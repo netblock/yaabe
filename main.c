@@ -178,7 +178,7 @@ int main(int argc, char** argv){
 	
 
 
-	if (0) {
+	if (1) {
 		switch(atree->data_table.vram_info.ver) {
 			case v2_4:
 				vi24_funstuffs(atree);

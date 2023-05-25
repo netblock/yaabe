@@ -35,11 +35,14 @@
 #ifndef _ATOMFIRMWARE_H_
 #define _ATOMFIRMWARE_H_
 
+#include <stdint.h>
+
+
 enum  atom_bios_header_version_def{
   ATOM_MAJOR_VERSION        =0x0003,
   ATOM_MINOR_VERSION        =0x0003,
 };
-
+/*
 #ifdef _H2INC
   #ifndef uint32_t
     typedef unsigned long uint32_t;
@@ -53,6 +56,7 @@ enum  atom_bios_header_version_def{
     typedef unsigned char uint8_t;
   #endif
 #endif
+*/
 
 enum atom_crtc_def{
   ATOM_CRTC1      =0,
