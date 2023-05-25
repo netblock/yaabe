@@ -144,7 +144,7 @@ bool atomtree_dt_populate_ppt(struct atom_tree* atree) {
 }
 
 
-bool atomtree_populate_umc_init_reg_block(struct atom_tree* atree,
+static atomtree_populate_umc_init_reg_block(struct atom_tree* atree,
 		struct atomtree_umc_init_reg_block* at_regblock) {
 	// TODO: something something end is 0xFFFF ???
 
@@ -194,7 +194,8 @@ bool atomtree_populate_umc_init_reg_block(struct atom_tree* atree,
 
 }
 
-bool atomtree_populate_vram_info_v2_3(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_vram_info_v2_3(
+		struct atom_tree* atree, bool generate_atui) {
 	struct atomtree_vram_info_header_v2_3* vi23 =
 		&(atree->data_table.vram_info.v2_3);
 
@@ -235,7 +236,8 @@ bool atomtree_populate_vram_info_v2_3(struct atom_tree* atree) {
 	return true;
 }
 
-bool atomtree_populate_vram_info_v2_4(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_vram_info_v2_4(
+		struct atom_tree* atree, bool generate_atui) {
 	struct atomtree_vram_info_header_v2_4* vi24 =
 		&(atree->data_table.vram_info.v2_4);
 
@@ -273,7 +275,8 @@ bool atomtree_populate_vram_info_v2_4(struct atom_tree* atree) {
 	return true;
 }
 
-bool atomtree_populate_vram_info_v2_5(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_vram_info_v2_5(
+	struct atom_tree* atree, bool generate_atui) {
 	uint8_t i=0;
 	struct atomtree_vram_info_header_v2_5* vi25 =
 		&(atree->data_table.vram_info.v2_5);
@@ -316,7 +319,8 @@ bool atomtree_populate_vram_info_v2_5(struct atom_tree* atree) {
 	return true;
 }
 
-bool atomtree_populate_vram_info_v2_6(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_vram_info_v2_6(
+		struct atom_tree* atree, bool generate_atui) {
 	struct atomtree_vram_info_header_v2_6* vi26 =
 		&(atree->data_table.vram_info.v2_6);
 
@@ -356,7 +360,8 @@ bool atomtree_populate_vram_info_v2_6(struct atom_tree* atree) {
 	return true;
 }
 
-bool atomtree_populate_vram_info_v3_0(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_vram_info_v3_0(
+		struct atom_tree* atree, bool generate_atui) {
 	uint8_t i=0;
 	struct atomtree_vram_info_header_v3_0* vi30 =
 		&(atree->data_table.vram_info.v3_0);
@@ -405,7 +410,8 @@ bool atomtree_populate_vram_info_v3_0(struct atom_tree* atree) {
 	}
 }
 
-bool atomtree_dt_populate_vram_info(struct atom_tree* atree) {
+static inline atui_branch* atomtree_dt_populate_vram_info(
+		struct atom_tree* atree, bool generate_atui) {
 	struct atomtree_vram_info* vram_info = &(atree->data_table.vram_info);
 
 	vram_info->dot = vram_info;
@@ -413,32 +419,35 @@ bool atomtree_dt_populate_vram_info(struct atom_tree* atree) {
 	vram_info->table_header = atree->bios +
 		atree->data_table.leaves->vram_info;
 
+
+	atui_branch* atui_vi = NULL;
 	vram_info->ver = get_ver(vram_info->table_header);
 	switch (vram_info->ver) { // TODO: earlier tables than 2.3?
 		case v2_3:
-			atomtree_populate_vram_info_v2_3(atree);
+			atui_vi = atomtree_populate_vram_info_v2_3(atree);
 			break;
 		case v2_4:
-			atomtree_populate_vram_info_v2_4(atree);
+			atui_vi = atomtree_populate_vram_info_v2_4(atree);
 			break;
 		case v2_5:
-			atomtree_populate_vram_info_v2_5(atree);
+			atui_vi = atomtree_populate_vram_info_v2_5(atree);
 			break;
 		case v2_6:
-			atomtree_populate_vram_info_v2_6(atree);
+			atui_vi = atomtree_populate_vram_info_v2_6(atree);
 			break;
 		case v3_0:
-			atomtree_populate_vram_info_v3_0(atree);
+			atui_vi = atomtree_populate_vram_info_v3_0(atree);
 			break;
 		default: //TODO error handling stub
 			break;
 	}
-	return true;
+	return atui_vi;
 }
 
 
 
-bool atomtree_populate_datatables(struct atom_tree* atree) {
+static inline atui_branch* atomtree_populate_datatables(
+		struct atom_tree* atree, bool generate_atui) {
 	//TODO double check pointer math if possible; some tables might be relative
 	//    to master_datatable.
 
@@ -490,10 +499,12 @@ bool atomtree_populate_datatables(struct atom_tree* atree) {
 	data_table->sw_datatable29.leaves = bios + leaves->sw_datatable29;
 	data_table->sw_datatable33.leaves = bios + leaves->sw_datatable33;
 	data_table->sw_datatable34.leaves = bios + leaves->sw_datatable34;
+
+
 }
 
 
-struct atom_tree* atombios_parse(void* bios) {
+struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	if (*(uint16_t*)bios != 0xAA55)
 		return NULL;
 		//TODO is anyone bothering to check all the magic signs?
@@ -501,6 +512,8 @@ struct atom_tree* atombios_parse(void* bios) {
 	struct atom_tree* atree = malloc(sizeof(struct atom_tree));
 	atree->dot = atree; 
 	atree->bios = bios; //PIC code; going to be used as the '0' in a lot of places.
+
+	//TODO
 	//atree->bios_size = *(uint8_t*)(bios+BIOS_IMAGE_SIZE_OFFSET) * BIOS_IMAGE_SIZE_UNIT; //wrong
 
 	// pointer math; void is byte aligned.
@@ -516,8 +529,18 @@ struct atom_tree* atombios_parse(void* bios) {
 	// any more between?
 	atree->psp_dir_table = bios + atree->leaves->pspdirtableoffset;
 
-	atomtree_populate_datatables(atree);
+	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
 	// atomtree_populate_commandtables(atree); // TODO
+
+	atui_branch* child_branches[] = {atui_dt};
+	int num_child = sizeof(child_branches)/sizeof(atui_branch*);
+
+	if (generate_atui) {
+		atree->atui_root = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
+			atree->leaves, num_child, child_branches); 
+	} else {
+		atree->atui_root = NULL;
+	}
 
 	return atree;
 }

@@ -3,6 +3,7 @@
 
 #include "atomtree_data_tables.h"
 #include "atomtree_common.h"
+#include "atui.h"
 
 
 #define BIOS_IMAGE_SIZE_OFFSET 2
@@ -78,6 +79,8 @@ struct atom_tree {
 	char* bootup_mesage;
 	void* int10;
 	void* psp_dir_table;
+
+	atui_branch* atui_root;
 };
 
 struct atombios_image { // TODO: is this worth a bother?
