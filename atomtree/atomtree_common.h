@@ -2,7 +2,12 @@
 #define ATOMTREE_COMMON_H
 
 
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+
 #include <atomfirmware.h>
+
 
 enum atomtree_common_version {
     nover=0,

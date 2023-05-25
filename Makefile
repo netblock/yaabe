@@ -3,7 +3,7 @@ CC=cc
 SRCS = $(wildcard *.c atom/*.c atomtree/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
 YAABE_LDFLAGS := -pthread -lz -lm -ldl
-YAABE_CFLAGS = -Iamd -Iatomtree
+YAABE_CFLAGS = -std=c2x -Iamd -Iatomtree
 
 all: yaabe
 

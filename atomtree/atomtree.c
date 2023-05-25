@@ -144,7 +144,8 @@ bool atomtree_dt_populate_ppt(struct atom_tree* atree) {
 }
 
 
-static atomtree_populate_umc_init_reg_block(struct atom_tree* atree,
+static atui_branch* atomtree_populate_umc_init_reg_block(
+		struct atom_tree* atree,
 		struct atomtree_umc_init_reg_block* at_regblock) {
 	// TODO: something something end is 0xFFFF ???
 
@@ -233,7 +234,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->leaves->post_ucode_init_offset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi23->post_ucode_init));
 
-	return true;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_4(
@@ -272,7 +272,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->leaves->post_ucode_init_offset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi24->post_ucode_init));
 
-	return true;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_5(
@@ -316,7 +315,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 	vi25->strobe_mode_patch.leaves = (void*)vi25->leaves +
 		vi25->leaves->strobe_mode_patch_tbloffset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi25->strobe_mode_patch));
-	return true;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_6(
@@ -357,7 +355,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_6(
 		vi26->leaves->post_ucode_init_offset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi26->post_ucode_init));
 
-	return true;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v3_0(
@@ -424,19 +421,19 @@ static inline atui_branch* atomtree_dt_populate_vram_info(
 	vram_info->ver = get_ver(vram_info->table_header);
 	switch (vram_info->ver) { // TODO: earlier tables than 2.3?
 		case v2_3:
-			atui_vi = atomtree_populate_vram_info_v2_3(atree);
+			atui_vi = atomtree_populate_vram_info_v2_3(atree, generate_atui);
 			break;
 		case v2_4:
-			atui_vi = atomtree_populate_vram_info_v2_4(atree);
+			atui_vi = atomtree_populate_vram_info_v2_4(atree, generate_atui);
 			break;
 		case v2_5:
-			atui_vi = atomtree_populate_vram_info_v2_5(atree);
+			atui_vi = atomtree_populate_vram_info_v2_5(atree, generate_atui);
 			break;
 		case v2_6:
-			atui_vi = atomtree_populate_vram_info_v2_6(atree);
+			atui_vi = atomtree_populate_vram_info_v2_6(atree, generate_atui);
 			break;
 		case v3_0:
-			atui_vi = atomtree_populate_vram_info_v3_0(atree);
+			atui_vi = atomtree_populate_vram_info_v3_0(atree, generate_atui);
 			break;
 		default: //TODO error handling stub
 			break;
@@ -477,7 +474,7 @@ static inline atui_branch* atomtree_populate_datatables(
 	//indirectioaccess
 	//umc_info
 	//dce_info
-	atomtree_dt_populate_vram_info(atree);
+	atomtree_dt_populate_vram_info(atree, generate_atui);
 	//integratedsysteminfo
 	//asic_profiling_info
 	//voltageobject_info

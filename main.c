@@ -144,7 +144,7 @@ int main(int argc, char** argv){
 	printf("%s: ",argv[1]);
 	bios = bios_fastforward(memfile, size);
 	printf("ffwd %d bytes to get to %X.\n", (bios-memfile), 0xAA55);
-	struct atom_tree* atree = atombios_parse(bios);
+	struct atom_tree* atree = atombios_parse(bios, false);
 	if (atree == NULL){
 		printf("bad atree\n");
 		return 1;

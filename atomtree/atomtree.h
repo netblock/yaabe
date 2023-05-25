@@ -19,7 +19,7 @@
 #define ATOM_ROM_MAGIC      "ATOM"
 #define ATOM_ROM_MAGIC_PTR  4
 
-struct atom_tree* atombios_parse(void* bios); 
+struct atom_tree* atombios_parse(void* bios, bool generate_atui); 
 void* bios_fastforward(void* memory, long size);
 void* bios_fastforward_odd(void* memory, long size);
 /*

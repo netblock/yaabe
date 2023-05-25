@@ -10,6 +10,10 @@ vim replace patterns that help copypaste structs from atombios.h:
 '<,'>s|,\n},|\r)|g
 */
 
+#ifndef ATUI_H
+#define ATUI_H
+#include "atomtree_common.h"
+
 typedef struct atui_branch_ atui_branch;
 typedef struct atui_leaf_ atui_leaf;
 struct atui_leaf_ {
@@ -75,16 +79,14 @@ where the second, the number, denotes a type?
 #define LEAF(var) {.val=&(bios->var), .name=#var, .type=ATUI_LEAF_TYPE(bios->var)},
 
 
-#define ATUI_FUNC_NAME(PP_NAME) \
-inline atui_branch* _##PP_NAME##_atui(struct PP_NAME * bios, \
-        unsigned int num_branches, atui_branch** import_children)
+#define H(PP_NAME) \
+atui_branch* _##PP_NAME##_atui(struct PP_NAME * bios, unsigned int num_branches, atui_branch** import_children)
 
-#define H(PP_NAME) ATUI_FUNC_NAME(PP_NAME)##;
-#define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) \
-	_##PP_NAME##_atui(bios, num_branches, children)
+//#define H(PP_NAME) ATUI_FUNC_NAME(PP_NAME)
+#define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) _##PP_NAME##_atui(bios, num_branches, children)
 
-#define ATUI_FUNCIFY(PP_NAME) \
-ATUI_FUNC_NAME(PP_NAME) { \
+#define ATUI_FUNCIFY(PP_NAME, ...) \
+H(PP_NAME) { \
 	int i = 0; \
 	void* scratch;\
 \
@@ -219,7 +221,10 @@ ATUI_FUNC_NAME(PP_NAME) { \
 
 
 
+H(atom_common_table_header);
+H(atom_rom_header_v2_2);
+H(atom_master_data_table_v2_1);
 
-H(atom_common_table_header)
-H(atom_rom_header_v2_2)
-H(atom_master_data_table_v2_1)
+
+
+#endif

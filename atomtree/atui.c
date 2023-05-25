@@ -79,7 +79,7 @@ ATUI_FUNCIFY(atom_test3_child3,
 
 
 
-ATUI_FUNCIFY(atom_common_table_header
+ATUI_FUNCIFY(atom_common_table_header,
 	structuresize,
 	format_revision,
 	content_revision
@@ -159,3 +159,4 @@ ATUI_FUNCIFY(atom_vram_info_header_v2_4,
 	umcip_max_ver,
 	mc_phy_tile_num
 )
+
