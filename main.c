@@ -132,6 +132,7 @@ void pp1_funstuffs(struct atom_tree* atree) {
 void pp2_funstuffs(struct atom_tree* atree) {
 }
 
+
 int main(int argc, char** argv){
 	printf("\n\n");	
 	void* bios = NULL;
@@ -144,7 +145,7 @@ int main(int argc, char** argv){
 	printf("%s: ",argv[1]);
 	bios = bios_fastforward(memfile, size);
 	printf("ffwd %d bytes to get to %X.\n", (bios-memfile), 0xAA55);
-	struct atom_tree* atree = atombios_parse(bios, false);
+	struct atom_tree* atree = atombios_parse(bios, true);
 	if (atree == NULL){
 		printf("bad atree\n");
 		return 1;
@@ -205,9 +206,15 @@ int main(int argc, char** argv){
 
 	}}
 
-	printf("\n\npsp:\n");
-	uint8_t* pm = atree->protected_mode;
-	printf("proctected: %d\n", pm[0]);
+	printf("atui branch: %s   num children: %i\n",
+		 atree->atui_root->name, atree->atui_root->branch_count);
+	printf("atui branch: %s\n", atree->atui_root->child_branches[0]->name);
+	printf("atui branch: %s\n", atree->atui_root->child_branches[1]->name);
+	printf("atui branch: %s\n",
+		atree->atui_root->child_branches[1]->child_branches[1]->name);
+	printf("atui branch: %s\n",
+		atree->atui_root->child_branches[1]->child_branches[1]->\
+			child_branches[1]->name);
 
 	return 0;
 }

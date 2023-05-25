@@ -79,14 +79,14 @@ where the second, the number, denotes a type?
 #define LEAF(var) {.val=&(bios->var), .name=#var, .type=ATUI_LEAF_TYPE(bios->var)},
 
 
-#define H(PP_NAME) \
+#define ATUI_FUNC_NAME(PP_NAME) \
 atui_branch* _##PP_NAME##_atui(struct PP_NAME * bios, unsigned int num_branches, atui_branch** import_children)
 
-//#define H(PP_NAME) ATUI_FUNC_NAME(PP_NAME)
+#define H(PP_NAME) ATUI_FUNC_NAME(PP_NAME)
 #define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) _##PP_NAME##_atui(bios, num_branches, children)
 
 #define ATUI_FUNCIFY(PP_NAME, ...) \
-H(PP_NAME) { \
+ATUI_FUNC_NAME(PP_NAME) { \
 	int i = 0; \
 	void* scratch;\
 \
@@ -222,9 +222,16 @@ H(PP_NAME) { \
 
 
 H(atom_common_table_header);
+
 H(atom_rom_header_v2_2);
 H(atom_master_data_table_v2_1);
 
 
+// fuck me...
+//H(atom_umc_reg_setting_data_block);
+
+
+H(atom_vram_module_v10);
+H(atom_vram_info_header_v2_4);
 
 #endif

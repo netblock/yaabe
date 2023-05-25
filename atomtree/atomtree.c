@@ -245,6 +245,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	vi24->dotdot = &(atree->data_table.vram_info);
 	vi24->leaves = atree->bios +
 		atree->data_table.leaves->vram_info;
+	struct atom_vram_info_header_v2_4* leaves = vi24->leaves;
 
 
 	vi24->mem_adjust_table.leaves = (void*)vi24->leaves +
@@ -272,6 +273,33 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->leaves->post_ucode_init_offset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi24->post_ucode_init));
 
+
+	atui_branch* atui_vi = NULL;
+	if(generate_atui) {
+		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
+			&(leaves->table_header), 0,NULL);
+		atui_branch* child_branches[] = {atui_header};
+		const int num_child_part = sizeof(child_branches)/sizeof(atui_branch*);
+
+		int num_child = num_child_part + vi24->leaves->vram_module_num;
+		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_4,
+			vi24->leaves, num_child, NULL);
+
+		int cb_depth = 0;
+		int i = 0;
+		for(i=0; i < num_child_part; i++)
+			atui_vi->child_branches[i] = child_branches[i];
+		cb_depth = cb_depth + i;
+
+		for(i=0; i < vi24->leaves->vram_module_num; i++) {
+			atui_vi->child_branches[i + cb_depth] = 
+				ATUI_MAKE_BRANCH(atom_vram_module_v10, 
+					&(vi24->leaves->vram_module[i]), 0,NULL);
+		}
+		cb_depth = cb_depth + i;
+	}
+
+	return atui_vi;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_5(
@@ -474,7 +502,8 @@ static inline atui_branch* atomtree_populate_datatables(
 	//indirectioaccess
 	//umc_info
 	//dce_info
-	atomtree_dt_populate_vram_info(atree, generate_atui);
+	atui_branch* atui_vram_info = 
+		atomtree_dt_populate_vram_info(atree, generate_atui);
 	//integratedsysteminfo
 	//asic_profiling_info
 	//voltageobject_info
@@ -497,7 +526,19 @@ static inline atui_branch* atomtree_populate_datatables(
 	data_table->sw_datatable33.leaves = bios + leaves->sw_datatable33;
 	data_table->sw_datatable34.leaves = bios + leaves->sw_datatable34;
 
+	atui_branch* atui_dt = NULL;
 
+	if (generate_atui) {
+		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
+			&(leaves->table_header), 0,NULL);
+
+		atui_branch* child_branches[] = {atui_header, atui_vram_info};
+		int num_child = sizeof(child_branches)/sizeof(atui_branch*);
+
+		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
+			leaves, num_child, child_branches);
+	}
+	return atui_dt;
 }
 
 
@@ -526,13 +567,17 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	// any more between?
 	atree->psp_dir_table = bios + atree->leaves->pspdirtableoffset;
 
-	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
 	// atomtree_populate_commandtables(atree); // TODO
 
-	atui_branch* child_branches[] = {atui_dt};
-	int num_child = sizeof(child_branches)/sizeof(atui_branch*);
+
+	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
 
 	if (generate_atui) {
+		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
+			&(atree->leaves->table_header), 0,NULL);
+
+		atui_branch* child_branches[] = {atui_header, atui_dt};
+		int num_child = sizeof(child_branches)/sizeof(atui_branch*);
 		atree->atui_root = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
 			atree->leaves, num_child, child_branches); 
 	} else {
@@ -541,6 +586,8 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 
 	return atree;
 }
+
+
 void* bios_fastforward(void* memory, long size) {
 	// The dumped bios probably doesn't start with where atombios actually
 	// begins. Go though the allocated memory to find the first magic bytes.
@@ -559,6 +606,7 @@ void* bios_fastforward_odd(void* memory, long size) { // every 1 byte
 			return (void*)bios;
 	return NULL;
 }
+
 
 enum atomtree_common_version get_ver(struct atom_common_table_header* header) {
 	return (header->format_revision * 100) + header->content_revision;

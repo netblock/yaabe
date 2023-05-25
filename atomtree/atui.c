@@ -1,5 +1,13 @@
 /*
 AtomTree iterable interface for UIs.
+
+adding tables
+
+vim replace patterns that help copypaste structs from atombios.h:
+'<,'>s:struct :ATUI_FUNCIFY(:g
+'<,'>s:.*uint[0-9]*_t[ ,^I]*:^I:g
+'<,'>s:;.*:,:g
+'<,'>s:,\n},:\r):g
 */
 
 #include "atui.h"
@@ -158,5 +166,29 @@ ATUI_FUNCIFY(atom_vram_info_header_v2_4,
 	umcip_min_ver,
 	umcip_max_ver,
 	mc_phy_tile_num
+)
+
+
+//TODO reserved, dram_pnstring
+ATUI_FUNCIFY(atom_vram_module_v10,
+	memory_size,
+	channel_enable,
+	max_mem_clk,
+	mem_voltage,
+	vram_module_size,
+	ext_memory_id,
+	memory_type,
+	channel_num,
+	channel_width,
+	density,
+	tunningset_id,
+	vender_rev_id,
+	refreshrate,
+	vram_flags,
+	vram_rsd2,
+	gddr6_mr10,
+	gddr6_mr1,
+	gddr6_mr2,
+	gddr6_mr7
 )
 
