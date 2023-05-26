@@ -7,6 +7,7 @@
 
 
 #include <atomtree.h>
+#include <yaabe_gtk4.h>
 
 int getfile(char* f, void** bios, long* size){
     FILE* tm = fopen(f, "r");
@@ -47,6 +48,8 @@ void vi24_funstuffs(struct atom_tree* atree) {
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr7);
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
+	printf("MR10: %016b\n",
+		atree->data_table.vram_info.v2_4.leaves->vram_module[1].gddr6_mr10);
 	printf("      5432109876543210\n");
 }
 
@@ -216,5 +219,7 @@ int main(int argc, char** argv){
 		atree->atui_root->child_branches[1]->child_branches[1]->\
 			child_branches[1]->name);
 
+
+	yaabe_gtk(atree);
 	return 0;
 }

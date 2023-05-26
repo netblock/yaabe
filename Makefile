@@ -1,9 +1,13 @@
 CC=cc
 
-SRCS = $(wildcard *.c atom/*.c atomtree/*.c)
+SRCS = $(wildcard *.c atom/*.c atomtree/*.c gtk/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
-YAABE_LDFLAGS := -pthread -lz -lm -ldl
-YAABE_CFLAGS = -std=c2x -Iamd -Iatomtree
+
+
+GTK_CFLAGS = `pkg-config --cflags gtk4`
+GTK_LDFLAGS = `pkg-config --libs gtk4`
+YAABE_LDFLAGS := -pthread -lz -lm -ldl $(GTK_LDFLAGS)
+YAABE_CFLAGS = -std=c2x -Iamd -Iatomtree -Igtk $(GTK_CFLAGS)
 
 all: yaabe
 
@@ -12,10 +16,10 @@ all: yaabe
 yaabe: $(OBJS)
 	$(CC) $(OBJS) -o $@ $(YAABE_LDFLAGS)
 
-out/%.o: %.c out/atom/.keep out/atomtree/.keep
+out/%.o: %.c out/atom/.keep out/atomtree/.keep out/gtk/.keep
 	$(CC) $(YAABE_CFLAGS) -c -o $@ $<
 
-out/atom/.keep out/atomtree/.keep:
+out/atom/.keep out/atomtree/.keep out/gtk/.keep:
 	mkdir -p $(@D)	
 	touch $@
 
