@@ -14,13 +14,37 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define ATUI_H
 #include "atomtree_common.h"
 
+
+struct atui_enumer {
+	char* name;
+	int val;
+};
+
+
+enum atui_type {
+	ATUI_DEC = 0b00,
+	ATUI_HEX = 0b01,
+	ATUI_BIN = 0b10,
+
+	ATUI_BITFIELD = 1<<3,
+	ATUI_ENUM = 1<<4,
+};
+
 typedef struct atui_branch_ atui_branch;
 typedef struct atui_leaf_ atui_leaf;
 struct atui_leaf_ {
 	char name[40];
 	char* description;
-	int type;
-	char fieldbits; //bitfield portion, if it's a bitfield
+
+
+	unsigned char bits; // number of bits for the leaf
+	//unsigned char type; // number of bits for the leaf
+	enum atui_type type; // bitfield struct
+	atui_leaf* bitfield_leaves;
+	int num_bitfield_children;
+	struct atui_enumer* enum_options; // text val pair
+	int num_enum_opts;
+
 	union {
 		void*     val;
 		uint8_t*  u8;
@@ -28,7 +52,8 @@ struct atui_leaf_ {
 		uint32_t* u32;
 		uint64_t* u64;
 	};
-	void* auxilary;
+
+	void* auxilary; // any extra info to hang off if necessary
 };
 struct  atui_branch_ {
 	char name[40];
@@ -58,6 +83,7 @@ uint64_t strtol_2(const char* str);
 
 
 
+
 /*
 TODO better type handling with ATUI_FUNCIFY? strings, enums?
 for example, what about
@@ -70,23 +96,26 @@ funcify(tablename,
 where the second, the number, denotes a type?
 */
 
-#define ATUI_LEAF_TYPE(var) _Generic((var), \
+
+
+#define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
 	uint8_t*:-1, \
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
 	default:1\
 )
 
-#define LEAF(var) {.val=&(bios->var), .name=#var, .type=ATUI_LEAF_TYPE(bios->var)},
+#define _PPATUI_LEAF(var, pptype) \
+	{.val=&(bios->var), .name=#var, .type=pptype, .bits=_PPATUI_LEAF_BITNESS(bios->var)},
 
 
-#define ATUI_FUNC_NAME(PP_NAME) \
+#define PPATUI_FUNC_NAME(PP_NAME) \
 atui_branch* _##PP_NAME##_atui(struct PP_NAME * bios, unsigned int num_branches, atui_branch** import_children)
 
-#define H(PP_NAME) ATUI_FUNC_NAME(PP_NAME)
+#define H(PP_NAME) PPATUI_FUNC_NAME(PP_NAME)
 #define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) _##PP_NAME##_atui(bios, num_branches, children)
 
-#define ATUI_FUNCIFY(PP_NAME, ...) \
-ATUI_FUNC_NAME(PP_NAME) { \
+#define PPATUI_FUNCIFY(PP_NAME, ...) \
+PPATUI_FUNC_NAME(PP_NAME) { \
 	int i = 0; \
 	void* scratch;\
 \
@@ -94,7 +123,7 @@ ATUI_FUNC_NAME(PP_NAME) { \
 	scratch = malloc( \
 		sizeof(atui_branch) + \
 		(sizeof(atui_branch*) * num_branches) +  \
-		(sizeof(atui_leaf) * PP_NUM_ARG(__VA_ARGS__)) \
+		(sizeof(atui_leaf) * PPATUI_NUM_LEAVES(__VA_ARGS__)) \
 	); \
 	table = scratch;\
 	scratch = scratch + sizeof(atui_branch);\
@@ -111,111 +140,126 @@ ATUI_FUNC_NAME(PP_NAME) { \
 	scratch = scratch + num_branches * sizeof(atui_branch*);\
 \
 	atui_leaf* leaves = NULL; \
-	if(PP_NUM_ARG(__VA_ARGS__)) { \
+	if(PPATUI_NUM_LEAVES(__VA_ARGS__)) { \
 		leaves = scratch;\
-		atui_leaf leavinit[] = {LEAVES(__VA_ARGS__)};\
-		for(i=0; i < PP_NUM_ARG(__VA_ARGS__); i++) {\
+		atui_leaf leavinit[] = {PPATUI_LEAVES(__VA_ARGS__)};\
+		for(i=0; i < PPATUI_NUM_LEAVES(__VA_ARGS__); i++) {\
 			leaves[i] = leavinit[i]; \
 		}\
 	} \
 \
 	*table = (atui_branch) { \
 		.name=#PP_NAME,.leaves=(atui_leaf*)leaves,\
-		.leaf_count=PP_NUM_ARG(__VA_ARGS__), .atomleaves=bios, \
+		.leaf_count=PPATUI_NUM_LEAVES(__VA_ARGS__), .atomleaves=bios, \
 		.child_branches=branches, .branch_count=num_branches \
 	}; \
 	return table; \
 }
 
 
+/*
+Throw the to-be-counted args into the depthcan and then measure the how
+full the depthcan is with the depthstick.
+Scale both ruler and depthcan if you want to count more than 63 args.
 
-// Throw the to-be-counted args into the depthcan and then measure the how
-// full the depthcan is with the depthstick.
-// Scale both ruler and depthcan if you want to count more than 63 args.
-#define PP_ARGCOUNTER_RULER \
-	63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40, \
-	39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16, \
-	15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0
-#define PP_ARGCOUNTER_DEPTHCAN_( \
+python script:
+for i in range(128): print("%i," % (127-i), end='')
+for i in range(1,128): print("_%i," % (i), end='')
+*/
+#define _PP_ARGCOUNTER_RULER \
+	127,126,125,124,123,122,121,120,119,118,117,116,115,114,113,112,111,110, \
+	109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90,89, \
+	88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,72,71,70,69,68,67,66,65, \
+	64,63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41, \
+	40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17, \
+	16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0
+#define _PP_ARGCOUNTER_DEPTHCAN_( \
 	_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20, \
 	_21,_22,_23,_24,_25,_26,_27,_28,_29,_30,_31,_32,_33,_34,_35,_36,_37,_38, \
 	_39,_40,_41,_42,_43,_44,_45,_46,_47,_48,_49,_50,_51,_52,_53,_54,_55,_56, \
-	_57,_58,_59,_60,_61,_62,_63,N,...) N
-#define PP_ARGCOUNTER_DEPTHCAN(...) PP_ARGCOUNTER_DEPTHCAN_(__VA_ARGS__)
-#define PP_NUM_ARG(...) \
-	PP_ARGCOUNTER_DEPTHCAN(__VA_ARGS__ __VA_OPT__(,) PP_ARGCOUNTER_RULER)
+	_57,_58,_59,_60,_61,_62,_63,_64,_65,_66,_67,_68,_69,_70,_71,_72,_73,_74, \
+	_75,_76,_77,_78,_79,_80,_81,_82,_83,_84,_85,_86,_87,_88,_89,_90,_91,_92, \
+	_93,_94,_95,_96,_97,_98,_99,_100,_101,_102,_103,_104,_105,_106,_107,_108, \
+	_109,_110,_111,_112,_113,_114,_115,_116,_117,_118,_119,_120,_121,_122, \
+	_123,_124,_125,_126,_127,N,...) N
+#define _PP_ARGCOUNTER_DEPTHCAN(...) _PP_ARGCOUNTER_DEPTHCAN_(__VA_ARGS__)
+#define _PP_NUMARG(...) \
+	_PP_ARGCOUNTER_DEPTHCAN(__VA_ARGS__ __VA_OPT__(,) _PP_ARGCOUNTER_RULER)
+
+#define PPATUI_NUM_LEAVES(...) _PP_NUMARG(...)/2
 
 
 //python script:
-//for i in range(0,63): print("#define L%i(var,...) LEAF(var) L%i(__VA_ARGS__)" % (i+1, i))
+//for i in range(0,64,2): print("#define _PPA_L%i(var,type,...) _PPATUI_LEAF(var,type) _PPA_L%i(__VA_ARGS__)" % (i+2, i))
 
-#define LEAVES(...) LEAVES_HELPER1(PP_NUM_ARG(__VA_ARGS__), __VA_ARGS__)
-#define LEAVES_HELPER1(...) LEAVES_HELPER2(__VA_ARGS__)
-#define LEAVES_HELPER2(N,...) L##N(__VA_ARGS__)
-#define L0(...)
-#define L1(var,...) LEAF(var)
-#define L2(var,...) LEAF(var) L1(__VA_ARGS__)
-#define L3(var,...) LEAF(var) L2(__VA_ARGS__)
-#define L4(var,...) LEAF(var) L3(__VA_ARGS__)
-#define L5(var,...) LEAF(var) L4(__VA_ARGS__)
-#define L6(var,...) LEAF(var) L5(__VA_ARGS__)
-#define L7(var,...) LEAF(var) L6(__VA_ARGS__)
-#define L8(var,...) LEAF(var) L7(__VA_ARGS__)
-#define L9(var,...) LEAF(var) L8(__VA_ARGS__)
-#define L10(var,...) LEAF(var) L9(__VA_ARGS__)
-#define L11(var,...) LEAF(var) L10(__VA_ARGS__)
-#define L12(var,...) LEAF(var) L11(__VA_ARGS__)
-#define L13(var,...) LEAF(var) L12(__VA_ARGS__)
-#define L14(var,...) LEAF(var) L13(__VA_ARGS__)
-#define L15(var,...) LEAF(var) L14(__VA_ARGS__)
-#define L16(var,...) LEAF(var) L15(__VA_ARGS__)
-#define L17(var,...) LEAF(var) L16(__VA_ARGS__)
-#define L18(var,...) LEAF(var) L17(__VA_ARGS__)
-#define L19(var,...) LEAF(var) L18(__VA_ARGS__)
-#define L20(var,...) LEAF(var) L19(__VA_ARGS__)
-#define L21(var,...) LEAF(var) L20(__VA_ARGS__)
-#define L22(var,...) LEAF(var) L21(__VA_ARGS__)
-#define L23(var,...) LEAF(var) L22(__VA_ARGS__)
-#define L24(var,...) LEAF(var) L23(__VA_ARGS__)
-#define L25(var,...) LEAF(var) L24(__VA_ARGS__)
-#define L26(var,...) LEAF(var) L25(__VA_ARGS__)
-#define L27(var,...) LEAF(var) L26(__VA_ARGS__)
-#define L28(var,...) LEAF(var) L27(__VA_ARGS__)
-#define L29(var,...) LEAF(var) L28(__VA_ARGS__)
-#define L30(var,...) LEAF(var) L29(__VA_ARGS__)
-#define L31(var,...) LEAF(var) L30(__VA_ARGS__)
-#define L32(var,...) LEAF(var) L31(__VA_ARGS__)
-#define L33(var,...) LEAF(var) L32(__VA_ARGS__)
-#define L34(var,...) LEAF(var) L33(__VA_ARGS__)
-#define L35(var,...) LEAF(var) L34(__VA_ARGS__)
-#define L36(var,...) LEAF(var) L35(__VA_ARGS__)
-#define L37(var,...) LEAF(var) L36(__VA_ARGS__)
-#define L38(var,...) LEAF(var) L37(__VA_ARGS__)
-#define L39(var,...) LEAF(var) L38(__VA_ARGS__)
-#define L40(var,...) LEAF(var) L39(__VA_ARGS__)
-#define L41(var,...) LEAF(var) L40(__VA_ARGS__)
-#define L42(var,...) LEAF(var) L41(__VA_ARGS__)
-#define L43(var,...) LEAF(var) L42(__VA_ARGS__)
-#define L44(var,...) LEAF(var) L43(__VA_ARGS__)
-#define L45(var,...) LEAF(var) L44(__VA_ARGS__)
-#define L46(var,...) LEAF(var) L45(__VA_ARGS__)
-#define L47(var,...) LEAF(var) L46(__VA_ARGS__)
-#define L48(var,...) LEAF(var) L47(__VA_ARGS__)
-#define L49(var,...) LEAF(var) L48(__VA_ARGS__)
-#define L50(var,...) LEAF(var) L49(__VA_ARGS__)
-#define L51(var,...) LEAF(var) L50(__VA_ARGS__)
-#define L52(var,...) LEAF(var) L51(__VA_ARGS__)
-#define L53(var,...) LEAF(var) L52(__VA_ARGS__)
-#define L54(var,...) LEAF(var) L53(__VA_ARGS__)
-#define L55(var,...) LEAF(var) L54(__VA_ARGS__)
-#define L56(var,...) LEAF(var) L55(__VA_ARGS__)
-#define L57(var,...) LEAF(var) L56(__VA_ARGS__)
-#define L58(var,...) LEAF(var) L57(__VA_ARGS__)
-#define L59(var,...) LEAF(var) L58(__VA_ARGS__)
-#define L60(var,...) LEAF(var) L59(__VA_ARGS__)
-#define L61(var,...) LEAF(var) L60(__VA_ARGS__)
-#define L62(var,...) LEAF(var) L61(__VA_ARGS__)
-#define L63(var,...) LEAF(var) L62(__VA_ARGS__)
+#define PPATUI_LEAVES(...) _PPATUI_LHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define _PPATUI_LHELPER1(...) _PPATUI_LHELPER2(__VA_ARGS__)
+#define _PPATUI_LHELPER2(N,...) _PPA_L##N(__VA_ARGS__)
+#define _PPA_L0(...)
+#define _PPA_L2(var,type,...) _PPATUI_LEAF(var,type) _PPA_L0(__VA_ARGS__)
+#define _PPA_L4(var,type,...) _PPATUI_LEAF(var,type) _PPA_L2(__VA_ARGS__)
+#define _PPA_L6(var,type,...) _PPATUI_LEAF(var,type) _PPA_L4(__VA_ARGS__)
+#define _PPA_L8(var,type,...) _PPATUI_LEAF(var,type) _PPA_L6(__VA_ARGS__)
+#define _PPA_L10(var,type,...) _PPATUI_LEAF(var,type) _PPA_L8(__VA_ARGS__)
+#define _PPA_L12(var,type,...) _PPATUI_LEAF(var,type) _PPA_L10(__VA_ARGS__)
+#define _PPA_L14(var,type,...) _PPATUI_LEAF(var,type) _PPA_L12(__VA_ARGS__)
+#define _PPA_L16(var,type,...) _PPATUI_LEAF(var,type) _PPA_L14(__VA_ARGS__)
+#define _PPA_L18(var,type,...) _PPATUI_LEAF(var,type) _PPA_L16(__VA_ARGS__)
+#define _PPA_L20(var,type,...) _PPATUI_LEAF(var,type) _PPA_L18(__VA_ARGS__)
+#define _PPA_L22(var,type,...) _PPATUI_LEAF(var,type) _PPA_L20(__VA_ARGS__)
+#define _PPA_L24(var,type,...) _PPATUI_LEAF(var,type) _PPA_L22(__VA_ARGS__)
+#define _PPA_L26(var,type,...) _PPATUI_LEAF(var,type) _PPA_L24(__VA_ARGS__)
+#define _PPA_L28(var,type,...) _PPATUI_LEAF(var,type) _PPA_L26(__VA_ARGS__)
+#define _PPA_L30(var,type,...) _PPATUI_LEAF(var,type) _PPA_L28(__VA_ARGS__)
+#define _PPA_L32(var,type,...) _PPATUI_LEAF(var,type) _PPA_L30(__VA_ARGS__)
+#define _PPA_L34(var,type,...) _PPATUI_LEAF(var,type) _PPA_L32(__VA_ARGS__)
+#define _PPA_L36(var,type,...) _PPATUI_LEAF(var,type) _PPA_L34(__VA_ARGS__)
+#define _PPA_L38(var,type,...) _PPATUI_LEAF(var,type) _PPA_L36(__VA_ARGS__)
+#define _PPA_L40(var,type,...) _PPATUI_LEAF(var,type) _PPA_L38(__VA_ARGS__)
+#define _PPA_L42(var,type,...) _PPATUI_LEAF(var,type) _PPA_L40(__VA_ARGS__)
+#define _PPA_L44(var,type,...) _PPATUI_LEAF(var,type) _PPA_L42(__VA_ARGS__)
+#define _PPA_L46(var,type,...) _PPATUI_LEAF(var,type) _PPA_L44(__VA_ARGS__)
+#define _PPA_L48(var,type,...) _PPATUI_LEAF(var,type) _PPA_L46(__VA_ARGS__)
+#define _PPA_L50(var,type,...) _PPATUI_LEAF(var,type) _PPA_L48(__VA_ARGS__)
+#define _PPA_L52(var,type,...) _PPATUI_LEAF(var,type) _PPA_L50(__VA_ARGS__)
+#define _PPA_L54(var,type,...) _PPATUI_LEAF(var,type) _PPA_L52(__VA_ARGS__)
+#define _PPA_L56(var,type,...) _PPATUI_LEAF(var,type) _PPA_L54(__VA_ARGS__)
+#define _PPA_L58(var,type,...) _PPATUI_LEAF(var,type) _PPA_L56(__VA_ARGS__)
+#define _PPA_L60(var,type,...) _PPATUI_LEAF(var,type) _PPA_L58(__VA_ARGS__)
+#define _PPA_L62(var,type,...) _PPATUI_LEAF(var,type) _PPA_L60(__VA_ARGS__)
+#define _PPA_L64(var,type,...) _PPATUI_LEAF(var,type) _PPA_L62(__VA_ARGS__)
+#define _PPA_L66(var,type,...) _PPATUI_LEAF(var,type) _PPA_L64(__VA_ARGS__)
+#define _PPA_L68(var,type,...) _PPATUI_LEAF(var,type) _PPA_L66(__VA_ARGS__)
+#define _PPA_L70(var,type,...) _PPATUI_LEAF(var,type) _PPA_L68(__VA_ARGS__)
+#define _PPA_L72(var,type,...) _PPATUI_LEAF(var,type) _PPA_L70(__VA_ARGS__)
+#define _PPA_L74(var,type,...) _PPATUI_LEAF(var,type) _PPA_L72(__VA_ARGS__)
+#define _PPA_L76(var,type,...) _PPATUI_LEAF(var,type) _PPA_L74(__VA_ARGS__)
+#define _PPA_L78(var,type,...) _PPATUI_LEAF(var,type) _PPA_L76(__VA_ARGS__)
+#define _PPA_L80(var,type,...) _PPATUI_LEAF(var,type) _PPA_L78(__VA_ARGS__)
+#define _PPA_L82(var,type,...) _PPATUI_LEAF(var,type) _PPA_L80(__VA_ARGS__)
+#define _PPA_L84(var,type,...) _PPATUI_LEAF(var,type) _PPA_L82(__VA_ARGS__)
+#define _PPA_L86(var,type,...) _PPATUI_LEAF(var,type) _PPA_L84(__VA_ARGS__)
+#define _PPA_L88(var,type,...) _PPATUI_LEAF(var,type) _PPA_L86(__VA_ARGS__)
+#define _PPA_L90(var,type,...) _PPATUI_LEAF(var,type) _PPA_L88(__VA_ARGS__)
+#define _PPA_L92(var,type,...) _PPATUI_LEAF(var,type) _PPA_L90(__VA_ARGS__)
+#define _PPA_L94(var,type,...) _PPATUI_LEAF(var,type) _PPA_L92(__VA_ARGS__)
+#define _PPA_L96(var,type,...) _PPATUI_LEAF(var,type) _PPA_L94(__VA_ARGS__)
+#define _PPA_L98(var,type,...) _PPATUI_LEAF(var,type) _PPA_L96(__VA_ARGS__)
+#define _PPA_L100(var,type,...) _PPATUI_LEAF(var,type) _PPA_L98(__VA_ARGS__)
+#define _PPA_L102(var,type,...) _PPATUI_LEAF(var,type) _PPA_L100(__VA_ARGS__)
+#define _PPA_L104(var,type,...) _PPATUI_LEAF(var,type) _PPA_L102(__VA_ARGS__)
+#define _PPA_L106(var,type,...) _PPATUI_LEAF(var,type) _PPA_L104(__VA_ARGS__)
+#define _PPA_L108(var,type,...) _PPATUI_LEAF(var,type) _PPA_L106(__VA_ARGS__)
+#define _PPA_L110(var,type,...) _PPATUI_LEAF(var,type) _PPA_L108(__VA_ARGS__)
+#define _PPA_L112(var,type,...) _PPATUI_LEAF(var,type) _PPA_L110(__VA_ARGS__)
+#define _PPA_L114(var,type,...) _PPATUI_LEAF(var,type) _PPA_L112(__VA_ARGS__)
+#define _PPA_L116(var,type,...) _PPATUI_LEAF(var,type) _PPA_L114(__VA_ARGS__)
+#define _PPA_L118(var,type,...) _PPATUI_LEAF(var,type) _PPA_L116(__VA_ARGS__)
+#define _PPA_L120(var,type,...) _PPATUI_LEAF(var,type) _PPA_L118(__VA_ARGS__)
+#define _PPA_L122(var,type,...) _PPATUI_LEAF(var,type) _PPA_L120(__VA_ARGS__)
+#define _PPA_L124(var,type,...) _PPATUI_LEAF(var,type) _PPA_L122(__VA_ARGS__)
+#define _PPA_L126(var,type,...) _PPATUI_LEAF(var,type) _PPA_L124(__VA_ARGS__)
+#define _PPA_L128(var,type,...) _PPATUI_LEAF(var,type) _PPA_L126(__VA_ARGS__)
 
 
 

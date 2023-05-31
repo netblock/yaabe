@@ -4,7 +4,7 @@ AtomTree iterable interface for UIs.
 adding tables
 
 vim replace patterns that help copypaste structs from atombios.h:
-'<,'>s:struct :ATUI_FUNCIFY(:g
+'<,'>s:struct :PPATUI_FUNCIFY(:g
 '<,'>s:.*uint[0-9]*_t[ ,^I]*:^I:g
 '<,'>s:;.*:,:g
 '<,'>s:,\n},:\r):g
@@ -64,131 +64,129 @@ void atui_destroy_tree(atui_branch* tree) { //a reference implementation
 
 /* example:
 
-ATUI_FUNCIFY(atom_root,
+PPATUI_FUNCIFY(atom_root,
 	antiem, otheritem)
-ATUI_FUNCIFY(atom_test1,
+PPATUI_FUNCIFY(atom_test1,
 	smolthing, twobytes, twobytes1, twobytes2)
-ATUI_FUNCIFY(atom_test1_child1,
+PPATUI_FUNCIFY(atom_test1_child1,
 	twobytes5, twobytes6, twobytes7, twobytes8, twobytes9, twobytes10)
-ATUI_FUNCIFY(atom_test1_child2,
+PPATUI_FUNCIFY(atom_test1_child2,
 	antiem, otheritem, smolthing, twobytes, twobytes1, twobytes2, twobytes3,
 	twobytes4, twobytes5, twobytes6, twobytes7, twobytes8, twobytes9,
 	twobytes10)
-ATUI_FUNCIFY(atom_test2)
-ATUI_FUNCIFY(atom_test3,
+PPATUI_FUNCIFY(atom_test2)
+PPATUI_FUNCIFY(atom_test3,
 	twobytes6, twobytes7, twobytes8, twobytes9, twobytes10)
-ATUI_FUNCIFY(atom_test3_child1,
+PPATUI_FUNCIFY(atom_test3_child1,
 	twobytes7, twobytes8, twobytes9, twobytes10)
-ATUI_FUNCIFY(atom_test3_child2,
+PPATUI_FUNCIFY(atom_test3_child2,
 	twobytes8, twobytes9, twobytes10)
-ATUI_FUNCIFY(atom_test3_child3,
+PPATUI_FUNCIFY(atom_test3_child3,
 	twobytes9, twobytes10)
 */
 
 
 
-ATUI_FUNCIFY(atom_common_table_header,
-	structuresize,
-	format_revision,
-	content_revision
+PPATUI_FUNCIFY(atom_common_table_header,
+	structuresize, ATUI_DEC,
+	format_revision, ATUI_DEC,
+	content_revision, ATUI_DEC
 )
-
 
 
 // TODO atom_bios_string
-ATUI_FUNCIFY(atom_rom_header_v2_2,
-	bios_segment_address,
-	protectedmodeoffset,
-	configfilenameoffset,
-	crc_block_offset,
-	vbios_bootupmessageoffset,
-	int10_offset,
-	pcibusdevinitcode,
-	iobaseaddress,
-	subsystem_vendor_id,
-	subsystem_id,
-	pci_info_offset,
-	masterhwfunction_offset,
-	masterdatatable_offset,
-	reserved,
-	pspdirtableoffset
+PPATUI_FUNCIFY(atom_rom_header_v2_2,
+	bios_segment_address, ATUI_DEC,
+	protectedmodeoffset, ATUI_DEC,
+	configfilenameoffset, ATUI_DEC,
+	crc_block_offset, ATUI_DEC,
+	vbios_bootupmessageoffset, ATUI_DEC,
+	int10_offset, ATUI_DEC,
+	pcibusdevinitcode, ATUI_DEC,
+	iobaseaddress, ATUI_DEC,
+	subsystem_vendor_id, ATUI_DEC,
+	subsystem_id, ATUI_DEC,
+	pci_info_offset, ATUI_DEC,
+	masterhwfunction_offset, ATUI_DEC,
+	masterdatatable_offset, ATUI_DEC,
+	reserved, ATUI_DEC,
+	pspdirtableoffset, ATUI_DEC
 )
 
 
-ATUI_FUNCIFY(atom_master_data_table_v2_1,
-	utilitypipeline,
-	multimedia_info,
-	smc_dpm_info,
-	sw_datatable3,
-	firmwareinfo,
-	sw_datatable5,
-	lcd_info,
-	sw_datatable7,
-	smu_info,
-	sw_datatable9,
-	sw_datatable10,
-	vram_usagebyfirmware,
-	gpio_pin_lut,
-	sw_datatable13,
-	gfx_info,
-	powerplayinfo,
-	sw_datatable16,
-	sw_datatable17,
-	sw_datatable18,
-	sw_datatable19,
-	sw_datatable20,
-	sw_datatable21,
-	displayobjectinfo,
-	indirectioaccess,
-	umc_info,
-	sw_datatable25,
-	sw_datatable26,
-	dce_info,
-	vram_info,
-	sw_datatable29,
-	integratedsysteminfo,
-	asic_profiling_info,
-	voltageobject_info,
-	sw_datatable33,
-	sw_datatable34
+PPATUI_FUNCIFY(atom_master_data_table_v2_1,
+	utilitypipeline, ATUI_DEC,
+	multimedia_info, ATUI_DEC,
+	smc_dpm_info, ATUI_DEC,
+	sw_datatable3, ATUI_DEC,
+	firmwareinfo, ATUI_DEC,
+	sw_datatable5, ATUI_DEC,
+	lcd_info, ATUI_DEC,
+	sw_datatable7, ATUI_DEC,
+	smu_info, ATUI_DEC,
+	sw_datatable9, ATUI_DEC,
+	sw_datatable10, ATUI_DEC,
+	vram_usagebyfirmware, ATUI_DEC,
+	gpio_pin_lut, ATUI_DEC,
+	sw_datatable13, ATUI_DEC,
+	gfx_info, ATUI_DEC,
+	powerplayinfo, ATUI_DEC,
+	sw_datatable16, ATUI_DEC,
+	sw_datatable17, ATUI_DEC,
+	sw_datatable18, ATUI_DEC,
+	sw_datatable19, ATUI_DEC,
+	sw_datatable20, ATUI_DEC,
+	sw_datatable21, ATUI_DEC,
+	displayobjectinfo, ATUI_DEC,
+	indirectioaccess, ATUI_DEC,
+	umc_info, ATUI_DEC,
+	sw_datatable25, ATUI_DEC,
+	sw_datatable26, ATUI_DEC,
+	dce_info, ATUI_DEC,
+	vram_info, ATUI_DEC,
+	sw_datatable29, ATUI_DEC,
+	integratedsysteminfo, ATUI_DEC,
+	asic_profiling_info, ATUI_DEC,
+	voltageobject_info, ATUI_DEC,
+	sw_datatable33, ATUI_DEC,
+	sw_datatable34, ATUI_DEC
 )
 
-ATUI_FUNCIFY(atom_vram_info_header_v2_4,
-	mem_adjust_tbloffset,
-	mem_clk_patch_tbloffset,
-	mc_adjust_pertile_tbloffset,
-	mc_phyinit_tbloffset,
-	dram_data_remap_tbloffset,
-	reserved,
-	post_ucode_init_offset,
-	vram_rsd2,
-	vram_module_num,
-	umcip_min_ver,
-	umcip_max_ver,
-	mc_phy_tile_num
+PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
+	mem_adjust_tbloffset, ATUI_DEC,
+	mem_clk_patch_tbloffset, ATUI_DEC,
+	mc_adjust_pertile_tbloffset, ATUI_DEC,
+	mc_phyinit_tbloffset, ATUI_DEC,
+	dram_data_remap_tbloffset, ATUI_DEC,
+	reserved, ATUI_DEC,
+	post_ucode_init_offset, ATUI_DEC,
+	vram_rsd2, ATUI_DEC,
+	vram_module_num, ATUI_DEC,
+	umcip_min_ver, ATUI_DEC,
+	umcip_max_ver, ATUI_DEC,
+	mc_phy_tile_num, ATUI_DEC
 )
 
 
-//TODO reserved, dram_pnstring
-ATUI_FUNCIFY(atom_vram_module_v10,
-	memory_size,
-	channel_enable,
-	max_mem_clk,
-	mem_voltage,
-	vram_module_size,
-	ext_memory_id,
-	memory_type,
-	channel_num,
-	channel_width,
-	density,
-	tunningset_id,
-	vender_rev_id,
-	refreshrate,
-	vram_flags,
-	vram_rsd2,
-	gddr6_mr10,
-	gddr6_mr1,
-	gddr6_mr2,
-	gddr6_mr7
+//TODO reserved, ATUI_DEC, dram_pnstring
+PPATUI_FUNCIFY(atom_vram_module_v10,
+	memory_size, ATUI_DEC,
+	channel_enable, ATUI_DEC,
+	max_mem_clk, ATUI_DEC,
+	mem_voltage, ATUI_DEC,
+	vram_module_size, ATUI_DEC,
+	ext_memory_id, ATUI_DEC,
+	memory_type, ATUI_DEC,
+	channel_num, ATUI_DEC,
+	channel_width, ATUI_DEC,
+	density, ATUI_DEC,
+	tunningset_id, ATUI_DEC,
+	vender_rev_id, ATUI_DEC,
+	refreshrate, ATUI_DEC,
+	vram_flags, ATUI_DEC,
+	vram_rsd2, ATUI_DEC,
+	gddr6_mr10, ATUI_DEC,
+	gddr6_mr1, ATUI_DEC,
+	gddr6_mr2, ATUI_DEC,
+	gddr6_mr7, ATUI_DEC
 )
-

@@ -42,6 +42,7 @@ enum  atom_bios_header_version_def{
   ATOM_MAJOR_VERSION        =0x0003,
   ATOM_MINOR_VERSION        =0x0003,
 };
+
 /*
 #ifdef _H2INC
   #ifndef uint32_t
