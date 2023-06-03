@@ -63,27 +63,25 @@ void atui_destroy_tree(atui_branch* tree) { //a reference implementation
 
 
 /* example:
+PPATUI_FUNCIFY(atom_able_tame,
+	table_element1, radix, fancy ui representation, args for fancy,
+	table_element2, radix, fancy ui representation, args for fancy,
+	table_element3, radix, fancy ui representation, args for fancy
+)
+WARNING: always have the last comma removed. This is bad: ,)
 
-PPATUI_FUNCIFY(atom_root,
-	antiem, otheritem)
-PPATUI_FUNCIFY(atom_test1,
-	smolthing, twobytes, twobytes1, twobytes2)
-PPATUI_FUNCIFY(atom_test1_child1,
-	twobytes5, twobytes6, twobytes7, twobytes8, twobytes9, twobytes10)
-PPATUI_FUNCIFY(atom_test1_child2,
-	antiem, otheritem, smolthing, twobytes, twobytes1, twobytes2, twobytes3,
-	twobytes4, twobytes5, twobytes6, twobytes7, twobytes8, twobytes9,
-	twobytes10)
-PPATUI_FUNCIFY(atom_test2)
-PPATUI_FUNCIFY(atom_test3,
-	twobytes6, twobytes7, twobytes8, twobytes9, twobytes10)
-PPATUI_FUNCIFY(atom_test3_child1,
-	twobytes7, twobytes8, twobytes9, twobytes10)
-PPATUI_FUNCIFY(atom_test3_child2,
-	twobytes8, twobytes9, twobytes10)
-PPATUI_FUNCIFY(atom_test3_child3,
-	twobytes9, twobytes10)
+If the element should be viewed as a number, set a radix. radix is one of
+ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN.
+
+If the element should be viewed in base 2, but also has bitfields for children, state:
+table_element, ATUI_BIN, ATUI_BITFIELD, (
+	bitfield_struct_name,
+	name, bitness, radix,
+	name, bitness, radix
+),
 */
+
+
 
 
 
@@ -152,22 +150,22 @@ PPATUI_FUNCIFY(atom_master_data_table_v2_1,
 )
 
 PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
-	mem_adjust_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	mem_clk_patch_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	mem_adjust_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	mem_clk_patch_tbloffset,     ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mc_adjust_pertile_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	mc_phyinit_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	dram_data_remap_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	reserved, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	post_ucode_init_offset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	vram_rsd2, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	vram_module_num, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	umcip_min_ver, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	umcip_max_ver, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	mc_phy_tile_num, ATUI_DEC, ATUI_NONE, ATUI_NONE
+	mc_phyinit_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	dram_data_remap_tbloffset,   ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	reserved,                    ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	post_ucode_init_offset,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	vram_rsd2,                   ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	vram_module_num,             ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	umcip_min_ver,               ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	umcip_max_ver,               ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	mc_phy_tile_num,             ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
 
-//TODO reserved, dram_pnstring
+//TODO "reserved" leaf
 PPATUI_FUNCIFY(atom_vram_module_v10,
 	memory_size,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	channel_enable,   ATUI_DEC, ATUI_NONE, ATUI_NONE,
@@ -185,9 +183,9 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	vram_flags,       ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	vram_rsd2,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	gddr6_mr10,       ATUI_BIN, ATUI_BITFIELD, (
-		struct_name,
-		name, bitness, ATUI_DEC
-		name, bitness, ATUI_DEC
+		struct_name,// TODO
+		name, bitness, ATUI_DEC, 
+		name, bitness, ATUI_DEC,
 		name, bitness, ATUI_DEC
 	),
 	gddr6_mr1,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
