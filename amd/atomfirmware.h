@@ -3277,29 +3277,46 @@ struct atom_umc_init_reg_block{ // not literal, topological only
   struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
 
+
+struct GDDR6_MR1 {
+	uint16_t drive_stren  : 2; // 0=AC60/40 1=AC48/40 2,3 vender specific
+	uint16_t data_term    : 2; // 0=disabled 1=60ohm 2=120ohm 3=48ohm
+	uint16_t PLLDLL_range : 2; // min-to-max WCK freq; vendor specific
+	uint16_t calib_update : 1; // calibration engine; 0=enabled 1=disabled
+	uint16_t PLLDLL       : 1; // 0=disabled 1=enabled
+	uint16_t RDBI         : 1; // Data Bus Inversion, for reads.   0=enabled
+	uint16_t WDBI         : 1; // Data Bus Inversion, for writes.  1=disabled
+	uint16_t CABI         : 1; // Command-address bus inversion.   0=enabled
+	uint16_t PLLDLL_reset : 4; // 1 = reset. MR1 OP11 self-clears after reset.
+	uint16_t ID           : 4; // MR 1
+};
+
 struct atom_vram_module_v10 {
-  // Design Specific Values
-  uint32_t  memory_size;                   // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
-  uint32_t  channel_enable;                // bit vector, each bit indicate specific channel enable or not
-  uint32_t  max_mem_clk;                   // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
-  uint16_t  reserved[3];
-  uint16_t  mem_voltage;                   // mem_voltage
-  uint16_t  vram_module_size;              // Size of atom_vram_module_v9
-  uint8_t   ext_memory_id;                 // Current memory module ID
-  uint8_t   memory_type;                   // enum of atom_dgpu_vram_type
-  uint8_t   channel_num;                   // Number of mem. channels supported in this module
-  uint8_t   channel_width;                 // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-  uint8_t   density;                       // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-  uint8_t   tunningset_id;                 // MC phy registers set per
-  uint8_t   vender_rev_id;                 // [7:4] Revision, [3:0] Vendor code
-  uint8_t   refreshrate;                   // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
-  uint8_t   vram_flags;			   // bit0= bankgroup enable
-  uint8_t   vram_rsd2;			   // reserved
-  uint16_t  gddr6_mr10;                    // gddr6 mode register10 value
-  uint16_t  gddr6_mr1;                     // gddr6 mode register1 value
-  uint16_t  gddr6_mr2;                     // gddr6 mode register2 value
-  uint16_t  gddr6_mr7;                     // gddr6 mode register7 value
-  char    dram_pnstring[20];               // part number end with '0'
+	// Design Specific Values
+	uint32_t  memory_size;      // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
+	uint32_t  channel_enable;   // bit vector, each bit indicate specific channel enable or not
+	uint32_t  max_mem_clk;      // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
+	uint16_t  reserved[3];
+	uint16_t  mem_voltage;      // mem_voltage
+	uint16_t  vram_module_size; // Size of atom_vram_module_v9
+	uint8_t   ext_memory_id;    // Current memory module ID
+	uint8_t   memory_type;      // enum of atom_dgpu_vram_type
+	uint8_t   channel_num;      // Number of mem. channels supported in this module
+	uint8_t   channel_width;    // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
+	uint8_t   density;          // _8Mx32, _16Mx32, _16Mx16, _32Mx16
+	uint8_t   tunningset_id;    // MC phy registers set per
+	uint8_t   vender_rev_id;    // [7:4] Revision, [3:0] Vendor code
+	uint8_t   refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
+	uint8_t   vram_flags;       // bit0= bankgroup enable
+	uint8_t   vram_rsd2;        // reserved
+	uint16_t  gddr6_mr10;       // gddr6 mode register10 value
+	union {
+		uint16_t gddr6_mr1;        // gddr6 mode register1 value
+		struct GDDR6_MR1 gddr6_mr1_bitfield;
+	};
+	uint16_t  gddr6_mr2;        // gddr6 mode register2 value
+	uint16_t  gddr6_mr7;        // gddr6 mode register7 value
+	char    dram_pnstring[20];  // part number end with '0'
 };
 
 struct atom_vram_info_header_v2_4 {

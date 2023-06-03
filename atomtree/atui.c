@@ -75,7 +75,7 @@ ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN.
 
 If the element should be viewed in base 2, but also has bitfields for children, state:
 table_element, ATUI_BIN, ATUI_BITFIELD, (
-	bitfield_struct_name,
+	bitfield_struct_instance_name,
 	name, bitness, radix,
 	name, bitness, radix
 ),
@@ -86,67 +86,67 @@ table_element, ATUI_BIN, ATUI_BITFIELD, (
 
 
 PPATUI_FUNCIFY(atom_common_table_header,
-	structuresize, ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	format_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	structuresize,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	format_revision,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
 // TODO atom_bios_string
 PPATUI_FUNCIFY(atom_rom_header_v2_2,
-	bios_segment_address, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	protectedmodeoffset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	configfilenameoffset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	crc_block_offset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	bios_segment_address,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	protectedmodeoffset,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	configfilenameoffset,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	crc_block_offset,          ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	vbios_bootupmessageoffset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	int10_offset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	pcibusdevinitcode, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	iobaseaddress, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	subsystem_vendor_id, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	subsystem_id, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	pci_info_offset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	masterhwfunction_offset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	masterdatatable_offset, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	reserved, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	pspdirtableoffset, ATUI_HEX, ATUI_NONE, ATUI_NONE
+	int10_offset,              ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	pcibusdevinitcode,         ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	iobaseaddress,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	subsystem_vendor_id,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	subsystem_id,              ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	pci_info_offset,           ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	masterhwfunction_offset,   ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	masterdatatable_offset,    ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	reserved,                  ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	pspdirtableoffset,         ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
 
 
 PPATUI_FUNCIFY(atom_master_data_table_v2_1,
-	utilitypipeline, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	multimedia_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	smc_dpm_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable3, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	firmwareinfo, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable5, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	lcd_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable7, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	smu_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable9, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable10, ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	utilitypipeline,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	multimedia_info,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	smc_dpm_info,         ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable3,        ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	firmwareinfo,         ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable5,        ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	lcd_info,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable7,        ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	smu_info,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable9,        ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable10,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	vram_usagebyfirmware, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	gpio_pin_lut, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable13, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	gfx_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	powerplayinfo, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable16, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable17, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable18, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable19, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable20, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable21, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	displayobjectinfo, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	indirectioaccess, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	umc_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable25, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable26, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	dce_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	vram_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable29, ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	gpio_pin_lut,         ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable13,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	gfx_info,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	powerplayinfo,        ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable16,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable17,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable18,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable19,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable20,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable21,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	displayobjectinfo,    ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	indirectioaccess,     ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	umc_info,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable25,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable26,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	dce_info,             ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	vram_info,            ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable29,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	integratedsysteminfo, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	asic_profiling_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	voltageobject_info, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable33, ATUI_HEX, ATUI_NONE, ATUI_NONE,
-	sw_datatable34, ATUI_HEX, ATUI_NONE, ATUI_NONE
+	asic_profiling_info,  ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	voltageobject_info,   ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable33,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
+	sw_datatable34,       ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
 
 PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
@@ -182,14 +182,24 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	refreshrate,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	vram_flags,       ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	vram_rsd2,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	gddr6_mr10,       ATUI_BIN, ATUI_BITFIELD, (
-		struct_name,// TODO
-		name, bitness, ATUI_DEC, 
-		name, bitness, ATUI_DEC,
-		name, bitness, ATUI_DEC
+	gddr6_mr10,       ATUI_BIN, ATUI_NONE, ATUI_NONE,
+	gddr6_mr1,        ATUI_BIN, ATUI_BITFIELD, (
+		gddr6_mr1_bitfield,
+		drive_stren,  2, ATUI_DEC
 	),
-	gddr6_mr1,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr2,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr7,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	dram_pnstring,    ATUI_NONE, ATUI_STRING, ATUI_NONE
 )
+/*
+		data_term,    2, ATUI_DEC, 
+		PLLDLL_range, 2, ATUI_DEC, 
+		calib_update, 1, ATUI_DEC, 
+		PLLDLL,       1, ATUI_DEC, 
+		RDBI,         1, ATUI_DEC, 
+		WDBI,         1, ATUI_DEC, 
+		CABI,         1, ATUI_DEC, 
+		PLLDLL_reset, 4, ATUI_DEC, 
+		ID,           4, ATUI_DEC 
+*/
+
