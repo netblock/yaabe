@@ -13,7 +13,8 @@ vim replace patterns that help copypaste structs from atombios.h:
 #include "atui.h"
 
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val) {
-	uint64_t maxval = (1ULL << (leaf->type)) - 1; //needs the ULL for 64-bit
+	//needs the ULL for 64-bit
+	uint64_t maxval = (1ULL << (leaf->total_bits)) - 1; 
 	if (val > maxval)
 		val = maxval;
 	switch(leaf->type) { // might be needed for bitfield structs
@@ -33,7 +34,7 @@ void atui_leaf_set_val(atui_leaf* leaf, uint64_t val) {
 }
 uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 //  return *(leaf->u64) & ((1<<leaf->type)-1);
-	switch(leaf->type) {
+	switch(leaf->total_bits) {
 		case 8:
 			return *(leaf->u8);
 		case 16:
@@ -184,14 +185,34 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	vram_rsd2,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	gddr6_mr10,       ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr1,        ATUI_BIN, ATUI_BITFIELD, (
-		gddr6_mr1_bitfield,
-		drive_stren,  2, ATUI_DEC
+		drive_stren,   1,0,  ATUI_DEC,
+		data_term,     3,2,  ATUI_DEC, 
+		PLLDLL_range,  5,4,  ATUI_DEC, 
+		calib_update,  6,6,  ATUI_DEC, 
+		PLLDLL,        7,7,  ATUI_DEC, 
+		RDBI,          8,8,  ATUI_DEC, 
+		WDBI,          9,9,  ATUI_DEC, 
+		CABI,         10,10, ATUI_DEC, 
+		PLLDLL_reset, 14,11, ATUI_DEC, 
+		ID,           15,12, ATUI_DEC 
 	),
 	gddr6_mr2,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr7,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	dram_pnstring,    ATUI_NONE, ATUI_STRING, ATUI_NONE
 )
 /*
+		drive_stren,   1,0,  ATUI_DEC
+		data_term,     3,2,  ATUI_DEC, 
+		PLLDLL_range,  5,4,  ATUI_DEC, 
+		calib_update,  6,6,  ATUI_DEC, 
+		PLLDLL,        7,7,  ATUI_DEC, 
+		RDBI,          8,8,  ATUI_DEC, 
+		WDBI,          9,9,  ATUI_DEC, 
+		CABI,         10,10, ATUI_DEC, 
+		PLLDLL_reset, 14,11, ATUI_DEC, 
+		ID,           15,12, ATUI_DEC 
+
+		drive_stren,  2, ATUI_DEC
 		data_term,    2, ATUI_DEC, 
 		PLLDLL_range, 2, ATUI_DEC, 
 		calib_update, 1, ATUI_DEC, 

@@ -18,7 +18,7 @@ struct gddr6_mr1 {
 	uint16_t RDBI         : 1; // Data Bus Inversion, for reads.   0=enabled
 	uint16_t WDBI         : 1; // Data Bus Inversion, for writes.  1=disabled
 	uint16_t CABI         : 1; // Command-address bus inversion.   0=enabled
-	uint16_t PLLDLL_reset : 4; // 1 = reset. MR1 OP11 self-clears after reset.
+	uint16_t PLLDLL_reset : 1; // 1 = reset. MR1 OP11 self-clears after reset.
 	uint16_t ID           : 4; // MR 1
 };
 

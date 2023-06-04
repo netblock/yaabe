@@ -46,12 +46,15 @@ struct atui_leaf_ {
 	char* description;
 
 
-	unsigned char bits; // number of bits for the leaf
-	//unsigned char type; // number of bits for the leaf
 	enum atui_type type; // bitfield struct
-	int num_bitfield_children;
+	unsigned char total_bits; // number of bits for the leaf
+
+	uint8_t num_bitfield_children;
+	uint8_t bitfield_hi; //bitfield range end
+	uint8_t bitfield_lo; //bitfield range start
+
 	struct atui_enum* enum_options; // text val pair
-	int num_enum_opts;
+	uint16_t num_enum_opts;
 
 	union {
 		void*     val;
@@ -68,11 +71,11 @@ struct  atui_branch_ {
 	char* description;
 
 	atui_branch** child_branches;
-	int branch_count;
+	uint8_t branch_count;
 
 	void* branch_aux; // alternative representation to leaves, if necessary
 	atui_leaf* leaves;
-	int leaf_count;
+	uint8_t leaf_count;
 
 	void* atomleaves;
 };
@@ -115,7 +118,7 @@ where the second, the number, denotes a type?
 /*
 #define _PPATUI_LEAF(var, type) \
 { \
-.val=&(bios->var), .name=#var, .bits=_PPATUI_LEAF_BITNESS(bios->var),\
+.val=&(bios->var), .name=#var, .total_bits=_PPATUI_LEAF_BITNESS(bios->var),\
 .type=pptype, \
 }
 */
@@ -123,48 +126,53 @@ where the second, the number, denotes a type?
 
 
 /**** LEAF FANCY FUNCS ***/
-#define _PPATUI_FANCY_NOBITFIELD .num_bitfield_children=0,
+#define _PPATUI_FANCY_NOBITFIELD(var) .num_bitfield_children=0, \
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(bios->var), .bitfield_lo=0,
 #define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
 
-#define _PPATUI_FANCY_ATUI_NONE(doesntmatter) _PPATUI_FANCY_NOBITFIELD _PPATUI_FANCY_NOENUM },
+#define _PPATUI_FANCY_ATUI_NONE(var, doesntmatter) \
+	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
 
-#define _PPATUI_FANCY_ATUI_ENUM(enum_array) _PPATUI_FANCY_NOBITFIELD },
+#define _PPATUI_FANCY_ATUI_ENUM(var, enum_array) \
+	_PPATUI_FANCY_NOBITFIELD(var) },
 
-#define _PPATUI_FANCY_ATUI_STRING(doesntmatter) _PPATUI_FANCY_NOBITFIELD _PPATUI_FANCY_NOENUM },
+#define _PPATUI_FANCY_ATUI_STRING(var, doesntmatter) \
+	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
 
 
 
-
-
-// the 3 is for name,bitness,radix trio
+// the 4 is for name,bithi,bitlo,radix set
 #define _PPATUI_FANCYBF_NUMCHILDREN(tablename, ...) \
-	 _PP_NUMARG(__VA_ARGS__) / 3
-
-//#define _PPATUI_FANCY_BFCHILDREN_HELPER(tablename, ...) _PPATUI_BITFIELD_LEAVES(__VA_ARGS__)
-//#define _PPATUI_FANCY_BFCHILDREN_HELPER(...) _PPATUI_BITFIELD_LEAVES(__VA_ARGS__)
+	 _PP_NUMARG(__VA_ARGS__) / 4
 
 
-#define _PPATUI_BFLEAF(tablename, var, bitness, radix) {\
-.val=&(bios->tablename.var), .name=#var, .bits=bitness, .type=radix, \
-.auxiliary = NULL, _PPATUI_FANCY_NOBITFIELD _PPATUI_FANCY_NOENUM \
-},
+#define _PPA_BFLEAF(var, bfname, bit_end, bit_start, radix) \
+	{\
+		.val=&(bios->var), .name=#bfname, \
+		.total_bits=_PPATUI_LEAF_BITNESS(bios->var), .type=radix, \
+		.bitfield_hi=bit_end, .bitfield_lo=bit_start, .auxiliary=NULL, \
+		_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM \
+	},
 
-#define _PPATUI_FANCY_ATUI_BITFIELD(args) \
-.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN args , \
-_PPATUI_FANCY_NOENUM }, \
-_PPATUI_BITFIELD_LEAVES args
+#define _PPATUI_FANCY_ATUI_BITFIELD(var, args) \
+	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN args , \
+	_PPATUI_FANCY_NOENUM }, \
+	_PPATUI_BITFIELD_LEAVES(var, _PPATUI_BITFIELD_LEAVES_HELPER args)
 // close parent and start on inbred children.
 
+//args is textually packed in () and this unpacks it
+#define _PPATUI_BITFIELD_LEAVES_HELPER(...) __VA_ARGS__
 
 /**** LEAF FANCY FUNCS END***/
 
 
 #define _PPATUI_LEAF(var, radix, fancytype, fancydata) \
-{ \
-.val=&(bios->var), .name=#var, .bits=_PPATUI_LEAF_BITNESS(bios->var),\
-.type=(radix | fancytype), .auxiliary = NULL, \
-_PPATUI_FANCY_##fancytype(fancydata)
-// the closing } for the leaf is handled in the fancy pp funcs.
+	{ \
+		.val=&(bios->var), .name=#var, \
+		.total_bits=_PPATUI_LEAF_BITNESS(bios->var),\
+		.type=(radix | fancytype), .auxiliary=NULL, \
+	_PPATUI_FANCY_##fancytype(var, fancydata)
+	// the closing } for the leaf is handled in the fancy pp funcs.
 
 
 
@@ -172,10 +180,15 @@ _PPATUI_FANCY_##fancytype(fancydata)
 
 
 #define PPATUI_FUNC_NAME(PP_NAME) \
-atui_branch* _##PP_NAME##_atui(struct PP_NAME * bios, unsigned int num_branches, atui_branch** import_children)
+	atui_branch* _##PP_NAME##_atui( \
+		struct PP_NAME * bios, \
+		unsigned int num_branches, \
+		atui_branch** import_children \
+	)
 
 #define H(PP_NAME) PPATUI_FUNC_NAME(PP_NAME)
-#define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) _##PP_NAME##_atui(bios, num_branches, children)
+#define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) \
+	_##PP_NAME##_atui(bios, num_branches, children)
 
 #define PPATUI_FUNCIFY(PP_NAME, ...) \
 PPATUI_FUNC_NAME(PP_NAME) {\
@@ -226,20 +239,6 @@ PPATUI_FUNC_NAME(PP_NAME) {\
 	};\
 	return table;\
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -346,51 +345,50 @@ Waterfall loop for primary leaves
 
 /*
 python script:
-def ppatui_leaveshelper(max_entries=32, args="v,b,r"):
+def ppatui_leaveshelper(max_entries=32, args="n,bh,bl,r"):
 	numargs=len(args.split(","))
 	for i in range(0,max_entries*numargs, numargs):
-		print("#define _BFL%i(t,%s,...) _PPATUI_BFLEAF(t,%s) _BFL%i(t,__VA_ARGS__)" % (i+numargs, args, args, i))
+		print("#define _BFL%i(v,%s,...) _PPA_BFLEAF(v,%s) _BFL%i(v,__VA_ARGS__)" % (i+numargs, args, args, i))
 
 Waterfall loop for bitfield leaves
 */
-#define _PPATUI_BITFIELD_LEAVES(table, ...) \
-	_PPATUI_BFLHELPER1(table,_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_BFLHELPER1(table, ...) _PPATUI_BFLHELPER2(table,__VA_ARGS__)
-#define _PPATUI_BFLHELPER2(table, N,...) _BFL##N(table, __VA_ARGS__)
-#define _PPA_BFL0(...)
-#define _BFL3(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL0(t,__VA_ARGS__)
-#define _BFL6(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL3(t,__VA_ARGS__)
-#define _BFL9(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL6(t,__VA_ARGS__)
-#define _BFL12(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL9(t,__VA_ARGS__)
-#define _BFL15(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL12(t,__VA_ARGS__)
-#define _BFL18(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL15(t,__VA_ARGS__)
-#define _BFL21(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL18(t,__VA_ARGS__)
-#define _BFL24(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL21(t,__VA_ARGS__)
-#define _BFL27(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL24(t,__VA_ARGS__)
-#define _BFL30(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL27(t,__VA_ARGS__)
-#define _BFL33(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL30(t,__VA_ARGS__)
-#define _BFL36(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL33(t,__VA_ARGS__)
-#define _BFL39(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL36(t,__VA_ARGS__)
-#define _BFL42(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL39(t,__VA_ARGS__)
-#define _BFL45(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL42(t,__VA_ARGS__)
-#define _BFL48(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL45(t,__VA_ARGS__)
-#define _BFL51(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL48(t,__VA_ARGS__)
-#define _BFL54(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL51(t,__VA_ARGS__)
-#define _BFL57(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL54(t,__VA_ARGS__)
-#define _BFL60(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL57(t,__VA_ARGS__)
-#define _BFL63(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL60(t,__VA_ARGS__)
-#define _BFL66(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL63(t,__VA_ARGS__)
-#define _BFL69(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL66(t,__VA_ARGS__)
-#define _BFL72(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL69(t,__VA_ARGS__)
-#define _BFL75(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL72(t,__VA_ARGS__)
-#define _BFL78(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL75(t,__VA_ARGS__)
-#define _BFL81(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL78(t,__VA_ARGS__)
-#define _BFL84(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL81(t,__VA_ARGS__)
-#define _BFL87(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL84(t,__VA_ARGS__)
-#define _BFL90(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL87(t,__VA_ARGS__)
-#define _BFL93(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL90(t,__VA_ARGS__)
-#define _BFL96(t,v,b,r,...) _PPATUI_BFLEAF(t,v,b,r) _BFL93(t,__VA_ARGS__)
-
+#define _PPATUI_BITFIELD_LEAVES(parent_var, ...) \
+	_PPATUI_BFLHELPER1(parent_var, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define _PPATUI_BFLHELPER1(v,...) _PPATUI_BFLHELPER2(v,__VA_ARGS__)
+#define _PPATUI_BFLHELPER2(v,N,...) _BFL##N(v, __VA_ARGS__)
+#define _BFL0(...)
+#define _BFL4(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r)
+#define _BFL8(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL4(v,__VA_ARGS__)
+#define _BFL12(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL8(v,__VA_ARGS__)
+#define _BFL16(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL12(v,__VA_ARGS__)
+#define _BFL20(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL16(v,__VA_ARGS__)
+#define _BFL24(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL20(v,__VA_ARGS__)
+#define _BFL28(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL24(v,__VA_ARGS__)
+#define _BFL32(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL28(v,__VA_ARGS__)
+#define _BFL36(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL32(v,__VA_ARGS__)
+#define _BFL40(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL36(v,__VA_ARGS__)
+#define _BFL44(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL40(v,__VA_ARGS__)
+#define _BFL48(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL44(v,__VA_ARGS__)
+#define _BFL52(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL48(v,__VA_ARGS__)
+#define _BFL56(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL52(v,__VA_ARGS__)
+#define _BFL60(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL56(v,__VA_ARGS__)
+#define _BFL64(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL60(v,__VA_ARGS__)
+#define _BFL68(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL64(v,__VA_ARGS__)
+#define _BFL72(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL68(v,__VA_ARGS__)
+#define _BFL76(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL72(v,__VA_ARGS__)
+#define _BFL80(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL76(v,__VA_ARGS__)
+#define _BFL84(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL80(v,__VA_ARGS__)
+#define _BFL88(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL84(v,__VA_ARGS__)
+#define _BFL92(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL88(v,__VA_ARGS__)
+#define _BFL96(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL92(v,__VA_ARGS__)
+#define _BFL100(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL96(v,__VA_ARGS__)
+#define _BFL104(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL100(v,__VA_ARGS__)
+#define _BFL108(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL104(v,__VA_ARGS__)
+#define _BFL112(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL108(v,__VA_ARGS__)
+#define _BFL116(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL112(v,__VA_ARGS__)
+#define _BFL120(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL116(v,__VA_ARGS__)
+#define _BFL124(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL120(v,__VA_ARGS__)
+#define _BFL128(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL124(v,__VA_ARGS__)
 
 
 
