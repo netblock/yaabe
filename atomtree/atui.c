@@ -165,6 +165,13 @@ PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
 	mc_phy_tile_num,             ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
+PPATUI_ENUMER(atom_dgpu_vram_type,
+  ATOM_DGPU_VRAM_TYPE_GDDR5,                                             
+  ATOM_DGPU_VRAM_TYPE_HBM2,
+  ATOM_DGPU_VRAM_TYPE_HBM2E,
+  ATOM_DGPU_VRAM_TYPE_GDDR6
+)
+
 
 //TODO "reserved" leaf
 PPATUI_FUNCIFY(atom_vram_module_v10,
@@ -174,7 +181,7 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	mem_voltage,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	vram_module_size, ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	ext_memory_id,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
-	memory_type,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	memory_type,      ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type,
 	channel_num,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	channel_width,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	density,          ATUI_DEC, ATUI_NONE, ATUI_NONE,

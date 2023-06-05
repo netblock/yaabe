@@ -10,16 +10,16 @@ struct gddr6_mr0 {
 };
 
 struct gddr6_mr1 {
-	uint16_t drive_stren  : 2; // 0=AC60/40 1=AC48/40 2,3 vender specific
-	uint16_t data_term    : 2; // 0=disabled 1=60ohm 2=120ohm 3=48ohm
-	uint16_t PLLDLL_range : 2; // min-to-max WCK freq; vendor specific
-	uint16_t calib_update : 1; // calibration engine; 0=enabled 1=disabled
-	uint16_t PLLDLL       : 1; // 0=disabled 1=enabled
-	uint16_t RDBI         : 1; // Data Bus Inversion, for reads.   0=enabled
-	uint16_t WDBI         : 1; // Data Bus Inversion, for writes.  1=disabled
-	uint16_t CABI         : 1; // Command-address bus inversion.   0=enabled
-	uint16_t PLLDLL_reset : 1; // 1 = reset. MR1 OP11 self-clears after reset.
-	uint16_t ID           : 4; // MR 1
+	uint16_t drive_stren  :1-0 +1; //0=AC60/40 1=AC48/40 2,3 vender specific
+	uint16_t data_term    :3-2 +1; //0=disabled 1=60ohm 2=120ohm 3=48ohm
+	uint16_t PLLDLL_range :5-4 +1; //min-to-max WCK freq; vendor specific
+	uint16_t calib_update :6-6 +1; //calibration engine; 0=enabled 1=disabled
+	uint16_t PLLDLL       :7-7 +1; //0=disabled 1=enabled
+	uint16_t RDBI         :8-8 +1; //Data Bus Inversion, for reads.  0=enabled
+	uint16_t WDBI         :9-9 +1; //Data Bus Inversion, for writes. 1=disabled
+	uint16_t CABI        :10-10 +1; //Command-address bus inversion.  0=enabled
+	uint16_t PLLDLL_reset:14-11 +1; //1 = reset. self-clears after reset.
+	uint16_t ID           :15-12 +1; //MR 1
 };
 
 

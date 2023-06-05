@@ -24,8 +24,6 @@ struct atui_enum {
 
 //just like funcify
 /*
-#define PPATUI_ENUMER(name, ...) \
-const _atui_enum_##name[] = {};
 */
 
 enum atui_type {
@@ -35,8 +33,10 @@ enum atui_type {
 	ATUI_BIN = 0b11,
 
 	ATUI_BITFIELD = 1<<3,
-	ATUI_ENUM = 1<<4,
-	ATUI_STRING = 1<<5
+	ATUI_ENUM = 1<<4,   // see also PPATUI_FUNCIFY()
+	ATUI_STRING = 1<<5, // meant for human-readable text
+	ATUI_ARRAY = 1<<6,  // no technical difference from string 
+	ATUI_INLINE = 1<<6, // if there's a small table, like the  header, inline it
 };
 
 typedef struct atui_branch_ atui_branch;
@@ -47,14 +47,15 @@ struct atui_leaf_ {
 
 
 	enum atui_type type; // bitfield struct
-	unsigned char total_bits; // number of bits for the leaf
+	uint8_t array_size;
+	uint8_t total_bits; // number of bits for the leaf
 
 	uint8_t num_bitfield_children;
 	uint8_t bitfield_hi; //bitfield range end
 	uint8_t bitfield_lo; //bitfield range start
 
-	struct atui_enum* enum_options; // text val pair
-	uint16_t num_enum_opts;
+	const struct atui_enum* enum_options; // array of text val pair
+	uint8_t num_enum_opts;
 
 	union {
 		void*     val;
@@ -110,12 +111,19 @@ where the second, the number, denotes a type?
 
 
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
-	uint8_t*:-1, \
+	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
-	default:1\
+	default:0\
 )
 
+
 /*
+#define _PPATUI_ARRAY_TYPE(var) _Generic((var), \
+	uint8_t*:uint8_t, uint16_t*:uint16_t, \
+	uint32_t*:uint32_t, uint64_t*:uint64_t, \
+	default:0\
+)
+
 #define _PPATUI_LEAF(var, type) \
 { \
 .val=&(bios->var), .name=#var, .total_bits=_PPATUI_LEAF_BITNESS(bios->var),\
@@ -126,42 +134,59 @@ where the second, the number, denotes a type?
 
 
 /**** LEAF FANCY FUNCS ***/
-#define _PPATUI_FANCY_NOBITFIELD(var) .num_bitfield_children=0, \
+#define _PPATUI_FANCY_NOBITFIELD(var) \
+	.num_bitfield_children=0, \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(bios->var), .bitfield_lo=0,
+
 #define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
+#define _PPATUI_FANCY_NOARRAY .array_size=0,
+
+
 
 #define _PPATUI_FANCY_ATUI_NONE(var, doesntmatter) \
 	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
 
-#define _PPATUI_FANCY_ATUI_ENUM(var, enum_array) \
+
+
+#define _PPATUI_FANCY_ATUI_ENUM(var, enumname) \
+	.enum_options=_atui_enum_##enumname, \
+	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
 	_PPATUI_FANCY_NOBITFIELD(var) },
 
+#define PPATUI_ENUMER(name, ...) \
+	const struct atui_enum _atui_enum_##name[] = \
+		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
+#define _PPATUI_EENTRY(estate) {.name=#estate, .val=estate}, 
+
+
 #define _PPATUI_FANCY_ATUI_STRING(var, doesntmatter) \
+	_PPATUI_FANCY_ATUI_ARRAY(var, doesntmatter) 
+#define _PPATUI_FANCY_ATUI_ARRAY(var, doesntmatter) \
+	.array_size = sizeof(bios->var)/sizeof(bios->var[0]), \
 	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
 
 
 
-// the 4 is for name,bithi,bitlo,radix set
-#define _PPATUI_FANCYBF_NUMCHILDREN(tablename, ...) \
-	 _PP_NUMARG(__VA_ARGS__) / 4
+#define _PPATUI_FANCY_ATUI_BITFIELD(var, args) \
+	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN args , \
+	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
+	_PPATUI_BITFIELD_LEAVES(var, _PPATUI_BITFIELD_LEAVES_HELPER args)
+// close parent and start on inbred children.
 
+// the 4 is for name,bithi,bitlo,radix set
+#define _PPATUI_FANCYBF_NUMCHILDREN(...) \
+	 _PP_NUMARG(__VA_ARGS__) / 4
+//args is textually packed in () and this unpacks it
+#define _PPATUI_BITFIELD_LEAVES_HELPER(...) __VA_ARGS__
 
 #define _PPA_BFLEAF(var, bfname, bit_end, bit_start, radix) \
 	{\
 		.val=&(bios->var), .name=#bfname, \
-		.total_bits=_PPATUI_LEAF_BITNESS(bios->var), .type=radix, \
-		.bitfield_hi=bit_end, .bitfield_lo=bit_start, .auxiliary=NULL, \
-		_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM \
+		.type=radix, .total_bits=_PPATUI_LEAF_BITNESS(bios->var), \
+		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
+		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD(var) \
+		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
 	},
-
-#define _PPATUI_FANCY_ATUI_BITFIELD(var, args) \
-	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN args , \
-	_PPATUI_FANCY_NOENUM }, \
-	_PPATUI_BITFIELD_LEAVES(var, _PPATUI_BITFIELD_LEAVES_HELPER args)
-// close parent and start on inbred children.
-
-//args is textually packed in () and this unpacks it
-#define _PPATUI_BITFIELD_LEAVES_HELPER(...) __VA_ARGS__
 
 /**** LEAF FANCY FUNCS END***/
 
@@ -272,7 +297,8 @@ def ppatui_leaveshelper(max_entries=64, args="v,r,t,ta"):
 
 Waterfall loop for primary leaves
 */
-#define PPATUI_LEAVES(...) _PPATUI_LHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define PPATUI_LEAVES(...) \
+	_PPATUI_LHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
 #define _PPATUI_LHELPER1(...) _PPATUI_LHELPER2(__VA_ARGS__)
 #define _PPATUI_LHELPER2(N,...) _PPA_L##N(__VA_ARGS__)
 #define _PPA_L0(...)
@@ -343,9 +369,60 @@ Waterfall loop for primary leaves
 
 
 
+
+
+/*
+def ppatui_enumhelper(max_entries=32, args="n"):
+        numargs=len(args.split(","))
+        for i in range(0,max_entries*numargs, numargs):
+                print("#define _PPA_EN%i(%s,...) _PPATUI_EENTRY(%s) _PPA_EN%i(__VA_ARGS__)" % (i+numargs, args, args, i))
+
+
+Waterfall loop for atui enum generator
+*/
+#define _PPATUI_ENUM_ENTRIES(...) \
+	_PPATUI_ENHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define _PPATUI_ENHELPER1(...) _PPATUI_ENHELPER2(__VA_ARGS__)
+#define _PPATUI_ENHELPER2(N,...) _PPA_EN##N(__VA_ARGS__)
+#define __PPA_EN0(...)
+#define _PPA_EN1(n,...) _PPATUI_EENTRY(n)
+#define _PPA_EN2(n,...) _PPATUI_EENTRY(n) _PPA_EN1(__VA_ARGS__)
+#define _PPA_EN3(n,...) _PPATUI_EENTRY(n) _PPA_EN2(__VA_ARGS__)
+#define _PPA_EN4(n,...) _PPATUI_EENTRY(n) _PPA_EN3(__VA_ARGS__)
+#define _PPA_EN5(n,...) _PPATUI_EENTRY(n) _PPA_EN4(__VA_ARGS__)
+#define _PPA_EN6(n,...) _PPATUI_EENTRY(n) _PPA_EN5(__VA_ARGS__)
+#define _PPA_EN7(n,...) _PPATUI_EENTRY(n) _PPA_EN6(__VA_ARGS__)
+#define _PPA_EN8(n,...) _PPATUI_EENTRY(n) _PPA_EN7(__VA_ARGS__)
+#define _PPA_EN9(n,...) _PPATUI_EENTRY(n) _PPA_EN8(__VA_ARGS__)
+#define _PPA_EN10(n,...) _PPATUI_EENTRY(n) _PPA_EN9(__VA_ARGS__)
+#define _PPA_EN11(n,...) _PPATUI_EENTRY(n) _PPA_EN10(__VA_ARGS__)
+#define _PPA_EN12(n,...) _PPATUI_EENTRY(n) _PPA_EN11(__VA_ARGS__)
+#define _PPA_EN13(n,...) _PPATUI_EENTRY(n) _PPA_EN12(__VA_ARGS__)
+#define _PPA_EN14(n,...) _PPATUI_EENTRY(n) _PPA_EN13(__VA_ARGS__)
+#define _PPA_EN15(n,...) _PPATUI_EENTRY(n) _PPA_EN14(__VA_ARGS__)
+#define _PPA_EN16(n,...) _PPATUI_EENTRY(n) _PPA_EN15(__VA_ARGS__)
+#define _PPA_EN17(n,...) _PPATUI_EENTRY(n) _PPA_EN16(__VA_ARGS__)
+#define _PPA_EN18(n,...) _PPATUI_EENTRY(n) _PPA_EN17(__VA_ARGS__)
+#define _PPA_EN19(n,...) _PPATUI_EENTRY(n) _PPA_EN18(__VA_ARGS__)
+#define _PPA_EN20(n,...) _PPATUI_EENTRY(n) _PPA_EN19(__VA_ARGS__)
+#define _PPA_EN21(n,...) _PPATUI_EENTRY(n) _PPA_EN20(__VA_ARGS__)
+#define _PPA_EN22(n,...) _PPATUI_EENTRY(n) _PPA_EN21(__VA_ARGS__)
+#define _PPA_EN23(n,...) _PPATUI_EENTRY(n) _PPA_EN22(__VA_ARGS__)
+#define _PPA_EN24(n,...) _PPATUI_EENTRY(n) _PPA_EN23(__VA_ARGS__)
+#define _PPA_EN25(n,...) _PPATUI_EENTRY(n) _PPA_EN24(__VA_ARGS__)
+#define _PPA_EN26(n,...) _PPATUI_EENTRY(n) _PPA_EN25(__VA_ARGS__)
+#define _PPA_EN27(n,...) _PPATUI_EENTRY(n) _PPA_EN26(__VA_ARGS__)
+#define _PPA_EN28(n,...) _PPATUI_EENTRY(n) _PPA_EN27(__VA_ARGS__)
+#define _PPA_EN29(n,...) _PPATUI_EENTRY(n) _PPA_EN28(__VA_ARGS__)
+#define _PPA_EN30(n,...) _PPATUI_EENTRY(n) _PPA_EN29(__VA_ARGS__)
+#define _PPA_EN31(n,...) _PPATUI_EENTRY(n) _PPA_EN30(__VA_ARGS__)
+#define _PPA_EN32(n,...) _PPATUI_EENTRY(n) _PPA_EN31(__VA_ARGS__)
+
+
+
 /*
 python script:
-def ppatui_leaveshelper(max_entries=32, args="n,bh,bl,r"):
+def ppatui_bfleaveshelper(max_entries=32, args="n,bh,bl,r"):
 	numargs=len(args.split(","))
 	for i in range(0,max_entries*numargs, numargs):
 		print("#define _BFL%i(v,%s,...) _PPA_BFLEAF(v,%s) _BFL%i(v,__VA_ARGS__)" % (i+numargs, args, args, i))
@@ -355,7 +432,7 @@ Waterfall loop for bitfield leaves
 #define _PPATUI_BITFIELD_LEAVES(parent_var, ...) \
 	_PPATUI_BFLHELPER1(parent_var, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
 #define _PPATUI_BFLHELPER1(v,...) _PPATUI_BFLHELPER2(v,__VA_ARGS__)
-#define _PPATUI_BFLHELPER2(v,N,...) _BFL##N(v, __VA_ARGS__)
+#define _PPATUI_BFLHELPER2(v,N,...) _BFL##N(v,__VA_ARGS__)
 #define _BFL0(...)
 #define _BFL4(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r)
 #define _BFL8(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL4(v,__VA_ARGS__)
@@ -389,6 +466,9 @@ Waterfall loop for bitfield leaves
 #define _BFL120(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL116(v,__VA_ARGS__)
 #define _BFL124(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL120(v,__VA_ARGS__)
 #define _BFL128(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL124(v,__VA_ARGS__)
+
+
+
 
 
 
