@@ -3,7 +3,11 @@ AtomTree iterable interface for UIs.
 
 TODO explain how to add add tables
 
-Here be preprocessor dragons; ATUI 
+Here be preprocessor dragons:
+ATUI, specifically atui.c is intended to as human-readable as possible,
+absrtracting away the programatic consequences of allocation and setup.
+This means that ATUI's allocater/instanciator functions have a lot of 
+that can be figured out at compile time.
 
 vim replace patterns that help copypaste structs from atombios.h:
 '<,'>s|struct |ATUI_FUNCIFY(|g
@@ -56,6 +60,8 @@ struct atui_leaf_ {
 
 	const struct atui_enum* enum_options; // array of text val pair
 	uint8_t num_enum_opts;
+
+	uint8_t num_inline_leaves;
 
 	union {
 		void*     val;
@@ -115,6 +121,9 @@ where the second, the number, denotes a type?
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
 	default:0\
 )
+#define _PPATUI_LEAF_ISPOINTER(bios, var) _Generic( ((void*)&var), \
+	void**: &(bios->var), void*: &(bios.var) \
+)
 
 
 /*
@@ -134,24 +143,34 @@ where the second, the number, denotes a type?
 
 
 /**** LEAF FANCY FUNCS ***/
-#define _PPATUI_FANCY_NOBITFIELD(var) \
+#define _PPATUI_FANCY_NOBITFIELD(biosvar) \
 	.num_bitfield_children=0, \
-	.bitfield_hi=_PPATUI_LEAF_BITNESS(bios->var), .bitfield_lo=0,
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar), .bitfield_lo=0,
+#define _PPATUI_FANCY_NOBITFIELD_HARD \
+	.num_bitfield_children=0, .bitfield_hi=0, .bitfield_lo=0,
 
 #define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
 #define _PPATUI_FANCY_NOARRAY .array_size=0,
 
+//fancydata is textually packed in () and this unpacks it
+#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
+#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
+
+//#define INLINE_DEPACK(child, ...) child __VA_OPT__(,) __VA_ARGS__
+//#define INLINE_DEPACK(...) __VA_ARGS__
+//#define INLINE_DEPACK2(todepack) INLINE_DEPACK todepack
+
+#define _PPATUI_FANCY_ATUI_NONE(bios, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
+	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
 
 
-#define _PPATUI_FANCY_ATUI_NONE(var, doesntmatter) \
-	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
 
-
-
-#define _PPATUI_FANCY_ATUI_ENUM(var, enumname) \
+#define _PPATUI_FANCY_ATUI_ENUM(bios, var, radix, fancytype, enumname) \
+	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
 	.enum_options=_atui_enum_##enumname, \
 	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
-	_PPATUI_FANCY_NOBITFIELD(var) },
+	_PPATUI_FANCY_NOBITFIELD(bios->var) },
 
 #define PPATUI_ENUMER(name, ...) \
 	const struct atui_enum _atui_enum_##name[] = \
@@ -159,49 +178,86 @@ where the second, the number, denotes a type?
 #define _PPATUI_EENTRY(estate) {.name=#estate, .val=estate}, 
 
 
-#define _PPATUI_FANCY_ATUI_STRING(var, doesntmatter) \
-	_PPATUI_FANCY_ATUI_ARRAY(var, doesntmatter) 
-#define _PPATUI_FANCY_ATUI_ARRAY(var, doesntmatter) \
+
+#define _PPATUI_FANCY_ATUI_STRING(bios, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_ATUI_ARRAY(bios, var, radix, fancytype, fancydata) 
+
+#define _PPATUI_FANCY_ATUI_ARRAY(bios, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
 	.array_size = sizeof(bios->var)/sizeof(bios->var[0]), \
-	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM },
+	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
 
 
 
-#define _PPATUI_FANCY_ATUI_BITFIELD(var, args) \
-	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN args , \
+#define _PPATUI_FANCY_ATUI_BITFIELD(bios, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
+	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN fancydata , \
 	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
-	_PPATUI_BITFIELD_LEAVES(var, _PPATUI_BITFIELD_LEAVES_HELPER args)
+	_PPATUI_BITFIELD_LEAVES(bios->var, _PPATUI_FANCYDATA_UNPACK(fancydata))
 // close parent and start on inbred children.
 
 // the 4 is for name,bithi,bitlo,radix set
 #define _PPATUI_FANCYBF_NUMCHILDREN(...) \
 	 _PP_NUMARG(__VA_ARGS__) / 4
-//args is textually packed in () and this unpacks it
-#define _PPATUI_BITFIELD_LEAVES_HELPER(...) __VA_ARGS__
 
-#define _PPA_BFLEAF(var, bfname, bit_end, bit_start, radix) \
+#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
 	{\
-		.val=&(bios->var), .name=#bfname, \
-		.type=radix, .total_bits=_PPATUI_LEAF_BITNESS(bios->var), \
+		.val=&(biosvar), .name=#bfname, \
+		.type=radix, .total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
-		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD(var) \
+		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD(biosvar) \
 		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
 	},
 
+
+
+
+#define _PPATUI_FANCY_ATUI_INLINE(bios, var, radix, fancytype, fancydata)\
+	.val=NULL, .num_inline_leaves = (_PP_NUMARG fancydata -1)/4, \
+	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
+	_PPATUI_FANCY_NOARRAY }, \
+	_PPATUI_FANCY_ATUI_INLINE_HELPER(bios,fancydata)
+
+//#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
+//#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
+
+#define INLINE_DEPACK(...) __VA_ARGS__
+#define INLINE_DEPACK2(todepack) INLINE_DEPACK todepack
+
+#define _PPATUI_FANCY_ATUI_INLINE_HELPER(bios, fancydata)\
+_PPATUI_FANCY_ATUI_INLINE_HELPER2(bios, INLINE_DEPACK2(fancydata)) 
+
+#define _PPATUI_INLEAF(bios, var, radix, fancytype, fancydata) \
+	{ \
+		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
+	_PPATUI_FANCY_##fancytype((& bios ), var, radix, fancytype, fancydata)
+// the "(& bios )" is meant to pointerify to be compatible with "bios->var"
+
+
+
+// removes trailing comma
+#define _PPATUI_FANCY_ATUI_INLINE_HELPER2(...) \
+_PPATUI_FANCY_ATUI_INLINE_HELPER3(__VA_ARGS__)
+
+#define _PPATUI_FANCY_ATUI_INLINE_HELPER3(parent, child, ...) \
+	_PPATUI_INLINE_LEAVES(parent->child, __VA_ARGS__)
+// The C preprocessor anti-loops PPATUI_LEAVES. 
+
+
+
+#define _PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
+		.val=&(bios->var), .total_bits=_PPATUI_LEAF_BITNESS(bios->var),
 /**** LEAF FANCY FUNCS END***/
 
 
-#define _PPATUI_LEAF(var, radix, fancytype, fancydata) \
+
+
+
+#define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
 	{ \
-		.val=&(bios->var), .name=#var, \
-		.total_bits=_PPATUI_LEAF_BITNESS(bios->var),\
-		.type=(radix | fancytype), .auxiliary=NULL, \
-	_PPATUI_FANCY_##fancytype(var, fancydata)
+		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
+	_PPATUI_FANCY_##fancytype(bios, var, radix, fancytype, fancydata)
 	// the closing } for the leaf is handled in the fancy pp funcs.
-
-
-
-
 
 
 #define PPATUI_FUNC_NAME(PP_NAME) \
@@ -215,6 +271,8 @@ where the second, the number, denotes a type?
 #define ATUI_MAKE_BRANCH(PP_NAME, bios, num_branches, children) \
 	_##PP_NAME##_atui(bios, num_branches, children)
 
+
+//#define PPATUI_FUNCIFY(...) _ATUI_PPDIFFER(_PPATUI_FUNCIFY(__VA_ARGS__))
 #define PPATUI_FUNCIFY(PP_NAME, ...) \
 PPATUI_FUNC_NAME(PP_NAME) {\
 	unsigned int i = 0;\
@@ -225,7 +283,7 @@ PPATUI_FUNC_NAME(PP_NAME) {\
 	unsigned int total_leaves = 0;\
 \
 	if(PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
-		const atui_leaf leavinit[] = { PPATUI_LEAVES(__VA_ARGS__) };\
+		const atui_leaf leavinit[] = { PPATUI_LEAVES(bios, __VA_ARGS__) };\
 		total_leaves = sizeof(leavinit)/sizeof(atui_leaf);\
 		scratch = malloc(\
 			sizeof(atui_branch) + \
@@ -293,82 +351,79 @@ python script:
 def ppatui_leaveshelper(max_entries=64, args="v,r,t,ta"):
 	numargs=len(args.split(","))
 	for i in range(0,max_entries*numargs, numargs):
-		print("#define _PPA_L%i(%s,...) _PPATUI_LEAF(%s) _PPA_L%i(__VA_ARGS__)" % (i+numargs, args, args, i))
+		print("#define _AL%i(b,%s,...) _PPATUI_LEAF(b,%s) _AL%i(b,__VA_ARGS__)" % (i+numargs, args, args, i))
 
 Waterfall loop for primary leaves
 */
-#define PPATUI_LEAVES(...) \
-	_PPATUI_LHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_LHELPER1(...) _PPATUI_LHELPER2(__VA_ARGS__)
-#define _PPATUI_LHELPER2(N,...) _PPA_L##N(__VA_ARGS__)
-#define _PPA_L0(...)
-#define _PPA_L4(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta)
-#define _PPA_L8(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L4(__VA_ARGS__)
-#define _PPA_L12(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L8(__VA_ARGS__)
-#define _PPA_L16(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L12(__VA_ARGS__)
-#define _PPA_L20(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L16(__VA_ARGS__)
-#define _PPA_L24(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L20(__VA_ARGS__)
-#define _PPA_L28(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L24(__VA_ARGS__)
-#define _PPA_L32(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L28(__VA_ARGS__)
-#define _PPA_L36(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L32(__VA_ARGS__)
-#define _PPA_L40(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L36(__VA_ARGS__)
-#define _PPA_L44(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L40(__VA_ARGS__)
-#define _PPA_L48(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L44(__VA_ARGS__)
-#define _PPA_L52(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L48(__VA_ARGS__)
-#define _PPA_L56(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L52(__VA_ARGS__)
-#define _PPA_L60(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L56(__VA_ARGS__)
-#define _PPA_L64(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L60(__VA_ARGS__)
-#define _PPA_L68(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L64(__VA_ARGS__)
-#define _PPA_L72(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L68(__VA_ARGS__)
-#define _PPA_L76(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L72(__VA_ARGS__)
-#define _PPA_L80(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L76(__VA_ARGS__)
-#define _PPA_L84(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L80(__VA_ARGS__)
-#define _PPA_L88(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L84(__VA_ARGS__)
-#define _PPA_L92(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L88(__VA_ARGS__)
-#define _PPA_L96(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L92(__VA_ARGS__)
-#define _PPA_L100(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L96(__VA_ARGS__)
-#define _PPA_L104(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L100(__VA_ARGS__)
-#define _PPA_L108(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L104(__VA_ARGS__)
-#define _PPA_L112(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L108(__VA_ARGS__)
-#define _PPA_L116(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L112(__VA_ARGS__)
-#define _PPA_L120(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L116(__VA_ARGS__)
-#define _PPA_L124(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L120(__VA_ARGS__)
-#define _PPA_L128(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L124(__VA_ARGS__)
-#define _PPA_L132(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L128(__VA_ARGS__)
-#define _PPA_L136(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L132(__VA_ARGS__)
-#define _PPA_L140(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L136(__VA_ARGS__)
-#define _PPA_L144(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L140(__VA_ARGS__)
-#define _PPA_L148(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L144(__VA_ARGS__)
-#define _PPA_L152(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L148(__VA_ARGS__)
-#define _PPA_L156(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L152(__VA_ARGS__)
-#define _PPA_L160(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L156(__VA_ARGS__)
-#define _PPA_L164(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L160(__VA_ARGS__)
-#define _PPA_L168(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L164(__VA_ARGS__)
-#define _PPA_L172(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L168(__VA_ARGS__)
-#define _PPA_L176(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L172(__VA_ARGS__)
-#define _PPA_L180(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L176(__VA_ARGS__)
-#define _PPA_L184(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L180(__VA_ARGS__)
-#define _PPA_L188(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L184(__VA_ARGS__)
-#define _PPA_L192(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L188(__VA_ARGS__)
-#define _PPA_L196(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L192(__VA_ARGS__)
-#define _PPA_L200(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L196(__VA_ARGS__)
-#define _PPA_L204(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L200(__VA_ARGS__)
-#define _PPA_L208(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L204(__VA_ARGS__)
-#define _PPA_L212(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L208(__VA_ARGS__)
-#define _PPA_L216(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L212(__VA_ARGS__)
-#define _PPA_L220(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L216(__VA_ARGS__)
-#define _PPA_L224(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L220(__VA_ARGS__)
-#define _PPA_L228(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L224(__VA_ARGS__)
-#define _PPA_L232(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L228(__VA_ARGS__)
-#define _PPA_L236(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L232(__VA_ARGS__)
-#define _PPA_L240(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L236(__VA_ARGS__)
-#define _PPA_L244(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L240(__VA_ARGS__)
-#define _PPA_L248(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L244(__VA_ARGS__)
-#define _PPA_L252(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L248(__VA_ARGS__)
-#define _PPA_L256(v,r,t,ta,...) _PPATUI_LEAF(v,r,t,ta) _PPA_L252(__VA_ARGS__)
-
-
-
+#define PPATUI_LEAVES(bios, ...) \
+	_PPATUI_LHELPER1(bios, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define _PPATUI_LHELPER1(b, ...) _PPATUI_LHELPER2(b, __VA_ARGS__)
+#define _PPATUI_LHELPER2(b, N,...) _AL##N(b, __VA_ARGS__)
+#define _AL0(...)
+#define _AL4(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta)
+#define _AL8(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL4(b,__VA_ARGS__)
+#define _AL12(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL8(b,__VA_ARGS__)
+#define _AL16(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL12(b,__VA_ARGS__)
+#define _AL20(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL16(b,__VA_ARGS__)
+#define _AL24(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL20(b,__VA_ARGS__)
+#define _AL28(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL24(b,__VA_ARGS__)
+#define _AL32(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL28(b,__VA_ARGS__)
+#define _AL36(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL32(b,__VA_ARGS__)
+#define _AL40(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL36(b,__VA_ARGS__)
+#define _AL44(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL40(b,__VA_ARGS__)
+#define _AL48(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL44(b,__VA_ARGS__)
+#define _AL52(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL48(b,__VA_ARGS__)
+#define _AL56(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL52(b,__VA_ARGS__)
+#define _AL60(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL56(b,__VA_ARGS__)
+#define _AL64(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL60(b,__VA_ARGS__)
+#define _AL68(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL64(b,__VA_ARGS__)
+#define _AL72(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL68(b,__VA_ARGS__)
+#define _AL76(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL72(b,__VA_ARGS__)
+#define _AL80(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL76(b,__VA_ARGS__)
+#define _AL84(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL80(b,__VA_ARGS__)
+#define _AL88(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL84(b,__VA_ARGS__)
+#define _AL92(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL88(b,__VA_ARGS__)
+#define _AL96(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL92(b,__VA_ARGS__)
+#define _AL100(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL96(b,__VA_ARGS__)
+#define _AL104(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL100(b,__VA_ARGS__)
+#define _AL108(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL104(b,__VA_ARGS__)
+#define _AL112(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL108(b,__VA_ARGS__)
+#define _AL116(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL112(b,__VA_ARGS__)
+#define _AL120(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL116(b,__VA_ARGS__)
+#define _AL124(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL120(b,__VA_ARGS__)
+#define _AL128(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL124(b,__VA_ARGS__)
+#define _AL132(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL128(b,__VA_ARGS__)
+#define _AL136(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL132(b,__VA_ARGS__)
+#define _AL140(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL136(b,__VA_ARGS__)
+#define _AL144(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL140(b,__VA_ARGS__)
+#define _AL148(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL144(b,__VA_ARGS__)
+#define _AL152(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL148(b,__VA_ARGS__)
+#define _AL156(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL152(b,__VA_ARGS__)
+#define _AL160(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL156(b,__VA_ARGS__)
+#define _AL164(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL160(b,__VA_ARGS__)
+#define _AL168(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL164(b,__VA_ARGS__)
+#define _AL172(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL168(b,__VA_ARGS__)
+#define _AL176(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL172(b,__VA_ARGS__)
+#define _AL180(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL176(b,__VA_ARGS__)
+#define _AL184(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL180(b,__VA_ARGS__)
+#define _AL188(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL184(b,__VA_ARGS__)
+#define _AL192(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL188(b,__VA_ARGS__)
+#define _AL196(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL192(b,__VA_ARGS__)
+#define _AL200(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL196(b,__VA_ARGS__)
+#define _AL204(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL200(b,__VA_ARGS__)
+#define _AL208(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL204(b,__VA_ARGS__)
+#define _AL212(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL208(b,__VA_ARGS__)
+#define _AL216(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL212(b,__VA_ARGS__)
+#define _AL220(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL216(b,__VA_ARGS__)
+#define _AL224(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL220(b,__VA_ARGS__)
+#define _AL228(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL224(b,__VA_ARGS__)
+#define _AL232(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL228(b,__VA_ARGS__)
+#define _AL236(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL232(b,__VA_ARGS__)
+#define _AL240(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL236(b,__VA_ARGS__)
+#define _AL244(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL240(b,__VA_ARGS__)
+#define _AL248(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL244(b,__VA_ARGS__)
+#define _AL252(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL248(b,__VA_ARGS__)
+#define _AL256(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL252(b,__VA_ARGS__)
 
 
 /*
@@ -467,6 +522,131 @@ Waterfall loop for bitfield leaves
 #define _BFL124(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL120(v,__VA_ARGS__)
 #define _BFL128(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL124(v,__VA_ARGS__)
 
+
+
+
+/*
+python script:
+def ppatui_inlineleaveshelper(max_entries=64, args="v,r,t,ta"):
+	numargs=len(args.split(","))
+	for i in range(0,max_entries*numargs, numargs):
+		print("#define _IL%i(b,%s,...) _PPATUI_INLEAF(b,%s) _IL%i(b,__VA_ARGS__)" % (i+numargs, args, args, i))
+
+Waterfall loop for inline leaves
+*/
+#define _PPATUI_INLINE_LEAVES(bios, ...) \
+	_PPATUI_ILHELPER1(bios, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
+#define _PPATUI_ILHELPER1(b, ...) _PPATUI_ILHELPER2(b, __VA_ARGS__)
+#define _PPATUI_ILHELPER2(b, N,...) _IL##N(b, __VA_ARGS__)
+#define _IL0(...)
+#define _IL4(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta)
+#define _IL8(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL4(b,__VA_ARGS__)
+#define _IL12(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL8(b,__VA_ARGS__)
+#define _IL16(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL12(b,__VA_ARGS__)
+#define _IL20(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL16(b,__VA_ARGS__)
+#define _IL24(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL20(b,__VA_ARGS__)
+#define _IL28(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL24(b,__VA_ARGS__)
+#define _IL32(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL28(b,__VA_ARGS__)
+#define _IL36(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL32(b,__VA_ARGS__)
+#define _IL40(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL36(b,__VA_ARGS__)
+#define _IL44(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL40(b,__VA_ARGS__)
+#define _IL48(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL44(b,__VA_ARGS__)
+#define _IL52(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL48(b,__VA_ARGS__)
+#define _IL56(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL52(b,__VA_ARGS__)
+#define _IL60(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL56(b,__VA_ARGS__)
+#define _IL64(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL60(b,__VA_ARGS__)
+#define _IL68(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL64(b,__VA_ARGS__)
+#define _IL72(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL68(b,__VA_ARGS__)
+#define _IL76(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL72(b,__VA_ARGS__)
+#define _IL80(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL76(b,__VA_ARGS__)
+#define _IL84(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL80(b,__VA_ARGS__)
+#define _IL88(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL84(b,__VA_ARGS__)
+#define _IL92(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL88(b,__VA_ARGS__)
+#define _IL96(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL92(b,__VA_ARGS__)
+#define _IL100(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL96(b,__VA_ARGS__)
+#define _IL104(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL100(b,__VA_ARGS__)
+#define _IL108(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL104(b,__VA_ARGS__)
+#define _IL112(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL108(b,__VA_ARGS__)
+#define _IL116(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL112(b,__VA_ARGS__)
+#define _IL120(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL116(b,__VA_ARGS__)
+#define _IL124(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL120(b,__VA_ARGS__)
+#define _IL128(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL124(b,__VA_ARGS__)
+#define _IL132(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL128(b,__VA_ARGS__)
+#define _IL136(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL132(b,__VA_ARGS__)
+#define _IL140(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL136(b,__VA_ARGS__)
+#define _IL144(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL140(b,__VA_ARGS__)
+#define _IL148(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL144(b,__VA_ARGS__)
+#define _IL152(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL148(b,__VA_ARGS__)
+#define _IL156(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL152(b,__VA_ARGS__)
+#define _IL160(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL156(b,__VA_ARGS__)
+#define _IL164(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL160(b,__VA_ARGS__)
+#define _IL168(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL164(b,__VA_ARGS__)
+#define _IL172(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL168(b,__VA_ARGS__)
+#define _IL176(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL172(b,__VA_ARGS__)
+#define _IL180(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL176(b,__VA_ARGS__)
+#define _IL184(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL180(b,__VA_ARGS__)
+#define _IL188(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL184(b,__VA_ARGS__)
+#define _IL192(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL188(b,__VA_ARGS__)
+#define _IL196(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL192(b,__VA_ARGS__)
+#define _IL200(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL196(b,__VA_ARGS__)
+#define _IL204(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL200(b,__VA_ARGS__)
+#define _IL208(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL204(b,__VA_ARGS__)
+#define _IL212(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL208(b,__VA_ARGS__)
+#define _IL216(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL212(b,__VA_ARGS__)
+#define _IL220(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL216(b,__VA_ARGS__)
+#define _IL224(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL220(b,__VA_ARGS__)
+#define _IL228(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL224(b,__VA_ARGS__)
+#define _IL232(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL228(b,__VA_ARGS__)
+#define _IL236(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL232(b,__VA_ARGS__)
+#define _IL240(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL236(b,__VA_ARGS__)
+#define _IL244(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL240(b,__VA_ARGS__)
+#define _IL248(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL244(b,__VA_ARGS__)
+#define _IL252(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL248(b,__VA_ARGS__)
+#define _IL256(b,v,r,t,ta,...) _PPATUI_INLEAF(b,v,r,t,ta) _IL252(b,__VA_ARGS__)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+inspired by https://stackoverflow.com/questions/319328/how-to-write-a-while-loop-with-the-c-preprocessor
+
+This prevents the C preprocessor engine from deregistering pp funcs
+def atui_preprocessor_defer(depth=5, width=3):
+	name = "_ATUI_PPD%i"
+	widthcall = ""
+	for i in range(width):
+		widthcall += name + "("
+	widthcall += "__VA_ARGS__" + ")"*width
+	for i in range(depth):
+		body = widthcall % ((i+1,)*width)
+		print("#define %s(...) %s" % ( name%(i,) , body) )
+	print("#define %s(...) __VA_ARGS__" % (name%(i+1)))
+	
+*/
+#define _ATUI_PPDIFFER(...) _ATUI_PPD0(__VA_ARGS__)
+#define _ATUI_PPD0(...) _ATUI_PPD1(_ATUI_PPD1(_ATUI_PPD1(__VA_ARGS__)))
+#define _ATUI_PPD1(...) _ATUI_PPD2(_ATUI_PPD2(_ATUI_PPD2(__VA_ARGS__)))
+#define _ATUI_PPD2(...) _ATUI_PPD3(_ATUI_PPD3(_ATUI_PPD3(__VA_ARGS__)))
+#define _ATUI_PPD3(...) _ATUI_PPD4(_ATUI_PPD4(_ATUI_PPD4(__VA_ARGS__)))
+#define _ATUI_PPD4(...) _ATUI_PPD5(_ATUI_PPD5(_ATUI_PPD5(__VA_ARGS__)))
+#define _ATUI_PPD5(...) _ATUI_PPD6(_ATUI_PPD6(_ATUI_PPD6(__VA_ARGS__)))
+#define _ATUI_PPD6(...) _ATUI_PPD7(_ATUI_PPD7(_ATUI_PPD7(__VA_ARGS__)))
+#define _ATUI_PPD7(...) _ATUI_PPD8(_ATUI_PPD8(_ATUI_PPD8(__VA_ARGS__)))
+#define _ATUI_PPD8(...) __VA_ARGS__
 
 
 

@@ -151,6 +151,11 @@ PPATUI_FUNCIFY(atom_master_data_table_v2_1,
 )
 
 PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
+	table_header,                ATUI_NONE, ATUI_INLINE, (table_header,
+		structuresize,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
+		format_revision,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
+		content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
+	),
 	mem_adjust_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mem_clk_patch_tbloffset,     ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mc_adjust_pertile_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,
@@ -173,11 +178,11 @@ PPATUI_ENUMER(atom_dgpu_vram_type,
 )
 
 
-//TODO "reserved" leaf
 PPATUI_FUNCIFY(atom_vram_module_v10,
 	memory_size,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	channel_enable,   ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	max_mem_clk,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	reserved,         ATUI_HEX, ATUI_ARRAY, ATUI_NONE,
 	mem_voltage,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	vram_module_size, ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	ext_memory_id,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
@@ -207,27 +212,3 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	gddr6_mr7,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	dram_pnstring,    ATUI_NONE, ATUI_STRING, ATUI_NONE
 )
-/*
-		drive_stren,   1,0,  ATUI_DEC
-		data_term,     3,2,  ATUI_DEC, 
-		PLLDLL_range,  5,4,  ATUI_DEC, 
-		calib_update,  6,6,  ATUI_DEC, 
-		PLLDLL,        7,7,  ATUI_DEC, 
-		RDBI,          8,8,  ATUI_DEC, 
-		WDBI,          9,9,  ATUI_DEC, 
-		CABI,         10,10, ATUI_DEC, 
-		PLLDLL_reset, 14,11, ATUI_DEC, 
-		ID,           15,12, ATUI_DEC 
-
-		drive_stren,  2, ATUI_DEC
-		data_term,    2, ATUI_DEC, 
-		PLLDLL_range, 2, ATUI_DEC, 
-		calib_update, 1, ATUI_DEC, 
-		PLLDLL,       1, ATUI_DEC, 
-		RDBI,         1, ATUI_DEC, 
-		WDBI,         1, ATUI_DEC, 
-		CABI,         1, ATUI_DEC, 
-		PLLDLL_reset, 4, ATUI_DEC, 
-		ID,           4, ATUI_DEC 
-*/
-
