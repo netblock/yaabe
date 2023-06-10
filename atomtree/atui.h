@@ -21,14 +21,12 @@ vim replace patterns that help copypaste structs from atombios.h:
 #include "atomtree_common.h"
 
 
+// shall be used in an array
 struct atui_enum {
 	char* name;
 	int val;
 };
 
-//just like funcify
-/*
-*/
 
 enum atui_type {
 	ATUI_NONE = 0b000,
@@ -62,7 +60,7 @@ struct atui_leaf_ {
 	const struct atui_enum* enum_options; // array of text val pair
 	uint8_t num_enum_opts;
 
-	atui_branch* inline_branch;
+	atui_branch** inline_branch;
 
 	union {
 		void*     val;
@@ -80,8 +78,11 @@ struct  atui_branch_ {
 
 	atui_branch** child_branches;
 	uint8_t branch_count;
+	uint8_t max_branch_count;
+
 	atui_branch** inline_branches;
 	uint8_t inline_branch_count;
+	uint8_t max_inline_branch_count;
 	
 
 	void* branch_aux; // alternative representation to leaves, if necessary
@@ -105,45 +106,11 @@ uint64_t strtol_2(const char* str);
 
 
 
-
-/*
-TODO better type handling with ATUI_FUNCIFY? strings, enums?
-for example, what about
-funcify(tablename,
-	leafa,0,
-	leafb,0,
-	leafstr,1,
-	leafc,0
-)
-where the second, the number, denotes a type?
-*/
-
-
-
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
 	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
 	default:0\
 )
-#define _PPATUI_LEAF_ISPOINTER(bios, var) _Generic( ((void*)&var), \
-	void**: &(bios->var), void*: &(bios.var) \
-)
-
-
-/*
-#define _PPATUI_ARRAY_TYPE(var) _Generic((var), \
-	uint8_t*:uint8_t, uint16_t*:uint16_t, \
-	uint32_t*:uint32_t, uint64_t*:uint64_t, \
-	default:0\
-)
-
-#define _PPATUI_LEAF(var, type) \
-{ \
-.val=&(bios->var), .name=#var, .total_bits=_PPATUI_LEAF_BITNESS(bios->var),\
-.type=pptype, \
-}
-*/
-
 
 
 /**** LEAF FANCY FUNCS ***/
@@ -160,9 +127,6 @@ where the second, the number, denotes a type?
 #define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
 #define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
 
-//#define INLINE_DEPACK(child, ...) child __VA_OPT__(,) __VA_ARGS__
-//#define INLINE_DEPACK(...) __VA_ARGS__
-//#define INLINE_DEPACK2(todepack) INLINE_DEPACK todepack
 
 #define _PPATUI_FANCY_ATUI_NONE(bios, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
@@ -221,42 +185,6 @@ where the second, the number, denotes a type?
 	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
 	_PPATUI_FANCY_NOARRAY },
 
-
-
-/*
-#define _PPATUI_FANCY_ATUI_INLINE(bios, var, radix, fancytype, fancydata)\
-	.val=NULL, .num_inline_leaves = (_PP_NUMARG fancydata -1)/4, \
-	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
-	_PPATUI_FANCY_NOARRAY }, \
-	_PPATUI_FANCY_ATUI_INLINE_HELPER(bios,fancydata)
-
-//#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
-//#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
-
-#define INLINE_DEPACK(...) __VA_ARGS__
-#define INLINE_DEPACK2(todepack) INLINE_DEPACK todepack
-
-#define _PPATUI_FANCY_ATUI_INLINE_HELPER(bios, fancydata)\
-_PPATUI_FANCY_ATUI_INLINE_HELPER2(bios, INLINE_DEPACK2(fancydata)) 
-
-#define _PPATUI_INLEAF(bios, var, radix, fancytype, fancydata) \
-	{ \
-		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
-	_PPATUI_FANCY_##fancytype((& bios ), var, radix, fancytype, fancydata)
-// the "(& bios )" is meant to pointerify to be compatible with "bios->var"
-
-
-
-// removes trailing comma
-#define _PPATUI_FANCY_ATUI_INLINE_HELPER2(...) \
-_PPATUI_FANCY_ATUI_INLINE_HELPER3(__VA_ARGS__)
-
-#define _PPATUI_FANCY_ATUI_INLINE_HELPER3(parent, child, ...) \
-	_PPATUI_INLINE_LEAVES(parent->child, __VA_ARGS__)
-// The C preprocessor anti-loops _PPATUI_LEAVES. 
-*/
-
-
 #define _PPATUI_INLEAF_ATUI_NONE(...)
 #define _PPATUI_INLEAF_ATUI_BITFIELD(...)
 #define _PPATUI_INLEAF_ATUI_ENUM(...)
@@ -276,14 +204,12 @@ _PPATUI_FANCY_ATUI_INLINE_HELPER3(__VA_ARGS__)
 /**** LEAF FANCY FUNCS END***/
 
 
-
-
-
 #define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
 	{ \
 		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
 	_PPATUI_FANCY_##fancytype(bios, var, radix, fancytype, fancydata)
 	// the closing } for the leaf is handled in the fancy pp funcs.
+
 
 
 #define PPATUI_FUNC_NAME(pp_name) \
@@ -297,11 +223,6 @@ _PPATUI_FANCY_ATUI_INLINE_HELPER3(__VA_ARGS__)
 #define ATUI_MAKE_BRANCH(pp_name, bios, num_branches, children) \
 	_##pp_name##_atui(bios, num_branches, children)
 
-
-
-
-
-//#define PPATUI_FUNCIFY(...) _ATUI_PPDIFFER(_PPATUI_FUNCIFY(__VA_ARGS__))
 #define PPATUI_FUNCIFY(pp_name, ...) \
 PPATUI_FUNC_NAME(pp_name) {\
 	atui_branch* table = NULL; \
@@ -352,7 +273,7 @@ PPATUI_FUNC_NAME(pp_name) {\
 			j=0;\
 			for(i=0; i<total_leaves; i++) {\
 				if (leaves[i].type & ATUI_INLINE) {\
-					leaves[i].inline_branch = (atui_branch*) inliners[j];\
+					leaves[i].inline_branch = &(inliners[j]);\
 					j++;\
 				}\
 			}\
@@ -380,9 +301,11 @@ PPATUI_FUNC_NAME(pp_name) {\
 		.leaf_count=total_leaves, .atomleaves=bios, \
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
+		.max_branch_count=num_branches, .max_inline_branch_count=num_inliners, \
 	};\
 	return table;\
 }
+
 
 
 /*
@@ -664,50 +587,6 @@ Waterfall loop for inline leaves
 #define _IL248(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL244(__VA_ARGS__)
 #define _IL252(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL248(__VA_ARGS__)
 #define _IL256(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL252(__VA_ARGS__)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-inspired by https://stackoverflow.com/questions/319328/how-to-write-a-while-loop-with-the-c-preprocessor
-
-This prevents the C preprocessor engine from deregistering pp funcs
-def atui_preprocessor_defer(depth=5, width=3):
-	name = "_ATUI_PPD%i"
-	widthcall = ""
-	for i in range(width):
-		widthcall += name + "("
-	widthcall += "__VA_ARGS__" + ")"*width
-	for i in range(depth):
-		body = widthcall % ((i+1,)*width)
-		print("#define %s(...) %s" % ( name%(i,) , body) )
-	print("#define %s(...) __VA_ARGS__" % (name%(i+1)))
-	
-*/
-#define _ATUI_PPDIFFER(...) _ATUI_PPD0(__VA_ARGS__)
-#define _ATUI_PPD0(...) _ATUI_PPD1(_ATUI_PPD1(_ATUI_PPD1(__VA_ARGS__)))
-#define _ATUI_PPD1(...) _ATUI_PPD2(_ATUI_PPD2(_ATUI_PPD2(__VA_ARGS__)))
-#define _ATUI_PPD2(...) _ATUI_PPD3(_ATUI_PPD3(_ATUI_PPD3(__VA_ARGS__)))
-#define _ATUI_PPD3(...) _ATUI_PPD4(_ATUI_PPD4(_ATUI_PPD4(__VA_ARGS__)))
-#define _ATUI_PPD4(...) _ATUI_PPD5(_ATUI_PPD5(_ATUI_PPD5(__VA_ARGS__)))
-#define _ATUI_PPD5(...) _ATUI_PPD6(_ATUI_PPD6(_ATUI_PPD6(__VA_ARGS__)))
-#define _ATUI_PPD6(...) _ATUI_PPD7(_ATUI_PPD7(_ATUI_PPD7(__VA_ARGS__)))
-#define _ATUI_PPD7(...) _ATUI_PPD8(_ATUI_PPD8(_ATUI_PPD8(__VA_ARGS__)))
-#define _ATUI_PPD8(...) __VA_ARGS__
 
 
 

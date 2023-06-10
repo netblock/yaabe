@@ -11,44 +11,8 @@ vim replace patterns that help copypaste structs from atombios.h:
 */
 
 #include "atui.h"
-/*
-void atui_leaf_set_val(atui_leaf* leaf, uint64_t val) {
-	//needs the ULL for 64-bit
-	uint64_t maxval = (1ULL << (leaf->total_bits)) - 1; 
-	if (val > maxval)
-		val = maxval;
-	switch(leaf->type) { // might be needed for bitfield structs
-		case 8:
-			*(leaf->u8) = val;
-			break;
-		case 16:
-			*(leaf->u16) = val;
-			break;
-		case 32:
-			*(leaf->u32) = val;
-			break;
-		case 64:
-			*(leaf->u64) = val;
-			break;
-	}
-}
-
-uint64_t atui_leaf_get_val(atui_leaf* leaf) {
-//  return *(leaf->u64) & ((1<<leaf->type)-1);
-	switch(leaf->total_bits) {
-		case 8:
-			return *(leaf->u8);
-		case 16:
-			return *(leaf->u16);
-		case 32:
-			return *(leaf->u32);
-		case 64:
-			return *(leaf->u64);
-	}
-}
 
 
-*/
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
 	if (leaf->type & ATUI_ANY) {
 		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
@@ -83,8 +47,8 @@ uint64_t strtol_2(const char* str) {
 
 
 void atui_destroy_tree(atui_branch* tree) { //a reference implementation
-	tree->branch_count += tree->inline_branch_count;
-	while(tree->branch_count--)
+	tree->max_branch_count += tree->max_inline_branch_count;
+	while(tree->max_branch_count--)
 		atui_destroy_tree(tree->child_branches[tree->branch_count]);
 	free(tree);
 }
@@ -102,12 +66,33 @@ WARNING: always have the last comma removed. This is bad: ,)
 If the element should be viewed as a number, set a radix. radix is one of
 ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN.
 
-If the element should be viewed in base 2, but also has bitfields for children, state:
-table_element, ATUI_BIN, ATUI_BITFIELD, (
-	bitfield_struct_instance_name,
-	name, bitness, radix,
-	name, bitness, radix
-),
+If the element should be viewed in base 2, but also has bitfields for children:
+	table_element, ATUI_BIN, ATUI_BITFIELD, (
+		bitfield_struct_instance_name,
+		name, bitness, radix,
+		name, bitness, radix
+	),
+
+
+if the element should have a list of text-val pairs, an enum,
+first populate the atui enum:
+	PPATUI_ENUMER(enum_struct_name,
+		ENUM_ENTRY1,
+		ENUM_ENTRY2,
+		ENUM_ENTRY3,
+	)
+and then for the atui table,
+	table_element, ATUI_HEX, ATUI_ENUM, enum_struct_name,
+
+if the element should reference a table, a atui_branch to inline,
+ake sure the table is populated with an ATUI_FUNCIFY()
+	table_element, ATUI_NONE, ATUI_INLINE, table_to_inline,
+
+if the element is a string,
+	table_element, ATUI_NONE, ATUI_STRING, ATUI_NONE,
+or otherwise an array,
+	table_element, ATUI_HEX, ATUI_ARRAY, ATUI_NONE,
+
 */
 
 
@@ -120,7 +105,6 @@ PPATUI_FUNCIFY(atom_common_table_header,
 	content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
-// TODO atom_bios_string
 PPATUI_FUNCIFY(atom_rom_header_v2_2,
 	table_header,              ATUI_NONE, ATUI_INLINE, 
 		atom_common_table_header,
@@ -183,14 +167,6 @@ PPATUI_FUNCIFY(atom_master_data_table_v2_1,
 	sw_datatable34,       ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
 
-/*
-	table_header,                ATUI_NONE, ATUI_INLINE, (table_header,
-		structuresize,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
-		format_revision,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
-		content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
-	),
-
-*/
 PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
 	table_header,                ATUI_NONE, ATUI_INLINE, 
 		atom_common_table_header,
@@ -208,14 +184,14 @@ PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
 	mc_phy_tile_num,             ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
+
+
 PPATUI_ENUMER(atom_dgpu_vram_type,
   ATOM_DGPU_VRAM_TYPE_GDDR5,                                             
   ATOM_DGPU_VRAM_TYPE_HBM2,
   ATOM_DGPU_VRAM_TYPE_HBM2E,
   ATOM_DGPU_VRAM_TYPE_GDDR6
 )
-
-
 PPATUI_FUNCIFY(atom_vram_module_v10,
 	memory_size,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	channel_enable,   ATUI_DEC, ATUI_NONE, ATUI_NONE,
