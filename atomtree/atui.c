@@ -11,7 +11,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 */
 
 #include "atui.h"
-
+#include <stdio.h>
 
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
 	if (leaf->type & ATUI_ANY) {

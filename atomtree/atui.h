@@ -159,6 +159,7 @@ uint64_t strtol_2(const char* str);
 
 #define _PPATUI_FANCY_ATUI_BITFIELD(bios, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(bios->var)-1, .bitfield_lo=0, \
 	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN fancydata , \
 	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
 	_PPATUI_BITFIELD_LEAVES(bios->var, _PPATUI_FANCYDATA_UNPACK(fancydata))
@@ -174,7 +175,7 @@ uint64_t strtol_2(const char* str);
 		.type=(radix|ATUI_BITFIELD), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
-		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD(biosvar) \
+		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
 		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
 	},
 
