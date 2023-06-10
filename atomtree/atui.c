@@ -11,7 +11,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 */
 
 #include "atui.h"
-
+/*
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val) {
 	//needs the ULL for 64-bit
 	uint64_t maxval = (1ULL << (leaf->total_bits)) - 1; 
@@ -32,6 +32,7 @@ void atui_leaf_set_val(atui_leaf* leaf, uint64_t val) {
 			break;
 	}
 }
+
 uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 //  return *(leaf->u64) & ((1<<leaf->type)-1);
 	switch(leaf->total_bits) {
@@ -46,6 +47,32 @@ uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 	}
 }
 
+
+*/
+void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
+	if (leaf->type & ATUI_ANY) {
+		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		uint64_t maxval = (1ULL << num_bits) - 1;
+		if (val > maxval)
+			val = maxval;
+
+		// ...11111 000.. 1111...
+		uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
+		val <<= leaf->bitfield_lo;
+		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+	}
+}
+
+
+uint64_t atui_leaf_get_val(atui_leaf* leaf) {
+	if (leaf->type & ATUI_ANY) {
+		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
+
+		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
+	}
+}
+
 uint64_t strtol_2(const char* str) {
 	// TODO better compatibility with binary, hex, etc.
 	char base = 0;
@@ -56,6 +83,7 @@ uint64_t strtol_2(const char* str) {
 
 
 void atui_destroy_tree(atui_branch* tree) { //a reference implementation
+	tree->branch_count += tree->inline_branch_count;
 	while(tree->branch_count--)
 		atui_destroy_tree(tree->child_branches[tree->branch_count]);
 	free(tree);
@@ -94,6 +122,9 @@ PPATUI_FUNCIFY(atom_common_table_header,
 
 // TODO atom_bios_string
 PPATUI_FUNCIFY(atom_rom_header_v2_2,
+	table_header,              ATUI_NONE, ATUI_INLINE, 
+		atom_common_table_header,
+	atom_bios_string,          ATUI_NONE, ATUI_STRING, ATUI_NONE,
 	bios_segment_address,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	protectedmodeoffset,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	configfilenameoffset,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
@@ -113,6 +144,8 @@ PPATUI_FUNCIFY(atom_rom_header_v2_2,
 
 
 PPATUI_FUNCIFY(atom_master_data_table_v2_1,
+	table_header,         ATUI_NONE, ATUI_INLINE, 
+		atom_common_table_header,
 	utilitypipeline,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	multimedia_info,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	smc_dpm_info,         ATUI_HEX, ATUI_NONE, ATUI_NONE,
@@ -150,12 +183,17 @@ PPATUI_FUNCIFY(atom_master_data_table_v2_1,
 	sw_datatable34,       ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
 
-PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
+/*
 	table_header,                ATUI_NONE, ATUI_INLINE, (table_header,
 		structuresize,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
 		format_revision,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
 		content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
 	),
+
+*/
+PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
+	table_header,                ATUI_NONE, ATUI_INLINE, 
+		atom_common_table_header,
 	mem_adjust_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mem_clk_patch_tbloffset,     ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mc_adjust_pertile_tbloffset, ATUI_DEC, ATUI_NONE, ATUI_NONE,

@@ -20,8 +20,15 @@ int main() {
 		(1,2,3),
 		test
 	)
+	printf("%i %i %i\n", ttt.a, ttt.b, ttt.c);
+	( & ttt ) ->a = 4;
+	printf("%i %i %i\n", ttt.a, ttt.b, ttt.c);
 
-	printf("%i %i %i\n", ttt.a, ttt.b, ttt.c);
-	( & ttt ) ->a = 1;
-	printf("%i %i %i\n", ttt.a, ttt.b, ttt.c);
+	int ar[] = {7,6,5,4,3,2,1,0};
+	int ar2[] = {};
+	int* arr = ar;
+	printf("%i ", *arr); arr+=1;
+	printf("%i ", *arr); arr+=1;
+	printf("%i \n", *arr); arr+=1;
+	printf("%i\n", sizeof(ar2));
 }
