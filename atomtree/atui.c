@@ -49,7 +49,7 @@ uint64_t strtol_2(const char* str) {
 void atui_destroy_tree(atui_branch* tree) { //a reference implementation
 	tree->max_branch_count += tree->max_inline_branch_count;
 	while(tree->max_branch_count--)
-		atui_destroy_tree(tree->child_branches[tree->branch_count]);
+		atui_destroy_tree(tree->child_branches[tree->max_branch_count]);
 	free(tree);
 }
 

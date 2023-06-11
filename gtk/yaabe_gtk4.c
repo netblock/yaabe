@@ -34,7 +34,8 @@ struct yaabe_gtkapp_branch_models { // to cache generated atui gobjects
 	GObject* child_gobj_branches[];
 };
 
-void alloc_aux_branch_models(atui_branch* branch) { // caching; see struct
+void alloc_aux_branch_models(atui_branch* branch) {
+		// caching; see struct
 	branch->branch_aux = malloc(
 		sizeof(struct yaabe_gtkapp_branch_models) +
 		branch->branch_count * sizeof(GObject*)
@@ -55,9 +56,10 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 
 		free(submodels);
 	}
-
-	while(tree->branch_count--)
-		atui_destroy_tree_with_gtk(tree->child_branches[tree->branch_count]);
+	tree->max_branch_count += tree->max_inline_branch_count;
+	while(tree->max_branch_count--)
+		atui_destroy_tree_with_gtk(
+			tree->child_branches[tree->max_branch_count]);
 
 	free(tree);
 }
@@ -220,7 +222,7 @@ static void set_leaves_list(GtkSelectionModel* model,
 	);
 }
 
-static GtkWidget* create_leaves_pane(
+inline static GtkWidget* create_leaves_pane(
 		struct yaabe_gtkapp_ptrs_commons* commons) {
 	
 	// columnview abstract
@@ -266,7 +268,7 @@ static GtkWidget* create_leaves_pane(
 
 
 
-static GListStore* atui_gtk_model(atui_branch* root) {
+inline static GListStore* atui_gtk_model(atui_branch* root) {
 	alloc_aux_branch_models(root);
 
 	GObject* gbranch = g_object_new(G_TYPE_OBJECT, NULL);
@@ -353,7 +355,7 @@ static void branch_listitem_recycler(GtkSignalListItemFactory* factory,
 }
 
 
-static GtkWidget* create_branches_pane(
+inline static GtkWidget* create_branches_pane(
 		struct yaabe_gtkapp_ptrs_commons* commons, GListStore* atui_model) {
 
 	//Treelist, along with branch_tlmodel_func, creates our collapsable model.
