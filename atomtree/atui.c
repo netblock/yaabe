@@ -38,12 +38,63 @@ uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 }
 
 uint64_t strtol_2(const char* str) {
-	// TODO better compatibility with binary, hex, etc.
-	char base = 0;
-	if ((str[0] == '0') && (str[1] == 'b'))
+	// TODO is there a strtoll that has 0b detection?
+	uint8_t base = 0; // 0 = auto
+	if ((str[0] == '0') && (str[1] == 'b')) {
 		base = 2;
-	return (uint64_t)strtol(str+base, NULL, base);
+		str += 2;
+	}
+	return (uint64_t)strtoll(str, NULL, base);
 }
+
+
+
+
+int atui_set_from_text(atui_leaf* leaf, char* buffer) {
+    int err = 0;
+
+    if(leaf->type & ATUI_ANY) {
+        atui_leaf_set_val(leaf, strtol_2(buffer));
+
+    } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) && 
+            leaf->total_bits == 8) {
+        uint8_t i = leaf->array_size;
+        while (i--)
+            leaf->u8[i] = buffer[i];
+
+    } else {
+        err = 1;
+    }
+    return err;
+}
+int atui_get_to_text(atui_leaf* leaf, char* buffer) {
+    int err = 0;
+
+    if(leaf->type & ATUI_ANY) {
+		uint64_t val = atui_leaf_get_val(leaf);
+		if ((leaf->type&ATUI_ANY) == ATUI_DEC) {
+			sprintf(buffer, "%u", val);
+		} else if ((leaf->type&ATUI_ANY) == ATUI_HEX) {
+			sprintf(buffer, "0x%X", val);
+		} else if ((leaf->type&ATUI_ANY) == ATUI_BIN) {
+			uint8_t numbits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+			//sprintf adds the \0 at the end.
+			char format[10] = "0b%0"; //prefix
+			sprintf(format, "%02ub", numbits); //middle, suffix.
+			sprintf(buffer, format, val);
+		}
+
+    } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) && 
+            leaf->total_bits == 8) {
+        uint8_t i = leaf->array_size;
+        while (i--)
+            buffer[i] = leaf->u8[i];
+    } else {
+        err = 1;
+    }
+    return err;
+}
+
 
 
 void atui_destroy_tree(atui_branch* tree) { //a reference implementation
