@@ -93,22 +93,23 @@ struct  atui_branch_ {
 	void* atomleaves;
 };
 
+// reccomended buffer size for the upcomming text functions
+#define ATUI_LEAVES_STR_BUFFER 70
+
+//set the value from a string or array of 8-bit
+int atui_set_from_text(atui_leaf* leaf, const char* buffer);
+int atui_get_to_text(atui_leaf*, char* buffer);
+
 
 //set or get the number value from the leaf
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val(atui_leaf* leaf);
 
 
-// reccomended buffer size for the upcomming functions
-#define ATUI_LEAVES_STR_BUFFER 70
-
-//set the value from a string or array of 8-bit
-int atui_set_from_text(atui_leaf* leaf, char* buffer);
-int atui_get_to_text(atui_leaf*, char* buffer);
 
 
-//temporary until a better strtol api that considers non base 10 inputs
-uint64_t strtol_2(const char* str);
+//TODO stroll that considers 0b prefix?
+uint64_t strtoll_2(const char* str);
 
 //atui has auxiliary pointers to hang extra data off of and this deallocator
 //doesn't consider.

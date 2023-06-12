@@ -37,7 +37,7 @@ uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 	}
 }
 
-uint64_t strtol_2(const char* str) {
+uint64_t strtoll_2(const char* str) {
 	// TODO is there a strtoll that has 0b detection?
 	uint8_t base = 0; // 0 = auto
 	if ((str[0] == '0') && (str[1] == 'b')) {
@@ -50,11 +50,11 @@ uint64_t strtol_2(const char* str) {
 
 
 
-int atui_set_from_text(atui_leaf* leaf, char* buffer) {
+int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
     int err = 0;
 
     if(leaf->type & ATUI_ANY) {
-        atui_leaf_set_val(leaf, strtol_2(buffer));
+        atui_leaf_set_val(leaf, strtoll_2(buffer));
 
     } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) && 
             leaf->total_bits == 8) {
@@ -80,7 +80,7 @@ int atui_get_to_text(atui_leaf* leaf, char* buffer) {
 			uint8_t numbits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 			//sprintf adds the \0 at the end.
 			char format[10] = "0b%0"; //prefix
-			sprintf(format, "%02ub", numbits); //middle, suffix.
+			sprintf(format+4, "%02ub", numbits); //middle, suffix.
 			sprintf(buffer, format, val);
 		}
 

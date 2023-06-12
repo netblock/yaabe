@@ -18,7 +18,6 @@ https://stackoverflow.com/questions/74556059/how-to-build-a-tree-in-gtk4-4-10
 */
 
 
-
 struct yaabe_gtkapp_ptrs_commons {
 	GtkApplication* yaabe_gtk;
 
@@ -26,15 +25,14 @@ struct yaabe_gtkapp_ptrs_commons {
 	atui_branch* atui_root;
 
 	GtkColumnView* leaves_columnview; // so branches can set leaves
-	//GListModel* stray_text_history; // un-Enter-key'd textbox resets.
 };
 
-struct yaabe_gtkapp_branch_models { // to cache generated atui gobjects
+struct yaabe_gtkapp_branch_models { // to cache generated gobjects
 	GListModel* leaves_model;
 	GObject* child_gobj_branches[];
 };
 
-void alloc_aux_branch_models(atui_branch* branch) {
+inline static void alloc_aux_branch_models(atui_branch* branch) {
 		// caching; see struct
 	branch->branch_aux = malloc(
 		sizeof(struct yaabe_gtkapp_branch_models) +
@@ -80,32 +78,28 @@ static void leaves_key_column_recycler(GtkListItemFactory* factory,
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
 }
 
+
+
+
 static void leaves_textbox_stray(GtkEventControllerFocus* focus_sense,
 		gpointer leaf_gptr) {
 	GtkWidget* textbox = gtk_event_controller_get_widget(
 		GTK_EVENT_CONTROLLER(focus_sense));
 	atui_leaf* leaf = leaf_gptr;
 
-	char str_buff[20];
-	int n = sprintf(str_buff, "%u", atui_leaf_get_val(leaf)); 
-	// TODO atom type, like for strings?
-	GtkEntryBuffer* buffer = gtk_text_get_buffer(GTK_TEXT(textbox));
-	gtk_entry_buffer_set_text(buffer, str_buff, n);
+	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	atui_get_to_text(leaf, str_buff);
+	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
 }
 static void leaves_val_column_textbox_apply(
 		GtkEditable* textbox, gpointer leaf_gptr) {
 	atui_leaf* leaf = leaf_gptr;
-	printf("before: (%u-bit: %u , %u); input: (%s , %u); ",
-		leaf->type,    atui_leaf_get_val(leaf),    *(leaf->u16), 
-		gtk_editable_get_text(textbox), 
-		strtol_2(gtk_editable_get_text(textbox)));
-	atui_leaf_set_val(leaf, strtol_2(gtk_editable_get_text(textbox)));
+
+	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 	
-	char str_buff[20];
-	sprintf(str_buff, "%u", atui_leaf_get_val(leaf));
+	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	atui_get_to_text(leaf, str_buff);
 	gtk_editable_set_text(textbox, str_buff);
-	printf("after: %u (%s; %u)\n",
-		atui_leaf_get_val(leaf), gtk_editable_get_text(textbox), *(leaf->u32));
 }
 
 
@@ -128,10 +122,9 @@ static void leaves_val_column_recycler(GtkListItemFactory* factory,
 	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 
-	char str_buff[20];
-	int n = sprintf(str_buff, "%u", atui_leaf_get_val(leaf));
-	GtkEntryBuffer* buffer = gtk_text_get_buffer(GTK_TEXT(textbox));
-	gtk_entry_buffer_set_text(buffer, str_buff, n);
+	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	atui_get_to_text(leaf, str_buff);
+	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
 
 	g_signal_connect(textbox,"activate",
 		G_CALLBACK(leaves_val_column_textbox_apply), leaf);
@@ -142,15 +135,16 @@ static void leaves_val_column_recycler(GtkListItemFactory* factory,
 	g_object_unref(controller_list);
 	g_signal_connect(focus_sense, "leave",
 		G_CALLBACK(leaves_textbox_stray), leaf);
-
-	//g_signal_connect(textbox,"leave",
-	//	G_CALLBACK(leaves_textbox_stray), NULL);
-
 }
 static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 		 GtkListItem* list_item) { //unbind
 // signals need to be removed, else they build up
 	GtkWidget* textbox = gtk_list_item_get_child(list_item);
+
+	//TODO: GtkText - unexpected blinking selection. Removing
+	// these don't work:
+	gtk_editable_select_region(GTK_EDITABLE(textbox), 0, 0);
+	gtk_editable_set_position(GTK_EDITABLE(textbox), 0);
 
 	g_signal_handlers_disconnect_matched(textbox, G_SIGNAL_MATCH_FUNC, 
 		0,0,NULL,  G_CALLBACK(leaves_val_column_textbox_apply),  NULL);
@@ -213,7 +207,7 @@ static void set_leaves_list(GtkSelectionModel* model,
 	atui_branch* branch = g_object_get_data(gobj_branch, "branch");
 
 	struct yaabe_gtkapp_branch_models* branch_models = branch->branch_aux;
-	if(branch_models->leaves_model == NULL) // caching
+	if(branch_models->leaves_model == NULL) // if not cached, generate.
 		atuileaves_to_glistmodel(branch);
 
 
@@ -347,9 +341,7 @@ static void branch_listitem_recycler(GtkSignalListItemFactory* factory,
 	GObject* gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
 	atui_branch* branch = g_object_get_data(gobj_branch, "branch");
 
-	char buff[50];
-	sprintf(buff, "%s", branch->name);
-	gtk_label_set_text(GTK_LABEL(row_label), buff);
+	gtk_label_set_text(GTK_LABEL(row_label), branch->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
 }
@@ -358,7 +350,7 @@ static void branch_listitem_recycler(GtkSignalListItemFactory* factory,
 inline static GtkWidget* create_branches_pane(
 		struct yaabe_gtkapp_ptrs_commons* commons, GListStore* atui_model) {
 
-	//Treelist, along with branch_tlmodel_func, creates our collapsable model.
+	//TreeList, along with branch_tlmodel_func, creates our collapsable model.
 	GtkTreeListModel* tlist_atui = gtk_tree_list_model_new(
 		G_LIST_MODEL(atui_model), false, true, branch_tlmodel_func, NULL,NULL);
 
@@ -368,7 +360,6 @@ inline static GtkWidget* create_branches_pane(
 	// change the leaves pane's model based on the what is selected in brances
 	g_signal_connect(sel_model, "selection-changed",
 		G_CALLBACK(set_leaves_list), commons);
-		//G_CALLBACK(set_leaves_list), leaves_model);
 	gtk_single_selection_set_autoselect(sel_model, false);
 
 
@@ -383,9 +374,6 @@ inline static GtkWidget* create_branches_pane(
 
 	GtkWidget* scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolledlist), listview);
-
-	//GtkWidget* scroll_frame = gtk_frame_new(NULL);
-	//gtk_frame_set_child(GTK_FRAME(scroll_frame), scrolledlist);
 
 	return scrolledlist;
 }
@@ -418,38 +406,6 @@ static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 	gtk_window_present(GTK_WINDOW(window)); //gtk4.10
 }
 
-/*
-int main(int argc, char* argv[]) {
-	struct atom_test_raw atest = { //pretend vals from bios
-		.antiem = 1, \
-		.otheritem = 3, \
-		.smolthing = 5, \
-		.strthing = "hello!", \
-		.twobytes = 7,  \
-		.twobytes1 = 11 , \
-		.twobytes2 = 13 , \
-		.twobytes3 = 17 , \
-		.twobytes4 = 19 , \
-		.twobytes5 = 23 , \
-		.twobytes6 = 29 , \
-		.twobytes7 = 31 , \
-		.twobytes8 = 37 , \
-		.twobytes9 = 41 , \
-		.twobytes10 = 43 , \
-	};
-	struct yaabe_gtkapp_ptrs_commons commons2;
-	commons2.root = atui_build_tree(&atest);
-
-	GtkApplication* yaabe_gtkapp = gtk_application_new(NULL,
-		G_APPLICATION_DEFAULT_FLAGS);
-	g_signal_connect (yaabe_gtkapp, "activate", G_CALLBACK(app_activate),
-		&commons2);
-	int status = g_application_run(G_APPLICATION(yaabe_gtkapp), argc, argv);
-
-	g_object_unref(yaabe_gtkapp);
-	return status;
-}
-*/
 int yaabe_gtk(struct atom_tree* atree) {
 	struct yaabe_gtkapp_ptrs_commons commons;
 	commons.atomtree_root = atree;
