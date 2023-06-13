@@ -7,16 +7,6 @@
 
 #include <atui.h>
 #include <atomtree.h>
-/*
-https://docs.gtk.org/gtk4/section-list-widget.html#list-styles
-https://blog.gtk.org/2020/09/05/a-primer-on-gtklistview/
-https://toshiocp.github.io/Gtk4-tutorial/sec26.html
-
-https://blog.gtk.org/2020/09/21/gtkcolumnview/
-
-https://stackoverflow.com/questions/74556059/how-to-build-a-tree-in-gtk4-4-10
-*/
-
 
 struct yaabe_gtkapp_ptrs_commons {
 	GtkApplication* yaabe_gtk;
@@ -28,20 +18,19 @@ struct yaabe_gtkapp_ptrs_commons {
 };
 
 struct yaabe_gtkapp_model_cache { // to cache
-	//GListModel* leaves_model;
-	//GtkTreeListModel* leaves_model;
 	GtkSelectionModel* leaves_model;
 	uint16_t child_gobj_count;
 	GObject* child_gobj[];
 };
 
 inline static void alloc_branch_cache(atui_branch* branch) {
-		// caching; see struct
 	uint16_t gobj_count = branch->branch_count;
+
 	branch->auxiliary = malloc(
 		sizeof(struct yaabe_gtkapp_model_cache) +
 		gobj_count * sizeof(GObject*)
 	);
+
 	struct yaabe_gtkapp_model_cache* models = branch->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = gobj_count;
@@ -52,6 +41,7 @@ inline static void alloc_leaf_cache(atui_leaf* leaf, uint16_t num_children) {
 		sizeof(struct yaabe_gtkapp_model_cache) +
 		num_children * sizeof(GObject*)
 	);
+
 	struct yaabe_gtkapp_model_cache* models = leaf->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = num_children;
@@ -100,6 +90,9 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 
 
 
+
+
+
 static void leaves_key_column_spawner(GtkListItemFactory* factory,
 		GtkListItem* list_item) { //setup to spawn a UI skeleton
 
@@ -110,7 +103,6 @@ static void leaves_key_column_spawner(GtkListItemFactory* factory,
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
 
 	gtk_list_item_set_child(list_item, expander);
-	//gtk_list_item_set_child(list_item, gtk_label_new(NULL));
 }
 static void leaves_key_column_recycler(GtkListItemFactory* factory, 
 		GtkListItem* list_item) { //bind data to the UI skeleton
@@ -125,16 +117,7 @@ static void leaves_key_column_recycler(GtkListItemFactory* factory,
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
-/*
-	GtkWidget* label = gtk_list_item_get_child(list_item);
-	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
-	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
-	gtk_label_set_text(GTK_LABEL(label), leaf->name);
-*/
 }
-
-
-
 
 static void leaves_textbox_stray(GtkEventControllerFocus* focus_sense,
 		gpointer leaf_gptr) {
@@ -177,7 +160,6 @@ static void leaves_val_column_recycler(GtkListItemFactory* factory,
 
 	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
-//	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 
 	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
@@ -198,6 +180,7 @@ static void leaves_val_column_recycler(GtkListItemFactory* factory,
 static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 		 GtkListItem* list_item) { //unbind
 // signals need to be removed, else they build up
+
 	GtkWidget* textbox = gtk_list_item_get_child(list_item);
 
 	//TODO: GtkText - unexpected blinking selection. Removing
@@ -214,11 +197,6 @@ static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 	g_signal_handlers_disconnect_matched(focus_sense, G_SIGNAL_MATCH_FUNC, 
 		0,0,NULL,  G_CALLBACK(leaves_textbox_stray),  NULL);
 }
-
-
-
-
-
 
 
 //GtkTreeListModelCreateModelFunc for leaves
@@ -284,9 +262,7 @@ inline static GtkSelectionModel* create_leaves_selmodel(
 	return GTK_SELECTION_MODEL(no_sel);
 }
 
-//inline static GListModel* atuileaves_to_glistmodel(atui_branch* branch) {
 inline static void atuileaves_to_glistmodel(atui_branch* branch) {
-//https://stackoverflow.com/questions/74838995/gobject-to-hold-a-pointer
 	GObject* gobj_leaf;
 	atui_leaf* leaf;
 	GListStore* leavesmodel = g_list_store_new(G_TYPE_OBJECT);
@@ -308,6 +284,7 @@ inline static void atuileaves_to_glistmodel(atui_branch* branch) {
 		G_LIST_MODEL(leavesmodel), false, true, leaves_tlmodel_func, NULL,NULL);
 	GtkSelectionModel* sel_model = create_leaves_selmodel(
 		G_LIST_MODEL(treemodel));
+
 	branch_models->leaves_model = sel_model;
 
 	//TODO Is this necessary?
@@ -316,7 +293,6 @@ inline static void atuileaves_to_glistmodel(atui_branch* branch) {
 
 static void set_leaves_list(GtkSelectionModel* model,
 		guint position, guint n_items, gpointer yaabe_commons) {
-//https://docs.gtk.org/gtk4/signal.SelectionModel.selection-changed.html
 
 	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
 
@@ -335,16 +311,14 @@ static void set_leaves_list(GtkSelectionModel* model,
 
 inline static GtkWidget* create_leaves_pane(
 		struct yaabe_gtkapp_ptrs_commons* commons) {
+
 	atui_branch* root_branch = commons->atui_root;
 	struct yaabe_gtkapp_model_cache* root_models = root_branch->auxiliary;
 	
 	// columnview abstract
 	atuileaves_to_glistmodel(root_branch);
-
 	GtkWidget* leaves_list = gtk_column_view_new(root_models->leaves_model);
 	commons->leaves_columnview = GTK_COLUMN_VIEW(leaves_list);
-
-	//commons->stray_text_history = model;
 
 
 	// create and attach columns
@@ -434,7 +408,6 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 
 static void branch_listitem_spawner(GtkSignalListItemFactory* factory,
 		GtkListItem* list_item) { // setup
-// https://stackoverflow.com/questions/74556059/how-to-build-a-tree-in-gtk4-4-10
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
 
 	GtkWidget* expander = gtk_tree_expander_new();
