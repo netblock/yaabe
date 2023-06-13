@@ -107,7 +107,7 @@ That is, bitfield population, and enum and inline association.
 #define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
 	{\
 		.val=&(biosvar), .name=#bfname, \
-		.type=(radix|ATUI_BITFIELD), \
+		.type=radix, \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \

@@ -27,33 +27,69 @@ struct yaabe_gtkapp_ptrs_commons {
 	GtkColumnView* leaves_columnview; // so branches can set leaves
 };
 
-struct yaabe_gtkapp_branch_models { // to cache generated gobjects
-	GListModel* leaves_model;
-	GObject* child_gobj_branches[];
+struct yaabe_gtkapp_model_cache { // to cache
+	//GListModel* leaves_model;
+	//GtkTreeListModel* leaves_model;
+	GtkSelectionModel* leaves_model;
+	uint16_t child_gobj_count;
+	GObject* child_gobj[];
 };
 
-inline static void alloc_aux_branch_models(atui_branch* branch) {
+inline static void alloc_branch_cache(atui_branch* branch) {
 		// caching; see struct
-	branch->branch_aux = malloc(
-		sizeof(struct yaabe_gtkapp_branch_models) +
-		branch->branch_count * sizeof(GObject*)
+	uint16_t gobj_count = branch->branch_count;
+	branch->auxiliary = malloc(
+		sizeof(struct yaabe_gtkapp_model_cache) +
+		gobj_count * sizeof(GObject*)
 	);
-	struct yaabe_gtkapp_branch_models* models = branch->branch_aux;
+	struct yaabe_gtkapp_model_cache* models = branch->auxiliary;
 	models->leaves_model = NULL;
-	models->child_gobj_branches[0] = NULL;
+	models->child_gobj_count = gobj_count;
+	models->child_gobj[0] = NULL;
+}
+inline static void alloc_leaf_cache(atui_leaf* leaf, uint16_t num_children) {
+	leaf->auxiliary = malloc(
+		sizeof(struct yaabe_gtkapp_model_cache) +
+		num_children * sizeof(GObject*)
+	);
+	struct yaabe_gtkapp_model_cache* models = leaf->auxiliary;
+	models->leaves_model = NULL;
+	models->child_gobj_count = num_children;
+	models->child_gobj[0] = NULL;
 }
 
-void atui_destroy_tree_with_gtk(atui_branch* tree) {
-	// the leaves gobjects should be sunk into the model, and branch_aux points
-	// to the model.
-	if (tree->branch_aux != NULL) {
-		struct yaabe_gtkapp_branch_models* submodels = tree->branch_aux;
-		g_object_unref(submodels->leaves_model);
-		for (int i = 0; i < tree->branch_count; i++)
-			g_object_unref(submodels->child_gobj_branches[i]);
 
+void atui_destroy_tree_with_gtk(atui_branch* tree) {
+	uint16_t i = 0;
+	uint16_t j = 0;
+	uint16_t child_gobj_count;
+	struct yaabe_gtkapp_model_cache* submodels;
+
+	// the leaves gobjects should be sunk into the model, and auxiliary points
+	// to the model.
+	if (tree->auxiliary != NULL) {
+		submodels = tree->auxiliary;
+		g_object_unref(submodels->leaves_model);
+		child_gobj_count = submodels->child_gobj_count;
+		for (i=0; i < child_gobj_count; i++) {
+			g_object_unref(submodels->child_gobj[i]);
+		}
 		free(submodels);
 	}
+
+	uint16_t leaf_count = tree->leaf_count;
+	for(i=0; i < leaf_count; i++) {
+		submodels = tree->leaves[i].auxiliary;
+		if (submodels != NULL) {
+			g_object_unref(submodels->leaves_model);
+			child_gobj_count = submodels->child_gobj_count;
+			for (j=0; j < child_gobj_count; j++) {
+				g_object_unref(submodels->child_gobj[j]);
+			}
+			free(submodels);
+		}
+	}
+
 	tree->max_branch_count += tree->max_inline_branch_count;
 	while(tree->max_branch_count--)
 		atui_destroy_tree_with_gtk(
@@ -67,15 +103,34 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 static void leaves_key_column_spawner(GtkListItemFactory* factory,
 		GtkListItem* list_item) { //setup to spawn a UI skeleton
 
-	gtk_list_item_set_child(list_item, gtk_label_new(NULL));
+	GtkWidget* expander = gtk_tree_expander_new();
+	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
+
+	GtkWidget* label = gtk_label_new(NULL);
+	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
+
+	gtk_list_item_set_child(list_item, expander);
+	//gtk_list_item_set_child(list_item, gtk_label_new(NULL));
 }
 static void leaves_key_column_recycler(GtkListItemFactory* factory, 
 		GtkListItem* list_item) { //bind data to the UI skeleton
 
+	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item));
+	GtkWidget* label = gtk_tree_expander_get_child(expander);
+
+	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
+	gtk_label_set_text(GTK_LABEL(label), leaf->name);
+
+	gtk_tree_expander_set_list_row(expander, tree_list_item);
+/*
 	GtkWidget* label = gtk_list_item_get_child(list_item);
 	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
+*/
 }
 
 
@@ -87,7 +142,7 @@ static void leaves_textbox_stray(GtkEventControllerFocus* focus_sense,
 		GTK_EVENT_CONTROLLER(focus_sense));
 	atui_leaf* leaf = leaf_gptr;
 
-	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
 	atui_get_to_text(leaf, str_buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
 }
@@ -97,7 +152,7 @@ static void leaves_val_column_textbox_apply(
 
 	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 	
-	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
 	atui_get_to_text(leaf, str_buff);
 	gtk_editable_set_text(textbox, str_buff);
 }
@@ -112,17 +167,20 @@ static void leaves_val_column_spawner(GtkListItemFactory* factory,
 	// if the user doesn't hit enter to apply changes, clean up on focus loss
 	GtkEventController* focus_sense = gtk_event_controller_focus_new();
 	gtk_widget_add_controller(textbox, focus_sense);
-	
+
 	gtk_list_item_set_child(list_item, textbox);
 }
 static void leaves_val_column_recycler(GtkListItemFactory* factory, 
 		GtkListItem* list_item) { //bind
 
 	GtkWidget* textbox = gtk_list_item_get_child(list_item);
-	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
+
+	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+//	GObject* gobj_leaf = gtk_list_item_get_item(list_item);
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 
-	char str_buff[ATUI_LEAVES_STR_BUFFER];
+	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
 	atui_get_to_text(leaf, str_buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
 
@@ -135,6 +193,7 @@ static void leaves_val_column_recycler(GtkListItemFactory* factory,
 	g_object_unref(controller_list);
 	g_signal_connect(focus_sense, "leave",
 		G_CALLBACK(leaves_textbox_stray), leaf);
+
 }
 static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 		 GtkListItem* list_item) { //unbind
@@ -160,26 +219,57 @@ static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 
 
 
-static GListModel* atuileaves_to_glistmodel(atui_branch* branch) {
-//https://stackoverflow.com/questions/74838995/gobject-to-hold-a-pointer
-	GObject* gobj_leaf;
-	GListStore* leavesmodel = g_list_store_new(G_TYPE_OBJECT);
 
-	for(int i=0 ; i < branch->leaf_count ; i++) {
-		gobj_leaf = g_object_new(G_TYPE_OBJECT, NULL);
-		g_object_force_floating(gobj_leaf); // so we can sink it into the model
-		g_object_set_data(gobj_leaf, "leaf", &(branch->leaves[i]));
-		g_list_store_append(leavesmodel, gobj_leaf);
+
+//GtkTreeListModelCreateModelFunc for leaves
+static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
+	GObject* gobj_parent = parent_ptr;
+	atui_leaf* parent = g_object_get_data(gobj_parent, "leaf");
+	struct yaabe_gtkapp_model_cache* leaf_models = parent->auxiliary;
+
+	GListStore* children_model = NULL;
+	uint16_t i = 0;
+
+	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE)) {
+		children_model = g_list_store_new(G_TYPE_OBJECT);
+
+		// if no cached gobjects, generate and cache them; otherwise use cache.
+		if (leaf_models == NULL) {
+			GObject* gobj_child;
+			uint16_t num_children;
+			atui_leaf* atui_children;
+
+			if (parent->type & ATUI_INLINE) {
+				atui_branch* branch = *(parent->inline_branch);
+				num_children = branch->leaf_count;
+				atui_children = branch->leaves;
+			} else {
+				num_children = parent->num_bitfield_children;
+				atui_children = parent+1;
+			}
+
+			// the only time we're gonna be using this cache is in this tlmodel
+			// function.
+			alloc_leaf_cache(parent, num_children);
+			leaf_models = parent->auxiliary;
+			for(i=0; i < num_children; i++) {
+				gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
+				g_object_set_data(gobj_child, "leaf", atui_children+i);
+				leaf_models->child_gobj[i] = gobj_child;
+				g_list_store_append(children_model, gobj_child);
+			}
+
+
+		} else { // if leaf_models != null
+			for(i=0; i < leaf_models->child_gobj_count; i++) {
+				g_list_store_append(children_model,
+					leaf_models->child_gobj[i]);
+			}
+		}
 	}
-
-	struct yaabe_gtkapp_branch_models* branch_models = branch->branch_aux;
-	branch_models->leaves_model = G_LIST_MODEL(leavesmodel);
-
-	//TODO Is this necessary?
-	g_object_ref_sink(G_OBJECT(branch_models->leaves_model));
-
-	return G_LIST_MODEL(leavesmodel);
+	return G_LIST_MODEL(children_model);
 }
+
 inline static GtkSelectionModel* create_leaves_selmodel(
 		GListModel* leaves_lm) {
 
@@ -194,6 +284,35 @@ inline static GtkSelectionModel* create_leaves_selmodel(
 	return GTK_SELECTION_MODEL(no_sel);
 }
 
+//inline static GListModel* atuileaves_to_glistmodel(atui_branch* branch) {
+inline static void atuileaves_to_glistmodel(atui_branch* branch) {
+//https://stackoverflow.com/questions/74838995/gobject-to-hold-a-pointer
+	GObject* gobj_leaf;
+	atui_leaf* leaf;
+	GListStore* leavesmodel = g_list_store_new(G_TYPE_OBJECT);
+	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
+
+	for(int i=0 ; i < branch->leaf_count ; i++) {
+		leaf = branch->leaves + i;
+
+		gobj_leaf = g_object_new(G_TYPE_OBJECT, NULL);
+		g_object_force_floating(gobj_leaf); // so we can sink it into the model
+		g_object_set_data(gobj_leaf, "leaf", leaf);
+		g_list_store_append(leavesmodel, gobj_leaf);
+
+		if (leaf->num_bitfield_children)
+			i += leaf->num_bitfield_children;
+	}
+
+	GtkTreeListModel* treemodel = gtk_tree_list_model_new(
+		G_LIST_MODEL(leavesmodel), false, true, leaves_tlmodel_func, NULL,NULL);
+	GtkSelectionModel* sel_model = create_leaves_selmodel(
+		G_LIST_MODEL(treemodel));
+	branch_models->leaves_model = sel_model;
+
+	//TODO Is this necessary?
+	g_object_ref_sink(G_OBJECT(sel_model));
+}
 
 static void set_leaves_list(GtkSelectionModel* model,
 		guint position, guint n_items, gpointer yaabe_commons) {
@@ -206,23 +325,23 @@ static void set_leaves_list(GtkSelectionModel* model,
 	GObject* gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
 	atui_branch* branch = g_object_get_data(gobj_branch, "branch");
 
-	struct yaabe_gtkapp_branch_models* branch_models = branch->branch_aux;
+	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
 	if(branch_models->leaves_model == NULL) // if not cached, generate.
 		atuileaves_to_glistmodel(branch);
 
-
 	gtk_column_view_set_model(commons->leaves_columnview,
-		create_leaves_selmodel(branch_models->leaves_model)
-	);
+		branch_models->leaves_model);
 }
 
 inline static GtkWidget* create_leaves_pane(
 		struct yaabe_gtkapp_ptrs_commons* commons) {
+	atui_branch* root_branch = commons->atui_root;
+	struct yaabe_gtkapp_model_cache* root_models = root_branch->auxiliary;
 	
 	// columnview abstract
-	GListModel* model = atuileaves_to_glistmodel(commons->atui_root);
-	GtkSelectionModel* sel_model = create_leaves_selmodel(model);
-	GtkWidget* leaves_list = gtk_column_view_new(sel_model);
+	atuileaves_to_glistmodel(root_branch);
+
+	GtkWidget* leaves_list = gtk_column_view_new(root_models->leaves_model);
 	commons->leaves_columnview = GTK_COLUMN_VIEW(leaves_list);
 
 	//commons->stray_text_history = model;
@@ -261,9 +380,9 @@ inline static GtkWidget* create_leaves_pane(
 
 
 
-
+//tippy top of the tree
 inline static GListStore* atui_gtk_model(atui_branch* root) {
-	alloc_aux_branch_models(root);
+	alloc_branch_cache(root);
 
 	GObject* gbranch = g_object_new(G_TYPE_OBJECT, NULL);
 	g_object_force_floating(gbranch); // sink into model
@@ -274,11 +393,11 @@ inline static GListStore* atui_gtk_model(atui_branch* root) {
 	return model;
 }
 
-//GtkTreeListModelCreateModelFunc
+//GtkTreeListModelCreateModelFunc for branches
 static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 	GObject* gobj_parent = ptr;
 	atui_branch* parent = g_object_get_data(gobj_parent, "branch");
-	struct yaabe_gtkapp_branch_models* branch_models = parent->branch_aux;
+	struct yaabe_gtkapp_model_cache* branch_models = parent->auxiliary;
 
 	GListStore* children = NULL; 
 	int i = 0;
@@ -287,24 +406,23 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 		children = g_list_store_new(G_TYPE_OBJECT);
 
 		// if no cached gobjects, generate and cache them; otherwise use cache.
-		if (branch_models->child_gobj_branches[0] == NULL) {
+		if (branch_models->child_gobj[0] == NULL) {
 			GObject* gobj_child;
 			for(i=0; i < parent->branch_count; i++){
-				// hopefully this is the only place, besides root, where we 
-				// alloc the yaabe_gtkapp_branch_models.
-				alloc_aux_branch_models(parent->child_branches[i]);
+				// the cache is also for the leaves
+				alloc_branch_cache(parent->child_branches[i]);
 
 				gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 				g_object_set_data(gobj_child, "branch",
 					parent->child_branches[i]);
 
-				branch_models->child_gobj_branches[i] = gobj_child;
+				branch_models->child_gobj[i] = gobj_child;
 				g_list_store_append(children, gobj_child);
 			}
 		} else {
-			for(i=0; i < parent->branch_count; i++) {
+			for(i=0; i < branch_models->child_gobj_count; i++) {
 				g_list_store_append(children,
-					branch_models->child_gobj_branches[i]);
+					branch_models->child_gobj[i]);
 			}
 		}
 	}
@@ -329,7 +447,6 @@ static void branch_listitem_spawner(GtkSignalListItemFactory* factory,
 
 	gtk_list_item_set_child(list_item, expander);
 }
-
 static void branch_listitem_recycler(GtkSignalListItemFactory* factory,
 		GtkListItem* list_item) { // bind
 
@@ -345,6 +462,7 @@ static void branch_listitem_recycler(GtkSignalListItemFactory* factory,
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
 }
+
 
 
 inline static GtkWidget* create_branches_pane(
@@ -377,7 +495,6 @@ inline static GtkWidget* create_branches_pane(
 
 	return scrolledlist;
 }
-
 static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
 

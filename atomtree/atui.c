@@ -58,10 +58,11 @@ int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
 
     } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) && 
             leaf->total_bits == 8) {
-        uint8_t i = leaf->array_size;
-        while (i--)
-            leaf->u8[i] = buffer[i];
-
+		uint8_t size = leaf->array_size;
+		uint8_t i;
+		for(i=0; i<size; i++)
+		   leaf->u8[i] = buffer[i];
+		//leaf->u8[i-1] = '\0';
     } else {
         err = 1;
     }
@@ -87,6 +88,7 @@ int atui_get_to_text(atui_leaf* leaf, char* buffer) {
     } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) && 
             leaf->total_bits == 8) {
         uint8_t i = leaf->array_size;
+		buffer[i] = '\0'; // for strings
         while (i--)
             buffer[i] = leaf->u8[i];
     } else {
@@ -275,5 +277,5 @@ PPATUI_FUNCIFY(atom_vram_module_v10,
 	),
 	gddr6_mr2,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr7,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
-	dram_pnstring,    ATUI_NONE, ATUI_STRING, ATUI_NONE
+	dram_pnstring,    ATUI_NONE, ATUI_ARRAY, ATUI_NONE // not text
 )

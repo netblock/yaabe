@@ -86,7 +86,7 @@ struct  atui_branch_ {
 	uint8_t max_inline_branch_count;
 	
 
-	void* branch_aux; // alternative representation to leaves, if necessary
+	void* auxiliary; // alternative representation to leaves, if necessary
 	atui_leaf* leaves;
 	uint8_t leaf_count;
 
