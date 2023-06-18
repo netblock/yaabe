@@ -3236,14 +3236,18 @@ struct atom_vram_info_header_v3_0 {
 	struct atom_vram_module_v3_0 vram_module[8];
 };
 
+
+
+
+
 struct atom_umc_register_addr_info{
   uint32_t  umc_register_addr:24;
   uint32_t  umc_reg_type_ind:1; //flag
   uint32_t  umc_reg_rsvd:7;
 };
 
-//atom_umc_register_addr_info.
 enum atom_umc_register_addr_info_flag{
+//atom_umc_register_addr_info.
   b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  =0x01,
 };
 
@@ -3269,11 +3273,18 @@ struct atom_umc_reg_setting_data_block{
   uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
 };
 
-struct init_reg_block_head {uint16_t umc_reg_num; uint16_t reserved;}; // for sizeof() math purposes only.
+struct atom_umc_init_reg_block_header {
+// is the first two elements of atom_umc_init_reg_block, and is for sizeof() 
+// math purposes only
+	uint16_t umc_reg_num; uint16_t reserved;
+}; 
 struct atom_umc_init_reg_block{ // not literal, topological only
   uint16_t umc_reg_num;
   uint16_t reserved;    
-  union atom_umc_register_addr_info_access umc_reg_list[1];     //for allocation purpose, the real number come from umc_reg_num;
+
+  //for allocation purpose, the real number come from umc_reg_num;
+  union atom_umc_register_addr_info_access umc_reg_list[1];
+
   struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
 

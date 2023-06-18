@@ -44,8 +44,8 @@ inline static void alloc_leaf_cache(atui_leaf* leaf, uint16_t num_children) {
 
 	struct yaabe_gtkapp_model_cache* models = leaf->auxiliary;
 	models->leaves_model = NULL;
-	models->child_gobj_count = num_children;
 	models->child_gobj[0] = NULL;
+	models->child_gobj_count = num_children;
 }
 
 
@@ -67,6 +67,7 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 		free(submodels);
 	}
 
+	//collapsable leaves in the leaves pane
 	uint16_t leaf_count = tree->leaf_count;
 	for(i=0; i < leaf_count; i++) {
 		submodels = tree->leaves[i].auxiliary;
@@ -80,6 +81,7 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 		}
 	}
 
+	//branches that the leaves point to should be adjacent to regular branches
 	tree->max_branch_count += tree->max_inline_branch_count;
 	while(tree->max_branch_count--)
 		atui_destroy_tree_with_gtk(
@@ -121,6 +123,8 @@ static void leaves_key_column_recycler(GtkListItemFactory* factory,
 
 static void leaves_textbox_stray(GtkEventControllerFocus* focus_sense,
 		gpointer leaf_gptr) {
+//if the value wasn't applied with enter, sync the text back to the actual data
+//when keyboard leaves the textbox
 	GtkWidget* textbox = gtk_event_controller_get_widget(
 		GTK_EVENT_CONTROLLER(focus_sense));
 	atui_leaf* leaf = leaf_gptr;
@@ -131,6 +135,8 @@ static void leaves_textbox_stray(GtkEventControllerFocus* focus_sense,
 }
 static void leaves_val_column_textbox_apply(
 		GtkEditable* textbox, gpointer leaf_gptr) {
+// only way to apply the value is to hit enter
+
 	atui_leaf* leaf = leaf_gptr;
 
 	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
@@ -147,7 +153,7 @@ static void leaves_val_column_spawner(GtkListItemFactory* factory,
 	GtkWidget* textbox = gtk_text_new();
 	gtk_text_set_input_purpose(GTK_TEXT(textbox), GTK_INPUT_PURPOSE_DIGITS);
 
-	// if the user doesn't hit enter to apply changes, clean up on focus loss
+	// for leaves_textbox_stray()
 	GtkEventController* focus_sense = gtk_event_controller_focus_new();
 	gtk_widget_add_controller(textbox, focus_sense);
 
@@ -184,9 +190,9 @@ static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 	GtkWidget* textbox = gtk_list_item_get_child(list_item);
 
 	//TODO: GtkText - unexpected blinking selection. Removing
-	// these don't work:
-	gtk_editable_select_region(GTK_EDITABLE(textbox), 0, 0);
-	gtk_editable_set_position(GTK_EDITABLE(textbox), 0);
+	// these don't fix the warning:
+	//gtk_editable_select_region(GTK_EDITABLE(textbox), 0, 0);
+	//gtk_editable_set_position(GTK_EDITABLE(textbox), 0);
 
 	g_signal_handlers_disconnect_matched(textbox, G_SIGNAL_MATCH_FUNC, 
 		0,0,NULL,  G_CALLBACK(leaves_val_column_textbox_apply),  NULL);
@@ -199,8 +205,9 @@ static void leaves_val_column_cleaner(GtkListItemFactory* factory,
 }
 
 
-//GtkTreeListModelCreateModelFunc for leaves
 static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
+//GtkTreeListModelCreateModelFunc for leaves
+
 	GObject* gobj_parent = parent_ptr;
 	atui_leaf* parent = g_object_get_data(gobj_parent, "leaf");
 	struct yaabe_gtkapp_model_cache* leaf_models = parent->auxiliary;
@@ -221,7 +228,7 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 				atui_branch* branch = *(parent->inline_branch);
 				num_children = branch->leaf_count;
 				atui_children = branch->leaves;
-			} else {
+			} else { // currently only otherwise bitfield
 				num_children = parent->num_bitfield_children;
 				atui_children = parent+1;
 			}
@@ -238,7 +245,7 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 			}
 
 
-		} else { // if leaf_models != null
+		} else { // use the cache
 			for(i=0; i < leaf_models->child_gobj_count; i++) {
 				g_list_store_append(children_model,
 					leaf_models->child_gobj[i]);
@@ -354,8 +361,9 @@ inline static GtkWidget* create_leaves_pane(
 
 
 
-//tippy top of the tree
 inline static GListStore* atui_gtk_model(atui_branch* root) {
+//for the tippy top of the tree
+
 	alloc_branch_cache(root);
 
 	GObject* gbranch = g_object_new(G_TYPE_OBJECT, NULL);
@@ -367,8 +375,9 @@ inline static GListStore* atui_gtk_model(atui_branch* root) {
 	return model;
 }
 
-//GtkTreeListModelCreateModelFunc for branches
 static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
+//GtkTreeListModelCreateModelFunc for branches
+
 	GObject* gobj_parent = ptr;
 	atui_branch* parent = g_object_get_data(gobj_parent, "branch");
 	struct yaabe_gtkapp_model_cache* branch_models = parent->auxiliary;

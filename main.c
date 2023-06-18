@@ -49,8 +49,17 @@ void vi24_funstuffs(struct atom_tree* atree) {
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
 	printf("MR10: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[1].gddr6_mr10);
+		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
 	printf("      5432109876543210\n");
+	
+	printf("\n\n");
+	char* pnstring = atree->data_table.vram_info.v2_4.leaves->vram_module[0].dram_pnstring;
+	printf("pnstring:\"%s\"\n", pnstring);
+	for(i = 0; i < 40; i++)
+		printf(" %d ", pnstring[i]);
+	printf("\n");
+	printf("refreshrate: %i\n", atree->data_table.vram_info.v2_4.leaves->vram_module[0].refreshrate);
+
 }
 
 void vi25_funstuffs(struct atom_tree* atree) {
@@ -208,17 +217,6 @@ int main(int argc, char** argv){
 				break;
 
 	}}
-
-	printf("atui branch: %s   num children: %i\n",
-		 atree->atui_root->name, atree->atui_root->branch_count);
-	printf("atui branch: %s\n", atree->atui_root->child_branches[0]->name);
-	printf("atui branch: %s\n", atree->atui_root->child_branches[1]->name);
-	printf("atui branch: %s\n",
-		atree->atui_root->child_branches[1]->child_branches[1]->name);
-	printf("atui branch: %s\n",
-		atree->atui_root->child_branches[1]->child_branches[1]->\
-			child_branches[1]->name);
-
 
 	yaabe_gtk(atree);
 	return 0;

@@ -134,7 +134,7 @@ bool atomtree_dt_populate_ppt(struct atom_tree* atree) {
 	ppt->leaves = atree->bios + atree->data_table.leaves->powerplayinfo;
     ppt->ver = get_ver(ppt->table_header);
 
-	if  (ppt->ver > maxver) { // Navi3 compatibility 
+	if  (ppt->ver > maxver) { // Navi3 compatibility. TODO: wrong.
 		ppt->leaves = atree->data_table.leaves +
 			atree->data_table.leaves->powerplayinfo;
 		ppt->ver = get_ver(ppt->table_header);
@@ -161,21 +161,27 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	// hell, I'd make the pointers 64-bit so you could just plop down a struct
 	// tree onto the void* bios, assume -fPIC and be done with it. 
 
-	// These lists are dynamically sized, and not statically aligned with the
-	// atom_umc_init_reg_block table.
-	at_regblock->umc_number_of_registers = &(at_regblock->leaves->umc_reg_num);
+	// Take a look at struct atom_umc_init_reg_block of atomfirmware.h.
+	// This struct has 3 notable lists: 
+	// umc_reg_list, umc_reg_setting_list, and 
+	// atom_umc_reg_setting_data_block's u32umc_reg_data.
+	// These lists are all dynamically sized. 
+	//
+	// umc_reg_list follows umc_reg_num.
+	// umc_reg_setting_list starts immediately after umc_reg_list.
+	// umc_reg_setting_list does not follow umc_reg_num. but ends with 0-fill.
+	// and atom_umc_reg_setting_data_block's u32umc_reg_data follows 
+	// umc_reg_num.
 
-	// since this is the very first dynamic list we don't need to be fancy.
 	at_regblock->umc_reg_list = at_regblock->leaves->umc_reg_list;
-
-	// size of the entire list for all its elements
+	at_regblock->umc_number_of_registers = &(at_regblock->leaves->umc_reg_num);
 	uint16_t umc_reg_list_size =
 		sizeof(union atom_umc_register_addr_info_access) *
 		(*at_regblock->umc_number_of_registers);
 
-	// regsettingblock_starting_point == umc_reg_setting_list[0]
+	// regsettingblock_starting_point is umc_reg_setting_list[0]
 	void* regsettingblock_starting_point = (void*)at_regblock->leaves +
-		sizeof(struct init_reg_block_head) + umc_reg_list_size; 
+		sizeof(struct atom_umc_init_reg_block_header) + umc_reg_list_size; 
 
 	// the -1 is from the data_block struct already having the first element,
 	// the "u32umc_reg_data[1]".
@@ -188,11 +194,10 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	for (i=0; i < *at_regblock->umc_number_of_registers ; i++) {
 		loc = regsettingblock_starting_point + regsettingblock_size*i;
 		if (loc->block_id.u32umc_id_access == 0)
-			break; // AtomBIOS ends the datablock list with a 0.
+			break; // AtomBIOS ends the datablock list with 0-fill.
 		at_regblock->umc_reg_setting_list[i] = loc;
 	}
 	at_regblock->umc_reg_setting_list_size = i;
-
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_3(
