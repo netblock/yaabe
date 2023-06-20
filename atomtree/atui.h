@@ -121,17 +121,17 @@ void atui_destroy_tree(atui_branch* tree);
 
 
 
-PPATUI_HEADERIFY(atom_common_table_header);
+PPATUI_HEADERIFY(struct, atom_common_table_header);
 
-PPATUI_HEADERIFY(atom_rom_header_v2_2);
-PPATUI_HEADERIFY(atom_master_data_table_v2_1);
+PPATUI_HEADERIFY(struct, atom_rom_header_v2_2);
+PPATUI_HEADERIFY(struct, atom_master_data_table_v2_1);
 
 
 // fuck me...
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 
 
-PPATUI_HEADERIFY(atom_vram_module_v10);
-PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
+PPATUI_HEADERIFY(struct, atom_vram_module_v10);
+PPATUI_HEADERIFY(struct, atom_vram_info_header_v2_4);
 
 #endif

@@ -152,13 +152,13 @@ or otherwise an array,
 
 
 
-PPATUI_FUNCIFY(atom_common_table_header,
+PPATUI_FUNCIFY(struct, atom_common_table_header,
 	structuresize,    ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	format_revision,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	content_revision, ATUI_DEC, ATUI_NONE, ATUI_NONE
 )
 
-PPATUI_FUNCIFY(atom_rom_header_v2_2,
+PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 	table_header,              ATUI_NONE, ATUI_INLINE, 
 		atom_common_table_header,
 	atom_bios_string,          ATUI_NONE, ATUI_STRING, ATUI_NONE,
@@ -180,7 +180,7 @@ PPATUI_FUNCIFY(atom_rom_header_v2_2,
 )
 
 
-PPATUI_FUNCIFY(atom_master_data_table_v2_1,
+PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 	table_header,         ATUI_NONE, ATUI_INLINE, 
 		atom_common_table_header,
 	utilitypipeline,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
@@ -220,7 +220,7 @@ PPATUI_FUNCIFY(atom_master_data_table_v2_1,
 	sw_datatable34,       ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
 
-PPATUI_FUNCIFY(atom_vram_info_header_v2_4,
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
 	table_header,                ATUI_NONE, ATUI_INLINE, 
 		atom_common_table_header,
 	mem_adjust_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
@@ -245,7 +245,7 @@ PPATUI_ENUMER(atom_dgpu_vram_type,
   ATOM_DGPU_VRAM_TYPE_HBM2E,
   ATOM_DGPU_VRAM_TYPE_GDDR6
 )
-PPATUI_FUNCIFY(atom_vram_module_v10,
+PPATUI_FUNCIFY(struct, atom_vram_module_v10,
 	memory_size,      ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	channel_enable,   ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	max_mem_clk,      ATUI_DEC, ATUI_NONE, ATUI_NONE,

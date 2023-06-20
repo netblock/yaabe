@@ -21,11 +21,17 @@ vim replace patterns that help copypaste structs from atombios.h:
 
 
 // to create the allocator function. See atui.c for how it is used.             
-#define PPATUI_FUNCIFY(pp_name, ...) \
-    PPATUI_FUNCIFY_HELPER(pp_name __VA_OPT__(,) __VA_ARGS__)
+#define PPATUI_FUNCIFY(objtype, objname, ...) \
+    PPATUI_FUNCIFY_HELPER(objtype, objname __VA_OPT__(,) __VA_ARGS__)
 
 // to define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(pp_name) _PPATUI_FUNC_NAME(pp_name)
+#define PPATUI_HEADERIFY(objtype, objname) _PPATUI_FUNC_NAME(objtype, objname)
+
+// to define an array of string-val pairs of an enum.
+#define PPATUI_ENUMER(name, ...) \
+	const struct atui_enum _atui_enum_##name[] = \
+		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
+#define _PPATUI_EENTRY(estate) {.name=#estate, .val=estate}, 
 
 /***************************** preprocessor hell *****************************/
 
@@ -75,10 +81,6 @@ That is, bitfield population, and enum and inline association.
 	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
 	_PPATUI_FANCY_NOBITFIELD(bios->var) },
 
-#define PPATUI_ENUMER(name, ...) \
-	const struct atui_enum _atui_enum_##name[] = \
-		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
-#define _PPATUI_EENTRY(estate) {.name=#estate, .val=estate}, 
 
 
 
@@ -127,8 +129,8 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_INLEAF_ATUI_STRING(...)
 #define _PPATUI_INLEAF_ATUI_ARRAY(...)
 
-#define _PPATUI_INLEAF_ATUI_INLINE(pp_name, instancename)\
-	ATUI_MAKE_BRANCH(pp_name, &(bios->instancename), 0, NULL),
+#define _PPATUI_INLEAF_ATUI_INLINE(objname, instancename)\
+	ATUI_MAKE_BRANCH(objname, &(bios->instancename), 0, NULL),
 #define _PPATUI_INLEAF(var, radix, fancytype, fancydata) \
 	_PPATUI_INLEAF_##fancytype(fancydata, var)
 
@@ -143,19 +145,19 @@ That is, bitfield population, and enum and inline association.
 
 
 
-#define _PPATUI_FUNC_NAME(pp_name) \
-	atui_branch* _##pp_name##_atui( \
-		struct pp_name * bios, \
+#define _PPATUI_FUNC_NAME(objtype, objname) \
+	atui_branch* _##objname##_atui( \
+		objtype objname * bios, \
 		unsigned int num_branches, \
 		atui_branch** import_children \
 	)
 
-#define ATUI_MAKE_BRANCH(pp_name, bios, num_branches, children) \
-	_##pp_name##_atui(bios, num_branches, children)
+#define ATUI_MAKE_BRANCH(objname, bios, num_branches, children) \
+	_##objname##_atui(bios, num_branches, children)
 
 // main allocator function
-#define PPATUI_FUNCIFY_HELPER(pp_name, ...) \
-_PPATUI_FUNC_NAME(pp_name) {\
+#define PPATUI_FUNCIFY_HELPER(objtype, objname, ...) \
+_PPATUI_FUNC_NAME(objtype, objname) {\
 	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
 \
@@ -227,7 +229,7 @@ _PPATUI_FUNC_NAME(pp_name) {\
 	}\
 \
 	*table = (atui_branch) {\
-		.name=#pp_name, .leaves=(atui_leaf*)leaves, \
+		.name=#objname, .leaves=(atui_leaf*)leaves, \
 		.leaf_count=total_leaves, .atomleaves=bios, \
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
