@@ -3241,36 +3241,36 @@ struct atom_vram_info_header_v3_0 {
 
 
 struct atom_umc_register_addr_info{
-  uint32_t  umc_register_addr:24;
-  uint32_t  umc_reg_type_ind:1; //flag
-  uint32_t  umc_reg_rsvd:7;
+	uint32_t  umc_register_addr:24;
+	uint32_t  umc_reg_type_ind:1; //flag
+	uint32_t  umc_reg_rsvd:7;
 };
 
 enum atom_umc_register_addr_info_flag{
 //atom_umc_register_addr_info.
-  b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  =0x01,
+	b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  =0x01,
 };
 
 union atom_umc_register_addr_info_access
 {
-  struct atom_umc_register_addr_info umc_reg_addr;
-  uint32_t u32umc_reg_addr;
+	struct atom_umc_register_addr_info umc_reg_addr;
+	uint32_t u32umc_reg_addr;
 };
 
 struct atom_umc_reg_setting_id_config{
-  uint32_t memclockrange:24;
-  uint32_t mem_blk_id:8;
+	uint32_t memclockrange:24;
+	uint32_t mem_blk_id:8;
 };
 
 union atom_umc_reg_setting_id_config_access
 {
-  struct atom_umc_reg_setting_id_config umc_id_access;
-  uint32_t  u32umc_id_access;
+	struct atom_umc_reg_setting_id_config umc_id_access;
+	uint32_t  u32umc_id_access;
 };
 
 struct atom_umc_reg_setting_data_block{
-  union atom_umc_reg_setting_id_config_access  block_id;
-  uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
+	union atom_umc_reg_setting_id_config_access  block_id;
+	uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
 };
 
 struct atom_umc_init_reg_block_header {
@@ -3279,13 +3279,13 @@ struct atom_umc_init_reg_block_header {
 	uint16_t umc_reg_num; uint16_t reserved;
 }; 
 struct atom_umc_init_reg_block{ // not literal, topological only
-  uint16_t umc_reg_num;
-  uint16_t reserved;    
+	uint16_t umc_reg_num;
+	uint16_t reserved;    
 
-  //for allocation purpose, the real number come from umc_reg_num;
-  union atom_umc_register_addr_info_access umc_reg_list[1];
+	//for allocation purpose, the real number come from umc_reg_num;
+	union atom_umc_register_addr_info_access umc_reg_list[1];
 
-  struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
+	struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
 
 

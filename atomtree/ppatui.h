@@ -21,17 +21,17 @@ vim replace patterns that help copypaste structs from atombios.h:
 
 
 // to create the allocator function. See atui.c for how it is used.             
-#define PPATUI_FUNCIFY(objtype, objname, ...) \
-    PPATUI_FUNCIFY_HELPER(objtype, objname __VA_OPT__(,) __VA_ARGS__)
+#define PPATUI_FUNCIFY(typeprefix, typesuffix, ...) \
+    PPATUI_FUNCIFY_HELPER(typeprefix, typesuffix __VA_OPT__(,) __VA_ARGS__)
 
 // to define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(objtype, objname) _PPATUI_FUNC_NAME(objtype, objname)
+#define PPATUI_HEADERIFY(typeprefix, typesuffix) _PPATUI_FUNC_NAME(typeprefix, typesuffix)
 
 // to define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...) \
 	const struct atui_enum _atui_enum_##name[] = \
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
-#define _PPATUI_EENTRY(estate) {.name=#estate, .val=estate}, 
+#define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate}, 
 
 /***************************** preprocessor hell *****************************/
 
@@ -65,15 +65,22 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
 
 #define _PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
+	{ \
+		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
 		.val=&(bios->var), .total_bits=_PPATUI_LEAF_BITNESS(bios->var),
+// Fancy common end
 
 
+//ATUI_NONE
 
 #define _PPATUI_FANCY_ATUI_NONE(bios, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
 	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
 
 
+
+
+//ATUI_ENUM
 
 #define _PPATUI_FANCY_ATUI_ENUM(bios, var, radix, fancytype, enumname) \
 	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
@@ -84,6 +91,10 @@ That is, bitfield population, and enum and inline association.
 
 
 
+
+//ATUI_STRING
+//ATUI_ARRAY
+
 #define _PPATUI_FANCY_ATUI_STRING(bios, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_ATUI_ARRAY(bios, var, radix, fancytype, fancydata) 
 
@@ -93,6 +104,11 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
 
 
+
+	
+
+
+//ATUI_BITFIELD
 
 #define _PPATUI_FANCY_ATUI_BITFIELD(bios, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
@@ -118,7 +134,13 @@ That is, bitfield population, and enum and inline association.
 
 
 
+
+
+//ATUI_INLINE
+
+// the meat of ATUI_INLINE is handled in the funcify
 #define _PPATUI_FANCY_ATUI_INLINE(bios, var, radix, fancytype, fancydata)\
+	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
 	.val=NULL, \
 	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
 	_PPATUI_FANCY_NOARRAY },
@@ -128,59 +150,75 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_INLEAF_ATUI_ENUM(...)
 #define _PPATUI_INLEAF_ATUI_STRING(...)
 #define _PPATUI_INLEAF_ATUI_ARRAY(...)
+#define _PPATUI_INLEAF_ATUI_DYNARRAY(...)
 
-#define _PPATUI_INLEAF_ATUI_INLINE(objname, instancename)\
-	ATUI_MAKE_BRANCH(objname, &(bios->instancename), 0, NULL),
-#define _PPATUI_INLEAF(var, radix, fancytype, fancydata) \
+#define _PPATUI_INLEAF_ATUI_INLINE(typesuffix, instancename)\
+	ATUI_MAKE_BRANCH(typesuffix, &(bios->instancename), 0, NULL),
+#define _PPATUI_INLEAF(m, var, radix, fancytype, fancydata) \
 	_PPATUI_INLEAF_##fancytype(fancydata, var)
+
+
+
+
+// ATUI_DYNARRAY
+#define _PPATUI_FANCY_ATUI_DYNARRAY(bios, var, radix, fancytype, fancydata)
+
 
 /**** LEAF FANCY FUNCS END***/
 
 
 #define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
-	{ \
-		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
 	_PPATUI_FANCY_##fancytype(bios, var, radix, fancytype, fancydata)
 	// the closing } for the leaf is handled in the fancy pp funcs.
 
 
 
-#define _PPATUI_FUNC_NAME(objtype, objname) \
-	atui_branch* _##objname##_atui( \
-		objtype objname * bios, \
+#define _PPATUI_FUNC_NAME(typeprefix, typesuffix) \
+	atui_branch* _##typesuffix##_atui( \
+		typeprefix typesuffix * bios, \
 		unsigned int num_branches, \
 		atui_branch** import_children \
 	)
 
-#define ATUI_MAKE_BRANCH(objname, bios, num_branches, children) \
-	_##objname##_atui(bios, num_branches, children)
+#define ATUI_MAKE_BRANCH(typesuffix, bios, num_branches, children) \
+	_##typesuffix##_atui(bios, num_branches, children)
 
 // main allocator function
-#define PPATUI_FUNCIFY_HELPER(objtype, objname, ...) \
-_PPATUI_FUNC_NAME(objtype, objname) {\
+#define PPATUI_FUNCIFY_HELPER(typeprefix, typesuffix, ...) \
+_PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
 \
 	atui_branch** inliners = NULL;\
-	uint8_t num_inliners;\
+	uint16_t num_inliners;\
 \
 	atui_leaf* leaves = NULL;\
-	uint8_t total_leaves = 0;\
+	uint16_t leaves_init_num = 0;\
 \
 	void* scratch;\
-	uint8_t i = 0;\
-	uint8_t j = 0;\
+	uint16_t i = 0;\
+	uint16_t j = 0;\
+	uint16_t k = 0;\
+	uint16_t l = 0;\
 \
 \
 	if(PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
 		/*counts bitfield*/ \
 		const atui_leaf leaves_init[] = { _PPATUI_LEAVES(bios, __VA_ARGS__) };\
-		total_leaves = sizeof(leaves_init)/sizeof(atui_leaf);\
+		leaves_init_num = sizeof(leaves_init)/sizeof(atui_leaf);\
 \
 		const atui_branch* inliners_init[] = { \
 			_PPATUI_INLINE_BRANCHES(__VA_ARGS__) \
-		}; \
+		};\
 		num_inliners = sizeof(inliners_init)/sizeof(atui_branch*);\
+\
+		const atui_leaf dynarray_patterns[] = { \
+			_PPATUI_DYNARRAY(ROLL, bios, __VA_ARGS__) \
+		};\
+		const uint8_t dynarray_pattern_lengths[] = { \
+			_PPATUI_DYNARRAY(COUNT, bios, __VA_ARGS__) \
+		};\
+\
 \
 		scratch = malloc(\
 			sizeof(atui_branch) + \
@@ -190,11 +228,18 @@ _PPATUI_FUNC_NAME(objtype, objname) {\
 		);\
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
-\
 		leaves = scratch + num_branches*sizeof(atui_branch*) +\
 			sizeof(inliners_init);\
-		for(i=0; i < total_leaves; i++) {\
-			leaves[i] = leaves_init[i];\
+\
+\
+		j=0; k=0; l=0;\
+		for(i=0; i < leaves_init_num; i++) {\
+			if (leaves_init[i].type & ATUI_DYNARRAY) {\
+				 /*for(k=0; k < */ \
+			} else {\
+				leaves[j] = leaves_init[i];\
+				j++;\
+			}\
 		}\
 \
 		if (sizeof(inliners_init)) {\
@@ -203,13 +248,14 @@ _PPATUI_FUNC_NAME(objtype, objname) {\
 				inliners[i] = (atui_branch*) inliners_init[i];\
 			}\
 			j=0;\
-			for(i=0; i<total_leaves; i++) {\
+			for(i=0; i<leaves_init_num; i++) {\
 				if (leaves[i].type & ATUI_INLINE) {\
 					leaves[i].inline_branch = &(inliners[j]);\
 					j++;\
 				}\
 			}\
 		}\
+\
 	} else {\
 		scratch = malloc(\
 			sizeof(atui_branch) + \
@@ -229,8 +275,8 @@ _PPATUI_FUNC_NAME(objtype, objname) {\
 	}\
 \
 	*table = (atui_branch) {\
-		.name=#objname, .leaves=(atui_leaf*)leaves, \
-		.leaf_count=total_leaves, .atomleaves=bios, \
+		.name=#typesuffix, .leaves=(atui_leaf*)leaves, \
+		.leaf_count=leaves_init_num, .atomleaves=bios, \
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
 		.max_branch_count=num_branches, .max_inline_branch_count=num_inliners, \
@@ -238,6 +284,90 @@ _PPATUI_FUNC_NAME(objtype, objname) {\
 	return table;\
 }
 
+
+
+
+
+#define PPATUI_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
+
+
+
+
+#define _PPATUI_DYNAR_SERVICE(jobbios, var, radix, fancytype, fancydata)\
+	_PPATUI_DYNAR_SVCHELPER1(_PPATUI_DYNDA_JB_UNPACK jobbios, \
+		var, radix, fancytype, fancydata)
+#define _PPATUI_DYNDA_JB_UNPACK(job, bios) job, bios
+#define _PPATUI_DYNAR_SVCHELPER1(...) _PPATUI_DYNAR_SVCHELPER2(__VA_ARGS__)
+#define _PPATUI_DYNAR_SVCHELPER2(job, bios, var, radix, ftype, fdata) \
+	_PPATUI_DYNAR_SVCHELPER3_##ftype(job, bios, var, radix, ftype, fdata)
+
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_NONE(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_BITFIELD(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_ENUM(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_INLINE(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_ARRAY(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_STRING(...)
+#define _PPATUI_DYNAR_SVCHELPER3_ATUI_DYNARRAY(\
+		job, bios,var,radix,fancytype,fancydata)\
+	_PPATUI_DYNAR_SVCHELPER4(job, bios, _PPATUI_DYNARR_UNPACK fancydata)
+
+//unpack ATUI_DYNARRY's fancydata
+#define _PPATUI_DYNARR_UNPACK(\
+		pattern_var,pattern_radix,pattern_fancytype,pattern_fancydata,\
+		start_pointer, count_var) \
+	pattern_var, pattern_radix, pattern_fancytype, pattern_fancydata, \
+	start_pointer, count_var
+
+#define _PPATUI_DYNAR_SVCHELPER4(job, ...) \
+	_PPATUI_DYNAR_SVCHELPER5_##job(__VA_ARGS__)
+
+//unrolls the pattern into leaves to copy.
+//var..fdat is for the pattern
+//TODO: use start instead of bios
+#define _PPATUI_DYNAR_SVCHELPER5_ROLL(\
+		bios, var,radix,fancytype,fancydata, start,count)\
+	_PPATUI_LEAF(bios,var,radix,fancytype,fancydata)
+
+
+// counts the ATUI_DYNARRAY's pattern leaf count. Mainly for bitfields
+#define _PPATUI_DYNAR_SVCHELPER5_COUNT(\
+		bios,var,radix,fancytype,fancydata, start,count)\
+	_PPATUI_DYNAR_SVCHELPER6_COUNT_##fancytype(\
+		bios,var,radix,fancytype,fancydata)  ,
+
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_NONE(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_ENUM(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_INLINE(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_ARRAY(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_STRING(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_DYNARRAY(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_BITFIELD(b,v,r,ft, fancydata)\
+	_PPATUI_LOOPER(_PPATUI_DYNAR_SVCHELPER7_COUNTER ,, 4, \
+		_PPATUI_FANCYDATA_UNPACK fancydata)
+#define _PPATUI_DYNAR_SVCHELPER7_COUNTER(...) 1,
+
+
+
+#define _PPATUI_LEAVES(bios, ...)\
+	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
+		(_PPATUI_LEAF, bios, __VA_ARGS__)
+
+#define _PPATUI_BITFIELD_LEAVES(parent_var, ...)\
+	_PPATUI_LOOPER(4,2,__VA_ARGS__)\
+		(_PPA_BFLEAF, parent_var, __VA_ARGS__)
+
+#define _PPATUI_INLINE_BRANCHES(...)\
+	_ppaTUI_LOOPER(4,1,__VA_ARGS__)\
+		(_PPATUI_INLEAF ,, __VA_ARGS__)
+
+#define _PPATUI_DYNARRAY(job, bios, ...)\
+	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
+		(_PPATUI_DYNAR_SERVICE, (job,bios), __VA_ARGS__)
+
+
+#define _PPATUI_ENUM_ENTRIES(...)\
+	_PPATUI_LOOPER(1,1,__VA_ARGS__)\
+		(_PPATUI_EENTRY ,, __VA_ARGS__)
 
 
 /*
@@ -260,266 +390,238 @@ _1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_
 _PP_ARGCOUNTER_DEPTHCAN_HELPER(__VA_ARGS__ __VA_OPT__(,) _PP_ARGCOUNTER_RULER)
 
 
-#define PPATUI_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
-
-/*
-python script:
-def ppatui_leaveshelper(max_entries=64, args="v,r,t,ta"):
-	numargs=len(args.split(","))
-	for i in range(0,max_entries*numargs, numargs):
-		print("#define _AL%i(b,%s,...) _PPATUI_LEAF(b,%s) _AL%i(b,__VA_ARGS__)" % (i+numargs, args, args, i))
-
-Waterfall loop for primary leaves
-*/
-#define _PPATUI_LEAVES(bios, ...) \
-	_PPATUI_LHELPER1(bios, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_LHELPER1(b, ...) _PPATUI_LHELPER2(b, __VA_ARGS__)
-#define _PPATUI_LHELPER2(b, N,...) _AL##N(b, __VA_ARGS__)
-#define _AL0(...)
-#define _AL4(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta)
-#define _AL8(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL4(b,__VA_ARGS__)
-#define _AL12(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL8(b,__VA_ARGS__)
-#define _AL16(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL12(b,__VA_ARGS__)
-#define _AL20(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL16(b,__VA_ARGS__)
-#define _AL24(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL20(b,__VA_ARGS__)
-#define _AL28(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL24(b,__VA_ARGS__)
-#define _AL32(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL28(b,__VA_ARGS__)
-#define _AL36(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL32(b,__VA_ARGS__)
-#define _AL40(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL36(b,__VA_ARGS__)
-#define _AL44(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL40(b,__VA_ARGS__)
-#define _AL48(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL44(b,__VA_ARGS__)
-#define _AL52(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL48(b,__VA_ARGS__)
-#define _AL56(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL52(b,__VA_ARGS__)
-#define _AL60(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL56(b,__VA_ARGS__)
-#define _AL64(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL60(b,__VA_ARGS__)
-#define _AL68(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL64(b,__VA_ARGS__)
-#define _AL72(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL68(b,__VA_ARGS__)
-#define _AL76(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL72(b,__VA_ARGS__)
-#define _AL80(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL76(b,__VA_ARGS__)
-#define _AL84(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL80(b,__VA_ARGS__)
-#define _AL88(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL84(b,__VA_ARGS__)
-#define _AL92(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL88(b,__VA_ARGS__)
-#define _AL96(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL92(b,__VA_ARGS__)
-#define _AL100(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL96(b,__VA_ARGS__)
-#define _AL104(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL100(b,__VA_ARGS__)
-#define _AL108(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL104(b,__VA_ARGS__)
-#define _AL112(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL108(b,__VA_ARGS__)
-#define _AL116(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL112(b,__VA_ARGS__)
-#define _AL120(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL116(b,__VA_ARGS__)
-#define _AL124(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL120(b,__VA_ARGS__)
-#define _AL128(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL124(b,__VA_ARGS__)
-#define _AL132(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL128(b,__VA_ARGS__)
-#define _AL136(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL132(b,__VA_ARGS__)
-#define _AL140(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL136(b,__VA_ARGS__)
-#define _AL144(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL140(b,__VA_ARGS__)
-#define _AL148(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL144(b,__VA_ARGS__)
-#define _AL152(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL148(b,__VA_ARGS__)
-#define _AL156(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL152(b,__VA_ARGS__)
-#define _AL160(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL156(b,__VA_ARGS__)
-#define _AL164(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL160(b,__VA_ARGS__)
-#define _AL168(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL164(b,__VA_ARGS__)
-#define _AL172(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL168(b,__VA_ARGS__)
-#define _AL176(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL172(b,__VA_ARGS__)
-#define _AL180(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL176(b,__VA_ARGS__)
-#define _AL184(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL180(b,__VA_ARGS__)
-#define _AL188(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL184(b,__VA_ARGS__)
-#define _AL192(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL188(b,__VA_ARGS__)
-#define _AL196(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL192(b,__VA_ARGS__)
-#define _AL200(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL196(b,__VA_ARGS__)
-#define _AL204(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL200(b,__VA_ARGS__)
-#define _AL208(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL204(b,__VA_ARGS__)
-#define _AL212(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL208(b,__VA_ARGS__)
-#define _AL216(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL212(b,__VA_ARGS__)
-#define _AL220(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL216(b,__VA_ARGS__)
-#define _AL224(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL220(b,__VA_ARGS__)
-#define _AL228(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL224(b,__VA_ARGS__)
-#define _AL232(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL228(b,__VA_ARGS__)
-#define _AL236(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL232(b,__VA_ARGS__)
-#define _AL240(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL236(b,__VA_ARGS__)
-#define _AL244(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL240(b,__VA_ARGS__)
-#define _AL248(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL244(b,__VA_ARGS__)
-#define _AL252(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL248(b,__VA_ARGS__)
-#define _AL256(b,v,r,t,ta,...) _PPATUI_LEAF(b,v,r,t,ta) _AL252(b,__VA_ARGS__)
-
-
-/*
-def ppatui_enumhelper(max_entries=32, args="n"):
-        numargs=len(args.split(","))
-        for i in range(0,max_entries*numargs, numargs):
-                print("#define _PPA_EN%i(%s,...) _PPATUI_EENTRY(%s) _PPA_EN%i(__VA_ARGS__)" % (i+numargs, args, args, i))
-
-
-Waterfall loop for atui enum generator
-*/
-#define _PPATUI_ENUM_ENTRIES(...) \
-	_PPATUI_ENHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_ENHELPER1(...) _PPATUI_ENHELPER2(__VA_ARGS__)
-#define _PPATUI_ENHELPER2(N,...) _PPA_EN##N(__VA_ARGS__)
-#define __PPA_EN0(...)
-#define _PPA_EN1(n,...) _PPATUI_EENTRY(n)
-#define _PPA_EN2(n,...) _PPATUI_EENTRY(n) _PPA_EN1(__VA_ARGS__)
-#define _PPA_EN3(n,...) _PPATUI_EENTRY(n) _PPA_EN2(__VA_ARGS__)
-#define _PPA_EN4(n,...) _PPATUI_EENTRY(n) _PPA_EN3(__VA_ARGS__)
-#define _PPA_EN5(n,...) _PPATUI_EENTRY(n) _PPA_EN4(__VA_ARGS__)
-#define _PPA_EN6(n,...) _PPATUI_EENTRY(n) _PPA_EN5(__VA_ARGS__)
-#define _PPA_EN7(n,...) _PPATUI_EENTRY(n) _PPA_EN6(__VA_ARGS__)
-#define _PPA_EN8(n,...) _PPATUI_EENTRY(n) _PPA_EN7(__VA_ARGS__)
-#define _PPA_EN9(n,...) _PPATUI_EENTRY(n) _PPA_EN8(__VA_ARGS__)
-#define _PPA_EN10(n,...) _PPATUI_EENTRY(n) _PPA_EN9(__VA_ARGS__)
-#define _PPA_EN11(n,...) _PPATUI_EENTRY(n) _PPA_EN10(__VA_ARGS__)
-#define _PPA_EN12(n,...) _PPATUI_EENTRY(n) _PPA_EN11(__VA_ARGS__)
-#define _PPA_EN13(n,...) _PPATUI_EENTRY(n) _PPA_EN12(__VA_ARGS__)
-#define _PPA_EN14(n,...) _PPATUI_EENTRY(n) _PPA_EN13(__VA_ARGS__)
-#define _PPA_EN15(n,...) _PPATUI_EENTRY(n) _PPA_EN14(__VA_ARGS__)
-#define _PPA_EN16(n,...) _PPATUI_EENTRY(n) _PPA_EN15(__VA_ARGS__)
-#define _PPA_EN17(n,...) _PPATUI_EENTRY(n) _PPA_EN16(__VA_ARGS__)
-#define _PPA_EN18(n,...) _PPATUI_EENTRY(n) _PPA_EN17(__VA_ARGS__)
-#define _PPA_EN19(n,...) _PPATUI_EENTRY(n) _PPA_EN18(__VA_ARGS__)
-#define _PPA_EN20(n,...) _PPATUI_EENTRY(n) _PPA_EN19(__VA_ARGS__)
-#define _PPA_EN21(n,...) _PPATUI_EENTRY(n) _PPA_EN20(__VA_ARGS__)
-#define _PPA_EN22(n,...) _PPATUI_EENTRY(n) _PPA_EN21(__VA_ARGS__)
-#define _PPA_EN23(n,...) _PPATUI_EENTRY(n) _PPA_EN22(__VA_ARGS__)
-#define _PPA_EN24(n,...) _PPATUI_EENTRY(n) _PPA_EN23(__VA_ARGS__)
-#define _PPA_EN25(n,...) _PPATUI_EENTRY(n) _PPA_EN24(__VA_ARGS__)
-#define _PPA_EN26(n,...) _PPATUI_EENTRY(n) _PPA_EN25(__VA_ARGS__)
-#define _PPA_EN27(n,...) _PPATUI_EENTRY(n) _PPA_EN26(__VA_ARGS__)
-#define _PPA_EN28(n,...) _PPATUI_EENTRY(n) _PPA_EN27(__VA_ARGS__)
-#define _PPA_EN29(n,...) _PPATUI_EENTRY(n) _PPA_EN28(__VA_ARGS__)
-#define _PPA_EN30(n,...) _PPATUI_EENTRY(n) _PPA_EN29(__VA_ARGS__)
-#define _PPA_EN31(n,...) _PPATUI_EENTRY(n) _PPA_EN30(__VA_ARGS__)
-#define _PPA_EN32(n,...) _PPATUI_EENTRY(n) _PPA_EN31(__VA_ARGS__)
-
 
 
 /*
 python script:
-def ppatui_bfleaveshelper(max_entries=32, args="n,bh,bl,r"):
+
+def ppatui_nloop_helper(max_entries=64, args="a,b,c,d", rec_depth=1):
 	numargs=len(args.split(","))
+	looper = "_%iN%iR%s(f,o,%s)" % (numargs,rec_depth,"%s", "%s")
+	la = looper % ("%i", "%s,..."%args)
+	lb = looper % ("%i", "__VA_ARGS__")
+	called = "f(o,%s)" % args
+	s = "#define %s %s %s" % (la, called, lb)
 	for i in range(0,max_entries*numargs, numargs):
-		print("#define _BFL%i(v,%s,...) _PPA_BFLEAF(v,%s) _BFL%i(v,__VA_ARGS__)" % (i+numargs, args, args, i))
+		print(s % (i+numargs, i))
 
-Waterfall loop for bitfield leaves
+
+generic waterfall loop for functions with 4 unique arguments and 1 common.
+
+The recurse/recusive depth is about the preprocessor "painting blue". That is, 
+after the waterfall loop has been used, it becomes undefined within that 
+recursion.
+In other words, if the f() needs to call a loop, the loop that spun out the 
+f() f() f() f()... is no longer usable; the f() needs to call a different
+waterfall.
 */
-#define _PPATUI_BITFIELD_LEAVES(parent_var, ...) \
-	_PPATUI_BFLHELPER1(parent_var, _PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_BFLHELPER1(v,...) _PPATUI_BFLHELPER2(v,__VA_ARGS__)
-#define _PPATUI_BFLHELPER2(v,N,...) _BFL##N(v,__VA_ARGS__)
-#define _BFL0(...)
-#define _BFL4(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r)
-#define _BFL8(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL4(v,__VA_ARGS__)
-#define _BFL12(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL8(v,__VA_ARGS__)
-#define _BFL16(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL12(v,__VA_ARGS__)
-#define _BFL20(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL16(v,__VA_ARGS__)
-#define _BFL24(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL20(v,__VA_ARGS__)
-#define _BFL28(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL24(v,__VA_ARGS__)
-#define _BFL32(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL28(v,__VA_ARGS__)
-#define _BFL36(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL32(v,__VA_ARGS__)
-#define _BFL40(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL36(v,__VA_ARGS__)
-#define _BFL44(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL40(v,__VA_ARGS__)
-#define _BFL48(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL44(v,__VA_ARGS__)
-#define _BFL52(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL48(v,__VA_ARGS__)
-#define _BFL56(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL52(v,__VA_ARGS__)
-#define _BFL60(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL56(v,__VA_ARGS__)
-#define _BFL64(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL60(v,__VA_ARGS__)
-#define _BFL68(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL64(v,__VA_ARGS__)
-#define _BFL72(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL68(v,__VA_ARGS__)
-#define _BFL76(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL72(v,__VA_ARGS__)
-#define _BFL80(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL76(v,__VA_ARGS__)
-#define _BFL84(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL80(v,__VA_ARGS__)
-#define _BFL88(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL84(v,__VA_ARGS__)
-#define _BFL92(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL88(v,__VA_ARGS__)
-#define _BFL96(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL92(v,__VA_ARGS__)
-#define _BFL100(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL96(v,__VA_ARGS__)
-#define _BFL104(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL100(v,__VA_ARGS__)
-#define _BFL108(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL104(v,__VA_ARGS__)
-#define _BFL112(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL108(v,__VA_ARGS__)
-#define _BFL116(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL112(v,__VA_ARGS__)
-#define _BFL120(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL116(v,__VA_ARGS__)
-#define _BFL124(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL120(v,__VA_ARGS__)
-#define _BFL128(v,n,bh,bl,r,...) _PPA_BFLEAF(v,n,bh,bl,r) _BFL124(v,__VA_ARGS__)
 
+#define _PPATUI_LOOPER(numargs, recurse, ...) \
+	_PPATUI_LOOPERH1(numargs, recurse, _PP_NUMARG(__VA_ARGS__))
+#define _PPATUI_LOOPERH1(...) _PPATUI_LOOPERH2(__VA_ARGS__)
+#define _PPATUI_LOOPERH2(n,r,d) _##n##N##r##R##d
 
+//#define _4N1R0_FLAG // to detect if it's "painted blue"
+//#define _4N1R0(...) _4N1R0_FLAG 
+#define _4N1R0(...)
+#define _4N1R4(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R0(f,o,__VA_ARGS__)
+#define _4N1R8(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R4(f,o,__VA_ARGS__)
+#define _4N1R12(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R8(f,o,__VA_ARGS__)
+#define _4N1R16(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R12(f,o,__VA_ARGS__)
+#define _4N1R20(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R16(f,o,__VA_ARGS__)
+#define _4N1R24(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R20(f,o,__VA_ARGS__)
+#define _4N1R28(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R24(f,o,__VA_ARGS__)
+#define _4N1R32(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R28(f,o,__VA_ARGS__)
+#define _4N1R36(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R32(f,o,__VA_ARGS__)
+#define _4N1R40(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R36(f,o,__VA_ARGS__)
+#define _4N1R44(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R40(f,o,__VA_ARGS__)
+#define _4N1R48(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R44(f,o,__VA_ARGS__)
+#define _4N1R52(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R48(f,o,__VA_ARGS__)
+#define _4N1R56(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R52(f,o,__VA_ARGS__)
+#define _4N1R60(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R56(f,o,__VA_ARGS__)
+#define _4N1R64(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R60(f,o,__VA_ARGS__)
+#define _4N1R68(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R64(f,o,__VA_ARGS__)
+#define _4N1R72(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R68(f,o,__VA_ARGS__)
+#define _4N1R76(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R72(f,o,__VA_ARGS__)
+#define _4N1R80(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R76(f,o,__VA_ARGS__)
+#define _4N1R84(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R80(f,o,__VA_ARGS__)
+#define _4N1R88(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R84(f,o,__VA_ARGS__)
+#define _4N1R92(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R88(f,o,__VA_ARGS__)
+#define _4N1R96(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R92(f,o,__VA_ARGS__)
+#define _4N1R100(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R96(f,o,__VA_ARGS__)
+#define _4N1R104(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R100(f,o,__VA_ARGS__)
+#define _4N1R108(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R104(f,o,__VA_ARGS__)
+#define _4N1R112(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R108(f,o,__VA_ARGS__)
+#define _4N1R116(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R112(f,o,__VA_ARGS__)
+#define _4N1R120(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R116(f,o,__VA_ARGS__)
+#define _4N1R124(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R120(f,o,__VA_ARGS__)
+#define _4N1R128(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R124(f,o,__VA_ARGS__)
+#define _4N1R132(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R128(f,o,__VA_ARGS__)
+#define _4N1R136(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R132(f,o,__VA_ARGS__)
+#define _4N1R140(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R136(f,o,__VA_ARGS__)
+#define _4N1R144(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R140(f,o,__VA_ARGS__)
+#define _4N1R148(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R144(f,o,__VA_ARGS__)
+#define _4N1R152(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R148(f,o,__VA_ARGS__)
+#define _4N1R156(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R152(f,o,__VA_ARGS__)
+#define _4N1R160(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R156(f,o,__VA_ARGS__)
+#define _4N1R164(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R160(f,o,__VA_ARGS__)
+#define _4N1R168(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R164(f,o,__VA_ARGS__)
+#define _4N1R172(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R168(f,o,__VA_ARGS__)
+#define _4N1R176(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R172(f,o,__VA_ARGS__)
+#define _4N1R180(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R176(f,o,__VA_ARGS__)
+#define _4N1R184(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R180(f,o,__VA_ARGS__)
+#define _4N1R188(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R184(f,o,__VA_ARGS__)
+#define _4N1R192(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R188(f,o,__VA_ARGS__)
+#define _4N1R196(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R192(f,o,__VA_ARGS__)
+#define _4N1R200(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R196(f,o,__VA_ARGS__)
+#define _4N1R204(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R200(f,o,__VA_ARGS__)
+#define _4N1R208(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R204(f,o,__VA_ARGS__)
+#define _4N1R212(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R208(f,o,__VA_ARGS__)
+#define _4N1R216(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R212(f,o,__VA_ARGS__)
+#define _4N1R220(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R216(f,o,__VA_ARGS__)
+#define _4N1R224(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R220(f,o,__VA_ARGS__)
+#define _4N1R228(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R224(f,o,__VA_ARGS__)
+#define _4N1R232(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R228(f,o,__VA_ARGS__)
+#define _4N1R236(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R232(f,o,__VA_ARGS__)
+#define _4N1R240(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R236(f,o,__VA_ARGS__)
+#define _4N1R244(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R240(f,o,__VA_ARGS__)
+#define _4N1R248(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R244(f,o,__VA_ARGS__)
+#define _4N1R252(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R248(f,o,__VA_ARGS__)
+#define _4N1R256(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R252(f,o,__VA_ARGS__)
 
+//#define _4N2R0_FLAG
+//#define _4N2R0(...) _4N2R0_FLAG
+#define _4N2R0(...)
+#define _4N2R4(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R0(f,o,__VA_ARGS__)
+#define _4N2R8(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R4(f,o,__VA_ARGS__)
+#define _4N2R12(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R8(f,o,__VA_ARGS__)
+#define _4N2R16(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R12(f,o,__VA_ARGS__)
+#define _4N2R20(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R16(f,o,__VA_ARGS__)
+#define _4N2R24(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R20(f,o,__VA_ARGS__)
+#define _4N2R28(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R24(f,o,__VA_ARGS__)
+#define _4N2R32(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R28(f,o,__VA_ARGS__)
+#define _4N2R36(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R32(f,o,__VA_ARGS__)
+#define _4N2R40(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R36(f,o,__VA_ARGS__)
+#define _4N2R44(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R40(f,o,__VA_ARGS__)
+#define _4N2R48(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R44(f,o,__VA_ARGS__)
+#define _4N2R52(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R48(f,o,__VA_ARGS__)
+#define _4N2R56(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R52(f,o,__VA_ARGS__)
+#define _4N2R60(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R56(f,o,__VA_ARGS__)
+#define _4N2R64(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R60(f,o,__VA_ARGS__)
+#define _4N2R68(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R64(f,o,__VA_ARGS__)
+#define _4N2R72(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R68(f,o,__VA_ARGS__)
+#define _4N2R76(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R72(f,o,__VA_ARGS__)
+#define _4N2R80(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R76(f,o,__VA_ARGS__)
+#define _4N2R84(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R80(f,o,__VA_ARGS__)
+#define _4N2R88(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R84(f,o,__VA_ARGS__)
+#define _4N2R92(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R88(f,o,__VA_ARGS__)
+#define _4N2R96(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R92(f,o,__VA_ARGS__)
+#define _4N2R100(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R96(f,o,__VA_ARGS__)
+#define _4N2R104(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R100(f,o,__VA_ARGS__)
+#define _4N2R108(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R104(f,o,__VA_ARGS__)
+#define _4N2R112(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R108(f,o,__VA_ARGS__)
+#define _4N2R116(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R112(f,o,__VA_ARGS__)
+#define _4N2R120(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R116(f,o,__VA_ARGS__)
+#define _4N2R124(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R120(f,o,__VA_ARGS__)
+#define _4N2R128(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R124(f,o,__VA_ARGS__)
+#define _4N2R132(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R128(f,o,__VA_ARGS__)
+#define _4N2R136(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R132(f,o,__VA_ARGS__)
+#define _4N2R140(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R136(f,o,__VA_ARGS__)
+#define _4N2R144(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R140(f,o,__VA_ARGS__)
+#define _4N2R148(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R144(f,o,__VA_ARGS__)
+#define _4N2R152(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R148(f,o,__VA_ARGS__)
+#define _4N2R156(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R152(f,o,__VA_ARGS__)
+#define _4N2R160(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R156(f,o,__VA_ARGS__)
+#define _4N2R164(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R160(f,o,__VA_ARGS__)
+#define _4N2R168(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R164(f,o,__VA_ARGS__)
+#define _4N2R172(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R168(f,o,__VA_ARGS__)
+#define _4N2R176(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R172(f,o,__VA_ARGS__)
+#define _4N2R180(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R176(f,o,__VA_ARGS__)
+#define _4N2R184(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R180(f,o,__VA_ARGS__)
+#define _4N2R188(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R184(f,o,__VA_ARGS__)
+#define _4N2R192(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R188(f,o,__VA_ARGS__)
+#define _4N2R196(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R192(f,o,__VA_ARGS__)
+#define _4N2R200(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R196(f,o,__VA_ARGS__)
+#define _4N2R204(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R200(f,o,__VA_ARGS__)
+#define _4N2R208(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R204(f,o,__VA_ARGS__)
+#define _4N2R212(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R208(f,o,__VA_ARGS__)
+#define _4N2R216(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R212(f,o,__VA_ARGS__)
+#define _4N2R220(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R216(f,o,__VA_ARGS__)
+#define _4N2R224(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R220(f,o,__VA_ARGS__)
+#define _4N2R228(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R224(f,o,__VA_ARGS__)
+#define _4N2R232(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R228(f,o,__VA_ARGS__)
+#define _4N2R236(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R232(f,o,__VA_ARGS__)
+#define _4N2R240(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R236(f,o,__VA_ARGS__)
+#define _4N2R244(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R240(f,o,__VA_ARGS__)
+#define _4N2R248(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R244(f,o,__VA_ARGS__)
+#define _4N2R252(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R248(f,o,__VA_ARGS__)
+#define _4N2R256(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R252(f,o,__VA_ARGS__)
 
-/*
-python script:
-def ppatui_inlineleaveshelper(max_entries=64, args="v,r,t,ta"):
-	numargs=len(args.split(","))
-	for i in range(0,max_entries*numargs, numargs):
-		print("#define _IL%i(%s,...) _PPATUI_INLEAF(%s) _IL%i(__VA_ARGS__)" % (i+numargs, args, args, i))
-
-Waterfall loop for inline leaves
-*/
-#define _PPATUI_INLINE_BRANCHES(...) \
-	_PPATUI_ILHELPER1(_PP_NUMARG(__VA_ARGS__), __VA_ARGS__)
-#define _PPATUI_ILHELPER1(...) _PPATUI_ILHELPER2(__VA_ARGS__)
-#define _PPATUI_ILHELPER2(N,...) _IL##N(__VA_ARGS__)
-#define _IL0(...)
-#define _IL4(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta)
-#define _IL8(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL4(__VA_ARGS__)
-#define _IL12(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL8(__VA_ARGS__)
-#define _IL16(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL12(__VA_ARGS__)
-#define _IL20(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL16(__VA_ARGS__)
-#define _IL24(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL20(__VA_ARGS__)
-#define _IL28(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL24(__VA_ARGS__)
-#define _IL32(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL28(__VA_ARGS__)
-#define _IL36(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL32(__VA_ARGS__)
-#define _IL40(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL36(__VA_ARGS__)
-#define _IL44(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL40(__VA_ARGS__)
-#define _IL48(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL44(__VA_ARGS__)
-#define _IL52(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL48(__VA_ARGS__)
-#define _IL56(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL52(__VA_ARGS__)
-#define _IL60(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL56(__VA_ARGS__)
-#define _IL64(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL60(__VA_ARGS__)
-#define _IL68(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL64(__VA_ARGS__)
-#define _IL72(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL68(__VA_ARGS__)
-#define _IL76(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL72(__VA_ARGS__)
-#define _IL80(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL76(__VA_ARGS__)
-#define _IL84(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL80(__VA_ARGS__)
-#define _IL88(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL84(__VA_ARGS__)
-#define _IL92(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL88(__VA_ARGS__)
-#define _IL96(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL92(__VA_ARGS__)
-#define _IL100(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL96(__VA_ARGS__)
-#define _IL104(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL100(__VA_ARGS__)
-#define _IL108(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL104(__VA_ARGS__)
-#define _IL112(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL108(__VA_ARGS__)
-#define _IL116(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL112(__VA_ARGS__)
-#define _IL120(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL116(__VA_ARGS__)
-#define _IL124(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL120(__VA_ARGS__)
-#define _IL128(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL124(__VA_ARGS__)
-#define _IL132(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL128(__VA_ARGS__)
-#define _IL136(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL132(__VA_ARGS__)
-#define _IL140(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL136(__VA_ARGS__)
-#define _IL144(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL140(__VA_ARGS__)
-#define _IL148(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL144(__VA_ARGS__)
-#define _IL152(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL148(__VA_ARGS__)
-#define _IL156(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL152(__VA_ARGS__)
-#define _IL160(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL156(__VA_ARGS__)
-#define _IL164(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL160(__VA_ARGS__)
-#define _IL168(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL164(__VA_ARGS__)
-#define _IL172(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL168(__VA_ARGS__)
-#define _IL176(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL172(__VA_ARGS__)
-#define _IL180(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL176(__VA_ARGS__)
-#define _IL184(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL180(__VA_ARGS__)
-#define _IL188(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL184(__VA_ARGS__)
-#define _IL192(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL188(__VA_ARGS__)
-#define _IL196(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL192(__VA_ARGS__)
-#define _IL200(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL196(__VA_ARGS__)
-#define _IL204(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL200(__VA_ARGS__)
-#define _IL208(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL204(__VA_ARGS__)
-#define _IL212(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL208(__VA_ARGS__)
-#define _IL216(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL212(__VA_ARGS__)
-#define _IL220(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL216(__VA_ARGS__)
-#define _IL224(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL220(__VA_ARGS__)
-#define _IL228(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL224(__VA_ARGS__)
-#define _IL232(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL228(__VA_ARGS__)
-#define _IL236(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL232(__VA_ARGS__)
-#define _IL240(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL236(__VA_ARGS__)
-#define _IL244(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL240(__VA_ARGS__)
-#define _IL248(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL244(__VA_ARGS__)
-#define _IL252(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL248(__VA_ARGS__)
-#define _IL256(v,r,t,ta,...) _PPATUI_INLEAF(v,r,t,ta) _IL252(__VA_ARGS__)
-
+#define _1N1R0(...)
+#define _1N1R1(f,o,a,...) f(o,a) _1N1R0(f,o,__VA_ARGS__)
+#define _1N1R2(f,o,a,...) f(o,a) _1N1R1(f,o,__VA_ARGS__)
+#define _1N1R3(f,o,a,...) f(o,a) _1N1R2(f,o,__VA_ARGS__)
+#define _1N1R4(f,o,a,...) f(o,a) _1N1R3(f,o,__VA_ARGS__)
+#define _1N1R5(f,o,a,...) f(o,a) _1N1R4(f,o,__VA_ARGS__)
+#define _1N1R6(f,o,a,...) f(o,a) _1N1R5(f,o,__VA_ARGS__)
+#define _1N1R7(f,o,a,...) f(o,a) _1N1R6(f,o,__VA_ARGS__)
+#define _1N1R8(f,o,a,...) f(o,a) _1N1R7(f,o,__VA_ARGS__)
+#define _1N1R9(f,o,a,...) f(o,a) _1N1R8(f,o,__VA_ARGS__)
+#define _1N1R10(f,o,a,...) f(o,a) _1N1R9(f,o,__VA_ARGS__)
+#define _1N1R11(f,o,a,...) f(o,a) _1N1R10(f,o,__VA_ARGS__)
+#define _1N1R12(f,o,a,...) f(o,a) _1N1R11(f,o,__VA_ARGS__)
+#define _1N1R13(f,o,a,...) f(o,a) _1N1R12(f,o,__VA_ARGS__)
+#define _1N1R14(f,o,a,...) f(o,a) _1N1R13(f,o,__VA_ARGS__)
+#define _1N1R15(f,o,a,...) f(o,a) _1N1R14(f,o,__VA_ARGS__)
+#define _1N1R16(f,o,a,...) f(o,a) _1N1R15(f,o,__VA_ARGS__)
+#define _1N1R17(f,o,a,...) f(o,a) _1N1R16(f,o,__VA_ARGS__)
+#define _1N1R18(f,o,a,...) f(o,a) _1N1R17(f,o,__VA_ARGS__)
+#define _1N1R19(f,o,a,...) f(o,a) _1N1R18(f,o,__VA_ARGS__)
+#define _1N1R20(f,o,a,...) f(o,a) _1N1R19(f,o,__VA_ARGS__)
+#define _1N1R21(f,o,a,...) f(o,a) _1N1R20(f,o,__VA_ARGS__)
+#define _1N1R22(f,o,a,...) f(o,a) _1N1R21(f,o,__VA_ARGS__)
+#define _1N1R23(f,o,a,...) f(o,a) _1N1R22(f,o,__VA_ARGS__)
+#define _1N1R24(f,o,a,...) f(o,a) _1N1R23(f,o,__VA_ARGS__)
+#define _1N1R25(f,o,a,...) f(o,a) _1N1R24(f,o,__VA_ARGS__)
+#define _1N1R26(f,o,a,...) f(o,a) _1N1R25(f,o,__VA_ARGS__)
+#define _1N1R27(f,o,a,...) f(o,a) _1N1R26(f,o,__VA_ARGS__)
+#define _1N1R28(f,o,a,...) f(o,a) _1N1R27(f,o,__VA_ARGS__)
+#define _1N1R29(f,o,a,...) f(o,a) _1N1R28(f,o,__VA_ARGS__)
+#define _1N1R30(f,o,a,...) f(o,a) _1N1R29(f,o,__VA_ARGS__)
+#define _1N1R31(f,o,a,...) f(o,a) _1N1R30(f,o,__VA_ARGS__)
+#define _1N1R32(f,o,a,...) f(o,a) _1N1R31(f,o,__VA_ARGS__)
+#define _1N1R33(f,o,a,...) f(o,a) _1N1R32(f,o,__VA_ARGS__)
+#define _1N1R34(f,o,a,...) f(o,a) _1N1R33(f,o,__VA_ARGS__)
+#define _1N1R35(f,o,a,...) f(o,a) _1N1R34(f,o,__VA_ARGS__)
+#define _1N1R36(f,o,a,...) f(o,a) _1N1R35(f,o,__VA_ARGS__)
+#define _1N1R37(f,o,a,...) f(o,a) _1N1R36(f,o,__VA_ARGS__)
+#define _1N1R38(f,o,a,...) f(o,a) _1N1R37(f,o,__VA_ARGS__)
+#define _1N1R39(f,o,a,...) f(o,a) _1N1R38(f,o,__VA_ARGS__)
+#define _1N1R40(f,o,a,...) f(o,a) _1N1R39(f,o,__VA_ARGS__)
+#define _1N1R41(f,o,a,...) f(o,a) _1N1R40(f,o,__VA_ARGS__)
+#define _1N1R42(f,o,a,...) f(o,a) _1N1R41(f,o,__VA_ARGS__)
+#define _1N1R43(f,o,a,...) f(o,a) _1N1R42(f,o,__VA_ARGS__)
+#define _1N1R44(f,o,a,...) f(o,a) _1N1R43(f,o,__VA_ARGS__)
+#define _1N1R45(f,o,a,...) f(o,a) _1N1R44(f,o,__VA_ARGS__)
+#define _1N1R46(f,o,a,...) f(o,a) _1N1R45(f,o,__VA_ARGS__)
+#define _1N1R47(f,o,a,...) f(o,a) _1N1R46(f,o,__VA_ARGS__)
+#define _1N1R48(f,o,a,...) f(o,a) _1N1R47(f,o,__VA_ARGS__)
+#define _1N1R49(f,o,a,...) f(o,a) _1N1R48(f,o,__VA_ARGS__)
+#define _1N1R50(f,o,a,...) f(o,a) _1N1R49(f,o,__VA_ARGS__)
+#define _1N1R51(f,o,a,...) f(o,a) _1N1R50(f,o,__VA_ARGS__)
+#define _1N1R52(f,o,a,...) f(o,a) _1N1R51(f,o,__VA_ARGS__)
+#define _1N1R53(f,o,a,...) f(o,a) _1N1R52(f,o,__VA_ARGS__)
+#define _1N1R54(f,o,a,...) f(o,a) _1N1R53(f,o,__VA_ARGS__)
+#define _1N1R55(f,o,a,...) f(o,a) _1N1R54(f,o,__VA_ARGS__)
+#define _1N1R56(f,o,a,...) f(o,a) _1N1R55(f,o,__VA_ARGS__)
+#define _1N1R57(f,o,a,...) f(o,a) _1N1R56(f,o,__VA_ARGS__)
+#define _1N1R58(f,o,a,...) f(o,a) _1N1R57(f,o,__VA_ARGS__)
+#define _1N1R59(f,o,a,...) f(o,a) _1N1R58(f,o,__VA_ARGS__)
+#define _1N1R60(f,o,a,...) f(o,a) _1N1R59(f,o,__VA_ARGS__)
+#define _1N1R61(f,o,a,...) f(o,a) _1N1R60(f,o,__VA_ARGS__)
+#define _1N1R62(f,o,a,...) f(o,a) _1N1R61(f,o,__VA_ARGS__)
+#define _1N1R63(f,o,a,...) f(o,a) _1N1R62(f,o,__VA_ARGS__)
+#define _1N1R64(f,o,a,...) f(o,a) _1N1R63(f,o,__VA_ARGS__)
 
 
 

@@ -13,6 +13,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 #include "atui.h"
 #include <stdio.h>
 
+
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
 	if (leaf->type & ATUI_ANY) {
 		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
@@ -139,12 +140,21 @@ and then for the atui table,
 
 if the element should reference a table, a atui_branch to inline,
 ake sure the table is populated with an ATUI_FUNCIFY()
-	table_element, ATUI_NONE, ATUI_INLINE, table_to_inline,
+	table_element, ATUI_NAN, ATUI_INLINE, table_to_inline,
 
 if the element is a string,
-	table_element, ATUI_NONE, ATUI_STRING, ATUI_NONE,
+	table_element, ATUI_NAN, ATUI_STRING, ATUI_NONE,
 or otherwise an array,
 	table_element, ATUI_HEX, ATUI_ARRAY, ATUI_NONE,
+
+
+
+ATUI_DYNARRAY:
+
+leaf_top_name, ATUI_NONE, ATUI_DYNARRY, (
+	leaf_name, radix, fancy_ui_representation, args_for_fancy
+	start_pointer, count
+)
 
 */
 
@@ -159,9 +169,9 @@ PPATUI_FUNCIFY(struct, atom_common_table_header,
 )
 
 PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
-	table_header,              ATUI_NONE, ATUI_INLINE, 
+	table_header,              ATUI_NAN, ATUI_INLINE, 
 		atom_common_table_header,
-	atom_bios_string,          ATUI_NONE, ATUI_STRING, ATUI_NONE,
+	atom_bios_string,          ATUI_NAN, ATUI_STRING, ATUI_NONE,
 	bios_segment_address,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	protectedmodeoffset,       ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	configfilenameoffset,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
@@ -181,7 +191,7 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 
 
 PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
-	table_header,         ATUI_NONE, ATUI_INLINE, 
+	table_header,         ATUI_NAN, ATUI_INLINE, 
 		atom_common_table_header,
 	utilitypipeline,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
 	multimedia_info,      ATUI_HEX, ATUI_NONE, ATUI_NONE,
@@ -221,7 +231,7 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 )
 
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
-	table_header,                ATUI_NONE, ATUI_INLINE, 
+	table_header,                ATUI_NAN, ATUI_INLINE, 
 		atom_common_table_header,
 	mem_adjust_tbloffset,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	mem_clk_patch_tbloffset,     ATUI_DEC, ATUI_NONE, ATUI_NONE,
@@ -264,18 +274,63 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10,
 	vram_rsd2,        ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	gddr6_mr10,       ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr1,        ATUI_BIN, ATUI_BITFIELD, (
-		drive_stren,   1,0,  ATUI_DEC,
-		data_term,     3,2,  ATUI_DEC, 
-		PLLDLL_range,  5,4,  ATUI_DEC, 
-		calib_update,  6,6,  ATUI_DEC, 
-		PLLDLL,        7,7,  ATUI_DEC, 
-		RDBI,          8,8,  ATUI_DEC, 
-		WDBI,          9,9,  ATUI_DEC, 
+		drive_stren,   1, 0, ATUI_DEC,
+		data_term,     3, 2, ATUI_DEC, 
+		PLLDLL_range,  5, 4, ATUI_DEC, 
+		calib_update,  6, 6, ATUI_DEC, 
+		PLLDLL,        7, 7, ATUI_DEC, 
+		RDBI,          8, 8, ATUI_DEC, 
+		WDBI,          9, 9, ATUI_DEC, 
 		CABI,         10,10, ATUI_DEC, 
 		PLLDLL_reset, 14,11, ATUI_DEC, 
 		ID,           15,12, ATUI_DEC 
 	),
 	gddr6_mr2,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
 	gddr6_mr7,        ATUI_BIN, ATUI_NONE, ATUI_NONE,
-	dram_pnstring,    ATUI_NONE, ATUI_ARRAY, ATUI_NONE // not text
+	dram_pnstring,    ATUI_NAN, ATUI_ARRAY, ATUI_NONE // not text
 )
+
+
+PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
+	u32umc_id_access,  ATUI_BIN, ATUI_BITFIELD, (
+		memclockrange, 23, 0, ATUI_DEC,
+		mem_blk_id,    31,24, ATUI_DEC
+	)
+)
+/*
+PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
+	umc_reg_list, ATUI_NODISPLAY, ATUI_DYNARRAY, (
+		u32umc_reg_addr,       ATUI_BIN, ATUI_BITFIELD, (
+			umc_register_addr, 23, 0, ATUI_DEC,
+			umc_reg_type_ind,  24,24, ATUI_DEC,
+			umc_reg_rsvd,      31,25, ATUI_BIN
+		),
+		start_pointer, count
+	)
+)
+*/
+PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
+	umc_reg_num,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
+	reserved,     ATUI_HEX, ATUI_NONE, ATUI_NONE
+)
+
+
+
+/*
+	umc_reg_list, ATUI_NAN, ATUI_DYNARRY, (
+		u32umc_reg_addr, ATUI_NODISPLAY, ATUI_INLINE,
+			atom_umc_register_addr_info_access,
+		start_pointer, count
+	)
+
+
+we need _#_atui dynamic inline leaves, probably like how extra branches work
+like
+
+atom_umc_init_reg_block's umc_reg_list and umc_reg_setting_list should be 
+branches.
+
+umc_reg_list shoud have dynamic inline leaves.
+
+atom_umc_reg_setting_data_block's u32umc_reg_data should be handled with a large struct, where appropriate. if not, dynamic leaves.
+*/

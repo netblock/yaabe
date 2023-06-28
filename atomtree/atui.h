@@ -30,17 +30,22 @@ struct atui_enum {
 
 
 enum atui_type {
-	ATUI_NONE = 0b000,
-	ATUI_DEC  = 0b001,
-	ATUI_HEX  = 0b010,
-	ATUI_BIN  = 0b011,
-	ATUI_ANY  = 0b011,
+	ATUI_NAN = 0b000,
+	ATUI_DEC = 0b001,
+	ATUI_HEX = 0b010,
+	ATUI_OCT = 0b011, // TODO not implemented
+	ATUI_BIN = 0b100,
+	ATUI_ANY = 0b111,
 
-	ATUI_BITFIELD = 1<<4,
-	ATUI_ENUM     = 1<<5, // see also PPATUI_FUNCIFY()
-	ATUI_STRING   = 1<<6, // meant for human-readable text
-	ATUI_ARRAY    = 1<<7, // no technical difference from string 
-	ATUI_INLINE   = 1<<8, // pull in leaves from other tables
+	ATUI_NONE      = 1<<4,
+	ATUI_NODISPLAY = 1<<4,
+
+	ATUI_BITFIELD = 1<<5,
+	ATUI_ENUM     = 1<<6, // see also PPATUI_FUNCIFY()
+	ATUI_STRING   = 1<<7, // meant for human-readable text
+	ATUI_ARRAY    = 1<<8, // no technical difference from string 
+	ATUI_INLINE   = 1<<9, // pull in leaves from other tables
+	ATUI_DYNARRAY    = 1<<10, // for runtime array lengths
 };
 
 typedef struct atui_branch_ atui_branch;
@@ -117,7 +122,16 @@ void atui_destroy_tree(atui_branch* tree);
 
 
 
+struct atui_funcify_data {
+	//void* bios;
+	void* atomtree_branch;
 
+	uint8_t import_branches_count;
+	atui_branch** import_branches;
+
+	//uint8_t import_leaves_count;
+	//atui_leaf* import_leaves;
+};
 
 
 
