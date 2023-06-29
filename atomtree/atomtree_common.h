@@ -5,9 +5,11 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <atomfirmware.h>
 
+//#include <atomtree_includes.h>
 
 enum atomtree_common_version {
     nover=0,

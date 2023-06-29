@@ -9,8 +9,10 @@
 
 #include <atomfirmware.h>
 #include <powerplay.h>
-#include "atomtree.h"
 
+#include "atomtree_common.h"
+#include "atomtree.h"
+#include "atui.h"
 
 bool atomtree_dt_populate_smc_dpm_info(struct atom_tree* atree) {
 	struct atomtree_smc_dpm_info* smc_dpm_info =
@@ -282,13 +284,13 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	atui_branch* atui_vi = NULL;
 	if(generate_atui) {
 		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
-			&(leaves->table_header), 0,NULL);
+			NULL, &(leaves->table_header),  0,NULL);
 		atui_branch* child_branches[] = {atui_header};
 		const int num_child_part = sizeof(child_branches)/sizeof(atui_branch*);
 
 		int num_child = num_child_part + vi24->leaves->vram_module_num;
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_4,
-			vi24->leaves, num_child, NULL);
+			vi24,NULL,  num_child,NULL);
 
 		int cb_depth = 0;
 		int i = 0;
@@ -299,7 +301,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		for(i=0; i < vi24->leaves->vram_module_num; i++) {
 			atui_vi->child_branches[i + cb_depth] = 
 				ATUI_MAKE_BRANCH(atom_vram_module_v10, 
-					&(vi24->leaves->vram_module[i]), 0,NULL);
+					vi24, &(vi24->leaves->vram_module[i]), 0,NULL);
 		}
 		cb_depth = cb_depth + i;
 	}
@@ -535,13 +537,13 @@ static inline atui_branch* atomtree_populate_datatables(
 
 	if (generate_atui) {
 		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
-			&(leaves->table_header), 0,NULL);
+			NULL,&(leaves->table_header),  0,NULL);
 
 		atui_branch* child_branches[] = {atui_header, atui_vram_info};
-		int num_child = sizeof(child_branches)/sizeof(atui_branch*);
+		int num_child_branches = sizeof(child_branches)/sizeof(atui_branch*);
 
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
-			leaves, num_child, child_branches);
+			data_table,NULL,  num_child_branches,child_branches);
 	}
 	return atui_dt;
 }
@@ -579,12 +581,12 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 
 	if (generate_atui) {
 		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
-			&(atree->leaves->table_header), 0,NULL);
+			NULL,&(atree->leaves->table_header), 0,NULL);
 
 		atui_branch* child_branches[] = {atui_header, atui_dt};
-		int num_child = sizeof(child_branches)/sizeof(atui_branch*);
+		int num_child_branches = sizeof(child_branches)/sizeof(atui_branch*);
 		atree->atui_root = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
-			atree->leaves, num_child, child_branches); 
+			atree,NULL,  num_child_branches,child_branches); 
 	} else {
 		atree->atui_root = NULL;
 	}

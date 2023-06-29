@@ -39,6 +39,7 @@ future ideas:
 #define ATOMTREE_DATA_TABLES_H
 #include <atomfirmware.h>
 #include <powerplay.h>
+
 #include "atomtree_common.h"
 
 

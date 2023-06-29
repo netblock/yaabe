@@ -1,9 +1,11 @@
 #ifndef ATOMTREE_H
 #define ATOMTREE_H
 
-#include "atomtree_data_tables.h"
 #include "atomtree_common.h"
-#include "atui.h"
+#include "atomtree_data_tables.h"
+
+//#include "atui.h"
+typedef struct _atui_branch atui_branch;
 
 
 #define BIOS_IMAGE_SIZE_OFFSET 2
@@ -54,6 +56,7 @@ struct atomtree_rom_header_v2_2
   uint16_t reserved;
   uint32_t pspdirtableoffset;
 };
+
 
 struct atom_tree {
 	struct atom_tree* dot;

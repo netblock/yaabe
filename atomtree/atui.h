@@ -18,8 +18,9 @@ vim replace patterns that help copypaste structs from atombios.h:
 
 #ifndef ATUI_H
 #define ATUI_H
-#include "atomtree_common.h"
 #include "ppatui.h"
+#include <atomtree.h>
+//#include <atomtree_includes.h>
 
 
 // shall be used in an array
@@ -48,9 +49,9 @@ enum atui_type {
 	ATUI_DYNARRAY    = 1<<10, // for runtime array lengths
 };
 
-typedef struct atui_branch_ atui_branch;
-typedef struct atui_leaf_ atui_leaf;
-struct atui_leaf_ {
+typedef struct _atui_branch atui_branch;
+typedef struct _atui_leaf atui_leaf;
+struct _atui_leaf {
 	char name[40];
 	char* description;
 
@@ -78,7 +79,7 @@ struct atui_leaf_ {
 
 	void* auxiliary; // any extra info to hang off if necessary
 };
-struct  atui_branch_ {
+struct  _atui_branch {
 	char name[40];
 	char* description;
 
@@ -135,17 +136,17 @@ struct atui_funcify_data {
 
 
 
-PPATUI_HEADERIFY(struct, atom_common_table_header);
+PPATUI_HEADERIFY(atom_common_table_header, atom_tree);
 
-PPATUI_HEADERIFY(struct, atom_rom_header_v2_2);
-PPATUI_HEADERIFY(struct, atom_master_data_table_v2_1);
+PPATUI_HEADERIFY(atom_rom_header_v2_2, atom_tree);
+PPATUI_HEADERIFY(atom_master_data_table_v2_1, atomtree_master_datatable_v2_1);
 
 
 // fuck me...
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 
 
-PPATUI_HEADERIFY(struct, atom_vram_module_v10);
-PPATUI_HEADERIFY(struct, atom_vram_info_header_v2_4);
+PPATUI_HEADERIFY(atom_vram_module_v10, atomtree_vram_info_header_v2_4);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_4, atomtree_vram_info_header_v2_4);
 
 #endif

@@ -20,12 +20,25 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define PPATUI_H
 
 
+//MAIN FUNCTIONS:
+
 // to create the allocator function. See atui.c for how it is used.             
-#define PPATUI_FUNCIFY(typeprefix, typesuffix, ...) \
-    PPATUI_FUNCIFY_HELPER(typeprefix, typesuffix __VA_OPT__(,) __VA_ARGS__)
+#define PPATUI_FUNCIFY(atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
+    _PPATUI_FUNCIFY_HELPER(atomtypeprefix, atomtypesuffix, atomtreestruct \
+		 __VA_OPT__(,) __VA_ARGS__)
+
 
 // to define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(typeprefix, typesuffix) _PPATUI_FUNC_NAME(typeprefix, typesuffix)
+#define PPATUI_HEADERIFY(atomstruct, atomtreestruct)\
+	 _PPATUI_FUNC_NAME(atomstruct, atomtreestruct)
+
+
+// thing to call to instanciate an atui_branch
+#define ATUI_MAKE_BRANCH(atomstruct, atomtree, suggestbios,\
+		 num_branches, children) \
+	_##atomstruct##_atui(atomtree, suggestbios, num_branches, children)
+
+
 
 // to define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...) \
@@ -33,159 +46,34 @@ vim replace patterns that help copypaste structs from atombios.h:
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
 #define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate}, 
 
-/***************************** preprocessor hell *****************************/
-
-#define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
-	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
-	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
-	default:0\
-)
 
 
-/**** LEAF FANCY FUNCS ***/
-/*
-The fancy funcions here are about populating the fancy UI representation flags
-for the leaves described in PPATUI_FUNCIFY().
-That is, bitfield population, and enum and inline association.
-*/
-
-
-// common guts and functions for Fancy. 
-#define _PPATUI_FANCY_NOBITFIELD(biosvar) \
-	.num_bitfield_children=0, \
-	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0,
-#define _PPATUI_FANCY_NOBITFIELD_HARD \
-	.num_bitfield_children=0, .bitfield_hi=0, .bitfield_lo=0,
-
-#define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
-#define _PPATUI_FANCY_NOARRAY .array_size=0,
-
-//fancydata is textually packed in () and this unpacks it
-#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
-#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
-
-#define _PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	{ \
-		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
-		.val=&(bios->var), .total_bits=_PPATUI_LEAF_BITNESS(bios->var),
-// Fancy common end
-
-
-//ATUI_NONE
-
-#define _PPATUI_FANCY_ATUI_NONE(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
-
-
-
-
-//ATUI_ENUM
-
-#define _PPATUI_FANCY_ATUI_ENUM(bios, var, radix, fancytype, enumname) \
-	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	.enum_options=_atui_enum_##enumname, \
-	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
-	_PPATUI_FANCY_NOBITFIELD(bios->var) },
-
-
-
-
-
-//ATUI_STRING
-//ATUI_ARRAY
-
-#define _PPATUI_FANCY_ATUI_STRING(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_ATUI_ARRAY(bios, var, radix, fancytype, fancydata) 
-
-#define _PPATUI_FANCY_ATUI_ARRAY(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	.array_size = sizeof(bios->var)/sizeof(bios->var[0]), \
-	_PPATUI_FANCY_NOBITFIELD(bios->var) _PPATUI_FANCY_NOENUM },
-
-
-
-	
-
-
-//ATUI_BITFIELD
-
-#define _PPATUI_FANCY_ATUI_BITFIELD(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	.bitfield_hi=_PPATUI_LEAF_BITNESS(bios->var)-1, .bitfield_lo=0, \
-	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN fancydata , \
-	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
-	_PPATUI_BITFIELD_LEAVES(bios->var, _PPATUI_FANCYDATA_UNPACK(fancydata))
-// close parent and start on inbred children.
-
-// the 4 is for name,bithi,bitlo,radix set
-#define _PPATUI_FANCYBF_NUMCHILDREN(...) \
-	 _PP_NUMARG(__VA_ARGS__) / 4
-
-#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
-	{\
-		.val=&(biosvar), .name=#bfname, \
-		.type=radix, \
-		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
-		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
-		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
-		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
-	},
-
-
-
-
-
-//ATUI_INLINE
-
-// the meat of ATUI_INLINE is handled in the funcify
-#define _PPATUI_FANCY_ATUI_INLINE(bios, var, radix, fancytype, fancydata)\
-	_PPATUI_FANCY_INIT(bios, var, radix, fancytype) \
-	.val=NULL, \
-	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
-	_PPATUI_FANCY_NOARRAY },
-
-#define _PPATUI_INLEAF_ATUI_NONE(...)
-#define _PPATUI_INLEAF_ATUI_BITFIELD(...)
-#define _PPATUI_INLEAF_ATUI_ENUM(...)
-#define _PPATUI_INLEAF_ATUI_STRING(...)
-#define _PPATUI_INLEAF_ATUI_ARRAY(...)
-#define _PPATUI_INLEAF_ATUI_DYNARRAY(...)
-
-#define _PPATUI_INLEAF_ATUI_INLINE(typesuffix, instancename)\
-	ATUI_MAKE_BRANCH(typesuffix, &(bios->instancename), 0, NULL),
-#define _PPATUI_INLEAF(m, var, radix, fancytype, fancydata) \
-	_PPATUI_INLEAF_##fancytype(fancydata, var)
-
-
-
-
-// ATUI_DYNARRAY
-#define _PPATUI_FANCY_ATUI_DYNARRAY(bios, var, radix, fancytype, fancydata)
-
-
-/**** LEAF FANCY FUNCS END***/
-
-
-#define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_##fancytype(bios, var, radix, fancytype, fancydata)
-	// the closing } for the leaf is handled in the fancy pp funcs.
-
-
-
-#define _PPATUI_FUNC_NAME(typeprefix, typesuffix) \
-	atui_branch* _##typesuffix##_atui( \
-		typeprefix typesuffix * bios, \
+// PPATUI function interface:
+#define _PPATUI_FUNC_NAME(atomstruct, atomtreestruct) \
+	atui_branch* _##atomstruct##_atui( \
+		struct atomtreestruct * atomtree,  \
+		/* For bios pointer, and to use atomtree digestion if necesary. Can be
+		optional depending on defined atui branch; use suggestbios instead.*/\
+\
+		void* suggestbios, \
+		/* Optional. A pointer to somewhere in the bios memory; mainly useful
+		for loops.*/\
+\
 		unsigned int num_branches, \
+		/* Number of child branches this atui_branch will have.*/\
+\
 		atui_branch** import_children \
+		/* If the child branches are preallocated, walk across this. 
+		This array must have num_branches elements.*/\
 	)
 
-#define ATUI_MAKE_BRANCH(typesuffix, bios, num_branches, children) \
-	_##typesuffix##_atui(bios, num_branches, children)
+/***************************** preprocessor hell *****************************/
 
 // main allocator function
-#define PPATUI_FUNCIFY_HELPER(typeprefix, typesuffix, ...) \
-_PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
+#define _PPATUI_FUNCIFY_HELPER(\
+		atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
+_PPATUI_FUNC_NAME(atomtypesuffix, atomtreestruct) {\
+\
 	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
 \
@@ -194,13 +82,18 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 \
 	atui_leaf* leaves = NULL;\
 	uint16_t leaves_init_num = 0;\
-\
 	void* scratch;\
 	uint16_t i = 0;\
 	uint16_t j = 0;\
 	uint16_t k = 0;\
 	uint16_t l = 0;\
 \
+	atomtypeprefix atomtypesuffix * bios;\
+	if (suggestbios != NULL) {\
+		bios = suggestbios;\
+	} else {\
+		bios = (void*) atomtree->leaves;\
+	}\
 \
 	if(PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
 		/*counts bitfield*/ \
@@ -218,13 +111,16 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 		const uint8_t dynarray_pattern_lengths[] = { \
 			_PPATUI_DYNARRAY(COUNT, bios, __VA_ARGS__) \
 		};\
+		const uint8_t num_dynarray_sets = \
+			sizeof(dynarray_pattern_lengths) / sizeof(uint8_t);\
 \
 \
 		scratch = malloc(\
-			sizeof(atui_branch) + \
-			(sizeof(atui_branch*) *  num_branches) + \
-			sizeof(inliners_init) + \
-			sizeof(leaves_init) \
+			sizeof(atui_branch)\
+			+ (sizeof(atui_branch*) * num_branches)\
+			+ sizeof(inliners_init)\
+			+ sizeof(leaves_init)\
+			- num_dynarray_sets*sizeof(atui_leaf) /*filler dynarray leaves*/\
 		);\
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
@@ -275,7 +171,7 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 	}\
 \
 	*table = (atui_branch) {\
-		.name=#typesuffix, .leaves=(atui_leaf*)leaves, \
+		.name=#atomtypesuffix, .leaves=(atui_leaf*)leaves, \
 		.leaf_count=leaves_init_num, .atomleaves=bios, \
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
@@ -288,10 +184,144 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 
 
 
-#define PPATUI_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
+
+/**** LEAF FANCY FUNCS ****/
+/*
+The fancy funcions here are about populating the fancy UI representation flags
+for the leaves described in PPATUI_FUNCIFY().
+That is, bitfield population, and enum and inline association.
+*/
+
+
+// common guts and functions for Fancy. 
+
+#define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
+	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
+	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
+	default:0\
+)
+
+#define _PPATUI_FANCY_NOBITFIELD(biosvar) \
+	.num_bitfield_children=0, \
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0,
+#define _PPATUI_FANCY_NOBITFIELD_HARD \
+	.num_bitfield_children=0, .bitfield_hi=0, .bitfield_lo=0,
+
+#define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
+#define _PPATUI_FANCY_NOARRAY .array_size=0,
+
+//fancydata is textually packed in () and this unpacks it
+#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
+#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
+
+#define _PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	{ \
+		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
+		.val=&(biosvar), .total_bits=_PPATUI_LEAF_BITNESS(biosvar),
+
+// Fancy common end
 
 
 
+//ATUI_NONE
+
+#define _PPATUI_FANCY_ATUI_NONE(biosvar, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM },
+
+
+
+//ATUI_ENUM
+
+#define _PPATUI_FANCY_ATUI_ENUM(biosvar, var, radix, fancytype, enumname) \
+	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	.enum_options=_atui_enum_##enumname, \
+	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
+	_PPATUI_FANCY_NOBITFIELD(biosvar) },
+
+
+
+//ATUI_STRING
+//ATUI_ARRAY
+
+#define _PPATUI_FANCY_ATUI_STRING(biosvar, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_ATUI_ARRAY(biosvar, var, radix, fancytype, fancydata) 
+
+#define _PPATUI_FANCY_ATUI_ARRAY(biosvar, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	.array_size = sizeof(biosvar)/sizeof(biosvar[0]), \
+	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM },
+
+
+
+//ATUI_BITFIELD
+
+#define _ATUI_BITFIELD_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
+ 
+#define _PPATUI_FANCY_ATUI_BITFIELD(biosvar, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0, \
+	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN fancydata , \
+	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
+	_PPATUI_BITFIELD_LEAVES(biosvar, _PPATUI_FANCYDATA_UNPACK(fancydata))
+// close parent and start on inbred children.
+// ('inbred' because because the bitfiled children also direct children to the
+// atui_branch)
+
+// the 4 is for name,bithi,bitlo,radix set
+#define _PPATUI_FANCYBF_NUMCHILDREN(...) \
+	 _PP_NUMARG(__VA_ARGS__) / 4
+
+#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
+	{\
+		.val=&(biosvar), .name=#bfname, \
+		.type=radix, \
+		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
+		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
+		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
+		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
+	},
+
+
+
+//ATUI_INLINE
+
+// the meat of ATUI_INLINE is handled in the funcify
+#define _PPATUI_FANCY_ATUI_INLINE(biosvar, var, radix, fancytype, fancydata)\
+	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
+	.val=NULL, \
+	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
+	_PPATUI_FANCY_NOARRAY },
+
+#define _PPATUI_INLEAF_ATUI_NONE(...)
+#define _PPATUI_INLEAF_ATUI_BITFIELD(...)
+#define _PPATUI_INLEAF_ATUI_ENUM(...)
+#define _PPATUI_INLEAF_ATUI_STRING(...)
+#define _PPATUI_INLEAF_ATUI_ARRAY(...)
+#define _PPATUI_INLEAF_ATUI_DYNARRAY(...)
+
+#define _PPATUI_INLEAF_ATUI_INLINE(atomstruct, instancename)\
+	ATUI_MAKE_BRANCH(atomstruct, NULL, &(bios->instancename), 0, NULL),
+#define _PPATUI_INLEAF(m, var, radix, fancytype, fancydata) \
+	_PPATUI_INLEAF_##fancytype(fancydata, var)
+
+
+
+// ATUI_DYNARRAY
+#define _PPATUI_FANCY_ATUI_DYNARRAY(bios, var, radix, fancytype, fancydata)
+
+
+
+#define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
+	_PPATUI_FANCY_##fancytype(bios->var, var, radix, fancytype, fancydata)
+	// the closing } for the leaf is handled in the fancy pp funcs.
+
+/**** LEAF FANCY FUNCS END ****/
+
+
+
+
+//ATUI_DYNARRAY stuff
 
 #define _PPATUI_DYNAR_SERVICE(jobbios, var, radix, fancytype, fancydata)\
 	_PPATUI_DYNAR_SVCHELPER1(_PPATUI_DYNDA_JB_UNPACK jobbios, \
@@ -326,7 +356,7 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 //TODO: use start instead of bios
 #define _PPATUI_DYNAR_SVCHELPER5_ROLL(\
 		bios, var,radix,fancytype,fancydata, start,count)\
-	_PPATUI_LEAF(bios,var,radix,fancytype,fancydata)
+	_PPATUI_FANCY_##fancytype(bios, var,radix,fancytype,fancydata)
 
 
 // counts the ATUI_DYNARRAY's pattern leaf count. Mainly for bitfields
@@ -340,11 +370,12 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 #define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_INLINE(...) 1
 #define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_ARRAY(...) 1
 #define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_STRING(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_DYNARRAY(...) 1
+#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_DYNARRAY(...) NULL
 #define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_BITFIELD(b,v,r,ft, fancydata)\
-	_PPATUI_LOOPER(_PPATUI_DYNAR_SVCHELPER7_COUNTER ,, 4, \
-		_PPATUI_FANCYDATA_UNPACK fancydata)
-#define _PPATUI_DYNAR_SVCHELPER7_COUNTER(...) 1,
+	1 + _ATUI_BITFIELD_NUM_LEAVES(_PPATUI_FANCYDATA_UNPACK(fancydata))
+
+//ATUI_DYNARRAY stuff end
+
 
 
 
@@ -357,7 +388,7 @@ _PPATUI_FUNC_NAME(typeprefix, typesuffix) {\
 		(_PPA_BFLEAF, parent_var, __VA_ARGS__)
 
 #define _PPATUI_INLINE_BRANCHES(...)\
-	_ppaTUI_LOOPER(4,1,__VA_ARGS__)\
+	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
 		(_PPATUI_INLEAF ,, __VA_ARGS__)
 
 #define _PPATUI_DYNARRAY(job, bios, ...)\
@@ -389,6 +420,7 @@ _1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_
 #define _PP_NUMARG(...) \
 _PP_ARGCOUNTER_DEPTHCAN_HELPER(__VA_ARGS__ __VA_OPT__(,) _PP_ARGCOUNTER_RULER)
 
+#define PPATUI_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
 
 
 
