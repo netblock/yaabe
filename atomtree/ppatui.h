@@ -466,30 +466,7 @@ That is, bitfield population, and enum and inline association.
 //var..fdat is for the pattern
 #define _PPATUI_DYNAR_SVCHELPER3_ROLL(\
 		var,radix,fancytype,fancydata, start,dynsize)\
-	_PPATUI_FANCY_##fancytype(*(int*)0, var,radix,fancytype,fancydata)
-
-/*
-#define _PPATUI_DYNARRAY_INLINE_COUNT(...)\
-	_PPATUI_DYNARRAY_INLINE_COUNT_HELPER(\
-		_PPATUI_DYNARRAY(INLINERS, __VA_ARGS__)\
-	)
-#define _PPATUI_DYNARRAY_INLINE_COUNT_HELPER(...)\
-	( _PP_NUMARG(__VA_ARGS__) __VA_OPT__(-1))
-
-// counts the amount of ATUI_DYNARRAYs that has an ATUI_INLINE for its pattern.
-#define _PPATUI_DYNAR_SVCHELPER3_INLINERS(\
-		var,radix,fancytype,fancydata, start,dynsize)\
-		_PPATUI_DYNAR_SVCHELPER4_INLINERS_##fancytype(fancydata)
-
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_INLINE(fancydata) \
-	PPATUI_FUNC_NAME(atomstruct),
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_NONE(...)
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_ENUM(...)
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_ARRAY(...)
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_STRING(...)
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_DYNARRAY(...)
-#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_BITFIELD(...)
-*/
+	_PPATUI_FANCY_##fancytype(bios->var, var,radix,fancytype,fancydata)
 
 // counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
 // the size of the dynamic array.
