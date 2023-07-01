@@ -109,16 +109,23 @@ void atui_destroy_tree(atui_branch* tree) { //a reference implementation
 
 
 
-/* example:
-PPATUI_FUNCIFY(atom_able_tame,
+/*
+See ppatui.h and atui.h for more detail.
+
+example:
+PPATUI_FUNCIFY(type_prefix, atom_table_tame, atomtree_table_name,
 	table_element1, radix, fancy ui representation, args for fancy,
 	table_element2, radix, fancy ui representation, args for fancy,
 	table_element3, radix, fancy ui representation, args for fancy
 )
-WARNING: always have the last comma removed. This is bad: ,)
 
-If the element should be viewed as a number, set a radix. radix is one of
-ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN.
+WARNING: always have the last comma removed:
+	This is bad:  arg,arg,)
+	This is good: arg,arg)
+
+
+If the table element should be viewed as a number, set a radix. radix is one of
+ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN
 
 If the element should be viewed in base 2, but also has bitfields for children:
 	table_element, ATUI_BIN, ATUI_BITFIELD, (
@@ -151,10 +158,22 @@ or otherwise an array,
 
 ATUI_DYNARRAY:
 
-leaf_top_name, ATUI_NONE, ATUI_DYNARRY, (
-	leaf_name, radix, fancy_ui_representation, args_for_fancy
+leaf_top_name, ATUI_NODISPLAY, ATUI_DYNARRY, (
+	leaf_name, radix, fancy_ui_representation, args_for_fancy,
 	start_pointer, count
 )
+
+If there is an array or number of leaves that is dynamically sized, especially
+if it has a dynamic allocation, ATUI_DYNARRY can pull in the boundaries from
+atomtree. 
+(it is originally written for atom_umc_init_reg_block.)
+
+leaf_top_name won't get displayed if ATUI_NODISPLAY is set.
+
+leaf_name .. args_for_fancy, is the leaf pattern to use. Can be a bitfield.
+start_pointer is a pointer where to start the array within the bios, and 
+count is how long the array goes on for. 
+Both start_pointer and count are members of the Funcify-passed atomtree struct.
 
 */
 
@@ -308,11 +327,11 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		atomtree_umc_init_reg_block,
 	umc_reg_list, ATUI_NODISPLAY, ATUI_DYNARRAY, (
 		u32umc_reg_addr,       ATUI_BIN, ATUI_BITFIELD, (
-			umc_register_addr, 23, 0, ATUI_DEC,
+			umc_register_addr, 23, 0, ATUI_HEX,
 			umc_reg_type_ind,  24,24, ATUI_DEC,
 			umc_reg_rsvd,      31,25, ATUI_BIN
 		),
-		start_pointer, count
+		umc_reg_list, umc_number_of_registers // start, count
 	)
 )
 
@@ -321,24 +340,3 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 	umc_reg_num,  ATUI_DEC, ATUI_NONE, ATUI_NONE,
 	reserved,     ATUI_HEX, ATUI_NONE, ATUI_NONE
 )
-
-
-
-/*
-	umc_reg_list, ATUI_NAN, ATUI_DYNARRY, (
-		u32umc_reg_addr, ATUI_NODISPLAY, ATUI_INLINE,
-			atom_umc_register_addr_info_access,
-		start_pointer, count
-	)
-
-
-we need _#_atui dynamic inline leaves, probably like how extra branches work
-like
-
-atom_umc_init_reg_block's umc_reg_list and umc_reg_setting_list should be 
-branches.
-
-umc_reg_list shoud have dynamic inline leaves.
-
-atom_umc_reg_setting_data_block's u32umc_reg_data should be handled with a large struct, where appropriate. if not, dynamic leaves.
-*/

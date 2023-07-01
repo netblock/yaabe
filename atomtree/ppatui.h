@@ -28,15 +28,12 @@ vim replace patterns that help copypaste structs from atombios.h:
 		 __VA_OPT__(,) __VA_ARGS__)
 
 
-// to define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(atomstruct, atomtreestruct)\
-	 _PPATUI_FUNC_NAME(atomstruct, atomtreestruct)
-
-
 // thing to call to instanciate an atui_branch
-#define ATUI_MAKE_BRANCH(atomstruct, atomtree, suggestbios,\
-		 num_branches, children) \
-	_##atomstruct##_atui(atomtree, suggestbios, num_branches, children)
+#define ATUI_MAKE_BRANCH(atomstruct, atree, bios, num_br, import) \
+	_##atomstruct##_atui(&(struct atui_funcify_args){\
+		.atomtree=atree, .suggestbios=bios, \
+		.num_branches=num_br, .import_children=import\
+	})
 
 
 
@@ -47,122 +44,229 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate}, 
 
 
+// to define the header entries for the aformentioned allocator functions.
+#define PPATUI_HEADERIFY(atomstruct)\
+	atui_branch* PPATUI_FUNC_NAME(atomstruct) (struct atui_funcify_args* args)
+
 
 // PPATUI function interface:
-#define _PPATUI_FUNC_NAME(atomstruct, atomtreestruct) \
-	atui_branch* _##atomstruct##_atui( \
-		struct atomtreestruct * atomtree,  \
-		/* For bios pointer, and to use atomtree digestion if necesary. Can be
-		optional depending on defined atui branch; use suggestbios instead.*/\
-\
-		void* suggestbios, \
-		/* Optional. A pointer to somewhere in the bios memory; mainly useful
-		for loops.*/\
-\
-		unsigned int num_branches, \
-		/* Number of child branches this atui_branch will have.*/\
-\
-		atui_branch** import_children \
-		/* If the child branches are preallocated, walk across this. 
-		This array must have num_branches elements.*/\
-	)
+#define PPATUI_FUNC_NAME(atomstruct) \
+	_##atomstruct##_atui
 
 /***************************** preprocessor hell *****************************/
 
 // main allocator function
 #define _PPATUI_FUNCIFY_HELPER(\
 		atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
-_PPATUI_FUNC_NAME(atomtypesuffix, atomtreestruct) {\
+PPATUI_HEADERIFY(atomtypesuffix) {\
+\
+	struct atomtreestruct* atomtree = args->atomtree;\
+	uint16_t num_branches = args->num_branches;\
+	atui_branch** import_children = args->import_children;\
+	atomtypeprefix atomtypesuffix * bios;\
+	if (args->suggestbios != NULL) {\
+		bios = args->suggestbios;\
+	} else {\
+		bios = (void*) atomtree->leaves;\
+	}\
 \
 	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
 \
 	atui_branch** inliners = NULL;\
-	uint16_t num_inliners;\
+	uint16_t num_inliners = 0;\
 \
 	atui_leaf* leaves = NULL;\
-	uint16_t leaves_init_num = 0;\
-	void* scratch;\
+	uint16_t total_num_leaves = 0;\
+	uint16_t max_alloced_leaves = 0;\
+	void* scratch = NULL;\
 	uint16_t i = 0;\
 	uint16_t j = 0;\
-	uint16_t k = 0;\
-	uint16_t l = 0;\
 \
-	atomtypeprefix atomtypesuffix * bios;\
-	if (suggestbios != NULL) {\
-		bios = suggestbios;\
-	} else {\
-		bios = (void*) atomtree->leaves;\
-	}\
 \
 	if(PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
 		/*counts bitfield*/ \
 		const atui_leaf leaves_init[] = { _PPATUI_LEAVES(bios, __VA_ARGS__) };\
-		leaves_init_num = sizeof(leaves_init)/sizeof(atui_leaf);\
+		const uint16_t leaves_init_num = sizeof(leaves_init)/sizeof(atui_leaf);\
+\
 \
 		const atui_branch* inliners_init[] = { \
 			_PPATUI_INLINE_BRANCHES(__VA_ARGS__) \
 		};\
-		num_inliners = sizeof(inliners_init)/sizeof(atui_branch*);\
+		const uint16_t inliners_init_num = \
+			sizeof(inliners_init)/sizeof(atui_branch*);\
+		num_inliners += inliners_init_num;\
 \
-		const atui_leaf dynarray_patterns[] = { \
-			_PPATUI_DYNARRAY(ROLL, bios, __VA_ARGS__) \
+\
+		const atui_leaf dynarray_patterns[] = {\
+			_PPATUI_DYNARRAY(ROLL, __VA_ARGS__)\
 		};\
-		const uint8_t dynarray_pattern_lengths[] = { \
-			_PPATUI_DYNARRAY(COUNT, bios, __VA_ARGS__) \
+		const struct dynarray_bounds dynarray_boundaries[] = {\
+			_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 		};\
 		const uint8_t num_dynarray_sets = \
-			sizeof(dynarray_pattern_lengths) / sizeof(uint8_t);\
+			sizeof(dynarray_boundaries) / sizeof(struct dynarray_bounds);\
 \
+		uint16_t dynarray_total_leaves = 0;\
+		j=0;\
+		for(i=0; i < num_dynarray_sets; i++) {\
+			dynarray_total_leaves += \
+				(dynarray_boundaries[i].dynarray_length * \
+				dynarray_boundaries[i].numleaves);\
+			if (dynarray_patterns[j].type & ATUI_INLINE) {\
+				num_inliners += dynarray_boundaries[i].dynarray_length;\
+			}\
+			j += dynarray_boundaries[i].numleaves;\
+		}\
+\
+		max_alloced_leaves = leaves_init_num + dynarray_total_leaves;\
 \
 		scratch = malloc(\
 			sizeof(atui_branch)\
-			+ (sizeof(atui_branch*) * num_branches)\
-			+ sizeof(inliners_init)\
-			+ sizeof(leaves_init)\
-			- num_dynarray_sets*sizeof(atui_leaf) /*filler dynarray leaves*/\
+			+ num_branches * sizeof(atui_branch*)\
+			+ num_inliners * sizeof(atui_branch*)\
+			+ leaves_init_num * sizeof(atui_leaf)\
+			+ dynarray_total_leaves * sizeof(atui_leaf)\
 		);\
 		table = scratch;\
-		scratch = scratch + sizeof(atui_branch);\
-		leaves = scratch + num_branches*sizeof(atui_branch*) +\
-			sizeof(inliners_init);\
-\
-\
-		j=0; k=0; l=0;\
-		for(i=0; i < leaves_init_num; i++) {\
-			if (leaves_init[i].type & ATUI_DYNARRAY) {\
-				 /*for(k=0; k < */ \
-			} else {\
-				leaves[j] = leaves_init[i];\
-				j++;\
-			}\
+		scratch += sizeof(atui_branch);\
+		if (num_branches) {\
+			branches = scratch;\
+			scratch += num_branches * sizeof(atui_branch*);\
 		}\
+		if (num_inliners) {\
+			inliners = scratch;\
+			scratch += num_inliners * sizeof(atui_branch*);\
+		}\
+		leaves = scratch;\
 \
-		if (sizeof(inliners_init)) {\
-			inliners = scratch + num_branches*sizeof(atui_branch*);\
-			for(i=0; i<num_inliners; i++) {\
-				inliners[i] = (atui_branch*) inliners_init[i];\
+\
+\
+		if (sizeof(dynarray_patterns)) {\
+			struct atui_funcify_args inl_args = {\
+				.atomtree=NULL, .suggestbios=NULL, .num_branches=0,\
+				.import_children=NULL\
+			};\
+			atui_branch* (*inl_func)(struct atui_funcify_args*) = NULL;\
+			void* dynar_pos = NULL;\
+			uint16_t init_i=0, leaves_i=0;\
+			uint32_t dynar_elementsize = 0;\
+			uint16_t dynar_len=0, dynar_i=0;\
+			uint16_t dynentry_i=0;\
+			uint16_t dynpat_i=0, pat_numleaves=0, pat_start=0, pat_end=0;\
+			uint16_t inliners_i=0, inlinit_i=0;\
+\
+			for(init_i=0; init_i < leaves_init_num; init_i++) {\
+\
+				if (leaves_init[init_i].type & ATUI_DYNARRAY) {\
+					dynar_len = \
+						dynarray_boundaries[dynentry_i].dynarray_length;\
+					pat_numleaves = \
+						dynarray_boundaries[dynentry_i].numleaves;\
+					dynar_pos = dynarray_boundaries[dynentry_i].array_start;\
+					dynar_elementsize = \
+						dynarray_boundaries[dynentry_i].element_size;\
+\
+					if ( (leaves_init[init_i].type & ATUI_NODISPLAY) == 0) {\
+						leaves[leaves_i] = leaves_init[init_i];\
+						leaves[leaves_i].array_size = dynar_len*pat_numleaves;\
+						leaves_i++;\
+					}\
+\
+					\
+					pat_end = pat_start + pat_numleaves;\
+					if(dynarray_patterns[dynpat_i].type & ATUI_INLINE) {\
+						dynpat_i = pat_start;\
+						inl_func = dynarray_boundaries[dynentry_i].inl_func;\
+						inl_args.suggestbios = dynar_pos;\
+						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
+							leaves[leaves_i] = dynarray_patterns[dynpat_i];\
+							leaves[leaves_i].inline_branch = \
+								inliners + inliners_i;\
+							inliners[inliners_i] = inl_func(&inl_args);\
+							inliners_i++;\
+							leaves_i++;\
+							inl_args.suggestbios += dynar_elementsize;\
+						}\
+					} else { /* if bitfield */\
+						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
+							dynpat_i = pat_start;\
+							for(; dynpat_i<pat_end; dynpat_i++){\
+								leaves[leaves_i] = dynarray_patterns[dynpat_i];\
+								leaves[leaves_i].val = dynar_pos;\
+								leaves_i++;\
+							}\
+							dynar_pos += dynar_elementsize;\
+						}\
+					}\
+					pat_start = pat_end;\
+					dynentry_i++;\
+\
+				} else { /* if not dynarray */\
+					if ( (leaves_init[init_i].type & ATUI_NODISPLAY) == 0) {\
+						leaves[leaves_i] = leaves_init[init_i];\
+						if (leaves_init[init_i].type & ATUI_INLINE) {\
+							leaves[leaves_i].inline_branch = \
+								inliners + inliners_i;\
+						}\
+						leaves_i++;\
+					}\
+					if (leaves_init[init_i].type & ATUI_INLINE) {\
+						inliners[inliners_i] = \
+							(atui_branch*) inliners_init[inlinit_i];\
+						inliners_i++;\
+						inlinit_i++;\
+					}\
+				}\
 			}\
+			total_num_leaves = leaves_i;\
+\
+		} else if (inliners_init_num) { /* at all: no dynarray */\
+			uint16_t inliners_i=0;\
+			for(inliners_i=0; inliners_i < num_inliners; inliners_i++) {\
+				inliners[inliners_i] = (atui_branch*)inliners_init[inliners_i];\
+			}\
+			inliners_i=0;\
+\
 			j=0;\
-			for(i=0; i<leaves_init_num; i++) {\
-				if (leaves[i].type & ATUI_INLINE) {\
-					leaves[i].inline_branch = &(inliners[j]);\
+			for(i=0; i < leaves_init_num; i++){\
+				if ( (leaves_init[i].type & ATUI_NODISPLAY) == 0) {\
+					leaves[j] = leaves_init[i];\
+					if (leaves_init[i].type & ATUI_INLINE) {\
+						leaves[j].inline_branch = inliners + inliners_i;\
+					}\
+					j++;\
+				}\
+				if (leaves_init[i].type & ATUI_INLINE) {\
+					inliners[inliners_i] = \
+						(atui_branch*)inliners_init[inliners_i];\
+					inliners_i++;\
+				}\
+			}\
+			total_num_leaves = j;\
+		} else { /* at all: no dynarray, no inline */\
+			j=0;\
+			for(i=0; i < leaves_init_num; i++){\
+				if ( (leaves_init[i].type & ATUI_NODISPLAY) == 0) {\
+					leaves[j] = leaves_init[i];\
 					j++;\
 				}\
 			}\
+			total_num_leaves = j;\
 		}\
 \
-	} else {\
+	} else { /* no leaves at all */\
 		scratch = malloc(\
-			sizeof(atui_branch) + \
-			(sizeof(atui_branch*) * num_branches) \
+			sizeof(atui_branch)\
+			+ (num_branches * sizeof(atui_branch*))\
 		); \
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
+		branches = scratch;\
+		/*scratch += num_branches * sizeof(atui_branch*);*/\
 	}\
 \
 	if (num_branches) {\
-		branches = scratch;\
 		if (import_children != NULL) {\
 			for (i=0; i<num_branches; i++) {\
 				branches[i] = import_children[i];\
@@ -171,11 +275,12 @@ _PPATUI_FUNC_NAME(atomtypesuffix, atomtreestruct) {\
 	}\
 \
 	*table = (atui_branch) {\
-		.name=#atomtypesuffix, .leaves=(atui_leaf*)leaves, \
-		.leaf_count=leaves_init_num, .atomleaves=bios, \
+		.name=#atomtypesuffix, .description=NULL, .auxiliary=NULL,\
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
 		.max_branch_count=num_branches, .max_inline_branch_count=num_inliners, \
+		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
+		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
 	};\
 	return table;\
 }
@@ -216,8 +321,9 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
 	{ \
-		.name=#var, .type=(radix | fancytype), .auxiliary=NULL, \
-		.val=&(biosvar), .total_bits=_PPATUI_LEAF_BITNESS(biosvar),
+		.name=#var, .description=NULL, .type=(radix | fancytype), \
+		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), .val=&(biosvar),\
+		.auxiliary=NULL, \
 
 // Fancy common end
 
@@ -256,7 +362,7 @@ That is, bitfield population, and enum and inline association.
 
 //ATUI_BITFIELD
 
-#define _ATUI_BITFIELD_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
+#define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
  
 #define _PPATUI_FANCY_ATUI_BITFIELD(biosvar, var, radix, fancytype, fancydata) \
 	_PPATUI_FANCY_INIT(biosvar, var, radix, fancytype) \
@@ -274,8 +380,7 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
 	{\
-		.val=&(biosvar), .name=#bfname, \
-		.type=radix, \
+		.name=#bfname, .description=NULL, .type=radix, .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
@@ -308,8 +413,15 @@ That is, bitfield population, and enum and inline association.
 
 
 // ATUI_DYNARRAY
-#define _PPATUI_FANCY_ATUI_DYNARRAY(bios, var, radix, fancytype, fancydata)
 
+// Usually a placeholder. The meat of ATUI_DYNARRAY is handled in the funcify.
+#define _PPATUI_FANCY_ATUI_DYNARRAY(biosvar, var, radix, fancytype, fancydata)\
+	{\
+		.name=#var, .description=NULL, .type=(radix | fancytype), \
+		.val=NULL, .total_bits=0, .auxiliary=NULL, \
+		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
+		_PPATUI_FANCY_NOARRAY\
+	},
 
 
 #define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
@@ -323,56 +435,105 @@ That is, bitfield population, and enum and inline association.
 
 //ATUI_DYNARRAY stuff
 
-#define _PPATUI_DYNAR_SERVICE(jobbios, var, radix, fancytype, fancydata)\
-	_PPATUI_DYNAR_SVCHELPER1(_PPATUI_DYNDA_JB_UNPACK jobbios, \
-		var, radix, fancytype, fancydata)
-#define _PPATUI_DYNDA_JB_UNPACK(job, bios) job, bios
-#define _PPATUI_DYNAR_SVCHELPER1(...) _PPATUI_DYNAR_SVCHELPER2(__VA_ARGS__)
-#define _PPATUI_DYNAR_SVCHELPER2(job, bios, var, radix, ftype, fdata) \
-	_PPATUI_DYNAR_SVCHELPER3_##ftype(job, bios, var, radix, ftype, fdata)
 
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_NONE(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_BITFIELD(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_ENUM(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_INLINE(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_ARRAY(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_STRING(...)
-#define _PPATUI_DYNAR_SVCHELPER3_ATUI_DYNARRAY(\
+
+#define _PPATUI_DYNAR_SERVICE(job, var, radix, ftype, fdata)\
+	_PPATUI_DYNAR_SVCHELPER1_##ftype(job, bios, var, radix, ftype, fdata)
+
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_NONE(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_BITFIELD(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_ENUM(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_INLINE(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_ARRAY(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_STRING(...)
+#define _PPATUI_DYNAR_SVCHELPER1_ATUI_DYNARRAY(\
 		job, bios,var,radix,fancytype,fancydata)\
-	_PPATUI_DYNAR_SVCHELPER4(job, bios, _PPATUI_DYNARR_UNPACK fancydata)
+	_PPATUI_DYNAR_SVCHELPER2(job, _PPATUI_DYNARR_UNPACK fancydata)
 
-//unpack ATUI_DYNARRY's fancydata
+//unpack ATUI_DYNARRY's fancydata. Also makes start and dynsize relative to the
+//atomtree.
 #define _PPATUI_DYNARR_UNPACK(\
 		pattern_var,pattern_radix,pattern_fancytype,pattern_fancydata,\
-		start_pointer, count_var) \
+		start_pointer, dynsize_var) \
 	pattern_var, pattern_radix, pattern_fancytype, pattern_fancydata, \
-	start_pointer, count_var
+	atomtree->start_pointer, atomtree->dynsize_var
 
-#define _PPATUI_DYNAR_SVCHELPER4(job, ...) \
-	_PPATUI_DYNAR_SVCHELPER5_##job(__VA_ARGS__)
+#define _PPATUI_DYNAR_SVCHELPER2(job, ...) \
+	_PPATUI_DYNAR_SVCHELPER3_##job(__VA_ARGS__)
+
 
 //unrolls the pattern into leaves to copy.
 //var..fdat is for the pattern
-//TODO: use start instead of bios
-#define _PPATUI_DYNAR_SVCHELPER5_ROLL(\
-		bios, var,radix,fancytype,fancydata, start,count)\
-	_PPATUI_FANCY_##fancytype(bios, var,radix,fancytype,fancydata)
+#define _PPATUI_DYNAR_SVCHELPER3_ROLL(\
+		var,radix,fancytype,fancydata, start,dynsize)\
+	_PPATUI_FANCY_##fancytype(*(int*)0, var,radix,fancytype,fancydata)
+
+/*
+#define _PPATUI_DYNARRAY_INLINE_COUNT(...)\
+	_PPATUI_DYNARRAY_INLINE_COUNT_HELPER(\
+		_PPATUI_DYNARRAY(INLINERS, __VA_ARGS__)\
+	)
+#define _PPATUI_DYNARRAY_INLINE_COUNT_HELPER(...)\
+	( _PP_NUMARG(__VA_ARGS__) __VA_OPT__(-1))
+
+// counts the amount of ATUI_DYNARRAYs that has an ATUI_INLINE for its pattern.
+#define _PPATUI_DYNAR_SVCHELPER3_INLINERS(\
+		var,radix,fancytype,fancydata, start,dynsize)\
+		_PPATUI_DYNAR_SVCHELPER4_INLINERS_##fancytype(fancydata)
+
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_INLINE(fancydata) \
+	PPATUI_FUNC_NAME(atomstruct),
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_NONE(...)
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_ENUM(...)
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_ARRAY(...)
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_STRING(...)
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_DYNARRAY(...)
+#define _PPATUI_DYNAR_SVCHELPER4_INLINERS_ATUI_BITFIELD(...)
+*/
+
+// counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
+// the size of the dynamic array.
+#define _PPATUI_DYNAR_SVCHELPER3_BOUNDS(\
+		var,radix,fancytype,fancydata, start,dynsize)\
+	_PPATUI_DYNAR_SVCHELPER4_BOUNDS_##fancytype(fancydata, start, dynsize)
+
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_DYNARRAY(...) NULL
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_NONE(fdat, start, dynsize) \
+	_PPATUI_DYNAR_SVCHELPER4_BOUNDS_ONELEAF(fdat, start, dynsize)
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_ENUM(fdat, start, dynsize)\
+	_PPATUI_DYNAR_SVCHELPER4_BOUNDS_ONELEAF(fdat, start, dynsize)
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_ARRAY(fdat, start, dynsize)\
+	_PPATUI_DYNAR_SVCHELPER4_BOUNDS_ONELEAF(fdat, start, dynsize)
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_STRING(fdat, start, dynsize)\
+	_PPATUI_DYNAR_SVCHELPER4_BOUNDS_ONELEAF(fdat, start, dynsize)
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ONELEAF(fdat, start, dynsize)\
+	{\
+		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
+		.array_start=start, .element_size=sizeof(start[0]), .inl_func=NULL,\
+	},
+
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_INLINE(fdat, start, dynsize)\
+	{\
+		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
+		.array_start=start, .element_size=sizeof(start[0])\
+		.func=PPATUI_FUNC_NAME(atomstruct),\
+	},
+#define _PPATUI_DYNAR_SVCHELPER4_BOUNDS_ATUI_BITFIELD(fancydata,start,dynsize)\
+	{\
+		.numleaves= 1+ _ATUI_BITFIELD_NUMLEAVES(\
+			_PPATUI_FANCYDATA_UNPACK(fancydata)),\
+		.dynarray_length=_PPATUI_DEREF(dynsize), .array_start=start,\
+		.element_size=sizeof(start[0]), .inl_func=NULL\
+	},
 
 
-// counts the ATUI_DYNARRAY's pattern leaf count. Mainly for bitfields
-#define _PPATUI_DYNAR_SVCHELPER5_COUNT(\
-		bios,var,radix,fancytype,fancydata, start,count)\
-	_PPATUI_DYNAR_SVCHELPER6_COUNT_##fancytype(\
-		bios,var,radix,fancytype,fancydata)  ,
 
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_NONE(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_ENUM(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_INLINE(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_ARRAY(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_STRING(...) 1
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_DYNARRAY(...) NULL
-#define _PPATUI_DYNAR_SVCHELPER6_COUNT_ATUI_BITFIELD(b,v,r,ft, fancydata)\
-	1 + _ATUI_BITFIELD_NUM_LEAVES(_PPATUI_FANCYDATA_UNPACK(fancydata))
+#define _PPATUI_DEREF(var) _Generic((var), \
+	uint8_t*:*(var), uint16_t*:*(var), uint32_t*:*(var), uint64_t*:*(var), \
+	uint8_t:var, uint16_t:var, uint32_t:var, uint64_t:var, \
+	default:var\
+)
+
 
 //ATUI_DYNARRAY stuff end
 
@@ -391,10 +552,9 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
 		(_PPATUI_INLEAF ,, __VA_ARGS__)
 
-#define _PPATUI_DYNARRAY(job, bios, ...)\
+#define _PPATUI_DYNARRAY(job, ...)\
 	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
-		(_PPATUI_DYNAR_SERVICE, (job,bios), __VA_ARGS__)
-
+		(_PPATUI_DYNAR_SERVICE, job, __VA_ARGS__)
 
 #define _PPATUI_ENUM_ENTRIES(...)\
 	_PPATUI_LOOPER(1,1,__VA_ARGS__)\

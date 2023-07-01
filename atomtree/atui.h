@@ -20,7 +20,6 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define ATUI_H
 #include "ppatui.h"
 #include <atomtree.h>
-//#include <atomtree_includes.h>
 
 
 // shall be used in an array
@@ -38,15 +37,15 @@ enum atui_type {
 	ATUI_BIN = 0b100,
 	ATUI_ANY = 0b111,
 
-	ATUI_NONE      = 1<<4,
 	ATUI_NODISPLAY = 1<<4,
 
-	ATUI_BITFIELD = 1<<5,
-	ATUI_ENUM     = 1<<6, // see also PPATUI_FUNCIFY()
-	ATUI_STRING   = 1<<7, // meant for human-readable text
-	ATUI_ARRAY    = 1<<8, // no technical difference from string 
-	ATUI_INLINE   = 1<<9, // pull in leaves from other tables
-	ATUI_DYNARRAY    = 1<<10, // for runtime array lengths
+	ATUI_NONE     = 1<<5,
+	ATUI_BITFIELD = 1<<6,
+	ATUI_ENUM     = 1<<7,  // see also PPATUI_FUNCIFY()
+	ATUI_STRING   = 1<<8,  // meant for human-readable text
+	ATUI_ARRAY    = 1<< 9, // no technical difference from string 
+	ATUI_INLINE   = 1<<10, // pull in leaves from other tables
+	ATUI_DYNARRAY = 1<<11, // for runtime array lengths
 };
 
 typedef struct _atui_branch atui_branch;
@@ -57,7 +56,7 @@ struct _atui_leaf {
 
 
 	enum atui_type type; // bitfield struct
-	uint8_t array_size;
+	uint16_t array_size;
 	uint8_t total_bits; // number of bits for the leaf
 
 	uint8_t num_bitfield_children;
@@ -92,11 +91,12 @@ struct  _atui_branch {
 	uint8_t max_inline_branch_count;
 	
 
-	void* auxiliary; // alternative representation to leaves, if necessary
 	atui_leaf* leaves;
-	uint8_t leaf_count;
+	uint16_t leaf_count;
+	uint16_t max_leaves;
 
 	void* atomleaves;
+	void* auxiliary; // alternative representation to leaves, if necessary
 };
 
 // reccomended buffer size for the upcomming text functions
@@ -123,30 +123,59 @@ void atui_destroy_tree(atui_branch* tree);
 
 
 
-struct atui_funcify_data {
-	//void* bios;
-	void* atomtree_branch;
+struct atui_funcify_args {
+	void* atomtree;
+	// Pointer to the relevant atomtree struct. Mainly for the bios pointer,
+	// but is necessary if atomtree-computer data needs to be pulled in. Can be
+	// optional depending on defined atui branch; use suggestbios instead.
 
-	uint8_t import_branches_count;
-	atui_branch** import_branches;
+	void* suggestbios;
+	// Optional. A pointer to somewhere in the bios memory; mainly useful for
+	// looping across an array within an atom struct.
 
-	//uint8_t import_leaves_count;
-	//atui_leaf* import_leaves;
+	uint16_t num_branches;
+	// Number of child branches this atui_branch will have.*/
+
+	atui_branch** import_children;
+	// If the child branches are preallocated, walk across this. This array
+	// must have num_branches elements.
+};
+
+
+// funcify internal structs
+struct dynarray_bounds { // for ATUI_DYNARRAY
+	uint16_t numleaves; // number of leaves within the pattern.
+	uint16_t dynarray_length; // the number of members to the dynamic array.
+
+	void* array_start;
+	uint32_t element_size;
+	
+	atui_branch* (*inl_func)(struct atui_funcify_args*);
+	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
+};
+
+struct dynarray_inline { // for ATUI_DYNARRAY leaves that has ATUI_INLINE
+	atui_branch* (*func)(struct atui_funcify_args*);
+	// function pointer to the _atui function for the inline pattern.
+
+	struct atui_funcify_args args;
+	// ..and its args. possibly not necessary.
 };
 
 
 
-PPATUI_HEADERIFY(atom_common_table_header, atom_tree);
+PPATUI_HEADERIFY(atom_common_table_header);
 
-PPATUI_HEADERIFY(atom_rom_header_v2_2, atom_tree);
-PPATUI_HEADERIFY(atom_master_data_table_v2_1, atomtree_master_datatable_v2_1);
+PPATUI_HEADERIFY(atom_rom_header_v2_2);
+PPATUI_HEADERIFY(atom_master_data_table_v2_1);
 
 
 // fuck me...
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
+PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
 
 
-PPATUI_HEADERIFY(atom_vram_module_v10, atomtree_vram_info_header_v2_4);
-PPATUI_HEADERIFY(atom_vram_info_header_v2_4, atomtree_vram_info_header_v2_4);
+PPATUI_HEADERIFY(atom_vram_module_v10);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
 
 #endif

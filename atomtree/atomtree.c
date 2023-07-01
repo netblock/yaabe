@@ -285,7 +285,10 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	if(generate_atui) {
 		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
 			NULL, &(leaves->table_header),  0,NULL);
-		atui_branch* child_branches[] = {atui_header};
+		atui_branch* memclkpatch = \
+			ATUI_MAKE_BRANCH(atom_umc_register_addr_info_access,
+				&(vi24->mem_clk_patch), NULL, 0,NULL);
+		atui_branch* child_branches[] = {atui_header, memclkpatch};
 		const int num_child_part = sizeof(child_branches)/sizeof(atui_branch*);
 
 		int num_child = num_child_part + vi24->leaves->vram_module_num;
