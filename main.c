@@ -48,8 +48,6 @@ void vi24_funstuffs(struct atom_tree* atree) {
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr7);
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
-	printf("MR10: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
 	printf("      5432109876543210\n");
 	
 	printf("\n\n");
