@@ -215,7 +215,7 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 	GListStore* children_model = NULL;
 	uint16_t i = 0;
 
-	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE)) {
+	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
 		children_model = g_list_store_new(G_TYPE_OBJECT);
 
 		// if no cached gobjects, generate and cache them; otherwise use cache.
@@ -228,8 +228,11 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 				atui_branch* branch = *(parent->inline_branch);
 				num_children = branch->leaf_count;
 				atui_children = branch->leaves;
-			} else { // currently only otherwise bitfield
+			} else if (parent->type & ATUI_BITFIELD) {
 				num_children = parent->num_bitfield_children;
+				atui_children = parent+1;
+			} else if (parent->type & ATUI_DYNARRAY) {
+				num_children = parent->array_size;
 				atui_children = parent+1;
 			}
 

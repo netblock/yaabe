@@ -93,6 +93,8 @@ void vi25_funstuffs(struct atom_tree* atree) {
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr10);
 	printf("      5432109876543210\n");
+	printf("bank groups enable (bit 0): %08b\n", 
+		atree->data_table.vram_info.v2_5.leaves->vram_module[0].vram_flags);
 }
 
 void vi30_funstuffs(struct atom_tree* atree) {

@@ -176,9 +176,30 @@ count is how long the array goes on for.
 Both start_pointer and count are members of the Funcify-passed atomtree struct.
 
 */
+/*
+var, namedata, val display data,
+var, namedata, val display data,
 
+PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
+	(var, display name, 
+		(radix, fancy, optional_fancy_args)
+		(lang, description
+			lang, description
+		)),
+	(var, display name, 
+		(radix, fancy, optional_fancy_args)
+		(lang, description
+			lang, description
+		)),
+	(var, display name, 
+		(radix, fancy, optional_fancy_args)
+		(lang, description
+			lang, description
+		)),
 
+)
 
+*/
 
 
 PPATUI_FUNCIFY(struct, atom_common_table_header,

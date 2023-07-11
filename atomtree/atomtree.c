@@ -288,7 +288,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		atui_branch* memclkpatch = \
 			ATUI_MAKE_BRANCH(atom_umc_register_addr_info_access,
 				&(vi24->mem_clk_patch), NULL, 0,NULL);
-		printf("v24 umcreglist: %i\n", memclkpatch->leaves[0].total_bits); //TODO
 		atui_branch* child_branches[] = {atui_header, memclkpatch};
 		const int num_child_part = sizeof(child_branches)/sizeof(atui_branch*);
 
