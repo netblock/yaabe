@@ -85,7 +85,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 \
 	if(_PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
-		/*counts bitfield*/ \
+		/*counts bitfield members*/ \
 		const atui_leaf leaves_init[] = { _PPATUI_LEAVES(bios, __VA_ARGS__) };\
 		const uint16_t leaves_init_num = sizeof(leaves_init)/sizeof(atui_leaf);\
 \
@@ -97,10 +97,12 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 			sizeof(inliners_init)/sizeof(atui_branch*);\
 		num_inliners += inliners_init_num;\
 \
-\
+		/*the leaf patterns for the runtime dynamic arrays.*/\
 		const atui_leaf dynarray_patterns[] = {\
 			_PPATUI_DYNARRAY(ROLL, __VA_ARGS__)\
 		};\
+		/*bounds contains amount of leaves per pattern, and the dimensions of
+		the runtime array*/\
 		const struct dynarray_bounds dynarray_boundaries[] = {\
 			_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 		};\
@@ -387,7 +389,6 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCYBF_NUMCHILDREN(...)\
 	 _PP_NUMARG(__VA_ARGS__)
 
-//#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
 
 #define _PPA_BFLEAF(biosvarvar, bfleaf)\
 	_PPA_BFLEAF_HELPER1(\
@@ -419,16 +420,8 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
 	_PPATUI_FANCY_NOARRAY },
 
-#define _PPATUI_INBRANCH_ATUI_NOFANCY(...)
-#define _PPATUI_INBRANCH_ATUI_BITFIELD(...)
-#define _PPATUI_INBRANCH_ATUI_ENUM(...)
-#define _PPATUI_INBRANCH_ATUI_STRING(...)
-#define _PPATUI_INBRANCH_ATUI_ARRAY(...)
-#define _PPATUI_INBRANCH_ATUI_DYNARRAY(...)
 
-#define _PPATUI_INBRANCH_ATUI_INLINE(instancename, atomstruct)\
-	ATUI_MAKE_BRANCH(atomstruct, NULL, &(bios->instancename), 0, NULL),
-
+// go through the leaves, find the ATUI_INLINERs, and gather their branches
 #define _PPATUI_INBRANCH(m, leafdata) \
 	_PPATUI_INBRANCH_HELPER1(_PPATUI_LEAF_UNPACK leafdata)
 #define _PPATUI_INBRANCH_HELPER1(...)\
@@ -440,6 +433,14 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_INBRANCH_HELPER4(var, radix, fancytype, ...)\
 	_PPATUI_INBRANCH_##fancytype(var, __VA_ARGS__)
 
+#define _PPATUI_INBRANCH_ATUI_NOFANCY(...)
+#define _PPATUI_INBRANCH_ATUI_BITFIELD(...)
+#define _PPATUI_INBRANCH_ATUI_ENUM(...)
+#define _PPATUI_INBRANCH_ATUI_STRING(...)
+#define _PPATUI_INBRANCH_ATUI_ARRAY(...)
+#define _PPATUI_INBRANCH_ATUI_DYNARRAY(...)
+#define _PPATUI_INBRANCH_ATUI_INLINE(instancename, atomstruct)\
+	ATUI_MAKE_BRANCH(atomstruct, NULL, &(bios->instancename), 0, NULL),
 
 
 
@@ -456,16 +457,13 @@ That is, bitfield population, and enum and inline association.
 		_PPATUI_FANCY_NOARRAY\
 	},
 
-
-/*
-#define _PPATUI_LEAF(bios, var, radix, fancytype, fancydata) \
-	_PPATUI_FANCY_##fancytype(bios->var, var, radix, fancytype, fancydata)
-*/
-
-#define _PPATUI_LEAF(bios, leafdata)\
-	_PPATUI_LEAF_HELPER1(bios, _PPATUI_LEAF_UNPACK leafdata)
+// TODO consolidate this unpack func with others like this
 #define _PPATUI_LEAF_UNPACK(...) __VA_ARGS__
 
+// the unpack the leaf, and its displaydata from their respective parentheses.
+// the variadic passthrough like _PPATUI_LEAF_HELPER1 executes the unpack.
+#define _PPATUI_LEAF(bios, leafdata)\
+	_PPATUI_LEAF_HELPER1(bios, _PPATUI_LEAF_UNPACK leafdata)
 #define _PPATUI_LEAF_HELPER1(...)\
 	_PPATUI_LEAF_HELPER2(__VA_ARGS__)
 #define _PPATUI_LEAF_HELPER2(bios, var, name, displaydata, descrdata)\
@@ -562,6 +560,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_STRING(start, dynsize, ...)\
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
+//struct dynarray_bounds; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
 	{\
 		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
@@ -572,7 +571,7 @@ That is, bitfield population, and enum and inline association.
 	{\
 		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
 		.array_start=start, .element_size=sizeof(start[0])\
-		.func=PPATUI_FUNC_NAME(atomstruct),\
+		.inl_func=PPATUI_FUNC_NAME(atomstruct),\
 	},
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_BITFIELD(start,dynsize, bitfields)\
 	{\
@@ -668,142 +667,6 @@ waterfall.
 	_PPATUI_LOOPERH1(numargs, recurse, _PP_NUMARG(__VA_ARGS__))
 #define _PPATUI_LOOPERH1(...) _PPATUI_LOOPERH2(__VA_ARGS__)
 #define _PPATUI_LOOPERH2(n,r,d) _##n##N##r##R##d
-
-//#define _4N1R0_FLAG // to detect if it's "painted blue"
-//#define _4N1R0(...) _4N1R0_FLAG 
-#define _4N1R0(...)
-#define _4N1R4(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R0(f,o,__VA_ARGS__)
-#define _4N1R8(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R4(f,o,__VA_ARGS__)
-#define _4N1R12(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R8(f,o,__VA_ARGS__)
-#define _4N1R16(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R12(f,o,__VA_ARGS__)
-#define _4N1R20(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R16(f,o,__VA_ARGS__)
-#define _4N1R24(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R20(f,o,__VA_ARGS__)
-#define _4N1R28(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R24(f,o,__VA_ARGS__)
-#define _4N1R32(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R28(f,o,__VA_ARGS__)
-#define _4N1R36(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R32(f,o,__VA_ARGS__)
-#define _4N1R40(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R36(f,o,__VA_ARGS__)
-#define _4N1R44(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R40(f,o,__VA_ARGS__)
-#define _4N1R48(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R44(f,o,__VA_ARGS__)
-#define _4N1R52(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R48(f,o,__VA_ARGS__)
-#define _4N1R56(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R52(f,o,__VA_ARGS__)
-#define _4N1R60(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R56(f,o,__VA_ARGS__)
-#define _4N1R64(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R60(f,o,__VA_ARGS__)
-#define _4N1R68(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R64(f,o,__VA_ARGS__)
-#define _4N1R72(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R68(f,o,__VA_ARGS__)
-#define _4N1R76(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R72(f,o,__VA_ARGS__)
-#define _4N1R80(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R76(f,o,__VA_ARGS__)
-#define _4N1R84(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R80(f,o,__VA_ARGS__)
-#define _4N1R88(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R84(f,o,__VA_ARGS__)
-#define _4N1R92(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R88(f,o,__VA_ARGS__)
-#define _4N1R96(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R92(f,o,__VA_ARGS__)
-#define _4N1R100(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R96(f,o,__VA_ARGS__)
-#define _4N1R104(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R100(f,o,__VA_ARGS__)
-#define _4N1R108(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R104(f,o,__VA_ARGS__)
-#define _4N1R112(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R108(f,o,__VA_ARGS__)
-#define _4N1R116(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R112(f,o,__VA_ARGS__)
-#define _4N1R120(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R116(f,o,__VA_ARGS__)
-#define _4N1R124(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R120(f,o,__VA_ARGS__)
-#define _4N1R128(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R124(f,o,__VA_ARGS__)
-#define _4N1R132(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R128(f,o,__VA_ARGS__)
-#define _4N1R136(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R132(f,o,__VA_ARGS__)
-#define _4N1R140(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R136(f,o,__VA_ARGS__)
-#define _4N1R144(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R140(f,o,__VA_ARGS__)
-#define _4N1R148(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R144(f,o,__VA_ARGS__)
-#define _4N1R152(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R148(f,o,__VA_ARGS__)
-#define _4N1R156(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R152(f,o,__VA_ARGS__)
-#define _4N1R160(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R156(f,o,__VA_ARGS__)
-#define _4N1R164(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R160(f,o,__VA_ARGS__)
-#define _4N1R168(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R164(f,o,__VA_ARGS__)
-#define _4N1R172(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R168(f,o,__VA_ARGS__)
-#define _4N1R176(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R172(f,o,__VA_ARGS__)
-#define _4N1R180(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R176(f,o,__VA_ARGS__)
-#define _4N1R184(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R180(f,o,__VA_ARGS__)
-#define _4N1R188(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R184(f,o,__VA_ARGS__)
-#define _4N1R192(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R188(f,o,__VA_ARGS__)
-#define _4N1R196(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R192(f,o,__VA_ARGS__)
-#define _4N1R200(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R196(f,o,__VA_ARGS__)
-#define _4N1R204(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R200(f,o,__VA_ARGS__)
-#define _4N1R208(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R204(f,o,__VA_ARGS__)
-#define _4N1R212(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R208(f,o,__VA_ARGS__)
-#define _4N1R216(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R212(f,o,__VA_ARGS__)
-#define _4N1R220(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R216(f,o,__VA_ARGS__)
-#define _4N1R224(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R220(f,o,__VA_ARGS__)
-#define _4N1R228(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R224(f,o,__VA_ARGS__)
-#define _4N1R232(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R228(f,o,__VA_ARGS__)
-#define _4N1R236(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R232(f,o,__VA_ARGS__)
-#define _4N1R240(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R236(f,o,__VA_ARGS__)
-#define _4N1R244(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R240(f,o,__VA_ARGS__)
-#define _4N1R248(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R244(f,o,__VA_ARGS__)
-#define _4N1R252(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R248(f,o,__VA_ARGS__)
-#define _4N1R256(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N1R252(f,o,__VA_ARGS__)
-
-//#define _4N2R0_FLAG
-//#define _4N2R0(...) _4N2R0_FLAG
-#define _4N2R0(...)
-#define _4N2R4(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R0(f,o,__VA_ARGS__)
-#define _4N2R8(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R4(f,o,__VA_ARGS__)
-#define _4N2R12(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R8(f,o,__VA_ARGS__)
-#define _4N2R16(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R12(f,o,__VA_ARGS__)
-#define _4N2R20(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R16(f,o,__VA_ARGS__)
-#define _4N2R24(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R20(f,o,__VA_ARGS__)
-#define _4N2R28(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R24(f,o,__VA_ARGS__)
-#define _4N2R32(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R28(f,o,__VA_ARGS__)
-#define _4N2R36(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R32(f,o,__VA_ARGS__)
-#define _4N2R40(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R36(f,o,__VA_ARGS__)
-#define _4N2R44(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R40(f,o,__VA_ARGS__)
-#define _4N2R48(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R44(f,o,__VA_ARGS__)
-#define _4N2R52(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R48(f,o,__VA_ARGS__)
-#define _4N2R56(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R52(f,o,__VA_ARGS__)
-#define _4N2R60(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R56(f,o,__VA_ARGS__)
-#define _4N2R64(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R60(f,o,__VA_ARGS__)
-#define _4N2R68(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R64(f,o,__VA_ARGS__)
-#define _4N2R72(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R68(f,o,__VA_ARGS__)
-#define _4N2R76(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R72(f,o,__VA_ARGS__)
-#define _4N2R80(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R76(f,o,__VA_ARGS__)
-#define _4N2R84(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R80(f,o,__VA_ARGS__)
-#define _4N2R88(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R84(f,o,__VA_ARGS__)
-#define _4N2R92(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R88(f,o,__VA_ARGS__)
-#define _4N2R96(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R92(f,o,__VA_ARGS__)
-#define _4N2R100(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R96(f,o,__VA_ARGS__)
-#define _4N2R104(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R100(f,o,__VA_ARGS__)
-#define _4N2R108(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R104(f,o,__VA_ARGS__)
-#define _4N2R112(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R108(f,o,__VA_ARGS__)
-#define _4N2R116(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R112(f,o,__VA_ARGS__)
-#define _4N2R120(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R116(f,o,__VA_ARGS__)
-#define _4N2R124(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R120(f,o,__VA_ARGS__)
-#define _4N2R128(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R124(f,o,__VA_ARGS__)
-#define _4N2R132(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R128(f,o,__VA_ARGS__)
-#define _4N2R136(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R132(f,o,__VA_ARGS__)
-#define _4N2R140(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R136(f,o,__VA_ARGS__)
-#define _4N2R144(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R140(f,o,__VA_ARGS__)
-#define _4N2R148(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R144(f,o,__VA_ARGS__)
-#define _4N2R152(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R148(f,o,__VA_ARGS__)
-#define _4N2R156(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R152(f,o,__VA_ARGS__)
-#define _4N2R160(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R156(f,o,__VA_ARGS__)
-#define _4N2R164(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R160(f,o,__VA_ARGS__)
-#define _4N2R168(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R164(f,o,__VA_ARGS__)
-#define _4N2R172(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R168(f,o,__VA_ARGS__)
-#define _4N2R176(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R172(f,o,__VA_ARGS__)
-#define _4N2R180(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R176(f,o,__VA_ARGS__)
-#define _4N2R184(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R180(f,o,__VA_ARGS__)
-#define _4N2R188(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R184(f,o,__VA_ARGS__)
-#define _4N2R192(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R188(f,o,__VA_ARGS__)
-#define _4N2R196(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R192(f,o,__VA_ARGS__)
-#define _4N2R200(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R196(f,o,__VA_ARGS__)
-#define _4N2R204(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R200(f,o,__VA_ARGS__)
-#define _4N2R208(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R204(f,o,__VA_ARGS__)
-#define _4N2R212(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R208(f,o,__VA_ARGS__)
-#define _4N2R216(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R212(f,o,__VA_ARGS__)
-#define _4N2R220(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R216(f,o,__VA_ARGS__)
-#define _4N2R224(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R220(f,o,__VA_ARGS__)
-#define _4N2R228(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R224(f,o,__VA_ARGS__)
-#define _4N2R232(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R228(f,o,__VA_ARGS__)
-#define _4N2R236(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R232(f,o,__VA_ARGS__)
-#define _4N2R240(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R236(f,o,__VA_ARGS__)
-#define _4N2R244(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R240(f,o,__VA_ARGS__)
-#define _4N2R248(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R244(f,o,__VA_ARGS__)
-#define _4N2R252(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R248(f,o,__VA_ARGS__)
-#define _4N2R256(f,o,a,b,c,d,...) f(o,a,b,c,d) _4N2R252(f,o,__VA_ARGS__)
 
 #define _1N1R0(...)
 #define _1N1R1(f,o,a,...) f(o,a) _1N1R0(f,o,__VA_ARGS__)

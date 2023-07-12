@@ -153,12 +153,11 @@ struct atui_funcify_args {
 
 // funcify internal structs
 struct dynarray_bounds { // for ATUI_DYNARRAY
-	uint16_t numleaves; // number of leaves within the pattern.
-	uint16_t dynarray_length; // the number of members to the dynamic array.
-
 	void* array_start;
-	uint32_t element_size;
+	uint32_t element_size; //for manual pointer math.
+	uint16_t dynarray_length; // the number of members to the dynamic array.
 	
+	uint16_t numleaves; // number of leaves within the pattern.
 	atui_branch* (*inl_func)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 };
