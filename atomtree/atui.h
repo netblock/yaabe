@@ -28,6 +28,13 @@ struct atui_enum {
 	int val;
 };
 
+enum i18n_languages {
+	LANG_NOLANG = -1,
+
+	LANG_ENGLISH = 0,
+
+	LANG_TOTALLANGS
+};
 
 enum atui_type {
 	ATUI_NAN = 0b000,
@@ -39,11 +46,12 @@ enum atui_type {
 
 	ATUI_NODISPLAY = 1<<4,
 
-	ATUI_NONE     = 1<<5,
+	ATUI_NONE     = 1<<5, //TODO depricate
+	ATUI_NOFANCY  = 1<<5,
 	ATUI_BITFIELD = 1<<6,
 	ATUI_ENUM     = 1<<7,  // see also PPATUI_FUNCIFY()
 	ATUI_STRING   = 1<<8,  // meant for human-readable text
-	ATUI_ARRAY    = 1<< 9, // no technical difference from string 
+	ATUI_ARRAY    = 1<<9,  // no technical difference from string 
 	ATUI_INLINE   = 1<<10, // pull in leaves from other tables
 	ATUI_DYNARRAY = 1<<11, // for runtime array lengths
 };
@@ -52,7 +60,8 @@ typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
 	char name[40];
-	char* description;
+	const char* varname;
+	char* description[LANG_TOTALLANGS];
 
 
 	enum atui_type type; // bitfield struct
