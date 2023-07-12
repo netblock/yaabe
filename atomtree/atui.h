@@ -162,15 +162,6 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 };
 
-struct dynarray_inline { // for ATUI_DYNARRAY leaves that has ATUI_INLINE
-	atui_branch* (*func)(struct atui_funcify_args*);
-	// function pointer to the _atui function for the inline pattern.
-
-	struct atui_funcify_args args;
-	// ..and its args. possibly not necessary.
-};
-
-
 
 PPATUI_HEADERIFY(atom_common_table_header);
 

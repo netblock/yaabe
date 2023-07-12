@@ -204,7 +204,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 					pat_start = pat_end;\
 					dynentry_i++;\
 \
-				} else { /* if not dynarray */\
+				} else { /*if not dynarray (still has dynarray siblings) */\
 					if ( (leaves_init[init_i].type & ATUI_NODISPLAY) == 0) {\
 						leaves[leaves_i] = leaves_init[init_i];\
 						if (leaves_init[init_i].type & ATUI_INLINE) {\
@@ -265,7 +265,6 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
 		branches = scratch;\
-		/*scratch += num_branches * sizeof(atui_branch*);*/\
 	}\
 \
 	if (num_branches) {\
@@ -662,7 +661,6 @@ In other words, if the f() needs to call a loop, the loop that spun out the
 f() f() f() f()... is no longer usable; the f() needs to call a different
 waterfall.
 */
-
 #define _PPATUI_LOOPER(numargs, recurse, ...) \
 	_PPATUI_LOOPERH1(numargs, recurse, _PP_NUMARG(__VA_ARGS__))
 #define _PPATUI_LOOPERH1(...) _PPATUI_LOOPERH2(__VA_ARGS__)
