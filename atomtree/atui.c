@@ -498,16 +498,16 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10,
 	),
 	(gddr6_mr1, gddr6_mr1,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			drive_stren,   1, 0, ATUI_DEC,
-			data_term,     3, 2, ATUI_DEC,
-			PLLDLL_range,  5, 4, ATUI_DEC,
-			calib_update,  6, 6, ATUI_DEC,
-			PLLDLL,        7, 7, ATUI_DEC,
-			RDBI,          8, 8, ATUI_DEC,
-			WDBI,          9, 9, ATUI_DEC,
-			CABI,         10,10, ATUI_DEC,
-			PLLDLL_reset, 14,11, ATUI_DEC,
-			ID,           15,12, ATUI_DEC
+			(drive_stren,   1, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(data_term,     3, 2, ATUI_DEC, (ATUI_NODESCR)),
+			(PLLDLL_range,  5, 4, ATUI_DEC, (ATUI_NODESCR)),
+			(calib_update,  6, 6, ATUI_DEC, (ATUI_NODESCR)),
+			(PLLDLL,        7, 7, ATUI_DEC, (ATUI_NODESCR)),
+			(RDBI,          8, 8, ATUI_DEC, (ATUI_NODESCR)),
+			(WDBI,          9, 9, ATUI_DEC, (ATUI_NODESCR)),
+			(CABI,         10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(PLLDLL_reset, 14,11, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	),
 	(gddr6_mr2, gddr6_mr2,
@@ -528,8 +528,8 @@ PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 
 	(u32umc_id_access,  u32umc_id_access,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			memclockrange, 23, 0, ATUI_DEC,
-			mem_blk_id,    31,24, ATUI_DEC
+			(memclockrange, 23, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(mem_blk_id,    31,24, ATUI_DEC, (ATUI_NODESCR))
 		)),
 		(ATUI_NODESCR)
 	)
@@ -542,9 +542,9 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 			// Leaf pattern:
 			(u32umc_reg_addr, u32umc_reg_addr,
 				(ATUI_BIN, ATUI_BITFIELD, (
-					umc_register_addr, 23, 0, ATUI_HEX,
-					umc_reg_type_ind,  24,24, ATUI_DEC,
-					umc_reg_rsvd,      31,25, ATUI_BIN
+					(umc_register_addr, 23, 0, ATUI_HEX, (ATUI_NODESCR)),
+					(umc_reg_type_ind,  24,24, ATUI_DEC, (ATUI_NODESCR)),
+					(umc_reg_rsvd,      31,25, ATUI_BIN, (ATUI_NODESCR))
 				)), (ATUI_NODESCR)
 			),
 			umc_reg_list, umc_number_of_registers // start, count
@@ -552,7 +552,6 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		(ATUI_NODESCR)
 	)
 )
-/*
 
 PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		atomtree_umc_init_reg_block,
@@ -563,4 +562,3 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
-*/

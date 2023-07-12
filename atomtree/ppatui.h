@@ -377,18 +377,30 @@ That is, bitfield population, and enum and inline association.
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0, \
 	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN bitfielddata, \
 	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
-	_PPATUI_BITFIELD_LEAVES(biosvar, _PPATUI_FANCYDATA_UNPACK(bitfielddata))
+	_PPATUI_BITFIELD_LEAVES(\
+		(biosvar, var), _PPATUI_FANCYDATA_UNPACK(bitfielddata)\
+	)
 // close parent and start on inbred children.
 // ('inbred' because because the bitfiled children also direct children to the
 // atui_branch)
 
-// the 4 is for name,bithi,bitlo,radix set
-#define _PPATUI_FANCYBF_NUMCHILDREN(...) \
-	 _PP_NUMARG(__VA_ARGS__) / 4
+#define _PPATUI_FANCYBF_NUMCHILDREN(...)\
+	 _PP_NUMARG(__VA_ARGS__)
 
-#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
+//#define _PPA_BFLEAF(biosvar, bfname, bit_end, bit_start, radix) \
+
+#define _PPA_BFLEAF(biosvarvar, bfleaf)\
+	_PPA_BFLEAF_HELPER1(\
+		_PPATUI_FANCYDATA_UNPACK(biosvarvar), _PPATUI_FANCYDATA_UNPACK(bfleaf)\
+	)
+#define _PPA_BFLEAF_HELPER1(...) _PPA_BFLEAF_HELPER2(__VA_ARGS__)
+//TODO handle description
+#define _PPA_BFLEAF_HELPER2(\
+		biosvar,var,\
+		bfname, bit_end, bit_start, radix, descrdata) \
 	{\
-		.name=#bfname, .description=NULL, .type=radix, .val=&(biosvar), \
+		.name=#bfname,.varname=#var, .description=NULL,\
+		.type=radix, .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
@@ -524,7 +536,7 @@ That is, bitfield population, and enum and inline association.
 
 
 //unrolls the pattern into leaves to copy.
-//var..fdat is for the pattern
+//var, name, descr, ... is for the pattern
 #define _PPATUI_DYNAR_SVCHELPER7_ROLL(\
 		start,dynsize,\
 		var, name, descr, radix, fancytype, ...)\
@@ -596,9 +608,9 @@ That is, bitfield population, and enum and inline association.
 		(_PPATUI_DYNAR_SERVICE, job, __VA_ARGS__)
 
 
-#define _PPATUI_BITFIELD_LEAVES(parent_var, ...)\
-	_PPATUI_LOOPER(4,1,__VA_ARGS__)\
-		(_PPA_BFLEAF, parent_var, __VA_ARGS__)
+#define _PPATUI_BITFIELD_LEAVES(datapack, ...)\
+	_PPATUI_LOOPER(1,2,__VA_ARGS__)\
+		(_PPA_BFLEAF, datapack, __VA_ARGS__)
 
 #define _PPATUI_ENUM_ENTRIES(...)\
 	_PPATUI_LOOPER(1,1,__VA_ARGS__)\
@@ -859,7 +871,71 @@ waterfall.
 #define _1N1R63(f,o,a,...) f(o,a) _1N1R62(f,o,__VA_ARGS__)
 #define _1N1R64(f,o,a,...) f(o,a) _1N1R63(f,o,__VA_ARGS__)
 
-
+#define _1N2R0(...)
+#define _1N2R1(f,o,a,...) f(o,a) _1N2R0(f,o,__VA_ARGS__)
+#define _1N2R2(f,o,a,...) f(o,a) _1N2R1(f,o,__VA_ARGS__)
+#define _1N2R3(f,o,a,...) f(o,a) _1N2R2(f,o,__VA_ARGS__)
+#define _1N2R4(f,o,a,...) f(o,a) _1N2R3(f,o,__VA_ARGS__)
+#define _1N2R5(f,o,a,...) f(o,a) _1N2R4(f,o,__VA_ARGS__)
+#define _1N2R6(f,o,a,...) f(o,a) _1N2R5(f,o,__VA_ARGS__)
+#define _1N2R7(f,o,a,...) f(o,a) _1N2R6(f,o,__VA_ARGS__)
+#define _1N2R8(f,o,a,...) f(o,a) _1N2R7(f,o,__VA_ARGS__)
+#define _1N2R9(f,o,a,...) f(o,a) _1N2R8(f,o,__VA_ARGS__)
+#define _1N2R10(f,o,a,...) f(o,a) _1N2R9(f,o,__VA_ARGS__)
+#define _1N2R11(f,o,a,...) f(o,a) _1N2R10(f,o,__VA_ARGS__)
+#define _1N2R12(f,o,a,...) f(o,a) _1N2R11(f,o,__VA_ARGS__)
+#define _1N2R13(f,o,a,...) f(o,a) _1N2R12(f,o,__VA_ARGS__)
+#define _1N2R14(f,o,a,...) f(o,a) _1N2R13(f,o,__VA_ARGS__)
+#define _1N2R15(f,o,a,...) f(o,a) _1N2R14(f,o,__VA_ARGS__)
+#define _1N2R16(f,o,a,...) f(o,a) _1N2R15(f,o,__VA_ARGS__)
+#define _1N2R17(f,o,a,...) f(o,a) _1N2R16(f,o,__VA_ARGS__)
+#define _1N2R18(f,o,a,...) f(o,a) _1N2R17(f,o,__VA_ARGS__)
+#define _1N2R19(f,o,a,...) f(o,a) _1N2R18(f,o,__VA_ARGS__)
+#define _1N2R20(f,o,a,...) f(o,a) _1N2R19(f,o,__VA_ARGS__)
+#define _1N2R21(f,o,a,...) f(o,a) _1N2R20(f,o,__VA_ARGS__)
+#define _1N2R22(f,o,a,...) f(o,a) _1N2R21(f,o,__VA_ARGS__)
+#define _1N2R23(f,o,a,...) f(o,a) _1N2R22(f,o,__VA_ARGS__)
+#define _1N2R24(f,o,a,...) f(o,a) _1N2R23(f,o,__VA_ARGS__)
+#define _1N2R25(f,o,a,...) f(o,a) _1N2R24(f,o,__VA_ARGS__)
+#define _1N2R26(f,o,a,...) f(o,a) _1N2R25(f,o,__VA_ARGS__)
+#define _1N2R27(f,o,a,...) f(o,a) _1N2R26(f,o,__VA_ARGS__)
+#define _1N2R28(f,o,a,...) f(o,a) _1N2R27(f,o,__VA_ARGS__)
+#define _1N2R29(f,o,a,...) f(o,a) _1N2R28(f,o,__VA_ARGS__)
+#define _1N2R30(f,o,a,...) f(o,a) _1N2R29(f,o,__VA_ARGS__)
+#define _1N2R31(f,o,a,...) f(o,a) _1N2R30(f,o,__VA_ARGS__)
+#define _1N2R32(f,o,a,...) f(o,a) _1N2R31(f,o,__VA_ARGS__)
+#define _1N2R33(f,o,a,...) f(o,a) _1N2R32(f,o,__VA_ARGS__)
+#define _1N2R34(f,o,a,...) f(o,a) _1N2R33(f,o,__VA_ARGS__)
+#define _1N2R35(f,o,a,...) f(o,a) _1N2R34(f,o,__VA_ARGS__)
+#define _1N2R36(f,o,a,...) f(o,a) _1N2R35(f,o,__VA_ARGS__)
+#define _1N2R37(f,o,a,...) f(o,a) _1N2R36(f,o,__VA_ARGS__)
+#define _1N2R38(f,o,a,...) f(o,a) _1N2R37(f,o,__VA_ARGS__)
+#define _1N2R39(f,o,a,...) f(o,a) _1N2R38(f,o,__VA_ARGS__)
+#define _1N2R40(f,o,a,...) f(o,a) _1N2R39(f,o,__VA_ARGS__)
+#define _1N2R41(f,o,a,...) f(o,a) _1N2R40(f,o,__VA_ARGS__)
+#define _1N2R42(f,o,a,...) f(o,a) _1N2R41(f,o,__VA_ARGS__)
+#define _1N2R43(f,o,a,...) f(o,a) _1N2R42(f,o,__VA_ARGS__)
+#define _1N2R44(f,o,a,...) f(o,a) _1N2R43(f,o,__VA_ARGS__)
+#define _1N2R45(f,o,a,...) f(o,a) _1N2R44(f,o,__VA_ARGS__)
+#define _1N2R46(f,o,a,...) f(o,a) _1N2R45(f,o,__VA_ARGS__)
+#define _1N2R47(f,o,a,...) f(o,a) _1N2R46(f,o,__VA_ARGS__)
+#define _1N2R48(f,o,a,...) f(o,a) _1N2R47(f,o,__VA_ARGS__)
+#define _1N2R49(f,o,a,...) f(o,a) _1N2R48(f,o,__VA_ARGS__)
+#define _1N2R50(f,o,a,...) f(o,a) _1N2R49(f,o,__VA_ARGS__)
+#define _1N2R51(f,o,a,...) f(o,a) _1N2R50(f,o,__VA_ARGS__)
+#define _1N2R52(f,o,a,...) f(o,a) _1N2R51(f,o,__VA_ARGS__)
+#define _1N2R53(f,o,a,...) f(o,a) _1N2R52(f,o,__VA_ARGS__)
+#define _1N2R54(f,o,a,...) f(o,a) _1N2R53(f,o,__VA_ARGS__)
+#define _1N2R55(f,o,a,...) f(o,a) _1N2R54(f,o,__VA_ARGS__)
+#define _1N2R56(f,o,a,...) f(o,a) _1N2R55(f,o,__VA_ARGS__)
+#define _1N2R57(f,o,a,...) f(o,a) _1N2R56(f,o,__VA_ARGS__)
+#define _1N2R58(f,o,a,...) f(o,a) _1N2R57(f,o,__VA_ARGS__)
+#define _1N2R59(f,o,a,...) f(o,a) _1N2R58(f,o,__VA_ARGS__)
+#define _1N2R60(f,o,a,...) f(o,a) _1N2R59(f,o,__VA_ARGS__)
+#define _1N2R61(f,o,a,...) f(o,a) _1N2R60(f,o,__VA_ARGS__)
+#define _1N2R62(f,o,a,...) f(o,a) _1N2R61(f,o,__VA_ARGS__)
+#define _1N2R63(f,o,a,...) f(o,a) _1N2R62(f,o,__VA_ARGS__)
+#define _1N2R64(f,o,a,...) f(o,a) _1N2R63(f,o,__VA_ARGS__)
 
 
 #endif
