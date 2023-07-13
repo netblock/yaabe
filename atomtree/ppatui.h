@@ -185,6 +185,10 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 							leaves[leaves_i] = dynarray_patterns[dynpat_i];\
 							leaves[leaves_i].inline_branch = \
 								inliners + inliners_i;\
+							sprintf(leaves[leaves_i].name,\
+								leaves[leaves_i].origname,\
+								dynar_i\
+							);\
 							inliners[inliners_i] = inl_func(&inl_args);\
 							inliners_i++;\
 							leaves_i++;\
@@ -198,7 +202,10 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 								leaves[leaves_i].val = dynar_pos;\
 								leaves_i++;\
 							}\
-							dynar_pos += dynar_elementsize;\
+							sprintf(leaves[leaves_i-pat_numleaves].name,\
+								leaves[leaves_i-pat_numleaves].origname,\
+								dynar_i\
+							);\
 						}\
 					}\
 					pat_start = pat_end;\
@@ -323,10 +330,10 @@ That is, bitfield population, and enum and inline association.
 // TODO handle desdat (description data)
 #define _PPATUI_FANCY_INIT(biosvar, var, namestr, desdat, radix, fancytype) \
 	{ \
-		.name=#namestr, .varname=#var, .description=NULL, \
-		.type=(radix | fancytype), \
-		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), .val=&(biosvar),\
-		.auxiliary=NULL, \
+		.name=#namestr, .origname=#namestr, .varname=#var,\
+		.description=NULL,\
+		.type=(radix | fancytype), .total_bits=_PPATUI_LEAF_BITNESS(biosvar),\
+		.val=&(biosvar), .auxiliary=NULL,\
 
 // Fancy common end
 
@@ -370,13 +377,13 @@ That is, bitfield population, and enum and inline association.
 
 //ATUI_BITFIELD
 
-#define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)/4
+#define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)
  
 #define _PPATUI_FANCY_ATUI_BITFIELD(\
 		biosvar, var, name, desdat, radix, fancytype, bitfielddata) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0, \
-	.num_bitfield_children=_PPATUI_FANCYBF_NUMCHILDREN bitfielddata, \
+	.num_bitfield_children=_ATUI_BITFIELD_NUMLEAVES bitfielddata, \
 	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
 	_PPATUI_BITFIELD_LEAVES(\
 		(biosvar, var), _PPATUI_FANCYDATA_UNPACK(bitfielddata)\
@@ -384,10 +391,6 @@ That is, bitfield population, and enum and inline association.
 // close parent and start on inbred children.
 // ('inbred' because because the bitfiled children also direct children to the
 // atui_branch)
-
-#define _PPATUI_FANCYBF_NUMCHILDREN(...)\
-	 _PP_NUMARG(__VA_ARGS__)
-
 
 #define _PPA_BFLEAF(biosvarvar, bfleaf)\
 	_PPA_BFLEAF_HELPER1(\
@@ -399,8 +402,8 @@ That is, bitfield population, and enum and inline association.
 		biosvar,var,\
 		bfname, bit_end, bit_start, radix, descrdata) \
 	{\
-		.name=#bfname,.varname=#var, .description=NULL,\
-		.type=radix, .val=&(biosvar), \
+		.name=#bfname, .origname=#bfname, .varname=#var,\
+		.description=NULL, .type=radix, .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
@@ -450,7 +453,8 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_DYNARRAY(\
 		biosvar, var, namestr, desdat, radix, fancytype, ...) \
 	{\
-		.name=#namestr, .varname=#var, .description=NULL, \
+		.name=#namestr, .origname=#namestr, .varname=#var, \
+		.description=NULL, \
 		.type=(radix | fancytype), .val=NULL, .total_bits=0, .auxiliary=NULL, \
 		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
 		_PPATUI_FANCY_NOARRAY\

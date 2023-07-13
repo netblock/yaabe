@@ -60,7 +60,9 @@ typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
 	char name[40];
+	const char* origname;
 	const char* varname;
+
 	char* description[LANG_TOTALLANGS];
 
 

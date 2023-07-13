@@ -540,7 +540,7 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 	(umc_reg_list, umc_reg_list,
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
-			(u32umc_reg_addr, u32umc_reg_addr,
+			(u32umc_reg_addr, u32umc_reg_addr [%02i],
 				(ATUI_BIN, ATUI_BITFIELD, (
 					(umc_register_addr, 23, 0, ATUI_HEX, (ATUI_NODESCR)),
 					(umc_reg_type_ind,  24,24, ATUI_DEC, (ATUI_NODESCR)),
