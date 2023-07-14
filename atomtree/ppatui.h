@@ -185,6 +185,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 							leaves[leaves_i] = dynarray_patterns[dynpat_i];\
 							leaves[leaves_i].inline_branch = \
 								inliners + inliners_i;\
+							/* if the name has a index number pattern: */\
 							sprintf(leaves[leaves_i].name,\
 								leaves[leaves_i].origname,\
 								dynar_i\
@@ -194,7 +195,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 							leaves_i++;\
 							inl_args.suggestbios += dynar_elementsize;\
 						}\
-					} else { /* if bitfield */\
+					} else { /* if dynarray with bitfield */\
 						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
 							dynpat_i = pat_start;\
 							for(; dynpat_i<pat_end; dynpat_i++){\
@@ -202,10 +203,12 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 								leaves[leaves_i].val = dynar_pos;\
 								leaves_i++;\
 							}\
+							/* if the name has a index number pattern: */\
 							sprintf(leaves[leaves_i-pat_numleaves].name,\
 								leaves[leaves_i-pat_numleaves].origname,\
 								dynar_i\
 							);\
+							dynar_pos += dynar_elementsize;\
 						}\
 					}\
 					pat_start = pat_end;\
