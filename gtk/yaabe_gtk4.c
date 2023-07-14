@@ -238,15 +238,22 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 
 			// the only time we're gonna be using this cache is in this tlmodel
 			// function.
+			// cache the gobjects because the gliststore gets eaten.
 			alloc_leaf_cache(parent, num_children);
 			leaf_models = parent->auxiliary;
+			atui_leaf* leaf;
 			for(i=0; i < num_children; i++) {
+				// a form of this loop also exists in atuileaves_to_glistmodel
+
+				leaf = atui_children+i;
 				gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-				g_object_set_data(gobj_child, "leaf", atui_children+i);
+				g_object_set_data(gobj_child, "leaf", leaf);
 				leaf_models->child_gobj[i] = gobj_child;
 				g_list_store_append(children_model, gobj_child);
-			}
 
+				if (leaf->num_bitfield_children)
+					i += leaf->num_bitfield_children;
+			}
 
 		} else { // use the cache
 			for(i=0; i < leaf_models->child_gobj_count; i++) {
@@ -273,20 +280,22 @@ inline static GtkSelectionModel* create_leaves_selmodel(
 }
 
 inline static void atuileaves_to_glistmodel(atui_branch* branch) {
+	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
+	GListStore* leavesmodel = g_list_store_new(G_TYPE_OBJECT);
+
 	GObject* gobj_leaf;
 	atui_leaf* leaf;
-	GListStore* leavesmodel = g_list_store_new(G_TYPE_OBJECT);
-	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
-
-	for(int i=0 ; i < branch->leaf_count ; i++) {
-		leaf = branch->leaves + i;
-
+	atui_leaf* leaves = branch->leaves;
+	uint16_t num_leaves = branch->leaf_count;
+	for(uint16_t i=0; i < num_leaves ; i++) {
+		// a form of this loop also exists in leaves_tlmodel_func
+		leaf = leaves + i;
 		gobj_leaf = g_object_new(G_TYPE_OBJECT, NULL);
 		g_object_force_floating(gobj_leaf); // so we can sink it into the model
 		g_object_set_data(gobj_leaf, "leaf", leaf);
 		g_list_store_append(leavesmodel, gobj_leaf);
 
-		if (leaf->num_bitfield_children)
+		if (leaves->num_bitfield_children)
 			i += leaf->num_bitfield_children;
 	}
 
@@ -300,6 +309,7 @@ inline static void atuileaves_to_glistmodel(atui_branch* branch) {
 	//TODO Is this necessary?
 	g_object_ref_sink(G_OBJECT(sel_model));
 }
+
 
 static void set_leaves_list(GtkSelectionModel* model,
 		guint position, guint n_items, gpointer yaabe_commons) {
