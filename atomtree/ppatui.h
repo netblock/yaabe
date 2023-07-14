@@ -195,7 +195,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 							leaves_i++;\
 							inl_args.suggestbios += dynar_elementsize;\
 						}\
-					} else { /* if dynarray with bitfield */\
+					} else { /* if dynarray. Does bitfield*/\
 						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
 							dynpat_i = pat_start;\
 							for(; dynpat_i<pat_end; dynpat_i++){\
@@ -531,7 +531,7 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNARR_UNPACK_HELPER4(\
 		start_pointer, dynsize_var,\
 		pat_var, pat_name, pat_descr, pat_radix, pat_fancytype, ...)\
-	atomtree->start_pointer, atomtree->dynsize_var,\
+	start_pointer, dynsize_var,\
 	pat_var, pat_name, pat_descr, pat_radix, pat_fancytype, __VA_ARGS__
 
 
@@ -558,7 +558,7 @@ That is, bitfield population, and enum and inline association.
 	)
 
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_DYNARRAY(...) NULL
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_NONE(start, dynsize, ...) \
+#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_NOFANCY(start, dynsize, ...) \
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_ENUM(start, dynsize, ...)\
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
@@ -569,13 +569,13 @@ That is, bitfield population, and enum and inline association.
 //struct dynarray_bounds; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
 	{\
-		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
+		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize), \
 		.array_start=start, .element_size=sizeof(start[0]), .inl_func=NULL,\
 	},
 
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_INLINE(start, dynsize, inltable)\
 	{\
-		.numleaves=1, .dynarray_length=_PPATUI_DEREF(start, dynsize), \
+		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize), \
 		.array_start=start, .element_size=sizeof(start[0])\
 		.inl_func=PPATUI_FUNC_NAME(atomstruct),\
 	},

@@ -523,17 +523,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10,
 )
 
 
-PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
-		atomtree_umc_init_reg_block,
-
-	(u32umc_id_access,  u32umc_id_access,
-		(ATUI_BIN, ATUI_BITFIELD, (
-			(memclockrange, 23, 0, ATUI_DEC, (ATUI_NODESCR)),
-			(mem_blk_id,    31,24, ATUI_DEC, (ATUI_NODESCR))
-		)),
-		(ATUI_NODESCR)
-	)
-)
 
 PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		atomtree_umc_init_reg_block,
@@ -547,7 +536,8 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 					(umc_reg_rsvd,      31,25, ATUI_BIN, (ATUI_NODESCR))
 				)), (ATUI_NODESCR)
 			),
-			umc_reg_list, umc_number_of_registers // start, count
+			//start, count
+			atomtree->umc_reg_list, atomtree->umc_number_of_registers
 		)),
 		(ATUI_NODESCR)
 	)
@@ -561,4 +551,37 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 	(reserved, reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
+)
+
+PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
+		atomtree_umc_init_reg_block,
+
+	(u32umc_id_access,  u32umc_id_access,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(memclockrange, 23, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(mem_blk_id,    31,24, ATUI_DEC, (ATUI_NODESCR))
+		)),
+		(ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
+		atomtree_umc_init_reg_block,
+	(block_id, UMC block ID,
+		(ATUI_NAN, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODESCR)
+	),
+
+	(u32umc_reg_data, u32umc_reg_data,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(u32umc_reg_data, u32umc_reg_data,
+				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			//start, count
+			bios->u32umc_reg_data, atomtree->umc_reg_num
+		)),
+		(ATUI_NODESCR)
+	)
+
 )

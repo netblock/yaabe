@@ -174,6 +174,11 @@ PPATUI_HEADERIFY(atom_master_data_table_v2_1);
 // fuck me...
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
+PPATUI_HEADERIFY(atom_umc_init_reg_block);
+PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
+PPATUI_HEADERIFY(atom_umc_reg_setting_id_config_access);
+
+
 
 
 PPATUI_HEADERIFY(atom_vram_module_v10);
