@@ -275,7 +275,6 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 
 		// if no cached gobjects, generate and cache them; otherwise use cache.
 		if (leaf_cache == NULL) {
-			GObject* gobj_child = NULL;
 			uint16_t num_children = 0;
 			atui_leaf* child_leaves = NULL;
 
@@ -310,28 +309,14 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d){
 	return children_model;
 }
 
-inline static GtkSelectionModel* create_leaves_selmodel(
-		GListModel* leaves_lm) {
-
-	/*
-	GtkSingleSelection* sing_sel = gtk_single_selection_new(leaves_lm);
-	gtk_single_selection_set_can_unselect(sing_sel, true);
-	gtk_single_selection_set_autoselect(sing_sel, false);
-	*/
-
-	GtkNoSelection* no_sel = gtk_no_selection_new(leaves_lm);
-	
-	return GTK_SELECTION_MODEL(no_sel);
-}
-
 inline static void branchleaves_to_treemodel(atui_branch* branch) {
 	GListModel* leavesmodel = \
 		atui_leaves_to_glistmodel(branch->leaves, branch->leaf_count);
 
 	GtkTreeListModel* treemodel = gtk_tree_list_model_new(
-		G_LIST_MODEL(leavesmodel), false, true, leaves_tlmodel_func, NULL,NULL);
-	GtkSelectionModel* sel_model = create_leaves_selmodel(
-		G_LIST_MODEL(treemodel));
+		leavesmodel, false, true, leaves_tlmodel_func, NULL,NULL);
+	GtkSelectionModel* sel_model =
+		GTK_SELECTION_MODEL(gtk_no_selection_new(G_LIST_MODEL(treemodel)));
 
 	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
 	branch_models->leaves_model = sel_model;
