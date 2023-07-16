@@ -569,7 +569,7 @@ PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 		atomtree_umc_init_reg_block,
 	(block_id, UMC block ID,
-		(ATUI_NAN, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
 	),
 

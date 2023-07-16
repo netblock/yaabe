@@ -44,7 +44,7 @@ enum atui_type {
 	ATUI_BIN = 0b100,
 	ATUI_ANY = 0b111,
 
-	ATUI_NODISPLAY = 1<<4,
+	ATUI_NODISPLAY = 1<<4, // don't display this leaf itself
 
 	ATUI_NONE     = 1<<5, //TODO depricate
 	ATUI_NOFANCY  = 1<<5,
@@ -67,12 +67,14 @@ struct _atui_leaf {
 
 
 	enum atui_type type; // bitfield struct
-	uint16_t array_size;
+	uint8_t array_size;
 	uint8_t total_bits; // number of bits for the leaf
 
-	uint8_t num_bitfield_children;
 	uint8_t bitfield_hi; //bitfield range end
 	uint8_t bitfield_lo; //bitfield range start
+
+	uint8_t num_child_leaves;
+
 
 	const struct atui_enum* enum_options; // array of text val pair
 	uint8_t num_enum_opts;
@@ -91,7 +93,9 @@ struct _atui_leaf {
 };
 struct  _atui_branch {
 	char name[40];
-	char* description;
+	const char* varname;
+
+	char* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;
 	uint8_t branch_count;

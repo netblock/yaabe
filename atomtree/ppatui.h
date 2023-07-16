@@ -169,13 +169,11 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 					dynar_elementsize = \
 						dynarray_boundaries[dynentry_i].element_size;\
 \
-					if ( (leaves_init[init_i].type & ATUI_NODISPLAY) == 0) {\
-						leaves[leaves_i] = leaves_init[init_i];\
-						leaves[leaves_i].array_size = dynar_len*pat_numleaves;\
-						leaves_i++;\
-					}\
+					leaves[leaves_i] = leaves_init[init_i];\
+					leaves[leaves_i].num_child_leaves = \
+						dynar_len*pat_numleaves;\
+					leaves_i++;\
 \
-					\
 					pat_end = pat_start + pat_numleaves;\
 					if(dynarray_patterns[dynpat_i].type & ATUI_INLINE) {\
 						dynpat_i = pat_start;\
@@ -215,20 +213,16 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 					dynentry_i++;\
 \
 				} else { /*if not dynarray (still has dynarray siblings) */\
-					if ( (leaves_init[init_i].type & ATUI_NODISPLAY) == 0) {\
-						leaves[leaves_i] = leaves_init[init_i];\
-						if (leaves_init[init_i].type & ATUI_INLINE) {\
-							leaves[leaves_i].inline_branch = \
-								inliners + inliners_i;\
-						}\
-						leaves_i++;\
-					}\
+					leaves[leaves_i] = leaves_init[init_i];\
 					if (leaves_init[init_i].type & ATUI_INLINE) {\
+						leaves[leaves_i].inline_branch = \
+							inliners + inliners_i;\
 						inliners[inliners_i] = \
 							(atui_branch*) inliners_init[inlinit_i];\
 						inliners_i++;\
 						inlinit_i++;\
 					}\
+					leaves_i++;\
 				}\
 			}\
 			total_num_leaves = leaves_i;\
@@ -242,27 +236,21 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 			j=0;\
 			for(i=0; i < leaves_init_num; i++){\
-				if ( (leaves_init[i].type & ATUI_NODISPLAY) == 0) {\
-					leaves[j] = leaves_init[i];\
-					if (leaves_init[i].type & ATUI_INLINE) {\
-						leaves[j].inline_branch = inliners + inliners_i;\
-					}\
-					j++;\
-				}\
+				leaves[j] = leaves_init[i];\
 				if (leaves_init[i].type & ATUI_INLINE) {\
+					leaves[j].inline_branch = inliners + inliners_i;\
 					inliners[inliners_i] = \
 						(atui_branch*)inliners_init[inliners_i];\
 					inliners_i++;\
 				}\
+				j++;\
 			}\
 			total_num_leaves = j;\
 		} else { /* at all: no dynarray, no inline */\
 			j=0;\
 			for(i=0; i < leaves_init_num; i++){\
-				if ( (leaves_init[i].type & ATUI_NODISPLAY) == 0) {\
-					leaves[j] = leaves_init[i];\
-					j++;\
-				}\
+				leaves[j] = leaves_init[i];\
+				j++;\
 			}\
 			total_num_leaves = j;\
 		}\
@@ -286,7 +274,8 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	}\
 \
 	*table = (atui_branch) {\
-		.name=#atomtypesuffix, .description=NULL, .auxiliary=NULL,\
+		.name=#atomtypesuffix, .varname=#atomtypesuffix,\
+		.description=NULL, .auxiliary=NULL,\
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
 		.max_branch_count=num_branches, .max_inline_branch_count=num_inliners, \
@@ -318,10 +307,9 @@ That is, bitfield population, and enum and inline association.
 )
 
 #define _PPATUI_FANCY_NOBITFIELD(biosvar) \
-	.num_bitfield_children=0, \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0,
 #define _PPATUI_FANCY_NOBITFIELD_HARD \
-	.num_bitfield_children=0, .bitfield_hi=0, .bitfield_lo=0,
+	.bitfield_hi=0, .bitfield_lo=0,
 
 #define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
 #define _PPATUI_FANCY_NOARRAY .array_size=0,
@@ -336,7 +324,7 @@ That is, bitfield population, and enum and inline association.
 		.name=#namestr, .origname=#namestr, .varname=#var,\
 		.description=NULL,\
 		.type=(radix | fancytype), .total_bits=_PPATUI_LEAF_BITNESS(biosvar),\
-		.val=&(biosvar), .auxiliary=NULL,\
+		.val=&(biosvar), .auxiliary=NULL, .num_child_leaves=0,\
 
 // Fancy common end
 
@@ -386,7 +374,7 @@ That is, bitfield population, and enum and inline association.
 		biosvar, var, name, desdat, radix, fancytype, bitfielddata) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0, \
-	.num_bitfield_children=_ATUI_BITFIELD_NUMLEAVES bitfielddata, \
+	.num_child_leaves=_ATUI_BITFIELD_NUMLEAVES bitfielddata, \
 	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
 	_PPATUI_BITFIELD_LEAVES(\
 		(biosvar, var), _PPATUI_FANCYDATA_UNPACK(bitfielddata)\
@@ -409,8 +397,8 @@ That is, bitfield population, and enum and inline association.
 		.description=NULL, .type=radix, .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
-		_PPATUI_FANCY_NOENUM .num_bitfield_children=0, \
-		_PPATUI_FANCY_NOARRAY .auxiliary = NULL, \
+		_PPATUI_FANCY_NOENUM .num_child_leaves=0, \
+		_PPATUI_FANCY_NOARRAY .auxiliary=NULL, \
 	},
 
 
@@ -454,8 +442,9 @@ That is, bitfield population, and enum and inline association.
 // Usually a placeholder. The meat of ATUI_DYNARRAY is handled in the funcify.
 //TODO handle desdat
 #define _PPATUI_FANCY_ATUI_DYNARRAY(\
-		biosvar, var, namestr, desdat, radix, fancytype, ...) \
+		biosvar, var, namestr, desdat, radix, fancytype, fancydata) \
 	{\
+		/* numleaves is handled in the dynarray expander func*/\
 		.name=#namestr, .origname=#namestr, .varname=#var, \
 		.description=NULL, \
 		.type=(radix | fancytype), .val=NULL, .total_bits=0, .auxiliary=NULL, \
