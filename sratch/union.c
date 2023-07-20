@@ -29,6 +29,16 @@ struct A {
 struct B {
 	struct A A;
 };
+
+union bitfield {
+	uint16_t twobytes;
+	struct { uint16_t
+		first6bits   :5-0 +1,
+		second6bits :11-6 +1,
+		lastfour    :15-12 +1;
+	};
+};
+
 int main() {
 	struct B* bee = malloc(sizeof(struct B));
 	bee->A.ver = a3;
@@ -51,4 +61,9 @@ int main() {
 			break;
 	}
 	free(bee);
+	union bitfield bf = {.twobytes=0};
+	printf("twobytes: %016b\n", bf.twobytes);
+	bf.lastfour = 0b1111;
+	bf.first6bits = 0b101101;
+	printf("twobytes: %016b\n", bf.twobytes);
 }

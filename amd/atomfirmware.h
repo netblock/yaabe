@@ -3289,17 +3289,18 @@ struct atom_umc_init_reg_block{ // not literal, topological only
 };
 
 
-struct GDDR6_MR1 {
-	uint16_t drive_stren  : 2; // 0=AC60/40 1=AC48/40 2,3 vender specific
-	uint16_t data_term    : 2; // 0=disabled 1=60ohm 2=120ohm 3=48ohm
-	uint16_t PLLDLL_range : 2; // min-to-max WCK freq; vendor specific
-	uint16_t calib_update : 1; // calibration engine; 0=enabled 1=disabled
-	uint16_t PLLDLL       : 1; // 0=disabled 1=enabled
-	uint16_t RDBI         : 1; // Data Bus Inversion, for reads.   0=enabled
-	uint16_t WDBI         : 1; // Data Bus Inversion, for writes.  1=disabled
-	uint16_t CABI         : 1; // Command-address bus inversion.   0=enabled
-	uint16_t PLLDLL_reset : 4; // 1 = reset. MR1 OP11 self-clears after reset.
-	uint16_t ID           : 4; // MR 1
+union GDDR6_MR1 { uint16_t
+	GDDR6_MR1,
+	drive_stren  : 2, // 0=AC60/40 1=AC48/40 2,3 vender specific
+	data_term    : 2, // 0=disabled 1=60ohm 2=120ohm 3=48ohm
+	PLLDLL_range : 2, // min-to-max WCK freq; vendor specific
+	calib_update : 1, // calibration engine; 0=enabled 1=disabled
+	PLLDLL       : 1, // 0=disabled 1=enabled
+	RDBI         : 1, // Data Bus Inversion, for reads.   0=enabled
+	WDBI         : 1, // Data Bus Inversion, for writes.  1=disabled
+	CABI         : 1, // Command-address bus inversion.   0=enabled
+	PLLDLL_reset : 4, // 1 = reset. MR1 OP11 self-clears after reset.
+	ID           : 4; // MR 1
 };
 
 struct atom_vram_module_v10 {
@@ -3323,7 +3324,7 @@ struct atom_vram_module_v10 {
 	uint16_t  gddr6_mr10;       // gddr6 mode register10 value
 	union {
 		uint16_t gddr6_mr1;        // gddr6 mode register1 value
-		struct GDDR6_MR1 gddr6_mr1_bitfield;
+		union GDDR6_MR1 gddr6_mr1_bitfield;
 	};
 	uint16_t  gddr6_mr2;        // gddr6 mode register2 value
 	uint16_t  gddr6_mr7;        // gddr6 mode register7 value

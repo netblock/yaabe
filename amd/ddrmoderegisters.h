@@ -1,29 +1,197 @@
-// Please refer to JESD 250 C. If unavailable consider,
+// Please refer to JESD 250. If unavailable consider,
 // 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
 
-struct gddr6_mr0 {
-	uint16_t WLmrs : 3; // tCWL, 8,9,10,11,12,5,6,7
-	uint16_t RLmrs : 4; // tCL, starting from 5. Consider MR8 OP8, MR12 OP3.
-	uint16_t TM    : 1; // Test mode
-	uint16_t WR    : 4; // tWR, starting from 4
-	uint16_t ID    : 4; // MR 0
+union gddr6_mr0 {
+	uint16_t gddr6_mr0; // raw data
+	struct { uint16_t
+	WLmrs    :2-0 +1, // tCWL, 8,9,10,11,12,5,6,7.
+	RLmrs    :6-3 +1, // tCL, starting from 5. See MR8 OP8, MR12 OP3
+	testmode :7-7 +1, // Test mode; behavior is vendor specific
+	WRmrs   :11-8 +1, // tWR for auto-pre, 0=4,1=5..47=51. See MR8 OP9, MR12 OP5
+	ID      :15-12 +1; // MR 0
+	};
 };
 
-struct gddr6_mr1 {
-	uint16_t drive_stren  :1-0 +1; //0=AC60/40 1=AC48/40 2,3 vender specific
-	uint16_t data_term    :3-2 +1; //0=disabled 1=60ohm 2=120ohm 3=48ohm
-	uint16_t PLLDLL_range :5-4 +1; //min-to-max WCK freq; vendor specific
-	uint16_t calib_update :6-6 +1; //calibration engine; 0=enabled 1=disabled
-	uint16_t PLLDLL       :7-7 +1; //0=disabled 1=enabled
-	uint16_t RDBI         :8-8 +1; //Data Bus Inversion, for reads.  0=enabled
-	uint16_t WDBI         :9-9 +1; //Data Bus Inversion, for writes. 1=disabled
-	uint16_t CABI        :10-10 +1; //Command-address bus inversion.  0=enabled
-	uint16_t PLLDLL_reset:14-11 +1; //1 = reset. self-clears after reset.
-	uint16_t ID           :15-12 +1; //MR 1
+union gddr6_mr1 {
+	uint16_t gddr6_mr1; // raw data
+	struct { uint16_t
+	drive_stren  :1-0 +1, // 0=Auto Cal. (60/40), 1=AC (48/40). 2,3 vndr spec
+	data_term    :3-2 +1, // 0=disabled 1=60ohm 2=120ohm 3=48ohm
+	PLLDLL_range :5-4 +1, // min-to-max WCK freq, vendor specific
+	Cal_Upd      :6-6 +1, // Auto Calibration Engine, 0=enabled.
+	PLL_DLL      :7-7 +1, // 0=disabled 1=enabled
+	RDBI         :8-8 +1, // Data Bus Inversion, for reads.   0=enabled
+	WDBI         :9-9 +1, // Data Bus Inversion, for writes.  1=disabled
+	CABI        :10-10 +1, // Command-address bus inversion.  0=enabled
+	PLLDLL_reset:14-11 +1, // 1 = reset. self-clears after reset.
+	ID          :15-12 +1; // MR 1
+	};
+};
+
+union gddr6_mr2 {
+	uint16_t gddr6_mr2; // raw data
+	struct { uint16_t
+	OCD_up       :2-0 +1, // output driver pullup offset. 0=0 with Two's Compl.
+	OCD_down     :5-3 +1, // pulldown. See JES250D Figure 33.
+	self_refresh :7-6 +1, // 0=32ms, 1-2 vendor specific, 3=temp controlled
+	EDC_mode     :8-8 +1, // 0=full data rate, 1=half
+	RDQS         :9-9 +1, // 1 = EDC pins will act as RDQS; no CRC.
+	CADT_SRF    :10-10 +1, // Self refesh while CA training
+	EDC_HR      :11-11 +1, // EDC hold data rate 0=full, 1=half
+	ID          :15-12 +1; // MR 2
+	};
+};
+
+union gddr6_mr3 {
+	uint16_t gddr6_mr3; // raw data
+	struct { uint16_t
+	dataWCK_term_offset :2-0 +1, // DQ, DBI and WCK termination offset.
+	CA_term_offset      :5-3 +1, // command address. See MR2.
+	DRAM_info           :7-6 +1, // 0=off 1=vndr ID1 2=temperature 3=vndr ID2
+	WR_scaling          :9-8 +1, // 1x 2x 3x value of MR8 OP9 and MR0 OP[11:8]
+	bank_groups        :11-10 +1, // 0,1=off, 2=on tCCDL=4, 3=on tCCDL=3
+	ID                 :15-12 +1; // MR 3
+	};
 };
 
 
-struct gddr6_mr2 {
-	uint16_t OCD_up   : 3; // output driver pullup offset. Has Two's Complement
-	uint16_t OCD_down : 3; // pulldown. vndr speific. -=decrease +=increase
-}
+union gddr6_mr4 {
+	uint16_t gddr6_mr4; // raw data
+	struct { uint16_t
+	EDC_hold_pattern :3-0 +1, // little-endian. pattern during EDC idle
+	CRCWL            :6-4 +1, // 15,16,RFU,10,11..21,RFU. See MR12 OP4
+	CRCRL            :8-7 +1, // CRC latency for reads. 4,1,2,3.
+	RDCRC            :9-9 +1, // read CRC 0=enable
+	WRCRC           :10-10 +1, // write CRC 0=enable
+	EDC_hold_invert :11-11 +1, // 0 = EDC hold pattern not inverted
+	ID              :15-12 +1; // MR 4
+	};
+};
+
+union gddr6_mr5 {
+	uint16_t gddr6_mr5; // raw data
+	struct { uint16_t
+	LP1       :0-0 +1, // 0=off, Low Power Mode 1, relax several core parameters
+	LP2       :1-1 +1, // WCK recievers turned off during powerdown.
+	LP3       :2-2 +1, // no read, write training, and temp measure during REFab
+	PLLDLL_BW :5-3 +1, // PLL/DLL bandwidth. All except 0 vendor specific
+	RAS      :11-6 +1, // 0,1,2...63. tRAS for auto precharge
+	ID       :15-12 +1; // MR 5
+	};
+};
+
+union gddr6_mr6 {
+	uint16_t gddr6_mr6; // raw data
+	struct { uint16_t
+	VREFD_level  :6-0 +1, // 0.005x steps of VDDQ, from 0=0.49x to 95=0.965x
+	pin_subaddr :11-7 +1, // which pin to configure the VREFD for. See JESD250
+	ID       :15-12 +1; // MR 6
+	};
+};
+
+union gddr6_mr7 {
+	uint16_t gddr6_mr7; // raw data
+	struct { uint16_t
+	WCK2CK_AP       :0-0 +1, // WCK alignment point. 0=inside 1=at balls
+	hibernate       :1-1 +1, // 1=Hibernate Self Refresh mode. self clearing
+	PLL_delay_comp  :2-2 +1, // 1=PLL feedback delay equiv. to WCK clock tree
+	low_freq_mode   :3-3 +1, // 1=reduce power of input RX, clock trees
+	WCK2CK_autosync :4-4 +1, // 1=auto sync, reduces WCK2CK MRS to 2.
+	DQ_preamble     :5-5 +1, // 1=preamble on DQ, DBI_n for gapped reads.
+	half_VREFC      :6-6 +1, // 0=0.7x VDDQ, 1=0.5x See MR6, MR9
+	half_VREFD      :7-7 +1, // 0=programmed VREFD,DFE. 1=0.5x VDDQ. See MR6,MR9
+	VDD_range       :9-8 +1, // 0>1>2>3. Adapt to lower VDD voltages
+	WCK_DCC        :11-10 +1, //Duty Cycle Correction 0=off,1=start,2=RFU,3=hold
+	ID             :15-12 +1; // MR 7
+	};
+};
+
+union gddr6_mr8 {
+	uint16_t gddr6_mr8; // raw data
+	struct { uint16_t
+	CA_low_term  :1-0 +1, // 0=disable, 1=60ohm, 2=120ohm, 3=rsvd. For CA[3:0]
+	CA_high_term :3-2 +1, // For CA[10:4]
+	CA_TO        :4-4 +1, // Command Address Termination Override, using CAL,CAH
+	EDC_hiZ      :5-5 +1, // 1=Hi-Z state. Precidence over all other states.
+	CK_auto_cal  :6-6 +1, // 0=auto calib. during REFab disabled, 1=enabled
+	REFpb        :7-7 +1, // 0=per-bank, 1=per-2-bank
+	RL_EHF       :8-8 +1, // Extends RLmrs of MR0 from 4 to 5 bits.
+	WR_EHF       :9-9 +1, // Extends WRmrs of MR0 from 4 to 5 bits.
+	CK_term     :11-10 +1, // 0=reset, 1=60ohm,2=120-ohm, 3=disabled
+	ID          :15-12 +1; // MR 8
+	};
+};
+
+union gddr6_mr9 {
+	uint16_t gddr6_mr9; // raw data
+	struct { uint16_t
+	DFE          :3-0 +1, // 0=off, in steps of +-0.5% VDDQ or 7mV
+	RFU          :6-4 +1, // reserved
+	pin_subaddr :11-7 +1, // see JESD250
+	ID       :15-12 +1; // MR 9
+	};
+};
+
+union gddr6_mr10 {
+	uint16_t gddr6_mr10; // raw data
+	struct { uint16_t
+	VREFC_offset  :3-0 +1, // CA bus. Two's Complement? 0b1000=0 is a typo?
+	WCK_inv_byte0 :5-4 +1, // for WCK2CK training. 0=0, 1=90 deg, 2=180, 3=270
+	WCK_inv_byte1 :7-6 +1, // B1 on chan A, B0 on chan B ignored if WCK/word
+	WCK2CK        :8-8 +1, // 1=enable WCK2CK alignment training
+	WCK_ratio     :9-9 +1, // 0=half data rate, 1=full data rate
+	WCK_term     :11-10 +1, // 0=disabled, 1=60 ohm, 2=120, 3=reserved
+	ID       :15-12 +1; // MR 10
+	};
+};
+
+union gddr6_mr11 {
+	uint16_t gddr6_mr11; // raw data
+	// 0=refresh enabled 1=refresh blocked for paticular segment or banks
+	struct { uint16_t
+	PASR_2bank_mask  :7-0 +1, // 1=banks0,1; 2=2,3; 4=4,5; 8=6,7 .. 128=14,15
+	PASR_rowseg_mask:11-8 +1, // two MSB of row addr. 0=00;2=01;4=10;8=11 15=all
+	ID       :15-12 +1; // MR 11
+	};
+};
+
+union gddr6_mr12 {
+	uint16_t gddr6_mr12; // raw data
+	struct { uint16_t
+	VDDQ_off  :0-0 +1, // 0=disabled. For Hibernate Self Refresh
+	P2BR_addr :1-1 +1, // 0=LSB/BA0 1=MSB/BA3. Select "Dont Care" for REFp2b
+	PRBS      :2-2 +1, // 0=disabled Psudorandom bit stream instead of EDC hold
+	RL_EHF2   :3-3 +1, // Extends RLmrs from 5 bits to 6 bits. See MR0, MR8
+	CRCWL_EHF :4-4 +1, // Extends CRCWL from 3 bits to 4 bits. See MR4.
+	WR_EHF2   :5-5 +1, // Extends WRmrs from 5 bits to 6 bits. See MR0, MR8
+	RFU      :11-6 +1, // reserved.
+	ID       :15-12 +1; // MR 12
+	};
+};
+
+union gddr6_mr13 {
+	uint16_t gddr6_mr13; // raw data
+	struct { uint16_t
+	vendor_specific :11-0 +1, // vendor specific features.
+	ID              :15-12 +1; // MR 13
+	};
+};
+
+union gddr6_mr14 {
+	uint16_t gddr6_mr14; // raw data
+	struct { uint16_t
+	vendor_specific :11-0 +1, // vendor specific features.
+	ID              :15-12 +1; // MR 14
+	};
+};
+
+union gddr6_mr15 {
+	uint16_t gddr6_mr15; // raw data
+	struct { uint16_t
+	MRS_to_chan_A :0-0 +1, // MRS access to the two channels for indiv. config
+	MRS_to_chan_B :1-1 +1, // 0=unblocked 1=blocked
+	CA_training   :3-2 +1, // 0=off 1=on rising of CK, 2=falling, 3=CABI_n,CA10
+	unused        :11-4 +1, // defined to be absent
+	ID            :15-12 +1; // MR 15
+	};
+};
