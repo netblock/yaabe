@@ -1,6 +1,9 @@
 // Please refer to JESD 250. If unavailable consider,
 // 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
 
+#pragma pack(1) // bios data
+
+
 union gddr6_mr0 {
 	uint16_t gddr6_mr0; // raw data
 	struct { uint16_t
