@@ -3202,19 +3202,16 @@ struct atom_vram_module_v10 {
 	uint8_t   refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t   vram_flags;       // bit0= bankgroup enable
 	uint8_t   vram_rsd2;        // reserved
-	uint16_t  gddr6_mr10;       // gddr6 mode register10 value
-	union {
-		union gddr6_mr0 gddr6_mr0;
-		uint16_t gddr6_mr1_raw; // gddr6 mode register1 value
-	};
-	union {
-		union gddr6_mr2 gddr6_mr2;
-		uint16_t gddr6_mr2_raw; // gddr6 mode register2 value
-	};
-	union {
-		union gddr6_mr7 gddr6_mr7;
-		uint16_t gddr6_mr7_raw; // gddr6 mode register7 value
-	};
+
+	union gddr6_mr10 gddr6_mr10;
+	//uint16_t  gddr6_mr10;     // gddr6 mode register10 value
+	union gddr6_mr1 gddr6_mr1;
+	//uint16_t gddr6_mr1;       // gddr6 mode register1 value
+	union gddr6_mr2 gddr6_mr2;
+	//uint16_t gddr6_mr2;       // gddr6 mode register2 value
+	union gddr6_mr7 gddr6_mr7;
+	//uint16_t gddr6_mr7;       // gddr6 mode register7 value
+
 	char dram_pnstring[20];     // part number end with '0'
 };
 
@@ -3252,34 +3249,22 @@ struct atom_vram_module_v11 {
 	uint8_t   refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t   vram_flags;       // bit0= bankgroup enable
 	uint8_t   vram_rsd2;        // reserved
-	union {
-		union gddr6_mr10 gddr6_mr10;
-		uint16_t gddr6_mr10;    // gddr6 mode register10 value
-	};
-	union {
-		union gddr6_mr0 gddr6_mr0;
-		uint16_t gddr6_mr0;     // gddr6 mode register0 value
-	};
-	union {
-		union gddr6_mr1 gddr6_mr1;
-		uint16_t gddr6_mr1;     // gddr6 mode register1 value
-	};
-	union {
-		union gddr6_mr2 gddr6_mr2;
-		uint16_t gddr6_mr2;     // gddr6 mode register2 value
-	};
-	union {
-		union gddr6_mr4 gddr6_mr4;
-		uint16_t gddr6_mr4;     // gddr6 mode register4 value
-	};
-	union {
-		union gddr6_mr7 gddr6_mr7;
-		uint16_t gddr6_mr7;     // gddr6 mode register7 value
-	};
-	union {
-		union gddr6_mr8 gddr6_mr8;
-		uint16_t gddr6_mr8;     // gddr6 mode register8 value
-	};
+
+	union gddr6_mr10 gddr6_mr10;
+	//uint16_t gddr6_mr10;        // gddr6 mode register10 value
+	union gddr6_mr0 gddr6_mr0;
+	//uint16_t gddr6_mr0;         // gddr6 mode register0 value
+	union gddr6_mr1 gddr6_mr1;
+	//uint16_t gddr6_mr1;         // gddr6 mode register1 value
+	union gddr6_mr2 gddr6_mr2;
+	//uint16_t gddr6_mr2;         // gddr6 mode register2 value
+	union gddr6_mr4 gddr6_mr4;
+	//uint16_t gddr6_mr4;         // gddr6 mode register4 value
+	union gddr6_mr7 gddr6_mr7;
+	//uint16_t gddr6_mr7;         // gddr6 mode register7 value
+	union gddr6_mr8 gddr6_mr8;
+	//uint16_t gddr6_mr8;         // gddr6 mode register8 value
+
 	char    dram_pnstring[40];  // part number end with '0'.
 };
 

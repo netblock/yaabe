@@ -168,6 +168,12 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 };
 
+struct atui_nullstruct {
+	// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
+	// relevant for that branch.
+	void* leaves; 
+};
+
 
 PPATUI_HEADERIFY(atom_common_table_header);
 

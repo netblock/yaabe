@@ -88,7 +88,7 @@ union gddr6_mr6 {
 	struct { uint16_t
 	VREFD_level  :6-0 +1, // 0.005x steps of VDDQ, from 0=0.49x to 95=0.965x
 	pin_subaddr :11-7 +1, // which pin to configure the VREFD for. See JESD250
-	ID       :15-12 +1; // MR 6
+	ID          :15-12 +1; // MR 6
 	};
 };
 
@@ -131,7 +131,7 @@ union gddr6_mr9 {
 	DFE          :3-0 +1, // 0=off, in steps of +-0.5% VDDQ or 7mV
 	RFU          :6-4 +1, // reserved
 	pin_subaddr :11-7 +1, // see JESD250
-	ID       :15-12 +1; // MR 9
+	ID          :15-12 +1; // MR 9
 	};
 };
 
@@ -144,7 +144,7 @@ union gddr6_mr10 {
 	WCK2CK        :8-8 +1, // 1=enable WCK2CK alignment training
 	WCK_ratio     :9-9 +1, // 0=half data rate, 1=full data rate
 	WCK_term     :11-10 +1, // 0=disabled, 1=60 ohm, 2=120, 3=reserved
-	ID       :15-12 +1; // MR 10
+	ID           :15-12 +1; // MR 10
 	};
 };
 
@@ -154,7 +154,7 @@ union gddr6_mr11 {
 	struct { uint16_t
 	PASR_2bank_mask  :7-0 +1, // 1=banks0,1; 2=2,3; 4=4,5; 8=6,7 .. 128=14,15
 	PASR_rowseg_mask:11-8 +1, // two MSB of row addr. 0=00;2=01;4=10;8=11 15=all
-	ID       :15-12 +1; // MR 11
+	ID              :15-12 +1; // MR 11
 	};
 };
 
