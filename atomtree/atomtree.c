@@ -262,6 +262,9 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	vi24->mem_clk_patch.leaves = (void*)vi24->leaves +
 		vi24->leaves->mem_clk_patch_tbloffset;
 	atomtree_populate_umc_init_reg_block(atree, &(vi24->mem_clk_patch));
+	vi24->navi1_gddr6_timings = (struct umc_block_navi1_timings*)\
+		vi24->mem_clk_patch.umc_reg_setting_list[0]; 
+	vi24->num_timing_straps = &(vi24->mem_clk_patch.umc_reg_setting_list_size);
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi24->mc_adjust_pertile.leaves = (void*)vi24->leaves +
@@ -299,6 +302,10 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 			ATUI_MAKE_BRANCH(atom_umc_reg_setting_data_block,
 				&(vi24->mem_clk_patch),
 				vi24->mem_clk_patch.umc_reg_setting_list[0],
+				0,NULL
+			),
+			ATUI_MAKE_BRANCH(umc_block_navi1_timings,
+				NULL, vi24->mem_clk_patch.umc_reg_setting_list[19],
 				0,NULL
 			),
 

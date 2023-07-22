@@ -52,27 +52,27 @@ uint64_t strtoll_2(const char* str) {
 
 
 int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
-    int err = 0;
+	int err = 0;
 
-    if(leaf->type & ATUI_ANY) {
-        atui_leaf_set_val(leaf, strtoll_2(buffer));
+	if(leaf->type & ATUI_ANY) {
+		atui_leaf_set_val(leaf, strtoll_2(buffer));
 
-    } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
-            leaf->total_bits == 8) {
+	} else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
+			leaf->total_bits == 8) {
 		uint8_t size = leaf->array_size;
 		uint8_t i;
 		for(i=0; i<size; i++)
 		   leaf->u8[i] = buffer[i];
 		//leaf->u8[i-1] = '\0';
-    } else {
-        err = 1;
-    }
-    return err;
+	} else {
+		err = 1;
+	}
+	return err;
 }
 int atui_get_to_text(atui_leaf* leaf, char* buffer) {
-    int err = 0;
+	int err = 0;
 
-    if(leaf->type & ATUI_ANY) {
+	if(leaf->type & ATUI_ANY) {
 		uint64_t val = atui_leaf_get_val(leaf);
 		if ((leaf->type&ATUI_ANY) == ATUI_DEC) {
 			sprintf(buffer, "%u", val);
@@ -86,16 +86,16 @@ int atui_get_to_text(atui_leaf* leaf, char* buffer) {
 			sprintf(buffer, format, val);
 		}
 
-    } else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
-            leaf->total_bits == 8) {
-        uint8_t i = leaf->array_size;
+	} else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
+			leaf->total_bits == 8) {
+		uint8_t i = leaf->array_size;
 		buffer[i] = '\0'; // for strings
-        while (i--)
-            buffer[i] = leaf->u8[i];
-    } else {
-        err = 1;
-    }
-    return err;
+		while (i--)
+			buffer[i] = leaf->u8[i];
+	} else {
+		err = 1;
+	}
+	return err;
 }
 
 
@@ -199,8 +199,8 @@ PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
 
 )
 _PPATUI_FANCY_##fancytype(\
-        bios->var, var, name, desdat, radix, fancytype, __VA_ARGS__\
-    )
+		bios->var, var, name, desdat, radix, fancytype, __VA_ARGS__\
+	)
 */
 
 		//atom_tree, // to satisfy atomtree->leaves.
@@ -395,14 +395,25 @@ vim search-replace translation patters, from ddrmoderegisters.h to ppatui
 '<,'>s/mr0/mr1/g
 
 vim q recording:
+union bitfields:
+'<,'>s/union/PPATUI_FUNCIFY(union,/
+'<,'>s/union, .* {/\0, atui_nullstruct,/
+'<,'>s/ {,/,/
 '<,'>s/;/,/g
-'<,'>s/-/,/
+'<,'>s/uint32_t .*,/(\0 \0/
+'<,'>s/uint32_t //g
+'<,'>s/struct { uint32_t/\t(ATUI_BIN, ATUI_BITFIELD, (/
+'<,'>s/\n    /\r\t/
+'<,'>s/\n\t    /\r\t\t/
+'<,'>s/\t\t[a-z,A-Z,0-9,_]\+ \+:/(\0/
+'<,'>s/(\t\t/\t\t\t(/
 '<,'>s/ \+:/,\0/
-'<,'>s/:/ /
-'<,'>s/    /\t\t\t(/
+'<,'>s/://
+'<,'>s/-/,/
 '<,'>s/ +1,.*\n/, ATUI_DEC, (ATUI_NODESCR)),\r/
-'<,'>s/,\n\n/\r/
+'<,'>s/,\n\t},\n},/\r\t\t)), (ATUI_NODESCR)\r\t)\r)/
 */
+
 
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(gddr6_mr0, gddr6_mr0,
@@ -415,10 +426,12 @@ PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
+
+
 PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
 	(gddr6_mr1, gddr6_mr1,
 		(ATUI_BIN, ATUI_BITFIELD, (
-    		(drive_stren,   1,0, ATUI_DEC, (ATUI_NODESCR)),
+			(drive_stren,   1,0, ATUI_DEC, (ATUI_NODESCR)),
 			(data_term,     3,2, ATUI_DEC, (ATUI_NODESCR)),
 			(PLLDLL_range,  5,4, ATUI_DEC, (ATUI_NODESCR)),
 			(Cal_Upd,       6,6, ATUI_DEC, (ATUI_NODESCR)),
@@ -599,6 +612,300 @@ PPATUI_FUNCIFY(union, gddr6_mr15, atui_nullstruct,
 )
 
 
+
+
+PPATUI_FUNCIFY(union, DRAMTiming1, atui_nullstruct,
+	(DRAMTiming1, DRAMTiming1,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tCL,     5, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,   7, 6, ATUI_DEC, (ATUI_NODESCR)),
+			(tRAS,   14, 8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,  15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(tRCDRD, 21,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,  23,22, ATUI_DEC, (ATUI_NODESCR)),
+			(tRCDWR, 29,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd3,  31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming2, atui_nullstruct,
+	(DRAMTiming2, DRAMTiming2,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRC_S,  7, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(tRC_L, 15, 8, ATUI_DEC, (ATUI_NODESCR)),
+			(tRP_S, 21,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0, 23,22, ATUI_DEC, (ATUI_NODESCR)),
+			(tRP_L, 29,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1, 31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming3, atui_nullstruct,
+	(DRAMTiming3, DRAMTiming3,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRRD_S,  4,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,   7,5, ATUI_DEC, (ATUI_NODESCR)),
+			(tRRD_L, 12,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,  23,13, ATUI_DEC, (ATUI_NODESCR)),
+			(tRTP,   28,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,  31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming4, atui_nullstruct,
+	(DRAMTiming4, DRAMTiming4,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tFAW,   6,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,   7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(t32AW, 16,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,  31,17, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming5, atui_nullstruct,
+	(DRAMTiming5, DRAMTiming5,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tWL,    5,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(tWTRS, 12,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1, 15,13, ATUI_DEC, (ATUI_NODESCR)),
+			(tWTRL, 22,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2, 31,23, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming6, atui_nullstruct,
+	(DRAMTiming6, DRAMTiming6,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tWR,    6,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0, 31,7, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming7, atui_nullstruct,
+	(DRAMTiming7, DRAMTiming7,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(PPD,      2,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,    3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(tCRCRL,   6,4, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,    7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(tRREFD,  13,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,   14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(tCRCWL,  19,15, ATUI_DEC, (ATUI_NODESCR)),
+			(tRCPAGE, 31,20, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct,
+	(DRAMTiming8, DRAMTiming8,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRDRD_DD,   3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,      7,4, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDRD_SD,  11,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,     15,12, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDRD_SC,  19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,     23,20, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDRD_SCL, 27,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd3,     29,28, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDRD_BAN, 31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming9, atui_nullstruct,
+	(DRAMTiming9, DRAMTiming9,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tWRWR_MW,   4,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,     15,5, ATUI_DEC, (ATUI_NODESCR)),
+			(tWRWR_SC,  19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,     23,20, ATUI_DEC, (ATUI_NODESCR)),
+			(tWRWR_SCL, 29,24, ATUI_DEC, (ATUI_NODESCR)),
+			(tWRWR_BAN, 31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming10, atui_nullstruct,
+	(DRAMTiming10, DRAMTiming10,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tWRRD,       3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,       7,4, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDWR,      13,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,      15,14, ATUI_DEC, (ATUI_NODESCR)),
+			(RDRspDelay, 21,16, ATUI_DEC, (ATUI_NODESCR)),
+			(tREFTTAdj,  28,17, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,      31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming12, atui_nullstruct,
+	(DRAMTiming12, DRAMTiming12,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tREFI, 15,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0, 31,16, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming13, atui_nullstruct,
+	(DRAMTiming13, DRAMTiming13,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tMRD,   5,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(tMOD,  13,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1, 31,14, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming14, atui_nullstruct,
+	(DRAMTiming14, DRAMTiming14,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tXS,   10,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0, 15,11, ATUI_DEC, (ATUI_NODESCR)),
+			(tDLLK, 26,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1, 31,27, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming15, atui_nullstruct,
+	(DRAMTiming15, DRAMTiming15,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(AlertCrcDly,  6,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(AlertParDly, 14,8, ATUI_DEC, (ATUI_NODESCR)),
+			(PL,          18,15, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,       22,19, ATUI_DEC, (ATUI_NODESCR)),
+			(RankBusyDly, 29,23, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,       31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming16, atui_nullstruct,
+	(DRAMTiming16, DRAMTiming16,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tXSMRS, 10,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  31,11, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming17, atui_nullstruct,
+	(DRAMTiming17, DRAMTiming17,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tPD,           4,0, ATUI_DEC, (ATUI_NODESCR)),
+			(tCKSRE,        10,5, ATUI_DEC, (ATUI_NODESCR)),
+			(tCKSRX,        16,11, ATUI_DEC, (ATUI_NODESCR)),
+			(PwrDownDly,    24,17, ATUI_DEC, (ATUI_NODESCR)),
+			(AggPwrDownDly, 30,25, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,         31,31, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming20, atui_nullstruct,
+	(DRAMTiming20, DRAMTiming20,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRFCSB, 10,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  15,11, ATUI_DEC, (ATUI_NODESCR)),
+			(tSTAG,  23,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,  31,24, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
+	(DRAMTiming21, DRAMTiming21,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tXP,     5,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  15,6, ATUI_DEC, (ATUI_NODESCR)),
+			(tCPDED, 19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,  23,20, ATUI_DEC, (ATUI_NODESCR)),
+			(tCKE,   28,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,  31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
+	(DRAMTiming22, DRAMTiming22,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRDDATA_EN,   6,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(tPHY_WRLAT,  13,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,       16,14, ATUI_DEC, (ATUI_NODESCR)),
+			(tPHY_RDLAT,  22,17, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,       24,23, ATUI_DEC, (ATUI_NODESCR)),
+			(tPHY_WRDATA, 27,25, ATUI_DEC, (ATUI_NODESCR)),
+			(tPARIN_LAT,  29,28, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd3,       31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming23, atui_nullstruct,
+	(DRAMTiming23, DRAMTiming23,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(LpDly,      5,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,      7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(LpExitDly,  13,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,      15,14, ATUI_DEC, (ATUI_NODESCR)),
+			(CKESTAGDLY, 19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd3,      31,20, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming34, atui_nullstruct,
+	(DRAMTiming34, DRAMTiming34,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tPhyupd_resp, 3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(tRDEDC_EN,    10,4, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,        11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(tWREDC_EN,    18,12, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,        31,19, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct,
+	(DRAMTiming35, DRAMTiming35,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(ReceiverWait, 10,0, ATUI_DEC, (ATUI_NODESCR)),
+			(CmdStageCnt,  21,11, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,        23,22, ATUI_DEC, (ATUI_NODESCR)),
+			(tWRMPR,       29,24, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,        31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct,
+	(DRAMTiming36, DRAMTiming36,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tWTRTR,     5,0, ATUI_DEC, (ATUI_NODESCR)),
+			(tREFTR,     11,6, ATUI_DEC, (ATUI_NODESCR)),
+			(tTTROW,     17,12, ATUI_DEC, (ATUI_NODESCR)),
+			(tLDTLD,     23,18, ATUI_DEC, (ATUI_NODESCR)),
+			(tUPDN,      29,24, ATUI_DEC, (ATUI_NODESCR)),
+			(tREFTR_MSB, 30,30, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,      31,31, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, TRFCTimingCS01, atui_nullstruct,
+	(TRFCTimingCS01, TRFCTimingCS01,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(tRFC,  10,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0, 31,11, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
+	(ChanPipeDly, ChanPipeDly,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(TXCtrlChanDly, 2,0, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,         3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(TXDataChanDly, 6,4, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd1,         7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(RXDataChanDly, 10,8, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd2,        31,11, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+
+
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
 		atomtree_vram_info_header_v2_4,
 
@@ -725,6 +1032,161 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10,
 		(ATUI_NODESCR)
 	)
 )
+
+/*
+for structs, vim record:
+
+'<,'>s/struct .* {\n/PPATUI_FUNCIFY(\0/
+'<,'>s/PPATUI_FUNCIFY(struct/PPATUI_FUNCIFY(struct,/
+'<,'>s/PPATUI_FUNCIFY(struct, .* {/\0, atui_nullstruct,/
+'<,'>s/ {,/,/
+'<,'>s://.*\n:\r:
+'<,'>s/\n    /\r\t/
+'<,'>s/\(union\|struct\) .*;/(\0,\r\t\t(ATUI_NODISPLAY, ATUI_INLINE,\0),\r\t\t(ATUI_NODESCR)\r\t),/
+'<,'>s/(\(union\|struct\) \<.*\> /(/
+'<,'>s/ATUI_INLINE,\(union\|struct\) /ATUI_INLINE, /
+'<,'>s/ATUI_INLINE.*;/\0!!!/
+'<,'>s/ \+[A-Z,a-z,0-9,_]\+;!!!),/)./
+'<,'>s/u\?int[0-9]\+_t .*;/(\0,\r\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\r\t),/
+'<,'>s/(u\?int[0-9]\+_t /(/
+'<,'>s/(.*;,/\0\0/
+'<,'>s/;,(/, /
+'<,'>s/;,/, /
+'<,'>s/),\n};/)\r)/
+
+*/
+
+PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atui_nullstruct,
+	( block_id,  block_id, 
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODESCR)
+	), 
+
+	(gddr6_mr5.gddr6_mr5, gddr6_mr5, 
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr5),
+		(ATUI_NODESCR)
+	),
+	(gddr6_mr5.reserved, gddr6_mr5_reserved, 
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(gddr6_mr0.gddr6_mr0, gddr6_mr0, 
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr0),
+		(ATUI_NODESCR)
+	),
+	(gddr6_mr0.reserved, gddr6_mr0_reserved, 
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(UMCCTRL_PMG_CMD_EMRS, UMCCTRL_PMG_CMD_EMRS, 
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(gddr6_mr4.gddr6_mr4, gddr6_mr4, 
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr4),
+		(ATUI_NODESCR)
+	),
+	(gddr6_mr4.reserved, gddr6_mr4_reserved, 
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(gddr6_mr8.gddr6_mr8, gddr6_mr8, 
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr8),
+		(ATUI_NODESCR)
+	),
+	(gddr6_mr8.reserved, gddr6_mr8_reserved, 
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(DRAMTiming1, DRAMTiming1, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming1),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming2, DRAMTiming2, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming2),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming3, DRAMTiming3, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming3),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming4, DRAMTiming4, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming4),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming5, DRAMTiming5, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming5),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming6, DRAMTiming6, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming6),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming7, DRAMTiming7, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming7),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming8, DRAMTiming8, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming8),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming9, DRAMTiming9, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming9),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming10, DRAMTiming10, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming10),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming12, DRAMTiming12, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming13, DRAMTiming13, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming13),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming14, DRAMTiming14, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming16, DRAMTiming16, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming16),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming17, DRAMTiming17, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming17),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming20, DRAMTiming20, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming20),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming21, DRAMTiming21, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming21),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming22, DRAMTiming22, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming22),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming23, DRAMTiming23, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming23),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming35, DRAMTiming35, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming35),
+		(ATUI_NODESCR)
+	),
+	(DRAMTiming36, DRAMTiming36, 
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming36),
+		(ATUI_NODESCR)
+	),
+	(tRFC, tRFC, 
+		(ATUI_NODISPLAY, ATUI_INLINE, TRFCTimingCS01),
+		(ATUI_NODESCR)
+	),
+	(ChanPipeDly, ChanPipeDly, 
+		(ATUI_NODISPLAY, ATUI_INLINE, ChanPipeDly),
+		(ATUI_NODESCR)
+	)
+)
+
 
 
 

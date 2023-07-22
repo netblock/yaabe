@@ -12,7 +12,7 @@ vim record:
 '<,'>s/struct/\tuint32_t
 '<,'>s/uint32_t .* {/\0{{{/
 '<,'>s/ {{{{/;\r\tstruct { uint32_t/
-'<,'>s/uint32_t .*:/\t{{}}\0/                                                  
+'<,'>s/uint32_t .*:/\t{{}}\0/                                                 
 '<,'>s/\t\t{{}}uint32_t /\t\t/
 '<,'>s/: /:/
 '<,'>s/:.*;/\0 +1,/
@@ -31,7 +31,7 @@ vim record:
 
 union DRAMTiming1 {
 	uint32_t DRAMTiming1;
-	struct { uint32_t 
+	struct { uint32_t
 		tCL     :5-0 +1,
 		rsvd0   :7-6 +1,
 		tRAS   :14-8 +1,
@@ -45,7 +45,7 @@ union DRAMTiming1 {
 
 union DRAMTiming2 {
 	uint32_t DRAMTiming2;
-	struct { uint32_t 
+	struct { uint32_t
 		tRC_S  :7-0 +1, // per-bank
 		tRC_L :15-8 +1, // all-bank?
 		tRP_S :21-16 +1,
@@ -57,7 +57,7 @@ union DRAMTiming2 {
 
 union DRAMTiming3 {
 	uint32_t DRAMTiming3;
-	struct { uint32_t 
+	struct { uint32_t
 		tRRD_S  :4-0 +1,
 		rsvd0   :7-5 +1,
 		tRRD_L :12-8 +1,
@@ -69,18 +69,18 @@ union DRAMTiming3 {
 
 union DRAMTiming4 {
 	uint32_t DRAMTiming4;
-	struct { uint32_t 
+	struct { uint32_t
 		tFAW   :6-0 +1,
-		Pad0   :7-7 +1,
+		rsvd0  :7-7 +1,
 		t32AW :16-8 +1,
-		Pad1  :31-17 +1; //1, tFAWSLR:6, 1, tFAWDLR:6, 1
+		rsvd1 :31-17 +1; //1, tFAWSLR:6, 1, tFAWDLR:6, 1
 	};
 };
 
 
 union DRAMTiming5 {
 	uint32_t DRAMTiming5;
-	struct { uint32_t 
+	struct { uint32_t
 		tWL    :5-0 +1,
 		rsvd0  :7-6 +1,
 		tWTRS :12-8 +1,
@@ -92,7 +92,7 @@ union DRAMTiming5 {
 
 union DRAMTiming6 {
 	uint32_t DRAMTiming6;
-	struct { uint32_t 
+	struct { uint32_t
 		tWR    :6-0 +1,
 		rsvd0 :31-7 +1; //what are you hiding...
 	};
@@ -100,7 +100,7 @@ union DRAMTiming6 {
 
 union DRAMTiming7 {
 	uint32_t DRAMTiming7;
-	struct { uint32_t 
+	struct { uint32_t
 		PPD      :2-0 +1,
 		rsvd0    :3-3 +1,
 		tCRCRL   :6-4 +1,
@@ -118,7 +118,7 @@ union DRAMTiming7 {
 // A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle.
 union DRAMTiming8 {
 	uint32_t DRAMTiming8;
-	struct { uint32_t 
+	struct { uint32_t
 		tRDRD_DD   :3-0 +1, // Different DIMM
 		rsvd0      :7-4 +1,
 		tRDRD_SD  :11-8 +1, // Same DIMM
@@ -133,7 +133,7 @@ union DRAMTiming8 {
 
 union DRAMTiming9 {
 	uint32_t DRAMTiming9;
-	struct { uint32_t 
+	struct { uint32_t
 		tWRWR_MW   :4-0 +1, // masked write; GDDR
 		rsvd0     :15-5 +1,
 		tWRWR_SC  :19-16 +1,
@@ -162,7 +162,7 @@ union DRAMTiming9_DDR4 {
 
 // tWRRD and tRDWR also follows the 'last clock of virtual CAS'.
 // LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD.
-// LD is about making sure one burst happens after the other. 
+// LD is about making sure one burst happens after the other.
 // And x and y follow the 'last clock of virtual CAS' and are about making sure
 // the data bus is stable.
 union DRAMTiming10 {
@@ -176,7 +176,7 @@ union DRAMTiming10 {
 		tREFTTAdj  :28-17 +1, // was tREFTT; a typo? tREFTR is a GDDR6 timing
 		rsvd2      :31-29 +1;
 	};
-}; 
+};
 union DRAMTiming10_DDR4 {
 	uint32_t DRAMTiming10_DDR4;
 	struct { uint32_t
@@ -250,7 +250,7 @@ union DRAMTiming15 {
 		rsvd0        :7-7 +1,
 		AlertParDly :14-8 +1, // Parity error
 		PL          :18-15 +1, // Cmd/Addr Parity Latency. See DDR4 MR5
-		rsvd1       :22-19 +1, 
+		rsvd1       :22-19 +1,
 		RankBusyDly :29-23 +1, // max of CRC/ECC alert delays
 		rsvd2       :31-30 +1;
 	};
@@ -284,7 +284,7 @@ union DRAMTiming20 {
 		tSTAG  :23-16 +1, // ref-to-ref different rank
 		rsvd1  :31-24 +1;
 	};
-}; 
+};
 
 union DRAMTiming21 {
 	uint32_t DRAMTiming21;
@@ -317,7 +317,7 @@ union DRAMTiming23 {
 	uint32_t DRAMTiming23;
 	struct { uint32_t
 		LpDly      :5-0 +1, // hysteresis before placing PHY into low power
-		rsvd0      :7-6 +1, 
+		rsvd0      :7-6 +1,
 		LpExitDly  :13-8 +1, // min memclk before taking a rank out of powerdown
 		rsvd1      :15-14 +1,
 		CKESTAGDLY :19-16 +1,
@@ -329,13 +329,13 @@ union DRAMTiming23_DDR4 {
 	uint32_t DRAMTiming23_DDR4;
 	struct { uint32_t
 		LpDly      :5-0 +1, // hysteresis before placing PHY into low power
-		rsvd0      :7-6 +1, 
+		rsvd0      :7-6 +1,
 		LpExitDly  :13-8 +1, // min memclk before taking a rank out of powerdown
 		rsvd1      :23-14 +1,
 		tGearSetup :26-24 +1,  // GDM I believe
-		rsvd4      :27-27 +1, 
-		tGearHold  :30-28 +1, 
-		rsvd5      :31-31 +1; 
+		rsvd4      :27-27 +1,
+		tGearHold  :30-28 +1,
+		rsvd5      :31-31 +1;
 	};
 };
 
@@ -411,26 +411,27 @@ union ChanPipeDly {
 
 struct UMCCTRL_MISC2 {
 	union gddr6_mr5 gddr6_mr5;
-	uint16_t rsvd0;
+	uint16_t reserved;
 };
 struct UMCCTRL_PMG_CMD_MRS {
 	union gddr6_mr0 gddr6_mr0;
-	uint16_t rsvd0;
+	uint16_t reserved;
 };
 struct UMCCTRL_PMG_CMD_MRS1 {
 	union gddr6_mr4 gddr6_mr4;
-	uint16_t rsvd0;
+	uint16_t reserved;
 };
 struct PMG_CMD {
 	union gddr6_mr8 gddr6_mr8;
-	uint16_t rsvd0;
+	uint16_t reserved;
 };
 
 
 struct umc_block_navi1_timings {
+	union atom_umc_reg_setting_id_config_access  block_id; //frequency
+
 	struct UMCCTRL_MISC2 gddr6_mr5;
 	struct UMCCTRL_PMG_CMD_MRS gddr6_mr0;
-	//struct UMCCTRL_PMG_CMD_EMRS;
 	uint32_t UMCCTRL_PMG_CMD_EMRS;
 	struct UMCCTRL_PMG_CMD_MRS1 gddr6_mr4;
 	struct PMG_CMD gddr6_mr8;

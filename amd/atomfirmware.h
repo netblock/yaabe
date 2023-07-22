@@ -36,7 +36,7 @@
 #define _ATOMFIRMWARE_H_
 #include <stdint.h>
 #include "ddrmoderegisters.h"
-#include "umctimings.h"
+// see bottom for other includes
 
 #pragma pack(push, 1) /* BIOS data must use byte aligment*/
 
@@ -4382,6 +4382,8 @@ enum scratch_pre_os_mode_info_bits_def {
               !! Please keep it at end of the atomfirmware.h !!
 ****************************************************************************/
 #include "atomfirmwareid.h"
+
+#include "umctimings.h"
 
 #pragma pack(pop)
 #endif

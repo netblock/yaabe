@@ -217,7 +217,9 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 */
 };
 
-
+// 64 is just atomtree allocation; real number is going to be less than or
+// equal to umc_reg_num, I believe.
+#define ATOMTREE_UMC_REG_NUM 64
 struct atomtree_umc_init_reg_block{
 	struct atomtree_umc_init_reg_block* dot;
 	struct atomtree_vram_info* dotdot;
@@ -231,9 +233,9 @@ struct atomtree_umc_init_reg_block{
 	union atom_umc_register_addr_info_access* umc_reg_list;
 	uint16_t umc_reg_list_size;
 
-	// 64 is just atomtree allocation; real number is going to be less than 
-	// or equal to umc_reg_num, I believe.
-	struct atom_umc_reg_setting_data_block* umc_reg_setting_list[64];
+	struct atom_umc_reg_setting_data_block* \
+		umc_reg_setting_list[ATOMTREE_UMC_REG_NUM];
+
 	uint16_t umc_reg_setting_list_size;
 };
 
@@ -286,6 +288,9 @@ struct atomtree_vram_info_header_v2_4 {
 
 	//uint16_t mem_clk_patch_tbloffset;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
+	struct umc_block_navi1_timings* navi1_gddr6_timings;
+	uint16_t* num_timing_straps; 
+	
 
 	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;

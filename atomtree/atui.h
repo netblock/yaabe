@@ -190,7 +190,7 @@ PPATUI_HEADERIFY(atom_umc_reg_setting_id_config_access);
 
 
 
-
+PPATUI_HEADERIFY(umc_block_navi1_timings);
 PPATUI_HEADERIFY(atom_vram_module_v10);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
 
