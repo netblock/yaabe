@@ -1,325 +1,463 @@
-// C bitfield structs; don't forget we're little-endian.
-//
-// Open your JESD and your PPR/BKDG
-// Muxed AMD DRAMTiming. Some timings get removed depending on the target
-// platform. If there's more than 4 contiguous reserved bits, there's probably
-// a timing for a different platform there.
+/*
+C bitfield structs; don't forget we're little-endian.
 
+Open your JESD and your PPR/BKDG
+Some timings get removed depending on the target platform. If there's more than
+4 contiguous reserved bits, there's probably a timing for a different platform
+there.
 
-struct DRAMTiming1 {
-	uint32_t tCL    : 6;
-	uint32_t rsvd0  : 2;
-	uint32_t tRAS   : 7;
-	uint32_t rsvd1  : 1;
-	uint32_t tRCDRD : 6;
-	uint32_t rsvd2  : 2;
-	uint32_t tRCDWR : 6;
-	uint32_t rsvd3  : 2;
+vim record:
+'<,'>s/struct .* {/union \0\r\0/
+'<,'>s/union struct/union/
+'<,'>s/struct/\tuint32_t
+'<,'>s/uint32_t .* {/\0{{{/
+'<,'>s/ {{{{/;\r\tstruct { uint32_t/
+'<,'>s/uint32_t .*:/\t{{}}\0/                                                  
+'<,'>s/\t\t{{}}uint32_t /\t\t/
+'<,'>s/: /:/
+'<,'>s/:.*;/\0 +1,/
+'<,'>s/; +1,/ +1,/
+'<,'>s/1,.*\n};/;\0/
+'<,'>s/;1,/1;/
+'<,'>s/};/\t};\r};/
+*/
+
+#ifndef _UMCTIMINGS_H_
+#define _UMCTIMINGS_H_
+
+#include "ddrmoderegisters.h"
+
+#pragma(push, 1) //bios data
+
+union DRAMTiming1 {
+	uint32_t DRAMTiming1;
+	struct { uint32_t 
+		tCL     :5-0 +1,
+		rsvd0   :7-6 +1,
+		tRAS   :14-8 +1,
+		rsvd1  :15-15 +1,
+		tRCDRD :21-16 +1,
+		rsvd2  :23-22 +1,
+		tRCDWR :29-24 +1,
+		rsvd3  :31-30 +1;
+	};
 };
 
-struct DRAMTiming2 {
-	uint32_t tRC_S : 8; // per-bank
-	uint32_t tRC_L : 8; // all-bank?
-	uint32_t tRP_S : 6;
-	uint32_t rsvd0 : 2;
-	uint32_t tRP_L : 6;
-	uint32_t rsvd1 : 2;
+union DRAMTiming2 {
+	uint32_t DRAMTiming2;
+	struct { uint32_t 
+		tRC_S  :7-0 +1, // per-bank
+		tRC_L :15-8 +1, // all-bank?
+		tRP_S :21-16 +1,
+		rsvd0 :23-22 +1,
+		tRP_L :29-24 +1,
+		rsvd1 :31-30 +1;
+	};
 };
 
-struct DRAMTiming3 {
-	uint32_t tRRDS   : 5;
-	uint32_t rsvd0   : 3;
-	uint32_t tRRDL   : 5;
-	uint32_t rsvd1   : 3;
-	uint32_t tRRDDLR : 5; // 3D die stacked memory
-	uint32_t rsvd2   : 3;
-	uint32_t tRTP    : 5;
-	uint32_t rsvd3   : 3;
+union DRAMTiming3 {
+	uint32_t DRAMTiming3;
+	struct { uint32_t 
+		tRRD_S  :4-0 +1,
+		rsvd0   :7-5 +1,
+		tRRD_L :12-8 +1,
+		rsvd1  :23-13 +1, // 3+5+3, middle 5 has tRRDDLR for 3D stacked memory.
+		tRTP   :28-24 +1,
+		rsvd2  :31-29 +1;
+	};
 };
 
-struct DRAMTiming4 {
-	uint32_t tFAW    : 7;
-	uint32_t rsvd0   : 1;
-	uint32_t t32AW   : 9;
-	uint32_t rsvd1   : 1;
-	uint32_t tFAWSLR : 6;
-	uint32_t rsvd2   : 1;
-	uint32_t tFAWDLR : 6;
-	uint32_t rsvd3   : 1;
+union DRAMTiming4 {
+	uint32_t DRAMTiming4;
+	struct { uint32_t 
+		tFAW   :6-0 +1,
+		Pad0   :7-7 +1,
+		t32AW :16-8 +1,
+		Pad1  :31-17 +1; //1, tFAWSLR:6, 1, tFAWDLR:6, 1
+	};
 };
 
-struct DRAMTiming5 {
-	uint32_t tWL   : 6;
-	uint32_t rsvd0 : 2;
-	uint32_t tWTRS : 5;
-	uint32_t rsvd1 : 3;
-	uint32_t tWTRL : 7;
-	uint32_t rsvd2 : 7;
+
+union DRAMTiming5 {
+	uint32_t DRAMTiming5;
+	struct { uint32_t 
+		tWL    :5-0 +1,
+		rsvd0  :7-6 +1,
+		tWTRS :12-8 +1,
+		rsvd1 :15-13 +1,
+		tWTRL :22-16 +1,
+		rsvd2 :31-23 +1; // no idea
+	};
 };
 
-struct DRAMTiming6 {
-	uint32_t tWR   : 7;
-	uint32_t rsvd0 :25; //what are you hiding...
+union DRAMTiming6 {
+	uint32_t DRAMTiming6;
+	struct { uint32_t 
+		tWR    :6-0 +1,
+		rsvd0 :31-7 +1; //what are you hiding...
+	};
 };
 
-struct DRAMTiming7 { // mostly GDDR 
-	uint32_t tPPD    : 3;
-	uint32_t rsvd0   : 1;
-	uint32_t tCRCRL  : 3;
-	uint32_t rsvd1   : 1;
-	uint32_t tRREFD  : 6;
-	uint32_t rsvd2   : 1;
-	uint32_t tCRCWL  : 5;
-	uint32_t tRCPAGE :12;
+union DRAMTiming7 {
+	uint32_t DRAMTiming7;
+	struct { uint32_t 
+		PPD      :2-0 +1,
+		rsvd0    :3-3 +1,
+		tCRCRL   :6-4 +1,
+		rsvd1    :7-7 +1,
+		tRREFD  :13-8 +1,
+		rsvd2   :14-14 +1,
+		tCRCWL  :19-15 +1,
+		tRCPAGE :31-20 +1;
+	};
 };
 
 // Specifies the minimum number of cycles from the last clock of virtual CAS of
 // the first burst operation to the clock in which CAS is asserted for a
 // following bust operation.
 // A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle.
-struct DRAMTiming8 {
-	uint32_t tRDRD_DD  : 4; // Different DIMM
-	uint32_t rsvd0     : 4;
-	uint32_t tRDRD_SD  : 4; // Same DIMM
-	uint32_t rsvd1     : 4;
-	uint32_t tRDRD_SC  : 4; // JEDEC tCCD_S
-	uint32_t rsvd2     : 4;
-	uint32_t tRDRD_SCL : 4; // tCCD_L
-	uint32_t rsvd3     : 2;
-	uint32_t tRDRD_BAN : 2; // Preamble2t ?1:0. 1h=tCCD+1; 2h=tCCD+1,2
+union DRAMTiming8 {
+	uint32_t DRAMTiming8;
+	struct { uint32_t 
+		tRDRD_DD   :3-0 +1, // Different DIMM
+		rsvd0      :7-4 +1,
+		tRDRD_SD  :11-8 +1, // Same DIMM
+		rsvd1     :15-12 +1,
+		tRDRD_SC  :19-16 +1, // JEDEC tCCD_S
+		rsvd2     :23-20 +1,
+		tRDRD_SCL :27-24 +1, // tCCD_L
+		rsvd3     :29-28 +1,
+		tRDRD_BAN :31-30 +1; // Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6
+	};
 };
 
-struct DRAMTiming9 {
-	uint32_t tWRWR_MW  : 5; // masked write; GDDR
-	uint32_t rsvd0     :11;
-	uint32_t tWRWR_SC  : 4;
-	uint32_t rsvd1     : 4;
-	uint32_t tWRWR_SCL : 6;
-	uint32_t tWRWR_BAN : 2;
+union DRAMTiming9 {
+	uint32_t DRAMTiming9;
+	struct { uint32_t 
+		tWRWR_MW   :4-0 +1, // masked write; GDDR
+		rsvd0     :15-5 +1,
+		tWRWR_SC  :19-16 +1,
+		rsvd1     :23-20 +1,
+		tWRWR_SCL :29-24 +1,
+		tWRWR_BAN :31-30 +1;
+	};
 };
-struct DRAMTiming9_DDR4 {
-	uint32_t tWRWR_DD    : 4;
-	uint32_t rsvd0       : 4;
-	uint32_t tWRWR_SD    : 4;
-	uint32_t rsvd1       : 4;
-	uint32_t tWRWR_SC    : 4;
-	uint32_t tWRWR_SCDLR : 4;
-	uint32_t tWRWR_SCL   : 6;
-	uint32_t tWRWR_BAN   : 2;
+
+
+union DRAMTiming9_DDR4 {
+	uint32_t DRAMTiming9_DDR4;
+	struct { uint32_t
+		tWRWR_DD     :3-0 +1,
+		rsvd0        :7-4 +1,
+		tWRWR_SD    :11-8 +1,
+		rsvd1       :15-12 +1,
+		tWRWR_SC    :19-16 +1,
+		tWRWR_SCDLR :23-20 +1,
+		tWRWR_SCL   :29-24 +1,
+		tWRWR_BAN   :31-30 +1;
+	};
 };
+
+
 
 // tWRRD and tRDWR also follows the 'last clock of virtual CAS'.
 // LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD.
 // LD is about making sure one burst happens after the other. 
 // And x and y follow the 'last clock of virtual CAS' and are about making sure
 // the data bus is stable.
-struct DRAMTiming10 {
-	uint32_t tWRRD      : 4;
-	uint32_t rsvd0      : 4;
-	uint32_t tRDWR      : 6;
-	uint32_t rsvd1      : 2;
-	uint32_t RDRspDelay : 6;
-	uint32_t tReftrAdj  : 7; // tREFTT a typo? tREFTR is a GDDR6 timing
-	uint32_t rsvd2      : 3;
+union DRAMTiming10 {
+	uint32_t DRAMTiming10;
+	struct { uint32_t
+		tWRRD       :3-0 +1,
+		rsvd0       :7-4 +1,
+		tRDWR      :13-8 +1,
+		rsvd1      :15-14 +1,
+		RDRspDelay :21-16 +1,
+		tREFTTAdj  :28-17 +1, // was tREFTT; a typo? tREFTR is a GDDR6 timing
+		rsvd2      :31-29 +1;
+	};
 }; 
-struct DRAMTiming10_DDR4 {
-	uint32_t tWRRD      : 4;
-	uint32_t rsvd0      : 4;
-	uint32_t tRDWR      : 5;
-	uint32_t rsvd1      : 3;
-	uint32_t tWRRDSCDLR : 5; //3DS RAM
-	uint32_t rsvd2      :11;
+union DRAMTiming10_DDR4 {
+	uint32_t DRAMTiming10_DDR4;
+	struct { uint32_t
+		tWRRD       :3-0 +1,
+		rsvd0       :7-4 +1,
+		tRDWR      :12-8 +1,
+		rsvd1      :15-13 +1,
+		tWRRDSCDLR :20-16 +1, // 3DS RAM
+		rsvd2      :31-21 +1;
+	};
 };
 
-struct DRAMTiming11 {
-	uint32_t tZQCS         : 8;
-	uint32_t tZQOPER       :28; // DDR4
-	uint32_t tZQCSInterval :10; // ZQCSInterval * 2^(ShortInit ?10 :20)
-	uint32_t rsvd0         : 1;
-	uint32_t ShortInit     : 1;
+union DRAMTiming11_DDR4 {
+	uint32_t DRAMTiming11_DDR4;
+	struct { uint32_t
+		tZQCS          :7-0 +1,
+		tZQOPER       :19-8 +1, // DDR4
+		tZQCSInterval :29-20 +1, // ZQCSInterval * 2^(ShortInit ?10 :20)
+		rsvd0         :30-30 +1,
+		ShortInit     :31-31 +1;
+	};
 };
 
-struct DRAMTiming12 {
-	uint32_t tREFI :16; //tREF; the microseconds not milliseconds one
-	uint32_t rsvd0 :16;
+
+union DRAMTiming12 {
+	uint32_t DRAMTiming12;
+	struct { uint32_t
+		tREFI :15-0 +1, //tREF; the microseconds not milliseconds one
+		rsvd0 :31-16 +1;
+	};
 };
 
-struct DRAMTiming13 {
-	uint32_t tMRD    : 6;
-	uint32_t rsvd0   : 2;
-	uint32_t tMOD    : 6;
-	uint32_t tMRDPDA : 6; //Per DRAM Addressability; PDA is for a single, specific DRAM on a rank.
-	uint32_t rsvd1   : 2;
-	uint32_t tMODPDA : 6;
-	uint32_t rsvd2   : 2;
+union DRAMTiming13 {
+	uint32_t DRAMTiming13;
+	struct { uint32_t
+		tMRD   :5-0 +1,
+		rsvd0  :7-6 +1,
+		tMOD  :13-8 +1,
+		rsvd1 :31-14 +1;
+	};
 };
 
-struct DRAMTiming14 {
-	uint32_t tXS   :11; // exit self refreh to not requiring a locked DLL
-	uint32_t rsvd0 : 5;
-	uint32_t tDLLK :11; // exit self refresh to requiring a locked DLL
+union DRAMTiming13_DDR4 {
+	uint32_t DRAMTiming13_DDR4;
+	struct { uint32_t
+		tMRD    :5-0 +1,
+		rsvd0   :7-6 +1,
+		tMOD    :13-8 +1,
+		rsvd1   :15-14 +1,
+		tMRDPDA :21-16 +1, //Per DRAM Addressability
+		rsvd2   :23-22 +1,
+		tMODPDA :29-24 +1,
+		rsvd3   :31-30 +1;
+	};
 };
 
-struct DRAMTiming15 { // DDR reliability RAS
-	uint32_t AlertCrcDly : 7; // expected alert crc error dely; memclocks
-	uint32_t rsvd0       : 1;
-	uint32_t AlertParDly : 7; // Parity error
-	uint32_t PL          : 4; // Cmd/Addr Parity Latency; see DDR4 MR5
-	uint32_t rsvd1       : 4; 
-	uint32_t RankBusyDly : 7; // max of AlertCrcDly, AlertWcrcDly, or ECC return delay
-	uint32_t rsvd2       : 1;
+union DRAMTiming14 {
+	uint32_t DRAMTiming14;
+	struct { uint32_t
+		tXS   :10-0 +1, // exit self refreh to not requiring a locked DLL
+		rsvd0 :15-11 +1,
+		tDLLK :26-16 +1, // exit self refresh to requiring a locked DLL
+		rsvd1 :31-27 +1;
+	};
 };
 
-struct DRAMTiming16 {
-	uint32_t tXSMRS :11;
-	uint32_t rsvd0  :21;
+union DRAMTiming15 {
+	uint32_t DRAMTiming15;
+	struct { uint32_t // DDR reliability RAS
+		AlertCrcDly  :6-0 +1, // expected alert crc error dely, in memclocks
+		rsvd0        :7-7 +1,
+		AlertParDly :14-8 +1, // Parity error
+		PL          :18-15 +1, // Cmd/Addr Parity Latency. See DDR4 MR5
+		rsvd1       :22-19 +1, 
+		RankBusyDly :29-23 +1, // max of CRC/ECC alert delays
+		rsvd2       :31-30 +1;
+	};
 };
 
-struct DRAMTiming17 {
-	uint32_t tPD           : 5;
-	uint32_t tCKSRE        : 6;
-	uint32_t tCKSRX        : 6;
-	uint32_t PwrDownDly    : 8; // last command to PowerDown; max of tPRPDEN, tRDAPDEN, tWRAPDEN, tREFPDEN, tMRSPDEN
-	uint32_t AggPwrDownDly : 6; // last DRAM activity to precharge, for precharge powerdown. Orthogonal to IdleCycleLimit
-	uint32_t rsvd0         : 1;
+union DRAMTiming16 {
+	uint32_t DRAMTiming16;
+	struct { uint32_t
+		tXSMRS :10-0 +1,
+		rsvd0  :31-11 +1;
+	};
 };
 
-struct DRAMTiming20 {
-	uint32_t tRFCSB :11;
-	uint32_t rsvd0  : 5;
-	uint32_t tSTAG  : 8; // ref-to-ref different rank
-	uint32_t rsvd1  : 8;
+union DRAMTiming17 {
+	uint32_t DRAMTiming17;
+	struct { uint32_t
+		tPD           :4-0 +1,
+		tCKSRE        :10-5 +1,
+		tCKSRX        :16-11 +1,
+		PwrDownDly    :24-17 +1, // last command to PowerDown
+		AggPwrDownDly :30-25 +1, // last DRAM activity to precharge, for PD
+		rsvd0         :31-31 +1;
+	};
+};
+
+union DRAMTiming20 {
+	uint32_t DRAMTiming20;
+	struct { uint32_t
+		tRFCSB :10-0 +1,
+		rsvd0  :15-11 +1,
+		tSTAG  :23-16 +1, // ref-to-ref different rank
+		rsvd1  :31-24 +1;
+	};
 }; 
 
-struct DRAMTiming21 {
-	uint32_t tXP    : 6;
-	uint32_t rsvd0  :10;
-	uint32_t tCPDED : 4;
-	uint32_t rsvd1  : 4;
-	uint32_t tCKE   : 5;
-	uint32_t rsvd2  : 3;
+union DRAMTiming21 {
+	uint32_t DRAMTiming21;
+	struct { uint32_t
+		tXP     :5-0 +1,
+		rsvd0  :15-6 +1,
+		tCPDED :19-16 +1,
+		rsvd1  :23-20 +1,
+		tCKE   :28-24 +1,
+		rsvd2  :31-29 +1;
+	};
 };
 
-struct DRAMTiming22 { // "DFI" is shorthand for "DDR PHY"
-	uint32_t tRDDATA_EN  : 7; // tCL-n; GDDR6 n=1; DDR4 n=5. read command to dfi_rddata_en delay
-	uint32_t rsvd0       : 1;
-	uint32_t tPHY_WRLAT  : 5; // tCWL-n; GDDR6 n=2; DDR4 n=5. write to dfi_wrdata_en delay
-	uint32_t rsvd1       : 3;
-	uint32_t tPHY_RDLAT  : 6; // dfi_rddata_en to dfi_rddata_vld dely
-	uint32_t rsvd2       : 2;
-	uint32_t tPHY_WRDATA : 3; // dfi_wrdata_en to dfi_wrdata delay
-	uint32_t tPARIN_LAT  : 2; // ctrl signals to parity delay
-	uint32_t rsvd3       : 2;
+union DRAMTiming22 {
+	uint32_t DRAMTiming22;
+	struct { uint32_t // "DFI" is shorthand for "DDR PHY"
+		tRDDATA_EN   :6-0 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
+		rsvd0        :7-7 +1,
+		tPHY_WRLAT  :13-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
+		rsvd1       :16-14 +1,
+		tPHY_RDLAT  :22-17 +1, // dfi_rddata_en to dfi_rddata_vld dely
+		rsvd2       :24-23 +1,
+		tPHY_WRDATA :27-25 +1, // dfi_wrdata_en to dfi_wrdata delay
+		tPARIN_LAT  :29-28 +1, // ctrl signals to parity delay
+		rsvd3       :31-30 +1;
+	};
 };
 
-struct DRAMTiming23 {
-	uint32_t LpDly      : 6; // hysteresis before placing PHY into low power
-	uint32_t rsvd0      : 2; 
-	uint32_t LpExitDly  : 6; // min memclk before taking a rank out of powerdown
-	uint32_t rsvd1      : 2;
-	uint32_t CKESTAGDLY : 4;
-	uint32_t rsvd3      : 4; 
-	uint32_t tGearSetup : 3;  // GDM I believe
-	uint32_t rsvd4      : 1; 
-	uint32_t tGearHold  : 3; 
-	uint32_t rsvd5      : 1; 
+union DRAMTiming23 {
+	uint32_t DRAMTiming23;
+	struct { uint32_t
+		LpDly      :5-0 +1, // hysteresis before placing PHY into low power
+		rsvd0      :7-6 +1, 
+		LpExitDly  :13-8 +1, // min memclk before taking a rank out of powerdown
+		rsvd1      :15-14 +1,
+		CKESTAGDLY :19-16 +1,
+		rsvd3      :31-20 +1;
+	};
 };
 
-struct DRAMTiming34 {
-	uint32_t tPhyupd_resp : 4;
-	uint32_t tRDEDC_EN    : 7;
-	uint32_t rsvd0        : 1;
-	uint32_t tWREDC_EN    : 7;
-	uint32_t rsvd1        :13;
+union DRAMTiming23_DDR4 {
+	uint32_t DRAMTiming23_DDR4;
+	struct { uint32_t
+		LpDly      :5-0 +1, // hysteresis before placing PHY into low power
+		rsvd0      :7-6 +1, 
+		LpExitDly  :13-8 +1, // min memclk before taking a rank out of powerdown
+		rsvd1      :23-14 +1,
+		tGearSetup :26-24 +1,  // GDM I believe
+		rsvd4      :27-27 +1, 
+		tGearHold  :30-28 +1, 
+		rsvd5      :31-31 +1; 
+	};
 };
 
-struct DRAMTiming35 { // reliability RAS
-	uint32_t ReceiverWait :11; // Wait time to start recovery sequence
-	uint32_t CmdStageCnt  :11; // Recovery sequence command stagger counter. See CmdStgFrc.  CmdStgFrc:1; 1=enable recovery command stagger in recovery phase
-	uint32_t rsvd0        : 2;
-	uint32_t tWRMPR       : 6;
-	uint32_t rsvd1        : 2;
+union DRAMTiming34 {
+	uint32_t DRAMTiming34;
+	struct { uint32_t
+		tPhyupd_resp :3-0 +1,
+		tRDEDC_EN    :10-4 +1,
+		rsvd0        :11-11 +1,
+		tWREDC_EN    :18-12 +1,
+		rsvd1        :31-19 +1;
+	};
 };
 
-struct DRAMTiming36 { // GDDR training
-	uint32_t tWTRTR     : 6; // WRITE to WRTR
-	uint32_t tREFTR     : 6; // was named tREFTT; REFab to RDTR/WRTR
-	uint32_t tTTROW     : 6; // ??
-	uint32_t tLDTLD     : 6; // JEDEC tLTLTR?
-	uint32_t tUPDN      : 6; // ??
-	uint32_t tREFTR_MSB : 1; // was named tREFTT
-	uint32_t rsvd0      : 1;
+union DRAMTiming35 {
+	uint32_t DRAMTiming35;
+	struct { uint32_t // reliability RAS
+		ReceiverWait :10-0 +1, // Wait time to start recovery sequence
+		CmdStageCnt  :21-11 +1,//Recov. seq. cmd stagger counter. See CmdStgFrc
+			// CmdStgFrc:1; 1=enable recovery command stagger in recovery phase
+		rsvd0        :23-22 +1,
+		tWRMPR       :29-24 +1,
+		rsvd1        :31-30 +1;
+	};
 };
 
-struct TRFCTimingCS01 {
-	uint32_t tRFC  : 11;
-	uint32_t tRFC2 : 11;
-	uint32_t tRFC4 : 10;
+union DRAMTiming36 {
+	uint32_t DRAMTiming36;
+	struct { uint32_t // GDDR training
+		tWTRTR     :5-0 +1, // WRITE to WRTR
+		tREFTR     :11-6 +1, // was named tREFTT. REFab to RDTR/WRTR
+		tTTROW     :17-12 +1, // ??
+		tLDTLD     :23-18 +1, // JEDEC tLTLTR?
+		tUPDN      :29-24 +1, // ??
+		tREFTR_MSB :30-30 +1, // was named tREFTT
+		rsvd0      :31-31 +1;
+	};
 };
 
-struct ChanPipeDly {
-	uint32_t TXCtrlChanDly : 3; // Number of delay stages on DFI control signals from UMC to PHY
-	uint32_t rsvd0         : 1;
-	uint32_t TXDataChanDly : 3; // Number of delay stages on DFI write data from UMC to PHY
-	uint32_t rsvd1         : 1;
-	uint32_t RXDataChanDly : 3; // Number of delay stages on DFI read data from PHY to UMC
-	uint32_t rsvd2         :21;
+union TRFCTimingCS01 {
+	uint32_t TRFCTimingCS01;
+	struct { uint32_t
+		tRFC  :10-0 +1,
+		rsvd0 :31-11 +1;
+	};
+};
+
+union TRFCTimingCS01_DDR4 {
+	uint32_t TRFCTimingCS01_DDR4;
+	struct { uint32_t
+		tRFC  :10-0 +1,
+		tRFC2 :21-11 +1,
+		tRFC4 :31-22 +1;
+	};
+};
+
+union ChanPipeDly {
+	uint32_t ChanPipeDly;
+	struct { uint32_t
+		TXCtrlChanDly :2-0 +1,//# of delay stages on DFI control from UMC to PHY
+		rsvd0         :3-3 +1,
+		TXDataChanDly :6-4 +1,// ... on DFI write data from UMC to PHY
+		rsvd1         :7-7 +1,
+		RXDataChanDly:10-8 +1, // ... on DFI read data from PHY to UMC
+		rsvd2        :31-11 +1;
+	};
 };
 
 
 
 
 
-
-//TODO
 
 struct UMCCTRL_MISC2 {
-	GDDR6_MODE_REG_5 MR5;
+	union gddr6_mr5 gddr6_mr5;
 	uint16_t rsvd0;
 };
-
 struct UMCCTRL_PMG_CMD_MRS {
-	GDDR6_MODE_REG_0 MR0;
+	union gddr6_mr0 gddr6_mr0;
 	uint16_t rsvd0;
 };
-
 struct UMCCTRL_PMG_CMD_MRS1 {
-	GDDR6_MODE_REG_4 MR4;
+	union gddr6_mr4 gddr6_mr4;
 	uint16_t rsvd0;
 };
-
 struct PMG_CMD {
-	GDDR6_MODE_REG_8 MR8;
+	union gddr6_mr8 gddr6_mr8;
 	uint16_t rsvd0;
 };
 
-struct navi1_timings {
-	uint32_t UMCCTRL_MISC2;
-	uint32_t UMCCTRL_PMG_CMD_MRS;
+
+struct umc_block_navi1_timings {
+	struct UMCCTRL_MISC2 gddr6_mr5;
+	struct UMCCTRL_PMG_CMD_MRS gddr6_mr0;
+	//struct UMCCTRL_PMG_CMD_EMRS;
 	uint32_t UMCCTRL_PMG_CMD_EMRS;
-	uint32_t UMCCTRL_PMG_CMD_MRS1;
-	uint32_t PMG_CMD;
-	struct DramTiming1;
-	struct DramTiming2;
-	struct DramTiming3;
-	struct DramTiming4;
-	struct DramTiming5;
-	struct DramTiming6;
-	struct DramTiming7;
-	struct DramTiming8;
-	struct DramTiming9;
-	struct DramTiming10;
-	struct DramTiming12;
-	struct DramTiming13;
-	struct DramTiming14;
-	struct DramTiming16;
-	struct DramTiming17;
-	struct DramTiming20;
-	struct DramTiming21;
-	struct DramTiming22;
-	struct DramTiming23;
-	struct DramTiming35;
-	struct DramTiming36;
-	TRFCTimingCS01 TRFC;
-	uint32_t ChanPipeDly;
+	struct UMCCTRL_PMG_CMD_MRS1 gddr6_mr4;
+	struct PMG_CMD gddr6_mr8;
+	union DRAMTiming1 DRAMTiming1;
+	union DRAMTiming2 DRAMTiming2;
+	union DRAMTiming3 DRAMTiming3;
+	union DRAMTiming4 DRAMTiming4;
+	union DRAMTiming5 DRAMTiming5;
+	union DRAMTiming6 DRAMTiming6;
+	union DRAMTiming7 DRAMTiming7;
+	union DRAMTiming8 DRAMTiming8;
+	union DRAMTiming9 DRAMTiming9;
+	union DRAMTiming10 DRAMTiming10;
+	union DRAMTiming12 DRAMTiming12;
+	union DRAMTiming13 DRAMTiming13;
+	union DRAMTiming14 DRAMTiming14;
+	union DRAMTiming16 DRAMTiming16;
+	union DRAMTiming17 DRAMTiming17;
+	union DRAMTiming20 DRAMTiming20;
+	union DRAMTiming21 DRAMTiming21;
+	union DRAMTiming22 DRAMTiming22;
+	union DRAMTiming23 DRAMTiming23;
+	union DRAMTiming35 DRAMTiming35;
+	union DRAMTiming36 DRAMTiming36;
+	union TRFCTimingCS01 tRFC;
+	union ChanPipeDly ChanPipeDly;
 };
+
+#pragma(pop) //restore old packing
+#endif
