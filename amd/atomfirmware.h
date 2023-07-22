@@ -34,11 +34,11 @@
 
 #ifndef _ATOMFIRMWARE_H_
 #define _ATOMFIRMWARE_H_
-
 #include <stdint.h>
 #include "ddrmoderegisters.h"
+#include "umctimings.h"
 
-#pragma pack(1) /* BIOS data must use byte aligment*/
+#pragma pack(push, 1) /* BIOS data must use byte aligment*/
 
 enum  atom_bios_header_version_def {
   ATOM_MAJOR_VERSION = 0x0003,
@@ -4382,7 +4382,6 @@ enum scratch_pre_os_mode_info_bits_def {
               !! Please keep it at end of the atomfirmware.h !!
 ****************************************************************************/
 #include "atomfirmwareid.h"
-#pragma pack()
 
+#pragma pack(pop)
 #endif
-

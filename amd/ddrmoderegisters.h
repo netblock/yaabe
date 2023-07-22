@@ -1,7 +1,10 @@
 // Please refer to JESD 250. If unavailable consider,
 // 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
 
-#pragma pack(1) // bios data
+#ifndef _DDRMODEREGISTERS_H_
+#define _DDRMODEREGISTERS_H_
+
+#pragma pack(push, 1) // bios data
 
 
 union gddr6_mr0 {
@@ -200,3 +203,7 @@ union gddr6_mr15 {
 		ID            :15-12 +1; // MR 15
 	};
 };
+
+
+#pragma(pop) // restore old packing
+#endif
