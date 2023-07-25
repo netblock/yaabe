@@ -174,6 +174,8 @@ struct atui_nullstruct {
 	void* leaves; 
 };
 
+//blank branch
+PPATUI_HEADERIFY(atui_nullstruct);
 
 PPATUI_HEADERIFY(atom_common_table_header);
 
@@ -181,7 +183,6 @@ PPATUI_HEADERIFY(atom_rom_header_v2_2);
 PPATUI_HEADERIFY(atom_master_data_table_v2_1);
 
 
-// fuck me...
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
 PPATUI_HEADERIFY(atom_umc_init_reg_block);
@@ -189,6 +190,8 @@ PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_reg_setting_id_config_access);
 
 
+PPATUI_HEADERIFY(atom_vram_module_v9);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_3);
 
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 PPATUI_HEADERIFY(atom_vram_module_v10);

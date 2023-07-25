@@ -526,7 +526,7 @@ static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 
 	GtkWidget* window = gtk_application_window_new(gtkapp);
 	gtk_window_set_title(GTK_WINDOW(window), "YAABE BIOS Editor");
-	gtk_window_set_default_size(GTK_WINDOW(window), 650,350);
+	gtk_window_set_default_size(GTK_WINDOW(window), 800,500);
 
 	gtk_window_set_child(GTK_WINDOW(window), divider);
 

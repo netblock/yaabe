@@ -61,13 +61,16 @@ vim replace patterns that help copypaste structs from atombios.h:
 PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	struct atomtreestruct* atomtree = args->atomtree;\
-	uint16_t num_branches = args->num_branches;\
+	uint16_t num_branches = 0;\
+	uint16_t max_branch_count = args->num_branches;\
 	atui_branch** import_children = args->import_children;\
 	atomtypeprefix atomtypesuffix * bios;\
 	if (args->suggestbios != NULL) {\
 		bios = args->suggestbios;\
-	} else {\
+	} else if (atomtree != NULL){\
 		bios = (void*) atomtree->leaves;\
+	} else {\
+		bios = NULL;\
 	}\
 \
 	atui_branch* table = NULL; \
@@ -125,16 +128,16 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 		scratch = malloc(\
 			sizeof(atui_branch)\
-			+ num_branches * sizeof(atui_branch*)\
+			+ max_branch_count * sizeof(atui_branch*)\
 			+ num_inliners * sizeof(atui_branch*)\
 			+ leaves_init_num * sizeof(atui_leaf)\
 			+ dynarray_total_leaves * sizeof(atui_leaf)\
 		);\
 		table = scratch;\
 		scratch += sizeof(atui_branch);\
-		if (num_branches) {\
+		if (max_branch_count) {\
 			branches = scratch;\
-			scratch += num_branches * sizeof(atui_branch*);\
+			scratch += max_branch_count * sizeof(atui_branch*);\
 		}\
 		if (num_inliners) {\
 			inliners = scratch;\
@@ -258,16 +261,17 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	} else { /* no leaves at all */\
 		scratch = malloc(\
 			sizeof(atui_branch)\
-			+ (num_branches * sizeof(atui_branch*))\
+			+ (max_branch_count * sizeof(atui_branch*))\
 		); \
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
 		branches = scratch;\
 	}\
 \
-	if (num_branches) {\
+	if (max_branch_count) {\
 		if (import_children != NULL) {\
-			for (i=0; i<num_branches; i++) {\
+			num_branches = max_branch_count;\
+			for (i=0; i<max_branch_count; i++) {\
 				branches[i] = import_children[i];\
 			}\
 		}\
@@ -278,7 +282,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.description=NULL, .auxiliary=NULL,\
 		.child_branches=branches, .branch_count=num_branches, \
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
-		.max_branch_count=num_branches, .max_inline_branch_count=num_inliners, \
+		.max_branch_count=max_branch_count, .max_inline_branch_count=num_inliners, \
 		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
 		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
 	};\

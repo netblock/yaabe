@@ -148,7 +148,11 @@ bool atomtree_dt_populate_ppt(struct atom_tree* atree) {
 
 static atui_branch* atomtree_populate_umc_init_reg_block(
 		struct atom_tree* atree,
-		struct atomtree_umc_init_reg_block* at_regblock) {
+		struct atomtree_umc_init_reg_block* at_regblock,
+		bool generate_atui, uint8_t num_extra_atuibranches) {
+
+	uint16_t i = 0;
+
 	// TODO: something something end is 0xFFFF ???
 
 	// regblock->leaves must be already populated.
@@ -192,7 +196,6 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 		sizeof(uint32_t) * (*at_regblock->umc_number_of_registers-1);
 
 	struct atom_umc_reg_setting_data_block* loc;
-	uint8_t i;
 	for (i=0; i < *at_regblock->umc_number_of_registers ; i++) {
 		loc = regsettingblock_starting_point + regsettingblock_size*i;
 		if (loc->block_id.u32umc_id_access == 0)
@@ -200,6 +203,45 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 		at_regblock->umc_reg_setting_list[i] = loc;
 	}
 	at_regblock->umc_reg_setting_list_size = i;
+
+	atui_branch* atui_regblock = NULL;
+	if(generate_atui) {
+		atui_branch* ui_branch = NULL;
+
+		atui_branch* addr_info = ATUI_MAKE_BRANCH(
+			atom_umc_register_addr_info_access,
+			at_regblock,NULL, 0,NULL
+		);
+
+		atui_branch* datablock = ATUI_MAKE_BRANCH(atui_nullstruct,
+			0,NULL,
+			at_regblock->umc_reg_setting_list_size, NULL
+		);
+		sprintf(datablock->name, "atom_umc_reg_setting_data_block");
+		for(i=0; i < at_regblock->umc_reg_setting_list_size; i++) {
+			ui_branch = ATUI_MAKE_BRANCH(atom_umc_reg_setting_data_block,
+				at_regblock, at_regblock->umc_reg_setting_list[i],
+				0, NULL
+			);
+			sprintf(ui_branch->name, "%s [%02u]", ui_branch->varname, i);
+			datablock->child_branches[i] = ui_branch;
+		}
+		datablock->branch_count = i;
+
+
+		atui_branch* regblock_children[] = {addr_info, datablock};
+		const uint8_t num_regblock_children = 
+			sizeof(regblock_children)/sizeof(atui_branch*);
+		atui_regblock = ATUI_MAKE_BRANCH(atom_umc_init_reg_block, 
+			at_regblock, NULL,
+			num_regblock_children+num_extra_atuibranches, NULL
+		);
+		for(i=0; i < num_regblock_children; i++) {
+			atui_regblock->child_branches[i] = regblock_children[i];
+		}
+		atui_regblock->branch_count = i;
+	}
+	return atui_regblock;
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_3(
@@ -215,31 +257,80 @@ static inline atui_branch* atomtree_populate_vram_info_v2_3(
 
 	vi23->mem_adjust_table.leaves = (void*)vi23->leaves +
 		vi23->leaves->mem_adjust_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi23->mem_adjust_table));
+	atui_branch* atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atree, &(vi23->mem_adjust_table), generate_atui, 0);
+	sprintf(atui_memadjust->name, "mem_adjust_table");
+
 
 	vi23->mem_clk_patch.leaves = (void*)vi23->leaves +
 		vi23->leaves->mem_clk_patch_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi23->mem_clk_patch));
+	atui_branch* atui_memclkpatch = atomtree_populate_umc_init_reg_block(
+		atree, &(vi23->mem_clk_patch), generate_atui, 1); // 1 for timings
+	sprintf(atui_memclkpatch->name, "mem_clk_patch_table");
+
+
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi23->mc_adjust_pertile.leaves = (void*)vi23->leaves +
 		vi23->leaves->mc_adjust_pertile_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi23->mc_adjust_pertile));
+	atui_branch* atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
+		atree, &(vi23->mc_adjust_pertile), generate_atui, 0);
+	sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+
 
 	vi23->mc_phyinit.leaves = (void*)vi23->leaves +
 		vi23->leaves->mc_phyinit_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi23->mc_phyinit));
+	atui_branch* atui_phyinit = atomtree_populate_umc_init_reg_block(
+		atree, &(vi23->mc_phyinit), generate_atui, 0);
+	sprintf(atui_phyinit->name, "mc_phyinit_table");
+
+
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi23->dram_data_remap = (void*)vi23->leaves +
 		vi23->leaves->dram_data_remap_tbloffset;
-
 	// TODO what is this?
 	vi23->hbm_tmrs = (void*)vi23->leaves + vi23->leaves->tmrs_seq_offset;
 
+
+
 	vi23->post_ucode_init.leaves = (void*)vi23->leaves +
 		vi23->leaves->post_ucode_init_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi23->post_ucode_init));
+	atui_branch* atui_postucode_init = atomtree_populate_umc_init_reg_block(
+		atree, &(vi23->post_ucode_init), generate_atui, 0);
+	sprintf(atui_postucode_init->name, "post_ucode_init");
+
+	atui_branch* atui_vi = NULL;
+	if(generate_atui) {
+		uint16_t i = 0;
+		atui_branch* ui_branch;
+
+		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			0,NULL,
+			vi23->leaves->vram_module_num, NULL
+		);
+		sprintf(vram_module->name, "atom_vram_module_v9");
+		for(i=0; i < vi23->leaves->vram_module_num; i++) {
+			ui_branch = ATUI_MAKE_BRANCH(atom_vram_module_v10,
+				NULL,&(vi23->leaves->vram_module[i]), 0,NULL);
+			sprintf(ui_branch->name, "%s [%02u]", ui_branch->varname, i);
+			vram_module->child_branches[i] = ui_branch;
+		}
+		vram_module->branch_count = i;
+
+		atui_branch* vi23_children[] = {
+			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, atui_phyinit,
+			atui_postucode_init, vram_module
+		};
+		const uint8_t num_children = sizeof(vi23_children)/sizeof(atui_branch*);
+		
+
+		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_3,
+			vi23,NULL,  num_children , vi23_children);
+
+	}
+
+	return atui_vi;
 
 }
 
@@ -257,23 +348,36 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 
 	vi24->mem_adjust_table.leaves = (void*)vi24->leaves +
 		vi24->leaves->mem_adjust_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi24->mem_adjust_table));
+	atui_branch* atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atree, &(vi24->mem_adjust_table), generate_atui, 0);
+	sprintf(atui_memadjust->name, "mem_adjust_table");
+
 
 	vi24->mem_clk_patch.leaves = (void*)vi24->leaves +
 		vi24->leaves->mem_clk_patch_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi24->mem_clk_patch));
+	atui_branch* atui_memclkpatch = atomtree_populate_umc_init_reg_block(
+		atree, &(vi24->mem_clk_patch), generate_atui, 1); // 1 for timings
+	sprintf(atui_memclkpatch->name, "mem_clk_patch_table");
+
 	vi24->navi1_gddr6_timings = (struct umc_block_navi1_timings*)\
 		vi24->mem_clk_patch.umc_reg_setting_list[0]; 
 	vi24->num_timing_straps = &(vi24->mem_clk_patch.umc_reg_setting_list_size);
 
+
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi24->mc_adjust_pertile.leaves = (void*)vi24->leaves +
 		vi24->leaves->mc_adjust_pertile_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi24->mc_adjust_pertile));
+	atui_branch* atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
+		atree, &(vi24->mc_adjust_pertile), generate_atui, 0);
+	sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+
 
 	vi24->mc_phyinit.leaves = (void*)vi24->leaves +
 		vi24->leaves->mc_phyinit_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi24->mc_phyinit));
+	atui_branch* atui_phyinit = atomtree_populate_umc_init_reg_block(
+		atree, &(vi24->mc_phyinit), generate_atui, 0);
+	sprintf(atui_phyinit->name, "mc_phyinit_table");
+
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi24->dram_data_remap = (void*)vi24->leaves +
@@ -281,62 +385,39 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 
 	vi24->post_ucode_init.leaves = (void*)vi24->leaves +
 		vi24->leaves->post_ucode_init_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi24->post_ucode_init));
+	atui_branch* atui_postucode_init = atomtree_populate_umc_init_reg_block(
+		atree, &(vi24->post_ucode_init), generate_atui, 0);
+	sprintf(atui_postucode_init->name, "post_ucode_init");
 
 
 	atui_branch* atui_vi = NULL;
 	if(generate_atui) {
-		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
-			NULL, &(leaves->table_header),  0,NULL);
+		uint16_t i = 0;
+		atui_branch* ui_branch;
 
+		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			0,NULL,
+			vi24->leaves->vram_module_num, NULL
+		);
+		sprintf(vram_module->name, "atom_vram_module_v10");
+		for(i=0; i < vi24->leaves->vram_module_num; i++) {
+			ui_branch = ATUI_MAKE_BRANCH(atom_vram_module_v10,
+				NULL,&(vi24->leaves->vram_module[i]), 0,NULL);
+			sprintf(ui_branch->name, "%s [%02u]", ui_branch->varname, i);
+			vram_module->child_branches[i] = ui_branch;
+		}
+		vram_module->branch_count = i;
 
-		atui_branch* memclkpatch_children[] = {
-			ATUI_MAKE_BRANCH(atom_umc_register_addr_info_access,
-				&(vi24->mem_clk_patch), NULL, 0,NULL
-			),
-/*
-			ATUI_MAKE_BRANCH(atom_umc_register_addr_info_access,
-				NULL, vi24->mem_clk_patch.umc_reg_list, 0,NULL
-			),
-*/
-			ATUI_MAKE_BRANCH(atom_umc_reg_setting_data_block,
-				&(vi24->mem_clk_patch),
-				vi24->mem_clk_patch.umc_reg_setting_list[0],
-				0,NULL
-			),
-			ATUI_MAKE_BRANCH(umc_block_navi1_timings,
-				NULL, vi24->mem_clk_patch.umc_reg_setting_list[19],
-				0,NULL
-			),
-
+		atui_branch* vi24_children[] = {
+			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, atui_phyinit,
+			atui_postucode_init, vram_module
 		};
-		const int memclkpatch_child_count = \
-			sizeof(memclkpatch_children)/sizeof(atui_branch*);
-		atui_branch* memclkpatch = \
-			ATUI_MAKE_BRANCH(atom_umc_init_reg_block,
-				&(vi24->mem_clk_patch),NULL,
-				memclkpatch_child_count, memclkpatch_children
-			);
-
-		atui_branch* child_branches[] = {atui_header, memclkpatch};
-		const int num_child_part = sizeof(child_branches)/sizeof(atui_branch*);
-		int num_child = num_child_part + vi24->leaves->vram_module_num;
+		const uint8_t num_children = sizeof(vi24_children)/sizeof(atui_branch*);
+		
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_4,
-			vi24,NULL,  num_child,NULL);
+			vi24,NULL,  num_children , vi24_children);
 
-		int cb_depth = 0;
-		int i = 0;
-		for(i=0; i < num_child_part; i++)
-			atui_vi->child_branches[i] = child_branches[i];
-		cb_depth = cb_depth + i;
-
-		for(i=0; i < vi24->leaves->vram_module_num; i++) {
-			atui_vi->child_branches[i + cb_depth] = 
-				ATUI_MAKE_BRANCH(atom_vram_module_v10, 
-					vi24, &(vi24->leaves->vram_module[i]), 0,NULL);
-		}
-		cb_depth = cb_depth + i;
 	}
 
 	return atui_vi;
@@ -356,7 +437,8 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 
 	vi25->mem_adjust_table.leaves = (void*)vi25->leaves +
 		vi25->leaves->mem_adjust_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi25->mem_adjust_table));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi25->mem_adjust_table), generate_atui, 0);
 	
 	vi25->gddr6_ac_timings = (void*)vi25->leaves +
 		vi25->leaves->gddr6_ac_timing_offset;
@@ -366,11 +448,13 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi25->mc_adjust_pertile.leaves = (void*)vi25->leaves +
 		vi25->leaves->mc_adjust_pertile_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi25->mc_adjust_pertile));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi25->mc_adjust_pertile), generate_atui, 0);
 
 	vi25->mc_phyinit.leaves = (void*)vi25->leaves +
 		vi25->leaves->mc_phyinit_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi25->mc_phyinit));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi25->mc_phyinit), generate_atui, 0);
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi25->dram_data_remap = (void*)vi25->leaves +
@@ -378,11 +462,13 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 
 	vi25->post_ucode_init.leaves = (void*)vi25->leaves +
 		vi25->leaves->post_ucode_init_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi25->post_ucode_init));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi25->post_ucode_init), generate_atui, 0);
 
 	vi25->strobe_mode_patch.leaves = (void*)vi25->leaves +
 		vi25->leaves->strobe_mode_patch_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi25->strobe_mode_patch));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi25->strobe_mode_patch), generate_atui, 0);
 }
 
 static inline atui_branch* atomtree_populate_vram_info_v2_6(
@@ -398,20 +484,24 @@ static inline atui_branch* atomtree_populate_vram_info_v2_6(
 
 	vi26->mem_adjust_table.leaves = (void*)vi26->leaves +
 		vi26->leaves->mem_adjust_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi26->mem_adjust_table));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi26->mem_adjust_table), generate_atui, 0);
 
 	vi26->mem_clk_patch.leaves = (void*)vi26->leaves +
 		vi26->leaves->mem_clk_patch_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi26->mem_clk_patch));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi26->mem_clk_patch), generate_atui, 0);
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi26->mc_adjust_pertile.leaves = (void*)vi26->leaves +
 		vi26->leaves->mc_adjust_pertile_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi26->mc_adjust_pertile));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi26->mc_adjust_pertile), generate_atui, 0);
 
 	vi26->mc_phyinit.leaves = (void*)vi26->leaves +
 		vi26->leaves->mc_phyinit_tbloffset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi26->mc_phyinit));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi26->mc_phyinit), generate_atui, 0);
 
 	//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi26->dram_data_remap = (void*)vi26->leaves +
@@ -421,7 +511,8 @@ static inline atui_branch* atomtree_populate_vram_info_v2_6(
 
 	vi26->post_ucode_init.leaves = (void*)vi26->leaves +
 		vi26->leaves->post_ucode_init_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi26->post_ucode_init));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi26->post_ucode_init), generate_atui, 0);
 
 }
 
@@ -445,14 +536,16 @@ static inline atui_branch* atomtree_populate_vram_info_v3_0(
 
 	vi30->mc_init.leaves = (void*)vi30->leaves +
 		vi30->leaves->umc_emuinittable_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi30->mc_init));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi30->mc_init), generate_atui, 0);
 
 	vi30->dram_data_remap = (void*)vi30->leaves +
 		vi30->leaves->dram_data_remap_table_offset;
 
 	vi30->umc_emuinit.leaves = (void*)vi30->leaves +
 		vi30->leaves->umc_emuinittable_offset;
-	atomtree_populate_umc_init_reg_block(atree, &(vi30->umc_emuinit));
+	atomtree_populate_umc_init_reg_block(
+		atree, &(vi30->umc_emuinit), generate_atui, 0);
 
 	vi30->rsvd_tables[0] = (void*)vi30->leaves +
 		vi30->leaves->reserved_sub_table_offset[0];
