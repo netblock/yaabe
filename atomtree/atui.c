@@ -300,7 +300,9 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 
 
 
-PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
+		atomtree_master_datatable_v2_1,
+
 	(table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -485,116 +487,116 @@ PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
 PPATUI_FUNCIFY(union, gddr6_mr2, atui_nullstruct,
 	(gddr6_mr2, gddr6_mr2,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(OCD_up,        2,0, ATUI_DEC, (ATUI_NODESCR)),
-			(OCD_down,      5,3, ATUI_DEC, (ATUI_NODESCR)),
-			(self_refresh,  7,6, ATUI_DEC, (ATUI_NODESCR)),
-			(EDC_mode,      8,8, ATUI_DEC, (ATUI_NODESCR)),
-			(RDQS,          9,9, ATUI_DEC, (ATUI_NODESCR)),
-			(CADT_SRF,     10,10, ATUI_DEC, (ATUI_NODESCR)),
-			(EDC_HR,       11,11, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
+			(OCD_up,       2,0, ATUI_DEC, (ATUI_NODESCR)),
+			(OCD_down,     5,3, ATUI_DEC, (ATUI_NODESCR)),
+			(self_refresh, 7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(EDC_mode,     8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(RDQS,         9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(CADT_SRF,    10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(EDC_HR,      11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,          15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr3, atui_nullstruct,
 	(gddr6_mr3, gddr6_mr3,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(dataWCK_term_offset,  2,0, ATUI_DEC, (ATUI_NODESCR)),
-			(CA_term_offset,       5,3, ATUI_DEC, (ATUI_NODESCR)),
-			(DRAM_info,            7,6, ATUI_DEC, (ATUI_NODESCR)),
-			(WR_scaling,           9,8, ATUI_DEC, (ATUI_NODESCR)),
-			(bank_groups,         11,10, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,                  15,12, ATUI_DEC, (ATUI_NODESCR))
+			(dataWCK_term_offset, 2,0, ATUI_DEC, (ATUI_NODESCR)),
+			(CA_term_offset,      5,3, ATUI_DEC, (ATUI_NODESCR)),
+			(DRAM_info,           7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(WR_scaling,          9,8, ATUI_DEC, (ATUI_NODESCR)),
+			(bank_groups,        11,10, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,                 15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr4, atui_nullstruct,
 	(gddr6_mr4, gddr6_mr4,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(EDC_hold_pattern,  3,0, ATUI_DEC, (ATUI_NODESCR)),
-			(CRCWL,             6,4, ATUI_DEC, (ATUI_NODESCR)),
-			(CRCRL,             8,7, ATUI_DEC, (ATUI_NODESCR)),
-			(RDCRC,             9,9, ATUI_DEC, (ATUI_NODESCR)),
-			(WRCRC,            10,10, ATUI_DEC, (ATUI_NODESCR)),
-			(EDC_hold_invert,  11,11, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,               15,12, ATUI_DEC, (ATUI_NODESCR))
+			(EDC_hold_pattern, 3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(CRCWL,            6,4, ATUI_DEC, (ATUI_NODESCR)),
+			(CRCRL,            8,7, ATUI_DEC, (ATUI_NODESCR)),
+			(RDCRC,            9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(WRCRC,           10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(EDC_hold_invert, 11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,              15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr5, atui_nullstruct,
 	(gddr6_mr5, gddr6_mr5,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(LP1,        0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(LP2,        1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(LP3,        2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(PLLDLL_BW,  5,3, ATUI_DEC, (ATUI_NODESCR)),
-			(RAS,       11,6, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,        15,12, ATUI_DEC, (ATUI_NODESCR))
+			(LP1,       0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(LP2,       1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(LP3,       2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(PLLDLL_BW, 5,3, ATUI_DEC, (ATUI_NODESCR)),
+			(RAS,      11,6, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,       15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr6, atui_nullstruct,
 	(gddr6_mr6, gddr6_mr6,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(VREFD_level,   6,0, ATUI_DEC, (ATUI_NODESCR)),
-			(pin_subaddr,  11,7, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
+			(VREFD_level,  6,0, ATUI_DEC, (ATUI_NODESCR)),
+			(pin_subaddr, 11,7, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,          15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr7, atui_nullstruct,
 	(gddr6_mr7, gddr6_mr7,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(WCK2CK_AP,        0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(hibernate,        1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(PLL_delay_comp,   2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(low_freq_mode,    3,3, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK2CK_autosync,  4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(DQ_preamble,      5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(half_VREFC,       6,6, ATUI_DEC, (ATUI_NODESCR)),
-			(half_VREFD,       7,7, ATUI_DEC, (ATUI_NODESCR)),
-			(VDD_range,        9,8, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK_DCC,         11,10, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,              15,12, ATUI_DEC, (ATUI_NODESCR))
+			(WCK2CK_AP,       0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(hibernate,       1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(PLL_delay_comp,  2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(low_freq_mode,   3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK2CK_autosync, 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(DQ_preamble,     5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(half_VREFC,      6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(half_VREFD,      7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(VDD_range,       9,8, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK_DCC,        11,10, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,             15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr8, atui_nullstruct,
 	(gddr6_mr8, gddr6_mr8,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(CA_low_term,   1,0, ATUI_DEC, (ATUI_NODESCR)),
-			(CA_high_term,  3,2, ATUI_DEC, (ATUI_NODESCR)),
-			(CA_TO,         4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(EDC_hiZ,       5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(CK_auto_cal,   6,6, ATUI_DEC, (ATUI_NODESCR)),
-			(REFpb,         7,7, ATUI_DEC, (ATUI_NODESCR)),
-			(RL_EHF,        8,8, ATUI_DEC, (ATUI_NODESCR)),
-			(WR_EHF,        9,9, ATUI_DEC, (ATUI_NODESCR)),
-			(CK_term,      11,10, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
+			(CA_low_term,  1,0, ATUI_DEC, (ATUI_NODESCR)),
+			(CA_high_term, 3,2, ATUI_DEC, (ATUI_NODESCR)),
+			(CA_TO,        4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(EDC_hiZ,      5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(CK_auto_cal,  6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(REFpb,        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(RL_EHF,       8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(WR_EHF,       9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(CK_term,     11,10, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,          15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr9, atui_nullstruct,
 	(gddr6_mr9, gddr6_mr9,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(DFE,           3,0, ATUI_DEC, (ATUI_NODESCR)),
-			(RFU,           6,4, ATUI_DEC, (ATUI_NODESCR)),
-			(pin_subaddr,  11,7, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
+			(DFE,          3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(RFU,          6,4, ATUI_DEC, (ATUI_NODESCR)),
+			(pin_subaddr, 11,7, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,          15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr10, atui_nullstruct,
 	(gddr6_mr10, gddr6_mr10,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(VREFC_offset,   3,0, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK_inv_byte0,  5,4, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK_inv_byte1,  7,6, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK2CK,         8,8, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK_ratio,      9,9, ATUI_DEC, (ATUI_NODESCR)),
-			(WCK_term,      11,10, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,            15,12, ATUI_DEC, (ATUI_NODESCR))
+			(VREFC_offset,  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK_inv_byte0, 5,4, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK_inv_byte1, 7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK2CK,        8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK_ratio,     9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(WCK_term,     11,10, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,           15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -610,41 +612,41 @@ PPATUI_FUNCIFY(union, gddr6_mr11, atui_nullstruct,
 PPATUI_FUNCIFY(union, gddr6_mr12, atui_nullstruct,
 	(gddr6_mr12, gddr6_mr12,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(VDDQ_off,   0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(P2BR_addr,  1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(PRBS,       2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(RL_EHF2,    3,3, ATUI_DEC, (ATUI_NODESCR)),
-			(CRCWL_EHF,  4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(WR_EHF2,    5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(RFU,       11,6, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,        15,12, ATUI_DEC, (ATUI_NODESCR))
+			(VDDQ_off,  0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(P2BR_addr, 1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(PRBS,      2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(RL_EHF2,   3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(CRCWL_EHF, 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(WR_EHF2,   5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(RFU,      11,6, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,       15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr13, atui_nullstruct,
 	(gddr6_mr13, gddr6_mr13,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(vendor_specific,  11,0, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,               15,12, ATUI_DEC, (ATUI_NODESCR))
+			(vendor_specific, 11,0, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,              15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr14, atui_nullstruct,
 	(gddr6_mr14, gddr6_mr14,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(vendor_specific,  11,0, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,               15,12, ATUI_DEC, (ATUI_NODESCR))
+			(vendor_specific, 11,0, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,              15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr15, atui_nullstruct,
 	(gddr6_mr15, gddr6_mr15,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(MRS_to_chan_A,  0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(MRS_to_chan_B,  1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(CA_training,    3,2, ATUI_DEC, (ATUI_NODESCR)),
-			(unused,         11,4, ATUI_DEC, (ATUI_NODESCR)),
-			(ID,             15,12, ATUI_DEC, (ATUI_NODESCR))
+			(MRS_to_chan_A, 0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(MRS_to_chan_B, 1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(CA_training,   3,2, ATUI_DEC, (ATUI_NODESCR)),
+			(unused,        11,4, ATUI_DEC, (ATUI_NODESCR)),
+			(ID,            15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -694,9 +696,9 @@ PPATUI_FUNCIFY(union, DRAMTiming4, atui_nullstruct,
 	(DRAMTiming4, DRAMTiming4,
 		(ATUI_HEX, ATUI_BITFIELD, (
 			(tFAW,   6,0, ATUI_DEC, (ATUI_NODESCR)),
-			(rsvd0,   7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(rsvd0,  7,7, ATUI_DEC, (ATUI_NODESCR)),
 			(t32AW, 16,8, ATUI_DEC, (ATUI_NODESCR)),
-			(rsvd1,  31,17, ATUI_DEC, (ATUI_NODESCR))
+			(rsvd1, 31,17, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -941,6 +943,49 @@ PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
 	)
 )
 
+
+PPATUI_FUNCIFY(struct, atom_gddr6_bit_byte_remap, atui_nullstruct,
+	(dphy_byteremap, dphy_byteremap,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_DPHY_ByteRemap"))
+	),
+	(dphy_bitremap0, dphy_bitremap0,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_DPHY_BitRemap0"))
+	),
+	(dphy_bitremap1, dphy_bitremap1,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_DPHY_BitRemap1"))
+	),
+	(dphy_bitremap2, dphy_bitremap2,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_DPHY_BitRemap2"))
+	),
+	(aphy_bitremap0, aphy_bitremap0,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_APHY_BitRemap0"))
+	),
+	(aphy_bitremap1, aphy_bitremap1,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_APHY_BitRemap1"))
+	),
+	(phy_dram, phy_dram,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mmUMC_PHY_DRAM"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
+	(table_size, table_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(phyintf_ck_inverted, phyintf_ck_inverted,
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "UMC_PHY_PHYINTF_CNTL.INV_CK"))
+	)
+)
+
+
 PPATUI_ENUMER(atom_dgpu_vram_type,
   ATOM_DGPU_VRAM_TYPE_GDDR5,
   ATOM_DGPU_VRAM_TYPE_HBM2,
@@ -951,13 +996,12 @@ PPATUI_ENUMER(atom_dgpu_vram_type,
 
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
-	// Design Specific Values
 	(memory_size, memory_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
 	),
 	(channel_enable, channel_enable,
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "bit vector, each bit indicate specific channel enable or not"))
 	),
 	(max_mem_clk, max_mem_clk,
@@ -965,7 +1009,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, "max memory clock of this memory in unit of 10kHz, =0 means it is not defined"))
 	),
 	(reserved, reserved,
-		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(mem_voltage, mem_voltage,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1016,7 +1060,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, "reserved"))
 	),
 	(dram_pnstring, dram_pnstring,
-		(ATUI_NAN, ATUI_ARRAY),
+		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
@@ -1122,19 +1166,17 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
 	(mc_phy_tile_num, mc_phy_tile_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
-	),
-	(vram_module, vram_module,
-		(ATUI_NODISPLAY, ATUI_INLINE, atom_vram_module_v10),
-		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
 	)
 )
+
+
 PPATUI_FUNCIFY(struct, atom_vram_module_v10, atomtree_vram_info_header_v2_4,
 	(memory_size, memory_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
 	),
 	(channel_enable, channel_enable,
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "bit vector, each bit indicate specific channel enable or not"))
 	),
 	(max_mem_clk, max_mem_clk,
