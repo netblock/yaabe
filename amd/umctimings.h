@@ -173,7 +173,7 @@ union DRAMTiming10 {
 		tRDWR      :13-8 +1,
 		rsvd1      :15-14 +1,
 		RDRspDelay :21-16 +1,
-		tREFTTAdj  :28-17 +1, // was tREFTT; a typo? tREFTR is a GDDR6 timing
+		tREFTTAdj  :28-22 +1, // was tREFTT; a typo? tREFTR is a GDDR6 timing
 		rsvd2      :31-29 +1;
 	};
 };
@@ -436,13 +436,16 @@ struct umc_block_navi1_timings {
 	struct UMCCTRL_PMG_CMD_MRS1 gddr6_mr4;
 	struct PMG_CMD gddr6_mr8;
 	union DRAMTiming1 DRAMTiming1;
+
 	union DRAMTiming2 DRAMTiming2;
 	union DRAMTiming3 DRAMTiming3;
 	union DRAMTiming4 DRAMTiming4;
 	union DRAMTiming5 DRAMTiming5;
 	union DRAMTiming6 DRAMTiming6;
+
 	union DRAMTiming7 DRAMTiming7;
 	union DRAMTiming8 DRAMTiming8;
+
 	union DRAMTiming9 DRAMTiming9;
 	union DRAMTiming10 DRAMTiming10;
 	union DRAMTiming12 DRAMTiming12;
