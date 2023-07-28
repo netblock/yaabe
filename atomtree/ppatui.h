@@ -270,10 +270,14 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	if (max_branch_count) {\
 		if (import_children != NULL) {\
-			num_branches = max_branch_count;\
+			j=0;\
 			for (i=0; i<max_branch_count; i++) {\
-				branches[i] = import_children[i];\
+				if (import_children[i] != NULL) {\
+					branches[j] = import_children[i];\
+					j++;\
+				}\
 			}\
+			num_branches = j;\
 		}\
 	}\
 \

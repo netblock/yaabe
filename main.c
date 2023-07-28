@@ -31,7 +31,7 @@ void vi24_funstuffs(struct atom_tree* atree) {
 	uint32_t memclock;
 	uint16_t i,j,l = 0;
 	l = (*regblk->umc_number_of_registers)*4;
-	for (i=0; i < regblk->umc_reg_setting_list_size ; i++) {
+	for (i=0; i < regblk->umc_reg_setting_list_length ; i++) {
 		memclock = dblk[i]->block_id.umc_id_access.memclockrange;
 		printf("memclockrange %2d: %4d %4X\n    ", i, memclock/100, (void*)dblk[i]->u32umc_reg_data - atree->bios);
 		for (j=0; j<l ; j++)
@@ -191,7 +191,7 @@ int main(int argc, char** argv){
 	
 
 
-	if (1) {
+	if (0) {
 		switch(atree->data_table.vram_info.ver) {
 			case v2_4:
 				vi24_funstuffs(atree);

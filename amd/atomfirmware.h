@@ -3113,7 +3113,7 @@ struct atom_vram_info_header_v3_0 {
 	uint16_t tmrs_table_offset;
 	uint16_t mc_init_table_offset;
 	uint16_t dram_data_remap_table_offset;
-	uint16_t umc_emuinittable_offset;
+	uint16_t umc_emuinit_table_offset;
 	uint16_t reserved_sub_table_offset[2];
 	uint8_t  vram_module_num;
 	uint8_t  umcip_min_ver;

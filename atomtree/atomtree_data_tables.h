@@ -51,7 +51,7 @@ struct atomtree_smc_dpm_info {
 
 	enum atomtree_common_version ver;
 	union {
-		void* leaves;
+		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
 		struct atom_smc_dpm_info_v4_1* v4_1;
@@ -74,7 +74,7 @@ struct atomtree_firmware_info {
 
 	enum atomtree_common_version ver;
 	union {
-		void* leaves;
+		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
 		struct atom_firmware_info_v3_1* v3_1;
@@ -94,7 +94,7 @@ struct atomtree_smu_info {
 
 	enum atomtree_common_version ver;
     union {
-        void* leaves;
+        void* leaves; // nonzero if populated
         struct atom_common_table_header* table_header;
 
 		struct atom_smu_info_v3_1* v3_1;
@@ -115,7 +115,7 @@ struct atomtree_vram_usagebyfirmware {
 
 	enum atomtree_common_version ver;
 	union {
-		void* leaves;
+		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
 		struct vram_usagebyfirmware_v2_1* v2_1;
@@ -133,7 +133,7 @@ struct atomtree_gfx_info {
 
 	enum atomtree_common_version ver;
     union {
-        void* leaves;
+        void* leaves; // nonzero if populated
         struct atom_common_table_header* table_header;
 
 		struct atom_gfx_info_v2_2* v2_2;
@@ -160,7 +160,7 @@ struct atomtree_powerplaytable {
 	//enum pp_rec_ver; // reccomend a path out of this hell
 	enum atomtree_common_version ver;
 	union {
-		void* leaves;
+		void* leaves; // nonzero if populated
         struct atom_common_table_header* table_header;
 		struct pp_common_table_header* pphead;
 
@@ -221,9 +221,10 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 // equal to umc_reg_num, I believe.
 #define ATOMTREE_UMC_REG_NUM 64
 struct atomtree_umc_init_reg_block{
+	struct atom_umc_init_reg_block* leaves; // nonzero if populated // nonzero if populated
+
 	struct atomtree_umc_init_reg_block* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_umc_init_reg_block* leaves;
 
 	union {
 		uint16_t* umc_reg_num;
@@ -235,15 +236,15 @@ struct atomtree_umc_init_reg_block{
 
 	struct atom_umc_reg_setting_data_block* \
 		umc_reg_setting_list[ATOMTREE_UMC_REG_NUM];
-
-	uint16_t umc_reg_setting_list_size;
+	uint16_t umc_reg_setting_list_length;
+	uint16_t umc_reg_setting_list_element_size;
 };
 
 /*
 struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
 	struct atomtree_gddr6_dram_data_remap* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_gddr6_bit_byte_remap* leaves;
+	struct atom_gddr6_bit_byte_remap* leaves; // nonzero if populated
 
 	//uint32_t table_size;
 	//uint8_t phyintf_ck_inverted[8];	 //UMC_PHY_PHYINTF_CNTL.INV_CK
@@ -252,9 +253,10 @@ struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
 */
 
 struct atomtree_vram_info_header_v2_3 {
+	struct atom_vram_info_header_v2_3* leaves; // nonzero if populated
+
 	struct atomtree_vram_info_header_v2_3* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_info_header_v2_3* leaves;
 
 	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -281,7 +283,7 @@ struct atomtree_vram_info_header_v2_3 {
 struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_vram_info_header_v2_4* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_info_header_v2_4* leaves;
+	struct atom_vram_info_header_v2_4* leaves; // nonzero if populated
 
 	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -307,7 +309,7 @@ struct atomtree_vram_info_header_v2_4 {
 struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_vram_info_header_v2_5* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_info_header_v2_5* leaves;
+	struct atom_vram_info_header_v2_5* leaves; // nonzero if populated
 
 	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -339,7 +341,7 @@ struct atomtree_vram_info_header_v2_5 {
 struct atomtree_vram_info_header_v2_6 {
 	struct atomtree_vram_info_header_v2_6* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_info_header_v2_6* leaves;
+	struct atom_vram_info_header_v2_6* leaves; // nonzero if populated
 
 	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -367,7 +369,7 @@ struct atomtree_vram_info_header_v2_6 {
 struct atomtree_vram_module_v3_0 { // TODO figure out child tables
 	struct atomtree_vram_module_v3_0* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_module_v3_0* leaves;
+	struct atom_vram_module_v3_0* leaves; // nonzero if populated
 
 	//uint16_t dram_info_offset;
 	void* dram_info;
@@ -382,7 +384,7 @@ struct atomtree_vram_module_v3_0 { // TODO figure out child tables
 struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atomtree_vram_info_header_v3_0* dot;
 	struct atomtree_vram_info* dotdot;
-	struct atom_vram_info_header_v3_0* leaves;
+	struct atom_vram_info_header_v3_0* leaves; // nonzero if populated
 
 	//struct atom_common_table_header table_header;
 
@@ -416,7 +418,7 @@ struct atomtree_vram_info {
 	struct atomtree_master_datatable_v2_1* dotdot;
 	union {
 		struct atom_common_table_header* table_header;
-		void* leaves;
+		void* leaves; // nonzero if populated
 	};
 
 	enum atomtree_common_version ver;
@@ -432,7 +434,7 @@ struct atomtree_vram_info {
 struct atomtree_sw_datatable {
 	enum atomtree_common_version ver; // meh
     union {
-        void* leaves;
+        void* leaves; // nonzero if populated
         struct atom_common_table_header* table_header;
 	};
 };
@@ -442,8 +444,8 @@ struct atomtree_master_datatable_v2_1 {
 	struct atom_tree* dotdot;
 	union {
         struct atom_common_table_header* table_header;
-		//struct atom_master_list_of_data_tables_v2_1* leaves;
-		struct atom_master_data_table_v2_1* leaves;
+		//struct atom_master_list_of_data_tables_v2_1* leaves; // nonzero if populated
+		struct atom_master_data_table_v2_1* leaves; // nonzero if populated
 	};
 	enum atomtree_common_version ver;
 
