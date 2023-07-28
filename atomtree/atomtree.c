@@ -422,10 +422,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 
 		vi24->navi1_gddr6_timings = (struct umc_block_navi1_timings*)\
 			vi24->mem_clk_patch.umc_reg_setting_list[0];
-		printf("!!!VI24: umc_reg element size: %u ; navi timing size: %u\n",
-			vi24->mem_clk_patch.umc_reg_setting_list_element_size,
-			sizeof(struct umc_block_navi1_timings)
-		);
 		vi24->num_timing_straps =
 			&(vi24->mem_clk_patch.umc_reg_setting_list_length);
 
@@ -1028,7 +1024,6 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 
 
 	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
-	printf("atui_dt: %p\n", atui_dt);
 
 	if (generate_atui) {
 		atui_branch* atui_header = ATUI_MAKE_BRANCH(atom_common_table_header,
