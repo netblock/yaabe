@@ -164,10 +164,14 @@ int main(int argc, char** argv){
 	}
 
 	printf("master data ver: %d\n", atree->data_table.ver);
-	printf("multimedia_info ver: %d %d\n",
-		atree->data_table.multimedia_info->table_header.format_revision,
-		atree->data_table.multimedia_info->table_header.content_revision
-	);
+	if (atree->data_table.multimedia_info) {
+		printf("multimedia_info ver: %d %d\n",
+			atree->data_table.multimedia_info->table_header.format_revision,
+			atree->data_table.multimedia_info->table_header.content_revision
+		);
+	} else {
+		 printf("multimedia_info ver: not populated\n");
+	}
 	printf("smc_dpm_info ver: %d\n", atree->data_table.smc_dpm_info.ver);
 	printf("firmwareinfo ver: %d\n", atree->data_table.firmwareinfo.ver);
 	printf("smu_info ver: %d\n", atree->data_table.smu_info.ver);
