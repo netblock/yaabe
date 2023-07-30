@@ -44,13 +44,15 @@ uint64_t strtoll_2(const char* str) {
 
 
 int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
+	//set the value of the leaf based on input text. Currently only support for
+	// numbers (including bitfields) and strings.
+
 	int err = 0;
 
 	if(leaf->type & ATUI_ANY) {
 		atui_leaf_set_val(leaf, strtoll_2(buffer));
 
-	} else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
-			leaf->total_bits == 8) {
+	} else if (leaf->type & ATUI_STRING) {
 		uint8_t size = leaf->array_size;
 		uint8_t i;
 		for(i=0; i<size; i++)
@@ -62,6 +64,8 @@ int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
 	return err;
 }
 int atui_get_to_text(atui_leaf* leaf, char* buffer) {
+	// Convert the value of a leaf to text. Currently only support for numbers,
+	// and strings.
 	int err = 0;
 
 	if(leaf->type & ATUI_ANY) {
@@ -78,8 +82,7 @@ int atui_get_to_text(atui_leaf* leaf, char* buffer) {
 			sprintf(buffer, format, val);
 		}
 
-	} else if( (leaf->type & (ATUI_STRING|ATUI_ARRAY)) &&
-			leaf->total_bits == 8) {
+	} else if (leaf->type & ATUI_STRING) {
 		uint8_t i = leaf->array_size;
 		buffer[i] = '\0'; // for strings
 		while (i--)
@@ -105,10 +108,19 @@ void atui_destroy_tree(atui_branch* tree) { //a reference implementation
 See ppatui.h and atui.h for more detail.
 
 example:
-PPATUI_FUNCIFY(type_prefix, atom_table_tame, atomtree_table_name,
-	table_element1, radix, fancy ui representation, args for fancy,
-	table_element2, radix, fancy ui representation, args for fancy,
-	table_element3, radix, fancy ui representation, args for fancy
+PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
+	(namespace_var, UI display name,
+		(radix, fancy, optional_fancy_args),
+		((lang, description)
+			(lang, description)
+		)
+	),
+	(namespace_var, UI display name,
+		(radix, fancy, optional_fancy_args),
+		((lang, description)
+			(lang, description)
+		)
+	)
 )
 
 WARNING: always have the last comma removed:
@@ -117,84 +129,95 @@ WARNING: always have the last comma removed:
 
 
 If the table element should be viewed as a number, set a radix. radix is one of
-ATUI_NONE, ATUI_DEC, ATUI_HEX, ATUI_BIN
+ATUI_NAN, ATUI_DEC, ATUI_HEX, ATUI_OCT, ATUI_BIN.
+If the element should be omitted from UI display, set radix to ATUI_NODISPLAY
 
+
+Fancy types:
+
+ATUI_BITFIELD:
 If the element should be viewed in base 2, but also has bitfields for children:
-	table_element, ATUI_BIN, ATUI_BITFIELD, (
-		bitfield_struct_instance_name,
-		name, bitness, radix,
-		name, bitness, radix
-	),
+	(namespace_var, UI display name,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(bitfield entry name, end_bit, start,  ATUI_DEC, (ATUI_NODESCR)),
+			(bitfield entry name, 7, 0,  ATUI_DEC, (ATUI_NODESCR)),
+			(bitfield entry name, 31,8,  ATUI_DEC, (ATUI_NODESCR)),
+		)), (ATUI_NODESCR)
+	)
 
 
-if the element should have a list of text-val pairs, an enum,
-first populate the atui enum:
+ATUI_ENUM:
+If the element should have a list of text-val pairs, an enum,
+First populate the atui enum:
 	PPATUI_ENUMER(enum_struct_name,
 		ENUM_ENTRY1,
 		ENUM_ENTRY2,
 		ENUM_ENTRY3,
 	)
-and then for the atui table,
-	table_element, ATUI_HEX, ATUI_ENUM, enum_struct_name,
+And then for the atui table,
+	(namespace_var, UI display name,
+		(ATUI_HEX, ATUI_ENUM, enum_struct_name),
+		(ATUI_NODESCR)
+	)
 
-if the element should reference a table, a atui_branch to inline,
-ake sure the table is populated with an ATUI_FUNCIFY()
-	table_element, ATUI_NAN, ATUI_INLINE, table_to_inline,
 
-if the element is a string,
-	table_element, ATUI_NAN, ATUI_STRING, ATUI_NONE,
+ATUI_INLINE:
+If the element should reference a table, a atui_branch to inline,
+	(namespace_var, UI display name,
+		(ATUI_NAN, ATUI_INLINE, table_to_inline),
+		(ATUI_NODESCR)
+	)
+If you want to import just the leaves of the table, as if it was the leaves of
+the branch you're constructing, set the radix to ATUI_NODISPLAY
+Also make sure the table is populated with an ATUI_FUNCIFY()
+
+
+ATUI_STRING, ATUI_ARRAY:
+If the element is a string,
+	(namespace_var, UI display name,
+		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NODESCR)
+	),
 or otherwise an array,
-	table_element, ATUI_HEX, ATUI_ARRAY, ATUI_NONE,
-
+	(namespace_var, UI display name,
+		(ATUI_HEX, ATUI_ARRAY),
+		(ATUI_NODESCR)
+	),
+If it's an array, data will be represented in the radix of your choosing.
 
 
 ATUI_DYNARRAY:
-
-leaf_top_name, ATUI_NODISPLAY, ATUI_DYNARRY, (
-	leaf_name, radix, fancy_ui_representation, args_for_fancy,
-	start_pointer, count
-)
-
+	(useless, leaf top UI name,
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			// Leaf pattern:
+			(namespace_var, UI display name,
+				(radix, fancy, optional_fancy_args),
+				((lang, description)
+					(lang, description)
+				)
+			)
+			source->dynarray_start_pointer, source->dynarray_number_of_elements
+		)),
+		(ATUI_NODESCR)
+	)
 If there is an array or number of leaves that is dynamically sized, especially
 if it has a dynamic allocation, ATUI_DYNARRY can pull in the boundaries from
 atomtree.
+
+The leaf pattern follows regular syntax, and can be a bitfield.
+
+dynarray_start_pointeris the pointer where to start the array within the bios,
+and dynarray_number_of_elements counts how long the array goes on for.
+Both dynarray_start_pointer and dynarray_number_of_elements can be either from
+the relevant atom struct (bios->), or atomtree struct (atomtree->)
+
+Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
+
 (it is originally written for atom_umc_init_reg_block.)
 
-leaf_top_name won't get displayed if ATUI_NODISPLAY is set.
 
-leaf_name .. args_for_fancy, is the leaf pattern to use. Can be a bitfield.
-start_pointer is a pointer where to start the array within the bios, and
-count is how long the array goes on for.
-Both start_pointer and count are members of the Funcify-passed atomtree struct.
 
-*/
-/*
-var, namedata, val display data,
-var, namedata, val display data,
-
-PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
-	(var, display name,
-		(radix, fancy, optional_fancy_args)
-		(lang, description
-			lang, description
-		)),
-	(var, display name,
-		(radix, fancy, optional_fancy_args)
-		(lang, description
-			lang, description
-		)),
-	(var, display name,
-		(radix, fancy, optional_fancy_args)
-		(lang, description
-			lang, description
-		)),
-
-)
-_PPATUI_FANCY_##fancytype(\
-		bios->var, var, name, desdat, radix, fancytype, __VA_ARGS__\
-	)
-
-python function to convert your bog-standard c-struct into a basic ATUI format
+python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
     import re
     s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
