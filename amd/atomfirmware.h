@@ -691,31 +691,31 @@ struct atom_gpio_pin_assignment {
 
 /* atom_gpio_pin_assignment.gpio_id definition */
 enum atom_gpio_pin_assignment_gpio_id {
-	I2C_HW_LANE_MUX       = 0x0f, // only valid when bit7=1 
-	I2C_HW_ENGINE_ID_MASK = 0x70, // only valid when bit7=1 
-	I2C_HW_CAP            = 0x80, // only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin 
+	I2C_HW_LANE_MUX       = 0x0f, // only valid when bit7=1
+	I2C_HW_ENGINE_ID_MASK = 0x70, // only valid when bit7=1
+	I2C_HW_CAP            = 0x80, // only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin
 
-	// gpio_id pre-define id for multiple usage 
-	// GPIO use to control PCIE_VDDC in certain SLT board 
+	// gpio_id pre-define id for multiple usage
+	// GPIO use to control PCIE_VDDC in certain SLT board
 	PCIE_VDDC_CONTROL_GPIO_PINID = 56,
-	// if PP_AC_DC_SWITCH_GPIO_PINID in Gpio_Pin_LutTable, AC/DC swithing feature is enable 
+	// if PP_AC_DC_SWITCH_GPIO_PINID in Gpio_Pin_LutTable, AC/DC swithing feature is enable
 	PP_AC_DC_SWITCH_GPIO_PINID = 60,
-	// VDDC_REGULATOR_VRHOT_GPIO_PINID in Gpio_Pin_LutTable, VRHot feature is enable 
+	// VDDC_REGULATOR_VRHOT_GPIO_PINID in Gpio_Pin_LutTable, VRHot feature is enable
 	VDDC_VRHOT_GPIO_PINID = 61,
-	//if VDDC_PCC_GPIO_PINID in GPIO_LUTable, Peak Current Control feature is enabled 
+	//if VDDC_PCC_GPIO_PINID in GPIO_LUTable, Peak Current Control feature is enabled
 	VDDC_PCC_GPIO_PINID = 62,
-	// Only used on certain SLT/PA board to allow utility to cut Efuse. 
+	// Only used on certain SLT/PA board to allow utility to cut Efuse.
 	EFUSE_CUT_ENABLE_GPIO_PINID = 63,
-	// ucGPIO=DRAM_SELF_REFRESH_GPIO_PIND uses  for memory self refresh (ucGPIO=0, DRAM self-refresh; ucGPIO= 
+	// ucGPIO=DRAM_SELF_REFRESH_GPIO_PIND uses  for memory self refresh (ucGPIO=0, DRAM self-refresh; ucGPIO=
 	DRAM_SELF_REFRESH_GPIO_PINID = 64,
-	// Thermal interrupt output->system thermal chip GPIO pin 
+	// Thermal interrupt output->system thermal chip GPIO pin
 	THERMAL_INT_OUTPUT_GPIO_PINID = 65,
 };
 
 
 struct atom_gpio_pin_lut_v2_1 {
 	struct atom_common_table_header table_header;
-	// the real number of this included in the structure is calcualted by using the (whole structure size - the header size)/size of atom_gpio_pin_lut  
+	// the real number of this included in the structure is calcualted by using the (whole structure size - the header size)/size of atom_gpio_pin_lut
 	struct atom_gpio_pin_assignment gpio_pin[8];
 };
 
@@ -3576,9 +3576,9 @@ struct get_memory_clock_parameter {
 */
 
 struct set_voltage_parameters_v1_4 {
-	uint8_t  voltagetype; // enum atom_voltage_type 
-	uint8_t  command;     // Indicate action: Set voltage level, enum atom_set_voltage_command 
-	uint16_t vlevel_mv;   // real voltage level in unit of mv or Voltage Phase (0, 1, 2, .. ) 
+	uint8_t  voltagetype; // enum atom_voltage_type
+	uint8_t  command;     // Indicate action: Set voltage level, enum atom_set_voltage_command
+	uint16_t vlevel_mv;   // real voltage level in unit of mv or Voltage Phase (0, 1, 2, .. )
 };
 
 // set_voltage_parameters_v2_1.voltagemode

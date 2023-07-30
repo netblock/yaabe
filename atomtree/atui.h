@@ -6,7 +6,7 @@ TODO explain how to add add tables
 Here be preprocessor dragons:
 ATUI, specifically atui.c is intended to as human-readable as possible,
 absrtracting away the programatic consequences of allocation and setup.
-This means that ATUI's allocater/instanciator functions have a lot of 
+This means that ATUI's allocater/instanciator functions have a lot of
 that can be figured out at compile time.
 
 vim replace patterns that help copypaste structs from atombios.h:
@@ -51,7 +51,7 @@ enum atui_type {
 	ATUI_BITFIELD = 1<<6,
 	ATUI_ENUM     = 1<<7,  // see also PPATUI_FUNCIFY()
 	ATUI_STRING   = 1<<8,  // meant for human-readable text
-	ATUI_ARRAY    = 1<<9,  // no technical difference from string 
+	ATUI_ARRAY    = 1<<9,  // no technical difference from string
 	ATUI_INLINE   = 1<<10, // pull in leaves from other tables
 	ATUI_DYNARRAY = 1<<11, // for runtime array lengths
 };
@@ -104,7 +104,7 @@ struct  _atui_branch {
 	atui_branch** inline_branches;
 	uint8_t inline_branch_count;
 	uint8_t max_inline_branch_count;
-	
+
 
 	atui_leaf* leaves;
 	uint16_t leaf_count;
@@ -162,7 +162,7 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	void* array_start;
 	uint32_t element_size; //for manual pointer math.
 	uint16_t dynarray_length; // the number of members to the dynamic array.
-	
+
 	uint16_t numleaves; // number of leaves within the pattern.
 	atui_branch* (*inl_func)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
@@ -171,7 +171,7 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 struct atui_nullstruct {
 	// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
 	// relevant for that branch.
-	void* leaves; 
+	void* leaves;
 };
 
 //blank branch

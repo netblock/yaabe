@@ -487,8 +487,8 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 				strap = ATUI_MAKE_BRANCH(umc_block_navi1_timings,
 					NULL, vi24->navi1_gddr6_timings+i, 0,NULL
 				);
-				sprintf(strap->name, "%s (%i MHz)", 
-					strap->varname, 
+				sprintf(strap->name, "%s (%i MHz)",
+					strap->varname,
 					(vi24->navi1_gddr6_timings[i].\
 						block_id.umc_id_access.memclockrange
 						/100
@@ -721,12 +721,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_6(
 	vi26->dotdot = &(atree->data_table.vram_info);
 	vi26->leaves = atree->bios +
 		atree->data_table.leaves->vram_info;
-/*
-	atui_branch* ;
-	if () {
-	} else {
-	}
-*/
+
 
 	atui_branch* atui_memadjust;
 	if (vi26->leaves->mem_adjust_tbloffset) {
@@ -927,7 +922,7 @@ static inline atui_branch* atomtree_populate_vram_info_v3_0(
 	// TODO: what was I doing here?
 	i = vi30->leaves->mc_phy_tile_num;
 	struct atomtree_vram_module_v3_0* atvm;
-	while (i) { // TODO: is the pointer math right? 
+	while (i) { // TODO: is the pointer math right?
 		i--;
 		atvm = &(vi30->vram_module[i]);
 
@@ -1104,7 +1099,7 @@ static inline atui_branch* atomtree_populate_datatables(
 	atui_branch* atui_smc_dpm_info =
 		atomtree_dt_populate_smc_dpm_info(atree, generate_atui);
 
-	atui_branch* atui_firmwareinfo = 
+	atui_branch* atui_firmwareinfo =
 		atomtree_dt_populate_firmwareinfo(atree, generate_atui);
 
 
@@ -1118,10 +1113,10 @@ static inline atui_branch* atomtree_populate_datatables(
 	}
 
 
-	atui_branch* atui_smu_info = 
+	atui_branch* atui_smu_info =
 		atomtree_dt_populate_smu_info(atree, generate_atui);
 
-	atui_branch* atui_fw_vram = 
+	atui_branch* atui_fw_vram =
 		atomtree_dt_populate_vram_usagebyfirmware(atree, generate_atui);
 
 
@@ -1135,7 +1130,7 @@ static inline atui_branch* atomtree_populate_datatables(
 	}
 
 
-	atui_branch* atui_gfx_info = 
+	atui_branch* atui_gfx_info =
 		atomtree_dt_populate_gfx_info(atree, generate_atui);
 
 	atui_branch* atui_ppt = atomtree_dt_populate_ppt(atree, generate_atui);

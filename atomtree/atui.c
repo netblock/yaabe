@@ -1,13 +1,5 @@
 /*
 AtomTree iterable interface for UIs.
-
-adding tables
-
-vim replace patterns that help copypaste structs from atombios.h:
-'<,'>s:struct :PPATUI_FUNCIFY(:g
-'<,'>s:.*uint[0-9]*_t[ ,^I]*:^I:g
-'<,'>s:;.*:,:g
-'<,'>s:,\n},:\r):g
 */
 
 #include "atui.h"
@@ -211,7 +203,7 @@ def struct_to_atui(s):
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
     s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(\g<3>, \g<3>,\n\t\t(ATUI_NODISPLAY, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
     s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)                                              
+    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
     s = re.sub("\s+?\(ATUI_NODESCR\)(\n\t\),)\s+?//\s+?(.*)", "\n\t\t((LANG_ENG, \"\g<2>\"))\g<1>", s)
     s = re.sub("\),(\s+)?};", ")\n)", s)
     return s
@@ -226,7 +218,7 @@ PPATUI_FUNCIFY(struct, atui_nullstruct, atui_nullstruct)
 PPATUI_FUNCIFY(struct, atom_common_table_header, atui_nullstruct,
 	(structuresize, structuresize,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),                                                     
+	),
 	(format_revision, format_revision,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mainly used for a hw function, when the parser is not backward compatible"))
@@ -266,7 +258,7 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 	),
 	(int10_offset, int10_offset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),  
+	),
 	(pcibusdevinitcode, pcibusdevinitcode,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -429,39 +421,13 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 )
 
 
-
-/*
-vim search-replace translation patters, from ddrmoderegisters.h to ppatui
-'<,'>s/mr0/mr1/g
-
-vim q recording:
-union bitfields:
-'<,'>s/union/PPATUI_FUNCIFY(union,/
-'<,'>s/union, .* {/\0, atui_nullstruct,/
-'<,'>s/ {,/,/
-'<,'>s/;/,/g
-'<,'>s/uint32_t .*,/(\0 \0/
-'<,'>s/uint32_t //g
-'<,'>s/struct { uint32_t/\t(ATUI_BIN, ATUI_BITFIELD, (/
-'<,'>s/\n    /\r\t/
-'<,'>s/\n\t    /\r\t\t/
-'<,'>s/\t\t[a-z,A-Z,0-9,_]\+ \+:/(\0/
-'<,'>s/(\t\t/\t\t\t(/
-'<,'>s/ \+:/,\0/
-'<,'>s/://
-'<,'>s/-/,/
-'<,'>s/ +1,.*\n/, ATUI_DEC, (ATUI_NODESCR)),\r/
-'<,'>s/,\n\t},\n},/\r\t\t)), (ATUI_NODESCR)\r\t)\r)/
-*/
-
-
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(gddr6_mr0, gddr6_mr0,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(WLmrs,    2, 0, ATUI_DEC, (ATUI_NODESCR)), 
-			(RLmrs,    6, 3, ATUI_DEC, (ATUI_NODESCR)), 
-			(testmode, 7, 7, ATUI_DEC, (ATUI_NODESCR)), 
-			(WRmrs,   11, 8, ATUI_DEC, (ATUI_NODESCR)), 
+			(WLmrs,    2, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(RLmrs,    6, 3, ATUI_DEC, (ATUI_NODESCR)),
+			(testmode, 7, 7, ATUI_DEC, (ATUI_NODESCR)),
+			(WRmrs,   11, 8, ATUI_DEC, (ATUI_NODESCR)),
 			(ID,      15,12, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
@@ -1068,7 +1034,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_3, atui_nullstruct,
 	(table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
-	),                             
+	),
 	(mem_adjust_tbloffset, mem_adjust_tbloffset,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting"))
@@ -1256,131 +1222,131 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10, atomtree_vram_info_header_v2_4,
 	)
 )
 PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atui_nullstruct,
-	( block_id,  block_id, 
+	( block_id,  block_id,
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
-	), 
+	),
 
-	(gddr6_mr5.gddr6_mr5, gddr6_mr5, 
+	(gddr6_mr5.gddr6_mr5, gddr6_mr5,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr5),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr5.reserved, gddr6_mr5_reserved, 
+	(gddr6_mr5.reserved, gddr6_mr5_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr0.gddr6_mr0, gddr6_mr0, 
+	(gddr6_mr0.gddr6_mr0, gddr6_mr0,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr0),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr0.reserved, gddr6_mr0_reserved, 
+	(gddr6_mr0.reserved, gddr6_mr0_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(UMCCTRL_PMG_CMD_EMRS, UMCCTRL_PMG_CMD_EMRS, 
+	(UMCCTRL_PMG_CMD_EMRS, UMCCTRL_PMG_CMD_EMRS,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr4.gddr6_mr4, gddr6_mr4, 
+	(gddr6_mr4.gddr6_mr4, gddr6_mr4,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr4),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr4.reserved, gddr6_mr4_reserved, 
+	(gddr6_mr4.reserved, gddr6_mr4_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr8.gddr6_mr8, gddr6_mr8, 
+	(gddr6_mr8.gddr6_mr8, gddr6_mr8,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr8),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr8.reserved, gddr6_mr8_reserved, 
+	(gddr6_mr8.reserved, gddr6_mr8_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(DRAMTiming1, DRAMTiming1, 
+	(DRAMTiming1, DRAMTiming1,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming1),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming2, DRAMTiming2, 
+	(DRAMTiming2, DRAMTiming2,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming2),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming3, DRAMTiming3, 
+	(DRAMTiming3, DRAMTiming3,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming3),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming4, DRAMTiming4, 
+	(DRAMTiming4, DRAMTiming4,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming4),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming5, DRAMTiming5, 
+	(DRAMTiming5, DRAMTiming5,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming5),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming6, DRAMTiming6, 
+	(DRAMTiming6, DRAMTiming6,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming6),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming7, DRAMTiming7, 
+	(DRAMTiming7, DRAMTiming7,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming7),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming8, DRAMTiming8, 
+	(DRAMTiming8, DRAMTiming8,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming8),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming9, DRAMTiming9, 
+	(DRAMTiming9, DRAMTiming9,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming9),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming10, DRAMTiming10, 
+	(DRAMTiming10, DRAMTiming10,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming10),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming12, DRAMTiming12, 
+	(DRAMTiming12, DRAMTiming12,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming13, DRAMTiming13, 
+	(DRAMTiming13, DRAMTiming13,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming13),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming14, DRAMTiming14, 
+	(DRAMTiming14, DRAMTiming14,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming16, DRAMTiming16, 
+	(DRAMTiming16, DRAMTiming16,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming16),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming17, DRAMTiming17, 
+	(DRAMTiming17, DRAMTiming17,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming17),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming20, DRAMTiming20, 
+	(DRAMTiming20, DRAMTiming20,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming20),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming21, DRAMTiming21, 
+	(DRAMTiming21, DRAMTiming21,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming21),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming22, DRAMTiming22, 
+	(DRAMTiming22, DRAMTiming22,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming22),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming23, DRAMTiming23, 
+	(DRAMTiming23, DRAMTiming23,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming23),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming35, DRAMTiming35, 
+	(DRAMTiming35, DRAMTiming35,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming35),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming36, DRAMTiming36, 
+	(DRAMTiming36, DRAMTiming36,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming36),
 		(ATUI_NODESCR)
 	),
-	(tRFC, tRFC, 
+	(tRFC, tRFC,
 		(ATUI_NODISPLAY, ATUI_INLINE, TRFCTimingCS01),
 		(ATUI_NODESCR)
 	),
-	(ChanPipeDly, ChanPipeDly, 
+	(ChanPipeDly, ChanPipeDly,
 		(ATUI_NODISPLAY, ATUI_INLINE, ChanPipeDly),
 		(ATUI_NODESCR)
 	)

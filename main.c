@@ -49,7 +49,7 @@ void vi24_funstuffs(struct atom_tree* atree) {
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
 	printf("      5432109876543210\n");
-	
+
 	printf("\n\n");
 	char* pnstring = atree->data_table.vram_info.v2_4.leaves->vram_module[0].dram_pnstring;
 	printf("pnstring:\"%s\"\n", pnstring);
@@ -74,7 +74,7 @@ void vi25_funstuffs(struct atom_tree* atree) {
 		printf("tRRDS %d, tFAW %d\n", vi25ac->tRRDS,vi25ac->tFAW);
 		//i++;
 	}
-	
+
 	printf("\n\n");
 	printf("      5432109876543210\n");
 	printf("MR 0: %016b\n",
@@ -93,7 +93,7 @@ void vi25_funstuffs(struct atom_tree* atree) {
 	printf("MR10: %016b\n",
 		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr10);
 	printf("      5432109876543210\n");
-	printf("bank groups enable (bit 0): %08b\n", 
+	printf("bank groups enable (bit 0): %08b\n",
 		atree->data_table.vram_info.v2_5.leaves->vram_module[0].vram_flags);
 }
 
@@ -137,8 +137,6 @@ void pp1_funstuffs(struct atom_tree* atree) {
 		navi1->power_saving_clock.max[SMU_11_0_PPCLOCK_UCLK],
 		navi1->power_saving_clock.max[SMU_11_0_PPCLOCK_PHYCLK]
 	);
-
-
 }
 
 void pp2_funstuffs(struct atom_tree* atree) {
@@ -146,7 +144,7 @@ void pp2_funstuffs(struct atom_tree* atree) {
 
 
 int main(int argc, char** argv){
-	printf("\n\n");	
+	printf("\n\n");
 	void* bios = NULL;
 	void* memfile = NULL;
 	long size;
@@ -192,7 +190,7 @@ int main(int argc, char** argv){
 	printf("\n");
 	printf("%s\n", (char*)atree->leaves->atom_bios_string);
 	printf("crc block offset: 0x%X\n", atree->leaves->crc_block_offset);
-	
+
 
 
 	if (0) {
@@ -219,7 +217,6 @@ int main(int argc, char** argv){
 			case 0:
 				//pp0_funstuffs(atree);
 				break;
-
 	}}
 
 	yaabe_gtk(atree);

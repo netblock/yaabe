@@ -21,20 +21,9 @@ typedef struct _atui_branch atui_branch;
 #define ATOM_ROM_MAGIC      "ATOM"
 #define ATOM_ROM_MAGIC_PTR  4
 
-struct atom_tree* atombios_parse(void* bios, bool generate_atui); 
+struct atom_tree* atombios_parse(void* bios, bool generate_atui);
 void* bios_fastforward(void* memory, long size);
 void* bios_fastforward_odd(void* memory, long size);
-/*
-enum atomtree_common_version {
-    v1_0=100, v1_1,v1_2,v1_3,v1_4,v1_5,v1_6,v1_7,v1_8,v1_9,v1_10,v1_11,v1_12,
-    v2_0=200, v2_1,v2_2,v2_3,v2_4,v2_5,v2_6,v2_7,v2_8,v2_9,v2_10,v2_11,v2_12,
-    v3_0=300, v3_1,v3_2,v3_3,v3_4,v3_5,v3_6,v3_7,v3_8,v3_9,v3_10,v3_11,v3_12,
-    v4_0=400, v4_1,v4_2,v4_3,v4_4,v4_5,v4_6,v4_7,v4_8,v4_9,v4_10,v4_11,v4_12,
-    nover=0
-};
-enum atomtree_common_version get_ver(struct atom_common_table_header* header);
-void set_ver(enum atomtree_common_version* ver, struct atom_common_table_header* header);
-*/
 
 struct atomtree_rom_header_v2_2
 {
@@ -70,7 +59,7 @@ struct atom_tree {
 
 	struct atom_rom_header_v2_2* leaves;
 	void* bios;
-	uint32_t bios_size;	
+	uint32_t bios_size;
 	//bios date, etc?
 
 	//bios_parser2_construct populates Display Core stuff

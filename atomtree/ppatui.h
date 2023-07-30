@@ -6,7 +6,7 @@ TODO explain how to add add tables
 Here be preprocessor dragons:
 ATUI, specifically atui.c is intended to as human-readable as possible,
 absrtracting away the programatic consequences of allocation and setup.
-This means that ATUI's allocater/instanciator functions have a lot of 
+This means that ATUI's allocater/instanciator functions have a lot of
 that can be figured out at compile time.
 
 vim replace patterns that help copypaste structs from atombios.h:
@@ -22,7 +22,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 
 //MAIN FUNCTIONS:
 
-// to create the allocator function. See atui.c for how it is used.             
+// to create the allocator function. See atui.c for how it is used.
 #define PPATUI_FUNCIFY(atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
     _PPATUI_FUNCIFY_HELPER(atomtypeprefix, atomtypesuffix, atomtreestruct \
 		 __VA_OPT__(,) __VA_ARGS__)
@@ -41,7 +41,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define PPATUI_ENUMER(name, ...) \
 	const struct atui_enum _atui_enum_##name[] = \
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
-#define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate}, 
+#define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate},
 
 
 // to define the header entries for the aformentioned allocator functions.
@@ -306,7 +306,7 @@ That is, bitfield population, and enum and inline association.
 */
 
 
-// common guts and functions for Fancy. 
+// common guts and functions for Fancy.
 
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
 	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
@@ -377,7 +377,7 @@ That is, bitfield population, and enum and inline association.
 //ATUI_BITFIELD
 
 #define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)
- 
+
 #define _PPATUI_FANCY_ATUI_BITFIELD(\
 		biosvar, var, name, desdat, radix, fancytype, bitfielddata) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
@@ -658,10 +658,10 @@ def ppatui_nloop_helper(max_entries=64, args="a,b,c,d", rec_depth=1):
 
 generic waterfall loop for functions with 4 unique arguments and 1 common.
 
-The recurse/recusive depth is about the preprocessor "painting blue". That is, 
-after the waterfall loop has been used, it becomes undefined within that 
+The recurse/recusive depth is about the preprocessor "painting blue". That is,
+after the waterfall loop has been used, it becomes undefined within that
 recursion.
-In other words, if the f() needs to call a loop, the loop that spun out the 
+In other words, if the f() needs to call a loop, the loop that spun out the
 f() f() f() f()... is no longer usable; the f() needs to call a different
 waterfall.
 */

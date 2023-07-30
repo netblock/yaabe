@@ -84,7 +84,7 @@ struct atomtree_firmware_info {
 	};
 };
 
-struct atomtree_smu_info { 
+struct atomtree_smu_info {
 	// TODO explode the versions into their own atomtree entities?
 	struct atomtree_smu_info* dot;
 	struct atomtree_master_datatable_v2_1* dotdot;
@@ -124,7 +124,7 @@ struct atomtree_vram_usagebyfirmware {
 };
 
 
-struct atomtree_gfx_info { 
+struct atomtree_gfx_info {
 	// TODO explode the versions into their own atomtree entities?
 	struct atomtree_gfx_info* dot;
 	struct atomtree_master_datatable_v2_1* dotdot;
@@ -177,7 +177,7 @@ struct atomtree_powerplaytable {
 		// what's the difference between 13.0.7 and 13.0.0?
 		//struct smu_13_0_7_powerplay_table* plum_bonito; //navi31
 
-		
+
 		// 13_0 is different from 13_0_0, and 13_0 is only used in aldebaran
 		// 13_0 has more stuff than 13_0_0; I wonder if they can be spliced
 		//struct smu_13_0_powerplay_table* aldebaran;
@@ -191,7 +191,7 @@ consider include/pptable.h
 firmware headers: amdgpu/amdgpu_ucode.h
 	we can probably get the smu version from this stuff
 --
-pp_dpm_load_fw 
+pp_dpm_load_fw
 smu_load_microcode,
 --
 
@@ -291,8 +291,8 @@ struct atomtree_vram_info_header_v2_4 {
 	//uint16_t mem_clk_patch_tbloffset;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	struct umc_block_navi1_timings* navi1_gddr6_timings;
-	uint16_t* num_timing_straps; 
-	
+	uint16_t* num_timing_straps;
+
 
 	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
@@ -444,7 +444,6 @@ struct atomtree_master_datatable_v2_1 {
 	struct atom_tree* dotdot;
 	union {
         struct atom_common_table_header* table_header;
-		//struct atom_master_list_of_data_tables_v2_1* leaves; // nonzero if populated
 		struct atom_master_data_table_v2_1* leaves; // nonzero if populated
 	};
 	enum atomtree_common_version ver;
