@@ -189,7 +189,10 @@ int main(int argc, char** argv){
 
 	printf("\n");
 	printf("%s\n", (char*)atree->leaves->atom_bios_string);
-	printf("crc block offset: 0x%X\n", atree->leaves->crc_block_offset);
+	printf("crc block offset: 0x%X (reg: 0x%X)\n",
+		atree->leaves->crc_block_offset,
+		(void*)&(atree->leaves->crc_block_offset) - atree->bios
+	);
 
 
 

@@ -226,10 +226,10 @@ def struct_to_atui(s):
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
     s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(\g<3>, \g<3>,\n\t\t(ATUI_NODISPLAY, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
     s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
-    s = re.sub("\s+?\(ATUI_NODESCR\)(\n\t\),)\s+?//\s+?(.*)", "\n\t\t((LANG_ENG, \"\g<2>\"))\g<1>", s)
+    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
+    s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
     s = re.sub("\),(\s+)?};", ")\n)", s)
-    return s
+    print(s)
 
 */
 
@@ -443,6 +443,250 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 	)
 )
 
+
+
+
+// TODO ATUI_DYNARRAY with multiple leaves
+PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
+	(Enabled, Enabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(Speed, Speed,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(Padding, Padding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(SlaveAddress, SlaveAddress,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(ControllerPort, ControllerPort,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(ControllerName, ControllerName,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(ThermalThrotter, ThermalThrotter,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(I2cProtocol, I2cProtocol,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
+	(table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+
+	(MaxVoltageStepGfx, MaxVoltageStepGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
+	),
+	(MaxVoltageStepSoc, MaxVoltageStepSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
+	),
+
+	(VddGfxVrMapping, VddGfxVrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(VddSocVrMapping, VddSocVrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(VddMem0VrMapping, VddMem0VrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(VddMem1VrMapping, VddMem1VrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+
+	(GfxUlvPhaseSheddingMask, GfxUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(SocUlvPhaseSheddingMask, SocUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(ExternalSensorPresent, ExternalSensorPresent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "External RDI connected to TMON (aka TEMP IN)"))
+	),
+	(Padding8_V, Padding8_V,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Telemetry Settings"))
+	),
+	(GfxMaxCurrent, GfxMaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(GfxOffset, GfxOffset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Padding_TelemetryGfx, Padding_TelemetryGfx,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(SocMaxCurrent, SocMaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(SocOffset, SocOffset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Padding_TelemetrySoc, Padding_TelemetrySoc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(Mem0MaxCurrent, Mem0MaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Mem0Offset, Mem0Offset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Padding_TelemetryMem0, Padding_TelemetryMem0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(Mem1MaxCurrent, Mem1MaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Mem1Offset, Mem1Offset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(Padding_TelemetryMem1, Padding_TelemetryMem1,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Settings"))
+	),
+	(AcDcGpio, AcDcGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for AC/DC switching"))
+	),
+	(AcDcPolarity, AcDcPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(VR0HotGpio, VR0HotGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
+	),
+	(VR0HotPolarity, VR0HotPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+
+	(VR1HotGpio, VR1HotGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR1 HOT event"))
+	),
+	(VR1HotPolarity, VR1HotPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(GthrGpio, GthrGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for GTHR Event"))
+	),
+	(GthrPolarity, GthrPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "replace GPIO polarity for GTHR"))
+	),
+
+	(LedPin0, LedPin0,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "LED Display Settings GPIO number for LedPin[0]"))
+	),
+	(LedPin1, LedPin1,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[1]"))
+	),
+	(LedPin2, LedPin2,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[2]"))
+	),
+	(padding8_4, padding8_4,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GFXCLK PLL Spread Spectrum"))
+	),
+	(PllGfxclkSpreadEnabled, PllGfxclkSpreadEnabled,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(PllGfxclkSpreadPercent, PllGfxclkSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(PllGfxclkSpreadFreq, PllGfxclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(DfllGfxclkSpreadEnabled, DfllGfxclkSpreadEnabled,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GFXCLK DFLL Spread Spectrum on or off"))
+	),
+	(DfllGfxclkSpreadPercent, DfllGfxclkSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(DfllGfxclkSpreadFreq, DfllGfxclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(UclkSpreadEnabled, UclkSpreadEnabled,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "UCLK Spread Spectrum  on or off"))
+	),
+	(UclkSpreadPercent, UclkSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(UclkSpreadFreq, UclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(SoclkSpreadEnabled, SoclkSpreadEnabled,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "SOCCLK Spread Spectrum on or off"))
+	),
+	(SocclkSpreadPercent, SocclkSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(SocclkSpreadFreq, SocclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(TotalBoardPower, TotalBoardPower,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power"))
+	),
+	(BoardPadding, BoardPadding,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Mvdd Svi2 Div Ratio Setting"))
+	),
+	(MvddRatio, MvddRatio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)"))
+	),
+
+	(BoardReserved, BoardReserved,
+		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
 
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(gddr6_mr0, gddr6_mr0,
