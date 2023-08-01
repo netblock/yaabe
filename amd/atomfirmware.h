@@ -485,22 +485,21 @@ enum atombios_firmware_capability_old {
 	ATOM_FIRMWARE_CAP_DYNAMIC_BOOT_CFG_ENABLE = 0x0020000,
 };
 union atombios_firmware_capability {
-	// TODO double check if it's bugfree to AMD's enum.
 	uint32_t firmware_capability;
 	struct { uint32_t
-		FIRMWARE_POSTED       :0-0 +1,
-		GPU_VIRTUALIZATION    :1-1 +1,
-		reserved0             :5-2 +1,
-		WMI_SUPPORT           :6-6 +1,
-		HWEMU_ENABLE          :7-7 +1,
-		HWEMU_UMC_CFG         :8-8 +1,
-		SRAM_ECC              :9-9 +1,
+		FIRMWARE_POSTED         :0-0 +1,
+		GPU_VIRTUALIZATION      :1-1 +1,
+		reserved0               :5-2 +1,
+		WMI_SUPPORT             :6-6 +1,
+		HWEMU_ENABLE            :7-7 +1,
+		HWEMU_UMC_CFG           :8-8 +1,
+		SRAM_ECC                :9-9 +1,
 		ENABLE_2STAGE_BIST_TRAINING :10-10 +1,
-		reserved1            :14-11 +1,
-		ENABLE_2ND_USB20PORT :15-15 +1,
-		reserved2            :16-16 +1,
-		DYNAMIC_BOOT_CFG_ENABLE :17-17 +1,
-		reserved3            :31-18 +1;
+		reserved1              :14-11 +1,
+		ENABLE_2ND_USB20PORT   :15-15 +1,
+		reserved2              :16-16 +1,
+		DYNAMIC_BOOT_CFG_ENABLE:17-17 +1,
+		reserved3              :31-18 +1;
 	};
 };
 
@@ -2450,6 +2449,7 @@ struct atom_smc_dpm_info_v4_5 {
 	uint8_t  padding8_4;
 
 	// GFXCLK PLL Spread Spectrum
+	// https://en.wikipedia.org/wiki/Q_(number_format)
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
 	uint8_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz

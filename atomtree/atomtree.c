@@ -112,7 +112,37 @@ atui_branch* atomtree_dt_populate_firmwareinfo(
 		firmwareinfo->leaves =
 			atree->bios + atree->data_table.leaves->firmwareinfo;
 		firmwareinfo->ver = get_ver(firmwareinfo->table_header);
-		atui_firmwareinfo = NULL;
+		if (generate_atui) {
+			switch (firmwareinfo->ver) {
+				case v3_1:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v3_1,
+						NULL, firmwareinfo->v3_1, 0,NULL
+					);
+					break;
+				case v3_2:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v3_2,
+						NULL, firmwareinfo->v3_2, 0,NULL
+					);
+					break;
+				case v3_3:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v3_3,
+						NULL, firmwareinfo->v3_3, 0,NULL
+					);
+					break;
+				case v3_4:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v3_4,
+						NULL, firmwareinfo->v3_4, 0,NULL
+					);
+					break;
+				default:
+					atui_firmwareinfo = NULL;
+					break;
+			}
+		}
 	} else {
 		firmwareinfo->leaves = NULL;
 		firmwareinfo->ver = nover;
@@ -1211,7 +1241,9 @@ static inline atui_branch* atomtree_populate_datatables(
 
 	atui_branch* atui_dt = NULL;
 	if (generate_atui) {
-		atui_branch* child_branches[] = {atui_smc_dpm_info, atui_vram_info};
+		atui_branch* child_branches[] = {
+			atui_smc_dpm_info, atui_firmwareinfo, atui_vram_info,
+		};
 		int num_child_branches = sizeof(child_branches)/sizeof(atui_branch*);
 
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,

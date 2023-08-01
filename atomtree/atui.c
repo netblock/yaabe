@@ -220,17 +220,34 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
     import re
-    s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
     s = re.sub("\n    ","\n\t", s)
     s = re.sub("\n\t    ","\n\t\t", s)
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
+    s = re.sub("[ \t]+\n", "\n", s)
+    s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
     s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(\g<3>, \g<3>,\n\t\t(ATUI_NODISPLAY, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
+    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)(\s+)?;", "(\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
     s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
     s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
     s = re.sub("\),(\s+)?};", ")\n)", s)
     print(s)
 
+
+def bitfield_to_atui(s):
+    import re
+    s = re.sub("\n    ","\n\t", s)
+    s = re.sub("\n\t    ","\n\t\t", s)
+    s = re.sub("\n\t\t    ","\n\t\t\t", s)
+    s = re.sub("[ \t]+\n", "\n", s)                                             
+    s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
+    s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
+    s = re.sub("\(ATUI_NODESCR\)(\s*)//(\s*)(.*)", "((LANG_ENG, \"\g<3>\"))", s)
+    s = re.sub("[ \t]*uint[0-9]+_t ([A-Za-z0-9_]+)[ \t]*;\s+struct { uint[0-9]+_t\n", "\t(\g<1>, \g<1>,\n\t\t(ATUI_BIN, ATUI_BITFIELD, (\n", s)
+    s = re.sub("([a-zA-Z0-9_]+)(\s*):([0-9]+)(\s*)-(\s*)([0-9]+)(\s*)\+1[,;][ \t]*", "\t(\g<1>,\g<2>\g<3>\g<4>,\g<5>\g<6>, ATUI_DEC,", s)
+    s = re.sub("ATUI_DEC,(\s*)//(\s*)(.*)", "ATUI_DEC, ((LANG_ENG, \"\g<3>\"))),", s) 
+    s = re.sub("ATUI_DEC,\n", "ATUI_DEC, (ATUI_NODESCR)),\n", s)
+    s = re.sub(",(\n\t\t\)\), )", "\g<1>", s) 
+    print(s)
 */
 
 
@@ -442,7 +459,6 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
-
 
 
 
@@ -688,6 +704,390 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	)
 )
 
+
+PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
+	(firmware_capability, firmware_capability,
+		(ATUI_HEX, ATUI_BITFIELD, (
+			(FIRMWARE_POSTED,         0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(GPU_VIRTUALIZATION,      1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved0,               5,2, ATUI_DEC, (ATUI_NODESCR)),
+			(WMI_SUPPORT,             6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(HWEMU_ENABLE,            7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(HWEMU_UMC_CFG,           8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(SRAM_ECC,                9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(ENABLE_2STAGE_BIST_TRAINING, 10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved1,              14,11, ATUI_DEC, (ATUI_NODESCR)),
+			(ENABLE_2ND_USB20PORT,   15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved2,              16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(DYNAMIC_BOOT_CFG_ENABLE,17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved3,              31,18, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v3_1, atomtree_firmware_info,
+	(table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(firmware_revision, firmware_revision,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(firmware_capability, firmware_capability,
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODESCR)
+	),
+	(main_call_parser_entry, main_call_parser_entry,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
+	),
+	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "1st bios scratch register dword address"))
+	),
+	(bootup_vddc_mv, bootup_vddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddci_mv, bootup_vddci_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddc_mv, bootup_mvddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mem_module_id, mem_module_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(coolingsolution_id, coolingsolution_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
+	),
+	(reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_high, mc_baseaddr_high,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_low, mc_baseaddr_low,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(reserved2, reserved2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v3_2, atomtree_firmware_info,
+	(table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(firmware_revision, firmware_revision,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(firmware_capability, firmware_capability,
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODESCR)
+	),
+	(main_call_parser_entry, main_call_parser_entry,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
+	),
+	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "1st bios scratch register dword address"))
+	),
+	(bootup_vddc_mv, bootup_vddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddci_mv, bootup_vddci_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddc_mv, bootup_mvddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mem_module_id, mem_module_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(coolingsolution_id, coolingsolution_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
+	),
+	(reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_high, mc_baseaddr_high,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_low, mc_baseaddr_low,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(board_i2c_feature_id, board_i2c_feature_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
+	),
+	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
+	),
+	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(reserved3, reserved3,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddq_mv, bootup_mvddq_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvpp_mv, bootup_mvpp_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(reserved2, reserved2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v3_3, atomtree_firmware_info,
+	(table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(firmware_revision, firmware_revision,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(firmware_capability, firmware_capability,
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODESCR)
+	),
+	(main_call_parser_entry, main_call_parser_entry,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
+	),
+	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "1st bios scratch register dword address"))
+	),
+	(bootup_vddc_mv, bootup_vddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddci_mv, bootup_vddci_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddc_mv, bootup_mvddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mem_module_id, mem_module_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(coolingsolution_id, coolingsolution_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
+	),
+	(reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_high, mc_baseaddr_high,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_low, mc_baseaddr_low,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(board_i2c_feature_id, board_i2c_feature_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
+	),
+	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
+	),
+	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(reserved3, reserved3,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddq_mv, bootup_mvddq_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvpp_mv, bootup_mvpp_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(pplib_pptable_id, pplib_pptable_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS"))
+	),
+	(reserved2, reserved2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
+	(table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(firmware_revision, firmware_revision,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(firmware_capability, firmware_capability,
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODESCR)
+	),
+	(main_call_parser_entry, main_call_parser_entry,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
+	),
+	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "1st bios scratch register dword address"))
+	),
+	(bootup_vddc_mv, bootup_vddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddci_mv, bootup_vddci_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddc_mv, bootup_mvddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mem_module_id, mem_module_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(coolingsolution_id, coolingsolution_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ... */"))
+	),
+	(reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_high, mc_baseaddr_high,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(mc_baseaddr_low, mc_baseaddr_low,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(board_i2c_feature_id, board_i2c_feature_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
+	),
+	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
+	),
+	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(ras_rom_i2c_slave_addr, ras_rom_i2c_slave_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvddq_mv, bootup_mvddq_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bootup_mvpp_mv, bootup_mvpp_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(pplib_pptable_id, pplib_pptable_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS"))
+	),
+	(mvdd_ratio, mvdd_ratio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mvdd_raio = (real mvdd in power rail)*1000/(mvdd_output_from_svi2)"))
+	),
+	(hw_bootup_vddgfx_mv, hw_bootup_vddgfx_mv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "hw default vddgfx voltage level decide by board strap"))
+	),
+	(hw_bootup_vddc_mv, hw_bootup_vddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "hw default vddc voltage level decide by board strap"))
+	),
+	(hw_bootup_mvddc_mv, hw_bootup_mvddc_mv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "hw default mvddc voltage level decide by board strap"))
+	),
+	(hw_bootup_vddci_mv, hw_bootup_vddci_mv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "hw default vddci voltage level decide by board strap"))
+	),
+	(maco_pwrlimit_mw, maco_pwrlimit_mw,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "bomaco mode power limit in unit of m-watt"))
+	),
+	(usb_pwrlimit_mw, usb_pwrlimit_mw,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "power limit when USB is enable in unit of m-watt"))
+	),
+	(fw_reserved_size_in_kb, fw_reserved_size_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "VBIOS reserved extra fw size in unit of kb."))
+	),
+	(pspbl_init_done_reg_addr, pspbl_init_done_reg_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(pspbl_init_done_value, pspbl_init_done_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(pspbl_init_done_check_timeout, pspbl_init_done_check_timeout,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "time out in unit of us when polling pspbl init done"))
+	),
+	(reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+
+
+
+
+
+
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(gddr6_mr0, gddr6_mr0,
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -699,8 +1099,6 @@ PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
-
-
 PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
 	(gddr6_mr1, gddr6_mr1,
 		(ATUI_BIN, ATUI_BITFIELD, (
