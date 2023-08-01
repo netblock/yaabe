@@ -152,14 +152,14 @@ union gddr6_mr10 {
 };
 
 union gddr6_mr11 {
-	uint16_t gddr6_mr11; // raw data
 	// 0=refresh enabled 1=refresh blocked for paticular segment or banks
+	uint16_t gddr6_mr11; // raw data
 	struct { uint16_t
 		PASR_2bank_mask  :7-0 +1,
 			// 1=banks0,1; 2=2,3; 4=4,5; 8=6,7 .. 128=14,15
 		PASR_rowseg_mask:11-8 +1,
 			// two MSB of row addr. 0=00;2=01;4=10;8=11 15=all
-	ID              :15-12 +1; // MR 11
+	ID                  :15-12 +1; // MR 11
 	};
 };
 

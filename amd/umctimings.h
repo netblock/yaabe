@@ -86,7 +86,7 @@ union DRAMTiming5 {
 		tWTRS :12-8 +1,
 		rsvd1 :15-13 +1,
 		tWTRL :22-16 +1,
-		rsvd2 :31-23 +1; // no idea
+		rsvd2 :31-23 +1;
 	};
 };
 
@@ -94,7 +94,7 @@ union DRAMTiming6 {
 	uint32_t DRAMTiming6;
 	struct { uint32_t
 		tWR    :6-0 +1,
-		rsvd0 :31-7 +1; //what are you hiding...
+		rsvd0 :31-7 +1;
 	};
 };
 
@@ -243,9 +243,9 @@ union DRAMTiming14 {
 	};
 };
 
-union DRAMTiming15 {
+union DRAMTiming15 { // DDR reliability RAS
 	uint32_t DRAMTiming15;
-	struct { uint32_t // DDR reliability RAS
+	struct { uint32_t
 		AlertCrcDly  :6-0 +1, // expected alert crc error dely, in memclocks
 		rsvd0        :7-7 +1,
 		AlertParDly :14-8 +1, // Parity error
@@ -298,9 +298,9 @@ union DRAMTiming21 {
 	};
 };
 
-union DRAMTiming22 {
+union DRAMTiming22 { // "DFI" is shorthand for "DDR PHY"
 	uint32_t DRAMTiming22;
-	struct { uint32_t // "DFI" is shorthand for "DDR PHY"
+	struct { uint32_t
 		tRDDATA_EN   :6-0 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
 		rsvd0        :7-7 +1,
 		tPHY_WRLAT  :13-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
@@ -350,9 +350,9 @@ union DRAMTiming34 {
 	};
 };
 
-union DRAMTiming35 {
+union DRAMTiming35 { // reliability RAS
 	uint32_t DRAMTiming35;
-	struct { uint32_t // reliability RAS
+	struct { uint32_t
 		ReceiverWait :10-0 +1, // Wait time to start recovery sequence
 		CmdStageCnt  :21-11 +1,//Recov. seq. cmd stagger counter. See CmdStgFrc
 			// CmdStgFrc:1; 1=enable recovery command stagger in recovery phase
@@ -362,9 +362,9 @@ union DRAMTiming35 {
 	};
 };
 
-union DRAMTiming36 {
+union DRAMTiming36 { // GDDR training
 	uint32_t DRAMTiming36;
-	struct { uint32_t // GDDR training
+	struct { uint32_t
 		tWTRTR     :5-0 +1, // WRITE to WRTR
 		tREFTR     :11-6 +1, // was named tREFTT. REFab to RDTR/WRTR
 		tTTROW     :17-12 +1, // ??
@@ -397,7 +397,7 @@ union ChanPipeDly {
 	struct { uint32_t
 		TXCtrlChanDly :2-0 +1,//# of delay stages on DFI control from UMC to PHY
 		rsvd0         :3-3 +1,
-		TXDataChanDly :6-4 +1,// ... on DFI write data from UMC to PHY
+		TXDataChanDly :6-4 +1, // ... on DFI write data from UMC to PHY
 		rsvd1         :7-7 +1,
 		RXDataChanDly:10-8 +1, // ... on DFI read data from PHY to UMC
 		rsvd2        :31-11 +1;
