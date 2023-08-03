@@ -5,21 +5,6 @@ Open your JESD and your PPR/BKDG
 Some timings get removed depending on the target platform. If there's more than
 4 contiguous reserved bits, there's probably a timing for a different platform
 there.
-
-vim record:
-'<,'>s/struct .* {/union \0\r\0/
-'<,'>s/union struct/union/
-'<,'>s/struct/\tuint32_t
-'<,'>s/uint32_t .* {/\0{{{/
-'<,'>s/ {{{{/;\r\tstruct { uint32_t/
-'<,'>s/uint32_t .*:/\t{{}}\0/                                                 
-'<,'>s/\t\t{{}}uint32_t /\t\t/
-'<,'>s/: /:/
-'<,'>s/:.*;/\0 +1,/
-'<,'>s/; +1,/ +1,/
-'<,'>s/1,.*\n};/;\0/
-'<,'>s/;1,/1;/
-'<,'>s/};/\t};\r};/
 */
 
 #ifndef _UMCTIMINGS_H_

@@ -20,10 +20,15 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* TODO: modernify atombios.h:
+
+%s/\(uint[0-9]\+_t[ \t]\+\)u[scl]/\1/
+*/
 
 /****************************************************************************/
 /*Portion I: Definitions  shared between VBIOS and Driver                   */
 /****************************************************************************/
+
 
 #ifndef _ATOMBIOS_H
 #define _ATOMBIOS_H

@@ -1,5 +1,7 @@
-// Please refer to JESD 250. If unavailable consider,
-// 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
+/*
+Please refer to JESD 250. If unavailable consider,
+2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
+*/
 
 #ifndef _DDRMODEREGISTERS_H_
 #define _DDRMODEREGISTERS_H_
