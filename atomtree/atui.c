@@ -109,13 +109,13 @@ See ppatui.h and atui.h for more detail.
 
 example:
 PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(radix, fancy, optional_fancy_args),
 		((lang, description)
 			(lang, description)
 		)
 	),
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(radix, fancy, optional_fancy_args),
 		((lang, description)
 			(lang, description)
@@ -137,7 +137,7 @@ Fancy types:
 
 ATUI_BITFIELD:
 If the element should be viewed in base 2, but also has bitfields for children:
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(bitfield entry name, end_bit, start,  ATUI_DEC, (ATUI_NODESCR)),
 			(bitfield entry name, 7, 0,  ATUI_DEC, (ATUI_NODESCR)),
@@ -155,7 +155,7 @@ First populate the atui enum:
 		ENUM_ENTRY3,
 	)
 And then for the atui table,
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(ATUI_HEX, ATUI_ENUM, enum_struct_name),
 		(ATUI_NODESCR)
 	)
@@ -163,7 +163,7 @@ And then for the atui table,
 
 ATUI_INLINE:
 If the element should reference a table, a atui_branch to inline,
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(ATUI_NAN, ATUI_INLINE, table_to_inline),
 		(ATUI_NODESCR)
 	)
@@ -174,12 +174,12 @@ Also make sure the table is populated with an ATUI_FUNCIFY()
 
 ATUI_STRING, ATUI_ARRAY:
 If the element is a string,
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(ATUI_NAN, ATUI_STRING),
 		(ATUI_NODESCR)
 	),
 or otherwise an array,
-	(namespace_var, UI display name,
+	(bios->namespace_var, UI display name,
 		(ATUI_HEX, ATUI_ARRAY),
 		(ATUI_NODESCR)
 	),
@@ -187,7 +187,7 @@ If it's an array, data will be represented in the radix of your choosing.
 
 
 ATUI_DYNARRAY:
-	(useless, leaf top UI name,
+	(doesnt_do_anything, leaf top UI name,
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
 			(namespace_var, UI display name,
@@ -206,7 +206,7 @@ atomtree.
 
 The leaf pattern follows regular syntax, and can be a bitfield.
 
-dynarray_start_pointeris the pointer where to start the array within the bios,
+dynarray_start_pointer uis the pointer where to start the array within the bios,
 and dynarray_number_of_elements counts how long the array goes on for.
 Both dynarray_start_pointer and dynarray_number_of_elements can be either from
 the relevant atom struct (bios->), or atomtree struct (atomtree->)
@@ -258,14 +258,14 @@ PPATUI_FUNCIFY(struct, atui_nullstruct, atui_nullstruct)
 
 
 PPATUI_FUNCIFY(struct, atom_common_table_header, atui_nullstruct,
-	(structuresize, structuresize,
+	(bios->structuresize, structuresize,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(format_revision, format_revision,
+	(bios->format_revision, format_revision,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mainly used for a hw function, when the parser is not backward compatible"))
 	),
-	(content_revision, content_revision,
+	(bios->content_revision, content_revision,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "change it when a data table has a structure change, or a hw function has a input/output parameter change"))
 	)
@@ -275,59 +275,59 @@ PPATUI_FUNCIFY(struct, atom_common_table_header, atui_nullstruct,
 PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 		atom_tree, //THE atom_tree struct
 
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(atom_bios_string, atom_bios_string,
+	(bios->atom_bios_string, atom_bios_string,
 		(ATUI_NAN, ATUI_STRING),
 		((LANG_ENG, "enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,"))
 	),
-	(bios_segment_address, bios_segment_address,
+	(bios->bios_segment_address, bios_segment_address,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(protectedmodeoffset, protectedmodeoffset,
+	(bios->protectedmodeoffset, protectedmodeoffset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(configfilenameoffset, configfilenameoffset,
+	(bios->configfilenameoffset, configfilenameoffset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(crc_block_offset, crc_block_offset,
+	(bios->crc_block_offset, crc_block_offset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(vbios_bootupmessageoffset, vbios_bootupmessageoffset,
+	(bios->vbios_bootupmessageoffset, vbios_bootupmessageoffset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(int10_offset, int10_offset,
+	(bios->int10_offset, int10_offset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pcibusdevinitcode, pcibusdevinitcode,
+	(bios->pcibusdevinitcode, pcibusdevinitcode,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(iobaseaddress, iobaseaddress,
+	(bios->iobaseaddress, iobaseaddress,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(subsystem_vendor_id, subsystem_vendor_id,
+	(bios->subsystem_vendor_id, subsystem_vendor_id,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(subsystem_id, subsystem_id,
+	(bios->subsystem_id, subsystem_id,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pci_info_offset, pci_info_offset,
+	(bios->pci_info_offset, pci_info_offset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(masterhwfunction_offset, masterhwfunction_offset,
+	(bios->masterhwfunction_offset, masterhwfunction_offset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Offest for SW to get all command function offsets, Don't change the position"))
 	),
-	(masterdatatable_offset, masterdatatable_offset,
+	(bios->masterdatatable_offset, masterdatatable_offset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Offest for SW to get all data table offsets, Don't change the position"))
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pspdirtableoffset, pspdirtableoffset,
+	(bios->pspdirtableoffset, pspdirtableoffset,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
@@ -337,127 +337,127 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 		atomtree_master_datatable_v2_1,
 
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(utilitypipeline, utilitypipeline,
+	(bios->utilitypipeline, utilitypipeline,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Offest for the utility to get parser info, Don't change this position!"))
 	),
-	(multimedia_info, multimedia_info,
+	(bios->multimedia_info, multimedia_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(smc_dpm_info, smc_dpm_info,
+	(bios->smc_dpm_info, smc_dpm_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable3, sw_datatable3,
+	(bios->sw_datatable3, sw_datatable3,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(firmwareinfo, firmwareinfo,
+	(bios->firmwareinfo, firmwareinfo,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable5, sw_datatable5,
+	(bios->sw_datatable5, sw_datatable5,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(lcd_info, lcd_info,
+	(bios->lcd_info, lcd_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable7, sw_datatable7,
+	(bios->sw_datatable7, sw_datatable7,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(smu_info, smu_info,
+	(bios->smu_info, smu_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable9, sw_datatable9,
+	(bios->sw_datatable9, sw_datatable9,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable10, sw_datatable10,
+	(bios->sw_datatable10, sw_datatable10,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(vram_usagebyfirmware, vram_usagebyfirmware,
+	(bios->vram_usagebyfirmware, vram_usagebyfirmware,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(gpio_pin_lut, gpio_pin_lut,
+	(bios->gpio_pin_lut, gpio_pin_lut,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable13, sw_datatable13,
+	(bios->sw_datatable13, sw_datatable13,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gfx_info, gfx_info,
+	(bios->gfx_info, gfx_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(powerplayinfo, powerplayinfo,
+	(bios->powerplayinfo, powerplayinfo,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable16, sw_datatable16,
+	(bios->sw_datatable16, sw_datatable16,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable17, sw_datatable17,
+	(bios->sw_datatable17, sw_datatable17,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable18, sw_datatable18,
+	(bios->sw_datatable18, sw_datatable18,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable19, sw_datatable19,
+	(bios->sw_datatable19, sw_datatable19,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable20, sw_datatable20,
+	(bios->sw_datatable20, sw_datatable20,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable21, sw_datatable21,
+	(bios->sw_datatable21, sw_datatable21,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(displayobjectinfo, displayobjectinfo,
+	(bios->displayobjectinfo, displayobjectinfo,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(indirectioaccess, indirectioaccess,
+	(bios->indirectioaccess, indirectioaccess,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "used as an internal one"))
 	),
-	(umc_info, umc_info,
+	(bios->umc_info, umc_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable25, sw_datatable25,
+	(bios->sw_datatable25, sw_datatable25,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable26, sw_datatable26,
+	(bios->sw_datatable26, sw_datatable26,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(dce_info, dce_info,
+	(bios->dce_info, dce_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(vram_info, vram_info,
+	(bios->vram_info, vram_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(sw_datatable29, sw_datatable29,
+	(bios->sw_datatable29, sw_datatable29,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(integratedsysteminfo, integratedsysteminfo,
+	(bios->integratedsysteminfo, integratedsysteminfo,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(asic_profiling_info, asic_profiling_info,
+	(bios->asic_profiling_info, asic_profiling_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "Shared by various SW components"))
 	),
-	(voltageobject_info, voltageobject_info,
+	(bios->voltageobject_info, voltageobject_info,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "shared by various SW components"))
 	),
-	(sw_datatable33, sw_datatable33,
+	(bios->sw_datatable33, sw_datatable33,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(sw_datatable34, sw_datatable34,
+	(bios->sw_datatable34, sw_datatable34,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
@@ -466,249 +466,249 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 
 // TODO ATUI_DYNARRAY with multiple leaves
 PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
-	(Enabled, Enabled,
+	(bios->Enabled, Enabled,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(Speed, Speed,
+	(bios->Speed, Speed,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(Padding, Padding,
+	(bios->Padding, Padding,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(SlaveAddress, SlaveAddress,
+	(bios->SlaveAddress, SlaveAddress,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(ControllerPort, ControllerPort,
+	(bios->ControllerPort, ControllerPort,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(ControllerName, ControllerName,
+	(bios->ControllerName, ControllerName,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(ThermalThrotter, ThermalThrotter,
+	(bios->ThermalThrotter, ThermalThrotter,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(I2cProtocol, I2cProtocol,
+	(bios->I2cProtocol, I2cProtocol,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
 	),
 
-	(MaxVoltageStepGfx, MaxVoltageStepGfx,
+	(bios->MaxVoltageStepGfx, MaxVoltageStepGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
 	),
-	(MaxVoltageStepSoc, MaxVoltageStepSoc,
+	(bios->MaxVoltageStepSoc, MaxVoltageStepSoc,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
 	),
 
-	(VddGfxVrMapping, VddGfxVrMapping,
+	(bios->VddGfxVrMapping, VddGfxVrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Use VR_MAPPING* bitfields"))
 	),
-	(VddSocVrMapping, VddSocVrMapping,
+	(bios->VddSocVrMapping, VddSocVrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Use VR_MAPPING* bitfields"))
 	),
-	(VddMem0VrMapping, VddMem0VrMapping,
+	(bios->VddMem0VrMapping, VddMem0VrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Use VR_MAPPING* bitfields"))
 	),
-	(VddMem1VrMapping, VddMem1VrMapping,
+	(bios->VddMem1VrMapping, VddMem1VrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Use VR_MAPPING* bitfields"))
 	),
 
-	(GfxUlvPhaseSheddingMask, GfxUlvPhaseSheddingMask,
+	(bios->GfxUlvPhaseSheddingMask, GfxUlvPhaseSheddingMask,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
-	(SocUlvPhaseSheddingMask, SocUlvPhaseSheddingMask,
+	(bios->SocUlvPhaseSheddingMask, SocUlvPhaseSheddingMask,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
-	(ExternalSensorPresent, ExternalSensorPresent,
+	(bios->ExternalSensorPresent, ExternalSensorPresent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "External RDI connected to TMON (aka TEMP IN)"))
 	),
-	(Padding8_V, Padding8_V,
+	(bios->Padding8_V, Padding8_V,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Telemetry Settings"))
 	),
-	(GfxMaxCurrent, GfxMaxCurrent,
+	(bios->GfxMaxCurrent, GfxMaxCurrent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(GfxOffset, GfxOffset,
+	(bios->GfxOffset, GfxOffset,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(Padding_TelemetryGfx, Padding_TelemetryGfx,
+	(bios->Padding_TelemetryGfx, Padding_TelemetryGfx,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(SocMaxCurrent, SocMaxCurrent,
+	(bios->SocMaxCurrent, SocMaxCurrent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(SocOffset, SocOffset,
+	(bios->SocOffset, SocOffset,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(Padding_TelemetrySoc, Padding_TelemetrySoc,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(Mem0MaxCurrent, Mem0MaxCurrent,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "in Amps"))
-	),
-	(Mem0Offset, Mem0Offset,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "in Amps"))
-	),
-	(Padding_TelemetryMem0, Padding_TelemetryMem0,
+	(bios->Padding_TelemetrySoc, Padding_TelemetrySoc,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(Mem1MaxCurrent, Mem1MaxCurrent,
+	(bios->Mem0MaxCurrent, Mem0MaxCurrent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(Mem1Offset, Mem1Offset,
+	(bios->Mem0Offset, Mem0Offset,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
 	),
-	(Padding_TelemetryMem1, Padding_TelemetryMem1,
+	(bios->Padding_TelemetryMem0, Padding_TelemetryMem0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Mem1MaxCurrent, Mem1MaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Mem1Offset, Mem1Offset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem1, Padding_TelemetryMem1,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO Settings"))
 	),
-	(AcDcGpio, AcDcGpio,
+	(bios->AcDcGpio, AcDcGpio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO pin configured for AC/DC switching"))
 	),
-	(AcDcPolarity, AcDcPolarity,
+	(bios->AcDcPolarity, AcDcPolarity,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO polarity for AC/DC switching"))
 	),
-	(VR0HotGpio, VR0HotGpio,
+	(bios->VR0HotGpio, VR0HotGpio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
 	),
-	(VR0HotPolarity, VR0HotPolarity,
+	(bios->VR0HotPolarity, VR0HotPolarity,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
 	),
 
-	(VR1HotGpio, VR1HotGpio,
+	(bios->VR1HotGpio, VR1HotGpio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO pin configured for VR1 HOT event"))
 	),
-	(VR1HotPolarity, VR1HotPolarity,
+	(bios->VR1HotPolarity, VR1HotPolarity,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
 	),
-	(GthrGpio, GthrGpio,
+	(bios->GthrGpio, GthrGpio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO pin configured for GTHR Event"))
 	),
-	(GthrPolarity, GthrPolarity,
+	(bios->GthrPolarity, GthrPolarity,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "replace GPIO polarity for GTHR"))
 	),
 
-	(LedPin0, LedPin0,
+	(bios->LedPin0, LedPin0,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "LED Display Settings GPIO number for LedPin[0]"))
 	),
-	(LedPin1, LedPin1,
+	(bios->LedPin1, LedPin1,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO number for LedPin[1]"))
 	),
-	(LedPin2, LedPin2,
+	(bios->LedPin2, LedPin2,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GPIO number for LedPin[2]"))
 	),
-	(padding8_4, padding8_4,
+	(bios->padding8_4, padding8_4,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GFXCLK PLL Spread Spectrum"))
 	),
-	(PllGfxclkSpreadEnabled, PllGfxclkSpreadEnabled,
+	(bios->PllGfxclkSpreadEnabled, PllGfxclkSpreadEnabled,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "on or off"))
 	),
-	(PllGfxclkSpreadPercent, PllGfxclkSpreadPercent,
+	(bios->PllGfxclkSpreadPercent, PllGfxclkSpreadPercent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Q4.4"))
 	),
-	(PllGfxclkSpreadFreq, PllGfxclkSpreadFreq,
+	(bios->PllGfxclkSpreadFreq, PllGfxclkSpreadFreq,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "kHz"))
 	),
 
-	(DfllGfxclkSpreadEnabled, DfllGfxclkSpreadEnabled,
+	(bios->DfllGfxclkSpreadEnabled, DfllGfxclkSpreadEnabled,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "GFXCLK DFLL Spread Spectrum on or off"))
 	),
-	(DfllGfxclkSpreadPercent, DfllGfxclkSpreadPercent,
+	(bios->DfllGfxclkSpreadPercent, DfllGfxclkSpreadPercent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Q4.4"))
 	),
-	(DfllGfxclkSpreadFreq, DfllGfxclkSpreadFreq,
+	(bios->DfllGfxclkSpreadFreq, DfllGfxclkSpreadFreq,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "kHz"))
 	),
 
-	(UclkSpreadEnabled, UclkSpreadEnabled,
+	(bios->UclkSpreadEnabled, UclkSpreadEnabled,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "UCLK Spread Spectrum  on or off"))
 	),
-	(UclkSpreadPercent, UclkSpreadPercent,
+	(bios->UclkSpreadPercent, UclkSpreadPercent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Q4.4"))
 	),
-	(UclkSpreadFreq, UclkSpreadFreq,
+	(bios->UclkSpreadFreq, UclkSpreadFreq,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "kHz"))
 	),
 
-	(SoclkSpreadEnabled, SoclkSpreadEnabled,
+	(bios->SoclkSpreadEnabled, SoclkSpreadEnabled,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "SOCCLK Spread Spectrum on or off"))
 	),
-	(SocclkSpreadPercent, SocclkSpreadPercent,
+	(bios->SocclkSpreadPercent, SocclkSpreadPercent,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Q4.4"))
 	),
-	(SocclkSpreadFreq, SocclkSpreadFreq,
+	(bios->SocclkSpreadFreq, SocclkSpreadFreq,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "kHz"))
 	),
 
-	(TotalBoardPower, TotalBoardPower,
+	(bios->TotalBoardPower, TotalBoardPower,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power"))
 	),
-	(BoardPadding, BoardPadding,
+	(bios->BoardPadding, BoardPadding,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Mvdd Svi2 Div Ratio Setting"))
 	),
-	(MvddRatio, MvddRatio,
+	(bios->MvddRatio, MvddRatio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)"))
 	),
 
-	(BoardReserved, BoardReserved,
+	(bios->BoardReserved, BoardReserved,
 		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 
 
 PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
-	(firmware_capability, firmware_capability,
+	(bios->firmware_capability, firmware_capability,
 		(ATUI_HEX, ATUI_BITFIELD, (
 			(FIRMWARE_POSTED,         0,0, ATUI_DEC, (ATUI_NODESCR)),
 			(GPU_VIRTUALIZATION,      1,1, ATUI_DEC, (ATUI_NODESCR)),
@@ -729,356 +729,356 @@ PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
 
 
 PPATUI_FUNCIFY(struct, atom_firmware_info_v3_1, atomtree_firmware_info,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(firmware_revision, firmware_revision,
+	(bios->firmware_revision, firmware_revision,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+	(bios->bootup_sclk_in10khz, bootup_sclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+	(bios->bootup_mclk_in10khz, bootup_mclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(firmware_capability, firmware_capability,
+	(bios->firmware_capability, firmware_capability,
 		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
 		(ATUI_NODESCR)
 	),
-	(main_call_parser_entry, main_call_parser_entry,
+	(bios->main_call_parser_entry, main_call_parser_entry,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
 	),
-	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+	(bios->bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "1st bios scratch register dword address"))
 	),
-	(bootup_vddc_mv, bootup_vddc_mv,
+	(bios->bootup_vddc_mv, bootup_vddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddci_mv, bootup_vddci_mv,
+	(bios->bootup_vddci_mv, bootup_vddci_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddc_mv, bootup_mvddc_mv,
+	(bios->bootup_mvddc_mv, bootup_mvddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+	(bios->bootup_vddgfx_mv, bootup_vddgfx_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mem_module_id, mem_module_id,
+	(bios->mem_module_id, mem_module_id,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(coolingsolution_id, coolingsolution_id,
+	(bios->coolingsolution_id, coolingsolution_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
 	),
-	(reserved1, reserved1,
+	(bios->reserved1, reserved1,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_high, mc_baseaddr_high,
+	(bios->mc_baseaddr_high, mc_baseaddr_high,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_low, mc_baseaddr_low,
+	(bios->mc_baseaddr_low, mc_baseaddr_low,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(reserved2, reserved2,
+	(bios->reserved2, reserved2,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 
 PPATUI_FUNCIFY(struct, atom_firmware_info_v3_2, atomtree_firmware_info,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(firmware_revision, firmware_revision,
+	(bios->firmware_revision, firmware_revision,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+	(bios->bootup_sclk_in10khz, bootup_sclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+	(bios->bootup_mclk_in10khz, bootup_mclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(firmware_capability, firmware_capability,
+	(bios->firmware_capability, firmware_capability,
 		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
 		(ATUI_NODESCR)
 	),
-	(main_call_parser_entry, main_call_parser_entry,
+	(bios->main_call_parser_entry, main_call_parser_entry,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
 	),
-	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+	(bios->bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "1st bios scratch register dword address"))
 	),
-	(bootup_vddc_mv, bootup_vddc_mv,
+	(bios->bootup_vddc_mv, bootup_vddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddci_mv, bootup_vddci_mv,
+	(bios->bootup_vddci_mv, bootup_vddci_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddc_mv, bootup_mvddc_mv,
+	(bios->bootup_mvddc_mv, bootup_mvddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+	(bios->bootup_vddgfx_mv, bootup_vddgfx_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mem_module_id, mem_module_id,
+	(bios->mem_module_id, mem_module_id,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(coolingsolution_id, coolingsolution_id,
+	(bios->coolingsolution_id, coolingsolution_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
 	),
-	(reserved1, reserved1,
+	(bios->reserved1, reserved1,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_high, mc_baseaddr_high,
+	(bios->mc_baseaddr_high, mc_baseaddr_high,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_low, mc_baseaddr_low,
+	(bios->mc_baseaddr_low, mc_baseaddr_low,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(board_i2c_feature_id, board_i2c_feature_id,
+	(bios->board_i2c_feature_id, board_i2c_feature_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
 	),
-	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+	(bios->board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
 	),
-	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+	(bios->board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(reserved3, reserved3,
+	(bios->reserved3, reserved3,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddq_mv, bootup_mvddq_mv,
+	(bios->bootup_mvddq_mv, bootup_mvddq_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvpp_mv, bootup_mvpp_mv,
+	(bios->bootup_mvpp_mv, bootup_mvpp_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+	(bios->zfbstartaddrin16mb, zfbstartaddrin16mb,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(reserved2, reserved2,
+	(bios->reserved2, reserved2,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 
 PPATUI_FUNCIFY(struct, atom_firmware_info_v3_3, atomtree_firmware_info,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(firmware_revision, firmware_revision,
+	(bios->firmware_revision, firmware_revision,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+	(bios->bootup_sclk_in10khz, bootup_sclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+	(bios->bootup_mclk_in10khz, bootup_mclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(firmware_capability, firmware_capability,
+	(bios->firmware_capability, firmware_capability,
 		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
 		(ATUI_NODESCR)
 	),
-	(main_call_parser_entry, main_call_parser_entry,
+	(bios->main_call_parser_entry, main_call_parser_entry,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
 	),
-	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+	(bios->bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "1st bios scratch register dword address"))
 	),
-	(bootup_vddc_mv, bootup_vddc_mv,
+	(bios->bootup_vddc_mv, bootup_vddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddci_mv, bootup_vddci_mv,
+	(bios->bootup_vddci_mv, bootup_vddci_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddc_mv, bootup_mvddc_mv,
+	(bios->bootup_mvddc_mv, bootup_mvddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+	(bios->bootup_vddgfx_mv, bootup_vddgfx_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mem_module_id, mem_module_id,
+	(bios->mem_module_id, mem_module_id,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(coolingsolution_id, coolingsolution_id,
+	(bios->coolingsolution_id, coolingsolution_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ..."))
 	),
-	(reserved1, reserved1,
+	(bios->reserved1, reserved1,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_high, mc_baseaddr_high,
+	(bios->mc_baseaddr_high, mc_baseaddr_high,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_low, mc_baseaddr_low,
+	(bios->mc_baseaddr_low, mc_baseaddr_low,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(board_i2c_feature_id, board_i2c_feature_id,
+	(bios->board_i2c_feature_id, board_i2c_feature_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
 	),
-	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+	(bios->board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
 	),
-	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+	(bios->board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(reserved3, reserved3,
+	(bios->reserved3, reserved3,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddq_mv, bootup_mvddq_mv,
+	(bios->bootup_mvddq_mv, bootup_mvddq_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvpp_mv, bootup_mvpp_mv,
+	(bios->bootup_mvpp_mv, bootup_mvpp_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+	(bios->zfbstartaddrin16mb, zfbstartaddrin16mb,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pplib_pptable_id, pplib_pptable_id,
+	(bios->pplib_pptable_id, pplib_pptable_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS"))
 	),
-	(reserved2, reserved2,
+	(bios->reserved2, reserved2,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 
 PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(firmware_revision, firmware_revision,
+	(bios->firmware_revision, firmware_revision,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_sclk_in10khz, bootup_sclk_in10khz,
+	(bios->bootup_sclk_in10khz, bootup_sclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mclk_in10khz, bootup_mclk_in10khz,
+	(bios->bootup_mclk_in10khz, bootup_mclk_in10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(firmware_capability, firmware_capability,
+	(bios->firmware_capability, firmware_capability,
 		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
 		(ATUI_NODESCR)
 	),
-	(main_call_parser_entry, main_call_parser_entry,
+	(bios->main_call_parser_entry, main_call_parser_entry,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "direct address of main parser call in VBIOS binary."))
 	),
-	(bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
+	(bios->bios_scratch_reg_startaddr, bios_scratch_reg_startaddr,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "1st bios scratch register dword address"))
 	),
-	(bootup_vddc_mv, bootup_vddc_mv,
+	(bios->bootup_vddc_mv, bootup_vddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddci_mv, bootup_vddci_mv,
+	(bios->bootup_vddci_mv, bootup_vddci_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddc_mv, bootup_mvddc_mv,
+	(bios->bootup_mvddc_mv, bootup_mvddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_vddgfx_mv, bootup_vddgfx_mv,
+	(bios->bootup_vddgfx_mv, bootup_vddgfx_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mem_module_id, mem_module_id,
+	(bios->mem_module_id, mem_module_id,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(coolingsolution_id, coolingsolution_id,
+	(bios->coolingsolution_id, coolingsolution_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ... */"))
 	),
-	(reserved1, reserved1,
+	(bios->reserved1, reserved1,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_high, mc_baseaddr_high,
+	(bios->mc_baseaddr_high, mc_baseaddr_high,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_baseaddr_low, mc_baseaddr_low,
+	(bios->mc_baseaddr_low, mc_baseaddr_low,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(board_i2c_feature_id, board_i2c_feature_id,
+	(bios->board_i2c_feature_id, board_i2c_feature_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "enum of atom_board_i2c_feature_id_def"))
 	),
-	(board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
+	(bios->board_i2c_feature_gpio_id, board_i2c_feature_gpio_id,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "i2c id find in gpio_lut data table gpio_id"))
 	),
-	(board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
+	(bios->board_i2c_feature_slave_addr, board_i2c_feature_slave_addr,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(ras_rom_i2c_slave_addr, ras_rom_i2c_slave_addr,
+	(bios->ras_rom_i2c_slave_addr, ras_rom_i2c_slave_addr,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvddq_mv, bootup_mvddq_mv,
+	(bios->bootup_mvddq_mv, bootup_mvddq_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bootup_mvpp_mv, bootup_mvpp_mv,
+	(bios->bootup_mvpp_mv, bootup_mvpp_mv,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(zfbstartaddrin16mb, zfbstartaddrin16mb,
+	(bios->zfbstartaddrin16mb, zfbstartaddrin16mb,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pplib_pptable_id, pplib_pptable_id,
+	(bios->pplib_pptable_id, pplib_pptable_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS"))
 	),
-	(mvdd_ratio, mvdd_ratio,
+	(bios->mvdd_ratio, mvdd_ratio,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mvdd_raio = (real mvdd in power rail)*1000/(mvdd_output_from_svi2)"))
 	),
-	(hw_bootup_vddgfx_mv, hw_bootup_vddgfx_mv,
+	(bios->hw_bootup_vddgfx_mv, hw_bootup_vddgfx_mv,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "hw default vddgfx voltage level decide by board strap"))
 	),
-	(hw_bootup_vddc_mv, hw_bootup_vddc_mv,
+	(bios->hw_bootup_vddc_mv, hw_bootup_vddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "hw default vddc voltage level decide by board strap"))
 	),
-	(hw_bootup_mvddc_mv, hw_bootup_mvddc_mv,
+	(bios->hw_bootup_mvddc_mv, hw_bootup_mvddc_mv,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "hw default mvddc voltage level decide by board strap"))
 	),
-	(hw_bootup_vddci_mv, hw_bootup_vddci_mv,
+	(bios->hw_bootup_vddci_mv, hw_bootup_vddci_mv,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "hw default vddci voltage level decide by board strap"))
 	),
-	(maco_pwrlimit_mw, maco_pwrlimit_mw,
+	(bios->maco_pwrlimit_mw, maco_pwrlimit_mw,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "bomaco mode power limit in unit of m-watt"))
 	),
-	(usb_pwrlimit_mw, usb_pwrlimit_mw,
+	(bios->usb_pwrlimit_mw, usb_pwrlimit_mw,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "power limit when USB is enable in unit of m-watt"))
 	),
-	(fw_reserved_size_in_kb, fw_reserved_size_in_kb,
+	(bios->fw_reserved_size_in_kb, fw_reserved_size_in_kb,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "VBIOS reserved extra fw size in unit of kb."))
 	),
-	(pspbl_init_done_reg_addr, pspbl_init_done_reg_addr,
+	(bios->pspbl_init_done_reg_addr, pspbl_init_done_reg_addr,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pspbl_init_done_value, pspbl_init_done_value,
+	(bios->pspbl_init_done_value, pspbl_init_done_value,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(pspbl_init_done_check_timeout, pspbl_init_done_check_timeout,
+	(bios->pspbl_init_done_check_timeout, pspbl_init_done_check_timeout,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "time out in unit of us when polling pspbl init done"))
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
@@ -1091,7 +1091,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
 
 
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
-	(gddr6_mr0, gddr6_mr0,
+	(bios->gddr6_mr0, gddr6_mr0,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(WLmrs,    2,0, ATUI_DEC,
 				((LANG_ENG, "tCWL, 8,9,10,11,12,5,6,7."))
@@ -1112,7 +1112,7 @@ PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
-	(gddr6_mr1, gddr6_mr1,
+	(bios->gddr6_mr1, gddr6_mr1,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(drive_stren,  1,0, ATUI_DEC,
 				((LANG_ENG, "0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec"))
@@ -1148,7 +1148,7 @@ PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr2, atui_nullstruct,
-	(gddr6_mr2, gddr6_mr2,
+	(bios->gddr6_mr2, gddr6_mr2,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(OCD_up,       2,0, ATUI_DEC,
 				((LANG_ENG, "output driver pullup offset. 0=0, Two's Compl."))
@@ -1178,7 +1178,7 @@ PPATUI_FUNCIFY(union, gddr6_mr2, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr3, atui_nullstruct,
-	(gddr6_mr3, gddr6_mr3,
+	(bios->gddr6_mr3, gddr6_mr3,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(dataWCK_term_offset, 2,0, ATUI_DEC,
 				((LANG_ENG, "DQ, DBI and WCK termination offset."))
@@ -1202,7 +1202,7 @@ PPATUI_FUNCIFY(union, gddr6_mr3, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr4, atui_nullstruct,
-	(gddr6_mr4, gddr6_mr4,
+	(bios->gddr6_mr4, gddr6_mr4,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(EDC_hold_pattern, 3,0, ATUI_DEC,
 				((LANG_ENG, "little-endian. pattern during EDC idle"))
@@ -1229,7 +1229,7 @@ PPATUI_FUNCIFY(union, gddr6_mr4, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr5, atui_nullstruct,
-	(gddr6_mr5, gddr6_mr5,
+	(bios->gddr6_mr5, gddr6_mr5,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(LP1,       0,0, ATUI_DEC,
 				((LANG_ENG, "0=off, Low Power Mode 1, relax several core params"))
@@ -1253,7 +1253,7 @@ PPATUI_FUNCIFY(union, gddr6_mr5, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr6, atui_nullstruct,
-	(gddr6_mr6, gddr6_mr6,
+	(bios->gddr6_mr6, gddr6_mr6,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(VREFD_level,  6,0, ATUI_DEC,
 				((LANG_ENG, "0.005x steps of VDDQ, from 0=0.49x to 95=0.965x"))
@@ -1268,7 +1268,7 @@ PPATUI_FUNCIFY(union, gddr6_mr6, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr7, atui_nullstruct,
-	(gddr6_mr7, gddr6_mr7,
+	(bios->gddr6_mr7, gddr6_mr7,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(WCK2CK_AP,       0,0, ATUI_DEC,
 				((LANG_ENG, "WCK alignment point. 0=inside 1=at balls"))
@@ -1307,7 +1307,7 @@ PPATUI_FUNCIFY(union, gddr6_mr7, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr8, atui_nullstruct,
-	(gddr6_mr8, gddr6_mr8,
+	(bios->gddr6_mr8, gddr6_mr8,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(CA_low_term,  1,0, ATUI_DEC,
 				((LANG_ENG, "0=disable, 1=60ohm, 2=120, 3=rsvd. For CA[3:0]"))
@@ -1343,7 +1343,7 @@ PPATUI_FUNCIFY(union, gddr6_mr8, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr9, atui_nullstruct,
-	(gddr6_mr9, gddr6_mr9,
+	(bios->gddr6_mr9, gddr6_mr9,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(DFE,          3,0, ATUI_DEC,
 				((LANG_ENG, "0=off, in steps of +-0.5% VDDQ or 7mV"))
@@ -1361,7 +1361,7 @@ PPATUI_FUNCIFY(union, gddr6_mr9, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr10, atui_nullstruct,
-	(gddr6_mr10, gddr6_mr10,
+	(bios->gddr6_mr10, gddr6_mr10,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(VREFC_offset,  3,0, ATUI_DEC,
 				((LANG_ENG, "CA bus. Two's Complement? 0b1000=0 is a typo?"))
@@ -1388,7 +1388,7 @@ PPATUI_FUNCIFY(union, gddr6_mr10, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr11, atui_nullstruct, 
-	(gddr6_mr11, gddr6_mr11,
+	(bios->gddr6_mr11, gddr6_mr11,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(PASR_2bank_mask,  7,0, ATUI_DEC,
 				((LANG_ENG, "1=banks0,1; 2=2,3; 4=4,5; 8=6,7 .. 128=14,15"))
@@ -1400,11 +1400,11 @@ PPATUI_FUNCIFY(union, gddr6_mr11, atui_nullstruct,
 				((LANG_ENG, "MR 11"))
 			)
 		)),
-				((LANG_ENG, "0=refresh enabled 1=refresh blocked for paticular segment or banks"))
+		((LANG_ENG, "0=refresh enabled 1=refresh blocked for paticular segment or banks"))
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr12, atui_nullstruct,
-	(gddr6_mr12, gddr6_mr12,
+	(bios->gddr6_mr12, gddr6_mr12,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(VDDQ_off,  0,0, ATUI_DEC,
 				((LANG_ENG, "0=disabled. For Hibernate Self Refresh"))
@@ -1434,7 +1434,7 @@ PPATUI_FUNCIFY(union, gddr6_mr12, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr13, atui_nullstruct,
-	(gddr6_mr13, gddr6_mr13,
+	(bios->gddr6_mr13, gddr6_mr13,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(vendor_specific, 11,0, ATUI_DEC,
 				((LANG_ENG, "vendor specific features."))
@@ -1446,7 +1446,7 @@ PPATUI_FUNCIFY(union, gddr6_mr13, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr14, atui_nullstruct,
-	(gddr6_mr14, gddr6_mr14,
+	(bios->gddr6_mr14, gddr6_mr14,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(vendor_specific, 11,0, ATUI_DEC,
 				((LANG_ENG, "vendor specific features."))
@@ -1458,7 +1458,7 @@ PPATUI_FUNCIFY(union, gddr6_mr14, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, gddr6_mr15, atui_nullstruct,
-	(gddr6_mr15, gddr6_mr15,
+	(bios->gddr6_mr15, gddr6_mr15,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(MRS_to_chan_A, 0,0, ATUI_DEC,
 				((LANG_ENG, "MRS to the two channels for individual config"))
@@ -1481,7 +1481,7 @@ PPATUI_FUNCIFY(union, gddr6_mr15, atui_nullstruct,
 
 
 PPATUI_FUNCIFY(union, DRAMTiming1, atui_nullstruct,
-	(DRAMTiming1, DRAMTiming1,
+	(bios->DRAMTiming1, DRAMTiming1,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tCL,     5,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,   7,6, ATUI_DEC, (ATUI_NODESCR)),
@@ -1495,7 +1495,7 @@ PPATUI_FUNCIFY(union, DRAMTiming1, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming2, atui_nullstruct,
-	(DRAMTiming2, DRAMTiming2,
+	(bios->DRAMTiming2, DRAMTiming2,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRC_S,  7,0, ATUI_DEC, ((LANG_ENG, "per-bank"))),
 			(tRC_L, 15,8, ATUI_DEC, ((LANG_ENG, "all-bank?"))),
@@ -1507,7 +1507,7 @@ PPATUI_FUNCIFY(union, DRAMTiming2, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming3, atui_nullstruct,
-	(DRAMTiming3, DRAMTiming3,
+	(bios->DRAMTiming3, DRAMTiming3,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRRD_S,  4,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,   7,5, ATUI_DEC, (ATUI_NODESCR)),
@@ -1521,7 +1521,7 @@ PPATUI_FUNCIFY(union, DRAMTiming3, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming4, atui_nullstruct,
-	(DRAMTiming4, DRAMTiming4,
+	(bios->DRAMTiming4, DRAMTiming4,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tFAW,   6,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  7,7, ATUI_DEC, (ATUI_NODESCR)),
@@ -1531,7 +1531,7 @@ PPATUI_FUNCIFY(union, DRAMTiming4, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming5, atui_nullstruct,
-	(DRAMTiming5, DRAMTiming5,
+	(bios->DRAMTiming5, DRAMTiming5,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWL,    5,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  7,6, ATUI_DEC, (ATUI_NODESCR)),
@@ -1543,7 +1543,7 @@ PPATUI_FUNCIFY(union, DRAMTiming5, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming6, atui_nullstruct,
-	(DRAMTiming6, DRAMTiming6,
+	(bios->DRAMTiming6, DRAMTiming6,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWR,    6,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0, 31,7, ATUI_DEC, (ATUI_NODESCR))
@@ -1551,7 +1551,7 @@ PPATUI_FUNCIFY(union, DRAMTiming6, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming7, atui_nullstruct,
-	(DRAMTiming7, DRAMTiming7,
+	(bios->DRAMTiming7, DRAMTiming7,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(PPD,      2,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,    3,3, ATUI_DEC, (ATUI_NODESCR)),
@@ -1565,7 +1565,7 @@ PPATUI_FUNCIFY(union, DRAMTiming7, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct, 
-	(DRAMTiming8, DRAMTiming8,
+	(bios->DRAMTiming8, DRAMTiming8,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRDRD_DD,   3,0, ATUI_DEC,
 				((LANG_ENG, "Different DIMM"))
@@ -1587,11 +1587,11 @@ PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct,
 				((LANG_ENG, "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6"))
 			)
 		)),
-				((LANG_ENG, "Specifies the minimum number of cycles from the last clock of virtual CAS of the first burst operation to the clock in which CAS is asserted for a following bust operation. A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle."))
+		((LANG_ENG, "Specifies the minimum number of cycles from the last clock of virtual CAS of the first burst operation to the clock in which CAS is asserted for a following bust operation. A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle."))
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming9, atui_nullstruct,
-	(DRAMTiming9, DRAMTiming9,
+	(bios->DRAMTiming9, DRAMTiming9,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWRWR_MW,   4,0, ATUI_DEC, ((LANG_ENG, "masked write; GDDR"))),
 			(rsvd0,     15,5, ATUI_DEC, (ATUI_NODESCR)),
@@ -1603,7 +1603,7 @@ PPATUI_FUNCIFY(union, DRAMTiming9, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming10, atui_nullstruct, 
-	(DRAMTiming10, DRAMTiming10,
+	(bios->DRAMTiming10, DRAMTiming10,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWRRD,       3,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,       7,4, ATUI_DEC, (ATUI_NODESCR)),
@@ -1615,11 +1615,11 @@ PPATUI_FUNCIFY(union, DRAMTiming10, atui_nullstruct,
 			),
 			(rsvd2,      31,29, ATUI_DEC, (ATUI_NODESCR))
 		)),
-				((LANG_ENG, "tWRRD and tRDWR also follows the 'last clock of virtual CAS'. LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD. LD is about making sure one burst happens after the other. And x and y follow the 'last clock of virtual CAS' and are about making sure the data bus is stable."))
+		((LANG_ENG, "tWRRD and tRDWR also follows the 'last clock of virtual CAS'. LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD. LD is about making sure one burst happens after the other. And x and y follow the 'last clock of virtual CAS' and are about making sure the data bus is stable."))
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming12, atui_nullstruct,
-	(DRAMTiming12, DRAMTiming12,
+	(bios->DRAMTiming12, DRAMTiming12,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tREFI, 15,0, ATUI_DEC,
 				((LANG_ENG, "tREF; the microseconds not milliseconds one"))
@@ -1629,7 +1629,7 @@ PPATUI_FUNCIFY(union, DRAMTiming12, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming13, atui_nullstruct,
-	(DRAMTiming13, DRAMTiming13,
+	(bios->DRAMTiming13, DRAMTiming13,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tMRD,   5,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  7,6, ATUI_DEC, (ATUI_NODESCR)),
@@ -1639,7 +1639,7 @@ PPATUI_FUNCIFY(union, DRAMTiming13, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming14, atui_nullstruct,
-	(DRAMTiming14, DRAMTiming14,
+	(bios->DRAMTiming14, DRAMTiming14,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tXS,   10,0, ATUI_DEC,
 				((LANG_ENG, "exit self refreh to not requiring a locked DLL"))
@@ -1653,7 +1653,7 @@ PPATUI_FUNCIFY(union, DRAMTiming14, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming15, atui_nullstruct, 
-	(DRAMTiming15, DRAMTiming15,
+	(bios->DRAMTiming15, DRAMTiming15,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(AlertCrcDly,  6,0, ATUI_DEC,
 				((LANG_ENG, "expected alert crc error dely, in memclocks"))
@@ -1671,11 +1671,11 @@ PPATUI_FUNCIFY(union, DRAMTiming15, atui_nullstruct,
 			),
 			(rsvd2,       31,30, ATUI_DEC, (ATUI_NODESCR))
 		)),
-				((LANG_ENG, "DDR reliability RAS"))
+		((LANG_ENG, "DDR reliability RAS"))
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming16, atui_nullstruct,
-	(DRAMTiming16, DRAMTiming16,
+	(bios->DRAMTiming16, DRAMTiming16,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tXSMRS, 10,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  31,11, ATUI_DEC, (ATUI_NODESCR))
@@ -1683,7 +1683,7 @@ PPATUI_FUNCIFY(union, DRAMTiming16, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming17, atui_nullstruct,
-	(DRAMTiming17, DRAMTiming17,
+	(bios->DRAMTiming17, DRAMTiming17,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tPD,           4,0, ATUI_DEC, (ATUI_NODESCR)),
 			(tCKSRE,        10,5, ATUI_DEC, (ATUI_NODESCR)),
@@ -1699,7 +1699,7 @@ PPATUI_FUNCIFY(union, DRAMTiming17, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming20, atui_nullstruct,
-	(DRAMTiming20, DRAMTiming20,
+	(bios->DRAMTiming20, DRAMTiming20,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRFCSB, 10,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  15,11, ATUI_DEC, (ATUI_NODESCR)),
@@ -1709,7 +1709,7 @@ PPATUI_FUNCIFY(union, DRAMTiming20, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
-	(DRAMTiming21, DRAMTiming21,
+	(bios->DRAMTiming21, DRAMTiming21,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tXP,     5,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0,  15,6, ATUI_DEC, (ATUI_NODESCR)),
@@ -1721,7 +1721,7 @@ PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct, 
-	(DRAMTiming22, DRAMTiming22,
+	(bios->DRAMTiming22, DRAMTiming22,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRDDATA_EN,   6,0, ATUI_DEC,
 				((LANG_ENG, "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en"))
@@ -1743,11 +1743,11 @@ PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
 			),
 			(rsvd3,       31,30, ATUI_DEC, (ATUI_NODESCR))
 		)),
-				((LANG_ENG, ""DFI" is shorthand for "DDR PHY""))
+		((LANG_ENG, ""DFI" is shorthand for "DDR PHY""))
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming23, atui_nullstruct,
-	(DRAMTiming23, DRAMTiming23,
+	(bios->DRAMTiming23, DRAMTiming23,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(LpDly,      5,0, ATUI_DEC,
 				((LANG_ENG, "hysteresis before placing PHY into low power"))
@@ -1763,7 +1763,7 @@ PPATUI_FUNCIFY(union, DRAMTiming23, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming34, atui_nullstruct,
-	(DRAMTiming34, DRAMTiming34,
+	(bios->DRAMTiming34, DRAMTiming34,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tPhyupd_resp, 3,0, ATUI_DEC, (ATUI_NODESCR)),
 			(tRDEDC_EN,    10,4, ATUI_DEC, (ATUI_NODESCR)),
@@ -1774,7 +1774,7 @@ PPATUI_FUNCIFY(union, DRAMTiming34, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct, 
-	(DRAMTiming35, DRAMTiming35,
+	(bios->DRAMTiming35, DRAMTiming35,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(ReceiverWait, 10,0, ATUI_DEC,
 				((LANG_ENG, "Wait time to start recovery sequence"))
@@ -1786,12 +1786,12 @@ PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct,
 			(tWRMPR,       29,24, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd1,        31,30, ATUI_DEC, (ATUI_NODESCR))
 		)),
-				((LANG_ENG, "reliability RAS"))
+		((LANG_ENG, "reliability RAS"))
 	)
 )
 
 PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct, 
-	(DRAMTiming36, DRAMTiming36,
+	(bios->DRAMTiming36, DRAMTiming36,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWTRTR,     5,0, ATUI_DEC, ((LANG_ENG, "WRITE to WRTR"))),
 			(tREFTR,     11,6, ATUI_DEC, ((LANG_ENG, "was named tREFTT. REFab to RDTR/WRTR"))),
@@ -1804,7 +1804,7 @@ PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, TRFCTimingCS01, atui_nullstruct,
-	(TRFCTimingCS01, TRFCTimingCS01,
+	(bios->TRFCTimingCS01, TRFCTimingCS01,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRFC,  10,0, ATUI_DEC, (ATUI_NODESCR)),
 			(rsvd0, 31,11, ATUI_DEC, (ATUI_NODESCR))
@@ -1812,7 +1812,7 @@ PPATUI_FUNCIFY(union, TRFCTimingCS01, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, TRFCTimingCS01_DDR4, atui_nullstruct,
-	(TRFCTimingCS01_DDR4, TRFCTimingCS01_DDR4,
+	(bios->TRFCTimingCS01_DDR4, TRFCTimingCS01_DDR4,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRFC,  10,0, ATUI_DEC, (ATUI_NODESCR)),
 			(tRFC2, 21,11, ATUI_DEC, (ATUI_NODESCR)),
@@ -1821,7 +1821,7 @@ PPATUI_FUNCIFY(union, TRFCTimingCS01_DDR4, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
-	(ChanPipeDly, ChanPipeDly,
+	(bios->ChanPipeDly, ChanPipeDly,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(TXCtrlChanDly, 2,0, ATUI_DEC,
 				((LANG_ENG, "# of delay stages on DFI control from UMC to PHY"))
@@ -1840,43 +1840,54 @@ PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
 )
 
 PPATUI_FUNCIFY(struct, atom_gddr6_bit_byte_remap, atui_nullstruct,
-	(dphy_byteremap, dphy_byteremap,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->dphy_byteremap, dphy_byteremap,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_DPHY_ByteRemap"))
 	),
-	(dphy_bitremap0, dphy_bitremap0,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->dphy_bitremap0, dphy_bitremap0,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_DPHY_BitRemap0"))
 	),
-	(dphy_bitremap1, dphy_bitremap1,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->dphy_bitremap1, dphy_bitremap1,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_DPHY_BitRemap1"))
 	),
-	(dphy_bitremap2, dphy_bitremap2,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->dphy_bitremap2, dphy_bitremap2,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_DPHY_BitRemap2"))
 	),
-	(aphy_bitremap0, aphy_bitremap0,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->aphy_bitremap0, aphy_bitremap0,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_APHY_BitRemap0"))
 	),
-	(aphy_bitremap1, aphy_bitremap1,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->aphy_bitremap1, aphy_bitremap1,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_APHY_BitRemap1"))
 	),
-	(phy_dram, phy_dram,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->phy_dram, phy_dram,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mmUMC_PHY_DRAM"))
 	)
 )
 
 PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
-	(table_size, table_size,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->table_size, table_size,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(phyintf_ck_inverted, phyintf_ck_inverted,
+	(bios->phyintf_ck_inverted, phyintf_ck_inverted,
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "UMC_PHY_PHYINTF_CNTL.INV_CK"))
+	),
+	(NULL, atom_gddr6_bit_byte_remap,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios, bit_byte_remap [%02u],
+				(ATUI_NAN, ATUI_INLINE, atom_gddr6_bit_byte_remap),
+				(ATUI_NODESCR)
+			),
+			bios->bit_byte_remap, // start
+			(sizeof(bios->bit_byte_remap)
+			/ sizeof(struct atom_gddr6_bit_byte_remap)) // count 
+		)), (ATUI_NODESCR)
 	)
 )
 
@@ -1891,121 +1902,121 @@ PPATUI_ENUMER(atom_dgpu_vram_type,
 
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
-	(memory_size, memory_size,
+	(bios->memory_size, memory_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
 	),
-	(channel_enable, channel_enable,
+	(bios->channel_enable, channel_enable,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "bit vector, each bit indicate specific channel enable or not"))
 	),
-	(max_mem_clk, max_mem_clk,
+	(bios->max_mem_clk, max_mem_clk,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "max memory clock of this memory in unit of 10kHz, =0 means it is not defined"))
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mem_voltage, mem_voltage,
+	(bios->mem_voltage, mem_voltage,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mem_voltage"))
 	),
-	(vram_module_size, vram_module_size,
+	(bios->vram_module_size, vram_module_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Size of atom_vram_module_v9"))
 	),
-	(ext_memory_id, ext_memory_id,
+	(bios->ext_memory_id, ext_memory_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Current memory module ID"))
 	),
-	(memory_type, memory_type,
+	(bios->memory_type, memory_type,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "enum of atom_dgpu_vram_type"))
 	),
-	(channel_num, channel_num,
+	(bios->channel_num, channel_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Number of mem. channels supported in this module"))
 	),
-	(channel_width, channel_width,
+	(bios->channel_width, channel_width,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
 	),
-	(density, density,
+	(bios->density, density,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "_8Mx32, _16Mx32, _16Mx16, _32Mx16"))
 	),
-	(tunningset_id, tunningset_id,
+	(bios->tunningset_id, tunningset_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "MC phy registers set per."))
 	),
-	(vender_rev_id, vender_rev_id,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->vender_rev_id, vender_rev_id,
+		(ATUI_BIN, ATUI_NOFANCY),
 		((LANG_ENG, "[7:4] Revision, [3:0] Vendor code"))
 	),
-	(refreshrate, refreshrate,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->refreshrate, refreshrate,
+		(ATUI_BIN, ATUI_NOFANCY),
 		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
 	),
-	(hbm_ven_rev_id, hbm_ven_rev_id,
+	(bios->hbm_ven_rev_id, hbm_ven_rev_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "hbm_ven_rev_id"))
 	),
-	(vram_rsd2, vram_rsd2,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->vram_rsd2, vram_rsd2,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "reserved"))
 	),
-	(dram_pnstring, dram_pnstring,
+	(bios->dram_pnstring, dram_pnstring,
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_3, atui_nullstruct,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(mem_adjust_tbloffset, mem_adjust_tbloffset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->mem_adjust_tbloffset, mem_adjust_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting"))
 	),
-	(mem_clk_patch_tbloffset, mem_clk_patch_tbloffset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->mem_clk_patch_tbloffset, mem_clk_patch_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting"))
 	),
-	(mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings"))
 	),
-	(mc_phyinit_tbloffset, mc_phyinit_tbloffset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->mc_phyinit_tbloffset, mc_phyinit_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init set"))
 	),
-	(dram_data_remap_tbloffset, dram_data_remap_tbloffset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->dram_data_remap_tbloffset, dram_data_remap_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "reserved for now"))
 	),
-	(tmrs_seq_offset, tmrs_seq_offset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->tmrs_seq_offset, tmrs_seq_offset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of HBM tmrs"))
 	),
-	(post_ucode_init_offset, post_ucode_init_offset,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->post_ucode_init_offset, post_ucode_init_offset,
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init"))
 	),
-	(vram_rsd2, vram_rsd2,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->vram_rsd2, vram_rsd2,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(vram_module_num, vram_module_num,
+	(bios->vram_module_num, vram_module_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate number of VRAM module"))
 	),
-	(umcip_min_ver, umcip_min_ver,
+	(bios->umcip_min_ver, umcip_min_ver,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(umcip_max_ver, umcip_max_ver,
+	(bios->umcip_max_ver, umcip_max_ver,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_phy_tile_num, mc_phy_tile_num,
+	(bios->mc_phy_tile_num, mc_phy_tile_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
 	)
@@ -2014,51 +2025,52 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_3, atui_nullstruct,
 
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
 		atomtree_vram_info_header_v2_4,
-	(table_header, table_header,
+	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
 	),
-	(mem_adjust_tbloffset, mem_adjust_tbloffset,
+	(bios->mem_adjust_tbloffset, mem_adjust_tbloffset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting"))
 	),
-	(mem_clk_patch_tbloffset, mem_clk_patch_tbloffset,
+	(bios->mem_clk_patch_tbloffset, mem_clk_patch_tbloffset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting"))
 	),
-	(mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),// offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings
-	(mc_phyinit_tbloffset, mc_phyinit_tbloffset,
+	(bios->mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings"))
+	),
+	(bios->mc_phyinit_tbloffset, mc_phyinit_tbloffset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init set"))
 	),
-	(dram_data_remap_tbloffset, dram_data_remap_tbloffset,
+	(bios->dram_data_remap_tbloffset, dram_data_remap_tbloffset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "reserved for now"))
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of reserved"))
 	),
-	(post_ucode_init_offset, post_ucode_init_offset,
+	(bios->post_ucode_init_offset, post_ucode_init_offset,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init"))
 	),
-	(vram_rsd2, vram_rsd2,
+	(bios->vram_rsd2, vram_rsd2,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(vram_module_num, vram_module_num,
+	(bios->vram_module_num, vram_module_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate number of VRAM module"))
 	),
-	(umcip_min_ver, umcip_min_ver,
+	(bios->umcip_min_ver, umcip_min_ver,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(umcip_max_ver, umcip_max_ver,
+	(bios->umcip_max_ver, umcip_max_ver,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(mc_phy_tile_num, mc_phy_tile_num,
+	(bios->mc_phy_tile_num, mc_phy_tile_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
 	)
@@ -2066,230 +2078,599 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
 
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v10, atomtree_vram_info_header_v2_4,
-	(memory_size, memory_size,
+	(bios->memory_size, memory_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
 	),
-	(channel_enable, channel_enable,
+	(bios->channel_enable, channel_enable,
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "bit vector, each bit indicate specific channel enable or not"))
 	),
-	(max_mem_clk, max_mem_clk,
+	(bios->max_mem_clk, max_mem_clk,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "max memory clock of this memory in unit of 10kHz, =0 means it is not defined"))
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(mem_voltage, mem_voltage,
+	(bios->mem_voltage, mem_voltage,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mem_voltage"))
 	),
-	(vram_module_size, vram_module_size,
+	(bios->vram_module_size, vram_module_size,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Size of atom_vram_module_v9"))
 	),
-	(ext_memory_id, ext_memory_id,
+	(bios->ext_memory_id, ext_memory_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Current memory module ID"))
 	),
-	(memory_type, memory_type,
+	(bios->memory_type, memory_type,
 		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
 		((LANG_ENG, "enum of atom_dgpu_vram_type"))
 	),
-	(channel_num, channel_num,
+	(bios->channel_num, channel_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Number of mem. channels supported in this module"))
 	),
-	(channel_width, channel_width,
+	(bios->channel_width, channel_width,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
 	),
-	(density, density,
+	(bios->density, density,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "_8Mx32, _16Mx32, _16Mx16, _32Mx16"))
 	),
-	(tunningset_id, tunningset_id,
+	(bios->tunningset_id, tunningset_id,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "MC phy registers set per"))
 	),
-	(vender_rev_id, vender_rev_id,
-		(ATUI_DEC, ATUI_NOFANCY),
+	(bios->vender_rev_id, vender_rev_id,
+		(ATUI_BIN, ATUI_NOFANCY),
 		((LANG_ENG, "[7:4] Revision, [3:0] Vendor code"))
 	),
-	(refreshrate, refreshrate,
+	(bios->refreshrate, refreshrate,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
 	),
-	(vram_flags, vram_flags,
+	(bios->vram_flags, vram_flags,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "bit0= bankgroup enable"))
 	),
-	(vram_rsd2, vram_rsd2,
+	(bios->vram_rsd2, vram_rsd2,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "reserved"))
 	),
-	(gddr6_mr10, gddr6_mr10,
+	(bios->gddr6_mr10, gddr6_mr10,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr10),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr1, gddr6_mr1,
+	(bios->gddr6_mr1, gddr6_mr1,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr1),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr2, gddr6_mr2,
+	(bios->gddr6_mr2, gddr6_mr2,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr2),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr7, gddr6_mr7,
+	(bios->gddr6_mr7, gddr6_mr7,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr7),
 		(ATUI_NODESCR)
 	),
-	(dram_pnstring, dram_pnstring,
+	(bios->dram_pnstring, dram_pnstring,
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "part number end with '0'"))
 	)
 )
-PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atui_nullstruct,
-	( block_id,  block_id,
+PPATUI_FUNCIFY(struct, umc_block_navi1_timings,
+		atomtree_vram_info_header_v2_4,
+
+	(bios->block_id,  block_id,
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
 	),
 
-	(gddr6_mr5.gddr6_mr5, gddr6_mr5,
+	(bios->gddr6_mr5.gddr6_mr5, gddr6_mr5,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr5),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr5.reserved, gddr6_mr5_reserved,
+	(bios->gddr6_mr5.reserved, gddr6_mr5_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr0.gddr6_mr0, gddr6_mr0,
+	(bios->gddr6_mr0.gddr6_mr0, gddr6_mr0,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr0),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr0.reserved, gddr6_mr0_reserved,
+	(bios->gddr6_mr0.reserved, gddr6_mr0_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(UMCCTRL_PMG_CMD_EMRS, UMCCTRL_PMG_CMD_EMRS,
+	(bios->UMCCTRL_PMG_CMD_EMRS, UMCCTRL_PMG_CMD_EMRS,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr4.gddr6_mr4, gddr6_mr4,
+	(bios->gddr6_mr4.gddr6_mr4, gddr6_mr4,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr4),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr4.reserved, gddr6_mr4_reserved,
+	(bios->gddr6_mr4.reserved, gddr6_mr4_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(gddr6_mr8.gddr6_mr8, gddr6_mr8,
+	(bios->gddr6_mr8.gddr6_mr8, gddr6_mr8,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr8),
 		(ATUI_NODESCR)
 	),
-	(gddr6_mr8.reserved, gddr6_mr8_reserved,
+	(bios->gddr6_mr8.reserved, gddr6_mr8_reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(DRAMTiming1, DRAMTiming1,
+	(bios->DRAMTiming1, DRAMTiming1,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming1),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming2, DRAMTiming2,
+	(bios->DRAMTiming2, DRAMTiming2,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming2),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming3, DRAMTiming3,
+	(bios->DRAMTiming3, DRAMTiming3,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming3),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming4, DRAMTiming4,
+	(bios->DRAMTiming4, DRAMTiming4,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming4),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming5, DRAMTiming5,
+	(bios->DRAMTiming5, DRAMTiming5,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming5),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming6, DRAMTiming6,
+	(bios->DRAMTiming6, DRAMTiming6,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming6),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming7, DRAMTiming7,
+	(bios->DRAMTiming7, DRAMTiming7,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming7),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming8, DRAMTiming8,
+	(bios->DRAMTiming8, DRAMTiming8,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming8),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming9, DRAMTiming9,
+	(bios->DRAMTiming9, DRAMTiming9,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming9),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming10, DRAMTiming10,
+	(bios->DRAMTiming10, DRAMTiming10,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming10),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming12, DRAMTiming12,
+	(bios->DRAMTiming12, DRAMTiming12,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming13, DRAMTiming13,
+	(bios->DRAMTiming13, DRAMTiming13,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming13),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming14, DRAMTiming14,
+	(bios->DRAMTiming14, DRAMTiming14,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming16, DRAMTiming16,
+	(bios->DRAMTiming16, DRAMTiming16,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming16),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming17, DRAMTiming17,
+	(bios->DRAMTiming17, DRAMTiming17,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming17),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming20, DRAMTiming20,
+	(bios->DRAMTiming20, DRAMTiming20,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming20),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming21, DRAMTiming21,
+	(bios->DRAMTiming21, DRAMTiming21,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming21),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming22, DRAMTiming22,
+	(bios->DRAMTiming22, DRAMTiming22,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming22),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming23, DRAMTiming23,
+	(bios->DRAMTiming23, DRAMTiming23,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming23),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming35, DRAMTiming35,
+	(bios->DRAMTiming35, DRAMTiming35,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming35),
 		(ATUI_NODESCR)
 	),
-	(DRAMTiming36, DRAMTiming36,
+	(bios->DRAMTiming36, DRAMTiming36,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming36),
 		(ATUI_NODESCR)
 	),
-	(tRFC, tRFC,
+	(bios->tRFC, tRFC,
 		(ATUI_NODISPLAY, ATUI_INLINE, TRFCTimingCS01),
 		(ATUI_NODESCR)
 	),
-	(ChanPipeDly, ChanPipeDly,
+	(bios->ChanPipeDly, ChanPipeDly,
 		(ATUI_NODISPLAY, ATUI_INLINE, ChanPipeDly),
 		(ATUI_NODESCR)
 	)
 )
 
+PPATUI_FUNCIFY(struct, atom_vram_module_v11,
+		atomtree_vram_info_header_v2_5,
 
+	(bios->memory_size, memory_size,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
+	),
+	(bios->channel_enable, channel_enable,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "bit vector, each bit indicate specific channel enable or not"))
+	),
+	(bios->mem_voltage, mem_voltage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mem_voltage"))
+	),
+	(bios->vram_module_size, vram_module_size,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Size of atom_vram_module_v9"))
+	),
+	(bios->ext_memory_id, ext_memory_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Current memory module ID"))
+	),
+	(bios->memory_type, memory_type,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "enum of atom_dgpu_vram_type"))
+	),
+	(bios->channel_num, channel_num,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of mem. channels supported in this module"))
+	),
+	(bios->channel_width, channel_width,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
+	),
+	(bios->density, density,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "_8Mx32, _16Mx32, _16Mx16, _32Mx16"))
+	),
+	(bios->tunningset_id, tunningset_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MC phy registers set per."))
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "reserved"))
+	),
+	(bios->vender_rev_id, vender_rev_id,
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "[7:4] Revision, [3:0] Vendor code"))
+	),
+	(bios->refreshrate, refreshrate,
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->vram_flags, vram_flags,
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "bit0= bankgroup enable"))
+	),
+	(bios->vram_rsd2, vram_rsd2,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "reserved"))
+	),
+
+	(bios->gddr6_mr10, gddr6_mr10,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr10),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr0, gddr6_mr0,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr0),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr1, gddr6_mr1,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr1),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr2, gddr6_mr2,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr2),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr4, gddr6_mr4,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr4),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr7, gddr6_mr7,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr7),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr6_mr8, gddr6_mr8,
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr6_mr8),
+		(ATUI_NODESCR)
+	),
+
+	(bios->dram_pnstring, dram_pnstring,
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "part number end with '0'."))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_gddr6_ac_timing_v2_5,
+		atomtree_vram_info_header_v2_5,
+	(bios->u32umc_id_access, u32umc_id_access,
+		(ATUI_NAN, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODESCR)
+	),
+	(bios->RL, RL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->WL, WL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRAS, tRAS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRC, tRC,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tREFI, tREFI,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRFC, tRFC,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRFCpb, tRFCpb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tRREFD, tRREFD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDRD, tRCDRD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDWR, tRCDWR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRP, tRP,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tRRDS, tRRDS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRRDL, tRRDL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWR, tWR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWTRS, tWTRS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tWTRL, tWTRL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW, tFAW,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCCDS, tCCDS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCCDL, tCCDL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tCRCRL, tCRCRL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCRCWL, tCRCWL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKE, tCKE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKSRE, tCKSRE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tCKSRX, tCKSRX,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRTPS, tRTPS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRTPL, tRTPL,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tMRD, tMRD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tMOD, tMOD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tXS, tXS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tXHP, tXHP,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tXSMRS, tXSMRS,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tXSH, tXSH,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tPD, tPD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tXP, tXP,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCPDED, tCPDED,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tACTPDE, tACTPDE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tPREPDE, tPREPDE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tREFPDE, tREFPDE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tMRSPDEN, tMRSPDEN,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRDSRE, tRDSRE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tWRSRE, tWRSRE,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tPPD, tPPD,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCCDMW, tCCDMW,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWTRTR, tWTRTR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->tLTLTR, tLTLTR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tREFTR, tREFTR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->VNDR, VNDR,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_5,
+		atomtree_vram_info_header_v2_5,
+
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->mem_adjust_tbloffset, mem_adjust_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust settings"))
+	),
+	(bios->gddr6_ac_timing_offset, gddr6_ac_timing_offset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_gddr6_ac_timing_v2_5 structure for memory clock specific UMC settings"))
+	),
+	(bios->mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings"))
+	),
+	(bios->mc_phyinit_tbloffset, mc_phyinit_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init set"))
+	),
+	(bios->dram_data_remap_tbloffset, dram_data_remap_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_gddr6_dram_data_remap array to indicate DRAM data lane to GPU mapping"))
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of reserved"))
+	),
+	(bios->post_ucode_init_offset, post_ucode_init_offset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init"))
+	),
+	(bios->strobe_mode_patch_tbloffset, strobe_mode_patch_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Strobe Mode memory clock specific UMC settings"))
+	),
+	(bios->vram_module_num, vram_module_num,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate number of VRAM module"))
+	),
+	(bios->umcip_min_ver, umcip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_max_ver, umcip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_phy_tile_num, mc_phy_tile_num,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
+	),
+	(bios->vram_module, vram_module,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_vram_module_v11),
+		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6, atui_nullstruct,
+	(bios->table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->mem_adjust_tbloffset, mem_adjust_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem_clk_patch_tbloffset, mem_clk_patch_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_adjust_pertile_tbloffset, mc_adjust_pertile_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_phyinit_tbloffset, mc_phyinit_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_data_remap_tbloffset, dram_data_remap_tbloffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tmrs_seq_offset, tmrs_seq_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->post_ucode_init_offset, post_ucode_init_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vram_rsd2, vram_rsd2,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vram_module_num, vram_module_num,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_min_ver, umcip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_max_ver, umcip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_phy_tile_num, mc_phy_tile_num,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vram_module, vram_module,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_vram_module_v9),
+		(ATUI_NODESCR)
+	)
+)
 
 
 PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		atomtree_umc_init_reg_block,
-	(umc_reg_list, umc_reg_list,
+	(NULL, umc_reg_list,
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
-			(u32umc_reg_addr, u32umc_reg_addr [%02u],
+			(bios->u32umc_reg_addr, u32umc_reg_addr [%02u],
 				(ATUI_HEX, ATUI_BITFIELD, (
 					(umc_register_addr, 23, 0, ATUI_HEX, (ATUI_NODESCR)),
 					(umc_reg_type_ind,  24,24, ATUI_DEC, (ATUI_NODESCR)),
@@ -2305,10 +2686,10 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 
 PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		atomtree_umc_init_reg_block,
-	(umc_reg_num, umc_reg_num,
+	(bios->umc_reg_num, umc_reg_num,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(reserved, reserved,
+	(bios->reserved, reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
@@ -2316,7 +2697,7 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 		atomtree_umc_init_reg_block,
 
-	(u32umc_id_access,  u32umc_id_access,
+	(bios->u32umc_id_access,  u32umc_id_access,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(memclockrange, 23, 0, ATUI_DEC, (ATUI_NODESCR)),
 			(mem_blk_id,    31,24, ATUI_DEC, (ATUI_NODESCR))
@@ -2327,13 +2708,13 @@ PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 
 PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 		atomtree_umc_init_reg_block,
-	(block_id, UMC block ID,
+	(bios->block_id, UMC block ID,
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
 	),
-	(u32umc_reg_data, u32umc_reg_data,
+	(NULL, u32umc_reg_data,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(u32umc_reg_data, u32umc_reg_data [%02u],
+			(bios->u32umc_reg_data, u32umc_reg_data [%02u],
 				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			bios->u32umc_reg_data, atomtree->umc_reg_num //start, count

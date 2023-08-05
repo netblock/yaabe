@@ -3332,6 +3332,8 @@ struct atom_gddr6_ac_timing_v2_5 {
 	uint8_t  reserved[9];
 };
 
+
+//TODO atombios.h has ATOM_DRAM_DATA_REMAP
 struct atom_gddr6_bit_byte_remap {
 	uint32_t dphy_byteremap; // mmUMC_DPHY_ByteRemap
 	uint32_t dphy_bitremap0; // mmUMC_DPHY_BitRemap0

@@ -61,17 +61,10 @@ vim replace patterns that help copypaste structs from atombios.h:
 PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	struct atomtreestruct* atomtree = args->atomtree;\
+	atomtypeprefix atomtypesuffix * bios = args->suggestbios;\
 	uint16_t num_branches = 0;\
 	uint16_t max_branch_count = args->num_branches;\
 	atui_branch** import_children = args->import_children;\
-	atomtypeprefix atomtypesuffix * bios;\
-	if (args->suggestbios != NULL) {\
-		bios = args->suggestbios;\
-	} else if (atomtree != NULL){\
-		bios = (void*) atomtree->leaves;\
-	} else {\
-		bios = NULL;\
-	}\
 \
 	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
@@ -313,6 +306,12 @@ That is, bitfield population, and enum and inline association.
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
 	default:0\
 )
+#define _PPATUI_DEREF(var) _Generic((var), \
+	uint8_t*:*((uint8_t*)var), uint16_t*:*((uint16_t*)var),\
+	uint32_t*:*((uint32_t*)var), uint64_t*:*((uint64_t*)var), \
+	uint8_t:var, uint16_t:var, uint32_t:var, uint64_t:var, \
+	default:0\
+)
 
 #define _PPATUI_FANCY_NOBITFIELD(biosvar) \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0,
@@ -441,7 +440,7 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_INBRANCH_ATUI_ARRAY(...)
 #define _PPATUI_INBRANCH_ATUI_DYNARRAY(...)
 #define _PPATUI_INBRANCH_ATUI_INLINE(instancename, atomstruct)\
-	ATUI_MAKE_BRANCH(atomstruct, NULL, &(bios->instancename), 0, NULL),
+	ATUI_MAKE_BRANCH(atomstruct, NULL, &(instancename), 0, NULL),
 
 
 
@@ -477,7 +476,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_LEAF_HELPER4(__VA_ARGS__)
 #define _PPATUI_LEAF_HELPER4(bios, var, name, desdat, radix, fancytype, ...)\
 	_PPATUI_FANCY_##fancytype(\
-		bios->var, var, name, desdat, radix, fancytype, __VA_ARGS__\
+		var, var, name, desdat, radix, fancytype, __VA_ARGS__\
 	)
 
 
@@ -542,7 +541,7 @@ That is, bitfield population, and enum and inline association.
 		start,dynsize,\
 		var, name, descr, radix, fancytype, ...)\
 	_PPATUI_FANCY_##fancytype(\
-		bios->var, var, name, descr, radix,fancytype, __VA_ARGS__\
+		var, var, name, descr, radix,fancytype, __VA_ARGS__\
 	)
 
 // counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
@@ -572,9 +571,9 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_INLINE(start, dynsize, inltable)\
 	{\
-		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize), \
-		.array_start=start, .element_size=sizeof(start[0])\
-		.inl_func=PPATUI_FUNC_NAME(atomstruct),\
+		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize),\
+		.array_start=start, .element_size=sizeof(start[0]),\
+		.inl_func=PPATUI_FUNC_NAME(inltable),\
 	},
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_BITFIELD(start,dynsize, bitfields)\
 	{\
@@ -586,11 +585,6 @@ That is, bitfield population, and enum and inline association.
 
 
 
-#define _PPATUI_DEREF(var) _Generic((var), \
-	uint8_t*:*(var), uint16_t*:*(var), uint32_t*:*(var), uint64_t*:*(var), \
-	uint8_t:var, uint16_t:var, uint32_t:var, uint64_t:var, \
-	default:var\
-)
 
 
 //ATUI_DYNARRAY stuff end
