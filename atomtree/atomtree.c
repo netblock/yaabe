@@ -675,18 +675,20 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		atui_postucode_init = NULL;
 	}
 
-
 	atui_branch* atui_vi = NULL;
 	if(generate_atui) {
 		uint16_t i = 0;
 		atui_branch* ui_branch;
-
+		const uint8_t num_vram_modules = (
+			sizeof(vi24->leaves->vram_module)
+			/ sizeof(struct atom_vram_module_v10)
+		);
 		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
 			NULL, NULL,
-			vi24->leaves->vram_module_num, NULL
+			num_vram_modules, NULL
 		);
 		sprintf(vram_module->name, "atom_vram_module_v10");
-		for(i=0; i < vi24->leaves->vram_module_num; i++) {
+		for(i=0; i < num_vram_modules; i++) {
 			ui_branch = ATUI_MAKE_BRANCH(atom_vram_module_v10,
 				NULL,&(vi24->leaves->vram_module[i]), 0,NULL);
 			sprintf(ui_branch->name, "%s [%02u]", ui_branch->varname, i);
