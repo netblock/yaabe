@@ -24,8 +24,8 @@ vim replace patterns that help copypaste structs from atombios.h:
 
 // shall be used in an array
 struct atui_enum {
-	char* name;
-	int val;
+	const char* name;
+	int64_t val;
 };
 
 enum i18n_languages {

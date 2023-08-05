@@ -2375,7 +2375,7 @@ enum smudpm_v4_5_i2ccontrollerthrottler_e {
 	SMC_V4_5_I2C_CONTROLLER_THROTTLER_COUNT,
 };
 
-enum smudpm_v4_5_i2ccontrollerprotocol_e {
+enum mudpm_v4_5_i2ccontrollerprotocol_e {
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_VR_0,
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_VR_1,
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_TMP_0,
@@ -2392,7 +2392,7 @@ struct smudpm_i2c_controller_config_v2 {
 	uint32_t SlaveAddress;
 	uint8_t  ControllerPort;
 	uint8_t  ControllerName;
-	uint8_t  ThermalThrotter;
+	uint8_t  Throttler;
 	uint8_t  I2cProtocol;
 };
 
