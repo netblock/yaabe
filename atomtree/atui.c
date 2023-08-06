@@ -2642,15 +2642,12 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_5,
 	(bios->mc_phy_tile_num, mc_phy_tile_num,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
-	),
-	(bios->vram_module, vram_module,
-		(ATUI_NODISPLAY, ATUI_INLINE, atom_vram_module_v11),
-		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
 	)
 )
 
 
-PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6,
+		atomtree_vram_info_header_v2_6,
 	(bios->table_header, table_header,
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -2690,12 +2687,117 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6, atui_nullstruct,
 	),
 	(bios->mc_phy_tile_num, mc_phy_tile_num,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->vram_module, vram_module,
-		(ATUI_NODISPLAY, ATUI_INLINE, atom_vram_module_v9),
-		(ATUI_NODESCR)
 	)
 )
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v3_0, 
+		atomtree_vram_info_header_v3_0,
+	(bios->density, density,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tunningset_id, tunningset_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ext_memory_id, ext_memory_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_vendor_id, dram_vendor_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_info_offset, dram_info_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem_tuning_offset, mem_tuning_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tmrs_seq_offset, tmrs_seq_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_size_per_ch, dram_size_per_ch,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->dram_pnstring, dram_pnstring,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,
+		atomtree_vram_info_header_v3_0,
+	(bios->table_header, table_header,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->mem_tuning_table_offset, mem_tuning_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_info_table_offset, dram_info_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tmrs_table_offset, tmrs_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_init_table_offset, mc_init_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dram_data_remap_table_offset, dram_data_remap_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umc_emuinit_table_offset, umc_emuinit_table_offset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved_sub_table_offset, reserved_sub_table_offset,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->vram_module_num, vram_module_num,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_min_ver, umcip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_max_ver, umcip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_phy_tile_num, mc_phy_tile_num,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->memory_type, memory_type,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->channel_num, channel_num,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->channel_width, channel_width,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->channel_enable, channel_enable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->channel1_enable, channel1_enable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->feature_enable, feature_enable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->feature1_enable, feature1_enable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->hardcode_mem_size, hardcode_mem_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved4, reserved4,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
 
 
 PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
@@ -2716,7 +2818,6 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		(ATUI_NODESCR)
 	)
 )
-
 PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		atomtree_umc_init_reg_block,
 	(bios->umc_reg_num, umc_reg_num,
@@ -2726,7 +2827,6 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
-
 PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 		atomtree_umc_init_reg_block,
 
@@ -2738,7 +2838,6 @@ PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
 		(ATUI_NODESCR)
 	)
 )
-
 PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 		atomtree_umc_init_reg_block,
 	(bios->block_id, UMC block ID,

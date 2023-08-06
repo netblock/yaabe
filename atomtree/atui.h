@@ -206,8 +206,17 @@ PPATUI_HEADERIFY(atom_gddr6_dram_data_remap);
 PPATUI_HEADERIFY(atom_vram_module_v9);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_3);
 
-PPATUI_HEADERIFY(umc_block_navi1_timings);
 PPATUI_HEADERIFY(atom_vram_module_v10);
+PPATUI_HEADERIFY(umc_block_navi1_timings);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
+
+PPATUI_HEADERIFY(atom_vram_module_v11);
+PPATUI_HEADERIFY(atom_gddr6_ac_timing_v2_5);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_5);
+
+PPATUI_HEADERIFY(atom_vram_info_header_v2_6);
+
+PPATUI_HEADERIFY(atom_vram_module_v3_0);
+PPATUI_HEADERIFY(atom_vram_info_header_v3_0);
 
 #endif
