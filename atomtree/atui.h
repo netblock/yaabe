@@ -101,7 +101,7 @@ struct  _atui_branch {
 	uint8_t branch_count;
 	uint8_t max_branch_count;
 
-	atui_branch** inline_branches;
+	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
 	uint8_t inline_branch_count;
 	uint8_t max_inline_branch_count;
 
