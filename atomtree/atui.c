@@ -1115,7 +1115,48 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
 	)
 )
 
+PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_1,
+		atomtree_vram_usagebyfirmware,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->start_address_in_kb, start_address_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->used_by_firmware_in_kb, used_by_firmware_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->used_by_driver_in_kb, used_by_driver_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
 
+PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_2,
+		atomtree_vram_usagebyfirmware,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->fw_region_start_address_in_kb, fw_region_start_address_in_kb,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->used_by_firmware_in_kb, used_by_firmware_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->driver_region0_start_address_in_kb, driver_region0_start_address_in_kb,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->used_by_driver_region0_in_kb, used_by_driver_region0_in_kb,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved32, reserved32,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
 
 
 

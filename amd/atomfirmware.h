@@ -3578,7 +3578,7 @@ struct asic_init_mem_parameters_old{
 	uint32_t memflag:8; /* enum atom_asic_init_mem_flag */
 };
 
-struct asic_init_mem_parameters {
+union asic_init_mem_parameters {
 	uint32_t memparam;
 	struct { uint32_t	
 		mclkfreqin10khz :23-0 +1,

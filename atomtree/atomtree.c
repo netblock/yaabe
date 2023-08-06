@@ -33,6 +33,7 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 		smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
 		if (generate_atui) {
 			switch (smc_dpm_info->ver) {
+				/*
 				case v4_1:
 					atui_smc_dpm_info = NULL;
 					break;
@@ -45,6 +46,7 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 				case v4_4:
 					atui_smc_dpm_info = NULL;
 					break;
+				*/
 				case v4_5:
 					const uint8_t num_i2c_controllers =
 						sizeof(smc_dpm_info->v4_5->I2cControllers)
@@ -66,6 +68,7 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 					}
 					atui_smc_dpm_info->branch_count = i;
 					break;
+				/*
 				case v4_6:
 					atui_smc_dpm_info = NULL;
 					break;
@@ -83,10 +86,18 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 					break;
 				case v5_0:
 					atui_smc_dpm_info = NULL;
+				*/
 					break;
 				default:
-					atui_smc_dpm_info = NULL;
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL, smc_dpm_info->table_header ,0,NULL
+					);
+					sprintf(atui_smc_dpm_info->name,
+						"vram_usagebyfirmware (header only stub)"
+					);
 					break;
+					atui_smc_dpm_info = NULL;
 			}
 		}
 	} else {
@@ -216,11 +227,32 @@ atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 			atree->data_table.leaves->vram_usagebyfirmware;
 
 		fw_vram->ver = get_ver(fw_vram->table_header);
+		switch(fw_vram->ver) {
+			case v2_1:
+				atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_1,
+					NULL, fw_vram->v2_1, 0,NULL
+				);
+				break;
+			case v2_2:
+				atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_2,
+					NULL, fw_vram->v2_2, 0,NULL
+				);
+				break;
+			default:
+				atui_fw_vram = ATUI_MAKE_BRANCH(atom_common_table_header,
+					NULL, fw_vram->table_header ,0,NULL
+				);
+				sprintf(atui_fw_vram->name,
+					"vram_usagebyfirmware (header only stub)"
+				);
+				break;
+		}
 	} else {
 		fw_vram->leaves = NULL;
 		fw_vram->ver = nover;
 		atui_fw_vram = NULL;
 	}
+	return atui_fw_vram;
 }
 
 
@@ -239,6 +271,7 @@ atui_branch* atomtree_dt_populate_gfx_info(
 
 		gfx_info->ver = get_ver(gfx_info->table_header);
 		switch(gfx_info->ver) {
+			/*
 			case v2_3:
 				gfx_info->gcgolden = gfx_info->leaves +
 					gfx_info->v2_3->gcgoldenoffset;
@@ -250,6 +283,15 @@ atui_branch* atomtree_dt_populate_gfx_info(
 			case v2_7:
 				gfx_info->gcgolden = gfx_info->leaves +
 					gfx_info->v2_7->gcgoldenoffset;
+				break;
+			*/
+			default:
+				atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+					NULL, gfx_info->table_header ,0,NULL
+				);
+				sprintf(atui_gfx_info->name,
+					"gfx_info (header only stub)"
+				);
 				break;
 		}
 	} else {
@@ -1177,7 +1219,7 @@ static inline atui_branch* atomtree_dt_populate_vram_info(
 				break;
 			default:
 				atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
-					NULL, &(vram_info->table_header) ,0,NULL
+					NULL, vram_info->table_header ,0,NULL
 				);
 				sprintf(atui_vi->name, "vram_info (header only stub)");
 				break;
@@ -1364,7 +1406,8 @@ static inline atui_branch* atomtree_populate_datatables(
 	atui_branch* atui_dt = NULL;
 	if (generate_atui) {
 		atui_branch* child_branches[] = {
-			atui_smc_dpm_info, atui_firmwareinfo, atui_vram_info,
+			atui_smc_dpm_info, atui_firmwareinfo, atui_vram_info, atui_lcd_info,
+			atui_smu_info, atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info
 		};
 		int num_child_branches = sizeof(child_branches)/sizeof(atui_branch*);
 
