@@ -468,6 +468,412 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 
 
 
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_1, atomtree_smc_dpm_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->liquid1_i2c_address, liquid1_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquid2_i2c_address, liquid2_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_address, vr_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->plx_i2c_address, plx_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->liquid_i2c_linescl, liquid_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquid_i2c_linesda, liquid_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_linescl, vr_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_linesda, vr_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->plx_i2c_linescl, plx_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->plx_i2c_linesda, plx_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vrsensorpresent, vrsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquidsensorpresent, liquidsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->maxvoltagestepgfx, maxvoltagestepgfx,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->maxvoltagestepsoc, maxvoltagestepsoc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vddgfxvrmapping, vddgfxvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddsocvrmapping, vddsocvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem0vrmapping, vddmem0vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem1vrmapping, vddmem1vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_v, padding8_v,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxmaxcurrent, gfxmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxoffset, gfxoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrygfx, padding_telemetrygfx,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->socmaxcurrent, socmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->socoffset, socoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrysoc, padding_telemetrysoc,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem0maxcurrent, mem0maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem0offset, mem0offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem0, padding_telemetrymem0,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem1maxcurrent, mem1maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem1offset, mem1offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem1, padding_telemetrymem1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->acdcgpio, acdcgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->acdcpolarity, acdcpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotgpio, vr0hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotpolarity, vr0hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vr1hotgpio, vr1hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr1hotpolarity, vr1hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding1, padding1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding2, padding2,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->ledpin0, ledpin0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin1, ledpin1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin2, ledpin2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_4, padding8_4,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->pllgfxclkspreadenabled, pllgfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadpercent, pllgfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadfreq, pllgfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->uclkspreadenabled, uclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadpercent, uclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadfreq, uclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->socclkspreadenabled, socclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->socclkspreadpercent, socclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->socclkspreadfreq, socclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->acggfxclkspreadenabled, acggfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->acggfxclkspreadpercent, acggfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->acggfxclkspreadfreq, acggfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Vr2_I2C_address, Vr2_I2C_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_vr2, padding_vr2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->boardreserved, boardreserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_3, atomtree_smc_dpm_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->liquid1_i2c_address, liquid1_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquid2_i2c_address, liquid2_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_address, vr_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->plx_i2c_address, plx_i2c_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->liquid_i2c_linescl, liquid_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquid_i2c_linesda, liquid_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_linescl, vr_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr_i2c_linesda, vr_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->plx_i2c_linescl, plx_i2c_linescl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->plx_i2c_linesda, plx_i2c_linesda,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vrsensorpresent, vrsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->liquidsensorpresent, liquidsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->maxvoltagestepgfx, maxvoltagestepgfx,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->maxvoltagestepsoc, maxvoltagestepsoc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vddgfxvrmapping, vddgfxvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddsocvrmapping, vddsocvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem0vrmapping, vddmem0vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem1vrmapping, vddmem1vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->externalsensorpresent, externalsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_v, padding8_v,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxmaxcurrent, gfxmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxoffset, gfxoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrygfx, padding_telemetrygfx,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->socmaxcurrent, socmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->socoffset, socoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrysoc, padding_telemetrysoc,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem0maxcurrent, mem0maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem0offset, mem0offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem0, padding_telemetrymem0,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem1maxcurrent, mem1maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem1offset, mem1offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem1, padding_telemetrymem1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->acdcgpio, acdcgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->acdcpolarity, acdcpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotgpio, vr0hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotpolarity, vr0hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vr1hotgpio, vr1hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr1hotpolarity, vr1hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding1, padding1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding2, padding2,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->ledpin0, ledpin0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin1, ledpin1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin2, ledpin2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_4, padding8_4,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->pllgfxclkspreadenabled, pllgfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadpercent, pllgfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadfreq, pllgfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->uclkspreadenabled, uclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadpercent, uclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadfreq, uclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->fclkspreadenabled, fclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclkspreadpercent, fclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclkspreadfreq, fclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->fllgfxclkspreadenabled, fllgfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fllgfxclkspreadpercent, fllgfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fllgfxclkspreadfreq, fllgfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->boardreserved, boardreserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
 PPATUI_ENUMER(smudpm_v4_5_i2ccontrollername_e,
 	SMC_V4_5_I2C_CONTROLLER_NAME_VR_GFX,
 	SMC_V4_5_I2C_CONTROLLER_NAME_VR_SOC,
@@ -499,6 +905,213 @@ PPATUI_ENUMER(smudpm_v4_5_i2ccontrollerprotocol_e,
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_SPARE_1,
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_COUNT
 )
+
+PPATUI_FUNCIFY(struct, smudpm_i2ccontrollerconfig_t, atomtree_smc_dpm_info,
+	(bios->enabled, enabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->slaveaddress, slaveaddress,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->controllerport, controllerport,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->controllername, controllername,
+		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollername_e), (ATUI_NODESCR)
+	),
+	(bios->thermalthrottler, thermalthrottler,
+		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerthrottler_e),
+		(ATUI_NODESCR)
+	),
+	(bios->i2cprotocol, i2cprotocol,
+		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerprotocol_e),
+		(ATUI_NODESCR)
+	),
+	(bios->i2cspeed, i2cspeed,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->i2c_padding, i2c_padding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->maxvoltagestepgfx, maxvoltagestepgfx,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->maxvoltagestepsoc, maxvoltagestepsoc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vddgfxvrmapping, vddgfxvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddsocvrmapping, vddsocvrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem0vrmapping, vddmem0vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vddmem1vrmapping, vddmem1vrmapping,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->externalsensorpresent, externalsensorpresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_v, padding8_v,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->gfxmaxcurrent, gfxmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxoffset, gfxoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrygfx, padding_telemetrygfx,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->socmaxcurrent, socmaxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->socoffset, socoffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrysoc, padding_telemetrysoc,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem0maxcurrent, mem0maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem0offset, mem0offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem0, padding_telemetrymem0,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->mem1maxcurrent, mem1maxcurrent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mem1offset, mem1offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding_telemetrymem1, padding_telemetrymem1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->acdcgpio, acdcgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->acdcpolarity, acdcpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotgpio, vr0hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr0hotpolarity, vr0hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->vr1hotgpio, vr1hotgpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vr1hotpolarity, vr1hotpolarity,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding1, padding1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding2, padding2,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->ledpin0, ledpin0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin1, ledpin1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ledpin2, ledpin2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->padding8_4, padding8_4,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->pllgfxclkspreadenabled, pllgfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadpercent, pllgfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadfreq, pllgfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->uclkspreadenabled, uclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadpercent, uclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadfreq, uclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->fclkspreadenabled, fclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclkspreadpercent, fclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclkspreadfreq, fclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->fllgfxclkspreadenabled, fllgfxclkspreadenabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fllgfxclkspreadpercent, fllgfxclkspreadpercent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fllgfxclkspreadfreq, fllgfxclkspreadfreq,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+
+	(bios->i2ccontrollers, i2ccontrollers,
+		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NODESCR)
+	),
+
+
+	(bios->boardreserved, boardreserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+
 // TODO ATUI_DYNARRAY with multiple leaves
 PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
 	(bios->Enabled, Enabled,
@@ -672,7 +1285,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	),
 	(bios->padding8_4, padding8_4,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "GFXCLK PLL Spread Spectrum"))
+		(ATUI_NODESCR)
 	),
 	(bios->PllGfxclkSpreadEnabled, PllGfxclkSpreadEnabled,
 		(ATUI_DEC, ATUI_NOFANCY),

@@ -33,30 +33,53 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 		smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
 		if (generate_atui) {
 			switch (smc_dpm_info->ver) {
-				/*
 				case v4_1:
-					atui_smc_dpm_info = NULL;
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_1,
+						NULL,smc_dpm_info->v4_1, 0,NULL
+					);
 					break;
+				/*
 				case v4_2:
 					atui_smc_dpm_info = NULL;
 					break;
+				*/
 				case v4_3:
-					atui_smc_dpm_info = NULL;
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_3,
+						NULL,smc_dpm_info->v4_3, 0,NULL
+					);
 					break;
 				case v4_4:
-					atui_smc_dpm_info = NULL;
+					const uint8_t num_i2c_controllers_v4_4 = (
+						sizeof(smc_dpm_info->v4_4->i2ccontrollers)
+						/ sizeof(struct smudpm_i2ccontrollerconfig_t)
+					);
+
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_4,
+						NULL,smc_dpm_info->v4_4,  num_i2c_controllers_v4_4,NULL
+					);
+					for(i=0; i < num_i2c_controllers_v4_4; i++) {
+						atui_smudpm_i2c = ATUI_MAKE_BRANCH(
+							smudpm_i2ccontrollerconfig_t,
+							NULL, &(smc_dpm_info->v4_4->i2ccontrollers[i]),
+							0, NULL
+						);
+						sprintf(atui_smudpm_i2c->name, "%s [%u]",
+							atui_smudpm_i2c->varname, i
+						);
+						atui_smc_dpm_info->child_branches[i] = atui_smudpm_i2c;
+					}
+					atui_smc_dpm_info->branch_count = num_i2c_controllers_v4_4;
 					break;
-				*/
 				case v4_5:
-					const uint8_t num_i2c_controllers =
+					const uint8_t num_i2c_controllers_v4_5 = (
 						sizeof(smc_dpm_info->v4_5->I2cControllers)
-						/ sizeof(struct smudpm_i2c_controller_config_v2
+						/ sizeof(struct smudpm_i2c_controller_config_v2)
 					);
 
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_5,
-						NULL,smc_dpm_info->v4_5,  num_i2c_controllers,NULL
+						NULL,smc_dpm_info->v4_5,  num_i2c_controllers_v4_5,NULL
 					);
-					for(i=0; i < num_i2c_controllers; i++) {
+					for(i=0; i < num_i2c_controllers_v4_5; i++) {
 						atui_smudpm_i2c = ATUI_MAKE_BRANCH(
 							smudpm_i2c_controller_config_v2,
 							NULL, &(smc_dpm_info->v4_5->I2cControllers[i]),
@@ -67,7 +90,7 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 						);
 						atui_smc_dpm_info->child_branches[i] = atui_smudpm_i2c;
 					}
-					atui_smc_dpm_info->branch_count = i;
+					atui_smc_dpm_info->branch_count = num_i2c_controllers_v4_5;
 					break;
 				/*
 				case v4_6:

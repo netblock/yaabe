@@ -183,7 +183,10 @@ PPATUI_HEADERIFY(atom_rom_header_v2_2);
 PPATUI_HEADERIFY(atom_master_data_table_v2_1);
 
 
-
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);
+PPATUI_HEADERIFY(smudpm_i2ccontrollerconfig_t);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_4);
 PPATUI_HEADERIFY(smudpm_i2c_controller_config_v2);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_5);
 
