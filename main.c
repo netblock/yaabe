@@ -177,11 +177,7 @@ int main(int argc, char** argv){
 	printf("vram_usagebyfirmware ver: %d\n",
 		atree->data_table.vram_usagebyfirmware.ver);
 	printf("gfx_info ver: %d\n", atree->data_table.gfx_info.ver);
-	printf("atom pp ver: %d size: %d\n", atree->data_table.powerplayinfo.ver,
-		atree->data_table.powerplayinfo.table_header->structuresize);
-	printf("powerplay table_revision: %d table_size: %d\n",
-		atree->data_table.powerplayinfo.pphead->table_revision,
-		atree->data_table.powerplayinfo.pphead->table_size);
+	printf("atom pp ver: %d\n", atree->data_table.powerplayinfo.ver);
 	printf("vraminfo ver: %d\n", atree->data_table.vram_info.ver);
 
 	printf("\n");
