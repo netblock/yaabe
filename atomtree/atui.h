@@ -200,6 +200,10 @@ PPATUI_HEADERIFY(vram_usagebyfirmware_v2_1);
 PPATUI_HEADERIFY(vram_usagebyfirmware_v2_2);
 
 
+PPATUI_HEADERIFY(atom_dtd_format);
+PPATUI_HEADERIFY(atom_lcd_info_v2_1);
+
+
 
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_register_addr_info_access);

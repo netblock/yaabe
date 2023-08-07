@@ -94,11 +94,12 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 						NULL, smc_dpm_info->table_header ,0,NULL
 					);
 					sprintf(atui_smc_dpm_info->name,
-						"vram_usagebyfirmware (header only stub)"
+						"smc_dpm_info (header only stub)"
 					);
 					break;
-					atui_smc_dpm_info = NULL;
 			}
+		} else { // generate_atui == false
+			atui_smc_dpm_info = NULL;
 		}
 	} else {
 		smc_dpm_info->leaves = NULL;
@@ -150,9 +151,17 @@ atui_branch* atomtree_dt_populate_firmwareinfo(
 					);
 					break;
 				default:
-					atui_firmwareinfo = NULL;
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL, firmwareinfo->table_header ,0,NULL
+					);
+					sprintf(atui_firmwareinfo->name,
+						"firmwareinfo (header only stub)"
+					);
 					break;
 			}
+		} else {
+			atui_firmwareinfo = NULL;
 		}
 	} else {
 		firmwareinfo->leaves = NULL;
@@ -162,10 +171,55 @@ atui_branch* atomtree_dt_populate_firmwareinfo(
 	return atui_firmwareinfo;
 }
 
+atui_branch* atomtree_dt_populate_lcd_info(
+		struct atom_tree* atree, bool generate_atui) {
+
+	struct atomtree_lcd_info* lcd_info = &(atree->data_table.lcd_info);
+	lcd_info->dot = lcd_info;
+	lcd_info->dotdot = &(atree->data_table);
+	atui_branch* atui_lcd_info;
+	atui_branch* atui_lcd_timing;
+
+	if (atree->data_table.leaves->lcd_info) {
+		lcd_info->leaves = atree->bios + atree->data_table.leaves->lcd_info;
+		lcd_info->ver = get_ver(lcd_info->table_header);
+		if (generate_atui) {
+			switch (lcd_info->ver) {
+				case v2_1:
+					atui_lcd_timing = ATUI_MAKE_BRANCH(atom_dtd_format,
+						NULL,&(lcd_info->v2_1->lcd_timing), 0,NULL
+					);
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lcd_info_v2_1,
+						NULL,lcd_info->leaves,
+						1, (atui_branch*[]){atui_lcd_timing}
+					);
+					break;
+				default:
+					atui_lcd_info = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL, lcd_info->table_header ,0,NULL
+					);
+					sprintf(atui_lcd_info->name,
+						"lcd_info (header only stub)"
+					);
+					break;
+			}
+		} else {
+			atui_lcd_info = NULL;
+		}
+	} else {
+		lcd_info->leaves = NULL;
+		lcd_info->ver = nover;
+		atui_lcd_info = NULL;
+	}
+
+	return atui_lcd_info;
+}
 
 
 atui_branch* atomtree_dt_populate_smu_info(
 		struct atom_tree* atree, bool generate_atui) {
+
 	struct atomtree_smu_info* smu_info = &(atree->data_table.smu_info);
 	smu_info->dot = smu_info;
 	smu_info->dotdot = &(atree->data_table);
@@ -179,6 +233,7 @@ atui_branch* atomtree_dt_populate_smu_info(
 
 		smu_info->ver = get_ver(smu_info->table_header);
 		switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
+			/*
 			case v3_3:
 				smu_info->smugolden = smu_info->leaves +
 					smu_info->v3_3->smugoldenoffset;
@@ -200,6 +255,20 @@ atui_branch* atomtree_dt_populate_smu_info(
 			case v4_0:
 				smu_info->smuinit = smu_info->leaves +
 					smu_info->v4_0->smuinitoffset;
+				break;
+			*/
+			default:
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL, smu_info->table_header ,0,NULL
+					);
+					sprintf(atui_smu_info->name,
+						"smu_info (header only stub)"
+					);
+				} else {
+					atui_smu_info = NULL;
+				}
 				break;
 		}
 	} else {
@@ -227,25 +296,27 @@ atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 			atree->data_table.leaves->vram_usagebyfirmware;
 
 		fw_vram->ver = get_ver(fw_vram->table_header);
-		switch(fw_vram->ver) {
-			case v2_1:
-				atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_1,
-					NULL, fw_vram->v2_1, 0,NULL
-				);
-				break;
-			case v2_2:
-				atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_2,
-					NULL, fw_vram->v2_2, 0,NULL
-				);
-				break;
-			default:
-				atui_fw_vram = ATUI_MAKE_BRANCH(atom_common_table_header,
-					NULL, fw_vram->table_header ,0,NULL
-				);
-				sprintf(atui_fw_vram->name,
-					"vram_usagebyfirmware (header only stub)"
-				);
-				break;
+		if (generate_atui) {
+			switch(fw_vram->ver) {
+				case v2_1:
+					atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_1,
+						NULL, fw_vram->v2_1, 0,NULL
+					);
+					break;
+				case v2_2:
+					atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_2,
+						NULL, fw_vram->v2_2, 0,NULL
+					);
+					break;
+				default:
+					atui_fw_vram = ATUI_MAKE_BRANCH(atom_common_table_header,
+						NULL, fw_vram->table_header ,0,NULL
+					);
+					sprintf(atui_fw_vram->name,
+						"vram_usagebyfirmware (header only stub)"
+					);
+					break;
+			}
 		}
 	} else {
 		fw_vram->leaves = NULL;
@@ -286,12 +357,16 @@ atui_branch* atomtree_dt_populate_gfx_info(
 				break;
 			*/
 			default:
-				atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-					NULL, gfx_info->table_header ,0,NULL
-				);
-				sprintf(atui_gfx_info->name,
-					"gfx_info (header only stub)"
-				);
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						NULL, gfx_info->table_header ,0,NULL
+					);
+					sprintf(atui_gfx_info->name,
+						"gfx_info (header only stub)"
+					);
+				} else {
+					atui_gfx_info = NULL;
+				}
 				break;
 		}
 	} else {
@@ -1218,10 +1293,14 @@ static inline atui_branch* atomtree_dt_populate_vram_info(
 				atui_vi = atomtree_populate_vram_info_v3_0(atree,generate_atui);
 				break;
 			default:
-				atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
-					NULL, vram_info->table_header ,0,NULL
-				);
-				sprintf(atui_vi->name, "vram_info (header only stub)");
+				if (generate_atui) {
+					atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
+						NULL, vram_info->table_header ,0,NULL
+					);
+					sprintf(atui_vi->name, "vram_info (header only stub)");
+				} else {
+					atui_vi = NULL;
+				}
 				break;
 		}
 	} else {
@@ -1356,14 +1435,8 @@ static inline atui_branch* atomtree_populate_datatables(
 		atomtree_dt_populate_firmwareinfo(atree, generate_atui);
 
 
-	atui_branch* atui_lcd_info;
-	if (leaves->lcd_info) {
-		data_table->lcd_info = bios + leaves->lcd_info;
-		atui_lcd_info = NULL;
-	} else {
-		data_table->lcd_info = NULL;
-		atui_lcd_info = NULL;
-	}
+	atui_branch* atui_lcd_info = 
+		atomtree_dt_populate_lcd_info(atree, generate_atui);
 
 
 	atui_branch* atui_smu_info =

@@ -431,25 +431,6 @@ struct atom_master_data_table_v2_1 {
 };
 */
 
-struct atom_dtd_format {
-	uint16_t pixclk;
-	uint16_t h_active;
-	uint16_t h_blanking_time;
-	uint16_t v_active;
-	uint16_t v_blanking_time;
-	uint16_t h_sync_offset;
-	uint16_t h_sync_width;
-	uint16_t v_sync_offset;
-	uint16_t v_syncwidth;
-	uint16_t reserved;
-	uint16_t reserved0;
-	uint8_t  h_border;
-	uint8_t  v_border;
-	uint16_t miscinfo;
-	uint8_t  atom_mode_id;
-	uint8_t  refreshrate;
-};
-
 /* atom_dtd_format.modemiscinfo defintion */
 enum atom_dtd_format_modemiscinfo_old {
 	ATOM_HSYNC_POLARITY    = 0x0002,
@@ -473,6 +454,26 @@ union atom_dtd_format_modemiscinfo {
 		reserved2            :15-8 +1;
 	};
 };
+
+struct atom_dtd_format {
+	uint16_t pixclk;
+	uint16_t h_active;
+	uint16_t h_blanking_time;
+	uint16_t v_active;
+	uint16_t v_blanking_time;
+	uint16_t h_sync_offset;
+	uint16_t h_sync_width;
+	uint16_t v_sync_offset;
+	uint16_t v_syncwidth;
+	uint16_t reserved;
+	uint16_t reserved0;
+	uint8_t  h_border;
+	uint8_t  v_border;
+	union atom_dtd_format_modemiscinfo miscinfo;
+	uint8_t  atom_mode_id;
+	uint8_t  refreshrate;
+};
+
 
 
 /* utilitypipeline
@@ -650,7 +651,7 @@ struct atom_firmware_info_v3_4 {
   ***************************************************************************
 */
 
-struct lcd_info_v2_1 {
+struct atom_lcd_info_v2_1 {
 	struct atom_common_table_header table_header;
 	struct  atom_dtd_format lcd_timing;
 	uint16_t backlight_pwm;

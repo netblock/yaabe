@@ -227,9 +227,9 @@ def struct_to_atui(s):
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
     s = re.sub("[ \t]+\n", "\n", s)
     s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
-    s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_NODISPLAY, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
+    s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_NAN, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
     s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
+    s = re.sub("(u?int[0-9]+_t|char)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
     s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
     s = re.sub("\),(\s+)?};", ")\n)", s)
     print(s)
@@ -331,6 +331,8 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
+
+
 
 
 
@@ -461,6 +463,10 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
+
+
+
+
 
 PPATUI_ENUMER(smudpm_v4_5_i2ccontrollername_e,
 	SMC_V4_5_I2C_CONTROLLER_NAME_VR_GFX,
@@ -739,6 +745,9 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 )
 
 
+
+
+
 PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
 	(bios->firmware_capability, firmware_capability,
 		(ATUI_HEX, ATUI_BITFIELD, (
@@ -758,7 +767,6 @@ PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
-
 
 PPATUI_FUNCIFY(struct, atom_firmware_info_v3_1, atomtree_firmware_info,
 	(bios->table_header, table_header,
@@ -1114,6 +1122,167 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
+
+
+
+
+
+PPATUI_FUNCIFY(union, atom_dtd_format_modemiscinfo, atomtree_lcd_info,
+	(bios->miscinfo, miscinfo,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(reserved0,             0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_HSYNC_POLARITY,   1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_VSYNC_POLARITY,   2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved1,             3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_H_REPLICATIONBY2, 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_V_REPLICATIONBY2, 5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_COMPOSITESYNC,    6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(ATOM_INTERLACE,        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved2,            15,8, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_dtd_format, atomtree_lcd_info,
+	(bios->pixclk, pixclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->h_active, h_active,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->h_blanking_time, h_blanking_time,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->v_active, v_active,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->v_blanking_time, v_blanking_time,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->h_sync_offset, h_sync_offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->h_sync_width, h_sync_width,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->v_sync_offset, v_sync_offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->v_syncwidth, v_syncwidth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved0, reserved0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->h_border, h_border,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->v_border, v_border,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->miscinfo, miscinfo,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_dtd_format_modemiscinfo),
+		(ATUI_NODESCR)
+	),
+	(bios->atom_mode_id, atom_mode_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->refreshrate, refreshrate,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_ENUMER(atom_lcd_info_panel_misc,
+	ATOM_PANEL_MISC_FPDI
+)
+PPATUI_ENUMER(atom_lcd_info_dptolvds_rx_id,
+	eDP_TO_LVDS_RX_DISABLE,
+	eDP_TO_LVDS_COMMON_ID,
+	eDP_TO_LVDS_REALTEK_ID
+)
+PPATUI_FUNCIFY(struct, atom_lcd_info_v2_1, atomtree_lcd_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->backlight_pwm, backlight_pwm,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->special_handle_cap, special_handle_cap,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->panel_misc, panel_misc,
+		(ATUI_DEC, ATUI_ENUM, atom_lcd_info_panel_misc), (ATUI_NODESCR)
+	),
+	(bios->lvds_max_slink_pclk, lvds_max_slink_pclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->lvds_ss_percentage, lvds_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->lvds_ss_rate_10hz, lvds_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_on_digon_to_de, pwr_on_digon_to_de,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "all pwr sequence numbers below are in uint of 4ms"))
+	),
+	(bios->pwr_on_de_to_vary_bl, pwr_on_de_to_vary_bl,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_down_vary_bloff_to_de, pwr_down_vary_bloff_to_de,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_down_de_to_digoff, pwr_down_de_to_digoff,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_off_delay, pwr_off_delay,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_on_vary_bl_to_blon, pwr_on_vary_bl_to_blon,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_down_bloff_to_vary_bloff, pwr_down_bloff_to_vary_bloff,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->panel_bpc, panel_bpc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dpcd_edp_config_cap, dpcd_edp_config_cap,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dpcd_max_link_rate, dpcd_max_link_rate,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dpcd_max_lane_count, dpcd_max_lane_count,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dpcd_max_downspread, dpcd_max_downspread,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->min_allowed_bl_level, min_allowed_bl_level,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_allowed_bl_level, max_allowed_bl_level,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_bl_level, bootup_bl_level,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dplvdsrxid, dplvdsrxid,
+		(ATUI_DEC, ATUI_ENUM, atom_lcd_info_dptolvds_rx_id),
+		((LANG_ENG, "eDP->LVDS translator chip. non-common like Realtek might require AMD SW init"))
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+
+
 
 PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_1,
 		atomtree_vram_usagebyfirmware,
@@ -1816,7 +1985,7 @@ PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
 			),
 			(rsvd3,       31,30, ATUI_DEC, (ATUI_NODESCR))
 		)),
-		((LANG_ENG, ""DFI" is shorthand for "DDR PHY""))
+		((LANG_ENG, "\"DFI\" is shorthand for \"DDR PHY\""))
 	)
 )
 PPATUI_FUNCIFY(union, DRAMTiming23, atui_nullstruct,

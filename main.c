@@ -173,10 +173,7 @@ int main(int argc, char** argv){
 	printf("smc_dpm_info ver: %d\n", atree->data_table.smc_dpm_info.ver);
 	printf("firmwareinfo ver: %d\n", atree->data_table.firmwareinfo.ver);
 	printf("smu_info ver: %d\n", atree->data_table.smu_info.ver);
-	printf("lcd_info ver: %d %d\n",
-		atree->data_table.lcd_info->table_header.format_revision,
-		atree->data_table.lcd_info->table_header.content_revision
-	);
+	printf("lcd_info ver: %d\n", atree->data_table.lcd_info.ver);
 	printf("vram_usagebyfirmware ver: %d\n",
 		atree->data_table.vram_usagebyfirmware.ver);
 	printf("gfx_info ver: %d\n", atree->data_table.gfx_info.ver);

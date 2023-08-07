@@ -83,6 +83,19 @@ struct atomtree_firmware_info {
 		struct atom_firmware_info_v3_4* v3_4;
 	};
 };
+struct atomtree_lcd_info {
+	struct atomtree_lcd_info* dot;
+	struct atomtree_master_datatable_v2_1* dotdot;
+
+	enum atomtree_common_version ver;
+	union {
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
+
+		//struct atom_lcd_info_v1_3* v1_3; // atombios.h
+		struct atom_lcd_info_v2_1* v2_1;
+	};
+};
 
 struct atomtree_smu_info {
 	// TODO explode the versions into their own atomtree entities?
@@ -455,7 +468,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atom_multimedia_info_v2_1* multimedia_info;
 	struct atomtree_smc_dpm_info smc_dpm_info;
 	struct atomtree_firmware_info firmwareinfo;
-	struct lcd_info_v2_1* lcd_info;
+	struct atomtree_lcd_info lcd_info;
 	struct atomtree_smu_info smu_info;
 	struct atomtree_vram_usagebyfirmware vram_usagebyfirmware;
 	struct atom_gpio_pin_lut_v2_1* gpio_pin_lut; //TODO atomtree for array len?
