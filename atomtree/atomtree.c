@@ -185,6 +185,7 @@ atui_branch* atomtree_dt_populate_lcd_info(
 		lcd_info->ver = get_ver(lcd_info->table_header);
 		if (generate_atui) {
 			switch (lcd_info->ver) {
+				/*case v1_3: TODO from atombios.h */ 
 				case v2_1:
 					atui_lcd_timing = ATUI_MAKE_BRANCH(atom_dtd_format,
 						NULL,&(lcd_info->v2_1->lcd_timing), 0,NULL
