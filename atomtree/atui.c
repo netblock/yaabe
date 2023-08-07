@@ -2142,8 +2142,6 @@ PPATUI_ENUMER(atom_dgpu_vram_type,
 	ATOM_DGPU_VRAM_TYPE_HBM3
 )
 
-
-
 PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 	(bios->memory_size, memory_size,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -2636,7 +2634,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v11,
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
-
 PPATUI_FUNCIFY(struct, atom_gddr6_ac_timing_v2_5,
 		atomtree_vram_info_header_v2_5,
 	(bios->u32umc_id_access, u32umc_id_access,
@@ -2936,7 +2933,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
-
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,
 		atomtree_vram_info_header_v3_0,
 	(bios->table_header, table_header,
