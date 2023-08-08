@@ -136,6 +136,20 @@ struct atomtree_vram_usagebyfirmware {
 	};
 };
 
+struct atomtree_gpio_pin_lut {
+	struct atomtree_gpio_pin_lut* dot;
+	struct atomtree_master_datatable_v2_1* dotdot;
+
+	uint16_t num_gpio_pins;
+
+	enum atomtree_common_version ver;
+	union {
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
+		struct atom_gpio_pin_lut_v2_1* v2_1;
+	};
+};
+
 
 struct atomtree_gfx_info {
 	// TODO explode the versions into their own atomtree entities?
@@ -473,7 +487,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_lcd_info lcd_info;
 	struct atomtree_smu_info smu_info;
 	struct atomtree_vram_usagebyfirmware vram_usagebyfirmware;
-	struct atom_gpio_pin_lut_v2_1* gpio_pin_lut; //TODO atomtree for array len?
+	struct atomtree_gpio_pin_lut gpio_pin_lut;
 	struct atomtree_gfx_info gfx_info;
 
 	struct atomtree_powerplaytable powerplayinfo;

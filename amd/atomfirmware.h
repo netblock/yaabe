@@ -696,14 +696,18 @@ enum atom_lcd_info_dptolvds_rx_id {
   Data Table gpio_pin_lut  structure
 ****************************************************************************/
 
-struct atom_gpio_pin_assignment {
-	uint32_t data_a_reg_index;
-	uint8_t  gpio_bitshift;
-	uint8_t  gpio_mask_bitshift;
+union atom_gpioi2c_pin_id {
 	uint8_t  gpio_id;
-	uint8_t  reserved;
+	struct { uint8_t
+		I2C_HW_LANE_MUX       :3-0 +1,
+		I2C_HW_ENGINE_ID_MASK :6-4 +1,
+		HW_CAP                :7-7 +1; // only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin
+	};
+	struct { uint8_t
+		GPIO_PINID : 6-0 +1, // enum atom_gpio_pin_assignment_gpio_id
+		_HW_CAP    : 7-7 +1;
+	};	
 };
-
 /* atom_gpio_pin_assignment.gpio_id definition */
 enum atom_gpio_pin_assignment_gpio_id {
 	I2C_HW_LANE_MUX       = 0x0f, // only valid when bit7=1
@@ -728,10 +732,21 @@ enum atom_gpio_pin_assignment_gpio_id {
 };
 
 
+struct atom_gpio_pin_assignment_v2_1 {
+	uint32_t data_a_reg_index;
+	uint8_t  gpio_bitshift;
+	uint8_t  gpio_mask_bitshift;
+	union atom_gpioi2c_pin_id gpio_id;
+	uint8_t  reserved;
+};
+
+
+
+
 struct atom_gpio_pin_lut_v2_1 {
 	struct atom_common_table_header table_header;
 	// the real number of this included in the structure is calcualted by using the (whole structure size - the header size)/size of atom_gpio_pin_lut
-	struct atom_gpio_pin_assignment gpio_pin[8];
+	struct atom_gpio_pin_assignment_v2_1 gpio_pin[8];
 };
 
 

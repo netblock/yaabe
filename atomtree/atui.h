@@ -203,6 +203,9 @@ PPATUI_HEADERIFY(vram_usagebyfirmware_v2_1);
 PPATUI_HEADERIFY(vram_usagebyfirmware_v2_2);
 
 
+PPATUI_HEADERIFY(atom_gpio_pin_assignment_v2_1);
+
+
 PPATUI_HEADERIFY(atom_gfx_info_v2_2);
 PPATUI_HEADERIFY(atom_gfx_info_v2_3);
 PPATUI_HEADERIFY(atom_gfx_info_v2_4);

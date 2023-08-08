@@ -347,6 +347,70 @@ atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 }
 
 
+atui_branch* atomtree_dt_populate_gpio_pin_lut(
+		struct atom_tree* atree, bool generate_atui) {
+
+	struct atomtree_gpio_pin_lut* gpio_pin_lut =
+		&(atree->data_table.gpio_pin_lut);
+	gpio_pin_lut->dot = gpio_pin_lut;
+	gpio_pin_lut->dotdot = &(atree->data_table);
+	atui_branch* atui_gpio_pin_lut = NULL;
+	atui_branch* atui_gpio_pin;
+	uint16_t i;
+
+	if (atree->data_table.leaves->gpio_pin_lut) {
+		gpio_pin_lut->leaves =
+			atree->bios + atree->data_table.leaves->gpio_pin_lut;
+
+		gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
+		switch(gpio_pin_lut->ver) {
+			case v2_1:
+				gpio_pin_lut->num_gpio_pins = (
+					//dynamic array length of nothing but pins after the header
+					(gpio_pin_lut->table_header->structuresize
+					- sizeof(struct atom_common_table_header)
+					) / sizeof(struct atom_gpio_pin_assignment_v2_1)
+				);
+				if (generate_atui) {
+					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL,gpio_pin_lut->table_header,
+						gpio_pin_lut->num_gpio_pins,NULL
+					);
+					sprintf(atui_gpio_pin_lut->name, "atom_gpio_pin_lut_v2_1");
+					for(i=0; i < gpio_pin_lut->num_gpio_pins; i++) {
+							atui_gpio_pin = ATUI_MAKE_BRANCH(
+								atom_gpio_pin_assignment_v2_1,
+								NULL,&(gpio_pin_lut->v2_1->gpio_pin[i]),  0,NULL
+							);
+							sprintf(atui_gpio_pin->name, "%s [%02u]",
+								atui_gpio_pin->varname, i
+							);
+							atui_gpio_pin_lut->child_branches[i]=atui_gpio_pin;
+					}
+					atui_gpio_pin_lut->branch_count =
+						gpio_pin_lut->num_gpio_pins;
+				}
+				break;
+			default:
+				gpio_pin_lut->num_gpio_pins = 0;
+				if (generate_atui) {
+					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						NULL,gpio_pin_lut->table_header,  0,NULL
+					);
+					sprintf(atui_gpio_pin_lut->name,
+						"gpio_pin_lut (header only stub)"
+					);
+				}
+				break;
+		}
+	} else {
+		gpio_pin_lut->leaves = NULL;
+		gpio_pin_lut->num_gpio_pins = 0;
+	}
+	return atui_gpio_pin_lut;
+}
 
 atui_branch* atomtree_dt_populate_gfx_info(
 		struct atom_tree* atree, bool generate_atui) {
@@ -1530,14 +1594,8 @@ static inline atui_branch* atomtree_populate_datatables(
 		atomtree_dt_populate_vram_usagebyfirmware(atree, generate_atui);
 
 
-	atui_branch* atui_gpio_pin_lut;
-	if (leaves->gpio_pin_lut) {
-		data_table->gpio_pin_lut = bios + leaves->gpio_pin_lut;
-		atui_gpio_pin_lut = NULL;
-	} else {
-		data_table->gpio_pin_lut = NULL;
-		atui_gpio_pin_lut = NULL;
-	}
+	atui_branch* atui_gpio_pin_lut =
+		atomtree_dt_populate_gpio_pin_lut(atree, generate_atui);
 
 
 	atui_branch* atui_gfx_info =

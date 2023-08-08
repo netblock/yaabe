@@ -1943,6 +1943,37 @@ PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_2,
 
 
 
+//TODO ATUI_FANCY for bitfields
+PPATUI_FUNCIFY(union, atom_gpioi2c_pin_id, atomtree_gpio_pin_lut,
+	(bios->gpio_id, gpio_id,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(I2C_HW_LANE_MUX,       3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(I2C_HW_ENGINE_ID_MASK, 6,4, ATUI_DEC, (ATUI_NODESCR)),
+			(HW_CAP,                7,7, ATUI_DEC, ((LANG_ENG, "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin"))),
+			(GPIO_PINID, 6,0, ATUI_DEC, ((LANG_ENG, "enum of atom_gpio_pin_assignment_gpio_id")))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_gpio_pin_assignment_v2_1, atomtree_gpio_pin_lut,
+	(bios->data_a_reg_index, data_a_reg_index,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpio_bitshift, gpio_bitshift,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpio_mask_bitshift, gpio_mask_bitshift,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpio_id, gpio_id,
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_gpioi2c_pin_id),
+		(ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+
 
 
 PPATUI_FUNCIFY(struct, atom_gfx_info_v2_2, atomtree_gfx_info,
