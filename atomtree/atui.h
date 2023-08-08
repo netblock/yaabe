@@ -203,6 +203,16 @@ PPATUI_HEADERIFY(vram_usagebyfirmware_v2_1);
 PPATUI_HEADERIFY(vram_usagebyfirmware_v2_2);
 
 
+PPATUI_HEADERIFY(atom_gfx_info_v2_2);
+PPATUI_HEADERIFY(atom_gfx_info_v2_3);
+PPATUI_HEADERIFY(atom_gfx_info_v2_4);
+PPATUI_HEADERIFY(atom_gfx_info_v2_5);
+PPATUI_HEADERIFY(atom_gfx_info_v2_6);
+PPATUI_HEADERIFY(atom_gfx_info_v2_7);
+PPATUI_HEADERIFY(atom_gfx_info_v3_0);
+
+
+
 PPATUI_HEADERIFY(atom_dtd_format);
 PPATUI_HEADERIFY(atom_lcd_info_v2_1);
 

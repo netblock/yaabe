@@ -353,44 +353,102 @@ atui_branch* atomtree_dt_populate_gfx_info(
 	struct atomtree_gfx_info* gfx_info = &(atree->data_table.gfx_info);
 	gfx_info->dot = gfx_info;
 	gfx_info->dotdot = &(atree->data_table);
-	atui_branch* atui_gfx_info;
+	atui_branch* atui_gfx_info = NULL;
+	gfx_info->gcgolden = NULL;
 
 	if (atree->data_table.leaves->gfx_info) {
-		atui_gfx_info = NULL;
 		// leaves is in a union with the structs.
 		gfx_info->leaves = atree->bios + atree->data_table.leaves->gfx_info;
 
 		gfx_info->ver = get_ver(gfx_info->table_header);
 		switch(gfx_info->ver) {
-			/*
+			case v2_2:
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_2,
+						NULL,gfx_info->v2_2,  0,NULL
+					);
+				}
+				break;
 			case v2_3:
-				gfx_info->gcgolden = gfx_info->leaves +
-					gfx_info->v2_3->gcgoldenoffset;
+				if (gfx_info->v2_3->gcgoldenoffset) {
+					gfx_info->gcgolden = gfx_info->leaves
+						+ gfx_info->v2_3->gcgoldenoffset;
+				}
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_3,
+						NULL,gfx_info->v2_3,  0,NULL
+					);
+				}
 				break;
 			case v2_4:
-				gfx_info->gcgolden = gfx_info->leaves +
-					gfx_info->v2_4->gcgoldenoffset;
+				if (gfx_info->v2_4->gcgoldenoffset) {
+					gfx_info->gcgolden = gfx_info->leaves
+						+ gfx_info->v2_4->gcgoldenoffset;
+				}
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_4,
+						NULL,gfx_info->v2_4,  0,NULL
+					);
+				}
+				break;
+			case v2_5:
+				if (gfx_info->v2_5->gcgoldenoffset) {
+					gfx_info->gcgolden = gfx_info->leaves
+						+ gfx_info->v2_5->gcgoldenoffset;
+				}
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_5,
+						NULL,gfx_info->v2_5,  0,NULL
+					);
+				}
+				break;
+			case v2_6:
+				if (gfx_info->v2_6->gcgoldenoffset) {
+					gfx_info->gcgolden = gfx_info->leaves
+						+ gfx_info->v2_6->gcgoldenoffset;
+				}
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						NULL,gfx_info->table_header,  1,NULL
+					);
+					sprintf(atui_gfx_info->name, "atom_gfx_info_v2_6 (header)");
+					atui_gfx_info->branch_count = 1;
+					atui_gfx_info->child_branches[0] = ATUI_MAKE_BRANCH(
+						atom_gfx_info_v2_5,
+						NULL,gfx_info->v2_6,  0,NULL
+					);
+				}
 				break;
 			case v2_7:
-				gfx_info->gcgolden = gfx_info->leaves +
-					gfx_info->v2_7->gcgoldenoffset;
+				if (gfx_info->v2_7->gcgoldenoffset) {
+					gfx_info->gcgolden = gfx_info->leaves
+						+ gfx_info->v2_7->gcgoldenoffset;
+				}
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_7,
+						NULL,gfx_info->v2_7,  0,NULL
+					);
+				}
 				break;
-			*/
+			case v3_0:
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v3_0,
+						NULL,gfx_info->v3_0,  0,NULL
+					);
+				}
+				break;
 			default:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
 						NULL,gfx_info->table_header,  0,NULL
 					);
 					sprintf(atui_gfx_info->name, "gfx_info (header only stub)");
-				} else {
-					atui_gfx_info = NULL;
 				}
 				break;
 		}
 	} else {
 		gfx_info->leaves = NULL;
 		gfx_info->ver = nover;
-		atui_gfx_info = NULL;
 	}
 	return atui_gfx_info;
 }

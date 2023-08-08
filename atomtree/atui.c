@@ -1945,6 +1945,560 @@ PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_2,
 
 
 
+PPATUI_FUNCIFY(struct, atom_gfx_info_v2_2, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_tile_pipes, max_tile_pipes,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr, regaddr_cp_dma_src_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr_hi, regaddr_cp_dma_src_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr, regaddr_cp_dma_dst_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr_hi, regaddr_cp_dma_dst_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_command, regaddr_cp_dma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_status, regaddr_cp_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_rlc_gpu_clock_32, regaddr_rlc_gpu_clock_32,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rlc_gpu_timer_refclk, rlc_gpu_timer_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_gfx_info_v2_3, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_tile_pipes, max_tile_pipes,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr, regaddr_cp_dma_src_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr_hi, regaddr_cp_dma_src_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr, regaddr_cp_dma_dst_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr_hi, regaddr_cp_dma_dst_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_command, regaddr_cp_dma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_status, regaddr_cp_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_rlc_gpu_clock_32, regaddr_rlc_gpu_clock_32,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rlc_gpu_timer_refclk, rlc_gpu_timer_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_per_sh, active_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_rb_per_se, active_rb_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gcgoldenoffset, gcgoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rm21_sram_vmin_value, rm21_sram_vmin_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_gfx_info_v2_4, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr, regaddr_cp_dma_src_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr_hi, regaddr_cp_dma_src_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr, regaddr_cp_dma_dst_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr_hi, regaddr_cp_dma_dst_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_command, regaddr_cp_dma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_status, regaddr_cp_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_rlc_gpu_clock_32, regaddr_rlc_gpu_clock_32,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rlc_gpu_timer_refclk, rlc_gpu_timer_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_per_sh, active_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_rb_per_se, active_rb_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gcgoldenoffset, gcgoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_gprs, gc_num_gprs,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gsprim_buff_depth, gc_gsprim_buff_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_parameter_cache_depth, gc_parameter_cache_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_wave_size, gc_wave_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_waves_per_simd, gc_max_waves_per_simd,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_lds_size, gc_lds_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_max_gs_thds, gc_num_max_gs_thds,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gs_table_depth, gc_gs_table_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_double_offchip_lds_buffer, gc_double_offchip_lds_buffer,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_scratch_slots_per_cu, gc_max_scratch_slots_per_cu,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_rm_fuses_val, sram_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_custom_rm_fuses_val, sram_custom_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_gfx_info_v2_5, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr, regaddr_cp_dma_src_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr_hi, regaddr_cp_dma_src_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr, regaddr_cp_dma_dst_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr_hi, regaddr_cp_dma_dst_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_command, regaddr_cp_dma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_status, regaddr_cp_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_rlc_gpu_clock_32, regaddr_rlc_gpu_clock_32,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rlc_gpu_timer_refclk, rlc_gpu_timer_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_per_sh, active_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_rb_per_se, active_rb_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gcgoldenoffset, gcgoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_gprs, gc_num_gprs,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gsprim_buff_depth, gc_gsprim_buff_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_parameter_cache_depth, gc_parameter_cache_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_wave_size, gc_wave_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_waves_per_simd, gc_max_waves_per_simd,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_lds_size, gc_lds_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_max_gs_thds, gc_num_max_gs_thds,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gs_table_depth, gc_gs_table_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_double_offchip_lds_buffer, gc_double_offchip_lds_buffer,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_scratch_slots_per_cu, gc_max_scratch_slots_per_cu,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_rm_fuses_val, sram_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_custom_rm_fuses_val, sram_custom_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cut_cu, cut_cu,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_total, active_cu_total,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cu_reserved, cu_reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->gc_config, gc_config,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->inactive_cu_per_se, inactive_cu_per_se,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_gfx_info_v2_7, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr, regaddr_cp_dma_src_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_src_addr_hi, regaddr_cp_dma_src_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr, regaddr_cp_dma_dst_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_dst_addr_hi, regaddr_cp_dma_dst_addr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_dma_command, regaddr_cp_dma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_cp_status, regaddr_cp_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_rlc_gpu_clock_32, regaddr_rlc_gpu_clock_32,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->rlc_gpu_timer_refclk, rlc_gpu_timer_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_per_sh, active_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_rb_per_se, active_rb_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gcgoldenoffset, gcgoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_gprs, gc_num_gprs,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gsprim_buff_depth, gc_gsprim_buff_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_parameter_cache_depth, gc_parameter_cache_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_wave_size, gc_wave_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_waves_per_simd, gc_max_waves_per_simd,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_lds_size, gc_lds_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_num_max_gs_thds, gc_num_max_gs_thds,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_gs_table_depth, gc_gs_table_depth,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_double_offchip_lds_buffer, gc_double_offchip_lds_buffer,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_max_scratch_slots_per_cu, gc_max_scratch_slots_per_cu,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_rm_fuses_val, sram_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_custom_rm_fuses_val, sram_custom_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cut_cu, cut_cu,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_cu_total, active_cu_total,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cu_reserved, cu_reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->gc_config, gc_config,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->inactive_cu_per_se, inactive_cu_per_se,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->reserved2, reserved2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+
+PPATUI_FUNCIFY(struct, atom_gfx_info_v3_0, atomtree_gfx_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->gfxip_min_ver, gfxip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gfxip_max_ver, gfxip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_shader_engines, max_shader_engines,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_tile_pipes, max_tile_pipes,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_cu_per_sh, max_cu_per_sh,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_sh_per_se, max_sh_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_backends_per_se, max_backends_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->max_texture_channel_caches, max_texture_channel_caches,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_queue0_rb_rptr, regaddr_lsdma_queue0_rb_rptr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_queue0_rb_rptr_hi, regaddr_lsdma_queue0_rb_rptr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_queue0_rb_wptr, regaddr_lsdma_queue0_rb_wptr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_queue0_rb_wptr_hi, regaddr_lsdma_queue0_rb_wptr_hi,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_command, regaddr_lsdma_command,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_lsdma_status, regaddr_lsdma_status,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->regaddr_golden_tsc_count_lower, regaddr_golden_tsc_count_lower,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->golden_tsc_count_lower_refclk, golden_tsc_count_lower_refclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_wgp_per_se, active_wgp_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_rb_per_se, active_rb_per_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->active_se, active_se,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_rm_fuses_val, sram_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sram_custom_rm_fuses_val, sram_custom_rm_fuses_val,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->inactive_sa_mask, inactive_sa_mask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gc_config, gc_config,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->inactive_wgp, inactive_wgp,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->inactive_rb, inactive_rb,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+
+
+
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(bios->gddr6_mr0, gddr6_mr0,
 		(ATUI_BIN, ATUI_BITFIELD, (
