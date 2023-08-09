@@ -3591,9 +3591,18 @@ struct atom_gpio_voltage_object_v4 {
 	struct atom_voltage_gpio_map_lut voltage_gpio_lut[1];
 };
 
+union loadline_psi1 {
+	uint8_t  loadline_psi1;
+	struct { uint8_t
+		loadline_setting :4-0 +1,
+		PSI1_L_enable    :5-5 +1,
+		reserved         :7-6 +1;
+	};
+};
 struct atom_svid2_voltage_object_v4 {
 	struct atom_voltage_object_header_v4 header; // voltage mode = VOLTAGE_OBJ_SVID2
-	uint8_t  loadline_psi1;     // bit4:0= loadline setting ( Core Loadline trim and offset trim ), bit5=0:PSI1_L disable =1: PSI1_L enable
+	union loadline_psi1 loadline_psi1;
+	//uint8_t  loadline_psi1;     // bit4:0= loadline setting ( Core Loadline trim and offset trim ), bit5=0:PSI1_L disable =1: PSI1_L enable
 	uint8_t  psi0_l_vid_thresd; // VR PSI0_L VID threshold
 	uint8_t  psi0_enable;       //
 	uint8_t  maxvstep;
@@ -3609,6 +3618,7 @@ struct atom_merged_voltage_object_v4 {
 };
 
 union atom_voltage_object_v4 {
+	struct atom_voltage_object_header_v4 header; // voltage mode = VOLTAGE_OBJ_MERGED_POWER
 	struct atom_gpio_voltage_object_v4 gpio_voltage_obj;
 	struct atom_i2c_voltage_object_v4 i2c_voltage_obj;
 	struct atom_svid2_voltage_object_v4 svid2_voltage_obj;

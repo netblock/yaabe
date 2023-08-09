@@ -278,8 +278,9 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.name=#atomtypesuffix, .varname=#atomtypesuffix,\
 		.description=NULL, .auxiliary=NULL,\
 		.child_branches=branches, .branch_count=num_branches, \
+		.max_branch_count=max_branch_count,\
 		.inline_branches=inliners, .inline_branch_count=num_inliners, \
-		.max_branch_count=max_branch_count, .max_inline_branch_count=num_inliners, \
+		.max_inline_branch_count=num_inliners, \
 		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
 		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
 	};\
