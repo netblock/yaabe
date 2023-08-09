@@ -821,7 +821,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	}
 
 
-	atui_branch* atui_memclkpatch;
+	atui_branch* atui_memclkpatch = NULL;
 	if (vi24->leaves->mem_clk_patch_tbloffset) {
 		vi24->mem_clk_patch.leaves = (void*)vi24->leaves +
 			vi24->leaves->mem_clk_patch_tbloffset;
@@ -844,10 +844,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 				);
 				sprintf(tmp_branch->name, "%s (%i MHz)",
 					tmp_branch->varname,
-					(vi24->navi1_gddr6_timings[i].\
-						block_id.umc_id_access.memclockrange
-						/100
-					)
+					(vi24->navi1_gddr6_timings[i].block_id.memclockrange / 100)
 				);
 				atui_navi_timings->child_branches[i] = tmp_branch;
 			}
@@ -863,7 +860,6 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->mem_clk_patch.leaves = NULL;
 		vi24->navi1_gddr6_timings = NULL;
 		vi24->num_timing_straps = 0;
-		atui_memclkpatch = NULL;
 	}
 
 
@@ -995,7 +991,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 	}
 
 
-	atui_branch* atui_gddr6_ac_timings;
+	atui_branch* atui_gddr6_ac_timings = NULL;
 	if (vi25->leaves->gddr6_ac_timing_offset) {
 		vi25->gddr6_ac_timings = (void*)vi25->leaves +
 			vi25->leaves->gddr6_ac_timing_offset;
@@ -1003,9 +999,24 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 		while(vi25->gddr6_ac_timings[i].u32umc_id_access.u32umc_id_access)
 			i++;
 		vi25->gddr6_acstrap_count = i;
-		atui_gddr6_ac_timings = NULL;
+		if (generate_atui) {
+			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
+				NULL, NULL,  vi25->gddr6_acstrap_count,NULL
+			);
+			sprintf(atui_gddr6_ac_timings->name, "atom_gddr6_ac_timing_v2_5");
+			for(i=0; i < vi25->gddr6_acstrap_count; i++) {
+				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
+					NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
+				);
+				sprintf(tmp_branch->name, "%s (%u MHz)",
+					tmp_branch->varname,
+					vi25->gddr6_ac_timings[i].u32umc_id_access.memclockrange/100
+				);
+				atui_gddr6_ac_timings->child_branches[i] = tmp_branch;
+			}
+			atui_gddr6_ac_timings->branch_count = vi25->gddr6_acstrap_count;
+		}
 	} else {
-		atui_gddr6_ac_timings = NULL;
 		vi25->gddr6_ac_timings = NULL;
 		vi25->gddr6_acstrap_count = 0;
 	}

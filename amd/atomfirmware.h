@@ -3276,26 +3276,39 @@ struct atom_umc_register_addr_info {
 	uint32_t  umc_reg_type_ind:1; //flag
 	uint32_t  umc_reg_rsvd:7;
 };
-
+union atom_umc_register_addr_info_access_old {
+	struct atom_umc_register_addr_info umc_reg_addr;
+	uint32_t u32umc_reg_addr;
+};
 enum atom_umc_register_addr_info_flag {
 //atom_umc_register_addr_info.
 	b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  = 0x01,
 };
-
 union atom_umc_register_addr_info_access {
-	struct atom_umc_register_addr_info umc_reg_addr;
 	uint32_t u32umc_reg_addr;
+	struct { uint32_t
+		umc_register_addr :23-0 +1,
+		umc_reg_type_ind  :24-24 +1, //flag
+		umc_reg_rsvd      :31-25 +1;
+	};
 };
 
 struct atom_umc_reg_setting_id_config {
 	uint32_t memclockrange:24;
 	uint32_t mem_blk_id:8;
 };
-
-union atom_umc_reg_setting_id_config_access {
+union atom_umc_reg_setting_id_config_access_old {
 	struct atom_umc_reg_setting_id_config umc_id_access;
 	uint32_t  u32umc_id_access;
 };
+union atom_umc_reg_setting_id_config_access {
+	uint32_t u32umc_id_access;
+	struct { uint32_t
+		memclockrange :23-0 +1,
+		mem_blk_id    :31-24 +1;
+	};
+};	
+
 
 struct atom_umc_reg_setting_data_block {
 	union atom_umc_reg_setting_id_config_access  block_id;

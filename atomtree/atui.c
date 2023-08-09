@@ -3835,7 +3835,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v11,
 PPATUI_FUNCIFY(struct, atom_gddr6_ac_timing_v2_5,
 		atomtree_vram_info_header_v2_5,
 	(bios->u32umc_id_access, u32umc_id_access,
-		(ATUI_NAN, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
 	),
 	(bios->RL, RL,

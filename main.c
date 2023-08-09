@@ -32,7 +32,7 @@ void vi24_funstuffs(struct atom_tree* atree) {
 	uint16_t i,j,l = 0;
 	l = (*regblk->umc_number_of_registers)*4;
 	for (i=0; i < regblk->umc_reg_setting_list_length ; i++) {
-		memclock = dblk[i]->block_id.umc_id_access.memclockrange;
+		memclock = dblk[i]->block_id.memclockrange;
 		printf("memclockrange %2d: %4d %4X\n    ", i, memclock/100, (void*)dblk[i]->u32umc_reg_data - atree->bios);
 		for (j=0; j<l ; j++)
 			printf("%02X", ((uint8_t*)dblk[i]->u32umc_reg_data)[j]);
@@ -69,7 +69,7 @@ void vi25_funstuffs(struct atom_tree* atree) {
 	for(i=0; i < vi25->gddr6_acstrap_count; i++) {
 		vi25ac = &(vi25->gddr6_ac_timings)[i];
 		printf("freq %4d: RL %2d, WL %d, tREFI %4d, tCCDS %d, ",
-			vi25ac->u32umc_id_access.umc_id_access.memclockrange/100,vi25ac->RL,
+			vi25ac->u32umc_id_access.memclockrange/100,vi25ac->RL,
 			vi25ac->WL,vi25ac->tREFI,vi25ac->tCCDS);
 		printf("tRRDS %d, tFAW %d\n", vi25ac->tRRDS,vi25ac->tFAW);
 		//i++;
@@ -103,7 +103,7 @@ void vi30_funstuffs(struct atom_tree* atree) {
 
 	struct atom_gddr6_ac_timing_v2_5* act = vi30->dram_info;
 	printf("freq %4d: RL %2d, WL %d, tREFI %4d, tCCDS %d\n",
-		act->u32umc_id_access.umc_id_access.memclockrange/100,act->RL,act->WL,
+		act->u32umc_id_access.memclockrange/100,act->RL,act->WL,
 		act->tREFI, act->tCCDS);
 }
 
