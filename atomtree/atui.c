@@ -244,7 +244,7 @@ def bitfield_to_atui(s):
     s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
     s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
     s = re.sub("\(ATUI_NODESCR\)(\s*)//(\s*)(.*)", "((LANG_ENG, \"\g<3>\"))", s)
-    s = re.sub("[ \t]*uint[0-9]+_t ([A-Za-z0-9_]+)[ \t]*;\s+struct { uint[0-9]+_t\n", "\t(bios->\g<1>, \g<1>,\n\t\t(ATUI_BIN, ATUI_BITFIELD, (\n", s)
+    s = re.sub("[ \t]*uint[0-9]+_t[ \t]+([A-Za-z0-9_]+)[ \t]*;\s+struct { uint[0-9]+_t\n", "\t(bios->\g<1>, \g<1>,\n\t\t(ATUI_BIN, ATUI_BITFIELD, (\n", s)
     s = re.sub("([a-zA-Z0-9_]+)(\s*):([0-9]+)(\s*)-(\s*)([0-9]+)(\s*)\+1[,;][ \t]*", "\t(\g<1>,\g<2>\g<3>\g<4>,\g<5>\g<6>, ATUI_DEC,", s)
     s = re.sub("ATUI_DEC,(\s*)//(\s*)(.*)", "ATUI_DEC, ((LANG_ENG, \"\g<3>\"))),", s) 
     s = re.sub("ATUI_DEC,\n", "ATUI_DEC, (ATUI_NODESCR)),\n", s)
@@ -3320,7 +3320,7 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 	),
 	(NULL, atom_gddr6_bit_byte_remap,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(bios, bit_byte_remap [%02u],
+			(ATUI_NULL, bit_byte_remap [%02u],
 				(ATUI_NAN, ATUI_INLINE, atom_gddr6_bit_byte_remap),
 				(ATUI_NODESCR)
 			),
@@ -4217,7 +4217,7 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 				)), (ATUI_NODESCR)
 			),
 			//start, count
-			atomtree->umc_reg_list, atomtree->umc_number_of_registers
+			atomtree->umc_reg_list, *(atomtree->umc_number_of_registers)
 		)),
 		(ATUI_NODESCR)
 	)
@@ -4253,8 +4253,200 @@ PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 			(bios->u32umc_reg_data, u32umc_reg_data [%02u],
 				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->u32umc_reg_data, atomtree->umc_reg_num //start, count
+			bios->u32umc_reg_data, *(atomtree->umc_reg_num) //start, count
 		)),
 		(ATUI_NODESCR)
 	)
 )
+
+
+
+
+
+PPATUI_ENUMER(atom_voltage_type,
+	VOLTAGE_TYPE_VDDC,
+	VOLTAGE_TYPE_MVDDC,
+	VOLTAGE_TYPE_MVDDQ,
+	VOLTAGE_TYPE_VDDCI,
+	VOLTAGE_TYPE_VDDGFX,
+	VOLTAGE_TYPE_PCC,
+	VOLTAGE_TYPE_MVPP,
+	VOLTAGE_TYPE_LEDDPM,
+	VOLTAGE_TYPE_PCC_MVDD,
+	VOLTAGE_TYPE_PCIE_VDDC,
+	VOLTAGE_TYPE_PCIE_VDDR,
+	VOLTAGE_TYPE_GENERIC_I2C_1,
+	VOLTAGE_TYPE_GENERIC_I2C_2,
+	VOLTAGE_TYPE_GENERIC_I2C_3,
+	VOLTAGE_TYPE_GENERIC_I2C_4,
+	VOLTAGE_TYPE_GENERIC_I2C_5,
+	VOLTAGE_TYPE_GENERIC_I2C_6,
+	VOLTAGE_TYPE_GENERIC_I2C_7,
+	VOLTAGE_TYPE_GENERIC_I2C_8,
+	VOLTAGE_TYPE_GENERIC_I2C_9,
+	VOLTAGE_TYPE_GENERIC_I2C_10
+)
+PPATUI_ENUMER(atom_voltage_object_mode,
+    VOLTAGE_OBJ_GPIO_LUT,
+    VOLTAGE_OBJ_VR_I2C_INIT_SEQ,
+    VOLTAGE_OBJ_PHASE_LUT,
+    VOLTAGE_OBJ_SVID2,
+    VOLTAGE_OBJ_EVV,
+    VOLTAGE_OBJ_MERGED_POWER
+)
+PPATUI_FUNCIFY(struct, atom_voltage_object_header_v4, atui_nullstruct,
+	(bios->voltage_type, voltage_type,
+		(ATUI_DEC, ATUI_ENUM, atom_voltage_type), (ATUI_NODESCR)
+	),
+	(bios->voltage_mode, voltage_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_voltage_object_mode), (ATUI_NODESCR)
+	),
+	(bios->object_size, object_size,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_voltage_gpio_map_lut, atomtree_voltage_object_v4,
+	(bios->voltage_gpio_reg_val, voltage_gpio_reg_val,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "The Voltage ID which is used to program GPIO register"))
+	),
+	(bios->voltage_level_mv, voltage_level_mv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "The corresponding Voltage Value, in mV"))
+	)
+)
+PPATUI_FUNCIFY(struct, atom_gpio_voltage_object_v4, atomtree_voltage_object_v4,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_voltage_object_header_v4), (ATUI_NODESCR)
+	),
+	(bios->gpio_control_id, gpio_control_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "default is 0 which indicate control through CG VID mode"))
+	),
+	(bios->gpio_entry_num, gpio_entry_num,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indiate the entry numbers of Votlage/Gpio value Look up table"))
+	),
+	(bios->phase_delay_us, phase_delay_us,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "phase delay in unit of micro second"))
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpio_mask_val, gpio_mask_val,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Mask value"))
+	),
+	(bios->voltage_gpio_lut, voltage_gpio_lut,
+		(ATUI_NAN, ATUI_INLINE, atom_voltage_gpio_map_lut),
+		(ATUI_NODESCR)
+	)
+	(NULL, voltage_gpio_lut,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, voltage_gpio_lut [%u],
+				(ATUI_NODISPLAY, ATUI_INLINE, atom_voltage_gpio_map_lut),
+				(ATUI_NODESCR)
+			),
+			bios->voltage_gpio_lut, atomtree->lut_entries //start, count
+		)),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct,  atom_i2c_data_entry, atomtree_voltage_object_v4,
+	(bios->i2c_reg_index, i2c_reg_index,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "i2c register address, can be up to 16bit"))
+	),
+	(bios->i2c_reg_data, i2c_reg_data,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "i2c register data, can be up to 16bit"))
+	)
+)
+PPATUI_FUNCIFY(struct, atom_i2c_voltage_object_v4, atomtree_voltage_object_v4,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_voltage_object_header_v4), (ATUI_NODESCR)
+	),
+	(bios->regulator_id, regulator_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate Voltage Regulator Id"))
+	),
+	(bios->i2c_id, i2c_id,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->i2c_slave_addr, i2c_slave_addr,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->i2c_control_offset, i2c_control_offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->i2c_flag, i2c_flag,
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "Bit0: 0 - One byte data; 1 - Two byte data"))
+	),
+	(bios->i2c_speed, i2c_speed,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "=0, use default i2c speed, otherwise use it in unit of kHz."))
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(NULL, i2cdatalut,
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(ATUI_NULL, i2cdatalut [%u],
+				(ATUI_NAN, ATUI_INLINE, atom_i2c_data_entry),
+				(ATUI_NODESCR)
+			),
+			bios->i2cdatalut, atomtree->lut_entries //start, count
+		)),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_svid2_voltage_object_v4, atomtree_voltage_object_v4,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_voltage_object_header_v4), (ATUI_NODESCR)
+	),
+	(bios->loadline_psi1.loadline_psi1, loadline_psi1,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(loadline_setting, 4,0, ATUI_DEC, ((LANG_ENG, "core trim and offset trim"))),
+			(PSI1_L_enable,    5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,         7,6, ATUI_HEX, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	),
+	(bios->psi0_l_vid_thresd, psi0_l_vid_thresd,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "VR PSI0_L VID threshold"))
+	),
+	(bios->psi0_enable, psi0_enable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->maxvstep, maxvstep,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->telemetry_offset, telemetry_offset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->telemetry_gain, telemetry_gain,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_merged_voltage_object_v4, atui_nullstruct,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_voltage_object_header_v4), (ATUI_NODESCR)
+	),
+	(bios->merged_powerrail_type, merged_powerrail_type,
+		(ATUI_DEC, ATUI_ENUM, atom_voltage_type), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+

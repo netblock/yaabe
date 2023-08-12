@@ -36,6 +36,7 @@ enum i18n_languages {
 	LANG_TOTALLANGS
 };
 
+static const void* ATUI_NULL = NULL; // to satisfy _Generics handling pointers.
 enum atui_type {
 	ATUI_NAN = 0b000,
 	ATUI_DEC = 0b001,
@@ -245,5 +246,13 @@ PPATUI_HEADERIFY(atom_vram_info_header_v2_6);
 
 PPATUI_HEADERIFY(atom_vram_module_v3_0);
 PPATUI_HEADERIFY(atom_vram_info_header_v3_0);
+
+
+
+PPATUI_HEADERIFY(atom_voltage_object_header_v4);
+PPATUI_HEADERIFY(atom_gpio_voltage_object_v4);
+PPATUI_HEADERIFY(atom_i2c_voltage_object_v4);
+PPATUI_HEADERIFY(atom_svid2_voltage_object_v4);
+PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 #endif

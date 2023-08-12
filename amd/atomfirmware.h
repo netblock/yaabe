@@ -159,15 +159,15 @@ enum atom_panel_bit_per_color {
 
 // ucVoltageType
 enum atom_voltage_type {
-	VOLTAGE_TYPE_VDDC   = 1,
-	VOLTAGE_TYPE_MVDDC  = 2,
-	VOLTAGE_TYPE_MVDDQ  = 3,
-	VOLTAGE_TYPE_VDDCI  = 4,
-	VOLTAGE_TYPE_VDDGFX = 5,
-	VOLTAGE_TYPE_PCC    = 6,
-	VOLTAGE_TYPE_MVPP   = 7,
-	VOLTAGE_TYPE_LEDDPM = 8,
-	VOLTAGE_TYPE_PCC_MVDD  =  9,
+	VOLTAGE_TYPE_VDDC      = 1,
+	VOLTAGE_TYPE_MVDDC     = 2,
+	VOLTAGE_TYPE_MVDDQ     = 3,
+	VOLTAGE_TYPE_VDDCI     = 4,
+	VOLTAGE_TYPE_VDDGFX    = 5,
+	VOLTAGE_TYPE_PCC       = 6,
+	VOLTAGE_TYPE_MVPP      = 7,
+	VOLTAGE_TYPE_LEDDPM    = 8,
+	VOLTAGE_TYPE_PCC_MVDD  = 9,
 	VOLTAGE_TYPE_PCIE_VDDC = 10,
 	VOLTAGE_TYPE_PCIE_VDDR = 11,
 	VOLTAGE_TYPE_GENERIC_I2C_1  = 0x11,
@@ -3536,17 +3536,11 @@ struct atom_vram_info_header_v2_6 {
     Data Table voltageobject_info  structure
   ***************************************************************************
 */
-struct  atom_i2c_data_entry {
-	uint16_t i2c_reg_index; // i2c register address, can be up to 16bit
-	uint16_t i2c_reg_data;  // i2c register data, can be up to 16bit
-};
-
 struct atom_voltage_object_header_v4 {
 	uint8_t  voltage_type; // enum atom_voltage_type
 	uint8_t  voltage_mode; // enum atom_voltage_object_mode
 	uint16_t object_size; // Size of Object
 };
-
 // atom_voltage_object_header_v4.voltage_mode
 enum atom_voltage_object_mode  {
 	VOLTAGE_OBJ_GPIO_LUT        = 0, //VOLTAGE and GPIO Lookup table ->atom_gpio_voltage_object_v4
@@ -3557,6 +3551,28 @@ enum atom_voltage_object_mode  {
 	VOLTAGE_OBJ_MERGED_POWER    = 9,
 };
 
+
+
+
+
+struct atom_voltage_gpio_map_lut {
+	uint32_t  voltage_gpio_reg_val; // The Voltage ID which is used to program GPIO register
+	uint16_t  voltage_level_mv;     // The corresponding Voltage Value, in mV
+};
+struct atom_gpio_voltage_object_v4 {
+	struct atom_voltage_object_header_v4 header;  // voltage mode = VOLTAGE_OBJ_GPIO_LUT or VOLTAGE_OBJ_PHASE_LUT
+	uint8_t  gpio_control_id; // default is 0 which indicate control through CG VID mode
+	uint8_t  gpio_entry_num;  // indiate the entry numbers of Votlage/Gpio value Look up table
+	uint8_t  phase_delay_us;  // phase delay in unit of micro second
+	uint8_t  reserved;
+	uint32_t gpio_mask_val;   // GPIO Mask value
+	struct atom_voltage_gpio_map_lut voltage_gpio_lut[1];
+};
+
+struct  atom_i2c_data_entry {
+	uint16_t i2c_reg_index; // i2c register address, can be up to 16bit
+	uint16_t i2c_reg_data;  // i2c register data, can be up to 16bit
+};
 struct atom_i2c_voltage_object_v4 {
 	struct atom_voltage_object_header_v4 header; // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
 	uint8_t  regulator_id; // Indicate Voltage Regulator Id
@@ -3568,28 +3584,12 @@ struct atom_i2c_voltage_object_v4 {
 	uint8_t  reserved[2];
 	struct atom_i2c_data_entry i2cdatalut[1]; // end with 0xff
 };
-
 // ATOM_I2C_VOLTAGE_OBJECT_V3.ucVoltageControlFlag
 enum atom_i2c_voltage_control_flag {
 	VOLTAGE_DATA_ONE_BYTE = 0,
 	VOLTAGE_DATA_TWO_BYTE = 1,
 };
 
-
-struct atom_voltage_gpio_map_lut {
-	uint32_t  voltage_gpio_reg_val; // The Voltage ID which is used to program GPIO register
-	uint16_t  voltage_level_mv;     // The corresponding Voltage Value, in mV
-};
-
-struct atom_gpio_voltage_object_v4 {
-	struct atom_voltage_object_header_v4 header;  // voltage mode = VOLTAGE_OBJ_GPIO_LUT or VOLTAGE_OBJ_PHASE_LUT
-	uint8_t  gpio_control_id; // default is 0 which indicate control through CG VID mode
-	uint8_t  gpio_entry_num;  // indiate the entry numbers of Votlage/Gpio value Look up table
-	uint8_t  phase_delay_us;  // phase delay in unit of micro second
-	uint8_t  reserved;
-	uint32_t gpio_mask_val;   // GPIO Mask value
-	struct atom_voltage_gpio_map_lut voltage_gpio_lut[1];
-};
 
 union loadline_psi1 {
 	uint8_t  loadline_psi1;
@@ -3617,8 +3617,23 @@ struct atom_merged_voltage_object_v4 {
 	uint8_t  reserved[3];
 };
 
+
+//TODO depricate once atombios.h is cleaned
+struct atom_evv_dpm_info {
+	uint32_t DPMSclk;      // DPM state SCLK
+	uint16_t VAdjOffset;   // Adjust Voltage offset in unit of mv
+	uint8_t  DPMTblVIndex; // Voltage Index in SMC_DPM_Table structure VddcTable/VddGfxTable
+	uint8_t  DPMState;     // DPMState0~7
+};
+struct atom_evv_voltage_object_v3 {
+	struct atom_voltage_object_header_v4 header;
+	struct atom_evv_dpm_info EvvDpmList[8];
+};
+
+
+
 union atom_voltage_object_v4 {
-	struct atom_voltage_object_header_v4 header; // voltage mode = VOLTAGE_OBJ_MERGED_POWER
+	struct atom_voltage_object_header_v4 header;
 	struct atom_gpio_voltage_object_v4 gpio_voltage_obj;
 	struct atom_i2c_voltage_object_v4 i2c_voltage_obj;
 	struct atom_svid2_voltage_object_v4 svid2_voltage_obj;

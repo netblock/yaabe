@@ -423,11 +423,11 @@ atui_branch* atomtree_dt_populate_gfx_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_gfx_info = NULL;
-	gfx_info->gcgolden = NULL;
 
 	struct atomtree_gfx_info* gfx_info = &(atree->data_table.gfx_info);
 	gfx_info->dot = gfx_info;
 	gfx_info->dotdot = &(atree->data_table);
+	gfx_info->gcgolden = NULL;
 
 	if (atree->data_table.leaves->gfx_info) {
 		// leaves is in a union with the structs.
@@ -1482,6 +1482,158 @@ static inline atui_branch* atomtree_dt_populate_vram_info(
 	return atui_vi;
 }
 
+
+atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
+		struct atom_tree* atree, bool generate_atui) {
+
+	atui_branch* atui_vo_info = NULL;
+	atui_branch* tmp_branch;
+	uint16_t i;
+
+	struct atomtree_voltageobject_info_v4_1* vo41 =
+	&(atree->data_table.voltageobject_info.v4_1);
+	vo41->dot = vo41;
+	vo41->dotdot = &(atree->data_table.voltageobject_info);
+	vo41->leaves = atree->bios + atree->data_table.leaves->voltageobject_info;
+
+	
+	// get the size ofthe dynamically-sized voltage object array, and walk
+	// through the array based on what each element reports their size as.
+	union atom_voltage_object_v4* vobj;
+	uint16_t offset = 0;
+	uint16_t vo41_array_size = (
+		vo41->leaves->table_header.structuresize
+		- offsetof(struct atom_voltage_objects_info_v4_1, voltage_object[0])
+	);
+	void* start = &(vo41->leaves->voltage_object[0]);
+	i = 0;
+	while(offset < vo41_array_size) {
+		vobj = start + offset;
+
+		vo41->voltage_objects[i].voltage_object = vobj;
+		switch(vobj->header.voltage_mode) {
+			// some voltage objects have a dynamically-sized lookup table.
+			case VOLTAGE_OBJ_GPIO_LUT:
+			case VOLTAGE_OBJ_PHASE_LUT:
+				vo41->voltage_objects[i].lut_entries = (
+					(vobj->header.object_size - offsetof(
+						struct atom_gpio_voltage_object_v4, voltage_gpio_lut[0]
+					)) / sizeof(struct atom_voltage_gpio_map_lut)
+				);
+				break;
+			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+				vo41->voltage_objects[i].lut_entries = (
+					(vobj->header.object_size - offsetof(
+						struct atom_i2c_voltage_object_v4, i2cdatalut[0]
+					)) / sizeof(struct atom_i2c_data_entry)
+				);
+				break;
+			default:
+				vo41->voltage_objects[i].lut_entries = 0;
+				break;
+		}
+
+		offset += vobj->header.object_size;
+		i++;		
+	}
+	vo41->num_voltage_objects = i;
+	// TODO bounds checks for i and array size
+
+	struct atomtree_voltage_object_v4* at_vobj;
+	if (generate_atui) {
+		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+			NULL,vo41->leaves,  vo41->num_voltage_objects,NULL
+		);
+		sprintf(atui_vo_info->name, "atom_voltage_objects_info_v4_1");
+		for(i=0; i < vo41->num_voltage_objects; i++) {
+			at_vobj = &(vo41->voltage_objects[i]);
+			switch(at_vobj->voltage_object->header.voltage_mode) {
+				case VOLTAGE_OBJ_GPIO_LUT:
+				case VOLTAGE_OBJ_PHASE_LUT:
+					tmp_branch = ATUI_MAKE_BRANCH(atom_gpio_voltage_object_v4,
+						at_vobj, &(at_vobj->voltage_object->gpio_voltage_obj),
+						0, NULL
+					);
+					break;
+				case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+					tmp_branch = ATUI_MAKE_BRANCH(atom_i2c_voltage_object_v4,
+						at_vobj, &(at_vobj->voltage_object->i2c_voltage_obj),
+						0, NULL
+					);
+					break;
+				case VOLTAGE_OBJ_SVID2:
+					tmp_branch = ATUI_MAKE_BRANCH(atom_svid2_voltage_object_v4,
+						at_vobj, &(at_vobj->voltage_object->svid2_voltage_obj),
+						0, NULL
+					);
+					break;
+				case VOLTAGE_OBJ_MERGED_POWER:
+					tmp_branch = ATUI_MAKE_BRANCH(atom_merged_voltage_object_v4,
+						at_vobj, &(at_vobj->voltage_object->merged_voltage_obj),
+						0, NULL
+					);
+					break;
+				case VOLTAGE_OBJ_EVV: // TODO does this get used by v4?
+				default:
+					tmp_branch = ATUI_MAKE_BRANCH(atom_voltage_object_header_v4,
+						at_vobj,&(at_vobj->voltage_object->header),  0,NULL
+					);
+					break;
+			}
+			sprintf(tmp_branch->name,  "%s [%u]", tmp_branch->varname, i);
+			atui_vo_info->child_branches[i] = tmp_branch;
+		}
+		atui_vo_info->branch_count = vo41->num_voltage_objects;
+	}
+	return atui_vo_info;
+}
+
+
+atui_branch* atomtree_dt_populate_voltageobject_info(
+		struct atom_tree* atree, bool generate_atui) {
+
+	atui_branch* atui_vo_info = NULL;
+
+	struct atomtree_voltageobject_info* vo_info =
+		&(atree->data_table.voltageobject_info);
+	vo_info->dot = vo_info;
+	vo_info->dotdot = &(atree->data_table);
+
+	if (atree->data_table.leaves->voltageobject_info) {
+		vo_info->table_header =
+			atree->bios + atree->data_table.leaves->voltageobject_info;
+		vo_info->ver = get_ver(vo_info->table_header);
+		switch (vo_info->ver) {
+			case v4_1:
+				atui_vo_info = atomtree_dt_populate_voltageobject_info_v4_1(
+					atree, generate_atui
+				);
+				break;
+			case v4_2: //hopefully v4_2 is the same
+				atui_vo_info = atomtree_dt_populate_voltageobject_info_v4_1(
+					atree, generate_atui
+				);
+				sprintf(atui_vo_info->name,
+					"atom_voltage_objects_info_v4_1 (forced)");
+				break;
+			default:
+				if (generate_atui) {
+					atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						NULL,vo_info->table_header,  0,NULL
+					);
+					sprintf(atui_vo_info->name,
+						"voltageobject_info (header only stub)"
+					);
+				}
+				break;
+		}
+	} else {
+		vo_info->ver = nover;
+		vo_info->leaves = NULL;
+	}
+	return atui_vo_info;
+}
+
 static inline atui_branch* atomtree_dt_populate_sw_datatables(
 		struct atom_tree* atree, bool generate_atui) {
 
@@ -1634,6 +1786,8 @@ static inline atui_branch* atomtree_populate_datatables(
 	//integratedsysteminfo
 	//asic_profiling_info
 	//voltageobject_info
+	atui_branch* atui_voltageobject_info =
+		atomtree_dt_populate_voltageobject_info(atree, generate_atui);
 
 	atomtree_dt_populate_sw_datatables(atree, generate_atui);
 
@@ -1643,6 +1797,7 @@ static inline atui_branch* atomtree_populate_datatables(
 		atui_branch* child_branches[] = {
 			atui_smc_dpm_info, atui_firmwareinfo, atui_vram_info, atui_lcd_info,
 			atui_smu_info, atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info,
+			atui_voltageobject_info
 		};
 		const uint8_t num_child_branches = 
 			sizeof(child_branches)/sizeof(atui_branch*);

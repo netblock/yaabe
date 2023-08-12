@@ -447,7 +447,7 @@ struct atomtree_vram_info {
 	struct atomtree_master_datatable_v2_1* dotdot;
 	union {
 		struct atom_common_table_header* table_header;
-		void* leaves; // nonzero if populated
+		void* leaves;
 	};
 
 	enum atomtree_common_version ver;
@@ -457,6 +457,36 @@ struct atomtree_vram_info {
 		struct atomtree_vram_info_header_v2_5 v2_5;
 		struct atomtree_vram_info_header_v2_6 v2_6;
 		struct atomtree_vram_info_header_v3_0 v3_0;
+	};
+};
+
+struct atomtree_voltage_object_v4 {
+	union atom_voltage_object_v4* voltage_object;
+	uint16_t lut_entries; // has entries if i2c or gpio
+};
+
+struct atomtree_voltageobject_info_v4_1 {
+	struct atomtree_voltageobject_info_v4_1* dot;
+	struct atomtree_voltageobject_info* dotdot;
+
+	struct atom_voltage_objects_info_v4_1* leaves;
+
+	uint16_t num_voltage_objects;
+	struct atomtree_voltage_object_v4 voltage_objects[64];
+};
+
+
+struct atomtree_voltageobject_info {
+	struct atomtree_voltageobject_info* dot;
+	struct atomtree_master_datatable_v2_1* dotdot;
+    union {
+        void* leaves; // nonzero if populated
+        struct atom_common_table_header* table_header;
+	};
+
+	enum atomtree_common_version ver;
+	union {
+		struct atomtree_voltageobject_info_v4_1 v4_1;
 	};
 };
 
@@ -501,7 +531,7 @@ struct atomtree_master_datatable_v2_1 {
 
 	uint16_t integratedsysteminfo;
 	uint16_t asic_profiling_info;
-	uint16_t voltageobject_info;
+	struct atomtree_voltageobject_info voltageobject_info;
 
 	// these aren't defined anywhere in AMDGPU.
 	struct atomtree_sw_datatable sw_datatable3;

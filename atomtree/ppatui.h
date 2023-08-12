@@ -307,9 +307,12 @@ That is, bitfield population, and enum and inline association.
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
 	default:0\
 )
+
 #define _PPATUI_DEREF(var) _Generic((var), \
-	uint8_t*:*((uint8_t*)var), uint16_t*:*((uint16_t*)var),\
-	uint32_t*:*((uint32_t*)var), uint64_t*:*((uint64_t*)var), \
+	uint8_t*:*( (uint8_t*) ((void*)var) ), \
+	uint16_t*:*( (uint16_t*) ((void*)var) ), \
+	uint32_t*:*( (uint32_t*) ((void*)var) ), \
+	uint64_t*:*( (uint64_t*) ((void*)var) ), \
 	uint8_t:var, uint16_t:var, uint32_t:var, uint64_t:var, \
 	default:0\
 )
@@ -566,13 +569,13 @@ That is, bitfield population, and enum and inline association.
 //struct dynarray_bounds; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
 	{\
-		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize), \
+		.numleaves=1, .dynarray_length=dynsize, \
 		.array_start=start, .element_size=sizeof(start[0]), .inl_func=NULL,\
 	},
 
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_INLINE(start, dynsize, inltable)\
 	{\
-		.numleaves=1, .dynarray_length=_PPATUI_DEREF(dynsize),\
+		.numleaves=1, .dynarray_length=dynsize,\
 		.array_start=start, .element_size=sizeof(start[0]),\
 		.inl_func=PPATUI_FUNC_NAME(inltable),\
 	},
@@ -580,7 +583,7 @@ That is, bitfield population, and enum and inline association.
 	{\
 		.numleaves= 1+ _ATUI_BITFIELD_NUMLEAVES(\
 			_PPATUI_FANCYDATA_UNPACK(bitfields)),\
-		.dynarray_length=_PPATUI_DEREF(dynsize), .array_start=start,\
+		.dynarray_length=dynsize, .array_start=start,\
 		.element_size=sizeof(start[0]), .inl_func=NULL\
 	},
 
