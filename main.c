@@ -9,6 +9,15 @@
 #include <atomtree.h>
 #include <yaabe_gtk4.h>
 
+/* TODO minor things
+ATUI_FUNCIFY: make the child_branhes+inline_branches more explicit in API
+	sanity pass for the free)( func
+stdint-ify everything
+gtk4: move gpointers to their actual things, where possible
+inline where possible
+*/
+
+
 int getfile(char* f, void** bios, long* size){
     FILE* tm = fopen(f, "r");
 	if (tm == NULL)

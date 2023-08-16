@@ -383,7 +383,10 @@ inline static GtkWidget* create_leaves_pane(
 	gtk_scrolled_window_set_child(
 		GTK_SCROLLED_WINDOW(scrolledlist), leaves_list);
 
-	return scrolledlist;
+	GtkWidget* frame = gtk_frame_new(NULL);
+	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
+
+	return frame;
 }
 
 
@@ -503,8 +506,84 @@ inline static GtkWidget* create_branches_pane(
 	GtkWidget* scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolledlist), listview);
 
-	return scrolledlist;
+	GtkWidget* frame = gtk_frame_new(NULL);
+	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
+
+	return frame;
 }
+
+// AsyncReadyCallback
+static void filedialog_load_and_set_bios(
+		GObject* gobj_filedialog, GAsyncResult* asyncfile,
+		gpointer yaabe_commons) {
+
+	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
+	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
+	GError* ferror = NULL;
+
+	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
+	if (ferror) {
+		g_object_unref(G_OBJECT(ferror));
+		return;
+	}
+
+	g_object_unref(gobj_filedialog);
+	g_object_unref(G_OBJECT(asyncfile));
+}
+
+static void load_button_open_bios(GtkWidget* button,
+	struct yaabe_gtkapp_ptrs_commons* commons) {
+	//struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
+
+	// compress this lot into a open_bios_dialog to use with a 
+	//  g_signal_connect_swapped  ? Might not be necessary cause when else?
+
+	GtkFileDialog* filer = gtk_file_dialog_new();
+
+	GFile* working_dir = g_file_new_for_path(g_get_current_dir());
+	GtkWindow* active_window = gtk_application_get_active_window(
+		commons->yaabe_gtk
+	);
+	gtk_file_dialog_set_initial_folder(filer, working_dir);
+
+	gtk_file_dialog_open(filer,
+		active_window, NULL, filedialog_load_and_set_bios, commons
+	);
+
+
+	g_object_unref(working_dir);
+}
+
+inline static GtkWidget* buttons_box(struct yaabe_gtkapp_ptrs_commons* commons){
+
+	GtkWidget* load_button = gtk_button_new_with_label("Load");
+	g_signal_connect(load_button, "clicked",
+		G_CALLBACK(load_button_open_bios), commons
+	);
+	GtkWidget* reload_button = gtk_button_new_with_label("Reload");
+	GtkWidget* load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_box_append(GTK_BOX(load_buttons), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+	gtk_box_append(GTK_BOX(load_buttons), load_button);
+	gtk_box_append(GTK_BOX(load_buttons), reload_button);
+
+	GtkWidget* save_button = gtk_button_new_with_label("Save");
+	GtkWidget* saveas_button = gtk_button_new_with_label("Save As");
+	GtkWidget* save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	gtk_box_append(GTK_BOX(save_buttons), save_button);
+	gtk_box_append(GTK_BOX(save_buttons), saveas_button);
+
+
+	GtkWidget* cf_button = gtk_button_new_with_label("Function Tables");
+
+	GtkWidget* buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
+	gtk_box_append(GTK_BOX(buttonboxes), load_buttons);
+
+	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
+	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
+
+	return buttonboxes;
+}
+
 static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
 
@@ -513,27 +592,52 @@ static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 	GtkWidget* branches_pane = create_branches_pane(commons, atui_model);
 	GtkWidget* leaves_pane = create_leaves_pane(commons);
 
-	GtkWidget* divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-	gtk_paned_set_resize_start_child (GTK_PANED(divider), true);
-	gtk_paned_set_shrink_start_child (GTK_PANED(divider), false);
-	gtk_paned_set_resize_end_child (GTK_PANED(divider), true);
-	gtk_paned_set_shrink_end_child (GTK_PANED(divider), false);
+	GtkWidget* tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+	gtk_paned_set_resize_start_child(GTK_PANED(tree_divider), true);
+	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
+	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
+	gtk_paned_set_shrink_end_child(GTK_PANED(tree_divider), false);
 	gtk_widget_set_size_request(branches_pane, 50, 50);
 	gtk_widget_set_size_request(leaves_pane, 50, 50);
-	gtk_paned_set_start_child(GTK_PANED(divider), branches_pane);
-	gtk_paned_set_end_child(GTK_PANED(divider), leaves_pane);
+	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
+	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
+	
+
+	GtkWidget* button_pane_complex = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+	GtkWidget* buttonboxes = buttons_box(commons);
+	gtk_widget_set_vexpand(tree_divider, true);
+	gtk_box_append(GTK_BOX(button_pane_complex), tree_divider);
+	gtk_box_append(GTK_BOX(button_pane_complex), buttonboxes);
+	gtk_box_append(GTK_BOX(button_pane_complex),
+		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+	
 
 	GtkWidget* window = gtk_application_window_new(gtkapp);
 	gtk_window_set_title(GTK_WINDOW(window), "YAABE BIOS Editor");
 	gtk_window_set_default_size(GTK_WINDOW(window), 800,500);
 
-	gtk_window_set_child(GTK_WINDOW(window), divider);
+	//gtk_window_set_child(GTK_WINDOW(window), tree_divider);
+	gtk_window_set_child(GTK_WINDOW(window), button_pane_complex);
+	//gtk_window_set_child(GTK_WINDOW(window), buttonboxes);
 
 	gtk_window_present(GTK_WINDOW(window)); //gtk4.10
 }
 
 int yaabe_gtk(struct atom_tree* atree) {
+	/* TODO  https://docs.gtk.org/gtk4/visual_index.html
+
+	set title bar to currently open file
+	path bar
+	changelog of what was changed before the save? feels hard to impement
+	menubar? of what?
+		https://github.com/luigifab/awf-extended/blob/levelup/src/awf.c#L692
+		file save/load ; about ; light-dark 
+	extra columns like bit count, bios position, description.
+		User selectable. Reorderable
+	*/
+
+	//TODO malloc this? g_application_run() is the main loop.
 	struct yaabe_gtkapp_ptrs_commons commons;
 	commons.atomtree_root = atree;
 	commons.atui_root = atree->atui_root;
@@ -542,6 +646,7 @@ int yaabe_gtk(struct atom_tree* atree) {
 	g_signal_connect(commons.yaabe_gtk, "activate", G_CALLBACK(app_activate),
         &commons);
 	int status = g_application_run(G_APPLICATION(commons.yaabe_gtk), 0,NULL);
+	//atui_destroy_tree_with_gtk(atree->atui_root);
 
 	return status;
 }
