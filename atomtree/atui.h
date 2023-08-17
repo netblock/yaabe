@@ -1,4 +1,5 @@
 /*
+    while(tree->max_branch_count--)
 AtomTree iterable interface for UIs.
 
 TODO explain how to add add tables
@@ -99,12 +100,15 @@ struct  _atui_branch {
 	char* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;
-	uint8_t branch_count;
-	uint8_t max_branch_count;
+	uint8_t num_child_branches;
+	uint8_t max_num_child_branches;
 
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
-	uint8_t inline_branch_count;
-	uint8_t max_inline_branch_count;
+	uint8_t num_inline_branches;
+	uint8_t max_num_inline_branches;
+
+	atui_branch** all_branches;
+	uint8_t max_branch_count;
 
 
 	atui_leaf* leaves;
@@ -149,12 +153,12 @@ struct atui_funcify_args {
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 
-	uint16_t num_branches;
+	uint16_t num_child_branches;
 	// Number of child branches this atui_branch will have.*/
 
 	atui_branch** import_children;
 	// If the child branches are preallocated, walk across this. This array
-	// must have num_branches elements.
+	// must have num_child_branches elements.
 };
 
 

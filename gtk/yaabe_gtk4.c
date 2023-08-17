@@ -18,20 +18,29 @@ struct yaabe_gtkapp_ptrs_commons {
 };
 
 struct yaabe_gtkapp_model_cache { // to cache
-	// TreeListModel of the branche's leaves
+	// If this struct is attached to a branch, this caches the depth 0
+	// TreeListModel elements of the branch's leaves if it has leaves.
 	GtkSelectionModel* leaves_model;
 
-	// array of gobject'd atui_leaves, if a leaf has child leaves
+	/*
+	If this struct is attached to a branch, child_gobj caches the simple
+	GOBject wrapper for the child branches, to be used in the TreeListModel in
+	the branches pane.
+
+	If this struct is attached to a leaf, child_gobj caches the simple
+	GOBject wrapper for the child leaves, to be used if the TreeListModel in
+	the leaves pane.
+	*/
 	uint16_t child_gobj_count;
 	GObject* child_gobj[];
 };
 
 inline static void alloc_branch_cache(atui_branch* branch) {
-	uint16_t gobj_count = branch->branch_count;
+	uint16_t gobj_count = branch->num_child_branches;
 
 	branch->auxiliary = malloc(
-		sizeof(struct yaabe_gtkapp_model_cache) +
-		gobj_count * sizeof(GObject*)
+		sizeof(struct yaabe_gtkapp_model_cache)
+		+ (gobj_count * sizeof(GObject*))
 	);
 
 	struct yaabe_gtkapp_model_cache* models = branch->auxiliary;
@@ -41,8 +50,8 @@ inline static void alloc_branch_cache(atui_branch* branch) {
 }
 inline static void alloc_leaf_cache(atui_leaf* leaf, uint16_t num_children) {
 	leaf->auxiliary = malloc(
-		sizeof(struct yaabe_gtkapp_model_cache) +
-		num_children * sizeof(GObject*)
+		sizeof(struct yaabe_gtkapp_model_cache)
+		+ (num_children * sizeof(GObject*))
 	);
 
 	struct yaabe_gtkapp_model_cache* models = leaf->auxiliary;
@@ -62,11 +71,15 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	// to the model.
 	if (tree->auxiliary != NULL) {
 		submodels = tree->auxiliary;
-		g_object_unref(submodels->leaves_model);
+
+		if(submodels->leaves_model)
+			g_object_unref(submodels->leaves_model);
+
 		child_gobj_count = submodels->child_gobj_count;
 		for (i=0; i < child_gobj_count; i++) {
 			g_object_unref(submodels->child_gobj[i]);
 		}
+
 		free(submodels);
 	}
 
@@ -75,22 +88,29 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	for(i=0; i < leaf_count; i++) {
 		submodels = tree->leaves[i].auxiliary;
 		if (submodels != NULL) {
-			g_object_unref(submodels->leaves_model);
+			if(submodels->leaves_model) // should always be false
+				g_object_unref(submodels->leaves_model);
+
 			child_gobj_count = submodels->child_gobj_count;
 			for (j=0; j < child_gobj_count; j++) {
 				g_object_unref(submodels->child_gobj[j]);
 			}
+
 			free(submodels);
 		}
 	}
 
 	//branches that the leaves point to should be adjacent to regular branches
-	tree->max_branch_count += tree->max_inline_branch_count;
-	while(tree->max_branch_count--)
+	
+	while(tree->max_branch_count) {
+		tree->max_branch_count--;
 		atui_destroy_tree_with_gtk(
-			tree->child_branches[tree->max_branch_count]);
+			tree->child_branches[tree->max_branch_count]
+		);
+	}
 
 	free(tree);
+
 }
 
 
@@ -416,13 +436,13 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 	GListStore* children = NULL; 
 	int i = 0;
 
-	if (parent->branch_count) {
+	if (parent->num_child_branches) {
 		children = g_list_store_new(G_TYPE_OBJECT);
 
 		// if no cached gobjects, generate and cache them; otherwise use cache.
 		if (branch_models->child_gobj[0] == NULL) {
 			GObject* gobj_child;
-			for(i=0; i < parent->branch_count; i++){
+			for(i=0; i < parent->num_child_branches; i++){
 				// the cache is also for the leaves
 				alloc_branch_cache(parent->child_branches[i]);
 
@@ -531,9 +551,8 @@ static void filedialog_load_and_set_bios(
 	g_object_unref(G_OBJECT(asyncfile));
 }
 
-static void load_button_open_bios(GtkWidget* button,
-	struct yaabe_gtkapp_ptrs_commons* commons) {
-	//struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
+static void load_button_open_bios(GtkWidget* button, gpointer yaabe_commons) {
+	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
 
 	// compress this lot into a open_bios_dialog to use with a 
 	//  g_signal_connect_swapped  ? Might not be necessary cause when else?
@@ -646,7 +665,7 @@ int yaabe_gtk(struct atom_tree* atree) {
 	g_signal_connect(commons.yaabe_gtk, "activate", G_CALLBACK(app_activate),
         &commons);
 	int status = g_application_run(G_APPLICATION(commons.yaabe_gtk), 0,NULL);
-	//atui_destroy_tree_with_gtk(atree->atui_root);
+	atui_destroy_tree_with_gtk(atree->atui_root);
 
 	return status;
 }

@@ -32,7 +32,7 @@ vim replace patterns that help copypaste structs from atombios.h:
 #define ATUI_MAKE_BRANCH(atomstruct, atree, bios, num_br, import) \
 	_##atomstruct##_atui(&(struct atui_funcify_args){\
 		.atomtree=atree, .suggestbios=bios, \
-		.num_branches=num_br, .import_children=import\
+		.num_child_branches=num_br, .import_children=import\
 	})
 
 
@@ -62,8 +62,8 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	struct atomtreestruct* atomtree = args->atomtree;\
 	atomtypeprefix atomtypesuffix * bios = args->suggestbios;\
-	uint16_t num_branches = 0;\
-	uint16_t max_branch_count = args->num_branches;\
+	uint16_t num_child_branches = 0;\
+	uint16_t max_num_child_branches = args->num_child_branches;\
 	atui_branch** import_children = args->import_children;\
 \
 	atui_branch* table = NULL; \
@@ -121,16 +121,15 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 		scratch = malloc(\
 			sizeof(atui_branch)\
-			+ max_branch_count * sizeof(atui_branch*)\
-			+ num_inliners * sizeof(atui_branch*)\
+			+ (max_num_child_branches + num_inliners) * sizeof(atui_branch*)\
 			+ leaves_init_num * sizeof(atui_leaf)\
 			+ dynarray_total_leaves * sizeof(atui_leaf)\
 		);\
 		table = scratch;\
 		scratch += sizeof(atui_branch);\
-		if (max_branch_count) {\
+		if (max_num_child_branches) {\
 			branches = scratch;\
-			scratch += max_branch_count * sizeof(atui_branch*);\
+			scratch += max_num_child_branches * sizeof(atui_branch*);\
 		}\
 		if (num_inliners) {\
 			inliners = scratch;\
@@ -142,7 +141,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 		if (sizeof(dynarray_patterns)) {\
 			struct atui_funcify_args inl_args = {\
-				.atomtree=NULL, .suggestbios=NULL, .num_branches=0,\
+				.atomtree=NULL, .suggestbios=NULL, .num_child_branches=0,\
 				.import_children=NULL\
 			};\
 			atui_branch* (*inl_func)(struct atui_funcify_args*) = NULL;\
@@ -254,33 +253,34 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	} else { /* no leaves at all */\
 		scratch = malloc(\
 			sizeof(atui_branch)\
-			+ (max_branch_count * sizeof(atui_branch*))\
+			+ (max_num_child_branches * sizeof(atui_branch*))\
 		); \
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
 		branches = scratch;\
 	}\
 \
-	if (max_branch_count) {\
+	if (max_num_child_branches) {\
 		if (import_children != NULL) {\
 			j=0;\
-			for (i=0; i<max_branch_count; i++) {\
+			for (i=0; i<max_num_child_branches; i++) {\
 				if (import_children[i] != NULL) {\
 					branches[j] = import_children[i];\
 					j++;\
 				}\
 			}\
-			num_branches = j;\
+			num_child_branches = j;\
 		}\
 	}\
 \
 	*table = (atui_branch) {\
 		.name=#atomtypesuffix, .varname=#atomtypesuffix,\
 		.description=NULL, .auxiliary=NULL,\
-		.child_branches=branches, .branch_count=num_branches, \
-		.max_branch_count=max_branch_count,\
-		.inline_branches=inliners, .inline_branch_count=num_inliners, \
-		.max_inline_branch_count=num_inliners, \
+		.child_branches=branches, .num_child_branches=num_child_branches, \
+		.max_num_child_branches=max_num_child_branches,\
+		.inline_branches=inliners, .num_inline_branches=num_inliners, \
+		.max_num_inline_branches=num_inliners, \
+		.all_branches=branches, \
 		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
 		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
 	};\

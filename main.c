@@ -13,7 +13,7 @@
 ATUI_FUNCIFY: make the child_branhes+inline_branches more explicit in API
 	sanity pass for the free)( func
 stdint-ify everything
-gtk4: move gpointers to their actual things, where possible
+gtk4: move gpointers to their actual things, where possible?
 inline where possible
 */
 
