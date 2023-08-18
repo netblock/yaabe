@@ -1642,7 +1642,7 @@ static inline atui_branch* atomtree_dt_populate_sw_datatables(
 		struct atom_tree* atree, bool generate_atui) {
 
 	struct atomtree_master_datatable_v2_1* data_table = &(atree->data_table);
-	struct atom_master_data_table_v2_1* leaves;
+	struct atom_master_data_table_v2_1* leaves = data_table->leaves;
 	void* bios = atree->bios;
 
 	data_table->sw_datatable3.leaves = NULL;

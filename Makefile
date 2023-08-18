@@ -7,7 +7,7 @@ OBJS = $(SRCS:%.c=out/%.o)
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS := -pthread -lz -lm -ldl $(GTK_LDFLAGS)
-YAABE_CFLAGS = -g -std=c2x -Iamd -Iatomtree -Igtk $(GTK_CFLAGS)
+YAABE_CFLAGS = -g -Og -std=c2x -Iamd -Iatomtree -Igtk $(GTK_CFLAGS)
 
 all: yaabe
 

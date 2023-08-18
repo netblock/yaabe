@@ -225,5 +225,8 @@ int main(int argc, char** argv){
 	}}
 
 	yaabe_gtk(atree);
+	atui_destroy_tree_with_gtk(atree->atui_root);
+	free(atree->bios);
+	free(atree);
 	return 0;
 }

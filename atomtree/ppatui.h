@@ -62,19 +62,22 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	struct atomtreestruct* atomtree = args->atomtree;\
 	atomtypeprefix atomtypesuffix * bios = args->suggestbios;\
+\
+	atui_branch* table = NULL; \
+\
 	uint16_t num_child_branches = 0;\
 	uint16_t max_num_child_branches = args->num_child_branches;\
 	atui_branch** import_children = args->import_children;\
-\
-	atui_branch* table = NULL; \
 	atui_branch** branches = NULL;\
-\
 	atui_branch** inliners = NULL;\
 	uint16_t num_inliners = 0;\
+	uint16_t max_branch_count = 0;\
+	atui_branch** all_branches = NULL;\
 \
 	atui_leaf* leaves = NULL;\
 	uint16_t total_num_leaves = 0;\
 	uint16_t max_alloced_leaves = 0;\
+\
 	void* scratch = NULL;\
 	uint16_t i = 0;\
 	uint16_t j = 0;\
@@ -127,6 +130,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		);\
 		table = scratch;\
 		scratch += sizeof(atui_branch);\
+		all_branches = scratch;\
 		if (max_num_child_branches) {\
 			branches = scratch;\
 			scratch += max_num_child_branches * sizeof(atui_branch*);\
@@ -177,7 +181,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
 							leaves[leaves_i] = dynarray_patterns[dynpat_i];\
 							leaves[leaves_i].inline_branch = \
-								inliners + inliners_i;\
+								&(inliners[inliners_i]);\
 							/* if the name has a index number pattern: */\
 							sprintf(leaves[leaves_i].name,\
 								leaves[leaves_i].origname,\
@@ -257,12 +261,13 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		); \
 		table = scratch;\
 		scratch = scratch + sizeof(atui_branch);\
+		all_branches = scratch;\
 		branches = scratch;\
 	}\
 \
 	if (max_num_child_branches) {\
+		j=0;\
 		if (import_children != NULL) {\
-			j=0;\
 			for (i=0; i<max_num_child_branches; i++) {\
 				if (import_children[i] != NULL) {\
 					branches[j] = import_children[i];\
@@ -271,16 +276,22 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 			}\
 			num_child_branches = j;\
 		}\
+		for(; j < max_num_child_branches; j++) {\
+			branches[j] = NULL;\
+		}\
 	}\
 \
 	*table = (atui_branch) {\
 		.name=#atomtypesuffix, .varname=#atomtypesuffix,\
 		.description=NULL, .auxiliary=NULL,\
+\
 		.child_branches=branches, .num_child_branches=num_child_branches, \
 		.max_num_child_branches=max_num_child_branches,\
 		.inline_branches=inliners, .num_inline_branches=num_inliners, \
 		.max_num_inline_branches=num_inliners, \
-		.all_branches=branches, \
+		.all_branches=all_branches, \
+		.max_branch_count=(max_num_child_branches + num_inliners),\
+\
 		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
 		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
 	};\
