@@ -272,7 +272,7 @@ static void atui_inline_pullin_gliststore(atui_leaf* parent, GListStore* list) {
 		}
 	}
 }
-static inline GListModel* atui_leaves_to_glistmodel(
+inline static GListModel* atui_leaves_to_glistmodel(
 		atui_leaf* children, uint16_t num_children) {
 
 	atui_leaf* leaf = NULL;
@@ -366,8 +366,9 @@ inline static void branchleaves_to_treemodel(atui_branch* branch) {
 }
 
 
-static void set_leaves_list(GtkSelectionModel* model,
-		guint position, guint n_items, gpointer yaabe_commons) {
+static void set_leaves_list(
+		GtkSelectionModel* model, guint position, guint n_items,
+		gpointer yaabe_commons) {
 
 	struct yaabe_gtkapp_ptrs_commons* commons = yaabe_commons;
 
@@ -516,7 +517,8 @@ static void branch_listitem_recycler(
 // bind
 
 	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
-		gtk_list_item_get_child(list_item));
+		gtk_list_item_get_child(list_item)
+	);
 	GtkWidget* row_label = gtk_tree_expander_get_child(expander);
 
 	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
@@ -536,25 +538,31 @@ inline static GtkWidget* create_branches_pane(
 
 	//TreeList, along with branch_tlmodel_func, creates our collapsable model.
 	GtkTreeListModel* tlist_atui = gtk_tree_list_model_new(
-		G_LIST_MODEL(atui_model), false, true, branch_tlmodel_func, NULL,NULL);
+		G_LIST_MODEL(atui_model), false, true, branch_tlmodel_func, NULL,NULL
+	);
 
 	GtkSingleSelection* sel_model = gtk_single_selection_new(
-		G_LIST_MODEL(tlist_atui));
+		G_LIST_MODEL(tlist_atui)
+	);
 
 	// change the leaves pane's model based on the what is selected in brances
-	g_signal_connect(sel_model, "selection-changed",
-		G_CALLBACK(set_leaves_list), commons);
+	g_signal_connect(sel_model,
+		"selection-changed", G_CALLBACK(set_leaves_list), commons
+	);
 	gtk_single_selection_set_autoselect(sel_model, false);
 
 
 	GtkListItemFactory* branch_list_factory =
 		gtk_signal_list_item_factory_new();
-	g_signal_connect(branch_list_factory, "setup",
-		G_CALLBACK(branch_listitem_spawner), NULL);
-	g_signal_connect(branch_list_factory, "bind",
-		G_CALLBACK(branch_listitem_recycler), NULL);
-	GtkWidget* listview = gtk_list_view_new(GTK_SELECTION_MODEL(sel_model),
-		branch_list_factory);
+	g_signal_connect(branch_list_factory,
+		"setup", G_CALLBACK(branch_listitem_spawner), NULL
+	);
+	g_signal_connect(branch_list_factory,
+		"bind", G_CALLBACK(branch_listitem_recycler), NULL
+	);
+	GtkWidget* listview = gtk_list_view_new(
+		GTK_SELECTION_MODEL(sel_model), branch_list_factory
+	);
 
 	GtkWidget* scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolledlist), listview);

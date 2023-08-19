@@ -14,11 +14,11 @@ ATUI_FUNCIFY: make the child_branhes+inline_branches more explicit in API
 	sanity pass for the free)( func
 stdint-ify everything
 gtk4: move gpointers to their actual things, where possible?
-inline where possible
+inline static where possible
 */
 
 
-int16_t getfile(char* f, void** bios, long* size){
+inline static int16_t getfile(char* f, void** bios, long* size){
     FILE* tm = fopen(f, "r");
 	if (tm == NULL)
 		return 1;
@@ -31,7 +31,7 @@ int16_t getfile(char* f, void** bios, long* size){
 	return 0;
 }
 
-void vi24_funstuffs(struct atom_tree* atree) {
+inline static void vi24_funstuffs(struct atom_tree* atree) {
 	printf("\n");
 	struct atomtree_umc_init_reg_block* regblk =
 		&(atree->data_table.vram_info.v2_4.mem_clk_patch);
@@ -70,7 +70,7 @@ void vi24_funstuffs(struct atom_tree* atree) {
 
 }
 
-void vi25_funstuffs(struct atom_tree* atree) {
+inline static void vi25_funstuffs(struct atom_tree* atree) {
 	uint8_t i=0;
 	struct atomtree_vram_info_header_v2_5* vi25 =
 		&(atree->data_table.vram_info.v2_5);
@@ -101,7 +101,7 @@ void vi25_funstuffs(struct atom_tree* atree) {
 	printf("bank groups enable (bit 0): %08b\n", vram_module->vram_flags);
 }
 
-void vi30_funstuffs(struct atom_tree* atree) {
+inline static void vi30_funstuffs(struct atom_tree* atree) {
 	struct atomtree_vram_info_header_v3_0* vi30 =
 		&(atree->data_table.vram_info.v3_0);
 
@@ -113,7 +113,7 @@ void vi30_funstuffs(struct atom_tree* atree) {
 }
 
 
-void pp1_funstuffs(struct atom_tree* atree) {
+inline static void pp1_funstuffs(struct atom_tree* atree) {
 	struct smu_11_0_powerplay_table* navi1 =
 		atree->data_table.powerplayinfo.navi1;
 
@@ -146,7 +146,7 @@ void pp1_funstuffs(struct atom_tree* atree) {
 	);
 }
 
-void pp2_funstuffs(struct atom_tree* atree) {
+inline static void pp2_funstuffs(struct atom_tree* atree) {
 }
 
 
@@ -155,7 +155,7 @@ int main(int argc, char** argv){
 	void* bios = NULL;
 	void* memfile = NULL;
 	long size;
-	if (getfile(argv[1], &memfile, &size)){
+	if (getfile(argv[1], &memfile, &size)) {
 		printf("no file\n");
 		return 1;
 	}

@@ -14,7 +14,7 @@
 #include "atomtree.h"
 #include "atui.h"
 
-atui_branch* atomtree_dt_populate_smc_dpm_info(
+inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_smc_dpm_info;
@@ -137,7 +137,7 @@ atui_branch* atomtree_dt_populate_smc_dpm_info(
 }
 
 
-atui_branch* atomtree_dt_populate_firmwareinfo(
+inline static atui_branch* atomtree_dt_populate_firmwareinfo(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_firmwareinfo;
@@ -199,7 +199,7 @@ atui_branch* atomtree_dt_populate_firmwareinfo(
 	return atui_firmwareinfo;
 }
 
-atui_branch* atomtree_dt_populate_lcd_info(
+inline static atui_branch* atomtree_dt_populate_lcd_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_lcd_info;
@@ -245,7 +245,7 @@ atui_branch* atomtree_dt_populate_lcd_info(
 }
 
 
-atui_branch* atomtree_dt_populate_smu_info(
+inline static atui_branch* atomtree_dt_populate_smu_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_smu_info;
@@ -307,7 +307,7 @@ atui_branch* atomtree_dt_populate_smu_info(
 
 
 
-atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
+inline static atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_fw_vram;
@@ -355,7 +355,7 @@ atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 }
 
 
-atui_branch* atomtree_dt_populate_gpio_pin_lut(
+inline static atui_branch* atomtree_dt_populate_gpio_pin_lut(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_gpio_pin_lut = NULL;
@@ -421,7 +421,7 @@ atui_branch* atomtree_dt_populate_gpio_pin_lut(
 	return atui_gpio_pin_lut;
 }
 
-atui_branch* atomtree_dt_populate_gfx_info(
+inline static atui_branch* atomtree_dt_populate_gfx_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_gfx_info = NULL;
@@ -529,7 +529,7 @@ atui_branch* atomtree_dt_populate_gfx_info(
 }
 
 
-atui_branch* atomtree_dt_populate_ppt(
+inline static atui_branch* atomtree_dt_populate_ppt(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_ppt;
@@ -657,7 +657,7 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	return atui_regblock;
 }
 
-static inline atui_branch* atomtree_populate_vram_info_v2_3(
+inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		struct atom_tree* atree, bool generate_atui) {
 
 	uint16_t i = 0;
@@ -805,7 +805,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_3(
 	return atui_vi;
 }
 
-static inline atui_branch* atomtree_populate_vram_info_v2_4(
+inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		struct atom_tree* atree, bool generate_atui) {
 
 	uint16_t i,j = 0;
@@ -977,7 +977,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_4(
 	return atui_vi;
 }
 
-static inline atui_branch* atomtree_populate_vram_info_v2_5(
+inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		struct atom_tree* atree, bool generate_atui) {
 
 	uint16_t i = 0;
@@ -1142,7 +1142,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_5(
 	return atui_vi;
 }
 
-static inline atui_branch* atomtree_populate_vram_info_v2_6(
+inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		struct atom_tree* atree, bool generate_atui) {
 
 	uint16_t i = 0;
@@ -1289,7 +1289,7 @@ static inline atui_branch* atomtree_populate_vram_info_v2_6(
 	return atui_vi;
 }
 
-static inline atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
+inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 		struct atom_tree* atree, bool generate_atui) {
 	uint16_t i = 0;
 	atui_branch* tmp_branch;
@@ -1438,7 +1438,7 @@ static inline atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 	return atui_vi;
 }
 
-static inline atui_branch* atomtree_dt_populate_vram_info(
+inline static atui_branch* atomtree_dt_populate_vram_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_vi;
@@ -1487,7 +1487,7 @@ static inline atui_branch* atomtree_dt_populate_vram_info(
 }
 
 
-atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
+inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_vo_info = NULL;
@@ -1593,7 +1593,7 @@ atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 }
 
 
-atui_branch* atomtree_dt_populate_voltageobject_info(
+inline static atui_branch* atomtree_dt_populate_voltageobject_info(
 		struct atom_tree* atree, bool generate_atui) {
 
 	atui_branch* atui_vo_info = NULL;
@@ -1638,7 +1638,7 @@ atui_branch* atomtree_dt_populate_voltageobject_info(
 	return atui_vo_info;
 }
 
-static inline atui_branch* atomtree_dt_populate_sw_datatables(
+inline static atui_branch* atomtree_dt_populate_sw_datatables(
 		struct atom_tree* atree, bool generate_atui) {
 
 	struct atomtree_master_datatable_v2_1* data_table = &(atree->data_table);
@@ -1717,7 +1717,7 @@ static inline atui_branch* atomtree_dt_populate_sw_datatables(
 	return NULL; // TODO unsure about what UI to do here
 }
 
-static inline atui_branch* atomtree_populate_datatables(
+inline static atui_branch* atomtree_populate_datatables(
 		struct atom_tree* atree, bool generate_atui) {
 	//TODO double check pointer math if possible; some tables might be relative
 	// to master_datatable.
@@ -1828,8 +1828,10 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 
 	// pointer math; void is byte aligned.
 	// we don't know where it is, but we can find out. Read ptr and use it.
-	atree->leaves = bios +
-		*(uint16_t*)(bios+OFFSET_TO_POINTER_TO_ATOM_ROM_HEADER);
+	atree->leaves = (
+		bios
+		+ *(uint16_t*)(bios+OFFSET_TO_POINTER_TO_ATOM_ROM_HEADER)
+	);
 
 	atree->protected_mode = bios + atree->leaves->protectedmodeoffset;
 	atree->config_filename = bios + atree->leaves->configfilenameoffset;
@@ -1878,10 +1880,12 @@ void* bios_fastforward_odd(void* memory, long size) { // every 1 byte
 			return (void*)bios;
 	return NULL;
 }
-inline enum atomtree_common_version get_ver(struct atom_common_table_header* header) {
+inline enum atomtree_common_version get_ver(
+		struct atom_common_table_header* header) {
 	return (header->format_revision * 100) + header->content_revision;
 }
-inline void set_ver(enum atomtree_common_version ver,
+inline void set_ver(
+		enum atomtree_common_version ver,
 		struct atom_common_table_header* header) {
 	header->format_revision = ver / 100;
 	header->content_revision = ver % 100;
