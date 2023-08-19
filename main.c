@@ -18,7 +18,7 @@ inline where possible
 */
 
 
-int getfile(char* f, void** bios, long* size){
+int16_t getfile(char* f, void** bios, long* size){
     FILE* tm = fopen(f, "r");
 	if (tm == NULL)
 		return 1;
@@ -42,35 +42,37 @@ void vi24_funstuffs(struct atom_tree* atree) {
 	l = (*regblk->umc_number_of_registers)*4;
 	for (i=0; i < regblk->umc_reg_setting_list_length ; i++) {
 		memclock = dblk[i]->block_id.memclockrange;
-		printf("memclockrange %2d: %4d %4X\n    ", i, memclock/100, (void*)dblk[i]->u32umc_reg_data - atree->bios);
-		for (j=0; j<l ; j++)
+		printf("memclockrange %2d: %4d %4X\n    ",
+			i, memclock/100, (void*)dblk[i]->u32umc_reg_data - atree->bios
+		);
+		for (j=0; j<l ; j++) {
 			printf("%02X", ((uint8_t*)dblk[i]->u32umc_reg_data)[j]);
+		}
 		printf("\n");
 	}
+	struct atom_vram_module_v10* vram_module = 
+		&(atree->data_table.vram_info.v2_4.leaves->vram_module[0]);
 	printf("\n\n");
 	printf("      5432109876543210\n");
-	printf("MR 1: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr1);
-	printf("MR 2: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr2);
-	printf("MR 7: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr7);
-	printf("MR10: %016b\n",
-		atree->data_table.vram_info.v2_4.leaves->vram_module[0].gddr6_mr10);
+	printf("MR 1: %016b\n", vram_module->gddr6_mr1);
+	printf("MR 2: %016b\n", vram_module->gddr6_mr2);
+	printf("MR 7: %016b\n", vram_module->gddr6_mr7);
+	printf("MR10: %016b\n", vram_module->gddr6_mr10);
 	printf("      5432109876543210\n");
+	printf("\n\n");
 
-	printf("\n\n");
-	char* pnstring = atree->data_table.vram_info.v2_4.leaves->vram_module[0].dram_pnstring;
+	char* pnstring = vram_module->dram_pnstring;
 	printf("pnstring:\"%s\"\n", pnstring);
-	for(i = 0; i < 40; i++)
+	for(i = 0; i < 40; i++) {
 		printf(" %d ", pnstring[i]);
+	}
 	printf("\n");
-	printf("refreshrate: %i\n", atree->data_table.vram_info.v2_4.leaves->vram_module[0].refreshrate);
+	printf("refreshrate: %i\n", vram_module->refreshrate);
 
 }
 
 void vi25_funstuffs(struct atom_tree* atree) {
-	int i=0;
+	uint8_t i=0;
 	struct atomtree_vram_info_header_v2_5* vi25 =
 		&(atree->data_table.vram_info.v2_5);
 	struct atom_gddr6_ac_timing_v2_5* vi25ac = &(vi25->gddr6_ac_timings)[0];
@@ -84,26 +86,20 @@ void vi25_funstuffs(struct atom_tree* atree) {
 		//i++;
 	}
 
+	struct atom_vram_module_v11* vram_module =
+		&(atree->data_table.vram_info.v2_5.leaves->vram_module[0]);
 	printf("\n\n");
 	printf("      5432109876543210\n");
-	printf("MR 0: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr0);
-	printf("MR 1: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr1);
-	printf("MR 2: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr2);
-	printf("MR 4: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr4);
+	printf("MR 0: %016b\n", vram_module->gddr6_mr0);
+	printf("MR 1: %016b\n", vram_module->gddr6_mr1);
+	printf("MR 2: %016b\n", vram_module->gddr6_mr2);
+	printf("MR 4: %016b\n", vram_module->gddr6_mr4);
 	printf("      5432109876543210\n");
-	printf("MR 7: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr7);
-	printf("MR 8: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr8);
-	printf("MR10: %016b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].gddr6_mr10);
+	printf("MR 7: %016b\n", vram_module->gddr6_mr7);
+	printf("MR 8: %016b\n", vram_module->gddr6_mr8);
+	printf("MR10: %016b\n", vram_module->gddr6_mr10);
 	printf("      5432109876543210\n");
-	printf("bank groups enable (bit 0): %08b\n",
-		atree->data_table.vram_info.v2_5.leaves->vram_module[0].vram_flags);
+	printf("bank groups enable (bit 0): %08b\n", vram_module->vram_flags);
 }
 
 void vi30_funstuffs(struct atom_tree* atree) {
@@ -113,7 +109,8 @@ void vi30_funstuffs(struct atom_tree* atree) {
 	struct atom_gddr6_ac_timing_v2_5* act = vi30->dram_info;
 	printf("freq %4d: RL %2d, WL %d, tREFI %4d, tCCDS %d\n",
 		act->u32umc_id_access.memclockrange/100,act->RL,act->WL,
-		act->tREFI, act->tCCDS);
+		act->tREFI, act->tCCDS
+	);
 }
 
 
@@ -122,9 +119,11 @@ void pp1_funstuffs(struct atom_tree* atree) {
 		atree->data_table.powerplayinfo.navi1;
 
 	printf("navi1 ppt: common: %d ; table_revision: %d\n",
-		atree->data_table.powerplayinfo.ver, navi1->table_revision);
+		atree->data_table.powerplayinfo.ver, navi1->table_revision
+	);
 	printf("table size: common: %d ; pp %d\n",
-		navi1->header.structuresize, navi1->table_size);
+		navi1->header.structuresize, navi1->table_size
+	);
 	printf("power limit:small: %d %d ; OD: %d %d\n",
 		navi1->small_power_limit1, navi1->small_power_limit2,
 		navi1->od_turbo_power_limit, navi1->od_power_save_power_limit
@@ -184,7 +183,8 @@ int main(int argc, char** argv){
 	printf("smu_info ver: %d\n", atree->data_table.smu_info.ver);
 	printf("lcd_info ver: %d\n", atree->data_table.lcd_info.ver);
 	printf("vram_usagebyfirmware ver: %d\n",
-		atree->data_table.vram_usagebyfirmware.ver);
+		atree->data_table.vram_usagebyfirmware.ver
+	);
 	printf("gfx_info ver: %d\n", atree->data_table.gfx_info.ver);
 	printf("atom pp ver: %d\n", atree->data_table.powerplayinfo.ver);
 	printf("vraminfo ver: %d\n", atree->data_table.vram_info.ver);
