@@ -74,14 +74,12 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	if (tree->auxiliary != NULL) {
 		submodels = tree->auxiliary;
 
-		if(submodels->leaves_model != NULL) {
+		if(submodels->leaves_model != NULL)
 			g_object_unref(submodels->leaves_model);
-		}
 
 		child_gobj_count = submodels->child_gobj_count;
-		for (i=0; i < child_gobj_count; i++) {
+		for (i=0; i < child_gobj_count; i++)
 			g_object_unref(submodels->child_gobj[i]);
-		}
 
 		free(submodels);
 	}
@@ -488,9 +486,8 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 				g_list_store_append(children, gobj_child);
 			}
 		} else {
-			for(i=0; i < branch_models->child_gobj_count; i++) {
+			for(i=0; i < branch_models->child_gobj_count; i++)
 				g_list_store_append(children, branch_models->child_gobj[i]);
-			}
 		}
 	}
 	return G_LIST_MODEL(children);

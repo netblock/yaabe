@@ -63,9 +63,8 @@ void vi24_funstuffs(struct atom_tree* atree) {
 
 	char* pnstring = vram_module->dram_pnstring;
 	printf("pnstring:\"%s\"\n", pnstring);
-	for(i = 0; i < 40; i++) {
+	for(i = 0; i < 40; i++)
 		printf(" %d ", pnstring[i]);
-	}
 	printf("\n");
 	printf("refreshrate: %i\n", vram_module->refreshrate);
 
