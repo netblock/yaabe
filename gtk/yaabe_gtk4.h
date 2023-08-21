@@ -3,8 +3,10 @@
 
 #include <gtk/gtk.h>
 
-
+struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out);
+void destroy_atomtree_with_gtk(struct atom_tree* atree);
 void atui_destroy_tree_with_gtk(atui_branch* tree);
-int yaabe_gtk(struct atom_tree* atree);
+
+int8_t yaabe_gtk(struct atom_tree** atree);
 
 #endif

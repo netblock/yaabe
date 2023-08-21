@@ -1822,6 +1822,9 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	struct atom_tree* atree = malloc(sizeof(struct atom_tree));
 	atree->dot = atree;
 	atree->bios = bios; //PIC code; going to be used as the '0' in a lot of places.
+	atree->biosfile = NULL;
+	atree->biosfile_size = 0;
+	
 
 	//TODO
 	//atree->bios_size = *(uint8_t*)(bios+BIOS_IMAGE_SIZE_OFFSET) * BIOS_IMAGE_SIZE_UNIT; //wrong

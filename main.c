@@ -223,9 +223,14 @@ int main(int argc, char** argv){
 				break;
 	}}
 
-	yaabe_gtk(atree);
-	atui_destroy_tree_with_gtk(atree->atui_root);
-	free(atree->bios);
-	free(atree);
+	struct atom_tree** ppat = &atree;
+	atui_branch* aroot = (*ppat)->atui_root;
+
+	yaabe_gtk(&atree);
+
+	destroy_atomtree_with_gtk(atree);
+	//struct atom_tree** for commons?
+	// make yaabe_gtk poop out new atom_tree?
+
 	return 0;
 }

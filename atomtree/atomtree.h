@@ -3,6 +3,7 @@
 
 #include "atomtree_common.h"
 #include "atomtree_data_tables.h"
+#include <gtk/gtk.h>
 
 //#include "atui.h"
 typedef struct _atui_branch atui_branch;
@@ -51,15 +52,16 @@ struct atom_tree {
 	struct atom_tree* dot;
 	void* dotdot;
 
-	void* parentfile; // to keep track of mallocs, if bios > parentfile.
-	long parentsize;
+	void* bios;
+	uint32_t bios_size;
+
+	GFile* biosfile;
+	int64_t biosfile_size;
 
 	struct atomtree_master_datatable_v2_1 data_table;
 	//struct atom_master_cmdtable_v2_1 cmd_table; // atom_master_list_of_command_functions_v2_1 TODO
 
 	struct atom_rom_header_v2_2* leaves;
-	void* bios;
-	uint32_t bios_size;
 	//bios date, etc?
 
 	//bios_parser2_construct populates Display Core stuff
