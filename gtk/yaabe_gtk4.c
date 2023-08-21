@@ -142,7 +142,8 @@ static void leaves_key_column_recycler(
 //bind data to the UI skeleton
 
 	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
-		gtk_list_item_get_child(list_item));
+		gtk_list_item_get_child(list_item)
+	);
 	GtkWidget* label = gtk_tree_expander_get_child(expander);
 
 	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
@@ -159,7 +160,8 @@ static void leaves_textbox_stray(
 //if the value wasn't applied with enter, sync the text back to the actual data
 //when keyboard leaves the textbox
 	GtkWidget* textbox = gtk_event_controller_get_widget(
-		GTK_EVENT_CONTROLLER(focus_sense));
+		GTK_EVENT_CONTROLLER(focus_sense)
+	);
 	atui_leaf* leaf = leaf_gptr;
 
 	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
@@ -230,11 +232,6 @@ static void leaves_val_column_cleaner(
 
 	GtkWidget* textbox = gtk_list_item_get_child(list_item);
 
-	//TODO: GtkText - unexpected blinking selection. Removing
-	// these don't fix the warning:
-	//gtk_editable_select_region(GTK_EDITABLE(textbox), 0, 0);
-	//gtk_editable_set_position(GTK_EDITABLE(textbox), 0);
-
 	g_signal_handlers_disconnect_matched(textbox, G_SIGNAL_MATCH_FUNC, 
 		0,0,NULL,  G_CALLBACK(leaves_val_column_textbox_apply),  NULL
 	);
@@ -268,7 +265,7 @@ static void atui_inline_pullin_gliststore(atui_leaf* parent, GListStore* list) {
 	for(i=0; i < num_children; i++) {
 		leaf = atui_children+i;
 
-		if ( (leaf->type & ATUI_NODISPLAY)==0 ) {
+		if ( 0 == (leaf->type & ATUI_NODISPLAY) ) {
 			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 			g_object_set_data(gobj_child, "leaf", leaf);
 			g_list_store_append(list, gobj_child);
@@ -333,8 +330,9 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d) {
 				child_leaves, num_children
 			);
 
-			uint16_t child_gobj_count =\
-				g_list_model_get_n_items(children_model);
+			uint16_t child_gobj_count = g_list_model_get_n_items(
+				children_model
+			);
 			alloc_leaf_cache(parent, child_gobj_count);
 			leaf_cache = parent->auxiliary;
 			for(i=0; i < child_gobj_count; i++) {
@@ -763,7 +761,8 @@ static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
 	gtk_box_append(GTK_BOX(button_pane_complex), tree_divider);
 	gtk_box_append(GTK_BOX(button_pane_complex), buttonboxes);
 	gtk_box_append(GTK_BOX(button_pane_complex),
-		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL)
+	);
 	
 
 	GtkWidget* window = gtk_application_window_new(gtkapp);
