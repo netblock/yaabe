@@ -112,11 +112,16 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	free(tree);
 
 }
-void destroy_atomtree_with_gtk(struct atom_tree* atree) {
+void destroy_atomtree_with_gtk(struct atom_tree* atree, bool free_bios) {
 	atui_destroy_tree_with_gtk(atree->atui_root);
-	free(atree->bios);
-	if (atree->biosfile)
-		g_object_unref(atree->biosfile);
+
+	if (free_bios) {
+		free(atree->bios);
+
+		if (atree->biosfile)
+			g_object_unref(atree->biosfile);
+	}
+
 	free(atree);
 }
 
@@ -656,7 +661,7 @@ static void filedialog_load_and_set_bios(
 		GtkSelectionModel* newmodel = atui_gtk_model(commons);
 		gtk_list_view_set_model(commons->branches_view, newmodel);
 
-		destroy_atomtree_with_gtk(oldtree);
+		destroy_atomtree_with_gtk(oldtree, true);
 		g_object_unref(newmodel);
 	}
 
@@ -699,6 +704,21 @@ static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 
 
 
+static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
+	yaabegtk_commons* commons = commonsptr;
+
+	struct atom_tree* old_tree = commons->atomtree_root;
+
+	struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
+	new_tree->biosfile = old_tree->biosfile;
+	new_tree->biosfile_size = old_tree->biosfile_size;
+	commons->atomtree_root = new_tree;
+
+	GtkSelectionModel* newmodel = atui_gtk_model(commons);
+	gtk_list_view_set_model(commons->branches_view, newmodel);
+
+	destroy_atomtree_with_gtk(old_tree, false);
+}
 
 
 inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
@@ -709,6 +729,10 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	);
 
 	GtkWidget* reload_button = gtk_button_new_with_label("Reload");
+	g_signal_connect(reload_button,
+		"clicked", G_CALLBACK(reload_button_reload_bios), commons
+	);
+	
 	GtkWidget* load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(load_buttons),
 		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL)

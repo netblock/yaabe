@@ -228,7 +228,7 @@ int main(int argc, char** argv){
 
 	yaabe_gtk(&atree);
 
-	destroy_atomtree_with_gtk(atree);
+	destroy_atomtree_with_gtk(atree, true);
 	//struct atom_tree** for commons?
 	// make yaabe_gtk poop out new atom_tree?
 
