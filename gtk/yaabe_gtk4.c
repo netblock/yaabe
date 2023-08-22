@@ -372,9 +372,9 @@ inline static void branchleaves_to_treemodel(atui_branch* branch) {
 }
 static void set_leaves_list(
 		GtkSelectionModel* model, guint position, guint n_items,
-		gpointer yaabe_commons) {
+		gpointer commonsptr) {
 
-	yaabegtk_commons* commons = yaabe_commons;
+	yaabegtk_commons* commons = commonsptr;
 
 	GtkTreeListRow* tree_list_item = gtk_single_selection_get_selected_item(
 		GTK_SINGLE_SELECTION(model)
@@ -632,10 +632,10 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 
 static void filedialog_load_and_set_bios(
 		GObject* gobj_filedialog, GAsyncResult* asyncfile,
-		gpointer yaabe_commons) {
+		gpointer commonsptr) {
 // AsyncReadyCallback
 
-	yaabegtk_commons* commons = yaabe_commons;
+	yaabegtk_commons* commons = commonsptr;
 	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 	
@@ -676,8 +676,8 @@ static void filedialog_load_and_set_bios(
 	hidden; when a file is set unhide it.
 	*/
 }
-static void load_button_open_bios(GtkWidget* button, gpointer yaabe_commons) {
-	yaabegtk_commons* commons = yaabe_commons;
+static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
+	yaabegtk_commons* commons = commonsptr;
 // compress this lot into a open_bios_dialog to use with a 
 //  g_signal_connect_swapped  ? Might not be necessary cause when else?
 
@@ -734,8 +734,8 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	return buttonboxes;
 }
 
-static void app_activate(GtkApplication* gtkapp, gpointer yaabe_commons) {
-	yaabegtk_commons* commons = yaabe_commons;
+static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
+	yaabegtk_commons* commons = commonsptr;
 
 	GtkSelectionModel* atui_model = atui_gtk_model(commons);
 	
