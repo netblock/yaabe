@@ -703,7 +703,6 @@ static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 }
 
 
-
 static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	yaabegtk_commons* commons = commonsptr;
 
@@ -717,9 +716,62 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	GtkSelectionModel* newmodel = atui_gtk_model(commons);
 	gtk_list_view_set_model(commons->branches_view, newmodel);
 
+	g_object_unref(newmodel);
 	destroy_atomtree_with_gtk(old_tree, false);
 }
 
+
+static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
+	yaabegtk_commons* commons = commonsptr;
+	GError* ferror = NULL;
+
+	
+
+
+	GIOStream* biostream = G_IO_STREAM(g_file_open_readwrite(
+		commons->atomtree_root->biosfile, NULL, &ferror
+	));
+	if (ferror)
+		goto ferr0;
+
+	GOutputStream* writestream = g_io_stream_get_output_stream(biostream);
+
+	g_output_stream_write_all(
+		writestream,  commons->atomtree_root->bios,
+		commons->atomtree_root->biosfile_size,  NULL,NULL,  &ferror
+	);
+	if (ferror)
+		goto ferr1;
+
+	g_output_stream_close(writestream, NULL, &ferror);
+	if (ferror)
+		goto ferr1;
+
+	g_io_stream_close(biostream, NULL, &ferror);
+	if (ferror)
+		goto ferr1;
+
+
+	g_object_unref(biostream);
+	return;
+	
+	ferr1:
+	g_object_unref(biostream);
+	ferr0:
+	GtkWindow* notify_window = GTK_WINDOW(gtk_application_window_new(
+		commons->yaabe_gtk
+	));
+	gtk_window_set_title(notify_window, "YAABE Save BIOS");
+	gtk_window_set_default_size(notify_window, 100,100);
+	gtk_window_set_child(notify_window,
+		gtk_label_new(ferror->message)
+	);
+	gtk_window_present(notify_window);
+
+	g_error_free(ferror);
+
+	return;
+}
 
 inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 
@@ -741,6 +793,9 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	gtk_box_append(GTK_BOX(load_buttons), reload_button);
 
 	GtkWidget* save_button = gtk_button_new_with_label("Save");
+	g_signal_connect(save_button,
+		"clicked", G_CALLBACK(save_button_same_file), commons
+	);
 	GtkWidget* saveas_button = gtk_button_new_with_label("Save As");
 	GtkWidget* save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
@@ -796,6 +851,7 @@ static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
 	
 	//gtk_widget_set_child_visible(tree_divider, false);
 	gtk_window_set_child(GTK_WINDOW(window), button_pane_complex);
+	
 
 	gtk_window_present(GTK_WINDOW(window)); //gtk4.10
 }
