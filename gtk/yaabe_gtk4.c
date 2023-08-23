@@ -118,17 +118,18 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 }
 void destroy_atomtree_with_gtk(struct atom_tree* atree, bool free_bios) {
 // free and unref
+	if (atree) {
+		atui_destroy_tree_with_gtk(atree->atui_root);
 
-	atui_destroy_tree_with_gtk(atree->atui_root);
+		if (free_bios) {
+			free(atree->bios);
 
-	if (free_bios) {
-		free(atree->bios);
+			if (atree->biosfile)
+				g_object_unref(atree->biosfile);
+		}
 
-		if (atree->biosfile)
-			g_object_unref(atree->biosfile);
+		free(atree);
 	}
-
-	free(atree);
 }
 
 
@@ -411,13 +412,20 @@ static void set_leaves_list(
 }
 
 inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
+	GtkSelectionModel* leaves_model = NULL;
 
-	atui_branch* root_branch = commons->atomtree_root->atui_root;
-	struct yaabe_gtkapp_model_cache* root_models = root_branch->auxiliary;
+	if (0) {
+	//if (commons->atomtree_root) {
+		//gtk_selection_model_select_item(newmodel, 0, true);
+		atui_branch* root_branch = commons->atomtree_root->atui_root;
+		branchleaves_to_treemodel(root_branch);
+
+		struct yaabe_gtkapp_model_cache* root_models = root_branch->auxiliary;
+		leaves_model = root_models->leaves_model;
+	}
 
 	// columnview abstract
-	branchleaves_to_treemodel(root_branch);
-	GtkWidget* leaves_list = gtk_column_view_new(root_models->leaves_model);
+	GtkWidget* leaves_list = gtk_column_view_new(leaves_model);
 	commons->leaves_view = GTK_COLUMN_VIEW(leaves_list);
 
 
@@ -523,11 +531,14 @@ inline static GtkSelectionModel* atui_gtk_model(yaabegtk_commons* commons) {
 	GtkSingleSelection* sel_model = gtk_single_selection_new(
 		G_LIST_MODEL(tlist_atui)
 	);
+	gtk_single_selection_set_autoselect(sel_model, false);
+	gtk_single_selection_set_can_unselect(sel_model, true);
+	gtk_selection_model_unselect_item(GTK_SELECTION_MODEL(sel_model), 0);
+	
 	// change the leaves pane's model based on the what is selected in brances
 	g_signal_connect(sel_model,
 		"selection-changed", G_CALLBACK(set_leaves_list), commons
 	);
-	gtk_single_selection_set_autoselect(sel_model, false);
 
 	return GTK_SELECTION_MODEL(sel_model);
 	// does not need to be unref'd if used with a new().
@@ -635,7 +646,7 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 		goto exit;
 	}
 
-	// g_object_ref(biosfile); // TODO why is this unnecessary?
+	g_object_ref(biosfile); // TODO why is this unnecessary?
 	atree->biosfile = biosfile;
 	atree->biosfile_size = filesize;
 
@@ -665,6 +676,7 @@ static void filedialog_load_and_set_bios(
 	if (ferror)
 		goto ferr;
 
+	g_object_unref(biosfile); // TODO why is there two refs from open_finish?
 	struct atom_tree* atree = atomtree_from_gfile(biosfile, &ferror);
 	g_object_unref(biosfile);
 	if (ferror)
@@ -676,6 +688,7 @@ static void filedialog_load_and_set_bios(
 		commons->atomtree_root = atree;
 		GtkSelectionModel* newmodel = atui_gtk_model(commons);
 		gtk_list_view_set_model(commons->branches_view, newmodel);
+		gtk_selection_model_select_item(newmodel, 0, true);
 
 		destroy_atomtree_with_gtk(oldtree, true);
 		g_object_unref(newmodel);
@@ -717,7 +730,7 @@ static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 	gtk_file_dialog_open(filer,
 		active_window, NULL, filedialog_load_and_set_bios, commons
 	);
-
+	g_object_unref(filer);
 }
 
 
@@ -725,26 +738,32 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
 	yaabegtk_commons* commons = commonsptr;
-
 	struct atom_tree* old_tree = commons->atomtree_root;
 
-	struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
-	new_tree->biosfile = old_tree->biosfile;
-	new_tree->biosfile_size = old_tree->biosfile_size;
-	commons->atomtree_root = new_tree;
+	if (old_tree) {
+		struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
+		new_tree->biosfile = old_tree->biosfile;
+		new_tree->biosfile_size = old_tree->biosfile_size;
+		commons->atomtree_root = new_tree;
 
-	GtkSelectionModel* newmodel = atui_gtk_model(commons);
-	gtk_list_view_set_model(commons->branches_view, newmodel);
+		GtkSelectionModel* newmodel = atui_gtk_model(commons);
+		gtk_list_view_set_model(commons->branches_view, newmodel);
+		gtk_selection_model_select_item(newmodel, 0, true);
 
-	g_object_unref(newmodel);
-	destroy_atomtree_with_gtk(old_tree, false);
+		g_object_unref(newmodel);
+		destroy_atomtree_with_gtk(old_tree, false);
+	}
 }
 
 
 static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
+// signal callback
+
 	yaabegtk_commons* commons = commonsptr;
 	GError* ferror = NULL;
-// signal callback
+
+	if (commons->atomtree_root == NULL)
+		return;
 
 	GIOStream* biostream = G_IO_STREAM(g_file_open_readwrite(
 		commons->atomtree_root->biosfile, NULL, &ferror
@@ -835,8 +854,9 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
 	yaabegtk_commons* commons = commonsptr;
 
-	GtkSelectionModel* atui_model = atui_gtk_model(commons);
-
+	GtkSelectionModel* atui_model = NULL;
+	 if (commons->atomtree_root)
+		atui_model = atui_gtk_model(commons);
 
 	GtkWidget* branches_pane = create_branches_pane(commons, atui_model);
 	GtkWidget* leaves_pane = create_leaves_pane(commons);
@@ -851,8 +871,13 @@ static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
 	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
+	if (commons->atomtree_root) {
+		gtk_selection_model_select_item(atui_model, 0, true);
+	} else {
+		//gtk_widget_set_visible(tree_divider, false);
+	}
 
-
+	// TODO https://docs.gtk.org/gtk4/class.BoxLayout.html
 	GtkWidget* button_pane_complex = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 	GtkWidget* buttonboxes = buttons_box(commons);
 	gtk_widget_set_vexpand(tree_divider, true);
@@ -868,6 +893,7 @@ static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
 	gtk_window_set_default_size(window, 800,500);
 	gtk_window_set_child(window, button_pane_complex);
 	gtk_window_present(window);
+
 }
 
 int8_t yaabe_gtk(struct atom_tree** atree) {

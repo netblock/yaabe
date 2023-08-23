@@ -18,7 +18,7 @@ inline static where possible
 */
 
 
-inline static int16_t getfile(char* f, void** bios, long* size){
+inline static int16_t getfile(char* f, void** bios, uint32_t* size){
     FILE* tm = fopen(f, "r");
 	if (tm == NULL)
 		return 1;
@@ -150,24 +150,7 @@ inline static void pp2_funstuffs(struct atom_tree* atree) {
 }
 
 
-int main(int argc, char** argv){
-	printf("\n\n");
-	void* bios = NULL;
-	void* memfile = NULL;
-	long size;
-	if (getfile(argv[1], &memfile, &size)) {
-		printf("no file\n");
-		return 1;
-	}
-	printf("%s: ",argv[1]);
-	bios = bios_fastforward(memfile, size);
-	printf("ffwd %d bytes to get to %X.\n", (bios-memfile), 0xAA55);
-	struct atom_tree* atree = atombios_parse(bios, true);
-	if (atree == NULL){
-		printf("bad atree\n");
-		return 1;
-	}
-
+inline static void funstuffs(struct atom_tree* atree) {
 	printf("master data ver: %d\n", atree->data_table.ver);
 	if (atree->data_table.multimedia_info) {
 		printf("multimedia_info ver: %d %d\n",
@@ -222,6 +205,34 @@ int main(int argc, char** argv){
 				//pp0_funstuffs(atree);
 				break;
 	}}
+
+}
+
+int main(int argc, char** argv){
+	printf("\n\n");
+	void* bios = NULL;
+	void* memfile = NULL;
+	uint32_t size = 0;
+	struct atom_tree* atree = NULL;
+
+	if (getfile(argv[1], &memfile, &size)) {
+		printf("no file\n");
+	} else {
+		printf("%s: ",argv[1]);
+		/*
+		bios = bios_fastforward(memfile, size);
+		printf("ffwd %d bytes to get to %X.\n", (bios-memfile), 0xAA55);
+		atree = atombios_parse(bios, true);
+		*/
+		GFile* biosfile = g_file_new_for_path(argv[1]);
+		atree = atomtree_from_gfile(biosfile, NULL);
+		g_object_unref(biosfile);
+		if (atree == NULL){
+			printf("bad atree\n");
+			return 1;
+		}
+		funstuffs(atree);
+	}
 
 	struct atom_tree** ppat = &atree;
 	atui_branch* aroot = (*ppat)->atui_root;
