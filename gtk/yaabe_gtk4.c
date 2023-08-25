@@ -661,6 +661,72 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 
 	return atree;
 }
+inline static void atomtree_save_to_gfile(
+		struct atom_tree* atree, GError** ferror_extern) {
+
+	GError* ferror = NULL;
+
+	GIOStream* biostream = G_IO_STREAM(g_file_open_readwrite(
+		atree->biosfile, NULL, &ferror
+	));
+	if (ferror)
+		goto ferr0;
+
+	GOutputStream* writestream = g_io_stream_get_output_stream(biostream);
+
+	g_output_stream_write_all(
+		writestream,  atree->bios,
+		atree->biosfile_size,  NULL,NULL,  &ferror
+	);
+	if (ferror)
+		goto ferr1;
+
+	g_output_stream_close(writestream, NULL, &ferror);
+	if (ferror)
+		goto ferr1;
+
+	g_io_stream_close(biostream, NULL, &ferror);
+	if (ferror)
+		goto ferr1;
+
+
+	ferr1:
+	g_object_unref(biostream);
+	ferr0:
+
+	if (ferror_extern) {
+		*ferror_extern = ferror;
+	} else {
+		g_error_free(ferror);
+	}
+
+	return;
+}
+
+
+
+inline static void filer_error_window(GError* ferror, const char* title) {
+
+	GtkEventController* escapeclose = gtk_shortcut_controller_new();
+	gtk_shortcut_controller_add_shortcut(
+		GTK_SHORTCUT_CONTROLLER(escapeclose),
+		gtk_shortcut_new(
+			gtk_shortcut_trigger_parse_string("Escape"),
+			gtk_named_action_new("window.close")
+		)
+	);
+
+	GtkWindow* notify_window = GTK_WINDOW(gtk_window_new());
+
+	gtk_widget_add_controller(GTK_WIDGET(notify_window), escapeclose);
+	gtk_window_set_title(notify_window, title);
+	gtk_window_set_default_size(notify_window, 100,100);
+	gtk_window_set_child(notify_window,
+		gtk_label_new(ferror->message)
+	);
+
+	gtk_window_present(notify_window);
+}
 
 static void filedialog_load_and_set_bios(
 		GObject* gobj_filedialog, GAsyncResult* asyncfile,
@@ -672,9 +738,7 @@ static void filedialog_load_and_set_bios(
 	GError* ferror = NULL;
 
 
-	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
-	if (ferror)
-		goto ferr;
+	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, NULL);
 
 	g_object_unref(biosfile); // TODO why is there two refs from open_finish?
 	struct atom_tree* atree = atomtree_from_gfile(biosfile, &ferror);
@@ -697,6 +761,7 @@ static void filedialog_load_and_set_bios(
 	return;
 
 	ferr:
+	filer_error_window(ferror, "YAABE Load BIOS");
 	g_error_free(ferror);
 	return;
 
@@ -740,7 +805,7 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	yaabegtk_commons* commons = commonsptr;
 	struct atom_tree* old_tree = commons->atomtree_root;
 
-	if (old_tree) {
+	if (old_tree) { // TODO hide button instead
 		struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
 		new_tree->biosfile = old_tree->biosfile;
 		new_tree->biosfile_size = old_tree->biosfile_size;
@@ -756,6 +821,7 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 }
 
 
+
 static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
@@ -765,50 +831,66 @@ static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
 	if (commons->atomtree_root == NULL)
 		return;
 
-	GIOStream* biostream = G_IO_STREAM(g_file_open_readwrite(
-		commons->atomtree_root->biosfile, NULL, &ferror
-	));
+	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
 	if (ferror)
-		goto ferr0;
+		goto ferr;
 
-	GOutputStream* writestream = g_io_stream_get_output_stream(biostream);
-
-	g_output_stream_write_all(
-		writestream,  commons->atomtree_root->bios,
-		commons->atomtree_root->biosfile_size,  NULL,NULL,  &ferror
-	);
-	if (ferror)
-		goto ferr1;
-
-	g_output_stream_close(writestream, NULL, &ferror);
-	if (ferror)
-		goto ferr1;
-
-	g_io_stream_close(biostream, NULL, &ferror);
-	if (ferror)
-		goto ferr1;
-
-
-	g_object_unref(biostream);
-	// TODO notify on success?
 	return;
 
-	ferr1:
-	g_object_unref(biostream);
-	ferr0:
-	GtkWindow* notify_window = GTK_WINDOW(gtk_application_window_new(
-		commons->yaabe_gtk
-	));
-	gtk_window_set_title(notify_window, "YAABE Save BIOS");
-	gtk_window_set_default_size(notify_window, 100,100);
-	gtk_window_set_child(notify_window,
-		gtk_label_new(ferror->message)
-	);
-	gtk_window_present(notify_window);
-
+	ferr:
+	filer_error_window(ferror, "YAABE Save BIOS");
 	g_error_free(ferror);
-
 	return;
+}
+
+static void filedialog_saveas_bios(
+		GObject* gobj_filedialog, GAsyncResult* asyncfile,
+		gpointer commonsptr) {
+// AsyncReadyCallback for the file dialog in the Save As button.
+
+	yaabegtk_commons* commons = commonsptr;
+	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
+	GError* ferror = NULL;
+
+	GFile* new_biosfile = gtk_file_dialog_save_finish(filer, asyncfile, NULL);
+
+	GFile* old_biosfile = commons->atomtree_root->biosfile;
+	commons->atomtree_root->biosfile = new_biosfile;
+	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
+	if (ferror) {
+		commons->atomtree_root->biosfile = old_biosfile;
+		g_object_unref(new_biosfile);
+		goto ferr;
+	}
+
+	g_object_unref(old_biosfile);
+	return;
+
+	ferr:
+	filer_error_window(ferror, "YAABE Save BIOS As");
+	g_error_free(ferror);
+	return;
+}
+static void saveas_button_name_bios(GtkWidget* button, gpointer commonsptr) {
+// signal callback
+// compress this lot into a open_bios_dialog to use with a
+//  g_signal_connect_swapped  ? Might not be necessary cause when else?
+
+	yaabegtk_commons* commons = commonsptr;
+
+	GtkFileDialog* filer = gtk_file_dialog_new();
+	GtkWindow* active_window = gtk_application_get_active_window(
+		commons->yaabe_gtk
+	);
+
+	GFile* working_dir = g_file_get_parent(commons->atomtree_root->biosfile);
+	gtk_file_dialog_set_initial_folder(filer, working_dir);
+	g_object_unref(working_dir);
+
+	gtk_file_dialog_save(filer,
+		active_window, NULL, filedialog_saveas_bios, commons
+	);
+	g_object_unref(filer);
 }
 
 inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
@@ -835,6 +917,9 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 		"clicked", G_CALLBACK(save_button_same_file), commons
 	);
 	GtkWidget* saveas_button = gtk_button_new_with_label("Save As");
+	g_signal_connect(saveas_button,
+		"clicked", G_CALLBACK(saveas_button_name_bios), commons
+	);
 	GtkWidget* save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
 	gtk_box_append(GTK_BOX(save_buttons), saveas_button);
