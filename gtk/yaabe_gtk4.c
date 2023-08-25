@@ -8,7 +8,7 @@
 #include <atui.h>
 #include <atomtree.h>
 
-
+static const char yaabe_name[] = "YAABE BIOS Editor";
 typedef struct yaabegtk_commons {
 	struct atom_tree* atomtree_root;
 	GtkApplication* yaabe_gtk;
@@ -669,14 +669,20 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 
 	GError* ferror = NULL;
-
-	GIOStream* biostream = G_IO_STREAM(g_file_open_readwrite(
-		atree->biosfile, NULL, &ferror
-	));
+	GIOStream* biosstream;
+	if (g_file_query_exists(atree->biosfile, NULL)) {
+		biosstream = G_IO_STREAM(g_file_open_readwrite(
+			atree->biosfile, NULL, &ferror
+		));
+	} else {
+		biosstream = G_IO_STREAM(g_file_create_readwrite(
+			atree->biosfile, G_FILE_CREATE_PRIVATE, NULL, &ferror
+		));
+	}
 	if (ferror)
 		goto ferr0;
 
-	GOutputStream* writestream = g_io_stream_get_output_stream(biostream);
+	GOutputStream* writestream = g_io_stream_get_output_stream(biosstream);
 
 	g_output_stream_write_all(
 		writestream,  atree->bios,
@@ -688,13 +694,13 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 	g_output_stream_close(writestream, NULL, &ferror);
 	if (ferror)
 		goto ferr1;
-	g_io_stream_close(biostream, NULL, &ferror);
+	g_io_stream_close(biosstream, NULL, &ferror);
 	if (ferror)
 		goto ferr1;
 
 
 	ferr1:
-	g_object_unref(biostream);
+	g_object_unref(biosstream);
 	ferr0:
 
 	if (ferror_out) {
@@ -706,7 +712,39 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 	return;
 }
 
+static void set_editor_titlebar(yaabegtk_commons* commons) {
+	const char print_format_file[] = "%s (%s)";
+	const char print_format_nofile[] = "%s";
 
+	char* filename;
+	uint16_t filename_length;
+	const char* formatstr;
+	if (commons->atomtree_root) {
+		filename = g_file_get_basename(commons->atomtree_root->biosfile);
+		filename_length = strlen(filename);
+		formatstr = print_format_file;
+	} else {
+		filename = NULL;
+		filename_length = 0;
+		formatstr = print_format_nofile;
+	}
+
+	char* window_title = malloc(
+		sizeof(yaabe_name)
+		+ filename_length
+		+ sizeof(print_format_file) // largest
+	);
+	sprintf(window_title, formatstr, yaabe_name, filename);
+
+	GtkWindow* editor_window = gtk_application_get_active_window(
+		commons->yaabe_gtk
+	);
+	gtk_window_set_title(editor_window, window_title);
+
+	free(window_title);
+	if (filename_length)
+		g_free(filename);
+}
 
 inline static void filer_error_window(GError* ferror, const char* title) {
 	GtkEventController* escapeclose = gtk_shortcut_controller_new();
@@ -759,13 +797,14 @@ static void filedialog_load_and_set_bios(
 
 		destroy_atomtree_with_gtk(oldtree, true);
 		g_object_unref(newmodel);
-	}
 
-	if  (gtk_widget_get_sensitive(commons->save_buttons) == false) {
-		gtk_widget_set_sensitive(commons->save_buttons, true);
-		gtk_widget_set_sensitive(commons->reload_button, true);
-	}
+		if  (gtk_widget_get_sensitive(commons->save_buttons) == false) {
+			gtk_widget_set_sensitive(commons->save_buttons, true);
+			gtk_widget_set_sensitive(commons->reload_button, true);
+		}
+		set_editor_titlebar(commons);
 
+	}
 	return;
 
 	ferr_msg:
@@ -866,7 +905,7 @@ static void filedialog_saveas_bios(
 		g_object_unref(new_biosfile);
 		goto ferr_msg;
 	}
-
+	set_editor_titlebar(commons);
 	g_object_unref(old_biosfile);
 	return;
 
@@ -988,7 +1027,7 @@ hidden; when a file is set unhide it.
 
 
 	GtkWindow* window = GTK_WINDOW(gtk_application_window_new(gtkapp));
-	gtk_window_set_title(window, "YAABE BIOS Editor");
+	set_editor_titlebar(commons);
 	gtk_window_set_default_size(window, 800,500);
 	gtk_window_set_child(window, button_pane_complex);
 	gtk_window_present(window);
@@ -998,7 +1037,6 @@ hidden; when a file is set unhide it.
 int8_t yaabe_gtk(struct atom_tree** atree) {
 	/* TODO  https://docs.gtk.org/gtk4/visual_index.html
 
-	set title bar to currently open file
 	path bar
 	changelog of what was changed before the save? feels hard to impement
 	menubar? of what?
@@ -1007,8 +1045,8 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 	extra columns like bit count, bios position, description.
 		User selectable. Reorderable
 	*/
-
-	//TODO malloc this? g_application_run() is the main loop.
+	// TODO better malloc'd?
+	//yaabegtk_commons* commons = calloc(1, sizeof(yaabegtk_commons)); // 0'd
 	yaabegtk_commons commons;
 	commons.atomtree_root = *atree;
 
@@ -1022,6 +1060,7 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 
 	*atree = commons.atomtree_root;
 	g_object_unref(commons.yaabe_gtk);
+	//free(commons);
 
 	return status;
 }
