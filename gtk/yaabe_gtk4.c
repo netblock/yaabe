@@ -713,6 +713,8 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 }
 
 static void set_editor_titlebar(yaabegtk_commons* commons) {
+// set the window name to the name of the currently-open bios.
+
 	const char print_format_file[] = "%s (%s)";
 	const char print_format_nofile[] = "%s";
 
@@ -745,8 +747,9 @@ static void set_editor_titlebar(yaabegtk_commons* commons) {
 	if (filename_length)
 		g_free(filename);
 }
-
 inline static void filer_error_window(GError* ferror, const char* title) {
+// simple error popup
+
 	GtkEventController* escapeclose = gtk_shortcut_controller_new();
 	gtk_shortcut_controller_add_shortcut(
 		GTK_SHORTCUT_CONTROLLER(escapeclose),
@@ -767,25 +770,15 @@ inline static void filer_error_window(GError* ferror, const char* title) {
 
 	gtk_window_present(notify_window);
 }
+inline static void yaabegtk_load_bios(
+		yaabegtk_commons* commons, GFile* biosfile, GError** ferror_out) {
+// processes necessary triggers for loading a bios, except final error handling
 
-static void filedialog_load_and_set_bios(
-		GObject* gobj_filedialog, GAsyncResult* asyncfile,
-		gpointer commonsptr) {
-// AsyncReadyCallback for the file dialog in the load button.
-
-	yaabegtk_commons* commons = commonsptr;
-	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 
-	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
-	if (ferror)
-		goto ferr_nomsg;
-
-	g_object_unref(biosfile); // TODO why's there two refs from open_finish?
 	struct atom_tree* atree = atomtree_from_gfile(biosfile, &ferror);
-	g_object_unref(biosfile);
 	if (ferror)
-		goto ferr_msg;
+		goto ferr;
 
 	if (atree) {
 		struct atom_tree* oldtree = commons->atomtree_root;
@@ -803,8 +796,36 @@ static void filedialog_load_and_set_bios(
 			gtk_widget_set_sensitive(commons->reload_button, true);
 		}
 		set_editor_titlebar(commons);
-
 	}
+
+	ferr:
+	if (ferror_out) {
+		*ferror_out = ferror;
+	} else {
+		g_error_free(ferror);
+	}
+	return;
+}
+
+
+static void filedialog_load_and_set_bios(
+		GObject* gobj_filedialog, GAsyncResult* asyncfile,
+		gpointer commonsptr) {
+// AsyncReadyCallback for the file dialog in the load button.
+
+	yaabegtk_commons* commons = commonsptr;
+	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
+	GError* ferror = NULL;
+
+	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
+	if (ferror)
+		goto ferr_nomsg;
+
+	g_object_unref(biosfile); // TODO why's there two refs from open_finish?
+	yaabegtk_load_bios(commons, biosfile, &ferror);
+	g_object_unref(biosfile);
+	if (ferror)
+		goto ferr_msg;
 	return;
 
 	ferr_msg:
@@ -984,6 +1005,31 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	return buttonboxes;
 }
 
+
+
+static gboolean dropped_file_open_bios(
+		GtkDropTarget* dropctrl, const GValue* value,  gdouble x,gdouble y,
+		gpointer commonsptr) {
+// load a bios from a drag-n'-drop
+// ???  https://gitlab.gnome.org/GNOME/gtk/-/issues/3755
+
+	yaabegtk_commons* commons = commonsptr;
+	GError* ferror = NULL;
+
+	if (G_VALUE_HOLDS(value, G_TYPE_FILE)) {
+		GFile* biosfile = g_value_get_object(value);
+		yaabegtk_load_bios(commonsptr, biosfile, &ferror);
+		if (ferror) {
+			filer_error_window(ferror, "YAABE Load dropped BIOS");
+			g_error_free(ferror);
+			return false;
+		}
+		return true;
+	}
+	return false;
+
+}
+
 static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
 /* TODO
 if there is no file set during bootup the branches-leaves panes need to be
@@ -1026,7 +1072,16 @@ hidden; when a file is set unhide it.
 	);
 
 
+	GtkDropTarget* dropfile = gtk_drop_target_new(G_TYPE_FILE, GDK_ACTION_COPY);
+	g_signal_connect(dropfile,
+		"drop", G_CALLBACK(dropped_file_open_bios), commons
+	);
+
 	GtkWindow* window = GTK_WINDOW(gtk_application_window_new(gtkapp));
+	gtk_widget_add_controller(
+		GTK_WIDGET(window), GTK_EVENT_CONTROLLER(dropfile)
+	);
+
 	set_editor_titlebar(commons);
 	gtk_window_set_default_size(window, 800,500);
 	gtk_window_set_child(window, button_pane_complex);
