@@ -15,6 +15,11 @@ typedef struct yaabegtk_commons {
 	GtkApplication* yaabe_gtk;
 	GtkColumnView* leaves_view; // so branches can set leaves
 	GtkListView* branches_view; // so we can set the bios during GTK
+
+	// for gtk_widget_set_sensitive() -- don't allow when no bios is loaded
+	GtkWidget* save_buttons;
+	GtkWidget* reload_button;
+	
 } yaabegtk_commons;
 
 struct yaabe_gtkapp_model_cache { // to cache
@@ -738,13 +743,15 @@ static void filedialog_load_and_set_bios(
 	GError* ferror = NULL;
 
 
-	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, NULL);
+	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
+	if (ferror)
+		goto ferr_nomsg;
 
-	g_object_unref(biosfile); // TODO why is there two refs from open_finish?
+	g_object_unref(biosfile); // TODO why's there two refs from open_finish?
 	struct atom_tree* atree = atomtree_from_gfile(biosfile, &ferror);
 	g_object_unref(biosfile);
 	if (ferror)
-		goto ferr;
+		goto ferr_msg;
 
 	if (atree) {
 		struct atom_tree* oldtree = commons->atomtree_root;
@@ -758,10 +765,17 @@ static void filedialog_load_and_set_bios(
 		g_object_unref(newmodel);
 	}
 
+	if  (gtk_widget_get_sensitive(commons->save_buttons) == false) {
+		gtk_widget_set_sensitive(commons->save_buttons, true);
+		gtk_widget_set_sensitive(commons->reload_button, true);
+	}
+
 	return;
 
-	ferr:
+	ferr_msg:
 	filer_error_window(ferror, "YAABE Load BIOS");
+	ferr_nomsg:
+
 	g_error_free(ferror);
 	return;
 
@@ -787,7 +801,12 @@ static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 		commons->yaabe_gtk
 	);
 
-	GFile* working_dir = g_file_new_for_path(".");
+	GFile* working_dir;
+	if (commons->atomtree_root) {
+		working_dir = g_file_get_parent(commons->atomtree_root->biosfile);
+	}else {
+		working_dir = g_file_new_for_path(".");
+	}
 	//TODO https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome/-/issues/84
 	gtk_file_dialog_set_initial_folder(filer, working_dir);
 	g_object_unref(working_dir);
@@ -805,19 +824,17 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	yaabegtk_commons* commons = commonsptr;
 	struct atom_tree* old_tree = commons->atomtree_root;
 
-	if (old_tree) { // TODO hide button instead
-		struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
-		new_tree->biosfile = old_tree->biosfile;
-		new_tree->biosfile_size = old_tree->biosfile_size;
-		commons->atomtree_root = new_tree;
+	struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
+	new_tree->biosfile = old_tree->biosfile;
+	new_tree->biosfile_size = old_tree->biosfile_size;
+	commons->atomtree_root = new_tree;
 
-		GtkSelectionModel* newmodel = atui_gtk_model(commons);
-		gtk_list_view_set_model(commons->branches_view, newmodel);
-		gtk_selection_model_select_item(newmodel, 0, true);
+	GtkSelectionModel* newmodel = atui_gtk_model(commons);
+	gtk_list_view_set_model(commons->branches_view, newmodel);
+	gtk_selection_model_select_item(newmodel, 0, true);
 
-		g_object_unref(newmodel);
-		destroy_atomtree_with_gtk(old_tree, false);
-	}
+	g_object_unref(newmodel);
+	destroy_atomtree_with_gtk(old_tree, false);
 }
 
 
@@ -827,9 +844,6 @@ static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
 
 	yaabegtk_commons* commons = commonsptr;
 	GError* ferror = NULL;
-
-	if (commons->atomtree_root == NULL)
-		return;
 
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
 	if (ferror)
@@ -852,22 +866,29 @@ static void filedialog_saveas_bios(
 	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 
-	GFile* new_biosfile = gtk_file_dialog_save_finish(filer, asyncfile, NULL);
+	GFile* new_biosfile = gtk_file_dialog_save_finish(
+		filer, asyncfile, &ferror
+	);
+	if (ferror)
+		goto ferr_nomsg;
+	
 
+	g_object_unref(new_biosfile); // TODO why's there two refs from open_finish?
 	GFile* old_biosfile = commons->atomtree_root->biosfile;
 	commons->atomtree_root->biosfile = new_biosfile;
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
 	if (ferror) {
 		commons->atomtree_root->biosfile = old_biosfile;
 		g_object_unref(new_biosfile);
-		goto ferr;
+		goto ferr_msg;
 	}
 
 	g_object_unref(old_biosfile);
 	return;
 
-	ferr:
+	ferr_msg:
 	filer_error_window(ferror, "YAABE Save BIOS As");
+	ferr_nomsg:
 	g_error_free(ferror);
 	return;
 }
@@ -912,6 +933,7 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	gtk_box_append(GTK_BOX(load_buttons), load_button);
 	gtk_box_append(GTK_BOX(load_buttons), reload_button);
 
+
 	GtkWidget* save_button = gtk_button_new_with_label("Save");
 	g_signal_connect(save_button,
 		"clicked", G_CALLBACK(save_button_same_file), commons
@@ -926,12 +948,21 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 
 
 	GtkWidget* cf_button = gtk_button_new_with_label("Function Tables");
+	gtk_widget_set_sensitive(cf_button, false);
 
 	GtkWidget* buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
 	gtk_box_append(GTK_BOX(buttonboxes), load_buttons);
 
 	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
+
+
+	commons->reload_button = reload_button;
+	commons->save_buttons = save_buttons;
+	if (commons->atomtree_root == NULL) {
+		gtk_widget_set_sensitive(save_buttons, false);
+		gtk_widget_set_sensitive(reload_button, false);
+	}
 
 	return buttonboxes;
 }
