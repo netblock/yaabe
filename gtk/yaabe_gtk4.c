@@ -11,8 +11,8 @@
 
 typedef struct yaabegtk_commons {
 	struct atom_tree* atomtree_root;
-
 	GtkApplication* yaabe_gtk;
+
 	GtkColumnView* leaves_view; // so branches can set leaves
 	GtkListView* branches_view; // so we can set the bios during GTK
 
@@ -616,7 +616,6 @@ inline static GtkWidget* create_branches_pane(
 
 struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 // geneate the atom_tree and atui from a GIO File
-// TODO pass error so it can be handled with a popup?
 
 	GError* ferror = NULL;
 	struct atom_tree* atree = NULL;
@@ -651,12 +650,13 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 		goto exit;
 	}
 
-	g_object_ref(biosfile); // TODO why is this unnecessary?
+	g_object_ref(biosfile);
 	atree->biosfile = biosfile;
 	atree->biosfile_size = filesize;
 
+	g_input_stream_close(G_INPUT_STREAM(readstream), NULL, &ferror);
+
 	exit:
-	//g_input_stream_close(G_INPUT_STREAM(readstream), NULL, &ferror);
 	g_object_unref(readstream);
 	if (ferror_out) {
 		*ferror_out = ferror;
@@ -666,8 +666,7 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 
 	return atree;
 }
-inline static void atomtree_save_to_gfile(
-		struct atom_tree* atree, GError** ferror_extern) {
+void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 
 	GError* ferror = NULL;
 
@@ -689,7 +688,6 @@ inline static void atomtree_save_to_gfile(
 	g_output_stream_close(writestream, NULL, &ferror);
 	if (ferror)
 		goto ferr1;
-
 	g_io_stream_close(biostream, NULL, &ferror);
 	if (ferror)
 		goto ferr1;
@@ -699,8 +697,8 @@ inline static void atomtree_save_to_gfile(
 	g_object_unref(biostream);
 	ferr0:
 
-	if (ferror_extern) {
-		*ferror_extern = ferror;
+	if (ferror_out) {
+		*ferror_out = ferror;
 	} else {
 		g_error_free(ferror);
 	}
@@ -711,7 +709,6 @@ inline static void atomtree_save_to_gfile(
 
 
 inline static void filer_error_window(GError* ferror, const char* title) {
-
 	GtkEventController* escapeclose = gtk_shortcut_controller_new();
 	gtk_shortcut_controller_add_shortcut(
 		GTK_SHORTCUT_CONTROLLER(escapeclose),
@@ -741,7 +738,6 @@ static void filedialog_load_and_set_bios(
 	yaabegtk_commons* commons = commonsptr;
 	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
-
 
 	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
 	if (ferror)
@@ -775,24 +771,12 @@ static void filedialog_load_and_set_bios(
 	ferr_msg:
 	filer_error_window(ferror, "YAABE Load BIOS");
 	ferr_nomsg:
-
 	g_error_free(ferror);
 	return;
 
-	/*
-	https://stackoverflow.com/questions/63901592/creating-a-gio-gfile-or-ginputstream-from-stdfile
-
-	filedialogto gfile -> gfile to atomtree
-	args to gfile -> gfile to atomtree
-
-	if there is no file set during bootup the branches-leaves panes need to be
-	hidden; when a file is set unhide it.
-	*/
 }
 static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
-// compress this lot into a open_bios_dialog to use with a
-//  g_signal_connect_swapped  ? Might not be necessary cause when else?
 
 	yaabegtk_commons* commons = commonsptr;
 
@@ -894,8 +878,6 @@ static void filedialog_saveas_bios(
 }
 static void saveas_button_name_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
-// compress this lot into a open_bios_dialog to use with a
-//  g_signal_connect_swapped  ? Might not be necessary cause when else?
 
 	yaabegtk_commons* commons = commonsptr;
 
@@ -920,12 +902,10 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	g_signal_connect(load_button,
 		"clicked", G_CALLBACK(load_button_open_bios), commons
 	);
-
 	GtkWidget* reload_button = gtk_button_new_with_label("Reload");
 	g_signal_connect(reload_button,
 		"clicked", G_CALLBACK(reload_button_reload_bios), commons
 	);
-
 	GtkWidget* load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(load_buttons),
 		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL)
@@ -952,10 +932,8 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 
 	GtkWidget* buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
 	gtk_box_append(GTK_BOX(buttonboxes), load_buttons);
-
 	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
-
 
 	commons->reload_button = reload_button;
 	commons->save_buttons = save_buttons;
@@ -968,6 +946,11 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 }
 
 static void app_activate(GtkApplication* gtkapp, gpointer commonsptr) {
+/* TODO
+if there is no file set during bootup the branches-leaves panes need to be
+hidden; when a file is set unhide it.
+*/
+
 	yaabegtk_commons* commons = commonsptr;
 
 	GtkSelectionModel* atui_model = NULL;
