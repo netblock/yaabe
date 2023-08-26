@@ -417,20 +417,9 @@ static void set_leaves_list(
 }
 
 inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
-	GtkSelectionModel* leaves_model = NULL;
-
-	if (0) {
-	//if (commons->atomtree_root) {
-		//gtk_selection_model_select_item(newmodel, 0, true);
-		atui_branch* root_branch = commons->atomtree_root->atui_root;
-		branchleaves_to_treemodel(root_branch);
-
-		struct yaabe_gtkapp_model_cache* root_models = root_branch->auxiliary;
-		leaves_model = root_models->leaves_model;
-	}
 
 	// columnview abstract
-	GtkWidget* leaves_list = gtk_column_view_new(leaves_model);
+	GtkWidget* leaves_list = gtk_column_view_new(NULL);
 	commons->leaves_view = GTK_COLUMN_VIEW(leaves_list);
 
 
