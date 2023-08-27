@@ -657,6 +657,8 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 }
 void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 
+	atomtree_bios_checksum(atree);
+
 	GError* ferror = NULL;
 	GIOStream* biosstream;
 	if (g_file_query_exists(atree->biosfile, NULL)) {

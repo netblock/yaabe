@@ -1813,6 +1813,22 @@ inline static atui_branch* atomtree_populate_datatables(
 	return atui_dt;
 }
 
+void atomtree_bios_checksum(struct atom_tree* atree) {
+#define OFFSET_ROM_CHECKSUM 0x21
+	uint8_t* bios = atree->bios;
+	uint32_t bios_size = (
+		(bios[OFFSET_TO_ATOM_ROM_IMAGE_SIZE])
+		* BIOS_IMAGE_SIZE_UNIT 
+	);
+	uint8_t offset = 0;
+
+	for (uint32_t i=0; i < bios_size; i++)
+		offset += bios[i];
+
+	if (offset) // test unnecessary.
+		bios[OFFSET_ROM_CHECKSUM] -= offset;
+}
+
 
 struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	if (*(uint16_t*)bios != 0xAA55)
@@ -1824,9 +1840,9 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	atree->bios = bios; //PIC code; going to be used as the '0' in a lot of places.
 	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
-	
 
-	//TODO
+	uint8_t* bios_size_part = bios + OFFSET_TO_ATOM_ROM_IMAGE_SIZE;
+	uint32_t bios_size = (*bios_size_part) * BIOS_IMAGE_SIZE_UNIT;
 	//atree->bios_size = *(uint8_t*)(bios+BIOS_IMAGE_SIZE_OFFSET) * BIOS_IMAGE_SIZE_UNIT; //wrong
 
 	// pointer math; void is byte aligned.

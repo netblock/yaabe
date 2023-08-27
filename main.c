@@ -209,10 +209,8 @@ inline static void funstuffs(struct atom_tree* atree) {
 }
 
 int main(int argc, char** argv){
-	printf("\n\n");
 	struct atom_tree* atree = NULL;
 
-	//if (getfile(argv[1], &memfile, &size)) {
 	if (argc > 1) {
 		printf("%s:\n",argv[1]);
 		/*
@@ -233,17 +231,14 @@ int main(int argc, char** argv){
 			return 1;
 		}
 		g_object_unref(biosfile);
+		atomtree_bios_checksum(atree);
+
 		funstuffs(atree);
 	}
-
-	struct atom_tree** ppat = &atree;
-	atui_branch* aroot = (*ppat)->atui_root;
 
 	yaabe_gtk(&atree);
 
 	destroy_atomtree_with_gtk(atree, true);
-	//struct atom_tree** for commons?
-	// make yaabe_gtk poop out new atom_tree?
 
 	return 0;
 }

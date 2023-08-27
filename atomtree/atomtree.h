@@ -22,6 +22,7 @@ typedef struct _atui_branch atui_branch;
 #define ATOM_ROM_MAGIC      "ATOM"
 #define ATOM_ROM_MAGIC_PTR  4
 
+void atomtree_bios_checksum(struct atom_tree* atree);
 struct atom_tree* atombios_parse(void* bios, bool generate_atui);
 void* bios_fastforward(void* memory, long size);
 void* bios_fastforward_odd(void* memory, long size);
@@ -53,7 +54,6 @@ struct atom_tree {
 	void* dotdot;
 
 	void* bios;
-	uint32_t bios_size;
 
 	GFile* biosfile;
 	int64_t biosfile_size;
@@ -77,14 +77,36 @@ struct atom_tree {
 	atui_branch* atui_root;
 };
 
-struct atombios_image { // TODO: is this worth a bother?
+struct atombios_image {
 	uint16_t rom_signature; // little endian: AA55
-	uint8_t image_size; //0x2;
-	uint8_t rsvd0[46];
+	uint8_t image_size; //0x02
+	uint8_t rsvd0[44];
+	uint8_t number_of_strings; // 0x2F
 	uint8_t amd_vbios_sig[10]; // 0x30; " 761295520" There is a space.
-	uint8_t rsvd1[22];
-	uint8_t vbios_date[14]; //0x30
-	//...
+	uint8_t rsvd1[14];
+	uint16_t bios_header; // 0x48
+	uint8_t rsvd2[6];
+	uint8_t bios_date[15]; // 0x50
+	uint8_t rsvd3[15];
+	uint16_t atombios_string_offset; // 0x6E 
+	uint8_t rsvd4[16];
+	uint8_t part_number_offset; // 0x80 ; only use if number_of_strings == 0
+	uint8_t rsvd5[19];
+	uint8_t asic_bus_mem_type_offset; // 0x94; I think it's a 20-byte str
+	// any more?
 };
+
+/*
+struct atombios_image* img = atree->bios;
+uint8_t* strs = atree->bios + img->atombios_string_offset;
+uint8_t i = 0;
+while(*strs) {														  
+	printf("%s\n", strs);
+	strs += (strlen(strs) + 1);
+	i++;
+}
+// it seems it's always i == 13
+
+*/
 
 #endif
