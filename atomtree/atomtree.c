@@ -486,7 +486,7 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
 						NULL,gfx_info->table_header,  1,NULL
 					);
-					sprintf(atui_gfx_info->name, "atom_gfx_info_v2_6 (header)");
+					sprintf(atui_gfx_info->name, "atom_gfx_info_v2_6 (forced)");
 					atui_gfx_info->num_child_branches = 1;
 					atui_gfx_info->child_branches[0] = ATUI_MAKE_BRANCH(
 						atom_gfx_info_v2_5,
@@ -1803,8 +1803,9 @@ inline static atui_branch* atomtree_populate_datatables(
 			atui_smu_info, atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info,
 			atui_voltageobject_info
 		};
-		const uint8_t num_child_branches = 
-			sizeof(child_branches)/sizeof(atui_branch*);
+		const uint8_t num_child_branches = (
+			sizeof(child_branches) / sizeof(atui_branch*)
+		);
 
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
 			data_table,data_table->leaves,  num_child_branches,child_branches
