@@ -27,42 +27,58 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui);
 void* bios_fastforward(void* memory, long size);
 void* bios_fastforward_odd(void* memory, long size);
 
-struct atomtree_rom_header_v2_2
-{
-  struct atom_common_table_header table_header;
-  uint8_t  atom_bios_string[4];        //enum atom_string_def atom_bios_string;     //Signature to distinguish between Atombios and non-atombios,
-  uint16_t bios_segment_address;
-  uint16_t protectedmodeoffset;
-  uint16_t configfilenameoffset;
-  uint16_t crc_block_offset; // TODO
-  uint16_t vbios_bootupmessageoffset;
-  uint16_t int10_offset;
-  uint16_t pcibusdevinitcode;
-  uint16_t iobaseaddress;
-  uint16_t subsystem_vendor_id;
-  uint16_t subsystem_id;
-  uint16_t pci_info_offset;
-  uint16_t masterhwfunction_offset;      //Offest for SW to get all command function offsets, Don't change the position
-  uint16_t masterdatatable_offset;       //Offest for SW to get all data table offsets, Don't change the position
-  uint16_t reserved;
-  uint32_t pspdirtableoffset;
-};
+struct atombios_image {
+	uint16_t atombios_magic; // little endian: 0xAA55
+	uint8_t image_size; //0x02
+	uint8_t rsvd0[30];
+	uint8_t checksum; // 0x21
+	uint8_t rsvd1[13];
+	uint8_t number_of_strings; // 0x2F
+	uint8_t atomati_magic[11]; // 0x30; " 761295520" There is a space.
+	uint8_t rsvd2[13];
+	uint16_t bios_header; // 0x48
+	uint8_t rsvd3[6];
+	uint8_t bios_date[15]; // 0x50
+	uint8_t rsvd4[15];
+	uint16_t atombios_strings_offset; // 0x6E 
+	uint8_t rsvd5[16];
+	uint8_t part_number_offset; // 0x80 ; only use if number_of_strings == 0
+	uint8_t rsvd6[19];
+	uint8_t asic_bus_mem_type_offset; // 0x94; I think it's a 20-byte str
+	// any more?
+/*
+struct atombios_image* img = atree->bios;
+uint8_t* strs = atree->bios + img->atombios_strings_offset;
+uint8_t i = 0;
+while(*strs) {														  
+	printf("%s\n", strs);
+	strs += (strlen(strs) + 1);
+	i++;
+}
+// it seems it's always i == 13
 
+*/
+};
 
 struct atom_tree {
 	struct atom_tree* dot;
 	void* dotdot;
 
-	void* bios;
-
 	GFile* biosfile;
 	int64_t biosfile_size;
+
+	union {
+		void* bios;
+		struct atombios_image* image;
+	};
+	struct atom_rom_header_v2_2* leaves;
+
+	//bios date, etc?
+	uint32_t bios_image_size;
 
 	struct atomtree_master_datatable_v2_1 data_table;
 	//struct atom_master_cmdtable_v2_1 cmd_table; // atom_master_list_of_command_functions_v2_1 TODO
 
-	struct atom_rom_header_v2_2* leaves;
-	//bios date, etc?
 
 	//bios_parser2_construct populates Display Core stuff
 	//https://docs.kernel.org/gpu/amdgpu/display/index.html
@@ -77,38 +93,5 @@ struct atom_tree {
 	atui_branch* atui_root;
 };
 
-struct atombios_image {
-	uint16_t rom_signature; // little endian: AA55
-	uint8_t image_size; //0x02
-	uint8_t rsvd0[44];
-	uint8_t checksum; // 0x21
-	uint8_t rsvd1[13];
-	uint8_t number_of_strings; // 0x2F
-	uint8_t amd_vbios_sig[10]; // 0x30; " 761295520" There is a space.
-	uint8_t rsvd2[14];
-	uint16_t bios_header; // 0x48
-	uint8_t rsvd3[6];
-	uint8_t bios_date[15]; // 0x50
-	uint8_t rsvd4[15];
-	uint16_t atombios_string_offset; // 0x6E 
-	uint8_t rsvd5[16];
-	uint8_t part_number_offset; // 0x80 ; only use if number_of_strings == 0
-	uint8_t rsvd6[19];
-	uint8_t asic_bus_mem_type_offset; // 0x94; I think it's a 20-byte str
-	// any more?
-};
-
-/*
-struct atombios_image* img = atree->bios;
-uint8_t* strs = atree->bios + img->atombios_string_offset;
-uint8_t i = 0;
-while(*strs) {														  
-	printf("%s\n", strs);
-	strs += (strlen(strs) + 1);
-	i++;
-}
-// it seems it's always i == 13
-
-*/
 
 #endif

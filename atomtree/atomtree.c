@@ -1815,43 +1815,42 @@ inline static atui_branch* atomtree_populate_datatables(
 }
 
 void atomtree_bios_checksum(struct atom_tree* atree) {
-#define OFFSET_ROM_CHECKSUM 0x21
 	uint8_t* bios = atree->bios;
-	uint32_t bios_size = (
-		(bios[OFFSET_TO_ATOM_ROM_IMAGE_SIZE])
-		* BIOS_IMAGE_SIZE_UNIT 
-	);
+	uint32_t bios_size = atree->bios_image_size;
 	uint8_t offset = 0;
 
 	for (uint32_t i=0; i < bios_size; i++)
 		offset += bios[i];
 
-	if (offset) // test unnecessary.
-		bios[OFFSET_ROM_CHECKSUM] -= offset;
+	if (offset) // this test is unnecessary
+		atree->image->checksum -= offset;
 }
 
 
 struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
-	if (*(uint16_t*)bios != 0xAA55)
+	struct atombios_image* image = bios;
+
+	//TODO is anyone bothering to check all the magic signs?
+	if (image->atombios_magic != ATOM_BIOS_MAGIC)
 		return NULL;
-		//TODO is anyone bothering to check all the magic signs?
+	if (strcmp(ATOM_ATI_MAGIC, image->atomati_magic))
+		return NULL;
 
 	struct atom_tree* atree = malloc(sizeof(struct atom_tree));
+
 	atree->dot = atree;
-	atree->bios = bios; //PIC code; going to be used as the '0' in a lot of places.
+	atree->dotdot = NULL;
+
 	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
 
-	uint8_t* bios_size_part = bios + OFFSET_TO_ATOM_ROM_IMAGE_SIZE;
-	uint32_t bios_size = (*bios_size_part) * BIOS_IMAGE_SIZE_UNIT;
-	//atree->bios_size = *(uint8_t*)(bios+BIOS_IMAGE_SIZE_OFFSET) * BIOS_IMAGE_SIZE_UNIT; //wrong
+	atree->bios = bios; //PIC code; going to be used as the '0' in places.
+	atree->leaves = bios + image->bios_header;
 
-	// pointer math; void is byte aligned.
-	// we don't know where it is, but we can find out. Read ptr and use it.
-	atree->leaves = (
-		bios
-		+ *(uint16_t*)(bios+OFFSET_TO_POINTER_TO_ATOM_ROM_HEADER)
-	);
+	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
+
+	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
+	// atomtree_populate_commandtables(atree); // TODO
 
 	atree->protected_mode = bios + atree->leaves->protectedmodeoffset;
 	atree->config_filename = bios + atree->leaves->configfilenameoffset;
@@ -1861,15 +1860,12 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 	// any more between?
 	atree->psp_dir_table = bios + atree->leaves->pspdirtableoffset;
 
-	// atomtree_populate_commandtables(atree); // TODO
-
-
-	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
 
 	if (generate_atui) {
 		atui_branch* child_branches[] = {atui_dt};
-		const uint8_t num_child_branches =
-			sizeof(child_branches)/sizeof(atui_branch*);
+		const uint8_t num_child_branches = (
+			sizeof(child_branches) / sizeof(atui_branch*)
+		);
 
 		atree->atui_root = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
 			atree,atree->leaves,  num_child_branches,child_branches
