@@ -37,6 +37,7 @@ enum i18n_languages {
 	LANG_TOTALLANGS
 };
 
+// TODO https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static const void* ATUI_NULL = NULL; // to satisfy _Generics handling pointers.
 enum atui_type {
 	ATUI_NAN = 0b000,
