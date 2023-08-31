@@ -313,6 +313,8 @@ That is, bitfield population, and enum and inline association.
 
 // common guts and functions for Fancy.
 
+
+// TODO these generics suck.
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
 	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
 	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
@@ -665,7 +667,7 @@ def ppatui_nloop_helper(max_entries=64, args="a,b,c,d", rec_depth=1):
 		print(s % (i+numargs, i))
 
 
-generic waterfall loop for functions with 4 unique arguments and 1 common.
+generic waterfall loop for functions with 1 unique argument and 1 common.
 
 The recurse/recusive depth is about the preprocessor "painting blue". That is,
 after the waterfall loop has been used, it becomes undefined within that

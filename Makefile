@@ -2,45 +2,51 @@ CC=cc
 WIN_CC=x86_64-w64-mingw32-gcc
 # TODO https://www.gtk.org/docs/installations/windows/
 
+YAABE_DEBUG_CFLAGS = -g -Og
+YAABE_RELEASE_CFLAGS = -O2 -flto=auto
+
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS :=  $(GTK_LDFLAGS)
 YAABE_CFLAGS = -std=c2x -Iamd -Iatomtree -Igtk $(GTK_CFLAGS)
 
-YAABE_DEBUG_CFLAGS = -g -Og
-YAABE_RELEASE_CFLAGS = -O2 -flto=jobserver
 
 
 SRCS = $(wildcard *.c atom/*.c atomtree/*.c gtk/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
 DIRS = out/atom/.keep out/atomtree/.keep out/gtk/.keep
 
+.PHONY: all
 all: debug
 
+.PHONY: debug
 debug: CFLAGS := $(YAABE_CFLAGS) $(YAABE_DEBUG_CFLAGS)
 debug: LDFLAGS := $(YAABE_LDFLAGS) $(YAABE_DEBUG_LDFLAGS)
 debug: yaabe
 
+.PHONY: release
 release: CFLAGS := $(YAABE_CFLAGS) $(YAABE_RELEASE_CFLAGS)
 release: LDFLAGS := $(YAABE_LDFLAGS) $(YAABE_RELEASE_LDFLAGS)
-release: strip #yaabe
+release: yaabe
+	strip -s yaabe
 
+.PHONY: windows
 windows: CC := $(WIN_CC)
 windows: release
 
-strip: yaabe
-	strip -s $<
-
+.PHONY: yaabe
 yaabe: $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS) $(CFLAGS)
 
 out/%.o: %.c dirs
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+.PHONY: dirs
 dirs: $(DIRS)
 $(DIRS):
 	mkdir -p $(@D)	
 	touch $@
 
+.PHONY: clean
 clean:
 	rm -rf yaabe out
