@@ -316,8 +316,13 @@ That is, bitfield population, and enum and inline association.
 
 // TODO these generics suck.
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
-	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64, \
-	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64, \
+	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64,\
+	uint8_t:8, uint16_t:16, uint32_t:32, uint64_t:64,\
+\
+	int8_t*:8, int16_t*:16, int32_t*:32, int64_t*:64,\
+	int8_t:8, int16_t:16, int32_t:32, int64_t:64,\
+\
+	char: 8, char*: 8,\
 	default:0\
 )
 

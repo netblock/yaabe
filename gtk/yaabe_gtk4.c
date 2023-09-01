@@ -181,9 +181,13 @@ static void leaves_textbox_stray(
 	);
 	atui_leaf* leaf = leaf_gptr;
 
-	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
-	atui_get_to_text(leaf, str_buff);
-	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
+	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	stack_buff[0] = '\0';
+	char* buff = stack_buff;
+	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
+	if (has_mallocd)
+		free(buff);
 }
 static void leaves_val_column_textbox_apply(
 		GtkEditable* textbox, gpointer leaf_gptr) {
@@ -193,9 +197,13 @@ static void leaves_val_column_textbox_apply(
 
 	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 
-	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
-	atui_get_to_text(leaf, str_buff);
-	gtk_editable_set_text(textbox, str_buff);
+	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	stack_buff[0] = '\0';
+	char* buff = stack_buff;
+	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	gtk_editable_set_text(textbox, buff);
+	if (has_mallocd)
+		free(buff);
 }
 
 
@@ -224,9 +232,13 @@ static void leaves_val_column_recycler(
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
-	char str_buff[ATUI_LEAVES_STR_BUFFER] = "\0";
-	atui_get_to_text(leaf, str_buff);
-	gtk_editable_set_text(GTK_EDITABLE(textbox), str_buff);
+	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	stack_buff[0] = '\0';
+	char* buff = stack_buff;
+	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
+	if (has_mallocd)
+		free(buff);
 
 	g_signal_connect(textbox,
 		"activate", G_CALLBACK(leaves_val_column_textbox_apply), leaf

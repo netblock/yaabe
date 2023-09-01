@@ -4,6 +4,7 @@ AtomTree iterable interface for UIs.
 
 #include "atui.h"
 #include <stdio.h>
+#include <math.h>
 
 
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
@@ -43,54 +44,168 @@ uint64_t strtoll_2(const char* str) {
 
 
 
-int atui_set_from_text(atui_leaf* leaf, const char* buffer) {
+uint8_t atui_set_from_text(atui_leaf* leaf, const char* text) {
 	//set the value of the leaf based on input text. Currently only support for
 	// numbers (including bitfields) and strings.
 
-	int err = 0;
+	const uint8_t bases[] = {0, 10, 16, 8, 2};
 
-	if(leaf->type & ATUI_ANY) {
-		atui_leaf_set_val(leaf, strtoll_2(buffer));
+	uint8_t err = 0;
+	uint16_t i=0,j = 0;
+	char buffer[65];
+
+	uint8_t array_size = leaf->array_size;
+
+
+	if (leaf->type & ATUI_ARRAY) {
+		uint8_t radix = leaf->type & ATUI_ANY;
+		uint8_t base = bases[radix];
+		uint8_t num_digits = ceil( // round up because it's gonna be like x.9999
+			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
+			/ log(base)
+		);
+		buffer[num_digits] = '\0';
+		while(text[j] == ' ') // cut off leading spaces
+			j++;
+		switch (leaf->total_bits) {
+			case 8:
+				for(; i < leaf->array_size; i++) {
+					memcpy(buffer, text+j, num_digits);
+					leaf->u8[i] = (uint8_t)strtoll(buffer, NULL, base);
+					j += num_digits;
+					if (text[j] == ' ') 
+						j++;
+				}
+				break;
+			case 16:
+				for(; i < leaf->array_size; i++) {
+					memcpy(buffer, text+j, num_digits);
+					leaf->u16[i] = (uint16_t)strtoll(buffer, NULL, base);
+					j += num_digits;
+					if (text[j] == ' ')
+						j++;
+				}
+				break;
+			case 32:
+				for(; i < leaf->array_size; i++) {
+					memcpy(buffer, text+j, num_digits);
+					leaf->u32[i] = (uint32_t)strtoll(buffer, NULL, base);
+					j += num_digits;
+					if (text[j] == ' ')
+						j++;
+				}
+				break;
+			case 64:
+				for(; i < leaf->array_size; i++) {
+					memcpy(buffer, text+j, num_digits);
+					leaf->u64[i] = (uint64_t)strtoll(buffer, NULL, base);
+					j += num_digits;
+					if (text[j] == ' ')
+						j++;
+				}
+				break;
+			default:
+				return 1;
+		}
+
+	} else if(leaf->type & ATUI_ANY) {
+		atui_leaf_set_val(leaf, strtoll_2(text));
 
 	} else if (leaf->type & ATUI_STRING) {
-		uint8_t size = leaf->array_size;
-		uint8_t i;
-		for(i=0; i<size; i++)
-		   leaf->u8[i] = buffer[i];
+		for(; i < array_size; i++)
+		   leaf->u8[i] = text[i];
 		//leaf->u8[i-1] = '\0';
 	} else {
 		err = 1;
 	}
 	return err;
 }
-int atui_get_to_text(atui_leaf* leaf, char* buffer) {
+uint8_t atui_get_to_text(atui_leaf* leaf, char** buffer_ptr) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
-	int err = 0;
 
-	if(leaf->type & ATUI_ANY) {
-		uint64_t val = atui_leaf_get_val(leaf);
-		if ((leaf->type&ATUI_ANY) == ATUI_DEC) {
-			sprintf(buffer, "%u", val);
-		} else if ((leaf->type&ATUI_ANY) == ATUI_HEX) {
-			sprintf(buffer, "0x%X", val);
-		} else if ((leaf->type&ATUI_ANY) == ATUI_BIN) {
-			uint8_t numbits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-			//sprintf adds the \0 at the end.
-			char format[10] = "0b%0"; //prefix
-			sprintf(format+4, "%02ub", numbits); //middle, suffix.
-			sprintf(buffer, format, val);
+	uint8_t has_malloced = 0;
+	uint16_t malloc_size = 0;
+	uint16_t i=0,j=0;
+	char* buffer = *buffer_ptr;
+
+	// NAN DEC HEX OCT BIN
+	const char* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+	const char* suffixes[] = {"", "u", "X", "o", "b"};
+	const uint8_t bases[] = {0, 10, 16, 8, 2};
+	const char* metaformat = "%s%u%s"; // amogus
+	char format[8];
+
+
+	uint8_t radix = leaf->type & ATUI_ANY;
+	uint8_t num_digits;
+	if (radix == ATUI_HEX) {
+		num_digits = leaf->total_bits/4;
+	} else if (radix == ATUI_BIN) {
+		num_digits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+	} else {
+		num_digits = 0;
+	}
+
+	if (leaf->type & ATUI_ARRAY) {
+		num_digits = ceil( // round up because it's gonna be like x.9999
+			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
+			/ log(bases[radix])
+		);
+
+		sprintf(format, "%s%u%s ", "%0", num_digits, suffixes[radix]);
+		num_digits += 1; // 1 for the space in between segments.
+
+		malloc_size = (num_digits * leaf->array_size) + 1;
+		if (malloc_size > ATUI_LEAVES_STR_BUFFER) {
+			buffer = malloc(malloc_size);
+			buffer[0] = '\0';
+			*buffer_ptr = buffer;
+			has_malloced = 1;
 		}
+		switch (leaf->total_bits) {
+			case 8:
+				for(; i < leaf->array_size; i++) {
+					sprintf(buffer+j, format,  leaf->u8[i]);
+					j += num_digits;
+				}
+				break;
+			case 16:
+				for(; i < leaf->array_size; i++) {
+					sprintf(buffer+j, format,  leaf->u16[i]);
+					j += num_digits;
+				}
+				break;
+			case 32:
+				for(; i < leaf->array_size; i++) {
+					sprintf(buffer+j, format,  leaf->u32[i]);
+					j += num_digits;
+				}
+				break;
+			case 64:
+				for(; i < leaf->array_size; i++) {
+					sprintf(buffer+j, format,  leaf->u64[i]);
+					j += num_digits;
+				}
+				break;
+			default:
+				return has_malloced;
+		}
+		buffer[j-1] = '\0'; // eat the final space
 
+	} else if (radix) {
+		sprintf(format, metaformat,
+			prefixes[radix], num_digits, suffixes[radix]
+		);
+		sprintf(buffer, format, atui_leaf_get_val(leaf));
 	} else if (leaf->type & ATUI_STRING) {
-		uint8_t i = leaf->array_size;
+		i = leaf->array_size;
 		buffer[i] = '\0'; // for strings
 		while (i--)
 			buffer[i] = leaf->u8[i];
-	} else {
-		err = 1;
 	}
-	return err;
+
+	return has_malloced;
 }
 
 
