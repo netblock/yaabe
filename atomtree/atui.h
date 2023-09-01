@@ -122,8 +122,6 @@ struct  _atui_branch {
 
 // reccomended buffer size for the upcomming text functions
 #define ATUI_LEAVES_STR_BUFFER 70
-// 2304 atom_fusion_system_info_v4's reserved ;  (bits/4 + 1)*length
-#define ATUI_LEAVES_STR_BUFFER_EXTENDED 2304
 
 //set the value from a string or array of 8-bit
 uint8_t atui_set_from_text(atui_leaf* leaf, const char* buffer);
