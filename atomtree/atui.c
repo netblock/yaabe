@@ -3519,7 +3519,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, "reserved"))
 	),
 	(bios->dram_pnstring, dram_pnstring,
-		(ATUI_HEX, ATUI_ARRAY),
+		(ATUI_NAN, ATUI_STRING),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
