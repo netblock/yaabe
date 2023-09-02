@@ -313,6 +313,8 @@ That is, bitfield population, and enum and inline association.
 
 // common guts and functions for Fancy.
 
+#define _PPATUI_UNPACK1(to_depack)  _PPATUI_UNPACK0 to_depack
+#define _PPATUI_UNPACK0(...) __VA_ARGS__
 
 // TODO these generics suck.
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var), \
@@ -343,9 +345,9 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
 #define _PPATUI_FANCY_NOARRAY .array_size=0,
 
-//fancydata is textually packed in () and this unpacks it
-#define _PPATUI_FANCYDATA_UNPACK(todepack) _PPATUI_FANCYDATA_UNPACK2 todepack
-#define _PPATUI_FANCYDATA_UNPACK2(...) __VA_ARGS__
+#define _PPATUI_FANCY_METALEAF \
+	_PPATUI_FANCY_NOBITFIELD_HARD _PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOARRAY
+
 
 // TODO handle desdat (description data)
 #define _PPATUI_FANCY_INIT(biosvar, var, namestr, desdat, radix, fancytype) \
@@ -411,7 +413,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_NOENUM \
 	}, \
 	_PPATUI_BITFIELD_LEAVES(\
-		(biosvar, var), _PPATUI_FANCYDATA_UNPACK(bitfielddata)\
+		(biosvar, var), _PPATUI_UNPACK1(bitfielddata)\
 	)
 // close parent and start on inbred children.
 // ('inbred' because because the bitfiled children also direct children to the
@@ -419,7 +421,7 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPA_BFLEAF(biosvarvar, bfleaf)\
 	_PPA_BFLEAF_HELPER1(\
-		_PPATUI_FANCYDATA_UNPACK(biosvarvar), _PPATUI_FANCYDATA_UNPACK(bfleaf)\
+		_PPATUI_UNPACK1(biosvarvar), _PPATUI_UNPACK1(bfleaf)\
 	)
 #define _PPA_BFLEAF_HELPER1(...) _PPA_BFLEAF_HELPER2(__VA_ARGS__)
 //TODO handle description
@@ -444,17 +446,17 @@ That is, bitfield population, and enum and inline association.
 		biosvar, var, name, desdat, radix, fancytype, inlinebranch) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.val=NULL, \
-	_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
-	_PPATUI_FANCY_NOARRAY },
+	_PPATUI_FANCY_METALEAF \
+	},
 
 
 // go through the leaves, find the ATUI_INLINERs, and gather their branches
 #define _PPATUI_INBRANCH(m, leafdata) \
-	_PPATUI_INBRANCH_HELPER1(_PPATUI_LEAF_UNPACK leafdata)
+	_PPATUI_INBRANCH_HELPER1(_PPATUI_UNPACK0 leafdata)
 #define _PPATUI_INBRANCH_HELPER1(...)\
 	_PPATUI_INBRANCH_HELPER2(__VA_ARGS__)
 #define _PPATUI_INBRANCH_HELPER2(var, name, displaydata, descrdata)\
-	_PPATUI_INBRANCH_HELPER3(var, _PPATUI_LEAF_UNPACK displaydata)
+	_PPATUI_INBRANCH_HELPER3(var, _PPATUI_UNPACK0 displaydata)
 #define _PPATUI_INBRANCH_HELPER3(...)\
 	_PPATUI_INBRANCH_HELPER4(__VA_ARGS__)
 #define _PPATUI_INBRANCH_HELPER4(var, radix, fancytype, ...)\
@@ -482,22 +484,18 @@ That is, bitfield population, and enum and inline association.
 		.name=#namestr, .origname=#namestr, .varname=#var, \
 		.description=NULL, \
 		.type=(radix | fancytype), .val=NULL, .total_bits=0, .auxiliary=NULL, \
-		_PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOBITFIELD_HARD \
-		_PPATUI_FANCY_NOARRAY\
+		_PPATUI_FANCY_METALEAF \
 	},
-
-// TODO consolidate this unpack func with others like this
-#define _PPATUI_LEAF_UNPACK(...) __VA_ARGS__
 
 // the unpack the leaf, and its displaydata from their respective parentheses.
 // the variadic passthrough like _PPATUI_LEAF_HELPER1 executes the unpack.
 #define _PPATUI_LEAF(bios, leafdata)\
-	_PPATUI_LEAF_HELPER1(bios, _PPATUI_LEAF_UNPACK leafdata)
+	_PPATUI_LEAF_HELPER1(bios, _PPATUI_UNPACK0 leafdata)
 #define _PPATUI_LEAF_HELPER1(...)\
 	_PPATUI_LEAF_HELPER2(__VA_ARGS__)
 #define _PPATUI_LEAF_HELPER2(bios, var, name, displaydata, descrdata)\
 	_PPATUI_LEAF_HELPER3(\
-		bios, var, name, descrdata, _PPATUI_LEAF_UNPACK displaydata\
+		bios, var, name, descrdata, _PPATUI_UNPACK0 displaydata\
 	)
 #define _PPATUI_LEAF_HELPER3(...)\
 	_PPATUI_LEAF_HELPER4(__VA_ARGS__)
@@ -517,11 +515,11 @@ That is, bitfield population, and enum and inline association.
 
 // go through the primary funcify leaves and find the ATUI_DINARRAY
 #define _PPATUI_DYNAR_SERVICE(job, leafdata)\
-	_PPATUI_DYNAR_SVCHELPER1(job, _PPATUI_LEAF_UNPACK leafdata)
+	_PPATUI_DYNAR_SVCHELPER1(job, _PPATUI_UNPACK0 leafdata)
 #define _PPATUI_DYNAR_SVCHELPER1(...)\
 	_PPATUI_DYNAR_SVCHELPER2(__VA_ARGS__)
 #define _PPATUI_DYNAR_SVCHELPER2(job, var, name, displaydata, desdat)\
-	_PPATUI_DYNAR_SVCHELPER3(job, _PPATUI_LEAF_UNPACK displaydata)
+	_PPATUI_DYNAR_SVCHELPER3(job, _PPATUI_UNPACK0 displaydata)
 #define _PPATUI_DYNAR_SVCHELPER3(...)\
 	_PPATUI_DYNAR_SVCHELPER4(__VA_ARGS__)
 #define _PPATUI_DYNAR_SVCHELPER4(job, radix, fancytype, ...)\
@@ -540,13 +538,13 @@ That is, bitfield population, and enum and inline association.
 //Also makes start and dynsize relative to the atomtree.
 #define _PPATUI_DYNARR_UNPACK(patternleaf, start_pointer, dynsize_var) \
 	_PPATUI_DYNARR_UNPACK_HELPER1(\
-		 start_pointer, dynsize_var, _PPATUI_LEAF_UNPACK patternleaf\
+		 start_pointer, dynsize_var, _PPATUI_UNPACK0 patternleaf\
 	)
 #define _PPATUI_DYNARR_UNPACK_HELPER1(...)\
 	_PPATUI_DYNARR_UNPACK_HELPER2(__VA_ARGS__)
 #define _PPATUI_DYNARR_UNPACK_HELPER2(sp,dv, var, name, dispdata, descrdata)\
 	_PPATUI_DYNARR_UNPACK_HELPER3(\
-		sp, dv, var, name, descrdata, _PPATUI_LEAF_UNPACK dispdata\
+		sp, dv, var, name, descrdata, _PPATUI_UNPACK0 dispdata\
 	)
 #define _PPATUI_DYNARR_UNPACK_HELPER3(...)\
 	_PPATUI_DYNARR_UNPACK_HELPER4(__VA_ARGS__)
@@ -605,7 +603,7 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_BITFIELD(start,dynsize, bitfields)\
 	{\
 		.numleaves= 1+ _ATUI_BITFIELD_NUMLEAVES(\
-			_PPATUI_FANCYDATA_UNPACK(bitfields)),\
+			_PPATUI_UNPACK1(bitfields)),\
 		.dynarray_length=dynsize, .array_start=start,\
 		.element_size=sizeof(start[0]), .inl_func=NULL\
 	},
