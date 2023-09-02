@@ -142,7 +142,7 @@ void destroy_atomtree_with_gtk(struct atom_tree* atree, bool free_bios) {
 
 
 
-static void leaves_key_column_spawner(
+static void leaves_label_column_spawner(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 //setup to spawn a UI skeleton
 
@@ -154,7 +154,7 @@ static void leaves_key_column_spawner(
 
 	gtk_list_item_set_child(list_item, expander);
 }
-static void leaves_key_column_recycler(
+static void leaves_name_column_recycler(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 //bind data to the UI skeleton
 
@@ -170,6 +170,43 @@ static void leaves_key_column_recycler(
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
+}
+static void leaves_offset_column_recycler(
+		GtkListItemFactory* factory, GtkListItem* list_item,
+		gpointer commonsptr) {
+//bind data to the UI skeleton
+
+	yaabegtk_commons* commons = commonsptr;
+
+	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item)
+	);
+	GtkWidget* label = gtk_tree_expander_get_child(expander);
+
+	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
+	g_object_unref(gobj_leaf);
+
+	char buffer[18];
+	if (leaf->type & (ATUI_ANY | ATUI_STRING|ATUI_ARRAY|ATUI_BITFIELD)) {
+		if (leaf->type & ATUI_BITCHILD) {
+			sprintf(buffer, "[%u:%u]",
+				leaf->bitfield_hi, leaf->bitfield_lo
+			);
+		} else {
+			uint32_t start = leaf->val - commons->atomtree_root->bios;
+			uint32_t end = (
+				start
+				+ ((leaf->total_bits/8) * (leaf->array_size)) 
+				- 1
+			);
+			sprintf(buffer, "[%05X - %05X]", start, end);
+		}
+	} else {
+		buffer[0] = '\0';
+	}
+	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
 
 static void leaves_textbox_stray(
@@ -439,16 +476,18 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
 
+
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory,
-		"setup", G_CALLBACK(leaves_key_column_spawner), NULL
+		"setup", G_CALLBACK(leaves_label_column_spawner), NULL
 	);
 	g_signal_connect(factory,
-		"bind", G_CALLBACK(leaves_key_column_recycler), NULL
+		"bind", G_CALLBACK(leaves_name_column_recycler), NULL
 	);
 	column = gtk_column_view_column_new("names", factory);
 	gtk_column_view_append_column(GTK_COLUMN_VIEW(leaves_list), column);
 	g_object_unref(column);
+
 
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory,
@@ -465,11 +504,22 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 	g_object_unref(column);
 
 
+	factory = gtk_signal_list_item_factory_new();
+	g_signal_connect(factory,
+		"setup", G_CALLBACK(leaves_label_column_spawner), NULL
+	);
+	g_signal_connect(factory,
+		"bind", G_CALLBACK(leaves_offset_column_recycler), commons
+	);
+	column = gtk_column_view_column_new("BIOS offset", factory);
+	gtk_column_view_append_column(GTK_COLUMN_VIEW(leaves_list), column);
+	g_object_unref(column);
+
+
 	GtkWidget* scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(
 		GTK_SCROLLED_WINDOW(scrolledlist), leaves_list
 	);
-
 	GtkWidget* frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 

@@ -52,11 +52,12 @@ enum atui_type {
 	ATUI_NONE     = 1<<5, //TODO depricate
 	ATUI_NOFANCY  = 1<<5,
 	ATUI_BITFIELD = 1<<6,
-	ATUI_ENUM     = 1<<7,  // see also PPATUI_FUNCIFY()
-	ATUI_STRING   = 1<<8,  // meant for human-readable text
-	ATUI_ARRAY    = 1<<9,  // no technical difference from string
-	ATUI_INLINE   = 1<<10, // pull in leaves from other tables
-	ATUI_DYNARRAY = 1<<11, // for runtime array lengths
+	ATUI_BITCHILD = 1<<7,
+	ATUI_ENUM     = 1<<8,  // see also PPATUI_FUNCIFY()
+	ATUI_STRING   = 1<<9,  // meant for human-readable text
+	ATUI_ARRAY    = 1<<10, // no technical difference from string
+	ATUI_INLINE   = 1<<11, // pull in leaves from other tables
+	ATUI_DYNARRAY = 1<<12, // for runtime array lengths
 };
 
 typedef struct _atui_branch atui_branch;

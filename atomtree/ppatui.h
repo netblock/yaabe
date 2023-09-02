@@ -354,6 +354,7 @@ That is, bitfield population, and enum and inline association.
 		.description=NULL,\
 		.type=(radix | fancytype), .total_bits=_PPATUI_LEAF_BITNESS(biosvar),\
 		.val=&(biosvar), .auxiliary=NULL, .num_child_leaves=0,\
+		.array_size=1,
 
 // Fancy common end
 
@@ -364,7 +365,8 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_NOFANCY(\
 		biosvar, var, name, desdat, radix, fancytype, ...) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
-	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM },
+	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM \
+	},
 
 
 
@@ -375,7 +377,8 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.enum_options=_atui_enum_##enumname, \
 	.num_enum_opts=sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum), \
-	_PPATUI_FANCY_NOBITFIELD(biosvar) },
+	_PPATUI_FANCY_NOBITFIELD(biosvar) \
+	},
 
 
 
@@ -391,7 +394,8 @@ That is, bitfield population, and enum and inline association.
 		biosvar, var, name, desdat, radix, fancytype, ...) \
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.array_size = sizeof(biosvar)/sizeof(biosvar[0]), \
-	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM },
+	_PPATUI_FANCY_NOBITFIELD(biosvar) _PPATUI_FANCY_NOENUM \
+	},
 
 
 
@@ -404,7 +408,8 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_INIT(biosvar, var, name, desdat, radix, fancytype) \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0, \
 	.num_child_leaves=_ATUI_BITFIELD_NUMLEAVES bitfielddata, \
-	_PPATUI_FANCY_NOARRAY  _PPATUI_FANCY_NOENUM }, \
+	_PPATUI_FANCY_NOENUM \
+	}, \
 	_PPATUI_BITFIELD_LEAVES(\
 		(biosvar, var), _PPATUI_FANCYDATA_UNPACK(bitfielddata)\
 	)
@@ -423,11 +428,11 @@ That is, bitfield population, and enum and inline association.
 		bfname, bit_end, bit_start, radix, descrdata) \
 	{\
 		.name=#bfname, .origname=#bfname, .varname=#var,\
-		.description=NULL, .type=radix, .val=&(biosvar), \
+		.description=NULL, .type=(radix|ATUI_BITCHILD), .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_child_leaves=0, \
-		_PPATUI_FANCY_NOARRAY .auxiliary=NULL, \
+		.array_size=1, .auxiliary=NULL, \
 	},
 
 
