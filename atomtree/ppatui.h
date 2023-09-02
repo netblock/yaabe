@@ -1,19 +1,12 @@
 /*
 AtomTree iterable interface for UIs.
 
-TODO explain how to add add tables
+Here be preprocessor dragons
 
-Here be preprocessor dragons:
-ATUI, specifically atui.c is intended to as human-readable as possible,
-absrtracting away the programatic consequences of allocation and setup.
-This means that ATUI's allocater/instanciator functions have a lot of
-that can be figured out at compile time.
+For main API use, see atui.h
+For ATUI_FUNCIFY headers see atui_includes.h
 
-vim replace patterns that help copypaste structs from atombios.h:
-'<,'>s|struct |ATUI_FUNCIFY(|g
-'<,'>s|.*uint[0-9]*_t[ ,^I]*|^I|g
-'<,'>s|;.*|,|g
-'<,'>s|,\n},|\r)|g
+ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 */
 
 #ifndef PPATUI_H

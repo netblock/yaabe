@@ -1,20 +1,13 @@
 /*
-    while(tree->max_branch_count--)
-AtomTree iterable interface for UIs.
-
-TODO explain how to add add tables
-
-Here be preprocessor dragons:
 ATUI, specifically atui.c is intended to as human-readable as possible,
-absrtracting away the programatic consequences of allocation and setup.
+abstracting away the programatic consequences of allocation and setup.
 This means that ATUI's allocater/instanciator functions have a lot of
 that can be figured out at compile time.
 
-vim replace patterns that help copypaste structs from atombios.h:
-'<,'>s|struct |ATUI_FUNCIFY(|g
-'<,'>s|.*uint[0-9]*_t[ ,^I]*|^I|g
-'<,'>s|;.*|,|g
-'<,'>s|,\n},|\r)|g
+For ATUI_FUNCIFY headers see atui_includes.h
+See ppatui.h for the metaprogramming.
+
+atui.h is about the main API for ATUI
 */
 
 #ifndef ATUI_H
@@ -181,84 +174,5 @@ struct atui_nullstruct {
 	void* leaves;
 };
 
-//blank branch
-PPATUI_HEADERIFY(atui_nullstruct);
-
-PPATUI_HEADERIFY(atom_common_table_header);
-
-PPATUI_HEADERIFY(atom_rom_header_v2_2);
-PPATUI_HEADERIFY(atom_master_data_table_v2_1);
-
-
-PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
-PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);
-PPATUI_HEADERIFY(smudpm_i2ccontrollerconfig_t);
-PPATUI_HEADERIFY(atom_smc_dpm_info_v4_4);
-PPATUI_HEADERIFY(smudpm_i2c_controller_config_v2);
-PPATUI_HEADERIFY(atom_smc_dpm_info_v4_5);
-
-
-
-PPATUI_HEADERIFY(atom_firmware_info_v3_1);
-PPATUI_HEADERIFY(atom_firmware_info_v3_2);
-PPATUI_HEADERIFY(atom_firmware_info_v3_3);
-PPATUI_HEADERIFY(atom_firmware_info_v3_4);
-
-
-
-PPATUI_HEADERIFY(vram_usagebyfirmware_v2_1);
-PPATUI_HEADERIFY(vram_usagebyfirmware_v2_2);
-
-
-PPATUI_HEADERIFY(atom_gpio_pin_assignment_v2_1);
-
-
-PPATUI_HEADERIFY(atom_gfx_info_v2_2);
-PPATUI_HEADERIFY(atom_gfx_info_v2_3);
-PPATUI_HEADERIFY(atom_gfx_info_v2_4);
-PPATUI_HEADERIFY(atom_gfx_info_v2_5);
-PPATUI_HEADERIFY(atom_gfx_info_v2_6);
-PPATUI_HEADERIFY(atom_gfx_info_v2_7);
-PPATUI_HEADERIFY(atom_gfx_info_v3_0);
-
-
-
-PPATUI_HEADERIFY(atom_dtd_format);
-PPATUI_HEADERIFY(atom_lcd_info_v2_1);
-
-
-
-//PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
-PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
-PPATUI_HEADERIFY(atom_umc_init_reg_block);
-PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
-PPATUI_HEADERIFY(atom_umc_reg_setting_id_config_access);
-
-PPATUI_HEADERIFY(atom_gddr6_bit_byte_remap);
-PPATUI_HEADERIFY(atom_gddr6_dram_data_remap);
-
-PPATUI_HEADERIFY(atom_vram_module_v9);
-PPATUI_HEADERIFY(atom_vram_info_header_v2_3);
-
-PPATUI_HEADERIFY(atom_vram_module_v10);
-PPATUI_HEADERIFY(umc_block_navi1_timings);
-PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
-
-PPATUI_HEADERIFY(atom_vram_module_v11);
-PPATUI_HEADERIFY(atom_gddr6_ac_timing_v2_5);
-PPATUI_HEADERIFY(atom_vram_info_header_v2_5);
-
-PPATUI_HEADERIFY(atom_vram_info_header_v2_6);
-
-PPATUI_HEADERIFY(atom_vram_module_v3_0);
-PPATUI_HEADERIFY(atom_vram_info_header_v3_0);
-
-
-
-PPATUI_HEADERIFY(atom_voltage_object_header_v4);
-PPATUI_HEADERIFY(atom_gpio_voltage_object_v4);
-PPATUI_HEADERIFY(atom_i2c_voltage_object_v4);
-PPATUI_HEADERIFY(atom_svid2_voltage_object_v4);
-PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
-
+#include "atui_includes.h"
 #endif
