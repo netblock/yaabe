@@ -3,7 +3,7 @@ WIN_CC=x86_64-w64-mingw32-gcc
 # TODO https://www.gtk.org/docs/installations/windows/
 
 YAABE_DEBUG_CFLAGS = -g -Og
-YAABE_RELEASE_CFLAGS = -O3 -flto=auto
+YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin -fuse-ld=gold
 
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
