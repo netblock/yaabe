@@ -3143,7 +3143,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->dram_pnstring, dram_pnstring,
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_STRING), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,
