@@ -738,7 +738,7 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 	GOutputStream* writestream = g_io_stream_get_output_stream(biosstream);
 
 	g_output_stream_write_all(
-		writestream,  atree->bios,
+		writestream,  atree->alloced_bios,
 		atree->biosfile_size,  NULL,NULL,  &ferror
 	);
 	if (ferror)
