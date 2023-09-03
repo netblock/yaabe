@@ -32,8 +32,8 @@ enum i18n_languages {
 	LANG_TOTALLANGS
 };
 
-// TODO https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
-static const void* ATUI_NULL = NULL; // to satisfy _Generics handling pointers.
+// https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
+static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
 enum atui_type {
 	ATUI_NAN = 0b000,
 	ATUI_DEC = 0b001,
@@ -170,12 +170,9 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 };
 
-
-struct atui_nullstruct {
-	// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
-	// relevant for that branch.
-	void* leaves;
-};
+struct atui_nullstruct;
+// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
+// relevant for that branch.
 
 
 #include "atui_includes.h"
