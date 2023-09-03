@@ -1,11 +1,11 @@
 /*******************************************************************************
-CPU AtomBIOS directory tree, or atomtree for short is a large tree of
-struct-based cpu pointers with the intent to abstract away AtomBIOS
-offset/pointer crawling. If a given AtomBIOS table has table offsets pointing
-to other tables, they will automatically be crawled and cpu-pointed-to by
-atomtree; otherwise if a given AtomBIOS table either dead-ends, or responsibly
-allocates their children, then atomtree will just point to them instead with
-minimised interference as reasonably possible.
+CPU AtomBIOS directory tree, atomtree, is a large tree of C structs with the
+intent to abstract away AtomBIOS offset/pointer crawling and bounds checking.
+If a given AtomBIOS table has table offsets pointing to other tables, they will 
+automatically be crawled and cpu-pointed-to by atomtree; otherwise if a given
+AtomBIOS table either dead-ends, or responsibly allocates their children, then
+atomtree will just point to them instead with minimised interference as
+reasonably possible.
 
 
 If there exists multiple versions of an atom table, then there is an enum-union
@@ -23,13 +23,6 @@ future ideas:
 
 *small:
 	* do we really care about dot and dotdot?
-	* make the the population code be agnostic to its table parent for dotdot?
-		* void*?
-	* enum type for the function returns? error tolerance; politely warn.
-	* consolodiate content-revision-based commons and only differentiate the
-	  when they actually differ?
-		* vram_info.f2.mem_adjust_pertile
-		* vram_info.f2.c5.gddr6_ac_timings
 *******************************************************************************/
 
 /*******************************************************************************
@@ -250,7 +243,7 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 // equal to umc_reg_num, I believe.
 #define ATOMTREE_UMC_REG_NUM 64
 struct atomtree_umc_init_reg_block{
-	struct atom_umc_init_reg_block* leaves; // nonzero if populated // nonzero if populated
+	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
 	struct atomtree_umc_init_reg_block* dot;
 	struct atomtree_vram_info* dotdot;
@@ -287,25 +280,12 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atomtree_vram_info_header_v2_3* dot;
 	struct atomtree_vram_info* dotdot;
 
-	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
-
-	//uint16_t mem_clk_patch_tbloffset;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
-
-	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-
-	//uint16_t mc_phyinit_tbloffset;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-
-	//uint16_t dram_data_remap_tbloffset;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
-
-	//uint16_t tmrs_seq_offset;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
-
-	//uint16_t post_ucode_init_offset;
 	struct atomtree_umc_init_reg_block post_ucode_init;
 };
 
@@ -314,24 +294,15 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_4* leaves; // nonzero if populated
 
-	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 
-	//uint16_t mem_clk_patch_tbloffset;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	struct umc_block_navi1_timings* navi1_gddr6_timings;
 	uint16_t* num_timing_straps;
 
-
-	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-
-	//uint16_t mc_phyinit_tbloffset;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
-
-	//uint16_t post_ucode_init_offset;
 	struct atomtree_umc_init_reg_block post_ucode_init;
 };
 
@@ -340,30 +311,19 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_5* leaves; // nonzero if populated
 
-	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 
-	//uint16_t gddr6_ac_timing_offset;
 	struct atom_gddr6_ac_timing_v2_5* gddr6_ac_timings; // is an array
 	uint8_t gddr6_acstrap_count;
 
-	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-
-	//uint16_t mc_phyinit_tbloffset;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-
-	//uint16_t dram_data_remap_tbloffset;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 
 	//uint16_t reserved; // offset of reserved
 
-	//uint16_t post_ucode_init_offset;
 	struct atomtree_umc_init_reg_block post_ucode_init;
-
-	//uint16_t strobe_mode_patch_tbloffset;
 	struct atomtree_umc_init_reg_block strobe_mode_patch;
-
 	struct atom_vram_module_v11 vram_module[16];
 };
 
@@ -372,25 +332,12 @@ struct atomtree_vram_info_header_v2_6 {
 	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_6* leaves; // nonzero if populated
 
-	//uint16_t mem_adjust_tbloffset;
 	struct atomtree_umc_init_reg_block mem_adjust_table;
-
-	//uint16_t mem_clk_patch_tbloffset;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
-
-	//uint16_t mc_adjust_pertile_tbloffset;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-
-	//uint16_t mc_phyinit_tbloffset;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-
-	//uint16_t dram_data_remap_tbloffset;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
-
-	//uint16_t tmrs_seq_offset;
 	void* tmrs_seq;
-
-	//uint16_t post_ucode_init_offset;
 	struct atomtree_umc_init_reg_block post_ucode_init;
 };
 
@@ -400,13 +347,8 @@ struct atomtree_vram_module_v3_0 { // TODO figure out child tables
 	struct atomtree_vram_info* dotdot;
 	struct atom_vram_module_v3_0* leaves; // nonzero if populated
 
-	//uint16_t dram_info_offset;
 	void* dram_info;
-
-	//uint16_t mem_tuning_offset;
 	void* mem_tuning;
-
-	//uint16_t tmrs_seq_offset;
 	void* tmrs_seq;
 };
 
@@ -415,30 +357,13 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v3_0* leaves; // nonzero if populated
 
-	//struct atom_common_table_header table_header;
-
-	//uint16_t mem_tuning_table_offset;
 	void* mem_tuning;
-
-	//uint16_t dram_info_table_offset;
 	void* dram_info;
-
-	//uint16_t tmrs_table_offset;
 	void* tmrs_seq;
-
-	//uint16_t mc_init_table_offset;
 	struct atomtree_umc_init_reg_block mc_init; // phy init? reg block anyway?
-
-	//uint16_t dram_data_remap_table_offset;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
-
-	//uint16_t umc_emuinittable_offset;
 	struct atomtree_umc_init_reg_block umc_emuinit; //TODO this is a guess
-
-	//uint16_t reserved_sub_table_offset[2];
 	void* rsvd_tables[2];
-
-	//struct atom_vram_module_v3_0 vram_module[8];
 	struct atomtree_vram_module_v3_0 vram_module[8];
 };
 

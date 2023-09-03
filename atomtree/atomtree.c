@@ -1,4 +1,4 @@
-/* for abstract commentary, read atomtree_data_tables.h */
+/* For atomtree's abstract, check out atomtree_data_tables.h */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -1016,7 +1016,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->gddr6_acstrap_count = i;
 		if (generate_atui) {
 			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-				NULL, NULL,  vi25->gddr6_acstrap_count,NULL
+				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 			);
 			sprintf(atui_gddr6_ac_timings->name, "atom_gddr6_ac_timing_v2_5");
 			for(i=0; i < vi25->gddr6_acstrap_count; i++) {

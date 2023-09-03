@@ -1,3 +1,8 @@
+/* 
+For atomtree's abstract, check out atomtree_data_tables.h
+atomtree.h is mainly about atomtree metadata and initial bios crawling.
+*/
+
 #ifndef ATOMTREE_H
 #define ATOMTREE_H
 
