@@ -23,9 +23,10 @@ typedef struct _atui_branch atui_branch;
 #define ATOM_ROM_MAGIC_PTR  4
 
 void atomtree_bios_checksum(struct atom_tree* atree);
-struct atom_tree* atombios_parse(void* bios, bool generate_atui);
-void* bios_fastforward(void* memory, long size);
-void* bios_fastforward_odd(void* memory, long size);
+
+struct atom_tree* atombios_parse(
+		void* bios, uint32_t alloc_size, bool generate_atui
+);
 
 struct atombios_image {
 	uint16_t atombios_magic; // little endian: 0xAA55
@@ -66,6 +67,7 @@ struct atom_tree {
 
 	GFile* biosfile;
 	int64_t biosfile_size;
+	void* alloced_bios;
 
 	union {
 		void* bios;

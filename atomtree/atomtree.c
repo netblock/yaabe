@@ -1827,14 +1827,32 @@ void atomtree_bios_checksum(struct atom_tree* atree) {
 }
 
 
-struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
-	struct atombios_image* image = bios;
 
-	//TODO is anyone bothering to check all the magic signs?
-	if (image->atombios_magic != ATOM_BIOS_MAGIC)
+
+inline static void* bios_fastforward(void* biosfile, const uint32_t size) {
+	const struct atombios_image* image;
+	const void* end = biosfile + size;
+	while(biosfile < end) {
+		image = biosfile;
+		//TODO is anyone bothering to check all the magic signs?
+		if ((image->atombios_magic == ATOM_BIOS_MAGIC)
+			&& (0 == strcmp(ATOM_ATI_MAGIC, image->atomati_magic))
+			) {
+			return biosfile;
+		}
+		biosfile++;
+	}
+	return NULL;
+}
+
+struct atom_tree* atombios_parse(
+		void* alloced_bios, uint32_t allocsize, bool generate_atui) {
+
+	void* bios = bios_fastforward(alloced_bios, allocsize);
+	if (bios == NULL)
 		return NULL;
-	if (strcmp(ATOM_ATI_MAGIC, image->atomati_magic))
-		return NULL;
+
+	struct atombios_image* image = bios;
 
 	struct atom_tree* atree = malloc(sizeof(struct atom_tree));
 
@@ -1843,6 +1861,7 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 
 	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
+	atree->alloced_bios = alloced_bios;
 
 	atree->bios = bios; //PIC code; going to be used as the '0' in places.
 	atree->leaves = bios + image->bios_header;
@@ -1878,24 +1897,6 @@ struct atom_tree* atombios_parse(void* bios, bool generate_atui) {
 }
 
 
-void* bios_fastforward(void* memory, long size) {
-	// The dumped bios probably doesn't start with where atombios actually
-	// begins. Go though the allocated memory to find the first magic bytes.
-	uint16_t* bios = memory;
-	uint16_t* end = memory+size;
-	for(; bios < end; bios++)
-		if (*bios == 0xAA55)
-			return (void*)bios;
-	return NULL;
-}
-void* bios_fastforward_odd(void* memory, long size) { // every 1 byte
-	uint8_t* bios = memory;
-	uint8_t* end = memory+size;
-	for(; bios < end; bios++)
-		if (*(uint16_t*)bios == 0xAA55)
-			return (void*)bios;
-	return NULL;
-}
 inline enum atomtree_common_version get_ver(
 		struct atom_common_table_header* header) {
 	return (header->format_revision * 100) + header->content_revision;

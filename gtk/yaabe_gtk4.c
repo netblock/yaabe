@@ -127,7 +127,7 @@ void destroy_atomtree_with_gtk(struct atom_tree* atree, bool free_bios) {
 		atui_destroy_tree_with_gtk(atree->atui_root);
 
 		if (free_bios) {
-			free(atree->bios);
+			free(atree->alloced_bios);
 
 			if (atree->biosfile)
 				g_object_unref(atree->biosfile);
@@ -695,7 +695,7 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 		goto exit;
 	}
 
-	atree = atombios_parse(bios, true);
+	atree = atombios_parse(bios, filesize, true);
 	if (atree == NULL) {
 		free(bios);
 		goto exit;
@@ -921,7 +921,9 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	yaabegtk_commons* commons = commonsptr;
 	struct atom_tree* old_tree = commons->atomtree_root;
 
-	struct atom_tree* new_tree = atombios_parse(old_tree->bios, true);
+	struct atom_tree* new_tree = atombios_parse(
+		old_tree->alloced_bios, old_tree->biosfile_size, true
+	);
 	new_tree->biosfile = old_tree->biosfile;
 	new_tree->biosfile_size = old_tree->biosfile_size;
 	commons->atomtree_root = new_tree;
