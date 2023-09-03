@@ -4,10 +4,8 @@ AtomTree iterable interface for UIs.
 See ppatui.h for the metaprogramming and atui.h for general API.
 */
 
+#include "atomtree.h"
 #include "atui.h"
-#include <stdio.h>
-#include <math.h>
-
 
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
 	if (leaf->type & ATUI_ANY) {

@@ -1,8 +1,10 @@
 /*
+For ddrmoderegisters.h
+See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 */
 
+#include "atomtree.h"
 #include "atui.h"
-#include <stdio.h>
 
 PPATUI_FUNCIFY(union, gddr6_mr0, atui_nullstruct,
 	(bios->gddr6_mr0, gddr6_mr0,

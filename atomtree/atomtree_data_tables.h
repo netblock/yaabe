@@ -30,13 +30,6 @@ future ideas:
 
 #ifndef ATOMTREE_DATA_TABLES_H
 #define ATOMTREE_DATA_TABLES_H
-#include <atomfirmware.h>
-#include <powerplay.h>
-
-#include "atomtree_common.h"
-
-
-
 
 struct atomtree_smc_dpm_info {
 	struct atomtree_smc_dpm_info* dot;

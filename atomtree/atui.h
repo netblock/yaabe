@@ -12,8 +12,10 @@ atui.h is about the main API for ATUI
 
 #ifndef ATUI_H
 #define ATUI_H
+
 #include "ppatui.h"
-#include <atomtree.h>
+// see bottom for more includes
+
 
 
 // shall be used in an array
@@ -114,20 +116,20 @@ struct  _atui_branch {
 	void* auxiliary; // alternative representation to leaves, if necessary
 };
 
+
+
 // reccomended buffer size for the upcomming text functions
 #define ATUI_LEAVES_STR_BUFFER 70
+
+
 
 //set the value from a string or array of 8-bit
 uint8_t atui_set_from_text(atui_leaf* leaf, const char* buffer);
 uint8_t atui_get_to_text(atui_leaf*, char** buffer_ptr);
 
-
 //set or get the number value from the leaf
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val(atui_leaf* leaf);
-
-
-
 
 //TODO stroll that considers 0b prefix?
 uint64_t strtoll_2(const char* str);
@@ -168,11 +170,14 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 };
 
+
 struct atui_nullstruct {
 	// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
 	// relevant for that branch.
 	void* leaves;
 };
 
+
 #include "atui_includes.h"
+
 #endif

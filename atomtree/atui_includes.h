@@ -8,8 +8,6 @@ ATUI_HEADERIFY()
 
 #ifndef ATUI_INCLUDES_H
 #define ATUI_INCLUDES_H
-#include "ppatui.h"
-#include <atomtree.h>
 
 //blank branch
 PPATUI_HEADERIFY(atui_nullstruct);

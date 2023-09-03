@@ -5,8 +5,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include <atui.h>
-#include <atomtree.h>
+#include "atomtree.h"
+#include "atui.h"
 
 static const char yaabe_name[] = "YAABE BIOS Editor";
 typedef struct yaabegtk_commons {

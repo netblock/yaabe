@@ -1,9 +1,10 @@
 /*
-see atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
+For umctimings.h
+See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 */
 
+#include "atomtree.h"
 #include "atui.h"
-#include <stdio.h>
 
 PPATUI_FUNCIFY(union, DRAMTiming1, atui_nullstruct,
 	(bios->DRAMTiming1, DRAMTiming1,

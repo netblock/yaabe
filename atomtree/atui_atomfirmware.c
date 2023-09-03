@@ -148,8 +148,10 @@ def bitfield_to_atui(s):
     print(s)
 */
 
+/* for atomfirmware.h */
+
+#include "atomtree.h"
 #include "atui.h"
-#include <stdio.h>
 
 // basic empty branch mainly to have collapsables
 PPATUI_FUNCIFY(struct, atui_nullstruct, atui_nullstruct)

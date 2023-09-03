@@ -1,8 +1,6 @@
 #ifndef YAABE_GTK4_H
 #define YAABE_GTK4_H
 
-#include <gtk/gtk.h>
-
 struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out);
 void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out);
 

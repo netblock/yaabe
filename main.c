@@ -1,13 +1,6 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-
-#include <atomtree.h>
-#include <yaabe_gtk4.h>
+#include "atomtree.h"
+#include "atui.h"
+#include "yaabe_gtk4.h"
 
 /* TODO minor things
 ATUI_FUNCIFY: make the child_branhes+inline_branches more explicit in API
