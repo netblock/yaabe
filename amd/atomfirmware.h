@@ -56,7 +56,7 @@ enum  atom_bios_header_version_def {
   #endif
 
   #ifndef uint8_t
-    typedef unsigned char uint8_t;
+    typedef unsigned char8_t uint8_t;
   #endif
 #endif
 */
@@ -3202,7 +3202,7 @@ struct atom_vram_module_v9 {
 	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  hbm_ven_rev_id;   // hbm_ven_rev_id
 	uint8_t  vram_rsd2;        // reserved
-	char     dram_pnstring[20]; // part number end with '0'.
+	char8_t     dram_pnstring[20]; // part number end with '0'.
 };
 
 struct atom_vram_info_header_v2_3 {
@@ -3238,7 +3238,7 @@ struct atom_vram_module_v3_0 {
 	uint16_t reserved1;
 	uint32_t dram_size_per_ch;
 	uint32_t reserved[3];
-	char dram_pnstring[40];
+	char8_t dram_pnstring[40];
 };
 
 struct atom_vram_info_header_v3_0 {
@@ -3360,7 +3360,7 @@ struct atom_vram_module_v10 {
 	union gddr6_mr7 gddr6_mr7;
 	//uint16_t gddr6_mr7;       // gddr6 mode register7 value
 
-	char dram_pnstring[20];     // part number end with '0'
+	char8_t dram_pnstring[20];     // part number end with '0'
 };
 
 struct atom_vram_info_header_v2_4 {
@@ -3413,7 +3413,7 @@ struct atom_vram_module_v11 {
 	union gddr6_mr8 gddr6_mr8;
 	//uint16_t gddr6_mr8;         // gddr6 mode register8 value
 
-	char    dram_pnstring[40];  // part number end with '0'.
+	char8_t    dram_pnstring[40];  // part number end with '0'.
 };
 
 struct atom_gddr6_ac_timing_v2_5 {

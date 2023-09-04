@@ -7,6 +7,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #define ATOMTREE_H
 
 #include <stdint.h>
+#include <uchar.h> 
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -98,9 +99,9 @@ struct atom_tree {
 	//https://docs.kernel.org/gpu/amdgpu/display/index.html
 
 	void* protected_mode;
-	char* config_filename;
+	char8_t* config_filename;
 	void* crc_block;
-	char* bootup_mesage;
+	char8_t* bootup_mesage;
 	void* int10;
 	void* psp_dir_table;
 

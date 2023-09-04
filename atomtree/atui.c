@@ -31,7 +31,7 @@ uint64_t atui_leaf_get_val(atui_leaf* leaf) {
 	}
 }
 
-uint64_t strtoll_2(const char* str) {
+uint64_t strtoll_2(const char8_t* str) {
 	// TODO is there a strtoll that has 0b detection?
 	uint8_t base = 0; // 0 = auto
 	if ((str[0] == '0') && (str[1] == 'b')) {
@@ -44,7 +44,7 @@ uint64_t strtoll_2(const char* str) {
 
 
 
-uint8_t atui_set_from_text(atui_leaf* leaf, const char* text) {
+uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	//set the value of the leaf based on input text. Currently only support for
 	// numbers (including bitfields) and strings.
 
@@ -52,7 +52,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char* text) {
 
 	uint8_t err = 0;
 	uint16_t i=0,j = 0;
-	char buffer[65];
+	char8_t buffer[65];
 
 	uint8_t array_size = leaf->array_size;
 
@@ -120,21 +120,21 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char* text) {
 	}
 	return err;
 }
-uint8_t atui_get_to_text(atui_leaf* leaf, char** buffer_ptr) {
+uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
 
 	uint8_t has_malloced = 0;
 	uint16_t malloc_size = 0;
 	uint16_t i=0,j=0;
-	char* buffer = *buffer_ptr;
+	char8_t* buffer = *buffer_ptr;
 
 	// NAN DEC HEX OCT BIN
-	const char* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
-	const char* suffixes[] = {"", "u", "X", "o", "b"};
+	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+	const char8_t* suffixes[] = {"", "u", "X", "o", "b"};
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
-	const char* metaformat = "%s%u%s"; // amogus
-	char format[8];
+	const char8_t* metaformat = "%s%u%s"; // amogus
+	char8_t format[8];
 
 
 	uint8_t radix = leaf->type & ATUI_ANY;

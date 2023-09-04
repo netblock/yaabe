@@ -2,7 +2,7 @@
 #include "atui.h"
 #include "yaabe_gtk4.h"
 
-static const char yaabe_name[] = "YAABE BIOS Editor";
+static const char8_t yaabe_name[] = "YAABE BIOS Editor";
 typedef struct yaabegtk_commons {
 	struct atom_tree* atomtree_root;
 	GtkApplication* yaabe_gtk;
@@ -182,7 +182,7 @@ static void leaves_offset_column_recycler(
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
-	char buffer[18];
+	char8_t buffer[18];
 	if (leaf->type & (ATUI_ANY | ATUI_STRING|ATUI_ARRAY|ATUI_BITFIELD)) {
 		if (leaf->type & ATUI_BITCHILD) {
 			sprintf(buffer, "[%u:%u]",
@@ -212,9 +212,9 @@ static void leaves_textbox_stray(
 	);
 	atui_leaf* leaf = leaf_gptr;
 
-	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
-	char* buff = stack_buff;
+	char8_t* buff = stack_buff;
 	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
@@ -228,9 +228,9 @@ static void leaves_val_column_textbox_apply(
 
 	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 
-	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
-	char* buff = stack_buff;
+	char8_t* buff = stack_buff;
 	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(textbox, buff);
 	if (has_mallocd)
@@ -263,9 +263,9 @@ static void leaves_val_column_recycler(
 	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
-	char stack_buff[ATUI_LEAVES_STR_BUFFER];
+	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
-	char* buff = stack_buff;
+	char8_t* buff = stack_buff;
 	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
@@ -762,12 +762,12 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 static void set_editor_titlebar(yaabegtk_commons* commons) {
 // set the window name to the name of the currently-open bios.
 
-	const char print_format_file[] = "%s (%s)";
-	const char print_format_nofile[] = "%s";
+	const char8_t print_format_file[] = "%s (%s)";
+	const char8_t print_format_nofile[] = "%s";
 
-	char* filename;
+	char8_t* filename;
 	uint16_t filename_length;
-	const char* formatstr;
+	const char8_t* formatstr;
 	if (commons->atomtree_root) {
 		filename = g_file_get_basename(commons->atomtree_root->biosfile);
 		filename_length = strlen(filename);
@@ -778,7 +778,7 @@ static void set_editor_titlebar(yaabegtk_commons* commons) {
 		formatstr = print_format_nofile;
 	}
 
-	char* window_title = malloc(
+	char8_t* window_title = malloc(
 		sizeof(yaabe_name)
 		+ filename_length
 		+ sizeof(print_format_file) // largest
@@ -794,7 +794,7 @@ static void set_editor_titlebar(yaabegtk_commons* commons) {
 	if (filename_length)
 		g_free(filename);
 }
-inline static void filer_error_window(GError* ferror, const char* title) {
+inline static void filer_error_window(GError* ferror, const char8_t* title) {
 // simple error popup
 
 	GtkEventController* escapeclose = gtk_shortcut_controller_new();

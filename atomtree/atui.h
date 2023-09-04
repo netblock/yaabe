@@ -20,7 +20,7 @@ atui.h is about the main API for ATUI
 
 // shall be used in an array
 struct atui_enum {
-	const char* name;
+	const char8_t* name;
 	int64_t val;
 };
 
@@ -58,11 +58,11 @@ enum atui_type {
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
-	char name[40];
-	const char* origname;
-	const char* varname;
+	char8_t name[40];
+	const char8_t* origname;
+	const char8_t* varname;
 
-	char* description[LANG_TOTALLANGS];
+	char8_t* description[LANG_TOTALLANGS];
 
 
 	enum atui_type type; // bitfield struct
@@ -91,10 +91,10 @@ struct _atui_leaf {
 	void* auxiliary; // any extra info to hang off if necessary
 };
 struct  _atui_branch {
-	char name[40];
-	const char* varname;
+	char8_t name[40];
+	const char8_t* varname;
 
-	char* description[LANG_TOTALLANGS];
+	char8_t* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;
 	uint8_t num_child_branches;
@@ -124,15 +124,15 @@ struct  _atui_branch {
 
 
 //set the value from a string or array of 8-bit
-uint8_t atui_set_from_text(atui_leaf* leaf, const char* buffer);
-uint8_t atui_get_to_text(atui_leaf*, char** buffer_ptr);
+uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
+uint8_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
 
 //set or get the number value from the leaf
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val(atui_leaf* leaf);
 
 //TODO stroll that considers 0b prefix?
-uint64_t strtoll_2(const char* str);
+uint64_t strtoll_2(const char8_t* str);
 
 //atui has auxiliary pointers to hang extra data off of and this deallocator
 //doesn't consider.

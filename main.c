@@ -1,3 +1,4 @@
+#include <uchar.h>
 #include "atomtree.h"
 #include "atui.h"
 #include "yaabe_gtk4.h"
@@ -11,7 +12,7 @@ inline static where possible
 */
 
 
-inline static int16_t getfile(char* f, void** bios, uint32_t* size){
+inline static int16_t getfile(char8_t* f, void** bios, uint32_t* size){
     FILE* tm = fopen(f, "r");
 	if (tm == NULL)
 		return 1;
@@ -54,7 +55,7 @@ inline static void vi24_funstuffs(struct atom_tree* atree) {
 	printf("      5432109876543210\n");
 	printf("\n\n");
 
-	char* pnstring = vram_module->dram_pnstring;
+	char8_t* pnstring = vram_module->dram_pnstring;
 	printf("pnstring:\"%s\"\n", pnstring);
 	for(i = 0; i < 40; i++)
 		printf(" %d ", pnstring[i]);
@@ -165,7 +166,7 @@ inline static void funstuffs(struct atom_tree* atree) {
 	printf("vraminfo ver: %d\n", atree->data_table.vram_info.ver);
 
 	printf("\n");
-	printf("%s\n", (char*)atree->leaves->atom_bios_string);
+	printf("%s\n", (char8_t*)atree->leaves->atom_bios_string);
 	printf("crc block offset: 0x%X (reg: 0x%X)\n",
 		atree->leaves->crc_block_offset,
 		(void*)&(atree->leaves->crc_block_offset) - atree->bios
@@ -201,7 +202,7 @@ inline static void funstuffs(struct atom_tree* atree) {
 
 }
 
-int main(int argc, char** argv){
+int main(int argc, char8_t** argv){
 	struct atom_tree* atree = NULL;
 
 	if (argc > 1) {
