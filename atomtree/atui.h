@@ -24,7 +24,7 @@ struct atui_enum {
 	int64_t val;
 };
 
-enum i18n_languages {
+enum i18n_languages:int8_t {
 	LANG_NOLANG = -1,
 
 	LANG_ENGLISH = 0,
@@ -34,7 +34,7 @@ enum i18n_languages {
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
-enum atui_type {
+enum atui_type:uint16_t {
 	ATUI_NAN = 0b000,
 	ATUI_DEC = 0b001,
 	ATUI_HEX = 0b010,
