@@ -100,7 +100,7 @@ struct atom_tree {
 
 	void* protected_mode;
 	char8_t* config_filename;
-	void* crc_block;
+	uint32_t* crc_block;
 	char8_t* bootup_mesage;
 	void* int10;
 	void* psp_dir_table;

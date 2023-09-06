@@ -7,7 +7,7 @@ YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin -fuse-ld=gold
 
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
-YAABE_LDFLAGS =  -lm $(GTK_LDFLAGS)
+YAABE_LDFLAGS =  -lm -lz $(GTK_LDFLAGS)
 YAABE_CFLAGS = -std=c2x -Iamd -Iatomtree -Igtk $(GTK_CFLAGS)
 
 

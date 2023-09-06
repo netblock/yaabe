@@ -202,16 +202,12 @@ inline static void funstuffs(struct atom_tree* atree) {
 
 }
 
-int main(int argc, char8_t** argv){
+int main(int argc, char8_t** argv) {
 	struct atom_tree* atree = NULL;
 
 	if (argc > 1) {
 		printf("%s:\n",argv[1]);
-		/*
-		bios = bios_fastforward(memfile, size);
-		printf("ffwd %d bytes to get to %X.\n", (bios-memfile), 0xAA55);
-		atree = atombios_parse(bios, true);
-		*/
+
 		GError* ferror = NULL;
 		GFile* biosfile = g_file_new_for_path(argv[1]);
 		atree = atomtree_from_gfile(biosfile, NULL);

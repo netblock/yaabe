@@ -1862,7 +1862,43 @@ struct atom_tree* atombios_parse(
 
 	atree->protected_mode = bios + atree->leaves->protectedmodeoffset;
 	atree->config_filename = bios + atree->leaves->configfilenameoffset;
+
 	atree->crc_block = bios + atree->leaves->crc_block_offset;
+	/* TODO what are these locations?
+	uint32_t crc = *(atree->crc_block);
+	zlib's crc32(0, startptr, bytes);
+	see also the sratch/crc.c brute-forcing tool
+
+
+	It doesn't seem that the crc_block has any importance for official release
+	since many most have a programmed CRC mismatch.
+
+	has crc match:
+		6950XT.16384.220310.rom:
+			address: +0x3882 ~ +0x5AE5 for 8803 bytes
+			crc: 0x98174286 0x98174286
+
+		AMD.RX480.8192.160603_1.rom:
+			address: +0x14D7 ~ +0x3866 for 9103 bytes
+			crc: 0x7F5E715 0x7F5E715
+
+	doesn't have it:
+		AMD.RXVega64.8192.170320.rom
+		AMD.RX5700.8192.190616.rom
+		Powercolor.RX6650XT.8192.220303.rom
+		ASRock.RX7900XTX.24576.221128_1.rom + 262144
+		AMD.RadeonPro.5600M.rom
+		Sapphire.RX6800XT.16384.211230.rom
+		Sapphire.RX580.8192.170320.rom
+		AMD.RX5500XT.8192.191017.rom
+		AMD.RX590.8192.191126.rom
+		AMD.RX6700XT.12288.210125.rom
+		AMD.RXVega56.8176.170730.rom
+		AMD.RX6900XT.16384.210108.rom
+		AMD.RX5700XT.8192.190616_1.rom
+	*/
+
+
 	atree->bootup_mesage = bios + atree->leaves->vbios_bootupmessageoffset;
 	atree->int10 = bios + atree->leaves->int10_offset;
 	// any more between?
