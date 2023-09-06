@@ -668,13 +668,13 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 
 	GFileInputStream* readstream = g_file_read(biosfile, NULL, &ferror);
 	if (ferror)
-		goto exit;
+		goto exit1;
 
 	GFileInfo* fi_size = g_file_query_info(biosfile,
 		G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &ferror
 	);
 	if (ferror)
-		goto exit;
+		goto exit2;
 
 	int64_t filesize = g_file_info_get_size(fi_size);
 	g_object_unref(fi_size);
@@ -686,13 +686,13 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 	);
 	if (ferror) {
 		free(bios);
-		goto exit;
+		goto exit2;
 	}
 
 	atree = atombios_parse(bios, filesize, true);
 	if (atree == NULL) {
 		free(bios);
-		goto exit;
+		goto exit2;
 	}
 
 	g_object_ref(biosfile);
@@ -701,12 +701,13 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 
 	g_input_stream_close(G_INPUT_STREAM(readstream), NULL, &ferror);
 
-	exit:
+	exit2:
 	g_object_unref(readstream);
+	exit1:
 	if (ferror_out) {
 		*ferror_out = ferror;
 	} else if (ferror) {
-		g_object_unref(ferror);
+		g_error_free(ferror);
 	}
 
 	return atree;
