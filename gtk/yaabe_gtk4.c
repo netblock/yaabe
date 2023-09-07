@@ -1147,9 +1147,10 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 	menubar? of what?
 		https://github.com/luigifab/awf-extended/blob/levelup/src/awf.c#L692
 		file save/load ; about ; light-dark
-	extra columns like bit count, bios position, description.
+	extra columns like bit count, description.
 		User selectable. Reorderable
 	*/
+
 	// TODO better malloc'd?
 	//yaabegtk_commons* commons = calloc(1, sizeof(yaabegtk_commons)); // 0'd
 	yaabegtk_commons commons;

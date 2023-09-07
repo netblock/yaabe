@@ -1,15 +1,6 @@
-#include <uchar.h>
 #include "atomtree.h"
 #include "atui.h"
 #include "yaabe_gtk4.h"
-
-/* TODO minor things
-ATUI_FUNCIFY: make the child_branhes+inline_branches more explicit in API
-	sanity pass for the free)( func
-stdint-ify everything
-gtk4: move gpointers to their actual things, where possible?
-inline static where possible
-*/
 
 
 inline static int16_t getfile(char8_t* f, void** bios, uint32_t* size){
@@ -143,7 +134,6 @@ inline static void pp1_funstuffs(struct atom_tree* atree) {
 inline static void pp2_funstuffs(struct atom_tree* atree) {
 }
 
-
 inline static void funstuffs(struct atom_tree* atree) {
 	printf("master data ver: %d\n", atree->data_table.ver);
 	if (atree->data_table.multimedia_info) {
@@ -172,8 +162,6 @@ inline static void funstuffs(struct atom_tree* atree) {
 		(void*)&(atree->leaves->crc_block_offset) - atree->bios
 	);
 
-
-
 	if (0) {
 		switch(atree->data_table.vram_info.ver) {
 			case v2_4:
@@ -201,6 +189,7 @@ inline static void funstuffs(struct atom_tree* atree) {
 	}}
 
 }
+
 
 int main(int argc, char8_t** argv) {
 	struct atom_tree* atree = NULL;
