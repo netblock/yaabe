@@ -73,7 +73,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 					memcpy(buffer, text+j, num_digits);
 					leaf->u8[i] = (uint8_t)strtoll(buffer, NULL, base);
 					j += num_digits;
-					if (text[j] == ' ') 
+					if (text[j] == ' ')
 						j++;
 				}
 				break;

@@ -35,7 +35,7 @@ inline static void vi24_funstuffs(struct atom_tree* atree) {
 		}
 		printf("\n");
 	}
-	struct atom_vram_module_v10* vram_module = 
+	struct atom_vram_module_v10* vram_module =
 		&(atree->data_table.vram_info.v2_4.leaves->vram_module[0]);
 	printf("\n\n");
 	printf("      5432109876543210\n");

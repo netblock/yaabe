@@ -104,7 +104,7 @@ PPATUI_FUNCIFY(union, DRAMTiming7, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct,
 	(bios->DRAMTiming8, DRAMTiming8,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRDRD_DD,   3,0, ATUI_DEC,
@@ -146,7 +146,7 @@ PPATUI_FUNCIFY(union, DRAMTiming9, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming10, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming10, atui_nullstruct,
 	(bios->DRAMTiming10, DRAMTiming10,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWRRD,       3,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -204,7 +204,7 @@ PPATUI_FUNCIFY(union, DRAMTiming14, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming15, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming15, atui_nullstruct,
 	(bios->DRAMTiming15, DRAMTiming15,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(AlertCrcDly,  6,0, ATUI_DEC,
@@ -282,7 +282,7 @@ PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
 	(bios->DRAMTiming22, DRAMTiming22,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tRDDATA_EN,   6,0, ATUI_DEC,
@@ -341,7 +341,7 @@ PPATUI_FUNCIFY(union, DRAMTiming34, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct,
 	(bios->DRAMTiming35, DRAMTiming35,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(ReceiverWait, 10,0, ATUI_DEC,
@@ -358,7 +358,7 @@ PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct, 
+PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct,
 	(bios->DRAMTiming36, DRAMTiming36,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(tWTRTR,     5,0, ATUI_DEC, ((LANG_ENG, "WRITE to WRTR"))),

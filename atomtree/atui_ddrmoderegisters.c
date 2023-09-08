@@ -325,7 +325,7 @@ PPATUI_FUNCIFY(union, gddr6_mr10, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, gddr6_mr11, atui_nullstruct, 
+PPATUI_FUNCIFY(union, gddr6_mr11, atui_nullstruct,
 	(bios->gddr6_mr11, gddr6_mr11,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(PASR_2bank_mask,  7,0, ATUI_DEC,

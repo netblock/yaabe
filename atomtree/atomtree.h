@@ -1,4 +1,4 @@
-/* 
+/*
 For atomtree's abstract, check out atomtree_data_tables.h
 atomtree.h is mainly about atomtree metadata and initial bios crawling.
 */
@@ -7,7 +7,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #define ATOMTREE_H
 
 #include <stdint.h>
-#include <uchar.h> 
+#include <uchar.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -53,7 +53,7 @@ struct atombios_image {
 	uint8_t rsvd3[6];
 	uint8_t bios_date[15]; // 0x50
 	uint8_t rsvd4[15];
-	uint16_t atombios_strings_offset; // 0x6E 
+	uint16_t atombios_strings_offset; // 0x6E
 	uint8_t rsvd5[16];
 	uint8_t part_number_offset; // 0x80 ; only use if number_of_strings == 0
 	uint8_t rsvd6[19];
@@ -63,7 +63,7 @@ struct atombios_image {
 struct atombios_image* img = atree->bios;
 uint8_t* strs = atree->bios + img->atombios_strings_offset;
 uint8_t i = 0;
-while(*strs) {														  
+while(*strs) {														
 	printf("%s\n", strs);
 	strs += (strlen(strs) + 1);
 	i++;

@@ -3301,7 +3301,7 @@ union atom_umc_reg_setting_id_config_access {
 		memclockrange :23-0 +1,
 		mem_blk_id    :31-24 +1;
 	};
-};	
+};
 
 
 struct atom_umc_reg_setting_data_block {
@@ -3688,7 +3688,7 @@ struct asic_init_engine_parameters_old {
 };
 union asic_init_engine_parameters {
 	uint32_t engineparam;
-	struct { uint32_t	
+	struct { uint32_t
 		sclkfreqin10khz :23-0 +1,
 		engineflag      :31-24+1; /* enum atom_asic_init_engine_flag*/
 	};
@@ -3701,7 +3701,7 @@ struct asic_init_mem_parameters_old{
 
 union asic_init_mem_parameters {
 	uint32_t memparam;
-	struct { uint32_t	
+	struct { uint32_t
 		mclkfreqin10khz :23-0 +1,
 		memflag         :31-24+1; /* enum atom_asic_init_mem_flag */
 	};
@@ -4485,7 +4485,7 @@ struct dig_transmitter_control_parameters_v1_6 {
 	uint32_t symclk_10khz;  // Symbol Clock in 10Khz
 	//uint8_t  hpdsel;        // =1: HPD1, =2: HPD2, .... =6: HPD6, =0: HPD is not assigned
 	//uint8_t  digfe_sel;     // DIG stream( front-end ) selection, bit0 means DIG0 FE is enable,
-	enum atom_dig_transmitter_control_hpd_sel hpdsel; 
+	enum atom_dig_transmitter_control_hpd_sel hpdsel;
 	enum atom_dig_transmitter_control_digfe_sel digfe_sel;
 	uint8_t  connobj_id;    // Connector Object Id defined in ObjectId.h
 	uint8_t  reserved;

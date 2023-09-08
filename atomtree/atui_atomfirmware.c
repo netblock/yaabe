@@ -136,15 +136,15 @@ def bitfield_to_atui(s):
     s = re.sub("\n    ","\n\t", s)
     s = re.sub("\n\t    ","\n\t\t", s)
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
-    s = re.sub("[ \t]+\n", "\n", s)                                             
+    s = re.sub("[ \t]+\n", "\n", s)                                           
     s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
     s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
     s = re.sub("\(ATUI_NODESCR\)(\s*)//(\s*)(.*)", "((LANG_ENG, \"\g<3>\"))", s)
     s = re.sub("[ \t]*uint[0-9]+_t[ \t]+([A-Za-z0-9_]+)[ \t]*;\s+struct { uint[0-9]+_t\n", "\t(bios->\g<1>, \g<1>,\n\t\t(ATUI_BIN, ATUI_BITFIELD, (\n", s)
     s = re.sub("([a-zA-Z0-9_]+)(\s*):([0-9]+)(\s*)-(\s*)([0-9]+)(\s*)\+1[,;][ \t]*", "\t(\g<1>,\g<2>\g<3>\g<4>,\g<5>\g<6>, ATUI_DEC,", s)
-    s = re.sub("ATUI_DEC,(\s*)//(\s*)(.*)", "ATUI_DEC, ((LANG_ENG, \"\g<3>\"))),", s) 
+    s = re.sub("ATUI_DEC,(\s*)//(\s*)(.*)", "ATUI_DEC, ((LANG_ENG, \"\g<3>\"))),", s)
     s = re.sub("ATUI_DEC,\n", "ATUI_DEC, (ATUI_NODESCR)),\n", s)
-    s = re.sub(",(\n\t\t\)\), )", "\g<1>", s) 
+    s = re.sub(",(\n\t\t\)\), )", "\g<1>", s)
     print(s)
 */
 
@@ -2474,7 +2474,7 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 			),
 			bios->bit_byte_remap, // start
 			(sizeof(bios->bit_byte_remap)
-			/ sizeof(struct atom_gddr6_bit_byte_remap)) // count 
+			/ sizeof(struct atom_gddr6_bit_byte_remap)) // count
 		)), (ATUI_NODESCR)
 	)
 )
@@ -3112,7 +3112,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_vram_module_v3_0, 
+PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 		atomtree_vram_info_header_v3_0,
 	(bios->density, density,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)

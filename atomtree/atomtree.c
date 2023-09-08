@@ -9,7 +9,7 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 	atui_branch* atui_smc_dpm_info;
 	atui_branch* atui_smudpm_i2c;
 	uint16_t i = 0;
-	
+
 	struct atomtree_smc_dpm_info* smc_dpm_info =
 		&(atree->data_table.smc_dpm_info);
 	smc_dpm_info->dot = smc_dpm_info;
@@ -203,7 +203,7 @@ inline static atui_branch* atomtree_dt_populate_lcd_info(
 		lcd_info->ver = get_ver(lcd_info->table_header);
 		if (generate_atui) {
 			switch (lcd_info->ver) {
-				/*case v1_3: TODO from atombios.h */ 
+				/*case v1_3: TODO from atombios.h */
 				case v2_1:
 					atui_lcd_timing = ATUI_MAKE_BRANCH(atom_dtd_format,
 						NULL,&(lcd_info->v2_1->lcd_timing),  0,NULL
@@ -574,7 +574,7 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	umc_reg_list, umc_reg_setting_list, and
 	atom_umc_reg_setting_data_block's u32umc_reg_data.
 	These lists are all dynamically sized.
-	
+
 	umc_reg_list follows umc_reg_num.
 	umc_reg_setting_list starts immediately after umc_reg_list.
 	umc_reg_setting_list does not follow umc_reg_num. but ends with 0-fill.
@@ -952,7 +952,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		vram_module->num_child_branches = i;
 
 		atui_branch* vi24_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, 
+			atui_memadjust, atui_memclkpatch, atui_mcadjpertile,
 			atui_dram_data_remap, atui_phyinit, atui_postucode_init,
 			vram_module
 		};
@@ -1489,7 +1489,7 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 	vo41->dotdot = &(atree->data_table.voltageobject_info);
 	vo41->leaves = atree->bios + atree->data_table.leaves->voltageobject_info;
 
-	
+
 	// get the size ofthe dynamically-sized voltage object array, and walk
 	// through the array based on what each element reports their size as.
 	union atom_voltage_object_v4* vobj;
@@ -1527,7 +1527,7 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 		}
 
 		offset += vobj->header.object_size;
-		i++;		
+		i++;
 	}
 	vo41->num_voltage_objects = i;
 	// TODO bounds checks for i and array size
@@ -1748,7 +1748,7 @@ inline static atui_branch* atomtree_populate_datatables(
 		atomtree_dt_populate_firmwareinfo(atree, generate_atui);
 
 
-	atui_branch* atui_lcd_info = 
+	atui_branch* atui_lcd_info =
 		atomtree_dt_populate_lcd_info(atree, generate_atui);
 
 

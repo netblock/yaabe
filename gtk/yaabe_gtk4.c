@@ -13,7 +13,7 @@ typedef struct yaabegtk_commons {
 	// for gtk_widget_set_sensitive() -- don't allow when no bios is loaded
 	GtkWidget* save_buttons;
 	GtkWidget* reload_button;
-	
+
 } yaabegtk_commons;
 
 struct yaabe_gtkapp_model_cache { // to cache
@@ -192,7 +192,7 @@ static void leaves_offset_column_recycler(
 			uint32_t start = leaf->val - commons->atomtree_root->bios;
 			uint32_t end = (
 				start
-				+ ((leaf->total_bits/8) * (leaf->array_size)) 
+				+ ((leaf->total_bits/8) * (leaf->array_size))
 				- 1
 			);
 			sprintf(buffer, "[%05X - %05X]", start, end);
@@ -584,7 +584,7 @@ inline static GtkSelectionModel* atui_gtk_model(yaabegtk_commons* commons) {
 	gtk_single_selection_set_autoselect(sel_model, false);
 	gtk_single_selection_set_can_unselect(sel_model, true);
 	gtk_selection_model_unselect_item(GTK_SELECTION_MODEL(sel_model), 0);
-	
+
 	// change the leaves pane's model based on the what is selected in brances
 	g_signal_connect(sel_model,
 		"selection-changed", G_CALLBACK(set_leaves_list), commons
@@ -965,7 +965,7 @@ static void filedialog_saveas_bios(
 	);
 	if (ferror)
 		goto ferr_nomsg;
-	
+
 
 	g_object_unref(new_biosfile); // TODO why's there two refs from open_finish?
 	GFile* old_biosfile = commons->atomtree_root->biosfile;

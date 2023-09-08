@@ -1,7 +1,7 @@
 /*******************************************************************************
 CPU AtomBIOS directory tree, atomtree, is a large tree of C structs with the
 intent to abstract away AtomBIOS offset/pointer crawling and bounds checking.
-If a given AtomBIOS table has table offsets pointing to other tables, they will 
+If a given AtomBIOS table has table offsets pointing to other tables, they will
 automatically be crawled and cpu-pointed-to by atomtree; otherwise if a given
 AtomBIOS table either dead-ends, or responsibly allocates their children, then
 atomtree will just point to them instead with minimised interference as
