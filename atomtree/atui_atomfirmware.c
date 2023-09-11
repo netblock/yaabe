@@ -122,10 +122,17 @@ def struct_to_atui(s):
     s = re.sub("\n\t    ","\n\t\t", s)
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
     s = re.sub("[ \t]+\n", "\n", s)
+	# self struct:
     s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
+	# embedded structs, create ATUI_INLINES from them:
     s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_NAN, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char8_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
-    s = re.sub("(u?int[0-9]+_t|char8_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
+	# embdedded enums; very similar to structs/unions:
+    s = re.sub("(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_DEC, ATUI_ENUM, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
+	# integers: intn_t/uintn_t/charn_t;
+    s = re.sub("(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
+	# integer arrays, won't do embedded enums
+    s = re.sub("(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
+	# take care of //-based comments
     s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
     s = re.sub("\),(\s+)?};", ")\n)", s)
     print(s)
