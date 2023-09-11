@@ -56,6 +56,15 @@ PPATUI_HEADERIFY(atom_lcd_info_v2_1);
 
 
 
+PPATUI_HEADERIFY(atom_smu_info_v3_1);
+PPATUI_HEADERIFY(atom_smu_info_v3_2);
+PPATUI_HEADERIFY(atom_smu_info_v3_3);
+PPATUI_HEADERIFY(atom_smu_info_v3_5);
+PPATUI_HEADERIFY(atom_smu_info_v3_6);
+PPATUI_HEADERIFY(atom_smu_info_v4_0);
+
+
+
 PPATUI_HEADERIFY(gddr6_mr0);
 PPATUI_HEADERIFY(gddr6_mr1);
 PPATUI_HEADERIFY(gddr6_mr2);

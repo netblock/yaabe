@@ -1906,7 +1906,7 @@ struct atom_smu_info_v3_2 {
 	uint32_t bootup_lclk_10khz;
 	uint32_t bootup_dcefclk_10khz;
 	uint32_t ctf_threshold_override_value;
-	uint32_t reserved[5];
+	uint32_t reserved[5]; // would be syspll3_0_vco_freq_10khz ~ smu_info_caps
 };
 
 struct atom_smu_info_v3_3 {
@@ -2002,7 +2002,7 @@ struct atom_smu_info_v3_5 {
 	uint32_t thm_ctf_delay_val;
 	uint32_t thm_thermal_int_ctrl_val;
 	uint32_t thm_tmon_config_val;
-	uint32_t reserved[16];
+	uint32_t reserved[16];// bootup_vclk_10khz ~ smu_gpiopad_pd_en_val +res[12]
 };
 
 struct atom_smu_info_v3_6 {
@@ -2370,7 +2370,7 @@ struct atom_smc_dpm_info_v4_4 {
 
 	uint8_t  fclkspreadenabled;
 	uint8_t  fclkspreadpercent;
-	uinT16_T fclkspreadfreq;
+	uint16_t fclkspreadfreq;
 
 
 	uint8_t  fllgfxclkspreadenabled;
@@ -4088,10 +4088,8 @@ struct set_dce_clock_parameters_v2_1 {
 	enum atom_set_dce_clock_clock_type dceclktype;
 	enum atom_ppll_def dceclksrc;
 	union dce_clock_flag dceclkflag; // Bit [1:0] = PPLL ref clock source ( when ucDCEClkSrc= ATOM_PPLL0 )
-	union atom_crtc_def crtc_id;      // ucDisp Pipe Id, use only when ucDCEClkType = PIXCLK
+	enum atom_crtc_def crtc_id;      // ucDisp Pipe Id, use only when ucDCEClkType = PIXCLK
 };
-
-
 
 
 struct set_dce_clock_ps_allocation_v2_1 {

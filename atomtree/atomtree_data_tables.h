@@ -100,6 +100,7 @@ struct atomtree_smu_info {
 		struct atom_smu_info_v3_2* v3_2;
 		struct atom_smu_info_v3_3* v3_3;
 		//struct atom_smu_info_v3_4* v3_4;
+		struct atom_smu_info_v3_5* v3_4; // bios reports 244 bytes. v3_5 is 240 bytes.
 		struct atom_smu_info_v3_5* v3_5;
 		struct atom_smu_info_v3_6* v3_6;
 		struct atom_smu_info_v4_0* v4_0;

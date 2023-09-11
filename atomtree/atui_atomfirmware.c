@@ -143,7 +143,7 @@ def bitfield_to_atui(s):
     s = re.sub("\n    ","\n\t", s)
     s = re.sub("\n\t    ","\n\t\t", s)
     s = re.sub("\n\t\t    ","\n\t\t\t", s)
-    s = re.sub("[ \t]+\n", "\n", s)                                           
+    s = re.sub("[ \t]+\n", "\n", s)
     s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
     s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
     s = re.sub("\(ATUI_NODESCR\)(\s*)//(\s*)(.*)", "((LANG_ENG, \"\g<3>\"))", s)
@@ -1801,6 +1801,857 @@ PPATUI_FUNCIFY(struct, atom_lcd_info_v2_1, atomtree_lcd_info,
 )
 
 
+
+
+
+PPATUI_ENUMER(atom_spread_spectrum_mode,
+    ATOM_SS_CENTER_OR_DOWN_MODE_MASK,
+    ATOM_SS_DOWN_SPREAD_MODE,
+    ATOM_SS_CENTRE_SPREAD_MODE,
+    ATOM_INT_OR_EXT_SS_MASK,
+    ATOM_INTERNAL_SS_MASK,
+    ATOM_EXTERNAL_SS_MASK
+)
+
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v3_1, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->smuip_min_ver, smuip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smuip_max_ver, smuip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_rsd1, smu_rsd1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_mode, gpuclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->sclk_ss_percentage, sclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sclk_ss_rate_10hz, sclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_percentage, gpuclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->gpuclk_ss_rate_10hz, gpuclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ac_dc_gpio_bit, ac_dc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid"))
+	),
+	(bios->ac_dc_polarity, ac_dc_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->vr0hot_gpio_bit, vr0hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid"))
+	),
+	(bios->vr0hot_polarity, vr0hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+	(bios->vr1hot_gpio_bit, vr1hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid"))
+	),
+	(bios->vr1hot_polarity, vr1hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(bios->fw_ctf_gpio_bit, fw_ctf_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid"))
+	),
+	(bios->fw_ctf_polarity, fw_ctf_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v3_2, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->smuip_min_ver, smuip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smuip_max_ver, smuip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_rsd1, smu_rsd1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_mode, gpuclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->sclk_ss_percentage, sclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sclk_ss_rate_10hz, sclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_percentage, gpuclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->gpuclk_ss_rate_10hz, gpuclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ac_dc_gpio_bit, ac_dc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid"))
+	),
+	(bios->ac_dc_polarity, ac_dc_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->vr0hot_gpio_bit, vr0hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid"))
+	),
+	(bios->vr0hot_polarity, vr0hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+	(bios->vr1hot_gpio_bit, vr1hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid"))
+	),
+	(bios->vr1hot_polarity, vr1hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(bios->fw_ctf_gpio_bit, fw_ctf_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid"))
+	),
+	(bios->fw_ctf_polarity, fw_ctf_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->pcc_gpio_bit, pcc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid"))
+	),
+	(bios->pcc_gpio_polarity, pcc_gpio_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->smugoldenoffset, smugoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpupll_vco_freq_10khz, gpupll_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_smnclk_10khz, bootup_smnclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_socclk_10khz, bootup_socclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp0clk_10khz, bootup_mp0clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp1clk_10khz, bootup_mp1clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_lclk_10khz, bootup_lclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dcefclk_10khz, bootup_dcefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v3_3, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->smuip_min_ver, smuip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smuip_max_ver, smuip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_mode, waflclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_mode, gpuclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->sclk_ss_percentage, sclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sclk_ss_rate_10hz, sclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_percentage, gpuclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->gpuclk_ss_rate_10hz, gpuclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ac_dc_gpio_bit, ac_dc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid"))
+	),
+	(bios->ac_dc_polarity, ac_dc_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->vr0hot_gpio_bit, vr0hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid"))
+	),
+	(bios->vr0hot_polarity, vr0hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+	(bios->vr1hot_gpio_bit, vr1hot_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid"))
+	),
+	(bios->vr1hot_polarity, vr1hot_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(bios->fw_ctf_gpio_bit, fw_ctf_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid"))
+	),
+	(bios->fw_ctf_polarity, fw_ctf_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->pcc_gpio_bit, pcc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid"))
+	),
+	(bios->pcc_gpio_polarity, pcc_gpio_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->smugoldenoffset, smugoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpupll_vco_freq_10khz, gpupll_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_smnclk_10khz, bootup_smnclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_socclk_10khz, bootup_socclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp0clk_10khz, bootup_mp0clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp1clk_10khz, bootup_mp1clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_lclk_10khz, bootup_lclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dcefclk_10khz, bootup_dcefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_1_vco_freq_10khz, syspll3_1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_fclk_10khz, bootup_fclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_waflclk_10khz, bootup_waflclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_info_caps, smu_info_caps,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_percentage, waflclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->smuinitoffset, smuinitoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v3_5, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->smuip_min_ver, smuip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smuip_max_ver, smuip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_mode, waflclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_mode, gpuclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->sclk_ss_percentage, sclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sclk_ss_rate_10hz, sclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_percentage, gpuclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->gpuclk_ss_rate_10hz, gpuclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_1_vco_freq_10khz, syspll0_1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_2_vco_freq_10khz, syspll0_2_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pcc_gpio_bit, pcc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid"))
+	),
+	(bios->pcc_gpio_polarity, pcc_gpio_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->smugoldenoffset, smugoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_0_vco_freq_10khz, syspll0_0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_smnclk_10khz, bootup_smnclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_socclk_10khz, bootup_socclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp0clk_10khz, bootup_mp0clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp1clk_10khz, bootup_mp1clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_lclk_10khz, bootup_lclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dcefclk_10khz, bootup_dcefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_1_vco_freq_10khz, syspll3_1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_fclk_10khz, bootup_fclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_waflclk_10khz, bootup_waflclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_info_caps, smu_info_caps,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_percentage, waflclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->smuinitoffset, smuinitoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dprefclk_10khz, bootup_dprefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_usbclk_10khz, bootup_usbclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smb_slave_address, smb_slave_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dtbclk_10khz, bootup_dtbclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclk_syspll_refclk_10khz, fclk_syspll_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc0_val, smusvi_svc0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc1_val, smusvi_svc1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd0_val, smusvi_svd0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd1_val, smusvi_svd1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt0_val, smusvi_svt0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt1_val, smusvi_svt1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_tmon_config_val, thm_tmon_config_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v3_6, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->smuip_min_ver, smuip_min_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smuip_max_ver, smuip_max_ver,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_mode, waflclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_mode, gpuclk_ss_mode,
+		(ATUI_DEC, ATUI_ENUM, atom_spread_spectrum_mode),
+		(ATUI_NODESCR)
+	),
+	(bios->sclk_ss_percentage, sclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->sclk_ss_rate_10hz, sclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_percentage, gpuclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gpuclk_ss_rate_10hz, gpuclk_ss_rate_10hz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_1_vco_freq_10khz, syspll0_1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_2_vco_freq_10khz, syspll0_2_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pcc_gpio_bit, pcc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid"))
+	),
+	(bios->pcc_gpio_polarity, pcc_gpio_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->smugoldenoffset, smugoldenoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_0_vco_freq_10khz, syspll0_0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_smnclk_10khz, bootup_smnclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_socclk_10khz, bootup_socclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp0clk_10khz, bootup_mp0clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp1clk_10khz, bootup_mp1clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_lclk_10khz, bootup_lclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dxioclk_10khz, bootup_dxioclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_1_vco_freq_10khz, syspll3_1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_fclk_10khz, bootup_fclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_waflclk_10khz, bootup_waflclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_info_caps, smu_info_caps,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_percentage, waflclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->smuinitoffset, smuinitoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_gfxavsclk_10khz, bootup_gfxavsclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mpioclk_10khz, bootup_mpioclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smb_slave_address, smb_slave_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved_clk, reserved_clk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclk_syspll_refclk_10khz, fclk_syspll_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc0_val, smusvi_svc0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc1_val, smusvi_svc1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd0_val, smusvi_svd0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd1_val, smusvi_svd1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt0_val, smusvi_svt0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt1_val, smusvi_svt1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_tmon_config_val, thm_tmon_config_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_vclk_10khz, bootup_vclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dclk_10khz, bootup_dclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_gpiopad_pu_en_val, smu_gpiopad_pu_en_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_gpiopad_pd_en_val, smu_gpiopad_pd_en_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smu_info_v4_0, atomtree_smu_info,
+	(bios->table_header, table_header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->bootup_gfxclk_bypass_10khz, bootup_gfxclk_bypass_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_usrclk_10khz, bootup_usrclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_csrclk_10khz, bootup_csrclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->core_refclk_10khz, core_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll1_vco_freq_10khz, syspll1_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll2_vco_freq_10khz, syspll2_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pcc_gpio_bit, pcc_gpio_bit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid"))
+	),
+	(bios->pcc_gpio_polarity, pcc_gpio_polarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for CTF"))
+	),
+	(bios->bootup_vddusr_mv, bootup_vddusr_mv,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll0_vco_freq_10khz, syspll0_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_smnclk_10khz, bootup_smnclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_socclk_10khz, bootup_socclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp0clk_10khz, bootup_mp0clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mp1clk_10khz, bootup_mp1clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_lclk_10khz, bootup_lclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dcefclk_10khz, bootup_dcefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->syspll3_vco_freq_10khz, syspll3_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mm_syspll_vco_freq_10khz, mm_syspll_vco_freq_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_fclk_10khz, bootup_fclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_waflclk_10khz, bootup_waflclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smu_info_caps, smu_info_caps,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->waflclk_ss_percentage, waflclk_ss_percentage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in unit of 0.001%"))
+	),
+	(bios->smuinitoffset, smuinitoffset,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dprefclk_10khz, bootup_dprefclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_usbclk_10khz, bootup_usbclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smb_slave_address, smb_slave_address,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dtbclk_10khz, bootup_dtbclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclk_syspll_refclk_10khz, fclk_syspll_refclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc0_val, smusvi_svc0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svc1_val, smusvi_svc1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd0_val, smusvi_svd0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svd1_val, smusvi_svd1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt0_val, smusvi_svt0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smusvi_svt1_val, smusvi_svt1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->thm_tmon_config_val, thm_tmon_config_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smbus_timing_cntrl0_val, smbus_timing_cntrl0_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smbus_timing_cntrl1_val, smbus_timing_cntrl1_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->smbus_timing_cntrl2_val, smbus_timing_cntrl2_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pwr_disp_timer_global_control_val, pwr_disp_timer_global_control_val,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_mpioclk_10khz, bootup_mpioclk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dclk0_10khz, bootup_dclk0_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_vclk0_10khz, bootup_vclk0_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_dclk1_10khz, bootup_dclk1_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_vclk1_10khz, bootup_vclk1_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_baco400clk_10khz, bootup_baco400clk_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_baco1200clk_bypass_10khz, bootup_baco1200clk_bypass_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->bootup_baco700clk_bypass_10khz, bootup_baco700clk_bypass_10khz,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
 
 
 

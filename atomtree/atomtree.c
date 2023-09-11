@@ -243,6 +243,9 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 	smu_info->dot = smu_info;
 	smu_info->dotdot = &(atree->data_table);
 
+	smu_info->smugolden = NULL;
+	smu_info->smuinit = NULL;
+
 	// leaves is in a union with the structs.
 	if (atree->data_table.leaves->smu_info) {
 		atui_smu_info = NULL;
@@ -251,38 +254,92 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 
 		smu_info->ver = get_ver(smu_info->table_header);
 		switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
-			/*
-			case v3_3:
-				smu_info->smugolden = smu_info->leaves +
-					smu_info->v3_3->smugoldenoffset;
-				smu_info->smuinit = smu_info->leaves +
-					smu_info->v3_3->smuinitoffset;
+			case v3_1:
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_1,
+						NULL,smu_info->v3_1,  0,NULL
+					);
+				}
 				break;
+			case v3_2:
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_2,
+						NULL,smu_info->v3_2,  0,NULL
+					);
+				}
+				if (smu_info->v3_2->smugoldenoffset) {
+					smu_info->smugolden = smu_info->leaves +
+						smu_info->v3_2->smugoldenoffset;
+				}
+				break;
+			case v3_3:
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_3,
+						NULL,smu_info->v3_3,  0,NULL
+					);
+				}
+				if (smu_info->v3_3->smugoldenoffset) {
+					smu_info->smugolden = smu_info->leaves +
+						smu_info->v3_3->smugoldenoffset;
+				}
+				if (smu_info->v3_3->smuinitoffset) {
+					smu_info->smuinit = smu_info->leaves +
+						smu_info->v3_3->smuinitoffset;
+				}
+				break;
+			case v3_4: // bios reports 244 bytes. v3_5 is 240 bytes.
 			case v3_5:
-				smu_info->smugolden = smu_info->leaves +
-					smu_info->v3_5->smugoldenoffset;
-				smu_info->smuinit = smu_info->leaves +
-					smu_info->v3_5->smuinitoffset;
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_5,
+						NULL,smu_info->v3_5,  0,NULL
+					);
+					if (smu_info->ver == v3_4) {
+						sprintf(atui_smu_info->name,
+							"%s (forced)", atui_smu_info->varname
+						);
+					}
+				}
+				if (smu_info->v3_5->smugoldenoffset) {
+					smu_info->smugolden = smu_info->leaves +
+						smu_info->v3_5->smugoldenoffset;
+				}
+				if (smu_info->v3_5->smuinitoffset) {
+					smu_info->smuinit = smu_info->leaves +
+						smu_info->v3_5->smuinitoffset;
+				}
 				break;
 			case v3_6:
-				smu_info->smugolden = smu_info->leaves +
-					smu_info->v3_6->smugoldenoffset;
-				smu_info->smuinit = smu_info->leaves +
-					smu_info->v3_6->smuinitoffset;
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_6,
+						NULL,smu_info->v3_6,  0,NULL
+					);
+				}
+				if (smu_info->v3_6->smugoldenoffset) {
+					smu_info->smugolden = smu_info->leaves +
+						smu_info->v3_6->smugoldenoffset;
+				}
+				if (smu_info->v3_6->smuinitoffset) {
+					smu_info->smuinit = smu_info->leaves +
+						smu_info->v3_6->smuinitoffset;
+				}
 				break;
 			case v4_0:
-				smu_info->smuinit = smu_info->leaves +
-					smu_info->v4_0->smuinitoffset;
+				if (generate_atui) {
+					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v4_0,
+						NULL,smu_info->v4_0,  0,NULL
+					);
+				}
+				if (smu_info->v4_0->smuinitoffset) {
+					smu_info->smuinit = smu_info->leaves +
+						smu_info->v4_0->smuinitoffset;
+				}
 				break;
-			*/
 			default:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_common_table_header,
 						NULL,smu_info->table_header,  0,NULL
 					);
 					sprintf(atui_smu_info->name, "smu_info (header only stub)");
-				} else {
-					atui_smu_info = NULL;
 				}
 				break;
 		}
