@@ -1881,7 +1881,7 @@ struct atom_smu_info_v3_2 {
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
 	uint8_t  smu_rsd1;
-	uint8_t  gpuclk_ss_mode;
+	enum atom_spread_spectrum_mode gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1913,8 +1913,8 @@ struct atom_smu_info_v3_3 {
 	struct   atom_common_table_header table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	uint8_t  waflclk_ss_mode;
-	uint8_t  gpuclk_ss_mode;
+	enum atom_spread_spectrum_mode waflclk_ss_mode;
+	enum atom_spread_spectrum_mode gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1953,8 +1953,8 @@ struct atom_smu_info_v3_5 {
 	struct   atom_common_table_header table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	uint8_t  waflclk_ss_mode;
-	uint8_t  gpuclk_ss_mode;
+	enum atom_spread_spectrum_mode waflclk_ss_mode;
+	enum atom_spread_spectrum_mode gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -2009,8 +2009,8 @@ struct atom_smu_info_v3_6 {
 	struct   atom_common_table_header table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	uint8_t  waflclk_ss_mode;
-	uint8_t  gpuclk_ss_mode;
+	enum atom_spread_spectrum_mode waflclk_ss_mode;
+	enum atom_spread_spectrum_mode gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage;
@@ -2073,8 +2073,6 @@ struct atom_smu_info_v4_0 {
 	uint32_t core_refclk_10khz;
 	uint32_t syspll1_vco_freq_10khz;
 	uint32_t syspll2_vco_freq_10khz;
-	uint8_t  pcc_gpio_bit;
-	uint8_t  pcc_gpio_polarity;
 	uint8_t  pcc_gpio_bit;      // GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid
 	uint8_t  pcc_gpio_polarity; // GPIO polarity for CTF
 	uint16_t bootup_vddusr_mv;
