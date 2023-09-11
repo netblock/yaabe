@@ -800,7 +800,7 @@ enum atom_gpio_pin_control_pinstate_def:uint8_t {
 struct atom_gpio_pin_control_pair {
 	uint8_t  gpio_id;       // GPIO_ID, find the corresponding ID in GPIO_LUT table
 	//uint8_t  gpio_pinstate; // Pin state showing how to set-up the pin
-	enum atom_gpio_pin_control_pinstate_def gpio_pinstate;
+	enum atom_gpio_pin_control_pinstate_def gpio_pinstate; // Pin state showing how to set-up the pin 
 };
 
 struct atom_object_gpio_cntl_record {
@@ -1482,11 +1482,11 @@ struct atom_integrated_system_info_v1_11 {
 	uint16_t  dvi_ss_rate_10hz;
 	//uint16_t  dpphy_override;       // bit vector, enum of atom_sysinfo_dpphy_override_def
 	//uint16_t  lvds_misc;            // enum of atom_sys_info_lvds_misc_def
-	union atom_sysinfo_dpphy_override_def dpphy_override;
+	union atom_sysinfo_dpphy_override_def dpphy_override; // bit vector
 	enum atom_sys_info_lvds_misc_def lvds_misc;
 	uint16_t  backlight_pwm_hz;     // pwm frequency in hz
 	//uint8_t   memorytype;           // enum of atom_dmi_t17_mem_type_def, APU memory type indication.
-	enum atom_dmi_t17_mem_type_def memorytype;
+	enum atom_dmi_t17_mem_type_def memorytype; // APU memory type indication.
 	uint8_t   umachannelnumber;     // number of memory channels
 	uint8_t   pwr_on_digon_to_de;   // all pwr sequence numbers below are in uint of 4ms
 	uint8_t   pwr_on_de_to_vary_bl;
@@ -1533,11 +1533,11 @@ struct atom_integrated_system_info_v1_12 {
 	uint16_t  dvi_ss_rate_10hz;
 	//uint16_t  dpphy_override;       // bit vector, enum of atom_sysinfo_dpphy_override_def
 	//uint16_t  lvds_misc;            // enum of atom_sys_info_lvds_misc_def
-	union atom_sysinfo_dpphy_override_def dpphy_override;
+	union atom_sysinfo_dpphy_override_def dpphy_override; // bit vector
 	enum atom_sys_info_lvds_misc_def lvds_misc;
 	uint16_t  backlight_pwm_hz;     // pwm frequency in hz
 	//uint8_t   memorytype;           // enum of atom_dmi_t17_mem_type_def, APU memory type indication.
-	enum atom_dmi_t17_mem_type_def memorytype;
+	enum atom_dmi_t17_mem_type_def memorytype; // APU memory type indication.
 	uint8_t   umachannelnumber;     // number of memory channels
 	uint8_t   pwr_on_digon_to_de;   // all pwr sequence numbers below are in uint of 4ms //
 	uint8_t   pwr_on_de_to_vary_bl;
@@ -1593,9 +1593,9 @@ struct atom_integrated_system_info_v2_1 {
 	uint16_t gpuclk_ss_percentage; // unit of 0.001%,   1000 mean 1%
 	uint16_t gpuclk_ss_type;
 	//uint16_t dpphy_override;       // bit vector, enum of atom_sysinfo_dpphy_override_def
-	union atom_sysinfo_dpphy_override_def dpphy_override;
+	union atom_sysinfo_dpphy_override_def dpphy_override; // bit vector
 	//uint8_t  memorytype;           // enum of atom_dmi_t17_mem_type_def, APU memory type indication.
-	enum atom_dmi_t17_mem_type_def memorytype;
+	enum atom_dmi_t17_mem_type_def memorytype; // APU memory type indication.
 	uint8_t  umachannelnumber;     // number of memory channels
 	uint8_t  htc_hyst_limit;
 	uint8_t  htc_tmp_limit;
@@ -1663,9 +1663,9 @@ struct atom_integrated_system_info_v2_2 {
 	uint16_t  gpuclk_ss_percentage; //unit of 0.001%,   1000 mean 1%
 	uint16_t  gpuclk_ss_type;
 	//uint16_t  dpphy_override;       // bit vector, enum of atom_sysinfo_dpphy_override_def
-	union atom_sysinfo_dpphy_override_def dpphy_override;
+	union atom_sysinfo_dpphy_override_def dpphy_override; // bit vector
 	//uint8_t   memorytype;           // enum of atom_dmi_t17_mem_type_def, APU memory type indication.
-	enum atom_dmi_t17_mem_type_def memorytype;
+	enum atom_dmi_t17_mem_type_def memorytype; // APU memory type indication.
 	uint8_t   umachannelnumber;     // number of memory channels
 	uint8_t   htc_hyst_limit;
 	uint8_t   htc_tmp_limit;
@@ -2069,8 +2069,8 @@ struct atom_smu_info_v3_6 {
 	uint32_t core_refclk_10khz;
 	uint32_t syspll0_1_vco_freq_10khz;
 	uint32_t syspll0_2_vco_freq_10khz;
-	uint8_t  pcc_gpio_bit;
-	uint8_t  pcc_gpio_polarity;
+	uint8_t  pcc_gpio_bit;      // GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid
+	uint8_t  pcc_gpio_polarity; // GPIO polarity for CTF
 	uint16_t smugoldenoffset;
 	uint32_t syspll0_0_vco_freq_10khz;
 	uint32_t bootup_smnclk_10khz;
@@ -2085,7 +2085,7 @@ struct atom_smu_info_v3_6 {
 	uint32_t bootup_fclk_10khz;
 	uint32_t bootup_waflclk_10khz;
 	uint32_t smu_info_caps;
-	uint16_t waflclk_ss_percentage;
+	uint16_t waflclk_ss_percentage; // in unit of 0.001%
 	uint16_t smuinitoffset;
 	uint32_t bootup_gfxavsclk_10khz;
 	uint32_t bootup_mpioclk_10khz;
@@ -2126,6 +2126,8 @@ struct atom_smu_info_v4_0 {
 	uint32_t syspll2_vco_freq_10khz;
 	uint8_t  pcc_gpio_bit;
 	uint8_t  pcc_gpio_polarity;
+	uint8_t  pcc_gpio_bit;      // GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid
+	uint8_t  pcc_gpio_polarity; // GPIO polarity for CTF
 	uint16_t bootup_vddusr_mv;
 	uint32_t syspll0_vco_freq_10khz;
 	uint32_t bootup_smnclk_10khz;
@@ -2140,7 +2142,7 @@ struct atom_smu_info_v4_0 {
 	uint32_t bootup_fclk_10khz;
 	uint32_t bootup_waflclk_10khz;
 	uint32_t smu_info_caps;
-	uint16_t waflclk_ss_percentage;
+	uint16_t waflclk_ss_percentage; // in unit of 0.001%
 	uint16_t smuinitoffset;
 	uint32_t bootup_dprefclk_10khz;
 	uint32_t bootup_usbclk_10khz;
@@ -2421,7 +2423,7 @@ struct atom_smc_dpm_info_v4_4 {
 
 	uint8_t  fclkspreadenabled;
 	uint8_t  fclkspreadpercent;
-	uint16_t fclkspreadfreq;
+	uinT16_T fclkspreadfreq;
 
 
 	uint8_t  fllgfxclkspreadenabled;
@@ -3636,7 +3638,7 @@ enum atom_i2c_voltage_control_flag {
 union loadline_psi1 {
 	uint8_t  loadline_psi1;
 	struct { uint8_t
-		loadline_setting :4-0 +1,
+		loadline_setting :4-0 +1, // Core Loadline trim and offset trim
 		PSI1_L_enable    :5-5 +1,
 		reserved         :7-6 +1;
 	};
@@ -3646,7 +3648,7 @@ struct atom_svid2_voltage_object_v4 {
 	union loadline_psi1 loadline_psi1;
 	//uint8_t  loadline_psi1;     // bit4:0= loadline setting ( Core Loadline trim and offset trim ), bit5=0:PSI1_L disable =1: PSI1_L enable
 	uint8_t  psi0_l_vid_thresd; // VR PSI0_L VID threshold
-	uint8_t  psi0_enable;       //
+	uint8_t  psi0_enable;
 	uint8_t  maxvstep;
 	uint8_t  telemetry_offset;
 	uint8_t  telemetry_gain;
@@ -4166,7 +4168,7 @@ enum atom_set_dce_clock_pixclk_flag {
 	DCE_CLOCK_FLAG_PIXCLK_YUV420_MODE        = 0x04,
 };
 union dce_clock_flag {
-	uint8_t  dceclkflag;
+	uint8_t  dceclkflag; // Bit [1:0] = PPLL ref clock source ( when ucDCEClkSrc= ATOM_PPLL0 )
 	enum atom_set_dce_clock_dprefclk_flag dprefclk;
 	enum atom_set_dce_clock_pixclk_flag pixclk;
 };
@@ -4179,8 +4181,9 @@ struct set_dce_clock_parameters_v2_1 {
 	//uint8_t  dceclksrc;    // ATOM_PLL0 or ATOM_GCK_DFS or ATOM_FCH_CLK or ATOM_COMBOPHY_PLLx
 	enum atom_ppll_def dceclksrc;
 	//uint8_t  dceclkflag;   // Bit [1:0] = PPLL ref clock source ( when ucDCEClkSrc= ATOM_PPLL0 )
-	union dce_clock_flag dceclkflag;
-	uint8_t  crtc_id;      // ucDisp Pipe Id, ATOM_CRTC0/1/2/..., use only when ucDCEClkType = PIXCLK
+	union dce_clock_flag dceclkflag; // Bit [1:0] = PPLL ref clock source ( when ucDCEClkSrc= ATOM_PPLL0 )
+	//uint8_t  crtc_id;      // ucDisp Pipe Id, ATOM_CRTC0/1/2/..., use only when ucDCEClkType = PIXCLK
+	union atom_crtc_def crtc_id;      // ucDisp Pipe Id, use only when ucDCEClkType = PIXCLK
 };
 
 
@@ -4505,7 +4508,7 @@ struct dig_transmitter_control_parameters_v1_6 {
 	//uint8_t  hpdsel;        // =1: HPD1, =2: HPD2, .... =6: HPD6, =0: HPD is not assigned
 	//uint8_t  digfe_sel;     // DIG stream( front-end ) selection, bit0 means DIG0 FE is enable,
 	enum atom_dig_transmitter_control_hpd_sel hpdsel;
-	enum atom_dig_transmitter_control_digfe_sel digfe_sel;
+	enum atom_dig_transmitter_control_digfe_sel digfe_sel; // DIG stream( front-end ) selection, bit0 means DIG0 FE is enable,
 	uint8_t  connobj_id;    // Connector Object Id defined in ObjectId.h
 	uint8_t  reserved;
 	uint32_t reserved1;
