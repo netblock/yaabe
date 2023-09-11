@@ -3172,7 +3172,26 @@ struct atom_umc_info_v3_3 {
 	uint32_t reserved[2];
 };
 
-
+struct atom_umc_info_v4_0 {
+	struct atom_common_table_header table_header;
+	uint32_t ucode_reserved[5];
+	uint8_t umcip_min_ver;
+	uint8_t umcip_max_ver;
+	//uint8_t vram_type;
+	//uint8_t umc_config;
+	enum atom_dgpu_vram_type vram_type;
+	union atom_umc_config_def umc_config;
+	uint32_t mem_refclk_10khz;
+	uint32_t clk_reserved[4];
+	uint32_t golden_reserved;
+	//uint32_t umc_config1;
+	union atom_umc_config1_def umc_config1;
+	uint32_t reserved[2];
+	uint8_t channel_num;
+	uint8_t channel_width;
+	uint8_t channel_reserve[2];
+	uint8_t umc_info_reserved[16];
+};
 
 /****************************************************************************
       Data Table vram_info  structure
