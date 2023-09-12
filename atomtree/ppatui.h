@@ -32,7 +32,7 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 
 // to define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...) \
-	const struct atui_enum _atui_enum_##name[] = \
+	static const struct atui_enum _atui_enum_##name[] = \
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
 #define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate},
 

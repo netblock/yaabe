@@ -18,10 +18,10 @@ atui.h is about the main API for ATUI
 
 
 
-// shall be used in an array
+// base struct for PPATUI_ENUMER() for ATUI_ENUM
 struct atui_enum {
 	const char8_t* name;
-	int64_t val;
+	const int64_t val;
 };
 
 enum i18n_languages:int8_t {
@@ -176,5 +176,6 @@ struct atui_nullstruct;
 
 
 #include "atui_includes.h"
+#include "atui_enums.h"
 
 #endif
