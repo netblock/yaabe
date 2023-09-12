@@ -789,7 +789,7 @@ enum atom_gpio_pin_control_pinstate_def:uint8_t {
 //The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
 struct atom_gpio_pin_control_pair {
 	uint8_t  gpio_id;       // GPIO_ID, find the corresponding ID in GPIO_LUT table
-	enum atom_gpio_pin_control_pinstate_def gpio_pinstate; // Pin state showing how to set-up the pin 
+	enum atom_gpio_pin_control_pinstate_def gpio_pinstate; // Pin state showing how to set-up the pin
 };
 
 struct atom_object_gpio_cntl_record {
@@ -4020,17 +4020,17 @@ enum atom_set_pixel_clock_v1_7_deepcolor_ratio:uint8_t {
 };
 
 struct set_pixel_clock_parameter_v1_7 {
-    uint32_t pixclk_100hz; // target the pixel clock to drive the CRTC timing in unit of 100Hz.
+	uint32_t pixclk_100hz; // target the pixel clock to drive the CRTC timing in unit of 100Hz.
 
-    uint8_t  pll_id;       // ATOM_PHY_PLL0/ATOM_PHY_PLL1/ATOM_PPLL0
-    uint8_t  encoderobjid; // ASIC encoder id defined in objectId.h,
-                           // indicate which graphic encoder will be used.
+	uint8_t  pll_id;       // ATOM_PHY_PLL0/ATOM_PHY_PLL1/ATOM_PPLL0
+	uint8_t  encoderobjid; // ASIC encoder id defined in objectId.h,
+	                       // indicate which graphic encoder will be used.
 	enum atom_encode_mode_def encoder_mode;
 	enum atom_set_pixel_clock_v1_7_misc_info miscinfo;
-    enum atom_crtc_def crtc_id;
+	enum atom_crtc_def crtc_id;
 	enum atom_set_pixel_clock_v1_7_deepcolor_ratio deep_color_ratio; // HDMI panel bit depth
-    uint8_t  reserved1[2];
-    uint32_t reserved2;
+	uint8_t  reserved1[2];
+	uint32_t reserved2;
 };
 
 

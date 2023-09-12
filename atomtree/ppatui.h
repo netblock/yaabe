@@ -17,7 +17,7 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 
 // to create the allocator function. See atui.c for how it is used.
 #define PPATUI_FUNCIFY(atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
-    _PPATUI_FUNCIFY_HELPER(atomtypeprefix, atomtypesuffix, atomtreestruct \
+	_PPATUI_FUNCIFY_HELPER(atomtypeprefix, atomtypesuffix, atomtreestruct \
 		 __VA_OPT__(,) __VA_ARGS__)
 
 
