@@ -12,6 +12,9 @@ ATUI_HEADERIFY()
 //blank branch
 PPATUI_HEADERIFY(atui_nullstruct);
 
+/***************************************************************************************/
+// atui_atomfirmware.c / atomfirmware.h
+
 PPATUI_HEADERIFY(atom_common_table_header);
 
 PPATUI_HEADERIFY(atom_rom_header_v2_2);
@@ -65,22 +68,6 @@ PPATUI_HEADERIFY(atom_smu_info_v4_0);
 
 
 
-PPATUI_HEADERIFY(gddr6_mr0);
-PPATUI_HEADERIFY(gddr6_mr1);
-PPATUI_HEADERIFY(gddr6_mr2);
-PPATUI_HEADERIFY(gddr6_mr3);
-PPATUI_HEADERIFY(gddr6_mr4);
-PPATUI_HEADERIFY(gddr6_mr5);
-PPATUI_HEADERIFY(gddr6_mr6);
-PPATUI_HEADERIFY(gddr6_mr7);
-PPATUI_HEADERIFY(gddr6_mr8);
-PPATUI_HEADERIFY(gddr6_mr9);
-PPATUI_HEADERIFY(gddr6_mr10);
-PPATUI_HEADERIFY(gddr6_mr11);
-PPATUI_HEADERIFY(gddr6_mr12);
-PPATUI_HEADERIFY(gddr6_mr13);
-PPATUI_HEADERIFY(gddr6_mr14);
-PPATUI_HEADERIFY(gddr6_mr15);
 
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
@@ -114,5 +101,33 @@ PPATUI_HEADERIFY(atom_gpio_voltage_object_v4);
 PPATUI_HEADERIFY(atom_i2c_voltage_object_v4);
 PPATUI_HEADERIFY(atom_svid2_voltage_object_v4);
 PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
+
+
+
+
+
+
+/***************************************************************************************/
+// atui_ddrmoderegisters.c / ddrmoderegisters.h
+
+PPATUI_HEADERIFY(gddr6_mr0);
+PPATUI_HEADERIFY(gddr6_mr1);
+PPATUI_HEADERIFY(gddr6_mr2);
+PPATUI_HEADERIFY(gddr6_mr3);
+PPATUI_HEADERIFY(gddr6_mr4);
+PPATUI_HEADERIFY(gddr6_mr5);
+PPATUI_HEADERIFY(gddr6_mr6);
+PPATUI_HEADERIFY(gddr6_mr7);
+PPATUI_HEADERIFY(gddr6_mr8);
+PPATUI_HEADERIFY(gddr6_mr9);
+PPATUI_HEADERIFY(gddr6_mr10);
+PPATUI_HEADERIFY(gddr6_mr11);
+PPATUI_HEADERIFY(gddr6_mr12);
+PPATUI_HEADERIFY(gddr6_mr13);
+PPATUI_HEADERIFY(gddr6_mr14);
+PPATUI_HEADERIFY(gddr6_mr15);
+
+
+/***************************************************************************************/
 
 #endif
