@@ -2297,14 +2297,51 @@ struct atom_smc_dpm_info_v4_3 {
 	uint32_t boardreserved[10];
 };
 
+enum I2cControllerPort_e:uint32_t {
+	I2C_CONTROLLER_PORT_0 = 0,
+	I2C_CONTROLLER_PORT_1 = 1,
+};
+enum I2cControllerName_e:uint32_t {
+	I2C_CONTROLLER_NAME_VR_GFX   = 0,
+	I2C_CONTROLLER_NAME_VR_SOC   = 1,
+	I2C_CONTROLLER_NAME_VR_VDDCI = 2,
+	I2C_CONTROLLER_NAME_VR_MVDD  = 3, // HBM
+	I2C_CONTROLLER_NAME_LIQUID_0 = 4,
+	I2C_CONTROLLER_NAME_LIQUID_1 = 5,
+	I2C_CONTROLLER_NAME_PLX      = 6,
+	I2C_CONTROLLER_NAME_COUNT    = 7,
+};
+enum I2cControllerThrottler_e:uint32_t {
+	I2C_CONTROLLER_THROTTLER_TYPE_NONE = 0,
+	I2C_CONTROLLER_THROTTLER_VR_GFX    = 1,
+	I2C_CONTROLLER_THROTTLER_VR_SOC    = 2,
+	I2C_CONTROLLER_THROTTLER_VR_VDDCI  = 3,
+	I2C_CONTROLLER_THROTTLER_VR_MVDD   = 4, // HBM
+	I2C_CONTROLLER_THROTTLER_LIQUID_0  = 5,
+	I2C_CONTROLLER_THROTTLER_LIQUID_1  = 6,
+	I2C_CONTROLLER_THROTTLER_PLX       = 7,
+};
+enum I2cControllerProtocol_e:uint32_t {
+	I2C_CONTROLLER_PROTOCOL_VR_XPDE132G5 = 0,
+	I2C_CONTROLLER_PROTOCOL_VR_IR35217   = 1,
+	I2C_CONTROLLER_PROTOCOL_TMP_TMP102A  = 2,
+	I2C_CONTROLLER_PROTOCOL_SPARE_0 = 3, // TMP
+	I2C_CONTROLLER_PROTOCOL_SPARE_1 = 4,
+	I2C_CONTROLLER_PROTOCOL_SPARE_2 = 5,
+};
+enum I2cControllerSpeed_e:uint32_t {
+	I2C_CONTROLLER_SPEED_SLOW = 0,
+	I2C_CONTROLLER_SPEED_FAST = 1,
+};
+
 struct smudpm_i2ccontrollerconfig_t {
 	uint32_t  enabled;
 	uint32_t  slaveaddress;
-	uint32_t  controllerport;
-	uint32_t  controllername;
-	uint32_t  thermalthrottler;
-	uint32_t  i2cprotocol;
-	uint32_t  i2cspeed;
+	enum I2cControllerPort_e controllerport;
+	enum I2cControllerName_e controllername;
+	enum I2cControllerThrottler_e thermalthrottler;
+	enum I2cControllerProtocol_e i2cprotocol;
+	enum I2cControllerSpeed_e i2cspeed;
 };
 
 struct atom_smc_dpm_info_v4_4 {
@@ -2385,7 +2422,14 @@ struct atom_smc_dpm_info_v4_4 {
 };
 
 
-// see smu11_driver_if.h
+enum smudpm_v4_5_i2ccontrollerspeed_e:uint8_t {
+	SMC_V4_5_I2C_CONTROLLER_SPEED_SLOW = 0,
+	SMC_V4_5_I2C_CONTROLLER_SPEED_FAST = 1,
+};
+enum smudpm_v4_5_i2ccontrollerport_e:uint8_t {
+	SMC_V4_5_I2C_CONTROLLER_PORT_0 = 0,
+	SMC_V4_5_I2C_CONTROLLER_PORT_1 = 1,
+};
 enum smudpm_v4_5_i2ccontrollername_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_NAME_VR_GFX = 0,
 	SMC_V4_5_I2C_CONTROLLER_NAME_VR_SOC,
@@ -2397,7 +2441,6 @@ enum smudpm_v4_5_i2ccontrollername_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_NAME_SPARE,
 	SMC_V4_5_I2C_CONTROLLER_NAME_COUNT,
 };
-
 enum smudpm_v4_5_i2ccontrollerthrottler_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_THROTTLER_TYPE_NONE = 0,
 	SMC_V4_5_I2C_CONTROLLER_THROTTLER_VR_GFX,
@@ -2409,7 +2452,6 @@ enum smudpm_v4_5_i2ccontrollerthrottler_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_THROTTLER_PLX,
 	SMC_V4_5_I2C_CONTROLLER_THROTTLER_COUNT,
 };
-
 enum smudpm_v4_5_i2ccontrollerprotocol_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_VR_0, // VR_XPDE132G5 
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_VR_1, // VR_IR35217
@@ -2419,13 +2461,12 @@ enum smudpm_v4_5_i2ccontrollerprotocol_e:uint8_t {
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_SPARE_1,
 	SMC_V4_5_I2C_CONTROLLER_PROTOCOL_COUNT,
 };
-
 struct smudpm_i2c_controller_config_v2 {
 	uint8_t  Enabled;
-	uint8_t  Speed; // 0=slow 1=fast
+	enum smudpm_v4_5_i2ccontrollerspeed_e Speed;
 	uint8_t  Padding[2];
 	uint32_t SlaveAddress;
-	uint8_t  ControllerPort;
+	enum smudpm_v4_5_i2ccontrollerport_e ControllerPort;
 	enum smudpm_v4_5_i2ccontrollername_e ControllerName;
 	enum smudpm_v4_5_i2ccontrollerthrottler_e Throttler;
 	enum smudpm_v4_5_i2ccontrollerprotocol_e I2cProtocol;
