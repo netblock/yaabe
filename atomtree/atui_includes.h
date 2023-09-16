@@ -9,6 +9,9 @@ ATUI_HEADERIFY()
 #ifndef ATUI_INCLUDES_H
 #define ATUI_INCLUDES_H
 
+
+
+
 //blank branch
 PPATUI_HEADERIFY(atui_nullstruct);
 
@@ -129,5 +132,15 @@ PPATUI_HEADERIFY(gddr6_mr15);
 
 
 /***************************************************************************************/
+// atui_smu_v11_pptable.c / smu_v11_pptable.h , smu11_driver_if.h
+
+PPATUI_HEADERIFY(smu_powerplay_table_header);
+PPATUI_HEADERIFY(smu_11_0_powerplay_table);
+PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
+PPATUI_HEADERIFY(smu_11_0_overdrive_table);
+PPATUI_HEADERIFY(smc_pptable);
+PPATUI_HEADERIFY(powerplay_features);
+PPATUI_HEADERIFY(smc_pptable_i2c);
+
 
 #endif

@@ -578,27 +578,69 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 inline static atui_branch* atomtree_dt_populate_ppt(
 		struct atom_tree* atree, bool generate_atui) {
 
-	atui_branch* atui_ppt;
+	atui_branch* atui_ppt = NULL;
 
 	struct atomtree_powerplaytable* ppt = &(atree->data_table.powerplayinfo);
 	ppt->dot = ppt;
 	ppt->dotdot = &(atree->data_table);
 
 	if (atree->data_table.leaves->powerplayinfo) {
-		atui_ppt = NULL;
 		// leaves is in a union with the structs.
 		ppt->leaves = atree->bios + atree->data_table.leaves->powerplayinfo;
 		ppt->ver = get_ver(ppt->table_header);
+		switch(ppt->ver) { // TODO should we use atom or pp version?
+			case v14_0:
+			case v12_0:
+				if (generate_atui) {
+					atui_branch* atui_smc_pptable_kids[] = {
+						ATUI_MAKE_BRANCH(powerplay_features,
+							NULL,&(ppt->v12_0->smc_pptable.features),  0,NULL
+						),
+						ATUI_MAKE_BRANCH(smc_pptable_i2c,
+							NULL, &(ppt->v12_0->smc_pptable.I2cControllers),
+							0, NULL
+						),
+					};
+					const uint8_t num_smc_pptable_kids = (
+						sizeof(atui_smc_pptable_kids)/sizeof(atui_branch*)
+					);
 
-		if  (ppt->ver > maxver) { // Navi3 compatibility. TODO: wrong.
-			ppt->leaves = atree->data_table.leaves +
-				atree->data_table.leaves->powerplayinfo;
-			ppt->ver = get_ver(ppt->table_header);
+					atui_branch* atui_smu11ppt_kids[] = {
+						ATUI_MAKE_BRANCH(smu_11_0_power_saving_clock_table,
+							NULL,&(ppt->v12_0->power_saving_clock),  0,NULL
+						),
+						ATUI_MAKE_BRANCH(smu_11_0_overdrive_table,
+							NULL,&(ppt->v12_0->overdrive_table),  0,NULL
+						),
+						ATUI_MAKE_BRANCH(smc_pptable,
+							NULL, &(ppt->v12_0->smc_pptable),
+							num_smc_pptable_kids, atui_smc_pptable_kids		
+						),
+					};
+					const uint8_t smu11ppt_numkids = (
+						sizeof(atui_smu11ppt_kids)/sizeof(atui_branch*)
+					);
+
+					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_powerplay_table,
+						NULL,ppt->v12_0,  smu11ppt_numkids,atui_smu11ppt_kids
+					);
+				}
+				break;
+			default:
+				if (generate_atui) {
+					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,
+						NULL,ppt->leaves,  0,NULL
+					);
+					sprintf(atui_ppt->name, "%s (header only stub)",
+						atui_ppt->varname
+					);
+				}
+				break;
 		}
+
 	} else {
 		ppt->leaves = NULL;
 		ppt->ver = nover;
-		atui_ppt = NULL;
 	}
 	return atui_ppt;
 }
@@ -1845,8 +1887,12 @@ inline static atui_branch* atomtree_populate_datatables(
 	atui_branch* atui_dt = NULL;
 	if (generate_atui) {
 		atui_branch* child_branches[] = {
-			atui_smc_dpm_info, atui_firmwareinfo, atui_vram_info, atui_lcd_info,
-			atui_smu_info, atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info,
+			// utility, multimedia
+			atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
+			atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt,
+			// disp obj, indirect, umc, dce, 
+			atui_vram_info,
+			// integrated, asic
 			atui_voltageobject_info
 		};
 		const uint8_t num_child_branches = (

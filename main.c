@@ -99,26 +99,54 @@ inline static void vi30_funstuffs(struct atom_tree* atree) {
 
 
 inline static void pp1_funstuffs(struct atom_tree* atree) {
+	uint8_t i = 0;
 	struct smu_11_0_powerplay_table* navi1 =
 		atree->data_table.powerplayinfo.navi1;
 
 	printf("navi1 ppt: common: %d ; table_revision: %d\n",
-		atree->data_table.powerplayinfo.ver, navi1->table_revision
+		atree->data_table.powerplayinfo.ver, navi1->header.table_revision
 	);
-	printf("table size: common: %d ; pp %d\n",
-		navi1->header.structuresize, navi1->table_size
+	printf("table size: common: %d ; pp %d ; sizeof %d\n",
+		navi1->header.header.structuresize, navi1->header.table_size,
+		sizeof(struct smu_11_0_powerplay_table)
 	);
-	printf("power limit:small: %d %d ; OD: %d %d\n",
+	printf("power limit:\n     small: %d %d\n    odrive: %d %d\n",
 		navi1->small_power_limit1, navi1->small_power_limit2,
 		navi1->od_turbo_power_limit, navi1->od_power_save_power_limit
 	);
 
-	printf("\nOD:\n");
-	printf("GFXCLKFMAX %d\nVDDGFXCURVEFREQ_P3 %d\nVDDGFXCURVEVOLTAGE_P3 %d\n",
-		navi1->overdrive_table.max[SMU_11_0_ODSETTING_GFXCLKFMAX],
-		navi1->overdrive_table.max[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P3],
-		navi1->overdrive_table.max[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P3]
+	printf("overdrive: revision: %u; feature count: %u; setting count: %u\n",
+			navi1->overdrive_table.revision,
+			navi1->overdrive_table.feature_count,
+			navi1->overdrive_table.setting_count
 	);
+	for(i=0; i< SMU_11_0_MAX_ODFEATURE; i++) {
+		printf("%02u cap: %u\n", i, navi1->overdrive_table.cap[i]);
+		printf("   max: %u\n", navi1->overdrive_table.max[i]);
+		printf("   min: %u\n", navi1->overdrive_table.min[i]);
+	}
+
+
+	printf("\n");
+	printf("powersaving: revision: %u; clock count: %u\n",
+			navi1->power_saving_clock.revision,
+			navi1->power_saving_clock.count
+	);
+	for(i=0; i < SMU_11_0_MAX_PPCLOCK; i++) {
+		printf("%02u max: %u\n", i, navi1->power_saving_clock.max[i]);
+		printf("   min: %u\n", navi1->power_saving_clock.min[i]);
+	}
+
+
+	printf("\n");
+	struct atom_common_table_header* header = (void*)&(navi1->smc_pptable);
+	printf("Try atomcommon: size: %u ; format: %u ; content: %u\n",
+		header->structuresize, header->format_revision, header->content_revision
+	);
+	printf("    raw: %u\n", navi1->smc_pptable.Version);
+	printf("smc_dpm_info vs PPT: %X\n", (void*)&(navi1->smc_pptable.BoardReserved[2]) - atree->bios);
+
+	/*
 	printf(
 		"GFXCLK %d\nVCLK %d\nDCLK %d\nECLK %d\nSOCCLK %d\nUCLK %d\nPHYCLK %d\n",
 		navi1->power_saving_clock.max[SMU_11_0_PPCLOCK_GFXCLK],
@@ -129,6 +157,7 @@ inline static void pp1_funstuffs(struct atom_tree* atree) {
 		navi1->power_saving_clock.max[SMU_11_0_PPCLOCK_UCLK],
 		navi1->power_saving_clock.max[SMU_11_0_PPCLOCK_PHYCLK]
 	);
+	*/
 }
 
 inline static void pp2_funstuffs(struct atom_tree* atree) {
