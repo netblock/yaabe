@@ -6,7 +6,7 @@ overclocker may want.
 
 This VBIOS editor does not hold your hand; it exposes a lot and you should have
 an idea what you're looking for and what it does. Until I get descriptions up
-and running, it is reccommended to view the header files under `amd/` in tandem.
+and running, it is reccommended to view the header files under `atom/` in tandem.
 
 ## TODO
 
@@ -39,7 +39,7 @@ pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4
 ```
 
 (The msys2 shell root `/` is the msys2 install location. Your current working directory
-when you open the msys2 shell is your username under `home/`). Plop the yaabe source in
+when you open the msys2 shell is your username under `home/`). Plop the YAABE source in
 a place you can reach it within msys2, cd to it, and then,
 
 ```shell
