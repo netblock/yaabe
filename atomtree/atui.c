@@ -130,15 +130,29 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	char8_t* buffer = *buffer_ptr;
 
 	// NAN DEC HEX OCT BIN
+#ifdef C2X_COMPAT
+	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
+	const char8_t* suffixes[] = {"", "u", "X", "o", "X"};
+	const uint8_t bases[] = {0, 10, 16, 8, 16};
+#else
 	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
 	const char8_t* suffixes[] = {"", "u", "X", "o", "b"};
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
+#endif
 	const char8_t* metaformat = "%s%u%s"; // amogus
 	char8_t format[8];
 
 
 	uint8_t radix = leaf->type & ATUI_ANY;
 	uint8_t num_digits;
+
+#ifdef C2X_COMPAT
+	if ((radix==ATUI_HEX) || (radix==ATUI_BIN)) {
+		num_digits = leaf->total_bits/4;
+	} else {
+		num_digits = 0;
+	}
+#else
 	if (radix == ATUI_HEX) {
 		num_digits = leaf->total_bits/4;
 	} else if (radix == ATUI_BIN) {
@@ -146,6 +160,7 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	} else {
 		num_digits = 0;
 	}
+#endif
 
 	if (leaf->type & ATUI_ARRAY) {
 		num_digits = ceil( // round up because it's gonna be like x.9999

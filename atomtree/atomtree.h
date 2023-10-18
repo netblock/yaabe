@@ -7,13 +7,18 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #define ATOMTREE_H
 
 #include <stdint.h>
-#include <uchar.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
+
+#ifdef C2X_COMPAT
+typedef uint8_t char8_t;
+#else
+#include <uchar.h>
+#endif
 
 #include "atomfirmware.h"
 #include "powerplay.h"

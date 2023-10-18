@@ -1,9 +1,7 @@
 CC=cc
-WIN_CC=x86_64-w64-mingw32-gcc
-# TODO https://www.gtk.org/docs/installations/windows/
 
 YAABE_DEBUG_CFLAGS = -g -Og
-YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin -fuse-ld=gold
+YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin
 
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
@@ -20,6 +18,7 @@ YAABE_EXE = yaabe
 .PHONY: all
 all: debug
 
+
 .PHONY: debug
 debug: CFLAGS = $(YAABE_CFLAGS) $(YAABE_DEBUG_CFLAGS)
 debug: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_DEBUG_LDFLAGS)
@@ -31,10 +30,18 @@ release: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_RELEASE_LDFLAGS)
 release: yaabe
 	strip -s $(YAABE_EXE)
 
+.PHONY: windows_debug
+windows_debug: YAABE_CFLAGS += -DC2X_COMPAT # msys2 isn't caught up with C23
+windows_debug: YAABE_LDFLAGS += -mwindows
+windows_debug: YAABE_EXE = yaabe.exe
+windows_debug: debug
+
 .PHONY: windows
-windows: CC = $(WIN_CC)
+windows: YAABE_CFLAGS += -DC2X_COMPAT # msys2 isn't caught up withC23
+windows: YAABE_LDFLAGS += -mwindows
 windows: YAABE_EXE = yaabe.exe
 windows: release
+
 
 .PHONY: yaabe
 yaabe: $(OBJS)

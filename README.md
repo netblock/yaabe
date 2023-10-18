@@ -29,7 +29,24 @@ then `$ make -j $(nproc) release`
 
 ### Windows
 
-TODO https://www.gtk.org/docs/installations/windows
+Install [MSYS2](https://www.msys2.org) (MSYS2 must be installed on an NTFS partition.
+FAT and ReFS doesn't work), and when in the msys2 shell, install mingw toolchain and
+the gtk4 libraries, 
+
+```shell
+pacman -Syu # update if it's an old install
+pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4
+```
+
+(The msys2 shell root `/` is the msys2 install location. Your current working directory
+when you open the msys2 shell is your username under `home/`). Plop the yaabe source in
+a place you can reach it within msys2, cd to it, and then,
+
+```shell
+export PATH="$PATH:/mingw64/bin"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
+make -j $(nproc) windows
+```
 
 ## Useful Resources
 
