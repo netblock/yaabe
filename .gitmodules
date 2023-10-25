@@ -1,0 +1,3 @@
+[submodule "third-party/Windows-10"]
+	path = third-party/Windows-10
+	url = https://github.com/B00merang-Project/Windows-10

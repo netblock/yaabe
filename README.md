@@ -48,13 +48,10 @@ export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
 make -j $(nproc) windows
 ```
 
-Optionally, create an installer wizard through NSIS,
-
-```shell
-export PATH="$PATH:/mingw64/bin"
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
-make -j $(nproc) nsis-installer
-```
+Optionally, create an installer wizard through NSIS with
+`make -j $(nproc) nsis-installer`. However it does use
+[B00MERANG Project's Windows 10 theme for GTK](https://github.com/B00merang-Project/Windows-10), 
+which is linked as a submodule and can be pulled in via `git submodule init`.
 
 ## Useful Resources
 
