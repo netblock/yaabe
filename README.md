@@ -49,9 +49,9 @@ make -j $(nproc) windows
 ```
 
 Optionally, create an installer wizard through NSIS with
-`make -j $(nproc) nsis-installer`. However it does use
+`make -j $(nproc) nsis-installer`. However it can use
 [B00MERANG Project's Windows 10 theme for GTK](https://github.com/B00merang-Project/Windows-10), 
-which is linked as a submodule and can be pulled in via `git submodule init`.
+which is linked as a submodule and can be pulled in via `git submodule init; git submodule update`.
 
 ## Useful Resources
 
