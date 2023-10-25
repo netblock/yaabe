@@ -2,18 +2,16 @@ CC=cc
 
 YAABE_DEBUG_CFLAGS = -g -Og
 YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin
-
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS =  -lm -lz $(GTK_LDFLAGS)
 YAABE_CFLAGS = -std=c2x -Iatom -Iatomtree -Igtk $(GTK_CFLAGS)
 
-
-
 SRCS = $(wildcard *.c atom/*.c atomtree/*.c gtk/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
 DIRS = out/atom/.keep out/atomtree/.keep out/gtk/.keep
 YAABE_EXE = yaabe
+NSIS_STAGE_DIR = nsis_stage
 
 .PHONY: all
 all: debug
@@ -43,6 +41,18 @@ windows: YAABE_EXE = yaabe.exe
 windows: release
 
 
+.PHONY: nsis-installer
+nsis-installer: windows
+	mkdir -p $(NSIS_STAGE_DIR)/share/glib-2.0 $(NSIS_STAGE_DIR)/share/themes
+	cp yaabe.exe $(NSIS_STAGE_DIR)
+	ldd $(NSIS_STAGE_DIR)/yaabe.exe | grep "\/mingw.*\.dll" -o | xargs -I{} cp "{}" $(NSIS_STAGE_DIR)
+	cp -r gtk-assets/* $(NSIS_STAGE_DIR)
+	cp -r /mingw64/share/glib-2.0/schemas $(NSIS_STAGE_DIR)/share/glib-2.0
+	cp -r /mingw64/share/icons $(NSIS_STAGE_DIR)/share
+	glib-compile-schemas $(NSIS_STAGE_DIR)/share/glib-2.0/schemas
+	makensis -Dnsis_stage_dir=$(NSIS_STAGE_DIR) yaabe.nsi
+
+
 .PHONY: yaabe
 yaabe: $(OBJS)
 	$(CC) $(OBJS) -o $(YAABE_EXE) $(LDFLAGS) $(CFLAGS)
@@ -58,4 +68,5 @@ $(DIRS):
 
 .PHONY: clean
 clean:
-	rm -rf yaabe out
+	rm -rf yaabe yaabeinstaller.exe
+	rm -rf out $(NSIS_STAGE_DIR)

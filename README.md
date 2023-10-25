@@ -35,7 +35,7 @@ the gtk4 libraries,
 
 ```shell
 pacman -Syu # update if it's an old install
-pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4
+pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4 mingw-w64-x86_64-nsis
 ```
 
 (The msys2 shell root `/` is the msys2 install location. Your current working directory
@@ -46,6 +46,14 @@ a place you can reach it within msys2, cd to it, and then,
 export PATH="$PATH:/mingw64/bin"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
 make -j $(nproc) windows
+```
+
+Optionally, create an installer wizard through NSIS,
+
+```shell
+export PATH="$PATH:/mingw64/bin"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
+make -j $(nproc) nsis-installer
 ```
 
 ## Useful Resources
