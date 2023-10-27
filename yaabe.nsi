@@ -8,7 +8,13 @@
 Unicode True
 Name "YAABE BIOS Editor"
 #LicenseData LICENSE
-Outfile "yaabeinstaller.exe"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "$(^Name)"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${yaabe_version}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${yaabe_version}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "https://github.com/netblock/yaabe"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright", "Copyright Netblock"
+VIProductVersion "${yaabe_version}"
+Outfile "yaabeinstaller-${yaabe_version}.exe"
 SetCompressor /solid lzma
 
 RequestExecutionLevel admin
@@ -52,7 +58,8 @@ Section "YAABE"
 	SetShellVarContext all
 	SetOutPath "$INSTDIR"
 	WriteRegStr HKEY_LOCAL_MACHINE "Software\YAABE" InstallLocation "$INSTDIR"
-	#WriteRegStr HKEY_LOCAL_MACHINE "Software\YAABE" Version #TODO https://nsis.sourceforge.io/Version_Info_manipulations_on_compile-time
+	WriteRegStr HKEY_LOCAL_MACHINE "Software\YAABE" Version "${yaabe_version}"
+
 	WriteUninstaller uninstall.exe
 
 	File /r "${nsis_stage_dir}\*"
