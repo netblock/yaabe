@@ -1,24 +1,26 @@
 #include <windows.h>
 // -DVER_WINRC=$(VER_WINRC) -DVER_WIN_DBG -DVER_STR=$(VERSION)
+#define STR(s) #s
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION VER_WINRC
 	PRODUCTVERSION VER_WINRC
 	FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
 	#ifdef VER_WIN_DBG
-	FILEFLAGS VER_DEBUG
+	FILEFLAGS VS_FF_DEBUG
 	#else
 	FILEFLAGS VS_FF_PRERELEASE
 	#endif
-	FILEOS VOS__WINDOWS64 // Hopefully it accepts 64-bit
+	FILEOS VOS_NT_WINDOWS32 // TODO No 64-bit?
 	FILETYPE VFT_APP
 	FILESUBTYPE VFT2_UNKNOWN
 	{
 		BLOCK "StringFileInfo" {
-			BLOCK 0x040904B0 { // 0x0409 == US English; 0x04B0 == Unicode
+			BLOCK "0x040904B0" { // 0x0409 == US English; 0x04B0 == Unicode
 				VALUE "ProductName", "YAABE BIOS Editor"
-				VALUE "FileVersion", VER_STR
-				VALUE "ProductVersion", VER_STR
+				VALUE "FileVersion", STR(VER_STR)
+				VALUE "ProductVersion", STR(VER_STR)
+				VALUE "FileDescription", "https://github.com/netblock/yaabe"
 				VALUE "Comments", "https://github.com/netblock/yaabe"
 				VALUE "LegalCopyright", "Copyright Netblock"
 			}
