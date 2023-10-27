@@ -38,14 +38,14 @@ release: _yaabe-linux
 	strip -s $(YAABE_EXE)
 
 .PHONY: windows_debug
-windows_debug: YAABE_CFLAGS += -DC2X_COMPAT # msys2 isn't caught up with C23
-windows_debug: YAABE_LDFLAGS += -mwindows
+windows_debug: CFLAGS = $(YAABE_CFLAGS) $(YAABE_DEBUG_CFLAGS) -DC2X_COMPAT # msys2 isn't caught up with C23
+windows_debug: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_DEBUG_LDFLAGS) -mwindows
 windows_debug: YAABE_EXE = yaabe.exe
 windows_debug: _yaabe-windows
 
 .PHONY: windows
-windows: YAABE_CFLAGS += -DC2X_COMPAT # msys2 isn't caught up withC23
-windows: YAABE_LDFLAGS += -mwindows
+windows: CFLAGS = $(YAABE_CFLAGS) $(YAABE_RELEASE_CFLAGS) -DC2X_COMPAT # msys2 isn't caught up with C23
+windows: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_RELEASE_LDFLAGS) -mwindows
 windows: YAABE_EXE = yaabe.exe
 windows: _yaabe-windows
 	strip -s $(YAABE_EXE)
