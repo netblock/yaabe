@@ -6,14 +6,15 @@
 #!include "FileFunc.nsh"
 
 Unicode True
-Name "YAABE BIOS Editor"
+!define name "YAABE BIOS Editor"
+Name "${name}"
 #LicenseData LICENSE
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "$(^Name)"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${yaabe_version}"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${yaabe_version}"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "https://github.com/netblock/yaabe"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright", "Copyright Netblock"
-VIProductVersion "${yaabe_version}"
+VIAddVersionKey /LANG=0 "ProductName" "${name}"
+VIAddVersionKey /LANG=0 "FileVersion" "${yaabe_version}"
+VIAddVersionKey /LANG=0 "ProductVersion" "${yaabe_version}"
+VIAddVersionKey /LANG=0 "FileDescription" "https://github.com/netblock/yaabe"
+VIAddVersionKey /LANG=0 "LegalCopyright" "Copyright Netblock"
+VIProductVersion "${yaabe_version}.0"
 Outfile "yaabeinstaller-${yaabe_version}.exe"
 SetCompressor /solid lzma
 

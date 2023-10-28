@@ -1,5 +1,4 @@
 #include <windows.h>
-// -DVER_WINRC=$(VER_WINRC) -DVER_WIN_DBG -DVER_STR=$(VERSION)
 #define STR(s) #s
 
 VS_VERSION_INFO VERSIONINFO
@@ -16,12 +15,11 @@ VS_VERSION_INFO VERSIONINFO
 	FILESUBTYPE VFT2_UNKNOWN
 	{
 		BLOCK "StringFileInfo" {
-			BLOCK "0x040904B0" { // 0x0409 == US English; 0x04B0 == Unicode
+			BLOCK "040904B0" { // 0x0409 == US English; 0x04B0 == Unicode
 				VALUE "ProductName", "YAABE BIOS Editor"
-				VALUE "FileVersion", STR(VER_STR)
-				VALUE "ProductVersion", STR(VER_STR)
+				//VALUE "FileVersion", VER_STR // can't get this to correctly preprocess
+				//VALUE "ProductVersion", VER_STR
 				VALUE "FileDescription", "https://github.com/netblock/yaabe"
-				VALUE "Comments", "https://github.com/netblock/yaabe"
 				VALUE "LegalCopyright", "Copyright Netblock"
 			}
 		}

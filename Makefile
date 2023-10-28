@@ -5,7 +5,7 @@ WINDRES=windres
 VER_MAJOR = 0
 VER_MINOR = 1
 VER_PATCH = 0
-VERSION = "$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)"
+VERSION = $(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
 VER_WINRC = $(VER_MAJOR),$(VER_MINOR),$(VER_PATCH),0 #for MS Resource Compiler
 
 YAABE_DEBUG_CFLAGS = -g -Og
@@ -13,7 +13,7 @@ YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS =  -lm -lz $(GTK_LDFLAGS)
-YAABE_CFLAGS = -std=c2x -Iatom -Iatomtree -Igtk -DYAABE_VERSION=$(VERSION) $(GTK_CFLAGS)
+YAABE_CFLAGS = -std=c2x -Iatom -Iatomtree -Igtk -DYAABE_VERSION="$(VERSION)" $(GTK_CFLAGS)
 
 SRCS = $(wildcard *.c atom/*.c atomtree/*.c gtk/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
@@ -37,11 +37,12 @@ release: YAABE_EXE = yaabe
 release: _yaabe-linux
 	strip -s $(YAABE_EXE)
 
-.PHONY: windows_debug
-windows_debug: CFLAGS = $(YAABE_CFLAGS) $(YAABE_DEBUG_CFLAGS) -DC2X_COMPAT # msys2 isn't caught up with C23
-windows_debug: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_DEBUG_LDFLAGS) -mwindows
-windows_debug: YAABE_EXE = yaabe.exe
-windows_debug: _yaabe-windows
+.PHONY: windows-debug
+windows-debug: CFLAGS = $(YAABE_CFLAGS) $(YAABE_DEBUG_CFLAGS) -DC2X_COMPAT # msys2 isn't caught up with C23
+windows-debug: LDFLAGS = $(YAABE_LDFLAGS) $(YAABE_DEBUG_LDFLAGS) -mwindows
+windows-debug: YAABE_EXE = yaabe.exe
+windows-debug: WIN_DEBUG = -DVER_WIN_DBG
+windows-debug: _yaabe-windows
 
 .PHONY: windows
 windows: CFLAGS = $(YAABE_CFLAGS) $(YAABE_RELEASE_CFLAGS) -DC2X_COMPAT # msys2 isn't caught up with C23
@@ -65,7 +66,7 @@ nsis-installer: windows
 		cp -r third-party/Windows-10/gtk-4.0 $(NSIS_STAGE_DIR)/share/themes/Windows-10; \
 	fi
 	glib-compile-schemas $(NSIS_STAGE_DIR)/share/glib-2.0/schemas
-	makensis -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version=$(VERSION) yaabe.nsi
+	makensis -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version="$(VERSION)" yaabe.nsi
 
 
 
@@ -80,7 +81,7 @@ _yaabe-windows: $(OBJS) out/yaabe_rc.o
 	$(CC) $? -o $(YAABE_EXE) $(LDFLAGS) $(CFLAGS)
 
 out/yaabe_rc.o: yaabewindows.rc
-	$(WINDRES) -DVER_WINRC=$(VER_WINRC) -DVER_WIN_DBG -DVER_STR=$(VERSION) -o $@ $<
+	$(WINDRES) -DVER_WINRC="$(VER_WINRC)" $(WIN_DEBUG) -DVER_STR="$(VERSION)" -o $@ $<
 
 out/%.o: %.c dirs
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -92,5 +93,5 @@ $(DIRS):
 
 .PHONY: clean
 clean:
-	rm -rf yaabe yaabeinstaller.exe
+	rm -rf yaabe yaabeinstaller-$(VERSION).exe
 	rm -rf out $(NSIS_STAGE_DIR)
