@@ -717,19 +717,21 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 	atomtree_bios_checksum(atree);
 
 	GError* ferror = NULL;
-	GIOStream* biosstream;
-	if (g_file_query_exists(atree->biosfile, NULL)) {
-		biosstream = G_IO_STREAM(g_file_open_readwrite(
+
+	GFileIOStream* biosfilestream = g_file_create_readwrite(
+		atree->biosfile, G_FILE_CREATE_PRIVATE, NULL, &ferror
+	);
+	if (ferror && (ferror->code == G_IO_ERROR_EXISTS)) {
+		g_error_free(ferror);
+		ferror = NULL;
+		biosfilestream = g_file_open_readwrite(
 			atree->biosfile, NULL, &ferror
-		));
-	} else {
-		biosstream = G_IO_STREAM(g_file_create_readwrite(
-			atree->biosfile, G_FILE_CREATE_PRIVATE, NULL, &ferror
-		));
+		);
 	}
 	if (ferror)
 		goto ferr0;
 
+	GIOStream* biosstream = G_IO_STREAM(biosfilestream);
 	GOutputStream* writestream = g_io_stream_get_output_stream(biosstream);
 
 	g_output_stream_write_all(
@@ -869,7 +871,6 @@ static void filedialog_load_and_set_bios(
 	if (ferror)
 		goto ferr_nomsg;
 
-	g_object_unref(biosfile); // TODO why's there two refs from open_finish?
 	yaabegtk_load_bios(commons, biosfile, &ferror);
 	g_object_unref(biosfile);
 	if (ferror)
@@ -967,7 +968,6 @@ static void filedialog_saveas_bios(
 		goto ferr_nomsg;
 
 
-	g_object_unref(new_biosfile); // TODO why's there two refs from open_finish?
 	GFile* old_biosfile = commons->atomtree_root->biosfile;
 	commons->atomtree_root->biosfile = new_biosfile;
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
@@ -995,7 +995,6 @@ static void saveas_button_name_bios(GtkWidget* button, gpointer commonsptr) {
 	GtkWindow* active_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
 	);
-
 	GFile* working_dir = g_file_get_parent(commons->atomtree_root->biosfile);
 	gtk_file_dialog_set_initial_folder(filer, working_dir);
 	g_object_unref(working_dir);
