@@ -19,7 +19,6 @@ int main(int argc, char8_t** argv) {
 			return 1;
 		}
 		g_object_unref(biosfile);
-		atomtree_bios_checksum(atree);
 	}
 
 	yaabe_gtk(&atree);
