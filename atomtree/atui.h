@@ -67,10 +67,10 @@ struct _atui_leaf {
 
 	enum atui_type type; // bitfield struct
 	uint8_t array_size;
-	uint8_t total_bits; // number of bits for the leaf
+	uint8_t total_bits;  // number of bits for the leaf
 
-	uint8_t bitfield_hi; //bitfield range end
-	uint8_t bitfield_lo; //bitfield range start
+	uint8_t bitfield_hi; // bitfield range end
+	uint8_t bitfield_lo; // bitfield range start
 
 	uint8_t num_child_leaves;
 
@@ -123,19 +123,19 @@ struct  _atui_branch {
 
 
 
-//set the value from a string or array of 8-bit
+// set the value from a string or array of 8-bit
 uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
 uint8_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
 
-//set or get the number value from the leaf
+// set or get the number value from the leaf
 void atui_leaf_set_val(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val(atui_leaf* leaf);
 
-//TODO stroll that considers 0b prefix?
+// TODO stroll that considers 0b prefix?
 uint64_t strtoll_2(const char8_t* str);
 
-//atui has auxiliary pointers to hang extra data off of and this deallocator
-//doesn't consider.
+// atui has auxiliary pointers to hang extra data off of and this deallocator
+// doesn't consider.
 void atui_destroy_tree(atui_branch* tree);
 
 

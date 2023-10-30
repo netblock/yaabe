@@ -31,30 +31,34 @@ typedef struct _atui_branch atui_branch;
 
 
 
+#define ATOM_BIOS_MAGIC 0xAA55
+#define ATOM_ATI_MAGIC  " 761295520"
+#define BIOS_IMAGE_SIZE_UNIT 512
+/*
 #define BIOS_IMAGE_SIZE_OFFSET 2
 #define BIOS_IMAGE_SIZE_UNIT 512
 #define OFFSET_TO_POINTER_TO_ATOM_ROM_HEADER 0x48
-//#define OFFSET_TO_ATOM_ROM_IMAGE_SIZE 0x2
+#define OFFSET_TO_ATOM_ROM_IMAGE_SIZE 0x2
 
-#define ATOM_BIOS_MAGIC     0xAA55
-#define ATOM_ATI_MAGIC_PTR  0x30
-#define ATOM_ATI_MAGIC      " 761295520"
-#define ATOM_ROM_TABLE_PTR  0x48
-#define ATOM_ROM_PART_NUMBER_PTR    0x6E
-#define ATOM_ROM_MAGIC      "ATOM"
-#define ATOM_ROM_MAGIC_PTR  4
-
+#define ATOM_BIOS_MAGIC    0xAA55
+#define ATOM_ATI_MAGIC_PTR 0x30
+#define ATOM_ATI_MAGIC     " 761295520"
+#define ATOM_ROM_TABLE_PTR 0x48
+#define ATOM_ROM_PART_NUMBER_PTR 0x6E
+#define ATOM_ROM_MAGIC     "ATOM"
+#define ATOM_ROM_MAGIC_PTR 4
+*/
 
 struct atombios_image {
 	uint16_t atombios_magic; // little endian: 0xAA55
-	uint8_t image_size; //0x02
+	uint8_t image_size; // 0x02
 	uint8_t rsvd0[30];
-	uint8_t checksum; // 0x21
+	uint8_t checksum;   // 0x21
 	uint8_t rsvd1[13];
 	uint8_t number_of_strings; // 0x2F
 	uint8_t atomati_magic[11]; // 0x30; " 761295520" There is a space.
 	uint8_t rsvd2[13];
-	uint16_t bios_header; // 0x48
+	uint16_t bios_header;  // 0x48
 	uint8_t rsvd3[6];
 	uint8_t bios_date[15]; // 0x50
 	uint8_t rsvd4[15];
