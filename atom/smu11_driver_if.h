@@ -396,7 +396,7 @@ typedef enum {
 
 //typedef struct pp_i2c_controller_config I2cControllerConfig_t;
 struct pp_i2c_controller_config {
-//see also smudpm_i2ccontrollerconfig_t and smudpm_i2c_controller_config_v2
+//see also i2ccontrollerconfig_u32 and smudpm_i2c_controller_config_v2
 //of atomfirmware.h
 	uint32_t Enabled;
 	uint32_t SlaveAddress;
@@ -476,14 +476,14 @@ struct dpm_descriptor {
 	struct quadratic_u32 SsCurve;
 };
 
-struct smc_pptable_i2c {
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_vr_gfx;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_vr_soc;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_vr_vddci;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_vr_mvdd;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_liquid_0;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_liquid_1;
-	struct smudpm_i2ccontrollerconfig_t i2ccontroller_plx;
+struct pptable_i2c_u32_smu11 {
+	struct i2ccontrollerconfig_u32 i2ccontroller_vr_gfx;
+	struct i2ccontrollerconfig_u32 i2ccontroller_vr_soc;
+	struct i2ccontrollerconfig_u32 i2ccontroller_vr_vddci;
+	struct i2ccontrollerconfig_u32 i2ccontroller_vr_mvdd;
+	struct i2ccontrollerconfig_u32 i2ccontroller_liquid_0;
+	struct i2ccontrollerconfig_u32 i2ccontroller_liquid_1;
+	struct i2ccontrollerconfig_u32 i2ccontroller_plx;
 };
 
 //typedef struct smc_pptable PPTable_t;
@@ -744,8 +744,8 @@ struct smc_pptable {
 	uint8_t  FllGfxclkSpreadPercent;
 	uint16_t FllGfxclkSpreadFreq;
 
-	//struct smudpm_i2ccontrollerconfig_t I2cControllers[I2C_CONTROLLER_NAME_COUNT];
-	struct smc_pptable_i2c I2cControllers;
+	//struct i2ccontrollerconfig_u32 I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11];
+	struct pptable_i2c_u32_smu11 I2cControllers;
 
 	uint32_t BoardReserved[10];
 	//AMD.RX5700.8192.190616.rom: smc_dpm_info v4_5 starts at BoardReserved[2]

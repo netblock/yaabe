@@ -782,7 +782,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_3, atomtree_smc_dpm_info,
 
 
 
-PPATUI_FUNCIFY(struct, smudpm_i2ccontrollerconfig_t, atomtree_smc_dpm_info,
+PPATUI_FUNCIFY(struct, i2ccontrollerconfig_u32, atomtree_smc_dpm_info,
 	(bios->enabled, enabled,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -974,7 +974,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
 
 
 	(bios->i2ccontrollers, i2ccontrollers,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 
@@ -992,7 +992,7 @@ PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->Speed, Speed,
-		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerspeed_e), (ATUI_NODESCR)
+		(ATUI_DEC, ATUI_ENUM, I2cControllerSpeed_e), (ATUI_NODESCR)
 	),
 	(bios->Padding, Padding,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -1001,18 +1001,18 @@ PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ControllerPort, ControllerPort,
-		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerport_e), (ATUI_NODESCR)
+		(ATUI_DEC, ATUI_ENUM, I2cControllerPort_e), (ATUI_NODESCR)
 	),
 	(bios->ControllerName, ControllerName,
-		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollername_e),
+		(ATUI_DEC, ATUI_ENUM, I2cControllerName_e),
 		(ATUI_NODESCR)
 	),
 	(bios->Throttler, Throttler,
-		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerthrottler_e),
+		(ATUI_DEC, ATUI_ENUM, I2cControllerThrottler_e),
 		(ATUI_NODESCR)
 	),
 	(bios->I2cProtocol, I2cProtocol,
-		(ATUI_DEC, ATUI_ENUM, smudpm_v4_5_i2ccontrollerprotocol_e),
+		(ATUI_DEC, ATUI_ENUM, I2cControllerProtocol_e),
 		(ATUI_NODESCR)
 	)
 )

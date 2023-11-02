@@ -40,7 +40,7 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 				case v4_4:
 					const uint8_t num_i2c_controllers_v4_4 = (
 						sizeof(smc_dpm_info->v4_4->i2ccontrollers)
-						/ sizeof(struct smudpm_i2ccontrollerconfig_t)
+						/ sizeof(struct i2ccontrollerconfig_u32)
 					);
 
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_4,
@@ -48,7 +48,7 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 					);
 					for(i=0; i < num_i2c_controllers_v4_4; i++) {
 						atui_smudpm_i2c = ATUI_MAKE_BRANCH(
-							smudpm_i2ccontrollerconfig_t,
+							i2ccontrollerconfig_u32,
 							NULL, &(smc_dpm_info->v4_4->i2ccontrollers[i]),
 							0, NULL
 						);
@@ -596,7 +596,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 						ATUI_MAKE_BRANCH(powerplay_features,
 							NULL,&(ppt->v12_0->smc_pptable.features),  0,NULL
 						),
-						ATUI_MAKE_BRANCH(smc_pptable_i2c,
+						ATUI_MAKE_BRANCH(pptable_i2c_u32_smu11,
 							NULL, &(ppt->v12_0->smc_pptable.I2cControllers),
 							0, NULL
 						),

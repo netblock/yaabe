@@ -148,33 +148,33 @@ PPATUI_FUNCIFY(union, powerplay_features, atomtree_powerplaytable,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smc_pptable_i2c, atomtree_powerplaytable,
+PPATUI_FUNCIFY(struct, pptable_i2c_u32_smu11, atomtree_powerplaytable,
 	(bios->i2ccontroller_vr_gfx, i2ccontroller_vr_gfx,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_vr_soc, i2ccontroller_vr_soc,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_vr_vddci, i2ccontroller_vr_vddci,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_vr_mvdd, i2ccontroller_vr_mvdd,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_liquid_0, i2ccontroller_liquid_0,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_liquid_1, i2ccontroller_liquid_1,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	),
 	(bios->i2ccontroller_plx, i2ccontroller_plx,
-		(ATUI_NAN, ATUI_INLINE, smudpm_i2ccontrollerconfig_t),
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
 	)
 )
@@ -964,7 +964,7 @@ PPATUI_FUNCIFY(struct, smc_pptable, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-//struct smudpm_i2ccontrollerconfig_t I2cControllers[I2C_CONTROLLER_NAME_COUNT];
+//struct i2ccontrollerconfig_u32 I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11];
 
 	(bios->BoardReserved, BoardReserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)

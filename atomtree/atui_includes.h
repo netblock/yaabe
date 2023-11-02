@@ -26,7 +26,7 @@ PPATUI_HEADERIFY(atom_master_data_table_v2_1);
 
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);
-PPATUI_HEADERIFY(smudpm_i2ccontrollerconfig_t);
+PPATUI_HEADERIFY(i2ccontrollerconfig_u32);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_4);
 PPATUI_HEADERIFY(smudpm_i2c_controller_config_v2);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_5);
@@ -140,7 +140,7 @@ PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
 PPATUI_HEADERIFY(smu_11_0_overdrive_table);
 PPATUI_HEADERIFY(smc_pptable);
 PPATUI_HEADERIFY(powerplay_features);
-PPATUI_HEADERIFY(smc_pptable_i2c);
+PPATUI_HEADERIFY(pptable_i2c_u32_smu11);
 
 
 #endif

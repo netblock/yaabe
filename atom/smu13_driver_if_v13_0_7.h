@@ -275,7 +275,7 @@ typedef enum {
 #define I2C_CONTROLLER_DISABLED 0
 
 #define MAX_SW_I2C_COMMANDS    24
-
+/*
 typedef enum {
 	I2C_CONTROLLER_PORT_0 = 0,  // CKSVII2C0
 	I2C_CONTROLLER_PORT_1 = 1,  // CKSVII2C1
@@ -348,6 +348,8 @@ typedef enum {
 	I2C_CMD_WRITE,
 	I2C_CMD_COUNT,
 } I2cCmdType_e;
+*/
+
 
 #define CMDCONFIG_STOP_BIT      0
 #define CMDCONFIG_RESTART_BIT   1
