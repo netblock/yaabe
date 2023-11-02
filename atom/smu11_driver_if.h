@@ -749,7 +749,7 @@ struct smc_pptable {
 
 	uint32_t BoardReserved[10];
 	//AMD.RX5700.8192.190616.rom: smc_dpm_info v4_5 starts at BoardReserved[2]
-	//sizeof(smu_11_0_powerplay_table) == 1738 ; header reports 1674
+	//sizeof(smu_11_0_powerplay_table) == 1738; header reports 1674
 	//(1738 - (8*4 + 8*4)) == 1674
 
 
@@ -797,24 +797,24 @@ typedef struct {
 	uint16_t CurrClock[PPCLK_COUNT];
 	uint16_t AverageGfxclkFrequency;
 	uint16_t AverageSocclkFrequency;
-	uint16_t AverageUclkFrequency  ;
-	uint16_t AverageGfxActivity    ;
-	uint16_t AverageUclkActivity   ;
-	uint8_t  CurrSocVoltageOffset  ;
-	uint8_t  CurrGfxVoltageOffset  ;
-	uint8_t  CurrMemVidOffset      ;
-	uint8_t  Padding8              ;
-	uint16_t CurrSocketPower       ;
-	uint16_t TemperatureEdge       ;
-	uint16_t TemperatureHotspot    ;
-	uint16_t TemperatureHBM        ;
-	uint16_t TemperatureVrGfx      ;
-	uint16_t TemperatureVrSoc      ;
-	uint16_t TemperatureVrMem0     ;
-	uint16_t TemperatureVrMem1     ;
-	uint16_t TemperatureLiquid     ;
-	uint16_t TemperaturePlx        ;
-	uint32_t ThrottlerStatus       ;
+	uint16_t AverageUclkFrequency;
+	uint16_t AverageGfxActivity;
+	uint16_t AverageUclkActivity;
+	uint8_t  CurrSocVoltageOffset;
+	uint8_t  CurrGfxVoltageOffset;
+	uint8_t  CurrMemVidOffset;
+	uint8_t  Padding8;
+	uint16_t CurrSocketPower;
+	uint16_t TemperatureEdge;
+	uint16_t TemperatureHotspot;
+	uint16_t TemperatureHBM;
+	uint16_t TemperatureVrGfx;
+	uint16_t TemperatureVrSoc;
+	uint16_t TemperatureVrMem0;
+	uint16_t TemperatureVrMem1;
+	uint16_t TemperatureLiquid;
+	uint16_t TemperaturePlx;
+	uint32_t ThrottlerStatus;
 
 	uint8_t  LinkDpmLevel;
 	uint16_t AverageSocketPower;
