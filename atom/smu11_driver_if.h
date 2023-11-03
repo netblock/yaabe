@@ -265,7 +265,7 @@ union powerplay_feature_control_smu11 {
 #define DPM_OVERRIDE_ENABLE_GFXOFF_FCLK_SWITCH      0x00020000
 */
 
-union dpm_debug_override_smu111 { // what does this go to?
+union dpm_debug_override_smu11 {
 	uint32_t dpm_debug_override_flags;
 	struct { uint32_t
 		disable_socclk_pid              :0-0 +1,
@@ -410,7 +410,7 @@ struct pp_i2c_controller_config {
 */
 
 //typedef struct quadratic_u32 QuadraticInt_t;
-struct quadratic_u32 {
+struct quadratic_u32 { // TODO probably IEEE 754 float
 	uint32_t a;
 	uint32_t b;
 	uint32_t c;
@@ -657,6 +657,7 @@ struct smc_pptable {
 	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS];
 
 	uint32_t DebugOverrides;
+	//union dpm_debug_override_smu11 DebugOverrides; // TODO atui-ify
 	struct quadratic_u32 ReservedEquation0;
 	struct quadratic_u32 ReservedEquation1;
 	struct quadratic_u32 ReservedEquation2;
