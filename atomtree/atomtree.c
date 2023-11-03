@@ -593,7 +593,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 			case v12_0:
 				if (generate_atui) {
 					atui_branch* atui_smc_pptable_kids[] = {
-						ATUI_MAKE_BRANCH(powerplay_features,
+						ATUI_MAKE_BRANCH(powerplay_feature_control_smu11,
 							NULL,&(ppt->v12_0->smc_pptable.features),  0,NULL
 						),
 						ATUI_MAKE_BRANCH(pptable_i2c_u32_smu11,

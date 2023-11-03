@@ -77,8 +77,8 @@ PPATUI_FUNCIFY(struct, dpm_descriptor, atomtree_powerplaytable,
 )
 
 
-PPATUI_FUNCIFY(union, powerplay_features, atomtree_powerplaytable,
-	(bios->features_to_run, features_to_run,
+PPATUI_FUNCIFY(union, powerplay_feature_control_smu11, atomtree_powerplaytable,
+	(bios->feature_control, feature_control,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(dpm_prefetcher, 0,0, ATUI_DEC, (ATUI_NODESCR)),
 			(dpm_gfxclk,     1,1, ATUI_DEC, (ATUI_NODESCR)),

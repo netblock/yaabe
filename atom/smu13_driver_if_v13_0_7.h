@@ -45,6 +45,7 @@
 #define NUM_FCLK_DPM_LEVELS     8
 #define NUM_OD_FAN_MAX_POINTS   6
 
+/*
 // Feature Control Defines
 #define FEATURE_FW_DATA_READ_BIT            0
 #define FEATURE_DPM_GFXCLK_BIT              1
@@ -138,6 +139,76 @@ typedef enum {
 	FEATURE_PWR_GFX,
 	FEATURE_PWR_DOMAIN_COUNT,
 } FEATURE_PWR_DOMAIN_e;
+*/
+union powerplay_feature_control_smu13 {
+    uint64_t feature_control;
+    struct { uint64_t
+		fw_data_read            :0-0 +1,
+		dpm_gfxclk              :1-1 +1,
+		dpm_gfx_power_optimizer :2-2 +1,
+		dpm_uclk                :3-3 +1,
+		dpm_fclk                :4-4 +1,
+		dpm_socclk              :5-5 +1,
+		dpm_mp0clk              :6-6 +1,
+		dpm_link                :7-7 +1,
+		dpm_dcn                 :8-8 +1,
+		vmemp_scaling           :9-9 +1,
+		vddio_mem_scaling      :10-10 +1,
+		ds_gfxclk              :11-11 +1,
+		ds_socclk              :12-12 +1,
+		ds_fclk                :13-13 +1,
+		ds_lclk                :14-14 +1,
+		ds_dcfclk              :15-15 +1,
+		ds_uclk                :16-16 +1,
+		gfx_ulv                :17-17 +1,
+		fw_dstate              :18-18 +1,
+		gfxoff                 :19-19 +1,
+		baco                   :20-20 +1,
+		mm_dpm                 :21-21 +1,
+		soc_mpclk_ds           :22-22 +1,
+		baco_mpclk_ds          :23-23 +1,
+		throttlers             :24-24 +1,
+		smartshift             :25-25 +1,
+		gthr                   :26-26 +1,
+		acdc                   :27-27 +1,
+		vr0hot                 :28-28 +1,
+		fw_ctf                 :29-29 +1,
+		fan_control            :30-30 +1,
+		gfx_dcs                :31-31 +1,
+		gfx_read_margin        :32-32 +1,
+		led_display            :33-33 +1,
+		gfxclk_spread_spectrum :34-34 +1,
+		out_of_band_monitor    :35-35 +1,
+		optimized_vmin         :36-36 +1,
+		gfx_imu                :37-37 +1,
+		boot_time_cal          :38-38 +1,
+		gfx_pcc_dfll           :39-39 +1,
+		soc_cg                 :40-40 +1,
+		df_cstate              :41-41 +1,
+		gfx_edc                :42-42 +1,
+		boot_power_opt         :43-43 +1,
+		clock_power_down_bypass:44-44 +1,
+		ds_vcn                 :45-45 +1,
+		baco_cg                :46-46 +1,
+		mem_temp_read          :47-47 +1,
+		athub_mmhub_pg         :48-48 +1,
+		soc_pcc                :49-49 +1,
+		edc_pwrbrk             :50-50 +1,
+		spare_51               :51-51 +1,
+		spare_52               :52-52 +1,
+		spare_53               :53-53 +1,
+		spare_54               :54-54 +1,
+		spare_55               :55-55 +1,
+		spare_56               :56-56 +1,
+		spare_57               :57-57 +1,
+		spare_58               :58-58 +1,
+		spare_59               :59-59 +1,
+		spare_60               :60-60 +1,
+		spare_61               :61-61 +1,
+		spare_62               :62-62 +1,
+		spare_63               :63-63 +1;
+	};
+};
 
 
 // Debug Overrides Bitmask
@@ -950,7 +1021,9 @@ typedef struct { // SECTION: Version
 
 	uint32_t Version; // should be unique to each SKU(i.e if any value changes in below structure then this value must be different)
 	// SECTION: Feature Control
-	uint32_t FeaturesToRun[NUM_FEATURES / 32]; // Features that PMFW will attempt to enable. Use FEATURE_*_BIT as mapping
+	//uint32_t FeaturesToRun[NUM_FEATURES / 32]; // Features that PMFW will attempt to enable. Use FEATURE_*_BIT as mapping
+	union powerplay_feature_control_smu11 features;
+
 	// SECTION: Miscellaneous Configuration
 	uint8_t  TotalPowerConfig; // Determines how PMFW calculates the power. Use defines from PwrConfig_e
 	uint8_t  CustomerVariant;  // To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e

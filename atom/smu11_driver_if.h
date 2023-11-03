@@ -173,8 +173,8 @@
 #define FEATURE_XGMI_MASK           (1ULL << FEATURE_XGMI_BIT)
 #define FEATURE_ECC_MASK            (1ULL << FEATURE_ECC_BIT)
 */
-union powerplay_features {
-	uint64_t features_to_run;
+union powerplay_feature_control_smu11 {
+	uint64_t feature_control;
 	struct { uint64_t
 		dpm_prefetcher :0-0 +1,
 		dpm_gfxclk     :1-1 +1,
@@ -265,8 +265,8 @@ union powerplay_features {
 #define DPM_OVERRIDE_ENABLE_GFXOFF_FCLK_SWITCH      0x00020000
 */
 
-union dpm_override { // what does this go to?
-	uint32_t dpm_override_flags;
+union dpm_debug_override_smu111 { // what does this go to?
+	uint32_t dpm_debug_override_flags;
 	struct { uint32_t
 		disable_socclk_pid              :0-0 +1,
 		disable_uclk_pid                :1-1 +1,
@@ -490,7 +490,7 @@ struct pptable_i2c_u32_smu11 {
 struct smc_pptable {
 	uint32_t Version; //doesn't seem to be atom_common_table_header.
 
-	union powerplay_features features;
+	union powerplay_feature_control_smu11 features;
 
 
 	uint16_t SocketPowerLimitAc0;
