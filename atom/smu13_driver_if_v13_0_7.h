@@ -23,6 +23,8 @@
 #ifndef SMU13_DRIVER_IF_SMU_13_0_7_H
 #define SMU13_DRIVER_IF_SMU_13_0_7_H
 
+#pragma pack(push, 1) /* BIOS data must use byte aligment*/
+
 // *** IMPORTANT ***
 // PMFW TEAM: Always increment the interface version on any change to this file
 #define SMU13_0_7_DRIVER_IF_VERSION  0x35
@@ -131,14 +133,14 @@
 					(1ULL << FEATURE_DS_VCN_BIT))
 
 // For use with feature control messages
-typedef enum {
+enum FEATURE_PWR_DOMAIN_e {
 	FEATURE_PWR_ALL,
 	FEATURE_PWR_S5,
 	FEATURE_PWR_BACO,
 	FEATURE_PWR_SOC,
 	FEATURE_PWR_GFX,
 	FEATURE_PWR_DOMAIN_COUNT,
-} FEATURE_PWR_DOMAIN_e;
+};
 */
 union powerplay_feature_control_smu13 {
     uint64_t feature_control;
@@ -212,6 +214,7 @@ union powerplay_feature_control_smu13 {
 
 
 // Debug Overrides Bitmask
+/*
 #define DEBUG_OVERRIDE_DISABLE_VOLT_LINK_VCN_FCLK   0x00000001
 #define DEBUG_OVERRIDE_DISABLE_VOLT_LINK_DCN_FCLK   0x00000002
 #define DEBUG_OVERRIDE_DISABLE_VOLT_LINK_MP0_FCLK   0x00000004
@@ -225,6 +228,28 @@ union powerplay_feature_control_smu13 {
 #define DEBUG_OVERRIDE_ENABLE_RLC_VF_BRINGUP_MODE   0x00000400
 #define DEBUG_OVERRIDE_DFLL_MASTER_MODE             0x00000800
 #define DEBUG_OVERRIDE_ENABLE_PROFILING_MODE        0x00001000
+*/
+
+union dpm_debug_override_smu13 {
+	uint32_t dpm_debug_override_flags;
+    struct { uint32_t
+		disable_volt_link_vcn_fclk   :0-0 +1,
+		disable_volt_link_dcn_fclk   :1-1 +1,
+		disable_volt_link_mp0_fclk   :2-2 +1,
+		disable_volt_link_vcn_dcfclk :3-3 +1,
+		disable_fast_fclk_timer      :4-4 +1,
+		disable_vcn_pg               :5-5 +1,
+		disable_fmax_vmax            :6-6 +1,
+		disable_imu_fw_checks        :7-7 +1,
+		disable_d0i2_reentry_hsr_timer_check :8-8 +1,
+		disable_dfll                 :9-9 +1,
+		enable_rlc_vf_bringup_mode  :10-10 +1,
+		dfll_master_mode            :11-11 +1,
+		enable_profiling_mode       :12-12 +1,
+		reserved                    :31-13 +1;
+	};
+};
+
 
 // VR Mapping Bit Defines
 #define VR_MAPPING_VR_SELECT_MASK  0x01
@@ -243,7 +268,7 @@ union powerplay_feature_control_smu13 {
 #define PSI_SEL_VR1_PLANE1_PSI0 0x40
 #define PSI_SEL_VR1_PLANE1_PSI1 0x80
 
-typedef enum {
+enum SVI_PSI_e {
 	SVI_PSI_0, // Full phase count (default)
 	SVI_PSI_1, // Phase count 1st level
 	SVI_PSI_2, // Phase count 2nd level
@@ -252,7 +277,7 @@ typedef enum {
 	SVI_PSI_5, // Reserved
 	SVI_PSI_6, // Power down to 0V (voltage regulation disabled)
 	SVI_PSI_7, // Automated phase shedding and diode emulation
-} SVI_PSI_e;
+};
 
 // Throttler Control/Status Bits
 #define THROTTLER_TEMP_EDGE_BIT      0
@@ -316,28 +341,28 @@ typedef enum {
 #define MEM_TEMP_READ_IN_BAND_REFRESH_BIT      1
 #define MEM_TEMP_READ_IN_BAND_DUMMY_PSTATE_BIT 2
 
-typedef enum {
-	SMARTSHIFT_VERSION_1,
-	SMARTSHIFT_VERSION_2,
-	SMARTSHIFT_VERSION_3,
-} SMARTSHIFT_VERSION_e;
+enum SMARTSHIFT_VERSION_e:uint8_t {
+	SMARTSHIFT_VERSION_1 = 0,
+	SMARTSHIFT_VERSION_2 = 1,
+	SMARTSHIFT_VERSION_3 = 2,
+};
 
-typedef enum {
+enum FOPT_CALC_e {
 	FOPT_CALC_AC_CALC_DC,
 	FOPT_PPTABLE_AC_CALC_DC,
 	FOPT_CALC_AC_PPTABLE_DC,
 	FOPT_PPTABLE_AC_PPTABLE_DC,
-} FOPT_CALC_e;
+};
 
-typedef enum {
+enum DRAM_BIT_WIDTH_TYPE_e:uint8_t {
 	DRAM_BIT_WIDTH_DISABLED = 0,
-	DRAM_BIT_WIDTH_X_8 = 8,
-	DRAM_BIT_WIDTH_X_16 = 16,
-	DRAM_BIT_WIDTH_X_32 = 32,
-	DRAM_BIT_WIDTH_X_64 = 64,
-	DRAM_BIT_WIDTH_X_128 = 128,
+	DRAM_BIT_WIDTH_X_8      = 8,
+	DRAM_BIT_WIDTH_X_16    = 16,
+	DRAM_BIT_WIDTH_X_32    = 32,
+	DRAM_BIT_WIDTH_X_64    = 64,
+	DRAM_BIT_WIDTH_X_128  = 128,
 	DRAM_BIT_WIDTH_COUNT,
-} DRAM_BIT_WIDTH_TYPE_e;
+};
 
 // I2C Interface
 #define NUM_I2C_CONTROLLERS     8
@@ -347,13 +372,13 @@ typedef enum {
 
 #define MAX_SW_I2C_COMMANDS    24
 /*
-typedef enum {
+enum I2cControllerPort_e {
 	I2C_CONTROLLER_PORT_0 = 0,  // CKSVII2C0
 	I2C_CONTROLLER_PORT_1 = 1,  // CKSVII2C1
 	I2C_CONTROLLER_PORT_COUNT,
-} I2cControllerPort_e;
+};
 
-typedef enum {
+enum I2cControllerName_e {
 	I2C_CONTROLLER_NAME_VR_GFX = 0,
 	I2C_CONTROLLER_NAME_VR_SOC,
 	I2C_CONTROLLER_NAME_VR_VMEMP,
@@ -363,9 +388,9 @@ typedef enum {
 	I2C_CONTROLLER_NAME_PLX,
 	I2C_CONTROLLER_NAME_FAN_INTAKE,
 	I2C_CONTROLLER_NAME_COUNT,
-} I2cControllerName_e;
+};
 
-typedef enum {
+enum I2cControllerThrottler_e {
 	I2C_CONTROLLER_THROTTLER_TYPE_NONE = 0,
 	I2C_CONTROLLER_THROTTLER_VR_GFX,
 	I2C_CONTROLLER_THROTTLER_VR_SOC,
@@ -377,18 +402,18 @@ typedef enum {
 	I2C_CONTROLLER_THROTTLER_FAN_INTAKE,
 	I2C_CONTROLLER_THROTTLER_INA3221,
 	I2C_CONTROLLER_THROTTLER_COUNT,
-} I2cControllerThrottler_e;
+};
 
-typedef enum {
+enum I2cControllerProtocol_e {
 	I2C_CONTROLLER_PROTOCOL_VR_XPDE132G5,
 	I2C_CONTROLLER_PROTOCOL_VR_IR35217,
 	I2C_CONTROLLER_PROTOCOL_TMP_MAX31875,
 	I2C_CONTROLLER_PROTOCOL_INA3221,
 	I2C_CONTROLLER_PROTOCOL_TMP_MAX6604,
 	I2C_CONTROLLER_PROTOCOL_COUNT,
-} I2cControllerProtocol_e;
+};
 
-typedef struct {
+struct I2cControllerConfig_t {
 	uint8_t  Enabled;
 	uint8_t  Speed;
 	uint8_t  SlaveAddress;
@@ -397,14 +422,14 @@ typedef struct {
 	uint8_t  ThermalThrotter;
 	uint8_t  I2cProtocol;
 	uint8_t  PaddingConfig;
-} I2cControllerConfig_t;
+};
 
-typedef enum {
+enum I2cPort_e {
 	I2C_PORT_SVD_SCL = 0,
 	I2C_PORT_GPIO,
-} I2cPort_e;
+};
 
-typedef enum {
+enum I2cSpeed_e {
 	I2C_SPEED_FAST_50K = 0, // 50  Kbits/s
 	I2C_SPEED_FAST_100K,    // 100 Kbits/s
 	I2C_SPEED_FAST_400K,    // 400 Kbits/s
@@ -412,13 +437,13 @@ typedef enum {
 	I2C_SPEED_HIGH_1M,      // 1   Mbits/s (in high speed mode)
 	I2C_SPEED_HIGH_2M,      // 2.3 Mbits/s
 	I2C_SPEED_COUNT,
-} I2cSpeed_e;
+};
 
-typedef enum {
+enum I2cCmdType_e {
 	I2C_CMD_READ = 0,
 	I2C_CMD_WRITE,
 	I2C_CMD_COUNT,
-} I2cCmdType_e;
+};
 */
 
 
@@ -430,28 +455,28 @@ typedef enum {
 #define CMDCONFIG_RESTART_MASK   (1 << CMDCONFIG_RESTART_BIT)
 #define CMDCONFIG_READWRITE_MASK (1 << CMDCONFIG_READWRITE_BIT)
 
-typedef struct {
+struct SwI2cCmd_t {
 	uint8_t  ReadWriteData;  // Return data for read. Data to send for write
 	uint8_t  CmdConfig; // Includes whether associated command should have a stop or restart command, and is a read or write
-} SwI2cCmd_t; // SW I2C Command Table
+}; // SW I2C Command Table
 
-typedef struct {
+struct SwI2cRequest_t {
 	uint8_t  I2CcontrollerPort; // CKSVII2C0(0) or //CKSVII2C1(1)
 	uint8_t  I2CSpeed;          // Use I2cSpeed_e to indicate speed to select
 	uint8_t  SlaveAddress;      // Slave address of device
 	uint8_t  NumCmds;           // Number of commands
 
 	SwI2cCmd_t  SwI2cCmds[MAX_SW_I2C_COMMANDS];
-} SwI2cRequest_t; // SW I2C Request Table
+}; // SW I2C Request Table
 
-typedef struct {
+struct SwI2cRequestExternal_t {
 	SwI2cRequest_t SwI2cRequest;
 
 	uint32_t Spare[8];
 	uint32_t MmHubPadding[8]; // SMU internal use
-} SwI2cRequestExternal_t;
+};
 
-typedef struct {
+struct EccInfo_t {
 	uint64_t mca_umc_status;
 	uint64_t mca_umc_addr;
 
@@ -459,286 +484,287 @@ typedef struct {
 	uint16_t ce_count_hi_chip;
 
 	uint32_t eccPadding;
-} EccInfo_t;
+};
 
-typedef struct {
+struct EccInfoTable_t {
 	EccInfo_t  EccInfo[24];
-} EccInfoTable_t;
+};
 
 // D3HOT sequences
-typedef enum {
-	BACO_SEQUENCE,
-	MSR_SEQUENCE,
-	BAMACO_SEQUENCE,
-	ULPS_SEQUENCE,
-	D3HOT_SEQUENCE_COUNT,
-} D3HOTSequence_e;
+enum D3HOTSequence_e {
+	BACO_SEQUENCE        = 0,
+	MSR_SEQUENCE         = 1,
+	BAMACO_SEQUENCE      = 2,
+	ULPS_SEQUENCE        = 3,
+	D3HOT_SEQUENCE_COUNT = 4,
+};
 
 // This is aligned with RSMU PGFSM Register Mapping
-typedef enum {
+enum PowerGatingMode_e {
 	PG_DYNAMIC_MODE = 0,
-	PG_STATIC_MODE,
-} PowerGatingMode_e;
+	PG_STATIC_MODE  = 1,
+};
 
 // This is aligned with RSMU PGFSM Register Mapping
-typedef enum {
+enum PowerGatingSettings_e {
 	PG_POWER_DOWN = 0,
-	PG_POWER_UP,
-} PowerGatingSettings_e;
+	PG_POWER_UP   = 1,
+};
 
-typedef struct {
+struct QuadraticInt_t {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
-} QuadraticInt_t;
+};
 
-typedef struct {
+struct LinearInt_t {
 	uint32_t m;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
-} LinearInt_t;
+};
 
-typedef struct {
+struct DroopInt_t {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
-} DroopInt_t;
+};
 
-typedef enum {
-	DCS_ARCH_DISABLED,
-	DCS_ARCH_FADCS,
-	DCS_ARCH_ASYNC,
-} DCS_ARCH_e;
+enum DCS_ARCH_e {
+	DCS_ARCH_DISABLED = 0,
+	DCS_ARCH_FADCS    = 1,
+	DCS_ARCH_ASYNC    = 2,
+};
 
 // Only Clks that have DPM descriptors are listed here
-typedef enum {
-	PPCLK_GFXCLK = 0,
-	PPCLK_SOCCLK,
-	PPCLK_UCLK,
-	PPCLK_FCLK,
-	PPCLK_DCLK_0,
-	PPCLK_VCLK_0,
-	PPCLK_DCLK_1,
-	PPCLK_VCLK_1,
-	PPCLK_DISPCLK,
-	PPCLK_DPPCLK,
-	PPCLK_DPREFCLK,
-	PPCLK_DCFCLK,
-	PPCLK_DTBCLK,
-	PPCLK_COUNT,
-} PPCLK_e;
+enum PPCLK_e {
+	PPCLK_GFXCLK   = 0,
+	PPCLK_SOCCLK   = 1,
+	PPCLK_UCLK     = 2,
+	PPCLK_FCLK     = 3,
+	PPCLK_DCLK_0   = 4,
+	PPCLK_VCLK_0   = 5,
+	PPCLK_DCLK_1   = 6,
+	PPCLK_VCLK_1   = 7,
+	PPCLK_DISPCLK  = 8,
+	PPCLK_DPPCLK   = 9,
+	PPCLK_DPREFCLK = 10,
+	PPCLK_DCFCLK   = 11,
+	PPCLK_DTBCLK   = 12,
+	PPCLK_COUNT    = 13,
+};
 
-typedef enum {
+enum VOLTAGE_MODE_e {
 	VOLTAGE_MODE_PPTABLE = 0,
-	VOLTAGE_MODE_FUSES,
-	VOLTAGE_MODE_COUNT,
-} VOLTAGE_MODE_e;
+	VOLTAGE_MODE_FUSES   = 1,
+	VOLTAGE_MODE_COUNT   = 2,
+};
 
 
-typedef enum {
-	AVFS_VOLTAGE_GFX = 0,
-	AVFS_VOLTAGE_SOC,
-	AVFS_VOLTAGE_COUNT,
-} AVFS_VOLTAGE_TYPE_e;
+enum AVFS_VOLTAGE_TYPE_e {
+	AVFS_VOLTAGE_GFX   = 0,
+	AVFS_VOLTAGE_SOC   = 1,
+	AVFS_VOLTAGE_COUNT = 2,
+};
 
-typedef enum {
-	AVFS_TEMP_COLD = 0,
-	AVFS_TEMP_HOT,
-	AVFS_TEMP_COUNT,
-} AVFS_TEMP_e;
+enum AVFS_TEMP_e {
+	AVFS_TEMP_COLD  = 0,
+	AVFS_TEMP_HOT   = 1,
+	AVFS_TEMP_COUNT = 2,
+};
 
-typedef enum {
-	AVFS_D_G,
-	AVFS_D_M_B,
-	AVFS_D_M_S,
-	AVFS_D_COUNT,
-} AVFS_D_e;
+enum AVFS_D_e {
+	AVFS_D_G     = 0,
+	AVFS_D_M_B   = 1,
+	AVFS_D_M_S   = 2,
+	AVFS_D_COUNT = 3,
+};
 
-typedef enum {
+enum UCLK_DIV_e {
 	UCLK_DIV_BY_1 = 0,
-	UCLK_DIV_BY_2,
-	UCLK_DIV_BY_4,
-	UCLK_DIV_BY_8,
-} UCLK_DIV_e;
+	UCLK_DIV_BY_2 = 1,
+	UCLK_DIV_BY_4 = 2,
+	UCLK_DIV_BY_8 = 3,
+};
 
-typedef enum {
-	GPIO_INT_POLARITY_ACTIVE_LOW = 0,
-	GPIO_INT_POLARITY_ACTIVE_HIGH,
-} GpioIntPolarity_e;
+enum GpioIntPolarity_e {
+	GPIO_INT_POLARITY_ACTIVE_LOW  = 0,
+	GPIO_INT_POLARITY_ACTIVE_HIGH = 1,
+};
 
-typedef enum {
+enum PwrConfig_e:uint8_t {
 	PWR_CONFIG_TDP = 0,
-	PWR_CONFIG_TGP,
-	PWR_CONFIG_TCP_ESTIMATED,
-	PWR_CONFIG_TCP_MEASURED,
-} PwrConfig_e;
+	PWR_CONFIG_TGP = 1,
+	PWR_CONFIG_TCP_ESTIMATED = 2,
+	PWR_CONFIG_TCP_MEASURED  = 3,
+};
 
-typedef struct {
+struct DpmDescriptor_t {
 	uint8_t  Padding;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
 	uint8_t  CalculateFopt;     // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
-	LinearInt_t    ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	struct LinearInt_t ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
 	uint32_t Padding3[3];
 	uint16_t Padding4;
 	uint16_t FoptimalDc; // Foptimal frequency in DC power mode.
 	uint16_t FoptimalAc; // Foptimal frequency in AC power mode.
 	uint16_t Padding2;
-} DpmDescriptor_t;
+};
 
-typedef enum  {
-	PPT_THROTTLER_PPT0,
-	PPT_THROTTLER_PPT1,
-	PPT_THROTTLER_PPT2,
-	PPT_THROTTLER_PPT3,
-	PPT_THROTTLER_COUNT
-} PPT_THROTTLER_e;
+enum PPT_THROTTLER_e {
+	PPT_THROTTLER_PPT0  = 0,
+	PPT_THROTTLER_PPT1  = 1,
+	PPT_THROTTLER_PPT2  = 2,
+	PPT_THROTTLER_PPT3  = 3,
+	PPT_THROTTLER_COUNT = 4,
+};
 
-typedef enum  {
-	TEMP_EDGE,
-	TEMP_HOTSPOT,
-	TEMP_HOTSPOT_G,
-	TEMP_HOTSPOT_M,
-	TEMP_MEM,
-	TEMP_VR_GFX,
-	TEMP_VR_MEM0,
-	TEMP_VR_MEM1,
-	TEMP_VR_SOC,
-	TEMP_VR_U,
-	TEMP_LIQUID0,
-	TEMP_LIQUID1,
-	TEMP_PLX,
-	TEMP_COUNT,
-} TEMP_e;
+enum TEMP_e {
+	TEMP_EDGE      = 0,
+	TEMP_HOTSPOT   = 1,
+	TEMP_HOTSPOT_G = 2,
+	TEMP_HOTSPOT_M = 3,
+	TEMP_MEM       = 4,
+	TEMP_VR_GFX    = 5,
+	TEMP_VR_MEM0   = 6,
+	TEMP_VR_MEM1   = 7,
+	TEMP_VR_SOC    = 8,
+	TEMP_VR_U      = 9,
+	TEMP_LIQUID0   = 10,
+	TEMP_LIQUID1   = 11,
+	TEMP_PLX       = 12,
+	TEMP_COUNT     = 13,
+};
 
-typedef enum {
-	TDC_THROTTLER_GFX,
-	TDC_THROTTLER_SOC,
-	TDC_THROTTLER_U,
-	TDC_THROTTLER_COUNT
-} TDC_THROTTLER_e;
+enum TDC_THROTTLER_e {
+	TDC_THROTTLER_GFX   = 0,
+	TDC_THROTTLER_SOC   = 1,
+	TDC_THROTTLER_U     = 2,
+	TDC_THROTTLER_COUNT = 3,
+};
 
-typedef enum {
-	SVI_PLANE_GFX,
-	SVI_PLANE_SOC,
-	SVI_PLANE_VMEMP,
-	SVI_PLANE_VDDIO_MEM,
-	SVI_PLANE_U,
-	SVI_PLANE_COUNT,
-} SVI_PLANE_e;
+enum SVI_PLANE_e {
+	SVI_PLANE_GFX       = 0,
+	SVI_PLANE_SOC       = 1,
+	SVI_PLANE_VMEMP     = 2,
+	SVI_PLANE_VDDIO_MEM = 3,
+	SVI_PLANE_U         = 4,
+	SVI_PLANE_COUNT     = 5,
+};
 
-typedef enum {
-	PMFW_VOLT_PLANE_GFX,
-	PMFW_VOLT_PLANE_SOC,
-	PMFW_VOLT_PLANE_COUNT
-} PMFW_VOLT_PLANE_e;
+enum PMFW_VOLT_PLANE_e {
+	PMFW_VOLT_PLANE_GFX   = 0,
+	PMFW_VOLT_PLANE_SOC   = 1,
+	PMFW_VOLT_PLANE_COUNT = 2,
+};
 
-typedef enum {
-	CUSTOMER_VARIANT_ROW,
-	CUSTOMER_VARIANT_FALCON,
-	CUSTOMER_VARIANT_COUNT,
-} CUSTOMER_VARIANT_e;
+enum CUSTOMER_VARIANT_e:uint8_t {
+	CUSTOMER_VARIANT_ROW    = 0,
+	CUSTOMER_VARIANT_FALCON = 1,
+	CUSTOMER_VARIANT_COUNT  = 2,
+};
 
-typedef enum {
-	POWER_SOURCE_AC,
-	POWER_SOURCE_DC,
-	POWER_SOURCE_COUNT,
-} POWER_SOURCE_e;
+enum POWER_SOURCE_e {
+	POWER_SOURCE_AC    = 0,
+	POWER_SOURCE_DC    = 1,
+	POWER_SOURCE_COUNT = 2,
+};
 
-typedef enum {
-	MEM_VENDOR_SAMSUNG,
-	MEM_VENDOR_INFINEON,
-	MEM_VENDOR_ELPIDA,
-	MEM_VENDOR_ETRON,
-	MEM_VENDOR_NANYA,
-	MEM_VENDOR_HYNIX,
-	MEM_VENDOR_MOSEL,
-	MEM_VENDOR_WINBOND,
-	MEM_VENDOR_ESMT,
-	MEM_VENDOR_PLACEHOLDER0,
-	MEM_VENDOR_PLACEHOLDER1,
-	MEM_VENDOR_PLACEHOLDER2,
-	MEM_VENDOR_PLACEHOLDER3,
-	MEM_VENDOR_PLACEHOLDER4,
-	MEM_VENDOR_PLACEHOLDER5,
-	MEM_VENDOR_MICRON,
-	MEM_VENDOR_COUNT,
-} MEM_VENDOR_e;
+enum MEM_VENDOR_e {
+	MEM_VENDOR_SAMSUNG      = 0,
+	MEM_VENDOR_INFINEON     = 1,
+	MEM_VENDOR_ELPIDA       = 2,
+	MEM_VENDOR_ETRON        = 3,
+	MEM_VENDOR_NANYA        = 4,
+	MEM_VENDOR_HYNIX        = 5,
+	MEM_VENDOR_MOSEL        = 6,
+	MEM_VENDOR_WINBOND      = 7,
+	MEM_VENDOR_ESMT         = 8,
+	MEM_VENDOR_PLACEHOLDER0 = 9,
+	MEM_VENDOR_PLACEHOLDER1 = 10,
+	MEM_VENDOR_PLACEHOLDER2 = 11,
+	MEM_VENDOR_PLACEHOLDER3 = 12,
+	MEM_VENDOR_PLACEHOLDER4 = 13,
+	MEM_VENDOR_PLACEHOLDER5 = 14,
+	MEM_VENDOR_MICRON       = 15,
+	MEM_VENDOR_COUNT        = 16,
+};
 
-typedef enum {
-	PP_GRTAVFS_HW_CPO_CTL_ZONE0,
-	PP_GRTAVFS_HW_CPO_CTL_ZONE1,
-	PP_GRTAVFS_HW_CPO_CTL_ZONE2,
-	PP_GRTAVFS_HW_CPO_CTL_ZONE3,
-	PP_GRTAVFS_HW_CPO_CTL_ZONE4,
-	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE0,
-	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE0,
-	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE1,
-	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE1,
-	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE2,
-	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE2,
-	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE3,
-	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE3,
-	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE4,
-	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE4,
-	PP_GRTAVFS_HW_ZONE0_VF,
-	PP_GRTAVFS_HW_ZONE1_VF1,
-	PP_GRTAVFS_HW_ZONE2_VF2,
-	PP_GRTAVFS_HW_ZONE3_VF3,
-	PP_GRTAVFS_HW_VOLTAGE_GB,
-	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE0,
-	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE1,
-	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE2,
-	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE3,
-	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE4,
-	PP_GRTAVFS_HW_RESERVED_0,
-	PP_GRTAVFS_HW_RESERVED_1,
-	PP_GRTAVFS_HW_RESERVED_2,
-	PP_GRTAVFS_HW_RESERVED_3,
-	PP_GRTAVFS_HW_RESERVED_4,
-	PP_GRTAVFS_HW_RESERVED_5,
-	PP_GRTAVFS_HW_RESERVED_6,
-	PP_GRTAVFS_HW_FUSE_COUNT,
-} PP_GRTAVFS_HW_FUSE_e;
+enum PP_GRTAVFS_HW_FUSE_e {
+	PP_GRTAVFS_HW_CPO_CTL_ZONE0        = 0,
+	PP_GRTAVFS_HW_CPO_CTL_ZONE1        = 1,
+	PP_GRTAVFS_HW_CPO_CTL_ZONE2        = 2,
+	PP_GRTAVFS_HW_CPO_CTL_ZONE3        = 3,
+	PP_GRTAVFS_HW_CPO_CTL_ZONE4        = 4,
+	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE0    = 5,
+	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE0   = 6,
+	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE1    = 7,
+	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE1   = 8,
+	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE2    = 9,
+	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE2   = 10,
+	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE3    = 11,
+	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE3   = 12,
+	PP_GRTAVFS_HW_CPO_EN_0_31_ZONE4    = 13,
+	PP_GRTAVFS_HW_CPO_EN_32_63_ZONE4   = 14,
+	PP_GRTAVFS_HW_ZONE0_VF             = 15,
+	PP_GRTAVFS_HW_ZONE1_VF1            = 16,
+	PP_GRTAVFS_HW_ZONE2_VF2            = 17,
+	PP_GRTAVFS_HW_ZONE3_VF3            = 18,
+	PP_GRTAVFS_HW_VOLTAGE_GB           = 19,
+	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE0 = 20,
+	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE1 = 21,
+	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE2 = 22,
+	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE3 = 23,
+	PP_GRTAVFS_HW_CPOSCALINGCTRL_ZONE4 = 24,
+	PP_GRTAVFS_HW_RESERVED_0           = 25,
+	PP_GRTAVFS_HW_RESERVED_1           = 26,
+	PP_GRTAVFS_HW_RESERVED_2           = 27,
+	PP_GRTAVFS_HW_RESERVED_3           = 28,
+	PP_GRTAVFS_HW_RESERVED_4           = 29,
+	PP_GRTAVFS_HW_RESERVED_5           = 30,
+	PP_GRTAVFS_HW_RESERVED_6           = 31,
+	PP_GRTAVFS_HW_FUSE_COUNT           = 32,
+};
 
-typedef enum {
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z1_HOT_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z1_COLD_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z2_HOT_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z2_COLD_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z3_HOT_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z3_COLD_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z4_HOT_T0,
-	PP_GRTAVFS_FW_COMMON_PPVMIN_Z4_COLD_T0,
-	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z0,
-	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z1,
-	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z2,
-	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z3,
-	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z4,
-	PP_GRTAVFS_FW_COMMON_FUSE_COUNT,
-} PP_GRTAVFS_FW_COMMON_FUSE_e;
+enum PP_GRTAVFS_FW_COMMON_FUSE_e {
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z1_HOT_T0  = 0,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z1_COLD_T0 = 1,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z2_HOT_T0  = 2,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z2_COLD_T0 = 3,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z3_HOT_T0  = 4,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z3_COLD_T0 = 5,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z4_HOT_T0  = 6,
+	PP_GRTAVFS_FW_COMMON_PPVMIN_Z4_COLD_T0 = 7,
+	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z0        = 8,
+	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z1        = 9,
+	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z2        = 10,
+	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z3        = 11,
+	PP_GRTAVFS_FW_COMMON_SRAM_RM_Z4        = 12,
+	PP_GRTAVFS_FW_COMMON_FUSE_COUNT        = 13,
+};
 
-typedef enum {
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_NEG_1,
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_0,
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_1,
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_2,
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_3,
-	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_4,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_NEG_1,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_0,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_1,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_2,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_3,
-	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_4,
-	PP_GRTAVFS_FW_SEP_FUSE_VF_NEG_1_FREQUENCY,
-	PP_GRTAVFS_FW_SEP_FUSE_VF4_FREQUENCY,
-	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_0,
-	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_1,
-	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_2,
-	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_3,
-	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_4,
-	PP_GRTAVFS_FW_SEP_FUSE_COUNT,
-} PP_GRTAVFS_FW_SEP_FUSE_e;
+enum PP_GRTAVFS_FW_SEP_FUSE_e {
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_NEG_1       = 0,
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_0           = 1,
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_1           = 2,
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_2           = 3,
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_3           = 4,
+	PP_GRTAVFS_FW_SEP_FUSE_GB1_PWL_VOLTAGE_4           = 5,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_NEG_1       = 6,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_0           = 7,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_1           = 8,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_2           = 9,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_3           = 10,
+	PP_GRTAVFS_FW_SEP_FUSE_GB2_PWL_VOLTAGE_4           = 11,
+	PP_GRTAVFS_FW_SEP_FUSE_VF_NEG_1_FREQUENCY          = 12,
+	PP_GRTAVFS_FW_SEP_FUSE_VF4_FREQUENCY               = 13,
+	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_0 = 14,
+	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_1 = 15,
+	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_2 = 16,
+	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_3 = 17,
+	PP_GRTAVFS_FW_SEP_FUSE_FREQUENCY_TO_COUNT_SCALER_4 = 18,
+	PP_GRTAVFS_FW_SEP_FUSE_COUNT                       = 19,
+};
+
 
 #define PP_NUM_RTAVFS_PWL_ZONES 5
 
@@ -746,11 +772,11 @@ typedef enum {
 
 // VBIOS or PPLIB configures telemetry slope and offset. Only slope expected to be set for SVI3
 // Slope Q1.7, Offset Q1.2
-typedef struct {
+struct SviTelemetryScale_t {
 	int8_t   Offset; // in Amps
 	uint8_t  Padding;
 	uint16_t MaxCurrent; // in Amps
-} SviTelemetryScale_t;
+};
 
 #define PP_NUM_OD_VF_CURVE_POINTS PP_NUM_RTAVFS_PWL_ZONES + 1
 
@@ -764,18 +790,18 @@ typedef struct {
 #define PP_OD_FEATURE_TEMPERATURE_BIT 10
 #define PP_OD_FEATURE_COUNT           13
 
-typedef enum {
-	PP_OD_POWER_FEATURE_ALWAYS_ENABLED,
-	PP_OD_POWER_FEATURE_DISABLED_WHILE_GAMING,
-	PP_OD_POWER_FEATURE_ALWAYS_DISABLED,
-} PP_OD_POWER_FEATURE_e;
+enum PP_OD_POWER_FEATURE_e {
+	PP_OD_POWER_FEATURE_ALWAYS_ENABLED = 0,
+	PP_OD_POWER_FEATURE_DISABLED_WHILE_GAMING = 1,
+	PP_OD_POWER_FEATURE_ALWAYS_DISABLED = 2,
+};
 
-typedef enum {
+enum FanMode_e {
 	FAN_MODE_AUTO = 0,
-	FAN_MODE_MANUAL_LINEAR,
-} FanMode_e;
+	FAN_MODE_MANUAL_LINEAR = 1,
+};
 
-typedef struct {
+struct OverDriveTable_t {
 	uint32_t FeatureCtrlMask;
 
 	// Voltage control
@@ -808,14 +834,16 @@ typedef struct {
 
 	uint32_t Spare[12];
 	uint32_t MmHubPadding[8]; // SMU internal use. Adding here instead of external as a workaround
-} OverDriveTable_t;
+};
 
-typedef struct {
+/*
+struct OverDriveTableExternal_t {
 	OverDriveTable_t OverDriveTable;
 
-} OverDriveTableExternal_t;
+};
+*/
 
-typedef struct {
+struct OverDriveLimits_t {
 	uint32_t FeatureCtrlMask;
 
 	int16_t VoltageOffsetPerZoneBoundary;
@@ -849,57 +877,57 @@ typedef struct {
 } OverDriveLimits_t;
 
 
-typedef enum {
-	BOARD_GPIO_SMUIO_0,
-	BOARD_GPIO_SMUIO_1,
-	BOARD_GPIO_SMUIO_2,
-	BOARD_GPIO_SMUIO_3,
-	BOARD_GPIO_SMUIO_4,
-	BOARD_GPIO_SMUIO_5,
-	BOARD_GPIO_SMUIO_6,
-	BOARD_GPIO_SMUIO_7,
-	BOARD_GPIO_SMUIO_8,
-	BOARD_GPIO_SMUIO_9,
-	BOARD_GPIO_SMUIO_10,
-	BOARD_GPIO_SMUIO_11,
-	BOARD_GPIO_SMUIO_12,
-	BOARD_GPIO_SMUIO_13,
-	BOARD_GPIO_SMUIO_14,
-	BOARD_GPIO_SMUIO_15,
-	BOARD_GPIO_SMUIO_16,
-	BOARD_GPIO_SMUIO_17,
-	BOARD_GPIO_SMUIO_18,
-	BOARD_GPIO_SMUIO_19,
-	BOARD_GPIO_SMUIO_20,
-	BOARD_GPIO_SMUIO_21,
-	BOARD_GPIO_SMUIO_22,
-	BOARD_GPIO_SMUIO_23,
-	BOARD_GPIO_SMUIO_24,
-	BOARD_GPIO_SMUIO_25,
-	BOARD_GPIO_SMUIO_26,
-	BOARD_GPIO_SMUIO_27,
-	BOARD_GPIO_SMUIO_28,
-	BOARD_GPIO_SMUIO_29,
-	BOARD_GPIO_SMUIO_30,
-	BOARD_GPIO_SMUIO_31,
-	MAX_BOARD_GPIO_SMUIO_NUM,
-	BOARD_GPIO_DC_GEN_A,
-	BOARD_GPIO_DC_GEN_B,
-	BOARD_GPIO_DC_GEN_C,
-	BOARD_GPIO_DC_GEN_D,
-	BOARD_GPIO_DC_GEN_E,
-	BOARD_GPIO_DC_GEN_F,
-	BOARD_GPIO_DC_GEN_G,
-	BOARD_GPIO_DC_GENLK_CLK,
-	BOARD_GPIO_DC_GENLK_VSYNC,
-	BOARD_GPIO_DC_SWAPLOCK_A,
-	BOARD_GPIO_DC_SWAPLOCK_B,
-} BOARD_GPIO_TYPE_e;
+enum BOARD_GPIO_TYPE_e {
+	BOARD_GPIO_SMUIO_0        = 0,
+	BOARD_GPIO_SMUIO_1        = 1,
+	BOARD_GPIO_SMUIO_2        = 2,
+	BOARD_GPIO_SMUIO_3        = 3,
+	BOARD_GPIO_SMUIO_4        = 4,
+	BOARD_GPIO_SMUIO_5        = 5,
+	BOARD_GPIO_SMUIO_6        = 6,
+	BOARD_GPIO_SMUIO_7        = 7,
+	BOARD_GPIO_SMUIO_8        = 8,
+	BOARD_GPIO_SMUIO_9        = 9,
+	BOARD_GPIO_SMUIO_10       = 10,
+	BOARD_GPIO_SMUIO_11       = 11,
+	BOARD_GPIO_SMUIO_12       = 12,
+	BOARD_GPIO_SMUIO_13       = 13,
+	BOARD_GPIO_SMUIO_14       = 14,
+	BOARD_GPIO_SMUIO_15       = 15,
+	BOARD_GPIO_SMUIO_16       = 16,
+	BOARD_GPIO_SMUIO_17       = 17,
+	BOARD_GPIO_SMUIO_18       = 18,
+	BOARD_GPIO_SMUIO_19       = 19,
+	BOARD_GPIO_SMUIO_20       = 20,
+	BOARD_GPIO_SMUIO_21       = 21,
+	BOARD_GPIO_SMUIO_22       = 22,
+	BOARD_GPIO_SMUIO_23       = 23,
+	BOARD_GPIO_SMUIO_24       = 24,
+	BOARD_GPIO_SMUIO_25       = 25,
+	BOARD_GPIO_SMUIO_26       = 26,
+	BOARD_GPIO_SMUIO_27       = 27,
+	BOARD_GPIO_SMUIO_28       = 28,
+	BOARD_GPIO_SMUIO_29       = 29,
+	BOARD_GPIO_SMUIO_30       = 30,
+	BOARD_GPIO_SMUIO_31       = 31,
+	MAX_BOARD_GPIO_SMUIO_NUM  = 32,
+	BOARD_GPIO_DC_GEN_A       = 33,
+	BOARD_GPIO_DC_GEN_B       = 34,
+	BOARD_GPIO_DC_GEN_C       = 35,
+	BOARD_GPIO_DC_GEN_D       = 36,
+	BOARD_GPIO_DC_GEN_E       = 37,
+	BOARD_GPIO_DC_GEN_F       = 38,
+	BOARD_GPIO_DC_GEN_G       = 39,
+	BOARD_GPIO_DC_GENLK_CLK   = 40,
+	BOARD_GPIO_DC_GENLK_VSYNC = 41,
+	BOARD_GPIO_DC_SWAPLOCK_A  = 42,
+	BOARD_GPIO_DC_SWAPLOCK_B  = 43,
+};
 
 #define INVALID_BOARD_GPIO 0xFF
 
 
-typedef struct {
+struct BootValues_t {
 	// PLL 0
 	uint16_t InitGfxclk_bypass;
 	uint16_t InitSocclk;
@@ -950,12 +978,12 @@ typedef struct {
 
 	uint32_t Spare[8];
 
-} BootValues_t;
+};
 
 
-typedef struct {
+struct MsgLimits_t {
 	uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
-	uint16_t Tdc[TDC_THROTTLER_COUNT];             // Amps
+	uint16_t Tdc[TDC_THROTTLER_COUNT]; // Amps
 
 	uint16_t Temperature[TEMP_COUNT]; // Celsius
 
@@ -981,9 +1009,9 @@ typedef struct {
 	uint16_t PowerMinPpt0[POWER_SOURCE_COUNT];
 	uint32_t Spare[11];
 
-} MsgLimits_t;
+};
 
-typedef struct {
+struct DriverReportedClocks_t {
 	uint16_t BaseClockAc;
 	uint16_t GameClockAc;
 	uint16_t BoostClockAc;
@@ -992,9 +1020,9 @@ typedef struct {
 	uint16_t BoostClockDc;
 
 	uint32_t Reserved[4];
-} DriverReportedClocks_t;
+};
 
-typedef struct {
+struct AvfsDcBtcParams_t {
 	uint8_t  DcBtcEnabled;
 	uint8_t  Padding[3];
 
@@ -1004,20 +1032,20 @@ typedef struct {
 	uint16_t DcBtcMin; // mV Q2
 	uint16_t DcBtcMax; // mV Q2
 
-	LinearInt_t       DcBtcGbScalar;
+	struct LinearInt_t DcBtcGbScalar;
 
-} AvfsDcBtcParams_t;
+};
 
-typedef struct {
+struct AvfsFuseOverride_t {
 	uint16_t AvfsTemp[AVFS_TEMP_COUNT]; // in degrees C
 	uint16_t VftFMin;    // in MHz
 	uint16_t VInversion; // in mV Q2
-	QuadraticInt_t qVft[AVFS_TEMP_COUNT];
-	QuadraticInt_t qAvfsGb;
-	QuadraticInt_t qAvfsGb2;
-} AvfsFuseOverride_t;
+	struct QuadraticInt_t qVft[AVFS_TEMP_COUNT];
+	struct QuadraticInt_t qAvfsGb;
+	struct QuadraticInt_t qAvfsGb2;
+};
 
-typedef struct { // SECTION: Version
+struct SkuTable_t { // SECTION: Version
 
 	uint32_t Version; // should be unique to each SKU(i.e if any value changes in below structure then this value must be different)
 	// SECTION: Feature Control
@@ -1025,10 +1053,10 @@ typedef struct { // SECTION: Version
 	union powerplay_feature_control_smu11 features;
 
 	// SECTION: Miscellaneous Configuration
-	uint8_t  TotalPowerConfig; // Determines how PMFW calculates the power. Use defines from PwrConfig_e
-	uint8_t  CustomerVariant;  // To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e
+	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power. Use defines from PwrConfig_e
+	enum CUSTOMER_VARIANT_e CustomerVariant;  // To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e
 	uint8_t  MemoryTemperatureTypeMask; // Bit mapping indicating which methods of memory temperature reading are enabled. Use defines from MEM_TEMP_*BIT
-	uint8_t  SmartShiftVersion; // Determine what SmartShift feature version is supported Use defines from SMARTSHIFT_VERSION_e
+	enum SMARTSHIFT_VERSION_e SmartShiftVersion; // Determine what SmartShift feature version is supported Use defines from SMARTSHIFT_VERSION_e
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT]; // In Watts. Power limit that PMFW attempts to control to in AC mode. Multiple limits supported
 	uint16_t SocketPowerLimitDc[PPT_THROTTLER_COUNT]; // In Watts. Power limit that PMFW attempts to control to in DC mode. Multiple limits supported
@@ -1094,11 +1122,11 @@ typedef struct { // SECTION: Version
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 	uint16_t SocketPowerLimitDcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 
-	QuadraticInt_t Vmin_droop;
+	struct QuadraticInt_t Vmin_droop;
 	uint32_t SpareVmin[9];
 
 	// SECTION: DPM Configuration 1
-	DpmDescriptor_t DpmDescriptor[PPCLK_COUNT];
+	struct DpmDescriptor_t DpmDescriptor[PPCLK_COUNT];
 
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS];        // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS];         // In MHz
@@ -1249,7 +1277,7 @@ typedef struct { // SECTION: Version
 	uint32_t V2F_vmax_range_low;
 	uint32_t V2F_vmax_range_high;
 
-	AvfsDcBtcParams_t DcBtcGfxParams;
+	struct AvfsDcBtcParams_t DcBtcGfxParams;
 
 	uint32_t GfxAvfsSpare[32];
 	// SECTION: VDD_SOC AVFS
@@ -1258,29 +1286,29 @@ typedef struct { // SECTION: Version
 	uint8_t  MinSocAvfsRevision;
 	uint8_t  SocAvfsPadding[2];
 
-	AvfsFuseOverride_t SocAvfsFuseOverride[AVFS_D_COUNT];
+	struct AvfsFuseOverride_t SocAvfsFuseOverride[AVFS_D_COUNT];
 
-	DroopInt_t        dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
+	struct DroopInt_t        dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
 
-	LinearInt_t       qAgingGb[AVFS_D_COUNT]; // GHz->V
+	struct LinearInt_t       qAgingGb[AVFS_D_COUNT]; // GHz->V
 
-	QuadraticInt_t    qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
+	struct QuadraticInt_t    qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
 
-	AvfsDcBtcParams_t DcBtcSocParams[AVFS_D_COUNT];
+	struct AvfsDcBtcParams_t DcBtcSocParams[AVFS_D_COUNT];
 
 	uint32_t SocAvfsSpare[32];
 	// SECTION: Boot clock and voltage values
-	BootValues_t BootValues;
+	struct BootValues_t BootValues;
 	// SECTION: Driver Reported Clocks
-	DriverReportedClocks_t DriverReportedClocks;
+	struct DriverReportedClocks_t DriverReportedClocks;
 	// SECTION: Message Limits
-	MsgLimits_t MsgLimits;
+	struct MsgLimits_t MsgLimits;
 	// SECTION: OverDrive Limits
-	OverDriveLimits_t OverDriveLimitsMin;
-	OverDriveLimits_t OverDriveLimitsBasicMax;
-	OverDriveLimits_t OverDriveLimitsAdvancedMax;
+	struct OverDriveLimits_t OverDriveLimitsMin;
+	struct OverDriveLimits_t OverDriveLimitsBasicMax;
+	struct OverDriveLimits_t OverDriveLimitsAdvancedMax;
 	// SECTION: Advanced Options
-	uint32_t DebugOverrides;
+	union dpm_debug_override_smu13 DebugOverrides;
 	// Section: Total Board Power idle vs active coefficients
 	uint8_t  TotalBoardPowerSupport;
 	uint8_t  TotalBoardPowerPadding[3];
@@ -1290,22 +1318,22 @@ typedef struct { // SECTION: Version
 	int16_t TotalBoardPowerM;
 	int16_t TotalBoardPowerB;
 
-	QuadraticInt_t qFeffCoeffGameClock[POWER_SOURCE_COUNT];
-	QuadraticInt_t qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
-	QuadraticInt_t qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
+	struct QuadraticInt_t qFeffCoeffGameClock[POWER_SOURCE_COUNT];
+	struct QuadraticInt_t qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
+	struct QuadraticInt_t qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
 	// SECTION: Sku Reserved
 	uint32_t Spare[43];
 	// Padding for MMHUB - do not modify this
 	uint32_t MmHubPadding[8];
 
-} SkuTable_t;
+};
 
-typedef struct {
+struct BoardTable_t {
 	// SECTION: Version
 	uint32_t Version; // should be unique to each board type
 
 	// SECTION: I2C Control
-	I2cControllerConfig_t  I2cControllers[NUM_I2C_CONTROLLERS];
+	struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS];
 	// SECTION: SVI2 Board Parameters
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
@@ -1323,7 +1351,7 @@ typedef struct {
 	uint8_t  PaddingPsi[SVI_PLANE_COUNT];
 	uint8_t  EnablePsi6[SVI_PLANE_COUNT]; // only applicable in SVI3
 	// SECTION: Voltage Regulator Settings
-	SviTelemetryScale_t SviTelemetryScale[SVI_PLANE_COUNT];
+	struct SviTelemetryScale_t SviTelemetryScale[SVI_PLANE_COUNT];
 	uint32_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
 
 	uint8_t  DownSlewRateVr[SVI_PLANE_COUNT];
@@ -1377,16 +1405,22 @@ typedef struct {
 	// SECTION: Structure Padding
 	// Padding for MMHUB - do not modify this
 	uint32_t MmHubPadding[8];
-} BoardTable_t;
+};
 
-#pragma pack(push, 1)
-typedef struct {
-	SkuTable_t SkuTable;
-	BoardTable_t BoardTable;
-} PPTable_t;
+struct PPTable_t {
+	struct SkuTable_t SkuTable;
+	struct BoardTable_t BoardTable;
+};
+
+
+
+
 #pragma pack(pop)
+
+
+
 /*
-typedef struct {
+struct DriverSmuConfig_t {
 	// Time constant parameters for clock averages in ms
 	uint16_t GfxclkAverageLpfTau;
 	uint16_t FclkAverageLpfTau;
@@ -1396,18 +1430,18 @@ typedef struct {
 	uint16_t SocketPowerLpfTau;
 	uint16_t VcnClkAverageLpfTau;
 	uint16_t VcnUsageAverageLpfTau;
-} DriverSmuConfig_t;
+};
 
-typedef struct {
+struct DriverSmuConfigExternal_t {
 	DriverSmuConfig_t DriverSmuConfig;
 
 	uint32_t Spare[8];
 	// Padding - ignore
 	uint32_t MmHubPadding[8]; // SMU internal use
-} DriverSmuConfigExternal_t;
+};
 
 
-typedef struct {
+struct DriverInfoTable_t {
 
 	uint16_t FreqTableGfx      [NUM_GFXCLK_DPM_LEVELS  ];     // In MHz
 	uint16_t FreqTableVclk     [NUM_VCLK_DPM_LEVELS    ];     // In MHz
@@ -1430,9 +1464,9 @@ typedef struct {
 	// Padding - ignore
 	uint32_t MmHubPadding[8]; // SMU internal use
 
-} DriverInfoTable_t;
+};
 
-typedef struct {
+struct SmuMetrics_t {
 	uint32_t CurrClock[PPCLK_COUNT];
 
 	uint16_t AverageGfxclkFrequencyTarget;
@@ -1490,59 +1524,59 @@ typedef struct {
 
 	uint32_t PublicSerialNumberLower;
 	uint32_t PublicSerialNumberUpper;
-} SmuMetrics_t;
+};
 
-typedef struct {
+struct SmuMetricsExternal_t {
 	SmuMetrics_t SmuMetrics;
 	uint32_t Spare[30];
 
 	// Padding - ignore
 	uint32_t MmHubPadding[8]; // SMU internal use
-} SmuMetricsExternal_t;
+};
 
-typedef struct {
+struct WatermarkRowGeneric_t {
 	uint8_t  WmSetting;
 	uint8_t  Flags;
 	uint8_t  Padding[2];
 
-} WatermarkRowGeneric_t;
+};
 
 #define NUM_WM_RANGES 4
 
-typedef enum {
+enum WATERMARKS_FLAGS_e {
 	WATERMARKS_CLOCK_RANGE = 0,
 	WATERMARKS_DUMMY_PSTATE,
 	WATERMARKS_MALL,
 	WATERMARKS_COUNT,
-} WATERMARKS_FLAGS_e;
+};
 
-typedef struct {
+struct Watermarks_t {
 	// Watermarks
 	WatermarkRowGeneric_t WatermarkRow[NUM_WM_RANGES];
-} Watermarks_t;
+};
 
-typedef struct {
+struct WatermarksExternal_t {
 	Watermarks_t Watermarks;
 	uint32_t Spare[16];
 
 	uint32_t MmHubPadding[8]; // SMU internal use
-} WatermarksExternal_t;
+};
 
-typedef struct {
+struct AvfsDebugTable_t {
 	uint16_t avgPsmCount[36];
 	uint16_t minPsmCount[36];
 	float    avgPsmVoltage[36];
 	float    minPsmVoltage[36];
-} AvfsDebugTable_t;
+};
 
-typedef struct {
+struct AvfsDebugTableExternal_t {
 	AvfsDebugTable_t AvfsDebugTable;
 
 	uint32_t MmHubPadding[8]; // SMU internal use
-} AvfsDebugTableExternal_t;
+};
 
 
-typedef struct {
+struct DpmActivityMonitorCoeffInt_t {
 	uint8_t  Gfx_ActiveHystLimit;
 	uint8_t  Gfx_IdleHystLimit;
 	uint8_t  Gfx_FPS;
@@ -1579,13 +1613,13 @@ typedef struct {
 	uint16_t Mem_Fps;
 	uint8_t  padding[2];
 
-} DpmActivityMonitorCoeffInt_t;
+};
 
 
-typedef struct {
+struct DpmActivityMonitorCoeffIntExternal_t {
 	DpmActivityMonitorCoeffInt_t DpmActivityMonitorCoeffInt;
 	uint32_t MmHubPadding[8]; // SMU internal use
-} DpmActivityMonitorCoeffIntExternal_t;
+};
 
 
 
