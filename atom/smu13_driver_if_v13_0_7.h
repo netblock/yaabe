@@ -32,20 +32,24 @@
 // Increment this version if SkuTable_t or BoardTable_t change
 #define PPTABLE_VERSION 0x27
 
-#define NUM_GFXCLK_DPM_LEVELS   16
-#define NUM_SOCCLK_DPM_LEVELS   8
-#define NUM_MP0CLK_DPM_LEVELS   2
-#define NUM_DCLK_DPM_LEVELS     8
-#define NUM_VCLK_DPM_LEVELS     8
-#define NUM_DISPCLK_DPM_LEVELS  8
-#define NUM_DPPCLK_DPM_LEVELS   8
-#define NUM_DPREFCLK_DPM_LEVELS 8
-#define NUM_DCFCLK_DPM_LEVELS   8
-#define NUM_DTBCLK_DPM_LEVELS   8
-#define NUM_UCLK_DPM_LEVELS     4
-#define NUM_LINK_LEVELS         3
-#define NUM_FCLK_DPM_LEVELS     8
-#define NUM_OD_FAN_MAX_POINTS   6
+#define NUM_GFXCLK_DPM_LEVELS_SMU13   16
+#define NUM_VCLK_DPM_LEVELS_SMU13     8
+#define NUM_DCLK_DPM_LEVELS_SMU13     8
+//ECLK
+#define NUM_MP0CLK_DPM_LEVELS_SMU13   2
+#define NUM_SOCCLK_DPM_LEVELS_SMU13   8
+#define NUM_UCLK_DPM_LEVELS_SMU13     4
+#define NUM_FCLK_DPM_LEVELS_SMU13     8
+#define NUM_DCFCLK_DPM_LEVELS_SMU13   8 //DCEF?
+#define NUM_DISPCLK_DPM_LEVELS_SMU13  8
+//PIXCLK
+//PHYCLK
+#define NUM_LINK_LEVELS_SMU13         3
+//XGMI
+#define NUM_DPPCLK_DPM_LEVELS_SMU13   8
+#define NUM_DPREFCLK_DPM_LEVELS_SMU13 8
+#define NUM_DTBCLK_DPM_LEVELS_SMU13   8
+#define NUM_OD_FAN_MAX_POINTS_SMU13   6
 
 /*
 // Feature Control Defines
@@ -347,12 +351,6 @@ enum SMARTSHIFT_VERSION_e:uint8_t {
 	SMARTSHIFT_VERSION_3 = 2,
 };
 
-enum FOPT_CALC_e {
-	FOPT_CALC_AC_CALC_DC,
-	FOPT_PPTABLE_AC_CALC_DC,
-	FOPT_CALC_AC_PPTABLE_DC,
-	FOPT_PPTABLE_AC_PPTABLE_DC,
-};
 
 enum DRAM_BIT_WIDTH_TYPE_e:uint8_t {
 	DRAM_BIT_WIDTH_DISABLED = 0,
@@ -371,7 +369,7 @@ enum DRAM_BIT_WIDTH_TYPE_e:uint8_t {
 #define I2C_CONTROLLER_DISABLED 0
 
 #define MAX_SW_I2C_COMMANDS    24
-/*
+/* duplicate
 enum I2cControllerPort_e {
 	I2C_CONTROLLER_PORT_0 = 0,  // CKSVII2C0
 	I2C_CONTROLLER_PORT_1 = 1,  // CKSVII2C1
@@ -466,11 +464,11 @@ struct SwI2cRequest_t {
 	uint8_t  SlaveAddress;      // Slave address of device
 	uint8_t  NumCmds;           // Number of commands
 
-	SwI2cCmd_t  SwI2cCmds[MAX_SW_I2C_COMMANDS];
+	struct SwI2cCmd_t SwI2cCmds[MAX_SW_I2C_COMMANDS];
 }; // SW I2C Request Table
 
 struct SwI2cRequestExternal_t {
-	SwI2cRequest_t SwI2cRequest;
+	struct SwI2cRequest_t SwI2cRequest;
 
 	uint32_t Spare[8];
 	uint32_t MmHubPadding[8]; // SMU internal use
@@ -487,7 +485,7 @@ struct EccInfo_t {
 };
 
 struct EccInfoTable_t {
-	EccInfo_t  EccInfo[24];
+	struct EccInfo_t  EccInfo[24];
 };
 
 // D3HOT sequences
@@ -511,22 +509,24 @@ enum PowerGatingSettings_e {
 	PG_POWER_UP   = 1,
 };
 
-struct QuadraticInt_t {
+/* duplicate
+struct quadratic_u32 {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
 };
 
-struct LinearInt_t {
+struct linear_u32 {
 	uint32_t m;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 };
 
-struct DroopInt_t {
+struct droop_u32 {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
 };
+*/
 
 enum DCS_ARCH_e {
 	DCS_ARCH_DISABLED = 0,
@@ -535,35 +535,36 @@ enum DCS_ARCH_e {
 };
 
 // Only Clks that have DPM descriptors are listed here
-enum PPCLK_e {
-	PPCLK_GFXCLK   = 0,
-	PPCLK_SOCCLK   = 1,
-	PPCLK_UCLK     = 2,
-	PPCLK_FCLK     = 3,
-	PPCLK_DCLK_0   = 4,
-	PPCLK_VCLK_0   = 5,
-	PPCLK_DCLK_1   = 6,
-	PPCLK_VCLK_1   = 7,
-	PPCLK_DISPCLK  = 8,
-	PPCLK_DPPCLK   = 9,
-	PPCLK_DPREFCLK = 10,
-	PPCLK_DCFCLK   = 11,
-	PPCLK_DTBCLK   = 12,
-	PPCLK_COUNT    = 13,
+enum PPCLK_SMU13_e {
+	PPCLK_SMU13_GFXCLK   = 0,
+	PPCLK_SMU13_SOCCLK   = 1,
+	PPCLK_SMU13_UCLK     = 2,
+	PPCLK_SMU13_FCLK     = 3,
+	PPCLK_SMU13_DCLK_0   = 4,
+	PPCLK_SMU13_VCLK_0   = 5,
+	PPCLK_SMU13_DCLK_1   = 6,
+	PPCLK_SMU13_VCLK_1   = 7,
+	PPCLK_SMU13_DISPCLK  = 8,
+	PPCLK_SMU13_DPPCLK   = 9,
+	PPCLK_SMU13_DPREFCLK = 10,
+	PPCLK_SMU13_DCFCLK   = 11,
+	PPCLK_SMU13_DTBCLK   = 12,
+	PPCLK_SMU13_COUNT    = 13,
 };
 
-enum VOLTAGE_MODE_e {
+/* duplicate
+enum VOLTAGE_MODE_e { // seemingly uneeded
 	VOLTAGE_MODE_PPTABLE = 0,
 	VOLTAGE_MODE_FUSES   = 1,
 	VOLTAGE_MODE_COUNT   = 2,
 };
-
 
 enum AVFS_VOLTAGE_TYPE_e {
 	AVFS_VOLTAGE_GFX   = 0,
 	AVFS_VOLTAGE_SOC   = 1,
 	AVFS_VOLTAGE_COUNT = 2,
 };
+*/
 
 enum AVFS_TEMP_e {
 	AVFS_TEMP_COLD  = 0,
@@ -597,12 +598,19 @@ enum PwrConfig_e:uint8_t {
 	PWR_CONFIG_TCP_MEASURED  = 3,
 };
 
+enum FOPT_CALC_e:uint8_t {
+	FOPT_CALC_AC_CALC_DC       = 0,
+	FOPT_PPTABLE_AC_CALC_DC    = 1,
+	FOPT_CALC_AC_PPTABLE_DC    = 2,
+	FOPT_PPTABLE_AC_PPTABLE_DC = 3,
+};
+
 struct DpmDescriptor_t {
 	uint8_t  Padding;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
-	uint8_t  CalculateFopt;     // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
-	struct LinearInt_t ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	enum FOPT_CALC_e CalculateFopt;     // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
+	struct linear_u32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
 	uint32_t Padding3[3];
 	uint16_t Padding4;
 	uint16_t FoptimalDc; // Foptimal frequency in DC power mode.
@@ -663,11 +671,13 @@ enum CUSTOMER_VARIANT_e:uint8_t {
 	CUSTOMER_VARIANT_COUNT  = 2,
 };
 
+/* duplicate
 enum POWER_SOURCE_e {
 	POWER_SOURCE_AC    = 0,
 	POWER_SOURCE_DC    = 1,
 	POWER_SOURCE_COUNT = 2,
 };
+*/
 
 enum MEM_VENDOR_e {
 	MEM_VENDOR_SAMSUNG      = 0,
@@ -820,8 +830,8 @@ struct OverDriveTable_t {
 	int16_t Tdc;
 
 	// Fan control
-	uint8_t  FanLinearPwmPoints[NUM_OD_FAN_MAX_POINTS];
-	uint8_t  FanLinearTempPoints[NUM_OD_FAN_MAX_POINTS];
+	uint8_t  FanLinearPwmPoints[NUM_OD_FAN_MAX_POINTS_SMU13];
+	uint8_t  FanLinearTempPoints[NUM_OD_FAN_MAX_POINTS_SMU13];
 	uint16_t FanMinimumPwm;
 	uint16_t AcousticTargetRpmThreshold;
 	uint16_t AcousticLimitRpmThreshold;
@@ -843,7 +853,7 @@ struct OverDriveTableExternal_t {
 };
 */
 
-struct OverDriveLimits_t {
+struct overdrivelimits_smu13 {
 	uint32_t FeatureCtrlMask;
 
 	int16_t VoltageOffsetPerZoneBoundary;
@@ -874,9 +884,9 @@ struct OverDriveLimits_t {
 
 	uint32_t Spare[12];
 
-} OverDriveLimits_t;
+};
 
-
+/* Unsure what this goes to
 enum BOARD_GPIO_TYPE_e {
 	BOARD_GPIO_SMUIO_0        = 0,
 	BOARD_GPIO_SMUIO_1        = 1,
@@ -922,9 +932,10 @@ enum BOARD_GPIO_TYPE_e {
 	BOARD_GPIO_DC_GENLK_VSYNC = 41,
 	BOARD_GPIO_DC_SWAPLOCK_A  = 42,
 	BOARD_GPIO_DC_SWAPLOCK_B  = 43,
+	INVALID_BOARD_GPIO      = 0xFF,
 };
+*/
 
-#define INVALID_BOARD_GPIO 0xFF
 
 
 struct BootValues_t {
@@ -1022,7 +1033,7 @@ struct DriverReportedClocks_t {
 	uint32_t Reserved[4];
 };
 
-struct AvfsDcBtcParams_t {
+struct AvfsDcBtcParams_smu13 {
 	uint8_t  DcBtcEnabled;
 	uint8_t  Padding[3];
 
@@ -1032,25 +1043,25 @@ struct AvfsDcBtcParams_t {
 	uint16_t DcBtcMin; // mV Q2
 	uint16_t DcBtcMax; // mV Q2
 
-	struct LinearInt_t DcBtcGbScalar;
+	struct linear_u32 DcBtcGbScalar;
 
 };
 
-struct AvfsFuseOverride_t {
+struct AvfsFuseOverride_smu13 {
 	uint16_t AvfsTemp[AVFS_TEMP_COUNT]; // in degrees C
 	uint16_t VftFMin;    // in MHz
 	uint16_t VInversion; // in mV Q2
-	struct QuadraticInt_t qVft[AVFS_TEMP_COUNT];
-	struct QuadraticInt_t qAvfsGb;
-	struct QuadraticInt_t qAvfsGb2;
+	struct quadratic_u32 qVft[AVFS_TEMP_COUNT];
+	struct quadratic_u32 qAvfsGb;
+	struct quadratic_u32 qAvfsGb2;
 };
 
-struct SkuTable_t { // SECTION: Version
+struct skutable_smu13 { // SECTION: Version
 
 	uint32_t Version; // should be unique to each SKU(i.e if any value changes in below structure then this value must be different)
 	// SECTION: Feature Control
 	//uint32_t FeaturesToRun[NUM_FEATURES / 32]; // Features that PMFW will attempt to enable. Use FEATURE_*_BIT as mapping
-	union powerplay_feature_control_smu11 features;
+	union powerplay_feature_control_smu13 features;
 
 	// SECTION: Miscellaneous Configuration
 	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power. Use defines from PwrConfig_e
@@ -1122,28 +1133,28 @@ struct SkuTable_t { // SECTION: Version
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 	uint16_t SocketPowerLimitDcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 
-	struct QuadraticInt_t Vmin_droop;
+	struct quadratic_u32 Vmin_droop;
 	uint32_t SpareVmin[9];
 
 	// SECTION: DPM Configuration 1
-	struct DpmDescriptor_t DpmDescriptor[PPCLK_COUNT];
+	struct DpmDescriptor_t DpmDescriptor[PPCLK_SMU13_COUNT];
 
-	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS];        // In MHz
-	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS];         // In MHz
-	uint16_t FreqTableDclk[NUM_DCLK_DPM_LEVELS];         // In MHz
-	uint16_t FreqTableSocclk[NUM_SOCCLK_DPM_LEVELS];     // In MHz
-	uint16_t FreqTableUclk[NUM_UCLK_DPM_LEVELS];         // In MHz
-	uint16_t FreqTableDispclk[NUM_DISPCLK_DPM_LEVELS];   // In MHz
-	uint16_t FreqTableDppClk[NUM_DPPCLK_DPM_LEVELS];     // In MHz
-	uint16_t FreqTableDprefclk[NUM_DPREFCLK_DPM_LEVELS]; // In MHz
-	uint16_t FreqTableDcfclk[NUM_DCFCLK_DPM_LEVELS];     // In MHz
-	uint16_t FreqTableDtbclk[NUM_DTBCLK_DPM_LEVELS];     // In MHz
-	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS];         // In MHz
+	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU13];        // In MHz
+	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU13];         // In MHz
+	uint16_t FreqTableDclk[NUM_DCLK_DPM_LEVELS_SMU13];         // In MHz
+	uint16_t FreqTableSocclk[NUM_SOCCLK_DPM_LEVELS_SMU13];     // In MHz
+	uint16_t FreqTableUclk[NUM_UCLK_DPM_LEVELS_SMU13];         // In MHz
+	uint16_t FreqTableDispclk[NUM_DISPCLK_DPM_LEVELS_SMU13];   // In MHz
+	uint16_t FreqTableDppClk[NUM_DPPCLK_DPM_LEVELS_SMU13];     // In MHz
+	uint16_t FreqTableDprefclk[NUM_DPREFCLK_DPM_LEVELS_SMU13]; // In MHz
+	uint16_t FreqTableDcfclk[NUM_DCFCLK_DPM_LEVELS_SMU13];     // In MHz
+	uint16_t FreqTableDtbclk[NUM_DTBCLK_DPM_LEVELS_SMU13];     // In MHz
+	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS_SMU13];         // In MHz
 
-	uint32_t DcModeMaxFreq[PPCLK_COUNT];                 // In MHz
+	uint32_t DcModeMaxFreq[PPCLK_SMU13_COUNT];                 // In MHz
 	// SECTION: DPM Configuration 2
-	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS];          // in MHz
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS];       // mV(Q2)
+	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU13];          // in MHz
+	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU13];       // mV(Q2)
 
 	uint8_t  GfxclkSpare[2];
 	uint16_t GfxclkFreqCap;
@@ -1190,27 +1201,27 @@ struct SkuTable_t { // SECTION: Version
 
 	uint32_t DcsSpare[14];
 	// UCLK section
-	uint16_t ShadowFreqTableUclk[NUM_UCLK_DPM_LEVELS]; // In MHz
+	uint16_t ShadowFreqTableUclk[NUM_UCLK_DPM_LEVELS_SMU13]; // In MHz
 	// UCLK section
 	uint8_t  UseStrobeModeOptimizations; // Set to indicate that FW should use strobe mode optimizations
 	uint8_t  PaddingMem[3];
 
-	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS]; // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
-	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
+	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13]; // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
+	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
 
-	uint16_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS]; // mV(Q2)
-	uint16_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS]; // mV(Q2)
+	uint16_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
+	uint16_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
 	// FCLK Section
 
-	uint8_t  FclkDpmUPstates[NUM_FCLK_DPM_LEVELS]; // U P-state ID associated with each FCLK DPM state.
-	uint16_t FclkDpmVddU[NUM_FCLK_DPM_LEVELS]; // mV(Q2) Vset U voltage associated with each FCLK DPM state.
-	uint16_t FclkDpmUSpeed[NUM_FCLK_DPM_LEVELS]; // U speed associated with each FCLK DPM state
+	uint8_t  FclkDpmUPstates[NUM_FCLK_DPM_LEVELS_SMU13]; // U P-state ID associated with each FCLK DPM state.
+	uint16_t FclkDpmVddU[NUM_FCLK_DPM_LEVELS_SMU13]; // mV(Q2) Vset U voltage associated with each FCLK DPM state.
+	uint16_t FclkDpmUSpeed[NUM_FCLK_DPM_LEVELS_SMU13]; // U speed associated with each FCLK DPM state
 	uint16_t FclkDpmDisallowPstateFreq;  // Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value
 	uint16_t PaddingFclk;
 	// Link DPM Settings
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS];  // /< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS]; // /< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
-	uint16_t LclkFreq[NUM_LINK_LEVELS];
+	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS_SMU13];  // /< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4
+	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU13]; // /< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
+	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU13];
 	// SECTION: Fan Control
 	uint16_t FanStopTemp[TEMP_COUNT];  // Celsius
 	uint16_t FanStartTemp[TEMP_COUNT]; // Celsius
@@ -1277,7 +1288,7 @@ struct SkuTable_t { // SECTION: Version
 	uint32_t V2F_vmax_range_low;
 	uint32_t V2F_vmax_range_high;
 
-	struct AvfsDcBtcParams_t DcBtcGfxParams;
+	struct AvfsDcBtcParams_smu13 DcBtcGfxParams;
 
 	uint32_t GfxAvfsSpare[32];
 	// SECTION: VDD_SOC AVFS
@@ -1286,15 +1297,15 @@ struct SkuTable_t { // SECTION: Version
 	uint8_t  MinSocAvfsRevision;
 	uint8_t  SocAvfsPadding[2];
 
-	struct AvfsFuseOverride_t SocAvfsFuseOverride[AVFS_D_COUNT];
+	struct AvfsFuseOverride_smu13 SocAvfsFuseOverride[AVFS_D_COUNT];
 
-	struct DroopInt_t        dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
+	struct droop_u32 dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
 
-	struct LinearInt_t       qAgingGb[AVFS_D_COUNT]; // GHz->V
+	struct linear_u32 qAgingGb[AVFS_D_COUNT]; // GHz->V
 
-	struct QuadraticInt_t    qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
+	struct quadratic_u32 qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
 
-	struct AvfsDcBtcParams_t DcBtcSocParams[AVFS_D_COUNT];
+	struct AvfsDcBtcParams_smu13 DcBtcSocParams[AVFS_D_COUNT];
 
 	uint32_t SocAvfsSpare[32];
 	// SECTION: Boot clock and voltage values
@@ -1304,9 +1315,9 @@ struct SkuTable_t { // SECTION: Version
 	// SECTION: Message Limits
 	struct MsgLimits_t MsgLimits;
 	// SECTION: OverDrive Limits
-	struct OverDriveLimits_t OverDriveLimitsMin;
-	struct OverDriveLimits_t OverDriveLimitsBasicMax;
-	struct OverDriveLimits_t OverDriveLimitsAdvancedMax;
+	struct overdrivelimits_smu13 OverDriveLimitsMin;
+	struct overdrivelimits_smu13 OverDriveLimitsBasicMax;
+	struct overdrivelimits_smu13 OverDriveLimitsAdvancedMax;
 	// SECTION: Advanced Options
 	union dpm_debug_override_smu13 DebugOverrides;
 	// Section: Total Board Power idle vs active coefficients
@@ -1318,9 +1329,9 @@ struct SkuTable_t { // SECTION: Version
 	int16_t TotalBoardPowerM;
 	int16_t TotalBoardPowerB;
 
-	struct QuadraticInt_t qFeffCoeffGameClock[POWER_SOURCE_COUNT];
-	struct QuadraticInt_t qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
-	struct QuadraticInt_t qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
+	struct quadratic_u32 qFeffCoeffGameClock[POWER_SOURCE_COUNT];
+	struct quadratic_u32 qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
+	struct quadratic_u32 qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
 	// SECTION: Sku Reserved
 	uint32_t Spare[43];
 	// Padding for MMHUB - do not modify this
@@ -1328,7 +1339,7 @@ struct SkuTable_t { // SECTION: Version
 
 };
 
-struct BoardTable_t {
+struct boardtable_smu13 {
 	// SECTION: Version
 	uint32_t Version; // should be unique to each board type
 
@@ -1407,9 +1418,9 @@ struct BoardTable_t {
 	uint32_t MmHubPadding[8];
 };
 
-struct PPTable_t {
-	struct SkuTable_t SkuTable;
-	struct BoardTable_t BoardTable;
+struct pptable_smu13 {
+	struct skutable_smu13 SkuTable;
+	struct boardtable_smu13 BoardTable;
 };
 
 
@@ -1443,19 +1454,19 @@ struct DriverSmuConfigExternal_t {
 
 struct DriverInfoTable_t {
 
-	uint16_t FreqTableGfx      [NUM_GFXCLK_DPM_LEVELS  ];     // In MHz
-	uint16_t FreqTableVclk     [NUM_VCLK_DPM_LEVELS    ];     // In MHz
-	uint16_t FreqTableDclk     [NUM_DCLK_DPM_LEVELS    ];     // In MHz
-	uint16_t FreqTableSocclk   [NUM_SOCCLK_DPM_LEVELS  ];     // In MHz
-	uint16_t FreqTableUclk     [NUM_UCLK_DPM_LEVELS    ];     // In MHz
-	uint16_t FreqTableDispclk  [NUM_DISPCLK_DPM_LEVELS ];     // In MHz
-	uint16_t FreqTableDppClk   [NUM_DPPCLK_DPM_LEVELS  ];     // In MHz
-	uint16_t FreqTableDprefclk [NUM_DPREFCLK_DPM_LEVELS];     // In MHz
-	uint16_t FreqTableDcfclk   [NUM_DCFCLK_DPM_LEVELS  ];     // In MHz
-	uint16_t FreqTableDtbclk   [NUM_DTBCLK_DPM_LEVELS  ];     // In MHz
-	uint16_t FreqTableFclk     [NUM_FCLK_DPM_LEVELS    ];     // In MHz
+	uint16_t FreqTableGfx      [NUM_GFXCLK_DPM_LEVELS_SMU13  ];     // In MHz
+	uint16_t FreqTableVclk     [NUM_VCLK_DPM_LEVELS_SMU13    ];     // In MHz
+	uint16_t FreqTableDclk     [NUM_DCLK_DPM_LEVELS_SMU13    ];     // In MHz
+	uint16_t FreqTableSocclk   [NUM_SOCCLK_DPM_LEVELS_SMU13  ];     // In MHz
+	uint16_t FreqTableUclk     [NUM_UCLK_DPM_LEVELS_SMU13    ];     // In MHz
+	uint16_t FreqTableDispclk  [NUM_DISPCLK_DPM_LEVELS_SMU13 ];     // In MHz
+	uint16_t FreqTableDppClk   [NUM_DPPCLK_DPM_LEVELS_SMU13  ];     // In MHz
+	uint16_t FreqTableDprefclk [NUM_DPREFCLK_DPM_LEVELS_SMU13];     // In MHz
+	uint16_t FreqTableDcfclk   [NUM_DCFCLK_DPM_LEVELS_SMU13  ];     // In MHz
+	uint16_t FreqTableDtbclk   [NUM_DTBCLK_DPM_LEVELS_SMU13  ];     // In MHz
+	uint16_t FreqTableFclk     [NUM_FCLK_DPM_LEVELS_SMU13    ];     // In MHz
 
-	uint16_t DcModeMaxFreq     [PPCLK_COUNT            ];     // In MHz
+	uint16_t DcModeMaxFreq     [PPCLK_SMU13_COUNT            ];     // In MHz
 
 	uint16_t Padding;
 
@@ -1467,7 +1478,7 @@ struct DriverInfoTable_t {
 };
 
 struct SmuMetrics_t {
-	uint32_t CurrClock[PPCLK_COUNT];
+	uint32_t CurrClock[PPCLK_SMU13_COUNT];
 
 	uint16_t AverageGfxclkFrequencyTarget;
 	uint16_t AverageGfxclkFrequencyPreDs;
@@ -1607,9 +1618,9 @@ struct DpmActivityMonitorCoeffInt_t {
 	uint32_t Fclk_PD_Data_error_coeff;      // Q16
 	uint32_t Fclk_PD_Data_error_rate_coeff; // Q16
 
-	uint32_t Mem_UpThreshold_Limit[NUM_UCLK_DPM_LEVELS];          // Q16
-	uint8_t  Mem_UpHystLimit[NUM_UCLK_DPM_LEVELS];
-	uint8_t  Mem_DownHystLimit[NUM_UCLK_DPM_LEVELS];
+	uint32_t Mem_UpThreshold_Limit[NUM_UCLK_DPM_LEVELS_SMU13];          // Q16
+	uint8_t  Mem_UpHystLimit[NUM_UCLK_DPM_LEVELS_SMU13];
+	uint8_t  Mem_DownHystLimit[NUM_UCLK_DPM_LEVELS_SMU13];
 	uint16_t Mem_Fps;
 	uint8_t  padding[2];
 
