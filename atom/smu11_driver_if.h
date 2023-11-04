@@ -36,39 +36,43 @@
 
 #define PPTABLE_V20_SMU_VERSION 3
 
-#define NUM_GFXCLK_DPM_LEVELS  16
-#define NUM_VCLK_DPM_LEVELS    8
-#define NUM_DCLK_DPM_LEVELS    8
-#define NUM_ECLK_DPM_LEVELS    8
-#define NUM_MP0CLK_DPM_LEVELS  2
-#define NUM_SOCCLK_DPM_LEVELS  8
-#define NUM_UCLK_DPM_LEVELS    4
-#define NUM_FCLK_DPM_LEVELS    8
-#define NUM_DCEFCLK_DPM_LEVELS 8
-#define NUM_DISPCLK_DPM_LEVELS 8
-#define NUM_PIXCLK_DPM_LEVELS  8
-#define NUM_PHYCLK_DPM_LEVELS  8
-#define NUM_LINK_LEVELS        2
-#define NUM_XGMI_LEVELS        2
+#define NUM_GFXCLK_DPM_LEVELS_SMU11  16
+#define NUM_VCLK_DPM_LEVELS_SMU11    8
+#define NUM_DCLK_DPM_LEVELS_SMU11    8
+#define NUM_ECLK_DPM_LEVELS_SMU11    8
+#define NUM_MP0CLK_DPM_LEVELS_SMU11  2
+#define NUM_SOCCLK_DPM_LEVELS_SMU11  8
+#define NUM_UCLK_DPM_LEVELS_SMU11    4
+#define NUM_FCLK_DPM_LEVELS_SMU11    8
+#define NUM_DCEFCLK_DPM_LEVELS_SMU11 8
+#define NUM_DISPCLK_DPM_LEVELS_SMU11 8
+#define NUM_PIXCLK_DPM_LEVELS_SMU11  8
+#define NUM_PHYCLK_DPM_LEVELS_SMU11  8
+#define NUM_LINK_LEVELS_SMU11        2
+#define NUM_XGMI_LEVELS_SMU11        2
 
-#define MAX_GFXCLK_DPM_LEVEL  (NUM_GFXCLK_DPM_LEVELS  - 1)
-#define MAX_VCLK_DPM_LEVEL    (NUM_VCLK_DPM_LEVELS    - 1)
-#define MAX_DCLK_DPM_LEVEL    (NUM_DCLK_DPM_LEVELS    - 1)
-#define MAX_ECLK_DPM_LEVEL    (NUM_ECLK_DPM_LEVELS    - 1)
-#define MAX_MP0CLK_DPM_LEVEL  (NUM_MP0CLK_DPM_LEVELS  - 1)
-#define MAX_SOCCLK_DPM_LEVEL  (NUM_SOCCLK_DPM_LEVELS  - 1)
-#define MAX_UCLK_DPM_LEVEL    (NUM_UCLK_DPM_LEVELS    - 1)
-#define MAX_FCLK_DPM_LEVEL    (NUM_FCLK_DPM_LEVELS    - 1)
-#define MAX_DCEFCLK_DPM_LEVEL (NUM_DCEFCLK_DPM_LEVELS - 1)
-#define MAX_DISPCLK_DPM_LEVEL (NUM_DISPCLK_DPM_LEVELS - 1)
-#define MAX_PIXCLK_DPM_LEVEL  (NUM_PIXCLK_DPM_LEVELS  - 1)
-#define MAX_PHYCLK_DPM_LEVEL  (NUM_PHYCLK_DPM_LEVELS  - 1)
-#define MAX_LINK_LEVEL        (NUM_LINK_LEVELS        - 1)
-#define MAX_XGMI_LEVEL        (NUM_XGMI_LEVELS        - 1)
+/*
+#define MAX_GFXCLK_DPM_LEVEL  (NUM_GFXCLK_DPM_LEVELS_SMU11  - 1)
+#define MAX_VCLK_DPM_LEVEL    (NUM_VCLK_DPM_LEVELS_SMU11    - 1)
+#define MAX_DCLK_DPM_LEVEL    (NUM_DCLK_DPM_LEVELS_SMU11    - 1)
+#define MAX_ECLK_DPM_LEVEL    (NUM_ECLK_DPM_LEVELS_SMU11    - 1)
+#define MAX_MP0CLK_DPM_LEVEL  (NUM_MP0CLK_DPM_LEVELS_SMU11  - 1)
+#define MAX_SOCCLK_DPM_LEVEL  (NUM_SOCCLK_DPM_LEVELS_SMU11  - 1)
+#define MAX_UCLK_DPM_LEVEL    (NUM_UCLK_DPM_LEVELS_SMU11    - 1)
+#define MAX_FCLK_DPM_LEVEL    (NUM_FCLK_DPM_LEVELS_SMU11    - 1)
+#define MAX_DCEFCLK_DPM_LEVEL (NUM_DCEFCLK_DPM_LEVELS_SMU11 - 1)
+#define MAX_DISPCLK_DPM_LEVEL (NUM_DISPCLK_DPM_LEVELS_SMU11 - 1)
+#define MAX_PIXCLK_DPM_LEVEL  (NUM_PIXCLK_DPM_LEVELS_SMU11  - 1)
+#define MAX_PHYCLK_DPM_LEVEL  (NUM_PHYCLK_DPM_LEVELS_SMU11  - 1)
+#define MAX_LINK_LEVEL        (NUM_LINK_LEVELS_SMU11        - 1)
+#define MAX_XGMI_LEVEL        (NUM_XGMI_LEVELS_SMU11        - 1)
+*/
 
+/*
 #define PPSMC_GeminiModeNone   0
 #define PPSMC_GeminiModeMaster 1
 #define PPSMC_GeminiModeSlave  2
+*/
 
 /*
 #define FEATURE_DPM_PREFETCHER_BIT 0
@@ -429,24 +433,24 @@ struct droop_u32 {
 	uint32_t c;
 };
 
-enum PPCLK_e {
-	PPCLK_GFXCLK  = 0,
-	PPCLK_VCLK    = 1,
-	PPCLK_DCLK    = 2,
-	PPCLK_ECLK    = 3,
-	PPCLK_SOCCLK  = 4,
-	PPCLK_UCLK    = 5,
-	PPCLK_DCEFCLK = 6,
-	PPCLK_DISPCLK = 7,
-	PPCLK_PIXCLK  = 8,
-	PPCLK_PHYCLK  = 9,
-	PPCLK_FCLK   = 10,
-	PPCLK_COUNT  = 11,
+enum PPCLK_SMU11 {
+	PPCLK_SMU11_GFXCLK  = 0,
+	PPCLK_SMU11_VCLK    = 1,
+	PPCLK_SMU11_DCLK    = 2,
+	PPCLK_SMU11_ECLK    = 3,
+	PPCLK_SMU11_SOCCLK  = 4,
+	PPCLK_SMU11_UCLK    = 5,
+	PPCLK_SMU11_DCEFCLK = 6,
+	PPCLK_SMU11_DISPCLK = 7,
+	PPCLK_SMU11_PIXCLK  = 8,
+	PPCLK_SMU11_PHYCLK  = 9,
+	PPCLK_SMU11_FCLK   = 10,
+	PPCLK_SMU11_COUNT  = 11,
 };
 
 enum POWER_SOURCE_e {
-	POWER_SOURCE_AC = 0,
-	POWER_SOURCE_DC = 1,
+	POWER_SOURCE_AC    = 0,
+	POWER_SOURCE_DC    = 1,
 	POWER_SOURCE_COUNT = 2,
 };
 
@@ -542,25 +546,25 @@ struct smc_pptable {
 	uint16_t LoadLineResistanceGfx;
 	uint16_t LoadLineResistanceSoc;
 
-	struct dpm_descriptor DpmDescriptor[PPCLK_COUNT];
+	struct dpm_descriptor DpmDescriptor[PPCLK_SMU11_COUNT];
 
-	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS];
-	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS];
-	uint16_t FreqTableDclk[NUM_DCLK_DPM_LEVELS];
-	uint16_t FreqTableEclk[NUM_ECLK_DPM_LEVELS];
-	uint16_t FreqTableSocclk[NUM_SOCCLK_DPM_LEVELS];
-	uint16_t FreqTableUclk[NUM_UCLK_DPM_LEVELS];
-	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS];
-	uint16_t FreqTableDcefclk[NUM_DCEFCLK_DPM_LEVELS];
-	uint16_t FreqTableDispclk[NUM_DISPCLK_DPM_LEVELS];
-	uint16_t FreqTablePixclk[NUM_PIXCLK_DPM_LEVELS];
-	uint16_t FreqTablePhyclk[NUM_PHYCLK_DPM_LEVELS];
+	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableDclk[NUM_DCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableEclk[NUM_ECLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableSocclk[NUM_SOCCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableUclk[NUM_UCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableDcefclk[NUM_DCEFCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTableDispclk[NUM_DISPCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTablePixclk[NUM_PIXCLK_DPM_LEVELS_SMU11];
+	uint16_t FreqTablePhyclk[NUM_PHYCLK_DPM_LEVELS_SMU11];
 
-	uint16_t DcModeMaxFreq[PPCLK_COUNT];
+	uint16_t DcModeMaxFreq[PPCLK_SMU11_COUNT];
 	uint16_t Padding8_Clks;
 
-	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS];
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS];
+	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];
+	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11];
 
 
 	uint16_t GfxclkFidle;
@@ -577,9 +581,9 @@ struct smc_pptable {
 	uint8_t  Padding8_Uclk[3];
 
 
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS];
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS];
-	uint16_t LclkFreq[NUM_LINK_LEVELS];
+	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU11];
+	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 
 
 	uint16_t EnableTdpm;
@@ -649,12 +653,12 @@ struct smc_pptable {
 	uint16_t DcBtcMaxGfx;
 	uint16_t DcBtcMaxSoc;
 
-	uint8_t  XgmiLinkSpeed[NUM_XGMI_LEVELS];
-	uint8_t  XgmiLinkWidth[NUM_XGMI_LEVELS];
-	uint16_t XgmiFclkFreq[NUM_XGMI_LEVELS];
-	uint16_t XgmiUclkFreq[NUM_XGMI_LEVELS];
-	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS];
-	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS];
+	uint8_t  XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
+	uint8_t  XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
+	uint16_t XgmiFclkFreq[NUM_XGMI_LEVELS_SMU11];
+	uint16_t XgmiUclkFreq[NUM_XGMI_LEVELS_SMU11];
+	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS_SMU11];
+	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS_SMU11];
 
 	uint32_t DebugOverrides;
 	//union dpm_debug_override_smu11 DebugOverrides; // TODO atui-ify
@@ -795,7 +799,7 @@ typedef struct {
 } OverDriveTable_t;
 
 typedef struct {
-	uint16_t CurrClock[PPCLK_COUNT];
+	uint16_t CurrClock[PPCLK_SMU11_COUNT];
 	uint16_t AverageGfxclkFrequency;
 	uint16_t AverageSocclkFrequency;
 	uint16_t AverageUclkFrequency;
