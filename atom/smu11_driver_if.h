@@ -24,8 +24,7 @@
 #ifndef SMU11_DRIVER_IF_H
 #define SMU11_DRIVER_IF_H
 
-
-#pragma pack(push, 1)
+#pragma pack(push, 1) // bios data must use byte alignment
 
 // *** IMPORTANT ***
 // SMU TEAM: Always increment the interface version if
@@ -422,7 +421,10 @@ struct quadratic_u32 { // TODO probably IEEE 754 float
 
 //typedef struct linear_u32 LinearInt_t;
 struct linear_u32 {
+	union {
 	uint32_t m;
+	float mf;
+	};
 	uint32_t b;
 };
 
@@ -1047,5 +1049,5 @@ typedef struct {
 
 
 
-#pragma pack(pop)
+#pragma pack(pop) // restore old packing
 #endif

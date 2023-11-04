@@ -22,7 +22,7 @@
 #ifndef SMU_13_0_7_PPTABLE_H
 #define SMU_13_0_7_PPTABLE_H
 
-#pragma pack(push, 1)
+#pragma pack(push, 1) // bios data must use byte alignment
 
 #define SMU_13_0_7_TABLE_FORMAT_REVISION 15
 
@@ -194,6 +194,6 @@ struct smu_13_0_7_powerplay_table {
     struct pptable_smu13 smc_pptable; // PPTable_t in driver_if.h
 };
 
-#pragma pack(pop)
+#pragma pack(pop) // restore old packing
 
 #endif

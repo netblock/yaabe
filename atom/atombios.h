@@ -26,6 +26,7 @@
 /*Portion I: Definitions  shared between VBIOS and Driver                   */
 /****************************************************************************/
 
+#pragma pack(push, 1) // BIOS data must use byte alignment
 
 #ifndef _ATOMBIOS_H
 #define _ATOMBIOS_H
@@ -170,7 +171,6 @@
 #define HW_ASSISTED_I2C_STATUS_FAILURE     2
 #define HW_ASSISTED_I2C_STATUS_SUCCESS     1
 
-#pragma pack(1)                                       // BIOS data must use byte alignment
 
 // Define offset to location of ROM header.
 // #define OFFSET_TO_POINTER_TO_ATOM_ROM_HEADER 0x00000048L
@@ -9176,9 +9176,6 @@ typedef struct  _ATOM_POWERPLAY_INFO_V3
 
 /*********************************************************************************/
 
-#pragma pack() // BIOS data must use byte alignment
-
-#pragma pack(1)
 
 typedef struct _ATOM_HOLE_INFO
 {
@@ -9205,14 +9202,9 @@ typedef struct _ATOM_SERVICE_INFO
 	  ATOM_HOLE_INFO holes[1]; // array of hole descriptions
 }ATOM_SERVICE_INFO;
 
-
-
-#pragma pack() // BIOS data must use byte alignment
-
 // 
 // AMD ACPI Table
 // 
-#pragma pack(1)
 
 typedef struct {
 	uint32_t Signature;
@@ -9270,8 +9262,7 @@ typedef struct {
 	uint8_t  Lib1Content[1];
 }GOP_LIB1_CONTENT;
 
-#pragma pack()
-
+#pragma pack(pop) // restore old packing
 
 #endif /* _ATOMBIOS_H */
 

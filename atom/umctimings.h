@@ -12,7 +12,7 @@ there.
 
 #include "ddrmoderegisters.h"
 
-#pragma(push, 1) //bios data
+#pragma pack(push, 1) // bios data must use byte alignment
 
 union DRAMTiming1 {
 	uint32_t DRAMTiming1;
@@ -448,5 +448,5 @@ struct umc_block_navi1_timings {
 	union ChanPipeDly ChanPipeDly;
 };
 
-#pragma(pop) //restore old packing
+#pragma pack(pop) // restore old packing
 #endif

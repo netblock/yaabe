@@ -23,7 +23,7 @@
 #ifndef SMU13_DRIVER_IF_SMU_13_0_7_H
 #define SMU13_DRIVER_IF_SMU_13_0_7_H
 
-#pragma pack(push, 1) /* BIOS data must use byte aligment*/
+#pragma pack(push, 1) // bios data must use byte alignment
 
 // *** IMPORTANT ***
 // PMFW TEAM: Always increment the interface version on any change to this file
@@ -1425,12 +1425,9 @@ struct pptable_smu13 {
 
 
 
-
+/*
 #pragma pack(pop)
 
-
-
-/*
 struct DriverSmuConfig_t {
 	// Time constant parameters for clock averages in ms
 	uint16_t GfxclkAverageLpfTau;
@@ -1681,4 +1678,6 @@ struct DpmActivityMonitorCoeffIntExternal_t {
 #define IH_INTERRUPT_CONTEXT_ID_FAN_ABNORMAL        0x8
 #define IH_INTERRUPT_CONTEXT_ID_FAN_RECOVERY        0x9
 */
+
+#pragma pack(pop) // restore old packing
 #endif

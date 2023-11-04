@@ -6,7 +6,7 @@ Please refer to JESD 250. If unavailable consider,
 #ifndef _DDRMODEREGISTERS_H_
 #define _DDRMODEREGISTERS_H_
 
-#pragma pack(push, 1) // bios data
+#pragma pack(push, 1) // bios data must use byte alignment
 
 
 union gddr6_mr0 {

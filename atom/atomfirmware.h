@@ -38,7 +38,7 @@
 #include "ddrmoderegisters.h"
 // see bottom for other includes
 
-#pragma pack(push, 1) /* BIOS data must use byte aligment*/
+#pragma pack(push, 1) // bios data must use byte alignment
 
 enum  atom_bios_header_version_def {
   ATOM_MAJOR_VERSION = 0x0003,
@@ -4665,5 +4665,5 @@ enum scratch_pre_os_mode_info_bits_def {
 
 #include "umctimings.h"
 
-#pragma pack(pop)
+#pragma pack(pop) // restore old packing
 #endif
