@@ -660,8 +660,7 @@ struct smc_pptable {
 	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS_SMU11];
 
-	uint32_t DebugOverrides;
-	//union dpm_debug_override_smu11 DebugOverrides; // TODO atui-ify
+	union dpm_debug_override_smu11 DebugOverrides;
 	struct quadratic_u32 ReservedEquation0;
 	struct quadratic_u32 ReservedEquation1;
 	struct quadratic_u32 ReservedEquation2;

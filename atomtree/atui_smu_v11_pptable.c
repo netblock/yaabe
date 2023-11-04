@@ -148,6 +148,34 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu11, atomtree_powerplaytable,
 	)
 )
 
+PPATUI_FUNCIFY(union, dpm_debug_override_smu11, atui_nullstruct,
+	(bios->dpm_debug_override_flags, dpm_debug_override_flags,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(disable_socclk_pid,              0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_uclk_pid,                1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_volt_link_uvd_socclk,     2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_volt_link_uvd_uclk,       3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_vclk_socclk,    4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_vclk_uclk,      5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_dclk_socclk,    6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_dclk_uclk,      7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_volt_link_vce_socclk,     8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_volt_link_vce_uclk,       9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_eclk_socclk,   10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_eclk_uclk,     11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_gfxclk_socclk, 12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_freq_link_gfxclk_uclk,   13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_gfxoff_gfxclk_switch,    14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_gfxoff_socclk_switch,    15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_gfxoff_uclk_switch,      16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_gfxoff_fclk_switch,      17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,                       31,18, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+
 PPATUI_FUNCIFY(struct, pptable_i2c_u32_smu11, atomtree_powerplaytable,
 	(bios->i2ccontroller_vr_gfx, i2ccontroller_vr_gfx,
 		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
@@ -750,9 +778,9 @@ PPATUI_FUNCIFY(struct, smc_pptable, atomtree_powerplaytable,
 		)), (ATUI_NODESCR)
 	),
 
-
 	(bios->DebugOverrides, DebugOverrides,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NODISPLAY, ATUI_INLINE, dpm_debug_override_smu11),
+		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation0, ReservedEquation0,
 		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
