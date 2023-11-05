@@ -421,10 +421,7 @@ struct quadratic_u32 { // TODO probably IEEE 754 float
 
 //typedef struct linear_u32 LinearInt_t;
 struct linear_u32 {
-	union {
 	uint32_t m;
-	float mf;
-	};
 	uint32_t b;
 };
 
@@ -531,8 +528,8 @@ struct smc_pptable {
 	uint8_t  padding8_limits;
 	uint16_t Tvr_SocLimit;
 
-	uint16_t  UlvVoltageOffsetSoc;
-	uint16_t  UlvVoltageOffsetGfx;
+	uint16_t UlvVoltageOffsetSoc;
+	uint16_t UlvVoltageOffsetGfx;
 
 	uint8_t  UlvSmnclkDid;
 	uint8_t  UlvMp1clkDid;
@@ -767,35 +764,35 @@ struct smc_pptable {
 
 typedef struct {
 
-	uint16_t     GfxclkAverageLpfTau;
-	uint16_t     SocclkAverageLpfTau;
-	uint16_t     UclkAverageLpfTau;
-	uint16_t     GfxActivityLpfTau;
-	uint16_t     UclkActivityLpfTau;
-	uint16_t     SocketPowerLpfTau;
+	uint16_t GfxclkAverageLpfTau;
+	uint16_t SocclkAverageLpfTau;
+	uint16_t UclkAverageLpfTau;
+	uint16_t GfxActivityLpfTau;
+	uint16_t UclkActivityLpfTau;
+	uint16_t SocketPowerLpfTau;
 
 
-	uint32_t     MmHubPadding[8];
+	uint32_t MmHubPadding[8];
 } DriverSmuConfig_t;
 
 typedef struct {
 
-	uint16_t      GfxclkFmin;
-	uint16_t      GfxclkFmax;
-	uint16_t      GfxclkFreq1;
-	uint16_t      GfxclkVolt1;
-	uint16_t      GfxclkFreq2;
-	uint16_t      GfxclkVolt2;
-	uint16_t      GfxclkFreq3;
-	uint16_t      GfxclkVolt3;
-	uint16_t      UclkFmax;
-	int16_t       OverDrivePct;
-	uint16_t      FanMaximumRpm;
-	uint16_t      FanMinimumPwm;
-	uint16_t      FanTargetTemperature;
-	uint16_t      MaxOpTemp;
-	uint16_t      FanZeroRpmEnable;
-	uint16_t      Padding;
+	uint16_t GfxclkFmin;
+	uint16_t GfxclkFmax;
+	uint16_t GfxclkFreq1;
+	uint16_t GfxclkVolt1;
+	uint16_t GfxclkFreq2;
+	uint16_t GfxclkVolt2;
+	uint16_t GfxclkFreq3;
+	uint16_t GfxclkVolt3;
+	uint16_t UclkFmax;
+	int16_t  OverDrivePct;
+	uint16_t FanMaximumRpm;
+	uint16_t FanMinimumPwm;
+	uint16_t FanTargetTemperature;
+	uint16_t MaxOpTemp;
+	uint16_t FanZeroRpmEnable;
+	uint16_t Padding;
 
 } OverDriveTable_t;
 
@@ -827,7 +824,7 @@ typedef struct {
 	uint8_t  Padding;
 
 
-	uint32_t     MmHubPadding[7];
+	uint32_t MmHubPadding[7];
 } SmuMetrics_t;
 
 typedef struct {
@@ -852,7 +849,7 @@ typedef struct {
 
 	WatermarkRowGeneric_t WatermarkRow[WM_COUNT_PP][NUM_WM_RANGES];
 
-	uint32_t     MmHubPadding[7];
+	uint32_t MmHubPadding[7];
 } Watermarks_t;
 
 typedef struct {
@@ -882,25 +879,25 @@ typedef struct {
 	uint8_t  OverrideP2V[AVFS_VOLTAGE_COUNT];
 	uint8_t  OverrideP2VCharzFreq[AVFS_VOLTAGE_COUNT];
 
-	int32_t VFT0_m1[AVFS_VOLTAGE_COUNT];
-	int32_t VFT0_m2[AVFS_VOLTAGE_COUNT];
-	int32_t VFT0_b[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT0_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT0_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT0_b[AVFS_VOLTAGE_COUNT];
 
-	int32_t VFT1_m1[AVFS_VOLTAGE_COUNT];
-	int32_t VFT1_m2[AVFS_VOLTAGE_COUNT];
-	int32_t VFT1_b[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT1_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT1_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT1_b[AVFS_VOLTAGE_COUNT];
 
-	int32_t VFT2_m1[AVFS_VOLTAGE_COUNT];
-	int32_t VFT2_m2[AVFS_VOLTAGE_COUNT];
-	int32_t VFT2_b[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT2_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT2_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  VFT2_b[AVFS_VOLTAGE_COUNT];
 
-	int32_t AvfsGb0_m1[AVFS_VOLTAGE_COUNT];
-	int32_t AvfsGb0_m2[AVFS_VOLTAGE_COUNT];
-	int32_t AvfsGb0_b[AVFS_VOLTAGE_COUNT];
+	int32_t  AvfsGb0_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  AvfsGb0_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  AvfsGb0_b[AVFS_VOLTAGE_COUNT];
 
-	int32_t AcBtcGb_m1[AVFS_VOLTAGE_COUNT];
-	int32_t AcBtcGb_m2[AVFS_VOLTAGE_COUNT];
-	int32_t AcBtcGb_b[AVFS_VOLTAGE_COUNT];
+	int32_t  AcBtcGb_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  AcBtcGb_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  AcBtcGb_b[AVFS_VOLTAGE_COUNT];
 
 	uint32_t AvfsTempCold[AVFS_VOLTAGE_COUNT];
 	uint32_t AvfsTempMid[AVFS_VOLTAGE_COUNT];
@@ -909,9 +906,9 @@ typedef struct {
 	uint32_t VInversion[AVFS_VOLTAGE_COUNT];
 
 
-	int32_t P2V_m1[AVFS_VOLTAGE_COUNT];
-	int32_t P2V_m2[AVFS_VOLTAGE_COUNT];
-	int32_t P2V_b[AVFS_VOLTAGE_COUNT];
+	int32_t  P2V_m1[AVFS_VOLTAGE_COUNT];
+	int32_t  P2V_m2[AVFS_VOLTAGE_COUNT];
+	int32_t  P2V_b[AVFS_VOLTAGE_COUNT];
 
 	uint32_t P2VCharzFreq[AVFS_VOLTAGE_COUNT];
 
@@ -921,65 +918,65 @@ typedef struct {
 } AvfsFuseOverride_t;
 
 typedef struct {
-	uint8_t   Gfx_ActiveHystLimit;
-	uint8_t   Gfx_IdleHystLimit;
-	uint8_t   Gfx_FPS;
-	uint8_t   Gfx_MinActiveFreqType;
-	uint8_t   Gfx_BoosterFreqType;
-	uint8_t   Gfx_UseRlcBusy;
-	uint16_t  Gfx_MinActiveFreq;
-	uint16_t  Gfx_BoosterFreq;
-	uint16_t  Gfx_PD_Data_time_constant;
-	uint32_t  Gfx_PD_Data_limit_a;
-	uint32_t  Gfx_PD_Data_limit_b;
-	uint32_t  Gfx_PD_Data_limit_c;
-	uint32_t  Gfx_PD_Data_error_coeff;
-	uint32_t  Gfx_PD_Data_error_rate_coeff;
+	uint8_t  Gfx_ActiveHystLimit;
+	uint8_t  Gfx_IdleHystLimit;
+	uint8_t  Gfx_FPS;
+	uint8_t  Gfx_MinActiveFreqType;
+	uint8_t  Gfx_BoosterFreqType;
+	uint8_t  Gfx_UseRlcBusy;
+	uint16_t Gfx_MinActiveFreq;
+	uint16_t Gfx_BoosterFreq;
+	uint16_t Gfx_PD_Data_time_constant;
+	uint32_t Gfx_PD_Data_limit_a;
+	uint32_t Gfx_PD_Data_limit_b;
+	uint32_t Gfx_PD_Data_limit_c;
+	uint32_t Gfx_PD_Data_error_coeff;
+	uint32_t Gfx_PD_Data_error_rate_coeff;
 
-	uint8_t   Soc_ActiveHystLimit;
-	uint8_t   Soc_IdleHystLimit;
-	uint8_t   Soc_FPS;
-	uint8_t   Soc_MinActiveFreqType;
-	uint8_t   Soc_BoosterFreqType;
-	uint8_t   Soc_UseRlcBusy;
-	uint16_t  Soc_MinActiveFreq;
-	uint16_t  Soc_BoosterFreq;
-	uint16_t  Soc_PD_Data_time_constant;
-	uint32_t  Soc_PD_Data_limit_a;
-	uint32_t  Soc_PD_Data_limit_b;
-	uint32_t  Soc_PD_Data_limit_c;
-	uint32_t  Soc_PD_Data_error_coeff;
-	uint32_t  Soc_PD_Data_error_rate_coeff;
+	uint8_t  Soc_ActiveHystLimit;
+	uint8_t  Soc_IdleHystLimit;
+	uint8_t  Soc_FPS;
+	uint8_t  Soc_MinActiveFreqType;
+	uint8_t  Soc_BoosterFreqType;
+	uint8_t  Soc_UseRlcBusy;
+	uint16_t Soc_MinActiveFreq;
+	uint16_t Soc_BoosterFreq;
+	uint16_t Soc_PD_Data_time_constant;
+	uint32_t Soc_PD_Data_limit_a;
+	uint32_t Soc_PD_Data_limit_b;
+	uint32_t Soc_PD_Data_limit_c;
+	uint32_t Soc_PD_Data_error_coeff;
+	uint32_t Soc_PD_Data_error_rate_coeff;
 
-	uint8_t   Mem_ActiveHystLimit;
-	uint8_t   Mem_IdleHystLimit;
-	uint8_t   Mem_FPS;
-	uint8_t   Mem_MinActiveFreqType;
-	uint8_t   Mem_BoosterFreqType;
-	uint8_t   Mem_UseRlcBusy;
-	uint16_t  Mem_MinActiveFreq;
-	uint16_t  Mem_BoosterFreq;
-	uint16_t  Mem_PD_Data_time_constant;
-	uint32_t  Mem_PD_Data_limit_a;
-	uint32_t  Mem_PD_Data_limit_b;
-	uint32_t  Mem_PD_Data_limit_c;
-	uint32_t  Mem_PD_Data_error_coeff;
-	uint32_t  Mem_PD_Data_error_rate_coeff;
+	uint8_t  Mem_ActiveHystLimit;
+	uint8_t  Mem_IdleHystLimit;
+	uint8_t  Mem_FPS;
+	uint8_t  Mem_MinActiveFreqType;
+	uint8_t  Mem_BoosterFreqType;
+	uint8_t  Mem_UseRlcBusy;
+	uint16_t Mem_MinActiveFreq;
+	uint16_t Mem_BoosterFreq;
+	uint16_t Mem_PD_Data_time_constant;
+	uint32_t Mem_PD_Data_limit_a;
+	uint32_t Mem_PD_Data_limit_b;
+	uint32_t Mem_PD_Data_limit_c;
+	uint32_t Mem_PD_Data_error_coeff;
+	uint32_t Mem_PD_Data_error_rate_coeff;
 
-	uint8_t   Fclk_ActiveHystLimit;
-	uint8_t   Fclk_IdleHystLimit;
-	uint8_t   Fclk_FPS;
-	uint8_t   Fclk_MinActiveFreqType;
-	uint8_t   Fclk_BoosterFreqType;
-	uint8_t   Fclk_UseRlcBusy;
-	uint16_t  Fclk_MinActiveFreq;
-	uint16_t  Fclk_BoosterFreq;
-	uint16_t  Fclk_PD_Data_time_constant;
-	uint32_t  Fclk_PD_Data_limit_a;
-	uint32_t  Fclk_PD_Data_limit_b;
-	uint32_t  Fclk_PD_Data_limit_c;
-	uint32_t  Fclk_PD_Data_error_coeff;
-	uint32_t  Fclk_PD_Data_error_rate_coeff;
+	uint8_t  Fclk_ActiveHystLimit;
+	uint8_t  Fclk_IdleHystLimit;
+	uint8_t  Fclk_FPS;
+	uint8_t  Fclk_MinActiveFreqType;
+	uint8_t  Fclk_BoosterFreqType;
+	uint8_t  Fclk_UseRlcBusy;
+	uint16_t Fclk_MinActiveFreq;
+	uint16_t Fclk_BoosterFreq;
+	uint16_t Fclk_PD_Data_time_constant;
+	uint32_t Fclk_PD_Data_limit_a;
+	uint32_t Fclk_PD_Data_limit_b;
+	uint32_t Fclk_PD_Data_limit_c;
+	uint32_t Fclk_PD_Data_error_coeff;
+	uint32_t Fclk_PD_Data_error_rate_coeff;
 
 } DpmActivityMonitorCoeffInt_t;
 

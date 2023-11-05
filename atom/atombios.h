@@ -37,139 +37,139 @@
 #define ATOM_HEADER_VERSION (ATOM_VERSION_MAJOR | ATOM_VERSION_MINOR)
 
 
-#define ATOM_DAC_A            0
-#define ATOM_DAC_B            1
-#define ATOM_EXT_DAC          2
+#define ATOM_DAC_A   0
+#define ATOM_DAC_B   1
+#define ATOM_EXT_DAC 2
 
-#define ATOM_CRTC1            0
-#define ATOM_CRTC2            1
-#define ATOM_CRTC3            2
-#define ATOM_CRTC4            3
-#define ATOM_CRTC5            4
-#define ATOM_CRTC6            5
+#define ATOM_CRTC1 0
+#define ATOM_CRTC2 1
+#define ATOM_CRTC3 2
+#define ATOM_CRTC4 3
+#define ATOM_CRTC5 4
+#define ATOM_CRTC6 5
 
-#define ATOM_UNDERLAY_PIPE0   16
-#define ATOM_UNDERLAY_PIPE1   17
+#define ATOM_UNDERLAY_PIPE0 16
+#define ATOM_UNDERLAY_PIPE1 17
 
-#define ATOM_CRTC_INVALID     0xFF
+#define ATOM_CRTC_INVALID 0xFF
 
-#define ATOM_DIGA             0
-#define ATOM_DIGB             1
+#define ATOM_DIGA 0
+#define ATOM_DIGB 1
 
-#define ATOM_PPLL1            0
-#define ATOM_PPLL2            1
-#define ATOM_DCPLL            2
-#define ATOM_PPLL0            2
-#define ATOM_PPLL3            3
+#define ATOM_PPLL1 0
+#define ATOM_PPLL2 1
+#define ATOM_DCPLL 2
+#define ATOM_PPLL0 2
+#define ATOM_PPLL3 3
 
-#define ATOM_PHY_PLL0         4
-#define ATOM_PHY_PLL1         5
+#define ATOM_PHY_PLL0 4
+#define ATOM_PHY_PLL1 5
 
-#define ATOM_EXT_PLL1         8
-#define ATOM_GCK_DFS          8
-#define ATOM_EXT_PLL2         9
-#define ATOM_FCH_CLK          9
-#define ATOM_EXT_CLOCK        10
-#define ATOM_DP_DTO           11
+#define ATOM_EXT_PLL1  8
+#define ATOM_GCK_DFS   8
+#define ATOM_EXT_PLL2  9
+#define ATOM_FCH_CLK   9
+#define ATOM_EXT_CLOCK 10
+#define ATOM_DP_DTO    11
 
-#define ATOM_COMBOPHY_PLL0    20
-#define ATOM_COMBOPHY_PLL1    21
-#define ATOM_COMBOPHY_PLL2    22
-#define ATOM_COMBOPHY_PLL3    23
-#define ATOM_COMBOPHY_PLL4    24
-#define ATOM_COMBOPHY_PLL5    25
+#define ATOM_COMBOPHY_PLL0 20
+#define ATOM_COMBOPHY_PLL1 21
+#define ATOM_COMBOPHY_PLL2 22
+#define ATOM_COMBOPHY_PLL3 23
+#define ATOM_COMBOPHY_PLL4 24
+#define ATOM_COMBOPHY_PLL5 25
 
-#define ATOM_PPLL_INVALID     0xFF
+#define ATOM_PPLL_INVALID  0xFF
 
-#define ENCODER_REFCLK_SRC_P1PLL       0
-#define ENCODER_REFCLK_SRC_P2PLL       1
-#define ENCODER_REFCLK_SRC_DCPLL       2
-#define ENCODER_REFCLK_SRC_EXTCLK      3
-#define ENCODER_REFCLK_SRC_INVALID     0xFF
+#define ENCODER_REFCLK_SRC_P1PLL   0
+#define ENCODER_REFCLK_SRC_P2PLL   1
+#define ENCODER_REFCLK_SRC_DCPLL   2
+#define ENCODER_REFCLK_SRC_EXTCLK  3
+#define ENCODER_REFCLK_SRC_INVALID 0xFF
 
-#define ATOM_SCALER_DISABLE   0   // For Fudo, it's bypass and auto-cengter & no replication
-#define ATOM_SCALER_CENTER    1   // For Fudo, it's bypass and auto-center & auto replication
-#define ATOM_SCALER_EXPANSION 2   // For Fudo, it's 2 Tap alpha blending mode
-#define ATOM_SCALER_MULTI_EX  3   // For Fudo only, it's multi-tap mode only used to drive TV or CV, only used by Bios
+#define ATOM_SCALER_DISABLE   0 // For Fudo, it's bypass and auto-cengter & no replication
+#define ATOM_SCALER_CENTER    1 // For Fudo, it's bypass and auto-center & auto replication
+#define ATOM_SCALER_EXPANSION 2 // For Fudo, it's 2 Tap alpha blending mode
+#define ATOM_SCALER_MULTI_EX  3 // For Fudo only, it's multi-tap mode only used to drive TV or CV, only used by Bios
 
-#define ATOM_DISABLE          0
-#define ATOM_ENABLE           1
-#define ATOM_LCD_BLOFF                          (ATOM_DISABLE+2)
-#define ATOM_LCD_BLON                           (ATOM_ENABLE+2)
-#define ATOM_LCD_BL_BRIGHTNESS_CONTROL          (ATOM_ENABLE+3)
-#define ATOM_LCD_SELFTEST_START                 (ATOM_DISABLE+5)
-#define ATOM_LCD_SELFTEST_STOP                  (ATOM_ENABLE+5)
-#define ATOM_ENCODER_INIT                       (ATOM_DISABLE+7)
-#define ATOM_INIT                               (ATOM_DISABLE+7)
-#define ATOM_GET_STATUS                         (ATOM_DISABLE+8)
+#define ATOM_DISABLE            0
+#define ATOM_ENABLE             1
+#define ATOM_LCD_BLOFF          2
+#define ATOM_LCD_BLON           3
+#define ATOM_LCD_BL_BRIGHTNESS_CONTROL 4
+#define ATOM_LCD_SELFTEST_START 5
+#define ATOM_LCD_SELFTEST_STOP  6
+#define ATOM_ENCODER_INIT       7
+#define ATOM_INIT               7
+#define ATOM_GET_STATUS         8
 
-#define ATOM_BLANKING         1
-#define ATOM_BLANKING_OFF     0
+#define ATOM_BLANKING     1
+#define ATOM_BLANKING_OFF 0
 
 
-#define ATOM_CRT1             0
-#define ATOM_CRT2             1
+#define ATOM_CRT1 0
+#define ATOM_CRT2 1
 
-#define ATOM_TV_NTSC          1
-#define ATOM_TV_NTSCJ         2
-#define ATOM_TV_PAL           3
-#define ATOM_TV_PALM          4
-#define ATOM_TV_PALCN         5
-#define ATOM_TV_PALN          6
-#define ATOM_TV_PAL60         7
-#define ATOM_TV_SECAM         8
-#define ATOM_TV_CV            16
+#define ATOM_TV_NTSC  1
+#define ATOM_TV_NTSCJ 2
+#define ATOM_TV_PAL   3
+#define ATOM_TV_PALM  4
+#define ATOM_TV_PALCN 5
+#define ATOM_TV_PALN  6
+#define ATOM_TV_PAL60 7
+#define ATOM_TV_SECAM 8
+#define ATOM_TV_CV    16
 
-#define ATOM_DAC1_PS2         1
-#define ATOM_DAC1_CV          2
-#define ATOM_DAC1_NTSC        3
-#define ATOM_DAC1_PAL         4
+#define ATOM_DAC1_PS2  1
+#define ATOM_DAC1_CV   2
+#define ATOM_DAC1_NTSC 3
+#define ATOM_DAC1_PAL  4
 
-#define ATOM_DAC2_PS2         ATOM_DAC1_PS2
-#define ATOM_DAC2_CV          ATOM_DAC1_CV
-#define ATOM_DAC2_NTSC        ATOM_DAC1_NTSC
-#define ATOM_DAC2_PAL         ATOM_DAC1_PAL
+#define ATOM_DAC2_PS2  ATOM_DAC1_PS2
+#define ATOM_DAC2_CV   ATOM_DAC1_CV
+#define ATOM_DAC2_NTSC ATOM_DAC1_NTSC
+#define ATOM_DAC2_PAL  ATOM_DAC1_PAL
 
-#define ATOM_PM_ON            0
-#define ATOM_PM_STANDBY       1
-#define ATOM_PM_SUSPEND       2
-#define ATOM_PM_OFF           3
+#define ATOM_PM_ON      0
+#define ATOM_PM_STANDBY 1
+#define ATOM_PM_SUSPEND 2
+#define ATOM_PM_OFF     3
 
 // For ATOM_LVDS_INFO_V12
 // Bit0:{=0:single, =1:dual},
 // Bit1 {=0:666RGB, =1:888RGB},
 // Bit2:3:{Grey level}
 // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
-#define ATOM_PANEL_MISC_DUAL               0x00000001
-#define ATOM_PANEL_MISC_888RGB             0x00000002
-#define ATOM_PANEL_MISC_GREY_LEVEL         0x0000000C
-#define ATOM_PANEL_MISC_FPDI               0x00000010
-#define ATOM_PANEL_MISC_GREY_LEVEL_SHIFT   2
-#define ATOM_PANEL_MISC_SPATIAL            0x00000020
-#define ATOM_PANEL_MISC_TEMPORAL           0x00000040
-#define ATOM_PANEL_MISC_API_ENABLED        0x00000080
+#define ATOM_PANEL_MISC_DUAL             0x00000001
+#define ATOM_PANEL_MISC_888RGB           0x00000002
+#define ATOM_PANEL_MISC_GREY_LEVEL       0x0000000C
+#define ATOM_PANEL_MISC_FPDI             0x00000010
+#define ATOM_PANEL_MISC_GREY_LEVEL_SHIFT 2
+#define ATOM_PANEL_MISC_SPATIAL          0x00000020
+#define ATOM_PANEL_MISC_TEMPORAL         0x00000040
+#define ATOM_PANEL_MISC_API_ENABLED      0x00000080
 
-#define MEMTYPE_DDR1                       "DDR1"
-#define MEMTYPE_DDR2                       "DDR2"
-#define MEMTYPE_DDR3                       "DDR3"
-#define MEMTYPE_DDR4                       "DDR4"
+#define MEMTYPE_DDR1 "DDR1"
+#define MEMTYPE_DDR2 "DDR2"
+#define MEMTYPE_DDR3 "DDR3"
+#define MEMTYPE_DDR4 "DDR4"
 
-#define ASIC_BUS_TYPE_PCI                  "PCI"
-#define ASIC_BUS_TYPE_AGP                  "AGP"
-#define ASIC_BUS_TYPE_PCIE                 "PCI_EXPRESS"
+#define ASIC_BUS_TYPE_PCI  "PCI"
+#define ASIC_BUS_TYPE_AGP  "AGP"
+#define ASIC_BUS_TYPE_PCIE "PCI_EXPRESS"
 
 // Maximum size of that FireGL flag string
-#define ATOM_FIREGL_FLAG_STRING            "FGL"      // Flag used to enable FireGL Support
-#define ATOM_MAX_SIZE_OF_FIREGL_FLAG_STRING     3     // sizeof( ATOM_FIREGL_FLAG_STRING )
+#define ATOM_FIREGL_FLAG_STRING "FGL" // Flag used to enable FireGL Support
+#define ATOM_MAX_SIZE_OF_FIREGL_FLAG_STRING 3 // sizeof( ATOM_FIREGL_FLAG_STRING )
 
-#define ATOM_FAKE_DESKTOP_STRING           "DSK"      // Flag used to enable mobile ASIC on Desktop
-#define ATOM_MAX_SIZE_OF_FAKE_DESKTOP_STRING    ATOM_MAX_SIZE_OF_FIREGL_FLAG_STRING
+#define ATOM_FAKE_DESKTOP_STRING "DSK" // Flag used to enable mobile ASIC on Desktop
+#define ATOM_MAX_SIZE_OF_FAKE_DESKTOP_STRING  ATOM_MAX_SIZE_OF_FIREGL_FLAG_STRING
 
-#define ATOM_M54T_FLAG_STRING              "M54T"     // Flag used to enable M54T Support
-#define ATOM_MAX_SIZE_OF_M54T_FLAG_STRING  4          // sizeof( ATOM_M54T_FLAG_STRING )
+#define ATOM_M54T_FLAG_STRING "M54T" // Flag used to enable M54T Support
+#define ATOM_MAX_SIZE_OF_M54T_FLAG_STRING 4 // sizeof( ATOM_M54T_FLAG_STRING )
 
-#define HW_ASSISTED_I2C_STATUS_FAILURE     2
-#define HW_ASSISTED_I2C_STATUS_SUCCESS     1
+#define HW_ASSISTED_I2C_STATUS_FAILURE 2
+#define HW_ASSISTED_I2C_STATUS_SUCCESS 1
 
 
 // Define offset to location of ROM header.
@@ -9262,9 +9262,7 @@ typedef struct {
 	uint8_t  Lib1Content[1];
 }GOP_LIB1_CONTENT;
 
+
 #pragma pack(pop) // restore old packing
 
 #endif /* _ATOMBIOS_H */
-
-// #include "pptable.h"
-

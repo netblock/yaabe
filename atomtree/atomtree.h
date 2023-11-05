@@ -74,22 +74,22 @@ typedef struct _atui_branch atui_branch;
 #pragma pack(push, 1) // bios data must use byte alignment
 struct atombios_image {
 	uint16_t atombios_magic; // little endian: 0xAA55
-	uint8_t image_size; // 0x02
-	uint8_t rsvd0[30];
-	uint8_t checksum;   // 0x21
-	uint8_t rsvd1[13];
-	uint8_t number_of_strings; // 0x2F
-	uint8_t atomati_magic[11]; // 0x30; " 761295520" There is a space.
-	uint8_t rsvd2[13];
-	uint16_t bios_header;  // 0x48
-	uint8_t rsvd3[6];
-	uint8_t bios_date[15]; // 0x50
-	uint8_t rsvd4[15];
+	uint8_t  image_size; // 0x02
+	uint8_t  rsvd0[30];
+	uint8_t  checksum;   // 0x21
+	uint8_t  rsvd1[13];
+	uint8_t  number_of_strings; // 0x2F
+	uint8_t  atomati_magic[11]; // 0x30; " 761295520" There is a space.
+	uint8_t  rsvd2[13];
+	uint16_t bios_header;   // 0x48
+	uint8_t  rsvd3[6];
+	uint8_t  bios_date[15]; // 0x50
+	uint8_t  rsvd4[15];
 	uint16_t atombios_strings_offset; // 0x6E
-	uint8_t rsvd5[16];
-	uint8_t part_number_offset; // 0x80 ; only use if number_of_strings == 0
-	uint8_t rsvd6[19];
-	uint8_t asic_bus_mem_type_offset; // 0x94; I think it's a 20-byte str
+	uint8_t  rsvd5[16];
+	uint8_t  part_number_offset; // 0x80 ; only use if number_of_strings == 0
+	uint8_t  rsvd6[19];
+	uint8_t  asic_bus_mem_type_offset; // 0x94; I think it's a 20-byte str
 	// any more?
 /*
 struct atombios_image* img = atree->bios;

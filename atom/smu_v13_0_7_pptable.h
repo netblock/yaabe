@@ -141,14 +141,14 @@ enum SMU_13_0_7_PWRMODE_SETTING {
 #define SMU_13_0_7_MAX_PMSETTING 32 // Maximum Number of PowerMode Settings
 
 struct smu_13_0_7_overdrive_table {
-    uint8_t revision;                             // Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION
-    uint8_t reserve[3];                           // Zero filled field reserved for future use
+    uint8_t  revision;                             // Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION
+    uint8_t  reserve[3];                           // Zero filled field reserved for future use
     uint32_t feature_count;                       // Total number of supported features
     uint32_t setting_count;                       // Total number of supported settings
-    uint8_t cap[SMU_13_0_7_MAX_ODFEATURE];        // OD feature support flags
+    uint8_t  cap[SMU_13_0_7_MAX_ODFEATURE];        // OD feature support flags
     uint32_t max[SMU_13_0_7_MAX_ODSETTING];       // default maximum settings
     uint32_t min[SMU_13_0_7_MAX_ODSETTING];       // default minimum settings
-    int16_t pm_setting[SMU_13_0_7_MAX_PMSETTING]; // Optimized power mode feature settings
+    int16_t  pm_setting[SMU_13_0_7_MAX_PMSETTING]; // Optimized power mode feature settings
 };
 
 enum SMU_13_0_7_PPCLOCK_ID {
@@ -172,15 +172,15 @@ enum SMU_13_0_7_PPCLOCK_ID {
 
 struct smu_13_0_7_powerplay_table {
     struct atom_common_table_header header; // For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0
-    uint8_t table_revision;   // For PLUM_BONITO, table_revision = 2
-    uint8_t padding;
+    uint8_t  table_revision;   // For PLUM_BONITO, table_revision = 2
+    uint8_t  padding;
     uint16_t table_size;      // Driver portion table size. The offset to smc_pptable including header size
     uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
     uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
     uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80
     uint32_t platform_caps;   // POWERPLAYABLE::ulPlatformCaps
 
-    uint8_t thermal_controller_type; // one of SMU_13_0_7_PP_THERMALCONTROLLER
+    uint8_t  thermal_controller_type; // one of SMU_13_0_7_PP_THERMALCONTROLLER
 
     uint16_t small_power_limit1;
     uint16_t small_power_limit2;
@@ -190,7 +190,7 @@ struct smu_13_0_7_powerplay_table {
     uint32_t reserve[45];
 
     struct smu_13_0_7_overdrive_table overdrive_table;
-    uint8_t padding1;
+    uint8_t  padding1;
     struct pptable_smu13 smc_pptable; // PPTable_t in driver_if.h
 };
 

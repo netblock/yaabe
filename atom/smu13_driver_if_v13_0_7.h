@@ -815,19 +815,19 @@ struct OverDriveTable_t {
 	uint32_t FeatureCtrlMask;
 
 	// Voltage control
-	int16_t VoltageOffsetPerZoneBoundary[PP_NUM_OD_VF_CURVE_POINTS];
+	int16_t  VoltageOffsetPerZoneBoundary[PP_NUM_OD_VF_CURVE_POINTS];
 
 	uint32_t Reserved;
 
 	// Frequency changes
-	int16_t GfxclkFmin; // MHz
-	int16_t GfxclkFmax; // MHz
+	int16_t  GfxclkFmin; // MHz
+	int16_t  GfxclkFmax; // MHz
 	uint16_t UclkFmin;  // MHz
 	uint16_t UclkFmax;  // MHz
 
 	// PPT
-	int16_t Ppt; // %
-	int16_t Tdc;
+	int16_t  Ppt; // %
+	int16_t  Tdc;
 
 	// Fan control
 	uint8_t  FanLinearPwmPoints[NUM_OD_FAN_MAX_POINTS_SMU13];
@@ -856,19 +856,19 @@ struct OverDriveTableExternal_t {
 struct overdrivelimits_smu13 {
 	uint32_t FeatureCtrlMask;
 
-	int16_t VoltageOffsetPerZoneBoundary;
+	int16_t  VoltageOffsetPerZoneBoundary;
 	uint16_t Reserved1;
 
 	uint16_t Reserved2;
 
-	int16_t GfxclkFmin; // MHz
-	int16_t GfxclkFmax; // MHz
+	int16_t  GfxclkFmin; // MHz
+	int16_t  GfxclkFmax; // MHz
 	uint16_t UclkFmin;  // MHz
 	uint16_t UclkFmax;  // MHz
 
 	// PPT
-	int16_t Ppt; // %
-	int16_t Tdc;
+	int16_t  Ppt; // %
+	int16_t  Tdc;
 
 	uint8_t  FanLinearPwmPoints;
 	uint8_t  FanLinearTempPoints;
@@ -1110,8 +1110,8 @@ struct skutable_smu13 { // SECTION: Version
 	uint16_t DefaultMaxVoltage[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Maximum voltage without FIT controller enabled
 	uint16_t BoostMaxVoltage[PMFW_VOLT_PLANE_COUNT];   // In mV(Q2) Maximum voltage with FIT controller enabled
 	// Vmin Optimizations
-	int16_t VminTempHystersis[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature hysteresis for switching between low/high temperature values for Vmin
-	int16_t VminTempThreshold[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature threshold for switching between low/high temperature values for Vmin
+	int16_t  VminTempHystersis[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature hysteresis for switching between low/high temperature values for Vmin
+	int16_t  VminTempThreshold[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature threshold for switching between low/high temperature values for Vmin
 	uint16_t Vmin_Hot_T0[PMFW_VOLT_PLANE_COUNT];       // In mV(Q2) Initial (pre-aging) Vset to be used at hot.
 	uint16_t Vmin_Cold_T0[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) Initial (pre-aging) Vset to be used at cold.
 	uint16_t Vmin_Hot_Eol[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) End-of-life Vset to be used at hot.
@@ -1179,9 +1179,9 @@ struct skutable_smu13 { // SECTION: Version
 	uint32_t GfxoffSpare[15];
 	// GFX GPO
 	uint32_t DfllBtcMasterScalerM;
-	int32_t DfllBtcMasterScalerB;
+	int32_t  DfllBtcMasterScalerB;
 	uint32_t DfllBtcSlaveScalerM;
-	int32_t DfllBtcSlaveScalerB;
+	int32_t  DfllBtcSlaveScalerB;
 	uint32_t DfllPccAsWaitCtrl; // GDFLL_AS_WAIT_CTRL_PCC register value to be passed to RLC msg
 	uint32_t DfllPccAsStepCtrl; // GDFLL_AS_STEP_CTRL_PCC register value to be passed to RLC msg
 	uint32_t GfxGpoSpare[10];
@@ -1240,20 +1240,20 @@ struct skutable_smu13 { // SECTION: Version
 	uint8_t  FanTachEdgePerRev;
 	uint16_t FanTargetTemperature[TEMP_COUNT];
 	// The following are AFC override parameters. Leave at 0 to use FW defaults.
-	int16_t FuzzyFan_ErrorSetDelta;
-	int16_t FuzzyFan_ErrorRateSetDelta;
-	int16_t FuzzyFan_PwmSetDelta;
+	int16_t  FuzzyFan_ErrorSetDelta;
+	int16_t  FuzzyFan_ErrorRateSetDelta;
+	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
 
 	uint16_t FwCtfLimit[TEMP_COUNT];
 
 	uint16_t IntakeTempEnableRPM;
-	int16_t IntakeTempOffsetTemp;
+	int16_t  IntakeTempOffsetTemp;
 	uint16_t IntakeTempReleaseTemp;
 	uint16_t IntakeTempHighIntakeAcousticLimit;
 	uint16_t IntakeTempAcouticLimitReleaseRate;
 
-	int16_t FanAbnormalTempLimitOffset;
+	int16_t  FanAbnormalTempLimitOffset;
 	uint16_t FanStalledTriggerRpm;
 	uint16_t FanAbnormalTriggerRpmCoeff;
 	uint16_t FanAbnormalDetectionEnable;
@@ -1324,10 +1324,10 @@ struct skutable_smu13 { // SECTION: Version
 	uint8_t  TotalBoardPowerSupport;
 	uint8_t  TotalBoardPowerPadding[3];
 
-	int16_t TotalIdleBoardPowerM;
-	int16_t TotalIdleBoardPowerB;
-	int16_t TotalBoardPowerM;
-	int16_t TotalBoardPowerB;
+	int16_t  TotalIdleBoardPowerM;
+	int16_t  TotalIdleBoardPowerB;
+	int16_t  TotalBoardPowerM;
+	int16_t  TotalBoardPowerB;
 
 	struct quadratic_u32 qFeffCoeffGameClock[POWER_SOURCE_COUNT];
 	struct quadratic_u32 qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
