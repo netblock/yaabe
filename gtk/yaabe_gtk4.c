@@ -215,7 +215,7 @@ static void leaves_textbox_stray(
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
 		free(buff);
@@ -231,7 +231,7 @@ static void leaves_val_column_textbox_apply(
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(textbox, buff);
 	if (has_mallocd)
 		free(buff);
@@ -266,7 +266,7 @@ static void leaves_val_column_recycler(
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint8_t has_mallocd = atui_get_to_text(leaf, &buff);
+	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
 		free(buff);

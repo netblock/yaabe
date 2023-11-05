@@ -132,7 +132,8 @@ struct  _atui_branch {
 
 // set the value from a string or array of 8-bit
 uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
-uint8_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
+uint16_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
+// returns malloc size
 
 // set or get the number value from the leaf
 void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);

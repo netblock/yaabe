@@ -45,6 +45,7 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 
 		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
 	}
+	return 0-1;
 }
 double atui_leaf_get_val_float(atui_leaf* leaf) {
 	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
@@ -152,11 +153,10 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	}
 	return err;
 }
-uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
+uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
 
-	uint8_t has_malloced = 0;
 	uint16_t malloc_size = 0;
 	uint16_t i=0,j=0;
 	char8_t* buffer = *buffer_ptr;
@@ -215,7 +215,8 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 			buffer = malloc(malloc_size);
 			buffer[0] = '\0';
 			*buffer_ptr = buffer;
-			has_malloced = 1;
+		} else {
+			malloc_size = 0;
 		}
 		switch (leaf->total_bits) {
 			case 8:
@@ -243,7 +244,7 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 				}
 				break;
 			default:
-				return has_malloced;
+				return malloc_size;
 		}
 		buffer[j-1] = '\0'; // eat the final space
 
@@ -263,7 +264,7 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 			buffer[i] = leaf->u8[i];
 	}
 
-	return has_malloced; // TODO return malloc size instead
+	return malloc_size;
 }
 
 

@@ -325,6 +325,7 @@ That is, bitfield population, and enum and inline association.
 	default:0\
 )
 
+/*
 #define _PPATUI_DEREF(var) _Generic((var), \
 	uint8_t*:*( (uint8_t*) ((void*)var) ), \
 	uint16_t*:*( (uint16_t*) ((void*)var) ), \
@@ -333,6 +334,7 @@ That is, bitfield population, and enum and inline association.
 	uint8_t:var, uint16_t:var, uint32_t:var, uint64_t:var, \
 	default:0\
 )
+*/
 
 #define _PPATUI_FANCY_NOBITFIELD(biosvar) \
 	.bitfield_hi=_PPATUI_LEAF_BITNESS(biosvar)-1, .bitfield_lo=0,
