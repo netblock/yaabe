@@ -510,18 +510,18 @@ enum PowerGatingSettings_e {
 };
 
 /* duplicate
-struct quadratic_u32 {
+struct quadratic_f32 {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
 };
 
-struct linear_u32 {
+struct linear_f32 {
 	uint32_t m;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 };
 
-struct droop_u32 {
+struct droop_f32 {
 	uint32_t a;  // store in IEEE float format in this variable
 	uint32_t b;  // store in IEEE float format in this variable
 	uint32_t c;  // store in IEEE float format in this variable
@@ -610,7 +610,7 @@ struct DpmDescriptor_t {
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
 	enum FOPT_CALC_e CalculateFopt;     // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
-	struct linear_u32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	struct linear_f32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
 	uint32_t Padding3[3];
 	uint16_t Padding4;
 	uint16_t FoptimalDc; // Foptimal frequency in DC power mode.
@@ -1043,7 +1043,7 @@ struct AvfsDcBtcParams_smu13 {
 	uint16_t DcBtcMin; // mV Q2
 	uint16_t DcBtcMax; // mV Q2
 
-	struct linear_u32 DcBtcGbScalar;
+	struct linear_f32 DcBtcGbScalar;
 
 };
 
@@ -1051,9 +1051,9 @@ struct AvfsFuseOverride_smu13 {
 	uint16_t AvfsTemp[AVFS_TEMP_COUNT]; // in degrees C
 	uint16_t VftFMin;    // in MHz
 	uint16_t VInversion; // in mV Q2
-	struct quadratic_u32 qVft[AVFS_TEMP_COUNT];
-	struct quadratic_u32 qAvfsGb;
-	struct quadratic_u32 qAvfsGb2;
+	struct quadratic_f32 qVft[AVFS_TEMP_COUNT];
+	struct quadratic_f32 qAvfsGb;
+	struct quadratic_f32 qAvfsGb2;
 };
 
 struct skutable_smu13 { // SECTION: Version
@@ -1090,11 +1090,11 @@ struct skutable_smu13 { // SECTION: Version
 
 	uint16_t PaddingInfra;
 	// Per year normalized Vmax state failure rates (sum of the two domains divided by life time in years)
-	uint32_t FitControllerFailureRateLimit; // in IEEE float // Expected GFX Duty Cycle at Vmax.
-	uint32_t FitControllerGfxDutyCycle;     // in IEEE float // Expected SOC Duty Cycle at Vmax.
-	uint32_t FitControllerSocDutyCycle;     // in IEEE float
+	float FitControllerFailureRateLimit; // in IEEE float // Expected GFX Duty Cycle at Vmax.
+	float FitControllerGfxDutyCycle;     // in IEEE float // Expected SOC Duty Cycle at Vmax.
+	float FitControllerSocDutyCycle;     // in IEEE float
 	// This offset will be deducted from the controller output to before it goes through the SOC Vset limiter block.
-	uint32_t FitControllerSocOffset;        // in IEEE float
+	float FitControllerSocOffset;        // in IEEE float
 
 	uint32_t GfxApccPlusResidencyLimit; // Percentage value. Used by APCC+ controller to control PCC residency to some value
 	// SECTION: Throttler settings
@@ -1133,7 +1133,7 @@ struct skutable_smu13 { // SECTION: Version
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 	uint16_t SocketPowerLimitDcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 
-	struct quadratic_u32 Vmin_droop;
+	struct quadratic_f32 Vmin_droop;
 	uint32_t SpareVmin[9];
 
 	// SECTION: DPM Configuration 1
@@ -1299,11 +1299,11 @@ struct skutable_smu13 { // SECTION: Version
 
 	struct AvfsFuseOverride_smu13 SocAvfsFuseOverride[AVFS_D_COUNT];
 
-	struct droop_u32 dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
+	struct droop_f32 dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
 
-	struct linear_u32 qAgingGb[AVFS_D_COUNT]; // GHz->V
+	struct linear_f32 qAgingGb[AVFS_D_COUNT]; // GHz->V
 
-	struct quadratic_u32 qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
+	struct quadratic_f32 qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
 
 	struct AvfsDcBtcParams_smu13 DcBtcSocParams[AVFS_D_COUNT];
 
@@ -1329,9 +1329,9 @@ struct skutable_smu13 { // SECTION: Version
 	int16_t  TotalBoardPowerM;
 	int16_t  TotalBoardPowerB;
 
-	struct quadratic_u32 qFeffCoeffGameClock[POWER_SOURCE_COUNT];
-	struct quadratic_u32 qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
-	struct quadratic_u32 qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32 qFeffCoeffGameClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32 qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32 qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
 	// SECTION: Sku Reserved
 	uint32_t Spare[43];
 	// Padding for MMHUB - do not modify this

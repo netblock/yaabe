@@ -412,24 +412,24 @@ struct pp_i2c_controller_config {
 };
 */
 
-//typedef struct quadratic_u32 QuadraticInt_t;
-struct quadratic_u32 { // TODO probably IEEE 754 float
-	uint32_t a;
-	uint32_t b;
-	uint32_t c;
+//typedef struct quadratic_f32 QuadraticInt_t;
+struct quadratic_f32 {
+	float a;
+	float b;
+	float c;
 };
 
-//typedef struct linear_u32 LinearInt_t;
-struct linear_u32 {
-	uint32_t m;
-	uint32_t b;
+//typedef struct linear_f32 LinearInt_t;
+struct linear_f32 {
+	float m;
+	float b;
 };
 
-//typedef struct droop_u32 DroopInt_t;
-struct droop_u32 {
-	uint32_t a;
-	uint32_t b;
-	uint32_t c;
+//typedef struct droop_f32 DroopInt_t;
+struct droop_f32 {
+	float a;
+	float b;
+	float c;
 };
 
 enum PPCLK_SMU11 {
@@ -475,8 +475,8 @@ struct dpm_descriptor {
 	uint8_t  SnapToDiscrete;
 	uint8_t  NumDiscreteLevels;
 	uint8_t  padding;
-	struct linear_u32 ConversionToAvfsClk;
-	struct quadratic_u32 SsCurve;
+	struct linear_f32 ConversionToAvfsClk;
+	struct quadratic_f32 SsCurve;
 };
 
 struct pptable_i2c_u32_smu11 {
@@ -570,7 +570,7 @@ struct smc_pptable {
 	uint16_t GfxclkSlewRate;
 	uint16_t CksEnableFreq;
 	uint16_t Padding789;
-	struct quadratic_u32 CksVoltageOffset;
+	struct quadratic_f32 CksVoltageOffset;
 	uint8_t  Padding567[4];
 	uint16_t GfxclkDsMaxFreq;
 	uint8_t  GfxclkSource;
@@ -622,19 +622,19 @@ struct smc_pptable {
 
 	uint8_t  Padding8_Avfs[2];
 
-	struct quadratic_u32 qAvfsGbGfx;
-	struct quadratic_u32 qAvfsGbSoc;
+	struct quadratic_f32 qAvfsGbGfx;
+	struct quadratic_f32 qAvfsGbSoc;
 
-	struct droop_u32  dBtcGbGfxCksOn;
-	struct droop_u32  dBtcGbGfxCksOff;
-	struct droop_u32  dBtcGbGfxAfll;
-	struct droop_u32  dBtcGbSoc;
-	struct linear_u32 qAgingGbGfx;
-	struct linear_u32 qAgingGbSoc;
+	struct droop_f32  dBtcGbGfxCksOn;
+	struct droop_f32  dBtcGbGfxCksOff;
+	struct droop_f32  dBtcGbGfxAfll;
+	struct droop_f32  dBtcGbSoc;
+	struct linear_f32 qAgingGbGfx;
+	struct linear_f32 qAgingGbSoc;
 
 
-	struct quadratic_u32 qStaticVoltageOffsetGfx;
-	struct quadratic_u32 qStaticVoltageOffsetSoc;
+	struct quadratic_f32 qStaticVoltageOffsetGfx;
+	struct quadratic_f32 qStaticVoltageOffsetSoc;
 
 
 	uint16_t DcTolGfx;
@@ -660,10 +660,10 @@ struct smc_pptable {
 	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS_SMU11];
 
 	union dpm_debug_override_smu11 DebugOverrides;
-	struct quadratic_u32 ReservedEquation0;
-	struct quadratic_u32 ReservedEquation1;
-	struct quadratic_u32 ReservedEquation2;
-	struct quadratic_u32 ReservedEquation3;
+	struct quadratic_f32 ReservedEquation0;
+	struct quadratic_f32 ReservedEquation1;
+	struct quadratic_f32 ReservedEquation2;
+	struct quadratic_f32 ReservedEquation3;
 
 	uint16_t MinVoltageUlvGfx;
 	uint16_t MinVoltageUlvSoc;

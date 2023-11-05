@@ -23,34 +23,58 @@ PPATUI_FUNCIFY(struct, smu_powerplay_table_header, atui_nullstruct,
 
 
 
-PPATUI_FUNCIFY(struct, quadratic_u32, atomtree_powerplaytable,
-	(bios->a, a,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+PPATUI_FUNCIFY(struct, quadratic_f32, atomtree_powerplaytable,
+	(bios->a, a (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, b,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, b (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->c, c,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->c, c (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->a, a (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->b, b (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->c, c (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, linear_u32, atomtree_powerplaytable,
-	(bios->m, m,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+PPATUI_FUNCIFY(struct, linear_f32, atomtree_powerplaytable,
+	(bios->m, m (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, b,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, b (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->m, m (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->b, b (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, droop_u32, atomtree_powerplaytable,
-	(bios->a, a,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+PPATUI_FUNCIFY(struct, droop_f32, atomtree_powerplaytable,
+	(bios->a, a (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, b,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, b (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->c, c,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->c, c (float),
+		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->a, a (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->b, b (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->c, c (raw),
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, dpm_descriptor, atomtree_powerplaytable,
@@ -67,11 +91,11 @@ PPATUI_FUNCIFY(struct, dpm_descriptor, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ConversionToAvfsClk, ConversionToAvfsClk,
-		(ATUI_NAN, ATUI_INLINE, linear_u32),
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->SsCurve, SsCurve,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	)
 )
@@ -508,7 +532,7 @@ PPATUI_FUNCIFY(struct, smc_pptable, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->CksVoltageOffset, CksVoltageOffset,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->Padding567, Padding567,
@@ -651,46 +675,46 @@ PPATUI_FUNCIFY(struct, smc_pptable, atomtree_powerplaytable,
 	),
 
 	(bios->qAvfsGbGfx, qAvfsGbGfx,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->qAvfsGbSoc, qAvfsGbSoc,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 
 	(bios->dBtcGbGfxCksOn, dBtcGbGfxCksOn,
-		(ATUI_NAN, ATUI_INLINE, droop_u32),
+		(ATUI_NAN, ATUI_INLINE, droop_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->dBtcGbGfxCksOff, dBtcGbGfxCksOff,
-		(ATUI_NAN, ATUI_INLINE, droop_u32),
+		(ATUI_NAN, ATUI_INLINE, droop_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->dBtcGbGfxAfll, dBtcGbGfxAfll,
-		(ATUI_NAN, ATUI_INLINE, droop_u32),
+		(ATUI_NAN, ATUI_INLINE, droop_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->dBtcGbSoc, dBtcGbSoc,
-		(ATUI_NAN, ATUI_INLINE, droop_u32),
+		(ATUI_NAN, ATUI_INLINE, droop_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->qAgingGbGfx, qAgingGbGfx,
-		(ATUI_NAN, ATUI_INLINE, linear_u32),
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->qAgingGbSoc, qAgingGbSoc,
-		(ATUI_NAN, ATUI_INLINE, linear_u32),
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
 		(ATUI_NODESCR)
 	),
 
 
 	(bios->qStaticVoltageOffsetGfx, qStaticVoltageOffsetGfx,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->qStaticVoltageOffsetSoc, qStaticVoltageOffsetSoc,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 
@@ -783,19 +807,19 @@ PPATUI_FUNCIFY(struct, smc_pptable, atomtree_powerplaytable,
 		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation0, ReservedEquation0,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation1, ReservedEquation1,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation2, ReservedEquation2,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation3, ReservedEquation3,
-		(ATUI_NAN, ATUI_INLINE, quadratic_u32),
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		(ATUI_NODESCR)
 	),
 
