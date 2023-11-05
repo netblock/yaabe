@@ -13,6 +13,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <assert.h>
 
 #ifdef C2X_COMPAT
 typedef uint8_t char8_t;

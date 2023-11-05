@@ -35,21 +35,21 @@ enum i18n_languages:int8_t {
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
 enum atui_type:uint16_t {
-	ATUI_NAN = 0b000,
-	ATUI_DEC = 0b001,
-	ATUI_HEX = 0b010,
-	ATUI_OCT = 0b011, // TODO not implemented
-	ATUI_BIN = 0b100,
-	ATUI_ANY = 0b111,
+	ATUI_NAN   = 0b000,
+	ATUI_DEC   = 0b001,
+	ATUI_HEX   = 0b010,
+	ATUI_OCT   = 0b011, // TODO not implemented
+	ATUI_BIN   = 0b100,
+	ATUI_FLOAT = 0b101,
+	ATUI_ANY   = 0b111,
 
 	ATUI_NODISPLAY = 1<<4, // don't display this leaf itself
-
-	ATUI_NONE     = 1<<5, //TODO depricate
-	ATUI_NOFANCY  = 1<<5,
-	ATUI_BITFIELD = 1<<6,
-	ATUI_BITCHILD = 1<<7,
-	ATUI_ENUM     = 1<<8,  // see also PPATUI_FUNCIFY()
-	ATUI_STRING   = 1<<9,  // meant for human-readable text
+	ATUI_NONE      = 1<<5, //TODO depricate
+	ATUI_NOFANCY   = 1<<5,
+	ATUI_BITFIELD  = 1<<6,
+	ATUI_BITCHILD  = 1<<7,
+	ATUI_ENUM      = 1<<8, // see also PPATUI_FUNCIFY()
+	ATUI_STRING    = 1<<9, // meant for human-readable text
 	ATUI_ARRAY    = 1<<10, // no technical difference from string
 	ATUI_INLINE   = 1<<11, // pull in leaves from other tables
 	ATUI_DYNARRAY = 1<<12, // for runtime array lengths
@@ -86,6 +86,13 @@ struct _atui_leaf {
 		uint16_t* u16;
 		uint32_t* u32;
 		uint64_t* u64;
+		int8_t*   s8; // TODO ATUI signed 
+		int16_t*  s16;
+		int32_t*  s32;
+		int64_t*  s64;
+		_Float16* f16;
+		float*    f32;
+		double*   f64;
 	};
 
 	void* auxiliary; // any extra info to hang off if necessary
@@ -128,8 +135,10 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
 uint8_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
 
 // set or get the number value from the leaf
-void atui_leaf_set_val(atui_leaf* leaf, uint64_t val);
-uint64_t atui_leaf_get_val(atui_leaf* leaf);
+void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
+uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
+double atui_leaf_get_val_float(atui_leaf* leaf);
+void atui_leaf_set_val_float(atui_leaf* leaf, double val);
 
 // TODO stroll that considers 0b prefix?
 uint64_t strtoll_2(const char8_t* str);

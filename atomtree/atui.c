@@ -6,8 +6,9 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 
 #include "atomtree.h"
 #include "atui.h"
+#include <math.h>
 
-void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
+void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val){
 	if (leaf->type & ATUI_ANY) {
 		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 		uint64_t maxval = (1ULL << num_bits) - 1;
@@ -20,15 +21,43 @@ void atui_leaf_set_val(atui_leaf* leaf, uint64_t val){
 		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
 	}
 }
+void atui_leaf_set_val_float(atui_leaf* leaf, double val) {
+	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
+		switch(leaf->total_bits) {
+			case 16:
+				*(leaf->f16) = val;
+				break;
+			case 32:
+				*(leaf->f32) = val;
+				break;
+			case 64:
+				*(leaf->f64) = val;
+				break;
+		}
+	}
+}
 
 
-uint64_t atui_leaf_get_val(atui_leaf* leaf) {
+uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 	if (leaf->type & ATUI_ANY) {
 		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 		uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
 
 		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
 	}
+}
+double atui_leaf_get_val_float(atui_leaf* leaf) {
+	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
+		switch(leaf->total_bits) {
+			case 16:
+				return *(leaf->f16);
+			case 32:
+				return *(leaf->f32);
+			case 64:
+				return *(leaf->f64);
+		}
+	}
+	return NAN;
 }
 
 uint64_t strtoll_2(const char8_t* str) {
@@ -55,10 +84,10 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	char8_t buffer[65];
 
 	uint8_t array_size = leaf->array_size;
+	uint8_t radix = leaf->type & ATUI_ANY;
 
 
 	if (leaf->type & ATUI_ARRAY) {
-		uint8_t radix = leaf->type & ATUI_ANY;
 		uint8_t base = bases[radix];
 		uint8_t num_digits = ceil( // round up because it's gonna be like x.9999
 			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
@@ -108,9 +137,12 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 				return 1;
 		}
 
-	} else if(leaf->type & ATUI_ANY) {
-		atui_leaf_set_val(leaf, strtoll_2(text));
-
+	} else if (radix) {
+		if (radix == ATUI_FLOAT) {
+			atui_leaf_set_val_float(leaf, strtod(text, NULL));
+		} else {
+			atui_leaf_set_val_unsigned(leaf, strtoll_2(text));
+		}
 	} else if (leaf->type & ATUI_STRING) {
 		for(; i < array_size; i++)
 		   leaf->u8[i] = text[i];
@@ -129,15 +161,18 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	uint16_t i=0,j=0;
 	char8_t* buffer = *buffer_ptr;
 
-	// NAN DEC HEX OCT BIN
+
+	// constructor arrays to be used with metaformat, and two sprintfs. See the
+	// radix-only part.
+	// NAN DEC HEX OCT BIN FLOAT
 #ifdef C2X_COMPAT
-	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
-	const char8_t* suffixes[] = {"", "u", "X", "o", "X"};
-	const uint8_t bases[] = {0, 10, 16, 8, 16};
+	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0", "%0"};
+	const char8_t* suffixes[] = {"", "u", "X", "o", "X", ".1f"};
+	const uint8_t bases[] = {0, 10, 16, 8, 16, 10};
 #else
-	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
-	const char8_t* suffixes[] = {"", "u", "X", "o", "b"};
-	const uint8_t bases[] = {0, 10, 16, 8, 2};
+	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0", "%0"};
+	const char8_t* suffixes[] = {"", "u", "X", "o", "b", ".1f"};
+	const uint8_t bases[] = {0, 10, 16, 8, 2, 10};
 #endif
 	const char8_t* metaformat = "%s%u%s"; // amogus
 	char8_t format[8];
@@ -163,6 +198,10 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 #endif
 
 	if (leaf->type & ATUI_ARRAY) {
+		assert(radix != ATUI_FLOAT);
+		// too hard cause floats can have many base-10 digits
+
+
 		num_digits = ceil( // round up because it's gonna be like x.9999
 			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
 			/ log(bases[radix])
@@ -212,7 +251,11 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		sprintf(format, metaformat,
 			prefixes[radix], num_digits, suffixes[radix]
 		);
-		sprintf(buffer, format, atui_leaf_get_val(leaf));
+		if (radix == ATUI_FLOAT) {
+			sprintf(buffer, format, atui_leaf_get_val_float(leaf));
+		} else {
+			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
+		}
 	} else if (leaf->type & ATUI_STRING) {
 		i = leaf->array_size;
 		buffer[i] = '\0'; // for strings
@@ -220,7 +263,7 @@ uint8_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 			buffer[i] = leaf->u8[i];
 	}
 
-	return has_malloced;
+	return has_malloced; // TODO return malloc size instead
 }
 
 
