@@ -45,7 +45,7 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 
 		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
 	}
-	return 0-1;
+	return 0ULL - 1;
 }
 double atui_leaf_get_val_float(atui_leaf* leaf) {
 	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
