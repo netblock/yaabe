@@ -9,7 +9,7 @@ VERSION = $(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
 VER_WINRC = $(VER_MAJOR),$(VER_MINOR),$(VER_PATCH),0 #for MS Resource Compiler
 
 YAABE_DEBUG_CFLAGS = -g -Og
-YAABE_RELEASE_CFLAGS = -O3 -flto=auto -fuse-linker-plugin
+YAABE_RELEASE_CFLAGS = -DNDEBUG -O3 -flto=auto -fuse-linker-plugin
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS =  -lm -lz $(GTK_LDFLAGS)
