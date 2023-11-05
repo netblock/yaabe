@@ -34,25 +34,27 @@ enum i18n_languages:int8_t {
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
-enum atui_type:uint16_t {
-	ATUI_NAN   = 0b000,
-	ATUI_DEC   = 0b001,
-	ATUI_HEX   = 0b010,
-	ATUI_OCT   = 0b011, // TODO not implemented
-	ATUI_BIN   = 0b100,
-	ATUI_FLOAT = 0b101,
-	ATUI_ANY   = 0b111,
 
-	ATUI_NODISPLAY = 1<<4, // don't display this leaf itself
-	ATUI_NONE      = 1<<5, //TODO depricate
-	ATUI_NOFANCY   = 1<<5,
-	ATUI_BITFIELD  = 1<<6,
-	ATUI_BITCHILD  = 1<<7,
-	ATUI_ENUM      = 1<<8, // see also PPATUI_FUNCIFY()
-	ATUI_STRING    = 1<<9, // meant for human-readable text
-	ATUI_ARRAY    = 1<<10, // no technical difference from string
-	ATUI_INLINE   = 1<<11, // pull in leaves from other tables
-	ATUI_DYNARRAY = 1<<12, // for runtime array lengths
+// TODO move to bitfield?
+enum atui_type:uint32_t {
+	ATUI_NAN  = 0x0, // Don't display a value
+	ATUI_DEC  = 0x1,
+	ATUI_HEX  = 0x2,
+	ATUI_OCT  = 0x3, // TODO not implemented
+	ATUI_BIN  = 0x4,
+	ATUI_FRAC = 0x5, // Both Q and float. TODO support Q notation.
+	ATUI_ANY  = 0xF, // Mask
+
+	ATUI_NOFANCY   = 1<<5, // Nothing fancy to the leaf
+	ATUI_NODISPLAY = 1<<6, // Don't display this leaf itself
+	ATUI_BITFIELD  = 1<<7, // Is a bitfield parent
+	ATUI_ENUM      = 1<<8, // See also PPATUI_FUNCIFY()
+	ATUI_STRING    = 1<<9, // Meant for human-readable text
+	ATUI_ARRAY    = 1<<10, // No technical difference from string
+	ATUI_INLINE   = 1<<11, // Pull in leaves from other tables
+	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
+
+	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
 };
 
 typedef struct _atui_branch atui_branch;
@@ -65,7 +67,7 @@ struct _atui_leaf {
 	char8_t* description[LANG_TOTALLANGS];
 
 
-	enum atui_type type; // bitfield struct
+	enum atui_type type; // how to display text, and other config data
 	uint8_t array_size;
 	uint8_t total_bits;  // number of bits for the leaf
 
@@ -138,8 +140,8 @@ uint16_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
 // set or get the number value from the leaf
 void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
-double atui_leaf_get_val_float(atui_leaf* leaf);
-void atui_leaf_set_val_float(atui_leaf* leaf, double val);
+double atui_leaf_get_val_fraction(atui_leaf* leaf);
+void atui_leaf_set_val_fraction(atui_leaf* leaf, double val);
 
 // TODO stroll that considers 0b prefix?
 uint64_t strtoll_2(const char8_t* str);

@@ -21,8 +21,8 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val){
 		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
 	}
 }
-void atui_leaf_set_val_float(atui_leaf* leaf, double val) {
-	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
+void atui_leaf_set_val_fraction(atui_leaf* leaf, double val) {
+	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
 		switch(leaf->total_bits) {
 			case 16:
 				*(leaf->f16) = val;
@@ -47,8 +47,8 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 	}
 	return 0ULL - 1;
 }
-double atui_leaf_get_val_float(atui_leaf* leaf) {
-	if ((leaf->type & ATUI_ANY) == ATUI_FLOAT) {
+double atui_leaf_get_val_fraction(atui_leaf* leaf) {
+	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
 		switch(leaf->total_bits) {
 			case 16:
 				return *(leaf->f16);
@@ -139,8 +139,8 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 		}
 
 	} else if (radix) {
-		if (radix == ATUI_FLOAT) {
-			atui_leaf_set_val_float(leaf, strtod(text, NULL));
+		if (radix == ATUI_FRAC) {
+			atui_leaf_set_val_fraction(leaf, strtod(text, NULL));
 		} else {
 			atui_leaf_set_val_unsigned(leaf, strtoll_2(text));
 		}
@@ -198,7 +198,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 #endif
 
 	if (leaf->type & ATUI_ARRAY) {
-		assert(radix != ATUI_FLOAT);
+		assert(radix != ATUI_FRAC);
 		// too hard cause floats can have many base-10 digits
 
 
@@ -252,8 +252,8 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		sprintf(format, metaformat,
 			prefixes[radix], num_digits, suffixes[radix]
 		);
-		if (radix == ATUI_FLOAT) {
-			sprintf(buffer, format, atui_leaf_get_val_float(leaf));
+		if (radix == ATUI_FRAC) {
+			sprintf(buffer, format, atui_leaf_get_val_fraction(leaf));
 		} else {
 			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
 		}

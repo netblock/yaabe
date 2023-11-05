@@ -184,7 +184,7 @@ static void leaves_offset_column_recycler(
 
 	char8_t buffer[18];
 	if (leaf->type & (ATUI_ANY | ATUI_STRING|ATUI_ARRAY|ATUI_BITFIELD)) {
-		if (leaf->type & ATUI_BITCHILD) {
+		if (leaf->type & _ATUI_BITCHILD) {
 			sprintf(buffer, "[%u:%u]",
 				leaf->bitfield_hi, leaf->bitfield_lo
 			);

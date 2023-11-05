@@ -429,7 +429,7 @@ That is, bitfield population, and enum and inline association.
 		bfname, bit_end, bit_start, radix, descrdata) \
 	{\
 		.name=#bfname, .origname=#bfname, .varname=#var,\
-		.description=NULL, .type=(radix|ATUI_BITCHILD), .val=&(biosvar), \
+		.description=NULL, .type=(radix|_ATUI_BITCHILD), .val=&(biosvar), \
 		.total_bits=_PPATUI_LEAF_BITNESS(biosvar), \
 		.bitfield_hi=bit_end, .bitfield_lo=bit_start, \
 		_PPATUI_FANCY_NOENUM .num_child_leaves=0, \

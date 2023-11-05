@@ -28,8 +28,8 @@ If the table element should be viewed as a number, set a radix. radix is one of
 ATUI_NAN, ATUI_DEC, ATUI_HEX, ATUI_OCT, ATUI_BIN.
 If the element should be omitted from UI display, set radix to ATUI_NODISPLAY
 
-If the element should be viewed as a floating-point number set the radix to
-ATUI_FLOAT. Note that this as a radix has limited compatibility, and will not
+If the element should be viewed as a decimal fraction number set the radix to
+ATUI_FRAC. Note that this as a radix has limited compatibility, and will not
 work with bitfields.
 
 
@@ -137,7 +137,7 @@ def struct_to_atui(s):
 	# integer arrays, won't do embedded enums
 	s = re.sub("(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
 	# floats:
-	s = re.sub("(_Float16|_Float32|_Float64|float|double)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(_Float16|_Float32|_Float64|float|double)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
 	# take care of //-based comments
 	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
 	s = re.sub("\),(\s+)?};", ")\n)", s)

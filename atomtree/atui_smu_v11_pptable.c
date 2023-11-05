@@ -25,13 +25,13 @@ PPATUI_FUNCIFY(struct, smu_powerplay_table_header, atui_nullstruct,
 
 PPATUI_FUNCIFY(struct, quadratic_f32, atomtree_powerplaytable,
 	(bios->a, a (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->b, b (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->c, c (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->a, a (raw),
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -45,10 +45,10 @@ PPATUI_FUNCIFY(struct, quadratic_f32, atomtree_powerplaytable,
 )
 PPATUI_FUNCIFY(struct, linear_f32, atomtree_powerplaytable,
 	(bios->m, m (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->b, b (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->m, m (raw),
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -59,13 +59,13 @@ PPATUI_FUNCIFY(struct, linear_f32, atomtree_powerplaytable,
 )
 PPATUI_FUNCIFY(struct, droop_f32, atomtree_powerplaytable,
 	(bios->a, a (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->b, b (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->c, c (float),
-		(ATUI_FLOAT, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->a, a (raw),
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
