@@ -53,7 +53,7 @@ union gddr6_mr2 {
 union gddr6_mr3 {
 	uint16_t gddr6_mr3; // raw data
 	struct { uint16_t
-		dataWCK_term_offset :2-0 +1, // DQ, DBI and WCK termination offset.
+		dataWCK_term_offset :2-0 +1, // DQ, DBI & WCK termination offset. Two's.
 		CA_term_offset      :5-3 +1, // command address. See MR2.
 		DRAM_info           :7-6 +1, // 0=off 1=vndr ID1 2=temp 3=vndr ID2
 		WR_scaling          :9-8 +1, // 1x 2x 3x value of tWR in MR8 and MR0

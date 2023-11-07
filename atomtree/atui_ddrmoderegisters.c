@@ -70,10 +70,10 @@ PPATUI_FUNCIFY(union, gddr6_mr1, atui_nullstruct,
 PPATUI_FUNCIFY(union, gddr6_mr2, atui_nullstruct,
 	(bios->gddr6_mr2, gddr6_mr2,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(OCD_up,       2,0, ATUI_DEC,
+			(OCD_up,       2,0, (ATUI_DEC|ATUI_SIGNED),
 				((LANG_ENG, "output driver pullup offset. 0=0, Two's Compl."))
 			),
-			(OCD_down,     5,3, ATUI_DEC,
+			(OCD_down,     5,3, (ATUI_DEC|ATUI_SIGNED),
 				((LANG_ENG, "pulldown. See JES250D Figure 33."))
 			),
 			(self_refresh, 7,6, ATUI_DEC,
@@ -102,10 +102,10 @@ PPATUI_FUNCIFY(union, gddr6_mr2, atui_nullstruct,
 PPATUI_FUNCIFY(union, gddr6_mr3, atui_nullstruct,
 	(bios->gddr6_mr3, gddr6_mr3,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(dataWCK_term_offset, 2,0, ATUI_DEC,
-				((LANG_ENG, "DQ, DBI and WCK termination offset."))
+			(dataWCK_term_offset, 2,0, (ATUI_DEC|ATUI_SIGNED),
+				((LANG_ENG, "DQ, DBI & WCK termination offset. Two's"))
 			),
-			(CA_term_offset,      5,3, ATUI_DEC,
+			(CA_term_offset,      5,3, (ATUI_DEC|ATUI_SIGNED),
 				((LANG_ENG, "command address. See MR2."))
 			),
 			(DRAM_info,           7,6, ATUI_DEC,
