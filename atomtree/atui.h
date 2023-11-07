@@ -55,6 +55,7 @@ enum atui_type:uint32_t {
 	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
 
 	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
+	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit
 };
 
 typedef struct _atui_branch atui_branch;
@@ -140,11 +141,14 @@ uint16_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
 // set or get the number value from the leaf
 void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
+void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val);
+int64_t atui_leaf_get_val_signed(atui_leaf* leaf);
 double atui_leaf_get_val_fraction(atui_leaf* leaf);
 void atui_leaf_set_val_fraction(atui_leaf* leaf, double val);
 
 // TODO stroll that considers 0b prefix?
-uint64_t strtoll_2(const char8_t* str);
+int64_t strtoll_2(const char8_t* str);
+uint64_t strtoull_2(const char8_t* str);
 
 // atui has auxiliary pointers to hang extra data off of and this deallocator
 // doesn't consider.
