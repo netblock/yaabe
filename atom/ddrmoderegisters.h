@@ -207,5 +207,5 @@ union gddr6_mr15 {
 };
 
 
-#pragma(pop) // restore old packing
+#pragma pack(pop) // restore old packing
 #endif

@@ -186,4 +186,7 @@ struct atom_tree* atombios_parse(
 
 //#include "atui.h"
 
+// make sure we're not on byte packing
+struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
+static_assert(sizeof(struct _twentyfourbytes) > 17);
 #endif

@@ -78,8 +78,8 @@ struct _atui_leaf {
 	uint8_t num_child_leaves;
 
 
-	const struct atui_enum* enum_options; // array of text val pair
 	uint8_t num_enum_opts;
+	const struct atui_enum* enum_options; // array of text val pair
 
 	atui_branch** inline_branch;
 
@@ -107,20 +107,21 @@ struct  _atui_branch {
 	char8_t* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;
+	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
+	atui_branch** all_branches;
+
 	uint8_t num_child_branches;
 	uint8_t max_num_child_branches;
 
-	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
 	uint8_t num_inline_branches;
 	uint8_t max_num_inline_branches;
 
-	atui_branch** all_branches;
 	uint8_t max_branch_count;
 
 
-	atui_leaf* leaves;
 	uint16_t leaf_count;
 	uint16_t max_leaves;
+	atui_leaf* leaves;
 
 	void* atomleaves;
 	void* auxiliary; // alternative representation to leaves, if necessary
@@ -166,19 +167,20 @@ struct atui_funcify_args {
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 
-	uint16_t num_child_branches;
-	// Number of child branches this atui_branch will have.*/
-
 	atui_branch** import_children;
 	// If the child branches are preallocated, walk across this. This array
 	// must have num_child_branches elements.
+
+	uint16_t num_child_branches;
+	// Number of child branches this atui_branch will have.*/
+
 };
 
 
 // funcify internal structs
 struct dynarray_bounds { // for ATUI_DYNARRAY
 	void* array_start;
-	uint32_t element_size; //for manual pointer math.
+	uint32_t element_size; // for manual pointer math.
 	uint16_t dynarray_length; // the number of members to the dynamic array.
 
 	uint16_t numleaves; // number of leaves within the pattern.
