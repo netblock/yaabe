@@ -1083,11 +1083,11 @@ struct skutable_smu13 { // SECTION: Version
 
 	uint16_t PaddingInfra;
 	// Per year normalized Vmax state failure rates (sum of the two domains divided by life time in years)
-	float FitControllerFailureRateLimit; // in IEEE float // Expected GFX Duty Cycle at Vmax.
-	float FitControllerGfxDutyCycle;     // in IEEE float // Expected SOC Duty Cycle at Vmax.
-	float FitControllerSocDutyCycle;     // in IEEE float
+	float32_t FitControllerFailureRateLimit; // in IEEE float // Expected GFX Duty Cycle at Vmax.
+	float32_t FitControllerGfxDutyCycle;     // in IEEE float // Expected SOC Duty Cycle at Vmax.
+	float32_t FitControllerSocDutyCycle;     // in IEEE float
 	// This offset will be deducted from the controller output to before it goes through the SOC Vset limiter block.
-	float FitControllerSocOffset;        // in IEEE float
+	float32_t FitControllerSocOffset;        // in IEEE float
 
 	uint32_t GfxApccPlusResidencyLimit; // Percentage value. Used by APCC+ controller to control PCC residency to some value
 	// SECTION: Throttler settings

@@ -27,22 +27,22 @@ union powerplay_platform_caps {
 
 //typedef struct quadratic_f32 QuadraticInt_t;
 struct quadratic_f32 {
-	float a;
-	float b;
-	float c;
+	float32_t a;
+	float32_t b;
+	float32_t c;
 };
 
 //typedef struct linear_f32 LinearInt_t;
 struct linear_f32 {
-	float m;
-	float b;
+	float32_t m;
+	float32_t b;
 };
 
 //typedef struct droop_f32 DroopInt_t;
 struct droop_f32 {
-	float a;
-	float b;
-	float c;
+	float32_t a;
+	float32_t b;
+	float32_t c;
 };
 
 enum PPT_THROTTLER_e {
