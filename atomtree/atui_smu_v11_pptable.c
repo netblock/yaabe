@@ -6,77 +6,6 @@ See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 #include "atomtree.h"
 #include "atui.h"
 
-PPATUI_FUNCIFY(struct, smu_powerplay_table_header, atui_nullstruct,
-	(bios->header, atom_common_table_header,
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		(ATUI_NODESCR)
-	),
-	(bios->table_revision, table_revision,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->table_size, table_size,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Driver portion table size. The offset to smc_pptable including header size"))
-	)
-)
-
-
-
-
-PPATUI_FUNCIFY(struct, quadratic_f32, atomtree_powerplaytable,
-	(bios->a, a (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, c (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->a, a (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, c (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	)
-)
-PPATUI_FUNCIFY(struct, linear_f32, atomtree_powerplaytable,
-	(bios->m, m (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->m, m (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	)
-)
-PPATUI_FUNCIFY(struct, droop_f32, atomtree_powerplaytable,
-	(bios->a, a (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, c (float),
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->a, a (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, b (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, c (raw),
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	)
-)
 PPATUI_FUNCIFY(struct, dpm_descriptor, atomtree_powerplaytable,
 	(bios->VoltageMode, VoltageMode,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1368,15 +1297,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_powerplay_table, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->platform_caps.platform_caps, platform_caps,
-		(ATUI_BIN, ATUI_BITFIELD, (
-			(powerplay,     0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(sbios_powersource, 1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(hardware_dc,   2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(BACO,          3,3, ATUI_DEC, (ATUI_NODESCR)),
-			(MACO,          4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(shadow_pstate, 5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(reserved,     31,6, ATUI_DEC, (ATUI_NODESCR))
-		)), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
+		(ATUI_NODESCR)
 	),
 	(bios->thermal_controller_type, thermal_controller_type,
 		(ATUI_DEC, ATUI_NOFANCY),

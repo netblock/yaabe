@@ -25,7 +25,7 @@
 #pragma pack(push, 1) // bios data must use byte alignment
 
 #define SMU_13_0_7_TABLE_FORMAT_REVISION 15
-
+/*
 // POWERPLAYTABLE::ulPlatformCaps
 #define SMU_13_0_7_PP_PLATFORM_CAP_POWERPLAY 0x1        // This cap indicates whether CCC need to show Powerplay page.
 #define SMU_13_0_7_PP_PLATFORM_CAP_SBIOSPOWERSOURCE 0x2 // This cap indicates whether power source notificaiton is done by SBIOS instead of OS.
@@ -33,7 +33,7 @@
 #define SMU_13_0_7_PP_PLATFORM_CAP_BACO 0x8             // This cap indicates whether board supports the BACO circuitry.
 #define SMU_13_0_7_PP_PLATFORM_CAP_MACO 0x10            // This cap indicates whether board supports the MACO circuitry.
 #define SMU_13_0_7_PP_PLATFORM_CAP_SHADOWPSTATE 0x20    // This cap indicates whether board supports the Shadow Pstate.
-
+*/
 // SMU_13_0_7_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_13_0_7_PP_THERMALCONTROLLER_NONE 0
 #define SMU_13_0_7_PP_THERMALCONTROLLER_NAVI21 28
@@ -178,7 +178,7 @@ struct smu_13_0_7_powerplay_table {
     uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
     uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
     uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80
-    uint32_t platform_caps;   // POWERPLAYABLE::ulPlatformCaps
+	union powerplay_platform_caps platform_caps;
 
     uint8_t  thermal_controller_type; // one of SMU_13_0_7_PP_THERMALCONTROLLER
 

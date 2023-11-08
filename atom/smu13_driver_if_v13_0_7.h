@@ -618,13 +618,6 @@ struct DpmDescriptor_t {
 	uint16_t Padding2;
 };
 
-enum PPT_THROTTLER_e {
-	PPT_THROTTLER_PPT0  = 0,
-	PPT_THROTTLER_PPT1  = 1,
-	PPT_THROTTLER_PPT2  = 2,
-	PPT_THROTTLER_PPT3  = 3,
-	PPT_THROTTLER_COUNT = 4,
-};
 
 enum TEMP_e {
 	TEMP_EDGE      = 0,

@@ -412,26 +412,6 @@ struct pp_i2c_controller_config {
 };
 */
 
-//typedef struct quadratic_f32 QuadraticInt_t;
-struct quadratic_f32 {
-	float a;
-	float b;
-	float c;
-};
-
-//typedef struct linear_f32 LinearInt_t;
-struct linear_f32 {
-	float m;
-	float b;
-};
-
-//typedef struct droop_f32 DroopInt_t;
-struct droop_f32 {
-	float a;
-	float b;
-	float c;
-};
-
 enum PPCLK_SMU11 {
 	PPCLK_SMU11_GFXCLK  = 0,
 	PPCLK_SMU11_VCLK    = 1,
@@ -496,7 +476,7 @@ struct smc_pptable {
 	union powerplay_feature_control_smu11 features;
 
 
-	uint16_t SocketPowerLimitAc0;
+	uint16_t SocketPowerLimitAc0; // TODO roll back into PPT_THROTTLER
 	uint16_t SocketPowerLimitAc0Tau;
 	uint16_t SocketPowerLimitAc1;
 	uint16_t SocketPowerLimitAc1Tau;

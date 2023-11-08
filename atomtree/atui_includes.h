@@ -132,9 +132,18 @@ PPATUI_HEADERIFY(gddr6_mr15);
 
 
 /***************************************************************************************/
-// atui_smu_v11_pptable.c / smu_v11_pptable.h , smu11_driver_if.h
+// atui_powerplay.c / powerplay.h
 
 PPATUI_HEADERIFY(smu_powerplay_table_header);
+PPATUI_HEADERIFY(powerplay_platform_caps);
+PPATUI_HEADERIFY(quadratic_f32);
+PPATUI_HEADERIFY(linear_f32);
+PPATUI_HEADERIFY(droop_f32);
+
+
+/***************************************************************************************/
+// atui_smu_v11_pptable.c / smu_v11_pptable.h , smu11_driver_if.h
+
 PPATUI_HEADERIFY(smu_11_0_powerplay_table);
 PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
 PPATUI_HEADERIFY(smu_11_0_overdrive_table);

@@ -24,35 +24,17 @@
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
-
-struct smu_powerplay_table_header {
-	struct atom_common_table_header header;
-	uint8_t  table_revision;
-	uint16_t table_size; // Driver portion table size. The offset to smc_pptable including header size
-};
-
 #define SMU_11_0_TABLE_FORMAT_REVISION 12
 
 // POWERPLAYTABLE::ulPlatformCaps
+/*
 #define SMU_11_0_PP_PLATFORM_CAP_POWERPLAY        0x1
 #define SMU_11_0_PP_PLATFORM_CAP_SBIOSPOWERSOURCE 0x2
 #define SMU_11_0_PP_PLATFORM_CAP_HARDWAREDC       0x4
 #define SMU_11_0_PP_PLATFORM_CAP_BACO             0x8
 #define SMU_11_0_PP_PLATFORM_CAP_MACO             0x10
 #define SMU_11_0_PP_PLATFORM_CAP_SHADOWPSTATE     0x20
-union smu11_platform_caps {
-	uint32_t platform_caps; 
-	struct { uint32_t
-		powerplay     :0-0 +1,
-		sbios_powersource :1-1 +1,
-		hardware_dc   :2-2 +1,
-		BACO          :3-3 +1,
-		MACO          :4-4 +1,
-		shadow_pstate :5-5 +1,
-		reserved     :31-6 +1;
-	};
-};
-
+*/
 
 // SMU_11_0_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_11_0_PP_THERMALCONTROLLER_NONE  0
@@ -162,7 +144,7 @@ struct smu_11_0_powerplay_table {
 	uint32_t golden_pp_id;
 	uint32_t golden_revision;
 	uint16_t format_id;
-	union smu11_platform_caps platform_caps;
+	union powerplay_platform_caps platform_caps;
 										
 	uint8_t  thermal_controller_type; // one of SMU_11_0_PP_THERMALCONTROLLER
 
