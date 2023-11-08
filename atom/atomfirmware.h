@@ -34,6 +34,7 @@
 
 #ifndef _ATOMFIRMWARE_H_
 #define _ATOMFIRMWARE_H_
+
 #include <stdint.h>
 #include "ddrmoderegisters.h"
 // see bottom for other includes
@@ -4666,4 +4667,5 @@ enum scratch_pre_os_mode_info_bits_def {
 #include "umctimings.h"
 
 #pragma pack(pop) // restore old packing
+
 #endif

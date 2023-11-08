@@ -607,9 +607,9 @@ enum FOPT_CALC_e:uint8_t {
 
 struct DpmDescriptor_t {
 	uint8_t  Padding;
-	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
-	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
-	enum FOPT_CALC_e CalculateFopt;     // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
+	uint8_t  SnapToDiscrete;        // 0 - Fine grained DPM, 1 - Discrete DPM
+	uint8_t  NumDiscreteLevels;     // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
+	enum FOPT_CALC_e CalculateFopt; // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
 	struct linear_f32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
 	uint32_t Padding3[3];
 	uint16_t Padding4;
@@ -815,8 +815,8 @@ struct OverDriveTable_t {
 	// Frequency changes
 	int16_t  GfxclkFmin; // MHz
 	int16_t  GfxclkFmax; // MHz
-	uint16_t UclkFmin;  // MHz
-	uint16_t UclkFmax;  // MHz
+	uint16_t UclkFmin;   // MHz
+	uint16_t UclkFmax;   // MHz
 
 	// PPT
 	int16_t  Ppt; // %
@@ -856,8 +856,8 @@ struct overdrivelimits_smu13 {
 
 	int16_t  GfxclkFmin; // MHz
 	int16_t  GfxclkFmax; // MHz
-	uint16_t UclkFmin;  // MHz
-	uint16_t UclkFmax;  // MHz
+	uint16_t UclkFmin;   // MHz
+	uint16_t UclkFmax;   // MHz
 
 	// PPT
 	int16_t  Ppt; // %
@@ -1199,7 +1199,7 @@ struct skutable_smu13 { // SECTION: Version
 	uint8_t  UseStrobeModeOptimizations; // Set to indicate that FW should use strobe mode optimizations
 	uint8_t  PaddingMem[3];
 
-	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13]; // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
+	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13];   // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
 	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
 
 	uint16_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
@@ -1419,7 +1419,7 @@ struct pptable_smu13 {
 
 
 /*
-#pragma pack(pop)
+//#pragma pack(pop)
 
 struct DriverSmuConfig_t {
 	// Time constant parameters for clock averages in ms
@@ -1673,4 +1673,5 @@ struct DpmActivityMonitorCoeffIntExternal_t {
 */
 
 #pragma pack(pop) // restore old packing
+
 #endif

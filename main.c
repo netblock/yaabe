@@ -22,7 +22,6 @@ int main(int argc, char8_t** argv) {
 	}
 
 	yaabe_gtk(&atree);
-
 	destroy_atomtree_with_gtk(atree, true);
 
 	return 0;

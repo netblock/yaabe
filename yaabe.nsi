@@ -3,12 +3,10 @@
 #!define nsis_stage_dir = nsis_stage #should be defined via command line
 
 !include MUI2.nsh
-#!include "FileFunc.nsh"
 
 Unicode True
 !define name "YAABE BIOS Editor"
 Name "${name}"
-#LicenseData LICENSE
 VIAddVersionKey /LANG=0 "ProductName" "${name}"
 VIAddVersionKey /LANG=0 "FileVersion" "${yaabe_version}"
 VIAddVersionKey /LANG=0 "ProductVersion" "${yaabe_version}"
@@ -88,4 +86,3 @@ Function RunShortcut
 	SetShellVarContext all
 	ExecShell "open" "$SMPrograms\$(^Name).lnk"
 FunctionEnd
-

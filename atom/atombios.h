@@ -26,10 +26,11 @@
 /*Portion I: Definitions  shared between VBIOS and Driver                   */
 /****************************************************************************/
 
-#pragma pack(push, 1) // BIOS data must use byte alignment
 
 #ifndef _ATOMBIOS_H
 #define _ATOMBIOS_H
+
+#pragma pack(push, 1) // BIOS data must use byte alignment
 
 #define ATOM_VERSION_MAJOR 0x00020000
 #define ATOM_VERSION_MINOR 0x00000002
@@ -585,7 +586,7 @@ typedef struct _COMPUTE_MEMORY_CLOCK_PARAM_PARAMETERS_V2_1
 	};
 	uint8_t  DllSpeed;                // Output
 	uint8_t  PostDiv;                 // Output
-	union{ 
+	union{
 		uint8_t  InputFlag;               // Input : ATOM_PLL_INPUT_FLAG_PLL_STROBE_MODE_EN: 1-StrobeMode, 0-PerformanceMode
 		uint8_t  PllCntlFlag;             // Output:
 	};
@@ -965,7 +966,7 @@ typedef struct _DIG_ENCODER_CONTROL_PARAMETERS_V3
 	uint16_t PixelClock;      // in 10KHz; for bios convenient
   ATOM_DIG_ENCODER_CONFIG_V3 acConfig;
 	uint8_t  Action;
-	union { 
+	union {
 		uint8_t  EncoderMode;
 								// =0: DP   encoder
 								// =1: LVDS encoder
@@ -1590,7 +1591,7 @@ typedef struct _EXTERNAL_ENCODER_CONTROL_PARAMETERS_V3
 	uint16_t ConnectorId;     // connector id, valid when ucAction = INIT
   };
 	uint8_t  Config;          // indicate which encoder, and DP link rate when ucAction = SETUP/ENABLE_OUTPUT
-	uint8_t  Action;          // 
+	uint8_t  Action;          //
 	uint8_t  EncoderMode;     // encoder mode, only used when ucAction = SETUP/ENABLE_OUTPUT
 	uint8_t  LaneNum;         // lane number, only used when ucAction = SETUP/ENABLE_OUTPUT
 	uint8_t  BitPerColor;     // output bit per color, only valid when ucAction = SETUP/ENABLE_OUTPUT and ucEncodeMode= DP
@@ -3613,8 +3614,8 @@ typedef struct _ATOM_GPU_VIRTUALIZATION_INFO_V2_1
 // Bit 9   = 0 - no DFP3 support= 1- DFP3 is supported
 // Bit 10= 0 - no DFP4 support= 1- DFP4 is supported
 // Bit 11= 0 - no DFP5 support= 1- DFP5 is supported
-// 
-// 
+//
+//
 
 /****************************************************************************/
 // Structure used in MclkSS_InfoTable
@@ -3757,7 +3758,7 @@ typedef union _ATOM_MODE_MISC_INFO_ACCESS
 
 // ATOM_MODE_TIMING data are exactly the same as VESA timing data.
 // Translation from EDID to ATOM_MODE_TIMING, use the following formula.
-// 
+//
 // VESA_HTOTAL         =   VESA_ACTIVE + 2* VESA_BORDER + VESA_BLANK
 // =   EDID_HA + EDID_HBL
 // VESA_HDISP         =   VESA_ACTIVE   =   EDID_HA
@@ -7167,7 +7168,7 @@ typedef struct _ENABLE_SCALER_PARAMETERS
 {
 	uint8_t  Scaler;            // ATOM_SCALER1, ATOM_SCALER2
 	uint8_t  Enable;            // ATOM_SCALER_DISABLE or ATOM_SCALER_CENTER or ATOM_SCALER_EXPANSION
-	uint8_t  TVStandard;        // 
+	uint8_t  TVStandard;        //
 	uint8_t  Padding[1];
 }ENABLE_SCALER_PARAMETERS;
 #define ENABLE_SCALER_PS_ALLOCATION ENABLE_SCALER_PARAMETERS
@@ -7677,15 +7678,15 @@ typedef   struct _ATOM_MEMORY_TIMING_FORMAT_V1
 	uint8_t  tAOND;               // tAOND
 	uint8_t  flag;                // flag to control memory timing calculation. bit0= control EMRS2 Infineon
 // //////////////////////////////////GDDR parameters///////////////////////////////////
-	uint8_t  tCCDL;               // 
-	uint8_t  tCRCRL;              // 
-	uint8_t  tCRCWL;              // 
-	uint8_t  tCKE;                // 
-	uint8_t  tCKRSE;              // 
-	uint8_t  tCKRSX;              // 
-	uint8_t  tFAW32;              // 
-	uint8_t  MR5lo;               // 
-	uint8_t  MR5hi;               // 
+	uint8_t  tCCDL;               //
+	uint8_t  tCRCRL;              //
+	uint8_t  tCRCWL;              //
+	uint8_t  tCKE;                //
+	uint8_t  tCKRSE;              //
+	uint8_t  tCKRSX;              //
+	uint8_t  tFAW32;              //
+	uint8_t  MR5lo;               //
+	uint8_t  MR5hi;               //
 	uint8_t  Terminator;
 }ATOM_MEMORY_TIMING_FORMAT_V1;
 
@@ -7713,17 +7714,17 @@ typedef   struct _ATOM_MEMORY_TIMING_FORMAT_V2
 	uint8_t  tAOND;                  // tAOND
 	uint8_t  flag;                  // flag to control memory timing calculation. bit0= control EMRS2 Infineon
 // //////////////////////////////////GDDR parameters///////////////////////////////////
-	uint8_t  tCCDL;                  // 
-	uint8_t  tCRCRL;                  // 
-	uint8_t  tCRCWL;                  // 
-	uint8_t  tCKE;                  // 
-	uint8_t  tCKRSE;                  // 
-	uint8_t  tCKRSX;                  // 
-	uint8_t  tFAW32;                  // 
-	uint8_t  MR4lo;               // 
-	uint8_t  MR4hi;               // 
-	uint8_t  MR5lo;               // 
-	uint8_t  MR5hi;               // 
+	uint8_t  tCCDL;                  //
+	uint8_t  tCRCRL;                  //
+	uint8_t  tCRCWL;                  //
+	uint8_t  tCKE;                  //
+	uint8_t  tCKRSE;                  //
+	uint8_t  tCKRSX;                  //
+	uint8_t  tFAW32;                  //
+	uint8_t  MR4lo;               //
+	uint8_t  MR4hi;               //
+	uint8_t  MR5lo;               //
+	uint8_t  MR5hi;               //
 	uint8_t  Terminator;
 	uint8_t  Reserved;
 }ATOM_MEMORY_TIMING_FORMAT_V2;
@@ -8760,7 +8761,7 @@ typedef struct  _COMPASSIONATE_DATA
 // = 2   - DACB
 // = 3   - External DAC
 // Others=TBD
-// 
+//
 
 typedef struct _ATOM_CONNECTOR_INFO
 {
@@ -9202,9 +9203,9 @@ typedef struct _ATOM_SERVICE_INFO
 	  ATOM_HOLE_INFO holes[1]; // array of hole descriptions
 }ATOM_SERVICE_INFO;
 
-// 
+//
 // AMD ACPI Table
-// 
+//
 
 typedef struct {
 	uint32_t Signature;

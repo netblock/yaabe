@@ -208,4 +208,5 @@ union gddr6_mr15 {
 
 
 #pragma pack(pop) // restore old packing
+
 #endif

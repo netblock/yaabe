@@ -9,13 +9,10 @@ ATUI_HEADERIFY()
 #ifndef ATUI_INCLUDES_H
 #define ATUI_INCLUDES_H
 
-
-
-
 //blank branch
 PPATUI_HEADERIFY(atui_nullstruct);
 
-/***************************************************************************************/
+/******************************************************************************/
 // atui_atomfirmware.c / atomfirmware.h
 
 PPATUI_HEADERIFY(atom_common_table_header);
@@ -110,7 +107,7 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 
 
-/***************************************************************************************/
+/******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
 
 PPATUI_HEADERIFY(gddr6_mr0);
@@ -131,7 +128,7 @@ PPATUI_HEADERIFY(gddr6_mr14);
 PPATUI_HEADERIFY(gddr6_mr15);
 
 
-/***************************************************************************************/
+/******************************************************************************/
 // atui_powerplay.c / powerplay.h
 
 PPATUI_HEADERIFY(smu_powerplay_table_header);
@@ -141,7 +138,7 @@ PPATUI_HEADERIFY(linear_f32);
 PPATUI_HEADERIFY(droop_f32);
 
 
-/***************************************************************************************/
+/******************************************************************************/
 // atui_smu_v11_pptable.c / smu_v11_pptable.h , smu11_driver_if.h
 
 PPATUI_HEADERIFY(smu_11_0_powerplay_table);
@@ -150,6 +147,5 @@ PPATUI_HEADERIFY(smu_11_0_overdrive_table);
 PPATUI_HEADERIFY(smc_pptable);
 PPATUI_HEADERIFY(powerplay_feature_control_smu11);
 PPATUI_HEADERIFY(pptable_i2c_u32_smu11);
-
 
 #endif

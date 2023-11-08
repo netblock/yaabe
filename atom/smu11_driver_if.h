@@ -1024,7 +1024,6 @@ typedef struct {
 
 */
 
-
-
 #pragma pack(pop) // restore old packing
+
 #endif

@@ -186,7 +186,7 @@ PPATUI_FUNCIFY(struct, atom_common_table_header, atui_nullstruct,
 
 
 PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
-		atom_tree, //THE atom_tree struct
+		atom_tree, // THE atom_tree struct
 
 	(bios->table_header, table_header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),

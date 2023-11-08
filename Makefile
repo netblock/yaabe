@@ -22,6 +22,8 @@ NSIS_STAGE_DIR = nsis_stage
 
 
 
+
+# real targets:
 .PHONY: all
 all: debug
 .PHONY: debug

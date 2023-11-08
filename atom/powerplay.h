@@ -1,5 +1,6 @@
 #ifndef POWERPLAY_H
 #define POWERPLAY_H
+#pragma pack(push, 1) // bios data must use byte alignment
 // common powerplay definitions
 // check bottom for includes
 
@@ -12,7 +13,7 @@ struct smu_powerplay_table_header {
 
 // SMU 11, 13
 union powerplay_platform_caps {
-	uint32_t platform_caps; 
+	uint32_t platform_caps;
 	struct { uint32_t
 		powerplay     :0-0 +1, // whether CCC needs to show Powerplay page.
 		sbios_powersource :1-1 +1, // whether power source notificaiton is done by SBIOS instead of OS.
@@ -53,6 +54,8 @@ enum PPT_THROTTLER_e {
 };
 
 // navi10
+#pragma pack(pop) // restore old packing
+
 #include <smu11_driver_if.h>
 #include <smu_v11_0_pptable.h>
 

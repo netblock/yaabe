@@ -93,8 +93,8 @@ struct atomtree_smu_info {
 
 	enum atomtree_common_version ver;
 	union {
-	    void* leaves; // nonzero if populated
-	    struct atom_common_table_header* table_header;
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
 
 		struct atom_smu_info_v3_1* v3_1;
 		struct atom_smu_info_v3_2* v3_2;
@@ -147,8 +147,8 @@ struct atomtree_gfx_info {
 
 	enum atomtree_common_version ver;
 	union {
-	    void* leaves; // nonzero if populated
-	    struct atom_common_table_header* table_header;
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
 
 		struct atom_gfx_info_v2_2* v2_2;
 		struct atom_gfx_info_v2_3* v2_3;
@@ -179,7 +179,7 @@ struct atomtree_powerplaytable {
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
-	    struct atom_common_table_header* table_header;
+		struct atom_common_table_header* table_header;
 		struct pp_common_table_header* pphead;
 
 		struct smu_11_0_powerplay_table* s11;
@@ -401,8 +401,8 @@ struct atomtree_voltageobject_info {
 	struct atomtree_voltageobject_info* dot;
 	struct atomtree_master_datatable_v2_1* dotdot;
 	union {
-	    void* leaves; // nonzero if populated
-	    struct atom_common_table_header* table_header;
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
 	};
 
 	enum atomtree_common_version ver;
@@ -414,8 +414,8 @@ struct atomtree_voltageobject_info {
 struct atomtree_sw_datatable {
 	enum atomtree_common_version ver; // meh
 	union {
-	    void* leaves; // nonzero if populated
-	    struct atom_common_table_header* table_header;
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
 	};
 };
 
@@ -423,7 +423,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_master_datatable_v2_1* dot;
 	struct atom_tree* dotdot;
 	union {
-	    struct atom_common_table_header* table_header;
+		struct atom_common_table_header* table_header;
 		struct atom_master_data_table_v2_1* leaves; // nonzero if populated
 	};
 	enum atomtree_common_version ver;
@@ -473,6 +473,5 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_sw_datatable sw_datatable33;
 	struct atomtree_sw_datatable sw_datatable34;
 };
-
 
 #endif

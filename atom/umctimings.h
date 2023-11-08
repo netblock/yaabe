@@ -58,7 +58,7 @@ union DRAMTiming4 {
 		tFAW   :6-0 +1,
 		rsvd0  :7-7 +1,
 		t32AW :16-8 +1,
-		rsvd1 :31-17 +1; //1, tFAWSLR:6, 1, tFAWDLR:6, 1
+		rsvd1 :31-17 +1; // 1, tFAWSLR:6, 1, tFAWDLR:6, 1
 	};
 };
 
@@ -391,9 +391,6 @@ union ChanPipeDly {
 
 
 
-
-
-
 struct UMCCTRL_MISC2 {
 	union gddr6_mr5 gddr6_mr5;
 	uint16_t reserved;
@@ -449,4 +446,5 @@ struct umc_block_navi1_timings {
 };
 
 #pragma pack(pop) // restore old packing
+
 #endif

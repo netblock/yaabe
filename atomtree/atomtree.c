@@ -614,7 +614,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 						),
 						ATUI_MAKE_BRANCH(smc_pptable,
 							NULL, &(ppt->v12_0->smc_pptable),
-							num_smc_pptable_kids, atui_smc_pptable_kids		
+							num_smc_pptable_kids, atui_smc_pptable_kids
 						),
 					};
 					const uint8_t smu11ppt_numkids = (
@@ -1890,7 +1890,7 @@ inline static atui_branch* atomtree_populate_datatables(
 			// utility, multimedia
 			atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
 			atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt,
-			// disp obj, indirect, umc, dce, 
+			// disp obj, indirect, umc, dce,
 			atui_vram_info,
 			// integrated, asic
 			atui_voltageobject_info

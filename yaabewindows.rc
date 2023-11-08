@@ -1,5 +1,4 @@
 #include <windows.h>
-#define STR(s) #s
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION VER_WINRC

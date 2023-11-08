@@ -89,7 +89,7 @@ struct _atui_leaf {
 		uint16_t* u16;
 		uint32_t* u32;
 		uint64_t* u64;
-		int8_t*   s8; // TODO ATUI signed 
+		int8_t*   s8; // TODO ATUI signed
 		int16_t*  s16;
 		int32_t*  s32;
 		int64_t*  s64;
@@ -144,8 +144,8 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
 void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val);
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf);
-double atui_leaf_get_val_fraction(atui_leaf* leaf);
 void atui_leaf_set_val_fraction(atui_leaf* leaf, double val);
+double atui_leaf_get_val_fraction(atui_leaf* leaf);
 
 // TODO stroll that considers 0b prefix?
 int64_t strtoll_2(const char8_t* str);
