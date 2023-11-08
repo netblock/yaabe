@@ -10,8 +10,6 @@ there.
 #ifndef _UMCTIMINGS_H_
 #define _UMCTIMINGS_H_
 
-#include "ddrmoderegisters.h"
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 union DRAMTiming1 {

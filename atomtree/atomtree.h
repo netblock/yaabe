@@ -42,8 +42,9 @@ struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
 static_assert(sizeof(struct _ninebytes) == 9);
 static_assert(sizeof(struct _tenbytes) == 10);
 
-
+#include "ddrmoderegisters.h"
 #include "atomfirmware.h"
+#include "umctimings.h"
 #include "powerplay.h"
 
 enum atomtree_common_version:uint16_t;

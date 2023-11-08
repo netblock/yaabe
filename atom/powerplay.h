@@ -56,7 +56,7 @@ enum PPT_THROTTLER_e {
 // navi10
 #pragma pack(pop) // restore old packing
 
-#include <smu11_driver_if.h>
-#include <smu_v11_0_pptable.h>
+#include "smu11_driver_if.h"
+#include "smu_v11_0_pptable.h"
 
 #endif
