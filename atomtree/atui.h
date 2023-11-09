@@ -53,6 +53,16 @@ enum atui_type:uint32_t {
 	ATUI_ARRAY    = 1<<10, // No technical difference from string
 	ATUI_INLINE   = 1<<11, // Pull in leaves from other tables
 	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
+	// TODO unrolled array for static arrays?
+	// follow dynarray, but instead of count, it's a preprocessor array with 
+	// enums that get valued and texted. possible pairs?
+	// start, ((val, name), (val, name))
+	// alternatively, use DYNARRAY, and compile the atui_*.c with
+	// and play with loop optimiser flags, like -funroll-loops
+
+	// TODO allow DYNARRAY to pull text from an ATUI enum?
+
+	// TODO ATUI_BRANCH for automatic branch pull-in?
 
 	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
 	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit

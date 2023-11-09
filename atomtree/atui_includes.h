@@ -145,7 +145,9 @@ PPATUI_HEADERIFY(smu_11_0_powerplay_table);
 PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
 PPATUI_HEADERIFY(smu_11_0_overdrive_table);
 PPATUI_HEADERIFY(smc_pptable);
-PPATUI_HEADERIFY(powerplay_feature_control_smu11);
+PPATUI_HEADERIFY(smu11_smcpptable_v3);
+PPATUI_HEADERIFY(smu11_smcpptable_v8);
+PPATUI_HEADERIFY(powerplay_feature_control_smu11_19);
+PPATUI_HEADERIFY(powerplay_feature_control_smu11_51);
 PPATUI_HEADERIFY(pptable_i2c_u32_smu11);
-
 #endif

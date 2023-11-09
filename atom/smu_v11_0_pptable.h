@@ -160,7 +160,7 @@ struct smu_11_0_powerplay_table {
 	struct smu_11_0_power_saving_clock_table power_saving_clock;
 	struct smu_11_0_overdrive_table overdrive_table;
 
-	struct smc_pptable smc_pptable; // PPTable_t in smu11_driver_if.h
+	struct smu11_smcpptable_v3 smc_pptable; // PPTable_t in smu11_driver_if.h
 };
 
 #pragma pack(pop) // restore old packing

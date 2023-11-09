@@ -2313,9 +2313,11 @@ enum I2cControllerName_e {
 	I2C_CONTROLLER_NAME_LIQUID_1   = 5,
 	I2C_CONTROLLER_NAME_PLX        = 6,
     I2C_CONTROLLER_NAME_FAN_INTAKE = 7,
+	I2C_CONTROLLER_NAME_SPARE      = 7, // Navi10
 
 	I2C_CONTROLLER_NAME_COUNT,
-	I2C_CONTROLLER_NAME_COUNT_SMU11  = 7,
+	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3 = 7,
+	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8 = 8,
 	I2C_CONTROLLER_NAME_COUNT_SMU13  = 8,
 };
 
@@ -2397,6 +2399,17 @@ struct i2ccontrollerconfig_u8 {
 	enum I2cControllerThrottler_u8 thermalthrottler;
 	enum I2cControllerProtocol_u8 i2cprotocol;
 	uint8_t  padding;
+};
+
+struct i2ccontrollerconfig_u8_mixed {
+	uint8_t  enabled;
+	enum I2cControllerSpeed_u8 speed;
+	uint8_t  padding[2];
+	uint32_t slaveaddress;
+	enum I2cControllerPort_u8 controllerport;
+	enum I2cControllerName_u8 controllername;
+	enum I2cControllerThrottler_u8 thermalthrottler;
+	enum I2cControllerProtocol_u8 i2cprotocol;
 };
 
 

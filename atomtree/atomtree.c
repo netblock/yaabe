@@ -591,9 +591,9 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 		switch(ppt->ver) { // TODO should we use atom or pp version?
 			case v14_0:
 			case v12_0:
-				if (generate_atui) {
+				if (generate_atui) { // TODO these versions are for vega20
 					atui_branch* atui_smc_pptable_kids[] = {
-						ATUI_MAKE_BRANCH(powerplay_feature_control_smu11,
+						ATUI_MAKE_BRANCH(powerplay_feature_control_smu11_19,
 							NULL,&(ppt->v12_0->smc_pptable.features),  0,NULL
 						),
 						ATUI_MAKE_BRANCH(pptable_i2c_u32_smu11,
@@ -612,7 +612,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 						ATUI_MAKE_BRANCH(smu_11_0_overdrive_table,
 							NULL,&(ppt->v12_0->overdrive_table),  0,NULL
 						),
-						ATUI_MAKE_BRANCH(smc_pptable,
+						ATUI_MAKE_BRANCH(smu11_smcpptable_v3,
 							NULL, &(ppt->v12_0->smc_pptable),
 							num_smc_pptable_kids, atui_smc_pptable_kids
 						),
