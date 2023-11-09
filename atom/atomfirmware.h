@@ -2396,7 +2396,7 @@ struct i2ccontrollerconfig_u8 {
 	enum I2cControllerName_u8 controllername;
 	enum I2cControllerThrottler_u8 thermalthrottler;
 	enum I2cControllerProtocol_u8 i2cprotocol;
-	enum I2cControllerSpeed_u8 i2cspeed;
+	uint8_t  padding;
 };
 
 
