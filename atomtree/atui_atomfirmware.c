@@ -3,7 +3,8 @@ AtomTree iterable interface for UIs.
 
 See ppatui.h for the metaprogramming and atui.h for general API.
 
-example:
+********************************************************************************
+pseudo-example:
 PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
 	(bios->namespace_var, UI display name,
 		(radix, fancy, optional_fancy_args),
@@ -18,34 +19,67 @@ PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
 		)
 	)
 )
+********************************************************************************
 
 WARNING: always have the last comma removed:
 	This is bad:  arg,arg,)
 	This is good: arg,arg)
 
+********************************************************************************
+********************************** Namespace ***********************************
+********************************************************************************
+
+There are two namespaces available, bios and atomtree.
+bios is the struct that the branch represents, straightforward.
+atomtree is an optional atomtree association that could be useful to pull in
+computed data; or even represent atomtree-computed data as leaves.
+
+declaration: 
+PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
+	...
+)
+
+instantiation:
+atui_branch* foba = ATUI_MAKE_BRANCH(name_of_bios_struct,
+	atomtree_pointer, bios_pointer,
+	number_of_child_branches, child_branches_array
+)
+
+********************************************************************************
+*********************************** Radix *************************************
+********************************************************************************
 
 If the table element should be viewed as a number, set a radix. radix is one of
 ATUI_NAN, ATUI_DEC, ATUI_HEX, ATUI_OCT, ATUI_BIN.
 If the element should be omitted from UI display, set radix to ATUI_NODISPLAY
 
 If the element should be viewed as a decimal fraction number set the radix to
-ATUI_FRAC. Note that this as a radix has limited compatibility, and will not
-work with bitfields.
+ATUI_FRAC. Note that this radix has limited compatibility, and will not work
+with bitfields or arrays.
 
+ATUI_SIGNED can signify if it's a signed number. This is usually automatically
+set based on the orignial C type.
 
-Fancy types:
-
+********************************************************************************
+********************************* Fancy Types: *********************************
+********************************************************************************
 ATUI_BITFIELD:
 If the element should be viewed in base 2, but also has bitfields for children:
 	(bios->namespace_var, UI display name,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(bitfield entry name, end_bit, start,  ATUI_DEC, (ATUI_NODESCR)),
-			(bitfield entry name, 7, 0,  ATUI_DEC, (ATUI_NODESCR)),
-			(bitfield entry name, 31,8,  ATUI_DEC, (ATUI_NODESCR)),
+			(bitfield entry name, 7, 0, ATUI_DEC, (ATUI_NODESCR)),
+			(bitfield entry name, 31,8, (ATUI_DEC|ATUI_SIGNED), (ATUI_NODESCR)),
 		)), (ATUI_NODESCR)
 	)
 
+The child leaves will be marked with _ATUI_BITCHILD in its type to aid UI
+layout.
 
+If a child is should be signed with Two's Complement, set ATUI_SIGNED in its
+radix alongside its main radix.
+
+********************************************************************************
 ATUI_ENUM:
 If the element should have a list of text-val pairs, an enum,
 First populate the atui enum:
@@ -60,7 +94,7 @@ And then for the atui table,
 		(ATUI_NODESCR)
 	)
 
-
+********************************************************************************
 ATUI_INLINE:
 If the element should reference a table, a atui_branch to inline,
 	(bios->namespace_var, UI display name,
@@ -71,7 +105,7 @@ If you want to import just the leaves of the table, as if it was the leaves of
 the branch you're constructing, set the radix to ATUI_NODISPLAY
 Also make sure the table is populated with an ATUI_FUNCIFY()
 
-
+********************************************************************************
 ATUI_STRING, ATUI_ARRAY:
 If the element is a string,
 	(bios->namespace_var, UI display name,
@@ -85,7 +119,7 @@ or otherwise an array,
 	),
 If it's an array, data will be represented in the radix of your choosing.
 
-
+********************************************************************************
 ATUI_DYNARRAY:
 	(doesnt_do_anything, leaf top UI name,
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
@@ -100,6 +134,7 @@ ATUI_DYNARRAY:
 		)),
 		(ATUI_NODESCR)
 	)
+
 If there is an array or number of leaves that is dynamically sized, especially
 if it has a dynamic allocation, ATUI_DYNARRY can pull in the boundaries from
 atomtree.
@@ -114,6 +149,8 @@ the relevant atom struct (bios->), or atomtree struct (atomtree->)
 Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
 
 (it is originally written for atom_umc_init_reg_block.)
+
+********************************************************************************
 
 
 

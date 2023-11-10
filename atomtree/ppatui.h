@@ -16,30 +16,39 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 //MAIN FUNCTIONS:
 
 // to create the allocator function. See atui.c for how it is used.
-#define PPATUI_FUNCIFY(atomtypeprefix, atomtypesuffix, atomtreestruct, ...) \
-	_PPATUI_FUNCIFY_HELPER(atomtypeprefix, atomtypesuffix, atomtreestruct \
+#define PPATUI_FUNCIFY(\
+		atom_type_prefix, atom_struct_name, atomtree_struct, ...) \
+\
+	_PPATUI_FUNCIFY_HELPER(atom_type_prefix, atom_struct_name, atomtree_struct \
 		 __VA_OPT__(,) __VA_ARGS__)
 
 
+
 // thing to call to instanciate an atui_branch
-#define ATUI_MAKE_BRANCH(atomstruct, atree, bios, num_br, import) \
-	_##atomstruct##_atui(&(struct atui_funcify_args){\
-		.atomtree=atree, .suggestbios=bios, \
-		.num_child_branches=num_br, .import_children=import\
+#define ATUI_MAKE_BRANCH(\
+		atom_struct_name, atomtree_pointer, bios_pointer,\
+		num_branches, branch_import_pointer) \
+\
+	_##atom_struct_name##_atui(&(struct atui_funcify_args) {\
+		.atomtree=atomtree_pointer,\
+		.suggestbios=bios_pointer,\
+		.num_child_branches=num_branches,\
+		.import_children=branch_import_pointer\
 	})
 
 
 
 // to define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...) \
+\
 	static const struct atui_enum _atui_enum_##name[] = \
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
-#define _PPATUI_EENTRY(o,estate) {.name=#estate, .val=estate},
+#define _PPATUI_EENTRY(o, enum_member) {.name=#enum_member, .val=enum_member},
 
 
 // to define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(atomstruct)\
-	atui_branch* PPATUI_FUNC_NAME(atomstruct) (struct atui_funcify_args* args)
+#define PPATUI_HEADERIFY(atom_struct)\
+	atui_branch* PPATUI_FUNC_NAME(atom_struct) (struct atui_funcify_args* args)
 
 
 // PPATUI function interface:

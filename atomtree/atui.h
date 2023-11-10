@@ -1,13 +1,32 @@
 /*
-ATUI, specifically atui.c is intended to as human-readable as possible,
-abstracting away the programatic consequences of allocation and setup.
-This means that ATUI's allocater/instanciator functions have a lot of
-that can be figured out at compile time.
+AtomTree iterable interface for UIs; chiefly for tree-view/directory interfaces.
+ATUI has two main components: branches and leaves. Branches describe the
+existence of structs and unions, and leaves describe the accessable elements of
+those structs/unions.
 
-For ATUI_FUNCIFY headers see atui_includes.h
-See ppatui.h for the metaprogramming.
+Leaves contain extra details about how a paticular element should be
+represented; for example what radix it is best viewed in, or has an associated
+enum, or is a member of a bitfield. Furthermore, there are meta leaves that
+describe or refer to other leaves.
 
-atui.h is about the main API for ATUI
+ATUI heavily relies on metaprogramming (currently C preprocessor) to abstract
+away the programatic consequences of the underlying allocation and setup.
+For how to use ATUI_FUNCIFY() see atui_atomfirmware.c
+For how to use ATUI_MAKE_BRANCH() See ppatui.h
+
+
+declaration: 
+PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
+    ...
+)
+
+instantiation:
+atui_branch* foba = ATUI_MAKE_BRANCH(name_of_bios_struct,
+	atomtree_pointer, bios_pointer,
+	number_of_child_branches, child_branches_array
+)
+
+atui.h is about the core atui interface
 */
 
 #ifndef ATUI_H
@@ -15,7 +34,6 @@ atui.h is about the main API for ATUI
 
 #include "ppatui.h"
 // see bottom for more includes
-
 
 
 // base struct for PPATUI_ENUMER() for ATUI_ENUM
@@ -53,6 +71,10 @@ enum atui_type:uint32_t {
 	ATUI_ARRAY    = 1<<10, // No technical difference from string
 	ATUI_INLINE   = 1<<11, // Pull in leaves from other tables
 	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
+
+	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
+	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit
+
 	// TODO unrolled array for static arrays?
 	// follow dynarray, but instead of count, it's a preprocessor array with 
 	// enums that get valued and texted. possible pairs?
@@ -63,9 +85,6 @@ enum atui_type:uint32_t {
 	// TODO allow DYNARRAY to pull text from an ATUI enum?
 
 	// TODO ATUI_BRANCH for automatic branch pull-in?
-
-	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
-	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit
 };
 
 typedef struct _atui_branch atui_branch;
@@ -99,7 +118,7 @@ struct _atui_leaf {
 		uint16_t* u16;
 		uint32_t* u32;
 		uint64_t* u64;
-		int8_t*   s8; // TODO ATUI signed
+		int8_t*   s8;
 		int16_t*  s16;
 		int32_t*  s32;
 		int64_t*  s64;

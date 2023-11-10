@@ -9,7 +9,7 @@ ATUI_HEADERIFY()
 #ifndef ATUI_INCLUDES_H
 #define ATUI_INCLUDES_H
 
-//blank branch
+// blank branch
 PPATUI_HEADERIFY(atui_nullstruct);
 
 /******************************************************************************/
