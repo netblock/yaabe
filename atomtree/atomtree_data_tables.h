@@ -160,13 +160,6 @@ struct atomtree_gfx_info {
 	};
 };
 
-#pragma pack(push, 1)
-struct pp_common_table_header {
-	struct atom_common_table_header table_header;
-	int8_t  table_revision;
-	uint16_t table_size;
-};
-#pragma pack(pop)
 
 struct atomtree_powerplaytable {
 	// What the fuck, AMD.
@@ -175,17 +168,19 @@ struct atomtree_powerplaytable {
 	struct atomtree_master_datatable_v2_1* dotdot;
 
 	//struct PPTable_t* smc_pptable;
-	//enum pp_rec_ver; // reccomend a path out of this hell
+	uint8_t* powerplay_table_ver; // as seen next to atom_common_table_header
+	//uint8_t* overdrive_table_ver; // hopefully unnecessary 
+	//uint8_t* powersaving_table_ver;
+	uint32_t* smc_pptable_ver; // as seen in driver_if*.h
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
-		struct pp_common_table_header* pphead;
+		struct smu_powerplay_table_header* pphead;
 
-		struct smu_11_0_powerplay_table* s11;
 		struct smu_11_0_powerplay_table* v12_0;
-		struct smu_11_0_powerplay_table* navi1;
 
+	};
 		/*
 		struct smu_13_0_0_powerplay_table* v15_0;
 		struct smu_13_0_0_powerplay_table* s1300;
@@ -202,7 +197,6 @@ struct atomtree_powerplaytable {
 
 		struct ATOM_Vega10_POWERPLAYTABLE* vega10;
 		*/
-	};
 /*
 consider include/pptable.h
 

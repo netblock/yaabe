@@ -20,7 +20,7 @@ PPATUI_FUNCIFY(struct, dpm_descriptor_smu11, atomtree_powerplaytable,
 		((LANG_ENG, "Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to # discrete levels used"))
 	),
 	(bios->padding, padding,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ConversionToAvfsClk, ConversionToAvfsClk,
 		(ATUI_NAN, ATUI_INLINE, linear_f32),
@@ -221,7 +221,7 @@ PPATUI_FUNCIFY(union, dpm_debug_override_smu11_51, atomtree_powerplaytable,
 )
 
 
-PPATUI_FUNCIFY(struct, pptable_i2c_u32_smu11, atomtree_powerplaytable,
+PPATUI_FUNCIFY(struct, smu11_pptable_v3_i2c_u32, atomtree_powerplaytable,
 	(bios->i2ccontroller_vr_gfx, i2ccontroller_vr_gfx,
 		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
 		(ATUI_NODESCR)
@@ -248,6 +248,40 @@ PPATUI_FUNCIFY(struct, pptable_i2c_u32_smu11, atomtree_powerplaytable,
 	),
 	(bios->i2ccontroller_plx, i2ccontroller_plx,
 		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
+		(ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, smu11_pptable_v8_i2c_u8mixed, atomtree_powerplaytable,
+	(bios->i2ccontroller_vr_gfx, i2ccontroller_vr_gfx,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_vr_soc, i2ccontroller_vr_soc,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_vr_vddci, i2ccontroller_vr_vddci,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_vr_mvdd, i2ccontroller_vr_mvdd,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_liquid_0, i2ccontroller_liquid_0,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_liquid_1, i2ccontroller_liquid_1,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_plx, i2ccontroller_plx,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+		(ATUI_NODESCR)
+	),
+	(bios->i2ccontroller_spare, i2ccontroller_spare,
+		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
 		(ATUI_NODESCR)
 	)
 )
@@ -355,7 +389,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->padding8_limits, padding8_limits,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->Tvr_SocLimit, Tvr_SocLimit,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -384,7 +418,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV"))
 	),
 	(bios->Padding234, Padding234,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 
@@ -541,7 +575,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 
 
 	(bios->Padding8_Clks, Padding8_Clks,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(NULL, Mp0clkFreq,
@@ -573,7 +607,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->Padding789, Padding789,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->CksVoltageOffset, CksVoltageOffset,
 		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
@@ -591,7 +625,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "0 = PLL, 1 = DFLL"))
 	),
 	(bios->Padding456, Padding456,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->LowestUclkReservedForUlv, LowestUclkReservedForUlv,
@@ -885,7 +919,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->padding16_Fan, padding16_Fan,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->FanGainVrMem0, FanGainVrMem0,
@@ -945,7 +979,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "External RDI connected to TMON (aka TEMP IN)"))
 	),
 	(bios->Padding8_V, Padding8_V,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->GfxMaxCurrent, GfxMaxCurrent,
@@ -957,7 +991,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "in Amps"))
 	),
 	(bios->Padding_TelemetryGfx, Padding_TelemetryGfx,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->SocMaxCurrent, SocMaxCurrent,
@@ -969,7 +1003,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "in Amps"))
 	),
 	(bios->Padding_TelemetrySoc, Padding_TelemetrySoc,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->Mem0MaxCurrent, Mem0MaxCurrent,
@@ -981,7 +1015,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "in Amps"))
 	),
 	(bios->Padding_TelemetryMem0, Padding_TelemetryMem0,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->Mem1MaxCurrent, Mem1MaxCurrent,
@@ -993,7 +1027,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "in Amps"))
 	),
 	(bios->Padding_TelemetryMem1, Padding_TelemetryMem1,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->AcDcGpio, AcDcGpio,
@@ -1044,7 +1078,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "GPIO number for LedPin[2]"))
 	),
 	(bios->padding8_4, padding8_4,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 
@@ -1339,7 +1373,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table, atomtree_powerplaytable,
+PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
+		atomtree_powerplaytable,
 	(bios->revision, revision,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Revision = SMU_11_0_PP_POWERSAVINGCLOCK_VERSION"))
@@ -1422,7 +1457,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table, atomtree_powerplaytabl
 			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT) // count
 		)), (ATUI_NODESCR)
 	),
-	(NULL, other PowerSavingClock Modes(min),
+	(NULL, other PowerSavingClock Modes (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PowerSavingClock Mode (min) [10 + %02u],
 					// if PPCLOCK_COUNT changes, please change this 10
@@ -1441,11 +1476,6 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table, atomtree_powerplaytabl
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	(bios->Version, Version,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(bios->features, features,
-		(ATUI_NAN, ATUI_INLINE, powerplay_feature_control_smu11_19),
-		(ATUI_NODESCR)
 	),
 
 	(NULL, SocketPowerLimitAc,
@@ -1591,7 +1621,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV"))
 	),
 	(bios->Padding234, Padding234,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->MinVoltageUlvGfx, MinVoltageUlvGfx,
@@ -1718,7 +1748,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->Padding8_Clks, Padding8_Clks,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(NULL, FreqTableUclkDiv,
@@ -1794,7 +1824,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "0 = PLL, 1 = DFLL"))
 	),
 	(bios->Padding456, Padding456,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->LowestUclkReservedForUlv, LowestUclkReservedForUlv,
@@ -1916,7 +1946,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->FanPadding, FanPadding,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->FanZeroRpmEnable, FanZeroRpmEnable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2214,7 +2244,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "in Amps"))
 	),
 	(bios->Padding_TelemetryMem1, Padding_TelemetryMem1,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->AcDcGpio, AcDcGpio,
@@ -2264,7 +2294,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "GPIO number for LedPin[2]"))
 	),
 	(bios->padding8_4, padding8_4,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->PllGfxclkSpreadEnabled, PllGfxclkSpreadEnabled,
@@ -2324,7 +2354,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power"))
 	),
 	(bios->BoardPadding, BoardPadding,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->MvddRatio, MvddRatio,
@@ -2342,7 +2372,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->Padding8_Loadline, Padding8_Loadline,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->BoardReserved, BoardReserved,
@@ -2379,7 +2409,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_powerplay_table, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->platform_caps.platform_caps, platform_caps,
-		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
+		(ATUI_NODISPLAY, ATUI_INLINE, powerplay_platform_caps),
 		(ATUI_NODESCR)
 	),
 	(bios->thermal_controller_type, thermal_controller_type,

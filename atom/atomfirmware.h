@@ -2389,7 +2389,6 @@ struct i2ccontrollerconfig_u32 {
 	enum I2cControllerProtocol_u32 i2cprotocol;
 	enum I2cControllerSpeed_u32 i2cspeed;
 };
-
 struct i2ccontrollerconfig_u8 {
 	uint8_t  enabled;
 	enum I2cControllerSpeed_u8 speed;
@@ -2400,7 +2399,6 @@ struct i2ccontrollerconfig_u8 {
 	enum I2cControllerProtocol_u8 i2cprotocol;
 	uint8_t  padding;
 };
-
 struct i2ccontrollerconfig_u8_mixed {
 	uint8_t  enabled;
 	enum I2cControllerSpeed_u8 speed;

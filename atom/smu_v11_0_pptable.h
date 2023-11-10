@@ -39,8 +39,10 @@
 // SMU_11_0_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_11_0_PP_THERMALCONTROLLER_NONE  0
 
-#define SMU_11_0_PP_OVERDRIVE_VERSION        0x0800
-#define SMU_11_0_PP_POWERSAVINGCLOCK_VERSION 0x0100
+//#define SMU_11_0_PP_OVERDRIVE_VERSION        0x0800
+//#define SMU_11_0_PP_POWERSAVINGCLOCK_VERSION 0x0100
+#define SMU_11_F12_OVERDRIVE_VERSION        0x80
+#define SMU_11_F12_POWERSAVINGCLOCK_VERSION 0x01
 
 enum SMU_11_0_ODFEATURE_CAP {
 	SMU_11_0_ODCAP_GFXCLK_LIMITS        = 0,
@@ -131,6 +133,12 @@ enum SMU_11_0_PPCLOCK_ID {
 };
 #define SMU_11_0_MAX_PPCLOCK 16 // Maximum Number of PP Clocks
 
+union smu11_smc_pptables {
+	uint32_t smc_pptable_ver;
+	struct smu11_smcpptable_v3 v3;
+	struct smu11_smcpptable_v8 v8;
+};
+
 struct smu_11_0_power_saving_clock_table {
 	uint8_t  revision;   // Revision = SMU_11_0_PP_POWERSAVINGCLOCK_VERSION
 	uint8_t  reserve[3]; // Zero filled field reserved for future use
@@ -160,8 +168,9 @@ struct smu_11_0_powerplay_table {
 	struct smu_11_0_power_saving_clock_table power_saving_clock;
 	struct smu_11_0_overdrive_table overdrive_table;
 
-	struct smu11_smcpptable_v3 smc_pptable; // PPTable_t in smu11_driver_if.h
+	union smu11_smc_pptables smc_pptable; // PPTable_t in the driver_if.h
 };
+
 
 #pragma pack(pop) // restore old packing
 

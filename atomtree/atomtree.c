@@ -585,47 +585,87 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 	ppt->dotdot = &(atree->data_table);
 
 	if (atree->data_table.leaves->powerplayinfo) {
+		atui_branch* atui_powersaving_table = NULL;
+		atui_branch* atui_overdrive_table = NULL;
+		atui_branch* atui_smc_pptable = NULL;
+		atui_branch* atui_feature_control = NULL;
+		atui_branch* atui_i2c = NULL;
+
+
+		ppt->powerplay_table_ver = &(ppt->pphead->table_revision);
+
 		// leaves is in a union with the structs.
 		ppt->leaves = atree->bios + atree->data_table.leaves->powerplayinfo;
 		ppt->ver = get_ver(ppt->table_header);
-		switch(ppt->ver) { // TODO should we use atom or pp version?
-			case v14_0:
+		switch(ppt->ver) {
 			case v12_0:
-				if (generate_atui) { // TODO these versions are for vega20
-					atui_branch* atui_smc_pptable_kids[] = {
-						ATUI_MAKE_BRANCH(powerplay_feature_control_smu11_19,
-							NULL,&(ppt->v12_0->smc_pptable.features),  0,NULL
-						),
-						ATUI_MAKE_BRANCH(pptable_i2c_u32_smu11,
-							NULL, &(ppt->v12_0->smc_pptable.I2cControllers),
-							0, NULL
-						),
-					};
-					const uint8_t num_smc_pptable_kids = (
-						sizeof(atui_smc_pptable_kids)/sizeof(atui_branch*)
+				ppt->smc_pptable_ver = &(
+					ppt->v12_0->smc_pptable.smc_pptable_ver
+				);
+
+				if (generate_atui) {
+					switch(*(ppt->smc_pptable_ver)) {
+						case 3:
+							atui_feature_control = ATUI_MAKE_BRANCH(
+								powerplay_feature_control_smu11_19,   NULL,
+								&(ppt->v12_0->smc_pptable.v3.features),
+								0,NULL
+							);
+							atui_i2c = ATUI_MAKE_BRANCH(
+								smu11_pptable_v3_i2c_u32,   NULL,
+								&(ppt->v12_0->smc_pptable.v3.I2cControllers),
+								0,NULL
+							);
+							atui_smc_pptable = ATUI_MAKE_BRANCH(
+								smu11_smcpptable_v3,
+								NULL, &(ppt->v12_0->smc_pptable),
+								2, NULL
+							);
+							break;
+						default:
+						case 8:
+							atui_feature_control = ATUI_MAKE_BRANCH(
+								powerplay_feature_control_smu11_51,   NULL,
+								&(ppt->v12_0->smc_pptable.v8.features),
+								0,NULL
+							);
+							atui_i2c = ATUI_MAKE_BRANCH(
+								smu11_pptable_v8_i2c_u8mixed,   NULL,
+								&(ppt->v12_0->smc_pptable.v8.I2cControllers),
+								0,NULL
+							);
+							atui_smc_pptable = ATUI_MAKE_BRANCH(
+								smu11_smcpptable_v8,
+								NULL, &(ppt->v12_0->smc_pptable),
+								2, NULL
+							);
+							break;
+					}
+					atui_smc_pptable->num_child_branches = 2;
+					atui_smc_pptable->child_branches[0] = atui_feature_control;
+					atui_smc_pptable->child_branches[1] = atui_i2c;
+
+					atui_powersaving_table = ATUI_MAKE_BRANCH(
+						smu_11_0_power_saving_clock_table,
+						NULL,&(ppt->v12_0->power_saving_clock),  0,NULL
+					);
+					atui_overdrive_table = ATUI_MAKE_BRANCH(
+						smu_11_0_overdrive_table,
+						NULL,&(ppt->v12_0->overdrive_table),  0,NULL
 					);
 
 					atui_branch* atui_smu11ppt_kids[] = {
-						ATUI_MAKE_BRANCH(smu_11_0_power_saving_clock_table,
-							NULL,&(ppt->v12_0->power_saving_clock),  0,NULL
-						),
-						ATUI_MAKE_BRANCH(smu_11_0_overdrive_table,
-							NULL,&(ppt->v12_0->overdrive_table),  0,NULL
-						),
-						ATUI_MAKE_BRANCH(smu11_smcpptable_v3,
-							NULL, &(ppt->v12_0->smc_pptable),
-							num_smc_pptable_kids, atui_smc_pptable_kids
-						),
+						atui_powersaving_table, atui_overdrive_table,
+						atui_smc_pptable
 					};
-					const uint8_t smu11ppt_numkids = (
-						sizeof(atui_smu11ppt_kids)/sizeof(atui_branch*)
-					);
-
 					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_powerplay_table,
-						NULL,ppt->v12_0,  smu11ppt_numkids,atui_smu11ppt_kids
+						NULL,ppt->v12_0,
+						sizeof(atui_smu11ppt_kids)/sizeof(atui_branch*),
+						atui_smu11ppt_kids
 					);
 				}
 				break;
+			//case v14_0:
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,

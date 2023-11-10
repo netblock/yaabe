@@ -23,11 +23,11 @@
 
 #ifndef SMU11_DRIVER_IF_H
 #define SMU11_DRIVER_IF_H
-// TODO what does the "Q2" in "mV (Q2)" mean? Q-notation? If so why 2 bits?
-// unless some of the SMU maintainers misunderstand the notation?
-// Where what they mean is naturally-wide Qm.0
+// TODO Q2 means Qm.2, where m fills the rest of the natural width
 // https://en.wikipedia.org/wiki/Q_(number_format)
-
+// AMD.RX5700XT.8192.190616_1.rom has:
+// MaxVoltageGfx/Soc at 0x12C0 and min at 0x0bb8
+// 0x12C0>>2 == 1200 and 0x0bb8>>2 == 750 which are sensible values.
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
@@ -384,8 +384,7 @@ struct dpm_descriptor_smu11 {
 
 
 
-struct pptable_i2c_u32_smu11 {
-// would roll this back up, but this is easier on ATUI
+struct smu11_pptable_v3_i2c_u32 {
 	struct i2ccontrollerconfig_u32 i2ccontroller_vr_gfx;
 	struct i2ccontrollerconfig_u32 i2ccontroller_vr_soc;
 	struct i2ccontrollerconfig_u32 i2ccontroller_vr_vddci;
@@ -394,14 +393,24 @@ struct pptable_i2c_u32_smu11 {
 	struct i2ccontrollerconfig_u32 i2ccontroller_liquid_1;
 	struct i2ccontrollerconfig_u32 i2ccontroller_plx;
 };
+struct smu11_pptable_v8_i2c_u8mixed {
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_gfx;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_soc;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_vddci;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_mvdd;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_liquid_0;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_liquid_1;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_plx;
+	struct i2ccontrollerconfig_u8_mixed i2ccontroller_spare;
+};
 
 
 
 struct smu11_smcpptable_v3 { // Vega20
 	// copied comments from smc_smu11_pptable_v8
-	uint32_t Version; //doesn't seem to be atom_common_table_header.
+	uint32_t Version;
 
-	union powerplay_feature_control_smu11_51 features;
+	union powerplay_feature_control_smu11_19 features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc0;
@@ -648,7 +657,12 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  FllGfxclkSpreadPercent; // Q4.4
 	uint16_t FllGfxclkSpreadFreq;    // kHz
 
-	struct pptable_i2c_u32_smu11 I2cControllers;
+	union {
+		struct i2ccontrollerconfig_u32 I2cControllers[
+			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3
+		];
+		struct smu11_pptable_v3_i2c_u32 i2c_unroll;
+	};
 
 	uint32_t BoardReserved[10];
 
@@ -659,7 +673,7 @@ struct smu11_smcpptable_v3 { // Vega20
 struct smu11_smcpptable_v8 { // Navi10
 	uint32_t Version;
 
-	union powerplay_feature_control_smu11_19 features;
+	union powerplay_feature_control_smu11_51 features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];
@@ -865,7 +879,12 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	// SECTION: BOARD PARAMETERS
 	// I2C Control
-	struct i2ccontrollerconfig_u8_mixed I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8];
+	union {
+		struct i2ccontrollerconfig_u8_mixed I2cControllers[
+			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+		];
+		struct smu11_pptable_v8_i2c_u8mixed i2c_unroll;
+	};
 
 	// SVI2 Board Parameters
 	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.

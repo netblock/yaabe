@@ -46,6 +46,20 @@ struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
 static_assert(sizeof(struct _ninebytes) == 9);
 static_assert(sizeof(struct _tenbytes) == 10);
 
+//TODO Q-notation type
+// https://en.wikipedia.org/wiki/Q_(number_format)
+// "Q2" means Qm.2 where m fills the rest of the natural width
+/*
+typedef union {
+	uint16_t raw;
+	struct { uint16_t
+		fraction :1-0 +1,
+		integer :16-2 +1;
+	};
+} uq14_2_t;
+*/
+
+
 #include "ddrmoderegisters.h"
 #include "atomfirmware.h"
 #include "umctimings.h"
