@@ -598,6 +598,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 		ppt->leaves = atree->bios + atree->data_table.leaves->powerplayinfo;
 		ppt->ver = get_ver(ppt->table_header);
 		switch(ppt->ver) {
+			case v14_0:
 			case v12_0:
 				ppt->smc_pptable_ver = &(
 					ppt->v12_0->smc_pptable.smc_pptable_ver
@@ -665,7 +666,6 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					);
 				}
 				break;
-			//case v14_0:
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,
