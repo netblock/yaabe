@@ -65,237 +65,305 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	struct atomtreestruct * atomtree = args->atomtree;\
 	atomtypeprefix atomtypesuffix * bios = args->suggestbios;\
 \
-	atui_branch* table = NULL; \
+	void* mallocvoid = NULL; /*temporary malloc partitioning pointer*/\
+	atui_branch* table = NULL;\
 \
-	uint16_t num_child_branches = 0;\
-	uint16_t max_num_child_branches = args->num_child_branches;\
-	atui_branch** import_children = args->import_children;\
+\
+	/* child branches: */\
+	uint16_t branches_i = 0;\
 	atui_branch** branches = NULL;\
+\
+	uint16_t max_num_child_branches = args->num_child_branches;\
+	uint16_t num_child_branches = 0;\
+	atui_branch** import_children = args->import_children;\
+	uint16_t importchildren_i = 0;\
+\
+	/* inliners: */\
 	atui_branch** inliners = NULL;\
 	uint16_t num_inliners = 0;\
+\
+	/* child branches + inliners: */\
 	uint16_t max_branch_count = 0;\
 	atui_branch** all_branches = NULL;\
+\
 \
 	atui_leaf* leaves = NULL;\
 	uint16_t total_num_leaves = 0;\
 	uint16_t max_alloced_leaves = 0;\
 \
-	void* scratch = NULL;\
-	uint16_t i = 0;\
-	uint16_t j = 0;\
 \
 \
 	if(_PPATUI_NUM_LEAVES(__VA_ARGS__)) {\
-		/*counts bitfield members*/ \
-		const atui_leaf leaves_init[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
+		/* counts bitfield members */\
+		uint16_t leavesinit_i = 0;\
+		const atui_leaf const leaves_init[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
 		const uint16_t leaves_init_num = sizeof(leaves_init)/sizeof(atui_leaf);\
 \
 \
-		const atui_branch* inliners_init[] = { \
+		atui_branch* const inliners_init[] = { \
 			_PPATUI_INLINE_BRANCHES(__VA_ARGS__) \
 		};\
 		const uint16_t inliners_init_num = \
 			sizeof(inliners_init)/sizeof(atui_branch*);\
 		num_inliners += inliners_init_num;\
 \
+\
 		/*the leaf patterns for the runtime dynamic arrays.*/\
-		const atui_leaf dynarray_patterns[] = {\
+		uint16_t leafpattern_i = 0;\
+		const atui_leaf const dynarray_patterns[] = {\
 			_PPATUI_DYNARRAY(ROLL, __VA_ARGS__)\
 		};\
 		/*bounds contains amount of leaves per pattern, and the dimensions of
 		the runtime array*/\
-		const struct dynarray_bounds dynarray_boundaries[] = {\
+		uint16_t dynentry_i = 0;\
+		const struct dynarray_bounds const dynarray_boundaries[] = {\
 			_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 		};\
 		const uint8_t num_dynarray_sets = \
 			sizeof(dynarray_boundaries) / sizeof(struct dynarray_bounds);\
 \
 		uint16_t dynarray_total_leaves = 0;\
-		j=0;\
-		for(i=0; i < num_dynarray_sets; i++) {\
+		dynentry_i = 0;\
+		leafpattern_i = 0;\
+		for (; dynentry_i < num_dynarray_sets; dynentry_i++) {\
 			dynarray_total_leaves += \
-				(dynarray_boundaries[i].dynarray_length * \
-				dynarray_boundaries[i].numleaves);\
-			if (dynarray_patterns[j].type & ATUI_INLINE) {\
-				num_inliners += dynarray_boundaries[i].dynarray_length;\
+				(dynarray_boundaries[dynentry_i].dynarray_length * \
+				dynarray_boundaries[dynentry_i].numleaves);\
+			if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {\
+				num_inliners +=\
+					dynarray_boundaries[dynentry_i].dynarray_length;\
 			}\
-			j += dynarray_boundaries[i].numleaves;\
+			leafpattern_i += dynarray_boundaries[dynentry_i].numleaves;\
 		}\
-\
 		max_alloced_leaves = leaves_init_num + dynarray_total_leaves;\
 \
-		scratch = malloc(\
+\
+		mallocvoid = malloc(\
 			sizeof(atui_branch)\
 			+ (max_num_child_branches + num_inliners) * sizeof(atui_branch*)\
 			+ leaves_init_num * sizeof(atui_leaf)\
 			+ dynarray_total_leaves * sizeof(atui_leaf)\
 		);\
-		table = scratch;\
-		scratch += sizeof(atui_branch);\
-		all_branches = scratch;\
+		table = mallocvoid;\
+		mallocvoid += sizeof(atui_branch);\
+		all_branches = mallocvoid;\
 		if (max_num_child_branches) {\
-			branches = scratch;\
-			scratch += max_num_child_branches * sizeof(atui_branch*);\
+			branches = mallocvoid;\
+			mallocvoid += max_num_child_branches * sizeof(atui_branch*);\
 		}\
 		if (num_inliners) {\
-			inliners = scratch;\
-			scratch += num_inliners * sizeof(atui_branch*);\
+			inliners = mallocvoid;\
+			mallocvoid += num_inliners * sizeof(atui_branch*);\
 		}\
-		leaves = scratch;\
+		leaves = mallocvoid;\
+		mallocvoid = NULL; /* we are done partitioning */\
 \
 \
 \
+		uint16_t inliners_i = 0;\
+		uint16_t leaves_i = 0;\
+		/*leavesinit_i = 0;*/\
+/* Handle all leaves, not just dynarray: */\
 		if (sizeof(dynarray_patterns)) {\
-			struct atui_funcify_args inl_args = {\
+			/* Due to dynarray, the amount of inliners overall might be greater
+			than the inliners_init amount:*/\
+			uint16_t inlinersinit_i = 0;\
+\
+			/*if there's more than one ATUI_DYNARRAY in this branch:*/\
+			dynentry_i = 0;\
+			/*array in the bios:*/\
+			void* dynarray_start_ptr = NULL;\
+			uint32_t dynarray_elementsize = 0;\
+			uint16_t dynarray_length=0, dynarray_biosarray_i=0;\
+			/*leaf playback for each element in the bios array:*/\
+			leafpattern_i = 0;\
+			uint16_t leafpattern_numleaves = 0;\
+			uint16_t leafpattern_start=0, leafpattern_end=0;\
+			atui_branch* (*dynarray_inline_function)(struct atui_funcify_args*)\
+				= NULL;\
+			struct atui_funcify_args dynarray_inline_function_args = {\
 				.atomtree=NULL, .suggestbios=NULL, .num_child_branches=0,\
 				.import_children=NULL\
 			};\
-			atui_branch* (*inl_func)(struct atui_funcify_args*) = NULL;\
-			void* dynar_pos = NULL;\
-			uint16_t init_i=0, leaves_i=0;\
-			uint32_t dynar_elementsize = 0;\
-			uint16_t dynar_len=0, dynar_i=0;\
-			uint16_t dynentry_i=0;\
-			uint16_t dynpat_i=0, pat_numleaves=0, pat_start=0, pat_end=0;\
-			uint16_t inliners_i=0, inlinit_i=0;\
 \
-			for(init_i=0; init_i < leaves_init_num; init_i++) {\
+			leavesinit_i = 0;\
+			for (;leavesinit_i < leaves_init_num; leavesinit_i++) {\
 \
-				if (leaves_init[init_i].type & ATUI_DYNARRAY) {\
-					dynar_len = \
+				if (leaves_init[leavesinit_i].type & ATUI_DYNARRAY) {\
+					dynarray_length = \
 						dynarray_boundaries[dynentry_i].dynarray_length;\
-					pat_numleaves = \
+					leafpattern_numleaves = \
 						dynarray_boundaries[dynentry_i].numleaves;\
-					dynar_pos = dynarray_boundaries[dynentry_i].array_start;\
-					dynar_elementsize = \
+					dynarray_start_ptr = \
+						dynarray_boundaries[dynentry_i].array_start;\
+					dynarray_elementsize = \
 						dynarray_boundaries[dynentry_i].element_size;\
 \
-					leaves[leaves_i] = leaves_init[init_i];\
+					leaves[leaves_i] = leaves_init[leavesinit_i];\
 					leaves[leaves_i].num_child_leaves = \
-						dynar_len*pat_numleaves;\
+						dynarray_length * leafpattern_numleaves;\
 					leaves_i++;\
 \
-					pat_end = pat_start + pat_numleaves;\
-					if(dynarray_patterns[dynpat_i].type & ATUI_INLINE) {\
-						dynpat_i = pat_start;\
-						inl_func = dynarray_boundaries[dynentry_i].inl_func;\
-						inl_args.suggestbios = dynar_pos;\
-						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
-							leaves[leaves_i] = dynarray_patterns[dynpat_i];\
+					leafpattern_end = \
+						leafpattern_start + leafpattern_numleaves;\
+					if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {\
+						leafpattern_i = leafpattern_start;\
+						dynarray_inline_function = \
+							dynarray_boundaries[dynentry_i]\
+								.dynarray_inline_function;\
+						dynarray_inline_function_args.suggestbios = \
+							dynarray_start_ptr;\
+						dynarray_biosarray_i = 0;\
+						while (dynarray_biosarray_i < dynarray_length) {\
+							leaves[leaves_i] = \
+								dynarray_patterns[leafpattern_i];\
 							leaves[leaves_i].inline_branch = \
 								&(inliners[inliners_i]);\
 							/* if the name has a index number pattern: */\
 							sprintf(leaves[leaves_i].name,\
 								leaves[leaves_i].origname,\
-								dynar_i\
+								dynarray_biosarray_i\
 							);\
-							inliners[inliners_i] = inl_func(&inl_args);\
+							inliners[inliners_i] = dynarray_inline_function(\
+								&dynarray_inline_function_args\
+							);\
 							inliners_i++;\
 							leaves_i++;\
-							inl_args.suggestbios += dynar_elementsize;\
+							dynarray_inline_function_args.suggestbios += \
+								dynarray_elementsize;\
+							dynarray_biosarray_i++;\
 						}\
-					} else { /* if dynarray. Does bitfield*/\
-						for(dynar_i=0; dynar_i < dynar_len; dynar_i++) {\
-							dynpat_i = pat_start;\
-							for(; dynpat_i<pat_end; dynpat_i++){\
-								leaves[leaves_i] = dynarray_patterns[dynpat_i];\
-								leaves[leaves_i].val = dynar_pos;\
+					} else { /* If dynarray: if not inline.  Does bitfield*/\
+						dynarray_biosarray_i = 0;\
+						while (dynarray_biosarray_i < dynarray_length) {\
+							leafpattern_i = leafpattern_start;\
+							while (leafpattern_i < leafpattern_end) {\
+								leaves[leaves_i] = \
+									dynarray_patterns[leafpattern_i];\
+								leaves[leaves_i].val = dynarray_start_ptr;\
 								leaves_i++;\
+								leafpattern_i++;\
 							}\
-							/* if the name has a index number pattern: */\
-							sprintf(leaves[leaves_i-pat_numleaves].name,\
-								leaves[leaves_i-pat_numleaves].origname,\
-								dynar_i\
+							/* If the name has a index number pattern: */\
+							sprintf(\
+								leaves[leaves_i-leafpattern_numleaves].name,\
+								leaves[leaves_i-leafpattern_numleaves]\
+									.origname,\
+								dynarray_biosarray_i\
 							);\
-							dynar_pos += dynar_elementsize;\
+							dynarray_start_ptr += dynarray_elementsize;\
+							dynarray_biosarray_i++;\
 						}\
 					}\
-					pat_start = pat_end;\
+					leafpattern_start = leafpattern_end;\
 					dynentry_i++;\
 \
-				} else { /*if not dynarray (still has dynarray siblings) */\
-					leaves[leaves_i] = leaves_init[init_i];\
-					if (leaves_init[init_i].type & ATUI_INLINE) {\
+				} else { /* If not dynarray (still has dynarray siblings) */\
+					leaves[leaves_i] = leaves_init[leavesinit_i];\
+					if (leaves_init[leavesinit_i].type & ATUI_INLINE) {\
 						leaves[leaves_i].inline_branch = \
-							inliners + inliners_i;\
-						inliners[inliners_i] = \
-							(atui_branch*) inliners_init[inlinit_i];\
+							&(inliners[inliners_i]);\
+						inliners[inliners_i] = inliners_init[inlinersinit_i];\
 						inliners_i++;\
-						inlinit_i++;\
+						inlinersinit_i++;\
 					}\
 					leaves_i++;\
 				}\
 			}\
 			total_num_leaves = leaves_i;\
 \
-		} else if (inliners_init_num) { /* at all: no dynarray */\
-			uint16_t inliners_i=0;\
-			for(inliners_i=0; inliners_i < num_inliners; inliners_i++) {\
-				inliners[inliners_i] = (atui_branch*)inliners_init[inliners_i];\
-			}\
-			inliners_i=0;\
 \
-			j=0;\
-			for(i=0; i < leaves_init_num; i++){\
-				leaves[j] = leaves_init[i];\
-				if (leaves_init[i].type & ATUI_INLINE) {\
-					leaves[j].inline_branch = inliners + inliners_i;\
-					inliners[inliners_i] = \
-						(atui_branch*)inliners_init[inliners_i];\
+\
+/* Handle leaves if there's no dynarray at all: */\
+		} else if (inliners_init_num) {\
+			inliners_i = 0;\
+			for(; inliners_i < num_inliners; inliners_i++) {\
+				inliners[inliners_i] = inliners_init[inliners_i];\
+			}\
+\
+			inliners_i = 0;\
+			leaves_i = 0;\
+			leavesinit_i = 0;\
+			for (; leavesinit_i < leaves_init_num; leavesinit_i++){\
+				leaves[leaves_i] = leaves_init[leavesinit_i];\
+				if (leaves_init[leavesinit_i].type & ATUI_INLINE) {\
+					leaves[leaves_i].inline_branch = &(inliners[inliners_i]);\
+					inliners[inliners_i] = inliners_init[inliners_i];\
 					inliners_i++;\
 				}\
-				j++;\
+				leaves_i++;\
 			}\
-			total_num_leaves = j;\
-		} else { /* at all: no dynarray, no inline */\
-			j=0;\
-			for(i=0; i < leaves_init_num; i++){\
-				leaves[j] = leaves_init[i];\
-				j++;\
+			total_num_leaves = leaves_i;\
+\
+\
+\
+/* Handle leaves if there's no dynarray or inline at all: */\
+		} else {\
+			leaves_i=0;\
+			leavesinit_i=0;\
+			for (; leavesinit_i < leaves_init_num; leavesinit_i++){\
+				leaves[leaves_i] = leaves_init[leavesinit_i];\
+				leaves_i++;\
 			}\
-			total_num_leaves = j;\
+			total_num_leaves = leaves_i;\
 		}\
 \
-	} else { /* no leaves at all */\
-		scratch = malloc(\
+\
+\
+/* Handle if there's no leaves at all: */\
+	} else {\
+		mallocvoid = malloc(\
 			sizeof(atui_branch)\
 			+ (max_num_child_branches * sizeof(atui_branch*))\
-		); \
-		table = scratch;\
-		scratch = scratch + sizeof(atui_branch);\
-		all_branches = scratch;\
-		branches = scratch;\
+		);\
+		table = mallocvoid;\
+		mallocvoid = mallocvoid + sizeof(atui_branch);\
+		all_branches = mallocvoid;\
+		branches = mallocvoid;\
+		mallocvoid = NULL; /* we are done partitioning */\
 	}\
 \
+\
+\
 	if (max_num_child_branches) {\
-		j=0;\
+		branches_i = 0;\
+		importchildren_i = 0;\
 		if (import_children != NULL) {\
-			for (i=0; i<max_num_child_branches; i++) {\
-				if (import_children[i] != NULL) {\
-					branches[j] = import_children[i];\
-					j++;\
+			while (importchildren_i < max_num_child_branches) {\
+				if (import_children[importchildren_i] != NULL) {\
+					branches[branches_i] = import_children[importchildren_i];\
+					branches_i++;\
 				}\
+			importchildren_i++;\
 			}\
-			num_child_branches = j;\
+			num_child_branches = branches_i;\
 		}\
-		for(; j < max_num_child_branches; j++) {\
-			branches[j] = NULL;\
+		for (; branches_i < max_num_child_branches; branches_i++) {\
+			branches[branches_i] = NULL;\
 		}\
 	}\
+\
+\
 \
 	*table = (atui_branch) {\
 		.name=#atomtypesuffix, .varname=#atomtypesuffix,\
 		.description=NULL, .auxiliary=NULL,\
 \
-		.child_branches=branches, .num_child_branches=num_child_branches, \
-		.max_num_child_branches=max_num_child_branches,\
-		.inline_branches=inliners, .num_inline_branches=num_inliners, \
-		.max_num_inline_branches=num_inliners, \
-		.all_branches=all_branches, \
-		.max_branch_count=(max_num_child_branches + num_inliners),\
+		.child_branches = branches,\
+		.num_child_branches = num_child_branches, \
+		.max_num_child_branches = max_num_child_branches, \
 \
-		.leaves=(atui_leaf*)leaves, .leaf_count=total_num_leaves, \
-		.max_leaves=max_alloced_leaves, .atomleaves=bios, \
+		.inline_branches = inliners, \
+		.num_inline_branches = num_inliners, \
+		.max_num_inline_branches=num_inliners, \
+\
+		.all_branches=all_branches, \
+		.max_branch_count=(max_num_child_branches + num_inliners), \
+\
+		.leaves=(atui_leaf*)leaves, \
+		.leaf_count=total_num_leaves, \
+		.max_leaves=max_alloced_leaves, \
+		.atomleaves=bios, \
 	};\
 	return table;\
 }
@@ -601,21 +669,22 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
 	{\
 		.numleaves=1, .dynarray_length=dynsize, \
-		.array_start=start, .element_size=sizeof(start[0]), .inl_func=NULL,\
+		.array_start=start, .element_size=sizeof(start[0]),\
+		.dynarray_inline_function=NULL,\
 	},
 
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_INLINE(start, dynsize, inltable)\
 	{\
 		.numleaves=1, .dynarray_length=dynsize,\
 		.array_start=start, .element_size=sizeof(start[0]),\
-		.inl_func=PPATUI_FUNC_NAME(inltable),\
+		.dynarray_inline_function=PPATUI_FUNC_NAME(inltable),\
 	},
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_BITFIELD(start,dynsize, bitfields)\
 	{\
 		.numleaves= 1+ _ATUI_BITFIELD_NUMLEAVES(\
 			_PPATUI_UNPACK1(bitfields)),\
 		.dynarray_length=dynsize, .array_start=start,\
-		.element_size=sizeof(start[0]), .inl_func=NULL\
+		.element_size=sizeof(start[0]), .dynarray_inline_function=NULL\
 	},
 
 
