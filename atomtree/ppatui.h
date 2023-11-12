@@ -12,10 +12,9 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 #ifndef PPATUI_H
 #define PPATUI_H
 
+/******************************* MAIN FUNCTIONS *******************************/
 
-//MAIN FUNCTIONS:
-
-// to create the allocator function. See atui.c for how it is used.
+// To create the allocator function. See atui.c for how it is used.
 #define PPATUI_FUNCIFY(\
 		atom_type_prefix, atom_struct_name, atomtree_struct, ...)\
 \
@@ -24,7 +23,7 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 
 
 
-// thing to call to instanciate an atui_branch
+// Thing to call to instanciate an atui_branch
 #define ATUI_MAKE_BRANCH(\
 		atom_struct_name, atomtree_pointer, bios_pointer,\
 		num_branches, branch_import_pointer)\
@@ -40,15 +39,15 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 
 
 
-// to define an array of string-val pairs of an enum.
+// To define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...)\
 \
-	static const struct atui_enum _atui_enum_##name[] =\
+	static const struct atui_enum const _atui_enum_##name[] =\
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
 #define _PPATUI_EENTRY(o, enum_member) {.name=#enum_member, .val=enum_member},
 
 
-// to define the header entries for the aformentioned allocator functions.
+// To define the header entries for the aformentioned allocator functions.
 #define PPATUI_HEADERIFY(atom_struct)\
 	atui_branch* PPATUI_FUNC_NAME(atom_struct) (struct atui_funcify_args* args)
 
@@ -57,7 +56,7 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 #define PPATUI_FUNC_NAME(atomstruct)\
 	_##atomstruct##_atui
 
-/***************************** preprocessor hell *****************************/
+/***************************** PREPROCESSOR HELL *****************************/
 
 // main allocator function
 #define _PPATUI_FUNCIFY_HELPER(\
@@ -380,7 +379,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 
 
 
-/**** LEAF FANCY FUNCS ****/
+/****************************** LEAF FANCY FUNCS ******************************/
 /*
 The fancy funcions here are about populating the fancy UI representation flags
 for the leaves described in PPATUI_FUNCIFY().
@@ -388,12 +387,11 @@ That is, bitfield population, and enum and inline association.
 */
 
 
-// common guts and functions for Fancy.
+// Common guts and functions for Fancy.
 
 #define _PPATUI_UNPACK1(to_depack)  _PPATUI_UNPACK0 to_depack
 #define _PPATUI_UNPACK0(...) __VA_ARGS__
 
-// TODO these generics suck.
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
 	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64,\
 	uint8_t :8, uint16_t :16, uint32_t :32, uint64_t :64,\
@@ -457,6 +455,9 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
 	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM\
 	},
+// note the comma. The comma exists to trigger the existence of fancy_data
+//#define ATUI_NOFANCY ATUI_NOFANCY ,
+// needs to be defined after the enum atui_type; before causes the enum to break
 
 
 
@@ -490,7 +491,7 @@ That is, bitfield population, and enum and inline association.
 
 
 
-//ATUI_BITFIELD
+// ATUI_BITFIELD
 
 #define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)
 
@@ -517,7 +518,7 @@ That is, bitfield population, and enum and inline association.
 //TODO handle description
 #define _PPA_BFLEAF_HELPER2(\
 		parent_var,\
-		bfname, bit_end, bit_start, radix, descrdata)\
+		bfname, bit_end, bit_start, radix, description_data)\
 	{\
 		.name = #bfname,\
 		.origname = #bfname,\
@@ -552,7 +553,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_INBRANCH_HELPER1(_PPATUI_UNPACK0 leafdata)
 #define _PPATUI_INBRANCH_HELPER1(...)\
 	_PPATUI_INBRANCH_HELPER2(__VA_ARGS__)
-#define _PPATUI_INBRANCH_HELPER2(var, name, displaydata, descrdata)\
+#define _PPATUI_INBRANCH_HELPER2(var, name, displaydata, description_data)\
 	_PPATUI_INBRANCH_HELPER3(var, _PPATUI_UNPACK0 displaydata)
 #define _PPATUI_INBRANCH_HELPER3(...)\
 	_PPATUI_INBRANCH_HELPER4(__VA_ARGS__)
@@ -589,12 +590,14 @@ That is, bitfield population, and enum and inline association.
 		_PPATUI_FANCY_METALEAF\
 	},
 
-// the unpack the leaf, and its displaydata from their respective parentheses.
-// the variadic passthrough like _PPATUI_LEAF_HELPER1 executes the unpack.
+// Unpack the leaf, and its displaydata from their respective parentheses.
+// The variadic passthrough like _PPATUI_LEAF_HELPER1 executes the unpack.
 //
 // description_data gets moved to the left because fancy_data may not exist,
 // due to ATUI_NOFANCY. The alternative is to have each fancy function unpack
 // the display_data themselves, which might be more convoluted.
+// Another way is to do a preprocessor define of ATUI_NOFANCY; see its section
+// for more details
 #define _PPATUI_LEAF(unused_o, leafdata)\
 	_PPATUI_LEAF_HELPER1(_PPATUI_UNPACK0 leafdata)
 #define _PPATUI_LEAF_HELPER1(...)\
@@ -610,16 +613,14 @@ That is, bitfield population, and enum and inline association.
 		var, name, description_data, radix, fancytype, __VA_ARGS__\
 	)
 
-
-
-/**** LEAF FANCY FUNCS END ****/
+/**************************** LEAF FANCY FUNCS END ****************************/
 
 
 
 
-//ATUI_DYNARRAY stuff
+/**************************** ATUI_DYNARRAY STUFF *****************************/
 
-// go through the primary funcify leaves and find the ATUI_DINARRAY
+// Go through the primary funcify leaves and find the ATUI_DINARRAY
 #define _PPATUI_DYNAR_SERVICE(job, leafdata)\
 	_PPATUI_DYNAR_SVCHELPER1(job, _PPATUI_UNPACK0 leafdata)
 #define _PPATUI_DYNAR_SVCHELPER1(...)\
@@ -641,17 +642,17 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_DYNAR_SVCHELPER6(job, _PPATUI_DYNARR_UNPACK fancydata)
 
 // TODO differ unpacking of the leaf pattern to the jobs
-//unpack ATUI_DYNARRY's fancydata, and its leaf.
-//Also makes start and dynsize relative to the atomtree.
+// Unpack ATUI_DYNARRY's fancydata, and its leaf.
+// Also makes start and dynsize relative to the atomtree.
 #define _PPATUI_DYNARR_UNPACK(patternleaf, start_pointer, dynsize_var)\
 	_PPATUI_DYNARR_UNPACK_HELPER1(\
 		 start_pointer, dynsize_var, _PPATUI_UNPACK0 patternleaf\
 	)
 #define _PPATUI_DYNARR_UNPACK_HELPER1(...)\
 	_PPATUI_DYNARR_UNPACK_HELPER2(__VA_ARGS__)
-#define _PPATUI_DYNARR_UNPACK_HELPER2(sp,dv, var, name, dispdata, descrdata)\
+#define _PPATUI_DYNARR_UNPACK_HELPER2(sp,dv, var, name, dispdata, description_data)\
 	_PPATUI_DYNARR_UNPACK_HELPER3(\
-		sp, dv, var, name, descrdata, _PPATUI_UNPACK0 dispdata\
+		sp, dv, var, name, description_data, _PPATUI_UNPACK0 dispdata\
 	)
 #define _PPATUI_DYNARR_UNPACK_HELPER3(...)\
 	_PPATUI_DYNARR_UNPACK_HELPER4(__VA_ARGS__)
@@ -676,7 +677,7 @@ That is, bitfield population, and enum and inline association.
 		var, name, descr, radix,fancytype, __VA_ARGS__\
 	)
 
-// counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
+// Counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
 // the size of the dynamic array.
 #define _PPATUI_DYNAR_SVCHELPER7_BOUNDS(\
 		start,dynsize,\
@@ -694,7 +695,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_STRING(start, dynsize, ...)\
 	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
-//struct dynarray_bounds; see atui.h
+// struct dynarray_bounds; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
 	{\
 		.array_start = start,\
@@ -721,11 +722,10 @@ That is, bitfield population, and enum and inline association.
 		.dynarray_inline_function = NULL,\
 	},
 
+/************************** ATUI_DYNARRAY STUFF END ***************************/
 
 
 
-
-//ATUI_DYNARRAY stuff end
 
 
 // looper(config)(data) -> waterfall(data) ; where waterfall is like _1N1R256

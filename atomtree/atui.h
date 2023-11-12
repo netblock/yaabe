@@ -32,7 +32,6 @@ atui.h is about the core atui interface
 #ifndef ATUI_H
 #define ATUI_H
 
-#include "ppatui.h"
 // see bottom for more includes
 
 
@@ -213,8 +212,10 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	uint16_t dynarray_length; // the number of members to the dynamic array.
 
 	uint16_t numleaves; // number of leaves within the pattern.
-	atui_branch* (*inl_func)(struct atui_funcify_args*);
+	atui_branch* (*dynarray_inline_function)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
+
+	//const stuct atui_enum* enum_taglist; // optional enum for name sprintf'ing
 };
 
 struct atui_nullstruct;
@@ -222,6 +223,7 @@ struct atui_nullstruct;
 // relevant for that branch.
 
 
+#include "ppatui.h"
 #include "atui_includes.h"
 #include "atui_enums.h"
 
