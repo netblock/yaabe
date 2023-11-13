@@ -302,11 +302,12 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 /* Handle leaves if there's no dynarray or inline at all: */\
 		} else {\
-			leaves_i=0;\
-			leavesinit_i=0;\
-			for (; leavesinit_i < leaves_init_num; leavesinit_i++){\
+			leaves_i = 0;\
+			leavesinit_i = 0;\
+			while(leavesinit_i < leaves_init_num) {\
 				leaves[leaves_i] = leaves_init[leavesinit_i];\
 				leaves_i++;\
+				leavesinit_i++;\
 			}\
 			total_num_leaves = leaves_i;\
 		}\
@@ -331,7 +332,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	if (max_num_child_branches) {\
 		branches_i = 0;\
 		importchildren_i = 0;\
-		if (import_children != NULL) {\
+		if (import_children) {\
 			while (importchildren_i < max_num_child_branches) {\
 				if (import_children[importchildren_i] != NULL) {\
 					branches[branches_i] = import_children[importchildren_i];\
@@ -366,7 +367,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.all_branches = all_branches,\
 		.max_branch_count = (max_num_child_branches + num_inliners),\
 \
-		.leaves = (atui_leaf*)leaves,\
+		.leaves = leaves,\
 		.leaf_count = total_num_leaves,\
 		.max_leaves = max_alloced_leaves,\
 	};\
@@ -448,20 +449,21 @@ That is, bitfield population, and enum and inline association.
 
 
 
-//ATUI_NOFANCY
+// ATUI_NOFANCY
 
 #define _PPATUI_FANCY_ATUI_NOFANCY(\
 		var, name, description_data, radix, fancytype, ...)\
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
 	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM\
 	},
-// note the comma. The comma exists to trigger the existence of fancy_data
+
+// Note the comma. The comma exists to trigger the existence of fancy_data
 //#define ATUI_NOFANCY ATUI_NOFANCY ,
 // needs to be defined after the enum atui_type; before causes the enum to break
 
 
 
-//ATUI_ENUM
+// ATUI_ENUM
 
 #define _PPATUI_FANCY_ATUI_ENUM(\
 		var, name, description_data, radix, fancytype, enumname)\
@@ -473,13 +475,14 @@ That is, bitfield population, and enum and inline association.
 
 
 
-//ATUI_STRING
-//ATUI_ARRAY
+// ATUI_STRING
+// ATUI_ARRAY
 
 #define _PPATUI_FANCY_ATUI_STRING(\
 		var, name, description_data, radix, fancytype, ...)\
 	_PPATUI_FANCY_ATUI_ARRAY(\
-		var, name, description_data, radix, fancytype)
+		var, name, description_data, radix, fancytype\
+	)
 
 #define _PPATUI_FANCY_ATUI_ARRAY(\
 		var, name, description_data, radix, fancytype, ...)\
@@ -498,15 +501,15 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_BITFIELD(\
 		var, name, description_data, radix, fancytype, bitfielddata)\
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\
+	.bitfield_hi = _PPATUI_LEAF_BITNESS(var) - 1,\
 	.bitfield_lo = 0,\
-	.num_child_leaves = _ATUI_BITFIELD_NUMLEAVES bitfielddata,\
+	.num_child_leaves = ( _ATUI_BITFIELD_NUMLEAVES bitfielddata ),\
 	_PPATUI_FANCY_NOENUM\
 	},\
 	_PPATUI_BITFIELD_LEAVES(\
 		var, _PPATUI_UNPACK1(bitfielddata)\
 	)
-// close parent and start on inbred children.
+// Close parent and start on inbred children.
 // ('inbred' because because the bitfiled children also direct children to the
 // atui_branch)
 
@@ -515,7 +518,7 @@ That is, bitfield population, and enum and inline association.
 		parent_var, _PPATUI_UNPACK1(bfleaf)\
 	)
 #define _PPA_BFLEAF_HELPER1(...) _PPA_BFLEAF_HELPER2(__VA_ARGS__)
-//TODO handle description
+// TODO handle description
 #define _PPA_BFLEAF_HELPER2(\
 		parent_var,\
 		bfname, bit_end, bit_start, radix, description_data)\
@@ -539,7 +542,7 @@ That is, bitfield population, and enum and inline association.
 
 //ATUI_INLINE
 
-// the meat of ATUI_INLINE is handled in the funcify
+// The meat of ATUI_INLINE is handled in the funcify
 #define _PPATUI_FANCY_ATUI_INLINE(\
 		var, name, description_data, radix, fancytype, inlinebranch)\
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
@@ -548,7 +551,7 @@ That is, bitfield population, and enum and inline association.
 	},
 
 
-// go through the leaves, find the ATUI_INLINERs, and gather their branches
+// Go through the leaves, find the ATUI_INLINERs, and gather their branches
 #define _PPATUI_INBRANCH(m, leafdata)\
 	_PPATUI_INBRANCH_HELPER1(_PPATUI_UNPACK0 leafdata)
 #define _PPATUI_INBRANCH_HELPER1(...)\
@@ -608,7 +611,8 @@ That is, bitfield population, and enum and inline association.
 	)
 #define _PPATUI_LEAF_HELPER3(...)\
 	_PPATUI_LEAF_HELPER4(__VA_ARGS__)
-#define _PPATUI_LEAF_HELPER4(var, name, description_data, radix, fancytype, ...)\
+#define _PPATUI_LEAF_HELPER4(\
+		var, name, description_data, radix, fancytype, ...)\
 	_PPATUI_FANCY_##fancytype(\
 		var, name, description_data, radix, fancytype, __VA_ARGS__\
 	)
@@ -625,12 +629,20 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_DYNAR_SVCHELPER1(job, _PPATUI_UNPACK0 leafdata)
 #define _PPATUI_DYNAR_SVCHELPER1(...)\
 	_PPATUI_DYNAR_SVCHELPER2(__VA_ARGS__)
+// Move description_data to the left because fancydata may not exist due
+// to ATUI_NOFANCY:
 #define _PPATUI_DYNAR_SVCHELPER2(job, var, name, displaydata, description_data)\
-	_PPATUI_DYNAR_SVCHELPER3(job, _PPATUI_UNPACK0 displaydata)
+	_PPATUI_DYNAR_SVCHELPER3(\
+			job,   var, name, description_data,\
+			 _PPATUI_UNPACK0 displaydata\
+	)
 #define _PPATUI_DYNAR_SVCHELPER3(...)\
 	_PPATUI_DYNAR_SVCHELPER4(__VA_ARGS__)
-#define _PPATUI_DYNAR_SVCHELPER4(job, radix, fancytype, ...)\
-	_PPATUI_DYNAR_SVCHELPER5_##fancytype(job, __VA_ARGS__)
+#define _PPATUI_DYNAR_SVCHELPER4(\
+		job, var, name, description_data, radix, fancytype, ...)\
+	_PPATUI_DYNAR_SVCHELPER5_##fancytype(\
+			job, var, name, description_data, radix, __VA_ARGS__\
+	) // The variadic may contain the fancydata
 
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_NOFANCY(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_BITFIELD(...)
@@ -638,89 +650,68 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_INLINE(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_ARRAY(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_STRING(...)
-#define _PPATUI_DYNAR_SVCHELPER5_ATUI_DYNARRAY(job, fancydata)\
-	_PPATUI_DYNAR_SVCHELPER6(job, _PPATUI_DYNARR_UNPACK fancydata)
-
-// TODO differ unpacking of the leaf pattern to the jobs
-// Unpack ATUI_DYNARRY's fancydata, and its leaf.
-// Also makes start and dynsize relative to the atomtree.
-#define _PPATUI_DYNARR_UNPACK(patternleaf, start_pointer, dynsize_var)\
-	_PPATUI_DYNARR_UNPACK_HELPER1(\
-		 start_pointer, dynsize_var, _PPATUI_UNPACK0 patternleaf\
+#define _PPATUI_DYNAR_SVCHELPER5_ATUI_DYNARRAY(\
+		job, var, name, description_data, radix, fancydata)\
+	_PPATUI_DYNAR_SVCHELPER6(\
+		job, var, name, description_data, radix,\
+		_PPATUI_UNPACK0 fancydata\
 	)
-#define _PPATUI_DYNARR_UNPACK_HELPER1(...)\
-	_PPATUI_DYNARR_UNPACK_HELPER2(__VA_ARGS__)
-#define _PPATUI_DYNARR_UNPACK_HELPER2(sp,dv, var, name, dispdata, description_data)\
-	_PPATUI_DYNARR_UNPACK_HELPER3(\
-		sp, dv, var, name, description_data, _PPATUI_UNPACK0 dispdata\
-	)
-#define _PPATUI_DYNARR_UNPACK_HELPER3(...)\
-	_PPATUI_DYNARR_UNPACK_HELPER4(__VA_ARGS__)
-// unpacked overall (va args is the pattern's fancydata):
-#define _PPATUI_DYNARR_UNPACK_HELPER4(\
-		start_pointer, dynsize_var,\
-		pat_var, pat_name, pat_descr, pat_radix, pat_fancytype, ...)\
-	start_pointer, dynsize_var,\
-	pat_var, pat_name, pat_descr, pat_radix, pat_fancytype, __VA_ARGS__
-
 
 #define _PPATUI_DYNAR_SVCHELPER6(job, ...)\
 	_PPATUI_DYNAR_SVCHELPER7_##job(__VA_ARGS__)
+// var, name, description_data, radix, leaf_pattern, start, count
 
 
-//unrolls the pattern into leaves to copy.
-//var, name, descr, ... is for the pattern
+// Unrolls the pattern into leaves to copy.
 #define _PPATUI_DYNAR_SVCHELPER7_ROLL(\
-		start,dynsize,\
-		var, name, descr, radix, fancytype, ...)\
-	_PPATUI_FANCY_##fancytype(\
-		var, name, descr, radix,fancytype, __VA_ARGS__\
-	)
+		var, name, description_data, radix, leaf_pattern, start, count)\
+	_PPATUI_LEAF(unused_o, leaf_pattern)
 
-// Counts the ATUI_DYNARRAY's pattern leaves (mainly for bitfields), and
-// the size of the dynamic array.
+// Get the non-pattern metadata for the dynarray
+// Struct dynarray_bounds ; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER7_BOUNDS(\
-		start,dynsize,\
-		var, name, radix, descr, fancytype, ...)\
-	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_##fancytype(\
-		start, dynsize, __VA_ARGS__\
-	)
-
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_DYNARRAY(...) NULL
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_NOFANCY(start, dynsize, ...)\
-	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_ENUM(start, dynsize, ...)\
-	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_ARRAY(start, dynsize, ...)\
-	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_STRING(start, dynsize, ...)\
-	_PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, __VA_ARGS__)
-// struct dynarray_bounds; see atui.h
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ONELEAF(start, dynsize, ...)\
+		var, name, description_data, radix, leaf_pattern, start, count)\
 	{\
 		.array_start = start,\
 		.element_size = sizeof(start[0]),\
-		.dynarray_length = dynsize,\
-		.numleaves = 1,\
-		.dynarray_inline_function = NULL,\
+		.dynarray_length = count,\
+		.numleaves = _PPATUI_DYNAR_BOUNDS_JOBS(\
+			NUMLEAVES, _PPATUI_UNPACK0 leaf_pattern\
+		),\
+		.dynarray_inline_function = _PPATUI_DYNAR_BOUNDS_JOBS(\
+			INLINEFUNC, _PPATUI_UNPACK0 leaf_pattern\
+		),\
 	},
 
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_INLINE(start, dynsize, inltable)\
-	{\
-		.array_start = start,\
-		.element_size = sizeof(start[0]),\
-		.dynarray_length = dynsize,\
-		.numleaves = 1,\
-		.dynarray_inline_function = PPATUI_FUNC_NAME(inltable),\
-	},
-#define _PPATUI_DYNAR_SVCHELPER8_BOUNDS_ATUI_BITFIELD(start,dynsize, bitfields)\
-	{\
-		.array_start = start,\
-		.element_size = sizeof(start[0]),\
-		.dynarray_length = dynsize,\
-		.numleaves = 1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK1(bitfields)),\
-		.dynarray_inline_function = NULL,\
-	},
+
+
+#define _PPATUI_DYNAR_BOUNDS_JOBS(job, ...)\
+	_PPATUI_DYNAR_BOUNDS_JOBS_HELPER0(job, __VA_ARGS__)
+#define _PPATUI_DYNAR_BOUNDS_JOBS_HELPER0(\
+		job, var, name, displaydata, description_data)\
+	_PPATUI_DYNAR_BOUNDS_JOBS_HELPER1(job, _PPATUI_UNPACK0 displaydata)
+#define _PPATUI_DYNAR_BOUNDS_JOBS_HELPER1(job, ...)\
+	_PPATUI_DYNAR_BOUNDS_JOBS_HELPER2(job, __VA_ARGS__)
+#define _PPATUI_DYNAR_BOUNDS_JOBS_HELPER2(job, radix, fancytype, ...)\
+	_PPATUI_DYNAR_BOUNDS_HELPER3_##job##_##fancytype(__VA_ARGS__)
+
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_NOFANCY(...) 1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_ENUM(...)    1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_STRING(...)  1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_ARRAY(...)   1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_INLINE(...)  1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_DYNARRAY(...) 0
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_BITFIELD(bitfields)\
+	1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK0 bitfields )
+
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_NOFANCY(...)  NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_BITFIELD(...) NULL 
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ENUM(...)     NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_STRING(...)   NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ARRAY(...)    NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_DYNARRAY(...) NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_INLINE(inltable)\
+	 PPATUI_FUNC_NAME(inltable)
 
 /************************** ATUI_DYNARRAY STUFF END ***************************/
 
@@ -788,7 +779,7 @@ def ppatui_nloop_helper(max_entries=64, args="a,b,c,d", rec_depth=1):
 		print(s % (i+numargs, i))
 
 
-generic waterfall loop for functions with 1 unique argument and 1 common.
+Generic waterfall loop for functions with 1 unique argument and 1 common.
 
 The recurse/recusive depth is about the preprocessor "painting blue". That is,
 after the waterfall loop has been used, it becomes undefined within that

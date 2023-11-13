@@ -37,7 +37,7 @@ atui.h is about the core atui interface
 
 // base struct for PPATUI_ENUMER() for ATUI_ENUM
 struct atui_enum {
-	const char8_t* name;
+	const char8_t* const name;
 	const int64_t val;
 };
 
