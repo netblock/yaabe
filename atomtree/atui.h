@@ -212,10 +212,11 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	uint16_t dynarray_length; // the number of members to the dynamic array.
 
 	uint16_t numleaves; // number of leaves within the pattern.
-	atui_branch* (*dynarray_inline_function)(struct atui_funcify_args*);
+	atui_branch* (*dynarray_inline_func)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 
-	//const stuct atui_enum* enum_taglist; // optional enum for name sprintf'ing
+	// optional enum for name sprintf'ing
+	const struct atui_enum* const enum_taglist;
 };
 
 struct atui_nullstruct;

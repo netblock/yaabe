@@ -286,7 +286,7 @@ PPATUI_FUNCIFY(struct, smu11_pptable_v8_i2c_u8mixed, atomtree_powerplaytable,
 	)
 )
 
-/*
+/* does not account for dynarray's enum
 '<,'>s@\(u\?int[0-9]\+_t\s\+\)\([a-zA-Z0-9_]\+\)\[\([a-zA-Z0-9_]\+\)\]@(NULL, \2,\r\t\t(ATUI_NAN, ATUI_DYNARRAY, (\r\t\t\t(ATUI_NULL, \2 [%02u],\r\t\t\t\t(ATU
 I_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\r\t\t\t),\r\t\t\tbios->\2, \3 \/\/ start, count\r\t\t)), (ATUI_NODESCR)\r\t),@
 */
@@ -455,7 +455,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableGfx [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableVclk,
@@ -463,7 +464,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableVclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableDclk,
@@ -471,7 +473,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableDclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableEclk,
@@ -479,7 +482,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableEclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableEclk, NUM_ECLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableEclk, NUM_ECLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableSocclk,
@@ -487,7 +491,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableSocclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableUclk,
@@ -495,7 +500,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableUclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableFclk,
@@ -503,7 +509,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableFclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableFclk, NUM_FCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableFclk, NUM_FCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableDcefclk,
@@ -511,7 +518,9 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableDcefclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11 // start, count
+			// start, count
+			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11,
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTableDispclk,
@@ -519,7 +528,9 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTableDispclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11 // start, count
+			// start, count
+			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11,
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTablePixclk,
@@ -527,7 +538,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTablePixclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, FreqTablePhyclk,
@@ -535,7 +547,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, FreqTablePhyclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 
@@ -583,7 +596,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, Mp0clkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11 // start, count
+			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 	(NULL, Mp0DpmVoltage,
@@ -591,7 +605,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, Mp0DpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11 // start, count
+			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "mV(Q2)"))
 	),
 
@@ -641,7 +656,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, PcieGenSpeed [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "< 0:PciE-gen1 1:PciE-gen2 2: PciE-gen3 3:PciE-gen4"))
 	),
 	(NULL, PcieLaneCount,
@@ -649,7 +665,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, PcieLaneCount [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG, "< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
 	),
 	(NULL, LclkFreq,
@@ -657,7 +674,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, LclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->LclkFreq, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 
@@ -839,7 +857,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiLinkSpeed [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiLinkSpeed, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiLinkSpeed, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, XgmiLinkWidth,
@@ -847,7 +866,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiLinkWidth [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiLinkWidth, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiLinkWidth, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, XgmiFclkFreq,
@@ -855,7 +875,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiFclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiFclkFreq, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiFclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, XgmiUclkFreq,
@@ -863,7 +884,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiUclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiUclkFreq, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiUclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, XgmiSocclkFreq,
@@ -871,7 +893,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiSocclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiSocclkFreq, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiSocclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, XgmiSocVoltage,
@@ -879,7 +902,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 			(ATUI_NULL, XgmiSocVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiSocVoltage, NUM_XGMI_LEVELS_SMU11 // start, count
+			bios->XgmiSocVoltage, NUM_XGMI_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 
@@ -1234,7 +1258,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 				(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
 			),
 			(&(bios->cap[SMU_11_0_ODCAP_COUNT])), // start
-			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODCAP_COUNT) // count
+			(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT), // count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(bios->max[SMU_11_0_ODSETTING_GFXCLKFMAX], gfx clk fmax (max),
@@ -1358,7 +1383,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			(&(bios->max[SMU_11_0_ODSETTING_COUNT])), // start
-			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT) // count
+			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT), // count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, other OD settings (min),
@@ -1368,7 +1394,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			(&(bios->min[SMU_11_0_ODSETTING_COUNT])), // start
-			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT) // count
+			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT), // count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
 )
@@ -1454,7 +1481,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			(&(bios->max[SMU_11_0_PPCLOCK_COUNT])), // start
-			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT) // count
+			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT), // count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, other PowerSavingClock Modes (min),
@@ -1464,7 +1492,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			(&(bios->min[SMU_11_0_PPCLOCK_COUNT])), // start
-			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT) // count
+			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT), // count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
 )
@@ -1483,7 +1512,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, SocketPowerLimitAc (PPT %u),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT // start, count
+			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, SocketPowerLimitAcTau,
@@ -1491,7 +1521,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, SocketPowerLimitAcTau (PPT %u),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT // start, count
+			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, SocketPowerLimitDc,
@@ -1499,7 +1530,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, SocketPowerLimitDc (PPT %u),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT // start, count
+			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 	(NULL, SocketPowerLimitDcTau,
@@ -1507,7 +1539,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, SocketPowerLimitDcTau (PPT %u),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT // start, count
+			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 
@@ -1667,7 +1700,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableGfx [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableVclk,
@@ -1675,7 +1709,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableVclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableDclk,
@@ -1683,7 +1718,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableDclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableSocclk,
@@ -1691,7 +1727,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableSocclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableUclk,
@@ -1699,7 +1736,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableUclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableDcefclk,
@@ -1707,7 +1745,9 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableDcefclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11 // start, count
+			// start, count
+			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11,
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTableDispclk,
@@ -1715,7 +1755,9 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableDispclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11 // start, count
+			// start, count
+			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11,
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTablePixclk,
@@ -1723,7 +1765,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTablePixclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(NULL, FreqTablePhyclk,
@@ -1731,7 +1774,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTablePhyclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 	(bios->Paddingclks, Paddingclks,
@@ -1743,7 +1787,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, DcModeMaxFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcModeMaxFreq, SMU11_PPT8_PPCLK_COUNT // start, count
+			bios->DcModeMaxFreq, SMU11_PPT8_PPCLK_COUNT, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
 
@@ -1756,7 +1801,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, FreqTableUclkDiv [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU11 // start, count
+			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8"))
 	),
 
@@ -1765,7 +1811,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, Mp0clkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11 // start, count
+			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"in MHz"))
 	),
 	(NULL, Mp0DpmVoltage,
@@ -1773,7 +1820,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, Mp0DpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11 // start, count
+			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
 	(NULL, MemVddciVoltage,
@@ -1781,7 +1829,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, MemVddciVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemVddciVoltage, NUM_UCLK_DPM_LEVELS_SMU11 // start, count
+			bios->MemVddciVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
 	(NULL, MemMvddVoltage,
@@ -1789,7 +1838,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, MemMvddVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemMvddVoltage, NUM_UCLK_DPM_LEVELS_SMU11 // start, count
+			bios->MemMvddVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
 	(bios->GfxclkFgfxoffEntry, GfxclkFgfxoffEntry,
@@ -1851,7 +1901,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, PcieGenSpeed [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4"))
 	),
 	(NULL, PcieLaneCount,
@@ -1859,7 +1910,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, PcieLaneCount [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), ((LANG_ENG,"< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
 	),
 	(NULL, LclkFreq,
@@ -1867,7 +1919,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 			(ATUI_NULL, LclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->LclkFreq, NUM_LINK_LEVELS_SMU11 // start, count
+			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 

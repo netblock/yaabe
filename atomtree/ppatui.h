@@ -42,9 +42,10 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 // To define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...)\
 \
-	static const struct atui_enum const _atui_enum_##name[] =\
+	static const struct atui_enum const PPATUI_ENUM_NAME(name)[] =\
 		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
 #define _PPATUI_EENTRY(o, enum_member) {.name=#enum_member, .val=enum_member},
+#define _atui_enum_ATUI_NULL NULL
 
 
 // To define the header entries for the aformentioned allocator functions.
@@ -55,6 +56,10 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 // PPATUI function interface:
 #define PPATUI_FUNC_NAME(atomstruct)\
 	_##atomstruct##_atui
+
+//#define _atui_enum_ATUI_NULL NULL
+#define PPATUI_ENUM_NAME(enum_name)\
+	_atui_enum_##enum_name
 
 /***************************** PREPROCESSOR HELL *****************************/
 
@@ -182,25 +187,30 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 			uint16_t leafpattern_numleaves = 0;\
 			uint16_t leafpattern_start = 0;\
 			uint16_t leafpattern_end = 0;\
-			atui_branch* (*dynarray_inline_function)(struct atui_funcify_args*)\
+			atui_branch* (*dynarray_inline_func)(struct atui_funcify_args*)\
 				= NULL;\
-			struct atui_funcify_args dynarray_inline_function_args = {\
+			struct atui_funcify_args dynarray_inline_func_args = {\
 				.atomtree=NULL, .suggestbios=NULL, .import_children=NULL,\
 				.num_child_branches=0,\
 			};\
+			const struct atui_enum* dynarray_enum_taglist = NULL;\
 \
 			leavesinit_i = 0;\
 			for (;leavesinit_i < leaves_init_num; leavesinit_i++) {\
 \
 				if (leaves_init[leavesinit_i].type & ATUI_DYNARRAY) {\
-					dynarray_length =\
-						dynarray_boundaries[dynentry_i].dynarray_length;\
-					leafpattern_numleaves =\
-						dynarray_boundaries[dynentry_i].numleaves;\
 					dynarray_start_ptr =\
 						dynarray_boundaries[dynentry_i].array_start;\
 					dynarray_elementsize =\
 						dynarray_boundaries[dynentry_i].element_size;\
+					dynarray_length =\
+						dynarray_boundaries[dynentry_i].dynarray_length;\
+					leafpattern_numleaves =\
+						dynarray_boundaries[dynentry_i].numleaves;\
+					dynarray_inline_func =\
+						dynarray_boundaries[dynentry_i].dynarray_inline_func;\
+					dynarray_enum_taglist =\
+						dynarray_boundaries[dynentry_i].enum_taglist;\
 \
 					leaves[leaves_i] = leaves_init[leavesinit_i];\
 					leaves[leaves_i].num_child_leaves =\
@@ -209,12 +219,11 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 					leafpattern_end =\
 						leafpattern_start + leafpattern_numleaves;\
+\
+\
 					if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {\
 						leafpattern_i = leafpattern_start;\
-						dynarray_inline_function =\
-							dynarray_boundaries[dynentry_i]\
-								.dynarray_inline_function;\
-						dynarray_inline_function_args.suggestbios =\
+						dynarray_inline_func_args.suggestbios =\
 							dynarray_start_ptr;\
 						dynarray_biosarray_i = 0;\
 						while (dynarray_biosarray_i < dynarray_length) {\
@@ -222,17 +231,29 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 								dynarray_patterns[leafpattern_i];\
 							leaves[leaves_i].inline_branch =\
 								&(inliners[inliners_i]);\
-							/* if the name has a index number pattern: */\
-							sprintf(leaves[leaves_i].name,\
-								leaves[leaves_i].origname,\
-								dynarray_biosarray_i\
+							/* The name might have printf stuff baked: */\
+							if (dynarray_enum_taglist) {\
+								sprintf(leaves[leaves_i].name,\
+									leaves[leaves_i].origname,\
+									dynarray_enum_taglist[\
+										dynarray_biosarray_i\
+									].name,\
+									dynarray_biosarray_i\
+								);\
+							} else {\
+								sprintf(leaves[leaves_i].name,\
+									leaves[leaves_i].origname,\
+									dynarray_biosarray_i\
+								);\
+							}\
+\
+							inliners[inliners_i] = dynarray_inline_func(\
+								&dynarray_inline_func_args\
 							);\
-							inliners[inliners_i] = dynarray_inline_function(\
-								&dynarray_inline_function_args\
-							);\
+\
 							inliners_i++;\
 							leaves_i++;\
-							dynarray_inline_function_args.suggestbios +=\
+							dynarray_inline_func_args.suggestbios +=\
 								dynarray_elementsize;\
 							dynarray_biosarray_i++;\
 						}\
@@ -248,12 +269,28 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 								leafpattern_i++;\
 							}\
 							/* If the name has a index number pattern: */\
+							/* The name might have printf stuff baked: */\
+							if (dynarray_enum_taglist) {\
+								sprintf(\
+									leaves[\
+										leaves_i-leafpattern_numleaves\
+									].name,\
+									leaves[\
+										leaves_i-leafpattern_numleaves\
+									].origname,\
+									dynarray_enum_taglist[\
+										dynarray_biosarray_i\
+									].name,\
+									dynarray_biosarray_i\
+								);\
+							} else {\
 							sprintf(\
 								leaves[leaves_i-leafpattern_numleaves].name,\
 								leaves[leaves_i-leafpattern_numleaves]\
 									.origname,\
 								dynarray_biosarray_i\
 							);\
+							}\
 							dynarray_start_ptr += dynarray_elementsize;\
 							dynarray_biosarray_i++;\
 						}\
@@ -468,7 +505,7 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_ENUM(\
 		var, name, description_data, radix, fancytype, enumname)\
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.enum_options = _atui_enum_##enumname,\
+	.enum_options = PPATUI_ENUM_NAME(enumname),\
 	.num_enum_opts = (sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum)),\
 	_PPATUI_FANCY_NOBITFIELD(var)\
 	},
@@ -509,9 +546,7 @@ That is, bitfield population, and enum and inline association.
 	_PPATUI_BITFIELD_LEAVES(\
 		var, _PPATUI_UNPACK1(bitfielddata)\
 	)
-// Close parent and start on inbred children.
-// ('inbred' because because the bitfiled children also direct children to the
-// atui_branch)
+// Close parent and start on children.
 
 #define _PPA_BFLEAF(parent_var, bfleaf)\
 	_PPA_BFLEAF_HELPER1(\
@@ -659,18 +694,20 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_DYNAR_SVCHELPER6(job, ...)\
 	_PPATUI_DYNAR_SVCHELPER7_##job(__VA_ARGS__)
-// var, name, description_data, radix, leaf_pattern, start, count
+// var, name, description_data, radix, leaf_pattern, start, count, enum_name
 
 
 // Unrolls the pattern into leaves to copy.
 #define _PPATUI_DYNAR_SVCHELPER7_ROLL(\
-		var, name, description_data, radix, leaf_pattern, start, count)\
+		var, name, description_data, radix,\
+		leaf_pattern, start, count, enum_name)\
 	_PPATUI_LEAF(unused_o, leaf_pattern)
 
 // Get the non-pattern metadata for the dynarray
-// Struct dynarray_bounds ; see atui.h
+// struct dynarray_bounds ; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER7_BOUNDS(\
-		var, name, description_data, radix, leaf_pattern, start, count)\
+		var, name, description_data, radix,\
+		leaf_pattern, start, count, enum_name)\
 	{\
 		.array_start = start,\
 		.element_size = sizeof(start[0]),\
@@ -678,9 +715,10 @@ That is, bitfield population, and enum and inline association.
 		.numleaves = _PPATUI_DYNAR_BOUNDS_JOBS(\
 			NUMLEAVES, _PPATUI_UNPACK0 leaf_pattern\
 		),\
-		.dynarray_inline_function = _PPATUI_DYNAR_BOUNDS_JOBS(\
+		.dynarray_inline_func = _PPATUI_DYNAR_BOUNDS_JOBS(\
 			INLINEFUNC, _PPATUI_UNPACK0 leaf_pattern\
 		),\
+		.enum_taglist = PPATUI_ENUM_NAME(enum_name),\
 	},
 
 

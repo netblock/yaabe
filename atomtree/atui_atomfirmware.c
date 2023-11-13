@@ -130,7 +130,8 @@ ATUI_DYNARRAY:
 					(lang, description)
 				)
 			)
-			source->dynarray_start_pointer, source->dynarray_number_of_elements
+			source->dynarray_start_pointer, source->dynarray_number_of_elements,
+			enum_name
 		)),
 		(ATUI_NODESCR)
 	)
@@ -145,6 +146,11 @@ dynarray_start_pointer uis the pointer where to start the array within the bios,
 and dynarray_number_of_elements counts how long the array goes on for.
 Both dynarray_start_pointer and dynarray_number_of_elements can be either from
 the relevant atom struct (bios->), or atomtree struct (atomtree->)
+
+If an enum should tag along for UI/naming purposes, state an enum; otherwise
+state the enum name as ATUI_NULL . The enum will be walked through sequentually
+in the order as it is defined with PPATUI_ENUMER().
+Futhermore, make sure the enum has an associated PPATUI_ENUMER() definition.
 
 Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
 
@@ -3397,7 +3403,8 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 			),
 			bios->bit_byte_remap, // start
 			(sizeof(bios->bit_byte_remap)
-			/ sizeof(struct atom_gddr6_bit_byte_remap)) // count
+				/ sizeof(struct atom_gddr6_bit_byte_remap) // count,
+			), ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
 )
@@ -4149,8 +4156,9 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 					(umc_reg_rsvd,      31,25, ATUI_BIN, (ATUI_NODESCR))
 				)), (ATUI_NODESCR)
 			),
-			//start, count
-			atomtree->umc_reg_list, *(atomtree->umc_number_of_registers)
+			// start, count
+			atomtree->umc_reg_list, *(atomtree->umc_number_of_registers),
+			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
 	)
@@ -4186,7 +4194,8 @@ PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 			(bios->u32umc_reg_data, u32umc_reg_data [%02u],
 				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->u32umc_reg_data, *(atomtree->umc_reg_num) //start, count
+			bios->u32umc_reg_data, *(atomtree->umc_reg_num), // start, count
+			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
 	)
@@ -4249,7 +4258,8 @@ PPATUI_FUNCIFY(struct, atom_gpio_voltage_object_v4, atomtree_voltage_object_v4,
 				(ATUI_NODISPLAY, ATUI_INLINE, atom_voltage_gpio_map_lut),
 				(ATUI_NODESCR)
 			),
-			bios->voltage_gpio_lut, atomtree->lut_entries //start, count
+			bios->voltage_gpio_lut, atomtree->lut_entries, // start, count
+			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
 	)
@@ -4299,7 +4309,8 @@ PPATUI_FUNCIFY(struct, atom_i2c_voltage_object_v4, atomtree_voltage_object_v4,
 				(ATUI_NAN, ATUI_INLINE, atom_i2c_data_entry),
 				(ATUI_NODESCR)
 			),
-			bios->i2cdatalut, atomtree->lut_entries //start, count
+			bios->i2cdatalut, atomtree->lut_entries, // start, count
+			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
 	)
