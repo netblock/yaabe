@@ -89,7 +89,7 @@ enum atui_type:uint32_t {
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
-	char8_t name[40];
+	char8_t name[64];
 	const char8_t* origname;
 	const char8_t* varname;
 
