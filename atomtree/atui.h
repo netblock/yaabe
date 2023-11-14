@@ -112,18 +112,21 @@ struct _atui_leaf {
 	atui_branch** inline_branch;
 
 	union {
-		void*     val;
-		uint8_t*  u8;
-		uint16_t* u16;
-		uint32_t* u32;
-		uint64_t* u64;
-		int8_t*   s8;
-		int16_t*  s16;
-		int32_t*  s32;
-		int64_t*  s64;
-		_Float16* f16;
-		float*    f32;
-		double*   f64;
+		void*      val;
+
+		uint8_t*   u8;
+		uint16_t*  u16;
+		uint32_t*  u32;
+		uint64_t*  u64;
+
+		int8_t*    s8;
+		int16_t*   s16;
+		int32_t*   s32;
+		int64_t*   s64;
+
+		float16_t* f16;
+		float32_t* f32;
+		float64_t* f64;
 	};
 
 	void* auxiliary; // any extra info to hang off if necessary

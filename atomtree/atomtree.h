@@ -24,6 +24,8 @@ typedef uint8_t char8_t;
 typedef _Float16 float16_t;
 typedef _Float32 float32_t;
 typedef _Float64 float64_t;
+//typedef _Float128 float128_t; // currently unnecessary
+// AVX-512 does partial native 128-bit?
 
 // we're dealing with a byte-packed ABI.
 static_assert(CHAR_BIT == 8);
@@ -39,6 +41,7 @@ static_assert(sizeof(char8_t) == 1);
 static_assert(sizeof(float16_t) == 2);
 static_assert(sizeof(float32_t) == 4);
 static_assert(sizeof(float64_t) == 8);
+//static_assert(sizeof(float128_t) == 16);
 #pragma pack(push, 1)
 struct _ninebytes { uint32_t a; uint8_t b; float32_t c; };
 struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
