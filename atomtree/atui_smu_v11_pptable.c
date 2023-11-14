@@ -20,7 +20,7 @@ PPATUI_FUNCIFY(struct, dpm_descriptor_smu11, atui_nullstruct,
 		((LANG_ENG, "Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to # discrete levels used"))
 	),
 	(bios->padding, padding,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ConversionToAvfsClk, ConversionToAvfsClk,
 		(ATUI_NAN, ATUI_INLINE, linear_f32),
@@ -424,11 +424,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 
 	(bios->MinVoltageGfx, MinVoltageGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX"))
+		((LANG_ENG, "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX"))
 	),
 	(bios->MinVoltageSoc, MinVoltageSoc,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC"))
+		((LANG_ENG, "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC"))
 	),
 	(bios->MaxVoltageGfx, MaxVoltageGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1469,21 +1469,21 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 
 	(bios->MinVoltageUlvGfx, MinVoltageUlvGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode"))
+		((LANG_ENG, "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode"))
 	),
 	(bios->MinVoltageUlvSoc, MinVoltageUlvSoc,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode"))
+		((LANG_ENG, "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode"))
 	),
 
 
 	(bios->MinVoltageGfx, MinVoltageGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX"))
+		((LANG_ENG, "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX"))
 	),
 	(bios->MinVoltageSoc, MinVoltageSoc,
 		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC"))
+		((LANG_ENG, "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC"))
 	),
 	(bios->MaxVoltageGfx, MaxVoltageGfx,
 		(ATUI_DEC, ATUI_NOFANCY),
