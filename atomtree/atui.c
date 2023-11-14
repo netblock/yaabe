@@ -209,13 +209,13 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	// NAN DEC HEX OCT BIN FLOAT
 #ifdef C2X_COMPAT
 	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0", "%0"};
-	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "X", "e"};
-	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "X", "e"};
+	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "X", "G"};
+	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "X", "G"};
 	const uint8_t bases[] = {0, 10, 16, 8, 16, 10};
 #else
 	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0", "%0"};
-	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "b", "e"};
-	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "b", "e"};
+	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "b", "G"};
+	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "b", "G"};
 	const uint8_t bases[] = {0, 10, 16, 8, 2, 10};
 #endif
 	const char8_t* metaformat = "%s%u%s"; // amogus
