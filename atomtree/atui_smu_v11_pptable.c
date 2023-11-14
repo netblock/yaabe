@@ -552,40 +552,15 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		)), ((LANG_ENG, "In MHz"))
 	),
 
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_GFXCLK], DcModeMaxFreq (GFXCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_VCLK], DcModeMaxFreq (VCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_DCLK], DcModeMaxFreq (DCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_ECLK], DcModeMaxFreq (ECLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_SOCCLK], DcModeMaxFreq (SOCCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_UCLK], DcModeMaxFreq (UCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_DCEFCLK], DcModeMaxFreq (DCEFCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_DISPCLK], DcModeMaxFreq (DISPCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_PIXCLK], DcModeMaxFreq (PIXCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_PHYCLK], DcModeMaxFreq (PHYCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-	(bios->DcModeMaxFreq[SMU11_PPT3_PPCLK_FCLK], DcModeMaxFreq (FCLK),
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "In MHz"))
-	),
-
+    (NULL, DcModeMaxFreq,
+        (ATUI_NAN, ATUI_DYNARRAY, (
+            (ATUI_NULL, FreqTablePhyclk[%s],
+                (ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+            ),
+            bios->DcModeMaxFreq, SMU11_PPT3_PPCLK_COUNT, // start, count
+            SMU11_PPT3_PPCLK // enum
+        )), ((LANG_ENG, "In MHz"))
+    ),
 
 	(bios->Padding8_Clks, Padding8_Clks,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1209,49 +1184,17 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Total number of supported settings"))
 	),
-	(bios->cap[SMU_11_0_ODCAP_GFXCLK_LIMITS], gfxclk limits,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
+
+	(NULL, supported OD feature support flags,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, %s,
+				(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
+			),
+			bios->cap, SMU_11_0_ODCAP_COUNT, // start, count
+			 SMU_11_0_ODFEATURE_CAP // enum
+		)), (ATUI_NODESCR)
 	),
-	(bios->cap[SMU_11_0_ODCAP_GFXCLK_CURVE], gfxclk curve,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_UCLK_MAX], uclk max,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_POWER_LIMIT], power limit,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_FAN_ACOUSTIC_LIMIT], fan acoustic limit,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_FAN_SPEED_MIN], fan speed min,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_TEMPERATURE_FAN], temperature fan,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_TEMPERATURE_SYSTEM], temperature system,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_MEMORY_TIMING_TUNE], memory timing tune,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_FAN_ZERO_RPM_CONTROL], fan zero rpm control,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_AUTO_UV_ENGINE], auto uv engine,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_AUTO_OC_ENGINE], auto oc engine,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_AUTO_OC_MEMORY], auto oc memory,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(bios->cap[SMU_11_0_ODCAP_FAN_CURVE], fan curve,
-		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
-	),
-	(NULL, other OD feature support flags,
+	(NULL, undefined OD feature support flags,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, OD feature [14 + %02u],
 					// if CAP_COUNT changes, please change this 14
@@ -1262,123 +1205,30 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(bios->max[SMU_11_0_ODSETTING_GFXCLKFMAX], gfx clk fmax (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_GFXCLKFMAX], gfx clk fmax (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_GFXCLKFMIN], gfx clk fmin (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_GFXCLKFMIN], gfx clk fmin (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P1], vddgfx curve freq p1 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P1], vddgfx curve freq p1 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P1], vddgfx curve voltage p1 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P1], vddgfx curve voltage p1 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P2], vddgfx curve freq p2 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P2], vddgfx curve freq p2 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P2], vddgfx curve voltage p2 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P2], vddgfx curve voltage p2 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P3], vddgfx curve freq p3 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEFREQ_P3], vddgfx curve freq p3 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P3], vddgfx curve voltage p3 (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_VDDGFXCURVEVOLTAGE_P3], vddgfx curve voltage p3 (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_UCLKFMAX], uclk fmax (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_UCLKFMAX], uclk fmax (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_POWERPERCENTAGE], power percentage (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_POWERPERCENTAGE], power percentage (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_FANRPMMIN], fan rpm min (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_FANRPMMIN], fan rpm min (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_FANRPMACOUSTICLIMIT], fan rpm acoustic limit (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_FANRPMACOUSTICLIMIT], fan rpm acoustic limit (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_FANTARGETTEMPERATURE], fan target temperature (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_FANTARGETTEMPERATURE], fan target temperature (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_OPERATINGTEMPMAX], operating temp max (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_OPERATINGTEMPMAX], operating temp max (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_ACTIMING], ac timing (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_ACTIMING], ac timing (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_FAN_ZERO_RPM_CONTROL], fan zero rpm control (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_FAN_ZERO_RPM_CONTROL], fan zero rpm control (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_AUTOUVENGINE], auto uv engine (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_AUTOUVENGINE], auto uv engine (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_AUTOOCENGINE], auto oc engine (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_AUTOOCENGINE], auto oc engine (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_ODSETTING_AUTOOCMEMORY], auto oc memory (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_ODSETTING_AUTOOCMEMORY], auto oc memory (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(NULL, other OD settings (max),
+
+	(NULL, supported Overdrive settings (max),
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, OD setting  (max) [19 + %02u],
+			(ATUI_NULL, max: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->max, SMU_11_0_ODSETTING_COUNT, // start, count
+			SMU_11_0_ODSETTING_ID // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, supported Overdrive settings (min),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, min: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->min, SMU_11_0_ODSETTING_COUNT, // start, count
+			SMU_11_0_ODSETTING_ID // enum
+		)), (ATUI_NODESCR)
+	),
+
+
+	(NULL, undefined OD settings (max),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, max: [19 + %02u],
 					// if ODSETTING_COUNT changes, please change this 19
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
@@ -1387,9 +1237,9 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, other OD settings (min),
+	(NULL, undefined OD settings (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, OD setting (min) [19 + %02u],
+			(ATUI_NULL, min: [19 + %02u],
 					// if ODSETTING_COUNT changes, please change this 19
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
@@ -1414,69 +1264,29 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "power_saving_clock_count = SMU_11_0_PPCLOCK_COUNT"))
 	),
-	(bios->max[SMU_11_0_PPCLOCK_GFXCLK], GFXCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_GFXCLK], GFXCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_VCLK], VCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_VCLK], VCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_DCLK], DCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_DCLK], DCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_ECLK], ECLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_ECLK], ECLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_SOCCLK], SOCCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_SOCCLK], SOCCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_UCLK], UCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_UCLK], UCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_DCEFCLK], DCEFCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_DCEFCLK], DCEFCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_DISPCLK], DISPCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_DISPCLK], DISPCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_PIXCLK], PIXCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_PIXCLK], PIXCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->max[SMU_11_0_PPCLOCK_PHYCLK], PHYCLK (max),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->min[SMU_11_0_PPCLOCK_PHYCLK], PHYCLK (min),
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(NULL, other PowerSavingClock Modes (max),
+
+	(NULL, PowerSavingClock modes (max),
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, PowerSavingClock Mode (max) [10 + %02u],
+			(ATUI_NULL, max: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->max, SMU_11_0_PPCLOCK_COUNT, // start, count
+			SMU_11_0_PPCLOCK_ID // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, PowerSavingClock modes (min),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, min: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->min, SMU_11_0_PPCLOCK_COUNT, // start, count
+			SMU_11_0_PPCLOCK_ID // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, undefined PowerSavingClock Modes (max),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, max: [10 + %02u],
 					// if PPCLOCK_COUNT changes, please change this 10
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
@@ -1485,9 +1295,9 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, other PowerSavingClock Modes (min),
+	(NULL, undefined PowerSavingClock Modes (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, PowerSavingClock Mode (min) [10 + %02u],
+			(ATUI_NULL, min: [10 + %02u],
 					// if PPCLOCK_COUNT changes, please change this 10
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
@@ -1509,7 +1319,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 
 	(NULL, SocketPowerLimitAc,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SocketPowerLimitAc (PPT %u),
+			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT, // start, count
@@ -1518,7 +1328,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 	(NULL, SocketPowerLimitAcTau,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SocketPowerLimitAcTau (PPT %u),
+			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT, // start, count
@@ -1527,7 +1337,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 	(NULL, SocketPowerLimitDc,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SocketPowerLimitDc (PPT %u),
+			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT, // start, count
@@ -1536,7 +1346,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 	(NULL, SocketPowerLimitDcTau,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SocketPowerLimitDcTau (PPT %u),
+			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT, // start, count
