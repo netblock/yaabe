@@ -160,38 +160,58 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
 
 
 
+	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+\s+)([a-zA-Z0-9_]+))\[(a-zA-Z0-9_)+\];",
+		"(NULL, \g<5>,\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tbios->\g<5>, \g<6>,\n\t\t\tATUI_NULL\n\t\t)), (ATUI_NODESCR)\n\t),\n",s)
 
 
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
 	import re
-	s = re.sub("\n    ","\n\t", s)
-	s = re.sub("\n\t    ","\n\t\t", s)
-	s = re.sub("\n\t\t    ","\n\t\t\t", s)
+	#
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
 	s = re.sub("[ \t]+\n", "\n", s)
+	#
 	# self struct:
 	s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
+	#
+	# dynarrays part 1 (bulk of it):
+	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
+		"(NULL, \g<5>,\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tbios->\g<5>, \g<6>, // start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+	#
 	# embedded structs, create ATUI_INLINES from them:
-	s = re.sub("(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_NAN, ATUI_INLINE, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(\t+)(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \g<4>,\n\g<1>\t(ATUI_NAN, ATUI_INLINE, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
+	#
 	# embdedded enums; very similar to structs/unions:
-	s = re.sub("(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "(bios->\g<3>, \g<3>,\n\t\t(ATUI_DEC, ATUI_ENUM, \g<2>),\n\t\t(ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(\t+)(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \g<4>,\n\g<1>\t(ATUI_DEC, ATUI_ENUM, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
+	#
 	# integers: intn_t/uintn_t/charn_t;
-	s = re.sub("(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \g<3>,\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
+	#
 	# integer arrays, won't do embedded enums
-	s = re.sub("(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "\g<1>(bios->\g<3>, \g<3>,\n\g<1>\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\g<1>),", s)
+	#
 	# floats:
-	s = re.sub("(_Float16|_Float32|_Float64|float|double)\s+([a-zA-Z0-9_]+)(\s+)?;", "(bios->\g<2>, \g<2>,\n\t\t(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)\n\t),", s)
+	s = re.sub("(\s+)(float16_t|float32_t|float64_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \g<3>,\n\g<1>\t(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
+	#
 	# take care of //-based comments
 	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
 	s = re.sub("\),(\s+)?};", ")\n)", s)
+	#
+	# dynarrays part 2 (ATUI_NULL and counter for pattern):
+	s = re.sub("(\(ATUI_NAN, ATUI_DYNARRAY, \(\n\t+\()bios->[a-zA-Z0-9_]+, ([a-zA-Z0-9_]+),","\g<1>ATUI_NULL, \g<2> [%02u],",s)
+	#
 	print(s)
 
 
 def bitfield_to_atui(s):
 	import re
-	s = re.sub("\n    ","\n\t", s)
-	s = re.sub("\n\t    ","\n\t\t", s)
-	s = re.sub("\n\t\t    ","\n\t\t\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
+	s = re.sub("(\n\t*)    ","\g<1>\t", s)
 	s = re.sub("[ \t]+\n", "\n", s)
 	s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
 	s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
