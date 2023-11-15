@@ -53,10 +53,18 @@ enum PPT_THROTTLER_e {
 	PPT_THROTTLER_COUNT = 4,
 };
 
+enum POWER_SOURCE_e {
+	POWER_SOURCE_AC    = 0,
+	POWER_SOURCE_DC    = 1,
+	POWER_SOURCE_COUNT = 2,
+};
+
 // navi10
 #pragma pack(pop) // restore old packing
 
 #include "smu11_driver_if.h"
 #include "smu_v11_0_pptable.h"
+#include "smu13_driver_if_v13_0_7.h"
+#include "smu_v13_0_7_pptable.h"
 
 #endif

@@ -1,0 +1,2159 @@
+/*
+For smu_v13_0_7_pptable.h and smu13_driver_if_v13_0_7.h
+See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
+*/
+
+#include "atomtree.h"
+#include "atui.h"
+
+
+PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atui_nullstruct,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		((LANG_ENG, "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0"))
+	),
+	(bios->table_revision, table_revision,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For PLUM_BONITO, table_revision = 2"))
+	),
+	(bios->padding, padding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->table_size, table_size,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Driver portion table size. The offset to smc_pptable including header size"))
+	),
+	(bios->golden_pp_id, golden_pp_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PP Table ID on the Golden Data Base"))
+	),
+	(bios->golden_revision, golden_revision,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PP Table Revision on the Golden Data Base"))
+	),
+	(bios->format_id, format_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80"))
+	),
+	(bios->platform_caps, platform_caps,
+		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
+		(ATUI_NODESCR)
+	),
+
+	(bios->thermal_controller_type, thermal_controller_type,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "one of SMU_13_0_7_PP_THERMALCONTROLLER"))
+	),
+
+	(bios->small_power_limit1, small_power_limit1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->small_power_limit2, small_power_limit2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->boost_power_limit, boost_power_limit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For Gemini Board, when the slave adapter is in BACO mode, the master adapter will use this boost power limit instead of the default power limit to boost the power limit."))
+	),
+	(bios->software_shutdown_temp, software_shutdown_temp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->reserve, reserve,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	// struct smu_13_0_7_overdrive_table overdrive_table;
+
+	(bios->padding1, padding1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+
+	// struct smu13_smcpptable_v39 smc_pptable;
+)
+
+PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atui_nullstruct,
+	(bios->revision, revision,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION"))
+	),
+	(bios->reserve, reserve,
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Zero filled field reserved for future use"))
+	),
+	(bios->feature_count, feature_count,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Total number of supported features"))
+	),
+	(bios->setting_count, setting_count,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Total number of supported settings"))
+	),
+
+	(NULL, Supported OD feature support flags,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, %s,
+					// if CAP_COUNT changes, please change this 16
+				(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
+			),
+			bios->cap, // start
+			SMU_13_0_7_ODCAP_COUNT, // count
+			SMU_11_0_ODFEATURE_CAP // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Undefined OD feature support flags,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, OD feature [16 + %02u],
+					// if CAP_COUNT changes, please change this 16
+				(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
+			),
+			(&(bios->cap[SMU_13_0_7_ODCAP_COUNT])), // start
+			(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, Supported Overdrive settings (max),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, max: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->max, SMU_13_0_7_ODSETTING_COUNT, // start, count
+			SMU_13_0_7_ODSETTING_ID // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Supported Overdrive settings (min),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, min: %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->min, SMU_13_0_7_ODSETTING_COUNT, // start, count
+			SMU_13_0_7_ODSETTING_ID // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Undefined OD settings (max),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, max: [32 + %02u],
+					// if ODSETTING_COUNT changes, please change this 32
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			(&(bios->max[SMU_13_0_7_ODSETTING_COUNT])), // start
+			(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Undefined OD settings (min),
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, min: [32 + %02u],
+					// if ODSETTING_COUNT changes, please change this 32
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			(&(bios->min[SMU_13_0_7_ODSETTING_COUNT])), // start
+			(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, PowerMode feature settings,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, %s,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->pm_setting, SMU_13_0_7_PMSETTING_COUNT, // start, count
+			SMU_13_0_7_PWRMODE_SETTING // enum
+		)), ((LANG_ENG, "Optimized power mode feature settings"))
+	),
+	(NULL, Undefined PowerMode feature settings,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, pm_setting [16 + %02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			(&(bios->pm_setting[SMU_13_0_7_PMSETTING_COUNT])), // start
+			(SMU_13_0_7_MAX_PMSETTING - SMU_13_0_7_PMSETTING_COUNT), // count
+			ATUI_NULL // enum
+		)), ((LANG_ENG, "Optimized power mode feature settings"))
+	)
+)
+
+
+PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atui_nullstruct,
+	(bios->feature_control, feature_control,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(FW_DATA_READ,            0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_GFXCLK,              1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_GFX_POWER_OPTIMIZER, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_UCLK,                3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_FCLK,                4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_SOCCLK,              5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_MP0CLK,              6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_LINK,                7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(DPM_DCN,                 8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(VMEMP_SCALING,           9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(VDDIO_MEM_SCALING,      10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_GFXCLK,              11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_SOCCLK,              12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_FCLK,                13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_LCLK,                14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_DCFCLK,              15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_UCLK,                16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_ULV,                17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(FW_DSTATE,              18,18, ATUI_DEC, (ATUI_NODESCR)),
+			(GFXOFF,                 19,19, ATUI_DEC, (ATUI_NODESCR)),
+			(BACO,                   20,20, ATUI_DEC, (ATUI_NODESCR)),
+			(MM_DPM,                 21,21, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_MPCLK_DS,           22,22, ATUI_DEC, (ATUI_NODESCR)),
+			(BACO_MPCLK_DS,          23,23, ATUI_DEC, (ATUI_NODESCR)),
+			(THROTTLERS,             24,24, ATUI_DEC, (ATUI_NODESCR)),
+			(SMARTSHIFT,             25,25, ATUI_DEC, (ATUI_NODESCR)),
+			(GTHR,                   26,26, ATUI_DEC, (ATUI_NODESCR)),
+			(ACDC,                   27,27, ATUI_DEC, (ATUI_NODESCR)),
+			(VR0HOT,                 28,28, ATUI_DEC, (ATUI_NODESCR)),
+			(FW_CTF,                 29,29, ATUI_DEC, (ATUI_NODESCR)),
+			(FAN_CONTROL,            30,30, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_DCS,                31,31, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_READ_MARGIN,        32,32, ATUI_DEC, (ATUI_NODESCR)),
+			(LED_DISPLAY,            33,33, ATUI_DEC, (ATUI_NODESCR)),
+			(GFXCLK_SPREAD_SPECTRUM, 34,34, ATUI_DEC, (ATUI_NODESCR)),
+			(OUT_OF_BAND_MONITOR,    35,35, ATUI_DEC, (ATUI_NODESCR)),
+			(OPTIMIZED_VMIN,         36,36, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_IMU,                37,37, ATUI_DEC, (ATUI_NODESCR)),
+			(BOOT_TIME_CAL,          38,38, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_PCC_DFLL,           39,39, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_CG,                 40,40, ATUI_DEC, (ATUI_NODESCR)),
+			(DF_CSTATE,              41,41, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_EDC,                42,42, ATUI_DEC, (ATUI_NODESCR)),
+			(BOOT_POWER_OPT,         43,43, ATUI_DEC, (ATUI_NODESCR)),
+			(CLOCK_POWER_DOWN_BYPASS,44,44, ATUI_DEC, (ATUI_NODESCR)),
+			(DS_VCN,                 45,45, ATUI_DEC, (ATUI_NODESCR)),
+			(BACO_CG,                46,46, ATUI_DEC, (ATUI_NODESCR)),
+			(MEM_TEMP_READ,          47,47, ATUI_DEC, (ATUI_NODESCR)),
+			(ATHUB_MMHUB_PG,         48,48, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_PCC,                49,49, ATUI_DEC, (ATUI_NODESCR)),
+			(EDC_PWRBRK,             50,50, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_51,               51,51, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_52,               52,52, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_53,               53,53, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_54,               54,54, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_55,               55,55, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_56,               56,56, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_57,               57,57, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_58,               58,58, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_59,               59,59, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_60,               60,60, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_61,               61,61, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_62,               62,62, ATUI_DEC, (ATUI_NODESCR)),
+			(SPARE_63,               63,63, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, DpmDescriptor_t, atui_nullstruct,
+	(bios->Padding, Padding,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->SnapToDiscrete, SnapToDiscrete,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0 - Fine grained DPM, 1 - Discrete DPM"))
+	),
+	(bios->NumDiscreteLevels, NumDiscreteLevels,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used"))
+	),
+	(bios->CalculateFopt, CalculateFopt,
+		(ATUI_DEC, ATUI_ENUM, FOPT_CALC_e),
+		((LANG_ENG, "Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e"))
+	),
+	(bios->ConversionToAvfsClk, ConversionToAvfsClk,
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
+		((LANG_ENG, "Transfer function to AVFS Clock (GHz->GHz)"))
+	),
+	(bios->Padding3, Padding3,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->Padding4, Padding4,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FoptimalDc, FoptimalDc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Foptimal frequency in DC power mode."))
+	),
+	(bios->FoptimalAc, FoptimalAc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Foptimal frequency in AC power mode."))
+	),
+	(bios->Padding2, Padding2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, BootValues_t, atui_nullstruct,
+	(bios->InitGfxclk_bypass, InitGfxclk_bypass,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitSocclk, InitSocclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitMp0clk, InitMp0clk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitMpioclk, InitMpioclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitSmnclk, InitSmnclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitUcpclk, InitUcpclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+	(bios->InitCsrclk, InitCsrclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
+	),
+
+	(bios->InitDprefclk, InitDprefclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 1"))
+	),
+	(bios->InitDcfclk, InitDcfclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 1"))
+	),
+	(bios->InitDtbclk, InitDtbclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 1"))
+	),
+	(bios->InitDclk, InitDclk,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PLL 2. assume same DCLK/VCLK for both instances"))
+	),
+	(bios->InitVclk, InitVclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 2"))
+	),
+	(bios->InitUsbdfsclk, InitUsbdfsclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitMp1clk, InitMp1clk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitLclk, InitLclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitBaco400clk_bypass, InitBaco400clk_bypass,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitBaco1200clk_bypass, InitBaco1200clk_bypass,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitBaco700clk_bypass, InitBaco700clk_bypass,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 3"))
+	),
+	(bios->InitFclk, InitFclk,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 4"))
+	),
+	(bios->InitGfxclk_clkb, InitGfxclk_clkb,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 5"))
+	),
+	(bios->InitUclkDPMState, InitUclkDPMState,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PLL 6. =0,1,2,3, frequency from FreqTableUclk"))
+	),
+
+	(bios->Padding, Padding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->InitVcoFreqPll0, InitVcoFreqPll0,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll1, InitVcoFreqPll1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll2, InitVcoFreqPll2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll3, InitVcoFreqPll3,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll4, InitVcoFreqPll4,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll5, InitVcoFreqPll5,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitVcoFreqPll6, InitVcoFreqPll6,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->InitGfx, InitGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) ,  should be 0?"))
+	),
+	(bios->InitSoc, InitSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)"))
+	),
+	(bios->InitU, InitU,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In Mv(Q2) not applicable"))
+	),
+
+	(bios->Padding2, Padding2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Spare, Spare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, MsgLimits_t, atui_nullstruct,
+	// unroll? dynarray inline?
+	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
+
+	(NULL, Tdc,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Tdc (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Tdc, TDC_THROTTLER_COUNT, // start, count
+			TDC_THROTTLER_e // enum
+		)),
+		((LANG_ENG, "Amps"))
+	),
+
+	(NULL, Temperature,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Temperature (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Temperature, TEMP_COUNT, // start, count
+			AVFS_TEMP_e // enum
+		)),
+		((LANG_ENG, "Celsius"))
+	),
+
+	(bios->PwmLimitMin, PwmLimitMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->PwmLimitMax, PwmLimitMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanTargetTemperature, FanTargetTemperature,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Spare1, Spare1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->AcousticTargetRpmThresholdMin, AcousticTargetRpmThresholdMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticTargetRpmThresholdMax, AcousticTargetRpmThresholdMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->AcousticLimitRpmThresholdMin, AcousticLimitRpmThresholdMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticLimitRpmThresholdMax, AcousticLimitRpmThresholdMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->PccLimitMin, PccLimitMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->PccLimitMax, PccLimitMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->FanStopTempMin, FanStopTempMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanStopTempMax, FanStopTempMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanStartTempMin, FanStartTempMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanStartTempMax, FanStartTempMax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(NULL, PowerMinPpt0,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PowerMinPpt0 (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PowerMinPpt0, POWER_SOURCE_COUNT, // start, count
+			POWER_SOURCE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->Spare, Spare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, DriverReportedClocks_t, atui_nullstruct,
+	(bios->BaseClockAc, BaseClockAc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GameClockAc, GameClockAc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BoostClockAc, BoostClockAc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BaseClockDc, BaseClockDc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GameClockDc, GameClockDc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BoostClockDc, BoostClockDc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Reserved, Reserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, AvfsDcBtcParams_smu13, atui_nullstruct,
+	(bios->DcBtcEnabled, DcBtcEnabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding, Padding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->DcTol, DcTol,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+	(bios->DcBtcGb, DcBtcGb,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+
+	(bios->DcBtcMin, DcBtcMin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+	(bios->DcBtcMax, DcBtcMax,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+
+	(bios->DcBtcGbScalar, DcBtcGbScalar,
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
+		(ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, AvfsFuseOverride_smu13, atui_nullstruct,
+	(NULL, AvfsTemp,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, AvfsTemp (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->AvfsTemp, AVFS_TEMP_COUNT, // start, count
+			AVFS_TEMP_e // enum
+		)),
+		((LANG_ENG, "in degrees C"))
+	),
+	(bios->VftFMin, VftFMin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in MHz"))
+	),
+	(bios->VInversion, VInversion,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in mV Q2"))
+	),
+	(NULL, qVft,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qVft (%s),
+				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qVft, AVFS_TEMP_COUNT, // start, count
+			AVFS_TEMP_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->qAvfsGb, qAvfsGb,
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+		(ATUI_NODESCR)
+	),
+	(bios->qAvfsGb2, qAvfsGb2,
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, SviTelemetryScale_t, atui_nullstruct,
+	(bios->Offset, Offset,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding, Padding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MaxCurrent, MaxCurrent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, overdrivelimits_smu13, atui_nullstruct,
+	(bios->FeatureCtrlMask, FeatureCtrlMask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->VoltageOffsetPerZoneBoundary, VoltageOffsetPerZoneBoundary,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved1, Reserved1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Reserved2, Reserved2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->GfxclkFmin, GfxclkFmin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MHz"))
+	),
+	(bios->GfxclkFmax, GfxclkFmax,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MHz"))
+	),
+	(bios->UclkFmin, UclkFmin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MHz"))
+	),
+	(bios->UclkFmax, UclkFmax,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MHz"))
+	),
+
+	(bios->Ppt, Ppt,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "%"))
+	),
+	(bios->Tdc, Tdc,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->FanLinearPwmPoints, FanLinearPwmPoints,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanLinearTempPoints, FanLinearTempPoints,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanMinimumPwm, FanMinimumPwm,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticTargetRpmThreshold, AcousticTargetRpmThreshold,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticLimitRpmThreshold, AcousticLimitRpmThreshold,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanTargetTemperature, FanTargetTemperature,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Degree Celcius"))
+	),
+	(bios->FanZeroRpmEnable, FanZeroRpmEnable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanZeroRpmStopTemp, FanZeroRpmStopTemp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanMode, FanMode,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MaxOpTemp, MaxOpTemp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding, Padding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->Spare, Spare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu13_skutable_v39, atui_nullstruct,
+
+	(bios->Version, Version,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "should be unique to each SKU(i.e if any value changes in below structure then this value must be different)"))
+	),
+
+	// union powerplay_feature_control_smu13 features;
+
+	(bios->TotalPowerConfig, TotalPowerConfig,
+		(ATUI_DEC, ATUI_ENUM, PwrConfig_e),
+		((LANG_ENG, "Determines how PMFW calculates the power. Use defines from PwrConfig_e"))
+	),
+	(bios->CustomerVariant, CustomerVariant,
+		(ATUI_DEC, ATUI_ENUM, CUSTOMER_VARIANT_e),
+		((LANG_ENG, "To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e"))
+	),
+	(bios->MemoryTemperatureTypeMask, MemoryTemperatureTypeMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Bit mapping indicating which methods of memory temperature reading are enabled. Use defines from MEM_TEMP_*BIT"))
+	),
+	(bios->SmartShiftVersion, SmartShiftVersion,
+		(ATUI_DEC, ATUI_ENUM, SMARTSHIFT_VERSION_e),
+		((LANG_ENG, "Determine what SmartShift feature version is supported"))
+	),
+	(NULL, SocketPowerLimitAc,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PPT %u,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In Watts. Power limit that PMFW attempts to control to in AC mode. Multiple limits supported"))
+	),
+	(NULL, SocketPowerLimitDc,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PPT %u,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In Watts. Power limit that PMFW attempts to control to in DC mode. Multiple limits supported"))
+	),
+
+	(bios->SocketPowerLimitSmartShift2, SocketPowerLimitSmartShift2,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In Watts. Power limit used SmartShift"))
+	),
+	(bios->EnableLegacyPptLimit, EnableLegacyPptLimit,
+		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "if set to 1, SocketPowerLimitAc and SocketPowerLimitDc will be interpreted as legacy programs(i.e absolute power). If 0, all except index 0 will be scalars. Relative index 0."))
+	),
+	(bios->UseInputTelemetry, UseInputTelemetry,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "applicable to SVI3 only and only to be set if VRs support"))
+	),
+	(bios->SmartShiftMinReportedPptinDcs, SmartShiftMinReportedPptinDcs,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "minimum possible active power consumption for this SKU. Used for SmartShift power reporting"))
+	),
+
+	(bios->PaddingPpt, PaddingPpt,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(NULL, VrTdcLimit,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VrTdcLimit (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VrTdcLimit, TDC_THROTTLER_COUNT, // start, count
+			TDC_THROTTLER_e // enum
+		)),
+		((LANG_ENG, "In Amperes. Current limit associated with VR regulator maximum temperature"))
+	),
+
+	(NULL, PlatformTdcLimit,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PlatformTdcLimit (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PlatformTdcLimit, TDC_THROTTLER_COUNT, // start, count
+			TDC_THROTTLER_e // enum
+		)),
+		((LANG_ENG, "In Amperes. Current limit associated with platform maximum temperature per VR current rail"))
+	),
+
+	(NULL, TemperatureLimit,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, TemperatureLimit (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->TemperatureLimit, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)),
+		((LANG_ENG, "In degrees Celsius. Temperature limit associated with each input"))
+	),
+
+	(bios->HwCtfTempLimit, HwCtfTempLimit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In degrees Celsius. Temperature above which HW will trigger CTF. Consumed by VBIOS only"))
+	),
+
+	(bios->PaddingInfra, PaddingInfra,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FitControllerFailureRateLimit, FitControllerFailureRateLimit,
+		(ATUI_FRAC, ATUI_NOFANCY),
+		((LANG_ENG, "Expected GFX Duty Cycle at Vmax."))
+	),
+	(bios->FitControllerGfxDutyCycle, FitControllerGfxDutyCycle,
+		(ATUI_FRAC, ATUI_NOFANCY),
+		((LANG_ENG, "Expected SOC Duty Cycle at Vmax."))
+	),
+	(bios->FitControllerSocDutyCycle, FitControllerSocDutyCycle,
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FitControllerSocOffset, FitControllerSocOffset,
+		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->GfxApccPlusResidencyLimit, GfxApccPlusResidencyLimit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Percentage value. Used by APCC+ controller to control PCC residency to some value"))
+	),
+	(bios->ThrottlerControlMask, ThrottlerControlMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "See THROTTLER_*_BIT for mapping"))
+	),
+	(bios->FwDStateMask, FwDStateMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "See FW_DSTATE_*_BIT for mapping"))
+	),
+	(NULL, UlvVoltageOffset,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, UlvVoltageOffset (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->UlvVoltageOffset, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)"))
+	),
+
+	(bios->UlvVoltageOffsetU, UlvVoltageOffsetU,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)"))
+	),
+	(bios->DeepUlvVoltageOffsetSoc, DeepUlvVoltageOffsetSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE"))
+	),
+	(NULL, DefaultMaxVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, DefaultMaxVoltage (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->DefaultMaxVoltage, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Maximum voltage without FIT controller enabled"))
+	),
+	(NULL, BoostMaxVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, BoostMaxVoltage (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->BoostMaxVoltage, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Maximum voltage with FIT controller enabled"))
+	),
+	(NULL, VminTempHystersis,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VminTempHystersis (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VminTempHystersis, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "Celsius Temperature hysteresis for switching between low/high temperature values for Vmin"))
+	),
+	(NULL, VminTempThreshold,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VminTempThreshold (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VminTempThreshold, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "Celsius Temperature threshold for switching between low/high temperature values for Vmin"))
+	),
+	(NULL, Vmin_Hot_T0,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Vmin_Hot_T0 (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Vmin_Hot_T0, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Initial (pre-aging) Vset to be used at hot."))
+	),
+	(NULL, Vmin_Cold_T0,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Vmin_Cold_T0 (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Vmin_Cold_T0, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Initial (pre-aging) Vset to be used at cold."))
+	),
+	(NULL, Vmin_Hot_Eol,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Vmin_Hot_Eol (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Vmin_Hot_Eol, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) End-of-life Vset to be used at hot."))
+	),
+	(NULL, Vmin_Cold_Eol,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Vmin_Cold_Eol (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Vmin_Cold_Eol, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) End-of-life Vset to be used at cold."))
+	),
+	(NULL, Vmin_Aging_Offset,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Vmin_Aging_Offset (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Vmin_Aging_Offset, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Worst-case aging margin"))
+	),
+	(NULL, Spare_Vmin_Plat_Offset_Hot,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Spare_Vmin_Plat_Offset_Hot (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Spare_Vmin_Plat_Offset_Hot, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Platform offset apply to T0 Hot"))
+	),
+	(NULL, Spare_Vmin_Plat_Offset_Cold,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Spare_Vmin_Plat_Offset_Cold (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Spare_Vmin_Plat_Offset_Cold, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "In mV(Q2) Platform offset apply to T0 Cold"))
+	),
+	(NULL, VcBtcFixedVminAgingOffset,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcFixedVminAgingOffset (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcFixedVminAgingOffset, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "Linear offset or GB term to account for mis-correlation between PSM and Vmin shift trends across parts."))
+	),
+	(NULL, VcBtcVmin2PsmDegrationGb,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcVmin2PsmDegrationGb (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcVmin2PsmDegrationGb, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "Scalar coefficient of the PSM aging degradation function"))
+	),
+	(NULL, VcBtcPsmA,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcPsmA (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcPsmA, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "A_PSM  // Exponential coefficient of the PSM aging degradation function"))
+	),
+	(NULL, VcBtcPsmB,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcPsmB (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcPsmB, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "B_PSM  // Scalar coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold."))
+	),
+	(NULL, VcBtcVminA,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcVminA (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcVminA, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "A_VMIN // Exponential coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold."))
+	),
+	(NULL, VcBtcVminB,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcVminB (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcVminB, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)),
+		((LANG_ENG, "B_VMIN"))
+	),
+
+	(NULL, PerPartVminEnabled,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PerPartVminEnabled (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PerPartVminEnabled, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, VcBtcEnabled,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VcBtcEnabled (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VcBtcEnabled, PMFW_VOLT_PLANE_COUNT, // start, count
+			PMFW_VOLT_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, SocketPowerLimitAcTau,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PPT %u,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Time constant of LPF in ms"))
+	),
+	(NULL, SocketPowerLimitDcTau,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PPT %u,
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Time constant of LPF in ms"))
+	),
+
+	(bios->Vmin_droop, Vmin_droop,
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+		(ATUI_NODESCR)
+	),
+	(bios->SpareVmin, SpareVmin,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	// struct DpmDescriptor_t DpmDescriptor[SMU13_PPCLK_COUNT];
+	/*
+	(NULL, DpmDescriptor,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, DpmDescriptor (%s),
+				(ATUI_NAN, ATUI_INLINE, DpmDescriptor_t),
+				(ATUI_NODESCR)
+			),
+			bios->DpmDescriptor, SMU13_PPCLK_COUNT, // start, count
+			 // enum
+		)), (ATUI_NODESCR)
+	),
+	*/
+
+
+
+
+	(NULL, FreqTableGfx,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableGfx [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableVclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableVclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableSocclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableSocclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableUclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableUclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDispclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDispclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDispclk, // start
+			NUM_DISPCLK_DPM_LEVELS_SMU13, // count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDppClk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDppClk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDppClk, NUM_DPPCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDprefclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDprefclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDprefclk, // start
+			NUM_DPREFCLK_DPM_LEVELS_SMU13, // count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDcfclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDcfclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDcfclk, NUM_DCFCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableDtbclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableDtbclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableDtbclk, NUM_DTBCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, FreqTableFclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableFclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableFclk, NUM_FCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+
+	(NULL, DcModeMaxFreq,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, DcModeMaxFreq [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->DcModeMaxFreq, SMU13_PPCLK_COUNT, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(NULL, Mp0clkFreq,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Mp0clkFreq [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "in MHz"))
+	),
+	(NULL, Mp0DpmVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Mp0DpmVoltage [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "mV(Q2)"))
+	),
+
+	(bios->GfxclkSpare, GfxclkSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->GfxclkFreqCap, GfxclkFreqCap,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxclkFgfxoffEntry, GfxclkFgfxoffEntry,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Mhz"))
+	),
+	(bios->GfxclkFgfxoffExitImu, GfxclkFgfxoffExitImu,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Mhz"))
+	),
+	(bios->GfxclkFgfxoffExitRlc, GfxclkFgfxoffExitRlc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Mhz"))
+	),
+	(bios->GfxclkThrottleClock, GfxclkThrottleClock,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Used primarily in DCS"))
+	),
+	(bios->EnableGfxPowerStagesGpio, EnableGfxPowerStagesGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Genlk_vsync GPIO flag used to control gfx power stages"))
+	),
+	(bios->GfxIdlePadding, GfxIdlePadding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->SmsRepairWRCKClkDivEn, SmsRepairWRCKClkDivEn,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->SmsRepairWRCKClkDivVal, SmsRepairWRCKClkDivVal,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxOffEntryEarlyMGCGEn, GfxOffEntryEarlyMGCGEn,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxOffEntryForceCGCGEn, GfxOffEntryForceCGCGEn,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxOffEntryForceCGCGDelayEn, GfxOffEntryForceCGCGDelayEn,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxOffEntryForceCGCGDelayVal, GfxOffEntryForceCGCGDelayVal,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in microseconds"))
+	),
+
+	(bios->GfxclkFreqGfxUlv, GfxclkFreqGfxUlv,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in MHz"))
+	),
+	(bios->GfxIdlePadding2, GfxIdlePadding2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->GfxOffEntryHysteresis, GfxOffEntryHysteresis,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For RLC to count after it enters CGCG, and before triggers GFXOFF entry"))
+	),
+	(bios->GfxoffSpare, GfxoffSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->DfllBtcMasterScalerM, DfllBtcMasterScalerM,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DfllBtcMasterScalerB, DfllBtcMasterScalerB,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DfllBtcSlaveScalerM, DfllBtcSlaveScalerM,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DfllBtcSlaveScalerB, DfllBtcSlaveScalerB,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DfllPccAsWaitCtrl, DfllPccAsWaitCtrl,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GDFLL_AS_WAIT_CTRL_PCC register value to be passed to RLC msg"))
+	),
+	(bios->DfllPccAsStepCtrl, DfllPccAsStepCtrl,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GDFLL_AS_STEP_CTRL_PCC register value to be passed to RLC msg"))
+	),
+	(bios->GfxGpoSpare, GfxGpoSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->DcsGfxOffVoltage, DcsGfxOffVoltage,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase"))
+	),
+	(bios->PaddingDcs, PaddingDcs,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->DcsMinGfxOffTime, DcsMinGfxOffTime,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase"))
+	),
+	(bios->DcsMaxGfxOffTime, DcsMaxGfxOffTime,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Maximum amount of time PMFW can shut GFX OFF as part of GFX DCS phase at a stretch."))
+	),
+
+	(bios->DcsMinCreditAccum, DcsMinCreditAccum,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Min amount of positive credit accumulation before waking GFX up as part of DCS."))
+	),
+
+	(bios->DcsExitHysteresis, DcsExitHysteresis,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "The min amount of time power credit accumulator should have a value > 0 before SMU exits the DCS throttling phase."))
+	),
+	(bios->DcsTimeout, DcsTimeout,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "This is the amount of time SMU FW waits for RLC to put GFX into GFXOFF before reverting to the fallback mechanism of throttling GFXCLK to Fmin."))
+	),
+
+
+	(bios->DcsSpare, DcsSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(NULL, ShadowFreqTableUclk,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, ShadowFreqTableUclk [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->ShadowFreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In MHz"))
+	),
+	(bios->UseStrobeModeOptimizations, UseStrobeModeOptimizations,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Set to indicate that FW should use strobe mode optimizations"))
+	),
+	(bios->PaddingMem, PaddingMem,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(NULL, UclkDpmPstates,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, UclkDpmPstates [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->UclkDpmPstates, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3."))
+	),
+	(NULL, FreqTableUclkDiv,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTableUclkDiv [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8"))
+	),
+
+	(NULL, MemVmempVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, MemVmempVoltage [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->MemVmempVoltage, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "mV(Q2)"))
+	),
+	(NULL, MemVddioVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, MemVddioVoltage [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->MemVddioVoltage, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "mV(Q2)"))
+	),
+
+	(NULL, FclkDpmUPstates,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FclkDpmUPstates [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FclkDpmUPstates, NUM_FCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "U P-state ID associated with each FCLK DPM state."))
+	),
+	(NULL, FclkDpmVddU,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FclkDpmVddU [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FclkDpmVddU, NUM_FCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "mV(Q2) Vset U voltage associated with each FCLK DPM state."))
+	),
+	(NULL, FclkDpmUSpeed,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FclkDpmUSpeed [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FclkDpmUSpeed, NUM_FCLK_DPM_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "U speed associated with each FCLK DPM state"))
+	),
+	(bios->FclkDpmDisallowPstateFreq, FclkDpmDisallowPstateFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value"))
+	),
+	(bios->PaddingFclk, PaddingFclk,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(NULL, PcieGenSpeed,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PcieGenSpeed [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "/< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4"))
+	),
+	(NULL, PcieLaneCount,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PcieLaneCount [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "/< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
+	),
+	(NULL, LclkFreq,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, LclkFreq [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->LclkFreq, NUM_LINK_LEVELS_SMU13, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, FanStopTemp,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FanStopTemp (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FanStopTemp, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)),
+		((LANG_ENG, "Celsius"))
+	),
+	(NULL, FanStartTemp,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FanStartTemp (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FanStartTemp, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)),
+		((LANG_ENG, "Celsius"))
+	),
+
+	(NULL, FanGain,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FanGain (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FanGain, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->FanGainPadding, FanGainPadding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->FanPwmMin, FanPwmMin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticTargetRpmThreshold, AcousticTargetRpmThreshold,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->AcousticLimitRpmThreshold, AcousticLimitRpmThreshold,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanMaximumRpm, FanMaximumRpm,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MGpuAcousticLimitRpmThreshold, MGpuAcousticLimitRpmThreshold,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanTargetGfxclk, FanTargetGfxclk,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->TempInputSelectMask, TempInputSelectMask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanZeroRpmEnable, FanZeroRpmEnable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanTachEdgePerRev, FanTachEdgePerRev,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(NULL, FanTargetTemperature,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FanTargetTemperature (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FanTargetTemperature, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->FuzzyFan_ErrorSetDelta, FuzzyFan_ErrorSetDelta,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FuzzyFan_ErrorRateSetDelta, FuzzyFan_ErrorRateSetDelta,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FuzzyFan_PwmSetDelta, FuzzyFan_PwmSetDelta,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FuzzyFan_Reserved, FuzzyFan_Reserved,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(NULL, FwCtfLimit,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FwCtfLimit (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->FwCtfLimit, TEMP_COUNT, // start, count
+			TEMP_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->IntakeTempEnableRPM, IntakeTempEnableRPM,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->IntakeTempOffsetTemp, IntakeTempOffsetTemp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->IntakeTempReleaseTemp, IntakeTempReleaseTemp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->IntakeTempHighIntakeAcousticLimit, IntakeTempHighIntakeAcousticLimit,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->IntakeTempAcouticLimitReleaseRate, IntakeTempAcouticLimitReleaseRate,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->FanAbnormalTempLimitOffset, FanAbnormalTempLimitOffset,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanStalledTriggerRpm, FanStalledTriggerRpm,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanAbnormalTriggerRpmCoeff, FanAbnormalTriggerRpmCoeff,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanAbnormalDetectionEnable, FanAbnormalDetectionEnable,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->FanIntakeSensorSupport, FanIntakeSensorSupport,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanIntakePadding, FanIntakePadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->FanSpare, FanSpare,
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "SECTION: VDD_GFX AVFS"))
+	),
+
+	(bios->OverrideGfxAvfsFuses, OverrideGfxAvfsFuses,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxAvfsPadding, GfxAvfsPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(NULL, L2HwRtAvfsFuses,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, L2HwRtAvfsFuses (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->L2HwRtAvfsFuses, PP_GRTAVFS_HW_FUSE_COUNT, // start, count
+			PP_GRTAVFS_HW_FUSE_e // enum
+		)),
+		((LANG_ENG, "see fusedoc for encoding"))
+	),
+	(NULL, SeHwRtAvfsFuses,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SeHwRtAvfsFuses (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SeHwRtAvfsFuses, PP_GRTAVFS_HW_FUSE_COUNT, // start, count
+			PP_GRTAVFS_HW_FUSE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, CommonRtAvfs,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, CommonRtAvfs (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->CommonRtAvfs, PP_GRTAVFS_FW_COMMON_FUSE_COUNT, // start, count
+			PP_GRTAVFS_FW_COMMON_FUSE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, L2FwRtAvfsFuses,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, L2FwRtAvfsFuses (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->L2FwRtAvfsFuses, PP_GRTAVFS_FW_SEP_FUSE_COUNT, // start, count
+			PP_GRTAVFS_FW_SEP_FUSE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, SeFwRtAvfsFuses,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SeFwRtAvfsFuses (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SeFwRtAvfsFuses, PP_GRTAVFS_FW_SEP_FUSE_COUNT, // start, count
+			PP_GRTAVFS_FW_SEP_FUSE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, Droop_PWL_F,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Droop_PWL_F [%u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Droop_PWL_F, PP_NUM_RTAVFS_PWL_ZONES, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Droop_PWL_a,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Droop_PWL_a [%u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Droop_PWL_a, PP_NUM_RTAVFS_PWL_ZONES, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Droop_PWL_b,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Droop_PWL_b [%u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Droop_PWL_b, PP_NUM_RTAVFS_PWL_ZONES, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Droop_PWL_c,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Droop_PWL_c [%u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Droop_PWL_c, PP_NUM_RTAVFS_PWL_ZONES, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, Static_PWL_Offset,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, Static_PWL_Offset [%u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->Static_PWL_Offset, PP_NUM_RTAVFS_PWL_ZONES, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->dGbV_dT_vmin, dGbV_dT_vmin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->dGbV_dT_vmax, dGbV_dT_vmax,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->V2F_vmin_range_low, V2F_vmin_range_low,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->V2F_vmin_range_high, V2F_vmin_range_high,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->V2F_vmax_range_low, V2F_vmax_range_low,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->V2F_vmax_range_high, V2F_vmax_range_high,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->DcBtcGfxParams, DcBtcGfxParams,
+		(ATUI_NAN, ATUI_INLINE, AvfsDcBtcParams_smu13),
+		(ATUI_NODESCR)
+	),
+
+	(bios->GfxAvfsSpare, GfxAvfsSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->OverrideSocAvfsFuses, OverrideSocAvfsFuses,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MinSocAvfsRevision, MinSocAvfsRevision,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->SocAvfsPadding, SocAvfsPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(NULL, SocAvfsFuseOverride,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SocAvfsFuseOverride (%s),
+				(ATUI_NAN, ATUI_INLINE, AvfsFuseOverride_smu13),
+				(ATUI_NODESCR)
+			),
+			bios->SocAvfsFuseOverride, AVFS_D_COUNT, // start, count
+			AVFS_D_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, dBtcGbSoc,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, dBtcGbSoc (%s),
+				(ATUI_NAN, ATUI_INLINE, droop_f32),
+				(ATUI_NODESCR)
+			),
+			bios->dBtcGbSoc, AVFS_D_COUNT, // start, count
+			AVFS_D_e // enum
+		)),
+		((LANG_ENG, "GHz->V BtcGb"))
+	),
+
+	(NULL, qAgingGb,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qAgingGb (%s),
+				(ATUI_NAN, ATUI_INLINE, linear_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qAgingGb, AVFS_D_COUNT, // start, count
+			AVFS_D_e // enum
+		)),
+		((LANG_ENG, "GHz->V"))
+	),
+
+	(NULL, qStaticVoltageOffset,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qStaticVoltageOffset (%s),
+				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qStaticVoltageOffset, AVFS_D_COUNT, // start, count
+			AVFS_D_e // enum
+		)),
+		((LANG_ENG, "GHz->V"))
+	),
+
+	(NULL, DcBtcSocParams,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, DcBtcSocParams (%s),
+				(ATUI_NAN, ATUI_INLINE, AvfsDcBtcParams_smu13),
+				(ATUI_NODESCR)
+			),
+			bios->DcBtcSocParams, AVFS_D_COUNT, // start, count
+			AVFS_D_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->SocAvfsSpare, SocAvfsSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	// struct BootValues_t BootValues;
+	// struct DriverReportedClocks_t DriverReportedClocks;
+	// struct MsgLimits_t MsgLimits;
+	// struct overdrivelimits_smu13 OverDriveLimitsMin;
+	// struct overdrivelimits_smu13 OverDriveLimitsBasicMax;
+	// struct overdrivelimits_smu13 OverDriveLimitsAdvancedMax;
+	// union dpm_debug_override_smu13 DebugOverrides;
+	/*
+	(bios->BootValues, BootValues,
+		(ATUI_NAN, ATUI_INLINE, BootValues_t),
+		(ATUI_NODESCR)
+	),
+	
+	(bios->DriverReportedClocks, DriverReportedClocks,
+		(ATUI_NAN, ATUI_INLINE, DriverReportedClocks_t),
+		(ATUI_NODESCR)
+	),
+	(bios->MsgLimits, MsgLimits,
+		(ATUI_NAN, ATUI_INLINE, MsgLimits_t),
+		(ATUI_NODESCR)
+	),
+	(bios->OverDriveLimitsMin, OverDriveLimitsMin,
+		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NODESCR)
+	),
+	(bios->OverDriveLimitsBasicMax, OverDriveLimitsBasicMax,
+		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NODESCR)
+	),
+	(bios->OverDriveLimitsAdvancedMax, OverDriveLimitsAdvancedMax,
+		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NODESCR)
+	),
+	(bios->DebugOverrides, DebugOverrides,
+		(ATUI_NAN, ATUI_INLINE, dpm_debug_override_smu13),
+		(ATUI_NODESCR)
+	),
+	*/
+
+
+	(bios->TotalBoardPowerSupport, TotalBoardPowerSupport,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->TotalBoardPowerPadding, TotalBoardPowerPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->TotalIdleBoardPowerM, TotalIdleBoardPowerM,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->TotalIdleBoardPowerB, TotalIdleBoardPowerB,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->TotalBoardPowerM, TotalBoardPowerM,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->TotalBoardPowerB, TotalBoardPowerB,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(NULL, qFeffCoeffGameClock,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qFeffCoeffGameClock (%s),
+				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qFeffCoeffGameClock, POWER_SOURCE_COUNT, // start, count
+			POWER_SOURCE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, qFeffCoeffBaseClock,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qFeffCoeffBaseClock (%s),
+				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qFeffCoeffBaseClock, POWER_SOURCE_COUNT, // start, count
+			POWER_SOURCE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, qFeffCoeffBoostClock,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, qFeffCoeffBoostClock (%s),
+				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
+				(ATUI_NODESCR)
+			),
+			bios->qFeffCoeffBoostClock, POWER_SOURCE_COUNT, // start, count
+			POWER_SOURCE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->Spare, Spare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->MmHubPadding, MmHubPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atui_nullstruct,
+	(bios->Version, Version,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "should be unique to each board type"))
+	),
+	//struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS];
+	/*
+	(NULL, I2cControllers,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, I2cControllers [%02u],
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			bios->I2cControllers, NUM_I2C_CONTROLLERS, // start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	*/
+	(bios->VddGfxVrMapping, VddGfxVrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddSocVrMapping, VddSocVrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem0VrMapping, VddMem0VrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem1VrMapping, VddMem1VrMapping,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+
+	(bios->GfxUlvPhaseSheddingMask, GfxUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->SocUlvPhaseSheddingMask, SocUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->VmempUlvPhaseSheddingMask, VmempUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->VddioUlvPhaseSheddingMask, VddioUlvPhaseSheddingMask,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(NULL, SlaveAddrMapping,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SlaveAddrMapping [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SlaveAddrMapping, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, VrPsiSupport,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VrPsiSupport [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VrPsiSupport, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(NULL, PaddingPsi,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PaddingPsi [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PaddingPsi, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, EnablePsi6,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, EnablePsi6 [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->EnablePsi6, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)),
+		((LANG_ENG, "only applicable in SVI3"))
+	),
+	(NULL, SviTelemetryScale,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SviTelemetryScale [%02u],
+				(ATUI_NAN, ATUI_INLINE, SviTelemetryScale_t),
+				(ATUI_NODESCR)
+			),
+			bios->SviTelemetryScale, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, VoltageTelemetryRatio,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, VoltageTelemetryRatio [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->VoltageTelemetryRatio, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)),
+		((LANG_ENG, "This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)"))
+	),
+
+	(NULL, DownSlewRateVr,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, DownSlewRateVr [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->DownSlewRateVr, SVI_PLANE_COUNT, // start, count
+			SVI_PLANE_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->LedOffGpio, LedOffGpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FanOffGpio, FanOffGpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->GfxVrPowerStageOffGpio, GfxVrPowerStageOffGpio,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->AcDcGpio, AcDcGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for AC/DC switching"))
+	),
+	(bios->AcDcPolarity, AcDcPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->VR0HotGpio, VR0HotGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
+	),
+	(bios->VR0HotPolarity, VR0HotPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+
+	(bios->GthrGpio, GthrGpio,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for GTHR Event"))
+	),
+	(bios->GthrPolarity, GthrPolarity,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "replace GPIO polarity for GTHR"))
+	),
+	(bios->LedPin0, LedPin0,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[0]"))
+	),
+	(bios->LedPin1, LedPin1,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[1]"))
+	),
+	(bios->LedPin2, LedPin2,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[2]"))
+	),
+	(bios->LedEnableMask, LedEnableMask,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->LedPcie, LedPcie,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for PCIE results"))
+	),
+	(bios->LedError, LedError,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for Error Cases"))
+	),
+	(bios->UclkTrainingModeSpreadPercent, UclkTrainingModeSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->UclkSpreadPadding, UclkSpreadPadding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->UclkSpreadFreq, UclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+	(NULL, UclkSpreadPercent,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, UclkSpreadPercent (%s),
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->UclkSpreadPercent, MEM_VENDOR_COUNT, // start, count
+			MEM_VENDOR_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->FclkSpreadPadding, FclkSpreadPadding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FclkSpreadPercent, FclkSpreadPercent,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->FclkSpreadFreq, FclkSpreadFreq,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+	(bios->DramWidth, DramWidth,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Width of interface to the channel for each DRAM module. See DRAM_BIT_WIDTH_TYPE_e"))
+	),
+	(bios->PaddingMem1, PaddingMem1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->HsrEnabled, HsrEnabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->VddqOffEnabled, VddqOffEnabled,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->PaddingUmcFlags, PaddingUmcFlags,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->PostVoltageSetBacoDelay, PostVoltageSetBacoDelay,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in microseconds. Amount of time FW will wait after power good is established or PSI0 command is issued"))
+	),
+	(bios->BacoEntryDelay, BacoEntryDelay,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in milliseconds. Amount of time FW will wait to trigger BACO entry after receiving entry notification from OS"))
+	),
+
+	(bios->FuseWritePowerMuxPresent, FuseWritePowerMuxPresent,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->FuseWritePadding, FuseWritePadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->BoardSpare, BoardSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->MmHubPadding, MmHubPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu13_smcpptable_v39, atui_nullstruct,
+	(bios->SkuTable, SkuTable,
+		(ATUI_NAN, ATUI_INLINE, smu13_skutable_v39),
+		(ATUI_NODESCR)
+	),
+	(bios->BoardTable, BoardTable,
+		(ATUI_NAN, ATUI_INLINE, smu13_boardtable_v39),
+		(ATUI_NODESCR)
+	)
+)
+

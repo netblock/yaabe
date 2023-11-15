@@ -137,6 +137,7 @@ enum SMU_13_0_7_PWRMODE_SETTING {
 	SMU_13_0_7_PMSETTING_ACOUSTIC_LIMIT_RPM_BALANCE  = 13,
 	SMU_13_0_7_PMSETTING_ACOUSTIC_LIMIT_RPM_TURBO    = 14,
 	SMU_13_0_7_PMSETTING_ACOUSTIC_LIMIT_RPM_RAGE     = 15,
+	SMU_13_0_7_PMSETTING_COUNT                       = 16,
 };
 #define SMU_13_0_7_MAX_PMSETTING 32 // Maximum Number of PowerMode Settings
 
@@ -170,6 +171,11 @@ enum SMU_13_0_7_PPCLOCK_ID {
 
 #define SMU_13_0_7_MAX_PPCLOCK 16 // Maximum Number of PP Clocks
 
+union smu13_smc_pptables {
+	uint32_t smc_pptable_ver;
+	struct smu13_smcpptable_v39 v39;
+};
+
 struct smu_13_0_7_powerplay_table {
 	struct atom_common_table_header header; // For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0
 	uint8_t  table_revision;  // For PLUM_BONITO, table_revision = 2
@@ -191,7 +197,7 @@ struct smu_13_0_7_powerplay_table {
 
 	struct smu_13_0_7_overdrive_table overdrive_table;
 	uint8_t  padding1;
-	struct pptable_smu13 smc_pptable; // PPTable_t in driver_if.h
+	union smu13_smc_pptables smc_pptable; // PPTable_t in the driver_if.h
 };
 
 #pragma pack(pop) // restore old packing
