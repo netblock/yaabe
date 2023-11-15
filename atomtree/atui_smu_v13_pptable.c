@@ -7,7 +7,7 @@ See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 #include "atui.h"
 
 
-PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atui_nullstruct,
+PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atomtree_powerplaytable,
 	(bios->header, header,
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		((LANG_ENG, "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0"))
@@ -72,7 +72,7 @@ PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atui_nullstruct,
 	// struct smu13_smcpptable_v39 smc_pptable;
 )
 
-PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atui_nullstruct,
+PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atomtree_powerplaytable,
 	(bios->revision, revision,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION"))
@@ -176,7 +176,7 @@ PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atui_nullstruct,
+PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atomtree_powerplaytable,
 	(bios->feature_control, feature_control,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(FW_DATA_READ,            0,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -247,7 +247,7 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, DpmDescriptor_t, atui_nullstruct,
+PPATUI_FUNCIFY(struct, DpmDescriptor_t, atomtree_powerplaytable,
 	(bios->Padding, Padding,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -287,7 +287,7 @@ PPATUI_FUNCIFY(struct, DpmDescriptor_t, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, BootValues_t, atui_nullstruct,
+PPATUI_FUNCIFY(struct, BootValues_t, atomtree_powerplaytable,
 	(bios->InitGfxclk_bypass, InitGfxclk_bypass,
 		(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "PLL 0"))
 	),
@@ -402,7 +402,7 @@ PPATUI_FUNCIFY(struct, BootValues_t, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, MsgLimits_t, atui_nullstruct,
+PPATUI_FUNCIFY(struct, MsgLimits_t, atomtree_powerplaytable,
 	// unroll? dynarray inline?
 	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
 
@@ -490,7 +490,7 @@ PPATUI_FUNCIFY(struct, MsgLimits_t, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, DriverReportedClocks_t, atui_nullstruct,
+PPATUI_FUNCIFY(struct, DriverReportedClocks_t, atomtree_powerplaytable,
 	(bios->BaseClockAc, BaseClockAc,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -516,7 +516,7 @@ PPATUI_FUNCIFY(struct, DriverReportedClocks_t, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, AvfsDcBtcParams_smu13, atui_nullstruct,
+PPATUI_FUNCIFY(struct, AvfsDcBtcParams_smu13, atomtree_powerplaytable,
 	(bios->DcBtcEnabled, DcBtcEnabled,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -547,7 +547,7 @@ PPATUI_FUNCIFY(struct, AvfsDcBtcParams_smu13, atui_nullstruct,
 		(ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, AvfsFuseOverride_smu13, atui_nullstruct,
+PPATUI_FUNCIFY(struct, AvfsFuseOverride_smu13, atomtree_powerplaytable,
 	(NULL, AvfsTemp,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, AvfsTemp (%s),
@@ -586,7 +586,7 @@ PPATUI_FUNCIFY(struct, AvfsFuseOverride_smu13, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, SviTelemetryScale_t, atui_nullstruct,
+PPATUI_FUNCIFY(struct, SviTelemetryScale_t, atomtree_powerplaytable,
 	(bios->Offset, Offset,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "in Amps"))
@@ -601,7 +601,7 @@ PPATUI_FUNCIFY(struct, SviTelemetryScale_t, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, overdrivelimits_smu13, atui_nullstruct,
+PPATUI_FUNCIFY(struct, overdrivelimits_smu13, atomtree_powerplaytable,
 	(bios->FeatureCtrlMask, FeatureCtrlMask,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -682,7 +682,7 @@ PPATUI_FUNCIFY(struct, overdrivelimits_smu13, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smu13_skutable_v39, atui_nullstruct,
+PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 
 	(bios->Version, Version,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1896,7 +1896,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atui_nullstruct,
+PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	(bios->Version, Version,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "should be unique to each board type"))
@@ -2146,7 +2146,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smu13_smcpptable_v39, atui_nullstruct,
+PPATUI_FUNCIFY(struct, smu13_smcpptable_v39, atomtree_powerplaytable,
 	(bios->SkuTable, SkuTable,
 		(ATUI_NAN, ATUI_INLINE, smu13_skutable_v39),
 		(ATUI_NODESCR)

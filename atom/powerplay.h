@@ -1,9 +1,10 @@
 #ifndef POWERPLAY_H
 #define POWERPLAY_H
-#pragma pack(push, 1) // bios data must use byte alignment
+
 // common powerplay definitions
 // check bottom for includes
 
+#pragma pack(push, 1) // bios data must use byte alignment
 
 struct smu_powerplay_table_header {
 	struct atom_common_table_header header;
@@ -59,7 +60,6 @@ enum POWER_SOURCE_e {
 	POWER_SOURCE_COUNT = 2,
 };
 
-// navi10
 #pragma pack(pop) // restore old packing
 
 #include "smu11_driver_if.h"

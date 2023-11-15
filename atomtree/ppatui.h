@@ -284,12 +284,13 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 									dynarray_biosarray_i\
 								);\
 							} else {\
-							sprintf(\
-								leaves[leaves_i-leafpattern_numleaves].name,\
-								leaves[leaves_i-leafpattern_numleaves]\
-									.origname,\
-								dynarray_biosarray_i\
-							);\
+								sprintf(\
+									leaves[leaves_i-leafpattern_numleaves]\
+										.name,\
+									leaves[leaves_i-leafpattern_numleaves]\
+										.origname,\
+									dynarray_biosarray_i\
+								);\
 							}\
 							dynarray_start_ptr += dynarray_elementsize;\
 							dynarray_biosarray_i++;\
@@ -743,7 +744,7 @@ That is, bitfield population, and enum and inline association.
 	1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK0 bitfields )
 
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_NOFANCY(...)  NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_BITFIELD(...) NULL 
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_BITFIELD(...) NULL
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ENUM(...)     NULL
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_STRING(...)   NULL
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ARRAY(...)    NULL

@@ -160,7 +160,7 @@ PPATUI_ENUMER(POWER_SOURCE_e,
 )
 
 /******************************************************************************/
-// smu11_driver_if.h / smu_v11_0_pptable.h
+// smu_v11_0_pptable.h / smu11_driver_if.h
 
 PPATUI_ENUMER(SMU11_PPT3_PPCLK,
 	SMU11_PPT3_PPCLK_GFXCLK,
@@ -189,7 +189,7 @@ PPATUI_ENUMER(SMU11_PPT8_PPCLK,
 	SMU11_PPT8_PPCLK_COUNT
 )
 
-PPATUI_ENUMER(VOLTAGE_MODE_e,                                                   
+PPATUI_ENUMER(VOLTAGE_MODE_e,
 	VOLTAGE_MODE_AVFS,
 	VOLTAGE_MODE_AVFS_SS,
 	VOLTAGE_MODE_SS,

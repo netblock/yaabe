@@ -6,7 +6,7 @@ See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 #include "atomtree.h"
 #include "atui.h"
 
-PPATUI_FUNCIFY(struct, dpm_descriptor_smu11, atui_nullstruct,
+PPATUI_FUNCIFY(struct, dpm_descriptor_smu11, atomtree_powerplaytable,
 	(bios->VoltageMode, VoltageMode,
 		(ATUI_DEC, ATUI_ENUM, VOLTAGE_MODE_e),
 		(ATUI_NODESCR)
@@ -1185,7 +1185,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 		((LANG_ENG, "Total number of supported settings"))
 	),
 
-	(NULL, supported OD feature support flags,
+	(NULL, Supported OD feature support flags,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), ((LANG_ENG, "support flag"))
@@ -1194,7 +1194,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 			 SMU_11_0_ODFEATURE_CAP // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, undefined OD feature support flags,
+	(NULL, Undefined OD feature support flags,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, OD feature [14 + %02u],
 					// if CAP_COUNT changes, please change this 14
@@ -1206,7 +1206,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 		)), (ATUI_NODESCR)
 	),
 
-	(NULL, supported Overdrive settings (max),
+	(NULL, Supported Overdrive settings (max),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1215,7 +1215,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 			SMU_11_0_ODSETTING_ID // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, supported Overdrive settings (min),
+	(NULL, Supported Overdrive settings (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1226,7 +1226,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 	),
 
 
-	(NULL, undefined OD settings (max),
+	(NULL, Undefined OD settings (max),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [19 + %02u],
 					// if ODSETTING_COUNT changes, please change this 19
@@ -1237,7 +1237,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, undefined OD settings (min),
+	(NULL, Undefined OD settings (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [19 + %02u],
 					// if ODSETTING_COUNT changes, please change this 19
@@ -1284,7 +1284,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 		)), (ATUI_NODESCR)
 	),
 
-	(NULL, undefined PowerSavingClock Modes (max),
+	(NULL, Undefined PowerSavingClock Modes (max),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [10 + %02u],
 					// if PPCLOCK_COUNT changes, please change this 10
@@ -1295,7 +1295,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, undefined PowerSavingClock Modes (min),
+	(NULL, Undefined PowerSavingClock Modes (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [10 + %02u],
 					// if PPCLOCK_COUNT changes, please change this 10
