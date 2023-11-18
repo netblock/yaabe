@@ -112,7 +112,7 @@ struct _atui_leaf {
 	atui_branch** inline_branch;
 
 	union {
-		void*      val;
+		void const*      val;
 
 		uint8_t*   u8;
 		uint16_t*  u16;
@@ -141,13 +141,13 @@ struct  _atui_branch {
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
 	atui_branch** all_branches;
 
-	uint8_t num_child_branches;
-	uint8_t max_num_child_branches;
+	uint8_t num_branches;
+	uint8_t max_num_branches;
 
 	uint8_t num_inline_branches;
 	uint8_t max_num_inline_branches;
 
-	uint8_t max_branch_count;
+	uint8_t max_all_branch_count;
 
 
 	uint16_t leaf_count;
@@ -187,8 +187,10 @@ uint64_t strtoull_2(const char8_t* str);
 void atui_destroy_tree(atui_branch* tree);
 
 
-
 struct atui_funcify_args {
+	char* rename;
+	// optionally rename the branch.
+
 	void* atomtree;
 	// Pointer to the relevant atomtree struct. Mainly for the bios pointer,
 	// but is necessary if atomtree-computer data needs to be pulled in. Can be
@@ -198,29 +200,52 @@ struct atui_funcify_args {
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 
-	atui_branch** import_children;
+	atui_branch** import_branches;
 	// If the child branches are preallocated, walk across this. This array
-	// must have num_child_branches elements.
+	// must have num_import_branches elements. NULLs allowed.
 
-	uint16_t num_child_branches;
-	// Number of child branches this atui_branch will have.*/
-
+	uint16_t num_import_branches;
+	// Number of imported child branches this atui_branch will have.*/
 };
 
 
 // funcify internal structs
 struct dynarray_bounds { // for ATUI_DYNARRAY
-	void* array_start;
-	uint32_t element_size; // for manual pointer math.
-	uint16_t dynarray_length; // the number of members to the dynamic array.
+	void const* array_start;
+	const uint32_t element_size; // for manual pointer math.
+	const uint16_t dynarray_length; // the number of members to the dynamic array.
 
-	uint16_t numleaves; // number of leaves within the pattern.
-	atui_branch* (*dynarray_inline_func)(struct atui_funcify_args*);
+	const uint16_t numleaves; // number of leaves within the pattern.
+	atui_branch* const(* dynarray_inline_func)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 
 	// optional enum for name sprintf'ing
-	const struct atui_enum* const enum_taglist;
+	const struct atui_enum const* enum_taglist;
 };
+
+struct atui_branch_data {
+	const char8_t const* name;
+	const char8_t const* varname;
+
+	// leaves straightforward:
+	const atui_leaf const* leaves_initial;
+
+	// computed branches for the the inline leaves:
+	const atui_branch const* const* inline_initial;
+
+	// the collection of leaf patterns for all dynarrays in the branch:
+	const atui_leaf const* dynarray_patterns;
+	// dynarray metadata:
+	const struct dynarray_bounds const* dynarray_boundaries;
+
+	const uint8_t num_leaves_initial;
+	const uint8_t num_inline_initial;
+	const uint8_t num_dynarray_sets;
+};
+atui_branch* atui_branch_allocator(
+		const struct atui_branch_data const* embryo,
+		const struct atui_funcify_args const* args);
+
 
 struct atui_nullstruct;
 // purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is

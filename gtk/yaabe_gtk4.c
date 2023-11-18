@@ -35,7 +35,7 @@ struct yaabe_gtkapp_model_cache { // to cache
 };
 
 inline static void alloc_branch_cache(atui_branch* branch) {
-	uint16_t gobj_count = branch->num_child_branches;
+	uint16_t gobj_count = branch->num_branches;
 
 	branch->auxiliary = malloc(
 		sizeof(struct yaabe_gtkapp_model_cache)
@@ -105,9 +105,9 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	}
 
 	atui_branch* child_branch;
-	while(tree->max_branch_count) {
-		(tree->max_branch_count)--;
-		child_branch = tree->all_branches[tree->max_branch_count];
+	while(tree->max_all_branch_count) {
+		(tree->max_all_branch_count)--;
+		child_branch = tree->all_branches[tree->max_all_branch_count];
 		if (child_branch != NULL)
 			atui_destroy_tree_with_gtk(child_branch);
 	}
@@ -535,13 +535,13 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 	GListStore* children = NULL;
 	int i = 0;
 
-	if (parent->num_child_branches) {
+	if (parent->num_branches) {
 		children = g_list_store_new(G_TYPE_OBJECT);
 
 		// if no cached gobjects, generate and cache them; otherwise use cache.
 		if (branch_models->child_gobj[0] == NULL) {
 			GObject* gobj_child;
-			for(i=0; i < parent->num_child_branches; i++) {
+			for(i=0; i < parent->num_branches; i++) {
 				// the cache is also for the leaves
 				alloc_branch_cache(parent->child_branches[i]);
 

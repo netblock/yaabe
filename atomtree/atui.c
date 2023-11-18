@@ -322,7 +322,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 
 void atui_destroy_tree(atui_branch* tree) { //a reference implementation
-	while(tree->max_branch_count--)
-		atui_destroy_tree(tree->all_branches[tree->max_branch_count]);
+	while(tree->max_all_branch_count--)
+		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
 	free(tree);
 }
