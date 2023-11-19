@@ -69,22 +69,15 @@ enum atui_type:uint32_t {
 	ATUI_STRING    = 1<<9, // Meant for human-readable text
 	ATUI_ARRAY    = 1<<10, // No technical difference from string
 	ATUI_INLINE   = 1<<11, // Pull in leaves from other tables
-	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
+	ATUI_PETIOLE  = 1<<12, // hard-attach a child branch
+	ATUI_DYNARRAY = 1<<13, // For runtime array lengths
 
 	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
 	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit
-
-	// TODO unrolled array for static arrays?
-	// follow dynarray, but instead of count, it's a preprocessor array with 
-	// enums that get valued and texted. possible pairs?
-	// start, ((val, name), (val, name))
-	// alternatively, use DYNARRAY, and compile the atui_*.c with
-	// and play with loop optimiser flags, like -funroll-loops
-
-	// TODO allow DYNARRAY to pull text from an ATUI enum?
-
-	// TODO ATUI_BRANCH for automatic branch pull-in?
 };
+
+
+struct atui_funcify_args; // TODO reorganise atui.h?
 
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
@@ -109,7 +102,11 @@ struct _atui_leaf {
 	uint8_t num_enum_opts;
 	const struct atui_enum* enum_options; // array of text val pair
 
-	atui_branch** inline_branch;
+	union {
+		atui_branch** inline_branch;
+		// allocator-funcify use only:
+		atui_branch* (* branch_bud)(struct atui_funcify_args*);
+	};
 
 	union {
 		void const*      val;
@@ -216,7 +213,7 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 	const uint16_t dynarray_length; // the number of members to the dynamic array.
 
 	const uint16_t numleaves; // number of leaves within the pattern.
-	atui_branch* const(* dynarray_inline_func)(struct atui_funcify_args*);
+	//atui_branch* const(* dynarray_inline_func)(struct atui_funcify_args*);
 	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 
 	// optional enum for name sprintf'ing
@@ -230,17 +227,18 @@ struct atui_branch_data {
 	// leaves straightforward:
 	const atui_leaf const* leaves_initial;
 
-	// computed branches for the the inline leaves:
-	const atui_branch const* const* inline_initial;
-
 	// the collection of leaf patterns for all dynarrays in the branch:
 	const atui_leaf const* dynarray_patterns;
 	// dynarray metadata:
 	const struct dynarray_bounds const* dynarray_boundaries;
 
 	const uint8_t num_leaves_initial;
-	const uint8_t num_inline_initial;
 	const uint8_t num_dynarray_sets;
+
+
+	const uint8_t num_inline_initial;
+	const uint8_t num_branches_initial;
+
 };
 atui_branch* atui_branch_allocator(
 		const struct atui_branch_data const* embryo,

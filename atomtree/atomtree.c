@@ -3,6 +3,8 @@
 #include "atomtree.h"
 #include "atui.h"
 
+// TODO take advantage of ATUI_PETIOLE as much as possible
+
 inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 		struct atom_tree* atree, bool generate_atui) {
 

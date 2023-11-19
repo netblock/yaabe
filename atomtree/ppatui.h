@@ -73,9 +73,6 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	const atomtypeprefix atomtypesuffix const* bios = args->suggestbios;\
 \
 	const atui_leaf const leaves_initial[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
-	const atui_branch const* inline_initial[] = {\
-		_PPATUI_INLINE_BRANCHES(__VA_ARGS__)\
-	};\
 	const atui_leaf const dynarray_patterns[] = {\
 		_PPATUI_DYNARRAY(ROLL, __VA_ARGS__)\
 	};\
@@ -87,16 +84,16 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.varname = #atomtypesuffix,\
 \
 		.leaves_initial = leaves_initial,\
-		.inline_initial = inline_initial,\
 		.dynarray_patterns = dynarray_patterns,\
 		.dynarray_boundaries = dynarray_boundaries,\
 \
 		.num_leaves_initial = sizeof(leaves_initial)/sizeof(atui_leaf),\
-		.num_inline_initial = sizeof(inline_initial)/sizeof(atui_branch*),\
 		.num_dynarray_sets = (\
 			sizeof(dynarray_boundaries)\
 			/ sizeof(struct dynarray_bounds)\
 		),\
+		.num_inline_initial = (0 _PPATUI_BRANCHES(INLINE, __VA_ARGS__) ),\
+		.num_branches_initial = (0 _PPATUI_BRANCHES(PETIOLE, __VA_ARGS__) ),\
 	};\
 	return atui_branch_allocator(&branch_embryo, args);\
 }
@@ -260,38 +257,22 @@ That is, bitfield population, and enum and inline association.
 
 
 
-//ATUI_INLINE
-
-// The meat of ATUI_INLINE is handled in the funcify
+// ATUI_INLINE
+// ATUI_PETIOLE
+#define _PPATUI_FANCY_ATUI_PETIOLE(...) _PPATUI_FANCY_ATUI_INLINE(__VA_ARGS__)
 #define _PPATUI_FANCY_ATUI_INLINE(\
 		var, name, description_data, radix, fancytype, inlinebranch)\
 	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.val = NULL,\
+	.branch_bud = PPATUI_FUNC_NAME(inlinebranch),\
 	_PPATUI_FANCY_METALEAF\
 	},
+/*
+ATUI_MAKE_BRANCH(atomstruct,\
+		(void*)atomtree, (void*)&(inlinebranch),  0,NULL\
+	),\
+*/
 
-
-// Go through the leaves, find the ATUI_INLINERs, and gather their branches
-#define _PPATUI_INBRANCH(m, leafdata)\
-	_PPATUI_INBRANCH_HELPER1(_PPATUI_UNPACK0 leafdata)
-#define _PPATUI_INBRANCH_HELPER1(...)\
-	_PPATUI_INBRANCH_HELPER2(__VA_ARGS__)
-#define _PPATUI_INBRANCH_HELPER2(var, name, displaydata, description_data)\
-	_PPATUI_INBRANCH_HELPER3(var, _PPATUI_UNPACK0 displaydata)
-#define _PPATUI_INBRANCH_HELPER3(...)\
-	_PPATUI_INBRANCH_HELPER4(__VA_ARGS__)
-#define _PPATUI_INBRANCH_HELPER4(var, radix, fancytype, ...)\
-	_PPATUI_INBRANCH_##fancytype(var, __VA_ARGS__)
-
-#define _PPATUI_INBRANCH_ATUI_NOFANCY(...)
-#define _PPATUI_INBRANCH_ATUI_BITFIELD(...)
-#define _PPATUI_INBRANCH_ATUI_ENUM(...)
-#define _PPATUI_INBRANCH_ATUI_STRING(...)
-#define _PPATUI_INBRANCH_ATUI_ARRAY(...)
-#define _PPATUI_INBRANCH_ATUI_DYNARRAY(...)
-#define _PPATUI_INBRANCH_ATUI_INLINE(instancename, atomstruct)\
-	ATUI_MAKE_BRANCH(atomstruct, NULL, (void*)&(instancename), 0, NULL),
-
+// Do nothing for that it isn't a leaf.
 
 
 // ATUI_DYNARRAY
@@ -312,6 +293,8 @@ That is, bitfield population, and enum and inline association.
 		.auxiliary = NULL,\
 		_PPATUI_FANCY_METALEAF\
 	},
+
+
 
 // Unpack the leaf, and its displaydata from their respective parentheses.
 // The variadic passthrough like _PPATUI_LEAF_HELPER1 executes the unpack.
@@ -340,6 +323,44 @@ That is, bitfield population, and enum and inline association.
 /**************************** LEAF FANCY FUNCS END ****************************/
 
 
+/******************** ATUI_INLINE AND ATUI_PETIOLE STUFF **********************/
+
+// Go through the leaves, find the ATUI_INLINE or ATUI_PETIOLE, and count them
+#define _PPATUI_BRANCH(job, leafdata)\
+	_PPATUI_BRANCH_HELPER1(job, _PPATUI_UNPACK0 leafdata)
+#define _PPATUI_BRANCH_HELPER1(job, ...)\
+	_PPATUI_BRANCH_HELPER2(job, __VA_ARGS__)
+#define _PPATUI_BRANCH_HELPER2(job, var, name, displaydata, description_data)\
+	_PPATUI_BRANCH_HELPER3(job, var, _PPATUI_UNPACK0 displaydata)
+#define _PPATUI_BRANCH_HELPER3(job, var, ...)\
+	_PPATUI_BRANCH_HELPER4(job, var, __VA_ARGS__)
+#define _PPATUI_BRANCH_HELPER4(job, var, radix, fancytype, ...)\
+	_PPATUI_BRANCH_##job##_##fancytype(var, __VA_ARGS__)
+
+#define _PPATUI_BRANCH_PETIOLE_ATUI_NOFANCY(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_BITFIELD(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_ENUM(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_STRING(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_ARRAY(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_INLINE(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_DYNARRAY(...)
+#define _PPATUI_BRANCH_PETIOLE_ATUI_PETIOLE(...)   +1
+
+#define _PPATUI_BRANCH_INLINE_ATUI_NOFANCY(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_BITFIELD(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_ENUM(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_STRING(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_ARRAY(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_PETIOLE(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_DYNARRAY(...)
+#define _PPATUI_BRANCH_INLINE_ATUI_INLINE(...)   +1
+/*
+#define _PPATUI_BRANCH_INLINE_ATUI_INLINE(instancename, atomstruct)\
+	ATUI_MAKE_BRANCH(atomstruct,\
+		(void*)atomtree, (void*)&(instancename),  0,NULL\
+	),
+*/
+/******************* ATUI_INLINE AND ATUI_PETIOLE STUFF END *******************/
 
 
 /**************************** ATUI_DYNARRAY STUFF *****************************/
@@ -367,9 +388,10 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_NOFANCY(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_BITFIELD(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_ENUM(...)
-#define _PPATUI_DYNAR_SVCHELPER5_ATUI_INLINE(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_ARRAY(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_STRING(...)
+#define _PPATUI_DYNAR_SVCHELPER5_ATUI_INLINE(...)
+#define _PPATUI_DYNAR_SVCHELPER5_ATUI_PETIOLE(...)
 #define _PPATUI_DYNAR_SVCHELPER5_ATUI_DYNARRAY(\
 		job, var, name, description_data, radix, fancydata)\
 	_PPATUI_DYNAR_SVCHELPER6(\
@@ -400,9 +422,6 @@ That is, bitfield population, and enum and inline association.
 		.numleaves = _PPATUI_DYNAR_BOUNDS_JOBS(\
 			NUMLEAVES, _PPATUI_UNPACK0 leaf_pattern\
 		),\
-		.dynarray_inline_func = _PPATUI_DYNAR_BOUNDS_JOBS(\
-			INLINEFUNC, _PPATUI_UNPACK0 leaf_pattern\
-		),\
 		.enum_taglist = PPATUI_ENUM_NAME(enum_name),\
 	},
 
@@ -423,18 +442,21 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_STRING(...)  1
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_ARRAY(...)   1
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_INLINE(...)  1
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_PETIOLE(...) 1
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_DYNARRAY(...) 0
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_BITFIELD(bitfields)\
 	1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK0 bitfields )
 
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_NOFANCY(...)  NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_BITFIELD(...) NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ENUM(...)     NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_STRING(...)   NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_ARRAY(...)    NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_DYNARRAY(...) NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_INLINEFUNC_ATUI_INLINE(inltable)\
-	 PPATUI_FUNC_NAME(inltable)
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_NOFANCY(...)  NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_BITFIELD(...) NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_ENUM(...)     NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_STRING(...)   NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_ARRAY(...)    NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_DYNARRAY(...) NULL
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_PETIOLE(branchname)\
+	 PPATUI_FUNC_NAME(branchname)
+#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_INLINE(branchname)\
+	 PPATUI_FUNC_NAME(branchname)
 
 /************************** ATUI_DYNARRAY STUFF END ***************************/
 
@@ -443,13 +465,18 @@ That is, bitfield population, and enum and inline association.
 
 
 // looper(config)(data) -> waterfall(data) ; where waterfall is like _1N1R256
+
 #define _PPATUI_LEAVES(...)\
 	_PPATUI_LOOPER(1,1,__VA_ARGS__)\
 		(_PPATUI_LEAF ,, __VA_ARGS__)
 
-#define _PPATUI_INLINE_BRANCHES(...)\
+#define _PPATUI_NOTLEAVES(...)\
 	_PPATUI_LOOPER(1,1,__VA_ARGS__)\
-		(_PPATUI_INBRANCH ,, __VA_ARGS__)
+		(_PPATUI_ ,, __VA_ARGS__)
+
+#define _PPATUI_BRANCHES(job, ...)\
+	_PPATUI_LOOPER(1,1,__VA_ARGS__)\
+		(_PPATUI_BRANCH, job, __VA_ARGS__)
 
 #define _PPATUI_DYNARRAY(job, ...)\
 	_PPATUI_LOOPER(1,1,__VA_ARGS__)\

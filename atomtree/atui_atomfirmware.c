@@ -96,13 +96,25 @@ And then for the atui table,
 
 ********************************************************************************
 ATUI_INLINE:
-If the element should reference a table, a atui_branch to inline,
+If the element should reference a table, a atui_branch to inline as a
+collection of leaves,
 	(bios->namespace_var, UI display name,
 		(ATUI_NAN, ATUI_INLINE, table_to_inline),
 		(ATUI_NODESCR)
 	)
 If you want to import just the leaves of the table, as if it was the leaves of
 the branch you're constructing, set the radix to ATUI_NODISPLAY
+Also make sure the table is populated with an ATUI_FUNCIFY()
+
+********************************************************************************
+ATUI_PETIOLE:
+If the element should reference a table, a atui_branch to integrate as a child
+branch
+	(bios->namespace_var, UI display name,
+		(ATUI_NAN, ATUI_PETIOLE, table_to_reference),
+		(ATUI_NODESCR)
+	)
+Since it isn't a leaf, but a reference to another branch, radix is ignored.
 Also make sure the table is populated with an ATUI_FUNCIFY()
 
 ********************************************************************************

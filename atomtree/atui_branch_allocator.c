@@ -12,15 +12,16 @@ atui_branch* atui_branch_allocator(
 		const struct atui_funcify_args const* args) {
 
 	const atui_leaf const* leaves_initial = embryo->leaves_initial;
-	const atui_branch const* const* inline_initial = embryo->inline_initial;
 	const atui_leaf const* dynarray_patterns = embryo->dynarray_patterns;
 	const struct dynarray_bounds const* dynarray_boundaries =\
 		embryo->dynarray_boundaries;
+	const uint8_t num_branches_initial = embryo->num_branches_initial;
 	const uint8_t num_leaves_initial = embryo->num_leaves_initial;
 	const uint8_t num_inline_initial = embryo->num_inline_initial;
 	const uint8_t num_dynarray_sets = embryo->num_dynarray_sets;
 
-	atui_branch** const import_branches = args->import_branches;
+	const uint16_t num_import_branches = args->num_import_branches;
+	atui_branch* const* import_branches = args->import_branches;
 
 	void* mallocvoid = NULL; // temporary malloc partitioning pointer
 	atui_branch* table = NULL;
@@ -45,25 +46,37 @@ atui_branch* atui_branch_allocator(
 	uint16_t max_all_branch_count = 0;
 	atui_branch** all_branches = NULL;
 
+	// arguments for inliners and petiole branches
+	struct atui_funcify_args branch_funcify_args = {
+		//.rename=NULL,
+		.atomtree=args->atomtree, .suggestbios=NULL,
+		.import_branches=NULL, .num_import_branches=0,
+	};
 	// leaves
 	uint16_t leavesinit_i = 0;
 	uint16_t leaves_i = 0;
 	atui_leaf* leaves = NULL;
 	uint16_t num_leaves = 0;
 
-	max_num_branches = args->num_import_branches;
-	uint16_t dynarray_total_leaves = 0;
-	uint16_t dynarray_total_inline = 0;
+	max_num_branches = num_branches_initial + num_import_branches;
+	uint16_t dynarray_total_branches = 0;
 
 	if (num_leaves_initial) {
 		uint16_t leafpattern_i = 0;
 		uint16_t dynentry_i = 0;
-
-		dynarray_total_leaves = 0;
-		dynarray_total_inline = 0;
-		while (dynentry_i < num_dynarray_sets) {
+		uint16_t dynarray_total_leaves = 0;
+		uint16_t dynarray_total_inline = 0;
+		uint16_t petiole_only_dynarrays = 0;
+		for (; dynentry_i < num_dynarray_sets; dynentry_i++) {
+			// except for bitfield, we assume there's gonna be exactly one
+			// pattern leaf.
+			if (dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE) {
+				dynarray_total_branches +=
+					dynarray_boundaries[dynentry_i].dynarray_length;
+				petiole_only_dynarrays++;
+				continue; // this isn't technically necessary; numleaves==0
+			}
 			if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {
-				// we assume there's gonna be exactly one pattern leaf.
 				dynarray_total_inline +=
 					dynarray_boundaries[dynentry_i].dynarray_length;
 			}
@@ -72,14 +85,22 @@ atui_branch* atui_branch_allocator(
 				* dynarray_boundaries[dynentry_i].numleaves
 			);
 
-			dynentry_i++;
 			leafpattern_i += dynarray_boundaries[dynentry_i].numleaves;
 		}
 
-
+		max_num_branches += dynarray_total_branches;
 		num_inliners = num_inline_initial + dynarray_total_inline;
 		max_all_branch_count = max_num_branches + num_inliners;
-		num_leaves = embryo->num_leaves_initial + dynarray_total_leaves;
+		num_leaves = (
+			embryo->num_leaves_initial
+			+ dynarray_total_leaves
+			- num_branches_initial // ATUI_PETIOLE
+			// future multi-leaf dynarray support:
+			//- dynarray_total_branches // ATUI_PETIOLE in ATUI_DYNARRAY
+			// dyn petiole could be partially pp'd: count how many petiole in
+			// pattern
+			- petiole_only_dynarrays
+		);
 		mallocvoid = malloc(
 			sizeof(atui_branch)
 			+ (max_all_branch_count * sizeof(atui_branch*))
@@ -109,12 +130,7 @@ atui_branch* atui_branch_allocator(
 		mallocvoid = NULL; // we are done partitioning
 
 
-
 		if (num_dynarray_sets) {
-			/* Due to dynarray, the amount of inliners overall might be greater
-			than the inline_initial amount:*/
-			uint16_t inlinersinit_i = 0;
-
 			// If there's more than one ATUI_DYNARRAY in this branch:
 			dynentry_i = 0;
 
@@ -131,20 +147,10 @@ atui_branch* atui_branch_allocator(
 			uint16_t leafpattern_numleaves = 0;
 			uint16_t leafpattern_start = 0;
 			uint16_t leafpattern_end = 0;
-			atui_branch* (*dynarray_inline_func)(struct atui_funcify_args*)
-				= NULL;
-			struct atui_funcify_args dynarray_inline_func_args = {
-				//.rename=NULL, 
-				.atomtree=args->atomtree, .suggestbios=NULL,
-				.import_branches=NULL, .num_import_branches=0,
-			};
 			const struct atui_enum* dynarray_enum_taglist = NULL;
 
 			leavesinit_i = 0;
 			while (leavesinit_i < num_leaves_initial) {
-
-				leaves[leaves_i] = leaves_initial[leavesinit_i];
-
 				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
 					dynarray_start_ptr =
 						(void*)dynarray_boundaries[dynentry_i].array_start;
@@ -154,15 +160,18 @@ atui_branch* atui_branch_allocator(
 						dynarray_boundaries[dynentry_i].dynarray_length;
 					leafpattern_numleaves =
 						dynarray_boundaries[dynentry_i].numleaves;
-					dynarray_inline_func =
-						dynarray_boundaries[dynentry_i].dynarray_inline_func;
 					dynarray_enum_taglist =
 						dynarray_boundaries[dynentry_i].enum_taglist;
 
-					leaves[leaves_i].num_child_leaves = (
-						dynarray_length * leafpattern_numleaves
-					);
-					leaves_i++; // we've child leaves to print
+					if (!((dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE)
+						&& (dynarray_boundaries[dynentry_i].numleaves == 1))) {
+						leaves[leaves_i] = leaves_initial[leavesinit_i];
+						leaves[leaves_i].num_child_leaves = (
+							dynarray_length * leafpattern_numleaves
+						);
+						leaves_i++; // we've child leaves to print
+					}
+					
 
 					leafpattern_end = leafpattern_start + leafpattern_numleaves;
 
@@ -177,8 +186,21 @@ atui_branch* atui_branch_allocator(
 						// for each each leaf in the leaf pattern set
 						leafpattern_i = leafpattern_start;
 						while (leafpattern_i < leafpattern_end) {
+							if (dynarray_patterns[leafpattern_i].type
+									& ATUI_PETIOLE) {
+								branch_funcify_args.suggestbios =\
+									dynarray_bios_pos;
+								// TODO have suggestname
+								branches[branches_i] =\
+									dynarray_patterns[leafpattern_i].branch_bud(
+										&branch_funcify_args
+									);
+								branches_i++;
+								leafpattern_i++;
+								continue;
+							}
 							leaves[leaves_i] = dynarray_patterns[leafpattern_i];
-							leaves[leaves_i].val = dynarray_start_ptr;
+							leaves[leaves_i].val = dynarray_bios_pos;
 							if (dynarray_enum_taglist) { // could be hoisted
 								sprintf(leaves[leaves_i].name,
 									leaves[leaves_i].origname,
@@ -195,13 +217,14 @@ atui_branch* atui_branch_allocator(
 							}
 
 							if (leaves[leaves_i].type & ATUI_INLINE) {
-								leaves[leaves_i].inline_branch =\
-									&(inliners[inliners_i]);
-								dynarray_inline_func_args.suggestbios =\
+								branch_funcify_args.suggestbios =\
 									(void*)leaves[leaves_i].val;
-								inliners[inliners_i] = dynarray_inline_func(
-									 &dynarray_inline_func_args
-								);
+								inliners[inliners_i] =\
+									leaves[leaves_i].branch_bud(
+										&branch_funcify_args
+									);
+								leaves[leaves_i].inline_branch =
+									&(inliners[inliners_i]);
 								inliners_i++;
 							}
 
@@ -210,35 +233,65 @@ atui_branch* atui_branch_allocator(
 						}
 						dynarray_biosarray_i++;
 					}
-					leaves_i--; // hand leaves printing back to leaves_init loop
 					leafpattern_start = leafpattern_end;
 					dynentry_i++;
+
 // If not dynarray (still has dynarray siblings):
 				} else if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					branch_funcify_args.suggestbios =\
+						(void*)leaves[leaves_i].val;
+					inliners[inliners_i] = leaves[leaves_i].branch_bud(
+						&branch_funcify_args
+					);
 					leaves[leaves_i].inline_branch =
 						&(inliners[inliners_i]);
-					inliners[inliners_i] = \
-						(atui_branch*)inline_initial[inlinersinit_i];
+
 					inliners_i++;
-					inlinersinit_i++;
+					leaves_i++;
+				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
+					branch_funcify_args.suggestbios =\
+						(void*)leaves_initial[leavesinit_i].val;
+					branches[branches_i] =\
+						leaves_initial[leavesinit_i].branch_bud(
+							&branch_funcify_args
+						);
+					branches_i++;
+				} else {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					leaves_i++;
 				}
-				leaves_i++;
 				leavesinit_i++;
 			}
 		} else {
-// Handle leaves if there's no dynarray at all:
+// minor hoist:  handle leaves if there's no dynarray at all:
 			inliners_i = 0;
 			leaves_i = 0;
-			//leavesinit_i = 0;
-			for (; leaves_i < num_leaves_initial; leaves_i++) {
-				leaves[leaves_i] = leaves_initial[leaves_i];
-				if (leaves[leaves_i].type & ATUI_INLINE) {
-					// could technically be hoisted with num_inline_initial
+			leavesinit_i = 0;
+			while (leavesinit_i < num_leaves_initial) {
+				if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					branch_funcify_args.suggestbios =\
+						(void*)leaves[leaves_i].val;
+					inliners[inliners_i] = leaves[leaves_i].branch_bud(
+						&branch_funcify_args
+					);
 					leaves[leaves_i].inline_branch = &(inliners[inliners_i]);
-					inliners[inliners_i] = \
-						(atui_branch*)inline_initial[inliners_i];
 					inliners_i++;
+					leaves_i++;
+				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
+					branch_funcify_args.suggestbios =\
+						(void*)leaves_initial[leavesinit_i].val;
+					branches[branches_i] =\
+						leaves_initial[leavesinit_i].branch_bud(
+							&branch_funcify_args
+						);
+					branches_i++;
+				} else {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					leaves_i++;
 				}
+				leavesinit_i++;
 			}
 		}
 
@@ -256,25 +309,26 @@ atui_branch* atui_branch_allocator(
 		}
 		mallocvoid = NULL; // we are done partitioning
 	}
-
 	assert(leaves_i == num_leaves);
 	assert(inliners_i == num_inliners);
+	assert(branches_i == (num_branches_initial + dynarray_total_branches));
 
 // Handle non-inline branches:
 	if (max_num_branches) {
-		branches_i = 0;
-		importbranches_i = 0;
 		if (import_branches) {
-			while (importbranches_i < args->num_import_branches) {
+			importbranches_i = 0;
+			while (importbranches_i < num_import_branches) {
 				if (import_branches[importbranches_i]) {
-					branches[branches_i] = import_branches[importbranches_i];
+					branches[branches_i] =\
+						(atui_branch*)import_branches[importbranches_i];
 					branches_i++;
 				}
 				importbranches_i++;
 			}
-			num_branches = branches_i;
 		}
-		assert(branches_i == num_branches);
+
+		num_branches = branches_i;
+
 		// zero out the import's unused allocation
 		for (; branches_i < max_num_branches; branches_i++) {
 			branches[branches_i] = NULL;
