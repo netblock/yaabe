@@ -71,7 +71,6 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	const struct atomtreestruct const* atomtree = args->atomtree;\
 	const atomtypeprefix atomtypesuffix const* bios = args->suggestbios;\
-	atomtypeprefix atomtypesuffix * bios2 = args->suggestbios;\
 \
 	const atui_leaf const leaves_initial[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
 	const atui_leaf const dynarray_patterns[] = {\

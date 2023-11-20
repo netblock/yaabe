@@ -287,7 +287,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 				}
 				break;
 			default:
-				assert(0); // why are we here?
+				assert(0); // why are we here? perhaps _PPATUI_LEAF_BITNESS()?
 				return malloc_size;
 		}
 		buffer[j-1] = '\0'; // eat the final space
