@@ -71,6 +71,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 \
 	const struct atomtreestruct const* atomtree = args->atomtree;\
 	const atomtypeprefix atomtypesuffix const* bios = args->suggestbios;\
+	atomtypeprefix atomtypesuffix * bios2 = args->suggestbios;\
 \
 	const atui_leaf const leaves_initial[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
 	const atui_leaf const dynarray_patterns[] = {\
@@ -118,26 +119,37 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_UNPACK1(to_depack)  _PPATUI_UNPACK0 to_depack
 #define _PPATUI_UNPACK0(...) __VA_ARGS__
-
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
-	uint8_t*:8, uint16_t*:16, uint32_t*:32, uint64_t*:64,\
-	uint8_t :8, uint16_t :16, uint32_t :32, uint64_t :64,\
+	uint8_t:8, uint8_t*:8, uint8_t const*:8,\
+	uint16_t:16, uint16_t*:16, uint16_t const*:16,\
+	uint32_t:32, uint32_t*:32, uint32_t const*:32,\
+	uint64_t:64, uint64_t*:64, uint64_t const*:64,\
 \
-	int8_t*:8, int16_t*:16, int32_t*:32, int64_t*:64,\
-	int8_t :8, int16_t :16, int32_t :32, int64_t :64,\
+	int8_t:8, int8_t*:8, int8_t const*:8,\
+	int16_t:16, int16_t*:16, int16_t const*:16,\
+	int32_t:32, int32_t*:32, int32_t const*:32,\
+	int64_t:64, int64_t*:64, int64_t const*:64,\
 \
-	float16_t*:16, float32_t*:32, float64_t*:64,\
-	float16_t :16, float32_t :32, float64_t :64,\
+	float16_t:16, float16_t*:16, float16_t const*:16,\
+	float32_t:32, float32_t*:32, float32_t const*:32,\
+	float64_t:64, float64_t*:64, float64_t const*:64,\
 \
-	default:0\
+	default:69\
 )
+
 #define _PPATUI_LEAF_SIGNED(var) _Generic((var),\
-	int8_t*:ATUI_SIGNED, int16_t*:ATUI_SIGNED, int32_t*:ATUI_SIGNED,\
-	int8_t :ATUI_SIGNED, int16_t :ATUI_SIGNED, int32_t :ATUI_SIGNED,\
-	int64_t*:ATUI_SIGNED,int64_t :ATUI_SIGNED,\
+	int8_t:ATUI_SIGNED, int8_t*:ATUI_SIGNED, int8_t const*:ATUI_SIGNED,\
+	int16_t:ATUI_SIGNED, int16_t*:ATUI_SIGNED, int16_t const*:ATUI_SIGNED,\
+	int32_t:ATUI_SIGNED, int32_t*:ATUI_SIGNED, int32_t const*:ATUI_SIGNED,\
+	int64_t:ATUI_SIGNED, int64_t*:ATUI_SIGNED, int64_t const*:ATUI_SIGNED,\
 \
-/*	float16_t*:ATUI_SIGNED, float32_t*:ATUI_SIGNED, float64_t*:ATUI_SIGNED,\
-	float16_t :ATUI_SIGNED, float32_t :ATUI_SIGNED, float64_t :ATUI_SIGNED,\
+/*
+	float16_t:ATUI_SIGNED, float16_t*:ATUI_SIGNED,\
+	float16_t const*:ATUI_SIGNED,\
+	float32_t:ATUI_SIGNED, float32_t*:ATUI_SIGNED,\
+	float32_t const*:ATUI_SIGNED,\
+	float64_t:ATUI_SIGNED, float64_t*:ATUI_SIGNED,\
+	float64_t const*:ATUI_SIGNED,\
 */\
 \
 	default:0\
@@ -169,7 +181,7 @@ That is, bitfield population, and enum and inline association.
 	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
 	.array_size = 1,\
 	.total_bits = _PPATUI_LEAF_BITNESS(var),\
-	.bitfield_hi=_PPATUI_LEAF_BITNESS(var)-1,\
+	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\
 	.val = &(var),\
 
 // Fancy common end

@@ -245,7 +245,6 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		assert(radix != ATUI_FRAC);
 		// too hard cause floats can have many base-10 digits
 
-
 		num_digits = ceil( // round up because it's gonna be like x.9999
 			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
 			/ log(bases[radix])
@@ -288,6 +287,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 				}
 				break;
 			default:
+				assert(0); // why are we here?
 				return malloc_size;
 		}
 		buffer[j-1] = '\0'; // eat the final space

@@ -1378,8 +1378,8 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 		((LANG_ENG, "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)"))
 	),
 
-	(bios->BoardReserved, BoardReserved,
-		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
+	(bios2->BoardReserved, BoardReserved,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 
