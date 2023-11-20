@@ -133,7 +133,7 @@ That is, bitfield population, and enum and inline association.
 	float32_t:32, float32_t*:32, float32_t const*:32,\
 	float64_t:64, float64_t*:64, float64_t const*:64,\
 \
-	default:69\
+	default:0\
 )
 
 #define _PPATUI_LEAF_SIGNED(var) _Generic((var),\
@@ -402,7 +402,16 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_DYNAR_SVCHELPER7_ROLL(\
 		var, name, description_data, radix,\
 		leaf_pattern, start, count, enum_name)\
-	_PPATUI_LEAF(unused_o, leaf_pattern)
+	_PPATUI_LEAF(unused_o, _PPATUI_DYNAR_ROLL_REPACK(start[0], leaf_pattern))
+
+// Replace the leaf-pattern's var with the dynarray start, to pp-compute stuff
+// like bit length and types
+#define _PPATUI_DYNAR_ROLL_REPACK(var_new, leaf_pattern)\
+	_PPATUI_DYNAR_ROLL_REPACK_HELPER1(var_new, _PPATUI_UNPACK0 leaf_pattern)
+#define _PPATUI_DYNAR_ROLL_REPACK_HELPER1(...)\
+	_PPATUI_DYNAR_ROLL_REPACK_HELPER2(__VA_ARGS__)
+#define _PPATUI_DYNAR_ROLL_REPACK_HELPER2(var_new, var_old, ...)\
+	(var_new, __VA_ARGS__)
 
 // Get the non-pattern metadata for the dynarray
 // struct dynarray_bounds ; see atui.h
