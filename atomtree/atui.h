@@ -51,6 +51,9 @@ enum i18n_languages:int8_t {
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
+// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
+// relevant for that branch:
+struct atui_nullstruct;
 
 // TODO move to bitfield?
 enum atui_type:uint32_t {
@@ -77,8 +80,7 @@ enum atui_type:uint32_t {
 };
 
 
-struct atui_funcify_args; // TODO reorganise atui.h?
-
+struct atui_funcify_args; // internal use; see below
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
@@ -109,7 +111,7 @@ struct _atui_leaf {
 	};
 
 	union {
-		void const*      val;
+		void const* val;
 
 		uint8_t*   u8;
 		uint16_t*  u16;
@@ -160,8 +162,6 @@ struct  _atui_branch {
 // reccomended buffer size for the upcomming text functions
 #define ATUI_LEAVES_STR_BUFFER 70
 
-
-
 // set the value from a string or array of 8-bit
 uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
 uint16_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
@@ -179,10 +179,14 @@ double atui_leaf_get_val_fraction(atui_leaf* leaf);
 int64_t strtoll_2(const char8_t* str);
 uint64_t strtoull_2(const char8_t* str);
 
+
 // atui has auxiliary pointers to hang extra data off of and this deallocator
 // doesn't consider.
 void atui_destroy_tree(atui_branch* tree);
 
+
+
+// funcify internal structs:
 
 struct atui_funcify_args {
 	char* rename;
@@ -205,16 +209,12 @@ struct atui_funcify_args {
 	// Number of imported child branches this atui_branch will have.*/
 };
 
-
-// funcify internal structs
 struct dynarray_bounds { // for ATUI_DYNARRAY
 	void const* array_start;
-	const uint32_t element_size; // for manual pointer math.
-	const uint16_t dynarray_length; // the number of members to the dynamic array.
+	const uint32_t element_size; // Size of bios element. For pointer math.
+	const uint16_t dynarray_length; // The number of elements in the bios array
 
 	const uint16_t numleaves; // number of leaves within the pattern.
-	//atui_branch* const(* dynarray_inline_func)(struct atui_funcify_args*);
-	// function pointer to the _atui function, if the pattern is a ATUI_INLINE
 
 	// optional enum for name sprintf'ing
 	const struct atui_enum const* enum_taglist;
@@ -235,19 +235,15 @@ struct atui_branch_data {
 	const uint8_t num_leaves_initial;
 	const uint8_t num_dynarray_sets;
 
-
 	const uint8_t num_inline_initial;
 	const uint8_t num_branches_initial;
 
 };
 atui_branch* atui_branch_allocator(
-		const struct atui_branch_data const* embryo,
-		const struct atui_funcify_args const* args);
+	const struct atui_branch_data const* embryo,
+	const struct atui_funcify_args const* args
+);
 
-
-struct atui_nullstruct;
-// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
-// relevant for that branch.
 
 
 #include "ppatui.h"

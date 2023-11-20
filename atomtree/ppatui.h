@@ -95,6 +95,13 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.num_inline_initial = (0 _PPATUI_BRANCHES(INLINE, __VA_ARGS__) ),\
 		.num_branches_initial = (0 _PPATUI_BRANCHES(PETIOLE, __VA_ARGS__) ),\
 	};\
+\
+	static_assert(sizeof(#atomtypesuffix) <= sizeof(((atui_branch*)0)->name));\
+\
+	/* If this fails, _PPATUI_LOOPER waterfall might need to be increased.
+	It doesn't consider the increase due to bitfields however. */\
+	static_assert((sizeof(leaves_initial)/sizeof(atui_leaf)) < 255);\
+\
 	return atui_branch_allocator(&branch_embryo, args);\
 }
 
@@ -119,8 +126,6 @@ That is, bitfield population, and enum and inline association.
 	int8_t*:8, int16_t*:16, int32_t*:32, int64_t*:64,\
 	int8_t :8, int16_t :16, int32_t :32, int64_t :64,\
 \
-	char: 8, char*: 8,\
-\
 	float16_t*:16, float32_t*:32, float64_t*:64,\
 	float16_t :16, float32_t :32, float64_t :64,\
 \
@@ -138,31 +143,34 @@ That is, bitfield population, and enum and inline association.
 	default:0\
 )
 
-#define _PPATUI_FANCY_NOBITFIELD(var)\
-	.bitfield_hi=_PPATUI_LEAF_BITNESS(var)-1, .bitfield_lo=0,
-#define _PPATUI_FANCY_NOBITFIELD_HARD\
-	.bitfield_hi=0, .bitfield_lo=0,
-
-#define _PPATUI_FANCY_NOENUM .enum_options=NULL, .num_enum_opts=0,
-#define _PPATUI_FANCY_NOARRAY .array_size=0,
-
-#define _PPATUI_FANCY_METALEAF\
-	_PPATUI_FANCY_NOBITFIELD_HARD _PPATUI_FANCY_NOENUM _PPATUI_FANCY_NOARRAY
-
+#define _PPATUI_FANCY_ZERO\
+	.name = {0},\
+	.origname = NULL,\
+	.varname = NULL,\
+	.description = {NULL},\
+	.type = 0,\
+	.array_size = 0,\
+	.total_bits = 0,\
+	.bitfield_hi = 0,\
+	.bitfield_lo = 0,\
+	.num_child_leaves = 0,\
+	.num_enum_opts = 0,\
+	.enum_options = NULL,\
+	.inline_branch = NULL,\
+	.val = NULL,\
+	.auxiliary = NULL,
 
 // TODO handle description_data
 #define _PPATUI_FANCY_INIT(var, namestr, description_data, radix, fancytype)\
-	{\
-		.name = #namestr,\
-		.origname = #namestr,\
-		.varname = #var,\
-		.description = NULL,\
-		.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
-		.array_size = 1,\
-		.total_bits = _PPATUI_LEAF_BITNESS(var),\
-		.num_child_leaves = 0,\
-		.val = &(var),\
-		.auxiliary = NULL,\
+	_PPATUI_FANCY_ZERO\
+	.name = #namestr,\
+	.origname = #namestr,\
+	.varname = #var,\
+	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
+	.array_size = 1,\
+	.total_bits = _PPATUI_LEAF_BITNESS(var),\
+	.bitfield_hi=_PPATUI_LEAF_BITNESS(var)-1,\
+	.val = &(var),\
 
 // Fancy common end
 
@@ -172,8 +180,8 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_FANCY_ATUI_NOFANCY(\
 		var, name, description_data, radix, fancytype, ...)\
-	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	_PPATUI_FANCY_NOBITFIELD(var) _PPATUI_FANCY_NOENUM\
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
 	},
 
 // Note the comma. The comma exists to trigger the existence of fancy_data
@@ -183,20 +191,20 @@ That is, bitfield population, and enum and inline association.
 
 
 // ATUI_ENUM
-
 #define _PPATUI_FANCY_ATUI_ENUM(\
 		var, name, description_data, radix, fancytype, enumname)\
-	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.enum_options = PPATUI_ENUM_NAME(enumname),\
-	.num_enum_opts = (sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum)),\
-	_PPATUI_FANCY_NOBITFIELD(var)\
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+		.enum_options = PPATUI_ENUM_NAME(enumname),\
+		.num_enum_opts = (\
+			sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum)\
+		),\
 	},
 
 
 
 // ATUI_STRING
 // ATUI_ARRAY
-
 #define _PPATUI_FANCY_ATUI_STRING(\
 		var, name, description_data, radix, fancytype, ...)\
 	_PPATUI_FANCY_ATUI_ARRAY(\
@@ -205,25 +213,23 @@ That is, bitfield population, and enum and inline association.
 
 #define _PPATUI_FANCY_ATUI_ARRAY(\
 		var, name, description_data, radix, fancytype, ...)\
-	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.array_size = (sizeof(var)/sizeof(var[0])),\
-	_PPATUI_FANCY_NOBITFIELD(var)\
-	_PPATUI_FANCY_NOENUM\
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+		.array_size = (sizeof(var)/sizeof(var[0])),\
 	},
 
 
 
 // ATUI_BITFIELD
-
 #define _ATUI_BITFIELD_NUMLEAVES(...) _PP_NUMARG(__VA_ARGS__)
 
 #define _PPATUI_FANCY_ATUI_BITFIELD(\
 		var, name, description_data, radix, fancytype, bitfielddata)\
-	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.bitfield_hi = _PPATUI_LEAF_BITNESS(var) - 1,\
-	.bitfield_lo = 0,\
-	.num_child_leaves = ( _ATUI_BITFIELD_NUMLEAVES bitfielddata ),\
-	_PPATUI_FANCY_NOENUM\
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+		.bitfield_hi = _PPATUI_LEAF_BITNESS(var) - 1,\
+		.bitfield_lo = 0,\
+		.num_child_leaves = ( _ATUI_BITFIELD_NUMLEAVES bitfielddata ),\
 	},\
 	_PPATUI_BITFIELD_LEAVES(\
 		var, _PPATUI_UNPACK1(bitfielddata)\
@@ -235,24 +241,15 @@ That is, bitfield population, and enum and inline association.
 		parent_var, _PPATUI_UNPACK1(bfleaf)\
 	)
 #define _PPA_BFLEAF_HELPER1(...) _PPA_BFLEAF_HELPER2(__VA_ARGS__)
-// TODO handle description
 #define _PPA_BFLEAF_HELPER2(\
 		parent_var,\
 		bfname, bit_end, bit_start, radix, description_data)\
 	{\
-		.name = #bfname,\
-		.origname = #bfname,\
-		.varname = #parent_var,\
-		.description = NULL,\
-		.type = (radix | _ATUI_BITCHILD),\
-		.array_size = 1,\
-		.total_bits = _PPATUI_LEAF_BITNESS(parent_var),\
+		_PPATUI_FANCY_INIT(\
+			parent_var, bfname, description_data, radix, _ATUI_BITCHILD\
+		)\
 		.bitfield_hi = bit_end,\
 		.bitfield_lo = bit_start,\
-		.num_child_leaves = 0,\
-		.val = &(parent_var),\
-		.auxiliary = NULL,\
-		_PPATUI_FANCY_NOENUM\
 	},
 
 
@@ -262,37 +259,28 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_PETIOLE(...) _PPATUI_FANCY_ATUI_INLINE(__VA_ARGS__)
 #define _PPATUI_FANCY_ATUI_INLINE(\
 		var, name, description_data, radix, fancytype, inlinebranch)\
-	_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-	.branch_bud = PPATUI_FUNC_NAME(inlinebranch),\
-	_PPATUI_FANCY_METALEAF\
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+		.branch_bud = PPATUI_FUNC_NAME(inlinebranch),\
 	},
-/*
-ATUI_MAKE_BRANCH(atomstruct,\
-		(void*)atomtree, (void*)&(inlinebranch),  0,NULL\
-	),\
-*/
 
-// Do nothing for that it isn't a leaf.
 
 
 // ATUI_DYNARRAY
-
 // Usually a placeholder. The meat of ATUI_DYNARRAY is handled in the funcify.
 //TODO handle description_data
 #define _PPATUI_FANCY_ATUI_DYNARRAY(\
 		var, namestr, description_data, radix, fancytype, fancydata)\
 	{\
-		/* numleaves is handled in the dynarray expander func*/\
+		_PPATUI_FANCY_ZERO\
+		/*.val = &(var),  any benefit?*/\
+		/* numleaves is handled in the allocator*/\
 		.name = #namestr,\
 		.origname = #namestr,\
 		.varname = #var,\
-		.description = NULL,\
 		.type = (radix | fancytype),\
-		.total_bits = 0,\
-		.val = NULL,\
-		.auxiliary = NULL,\
-		_PPATUI_FANCY_METALEAF\
 	},
+
 
 
 
@@ -354,12 +342,7 @@ ATUI_MAKE_BRANCH(atomstruct,\
 #define _PPATUI_BRANCH_INLINE_ATUI_PETIOLE(...)
 #define _PPATUI_BRANCH_INLINE_ATUI_DYNARRAY(...)
 #define _PPATUI_BRANCH_INLINE_ATUI_INLINE(...)   +1
-/*
-#define _PPATUI_BRANCH_INLINE_ATUI_INLINE(instancename, atomstruct)\
-	ATUI_MAKE_BRANCH(atomstruct,\
-		(void*)atomtree, (void*)&(instancename),  0,NULL\
-	),
-*/
+
 /******************* ATUI_INLINE AND ATUI_PETIOLE STUFF END *******************/
 
 
@@ -447,17 +430,6 @@ ATUI_MAKE_BRANCH(atomstruct,\
 #define _PPATUI_DYNAR_BOUNDS_HELPER3_NUMLEAVES_ATUI_BITFIELD(bitfields)\
 	1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK0 bitfields )
 
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_NOFANCY(...)  NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_BITFIELD(...) NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_ENUM(...)     NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_STRING(...)   NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_ARRAY(...)    NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_DYNARRAY(...) NULL
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_PETIOLE(branchname)\
-	 PPATUI_FUNC_NAME(branchname)
-#define _PPATUI_DYNAR_BOUNDS_HELPER3_BRANCHFUNC_ATUI_INLINE(branchname)\
-	 PPATUI_FUNC_NAME(branchname)
-
 /************************** ATUI_DYNARRAY STUFF END ***************************/
 
 
@@ -537,6 +509,8 @@ recursion.
 In other words, if the f() needs to call a loop, the loop that spun out the
 f() f() f() f()... is no longer usable; the f() needs to call a different
 waterfall.
+
+check out the related static_assert in the funcify function
 */
 #define _PPATUI_LOOPER(numargs, recurse, ...)\
 	_PPATUI_LOOPERH1(numargs, recurse, _PP_NUMARG(__VA_ARGS__))
