@@ -14,7 +14,7 @@ YAABE_RELEASE_CFLAGS = -DNDEBUG -O3 -flto=auto -fuse-linker-plugin
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
 YAABE_LDFLAGS =  -lm -lz $(GTK_LDFLAGS)
-YAABE_CFLAGS = -std=c2x -Iatom -Iatomtree -Igtk -DYAABE_VERSION="$(VERSION)" $(GTK_CFLAGS)
+YAABE_CFLAGS = -std=c2x -pipe -Iatom -Iatomtree -Igtk -DYAABE_VERSION="$(VERSION)" $(GTK_CFLAGS)
 
 SRCS = $(wildcard *.c atom/*.c atomtree/*.c gtk/*.c)
 OBJS = $(SRCS:%.c=out/%.o)
