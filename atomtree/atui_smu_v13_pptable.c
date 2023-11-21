@@ -6,72 +6,6 @@ See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 #include "atomtree.h"
 #include "atui.h"
 
-
-PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atomtree_powerplaytable,
-	(bios->header, header,
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		((LANG_ENG, "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0"))
-	),
-	(bios->table_revision, table_revision,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "For PLUM_BONITO, table_revision = 2"))
-	),
-	(bios->padding, padding,
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->table_size, table_size,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Driver portion table size. The offset to smc_pptable including header size"))
-	),
-	(bios->golden_pp_id, golden_pp_id,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "PPGen use only: PP Table ID on the Golden Data Base"))
-	),
-	(bios->golden_revision, golden_revision,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "PPGen use only: PP Table Revision on the Golden Data Base"))
-	),
-	(bios->format_id, format_id,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80"))
-	),
-	(bios->platform_caps, platform_caps,
-		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
-		(ATUI_NODESCR)
-	),
-
-	(bios->thermal_controller_type, thermal_controller_type,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "one of SMU_13_0_7_PP_THERMALCONTROLLER"))
-	),
-
-	(bios->small_power_limit1, small_power_limit1,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->small_power_limit2, small_power_limit2,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->boost_power_limit, boost_power_limit,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "For Gemini Board, when the slave adapter is in BACO mode, the master adapter will use this boost power limit instead of the default power limit to boost the power limit."))
-	),
-	(bios->software_shutdown_temp, software_shutdown_temp,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(bios->reserve, reserve,
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
-
-	// struct smu_13_0_7_overdrive_table overdrive_table;
-
-	(bios->padding1, padding1,
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	)
-
-	// struct smu13_smcpptable_v39 smc_pptable;
-)
-
 PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atomtree_powerplaytable,
 	(bios->revision, revision,
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -175,6 +109,75 @@ PPATUI_FUNCIFY(struct, smu_13_0_7_overdrive_table, atomtree_powerplaytable,
 	)
 )
 
+PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atomtree_powerplaytable,
+	(bios->header, header,
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		((LANG_ENG, "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0"))
+	),
+	(bios->table_revision, table_revision,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For PLUM_BONITO, table_revision = 2"))
+	),
+	(bios->padding, padding,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->table_size, table_size,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Driver portion table size. The offset to smc_pptable including header size"))
+	),
+	(bios->golden_pp_id, golden_pp_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PP Table ID on the Golden Data Base"))
+	),
+	(bios->golden_revision, golden_revision,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PP Table Revision on the Golden Data Base"))
+	),
+	(bios->format_id, format_id,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80"))
+	),
+	(bios->platform_caps, platform_caps,
+		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
+		(ATUI_NODESCR)
+	),
+
+	(bios->thermal_controller_type, thermal_controller_type,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "one of SMU_13_0_7_PP_THERMALCONTROLLER"))
+	),
+
+	(bios->small_power_limit1, small_power_limit1,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->small_power_limit2, small_power_limit2,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->boost_power_limit, boost_power_limit,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For Gemini Board, when the slave adapter is in BACO mode, the master adapter will use this boost power limit instead of the default power limit to boost the power limit."))
+	),
+	(bios->software_shutdown_temp, software_shutdown_temp,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->reserve, reserve,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->overdrive_table, overdrive_table,
+		(ATUI_NAN, ATUI_PETIOLE, smu_13_0_7_overdrive_table),
+		(ATUI_NODESCR)
+	),
+
+	(bios->padding1, padding1,
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+
+	// struct smu13_smcpptable_v39 smc_pptable;
+)
+
+
 
 PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atomtree_powerplaytable,
 	(bios->feature_control, feature_control,
@@ -243,6 +246,29 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atomtree_powerplaytable,
 			(SPARE_61,               61,61, ATUI_DEC, (ATUI_NODESCR)),
 			(SPARE_62,               62,62, ATUI_DEC, (ATUI_NODESCR)),
 			(SPARE_63,               63,63, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, dpm_debug_override_smu13, atui_nullstruct,
+	(bios->dpm_debug_override_flags, dpm_debug_override_flags,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(disable_volt_link_vcn_fclk,   0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_volt_link_dcn_fclk,   1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_volt_link_mp0_fclk,   2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_volt_link_vcn_dcfclk, 3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_fast_fclk_timer,      4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_vcn_pg,               5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_fmax_vmax,            6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_imu_fw_checks,        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(disable_d0i2_reentry_hsr_timer_check, 8,8, ATUI_DEC,
+				(ATUI_NODESCR)
+			),
+			(disable_dfll,                 9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_rlc_vf_bringup_mode,  10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(dfll_master_mode,            11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(enable_profiling_mode,       12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,                    31,13, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -689,7 +715,10 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "should be unique to each SKU(i.e if any value changes in below structure then this value must be different)"))
 	),
 
-	// union powerplay_feature_control_smu13 features;
+	(bios->features, features,
+		(ATUI_NAN, ATUI_PETIOLE, powerplay_feature_control_smu13),
+		(ATUI_NODESCR)
+	),
 
 	(bios->TotalPowerConfig, TotalPowerConfig,
 		(ATUI_DEC, ATUI_ENUM, PwrConfig_e),
@@ -707,6 +736,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_ENUM, SMARTSHIFT_VERSION_e),
 		((LANG_ENG, "Determine what SmartShift feature version is supported"))
 	),
+
 	(NULL, SocketPowerLimitAc,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PPT %u,
@@ -1053,19 +1083,15 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 	(bios->SpareVmin, SpareVmin,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	// struct DpmDescriptor_t DpmDescriptor[SMU13_PPCLK_COUNT];
-	/*
 	(NULL, DpmDescriptor,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, DpmDescriptor (%s),
-				(ATUI_NAN, ATUI_INLINE, DpmDescriptor_t),
-				(ATUI_NODESCR)
+				(ATUI_NAN, ATUI_PETIOLE, DpmDescriptor_t), (ATUI_NODESCR)
 			),
 			bios->DpmDescriptor, SMU13_PPCLK_COUNT, // start, count
-			 // enum
+			SMU13_PPCLK_e // enum
 		)), (ATUI_NODESCR)
 	),
-	*/
 
 
 
@@ -1723,7 +1749,6 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		(ATUI_NAN, ATUI_INLINE, AvfsDcBtcParams_smu13),
 		(ATUI_NODESCR)
 	),
-
 	(bios->GfxAvfsSpare, GfxAvfsSpare,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
@@ -1740,7 +1765,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 	(NULL, SocAvfsFuseOverride,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocAvfsFuseOverride (%s),
-				(ATUI_NAN, ATUI_INLINE, AvfsFuseOverride_smu13),
+				(ATUI_NAN, ATUI_PETIOLE, AvfsFuseOverride_smu13),
 				(ATUI_NODESCR)
 			),
 			bios->SocAvfsFuseOverride, AVFS_D_COUNT, // start, count
@@ -1799,44 +1824,35 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	// struct BootValues_t BootValues;
-	// struct DriverReportedClocks_t DriverReportedClocks;
-	// struct MsgLimits_t MsgLimits;
-	// struct overdrivelimits_smu13 OverDriveLimitsMin;
-	// struct overdrivelimits_smu13 OverDriveLimitsBasicMax;
-	// struct overdrivelimits_smu13 OverDriveLimitsAdvancedMax;
-	// union dpm_debug_override_smu13 DebugOverrides;
-	/*
 	(bios->BootValues, BootValues,
-		(ATUI_NAN, ATUI_INLINE, BootValues_t),
+		(ATUI_NAN, ATUI_PETIOLE, BootValues_t),
 		(ATUI_NODESCR)
 	),
 	
 	(bios->DriverReportedClocks, DriverReportedClocks,
-		(ATUI_NAN, ATUI_INLINE, DriverReportedClocks_t),
+		(ATUI_NAN, ATUI_PETIOLE, DriverReportedClocks_t),
 		(ATUI_NODESCR)
 	),
 	(bios->MsgLimits, MsgLimits,
-		(ATUI_NAN, ATUI_INLINE, MsgLimits_t),
+		(ATUI_NAN, ATUI_PETIOLE, MsgLimits_t),
 		(ATUI_NODESCR)
 	),
 	(bios->OverDriveLimitsMin, OverDriveLimitsMin,
-		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NAN, ATUI_PETIOLE, overdrivelimits_smu13),
 		(ATUI_NODESCR)
 	),
 	(bios->OverDriveLimitsBasicMax, OverDriveLimitsBasicMax,
-		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NAN, ATUI_PETIOLE, overdrivelimits_smu13),
 		(ATUI_NODESCR)
 	),
 	(bios->OverDriveLimitsAdvancedMax, OverDriveLimitsAdvancedMax,
-		(ATUI_NAN, ATUI_INLINE, overdrivelimits_smu13),
+		(ATUI_NAN, ATUI_PETIOLE, overdrivelimits_smu13),
 		(ATUI_NODESCR)
 	),
 	(bios->DebugOverrides, DebugOverrides,
 		(ATUI_NAN, ATUI_INLINE, dpm_debug_override_smu13),
 		(ATUI_NODESCR)
 	),
-	*/
 
 
 	(bios->TotalBoardPowerSupport, TotalBoardPowerSupport,
@@ -1902,18 +1918,18 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "should be unique to each board type"))
 	),
 	//struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS];
-	/*
+
 	(NULL, I2cControllers,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, I2cControllers [%02u],
-				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8),
 				(ATUI_NODESCR)
 			),
 			bios->I2cControllers, NUM_I2C_CONTROLLERS, // start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	*/
+
 	(bios->VddGfxVrMapping, VddGfxVrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Use VR_MAPPING* bitfields"))
@@ -2148,11 +2164,11 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 
 PPATUI_FUNCIFY(struct, smu13_smcpptable_v39, atomtree_powerplaytable,
 	(bios->SkuTable, SkuTable,
-		(ATUI_NAN, ATUI_INLINE, smu13_skutable_v39),
+		(ATUI_NAN, ATUI_PETIOLE, smu13_skutable_v39),
 		(ATUI_NODESCR)
 	),
 	(bios->BoardTable, BoardTable,
-		(ATUI_NAN, ATUI_INLINE, smu13_boardtable_v39),
+		(ATUI_NAN, ATUI_PETIOLE, smu13_boardtable_v39),
 		(ATUI_NODESCR)
 	)
 )

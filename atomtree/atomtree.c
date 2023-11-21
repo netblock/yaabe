@@ -649,6 +649,30 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					);
 				}
 				break;
+			case v15_0:
+				ppt->smc_pptable_ver = &(
+					ppt->v15_0->smc_pptable.smc_pptable_ver
+				);
+				if (generate_atui) {
+					switch(*(ppt->smc_pptable_ver)) {
+						default:
+						case 39:
+							atui_smc_pptable = ATUI_MAKE_BRANCH(
+								smu13_smcpptable_v39,
+								NULL, &(ppt->v15_0->smc_pptable),
+								0, NULL
+							);
+						break;
+					}
+				}
+				atui_ppt = ATUI_MAKE_BRANCH(smu_13_0_7_powerplay_table,
+					NULL, ppt->v15_0,
+					1, NULL
+				);
+				atui_ppt->child_branches[atui_ppt->num_branches] =\
+					atui_smc_pptable;
+				atui_ppt->num_branches++;
+				break;
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,

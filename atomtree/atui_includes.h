@@ -154,4 +154,11 @@ PPATUI_HEADERIFY(powerplay_feature_control_smu11_51);
 PPATUI_HEADERIFY(smu11_pptable_v3_i2c_u32);
 PPATUI_HEADERIFY(smu11_pptable_v8_i2c_u8mixed);
 
+
+/******************************************************************************/
+// atui_smu_v13_pptable.c / smu_v13_0_7_pptable.h , smu13_driver_if_v13_0_7.h
+
+PPATUI_HEADERIFY(smu_13_0_7_powerplay_table);
+PPATUI_HEADERIFY(smu13_smcpptable_v39);
+
 #endif
