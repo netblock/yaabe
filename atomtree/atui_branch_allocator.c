@@ -74,9 +74,7 @@ atui_branch* atui_branch_allocator(
 				dynarray_total_branches +=
 					dynarray_boundaries[dynentry_i].dynarray_length;
 				petiole_only_dynarrays++;
-				continue; // this isn't technically necessary; numleaves==0
-			}
-			if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {
+			} else if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {
 				dynarray_total_inline +=
 					dynarray_boundaries[dynentry_i].dynarray_length;
 			}
@@ -95,11 +93,11 @@ atui_branch* atui_branch_allocator(
 			embryo->num_leaves_initial
 			+ dynarray_total_leaves
 			- num_branches_initial // ATUI_PETIOLE
+			- dynarray_total_branches // ATUI_PETIOLE in ATUI_DYNARRAY
+			- petiole_only_dynarrays
 			// future multi-leaf dynarray support:
-			//- dynarray_total_branches // ATUI_PETIOLE in ATUI_DYNARRAY
 			// dyn petiole could be partially pp'd: count how many petiole in
 			// pattern
-			- petiole_only_dynarrays
 		);
 		mallocvoid = malloc(
 			sizeof(atui_branch)
@@ -172,7 +170,6 @@ atui_branch* atui_branch_allocator(
 						leaves_i++; // we've child leaves to print
 					}
 					
-
 					leafpattern_end = leafpattern_start + leafpattern_numleaves;
 
 					// for each element in the bios array
@@ -201,6 +198,7 @@ atui_branch* atui_branch_allocator(
 							}
 							leaves[leaves_i] = dynarray_patterns[leafpattern_i];
 							leaves[leaves_i].val = dynarray_bios_pos;
+
 							if (dynarray_enum_taglist) { // could be hoisted
 								sprintf(leaves[leaves_i].name,
 									leaves[leaves_i].origname,
@@ -309,6 +307,7 @@ atui_branch* atui_branch_allocator(
 		}
 		mallocvoid = NULL; // we are done partitioning
 	}
+
 	assert(leaves_i == num_leaves);
 	assert(inliners_i == num_inliners);
 	assert(branches_i == (num_branches_initial + dynarray_total_branches));
