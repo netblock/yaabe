@@ -99,7 +99,8 @@ atui_branch* atui_branch_allocator(
 			// dyn petiole could be partially pp'd: count how many petiole in
 			// pattern
 		);
-		mallocvoid = malloc(
+		// calloc hands over 0'd memory
+		mallocvoid = calloc(1,
 			sizeof(atui_branch)
 			+ (max_all_branch_count * sizeof(atui_branch*))
 			+ (num_leaves * sizeof(atui_leaf))
@@ -295,7 +296,8 @@ atui_branch* atui_branch_allocator(
 
 // Handle if there's no leaves at all:
 	} else {
-		mallocvoid = malloc(
+		// calloc hands over 0'd memory
+		mallocvoid = calloc(1,
 			sizeof(atui_branch)
 			+ (max_num_branches * sizeof(atui_branch*))
 		);
@@ -328,18 +330,11 @@ atui_branch* atui_branch_allocator(
 
 		num_branches = branches_i;
 
-		// zero out the import's unused allocation
-		for (; branches_i < max_num_branches; branches_i++) {
-			branches[branches_i] = NULL;
-		}
 	}
-
 
 	*table = (atui_branch) {
 		.varname = embryo->varname,
-		.description = NULL,
 		.atomleaves = args->suggestbios,
-		.auxiliary = NULL,
 
 		.child_branches = branches,
 		.num_branches = num_branches,

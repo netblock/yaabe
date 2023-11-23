@@ -154,27 +154,11 @@ That is, bitfield population, and enum and inline association.
 	default:0\
 )
 
-#define _PPATUI_FANCY_ZERO\
-	.name = {0},\
-	.origname = NULL,\
-	.varname = NULL,\
-	.description = {NULL},\
-	.type = 0,\
-	.array_size = 0,\
-	.total_bits = 0,\
-	.bitfield_hi = 0,\
-	.bitfield_lo = 0,\
-	.num_child_leaves = 0,\
-	.num_enum_opts = 0,\
-	.enum_options = NULL,\
-	.inline_branch = NULL,\
-	.val = NULL,\
-	.auxiliary = NULL,
 
 // TODO handle description_data
-// some of these elements may be respectively replaced by their fancy type
+// Some of these elements may be respectively replaced by their fancy type.
+// Unused fields are set to 0 via calloc.
 #define _PPATUI_FANCY_INIT(var, namestr, description_data, radix, fancytype)\
-	_PPATUI_FANCY_ZERO\
 	.name = #namestr,\
 	.origname = #namestr,\
 	.varname = #var,\
@@ -285,7 +269,6 @@ That is, bitfield population, and enum and inline association.
 #define _PPATUI_FANCY_ATUI_DYNARRAY(\
 		var, namestr, description_data, radix, fancytype, fancydata)\
 	{\
-		_PPATUI_FANCY_ZERO\
 		/*.val = &(var),  any benefit?*/\
 		/* numleaves is handled in the allocator*/\
 		.name = #namestr,\
