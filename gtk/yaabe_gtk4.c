@@ -183,23 +183,21 @@ static void leaves_offset_column_recycler(
 	g_object_unref(gobj_leaf);
 
 	char8_t buffer[18];
+	if (leaf->type & _ATUI_BITCHILD) {
+		sprintf(buffer, "[%u:%u]",
+			leaf->bitfield_hi, leaf->bitfield_lo
+		);
+	} else {
+		uint32_t start = leaf->val - commons->atomtree_root->bios;
+		uint32_t end = (start + leaf->num_bytes -1);
+		sprintf(buffer, "[%05X - %05X]", start, end);
+	}
+	/*
 	if (leaf->type & (ATUI_ANY | ATUI_STRING|ATUI_ARRAY|ATUI_BITFIELD)) {
-		if (leaf->type & _ATUI_BITCHILD) {
-			sprintf(buffer, "[%u:%u]",
-				leaf->bitfield_hi, leaf->bitfield_lo
-			);
-		} else {
-			uint32_t start = leaf->val - commons->atomtree_root->bios;
-			uint32_t end = (
-				start
-				+ ((leaf->total_bits/8) * (leaf->array_size))
-				- 1
-			);
-			sprintf(buffer, "[%05X - %05X]", start, end);
-		}
 	} else {
 		buffer[0] = '\0';
 	}
+	*/
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
 

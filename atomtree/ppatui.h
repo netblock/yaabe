@@ -172,12 +172,14 @@ That is, bitfield population, and enum and inline association.
 	.auxiliary = NULL,
 
 // TODO handle description_data
+// some of these elements may be respectively replaced by their fancy type
 #define _PPATUI_FANCY_INIT(var, namestr, description_data, radix, fancytype)\
 	_PPATUI_FANCY_ZERO\
 	.name = #namestr,\
 	.origname = #namestr,\
 	.varname = #var,\
 	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
+	.num_bytes = sizeof(var),\
 	.array_size = 1,\
 	.total_bits = _PPATUI_LEAF_BITNESS(var),\
 	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\

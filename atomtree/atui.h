@@ -92,6 +92,7 @@ struct _atui_leaf {
 
 
 	enum atui_type type; // how to display text, and other config data
+	uint32_t num_bytes; // number of bytes for quick leaf size
 	uint8_t array_size;
 	uint8_t total_bits;  // number of bits for the leaf
 
