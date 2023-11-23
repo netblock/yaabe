@@ -71,7 +71,7 @@ enum smu11_driver_if_version { //  #define SMU11_DRIVER_IF_VERSION
 #define PPSMC_GeminiModeSlave  2 // Slave GPU on a Gemini board
 */
 
-union powerplay_feature_control_smu11_19 {
+union powerplay_feature_control_smu11_0x13 {
 	uint64_t feature_control;
 	struct { uint64_t
 		DPM_PREFETCHER :0-0 +1,
@@ -141,7 +141,7 @@ union powerplay_feature_control_smu11_19 {
 	};
 };
 
-union powerplay_feature_control_smu11_51 {
+union powerplay_feature_control_smu11_0x33 {
 	uint64_t feature_control;
 	struct { uint64_t
 		DPM_PREFETCHER      :0-0 +1,
@@ -220,8 +220,8 @@ union powerplay_feature_control_smu11_51 {
 
 
 
-union dpm_debug_override_smu11_19 {
-	uint32_t dpm_debug_override_flags;
+union dpm_debug_override_smu11_0x13 {
+	uint32_t DebugOverrides;
 	struct { uint32_t
 		disable_socclk_pid              :0-0 +1,
 		disable_uclk_pid                :1-1 +1,
@@ -244,8 +244,8 @@ union dpm_debug_override_smu11_19 {
 		reserved                       :31-18 +1;
 	};
 };
-union dpm_debug_override_smu11_51 {
-	uint32_t dpm_debug_override_flags;
+union dpm_debug_override_smu11_0x33 {
+	uint32_t DebugOverrides;
 	struct { uint32_t
 		disable_socclk_pid               :0-0 +1,
 		disable_uclk_pid                 :1-1 +1,
@@ -276,7 +276,7 @@ union dpm_debug_override_smu11_51 {
 #define VR_MAPPING_PLANE_SELECT_MASK  0x02
 #define VR_MAPPING_PLANE_SELECT_SHIFT 0x01
 
-
+/* duplicate
 #define PSI_SEL_VR0_PLANE0_PSI0  0x01
 #define PSI_SEL_VR0_PLANE0_PSI1  0x02
 #define PSI_SEL_VR0_PLANE1_PSI0  0x04
@@ -285,26 +285,73 @@ union dpm_debug_override_smu11_51 {
 #define PSI_SEL_VR1_PLANE0_PSI1  0x20
 #define PSI_SEL_VR1_PLANE1_PSI0  0x40
 #define PSI_SEL_VR1_PLANE1_PSI1  0x80
+*/
 
+union throttler_control_smu11_0x13 { // unused?
+	uint32_t ThrottlerControlMask;
+	struct { uint32_t
+		PADDING      :0-0 +1,
+		TEMP_EDGE    :1-1 +1,
+		TEMP_HOTSPOT :2-2 +1,
+		TEMP_HBM     :3-3 +1,
+		TEMP_VR_GFX  :4-4 +1,
+		TEMP_VR_SOC  :5-5 +1,
+		TEMP_VR_MEM0 :6-6 +1,
+		TEMP_VR_MEM1 :7-7 +1,
+		TEMP_LIQUID  :8-8 +1,
+		TEMP_PLX     :9-9 +1,
+		TEMP_SKIN   :10-10 +1,
+		TDC_GFX     :11-11 +1,
+		TDC_SOC     :12-12 +1,
+		PPT         :13-13 +1,
+		FIT         :14-14 +1,
+		PPM         :15-15 +1,
+		reserved    :31-16 +1;
+	};
+};
+union throttler_control_smu11_0x33 {
+	uint32_t ThrottlerControlMask;
+	struct { uint32_t
+		PADDING      :0-0 +1,
+		TEMP_EDGE    :1-1 +1,
+		TEMP_HOTSPOT :2-2 +1,
+		TEMP_MEM     :3-3 +1,
+		TEMP_VR_GFX  :4-4 +1,
+		TEMP_VR_MEM0 :5-5 +1,
+		TEMP_VR_MEM1 :6-6 +1,
+		TEMP_VR_SOC  :7-7 +1,
+		TEMP_LIQUID0 :8-8 +1,
+		TEMP_LIQUID1 :9-9 +1,
+		TEMP_PLX    :10-10 +1,
+		TEMP_SKIN   :11-11 +1,
+		TDC_GFX     :12-12 +1,
+		TDC_SOC     :13-13 +1,
+		PPT0        :14-14 +1,
+		PPT1        :15-15 +1,
+		PPT2        :16-16 +1,
+		PPT3        :17-17 +1,
+		FIT         :18-18 +1,
+		PPM         :19-19 +1,
+		APCC        :20-20 +1,
+		reserved    :31-21 +1;
+	};
+};
 
-
-#define THROTTLER_STATUS_PADDING_BIT      0
-#define THROTTLER_STATUS_TEMP_EDGE_BIT    1
-#define THROTTLER_STATUS_TEMP_HOTSPOT_BIT 2
-#define THROTTLER_STATUS_TEMP_HBM_BIT     3
-#define THROTTLER_STATUS_TEMP_VR_GFX_BIT  4
-#define THROTTLER_STATUS_TEMP_VR_SOC_BIT  5
-#define THROTTLER_STATUS_TEMP_VR_MEM0_BIT 6
-#define THROTTLER_STATUS_TEMP_VR_MEM1_BIT 7
-#define THROTTLER_STATUS_TEMP_LIQUID_BIT  8
-#define THROTTLER_STATUS_TEMP_PLX_BIT     9
-#define THROTTLER_STATUS_TEMP_SKIN_BIT    10
-#define THROTTLER_STATUS_TDC_GFX_BIT      11
-#define THROTTLER_STATUS_TDC_SOC_BIT      12
-#define THROTTLER_STATUS_PPT_BIT          13
-#define THROTTLER_STATUS_FIT_BIT          14
-#define THROTTLER_STATUS_PPM_BIT          15
-
+union fw_dstate_features_smu11_0x33 {
+	uint32_t FwDStateMask;
+	struct { uint32_t
+		SOC_ULV          :0-0 +1,
+		G6_HSR           :1-1 +1,
+		G6_PHY_VDDCI_OFF :2-2 +1,
+		MP0_DS           :3-3 +1,
+		SMN_DS           :4-4 +1,
+		MP1_DS           :5-5 +1,
+		MP1_WHISPER_MODE :6-6 +1,
+		LIV_MIN          :7-7 +1,
+		SOC_PLL_PWRDN    :8-8 +1,
+		reserved        :31-9 +1;
+	};
+};
 
 #define TABLE_TRANSFER_OK         0x0
 #define TABLE_TRANSFER_FAILED     0xFF
@@ -364,6 +411,17 @@ enum AVFS_VOLTAGE_TYPE_e {
 	AVFS_VOLTAGE_COUNT = 2,
 };
 
+enum TEMP_SMU11_0_0_e {
+	TEMP_SMU11_0_0_EDGE    = 0,
+	TEMP_SMU11_0_0_HOTSPOT = 1,
+	TEMP_SMU11_0_0_LIQUID  = 2,
+	TEMP_SMU11_0_0_VR_GFX  = 3,
+	TEMP_SMU11_0_0_VR_SOC  = 3,
+	TEMP_SMU11_0_0_PLX     = 4,
+	TEMP_SMU11_0_0_HBM     = 5,
+	TEMP_SMU11_0_0_COUNT   = 6,
+};
+
 
 //typedef struct dpm_descriptor_smu11 DpmDescriptor_t;
 
@@ -404,7 +462,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	// copied comments from smc_smu11_pptable_v8
 	uint32_t Version;
 
-	union powerplay_feature_control_smu11_19 features;
+	union powerplay_feature_control_smu11_0x13 features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc0;
@@ -510,6 +568,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
 
+	//uint16_t FanGain[TEMP_SMU11_0_0_COUNT]; // TODO
 	uint16_t FanGainEdge;
 	uint16_t FanGainHotspot;
 	uint16_t FanGainLiquid;
@@ -555,8 +614,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	int16_t  DcBtcMin[AVFS_VOLTAGE_COUNT]; // is this actually signed? mV Q2
 	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
-	uint8_t  XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
-	uint8_t  XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
+	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
+	enum XGMI_LINK_WIDTH_e XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiFclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiUclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS_SMU11];
@@ -564,7 +623,7 @@ struct smu11_smcpptable_v3 { // Vega20
 
 
 	// SECTION: Advanced Options
-	union  dpm_debug_override_smu11_19 DebugOverrides;
+	union  dpm_debug_override_smu11_0x13 DebugOverrides;
 	struct quadratic_f32 ReservedEquation0;
 	struct quadratic_f32 ReservedEquation1;
 	struct quadratic_f32 ReservedEquation2;
@@ -595,8 +654,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  VddMem0VrMapping;
 	uint8_t  VddMem1VrMapping;
 
-	uint8_t  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 
@@ -667,7 +726,7 @@ struct smu11_smcpptable_v3 { // Vega20
 struct smu11_smcpptable_v8 { // Navi10
 	uint32_t Version;
 
-	union powerplay_feature_control_smu11_51 features;
+	union powerplay_feature_control_smu11_0x33 features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];
@@ -696,10 +755,10 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t PpmTemperatureThreshold;
 
 	// SECTION: Throttler settings
-	uint32_t ThrottlerControlMask; // See Throtter masks defines
+	union throttler_control_smu11_0x33 ThrottlerControlMask;
 
 	// SECTION: FW DSTATE Settings
-	uint32_t FwDStateMask; // See FW DState masks defines
+	union fw_dstate_features_smu11_0x33 FwDStateMask;
 
 	// SECTION: ULV Settings
 	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
@@ -784,6 +843,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
 
+	//uint16_t FanGain[TEMP_SMU11_**_COUNT]; // TODO
 	uint16_t FanGainEdge;
 	uint16_t FanGainHotspot;
 	uint16_t FanGainLiquid0;

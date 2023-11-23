@@ -452,6 +452,20 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v2_1,
 	)
 )
 
+PPATUI_FUNCIFY(union, psi_sel_mask, atui_nullstruct,
+	(bios->sel_mask, sel_mask,
+		(ATUI_NODISPLAY, ATUI_BITFIELD, (
+			(VR0_PLANE0_PSI0, 0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(VR0_PLANE0_PSI1, 1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(VR0_PLANE1_PSI0, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(VR0_PLANE1_PSI1, 3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(VR1_PLANE0_PSI0, 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(VR1_PLANE0_PSI1, 5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(VR1_PLANE1_PSI0, 6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(VR1_PLANE1_PSI1, 7,7, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 
 
 
@@ -521,10 +535,10 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_1, atomtree_smc_dpm_info,
 	),
 
 	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->padding8_v, padding8_v,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -725,10 +739,10 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_3, atomtree_smc_dpm_info,
 	),
 
 	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->externalsensorpresent, externalsensorpresent,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -987,10 +1001,10 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
 	),
 
 	(bios->gfxulvphasesheddingmask, gfxulvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->soculvphasesheddingmask, soculvphasesheddingmask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask), (ATUI_NODESCR)
 	),
 	(bios->externalsensorpresent, externalsensorpresent,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1201,11 +1215,11 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	),
 
 	(bios->GfxUlvPhaseSheddingMask, GfxUlvPhaseSheddingMask,
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
 	(bios->SocUlvPhaseSheddingMask, SocUlvPhaseSheddingMask,
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
 	(bios->ExternalSensorPresent, ExternalSensorPresent,

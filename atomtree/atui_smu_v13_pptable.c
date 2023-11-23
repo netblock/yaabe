@@ -251,7 +251,7 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atomtree_powerplaytable,
 )
 
 PPATUI_FUNCIFY(union, dpm_debug_override_smu13, atui_nullstruct,
-	(bios->dpm_debug_override_flags, dpm_debug_override_flags,
+	(bios->DebugOverrides, DebugOverrides,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(disable_volt_link_vcn_fclk,   0,0, ATUI_DEC, (ATUI_NODESCR)),
 			(disable_volt_link_dcn_fclk,   1,1, ATUI_DEC, (ATUI_NODESCR)),
@@ -272,6 +272,70 @@ PPATUI_FUNCIFY(union, dpm_debug_override_smu13, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
+
+PPATUI_FUNCIFY(union, throttler_control_smu13_0x35, atui_nullstruct,
+	(bios->ThrottlerControlMask, ThrottlerControlMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(TEMP_EDGE,      0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HOTSPOT,   1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HOTSPOT_G, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HOTSPOT_M, 3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_MEM,       4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_GFX,    5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM0,   6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM1,   7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_SOC,    8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_U,      9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_LIQUID0,  10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_LIQUID1,  11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_PLX,      12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_GFX,       13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_SOC,       14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_U,         15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT0,          16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT1,          17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT2,          18,18, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT3,          19,19, ATUI_DEC, (ATUI_NODESCR)),
+			(FIT,           20,20, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_APCC_PLUS, 21,21, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,      31,22, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, fw_dstate_features_smu13_0x35, atui_nullstruct,
+	(bios->FwDStateMask, FwDStateMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(SOC_ULV,           0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(G6_HSR,            1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(G6_PHY_VMEMP_OFF,  2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(SMN_DS,            3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(MP1_WHISPER_MODE,  4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_LIV_MIN,       5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_PLL_PWRDN,     6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(MEM_PLL_PWRDN,     7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(MALL_ALLOC,        8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(MEM_PSI,           9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(HSR_NON_STROBE,    10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(MP0_ENTER_WFI,     11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(U_ULV,             12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(MALL_FLUSH,        13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_PSI,           14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(U_PSI,             15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(UCP_DS,            16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(CSRCLK_DS,         17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(MMHUB_INTERLOCK,   18,18, ATUI_DEC, (ATUI_NODESCR)),
+			(D0i3_2_QUIET_FW,   19,19, ATUI_DEC, (ATUI_NODESCR)),
+			(CLDO_PRG,          20,20, ATUI_DEC, (ATUI_NODESCR)),
+			(DF_PLL_PWRDN,      21,21, ATUI_DEC, (ATUI_NODESCR)),
+			(U_LOW_PWR_MODE_EN, 22,22, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_PSI6,          23,23, ATUI_DEC, (ATUI_NODESCR)),
+			(GFX_VR_PWR_STAGE,  24,24, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,          31,25, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
 
 PPATUI_FUNCIFY(struct, DpmDescriptor_t, atomtree_powerplaytable,
 	(bios->Padding, Padding,
@@ -437,7 +501,7 @@ PPATUI_FUNCIFY(struct, MsgLimits_t, atomtree_powerplaytable,
 			(ATUI_NULL, Tdc (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Tdc, TDC_THROTTLER_COUNT, // start, count
+			bios->Tdc, TDC_THROTTLER_COUNT_SMU13, // start, count
 			TDC_THROTTLER_e // enum
 		)),
 		((LANG_ENG, "Amps"))
@@ -448,8 +512,8 @@ PPATUI_FUNCIFY(struct, MsgLimits_t, atomtree_powerplaytable,
 			(ATUI_NULL, Temperature (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Temperature, TEMP_COUNT, // start, count
-			AVFS_TEMP_e // enum
+			bios->Temperature, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)),
 		((LANG_ENG, "Celsius"))
 	),
@@ -783,7 +847,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, VrTdcLimit (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->VrTdcLimit, TDC_THROTTLER_COUNT, // start, count
+			bios->VrTdcLimit, TDC_THROTTLER_COUNT_SMU13, // start, count
 			TDC_THROTTLER_e // enum
 		)),
 		((LANG_ENG, "In Amperes. Current limit associated with VR regulator maximum temperature"))
@@ -794,7 +858,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, PlatformTdcLimit (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PlatformTdcLimit, TDC_THROTTLER_COUNT, // start, count
+			bios->PlatformTdcLimit, TDC_THROTTLER_COUNT_SMU13, // start, count
 			TDC_THROTTLER_e // enum
 		)),
 		((LANG_ENG, "In Amperes. Current limit associated with platform maximum temperature per VR current rail"))
@@ -805,8 +869,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, TemperatureLimit (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->TemperatureLimit, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->TemperatureLimit, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)),
 		((LANG_ENG, "In degrees Celsius. Temperature limit associated with each input"))
 	),
@@ -839,13 +903,15 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "Percentage value. Used by APCC+ controller to control PCC residency to some value"))
 	),
 	(bios->ThrottlerControlMask, ThrottlerControlMask,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "See THROTTLER_*_BIT for mapping"))
+		(ATUI_NAN, ATUI_INLINE, throttler_control_smu13_0x35),
+		(ATUI_NODESCR)
 	),
+
 	(bios->FwDStateMask, FwDStateMask,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "See FW_DSTATE_*_BIT for mapping"))
+		(ATUI_NAN, ATUI_INLINE, fw_dstate_features_smu13_0x35),
+		(ATUI_NODESCR)
 	),
+
 	(NULL, UlvVoltageOffset,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, UlvVoltageOffset (%s),
@@ -1494,8 +1560,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, FanStopTemp (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FanStopTemp, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->FanStopTemp, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)),
 		((LANG_ENG, "Celsius"))
 	),
@@ -1504,8 +1570,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, FanStartTemp (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FanStartTemp, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->FanStartTemp, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)),
 		((LANG_ENG, "Celsius"))
 	),
@@ -1515,8 +1581,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, FanGain (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FanGain, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->FanGain, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)), (ATUI_NODESCR)
 	),
 	(bios->FanGainPadding, FanGainPadding,
@@ -1555,8 +1621,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, FanTargetTemperature (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FanTargetTemperature, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->FanTargetTemperature, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)), (ATUI_NODESCR)
 	),
 	(bios->FuzzyFan_ErrorSetDelta, FuzzyFan_ErrorSetDelta,
@@ -1577,8 +1643,8 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 			(ATUI_NULL, FwCtfLimit (%s),
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FwCtfLimit, TEMP_COUNT, // start, count
-			TEMP_e // enum
+			bios->FwCtfLimit, SMU_13_0_7_TEMP_COUNT, // start, count
+			SMU_13_0_7_TEMP_e // enum
 		)), (ATUI_NODESCR)
 	),
 

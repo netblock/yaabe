@@ -591,7 +591,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					switch(*(ppt->smc_pptable_ver)) {
 						case 3:
 							atui_feature_control = ATUI_MAKE_BRANCH(
-								powerplay_feature_control_smu11_19,   NULL,
+								powerplay_feature_control_smu11_0x13,   NULL,
 								&(ppt->v12_0->smc_pptable.v3.features),
 								0,NULL
 							);
@@ -609,7 +609,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 						default:
 						case 8:
 							atui_feature_control = ATUI_MAKE_BRANCH(
-								powerplay_feature_control_smu11_51,   NULL,
+								powerplay_feature_control_smu11_0x33,   NULL,
 								&(ppt->v12_0->smc_pptable.v8.features),
 								0,NULL
 							);

@@ -26,6 +26,7 @@ union powerplay_platform_caps {
 	};
 };
 
+
 //typedef struct quadratic_f32 QuadraticInt_t;
 struct quadratic_f32 {
 	float32_t a;
@@ -46,6 +47,34 @@ struct droop_f32 {
 	float32_t c;
 };
 
+enum XGMI_LINK_RATE_e:uint8_t { // rate x Gbps
+	XGMI_LINK_RATE_2  = 2,
+	XGMI_LINK_RATE_4  = 4,
+	XGMI_LINK_RATE_8  = 8,
+	XGMI_LINK_RATE_12 = 12,
+	XGMI_LINK_RATE_16 = 16,
+	XGMI_LINK_RATE_17 = 17,
+	XGMI_LINK_RATE_18 = 18,
+	XGMI_LINK_RATE_19 = 19,
+	XGMI_LINK_RATE_20 = 20,
+	XGMI_LINK_RATE_21 = 21,
+	XGMI_LINK_RATE_22 = 22,
+	XGMI_LINK_RATE_23 = 23,
+	XGMI_LINK_RATE_24 = 24,
+	XGMI_LINK_RATE_25 = 25,
+	XGMI_LINK_RATE_COUNT = 26,
+};
+
+enum XGMI_LINK_WIDTH_e:uint8_t {
+	XGMI_LINK_WIDTH_1  = 0,
+	XGMI_LINK_WIDTH_2  = 2,
+	XGMI_LINK_WIDTH_4  = 3,
+	XGMI_LINK_WIDTH_8  = 4,
+	XGMI_LINK_WIDTH_9  = 5,
+	XGMI_LINK_WIDTH_16 = 6,
+	XGMI_LINK_WIDTH_COUNT = 7,
+};
+
 enum PPT_THROTTLER_e {
 	PPT_THROTTLER_PPT0  = 0,
 	PPT_THROTTLER_PPT1  = 1,
@@ -59,6 +88,22 @@ enum POWER_SOURCE_e {
 	POWER_SOURCE_DC    = 1,
 	POWER_SOURCE_COUNT = 2,
 };
+
+enum CUSTOMER_VARIANT_e:uint8_t {
+	CUSTOMER_VARIANT_ROW    = 0,
+	CUSTOMER_VARIANT_FALCON = 1,
+	CUSTOMER_VARIANT_COUNT  = 2,
+};
+
+enum TDC_THROTTLER_e {
+	TDC_THROTTLER_GFX = 0,
+	TDC_THROTTLER_SOC = 1,
+	TDC_THROTTLER_U   = 2,
+
+	TDC_THROTTLER_COUNT_SMU11 = 2,
+	TDC_THROTTLER_COUNT_SMU13 = 3,
+};
+
 
 #pragma pack(pop) // restore old packing
 

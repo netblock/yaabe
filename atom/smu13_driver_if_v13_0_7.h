@@ -123,7 +123,7 @@ union powerplay_feature_control_smu13 {
 
 
 union dpm_debug_override_smu13 {
-	uint32_t dpm_debug_override_flags;
+	uint32_t DebugOverrides;
     struct { uint32_t
 		disable_volt_link_vcn_fclk   :0-0 +1,
 		disable_volt_link_dcn_fclk   :1-1 +1,
@@ -151,6 +151,7 @@ union dpm_debug_override_smu13 {
 #define VR_MAPPING_PLANE_SELECT_SHIFT 0x01
 
 // PSI Bit Defines
+/* duplicate
 #define PSI_SEL_VR0_PLANE0_PSI0 0x01
 #define PSI_SEL_VR0_PLANE0_PSI1 0x02
 #define PSI_SEL_VR0_PLANE1_PSI0 0x04
@@ -159,6 +160,7 @@ union dpm_debug_override_smu13 {
 #define PSI_SEL_VR1_PLANE0_PSI1 0x20
 #define PSI_SEL_VR1_PLANE1_PSI0 0x40
 #define PSI_SEL_VR1_PLANE1_PSI1 0x80
+*/
 
 enum SVI_PSI_e {
 	SVI_PSI_0, // Full phase count (default)
@@ -172,56 +174,67 @@ enum SVI_PSI_e {
 };
 
 // Throttler Control/Status Bits
-#define THROTTLER_TEMP_EDGE_BIT      0
-#define THROTTLER_TEMP_HOTSPOT_BIT   1
-#define THROTTLER_TEMP_HOTSPOT_G_BIT 2
-#define THROTTLER_TEMP_HOTSPOT_M_BIT 3
-#define THROTTLER_TEMP_MEM_BIT       4
-#define THROTTLER_TEMP_VR_GFX_BIT    5
-#define THROTTLER_TEMP_VR_MEM0_BIT   6
-#define THROTTLER_TEMP_VR_MEM1_BIT   7
-#define THROTTLER_TEMP_VR_SOC_BIT    8
-#define THROTTLER_TEMP_VR_U_BIT      9
-#define THROTTLER_TEMP_LIQUID0_BIT  10
-#define THROTTLER_TEMP_LIQUID1_BIT  11
-#define THROTTLER_TEMP_PLX_BIT      12
-#define THROTTLER_TDC_GFX_BIT       13
-#define THROTTLER_TDC_SOC_BIT       14
-#define THROTTLER_TDC_U_BIT         15
-#define THROTTLER_PPT0_BIT          16
-#define THROTTLER_PPT1_BIT          17
-#define THROTTLER_PPT2_BIT          18
-#define THROTTLER_PPT3_BIT          19
-#define THROTTLER_FIT_BIT           20
-#define THROTTLER_GFX_APCC_PLUS_BIT 21
-#define THROTTLER_COUNT             22
+union throttler_control_smu13_0x35 {
+	uint32_t ThrottlerControlMask;                                              
+	struct { uint32_t
+		TEMP_EDGE      :0-0 +1,
+		TEMP_HOTSPOT   :1-1 +1,
+		TEMP_HOTSPOT_G :2-2 +1,
+		TEMP_HOTSPOT_M :3-3 +1,
+		TEMP_MEM       :4-4 +1,
+		TEMP_VR_GFX    :5-5 +1,
+		TEMP_VR_MEM0   :6-6 +1,
+		TEMP_VR_MEM1   :7-7 +1,
+		TEMP_VR_SOC    :8-8 +1,
+		TEMP_VR_U      :9-9 +1,
+		TEMP_LIQUID0  :10-10 +1,
+		TEMP_LIQUID1  :11-11 +1,
+		TEMP_PLX      :12-12 +1,
+		TDC_GFX       :13-13 +1,
+		TDC_SOC       :14-14 +1,
+		TDC_U         :15-15 +1,
+		PPT0          :16-16 +1,
+		PPT1          :17-17 +1,
+		PPT2          :18-18 +1,
+		PPT3          :19-19 +1,
+		FIT           :20-20 +1,
+		GFX_APCC_PLUS :21-21 +1,
+		reserved      :31-22 +1;
+	};
+};
 
 // FW DState Features Control Bits
-#define FW_DSTATE_SOC_ULV_BIT           0
-#define FW_DSTATE_G6_HSR_BIT            1
-#define FW_DSTATE_G6_PHY_VMEMP_OFF_BIT  2
-#define FW_DSTATE_SMN_DS_BIT            3
-#define FW_DSTATE_MP1_WHISPER_MODE_BIT  4
-#define FW_DSTATE_SOC_LIV_MIN_BIT       5
-#define FW_DSTATE_SOC_PLL_PWRDN_BIT     6
-#define FW_DSTATE_MEM_PLL_PWRDN_BIT     7
-#define FW_DSTATE_MALL_ALLOC_BIT        8
-#define FW_DSTATE_MEM_PSI_BIT           9
-#define FW_DSTATE_HSR_NON_STROBE_BIT    10
-#define FW_DSTATE_MP0_ENTER_WFI_BIT     11
-#define FW_DSTATE_U_ULV_BIT             12
-#define FW_DSTATE_MALL_FLUSH_BIT        13
-#define FW_DSTATE_SOC_PSI_BIT           14
-#define FW_DSTATE_U_PSI_BIT             15
-#define FW_DSTATE_UCP_DS_BIT            16
-#define FW_DSTATE_CSRCLK_DS_BIT         17
-#define FW_DSTATE_MMHUB_INTERLOCK_BIT   18
-#define FW_DSTATE_D0i3_2_QUIET_FW_BIT   19
-#define FW_DSTATE_CLDO_PRG_BIT          20
-#define FW_DSTATE_DF_PLL_PWRDN_BIT      21
-#define FW_DSTATE_U_LOW_PWR_MODE_EN_BIT 22
-#define FW_DSTATE_GFX_PSI6_BIT          23
-#define FW_DSTATE_GFX_VR_PWR_STAGE_BIT  24
+union fw_dstate_features_smu13_0x35 {
+	uint32_t FwDStateMask;
+	struct { uint32_t
+		SOC_ULV           :0-0 +1,
+		G6_HSR            :1-1 +1,
+		G6_PHY_VMEMP_OFF  :2-2 +1,
+		SMN_DS            :3-3 +1,
+		MP1_WHISPER_MODE  :4-4 +1,
+		SOC_LIV_MIN       :5-5 +1,
+		SOC_PLL_PWRDN     :6-6 +1,
+		MEM_PLL_PWRDN     :7-7 +1,
+		MALL_ALLOC        :8-8 +1,
+		MEM_PSI           :9-9 +1,
+		HSR_NON_STROBE    :10-10 +1,
+		MP0_ENTER_WFI     :11-11 +1,
+		U_ULV             :12-12 +1,
+		MALL_FLUSH        :13-13 +1,
+		SOC_PSI           :14-14 +1,
+		U_PSI             :15-15 +1,
+		UCP_DS            :16-16 +1,
+		CSRCLK_DS         :17-17 +1,
+		MMHUB_INTERLOCK   :18-18 +1,
+		D0i3_2_QUIET_FW   :19-19 +1,
+		CLDO_PRG          :20-20 +1,
+		DF_PLL_PWRDN      :21-21 +1,
+		U_LOW_PWR_MODE_EN :22-22 +1,
+		GFX_PSI6          :23-23 +1,
+		GFX_VR_PWR_STAGE  :24-24 +1,
+		reserved          :31-25 +1;
+	};
+};
 
 // LED Display Mask & Control Bits
 #define LED_DISPLAY_GFX_DPM_BIT 0
@@ -240,7 +253,7 @@ enum SMARTSHIFT_VERSION_e:uint8_t {
 };
 
 
-enum DRAM_BIT_WIDTH_TYPE_e:uint8_t {
+enum DRAM_BIT_WIDTH_TYPE_e:uint8_t { // uint8_t  DramWidth;
 	DRAM_BIT_WIDTH_DISABLED = 0,
 	DRAM_BIT_WIDTH_X_8      = 8,
 	DRAM_BIT_WIDTH_X_16    = 16,
@@ -413,29 +426,23 @@ struct DpmDescriptor_t {
 };
 
 
-enum TEMP_e {
-	TEMP_EDGE      = 0,
-	TEMP_HOTSPOT   = 1,
-	TEMP_HOTSPOT_G = 2,
-	TEMP_HOTSPOT_M = 3,
-	TEMP_MEM       = 4,
-	TEMP_VR_GFX    = 5,
-	TEMP_VR_MEM0   = 6,
-	TEMP_VR_MEM1   = 7,
-	TEMP_VR_SOC    = 8,
-	TEMP_VR_U      = 9,
-	TEMP_LIQUID0   = 10,
-	TEMP_LIQUID1   = 11,
-	TEMP_PLX       = 12,
-	TEMP_COUNT     = 13,
+enum SMU_13_0_7_TEMP_e {
+	SMU_13_0_7_TEMP_EDGE      = 0,
+	SMU_13_0_7_TEMP_HOTSPOT   = 1,
+	SMU_13_0_7_TEMP_HOTSPOT_G = 2,
+	SMU_13_0_7_TEMP_HOTSPOT_M = 3,
+	SMU_13_0_7_TEMP_MEM       = 4,
+	SMU_13_0_7_TEMP_VR_GFX    = 5,
+	SMU_13_0_7_TEMP_VR_MEM0   = 6,
+	SMU_13_0_7_TEMP_VR_MEM1   = 7,
+	SMU_13_0_7_TEMP_VR_SOC    = 8,
+	SMU_13_0_7_TEMP_VR_U      = 9,
+	SMU_13_0_7_TEMP_LIQUID0   = 10,
+	SMU_13_0_7_TEMP_LIQUID1   = 11,
+	SMU_13_0_7_TEMP_PLX       = 12,
+	SMU_13_0_7_TEMP_COUNT     = 13,
 };
 
-enum TDC_THROTTLER_e {
-	TDC_THROTTLER_GFX   = 0,
-	TDC_THROTTLER_SOC   = 1,
-	TDC_THROTTLER_U     = 2,
-	TDC_THROTTLER_COUNT = 3,
-};
 
 enum SVI_PLANE_e {
 	SVI_PLANE_GFX       = 0,
@@ -452,11 +459,6 @@ enum PMFW_VOLT_PLANE_e {
 	PMFW_VOLT_PLANE_COUNT = 2,
 };
 
-enum CUSTOMER_VARIANT_e:uint8_t {
-	CUSTOMER_VARIANT_ROW    = 0,
-	CUSTOMER_VARIANT_FALCON = 1,
-	CUSTOMER_VARIANT_COUNT  = 2,
-};
 
 enum MEM_VENDOR_e {
 	MEM_VENDOR_SAMSUNG      = 0,
@@ -777,9 +779,9 @@ struct BootValues_t {
 
 struct MsgLimits_t {
 	uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
-	uint16_t Tdc[TDC_THROTTLER_COUNT]; // Amps
+	uint16_t Tdc[TDC_THROTTLER_COUNT_SMU13]; // Amps
 
-	uint16_t Temperature[TEMP_COUNT]; // Celsius
+	uint16_t Temperature[SMU_13_0_7_TEMP_COUNT]; // Celsius
 
 	uint8_t  PwmLimitMin;
 	uint8_t  PwmLimitMax;
@@ -847,8 +849,8 @@ struct smu13_skutable_v39 { // SECTION: Version
 	union powerplay_feature_control_smu13 features;
 
 	// SECTION: Miscellaneous Configuration
-	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power. Use defines from PwrConfig_e
-	enum CUSTOMER_VARIANT_e CustomerVariant;  // To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e
+	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
+	enum CUSTOMER_VARIANT_e CustomerVariant;  // To specify if this PPTable is intended for a particular customer.
 	uint8_t  MemoryTemperatureTypeMask; // Bit mapping indicating which methods of memory temperature reading are enabled. Use defines from MEM_TEMP_*BIT
 	enum SMARTSHIFT_VERSION_e SmartShiftVersion; // Determine what SmartShift feature version is supported
 	// SECTION: Infrastructure Limits
@@ -862,32 +864,32 @@ struct smu13_skutable_v39 { // SECTION: Version
 
 	uint8_t  PaddingPpt[1];
 
-	uint16_t VrTdcLimit[TDC_THROTTLER_COUNT];       // In Amperes. Current limit associated with VR regulator maximum temperature
+	uint16_t VrTdcLimit[TDC_THROTTLER_COUNT_SMU13];       // In Amperes. Current limit associated with VR regulator maximum temperature
 
-	uint16_t PlatformTdcLimit[TDC_THROTTLER_COUNT]; // In Amperes. Current limit associated with platform maximum temperature per VR current rail
+	uint16_t PlatformTdcLimit[TDC_THROTTLER_COUNT_SMU13]; // In Amperes. Current limit associated with platform maximum temperature per VR current rail
 
-	uint16_t TemperatureLimit[TEMP_COUNT]; // In degrees Celsius. Temperature limit associated with each input
+	uint16_t TemperatureLimit[SMU_13_0_7_TEMP_COUNT]; // In degrees Celsius. Temperature limit associated with each input
 
 	uint16_t HwCtfTempLimit; // In degrees Celsius. Temperature above which HW will trigger CTF. Consumed by VBIOS only
 
 	uint16_t PaddingInfra;
 	// Per year normalized Vmax state failure rates (sum of the two domains divided by life time in years)
-	float32_t FitControllerFailureRateLimit; // in IEEE float // Expected GFX Duty Cycle at Vmax.
-	float32_t FitControllerGfxDutyCycle;     // in IEEE float // Expected SOC Duty Cycle at Vmax.
-	float32_t FitControllerSocDutyCycle;     // in IEEE float
+	float32_t FitControllerFailureRateLimit; // Expected GFX Duty Cycle at Vmax.
+	float32_t FitControllerGfxDutyCycle; // Expected SOC Duty Cycle at Vmax.
+	float32_t FitControllerSocDutyCycle;
 	// This offset will be deducted from the controller output to before it goes through the SOC Vset limiter block.
-	float32_t FitControllerSocOffset;        // in IEEE float
+	float32_t FitControllerSocOffset;
 
 	uint32_t GfxApccPlusResidencyLimit; // Percentage value. Used by APCC+ controller to control PCC residency to some value
 	// SECTION: Throttler settings
-	uint32_t ThrottlerControlMask;      // See THROTTLER_*_BIT for mapping
+	union throttler_control_smu13_0x35 ThrottlerControlMask;
 	// SECTION: FW DSTATE Settings
-	uint32_t FwDStateMask;              // See FW_DSTATE_*_BIT for mapping
+	union fw_dstate_features_smu13_0x35 FwDStateMask;
 	// SECTION: Voltage Control Parameters
 	uint16_t UlvVoltageOffset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)
 
-	uint16_t UlvVoltageOffsetU;        // In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)
-	uint16_t DeepUlvVoltageOffsetSoc;  // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE
+	uint16_t UlvVoltageOffsetU;       // In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)
+	uint16_t DeepUlvVoltageOffsetSoc; // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE
 	// Voltage Limits
 	uint16_t DefaultMaxVoltage[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Maximum voltage without FIT controller enabled
 	uint16_t BoostMaxVoltage[PMFW_VOLT_PLANE_COUNT];   // In mV(Q2) Maximum voltage with FIT controller enabled
@@ -1005,10 +1007,10 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU13]; // /< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU13];
 	// SECTION: Fan Control
-	uint16_t FanStopTemp[TEMP_COUNT];  // Celsius
-	uint16_t FanStartTemp[TEMP_COUNT]; // Celsius
+	uint16_t FanStopTemp[SMU_13_0_7_TEMP_COUNT];  // Celsius
+	uint16_t FanStartTemp[SMU_13_0_7_TEMP_COUNT]; // Celsius
 
-	uint16_t FanGain[TEMP_COUNT];
+	uint16_t FanGain[SMU_13_0_7_TEMP_COUNT];
 	uint16_t FanGainPadding;
 
 	uint16_t FanPwmMin;
@@ -1020,14 +1022,14 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint32_t TempInputSelectMask;
 	uint8_t  FanZeroRpmEnable;
 	uint8_t  FanTachEdgePerRev;
-	uint16_t FanTargetTemperature[TEMP_COUNT];
+	uint16_t FanTargetTemperature[SMU_13_0_7_TEMP_COUNT];
 	// The following are AFC override parameters. Leave at 0 to use FW defaults.
 	int16_t  FuzzyFan_ErrorSetDelta;
 	int16_t  FuzzyFan_ErrorRateSetDelta;
 	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
 
-	uint16_t FwCtfLimit[TEMP_COUNT];
+	uint16_t FwCtfLimit[SMU_13_0_7_TEMP_COUNT];
 
 	uint16_t IntakeTempEnableRPM;
 	int16_t  IntakeTempOffsetTemp;
@@ -1133,10 +1135,10 @@ struct smu13_boardtable_v39 {
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  VmempUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  VddioUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask VmempUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask VddioUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	// SECTION SVI3 Board Parameters
 	uint8_t  SlaveAddrMapping[SVI_PLANE_COUNT];
 	uint8_t  VrPsiSupport[SVI_PLANE_COUNT];

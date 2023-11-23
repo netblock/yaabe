@@ -2129,6 +2129,19 @@ struct atom_smu_info_v4_0 {
 ***************************************************************************
        Data Table smc_dpm_info  structure
 ****************************************************************************/
+union psi_sel_mask { // from *driver_if*.h
+	uint8_t sel_mask;
+	struct { uint8_t
+		VR0_PLANE0_PSI0 :0-0 +1,
+		VR0_PLANE0_PSI1 :1-1 +1,
+		VR0_PLANE1_PSI0 :2-2 +1,
+		VR0_PLANE1_PSI1 :3-3 +1,
+		VR1_PLANE0_PSI0 :4-4 +1,
+		VR1_PLANE0_PSI1 :5-5 +1,
+		VR1_PLANE1_PSI0 :6-6 +1,
+		VR1_PLANE1_PSI1 :7-7 +1;
+	};
+};
 struct atom_smc_dpm_info_v4_1 {
 	struct   atom_common_table_header table_header;
 	uint8_t  liquid1_i2c_address;
@@ -2154,8 +2167,8 @@ struct atom_smc_dpm_info_v4_1 {
 	uint8_t  vddmem0vrmapping;
 	uint8_t  vddmem1vrmapping;
 
-	uint8_t  gfxulvphasesheddingmask;
-	uint8_t  soculvphasesheddingmask;
+	union psi_sel_mask gfxulvphasesheddingmask;
+	union psi_sel_mask soculvphasesheddingmask;
 	uint8_t  padding8_v[2];
 
 	uint16_t gfxmaxcurrent;
@@ -2239,8 +2252,8 @@ struct atom_smc_dpm_info_v4_3 {
 	uint8_t  vddmem0vrmapping;
 	uint8_t  vddmem1vrmapping;
 
-	uint8_t  gfxulvphasesheddingmask;
-	uint8_t  soculvphasesheddingmask;
+	union psi_sel_mask gfxulvphasesheddingmask;
+	union psi_sel_mask soculvphasesheddingmask;
 	uint8_t  externalsensorpresent;
 	uint8_t  padding8_v;
 
@@ -2423,8 +2436,8 @@ struct atom_smc_dpm_info_v4_4 {
 	uint8_t  vddmem0vrmapping;
 	uint8_t  vddmem1vrmapping;
 
-	uint8_t  gfxulvphasesheddingmask;
-	uint8_t  soculvphasesheddingmask;
+	union psi_sel_mask gfxulvphasesheddingmask;
+	union psi_sel_mask soculvphasesheddingmask;
 	uint8_t  externalsensorpresent;
 	uint8_t  padding8_v;
 
@@ -2514,8 +2527,8 @@ struct atom_smc_dpm_info_v4_5 {
 	uint8_t  VddMem0VrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping;  // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 
@@ -2597,7 +2610,7 @@ struct atom_smc_dpm_info_v4_6 {
 	uint8_t  vddmemvrmapping; // use vr_mapping* bitfields
 	uint8_t  boardvrmapping;  // use vr_mapping* bitfields
 
-	uint8_t  gfxulvphasesheddingmask; // set this to 1 to set psi0/1 to 1 in ulv mode
+	union psi_sel_mask gfxulvphasesheddingmask; // set this to 1 to set psi0/1 to 1 in ulv mode
 	uint8_t  externalsensorpresent;   // external rdi connected to tmon (aka temp in)
 	uint8_t  padding8_v[2];
 
@@ -2684,8 +2697,8 @@ struct atom_smc_dpm_info_v4_7 {
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	uint8_t  ExternalSensorPresent;   // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 
@@ -2762,8 +2775,8 @@ struct atom_smc_dpm_info_v4_7 {
 	// Power Limit Scalars
 	uint8_t  PowerLimitScalar[4]; // [PPT_THROTTLER_COUNT]
 
-	uint8_t  MvddUlvPhaseSheddingMask;
-	uint8_t  VddciUlvPhaseSheddingMask;
+	union psi_sel_mask MvddUlvPhaseSheddingMask;
+	union psi_sel_mask VddciUlvPhaseSheddingMask;
 	uint8_t  Padding8_Psi1;
 	uint8_t  Padding8_Psi2;
 
@@ -2800,10 +2813,10 @@ struct atom_smc_dpm_info_v4_9 {
 	uint8_t  VddMem0VrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping;  // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
 
 	// SECTION: Telemetry Settings
 	uint16_t GfxMaxCurrent; // in Amps

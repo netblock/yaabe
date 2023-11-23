@@ -32,7 +32,7 @@ PPATUI_FUNCIFY(struct, dpm_descriptor_smu11, atomtree_powerplaytable,
 	)
 )
 
-PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_19, atomtree_powerplaytable,
+PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x13, atomtree_powerplaytable,
 	(bios->feature_control, feature_control,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(DPM_PREFETCHER, 0,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -103,7 +103,7 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_19, atomtree_powerplaytabl
 	)
 )
 
-PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_51, atomtree_powerplaytable,
+PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x33, atomtree_powerplaytable,
 	(bios->feature_control, feature_control,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(DPM_PREFETCHER,      0,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -176,8 +176,8 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_51, atomtree_powerplaytabl
 
 
 
-PPATUI_FUNCIFY(union, dpm_debug_override_smu11_19, atomtree_powerplaytable,
-	(bios->dpm_debug_override_flags, dpm_debug_override_flags,
+PPATUI_FUNCIFY(union, dpm_debug_override_smu11_0x13, atomtree_powerplaytable,
+	(bios->DebugOverrides, DebugOverrides,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(disable_socclk_pid,              0,0, ATUI_DEC, (ATUI_NODESCR)),
 			(disable_uclk_pid,                1,1, ATUI_DEC, (ATUI_NODESCR)),
@@ -201,8 +201,8 @@ PPATUI_FUNCIFY(union, dpm_debug_override_smu11_19, atomtree_powerplaytable,
 		)), (ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(union, dpm_debug_override_smu11_51, atomtree_powerplaytable,
-	(bios->dpm_debug_override_flags, dpm_debug_override_flags,
+PPATUI_FUNCIFY(union, dpm_debug_override_smu11_0x33, atomtree_powerplaytable,
+	(bios->DebugOverrides, DebugOverrides,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(disable_socclk_pid,               0,0, ATUI_DEC, (ATUI_NODESCR)),
 			(disable_uclk_pid,                 1,1, ATUI_DEC, (ATUI_NODESCR)),
@@ -219,6 +219,77 @@ PPATUI_FUNCIFY(union, dpm_debug_override_smu11_51, atomtree_powerplaytable,
 		)), (ATUI_NODESCR)
 	)
 )
+
+PPATUI_FUNCIFY(union, throttler_control_smu11_0x13, atui_nullstruct,
+	(bios->ThrottlerControlMask, ThrottlerControlMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(PADDING,      0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_EDGE,    1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HOTSPOT, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HBM,     3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_GFX,  4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_SOC,  5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM0, 6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM1, 7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_LIQUID,  8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_PLX,     9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_SKIN,   10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_GFX,     11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_SOC,     12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT,         13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(FIT,         14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(PPM,         15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,    31,16, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, throttler_control_smu11_0x33, atui_nullstruct,
+	(bios->ThrottlerControlMask, ThrottlerControlMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(PADDING,      0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_EDGE,    1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_HOTSPOT, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_MEM,     3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_GFX,  4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM0, 5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_MEM1, 6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_VR_SOC,  7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_LIQUID0, 8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_LIQUID1, 9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_PLX,    10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(TEMP_SKIN,   11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_GFX,     12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(TDC_SOC,     13,13, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT0,        14,14, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT1,        15,15, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT2,        16,16, ATUI_DEC, (ATUI_NODESCR)),
+			(PPT3,        17,17, ATUI_DEC, (ATUI_NODESCR)),
+			(FIT,         18,18, ATUI_DEC, (ATUI_NODESCR)),
+			(PPM,         19,19, ATUI_DEC, (ATUI_NODESCR)),
+			(APCC,        20,20, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,    31,21, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, fw_dstate_features_smu11_0x33, atui_nullstruct,
+	(bios->FwDStateMask, FwDStateMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(SOC_ULV,          0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(G6_HSR,           1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(G6_PHY_VDDCI_OFF, 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(MP0_DS,           3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(SMN_DS,           4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(MP1_DS,           5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(MP1_WHISPER_MODE, 6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(LIV_MIN,          7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(SOC_PLL_PWRDN,    8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,        31,9, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
 
 
 PPATUI_FUNCIFY(struct, smu11_pptable_v3_i2c_u32, atomtree_powerplaytable,
@@ -830,7 +901,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	(NULL, XgmiLinkSpeed,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkSpeed [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_RATE_e), (ATUI_NODESCR)
 			),
 			bios->XgmiLinkSpeed, NUM_XGMI_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
@@ -839,7 +910,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	(NULL, XgmiLinkWidth,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkWidth [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_WIDTH_e), (ATUI_NODESCR)
 			),
 			bios->XgmiLinkWidth, NUM_XGMI_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
@@ -883,7 +954,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	),
 
 	(bios->DebugOverrides, DebugOverrides,
-		(ATUI_NODISPLAY, ATUI_INLINE, dpm_debug_override_smu11_19),
+		(ATUI_NODISPLAY, ATUI_INLINE, dpm_debug_override_smu11_0x13),
 		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation0, ReservedEquation0,
@@ -1425,13 +1496,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->ThrottlerControlMask, ThrottlerControlMask,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "See Throtter masks defines"))
+		(ATUI_NAN, ATUI_INLINE, throttler_control_smu11_0x33),
+		(ATUI_NODESCR)
 	),
 
 	(bios->FwDStateMask, FwDStateMask,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "See FW DState masks defines"))
+		(ATUI_NAN, ATUI_INLINE, fw_dstate_features_smu11_0x33),
+		(ATUI_NODESCR)
 	),
 
 	(bios->UlvVoltageOffsetSoc, UlvVoltageOffsetSoc,

@@ -25,6 +25,8 @@ PPATUI_HEADERIFY(i2ccontrollerconfig_u32);
 PPATUI_HEADERIFY(i2ccontrollerconfig_u8);
 PPATUI_HEADERIFY(i2ccontrollerconfig_u8_mixed);
 
+PPATUI_HEADERIFY(psi_sel_mask);
+
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_4);
@@ -149,8 +151,8 @@ PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
 PPATUI_HEADERIFY(smu_11_0_overdrive_table);
 PPATUI_HEADERIFY(smu11_smcpptable_v3);
 PPATUI_HEADERIFY(smu11_smcpptable_v8);
-PPATUI_HEADERIFY(powerplay_feature_control_smu11_19);
-PPATUI_HEADERIFY(powerplay_feature_control_smu11_51);
+PPATUI_HEADERIFY(powerplay_feature_control_smu11_0x13);
+PPATUI_HEADERIFY(powerplay_feature_control_smu11_0x33);
 PPATUI_HEADERIFY(smu11_pptable_v3_i2c_u32);
 PPATUI_HEADERIFY(smu11_pptable_v8_i2c_u8mixed);
 

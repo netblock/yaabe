@@ -172,6 +172,7 @@ union dpm_debug_override_smu11_0x40 {
 #define VR_MAPPING_PLANE_SELECT_MASK  0x02
 #define VR_MAPPING_PLANE_SELECT_SHIFT 0x01
 
+/* duplicate
 // PSI Bit Defines
 #define PSI_SEL_VR0_PLANE0_PSI0  0x01
 #define PSI_SEL_VR0_PLANE0_PSI1  0x02
@@ -182,22 +183,23 @@ union dpm_debug_override_smu11_0x40 {
 #define PSI_SEL_VR1_PLANE1_PSI0  0x40
 #define PSI_SEL_VR1_PLANE1_PSI1  0x80
 union psi_sel_mask {
-	uint8_t sel_mask
+	uint8_t sel_mask;
 	struct { uint8_t
-		PSI_SEL_VR0_PLANE0_PSI0 :0-0 +1,
-		PSI_SEL_VR0_PLANE0_PSI1 :1-1 +1,
-		PSI_SEL_VR0_PLANE1_PSI0 :2-2 +1,
-		PSI_SEL_VR0_PLANE1_PSI1 :3-3 +1,
-		PSI_SEL_VR1_PLANE0_PSI0 :4-4 +1,
-		PSI_SEL_VR1_PLANE0_PSI1 :5-5 +1,
-		PSI_SEL_VR1_PLANE1_PSI0 :6-6 +1,
-		PSI_SEL_VR1_PLANE1_PSI1 :7-7 +1;
+		VR0_PLANE0_PSI0 :0-0 +1,
+		VR0_PLANE0_PSI1 :1-1 +1,
+		VR0_PLANE1_PSI0 :2-2 +1,
+		VR0_PLANE1_PSI1 :3-3 +1,
+		VR1_PLANE0_PSI0 :4-4 +1,
+		VR1_PLANE0_PSI1 :5-5 +1,
+		VR1_PLANE1_PSI0 :6-6 +1,
+		VR1_PLANE1_PSI1 :7-7 +1;
 	};
 };
+*/
 
 // Throttler Control/Status Bits
-union throttler_control_smu11
-	uint32_t ThrottlerControlMask
+union throttler_control_smu11_0x40 {
+	uint32_t ThrottlerControlMask;
 	struct { uint32_t
 		PADDING      :0-0 +1,
 		TEMP_EDGE    :1-1 +1,
@@ -224,7 +226,7 @@ union throttler_control_smu11
 };
 
 // FW DState Features Control Bits
-union fw_dstate_features_smu11 {
+union fw_dstate_features_smu11_0x40 {
 	uint32_t FwDStateMask;
 	struct { uint32_t
 		SOC_ULV                :0-0 +1,
@@ -420,34 +422,6 @@ enum PwrConfig_e {
 	PWR_CONFIG_TCP_MEASURED,
 };
 
-enum XGMI_LINK_RATE_e { // rate x Gbps
-	XGMI_LINK_RATE_2  = 2,
-	XGMI_LINK_RATE_4  = 4,
-	XGMI_LINK_RATE_8  = 8,
-	XGMI_LINK_RATE_12 = 12,
-	XGMI_LINK_RATE_16 = 16,
-	XGMI_LINK_RATE_17 = 17,
-	XGMI_LINK_RATE_18 = 18,
-	XGMI_LINK_RATE_19 = 19,
-	XGMI_LINK_RATE_20 = 20,
-	XGMI_LINK_RATE_21 = 21,
-	XGMI_LINK_RATE_22 = 22,
-	XGMI_LINK_RATE_23 = 23,
-	XGMI_LINK_RATE_24 = 24,
-	XGMI_LINK_RATE_25 = 25,
-	XGMI_LINK_RATE_COUNT = 26,
-};
-
-enum XGMI_LINK_WIDTH_e {
-	XGMI_LINK_WIDTH_1  = 0,
-	XGMI_LINK_WIDTH_2  = 2,
-	XGMI_LINK_WIDTH_4  = 3,
-	XGMI_LINK_WIDTH_8  = 4,
-	XGMI_LINK_WIDTH_9  = 5,
-	XGMI_LINK_WIDTH_16 = 6,
-	XGMI_LINK_WIDTH_COUNT = 7,
-};
-
 struct dpm_descriptor_smu11_0x40 {
 	uint8_t  VoltageMode;       // 0 - AVFS only, 1- min(AVFS,SS), 2-SS only
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
@@ -467,20 +441,21 @@ enum PPT_THROTTLER_e {
 	PPT_THROTTLER_COUNT
 };
 
-enum TEMP_e {
-	TEMP_EDGE,
-	TEMP_HOTSPOT,
-	TEMP_MEM,
-	TEMP_VR_GFX,
-	TEMP_VR_MEM0,
-	TEMP_VR_MEM1,
-	TEMP_VR_SOC,
-	TEMP_LIQUID0,
-	TEMP_LIQUID1,
-	TEMP_PLX,
-	TEMP_COUNT,
+enum TEMP_SMU11_0_7_e {
+	TEMP_SMU_11_0_7_EDGE,
+	TEMP_SMU_11_0_7_HOTSPOT,
+	TEMP_SMU_11_0_7_MEM,
+	TEMP_SMU_11_0_7_VR_GFX,
+	TEMP_SMU_11_0_7_VR_MEM0,
+	TEMP_SMU_11_0_7_VR_MEM1,
+	TEMP_SMU_11_0_7_VR_SOC,
+	TEMP_SMU_11_0_7_LIQUID0,
+	TEMP_SMU_11_0_7_LIQUID1,
+	TEMP_SMU_11_0_7_PLX,
+	TEMP_SMU_11_0_7_COUNT,
 };
 
+/* duplicate
 enum TDC_THROTTLER_e {
 	TDC_THROTTLER_GFX,
 	TDC_THROTTLER_SOC,
@@ -492,6 +467,7 @@ enum CUSTOMER_VARIANT_e {
 	CUSTOMER_VARIANT_FALCON,
 	CUSTOMER_VARIANT_COUNT,
 };
+*/
 
 struct UclkDpmChangeRange_t { // Used for 2-step UCLK DPM change workaround
 	uint16_t Fmin;
@@ -504,7 +480,8 @@ struct smu11_smcpptable_v7 {
 	uint32_t Version;
 
 	// SECTION: Feature Enablement
-	uint32_t FeaturesToRun[NUM_FEATURES / 32];
+	union powerplay_feature_control_smu11_0x40 features;
+	
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];    // Watts
@@ -512,10 +489,10 @@ struct smu11_smcpptable_v7 {
 	uint16_t SocketPowerLimitDc[PPT_THROTTLER_COUNT];    // Watts
 	uint16_t SocketPowerLimitDcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 
-	uint16_t TdcLimit[TDC_THROTTLER_COUNT];    // Amps
-	uint16_t TdcLimitTau[TDC_THROTTLER_COUNT]; // Time constant of LPF in ms
+	uint16_t TdcLimit[TDC_THROTTLER_COUNT_SMU11];    // Amps
+	uint16_t TdcLimitTau[TDC_THROTTLER_COUNT_SMU11]; // Time constant of LPF in ms
 
-	uint16_t TemperatureLimit[TEMP_COUNT]; // Celcius
+	uint16_t TemperatureLimit[TEMP_SMU_11_0_7_COUNT]; // Celcius
 
 	uint32_t FitLimit; // Failures in time (failures per million parts over the defined lifetime)
 
@@ -535,10 +512,10 @@ struct smu11_smcpptable_v7 {
 	uint16_t PaddingPerPartDroop;
 
 	// SECTION: Throttler settings
-	uint32_t ThrottlerControlMask; // See Throtter masks defines
+	union throttler_control_smu11_0x40 ThrottlerControlMask;
 
 	// SECTION: FW DSTATE Settings
-	uint32_t FwDStateMask; // See FW DState masks defines
+	union fw_dstate_features_smu11_0x40 FwDStateMask;
 
 	// SECTION: ULV Settings
 	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
@@ -659,7 +636,7 @@ struct smu11_smcpptable_v7 {
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
 
-	uint16_t FanGain[TEMP_COUNT];
+	uint16_t FanGain[TEMP_SMU_11_0_7_COUNT];
 
 	uint16_t FanPwmMin;
 	uint16_t FanAcousticLimitRpm;
@@ -711,7 +688,7 @@ struct smu11_smcpptable_v7 {
 	uint8_t  XgmiDpmSpare[2];
 
 	// SECTION: Advanced Options
-	uint32_t DebugOverrides;
+	union dpm_debug_override_smu11_0x40 DebugOverrides;
 	struct quadratic_f32 ReservedEquation0;
 	struct quadratic_f32 ReservedEquation1;
 	struct quadratic_f32 ReservedEquation2;
@@ -756,10 +733,10 @@ struct smu11_smcpptable_v7 {
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
 
 	// SECTION: Telemetry Settings
 	uint16_t GfxMaxCurrent; // in Amps
@@ -831,10 +808,9 @@ struct smu11_smcpptable_v7 {
 	// Section: Total Board Power
 	uint16_t TotalBoardPower; // Only needed for TCP Estimated case, where TCP = TGP+Total Board Power
 	uint16_t BoardPowerPadding;
-
 	// SECTION: XGMI Training
-	uint8_t  XgmiLinkSpeed[NUM_XGMI_PSTATE_LEVELS];
-	uint8_t  XgmiLinkWidth[NUM_XGMI_PSTATE_LEVELS];
+	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_PSTATE_LEVELS];
+	enum XGMI_LINK_WIDTH_e XgmiLinkWidth[NUM_XGMI_PSTATE_LEVELS];
 
 	uint16_t XgmiFclkFreq[NUM_XGMI_PSTATE_LEVELS];
 	uint16_t XgmiSocVoltage[NUM_XGMI_PSTATE_LEVELS];
