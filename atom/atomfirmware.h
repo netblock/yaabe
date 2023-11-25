@@ -2142,6 +2142,17 @@ union psi_sel_mask { // from *driver_if*.h
 		VR1_PLANE1_PSI1 :7-7 +1;
 	};
 };
+
+union led_display_control { // from *driver_if*.h
+	uint8_t  LedEnableMask;
+	struct { uint8_t
+		GFX_DPM  :0-0 +1,
+		PCIE     :1-1 +1,
+		ERROR    :2-2 +1,
+		reserved :7-3 +1;
+	};
+};
+
 struct atom_smc_dpm_info_v4_1 {
 	struct   atom_common_table_header table_header;
 	uint8_t  liquid1_i2c_address;
@@ -2347,6 +2358,8 @@ enum I2cControllerThrottler_e {
 	I2C_CONTROLLER_THROTTLER_PLX        = 7,
     I2C_CONTROLLER_THROTTLER_FAN_INTAKE = 8,
     I2C_CONTROLLER_THROTTLER_INA3221    = 9,
+
+    I2C_CONTROLLER_THROTTLER_INA3221_SMU11_0x40 = 8, 
 };
 
 enum I2cControllerProtocol_u8:uint8_t;
@@ -2362,6 +2375,8 @@ enum I2cControllerProtocol_e {
 	I2C_CONTROLLER_PROTOCOL_SPARE_0 = 3, // TMP
 	I2C_CONTROLLER_PROTOCOL_SPARE_1 = 4,
 	I2C_CONTROLLER_PROTOCOL_SPARE_2 = 5,
+
+    I2C_CONTROLLER_PROTOCOL_INA3221_SMU_11_0x40 = 3,
 };
 
 enum I2cControllerSpeed_u8:uint8_t;
@@ -2770,7 +2785,7 @@ struct atom_smc_dpm_info_v4_7 {
 	// Additional LED Display Settings
 	uint8_t  LedPin3; // GPIO number for LedPin[3] - PCIE GEN Speed
 	uint8_t  LedPin4; // GPIO number for LedPin[4] - PMFW Error Status
-	uint16_t LedEnableMask;
+	uint16_t LedEnableMask; // TODO union led_display_control
 
 	// Power Limit Scalars
 	uint8_t  PowerLimitScalar[4]; // [PPT_THROTTLER_COUNT]
@@ -2852,7 +2867,7 @@ struct atom_smc_dpm_info_v4_9 {
 	uint8_t  LedPin0; // GPIO number for LedPin[0]
 	uint8_t  LedPin1; // GPIO number for LedPin[1]
 	uint8_t  LedPin2; // GPIO number for LedPin[2]
-	uint8_t  LedEnableMask;
+	union led_display_control LedEnableMask;
 
 	uint8_t  LedPcie;  // GPIO number for PCIE results
 	uint8_t  LedError; // GPIO number for Error Cases

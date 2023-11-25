@@ -786,7 +786,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 
 	(bios->TotalPowerConfig, TotalPowerConfig,
 		(ATUI_DEC, ATUI_ENUM, PwrConfig_e),
-		((LANG_ENG, "Determines how PMFW calculates the power. Use defines from PwrConfig_e"))
+		((LANG_ENG, "Determines how PMFW calculates the power."))
 	),
 	(bios->CustomerVariant, CustomerVariant,
 		(ATUI_DEC, ATUI_ENUM, CUSTOMER_VARIANT_e),
@@ -1450,22 +1450,21 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 	(NULL, UclkDpmPstates,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, UclkDpmPstates [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, DPM_PSTATES_e), (ATUI_NODESCR)
 			),
 			bios->UclkDpmPstates, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
 			ATUI_NULL // enum
 		)),
-		((LANG_ENG, "4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3."))
+		((LANG_ENG, "4 DPM states."))
 	),
 	(NULL, FreqTableUclkDiv,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclkDiv [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, UCLK_DIV_e), (ATUI_NODESCR)
 			),
 			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU13, // start, count
 			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8"))
+		)), (ATUI_NODESCR)
 	),
 
 	(NULL, MemVmempVoltage,
@@ -1529,22 +1528,20 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 	(NULL, PcieGenSpeed,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e), (ATUI_NODESCR)
 			),
 			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU13, // start, count
 			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "/< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, PcieLaneCount,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e), (ATUI_NODESCR)
 			),
 			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU13, // start, count
 			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "/< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, LclkFreq,
 		(ATUI_NAN, ATUI_DYNARRAY, (
@@ -2146,7 +2143,8 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "GPIO number for LedPin[2]"))
 	),
 	(bios->LedEnableMask, LedEnableMask,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, led_display_control),
+		(ATUI_NODESCR)
 	),
 
 	(bios->LedPcie, LedPcie,

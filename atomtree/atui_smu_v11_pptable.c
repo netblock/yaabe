@@ -700,20 +700,20 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	(NULL, PcieGenSpeed,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e), (ATUI_NODESCR)
 			),
 			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
-		)), ((LANG_ENG, "< 0:PciE-gen1 1:PciE-gen2 2: PciE-gen3 3:PciE-gen4"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, PcieLaneCount,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e), (ATUI_NODESCR)
 			),
 			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
-		)), ((LANG_ENG, "< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, LclkFreq,
 		(ATUI_NAN, ATUI_DYNARRAY, (
@@ -1680,11 +1680,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	(NULL, FreqTableUclkDiv,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclkDiv [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, UCLK_DIV_e), (ATUI_NODESCR)
 			),
 			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
-		)), ((LANG_ENG,"0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8"))
+		)), (ATUI_NODESCR)
 	),
 
 	(NULL, Mp0clkFreq,
@@ -1780,20 +1780,20 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	(NULL, PcieGenSpeed,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e), (ATUI_NODESCR)
 			),
 			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
-		)), ((LANG_ENG,"< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, PcieLaneCount,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e), (ATUI_NODESCR)
 			),
 			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
-		)), ((LANG_ENG,"< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16"))
+		)), (ATUI_NODESCR)
 	),
 	(NULL, LclkFreq,
 		(ATUI_NAN, ATUI_DYNARRAY, (
@@ -2012,8 +2012,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->TotalPowerConfig, TotalPowerConfig,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "0-TDP, 1-TGP, 2-TCP Estimated, 3-TCP Measured"))
+		(ATUI_DEC, ATUI_ENUM, PwrConfig_e), (ATUI_NODESCR)
 	),
 	(bios->TotalPowerSpare1, TotalPowerSpare1,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)

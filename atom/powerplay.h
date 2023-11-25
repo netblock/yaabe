@@ -104,6 +104,54 @@ enum TDC_THROTTLER_e {
 	TDC_THROTTLER_COUNT_SMU13 = 3,
 };
 
+enum UCLK_DIV_e:uint8_t {
+	UCLK_DIV_BY_1 = 0,
+	UCLK_DIV_BY_2 = 1,
+	UCLK_DIV_BY_4 = 2,
+	UCLK_DIV_BY_8 = 3,
+};
+
+enum PwrConfig_e:uint8_t {                                                      
+	PWR_CONFIG_TDP = 0,
+	PWR_CONFIG_TGP = 1,
+	PWR_CONFIG_TCP_ESTIMATED = 2,
+	PWR_CONFIG_TCP_MEASURED  = 3,
+}; 
+
+enum PCIE_SPEED_e:uint8_t {
+	PCIE_LINK_SPEED_PCIE_1 = 0,
+	PCIE_LINK_SPEED_PCIE_2 = 1,
+	PCIE_LINK_SPEED_PCIE_3 = 2,
+	PCIE_LINK_SPEED_PCIE_4 = 3,
+	PCIE_LINK_SPEED_PCIE_5 = 4,
+};
+enum PCIE_WIDTH_e:uint8_t {
+	PCIE_LINK_WIDTH_x1  = 1,
+	PCIE_LINK_WIDTH_x2  = 2,
+	PCIE_LINK_WIDTH_x4  = 3,
+	PCIE_LINK_WIDTH_x8  = 4,
+	PCIE_LINK_WIDTH_x12 = 5,
+	PCIE_LINK_WIDTH_x16 = 6,
+};
+
+enum DPM_PSTATES_e:uint8_t { // TODO is this just PPT_THROTTLER?
+	DPM_PSTATE_P0 = 0,
+	DPM_PSTATE_P1 = 1,
+	DPM_PSTATE_P2 = 2,
+	DPM_PSTATE_P3 = 3,
+};
+
+enum VOLTAGE_MODE_e:uint8_t {
+	VOLTAGE_MODE_AVFS    = 0, // AVFS only
+	VOLTAGE_MODE_AVFS_SS = 1, // min(AVS,SS)
+	VOLTAGE_MODE_SS      = 2, // SS only
+	VOLTAGE_MODE_COUNT   = 3,
+};
+enum AVFS_VOLTAGE_TYPE_e {
+	AVFS_VOLTAGE_GFX   = 0,
+	AVFS_VOLTAGE_SOC   = 1,
+	AVFS_VOLTAGE_COUNT = 2,
+};
 
 #pragma pack(pop) // restore old packing
 

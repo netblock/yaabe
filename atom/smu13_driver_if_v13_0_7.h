@@ -386,24 +386,17 @@ enum AVFS_D_e {
 	AVFS_D_COUNT = 3,
 };
 
-enum UCLK_DIV_e {
-	UCLK_DIV_BY_1 = 0,
-	UCLK_DIV_BY_2 = 1,
-	UCLK_DIV_BY_4 = 2,
-	UCLK_DIV_BY_8 = 3,
-};
-
 enum GpioIntPolarity_e {
 	GPIO_INT_POLARITY_ACTIVE_LOW  = 0,
 	GPIO_INT_POLARITY_ACTIVE_HIGH = 1,
 };
-
+/* duplocate
 enum PwrConfig_e:uint8_t {
 	PWR_CONFIG_TDP = 0,
 	PWR_CONFIG_TGP = 1,
 	PWR_CONFIG_TCP_ESTIMATED = 2,
 	PWR_CONFIG_TCP_MEASURED  = 3,
-};
+};*/
 
 enum FOPT_CALC_e:uint8_t {
 	FOPT_CALC_AC_CALC_DC       = 0,
@@ -990,8 +983,8 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint8_t  UseStrobeModeOptimizations; // Set to indicate that FW should use strobe mode optimizations
 	uint8_t  PaddingMem[3];
 
-	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13];   // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
-	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
+	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13];   // 4 DPM states
+	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13];
 
 	uint16_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
 	uint16_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
@@ -1003,8 +996,8 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint16_t FclkDpmDisallowPstateFreq;  // Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value
 	uint16_t PaddingFclk;
 	// Link DPM Settings
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS_SMU13];  // /< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU13]; // /< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
+	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU13];
+	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU13];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU13];
 	// SECTION: Fan Control
 	uint16_t FanStopTemp[SMU_13_0_7_TEMP_COUNT];  // Celsius
@@ -1167,7 +1160,7 @@ struct smu13_boardtable_v39 {
 	uint8_t  LedPin0;        // GPIO number for LedPin[0]
 	uint8_t  LedPin1;        // GPIO number for LedPin[1]
 	uint8_t  LedPin2;        // GPIO number for LedPin[2]
-	uint8_t  LedEnableMask;
+	union led_display_control LedEnableMask;
 
 	uint8_t  LedPcie;        // GPIO number for PCIE results
 	uint8_t  LedError;       // GPIO number for Error Cases

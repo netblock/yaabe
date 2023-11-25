@@ -53,6 +53,7 @@
 #define NUM_XGMI_PSTATE_LEVELS 4 // Navi21
 #define NUM_OD_FAN_MAX_POINTS  6 // Navi21
 #define NUM_DTBCLK_DPM_LEVELS  8 // Navi21
+#define RLC_PACE_TABLE_NUM_LEVELS 16 // Navi21
 
 #define NUM_LINK_LEVELS        2
 
@@ -248,6 +249,7 @@ union fw_dstate_features_smu11_0x40 {
 };
 
 // GFX GPO Feature Contains PACE and DEM sub features
+/*
 #define GFX_GPO_PACE_BIT                   0
 #define GFX_GPO_DEM_BIT                    1
 
@@ -257,16 +259,30 @@ union fw_dstate_features_smu11_0x40 {
 #define GPO_UPDATE_REQ_UCLKDPM_MASK  0x1
 #define GPO_UPDATE_REQ_FCLKDPM_MASK  0x2
 #define GPO_UPDATE_REQ_MALLHIT_MASK  0x4
+*/
+union gfx_gpo_features {
+	uint8_t  GfxGpoSubFeatureMask;
+	struct { uint8_t
+		PACE     :0-0 +1,
+		DEM      :1-1 +1,
+		reserved :7-2 +1;
+	};
+};
+
 
 
 //LED Display Mask & Control Bits
+/* union led_display_control
 #define LED_DISPLAY_GFX_DPM_BIT            0
 #define LED_DISPLAY_PCIE_BIT               1
 #define LED_DISPLAY_ERROR_BIT              2
+*/
 
+
+/*
 //RLC Pace Table total number of levels
-#define RLC_PACE_TABLE_NUM_LEVELS          16
-#define SIENNA_CICHLID_UMC_CHANNEL_NUM     16
+#define SIENNA_CICHLID_UMC_CHANNEL_NUM 16
+#define RLC_PACE_TABLE_NUM_LEVELS      16
 
 struct EccInfo_t {
 	uint64_t mca_umc_status;
@@ -280,7 +296,7 @@ struct EccInfo_t {
 
 struct EccInfoTable_t {
 	EccInfo_t  EccInfo[SIENNA_CICHLID_UMC_CHANNEL_NUM];
-};
+};*/
 
 enum DRAM_BIT_WIDTH_TYPE_e {
 	DRAM_BIT_WIDTH_DISABLED = 0,
@@ -301,7 +317,7 @@ enum DRAM_BIT_WIDTH_TYPE_e {
 #define MAX_SW_I2C_COMMANDS 24
 
 
-
+// semi-duplicate; take note
 enum I2cControllerThrottler_e {
 	I2C_CONTROLLER_THROTTLER_TYPE_NONE = 0,
 	I2C_CONTROLLER_THROTTLER_VR_GFX,
@@ -322,6 +338,8 @@ enum I2cControllerProtocol_e {
 	I2C_CONTROLLER_PROTOCOL_INA3221,
 	I2C_CONTROLLER_PROTOCOL_COUNT,
 };
+
+
 
 /*
 struct struct i2ccontrollerconfig_u8 {
@@ -353,11 +371,12 @@ typedef struct {
 
 //Piecewise linear droop model, Sienna_Cichlid currently used only for GFX DFLL
 #define NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS 5
-enum DfllDroopModelSelect_e { // dBtcGbGfxDfllModelSelect
+enum DfllDroopModelSelect_e:uint8_t {
 	PIECEWISE_LINEAR_FUSED_MODEL = 0,
-	PIECEWISE_LINEAR_PP_MODEL,
-	QUADRATIC_PP_MODEL,
-	PERPART_PIECEWISE_LINEAR_PP_MODEL,
+	PIECEWISE_LINEAR_PP_MODEL    = 1,
+	QUADRATIC_PP_MODEL           = 2,
+	PERPART_PIECEWISE_LINEAR_PP_MODEL = 3,
+	DFLLDROOPMODELSELECT_COUNT   = 4,
 };
 
 struct PiecewiseLinearDroopInt_t {
@@ -372,23 +391,24 @@ enum GFXCLK_SOURCE_e {
 };
 
 //Only Clks that have DPM descriptors are listed here
-enum PPCLK_e {
-	PPCLK_GFXCLK = 0,
-	PPCLK_SOCCLK,
-	PPCLK_UCLK,
-	PPCLK_FCLK,
-	PPCLK_DCLK_0,
-	PPCLK_VCLK_0,
-	PPCLK_DCLK_1,
-	PPCLK_VCLK_1,
-	PPCLK_DCEFCLK,
-	PPCLK_DISPCLK,
-	PPCLK_PIXCLK,
-	PPCLK_PHYCLK,
-	PPCLK_DTBCLK,
-	PPCLK_COUNT,
+enum SMU11_PPT7_PPCLK_e {
+	SMU11_PPT7_PPCLK_GFXCLK  = 0,
+	SMU11_PPT7_PPCLK_SOCCLK  = 1,
+	SMU11_PPT7_PPCLK_UCLK    = 2,
+	SMU11_PPT7_PPCLK_FCLK    = 3,
+	SMU11_PPT7_PPCLK_DCLK_0  = 4,
+	SMU11_PPT7_PPCLK_VCLK_0  = 5,
+	SMU11_PPT7_PPCLK_DCLK_1  = 6,
+	SMU11_PPT7_PPCLK_VCLK_1  = 7,
+	SMU11_PPT7_PPCLK_DCEFCLK = 8,
+	SMU11_PPT7_PPCLK_DISPCLK = 9,
+	SMU11_PPT7_PPCLK_PIXCLK  = 10,
+	SMU11_PPT7_PPCLK_PHYCLK  = 11,
+	SMU11_PPT7_PPCLK_DTBCLK  = 12,
+	SMU11_PPT7_PPCLK_COUNT   = 13,
 };
 
+/* duplicate
 enum VOLTAGE_MODE_e {
 	VOLTAGE_MODE_AVFS = 0,
 	VOLTAGE_MODE_AVFS_SS,
@@ -396,34 +416,29 @@ enum VOLTAGE_MODE_e {
 	VOLTAGE_MODE_COUNT,
 };
 
-
 enum AVFS_VOLTAGE_TYPE_e {
-	AVFS_VOLTAGE_GFX = 0,
-	AVFS_VOLTAGE_SOC,
-	AVFS_VOLTAGE_COUNT,
-};
+	AVFS_VOLTAGE_GFX   = 0,
+	AVFS_VOLTAGE_SOC   = 1,
+	AVFS_VOLTAGE_COUNT = 2,
+}; */
 
-enum UCLK_DIV_e {
-	UCLK_DIV_BY_1 = 0,
-	UCLK_DIV_BY_2,
-	UCLK_DIV_BY_4,
-	UCLK_DIV_BY_8,
-};
 
 enum GpioIntPolarity_e {
-	GPIO_INT_POLARITY_ACTIVE_LOW = 0,
-	GPIO_INT_POLARITY_ACTIVE_HIGH,
+	GPIO_INT_POLARITY_ACTIVE_LOW  = 0,
+	GPIO_INT_POLARITY_ACTIVE_HIGH = 1,
 };
 
+
+/* duplicate
 enum PwrConfig_e {
 	PWR_CONFIG_TDP = 0,
 	PWR_CONFIG_TGP,
 	PWR_CONFIG_TCP_ESTIMATED,
 	PWR_CONFIG_TCP_MEASURED,
-};
+};*/
 
 struct dpm_descriptor_smu11_0x40 {
-	uint8_t  VoltageMode;       // 0 - AVFS only, 1- min(AVFS,SS), 2-SS only
+	enum VOLTAGE_MODE_e VoltageMode;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
 	uint8_t  Padding;
@@ -432,27 +447,27 @@ struct dpm_descriptor_smu11_0x40 {
 	uint16_t SsFmin; // Fmin for SS curve. If SS curve is selected, will use V@SSFmin for F <= Fmin
 	uint16_t Padding16;
 };
-
+/* duplicate
 enum PPT_THROTTLER_e {
 	PPT_THROTTLER_PPT0,
 	PPT_THROTTLER_PPT1,
 	PPT_THROTTLER_PPT2,
 	PPT_THROTTLER_PPT3,
 	PPT_THROTTLER_COUNT
-};
+};*/
 
 enum TEMP_SMU11_0_7_e {
-	TEMP_SMU_11_0_7_EDGE,
-	TEMP_SMU_11_0_7_HOTSPOT,
-	TEMP_SMU_11_0_7_MEM,
-	TEMP_SMU_11_0_7_VR_GFX,
-	TEMP_SMU_11_0_7_VR_MEM0,
-	TEMP_SMU_11_0_7_VR_MEM1,
-	TEMP_SMU_11_0_7_VR_SOC,
-	TEMP_SMU_11_0_7_LIQUID0,
-	TEMP_SMU_11_0_7_LIQUID1,
-	TEMP_SMU_11_0_7_PLX,
-	TEMP_SMU_11_0_7_COUNT,
+	TEMP_SMU_11_0_7_EDGE    = 0,
+	TEMP_SMU_11_0_7_HOTSPOT = 1,
+	TEMP_SMU_11_0_7_MEM     = 2,
+	TEMP_SMU_11_0_7_VR_GFX  = 3,
+	TEMP_SMU_11_0_7_VR_MEM0 = 4,
+	TEMP_SMU_11_0_7_VR_MEM1 = 5,
+	TEMP_SMU_11_0_7_VR_SOC  = 6,
+	TEMP_SMU_11_0_7_LIQUID0 = 7,
+	TEMP_SMU_11_0_7_LIQUID1 = 8,
+	TEMP_SMU_11_0_7_PLX     = 9,
+	TEMP_SMU_11_0_7_COUNT   = 10,
 };
 
 /* duplicate
@@ -497,7 +512,7 @@ struct smu11_smcpptable_v7 {
 	uint32_t FitLimit; // Failures in time (failures per million parts over the defined lifetime)
 
 	// SECTION: Power Configuration
-	uint8_t  TotalPowerConfig;    //0-TDP, 1-TGP, 2-TCP Estimated, 3-TCP Measured. Use defines from PwrConfig_e
+	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
 	uint8_t  TotalPowerPadding[3];
 
 	// SECTION: APCC Settings
@@ -551,7 +566,7 @@ struct smu11_smcpptable_v7 {
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 
 	//SECTION: DPM Config 1
-	struct dpm_descriptor_smu11_0x40 DpmDescriptor[PPCLK_COUNT];
+	struct dpm_descriptor_smu11_0x40 DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
 
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS];      // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS];       // In MHz
@@ -566,11 +581,11 @@ struct smu11_smcpptable_v7 {
 	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS];       // In MHz
 	uint32_t Paddingclks;
 
-	struct droop_f32 PerPartDroopModelGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS]; //GHz ->V
+	struct droop_f32 PerPartDroopModelGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS]; // GHz ->V
 
-	uint32_t DcModeMaxFreq[PPCLK_COUNT]; // In MHz
+	uint32_t DcModeMaxFreq[SMU11_PPT7_PPCLK_COUNT]; // In MHz
 
-	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
+	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS];
 
 	// Used for MALL performance boost
 	uint16_t FclkBoostFreq; // In Mhz
@@ -589,9 +604,9 @@ struct smu11_smcpptable_v7 {
 	uint8_t  GfxclkPadding;
 
 	// GFX GPO
-	uint8_t  GfxGpoSubFeatureMask; // bit 0 = PACE, bit 1 = DEM
-	uint8_t  GfxGpoEnabledWorkPolicyMask; // Any policy that GPO can be enabled
-	uint8_t  GfxGpoDisabledWorkPolicyMask; // Any policy that GPO can be disabled
+	union gfx_gpo_features GfxGpoSubFeatureMask;
+	union gfx_gpo_features GfxGpoEnabledWorkPolicyMask; // Any policy that GPO can be enabled
+	union gfx_gpo_features GfxGpoDisabledWorkPolicyMask; // Any policy that GPO can be disabled
 	uint8_t  GfxGpoPadding[1];
 	uint32_t GfxGpoVotingAllow; // For indicating which feature changes should result in a GPO table recalculation
 
@@ -619,7 +634,7 @@ struct smu11_smcpptable_v7 {
 	uint8_t  LowestUclkReservedForUlv; // Set this to 1 if UCLK DPM0 is reserved for ULV-mode only
 	uint8_t  PaddingMem[3];
 
-	uint8_t  UclkDpmPstates[NUM_UCLK_DPM_LEVELS]; // 4 DPM states, 0-P0, 1-P1, 2-P2, 3-P3.
+	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS]; // 4 DPM states.
 
 	// Used for 2-Step UCLK change workaround
 	struct UclkDpmChangeRange_t UclkDpmSrcFreqRange;  // In Mhz
@@ -628,8 +643,8 @@ struct smu11_smcpptable_v7 {
 	uint16_t UclkMidstepPadding;
 
 	// Link DPM Settings
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS];  //< 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS]; //< 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
+	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS];
+	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS];
 	uint16_t LclkFreq[NUM_LINK_LEVELS];
 
 	// SECTION: Fan Control
@@ -652,15 +667,15 @@ struct smu11_smcpptable_v7 {
 	uint8_t  FanTachEdgePerRev;
 
 	// The following are AFC override parameters. Leave at 0 to use FW defaults.
-	int16_t   FuzzyFan_ErrorSetDelta;
-	int16_t   FuzzyFan_ErrorRateSetDelta;
-	int16_t   FuzzyFan_PwmSetDelta;
+	int16_t  FuzzyFan_ErrorSetDelta;
+	int16_t  FuzzyFan_ErrorRateSetDelta;
+	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
 
 	// SECTION: AVFS
 	// Overrides
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
-	uint8_t  dBtcGbGfxDfllModelSelect; // 0 -> fused piece-wise model, 1 -> piece-wise linear(PPTable), 2 -> quadratic model(PPTable)
+	enum DfllDroopModelSelect_e dBtcGbGfxDfllModelSelect;
 	uint8_t  Padding8_Avfs;
 
 	struct quadratic_f32 qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
@@ -669,7 +684,7 @@ struct smu11_smcpptable_v7 {
 	struct droop_f32 dBtcGbSoc;     // GHz->V BtcGb
 	struct linear_f32 qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	struct PiecewiseLinearDroopInt_t PiecewiseLinearDroopIntGfxDfll; //GHz ->V
+	struct PiecewiseLinearDroopInt_t PiecewiseLinearDroopIntGfxDfll; // GHz ->V
 
 	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
@@ -684,7 +699,7 @@ struct smu11_smcpptable_v7 {
 	uint16_t DcBtcGb[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	// SECTION: XGMI
-	uint8_t  XgmiDpmPstates[NUM_XGMI_LEVELS]; // 2 DPM states, high and low.  0-P0, 1-P1, 2-P2, 3-P3.
+	enum DPM_PSTATES_e XgmiDpmPstates[NUM_XGMI_LEVELS]; // 2 DPM states, high and low.
 	uint8_t  XgmiDpmSpare[2];
 
 	// SECTION: Advanced Options
@@ -772,7 +787,7 @@ struct smu11_smcpptable_v7 {
 	uint8_t  LedPin0; // GPIO number for LedPin[0]
 	uint8_t  LedPin1; // GPIO number for LedPin[1]
 	uint8_t  LedPin2; // GPIO number for LedPin[2]
-	uint8_t  LedEnableMask;
+	union led_display_control LedEnableMask;
 
 	uint8_t  LedPcie;  // GPIO number for PCIE results
 	uint8_t  LedError; // GPIO number for Error Cases

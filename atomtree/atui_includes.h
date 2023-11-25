@@ -26,6 +26,7 @@ PPATUI_HEADERIFY(i2ccontrollerconfig_u8);
 PPATUI_HEADERIFY(i2ccontrollerconfig_u8_mixed);
 
 PPATUI_HEADERIFY(psi_sel_mask);
+PPATUI_HEADERIFY(led_display_control);
 
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);

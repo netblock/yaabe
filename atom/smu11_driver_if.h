@@ -397,19 +397,19 @@ enum SMU11_PPT8_PPCLK {
 	SMU11_PPT8_PPCLK_COUNT   = 9,
 };
 
+/* duplicate
 enum VOLTAGE_MODE_e:uint8_t {
 	VOLTAGE_MODE_AVFS    = 0, // AVFS only
 	VOLTAGE_MODE_AVFS_SS = 1, // min(AVS,SS)
 	VOLTAGE_MODE_SS      = 2, // SS only
 	VOLTAGE_MODE_COUNT   = 3,
-};
-
+}; 
 
 enum AVFS_VOLTAGE_TYPE_e {
 	AVFS_VOLTAGE_GFX   = 0,
 	AVFS_VOLTAGE_SOC   = 1,
 	AVFS_VOLTAGE_COUNT = 2,
-};
+}; */
 
 enum TEMP_SMU11_0_0_e {
 	TEMP_SMU11_0_0_EDGE    = 0,
@@ -424,8 +424,7 @@ enum TEMP_SMU11_0_0_e {
 
 
 //typedef struct dpm_descriptor_smu11 DpmDescriptor_t;
-
-struct dpm_descriptor_smu11 {
+struct dpm_descriptor_smu11 { // works for driver_if ver 0x13 0x33
 	enum VOLTAGE_MODE_e VoltageMode;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to # discrete levels used
@@ -554,8 +553,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  Padding8_Uclk[3];
 
 	// Link DPM Settings
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS_SMU11];  // < 0:PciE-gen1 1:PciE-gen2 2: PciE-gen3 3:PciE-gen4
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU11]; // < 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
+	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 
 	// GFXCLK Thermal DPM (formerly 'Boost' Settings
@@ -802,7 +801,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t DcModeMaxFreq[SMU11_PPT8_PPCLK_COUNT]; // In MHz
 	uint16_t Padding8_Clks;
 
-	uint8_t  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11]; // 0:Div-1, 1:Div-1/2, 2:Div-1/4, 3:Div-1/8
+	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11];
 
 	// SECTION: DPM Config 2
 	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // in MHz
@@ -829,8 +828,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint8_t  PaddingMem[2];
 
 	// Link DPM Settings
-	uint8_t  PcieGenSpeed[NUM_LINK_LEVELS_SMU11]; // < 0:PciE-gen1 1:PciE-gen2 2:PciE-gen3 3:PciE-gen4
-	uint8_t  PcieLaneCount[NUM_LINK_LEVELS_SMU11]; // < 1=x1, 2=x2, 3=x4, 4=x8, 5=x12, 6=x16
+	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 
 	// GFXCLK Thermal DPM (formerly 'Boost' Settings)
@@ -900,8 +899,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	struct quadratic_f32 ReservedEquation2;
 	struct quadratic_f32 ReservedEquation3;
 
-	// Total Power configuration, use defines from PwrConfig_e
-	uint8_t  TotalPowerConfig; // 0-TDP, 1-TGP, 2-TCP Estimated, 3-TCP Measured
+	// Total Power configuration
+	enum PwrConfig_e TotalPowerConfig; 
 	uint8_t  TotalPowerSpare1;
 	uint16_t TotalPowerSpare2;
 

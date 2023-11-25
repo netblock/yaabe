@@ -89,3 +89,15 @@ PPATUI_FUNCIFY(struct, droop_f32, atomtree_powerplaytable,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
+
+PPATUI_FUNCIFY(union, led_display_control, atui_nullstruct,
+	(bios->LedEnableMask, LedEnableMask,
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(GFX_DPM,  0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(PCIE,     1,1, ATUI_DEC, (ATUI_NODESCR)),
+			(ERROR,    2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved, 7,3, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
