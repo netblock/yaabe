@@ -649,6 +649,27 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					);
 				}
 				break;
+
+			case v18_0: // navi2 xx50
+			case v15_0:
+				ppt->smc_pptable_ver = &(
+					ppt->v15_0->smc_pptable.smc_pptable_ver
+				);
+				if (generate_atui) {
+					atui_branch* atui_smu11_0_7_ppt_kids[] = {
+						ATUI_MAKE_BRANCH(
+							smu11_smcpptable_v7,
+							NULL, &(ppt->v15_0->smc_pptable),
+							0, NULL
+						),
+					};
+					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_7_powerplay_table,
+						NULL,ppt->v15_0,
+						sizeof(atui_smu11_0_7_ppt_kids)/sizeof(atui_branch*),
+						atui_smu11_0_7_ppt_kids
+					);
+				};
+				break;
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,

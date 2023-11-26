@@ -101,8 +101,7 @@ enum SMU_11_0_7_PWRMODE_SETTING {
 };
 #define SMU_11_0_7_MAX_PMSETTING 32 // Maximum Number of PowerMode Settings
 
-struct smu_11_0_7_overdrive_table
-{
+struct smu_11_0_7_overdrive_table {
 	uint8_t  revision;      // Revision = SMU_11_0_7_PP_OVERDRIVE_VERSION
 	uint8_t  reserve[3];    // Zero filled field reserved for future use
 	uint32_t feature_count; // Total number of supported features
@@ -131,8 +130,7 @@ enum SMU_11_0_7_PPCLOCK_ID {
 };
 #define SMU_11_0_7_MAX_PPCLOCK 16 // Maximum Number of PP Clocks
 
-struct smu_11_0_7_power_saving_clock_table
-{
+struct smu_11_0_7_power_saving_clock_table {
 	uint8_t  revision;   // Revision = SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION
 	uint8_t  reserve[3]; // Zero filled field reserved for future use
 	uint32_t count;      // power_saving_clock_count = SMU_11_0_7_PPCLOCK_COUNT
@@ -140,8 +138,7 @@ struct smu_11_0_7_power_saving_clock_table
 	uint32_t min[SMU_11_0_7_MAX_PPCLOCK]; // PowerSavingClock Mode Clock Minimum array In MHz
 };
 
-struct smu_11_0_7_powerplay_table
-{
+struct smu_11_0_7_powerplay_table {
 	struct smu_powerplay_table_header header;
 	uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
 	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base

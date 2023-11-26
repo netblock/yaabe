@@ -179,7 +179,8 @@ struct atomtree_powerplaytable {
 		struct smu_powerplay_table_header* pphead;
 
 		struct smu_11_0_powerplay_table* v12_0;
-		// struct smu_13_0_7_powerplay_table* v15_0; // navi2 is 11.0.7
+		struct smu_11_0_7_powerplay_table* v15_0;
+		// struct smu_13_0_7_powerplay_table* v15_0; // navi3?
 
 	};
 		/*

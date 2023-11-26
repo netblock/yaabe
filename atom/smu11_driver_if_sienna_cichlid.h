@@ -63,7 +63,7 @@
 #define PPSMC_GeminiModeSlave  2  //Slave GPU on a Gemini board
 
 // Feature Control Defines
-union powerplay_feature_control_smu11_0x40
+union powerplay_feature_control_smu11_0x40 {
 	uint64_t feature_control;
 	struct { uint64_t
 		// DPM
@@ -143,7 +143,6 @@ union powerplay_feature_control_smu11_0x40
 
 // Debug Overrides Bitmask
 union dpm_debug_override_smu11_0x40 {
-	uint32_t dpm_debug_override_flags;
 	uint32_t DebugOverrides;
 	struct { uint32_t
 		DISABLE_FCLK_PID                 :0-0 +1,
