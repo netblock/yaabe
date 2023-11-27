@@ -2698,21 +2698,8 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 )
 
 
-
-
-
-PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
-
-	(bios->Version, Version,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(bios->features, features,
-		(ATUI_NAN, ATUI_PETIOLE, powerplay_feature_control_smu11_0x40),
-		(ATUI_NODESCR)
-	),
-
-
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_infrastructure_limits,
+		atui_nullstruct,
 	(NULL, SocketPowerLimitAc,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocketPowerLimitAc [%02u],
@@ -2789,173 +2776,24 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 	(bios->FitLimit, FitLimit,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Failures in time (failures per million parts over the defined lifetime)"))
-	),
+	)
+)
 
-	(bios->TotalPowerConfig, TotalPowerConfig,
-		(ATUI_DEC, ATUI_ENUM, PwrConfig_e),
-		((LANG_ENG, "Determines how PMFW calculates the power."))
-	),
-	(bios->TotalPowerPadding, TotalPowerPadding,
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
 
-	(bios->ApccPlusResidencyLimit, ApccPlusResidencyLimit,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(NULL, SmnclkDpmFreq,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SmnclkDpmFreq [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-			),
-			bios->SmnclkDpmFreq, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "in MHz"))
-	),
-	(NULL, SmnclkDpmVoltage,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, SmnclkDpmVoltage [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-			),
-			bios->SmnclkDpmVoltage, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "mV(Q2)"))
-	),
-
-	(bios->PaddingAPCC, PaddingAPCC,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(NULL, PerPartDroopVsetGfxDfll,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, PerPartDroopVsetGfxDfll [%02u],
-				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-			),
-			bios->PerPartDroopVsetGfxDfll, NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "In mV(Q2)"))
-	),
-	(bios->PaddingPerPartDroop, PaddingPerPartDroop,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(bios->ThrottlerControlMask, ThrottlerControlMask,
-		(ATUI_NAN, ATUI_PETIOLE, throttler_control_smu11_0x40),
-		(ATUI_NODESCR)
-	),
-
-	(bios->FwDStateMask, FwDStateMask,
-		(ATUI_NAN, ATUI_PETIOLE, fw_dstate_features_smu11_0x40),
-		(ATUI_NODESCR)
-	),
-
-	(bios->UlvVoltageOffsetSoc, UlvVoltageOffsetSoc,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)"))
-	),
-	(bios->UlvVoltageOffsetGfx, UlvVoltageOffsetGfx,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)"))
-	),
-
-	(bios->MinVoltageUlvGfx, MinVoltageUlvGfx,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode"))
-	),
-	(bios->MinVoltageUlvSoc, MinVoltageUlvSoc,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode"))
-	),
-
-	(bios->SocLIVmin, SocLIVmin,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC"))
-	),
-	(bios->PaddingLIVmin, PaddingLIVmin,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-
-	(bios->GceaLinkMgrIdleThreshold, GceaLinkMgrIdleThreshold,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events"))
-	),
-	(bios->paddingRlcUlvParams, paddingRlcUlvParams,
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
-
-	(bios->MinVoltageGfx, MinVoltageGfx,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX"))
-	),
-	(bios->MinVoltageSoc, MinVoltageSoc,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC"))
-	),
-	(bios->MaxVoltageGfx, MaxVoltageGfx,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Maximum Voltage allowable of VDD_GFX"))
-	),
-	(bios->MaxVoltageSoc, MaxVoltageSoc,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mV(Q2) Maximum Voltage allowable of VDD_SOC"))
-	),
-
-	(bios->LoadLineResistanceGfx, LoadLineResistanceGfx,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mOhms Q8.8 with 8 fractional bits"))
-	),
-	(bios->LoadLineResistanceSoc, LoadLineResistanceSoc,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "In mOhms with 8 fractional bits"))
-	),
-
-	(bios->VDDGFX_TVmin, VDDGFX_TVmin,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Celcius"))
-	),
-	(bios->VDDSOC_TVmin, VDDSOC_TVmin,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Celcius"))
-	),
-	(bios->VDDGFX_Vmin_HiTemp, VDDGFX_Vmin_HiTemp,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "mV Q2"))
-	),
-	(bios->VDDGFX_Vmin_LoTemp, VDDGFX_Vmin_LoTemp,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "mV Q2"))
-	),
-	(bios->VDDSOC_Vmin_HiTemp, VDDSOC_Vmin_HiTemp,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "mV Q2"))
-	),
-	(bios->VDDSOC_Vmin_LoTemp, VDDSOC_Vmin_LoTemp,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "mV Q2"))
-	),
-
-	(bios->VDDGFX_TVminHystersis, VDDGFX_TVminHystersis,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Celcius"))
-	),
-	(bios->VDDSOC_TVminHystersis, VDDSOC_TVminHystersis,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "Celcius"))
-	),
-
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_descriptors, atui_nullstruct,
 	(NULL, DpmDescriptor,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, DpmDescriptor: %s,
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(ATUI_NULL, %s,
 				(ATUI_NAN, ATUI_INLINE, dpm_descriptor_smu11_0x40),
 				(ATUI_NODESCR)
 			),
 			bios->DpmDescriptor, SMU11_PPT7_PPCLK_COUNT, // start, count
 			SMU11_PPT7_PPCLK_e // enum
 		)), (ATUI_NODESCR)
-	),
+	)
+)
 
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_freq_tables, atui_nullstruct,
 	(NULL, FreqTableGfx,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableGfx [%02u],
@@ -3065,7 +2903,19 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
+	(bios->DpmDescriptors, DpmDescriptors,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_dpm_descriptors),
+		(ATUI_NODESCR)
 	),
+	(bios->freq_tables, freq_tables,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_dpm_freq_tables),
+		(ATUI_NODESCR)
+	),
+
 	(bios->Paddingclks, Paddingclks,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
@@ -3315,8 +3165,10 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
-	),
+	)
 
+)
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_fan_control, atui_nullstruct,
 	(bios->FanStopTemp, FanStopTemp,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Celcius"))
@@ -3384,8 +3236,10 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 	),
 	(bios->FuzzyFan_Reserved, FuzzyFan_Reserved,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
+	)
+)
 
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 	(NULL, OverrideAvfsGb,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
@@ -3509,6 +3363,237 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "mV Q2"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_i2c_control, atui_nullstruct,
+	(NULL, Supported I2cControllers,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, %s,
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			bios->I2cControllers, // start
+			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7, // count
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(NULL, Undefined I2cControllers,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, I2cControllers [8 + %02u],
+					// if COUNT changes, please change this 8
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			// start:
+			(&(bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])),
+			(NUM_I2C_CONTROLLERS_SMU11_0_7
+				- I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+
+	(bios->GpioScl, GpioScl,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Number for SCL Line, used only for CKSVII2C1"))
+	),
+	(bios->GpioSda, GpioSda,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Number for SDA Line, used only for CKSVII2C1"))
+	),
+	(bios->FchUsbPdSlaveAddr, FchUsbPdSlaveAddr,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For requesting USB PD controller S-states via FCH I2C when entering PME turn off"))
+	),
+	(bios->I2cSpare, I2cSpare,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
+
+	(bios->Version, Version,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->features, features,
+		(ATUI_NAN, ATUI_PETIOLE, powerplay_feature_control_smu11_0x40),
+		(ATUI_NODESCR)
+	),
+
+	(bios->infrastructure_limits, infrastructure_limits,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_infrastructure_limits),
+		(ATUI_NODESCR)
+	),
+
+
+	(bios->TotalPowerConfig, TotalPowerConfig,
+		(ATUI_DEC, ATUI_ENUM, PwrConfig_e),
+		((LANG_ENG, "Determines how PMFW calculates the power."))
+	),
+	(bios->TotalPowerPadding, TotalPowerPadding,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->ApccPlusResidencyLimit, ApccPlusResidencyLimit,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(NULL, SmnclkDpmFreq,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SmnclkDpmFreq [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SmnclkDpmFreq, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "in MHz"))
+	),
+	(NULL, SmnclkDpmVoltage,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, SmnclkDpmVoltage [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->SmnclkDpmVoltage, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "mV(Q2)"))
+	),
+
+	(bios->PaddingAPCC, PaddingAPCC,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(NULL, PerPartDroopVsetGfxDfll,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, PerPartDroopVsetGfxDfll [%02u],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			bios->PerPartDroopVsetGfxDfll, NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "In mV(Q2)"))
+	),
+	(bios->PaddingPerPartDroop, PaddingPerPartDroop,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->ThrottlerControlMask, ThrottlerControlMask,
+		(ATUI_NAN, ATUI_PETIOLE, throttler_control_smu11_0x40),
+		(ATUI_NODESCR)
+	),
+
+	(bios->FwDStateMask, FwDStateMask,
+		(ATUI_NAN, ATUI_PETIOLE, fw_dstate_features_smu11_0x40),
+		(ATUI_NODESCR)
+	),
+
+	(bios->UlvVoltageOffsetSoc, UlvVoltageOffsetSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)"))
+	),
+	(bios->UlvVoltageOffsetGfx, UlvVoltageOffsetGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)"))
+	),
+
+	(bios->MinVoltageUlvGfx, MinVoltageUlvGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode"))
+	),
+	(bios->MinVoltageUlvSoc, MinVoltageUlvSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode"))
+	),
+
+	(bios->SocLIVmin, SocLIVmin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC"))
+	),
+	(bios->PaddingLIVmin, PaddingLIVmin,
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->GceaLinkMgrIdleThreshold, GceaLinkMgrIdleThreshold,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events"))
+	),
+	(bios->paddingRlcUlvParams, paddingRlcUlvParams,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+
+	(bios->MinVoltageGfx, MinVoltageGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX"))
+	),
+	(bios->MinVoltageSoc, MinVoltageSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC"))
+	),
+	(bios->MaxVoltageGfx, MaxVoltageGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Maximum Voltage allowable of VDD_GFX"))
+	),
+	(bios->MaxVoltageSoc, MaxVoltageSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Maximum Voltage allowable of VDD_SOC"))
+	),
+
+	(bios->LoadLineResistanceGfx, LoadLineResistanceGfx,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mOhms Q8.8 with 8 fractional bits"))
+	),
+	(bios->LoadLineResistanceSoc, LoadLineResistanceSoc,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mOhms with 8 fractional bits"))
+	),
+
+	(bios->VDDGFX_TVmin, VDDGFX_TVmin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Celcius"))
+	),
+	(bios->VDDSOC_TVmin, VDDSOC_TVmin,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Celcius"))
+	),
+	(bios->VDDGFX_Vmin_HiTemp, VDDGFX_Vmin_HiTemp,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+	(bios->VDDGFX_Vmin_LoTemp, VDDGFX_Vmin_LoTemp,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+	(bios->VDDSOC_Vmin_HiTemp, VDDSOC_Vmin_HiTemp,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+	(bios->VDDSOC_Vmin_LoTemp, VDDSOC_Vmin_LoTemp,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "mV Q2"))
+	),
+
+	(bios->VDDGFX_TVminHystersis, VDDGFX_TVminHystersis,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Celcius"))
+	),
+	(bios->VDDSOC_TVminHystersis, VDDSOC_TVminHystersis,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Celcius"))
+	),
+
+	(bios->dpm_config, dpm_config,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_dpm_config),
+		(ATUI_NODESCR)
+	),
+	(bios->fan_control, fan_control,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_fan_control),
+		(ATUI_NODESCR)
+	),
+	(bios->avfs, avfs,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_avfs),
+		(ATUI_NODESCR)
 	),
 
 	(NULL, XgmiDpmPstates,
@@ -3602,49 +3687,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, Supported I2cControllers,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, I2cControllers: %s,
-				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
-				(ATUI_NODESCR)
-			),
-			bios->I2cControllers, // start
-			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7, // count
-			I2cControllerName_SMU_11_0_7_e // enum
-		)), (ATUI_NODESCR)
-	),
-	(NULL, Undefined I2cControllers,
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, I2cControllers [8 + %02u],
-					// if COUNT changes, please change this 8
-				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
-				(ATUI_NODESCR)
-			),
-			// start:
-			(&(bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])),
-			(NUM_I2C_CONTROLLERS_SMU11_0_7
-				- I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7
-			), // count
-			ATUI_NULL // enum
-		)), (ATUI_NODESCR)
+	(bios->i2c_control, i2c_control,
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_i2c_control),
+		(ATUI_NODESCR)
 	),
 
-
-	(bios->GpioScl, GpioScl,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "GPIO Number for SCL Line, used only for CKSVII2C1"))
-	),
-	(bios->GpioSda, GpioSda,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "GPIO Number for SDA Line, used only for CKSVII2C1"))
-	),
-	(bios->FchUsbPdSlaveAddr, FchUsbPdSlaveAddr,
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "For requesting USB PD controller S-states via FCH I2C when entering PME turn off"))
-	),
-	(bios->I2cSpare, I2cSpare,
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
 
 	(bios->VddGfxVrMapping, VddGfxVrMapping,
 		(ATUI_DEC, ATUI_NOFANCY),

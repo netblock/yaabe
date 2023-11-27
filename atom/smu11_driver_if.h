@@ -1250,15 +1250,9 @@ struct smu11_smcpptable_v8 { // Navi10
 };
 
 
-struct smu11_smcpptable_v7 { // Navi21
-	// MAJOR SECTION: SKU PARAMETERS
 
-	uint32_t Version;
 
-	// SECTION: Feature Enablement
-	union powerplay_feature_control_smu11_0x40 features;
-	
-
+struct smu11_smcpptable_v7_infrastructure_limits {
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];    // Watts
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
@@ -1271,64 +1265,12 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t TemperatureLimit[TEMP_SMU_11_0_7_COUNT]; // Celcius
 
 	uint32_t FitLimit; // Failures in time (failures per million parts over the defined lifetime)
+};
 
-	// SECTION: Power Configuration
-	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
-	uint8_t  TotalPowerPadding[3];
-
-	// SECTION: APCC Settings
-	uint32_t ApccPlusResidencyLimit;
-
-	//SECTION: SMNCLK DPM
-	uint16_t SmnclkDpmFreq[NUM_SMNCLK_DPM_LEVELS_SMU11];    // in MHz
-	uint16_t SmnclkDpmVoltage[NUM_SMNCLK_DPM_LEVELS_SMU11]; // mV(Q2)
-
-	uint32_t PaddingAPCC;
-	uint16_t PerPartDroopVsetGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS];  //In mV(Q2)
-	uint16_t PaddingPerPartDroop;
-
-	// SECTION: Throttler settings
-	union throttler_control_smu11_0x40 ThrottlerControlMask;
-
-	// SECTION: FW DSTATE Settings
-	union fw_dstate_features_smu11_0x40 FwDStateMask;
-
-	// SECTION: ULV Settings
-	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uint16_t UlvVoltageOffsetGfx; // In mV(Q2)
-
-	uint16_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
-	uint16_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
-
-	uint16_t SocLIVmin;        // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC
-	uint16_t PaddingLIVmin;
-
-	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events
-	uint8_t  paddingRlcUlvParams[3];
-
-	// SECTION: Voltage Control Parameters
-	uint16_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uint16_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uint16_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uint16_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
-
-	uint16_t LoadLineResistanceGfx; // In mOhms Q8.8 with 8 fractional bits
-	uint16_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
-
-	// SECTION: Temperature Dependent Vmin
-	uint16_t VDDGFX_TVmin;       // Celcius
-	uint16_t VDDSOC_TVmin;       // Celcius
-	uint16_t VDDGFX_Vmin_HiTemp; // mV Q2
-	uint16_t VDDGFX_Vmin_LoTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_HiTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_LoTemp; // mV Q2
-
-	uint16_t VDDGFX_TVminHystersis; // Celcius
-	uint16_t VDDSOC_TVminHystersis; // Celcius
-
-	//SECTION: DPM Config 1
+struct smu11_smcpptable_v7_dpm_descriptors {
 	struct dpm_descriptor_smu11_0x40 DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
-
+};
+struct smu11_smcpptable_v7_dpm_freq_tables {
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU11];      // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU11];       // In MHz
 	uint16_t FreqTableDclk[NUM_DCLK_DPM_LEVELS_SMU11];       // In MHz
@@ -1340,6 +1282,12 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t FreqTablePhyclk[NUM_PHYCLK_DPM_LEVELS_SMU11];   // In MHz
 	uint16_t FreqTableDtbclk[NUM_DTBCLK_DPM_LEVELS_SMU11];   // In MHz
 	uint16_t FreqTableFclk[NUM_FCLK_DPM_LEVELS_SMU11];       // In MHz
+};
+struct smu11_smcpptable_v7_dpm_config {
+	//SECTION: DPM Config 1
+	struct smu11_smcpptable_v7_dpm_descriptors DpmDescriptors;
+
+	struct smu11_smcpptable_v7_dpm_freq_tables freq_tables;
 	uint32_t Paddingclks;
 
 	struct droop_f32 PerPartDroopModelGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS]; // GHz ->V
@@ -1407,7 +1355,8 @@ struct smu11_smcpptable_v7 { // Navi21
 	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
 	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
-
+};
+struct smu11_smcpptable_v7_fan_control {
 	// SECTION: Fan Control
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
@@ -1432,7 +1381,8 @@ struct smu11_smcpptable_v7 { // Navi21
 	int16_t  FuzzyFan_ErrorRateSetDelta;
 	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
-
+};
+struct smu11_smcpptable_v7_avfs {
 	// SECTION: AVFS
 	// Overrides
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
@@ -1458,7 +1408,89 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	uint16_t DcBtcGb[AVFS_VOLTAGE_COUNT]; // mV Q2
+};
+struct smu11_smcpptable_v7_i2c_control {
+	// SECTION: I2C Control
+	struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS_SMU11_0_7];
 
+	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
+	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
+	uint8_t  FchUsbPdSlaveAddr; // For requesting USB PD controller S-states via FCH I2C when entering PME turn off
+	uint8_t  I2cSpare[1];
+};
+struct smu11_smcpptable_v7 { // Navi21
+	// MAJOR SECTION: SKU PARAMETERS
+
+	uint32_t Version;
+
+	// SECTION: Feature Enablement
+	union powerplay_feature_control_smu11_0x40 features;
+	
+	// SECTION: Infrastructure Limits
+	struct smu11_smcpptable_v7_infrastructure_limits infrastructure_limits;
+
+	// SECTION: Power Configuration
+	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
+	uint8_t  TotalPowerPadding[3];
+
+	// SECTION: APCC Settings
+	uint32_t ApccPlusResidencyLimit;
+
+	//SECTION: SMNCLK DPM
+	uint16_t SmnclkDpmFreq[NUM_SMNCLK_DPM_LEVELS_SMU11];    // in MHz
+	uint16_t SmnclkDpmVoltage[NUM_SMNCLK_DPM_LEVELS_SMU11]; // mV(Q2)
+
+	uint32_t PaddingAPCC;
+	uint16_t PerPartDroopVsetGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS];  //In mV(Q2)
+	uint16_t PaddingPerPartDroop;
+
+	// SECTION: Throttler settings
+	union throttler_control_smu11_0x40 ThrottlerControlMask;
+
+	// SECTION: FW DSTATE Settings
+	union fw_dstate_features_smu11_0x40 FwDStateMask;
+
+	// SECTION: ULV Settings
+	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uint16_t UlvVoltageOffsetGfx; // In mV(Q2)
+
+	uint16_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
+	uint16_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
+
+	uint16_t SocLIVmin;        // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC
+	uint16_t PaddingLIVmin;
+
+	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events
+	uint8_t  paddingRlcUlvParams[3];
+
+	// SECTION: Voltage Control Parameters
+	uint16_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uint16_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uint16_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uint16_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+
+	uint16_t LoadLineResistanceGfx; // In mOhms Q8.8 with 8 fractional bits
+	uint16_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+
+	// SECTION: Temperature Dependent Vmin
+	uint16_t VDDGFX_TVmin;       // Celcius
+	uint16_t VDDSOC_TVmin;       // Celcius
+	uint16_t VDDGFX_Vmin_HiTemp; // mV Q2
+	uint16_t VDDGFX_Vmin_LoTemp; // mV Q2
+	uint16_t VDDSOC_Vmin_HiTemp; // mV Q2
+	uint16_t VDDSOC_Vmin_LoTemp; // mV Q2
+
+	uint16_t VDDGFX_TVminHystersis; // Celcius
+	uint16_t VDDSOC_TVminHystersis; // Celcius
+
+	//SECTION: DPM Config 1 & 2
+	struct smu11_smcpptable_v7_dpm_config dpm_config;
+
+	// SECTION: Fan Control
+	struct smu11_smcpptable_v7_fan_control fan_control;
+
+	// SECTION: AVFS
+	struct smu11_smcpptable_v7_avfs avfs;
 	// SECTION: XGMI
 	enum DPM_PSTATES_e XgmiDpmPstates[NUM_XGMI_LEVELS_SMU11]; // 2 DPM states, high and low.
 	uint8_t  XgmiDpmSpare[2];
@@ -1495,12 +1527,7 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint32_t GamingClk[6];
 
 	// SECTION: I2C Control
-	struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS_SMU11_0_7];
-
-	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
-	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
-	uint8_t  FchUsbPdSlaveAddr; // For requesting USB PD controller S-states via FCH I2C when entering PME turn off
-	uint8_t  I2cSpare[1];
+	struct smu11_smcpptable_v7_i2c_control i2c_control;
 
 	// SECTION: SVI2 Board Parameters
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
