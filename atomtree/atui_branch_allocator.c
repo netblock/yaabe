@@ -165,6 +165,10 @@ atui_branch* atui_branch_allocator(
 					if (!((dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE)
 						&& (dynarray_boundaries[dynentry_i].numleaves == 1))) {
 						leaves[leaves_i] = leaves_initial[leavesinit_i];
+						leaves[leaves_i].val = dynarray_start_ptr;
+						leaves[leaves_i].num_bytes = (
+							dynarray_length * dynarray_elementsize
+						);
 						leaves[leaves_i].num_child_leaves = (
 							dynarray_length * leafpattern_numleaves
 						);
