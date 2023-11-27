@@ -460,8 +460,10 @@ static void set_leaves_list(
 inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 
 	// columnview abstract
-	GtkWidget* leaves_list = gtk_column_view_new(NULL);
-	commons->leaves_view = GTK_COLUMN_VIEW(leaves_list);
+	GtkColumnView* leaves_list = GTK_COLUMN_VIEW(gtk_column_view_new(NULL));
+	gtk_column_view_set_reorderable(leaves_list, true);
+	gtk_column_view_set_show_row_separators(leaves_list, true);
+	commons->leaves_view = leaves_list;
 
 
 	// create and attach columns
@@ -477,7 +479,9 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 		"bind", G_CALLBACK(leaves_name_column_recycler), NULL
 	);
 	column = gtk_column_view_column_new("names", factory);
-	gtk_column_view_append_column(GTK_COLUMN_VIEW(leaves_list), column);
+	gtk_column_view_column_set_resizable(column, true);
+	gtk_column_view_column_set_expand(column, true);
+	gtk_column_view_append_column(leaves_list, column);
 	g_object_unref(column);
 
 
@@ -492,7 +496,8 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 		"unbind", G_CALLBACK(leaves_val_column_cleaner), NULL
 	);
 	column = gtk_column_view_column_new("values", factory);
-	gtk_column_view_append_column(GTK_COLUMN_VIEW(leaves_list), column);
+	gtk_column_view_column_set_resizable(column, true);
+	gtk_column_view_append_column(leaves_list, column);
 	g_object_unref(column);
 
 
@@ -504,13 +509,14 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 		"bind", G_CALLBACK(leaves_offset_column_recycler), commons
 	);
 	column = gtk_column_view_column_new("BIOS offset", factory);
-	gtk_column_view_append_column(GTK_COLUMN_VIEW(leaves_list), column);
+	gtk_column_view_column_set_resizable(column, true);
+	gtk_column_view_append_column(leaves_list, column);
 	g_object_unref(column);
 
 
 	GtkWidget* scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(
-		GTK_SCROLLED_WINDOW(scrolledlist), leaves_list
+		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(leaves_list)
 	);
 	GtkWidget* frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
@@ -1097,8 +1103,8 @@ hidden; when a file is set unhide it.
 	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
 	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
 	gtk_paned_set_shrink_end_child(GTK_PANED(tree_divider), false);
-	gtk_widget_set_size_request(branches_pane, 50, 50);
-	gtk_widget_set_size_request(leaves_pane, 50, 50);
+	gtk_widget_set_size_request(branches_pane, 34, 50);
+	gtk_widget_set_size_request(leaves_pane, 66, 50);
 	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
@@ -1130,7 +1136,7 @@ hidden; when a file is set unhide it.
 	);
 
 	set_editor_titlebar(commons);
-	gtk_window_set_default_size(window, 800,500);
+	gtk_window_set_default_size(window, 1000,563); // 16:9
 	gtk_window_set_child(window, button_pane_complex);
 	gtk_window_present(window);
 
