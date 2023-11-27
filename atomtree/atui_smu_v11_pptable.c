@@ -201,8 +201,8 @@ PPATUI_FUNCIFY(struct, smu_11_0_7_overdrive_table, atui_nullstruct,
 	),
 	(NULL, Undefined Power Mode settings,
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, pm_setting: [8 + %02u],
-					// if COUNT changes, please change this 8
+			(ATUI_NULL, pm_setting: [16 + %02u],
+					// if COUNT changes, please change this 16
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			(&(bios->pm_setting[SMU_11_0_7_PMSETTING_COUNT])), // start
