@@ -241,10 +241,13 @@ struct atom_master_command_function_v2_1 {
 /****************************************************************************
 * Structures used in every command function
 ****************************************************************************/
-struct atom_function_attribute { uint16_t
-	ws_in_bytes    :8, // [7:0]=Size of workspace in Bytes (in multiple of a dword),
-	ps_in_bytes    :7, // [14:8]=Size of parameter space in Bytes (multiple of a dword),
-	updated_by_util:1; // [15]=flag to indicate the function is updated by util
+union atom_function_attribute {
+	uint16_t func_attrib;
+	struct { uint16_t
+		ws_in_bytes      :7-0 +1, // Size of workspace in Bytes (in multiple of a dword),
+		ps_in_bytes     :14-8 +1, // Size of parameter space in Bytes (multiple of a dword),
+		updated_by_util :15-15 +1; // flag to indicate the function is updated by util
+	};
 };
 
 
@@ -255,7 +258,7 @@ struct atom_function_attribute { uint16_t
 ****************************************************************************/
 struct atom_rom_hw_function_header {
 	struct atom_common_table_header func_header;
-	struct atom_function_attribute func_attrib;
+	union atom_function_attribute func_attrib;
 };
 
 
@@ -682,10 +685,10 @@ struct vram_usagebyfirmware_v2_2 {
 ****************************************************************************/
 
 enum atom_object_record_type_id:uint8_t {
-	ATOM_I2C_RECORD_TYPE           = 1,
-	ATOM_HPD_INT_RECORD_TYPE       = 2,
-	ATOM_CONNECTOR_CAP_RECORD_TYPE = 3,
-	ATOM_CONNECTOR_SPEED_UPTO      = 4,
+	ATOM_I2C_RECORD_TYPE              = 1,
+	ATOM_HPD_INT_RECORD_TYPE          = 2,
+	ATOM_CONNECTOR_CAP_RECORD_TYPE    = 3,
+	ATOM_CONNECTOR_SPEED_UPTO         = 4,
 	ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE = 9,
 	ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE = 16,
 	ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE = 17,
@@ -953,7 +956,24 @@ enum atom_spread_spectrum_mode:uint8_t {
 	ATOM_INTERNAL_SS_MASK            = 0x00,
 	ATOM_EXTERNAL_SS_MASK            = 0x02,
 };
-enum dce_info_caps_def:uint32_t {
+union dce_info_caps {
+	uint32_t display_caps;
+	struct { uint32_t
+		reserved1               :0-0 +1,
+		// only for VBIOS
+		FORCE_DISPDEV_CONNECTED :1-1 +1,
+		// only for VBIOS
+		DISABLE_DFP_DP_HBR2     :2-2 +1,
+		// only for VBIOS
+		ENABLE_INTERLAC_TIMING  :3-3 +1,
+		// only for VBIOS
+		LTTPR_SUPPORT_ENABLE    :4-4 +1,
+		VBIOS_LTTPR_TRANSPARENT_ENABLE :5-5 +1,
+		reserved2              :31-6 +1;
+	};
+};
+
+enum dce_info_caps_def_old:uint32_t {
 	// only for VBIOS
 	DCE_INFO_CAPS_FORCE_DISPDEV_CONNECTED = 0x02,
 	// only for VBIOS
@@ -966,7 +986,7 @@ enum dce_info_caps_def:uint32_t {
 };
 struct atom_displaycontroller_info_v4_1 {
 	struct atom_common_table_header table_header;
-	enum dce_info_caps_def display_caps;
+	union dce_info_caps display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
@@ -997,7 +1017,7 @@ struct atom_displaycontroller_info_v4_1 {
 
 struct atom_display_controller_info_v4_2 {
 	struct atom_common_table_header table_header;
-	enum dce_info_caps_def display_caps;
+	union dce_info_caps display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
@@ -1030,7 +1050,7 @@ struct atom_display_controller_info_v4_2 {
 
 struct atom_display_controller_info_v4_3 {
 	struct atom_common_table_header table_header;
-	enum dce_info_caps_def display_caps;
+	union dce_info_caps display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
@@ -1063,7 +1083,7 @@ struct atom_display_controller_info_v4_3 {
 
 struct atom_display_controller_info_v4_4 {
 	struct atom_common_table_header table_header;
-	enum dce_info_caps_def display_caps;
+	union dce_info_caps display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
@@ -1117,7 +1137,7 @@ struct atom_dc_golden_table_v1 {
 
 struct atom_display_controller_info_v4_5 {
 	struct atom_common_table_header table_header;
-	enum dce_info_caps_def display_caps;
+	union dce_info_caps display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
@@ -1390,38 +1410,48 @@ enum atom_sys_info_lvds_misc_def:uint16_t {
 };
 //memorytype DMI Type 17 offset 12h - Memory Type
 enum atom_dmi_t17_mem_type_def:uint8_t {
-	OtherMemType = 0x01,//< Assign 01 to Other
-	UnknownMemType,     //< Assign 02 to Unknown
-	DramMemType,        //< Assign 03 to DRAM
-	EdramMemType,       //< Assign 04 to EDRAM
-	VramMemType,        //< Assign 05 to VRAM
-	SramMemType,        //< Assign 06 to SRAM
-	RamMemType,         //< Assign 07 to RAM
-	RomMemType,         //< Assign 08 to ROM
-	FlashMemType,       //< Assign 09 to Flash
-	EepromMemType,      //< Assign 10 to EEPROM
-	FepromMemType,      //< Assign 11 to FEPROM
-	EpromMemType,       //< Assign 12 to EPROM
-	CdramMemType,       //< Assign 13 to CDRAM
-	ThreeDramMemType,   //< Assign 14 to 3DRAM
-	SdramMemType,       //< Assign 15 to SDRAM
-	SgramMemType,       //< Assign 16 to SGRAM
-	RdramMemType,       //< Assign 17 to RDRAM
-	DdrMemType,         //< Assign 18 to DDR
-	Ddr2MemType,        //< Assign 19 to DDR2
-	Ddr2FbdimmMemType,  //< Assign 20 to DDR2 FB-DIMM
-	Ddr3MemType = 0x18, //< Assign 24 to DDR3
-	Fbd2MemType,        //< Assign 25 to FBD2
-	Ddr4MemType,        //< Assign 26 to DDR4
-	LpDdrMemType,       //< Assign 27 to LPDDR
-	LpDdr2MemType,      //< Assign 28 to LPDDR2
-	LpDdr3MemType,      //< Assign 29 to LPDDR3
-	LpDdr4MemType,      //< Assign 30 to LPDDR4
-	GDdr6MemType,       //< Assign 31 to GDDR6
-	HbmMemType,         //< Assign 32 to HBM
-	Hbm2MemType,        //< Assign 33 to HBM2
-	Ddr5MemType,        //< Assign 34 to DDR5
-	LpDdr5MemType,      //< Assign 35 to LPDDR5
+	OTHER_MEMTYPE       = 1,
+	UNKNOWN_MEMTYPE     = 2,
+	DRAM_MEMTYPE        = 3,
+	EDRAM_MEMTYPE       = 4,
+	VRAM_MEMTYPE        = 5,
+	SRAM_MEMTYPE        = 6,
+	RAM_MEMTYPE         = 7,
+	ROM_MEMTYPE         = 8,
+	FLASH_MEMTYPE       = 9,
+	EEPROM_MEMTYPE     = 10,
+	FEPROM_MEMTYPE     = 11,
+	EPROM_MEMTYPE      = 12,
+	CDRAM_MEMTYPE      = 13,
+	THREEDRAM_MEMTYPE  = 14,
+	SDRAM_MEMTYPE      = 15,
+	SGRAM_MEMTYPE      = 16,
+	RDRAM_MEMTYPE      = 17,
+	DDR_MEMTYPE        = 18,
+	DDR2_MEMTYPE       = 19,
+	DDR2FBDIMM_MEMTYPE = 20,
+	DDR3_MEMTYPE       = 24,
+	FBD2_MEMTYPE       = 25,
+	DDR4_MEMTYPE       = 26,
+	LPDDR_MEMTYPE      = 27,
+	LPDDR2_MEMTYPE     = 28,
+	LPDDR3_MEMTYPE     = 29,
+	LPDDR4_MEMTYPE     = 30,
+	GDDR6_MEMTYPE      = 31,
+	HBM_MEMTYPE        = 32,
+	HBM2_MEMTYPE       = 33,
+	DDR5_MEMTYPE       = 34,
+	LPDDR5_MEMTYPE     = 35,
+};
+// system_config
+enum atom_system_vbiosmisc_def:uint32_t {
+	INTEGRATED_SYSTEM_INFO__GET_EDID_CALLBACK_FUNC_SUPPORT = 0x01,
+};
+
+
+// gpucapinfo
+enum atom_system_gpucapinf_def:uint32_t {
+	SYS_INFO_GPUCAPS__ENABEL_DFS_BYPASS = 0x10,
 };
 struct atom_integrated_system_info_v1_11 {
 	struct atom_common_table_header table_header;
@@ -1626,16 +1656,6 @@ struct atom_integrated_system_info_v2_2 {
 	uint32_t reserved4[189];
 };
 
-// system_config
-enum atom_system_vbiosmisc_def {
-	INTEGRATED_SYSTEM_INFO__GET_EDID_CALLBACK_FUNC_SUPPORT = 0x01,
-};
-
-
-// gpucapinfo
-enum atom_system_gpucapinf_def {
-	SYS_INFO_GPUCAPS__ENABEL_DFS_BYPASS = 0x10,
-};
 
 
 
@@ -1980,7 +2000,7 @@ struct atom_smu_info_v3_5 {
 	uint32_t bootup_dprefclk_10khz;
 	uint32_t bootup_usbclk_10khz;
 	uint32_t smb_slave_address;
-	uint32_t cg_fdo_ctrl0_val;
+	uint32_t cg_fdo_ctrl0_val; // TODO include/asic_reg/thm/thm_13_0_2_sh_mask.h ??
 	uint32_t cg_fdo_ctrl1_val;
 	uint32_t cg_fdo_ctrl2_val;
 	uint32_t gdfll_as_wait_ctrl_val;
@@ -3248,7 +3268,7 @@ struct atom_vram_module_v9 {
 	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  hbm_ven_rev_id;   // hbm_ven_rev_id
 	uint8_t  vram_rsd2;        // reserved
-	char8_t     dram_pnstring[20]; // part number end with '0'.
+	char8_t  dram_pnstring[20]; // part number end with '0'.
 };
 
 struct atom_vram_info_header_v2_3 {
@@ -3319,7 +3339,7 @@ struct atom_vram_info_header_v3_0 {
 
 struct atom_umc_register_addr_info {
 	uint32_t umc_register_addr:24;
-	uint32_t umc_reg_type_ind:1; //flag
+	uint32_t umc_reg_type_ind:1; // flag
 	uint32_t umc_reg_rsvd:7;
 };
 union atom_umc_register_addr_info_access_old {
@@ -3334,7 +3354,7 @@ union atom_umc_register_addr_info_access {
 	uint32_t u32umc_reg_addr;
 	struct { uint32_t
 		umc_register_addr :23-0 +1,
-		umc_reg_type_ind  :24-24 +1, //flag
+		umc_reg_type_ind  :24-24 +1, // flag
 		umc_reg_rsvd      :31-25 +1;
 	};
 };
@@ -3728,7 +3748,7 @@ union asic_init_engine_parameters {
 	};
 };
 
-struct asic_init_mem_parameters_old{
+struct asic_init_mem_parameters_old {
 	uint32_t mclkfreqin10khz:24;
 	uint32_t memflag:8; /* enum atom_asic_init_mem_flag */
 };
@@ -3829,8 +3849,8 @@ struct get_memory_clock_parameter {
 
 struct set_voltage_parameters_v1_4 {
 	enum atom_voltage_type voltage_type;
-	uint8_t  command;     // Indicate action: Set voltage level, enum atom_set_voltage_command
-	uint16_t vlevel_mv;   // real voltage level in unit of mv or Voltage Phase (0, 1, 2, .. )
+	uint8_t  command;   // Indicate action: Set voltage level, enum atom_set_voltage_command
+	uint16_t vlevel_mv; // real voltage level in unit of mv or Voltage Phase (0, 1, 2, .. )
 };
 
 // set_voltage_parameters_v2_1.voltagemode
@@ -3872,8 +3892,8 @@ struct compute_gpu_clock_output_parameter_v1_8 {
 		gpuclock_10khz:23-0 +1,  // Input= target clock, output = actual clock
 		dfs_did       :31-24 +1; // return parameter: DFS divider which is used to program to register directly
 	};
-	uint32_t pll_fb_mult;      // Feedback Multiplier, bit 8:0 int, bit 15:12 post_div, bit 31:16 frac
-	uint32_t pll_ss_fbsmult;   // Spread FB Mult: bit 8:0 int, bit 31:16 frac
+	uint32_t pll_fb_mult;    // Feedback Multiplier, bit 8:0 int, bit 15:12 post_div, bit 31:16 frac
+	uint32_t pll_ss_fbsmult; // Q? Spread FB Mult: bit 8:0 int, bit 31:16 frac
 	uint16_t pll_ss_slew_frac;
 	uint8_t  pll_ss_enable;
 	uint8_t  reserved;
@@ -4474,7 +4494,7 @@ enum atom_dig_transmitter_control_hpd_sel {
 };
 
 // digfe_sel
-enum atom_dig_transmitter_control_digfe_sel:uint8_t {
+enum atom_dig_transmitter_control_digfe_sel_old:uint8_t {
 	ATOM_TRANMSITTER_V6__DIGA_SEL = 0x01,
 	ATOM_TRANMSITTER_V6__DIGB_SEL = 0x02,
 	ATOM_TRANMSITTER_V6__DIGC_SEL = 0x04,
@@ -4482,6 +4502,19 @@ enum atom_dig_transmitter_control_digfe_sel:uint8_t {
 	ATOM_TRANMSITTER_V6__DIGE_SEL = 0x10,
 	ATOM_TRANMSITTER_V6__DIGF_SEL = 0x20,
 	ATOM_TRANMSITTER_V6__DIGG_SEL = 0x40,
+};
+union atom_dig_transmitter_control_digfe_sel {
+	uint8_t digfe_sel;
+	struct { uint8_t
+		DIG_A_SEL :0-0 +1,
+		DIG_B_SEL :1-1 +1,
+		DIG_C_SEL :2-2 +1,
+		DIG_D_SEL :3-3 +1,
+		DIG_E_SEL :4-4 +1,
+		DIG_F_SEL :5-5 +1,
+		DIG_G_SEL :6-6 +1,
+		reserved  :7-7 +1;
+	};
 };
 
 // TODO wtf is going on here
@@ -4497,7 +4530,7 @@ struct dig_transmitter_control_parameters_v1_6 {
 	uint8_t  lanenum;       // Lane number 1, 2, 4, 8
 	uint32_t symclk_10khz;  // Symbol Clock in 10Khz
 	enum atom_dig_transmitter_control_hpd_sel hpdsel;
-	enum atom_dig_transmitter_control_digfe_sel digfe_sel; // DIG stream( front-end ) selection, bit0 means DIG0 FE is enable,
+	union atom_dig_transmitter_control_digfe_sel digfe_sel; // DIG stream( front-end ) selection, bit0 means DIG0 FE is enable,
 	uint8_t  connobj_id;    // Connector Object Id defined in ObjectId.h
 	uint8_t  reserved;
 	uint32_t reserved1;

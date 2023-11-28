@@ -2098,7 +2098,7 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_2, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -2205,7 +2205,7 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_3, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2308,7 +2308,7 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_5, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2342,19 +2342,19 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_5, atomtree_smu_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->bootup_dtbclk_10khz, bootup_dtbclk_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2363,40 +2363,40 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_5, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc0_val, smusvi_svc0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc1_val, smusvi_svc1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd0_val, smusvi_svd0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd1_val, smusvi_svd1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt0_val, smusvi_svt0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt1_val, smusvi_svt1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_tmon_config_val, thm_tmon_config_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -2476,7 +2476,7 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_6, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->syspll3_0_vco_freq_10khz, syspll3_0_vco_freq_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2510,19 +2510,19 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_6, atomtree_smu_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->reserved_clk, reserved_clk,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2531,40 +2531,40 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_6, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc0_val, smusvi_svc0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc1_val, smusvi_svc1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd0_val, smusvi_svd0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd1_val, smusvi_svd1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt0_val, smusvi_svt0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt1_val, smusvi_svt1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_tmon_config_val, thm_tmon_config_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->bootup_vclk_10khz, bootup_vclk_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2573,10 +2573,10 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v3_6, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smu_gpiopad_pu_en_val, smu_gpiopad_pu_en_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smu_gpiopad_pd_en_val, smu_gpiopad_pd_en_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -2639,7 +2639,7 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v4_0, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->ctf_threshold_override_value, ctf_threshold_override_value,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->syspll3_vco_freq_10khz, syspll3_vco_freq_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2673,19 +2673,19 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v4_0, atomtree_smu_info,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl0_val, cg_fdo_ctrl0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl1_val, cg_fdo_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_fdo_ctrl2_val, cg_fdo_ctrl2_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_wait_ctrl_val, gdfll_as_wait_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->gdfll_as_step_ctrl_val, gdfll_as_step_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->bootup_dtbclk_10khz, bootup_dtbclk_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2694,52 +2694,52 @@ PPATUI_FUNCIFY(struct, atom_smu_info_v4_0, atomtree_smu_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc0_val, smusvi_svc0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svc1_val, smusvi_svc1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd0_val, smusvi_svd0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svd1_val, smusvi_svd1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt0_val, smusvi_svt0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smusvi_svt1_val, smusvi_svt1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_tach_ctrl_val, cg_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_ctrl1_val, cg_pump_ctrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->cg_pump_tach_ctrl_val, cg_pump_tach_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_ctf_delay_val, thm_ctf_delay_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_thermal_int_ctrl_val, thm_thermal_int_ctrl_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->thm_tmon_config_val, thm_tmon_config_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smbus_timing_cntrl0_val, smbus_timing_cntrl0_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smbus_timing_cntrl1_val, smbus_timing_cntrl1_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->smbus_timing_cntrl2_val, smbus_timing_cntrl2_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->pwr_disp_timer_global_control_val, pwr_disp_timer_global_control_val,
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->bootup_mpioclk_10khz, bootup_mpioclk_10khz,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
