@@ -7,7 +7,7 @@ int main(int argc, char8_t** argv) {
 
 	if (argc > 1) {
 		GError* ferror = NULL;
-		GFile* biosfile = g_file_new_for_path(argv[1]);
+		GFile* const biosfile = g_file_new_for_path(argv[1]);
 		atree = atomtree_from_gfile(biosfile, NULL);
 		if (ferror) {
 			printf("%s\n", ferror->message);

@@ -10,21 +10,21 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 
 void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 	if (leaf->type & ATUI_ANY) {
-		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		uint64_t maxval = (1ULL << num_bits) - 1;
+		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		const uint64_t maxval = (1ULL << num_bits) - 1;
 		if (val > maxval)
 			val = maxval;
 
 		// ...11111 000.. 1111...
-		uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
+		const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
 		val <<= leaf->bitfield_lo;
 		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
 	}
 }
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 	if (leaf->type & ATUI_ANY) {
-		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
+		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		const uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
 
 		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
 	}
@@ -34,9 +34,9 @@ void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
 	if (leaf->type & ATUI_ANY) {
-		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		uint64_t mask = (1ULL << num_bits) - 1;
-		int64_t maxval = mask>>1; // max positive val 0111...
+		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		const uint64_t mask = (1ULL << num_bits) - 1;
+		const int64_t maxval = mask>>1; // max positive val 0111...
 		if (val > maxval) {
 			raw_val = maxval;
 		} else if (val < -maxval) {
@@ -46,17 +46,17 @@ void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
 		}
 
 		// ...11111 000.. 1111...
-		uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
+		const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
 		raw_val <<= leaf->bitfield_lo;
 		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
 	}
 }
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	if (leaf->type & ATUI_ANY) {
-		uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
+		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+		const uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
 		int64_t val = (*(leaf->u64) >> leaf->bitfield_lo) & premask;
-		uint8_t remaining_bits = sizeof(val)*8 - num_bits;
+		const uint8_t remaining_bits = sizeof(val)*8 - num_bits;
 		val <<= remaining_bits;
 		val >>= remaining_bits; // rightshift on signed repeats sign
 		return val;
@@ -124,13 +124,14 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	uint16_t i=0,j = 0;
 	char8_t buffer[65];
 
-	uint8_t array_size = leaf->array_size;
-	uint8_t radix = leaf->type & ATUI_ANY;
+	const uint8_t array_size = leaf->array_size;
+	const uint8_t radix = leaf->type & ATUI_ANY;
 
 
 	if (leaf->type & ATUI_ARRAY) {
-		uint8_t base = bases[radix];
-		uint8_t num_digits = ceil( // round up because it's gonna be like x.9999
+		const uint8_t base = bases[radix];
+		const uint8_t num_digits = ceil(
+			// round up because it's gonna be like x.9999
 			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
 			/ log(base)
 		);
@@ -208,21 +209,21 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	// radix-only part.
 	// NAN DEC HEX OCT BIN FLOAT
 #ifdef C2X_COMPAT
-	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0", "%0"};
-	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "X", "G"};
-	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "X", "G"};
+	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0", "%0"};
+	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "X", "G"};
+	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "X", "G"};
 	const uint8_t bases[] = {0, 10, 16, 8, 16, 10};
 #else
-	const char8_t* prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0", "%0"};
-	const char8_t* suffixes_unsigned[] = {"", "u", "X", "o", "b", "G"};
-	const char8_t* suffixes_signed[]   = {"", "i", "X", "o", "b", "G"};
+	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0", "%0"};
+	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "b", "G"};
+	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "b", "G"};
 	const uint8_t bases[] = {0, 10, 16, 8, 2, 10};
 #endif
-	const char8_t* metaformat = "%s%u%s"; // amogus
+	const char8_t* const metaformat = "%s%u%s"; // amogus
 	char8_t format[8];
 
 
-	uint8_t radix = leaf->type & ATUI_ANY;
+	const uint8_t radix = leaf->type & ATUI_ANY;
 	uint8_t num_digits;
 
 #ifdef C2X_COMPAT

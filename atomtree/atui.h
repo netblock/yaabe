@@ -50,7 +50,7 @@ enum i18n_languages:int8_t {
 };
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
-static nullptr_t ATUI_NULL; // to satisfy _Generics and address-of'`s
+static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 // purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
 // relevant for that branch:
 struct atui_nullstruct;
@@ -88,7 +88,7 @@ struct _atui_leaf {
 	const char8_t* origname;
 	const char8_t* varname;
 
-	char8_t* description[LANG_TOTALLANGS];
+	const char8_t* description[LANG_TOTALLANGS];
 
 
 	enum atui_type type; // how to display text, and other config data
@@ -108,11 +108,11 @@ struct _atui_leaf {
 	union {
 		atui_branch** inline_branch;
 		// allocator-funcify use only:
-		atui_branch* (* branch_bud)(struct atui_funcify_args*);
+		atui_branch* (* branch_bud)(const struct atui_funcify_args*);
 	};
 
 	union {
-		void const* val;
+		const void* val;
 
 		uint8_t*   u8;
 		uint16_t*  u16;
@@ -135,7 +135,7 @@ struct  _atui_branch {
 	char8_t name[48];
 	const char8_t* varname;
 
-	char8_t* description[LANG_TOTALLANGS];
+	const char8_t* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
@@ -198,11 +198,11 @@ struct atui_funcify_args {
 	// but is necessary if atomtree-computer data needs to be pulled in. Can be
 	// optional depending on defined atui branch; use suggestbios instead.
 
-	void* suggestbios;
+	const void* suggestbios;
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 
-	atui_branch** import_branches;
+	atui_branch* const* import_branches;
 	// If the child branches are preallocated, walk across this. This array
 	// must have num_import_branches elements. NULLs allowed.
 
@@ -211,27 +211,27 @@ struct atui_funcify_args {
 };
 
 struct dynarray_bounds { // for ATUI_DYNARRAY
-	void const* array_start;
+	const void* const array_start;
 	const uint32_t element_size; // Size of bios element. For pointer math.
 	const uint16_t dynarray_length; // The number of elements in the bios array
 
 	const uint16_t numleaves; // number of leaves within the pattern.
 
 	// optional enum for name sprintf'ing
-	const struct atui_enum const* enum_taglist;
+	const struct atui_enum* const enum_taglist;
 };
 
 struct atui_branch_data {
-	const char8_t const* name;
-	const char8_t const* varname;
+	const char8_t* const name;
+	const char8_t* const varname;
 
 	// leaves straightforward:
-	const atui_leaf const* leaves_initial;
+	const atui_leaf* const leaves_initial;
 
 	// the collection of leaf patterns for all dynarrays in the branch:
-	const atui_leaf const* dynarray_patterns;
+	const atui_leaf* const dynarray_patterns;
 	// dynarray metadata:
-	const struct dynarray_bounds const* dynarray_boundaries;
+	const struct dynarray_bounds* const dynarray_boundaries;
 
 	const uint8_t num_leaves_initial;
 	const uint8_t num_dynarray_sets;
@@ -241,8 +241,8 @@ struct atui_branch_data {
 
 };
 atui_branch* atui_branch_allocator(
-	const struct atui_branch_data const* embryo,
-	const struct atui_funcify_args const* args
+	const struct atui_branch_data* const embryo,
+	const struct atui_funcify_args* const args
 );
 
 

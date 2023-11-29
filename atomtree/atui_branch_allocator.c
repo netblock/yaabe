@@ -8,12 +8,12 @@ to spit out your branch
 
 */
 atui_branch* atui_branch_allocator(
-		const struct atui_branch_data const* embryo,
-		const struct atui_funcify_args const* args) {
+		const struct atui_branch_data* const embryo,
+		const struct atui_funcify_args* const args) {
 
-	const atui_leaf const* leaves_initial = embryo->leaves_initial;
-	const atui_leaf const* dynarray_patterns = embryo->dynarray_patterns;
-	const struct dynarray_bounds const* dynarray_boundaries =\
+	const atui_leaf* const leaves_initial = embryo->leaves_initial;
+	const atui_leaf* const dynarray_patterns = embryo->dynarray_patterns;
+	const struct dynarray_bounds* const dynarray_boundaries =\
 		embryo->dynarray_boundaries;
 	const uint8_t num_branches_initial = embryo->num_branches_initial;
 	const uint8_t num_leaves_initial = embryo->num_leaves_initial;
@@ -21,7 +21,7 @@ atui_branch* atui_branch_allocator(
 	const uint8_t num_dynarray_sets = embryo->num_dynarray_sets;
 
 	const uint16_t num_import_branches = args->num_import_branches;
-	atui_branch* const* import_branches = args->import_branches;
+	atui_branch* const* const import_branches = args->import_branches;
 
 	void* mallocvoid = NULL; // temporary malloc partitioning pointer
 	atui_branch* table = NULL;
@@ -134,12 +134,12 @@ atui_branch* atui_branch_allocator(
 			dynentry_i = 0;
 
 			// Array in the bios:
-			void* dynarray_start_ptr = NULL;
+			const void* dynarray_start_ptr = NULL;
 			uint16_t dynarray_biosarray_i = 0;
 			uint32_t dynarray_elementsize = 0;
 			uint16_t dynarray_length = 0;
 			// for multi-leaf playback
-			void* dynarray_bios_pos = NULL;
+			const void* dynarray_bios_pos = NULL;
 
 			// Leaf playback for each element in the bios array:
 			leafpattern_i = 0;
@@ -152,7 +152,7 @@ atui_branch* atui_branch_allocator(
 			while (leavesinit_i < num_leaves_initial) {
 				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
 					dynarray_start_ptr =
-						(void*)dynarray_boundaries[dynentry_i].array_start;
+						dynarray_boundaries[dynentry_i].array_start;
 					dynarray_elementsize =
 						dynarray_boundaries[dynentry_i].element_size;
 					dynarray_length =
@@ -221,7 +221,7 @@ atui_branch* atui_branch_allocator(
 
 							if (leaves[leaves_i].type & ATUI_INLINE) {
 								branch_funcify_args.suggestbios =\
-									(void*)leaves[leaves_i].val;
+									leaves[leaves_i].val;
 								inliners[inliners_i] =\
 									leaves[leaves_i].branch_bud(
 										&branch_funcify_args
@@ -242,8 +242,7 @@ atui_branch* atui_branch_allocator(
 // If not dynarray (still has dynarray siblings):
 				} else if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					branch_funcify_args.suggestbios =\
-						(void*)leaves[leaves_i].val;
+					branch_funcify_args.suggestbios = leaves[leaves_i].val;
 					inliners[inliners_i] = leaves[leaves_i].branch_bud(
 						&branch_funcify_args
 					);
@@ -254,7 +253,7 @@ atui_branch* atui_branch_allocator(
 					leaves_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
 					branch_funcify_args.suggestbios =\
-						(void*)leaves_initial[leavesinit_i].val;
+						leaves_initial[leavesinit_i].val;
 					branches[branches_i] =\
 						leaves_initial[leavesinit_i].branch_bud(
 							&branch_funcify_args
@@ -274,8 +273,7 @@ atui_branch* atui_branch_allocator(
 			while (leavesinit_i < num_leaves_initial) {
 				if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					branch_funcify_args.suggestbios =\
-						(void*)leaves[leaves_i].val;
+					branch_funcify_args.suggestbios = leaves[leaves_i].val;
 					inliners[inliners_i] = leaves[leaves_i].branch_bud(
 						&branch_funcify_args
 					);
@@ -284,7 +282,7 @@ atui_branch* atui_branch_allocator(
 					leaves_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
 					branch_funcify_args.suggestbios =\
-						(void*)leaves_initial[leavesinit_i].val;
+						leaves_initial[leavesinit_i].val;
 					branches[branches_i] =\
 						leaves_initial[leavesinit_i].branch_bud(
 							&branch_funcify_args
@@ -338,7 +336,7 @@ atui_branch* atui_branch_allocator(
 
 	*table = (atui_branch) {
 		.varname = embryo->varname,
-		.atomleaves = args->suggestbios,
+		.atomleaves = (void*)args->suggestbios,
 
 		.child_branches = branches,
 		.num_branches = num_branches,

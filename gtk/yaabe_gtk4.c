@@ -42,7 +42,7 @@ inline static void alloc_branch_cache(atui_branch* branch) {
 		+ (gobj_count * sizeof(GObject*))
 	);
 
-	struct yaabe_gtkapp_model_cache* models = branch->auxiliary;
+	struct yaabe_gtkapp_model_cache* const models = branch->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = gobj_count;
 	if (gobj_count)
@@ -54,7 +54,7 @@ inline static void alloc_leaf_cache(atui_leaf* leaf, uint16_t num_children) {
 		+ (num_children * sizeof(GObject*))
 	);
 
-	struct yaabe_gtkapp_model_cache* models = leaf->auxiliary;
+	struct yaabe_gtkapp_model_cache* const models = leaf->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = num_children;
 	if (num_children)
@@ -88,7 +88,7 @@ void atui_destroy_tree_with_gtk(atui_branch* tree) {
 	}
 
 	//collapsable leaves in the leaves pane
-	uint16_t leaf_count = tree->leaf_count;
+	const uint16_t leaf_count = tree->leaf_count;
 	for(i=0; i < leaf_count; i++) {
 		submodels = tree->leaves[i].auxiliary;
 		if (submodels != NULL) {
@@ -140,10 +140,10 @@ static void leaves_label_column_spawner(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 //setup to spawn a UI skeleton
 
-	GtkWidget* expander = gtk_tree_expander_new();
+	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
 
-	GtkWidget* label = gtk_label_new(NULL);
+	GtkWidget* const label = gtk_label_new(NULL);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
 
 	gtk_list_item_set_child(list_item, expander);
@@ -152,14 +152,14 @@ static void leaves_name_column_recycler(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 //bind data to the UI skeleton
 
-	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_list_item_get_child(list_item)
 	);
-	GtkWidget* label = gtk_tree_expander_get_child(expander);
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 
-	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
-	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
-	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
 
@@ -170,16 +170,16 @@ static void leaves_offset_column_recycler(
 		gpointer commonsptr) {
 //bind data to the UI skeleton
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 
-	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_list_item_get_child(list_item)
 	);
-	GtkWidget* label = gtk_tree_expander_get_child(expander);
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 
-	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
-	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
-	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
 	char8_t buffer[18];
@@ -188,8 +188,8 @@ static void leaves_offset_column_recycler(
 			leaf->bitfield_hi, leaf->bitfield_lo
 		);
 	} else {
-		uint32_t start = leaf->val - commons->atomtree_root->bios;
-		uint32_t end = (start + leaf->num_bytes -1);
+		const uint32_t start = leaf->val - commons->atomtree_root->bios;
+		const uint32_t end = (start + leaf->num_bytes -1);
 		sprintf(buffer, "[%05X - %05X]", start, end);
 	}
 	/*
@@ -205,15 +205,15 @@ static void leaves_textbox_stray(
 		GtkEventControllerFocus* focus_sense, gpointer leaf_gptr) {
 //if the value wasn't applied with enter, sync the text back to the actual data
 //when keyboard leaves the textbox
-	GtkWidget* textbox = gtk_event_controller_get_widget(
+	GtkWidget* const textbox = gtk_event_controller_get_widget(
 		GTK_EVENT_CONTROLLER(focus_sense)
 	);
-	atui_leaf* leaf = leaf_gptr;
+	atui_leaf* const leaf = leaf_gptr;
 
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
+	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
 		free(buff);
@@ -222,14 +222,14 @@ static void leaves_val_column_textbox_apply(
 		GtkEditable* textbox, gpointer leaf_gptr) {
 // only way to apply the value is to hit enter
 
-	atui_leaf* leaf = leaf_gptr;
+	atui_leaf* const leaf = leaf_gptr;
 
 	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
+	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(textbox, buff);
 	if (has_mallocd)
 		free(buff);
@@ -240,11 +240,11 @@ static void leaves_val_column_spawner(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 // setup
 
-	GtkWidget* textbox = gtk_text_new();
+	GtkWidget* const textbox = gtk_text_new();
 	gtk_text_set_input_purpose(GTK_TEXT(textbox), GTK_INPUT_PURPOSE_DIGITS);
 
 	// for leaves_textbox_stray()
-	GtkEventController* focus_sense = gtk_event_controller_focus_new();
+	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
 	gtk_widget_add_controller(textbox, focus_sense);
 	// widget takes ownership of the controller, no need to unref.
 
@@ -254,17 +254,17 @@ static void leaves_val_column_recycler(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 // bind
 
-	GtkWidget* textbox = gtk_list_item_get_child(list_item);
+	GtkWidget* const textbox = gtk_list_item_get_child(list_item);
 
-	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
-	GObject* gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
-	atui_leaf* leaf = g_object_get_data(gobj_leaf, "leaf");
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
+	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
 	if (has_mallocd)
 		free(buff);
@@ -274,8 +274,12 @@ static void leaves_val_column_recycler(
 	);
 
 
-	GListModel* controller_list = gtk_widget_observe_controllers(textbox);
-	GtkEventController* focus_sense = g_list_model_get_item(controller_list, 0);
+	GListModel* const controller_list = gtk_widget_observe_controllers(
+		textbox
+	);
+	GtkEventController* const focus_sense = g_list_model_get_item(
+		controller_list, 0
+	);
 	g_signal_connect(focus_sense,
 		"leave", G_CALLBACK(leaves_textbox_stray), leaf
 	);
@@ -288,14 +292,18 @@ static void leaves_val_column_cleaner(
 // unbind
 // signals need to be removed, else they build up
 
-	GtkWidget* textbox = gtk_list_item_get_child(list_item);
+	GtkWidget* const textbox = gtk_list_item_get_child(list_item);
 
 	g_signal_handlers_disconnect_matched(textbox, G_SIGNAL_MATCH_FUNC,
 		0,0,NULL,  G_CALLBACK(leaves_val_column_textbox_apply),  NULL
 	);
 
-	GListModel* controller_list = gtk_widget_observe_controllers(textbox);
-	GtkEventController* focus_sense = g_list_model_get_item(controller_list, 0);
+	GListModel* const controller_list = gtk_widget_observe_controllers(
+		textbox
+	);
+	GtkEventController* const focus_sense = g_list_model_get_item(
+		controller_list, 0
+	);
 	g_signal_handlers_disconnect_matched(focus_sense, G_SIGNAL_MATCH_FUNC,
 		0,0,NULL,  G_CALLBACK(leaves_textbox_stray),  NULL
 	);
@@ -315,7 +323,7 @@ static void atui_inline_pullin_gliststore(atui_leaf* parent, GListStore* list) {
 	uint16_t i = 0;
 
 	if (parent->type & ATUI_INLINE) {
-		atui_branch* branch = *(parent->inline_branch);
+		atui_branch* const branch = *(parent->inline_branch);
 		num_children = branch->leaf_count;
 		atui_children = branch->leaves;
 	}
@@ -342,7 +350,7 @@ inline static GListModel* atui_leaves_to_glistmodel(
 	GObject* gobj_child = NULL;
 	uint16_t i = 0;
 
-	GListStore* child_list = g_list_store_new(G_TYPE_OBJECT);
+	GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
 
 	for(i=0; i < num_children; i++) {
 		leaf = children+i;
@@ -364,8 +372,8 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d) {
 //GtkTreeListModelCreateModelFunc for leaves
 // creates the children models for the collapsable tree, of the leaves pane.
 
-	GObject* gobj_parent = parent_ptr;
-	atui_leaf* parent = g_object_get_data(gobj_parent, "leaf");
+	GObject* const gobj_parent = parent_ptr;
+	atui_leaf* const parent = g_object_get_data(gobj_parent, "leaf");
 	struct yaabe_gtkapp_model_cache* leaf_cache = parent->auxiliary;
 
 	GListModel* children_model = NULL;
@@ -390,7 +398,7 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d) {
 				child_leaves, num_children
 			);
 
-			uint16_t child_gobj_count = g_list_model_get_n_items(
+			const uint16_t child_gobj_count = g_list_model_get_n_items(
 				children_model
 			);
 			alloc_leaf_cache(parent, child_gobj_count);
@@ -403,7 +411,7 @@ static GListModel* leaves_tlmodel_func(gpointer parent_ptr, gpointer d) {
 			}
 
 		} else { // use the cache
-			GListStore* child_list = g_list_store_new(G_TYPE_OBJECT);
+			GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
 			for(i=0; i < leaf_cache->child_gobj_count; i++)
 				g_list_store_append(child_list, leaf_cache->child_gobj[i]);
 			children_model = G_LIST_MODEL(child_list);
@@ -417,19 +425,19 @@ inline static void branchleaves_to_treemodel(atui_branch* branch) {
 // turns the 'level 0' leaves of a branch into a model for the leaves pane.
 // Also generates its cache.
 
-	GListModel* leavesmodel = atui_leaves_to_glistmodel(
+	GListModel* const leavesmodel = atui_leaves_to_glistmodel(
 		branch->leaves, branch->leaf_count
 	);
 
-	GtkTreeListModel* treemodel = gtk_tree_list_model_new(
+	GtkTreeListModel* const treemodel = gtk_tree_list_model_new(
 		leavesmodel, false, true, leaves_tlmodel_func, NULL,NULL
 	);
-	GtkSelectionModel* sel_model = GTK_SELECTION_MODEL(
+	GtkSelectionModel* const sel_model = GTK_SELECTION_MODEL(
 		gtk_no_selection_new(G_LIST_MODEL(treemodel))
 	);
 	// no_selection takes ownership of treemodel.
 
-	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
+	struct yaabe_gtkapp_model_cache* const branch_models = branch->auxiliary;
 	branch_models->leaves_model = sel_model;
 	g_object_ref(sel_model); // to cache
 }
@@ -439,16 +447,15 @@ static void set_leaves_list(
 // signal callback.
 // change the leaves pane's model based on the what is selected in brances
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 
-	GtkTreeListRow* tree_list_item = gtk_single_selection_get_selected_item(
-		GTK_SINGLE_SELECTION(model)
-	);
-	GObject* gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
-	atui_branch* branch = g_object_get_data(gobj_branch, "branch");
+	GtkTreeListRow* const tree_list_item =
+		gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
+	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
-	struct yaabe_gtkapp_model_cache* branch_models = branch->auxiliary;
+	struct yaabe_gtkapp_model_cache* const branch_models = branch->auxiliary;
 	if(branch_models->leaves_model == NULL) // if not cached, generate.
 		branchleaves_to_treemodel(branch);
 
@@ -460,7 +467,9 @@ static void set_leaves_list(
 inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 
 	// columnview abstract
-	GtkColumnView* leaves_list = GTK_COLUMN_VIEW(gtk_column_view_new(NULL));
+	GtkColumnView* const leaves_list = GTK_COLUMN_VIEW(
+		gtk_column_view_new(NULL)
+	);
 	gtk_column_view_set_reorderable(leaves_list, true);
 	gtk_column_view_set_show_row_separators(leaves_list, true);
 	commons->leaves_view = leaves_list;
@@ -514,11 +523,11 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 	g_object_unref(column);
 
 
-	GtkWidget* scrolledlist = gtk_scrolled_window_new();
+	GtkWidget* const scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(
 		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(leaves_list)
 	);
-	GtkWidget* frame = gtk_frame_new(NULL);
+	GtkWidget* const frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
 	return frame;
@@ -532,9 +541,9 @@ static GListModel* branch_tlmodel_func(gpointer ptr, gpointer data) {
 // GtkTreeListModelCreateModelFunc for branches
 // creates the children models for the collapsable tree, of the branches pane.
 
-	GObject* gobj_parent = ptr;
-	atui_branch* parent = g_object_get_data(gobj_parent, "branch");
-	struct yaabe_gtkapp_model_cache* branch_models = parent->auxiliary;
+	GObject* const gobj_parent = ptr;
+	atui_branch* const parent = g_object_get_data(gobj_parent, "branch");
+	struct yaabe_gtkapp_model_cache* const branch_models = parent->auxiliary;
 
 	GListStore* children = NULL;
 	int i = 0;
@@ -568,21 +577,21 @@ inline static GtkSelectionModel* atui_gtk_model(yaabegtk_commons* commons) {
 // generate the very first model, of the tippy top of the tree, for the
 // branches pane
 
-	atui_branch* atui_root = commons->atomtree_root->atui_root;
+	atui_branch* const atui_root = commons->atomtree_root->atui_root;
 	alloc_branch_cache(atui_root);
 
-	GObject* gbranch = g_object_new(G_TYPE_OBJECT, NULL);
+	GObject* const gbranch = g_object_new(G_TYPE_OBJECT, NULL);
 	g_object_set_data(gbranch, "branch", atui_root);
-	GListStore* ls_model = g_list_store_new(G_TYPE_OBJECT);
+	GListStore* const ls_model = g_list_store_new(G_TYPE_OBJECT);
 	g_list_store_append(ls_model, gbranch);
 	g_object_unref(gbranch);
 
 	//TreeList, along with branch_tlmodel_func, creates our collapsable model.
-	GtkTreeListModel* tlist_atui = gtk_tree_list_model_new(
+	GtkTreeListModel* const tlist_atui = gtk_tree_list_model_new(
 		G_LIST_MODEL(ls_model), false, true, branch_tlmodel_func, NULL,NULL
 	);
 
-	GtkSingleSelection* sel_model = gtk_single_selection_new(
+	GtkSingleSelection* const sel_model = gtk_single_selection_new(
 		G_LIST_MODEL(tlist_atui)
 	);
 	gtk_single_selection_set_autoselect(sel_model, false);
@@ -606,12 +615,12 @@ static void branch_listitem_spawner(
 // setup
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
 
-	GtkWidget* expander = gtk_tree_expander_new();
+	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
 	//gtk_tree_expander_set_indent_for_depth(GTK_TREE_EXPANDER(expander), true);
 	//gtk_tree_expander_set_hide_expander(GTK_TREE_EXPANDER(expander), false);
 
-	GtkWidget* label = gtk_label_new(NULL);
+	GtkWidget* const label = gtk_label_new(NULL);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
 
 	gtk_list_item_set_child(list_item, expander);
@@ -620,14 +629,14 @@ static void branch_listitem_recycler(
 		GtkSignalListItemFactory* factory, GtkListItem* list_item) {
 // bind
 
-	GtkTreeExpander* expander = GTK_TREE_EXPANDER(
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_list_item_get_child(list_item)
 	);
-	GtkWidget* row_label = gtk_tree_expander_get_child(expander);
+	GtkWidget* const row_label = gtk_tree_expander_get_child(expander);
 
-	GtkTreeListRow* tree_list_item = gtk_list_item_get_item(list_item);
-	GObject* gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
-	atui_branch* branch = g_object_get_data(gobj_branch, "branch");
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
+	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
 	gtk_label_set_text(GTK_LABEL(row_label), branch->name);
@@ -637,7 +646,7 @@ static void branch_listitem_recycler(
 inline static GtkWidget* create_branches_pane(
 		yaabegtk_commons* commons, GtkSelectionModel* atui_model) {
 
-	GtkListItemFactory* branch_list_factory =
+	GtkListItemFactory* const branch_list_factory =
 		gtk_signal_list_item_factory_new();
 	g_signal_connect(branch_list_factory,
 		"setup", G_CALLBACK(branch_listitem_spawner), NULL
@@ -645,15 +654,15 @@ inline static GtkWidget* create_branches_pane(
 	g_signal_connect(branch_list_factory,
 		"bind", G_CALLBACK(branch_listitem_recycler), NULL
 	);
-	GtkWidget* listview = gtk_list_view_new(
+	GtkWidget* const listview = gtk_list_view_new(
 		atui_model, branch_list_factory
 	);
 
 	commons->branches_view = GTK_LIST_VIEW(listview);
 
-	GtkWidget* scrolledlist = gtk_scrolled_window_new();
+	GtkWidget* const scrolledlist = gtk_scrolled_window_new();
 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolledlist), listview);
-	GtkWidget* frame = gtk_frame_new(NULL);
+	GtkWidget* const frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
 	return frame;
@@ -667,20 +676,19 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 // geneate the atom_tree and atui from a GIO File
 
 	GError* ferror = NULL;
-	struct atom_tree* atree = NULL;
 	void* bios = NULL;
 
-	GFileInputStream* readstream = g_file_read(biosfile, NULL, &ferror);
+	GFileInputStream* const readstream = g_file_read(biosfile, NULL, &ferror);
 	if (ferror)
 		goto exit1;
 
-	GFileInfo* fi_size = g_file_query_info(biosfile,
+	GFileInfo* const fi_size = g_file_query_info(biosfile,
 		G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &ferror
 	);
 	if (ferror)
 		goto exit2;
 
-	int64_t filesize = g_file_info_get_size(fi_size);
+	const int64_t filesize = g_file_info_get_size(fi_size);
 	g_object_unref(fi_size);
 	// TODO possible warning if the file size is too big? too small?
 
@@ -693,7 +701,7 @@ struct atom_tree* atomtree_from_gfile(GFile* biosfile, GError** ferror_out) {
 		goto exit2;
 	}
 
-	atree = atombios_parse(bios, filesize, true);
+	struct atom_tree* const atree = atombios_parse(bios, filesize, true);
 	if (atree == NULL) {
 		free(bios);
 		goto exit2;
@@ -735,8 +743,10 @@ void atomtree_save_to_gfile(struct atom_tree* atree, GError** ferror_out) {
 	if (ferror)
 		goto ferr0;
 
-	GIOStream* biosstream = G_IO_STREAM(biosfilestream);
-	GOutputStream* writestream = g_io_stream_get_output_stream(biosstream);
+	GIOStream* const biosstream = G_IO_STREAM(biosfilestream);
+	GOutputStream* const writestream = g_io_stream_get_output_stream(
+		biosstream
+	);
 
 	g_output_stream_write_all(
 		writestream,  atree->alloced_bios,
@@ -785,14 +795,14 @@ static void set_editor_titlebar(yaabegtk_commons* commons) {
 		formatstr = print_format_nofile;
 	}
 
-	char8_t* window_title = malloc(
+	char8_t* const window_title = malloc(
 		sizeof(yaabe_name)
 		+ filename_length
 		+ sizeof(print_format_file) // largest
 	);
 	sprintf(window_title, formatstr, yaabe_name, filename);
 
-	GtkWindow* editor_window = gtk_application_get_active_window(
+	GtkWindow* const editor_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
 	);
 	gtk_window_set_title(editor_window, window_title);
@@ -804,7 +814,7 @@ static void set_editor_titlebar(yaabegtk_commons* commons) {
 inline static void filer_error_window(GError* ferror, const char8_t* title) {
 // simple error popup
 
-	GtkEventController* escapeclose = gtk_shortcut_controller_new();
+	GtkEventController* const escapeclose = gtk_shortcut_controller_new();
 	gtk_shortcut_controller_add_shortcut(
 		GTK_SHORTCUT_CONTROLLER(escapeclose),
 		gtk_shortcut_new(
@@ -813,7 +823,7 @@ inline static void filer_error_window(GError* ferror, const char8_t* title) {
 		)
 	);
 
-	GtkWindow* notify_window = GTK_WINDOW(gtk_window_new());
+	GtkWindow* const notify_window = GTK_WINDOW(gtk_window_new());
 
 	gtk_widget_add_controller(GTK_WIDGET(notify_window), escapeclose);
 	gtk_window_set_title(notify_window, title);
@@ -830,15 +840,15 @@ inline static void yaabegtk_load_bios(
 
 	GError* ferror = NULL;
 
-	struct atom_tree* atree = atomtree_from_gfile(biosfile, &ferror);
+	struct atom_tree* const atree = atomtree_from_gfile(biosfile, &ferror);
 	if (ferror)
 		goto ferr;
 
 	if (atree) {
-		struct atom_tree* oldtree = commons->atomtree_root;
+		struct atom_tree* const oldtree = commons->atomtree_root;
 
 		commons->atomtree_root = atree;
-		GtkSelectionModel* newmodel = atui_gtk_model(commons);
+		GtkSelectionModel* const newmodel = atui_gtk_model(commons);
 		gtk_list_view_set_model(commons->branches_view, newmodel);
 		gtk_selection_model_select_item(newmodel, 0, true);
 
@@ -867,11 +877,13 @@ static void filedialog_load_and_set_bios(
 		gpointer commonsptr) {
 // AsyncReadyCallback for the file dialog in the load button.
 
-	yaabegtk_commons* commons = commonsptr;
-	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
+	yaabegtk_commons* const commons = commonsptr;
+	GtkFileDialog* const filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 
-	GFile* biosfile = gtk_file_dialog_open_finish(filer, asyncfile, &ferror);
+	GFile* const biosfile = gtk_file_dialog_open_finish(
+		filer, asyncfile, &ferror
+	);
 	if (ferror)
 		goto ferr_nomsg;
 
@@ -891,10 +903,10 @@ static void filedialog_load_and_set_bios(
 static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 
-	GtkFileDialog* filer = gtk_file_dialog_new();
-	GtkWindow* active_window = gtk_application_get_active_window(
+	GtkFileDialog* const filer = gtk_file_dialog_new();
+	GtkWindow* const active_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
 	);
 
@@ -918,17 +930,17 @@ static void load_button_open_bios(GtkWidget* button, gpointer commonsptr) {
 static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
-	yaabegtk_commons* commons = commonsptr;
-	struct atom_tree* old_tree = commons->atomtree_root;
+	yaabegtk_commons* const commons = commonsptr;
+	struct atom_tree* const old_tree = commons->atomtree_root;
 
-	struct atom_tree* new_tree = atombios_parse(
+	struct atom_tree* const new_tree = atombios_parse(
 		old_tree->alloced_bios, old_tree->biosfile_size, true
 	);
 	new_tree->biosfile = old_tree->biosfile;
 	new_tree->biosfile_size = old_tree->biosfile_size;
 	commons->atomtree_root = new_tree;
 
-	GtkSelectionModel* newmodel = atui_gtk_model(commons);
+	GtkSelectionModel* const newmodel = atui_gtk_model(commons);
 	gtk_list_view_set_model(commons->branches_view, newmodel);
 	gtk_selection_model_select_item(newmodel, 0, true);
 
@@ -941,7 +953,7 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 static void save_button_same_file(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 	GError* ferror = NULL;
 
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
@@ -961,11 +973,11 @@ static void filedialog_saveas_bios(
 		gpointer commonsptr) {
 // AsyncReadyCallback for the file dialog in the Save As button.
 
-	yaabegtk_commons* commons = commonsptr;
-	GtkFileDialog* filer = GTK_FILE_DIALOG(gobj_filedialog);
+	yaabegtk_commons* const commons = commonsptr;
+	GtkFileDialog* const filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 
-	GFile* new_biosfile = gtk_file_dialog_save_finish(
+	GFile* const new_biosfile = gtk_file_dialog_save_finish(
 		filer, asyncfile, &ferror
 	);
 	if (ferror)
@@ -993,13 +1005,15 @@ static void filedialog_saveas_bios(
 static void saveas_button_name_bios(GtkWidget* button, gpointer commonsptr) {
 // signal callback
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 
-	GtkFileDialog* filer = gtk_file_dialog_new();
-	GtkWindow* active_window = gtk_application_get_active_window(
+	GtkFileDialog* const filer = gtk_file_dialog_new();
+	GtkWindow* const active_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
 	);
-	GFile* working_dir = g_file_get_parent(commons->atomtree_root->biosfile);
+	GFile* const working_dir = g_file_get_parent(
+		commons->atomtree_root->biosfile
+	);
 	gtk_file_dialog_set_initial_folder(filer, working_dir);
 	g_object_unref(working_dir);
 
@@ -1011,15 +1025,15 @@ static void saveas_button_name_bios(GtkWidget* button, gpointer commonsptr) {
 
 inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 
-	GtkWidget* load_button = gtk_button_new_with_label("Load");
+	GtkWidget* const load_button = gtk_button_new_with_label("Load");
 	g_signal_connect(load_button,
 		"clicked", G_CALLBACK(load_button_open_bios), commons
 	);
-	GtkWidget* reload_button = gtk_button_new_with_label("Reload");
+	GtkWidget* const reload_button = gtk_button_new_with_label("Reload");
 	g_signal_connect(reload_button,
 		"clicked", G_CALLBACK(reload_button_reload_bios), commons
 	);
-	GtkWidget* load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	GtkWidget* const load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(load_buttons),
 		gtk_separator_new(GTK_ORIENTATION_HORIZONTAL)
 	);
@@ -1027,23 +1041,23 @@ inline static GtkWidget* buttons_box(yaabegtk_commons* commons) {
 	gtk_box_append(GTK_BOX(load_buttons), reload_button);
 
 
-	GtkWidget* save_button = gtk_button_new_with_label("Save");
+	GtkWidget* const save_button = gtk_button_new_with_label("Save");
 	g_signal_connect(save_button,
 		"clicked", G_CALLBACK(save_button_same_file), commons
 	);
-	GtkWidget* saveas_button = gtk_button_new_with_label("Save As");
+	GtkWidget* const saveas_button = gtk_button_new_with_label("Save As");
 	g_signal_connect(saveas_button,
 		"clicked", G_CALLBACK(saveas_button_name_bios), commons
 	);
-	GtkWidget* save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	GtkWidget* const save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
 	gtk_box_append(GTK_BOX(save_buttons), saveas_button);
 
 
-	GtkWidget* cf_button = gtk_button_new_with_label("Function Tables");
+	GtkWidget* const cf_button = gtk_button_new_with_label("Function Tables");
 	gtk_widget_set_sensitive(cf_button, false);
 
-	GtkWidget* buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
+	GtkWidget* const buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
 	gtk_box_append(GTK_BOX(buttonboxes), load_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
@@ -1066,7 +1080,7 @@ static gboolean dropped_file_open_bios(
 // load a bios from a drag-n'-drop
 // ???  https://gitlab.gnome.org/GNOME/gtk/-/issues/3755
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 	GError* ferror = NULL;
 
 	if (G_VALUE_HOLDS(value, G_TYPE_FILE)) {
@@ -1089,16 +1103,16 @@ if there is no file set during bootup the branches-leaves panes need to be
 hidden; when a file is set unhide it.
 */
 
-	yaabegtk_commons* commons = commonsptr;
+	yaabegtk_commons* const commons = commonsptr;
 
 	GtkSelectionModel* atui_model = NULL;
 	 if (commons->atomtree_root)
 		atui_model = atui_gtk_model(commons);
 
-	GtkWidget* branches_pane = create_branches_pane(commons, atui_model);
-	GtkWidget* leaves_pane = create_leaves_pane(commons);
+	GtkWidget* const branches_pane = create_branches_pane(commons, atui_model);
+	GtkWidget* const leaves_pane = create_leaves_pane(commons);
 
-	GtkWidget* tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+	GtkWidget* const tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_paned_set_resize_start_child(GTK_PANED(tree_divider), true);
 	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
 	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
@@ -1115,8 +1129,10 @@ hidden; when a file is set unhide it.
 	}
 
 	// TODO https://docs.gtk.org/gtk4/class.BoxLayout.html
-	GtkWidget* button_pane_complex = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-	GtkWidget* buttonboxes = buttons_box(commons);
+	GtkWidget* const button_pane_complex = gtk_box_new(
+		GTK_ORIENTATION_VERTICAL, 5
+	);
+	GtkWidget* const buttonboxes = buttons_box(commons);
 	gtk_widget_set_vexpand(tree_divider, true);
 	gtk_box_append(GTK_BOX(button_pane_complex), tree_divider);
 	gtk_box_append(GTK_BOX(button_pane_complex), buttonboxes);
@@ -1125,12 +1141,14 @@ hidden; when a file is set unhide it.
 	);
 
 
-	GtkDropTarget* dropfile = gtk_drop_target_new(G_TYPE_FILE, GDK_ACTION_COPY);
+	GtkDropTarget* const dropfile = gtk_drop_target_new(
+		G_TYPE_FILE, GDK_ACTION_COPY
+	);
 	g_signal_connect(dropfile,
 		"drop", G_CALLBACK(dropped_file_open_bios), commons
 	);
 
-	GtkWindow* window = GTK_WINDOW(gtk_application_window_new(gtkapp));
+	GtkWindow* const window = GTK_WINDOW(gtk_application_window_new(gtkapp));
 	gtk_widget_add_controller(
 		GTK_WIDGET(window), GTK_EVENT_CONTROLLER(dropfile)
 	);
@@ -1155,7 +1173,7 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 	*/
 
 	// TODO better malloc'd?
-	//yaabegtk_commons* commons = calloc(1, sizeof(yaabegtk_commons)); // 0'd
+	//yaabegtk_commons* const commons = calloc(1, sizeof(yaabegtk_commons)); // 0'd
 	yaabegtk_commons commons;
 	commons.atomtree_root = *atree;
 
@@ -1163,7 +1181,7 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 	g_signal_connect(commons.yaabe_gtk,
 		"activate", G_CALLBACK(app_activate), &commons
 	);
-	int16_t status = g_application_run(
+	const int16_t status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL
 	);
 
