@@ -973,8 +973,8 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 			&(vi24->mem_clk_patch.umc_reg_setting_list_length);
 
 		if (generate_atui) {
-			atui_branch* atui_navi_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-				NULL,NULL,  *vi24->num_timing_straps,NULL
+			atui_branch* const atui_navi_timings = ATUI_MAKE_BRANCH(
+				atui_nullstruct,  NULL,NULL,  *vi24->num_timing_straps,NULL
 			);
 			for(i=0; i < *vi24->num_timing_straps; i++) {
 				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings,
@@ -1069,7 +1069,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 			sizeof(vi24->leaves->vram_module)
 			/ sizeof(struct atom_vram_module_v10)
 		);
-		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
 			NULL,NULL,  num_vram_modules,NULL
 		);
 		sprintf(vram_module->name, "atom_vram_module_v10");
@@ -1227,7 +1227,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 			sizeof(vi25->leaves->vram_module)
 			/ sizeof(struct atom_vram_module_v11)
 		);
-		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
 			NULL,NULL,  num_vram_modules,NULL
 		);
 		sprintf(vram_module->name, "atom_vram_module_v11");
@@ -1365,7 +1365,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 			sizeof(vi26->leaves->vram_module)
 			/ sizeof(struct atom_vram_module_v9)
 		);
-		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
 			NULL,NULL,  num_vram_modules,NULL
 		);
 		sprintf(vram_module->name, "atom_vram_module_v9");

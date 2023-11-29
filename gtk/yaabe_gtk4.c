@@ -35,7 +35,7 @@ struct yaabe_gtkapp_model_cache { // to cache
 };
 
 inline static void alloc_branch_cache(atui_branch* branch) {
-	uint16_t gobj_count = branch->num_branches;
+	const uint16_t gobj_count = branch->num_branches;
 
 	branch->auxiliary = malloc(
 		sizeof(struct yaabe_gtkapp_model_cache)
@@ -984,7 +984,7 @@ static void filedialog_saveas_bios(
 		goto ferr_nomsg;
 
 
-	GFile* old_biosfile = commons->atomtree_root->biosfile;
+	GFile* const old_biosfile = commons->atomtree_root->biosfile;
 	commons->atomtree_root->biosfile = new_biosfile;
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
 	if (ferror) {
