@@ -653,6 +653,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 				break;
 
 			case v18_0: // navi2 xx50
+			case v16_0: // 6700XT
 			case v15_0:
 				ppt->smc_pptable_ver = &(
 					ppt->v15_0->smc_pptable.smc_pptable_ver
