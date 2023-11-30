@@ -67,6 +67,7 @@ typedef union {
 #include "atomfirmware.h"
 #include "umctimings.h"
 #include "powerplay.h"
+#include "atombios.h"
 
 enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;

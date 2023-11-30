@@ -1783,15 +1783,21 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
 PPATUI_FUNCIFY(union, atom_dtd_format_modemiscinfo, atomtree_lcd_info,
 	(bios->miscinfo, miscinfo,
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(reserved0,             0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_HSYNC_POLARITY,   1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_VSYNC_POLARITY,   2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(reserved1,             3,3, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_H_REPLICATIONBY2, 4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_V_REPLICATIONBY2, 5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_COMPOSITESYNC,    6,6, ATUI_DEC, (ATUI_NODESCR)),
-			(ATOM_INTERLACE,        7,7, ATUI_DEC, (ATUI_NODESCR)),
-			(reserved2,            15,8, ATUI_DEC, (ATUI_NODESCR))
+			(HORIZONTAL_CUTOFF ,0,0, ATUI_DEC, (ATUI_NODESCR)),
+			(HSYNC_POLARITY,    1,1, ATUI_DEC,
+				((LANG_ENG, "0=Active High, 1=Active Low"))
+			),
+			(VSYNC_POLARITY,    2,2, ATUI_DEC,
+				((LANG_ENG, "0=Active High, 1=Active Low"))
+			),
+			(VERTICAL_CUTOFF,   3,3, ATUI_DEC, (ATUI_NODESCR)),
+			(H_REPLICATIONBY2,  4,4, ATUI_DEC, (ATUI_NODESCR)),
+			(V_REPLICATIONBY2,  5,5, ATUI_DEC, (ATUI_NODESCR)),
+			(COMPOSITESYNC,     6,6, ATUI_DEC, (ATUI_NODESCR)),
+			(INTERLACE,         7,7, ATUI_DEC, (ATUI_NODESCR)),
+			(DOUBLECLOCK,       8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(RGB888,            9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(reserved,         15,10, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -1823,10 +1829,10 @@ PPATUI_FUNCIFY(struct, atom_dtd_format, atomtree_lcd_info,
 	(bios->v_syncwidth, v_syncwidth,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->reserved, reserved,
+	(bios->image_h_size, image_h_size,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->reserved0, reserved0,
+	(bios->image_v_size, image_v_size,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->h_border, h_border,

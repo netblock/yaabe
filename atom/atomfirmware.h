@@ -326,15 +326,17 @@ enum atom_dtd_format_modemiscinfo_old {
 union atom_dtd_format_modemiscinfo {
 	uint16_t miscinfo;
 	struct { uint16_t
-		reserved0             :0-0 +1,
-		ATOM_HSYNC_POLARITY   :1-1 +1,
-		ATOM_VSYNC_POLARITY   :2-2 +1,
-		reserved1             :3-3 +1,
-		ATOM_H_REPLICATIONBY2 :4-4 +1,
-		ATOM_V_REPLICATIONBY2 :5-5 +1,
-		ATOM_COMPOSITESYNC    :6-6 +1,
-		ATOM_INTERLACE        :7-7 +1,
-		reserved2            :15-8 +1;
+		HORIZONTAL_CUTOFF :0-0 +1,
+		HSYNC_POLARITY    :1-1 +1, // 0=Active High, 1=Active Low
+		VSYNC_POLARITY    :2-2 +1, // 0=Active High, 1=Active Low
+		VERTICAL_CUTOFF   :3-3 +1,
+		H_REPLICATIONBY2  :4-4 +1,
+		V_REPLICATIONBY2  :5-5 +1,
+		COMPOSITESYNC     :6-6 +1,
+		INTERLACE         :7-7 +1,
+		DOUBLECLOCK       :8-8 +1,
+		RGB888            :9-9 +1,
+		reserved         :15-10 +1;
 	};
 };
 
@@ -348,8 +350,8 @@ struct atom_dtd_format {
 	uint16_t h_sync_width;
 	uint16_t v_sync_offset;
 	uint16_t v_syncwidth;
-	uint16_t reserved;
-	uint16_t reserved0;
+	uint16_t image_h_size;
+	uint16_t image_v_size;
 	uint8_t  h_border;
 	uint8_t  v_border;
 	union atom_dtd_format_modemiscinfo miscinfo;
@@ -705,9 +707,18 @@ struct atom_common_record_header {
 	uint8_t  record_size; // The size of the whole record in byte
 };
 
+union atom_i2c_id_config {
+	uint8_t  i2c_id;
+	struct { uint8_t
+		I2C_LineMux :3-0 +1, // A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C
+		HW_EngineID :6-4 +1, // =1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines
+		HW_Capable  :7-7 +1; // =0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)
+	};
+};
+
 struct atom_i2c_record {
 	struct atom_common_record_header record_header; // record_type = ATOM_I2C_RECORD_TYPE
-	uint8_t  i2c_id;
+	union atom_i2c_id_config i2c_id;
 	uint8_t  i2c_slave_addr; // The slave address, it's 0 when the record is attached to connector for DDC
 };
 
@@ -786,7 +797,7 @@ enum atom_gpio_pin_control_pinstate_def:uint8_t {
 	GPIO_PIN_STATE_ACTIVE_LOW   = 0x0,
 	GPIO_PIN_STATE_ACTIVE_HIGH  = 0x1,
 };
-//The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
+// The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
 struct atom_gpio_pin_control_pair {
 	uint8_t  gpio_id;       // GPIO_ID, find the corresponding ID in GPIO_LUT table
 	enum atom_gpio_pin_control_pinstate_def gpio_pinstate; // Pin state showing how to set-up the pin
@@ -818,12 +829,12 @@ enum atom_glsync_record_gpio_index_def {
 
 struct atom_connector_hpdpin_lut_record { // record for ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE
 	struct atom_common_record_header record_header;
-	uint8_t  hpd_pin_map[8];
+	uint8_t  hpd_pin_map[8]; // EXT_HPDPIN_LUT. An fixed size array which maps external pins to internal GPIO_PIN_INFO table 
 };
 
 struct atom_connector_auxddc_lut_record { //record for ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE
 	struct atom_common_record_header record_header;
-	uint8_t  aux_ddc_map[8];
+	uint8_t  aux_ddc_map[8]; // EXT_AUXDDC_LUT.  An fixed size array which maps external pins to internal DDC ID.
 };
 
 struct atom_connector_forced_tmds_cap_record {
@@ -835,11 +846,12 @@ struct atom_connector_forced_tmds_cap_record {
 
 // define ATOM_CONNECTOR_LAYOUT_INFO.ucConnectorType to describe the display connector size
 enum atom_connector_layout_info_connector_type_def:uint8_t {
-	CONNECTOR_TYPE_DVI_D                 = 1,
-
-	CONNECTOR_TYPE_HDMI                  = 4,
-	CONNECTOR_TYPE_DISPLAY_PORT          = 5,
-	CONNECTOR_TYPE_MINI_DISPLAY_PORT     = 6,
+	CONNECTOR_TYPE_DVI_D             = 1,
+	CONNECTOR_TYPE_DVI_I             = 2,
+	ONNECTOR_TYPE_VGA                = 3,
+	CONNECTOR_TYPE_HDMI              = 4,
+	CONNECTOR_TYPE_DISPLAY_PORT      = 5,
+	CONNECTOR_TYPE_MINI_DISPLAY_PORT = 6,
 };
 struct atom_connector_layout_info {
 	uint16_t connectorobjid;
@@ -3655,7 +3667,7 @@ struct  atom_i2c_data_entry {
 struct atom_i2c_voltage_object_v4 {
 	struct atom_voltage_object_header_v4 header; // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
 	uint8_t  regulator_id; // Indicate Voltage Regulator Id
-	uint8_t  i2c_id;
+	union atom_i2c_id_config i2c_id;
 	uint8_t  i2c_slave_addr;
 	uint8_t  i2c_control_offset;
 	uint8_t  i2c_flag;  // Bit0: 0 - One byte data; 1 - Two byte data
@@ -4218,17 +4230,19 @@ struct set_dce_clock_ps_allocation_v2_1 {
 
 
 /****************************************************************************
-   Structures used by BlankCRTC
+   StruCTUREs used by BlankCRTC
 ****************************************************************************/
 enum atom_blank_crtc_command:uint8_t {
 	ATOM_BLANKING     = 1,
 	ATOM_BLANKING_OFF = 0,
 };
+
 struct blank_crtc_parameters {
     enum atom_crtc_def crtc_id;
 	enum atom_blank_crtc_command blanking;
-	uint16_t reserved;
-	uint32_t reserved1;
+	uint16_t BlackColorRCr;
+    uint16_t BlackColorGY;
+    uint16_t BlackColorBCb;
 };
 
 
@@ -4268,7 +4282,7 @@ struct set_crtc_using_dtd_timing_parameters {
 	uint16_t h_syncwidth;
 	uint16_t v_syncoffset;
 	uint16_t v_syncwidth;
-	uint16_t modemiscinfo;
+	union atom_dtd_format_modemiscinfo miscinfo;
 	uint8_t  h_border;
 	uint8_t  v_border;
     enum atom_crtc_def crtc_id;
@@ -4290,7 +4304,7 @@ struct process_i2c_channel_transaction_parameters {
 	uint8_t  flag; // enum atom_process_i2c_status
 	uint8_t  trans_bytes;
 	uint8_t  slave_addr;
-	uint8_t  i2c_id;
+	union atom_i2c_id_config i2c_id;
 };
 
 //ucFlag
@@ -4518,6 +4532,7 @@ union atom_dig_transmitter_control_digfe_sel {
 };
 
 // TODO wtf is going on here
+// atombios.h has a duplicate
 struct dig_transmitter_control_parameters_v1_6 {
 	uint8_t  phyid;         // 0=UNIPHYA, 1=UNIPHYB, 2=UNIPHYC, 3=UNIPHYD, 4= UNIPHYE 5=UNIPHYF
 	enum atom_dig_transmitter_control_action action;
