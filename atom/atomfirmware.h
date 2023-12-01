@@ -93,8 +93,6 @@ asic_bus_type_pcie_string = "PCI_EXPRESS",
 atom_fire_gl_string       = "FGL",
 atom_bios_string          = "ATOM"
 };
-*/
-
 enum atombios_image_offset {
 	OFFSET_TO_ATOM_ROM_HEADER_POINTER     = 0x00000048,
 	OFFSET_TO_ATOM_ROM_IMAGE_SIZE         = 0x00000002,
@@ -104,6 +102,31 @@ enum atombios_image_offset {
 	OFFSET_TO_GET_ATOMBIOS_STRING_START   = 0x6e,
 	OFFSET_TO_VBIOS_PART_NUMBER           = 0x80,
 	OFFSET_TO_VBIOS_DATE                  = 0x50,
+};
+*/
+#define ATOM_BIOS_MAGIC 0xAA55
+#define ATOM_ATI_MAGIC  " 761295520"
+#define BIOS_IMAGE_SIZE_UNIT 512
+struct atombios_image {
+	uint16_t atombios_magic; // little endian: 0xAA55
+	uint8_t  image_size; // 0x02
+	uint8_t  reserved0[30];
+	uint8_t  checksum;   // 0x21
+	uint8_t  reserved1[13];
+	uint8_t  number_of_strings; // 0x2F
+	uint8_t  atomati_magic[11]; // 0x30; " 761295520" There is a space.
+	uint8_t  reserved2[13];
+	uint16_t bios_header;   // 0x48
+	uint8_t  reserved3[6];
+	uint8_t  bios_date[15]; // 0x50
+	uint8_t  reserved4[15];
+	uint16_t atombios_strings_offset; // 0x6E
+	uint8_t  reserved5[16];
+	uint8_t  vbios_part_number; // 0x80 ; only use if number_of_strings == 0
+	uint8_t  reserved6[19];
+	uint8_t  asic_bus_mem_type[20]; // 0x94.
+	// asic_bus_mem_type is ATI; AMD uses atombios_strings_offset.
+	// any more?
 };
 
 /****************************************************************************

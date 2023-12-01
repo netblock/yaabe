@@ -244,6 +244,82 @@ def bitfield_to_atui(s):
 // basic empty branch mainly to have collapsables
 PPATUI_FUNCIFY(struct, atui_nullstruct, atui_nullstruct)
 
+PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
+	(bios->atombios_magic, atombios_magic,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "little endian: 0xAA55"))
+	),
+	(bios->image_size, image_size,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0x02"))
+	),
+	(bios->reserved0, reserved0,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->checksum, checksum,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "0x21"))
+	),
+	(bios->reserved1, reserved1,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->number_of_strings, number_of_strings,
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0x2F"))
+	),
+	(bios->atomati_magic, atomati_magic,
+		(ATUI_NAN, ATUI_STRING),
+		((LANG_ENG, "0x30; " 761295520" There is a space."))
+	),
+	(bios->reserved2, reserved2,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->bios_header, bios_header,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "0x48"))
+	),
+	(bios->reserved3, reserved3,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->bios_date, bios_date,
+		(ATUI_NAN, ATUI_STRING),
+		((LANG_ENG, "0x50"))
+	),
+	(bios->reserved4, reserved4,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->atombios_strings_offset, atombios_strings_offset,
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "0x6E"))
+	),
+	(bios->reserved5, reserved5,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->vbios_part_number, vbios_part_number,
+		(ATUI_HEX, ATUI_NOFANCY), // 0-term'd string
+		((LANG_ENG, "0x80 ; only use if number_of_strings == 0"))
+	),
+	(bios->reserved6, reserved6,
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->asic_bus_mem_type, asic_bus_mem_type,
+		(ATUI_NAN, ATUI_STRING),
+		((LANG_ENG, "0x94;  ATI days; AMD uses atombios_strings_offset."))
+	)
+/*
+	(NULL, atombios strings,
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, string [%02u],
+				(ATUI_NAN, ATUI_STRING), (ATUI_NODESCR)
+			),
+			atomtree->atombios_strings, // start
+			atomtree->num_of_crawled_strings, // count
+			ATUI_NULL // enum
+		)), ((LANG_ENG, "support flag"))
+	)
+*/
+)
+
 
 PPATUI_FUNCIFY(struct, atom_common_table_header, atui_nullstruct,
 	(bios->structuresize, structuresize,

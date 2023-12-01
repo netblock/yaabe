@@ -1947,24 +1947,34 @@ struct atom_tree* atombios_parse(
 	void* const bios = bios_fastforward(alloced_bios, allocsize);
 	if (bios == NULL)
 		return NULL;
-
 	struct atombios_image* const image = bios;
-
 	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
 
 	atree->dot = atree;
 	atree->dotdot = NULL;
-
 	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
 	atree->alloced_bios = alloced_bios;
 
-	atree->bios = bios; //PIC code; going to be used as the '0' in places.
-	atree->leaves = bios + image->bios_header;
 
+	atree->bios = bios; //PIC code; going to be used as the '0' in places.
 	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
 
-	atui_branch* atui_dt = atomtree_populate_datatables(atree, generate_atui);
+	uint8_t* strs = atree->bios + image->atombios_strings_offset;
+	uint8_t num_of_crawled_strings = 0;
+	while(*strs) { // the last string ends with 00 00
+		assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
+		atree->atombios_strings[num_of_crawled_strings] = strs;
+		num_of_crawled_strings++;
+		strs += (strlen(strs) + 1);
+	}
+	atree->num_of_crawled_strings = num_of_crawled_strings;
+
+
+	atree->leaves = bios + image->bios_header;
+
+	atui_branch* const atui_dt =
+		atomtree_populate_datatables(atree, generate_atui);
 	// atomtree_populate_commandtables(atree); // TODO
 
 	atree->protected_mode = bios + atree->leaves->protectedmodeoffset;
@@ -1987,7 +1997,7 @@ struct atom_tree* atombios_parse(
 
 		AMD.RX480.8192.160603_1.rom:
 			address: +0x14D7 ~ +0x3866 for 9103 bytes
-			crc: 0x7F5E715 0x7F5E715
+			crc: 0x7F5E715 0x7F5E7150
 
 	doesn't have it:
 		AMD.RXVega64.8192.170320.rom
@@ -2013,14 +2023,20 @@ struct atom_tree* atombios_parse(
 
 
 	if (generate_atui) {
-		atui_branch* const child_branches[] = {atui_dt};
-		const uint8_t num_branches = (
-			sizeof(child_branches) / sizeof(atui_branch*)
+		atui_branch* const rom_header_child_branches[] = {atui_dt};
+		atui_branch* const atui_rom_header = ATUI_MAKE_BRANCH(
+			atom_rom_header_v2_2,
+			atree, atree->leaves,
+			sizeof(rom_header_child_branches) / sizeof(atui_branch*),
+			rom_header_child_branches
 		);
-
-		atree->atui_root = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
-			atree,atree->leaves,  num_branches,child_branches
+		atui_branch* const atui_atom_image = ATUI_MAKE_BRANCH(atombios_image,
+			 atree, atree->image,  1,NULL
 		);
+		atui_atom_image->child_branches[atui_atom_image->num_branches] = 
+			atui_rom_header;
+		atui_atom_image->num_branches++;
+		atree->atui_root = atui_atom_image;
 	} else {
 		atree->atui_root = NULL;
 	}

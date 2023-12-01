@@ -15,6 +15,8 @@ PPATUI_HEADERIFY(atui_nullstruct);
 /******************************************************************************/
 // atui_atomfirmware.c / atomfirmware.h
 
+PPATUI_HEADERIFY(atombios_image);
+
 PPATUI_HEADERIFY(atom_common_table_header);
 
 PPATUI_HEADERIFY(atom_rom_header_v2_2);
