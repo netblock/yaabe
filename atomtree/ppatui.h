@@ -74,11 +74,11 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	const struct atomtreestruct* const atomtree = args->atomtree;\
 	const atomtypeprefix atomtypesuffix* const bios = args->suggestbios;\
 \
-	const atui_leaf const leaves_initial[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
-	const atui_leaf const dynarray_patterns[] = {\
+	const atui_leaf leaves_initial[] = { _PPATUI_LEAVES(__VA_ARGS__) };\
+	const atui_leaf dynarray_patterns[] = {\
 		_PPATUI_DYNARRAY(ROLL, __VA_ARGS__)\
 	};\
-	const struct dynarray_bounds const dynarray_boundaries[] = {\
+	const struct dynarray_bounds dynarray_boundaries[] = {\
 		_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 	};\
 	const struct atui_branch_data branch_embryo = {\

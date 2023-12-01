@@ -173,8 +173,8 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
 void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val);
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf);
-void atui_leaf_set_val_fraction(atui_leaf* leaf, double val);
-double atui_leaf_get_val_fraction(atui_leaf* leaf);
+void atui_leaf_set_val_fraction(atui_leaf* leaf, float32_t val);
+float32_t atui_leaf_get_val_fraction(atui_leaf* leaf);
 
 // TODO stroll that considers 0b prefix?
 int64_t strtoll_2(const char8_t* str);

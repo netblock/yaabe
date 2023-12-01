@@ -63,7 +63,7 @@ int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	}
 	return (1ULL<<63);
 }
-void atui_leaf_set_val_fraction(atui_leaf* leaf, double val) {
+void atui_leaf_set_val_fraction(atui_leaf* leaf, float32_t val) {
 	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
 		switch(leaf->total_bits) {
 			case 16:
@@ -78,7 +78,7 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, double val) {
 		}
 	}
 }
-double atui_leaf_get_val_fraction(atui_leaf* leaf) {
+float32_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
 	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
 		switch(leaf->total_bits) {
 			case 16:

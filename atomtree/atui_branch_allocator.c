@@ -336,8 +336,7 @@ atui_branch* atui_branch_allocator(
 
 	*table = (atui_branch) {
 		.varname = embryo->varname,
-		.atomleaves = (void*)args->suggestbios,
-
+		.atomleaves = (void*)(args->suggestbios),
 		.child_branches = branches,
 		.num_branches = num_branches,
 		.max_num_branches = max_num_branches,

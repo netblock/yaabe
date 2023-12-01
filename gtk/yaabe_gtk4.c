@@ -1181,7 +1181,7 @@ int8_t yaabe_gtk(struct atom_tree** atree) {
 	g_signal_connect(commons.yaabe_gtk,
 		"activate", G_CALLBACK(app_activate), &commons
 	);
-	const int16_t status = g_application_run(
+	const int8_t status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL
 	);
 
