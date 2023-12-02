@@ -92,7 +92,7 @@ out/%.o: %.c dirs
 .PHONY: dirs
 dirs: $(DIRS)
 $(DIRS):
-	mkdir -p $(@D)	
+	mkdir -p $(@D)
 
 .PHONY: clean
 clean:

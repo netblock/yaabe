@@ -169,7 +169,7 @@ struct atomtree_powerplaytable {
 
 	//struct PPTable_t* smc_pptable;
 	uint8_t* powerplay_table_ver; // as seen next to atom_common_table_header
-	//uint8_t* overdrive_table_ver; // hopefully unnecessary 
+	//uint8_t* overdrive_table_ver; // hopefully unnecessary
 	//uint8_t* powersaving_table_ver;
 	uint32_t* smc_pptable_ver; // as seen in driver_if*.h
 	enum atomtree_common_version ver;

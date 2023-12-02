@@ -15,7 +15,7 @@ For how to use ATUI_FUNCIFY() see atui_atomfirmware.c
 For how to use ATUI_MAKE_BRANCH() See ppatui.h
 
 
-declaration: 
+declaration:
 PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
     ...
 )
@@ -244,7 +244,6 @@ atui_branch* atui_branch_allocator(
 	const struct atui_branch_data* const embryo,
 	const struct atui_funcify_args* const args
 );
-
 
 
 #include "ppatui.h"

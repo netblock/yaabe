@@ -2295,11 +2295,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->qAvfsGb[AVFS_VOLTAGE_GFX], qAvfsGb (GFX),
-		(ATUI_NAN, ATUI_INLINE, quadratic_f32), 
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		((LANG_ENG, "GHz->V Override of fused curve"))
 	),
 	(bios->qAvfsGb[AVFS_VOLTAGE_SOC], qAvfsGb (SOC),
-		(ATUI_NAN, ATUI_INLINE, quadratic_f32), 
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		((LANG_ENG, "GHz->V Override of fused curve"))
 	),
 
@@ -2316,29 +2316,29 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "GHz->V BtcGb"))
 	),
 	(bios->qAgingGb[AVFS_VOLTAGE_GFX], qAgingGb (GFX),
-		(ATUI_NAN, ATUI_INLINE, linear_f32), 
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
 		((LANG_ENG, "GHz->V"))
 	),
 	(bios->qAgingGb[AVFS_VOLTAGE_SOC], qAgingGb (SOC),
-		(ATUI_NAN, ATUI_INLINE, linear_f32), 
+		(ATUI_NAN, ATUI_INLINE, linear_f32),
 		((LANG_ENG, "GHz->V"))
 	),
 
 	(bios->qStaticVoltageOffset[AVFS_VOLTAGE_GFX], qStaticVoltageOffset (GFX),
-		(ATUI_NAN, ATUI_INLINE, quadratic_f32), 
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		((LANG_ENG, "GHz->V"))
 	),
 	(bios->qStaticVoltageOffset[AVFS_VOLTAGE_SOC], qStaticVoltageOffset (SOC),
-		(ATUI_NAN, ATUI_INLINE, quadratic_f32), 
+		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 		((LANG_ENG, "GHz->V"))
 	),
 
 	(bios->DcTol[AVFS_VOLTAGE_GFX], DcTol (GFX),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcTol[AVFS_VOLTAGE_SOC], DcTol (SOC),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 
@@ -2354,19 +2354,19 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->DcBtcMin[AVFS_VOLTAGE_GFX], DcBtcMin (GFX),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMin[AVFS_VOLTAGE_SOC], DcBtcMin (SOC),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMax[AVFS_VOLTAGE_GFX], DcBtcMax (GFX),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMax[AVFS_VOLTAGE_SOC], DcBtcMax (SOC),
-		(ATUI_HEX, ATUI_NOFANCY), 
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 

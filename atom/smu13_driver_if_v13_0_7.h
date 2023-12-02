@@ -26,7 +26,6 @@
 #pragma pack(push, 1) // bios data must use byte alignment
 
 // *** IMPORTANT ***
-// PMFW TEAM: Always increment the interface version on any change to this file
 #define SMU13_0_7_DRIVER_IF_VERSION  0x35
 
 // Increment this version if SkuTable_t or BoardTable_t change
@@ -150,18 +149,6 @@ union dpm_debug_override_smu13 {
 #define VR_MAPPING_PLANE_SELECT_MASK  0x02
 #define VR_MAPPING_PLANE_SELECT_SHIFT 0x01
 
-// PSI Bit Defines
-/* duplicate
-#define PSI_SEL_VR0_PLANE0_PSI0 0x01
-#define PSI_SEL_VR0_PLANE0_PSI1 0x02
-#define PSI_SEL_VR0_PLANE1_PSI0 0x04
-#define PSI_SEL_VR0_PLANE1_PSI1 0x08
-#define PSI_SEL_VR1_PLANE0_PSI0 0x10
-#define PSI_SEL_VR1_PLANE0_PSI1 0x20
-#define PSI_SEL_VR1_PLANE1_PSI0 0x40
-#define PSI_SEL_VR1_PLANE1_PSI1 0x80
-*/
-
 enum SVI_PSI_e {
 	SVI_PSI_0, // Full phase count (default)
 	SVI_PSI_1, // Phase count 1st level
@@ -175,7 +162,7 @@ enum SVI_PSI_e {
 
 // Throttler Control/Status Bits
 union throttler_control_smu13_0x35 {
-	uint32_t ThrottlerControlMask;                                              
+	uint32_t ThrottlerControlMask;
 	struct { uint32_t
 		TEMP_EDGE      :0-0 +1,
 		TEMP_HOTSPOT   :1-1 +1,
@@ -275,6 +262,7 @@ enum DRAM_BIT_WIDTH_TYPE_e:uint8_t { // uint8_t  DramWidth;
 #define CMDCONFIG_RESTART_BIT   1
 #define CMDCONFIG_READWRITE_BIT 2 // bit should be 0 for read, 1 for write
 
+// TODO
 #define CMDCONFIG_STOP_MASK      (1 << CMDCONFIG_STOP_BIT)
 #define CMDCONFIG_RESTART_MASK   (1 << CMDCONFIG_RESTART_BIT)
 #define CMDCONFIG_READWRITE_MASK (1 << CMDCONFIG_READWRITE_BIT)
@@ -359,20 +347,6 @@ enum SMU13_PPCLK_e {
 	SMU13_PPCLK_COUNT    = 13,
 };
 
-/* duplicate
-enum VOLTAGE_MODE_e { // seemingly uneeded
-	VOLTAGE_MODE_PPTABLE = 0,
-	VOLTAGE_MODE_FUSES   = 1,
-	VOLTAGE_MODE_COUNT   = 2,
-};
-
-enum AVFS_VOLTAGE_TYPE_e {
-	AVFS_VOLTAGE_GFX   = 0,
-	AVFS_VOLTAGE_SOC   = 1,
-	AVFS_VOLTAGE_COUNT = 2,
-};
-*/
-
 enum AVFS_TEMP_e {
 	AVFS_TEMP_COLD  = 0,
 	AVFS_TEMP_HOT   = 1,
@@ -390,13 +364,6 @@ enum GpioIntPolarity_e {
 	GPIO_INT_POLARITY_ACTIVE_LOW  = 0,
 	GPIO_INT_POLARITY_ACTIVE_HIGH = 1,
 };
-/* duplocate
-enum PwrConfig_e:uint8_t {
-	PWR_CONFIG_TDP = 0,
-	PWR_CONFIG_TGP = 1,
-	PWR_CONFIG_TCP_ESTIMATED = 2,
-	PWR_CONFIG_TCP_MEASURED  = 3,
-};*/
 
 enum FOPT_CALC_e:uint8_t {
 	FOPT_CALC_AC_CALC_DC       = 0,
@@ -550,10 +517,6 @@ enum PP_GRTAVFS_FW_SEP_FUSE_e {
 };
 
 
-#define PP_NUM_RTAVFS_PWL_ZONES 5
-
-
-
 // VBIOS or PPLIB configures telemetry slope and offset. Only slope expected to be set for SVI3
 // Slope Q1.7, Offset Q1.2
 struct SviTelemetryScale_t {
@@ -561,7 +524,7 @@ struct SviTelemetryScale_t {
 	uint8_t  Padding;
 	uint16_t MaxCurrent; // in Amps
 };
-
+#define PP_NUM_RTAVFS_PWL_ZONES 5
 #define PP_NUM_OD_VF_CURVE_POINTS PP_NUM_RTAVFS_PWL_ZONES + 1
 
 
@@ -660,58 +623,6 @@ struct overdrivelimits_smu13 {
 
 };
 
-/* Unsure what this goes to
-enum BOARD_GPIO_TYPE_e {
-	BOARD_GPIO_SMUIO_0        = 0,
-	BOARD_GPIO_SMUIO_1        = 1,
-	BOARD_GPIO_SMUIO_2        = 2,
-	BOARD_GPIO_SMUIO_3        = 3,
-	BOARD_GPIO_SMUIO_4        = 4,
-	BOARD_GPIO_SMUIO_5        = 5,
-	BOARD_GPIO_SMUIO_6        = 6,
-	BOARD_GPIO_SMUIO_7        = 7,
-	BOARD_GPIO_SMUIO_8        = 8,
-	BOARD_GPIO_SMUIO_9        = 9,
-	BOARD_GPIO_SMUIO_10       = 10,
-	BOARD_GPIO_SMUIO_11       = 11,
-	BOARD_GPIO_SMUIO_12       = 12,
-	BOARD_GPIO_SMUIO_13       = 13,
-	BOARD_GPIO_SMUIO_14       = 14,
-	BOARD_GPIO_SMUIO_15       = 15,
-	BOARD_GPIO_SMUIO_16       = 16,
-	BOARD_GPIO_SMUIO_17       = 17,
-	BOARD_GPIO_SMUIO_18       = 18,
-	BOARD_GPIO_SMUIO_19       = 19,
-	BOARD_GPIO_SMUIO_20       = 20,
-	BOARD_GPIO_SMUIO_21       = 21,
-	BOARD_GPIO_SMUIO_22       = 22,
-	BOARD_GPIO_SMUIO_23       = 23,
-	BOARD_GPIO_SMUIO_24       = 24,
-	BOARD_GPIO_SMUIO_25       = 25,
-	BOARD_GPIO_SMUIO_26       = 26,
-	BOARD_GPIO_SMUIO_27       = 27,
-	BOARD_GPIO_SMUIO_28       = 28,
-	BOARD_GPIO_SMUIO_29       = 29,
-	BOARD_GPIO_SMUIO_30       = 30,
-	BOARD_GPIO_SMUIO_31       = 31,
-	MAX_BOARD_GPIO_SMUIO_NUM  = 32,
-	BOARD_GPIO_DC_GEN_A       = 33,
-	BOARD_GPIO_DC_GEN_B       = 34,
-	BOARD_GPIO_DC_GEN_C       = 35,
-	BOARD_GPIO_DC_GEN_D       = 36,
-	BOARD_GPIO_DC_GEN_E       = 37,
-	BOARD_GPIO_DC_GEN_F       = 38,
-	BOARD_GPIO_DC_GEN_G       = 39,
-	BOARD_GPIO_DC_GENLK_CLK   = 40,
-	BOARD_GPIO_DC_GENLK_VSYNC = 41,
-	BOARD_GPIO_DC_SWAPLOCK_A  = 42,
-	BOARD_GPIO_DC_SWAPLOCK_B  = 43,
-	INVALID_BOARD_GPIO      = 0xFF,
-};
-*/
-
-
-
 struct BootValues_t {
 	// PLL 0
 	uint16_t InitGfxclk_bypass;
@@ -797,7 +708,6 @@ struct MsgLimits_t {
 
 	uint16_t PowerMinPpt0[POWER_SOURCE_COUNT];
 	uint32_t Spare[11];
-
 };
 
 struct DriverReportedClocks_t {

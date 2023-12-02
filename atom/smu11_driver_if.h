@@ -23,11 +23,6 @@
 
 #ifndef SMU11_DRIVER_IF_H
 #define SMU11_DRIVER_IF_H
-// TODO Q2 means Qm.2, where m fills the rest of the natural width
-// https://en.wikipedia.org/wiki/Q_(number_format)
-// AMD.RX5700XT.8192.190616_1.rom has:
-// MaxVoltageGfx/Soc at 0x12C0 and min at 0x0bb8
-// 0x12C0>>2 == 1200 and 0x0bb8>>2 == 750 which are sensible values.
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
@@ -382,16 +377,6 @@ union dpm_debug_override_smu11_0x40 {
 #define VR_MAPPING_PLANE_SELECT_MASK  0x02
 #define VR_MAPPING_PLANE_SELECT_SHIFT 0x01
 
-/* duplicate
-#define PSI_SEL_VR0_PLANE0_PSI0  0x01
-#define PSI_SEL_VR0_PLANE0_PSI1  0x02
-#define PSI_SEL_VR0_PLANE1_PSI0  0x04
-#define PSI_SEL_VR0_PLANE1_PSI1  0x08
-#define PSI_SEL_VR1_PLANE0_PSI0  0x10
-#define PSI_SEL_VR1_PLANE0_PSI1  0x20
-#define PSI_SEL_VR1_PLANE1_PSI0  0x40
-#define PSI_SEL_VR1_PLANE1_PSI1  0x80
-*/
 
 union throttler_control_smu11_0x13 { // unused?
 	uint32_t ThrottlerControlMask;
@@ -516,20 +501,6 @@ union gfx_gpo_features { // graphics power optimisation
 };
 
 
-// unused?
-#define TABLE_TRANSFER_OK         0x0
-#define TABLE_TRANSFER_FAILED     0xFF
-
-// unused?
-#define WORKLOAD_DEFAULT_BIT              0
-#define WORKLOAD_PPLIB_FULL_SCREEN_3D_BIT 1
-#define WORKLOAD_PPLIB_POWER_SAVING_BIT   2
-#define WORKLOAD_PPLIB_VIDEO_BIT          3
-#define WORKLOAD_PPLIB_VR_BIT             4
-#define WORKLOAD_PPLIB_COMPUTE_BIT        5
-#define WORKLOAD_PPLIB_CUSTOM_BIT         6
-#define WORKLOAD_PPLIB_COUNT              7
-
 #define XGMI_STATE_D0 1
 #define XGMI_STATE_D3 0
 
@@ -592,20 +563,6 @@ enum SMU11_PPT7_PPCLK_e {
 	SMU11_PPT7_PPCLK_DTBCLK  = 12,
 	SMU11_PPT7_PPCLK_COUNT   = 13,
 };
-
-/* duplicate
-enum VOLTAGE_MODE_e:uint8_t {
-	VOLTAGE_MODE_AVFS    = 0, // AVFS only
-	VOLTAGE_MODE_AVFS_SS = 1, // min(AVS,SS)
-	VOLTAGE_MODE_SS      = 2, // SS only
-	VOLTAGE_MODE_COUNT   = 3,
-}; 
-
-enum AVFS_VOLTAGE_TYPE_e {
-	AVFS_VOLTAGE_GFX   = 0,
-	AVFS_VOLTAGE_SOC   = 1,
-	AVFS_VOLTAGE_COUNT = 2,
-}; */
 
 enum TEMP_SMU11_0_0_e {
 	TEMP_SMU11_0_0_EDGE    = 0,
@@ -1123,7 +1080,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	struct quadratic_f32 ReservedEquation3;
 
 	// Total Power configuration
-	enum PwrConfig_e TotalPowerConfig; 
+	enum PwrConfig_e TotalPowerConfig;
 	uint8_t  TotalPowerSpare1;
 	uint16_t TotalPowerSpare2;
 
@@ -1407,7 +1364,7 @@ struct smu11_smcpptable_v7_avfs {
 	uint16_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
 	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
-	uint16_t DcBtcGb[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uint16_t DcBtcGb[AVFS_VOLTAGE_COUNT];  // mV Q2
 };
 struct smu11_smcpptable_v7_i2c_control {
 	// SECTION: I2C Control
@@ -1425,7 +1382,7 @@ struct smu11_smcpptable_v7 { // Navi21
 
 	// SECTION: Feature Enablement
 	union powerplay_feature_control_smu11_0x40 features;
-	
+
 	// SECTION: Infrastructure Limits
 	struct smu11_smcpptable_v7_infrastructure_limits infrastructure_limits;
 
@@ -1634,7 +1591,6 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint32_t MmHubPadding[8]; // SMU internal use
 
 };
-
 
 #pragma pack(pop) // restore old packing
 

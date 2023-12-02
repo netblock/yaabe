@@ -27,27 +27,16 @@
 #define SMU_11_0_TABLE_FORMAT_REVISION   12
 #define SMU_11_0_7_TABLE_FORMAT_REVISION 15
 
-// POWERPLAYTABLE::ulPlatformCaps
-/*
-#define SMU_11_0_PP_PLATFORM_CAP_POWERPLAY        0x1
-#define SMU_11_0_PP_PLATFORM_CAP_SBIOSPOWERSOURCE 0x2
-#define SMU_11_0_PP_PLATFORM_CAP_HARDWAREDC       0x4
-#define SMU_11_0_PP_PLATFORM_CAP_BACO             0x8
-#define SMU_11_0_PP_PLATFORM_CAP_MACO             0x10
-#define SMU_11_0_PP_PLATFORM_CAP_SHADOWPSTATE     0x20
-*/
 
 // SMU_11_0_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_11_0_PP_THERMALCONTROLLER_NONE  0
 #define SMU_11_0_7_PP_THERMALCONTROLLER_SIENNA_CICHLID 28
 
-//#define SMU_11_0_PP_OVERDRIVE_VERSION        0x0800
-//#define SMU_11_0_PP_POWERSAVINGCLOCK_VERSION 0x0100
-#define SMU_11_F12_OVERDRIVE_VERSION        0x80
-#define SMU_11_F12_POWERSAVINGCLOCK_VERSION 0x01
-
-#define SMU_11_0_7_PP_OVERDRIVE_VERSION        0x81 // OverDrive 8 Table Version 0.2
+#define SMU_11_F12_POWERSAVINGCLOCK_VERSION    0x01
 #define SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION 0x01 // Power Saving Clock Table Version 1.00
+
+#define SMU_11_F12_OVERDRIVE_VERSION    0x80
+#define SMU_11_0_7_PP_OVERDRIVE_VERSION 0x81 // OverDrive 8 Table Version 0.2
 
 enum SMU_11_0_ODFEATURE_CAP {
 	SMU_11_0_ODCAP_GFXCLK_LIMITS        = 0,
@@ -90,27 +79,6 @@ enum SMU_11_0_7_ODFEATURE_CAP {
 #define SMU_11_0_7_MAX_ODFEATURE 32 // Maximum Number of OD Features
 
 
-/*
-// 14 bits; when does this get used?
-enum SMU_11_0_ODFEATURE_ID { // this isn't a necessary way to do it, AMD. Wasteful.
-	SMU_11_0_ODFEATURE_GFXCLK_LIMITS        = 1 << SMU_11_0_ODCAP_GFXCLK_LIMITS,        // GFXCLK Limit feature
-	SMU_11_0_ODFEATURE_GFXCLK_CURVE         = 1 << SMU_11_0_ODCAP_GFXCLK_CURVE,         // GFXCLK Curve feature
-	SMU_11_0_ODFEATURE_UCLK_MAX             = 1 << SMU_11_0_ODCAP_UCLK_MAX,             // UCLK Limit feature
-	SMU_11_0_ODFEATURE_POWER_LIMIT          = 1 << SMU_11_0_ODCAP_POWER_LIMIT,          // Power Limit feature
-	SMU_11_0_ODFEATURE_FAN_ACOUSTIC_LIMIT   = 1 << SMU_11_0_ODCAP_FAN_ACOUSTIC_LIMIT,   // Fan Acoustic RPM feature
-	SMU_11_0_ODFEATURE_FAN_SPEED_MIN        = 1 << SMU_11_0_ODCAP_FAN_SPEED_MIN,        // Minimum Fan Speed feature
-	SMU_11_0_ODFEATURE_TEMPERATURE_FAN      = 1 << SMU_11_0_ODCAP_TEMPERATURE_FAN,      // Fan Target Temperature Limit feature
-	SMU_11_0_ODFEATURE_TEMPERATURE_SYSTEM   = 1 << SMU_11_0_ODCAP_TEMPERATURE_SYSTEM,   // Operating Temperature Limit feature
-	SMU_11_0_ODFEATURE_MEMORY_TIMING_TUNE   = 1 << SMU_11_0_ODCAP_MEMORY_TIMING_TUNE,   // AC Timing Tuning feature
-	SMU_11_0_ODFEATURE_FAN_ZERO_RPM_CONTROL = 1 << SMU_11_0_ODCAP_FAN_ZERO_RPM_CONTROL, // Zero RPM feature
-	SMU_11_0_ODFEATURE_AUTO_UV_ENGINE       = 1 << SMU_11_0_ODCAP_AUTO_UV_ENGINE,       // Auto Under Volt GFXCLK feature
-	SMU_11_0_ODFEATURE_AUTO_OC_ENGINE       = 1 << SMU_11_0_ODCAP_AUTO_OC_ENGINE,       // Auto Over Clock GFXCLK feature
-	SMU_11_0_ODFEATURE_AUTO_OC_MEMORY       = 1 << SMU_11_0_ODCAP_AUTO_OC_MEMORY,       // Auto Over Clock MCLK feature
-	SMU_11_0_ODFEATURE_FAN_CURVE            = 1 << SMU_11_0_ODCAP_FAN_CURVE,            // Fan Curve feature
-	SMU_11_0_ODFEATURE_COUNT                = 14,
-};
-*/
-
 enum SMU_11_0_ODSETTING_ID { // index into array
 	SMU_11_0_ODSETTING_GFXCLKFMAX            = 0,
 	SMU_11_0_ODSETTING_GFXCLKFMIN            = 1,
@@ -133,7 +101,7 @@ enum SMU_11_0_ODSETTING_ID { // index into array
 	SMU_11_0_ODSETTING_AUTOOCMEMORY         = 18,
 	SMU_11_0_ODSETTING_COUNT                = 19,
 };
-#define SMU_11_0_MAX_ODSETTING    32          // Maximum Number of ODSettings
+#define SMU_11_0_MAX_ODSETTING 32 // Maximum Number of ODSettings
 
 enum SMU_11_0_7_ODSETTING_ID {
 	SMU_11_0_7_ODSETTING_GFXCLKFMAX              = 0,

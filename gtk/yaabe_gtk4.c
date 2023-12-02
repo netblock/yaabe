@@ -192,12 +192,6 @@ static void leaves_offset_column_recycler(
 		const uint32_t end = (start + leaf->num_bytes -1);
 		sprintf(buffer, "[%05X - %05X]", start, end);
 	}
-	/*
-	if (leaf->type & (ATUI_ANY | ATUI_STRING|ATUI_ARRAY|ATUI_BITFIELD)) {
-	} else {
-		buffer[0] = '\0';
-	}
-	*/
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
 

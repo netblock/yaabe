@@ -1891,7 +1891,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		(ATUI_NAN, ATUI_PETIOLE, BootValues_t),
 		(ATUI_NODESCR)
 	),
-	
+
 	(bios->DriverReportedClocks, DriverReportedClocks,
 		(ATUI_NAN, ATUI_PETIOLE, DriverReportedClocks_t),
 		(ATUI_NODESCR)

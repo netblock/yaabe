@@ -174,7 +174,7 @@ atui_branch* atui_branch_allocator(
 						);
 						leaves_i++; // we've child leaves to print
 					}
-					
+
 					leafpattern_end = leafpattern_start + leafpattern_numleaves;
 
 					// for each element in the bios array

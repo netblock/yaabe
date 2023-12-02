@@ -2033,7 +2033,7 @@ struct atom_tree* atombios_parse(
 		atui_branch* const atui_atom_image = ATUI_MAKE_BRANCH(atombios_image,
 			 atree, atree->image,  1,NULL
 		);
-		atui_atom_image->child_branches[atui_atom_image->num_branches] = 
+		atui_atom_image->child_branches[atui_atom_image->num_branches] =
 			atui_rom_header;
 		atui_atom_image->num_branches++;
 		atree->atui_root = atui_atom_image;

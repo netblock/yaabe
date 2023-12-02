@@ -109,11 +109,9 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 
 
 /****************************** LEAF FANCY FUNCS ******************************/
-/*
-The fancy funcions here are about populating the fancy UI representation flags
-for the leaves described in PPATUI_FUNCIFY().
-That is, bitfield population, and enum and inline association.
-*/
+// The fancy funcions here are about populating the fancy UI representation
+// flags for the leaves described in PPATUI_FUNCIFY().
+// That is, bitfield population, and enum and inline association.
 
 
 // Common guts and functions for Fancy.
@@ -209,6 +207,8 @@ That is, bitfield population, and enum and inline association.
 	{\
 		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
 	},
+
+
 
 // ATUI_ARRAY
 #define _PPATUI_FANCY_ATUI_ARRAY(\
@@ -417,7 +417,6 @@ That is, bitfield population, and enum and inline association.
 	},
 
 
-
 #define _PPATUI_DYNAR_BOUNDS_JOBS(job, ...)\
 	_PPATUI_DYNAR_BOUNDS_JOBS_HELPER0(job, __VA_ARGS__)
 #define _PPATUI_DYNAR_BOUNDS_JOBS_HELPER0(\
@@ -439,8 +438,6 @@ That is, bitfield population, and enum and inline association.
 	1 + _ATUI_BITFIELD_NUMLEAVES(_PPATUI_UNPACK0 bitfields )
 
 /************************** ATUI_DYNARRAY STUFF END ***************************/
-
-
 
 
 
@@ -492,7 +489,6 @@ _1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_
 _PP_ARGCOUNTER_DEPTHCAN_HELPER(__VA_ARGS__ __VA_OPT__(,) _PP_ARGCOUNTER_RULER)
 
 #define _PPATUI_NUM_LEAVES(...) _PP_NUMARG(__VA_ARGS__)
-
 
 
 /*

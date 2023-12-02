@@ -34,7 +34,7 @@ bios is the struct that the branch represents, straightforward.
 atomtree is an optional atomtree association that could be useful to pull in
 computed data; or even represent atomtree-computed data as leaves.
 
-declaration: 
+declaration:
 PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
 	...
 )

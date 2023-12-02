@@ -25,20 +25,12 @@
 #pragma pack(push, 1) // bios data must use byte alignment
 
 #define SMU_13_0_7_TABLE_FORMAT_REVISION 15
-/*
-// POWERPLAYTABLE::ulPlatformCaps
-#define SMU_13_0_7_PP_PLATFORM_CAP_POWERPLAY 0x1        // This cap indicates whether CCC need to show Powerplay page.
-#define SMU_13_0_7_PP_PLATFORM_CAP_SBIOSPOWERSOURCE 0x2 // This cap indicates whether power source notificaiton is done by SBIOS instead of OS.
-#define SMU_13_0_7_PP_PLATFORM_CAP_HARDWAREDC 0x4       // This cap indicates whether DC mode notificaiton is done by GPIO pin directly.
-#define SMU_13_0_7_PP_PLATFORM_CAP_BACO 0x8             // This cap indicates whether board supports the BACO circuitry.
-#define SMU_13_0_7_PP_PLATFORM_CAP_MACO 0x10            // This cap indicates whether board supports the MACO circuitry.
-#define SMU_13_0_7_PP_PLATFORM_CAP_SHADOWPSTATE 0x20    // This cap indicates whether board supports the Shadow Pstate.
-*/
+
 // SMU_13_0_7_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_13_0_7_PP_THERMALCONTROLLER_NONE 0
 #define SMU_13_0_7_PP_THERMALCONTROLLER_NAVI21 28
 
-#define SMU_13_0_7_PP_OVERDRIVE_VERSION 0x83        // OverDrive 8 Table Version 0.2
+#define SMU_13_0_7_PP_OVERDRIVE_VERSION 0x83 // OverDrive 8 Table Version 0.2
 #define SMU_13_0_7_PP_POWERSAVINGCLOCK_VERSION 0x01 // Power Saving Clock Table Version 1.00
 
 enum SMU_13_0_7_ODFEATURE_CAP {
@@ -59,26 +51,6 @@ enum SMU_13_0_7_ODFEATURE_CAP {
 	SMU_13_0_7_ODCAP_POWER_MODE              = 14,
 	SMU_13_0_7_ODCAP_PER_ZONE_GFX_VOLTAGE_OFFSET = 15,
 	SMU_13_0_7_ODCAP_COUNT = 16,
-};
-
-enum SMU_13_0_7_ODFEATURE_ID {
-	SMU_13_0_7_ODFEATURE_GFXCLK_LIMITS           = 1 << SMU_13_0_7_ODCAP_GFXCLK_LIMITS,           // GFXCLK Limit feature
-	SMU_13_0_7_ODFEATURE_UCLK_LIMITS             = 1 << SMU_13_0_7_ODCAP_UCLK_LIMITS,             // UCLK Limit feature
-	SMU_13_0_7_ODFEATURE_POWER_LIMIT             = 1 << SMU_13_0_7_ODCAP_POWER_LIMIT,             // Power Limit feature
-	SMU_13_0_7_ODFEATURE_FAN_ACOUSTIC_LIMIT      = 1 << SMU_13_0_7_ODCAP_FAN_ACOUSTIC_LIMIT,      // Fan Acoustic RPM feature
-	SMU_13_0_7_ODFEATURE_FAN_SPEED_MIN           = 1 << SMU_13_0_7_ODCAP_FAN_SPEED_MIN,           // Minimum Fan Speed feature
-	SMU_13_0_7_ODFEATURE_TEMPERATURE_FAN         = 1 << SMU_13_0_7_ODCAP_TEMPERATURE_FAN,         // Fan Target Temperature Limit feature
-	SMU_13_0_7_ODFEATURE_TEMPERATURE_SYSTEM      = 1 << SMU_13_0_7_ODCAP_TEMPERATURE_SYSTEM,      // Operating Temperature Limit feature
-	SMU_13_0_7_ODFEATURE_MEMORY_TIMING_TUNE      = 1 << SMU_13_0_7_ODCAP_MEMORY_TIMING_TUNE,      // AC Timing Tuning feature
-	SMU_13_0_7_ODFEATURE_FAN_ZERO_RPM_CONTROL    = 1 << SMU_13_0_7_ODCAP_FAN_ZERO_RPM_CONTROL,    // Zero RPM feature
-	SMU_13_0_7_ODFEATURE_AUTO_UV_ENGINE          = 1 << SMU_13_0_7_ODCAP_AUTO_UV_ENGINE,          // Auto Under Volt GFXCLK feature
-	SMU_13_0_7_ODFEATURE_AUTO_OC_ENGINE          = 1 << SMU_13_0_7_ODCAP_AUTO_OC_ENGINE,          // Auto Over Clock GFXCLK feature
-	SMU_13_0_7_ODFEATURE_AUTO_OC_MEMORY          = 1 << SMU_13_0_7_ODCAP_AUTO_OC_MEMORY,          // Auto Over Clock MCLK feature
-	SMU_13_0_7_ODFEATURE_FAN_CURVE               = 1 << SMU_13_0_7_ODCAP_FAN_CURVE,               // Fan Curve feature
-	SMU_13_0_7_ODFEATURE_AUTO_FAN_ACOUSTIC_LIMIT = 1 << SMU_13_0_7_ODCAP_AUTO_FAN_ACOUSTIC_LIMIT, // Auto Fan Acoustic RPM feature
-	SMU_13_0_7_ODFEATURE_POWER_MODE              = 1 << SMU_13_0_7_ODCAP_POWER_MODE,              // Optimized GPU Power Mode feature
-	SMU_13_0_7_ODFEATURE_PER_ZONE_GFX_VOLTAGE_OFFSET = 1 << SMU_13_0_7_ODCAP_PER_ZONE_GFX_VOLTAGE_OFFSET, // Perzone voltage offset feature
-	SMU_13_0_7_ODFEATURE_COUNT                   = 16,
 };
 
 #define SMU_13_0_7_MAX_ODFEATURE 32 // Maximum Number of OD Features
@@ -142,10 +114,10 @@ enum SMU_13_0_7_PWRMODE_SETTING {
 #define SMU_13_0_7_MAX_PMSETTING 32 // Maximum Number of PowerMode Settings
 
 struct smu_13_0_7_overdrive_table {
-	uint8_t  revision;                             // Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION
-	uint8_t  reserve[3];                           // Zero filled field reserved for future use
-	uint32_t feature_count;                        // Total number of supported features
-	uint32_t setting_count;                        // Total number of supported settings
+	uint8_t  revision;      // Revision = SMU_13_0_7_PP_OVERDRIVE_VERSION
+	uint8_t  reserve[3];    // Zero filled field reserved for future use
+	uint32_t feature_count; // Total number of supported features
+	uint32_t setting_count; // Total number of supported settings
 	uint8_t  cap[SMU_13_0_7_MAX_ODFEATURE];        // OD feature support flags
 	uint32_t max[SMU_13_0_7_MAX_ODSETTING];        // default maximum settings
 	uint32_t min[SMU_13_0_7_MAX_ODSETTING];        // default minimum settings

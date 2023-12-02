@@ -112,8 +112,6 @@ uint64_t strtoull_2(const char8_t* str) {
 }
 
 
-
-
 uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	//set the value of the leaf based on input text. Currently only support for
 	// numbers (including bitfields) and strings.
@@ -185,7 +183,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 		if (leaf->type & ATUI_STRING) {
 			/* ATUI_STRING's length is implicitly defined by the null
 			termination. If the input buffer 0-terminates before array_size,
-			then we will lose the intended allocation size in the bios. So fill 
+			then we will lose the intended allocation size in the bios. So fill
 			the remaining bytes with spaces to push the null back to its
 			original position.
 			*/
@@ -333,7 +331,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 
 
-void atui_destroy_tree(atui_branch* tree) { //a reference implementation
+void atui_destroy_tree(atui_branch* tree) { // a reference implementation
 	while(tree->max_all_branch_count--)
 		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
 	free(tree);

@@ -111,12 +111,12 @@ enum UCLK_DIV_e:uint8_t {
 	UCLK_DIV_BY_8 = 3,
 };
 
-enum PwrConfig_e:uint8_t {                                                      
+enum PwrConfig_e:uint8_t {
 	PWR_CONFIG_TDP = 0,
 	PWR_CONFIG_TGP = 1,
 	PWR_CONFIG_TCP_ESTIMATED = 2,
 	PWR_CONFIG_TCP_MEASURED  = 3,
-}; 
+};
 
 enum PCIE_SPEED_e:uint8_t {
 	PCIE_LINK_SPEED_PCIE_1 = 0,
