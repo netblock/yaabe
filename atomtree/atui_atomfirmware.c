@@ -119,7 +119,7 @@ Also make sure the table is populated with an ATUI_FUNCIFY()
 
 ********************************************************************************
 ATUI_STRING, ATUI_ARRAY:
-If the element is a string,
+If the element is a dynanmically-sized 0-terminated string,
 	(bios->namespace_var, UI display name,
 		(ATUI_NAN, ATUI_STRING),
 		(ATUI_NODESCR)
@@ -129,7 +129,12 @@ or otherwise an array,
 		(ATUI_HEX, ATUI_ARRAY),
 		(ATUI_NODESCR)
 	),
-If it's an array, data will be represented in the radix of your choosing.
+
+If it's an array, data will be represented in the radix of your choosing, with
+the exception of fractions.
+
+If the array is text but has a static size, set the fancy to ATUI_ARRAY and
+radix to ATUI_NAN.
 
 ********************************************************************************
 ATUI_DYNARRAY:
@@ -268,7 +273,7 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 		((LANG_ENG, "0x2F"))
 	),
 	(bios->atomati_magic, atomati_magic,
-		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "0x30; " 761295520" There is a space."))
 	),
 	(bios->reserved2, reserved2,
@@ -282,7 +287,7 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->bios_date, bios_date,
-		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "0x50"))
 	),
 	(bios->reserved4, reserved4,
@@ -296,14 +301,14 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->vbios_part_number, vbios_part_number,
-		(ATUI_HEX, ATUI_NOFANCY), // 0-term'd string
+		(ATUI_NAN, ATUI_STRING), // 0-term'd string
 		((LANG_ENG, "0x80 ; only use if number_of_strings == 0"))
 	),
 	(bios->reserved6, reserved6,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->asic_bus_mem_type, asic_bus_mem_type,
-		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "0x94;  ATI days; AMD uses atombios_strings_offset."))
 	)
 /*
@@ -344,7 +349,7 @@ PPATUI_FUNCIFY(struct, atom_rom_header_v2_2,
 		(ATUI_NODESCR)
 	),
 	(bios->atom_bios_string, atom_bios_string,
-		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,"))
 	),
 	(bios->bios_segment_address, bios_segment_address,
@@ -3604,7 +3609,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, "reserved"))
 	),
 	(bios->dram_pnstring, dram_pnstring,
-		(ATUI_NAN, ATUI_STRING),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
@@ -4196,7 +4201,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->dram_pnstring, dram_pnstring,
-		(ATUI_NAN, ATUI_STRING), (ATUI_NODESCR)
+		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,

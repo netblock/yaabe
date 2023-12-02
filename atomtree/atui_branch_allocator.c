@@ -229,6 +229,10 @@ atui_branch* atui_branch_allocator(
 								leaves[leaves_i].inline_branch =
 									&(inliners[inliners_i]);
 								inliners_i++;
+							} else if (leaves[leaves_i].type & ATUI_STRING) {
+								leaves[leaves_i].array_size = strlen(
+									leaves[leaves_i].u8
+								);
 							}
 
 							leaves_i++;
@@ -259,6 +263,12 @@ atui_branch* atui_branch_allocator(
 							&branch_funcify_args
 						);
 					branches_i++;
+				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					leaves[leaves_i].array_size = strlen(
+						leaves_initial[leavesinit_i].u8
+					);
+					leaves_i++;
 				} else {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
 					leaves_i++;
@@ -288,6 +298,12 @@ atui_branch* atui_branch_allocator(
 							&branch_funcify_args
 						);
 					branches_i++;
+				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
+					leaves[leaves_i] = leaves_initial[leavesinit_i];
+					leaves[leaves_i].array_size = strlen(
+						leaves_initial[leavesinit_i].u8
+					);
+					leaves_i++;
 				} else {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
 					leaves_i++;

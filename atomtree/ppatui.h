@@ -204,13 +204,13 @@ That is, bitfield population, and enum and inline association.
 
 
 // ATUI_STRING
-// ATUI_ARRAY
 #define _PPATUI_FANCY_ATUI_STRING(\
 		var, name, description_data, radix, fancytype, ...)\
-	_PPATUI_FANCY_ATUI_ARRAY(\
-		var, name, description_data, radix, fancytype\
-	)
+	{\
+		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+	},
 
+// ATUI_ARRAY
 #define _PPATUI_FANCY_ATUI_ARRAY(\
 		var, name, description_data, radix, fancytype, ...)\
 	{\

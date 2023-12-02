@@ -128,7 +128,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	const uint8_t radix = leaf->type & ATUI_ANY;
 
 
-	if (leaf->type & ATUI_ARRAY) {
+	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
 		const uint8_t base = bases[radix];
 		const uint8_t num_digits = ceil(
 			// round up because it's gonna be like x.9999
@@ -178,7 +178,23 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			default:
 				return 1;
 		}
+	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
+		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
+		char8_t* null_exit = memccpy(leaf->u8, text, '\0', array_size);
 
+		if (leaf->type & ATUI_STRING) {
+			/* ATUI_STRING's length is implicitly defined by the null
+			termination. If the input buffer 0-terminates before array_size,
+			then we will lose the intended allocation size in the bios. So fill 
+			the remaining bytes with spaces to push the null back to its
+			original position.
+			*/
+			const uint8_t bytes_left = leaf->u8 + array_size - null_exit;
+			if (null_exit && bytes_left) {
+				memset(null_exit-1, ' ', bytes_left); // -1 eats memccpy's 0.
+				leaf->u8[array_size-1] = '\0';
+			}
+		}
 	} else if (radix) {
 		if (radix == ATUI_FRAC) {
 			atui_leaf_set_val_fraction(leaf, strtod(text, NULL));
@@ -187,10 +203,6 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 		} else {
 			atui_leaf_set_val_unsigned(leaf, strtoull_2(text));
 		}
-	} else if (leaf->type & ATUI_STRING) {
-		for(; i < array_size; i++)
-		   leaf->u8[i] = text[i];
-		//leaf->u8[i-1] = '\0';
 	} else {
 		err = 1;
 	}
@@ -242,7 +254,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	}
 #endif
 
-	if (leaf->type & ATUI_ARRAY) {
+	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
 		assert(radix != ATUI_FRAC);
 		// too hard cause floats can have many base-10 digits
 
@@ -293,6 +305,10 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		}
 		buffer[j-1] = '\0'; // eat the final space
 
+	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
+		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
+		memcpy(buffer, leaf->u8, leaf->array_size);
+		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		if (radix == ATUI_FRAC) {
 			sprintf(format, metaformat,
@@ -310,11 +326,6 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 			);
 			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
 		}
-	} else if (leaf->type & ATUI_STRING) {
-		i = leaf->array_size;
-		buffer[i] = '\0'; // for strings
-		while (i--)
-			buffer[i] = leaf->u8[i];
 	}
 
 	return malloc_size;
