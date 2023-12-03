@@ -187,10 +187,12 @@ static void leaves_offset_column_recycler(
 		sprintf(buffer, "[%u:%u]",
 			leaf->bitfield_hi, leaf->bitfield_lo
 		);
-	} else {
+	} else if (leaf->num_bytes) {
 		const uint32_t start = leaf->val - commons->atomtree_root->bios;
 		const uint32_t end = (start + leaf->num_bytes -1);
 		sprintf(buffer, "[%05X - %05X]", start, end);
+	} else {
+		buffer[0] = '\0';
 	}
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }

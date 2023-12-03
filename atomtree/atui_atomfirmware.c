@@ -321,6 +321,10 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 		((LANG_ENG, "0x94;  ATI days; AMD uses atombios_strings_offset."))
 	)
 /*
+	(*(atomtree->atombios_strings[4]), string4, // TODO newline bugs gtk text?
+		(ATUI_NAN, ATUI_STRING), // 0-term'd string
+		(ATUI_NODESCR)
+	),
 	(NULL, atombios strings, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, string [%02u],

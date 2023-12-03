@@ -240,9 +240,11 @@ atui_branch* atui_branch_allocator(
 									&(inliners[inliners_i]);
 								inliners_i++;
 							} else if (leaves[leaves_i].type & ATUI_STRING) {
-								leaves[leaves_i].array_size = strlen(
+								leaves[leaves_i].array_size = 1 + strlen(
 									leaves[leaves_i].u8
-								);
+								); // + 1 for null
+								leaves[leaves_i].num_bytes =
+									leaves[leaves_i].array_size;
 							}
 
 							leaves_i++;
@@ -275,9 +277,10 @@ atui_branch* atui_branch_allocator(
 					branches_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves[leaves_i].array_size = strlen(
+					leaves[leaves_i].array_size = 1 + strlen( // +1 for null
 						leaves_initial[leavesinit_i].u8
 					);
+					leaves[leaves_i].num_bytes = leaves[leaves_i].array_size;
 					leaves_i++;
 				} else {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
@@ -310,9 +313,10 @@ atui_branch* atui_branch_allocator(
 					branches_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves[leaves_i].array_size = strlen(
+					leaves[leaves_i].array_size = 1 + strlen( // +1 for null
 						leaves_initial[leavesinit_i].u8
 					);
+					leaves[leaves_i].num_bytes = leaves[leaves_i].array_size;
 					leaves_i++;
 				} else {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
