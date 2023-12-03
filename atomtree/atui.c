@@ -305,6 +305,11 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
+		if (leaf->array_size >= ATUI_LEAVES_STR_BUFFER) {
+			malloc_size = leaf->array_size + 1;
+			buffer = malloc(malloc_size);
+			*buffer_ptr = buffer;
+		}
 		memcpy(buffer, leaf->u8, leaf->array_size);
 		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {

@@ -313,11 +313,6 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 	(bios->asic_bus_mem_type, asic_bus_mem_type,
 		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "0x94;  ATI days; AMD uses atombios_strings_offset."))
-	)
-/*
-	(*(atomtree->atombios_strings[4]), string4, // TODO newline bugs gtk text?
-		(ATUI_NAN, ATUI_STRING), // 0-term'd string
-		(ATUI_NODESCR)
 	),
 	(NULL, atombios strings, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
@@ -327,9 +322,8 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 			atomtree->atombios_strings, // deferred start
 			atomtree->num_of_crawled_strings, // count
 			ATUI_NULL // enum
-		)), ((LANG_ENG, "support flag"))
+		)), (ATUI_NODESCR)
 	)
-*/
 )
 
 
