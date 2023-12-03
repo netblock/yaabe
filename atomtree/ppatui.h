@@ -119,6 +119,14 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_UNPACK1(to_depack)  _PPATUI_UNPACK0 to_depack
 #define _PPATUI_UNPACK0(...) __VA_ARGS__
 // the _Generic needs const*: not *const: for that const affects the next word
+#define _PPATUI_FANCY_INIT_NULLPTR(var) _Generic((var),\
+	nullptr_t: nullptr,\
+	default: &(var)\
+)
+#define _PPATUI_FANCY_INIT_NULLPTR_SIZE(var) _Generic((var),\
+	nullptr_t: 0,\
+	default: sizeof(var)\
+)
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
 	uint8_t:8, uint8_t*:8, uint8_t const*:8,\
 	uint16_t:16, uint16_t*:16, uint16_t const*:16,\
@@ -155,7 +163,6 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	default:0\
 )
 
-
 // TODO handle description_data
 // Some of these elements may be respectively replaced by their fancy type.
 // Unused fields are set to 0 via calloc.
@@ -164,11 +171,11 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	.origname = #namestr,\
 	.varname = #var,\
 	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
-	.num_bytes = sizeof(var),\
+	.num_bytes = _PPATUI_FANCY_INIT_NULLPTR_SIZE(var),\
 	.array_size = 1,\
 	.total_bits = _PPATUI_LEAF_BITNESS(var),\
 	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\
-	.val = &(var),\
+	.val = _PPATUI_FANCY_INIT_NULLPTR(var),\
 
 // Fancy common end
 
@@ -272,12 +279,12 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_FANCY_ATUI_DYNARRAY(\
 		var, namestr, description_data, radix, fancytype, fancydata)\
 	{\
-		/*.val = &(var),  any benefit?*/\
 		/* numleaves is handled in the allocator*/\
 		.name = #namestr,\
 		.origname = #namestr,\
 		.varname = #var,\
 		.type = (radix | fancytype),\
+		.val = var,\
 	},
 
 
@@ -383,17 +390,20 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 
 #define _PPATUI_DYNAR_SVCHELPER6(job, ...)\
 	_PPATUI_DYNAR_SVCHELPER7_##job(__VA_ARGS__)
-// var, name, description_data, radix, leaf_pattern, start, count, enum_name
+// var, name, description_data, radix, leaf_pattern, deferred_start, count, enum_name
 
 
 // Unrolls the pattern into leaves to copy.
 #define _PPATUI_DYNAR_SVCHELPER7_ROLL(\
 		var, name, description_data, radix,\
-		leaf_pattern, start, count, enum_name)\
-	_PPATUI_LEAF(unused_o, _PPATUI_DYNAR_ROLL_REPACK(start[0], leaf_pattern))
-
-// Replace the leaf-pattern's var with the dynarray start, to pp-compute stuff
-// like bit length and types
+		leaf_pattern, deferred_start, count, enum_name)\
+	_PPATUI_LEAF(unused_o,\
+		_PPATUI_DYNAR_ROLL_REPACK(\
+			_PPATUI_DYNARRAY_SELECT_START(var, deferred_start), leaf_pattern\
+		)\
+	)
+// Replace the leaf-pattern's var with the relevant dynarray start, to
+// pp-compute stuff like bit length and types
 #define _PPATUI_DYNAR_ROLL_REPACK(var_new, leaf_pattern)\
 	_PPATUI_DYNAR_ROLL_REPACK_HELPER1(var_new, _PPATUI_UNPACK0 leaf_pattern)
 #define _PPATUI_DYNAR_ROLL_REPACK_HELPER1(...)\
@@ -401,20 +411,54 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_DYNAR_ROLL_REPACK_HELPER2(var_new, var_old, ...)\
 	(var_new, __VA_ARGS__)
 
+
 // Get the non-pattern metadata for the dynarray
 // struct dynarray_bounds ; see atui.h
 #define _PPATUI_DYNAR_SVCHELPER7_BOUNDS(\
 		var, name, description_data, radix,\
-		leaf_pattern, start, count, enum_name)\
+		leaf_pattern, deferred_start, count, enum_name)\
 	{\
-		.array_start = start,\
-		.element_size = sizeof(start[0]),\
+		.deferred_start_array = (const void* const*)deferred_start,\
+		.element_size = sizeof(\
+			_PPATUI_DYNARRAY_SELECT_START(var, deferred_start)\
+		),\
 		.dynarray_length = count,\
 		.numleaves = _PPATUI_DYNAR_BOUNDS_JOBS(\
 			NUMLEAVES, _PPATUI_UNPACK0 leaf_pattern\
 		),\
 		.enum_taglist = PPATUI_ENUM_NAME(enum_name),\
 	},
+
+/* a problem with _Generics is that all expressions must be globally 
+syntaxically correct, meaning that
+	#define deref(var) _Generic((var), nullptr_t: 0, default: *(var))
+	deref(nullptr)
+would trip 'derefrencing null pointer'.
+Furthermore, there's no easy way to tell if something is a pointer type or not.
+
+starting states should be:
+(NULL, pointer) or (pointer, NULL) or (pointer, pointer)
+direct_start is an array, and deferred_start is an array of pointers
+*/
+#define _PPATUI_DYNARRAY_SELECT_START(direct_start, deferred_start)\
+	_PPATUI_DYNAR_SELECTSTART_STAGE2(\
+		_PPATUI_DYNAR_SELECTSTART_STAGE1(direct_start, deferred_start),\
+		direct_start\
+	)
+#define _PPATUI_DYNAR_SELECTSTART_STAGE1(direct_start, deferred_start)\
+	_Generic((direct_start),\
+		void*: deferred_start, nullptr_t: deferred_start,\
+		default: direct_start\
+	)[0] // figure out which array to use and dereference it once
+#define _PPATUI_DYNAR_SELECTSTART_STAGE2(superposition, flag)\
+	_Generic((flag),\
+		void*: superposition, nullptr_t: superposition,\
+		default: &(superposition)\
+	)[0] // if direct_start is not null, re-reference the data
+// direct_start (pointer) would look like (&(direct_start[0]))[0]
+// deferred_start (pointer-pointer) would look like (deferred_start[0])[0]
+
+
 
 
 #define _PPATUI_DYNAR_BOUNDS_JOBS(job, ...)\

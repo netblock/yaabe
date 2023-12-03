@@ -138,7 +138,7 @@ radix to ATUI_NAN.
 
 ********************************************************************************
 ATUI_DYNARRAY:
-	(doesnt_do_anything, leaf top UI name,
+	(source->array_start_pointer, leaf top UI name,
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
 			(namespace_var, UI display name,
@@ -147,7 +147,7 @@ ATUI_DYNARRAY:
 					(lang, description)
 				)
 			)
-			source->dynarray_start_pointer, source->dynarray_number_of_elements,
+			source->deferred_pointers, source->dynarray_number_of_elements,
 			enum_name
 		)),
 		(ATUI_NODESCR)
@@ -159,19 +159,28 @@ atomtree.
 
 The leaf pattern follows regular syntax, and can be a bitfield.
 
-dynarray_start_pointer uis the pointer where to start the array within the bios,
-and dynarray_number_of_elements counts how long the array goes on for.
-Both dynarray_start_pointer and dynarray_number_of_elements can be either from
-the relevant atom struct (bios->), or atomtree struct (atomtree->)
+dynarray_start_pointer is a direct pointer that is treated as the beginning of
+the array, such that access would be effectively, 
+	datatype* dataptr = &(source->array_start_pointer[i])
+
+deferred_pointers is an array of pointers, each of which points an element,
+such that access would be effectively,
+	datatype* dataptr = source->deferred_pointers[i]
+
+dynarray_start_pointer is for contiguous isometric arrays; deferred_pointers is
+for arrays whose elements are not necessarily contiguous, and/or not
+necessarily equally-sized (eg strings, for ATUI_STRING).
+array_start_pointer takes precedence over deferred pointers; to use
+deferred_pointers, array_start_pointer must be NULL.
+
+dynarray_number_of_elements counts how long the array goes on for.
 
 If an enum should tag along for UI/naming purposes, state an enum; otherwise
 state the enum name as ATUI_NULL . The enum will be walked through sequentually
 in the order as it is defined with PPATUI_ENUMER().
 Futhermore, make sure the enum has an associated PPATUI_ENUMER() definition.
 
-Leaf top UI name won't get displayed if ATUI_NODISPLAY is set.
-
-(it is originally written for atom_umc_init_reg_block.)
+Leaf top UI name won't get displayed if ATUI_NODISPLAY is set for the radix
 
 ********************************************************************************
 
@@ -312,12 +321,12 @@ PPATUI_FUNCIFY(struct, atombios_image, atom_tree,
 		((LANG_ENG, "0x94;  ATI days; AMD uses atombios_strings_offset."))
 	)
 /*
-	(NULL, atombios strings,
+	(NULL, atombios strings, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, string [%02u],
 				(ATUI_NAN, ATUI_STRING), (ATUI_NODESCR)
 			),
-			atomtree->atombios_strings, // start
+			atomtree->atombios_strings, // deferred start
 			atomtree->num_of_crawled_strings, // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "support flag"))
@@ -3528,16 +3537,17 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "UMC_PHY_PHYINTF_CNTL.INV_CK"))
 	),
-	(NULL, atom_gddr6_bit_byte_remap,
+	(bios->bit_byte_remap, atom_gddr6_bit_byte_remap, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, bit_byte_remap [%02u],
 				(ATUI_NAN, ATUI_INLINE, atom_gddr6_bit_byte_remap),
 				(ATUI_NODESCR)
 			),
-			bios->bit_byte_remap, // start
+			NULL, // deferred start
 			(sizeof(bios->bit_byte_remap)
-				/ sizeof(struct atom_gddr6_bit_byte_remap) // count,
-			), ATUI_NULL // enum
+				/ sizeof(struct atom_gddr6_bit_byte_remap) // count
+			),
+			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
 )
@@ -4279,7 +4289,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,
 
 PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		atomtree_umc_init_reg_block,
-	(NULL, umc_reg_list,
+	(atomtree->umc_reg_list, umc_reg_list, // start, name
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
 			(bios->u32umc_reg_addr, u32umc_reg_addr [%02u],
@@ -4289,8 +4299,8 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 					(umc_reg_rsvd,      31,25, ATUI_BIN, (ATUI_NODESCR))
 				)), (ATUI_NODESCR)
 			),
-			// start, count
-			atomtree->umc_reg_list, *(atomtree->umc_number_of_registers),
+			NULL, // deferred start
+			*(atomtree->umc_number_of_registers), // count
 			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
@@ -4322,12 +4332,12 @@ PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
 		(ATUI_NODESCR)
 	),
-	(NULL, u32umc_reg_data,
+	(bios->u32umc_reg_data, u32umc_reg_data,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(bios->u32umc_reg_data, u32umc_reg_data [%02u],
 				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->u32umc_reg_data, *(atomtree->umc_reg_num), // start, count
+			NULL, *(atomtree->umc_reg_num), // deferred start. count
 			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
@@ -4385,13 +4395,13 @@ PPATUI_FUNCIFY(struct, atom_gpio_voltage_object_v4, atomtree_voltage_object_v4,
 		(ATUI_NAN, ATUI_INLINE, atom_voltage_gpio_map_lut),
 		(ATUI_NODESCR)
 	)
-	(NULL, voltage_gpio_lut,
+	(bios->voltage_gpio_lut, voltage_gpio_lut, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, voltage_gpio_lut [%u],
 				(ATUI_NODISPLAY, ATUI_INLINE, atom_voltage_gpio_map_lut),
 				(ATUI_NODESCR)
 			),
-			bios->voltage_gpio_lut, atomtree->lut_entries, // start, count
+			NULL, atomtree->lut_entries, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)
@@ -4436,13 +4446,13 @@ PPATUI_FUNCIFY(struct, atom_i2c_voltage_object_v4, atomtree_voltage_object_v4,
 	(bios->reserved, reserved,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
-	(NULL, i2cdatalut,
+	(bios->i2cdatalut, i2cdatalut, // start, name
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			(ATUI_NULL, i2cdatalut [%u],
 				(ATUI_NAN, ATUI_INLINE, atom_i2c_data_entry),
 				(ATUI_NODESCR)
 			),
-			bios->i2cdatalut, atomtree->lut_entries, // start, count
+			NULL, atomtree->lut_entries, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		(ATUI_NODESCR)

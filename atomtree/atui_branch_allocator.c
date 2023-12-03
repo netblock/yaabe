@@ -134,7 +134,8 @@ atui_branch* atui_branch_allocator(
 			dynentry_i = 0;
 
 			// Array in the bios:
-			const void* dynarray_start_ptr = NULL;
+			const void* dynarray_start_ptr = NULL; // array itself
+			const void* const* deferred_start = NULL; // array of pointers
 			uint16_t dynarray_biosarray_i = 0;
 			uint32_t dynarray_elementsize = 0;
 			uint16_t dynarray_length = 0;
@@ -151,8 +152,9 @@ atui_branch* atui_branch_allocator(
 			leavesinit_i = 0;
 			while (leavesinit_i < num_leaves_initial) {
 				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
-					dynarray_start_ptr =
-						dynarray_boundaries[dynentry_i].array_start;
+					dynarray_start_ptr = leaves_initial[leavesinit_i].val;
+					deferred_start = 
+						dynarray_boundaries[dynentry_i].deferred_start_array;
 					dynarray_elementsize =
 						dynarray_boundaries[dynentry_i].element_size;
 					dynarray_length =
@@ -165,10 +167,12 @@ atui_branch* atui_branch_allocator(
 					if (!((dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE)
 						&& (dynarray_boundaries[dynentry_i].numleaves == 1))) {
 						leaves[leaves_i] = leaves_initial[leavesinit_i];
-						leaves[leaves_i].val = dynarray_start_ptr;
-						leaves[leaves_i].num_bytes = (
-							dynarray_length * dynarray_elementsize
-						);
+						//leaves[leaves_i].val = dynarray_start_ptr;
+						if (dynarray_start_ptr) {
+							leaves[leaves_i].num_bytes = (
+								dynarray_length * dynarray_elementsize
+							);
+						}
 						leaves[leaves_i].num_child_leaves = (
 							dynarray_length * leafpattern_numleaves
 						);
@@ -179,11 +183,17 @@ atui_branch* atui_branch_allocator(
 
 					// for each element in the bios array
 					dynarray_biosarray_i = 0;
+				
 					while (dynarray_biosarray_i < dynarray_length) {
-						dynarray_bios_pos = (
-							dynarray_start_ptr
-							+ (dynarray_biosarray_i * dynarray_elementsize)
-						);
+						if (dynarray_start_ptr) { // direct array
+							dynarray_bios_pos = (
+								dynarray_start_ptr
+								+ (dynarray_biosarray_i * dynarray_elementsize)
+							);
+						} else { // array of arbitrarily-targeted pointers
+							dynarray_bios_pos =
+								deferred_start[dynarray_biosarray_i];
+						}
 
 						// for each each leaf in the leaf pattern set
 						leafpattern_i = leafpattern_start;

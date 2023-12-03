@@ -211,7 +211,7 @@ struct atui_funcify_args {
 };
 
 struct dynarray_bounds { // for ATUI_DYNARRAY
-	const void* const array_start;
+	const void* const* const deferred_start_array;
 	const uint32_t element_size; // Size of bios element. For pointer math.
 	const uint16_t dynarray_length; // The number of elements in the bios array
 

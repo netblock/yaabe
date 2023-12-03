@@ -44,65 +44,68 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 		((LANG_ENG, "Total number of supported settings"))
 	),
 
-	(NULL, Supported OD feature support flags,
+	(bios->cap, Supported OD feature support flags, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->cap, SMU_11_0_ODCAP_COUNT, // start, count
+			NULL, SMU_11_0_ODCAP_COUNT, // deferred start, count
 			 SMU_11_0_ODFEATURE_CAP // enum
 		)), ((LANG_ENG, "support flag"))
 	),
-	(NULL, Undefined OD feature support flags,
+	((&(bios->cap[SMU_11_0_ODCAP_COUNT])), // start
+		Undefined OD feature support flags, // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, OD feature [14 + %02u],
 					// if COUNT changes, please change this 14
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->cap[SMU_11_0_ODCAP_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT), // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "support flag"))
 	),
 
-	(NULL, Supported Overdrive settings (max),
+	(bios->max, Supported Overdrive settings (max), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->max, SMU_11_0_ODSETTING_COUNT, // start, count
+			NULL, SMU_11_0_ODSETTING_COUNT, // deferred start, count
 			SMU_11_0_ODSETTING_ID // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, Supported Overdrive settings (min),
+	(bios->min, Supported Overdrive settings (min),
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->min, SMU_11_0_ODSETTING_COUNT, // start, count
+			NULL, SMU_11_0_ODSETTING_COUNT, // deferred start, count
 			SMU_11_0_ODSETTING_ID // enum
 		)), (ATUI_NODESCR)
 	),
 
 
-	(NULL, Undefined OD settings (max),
+	((&(bios->max[SMU_11_0_ODSETTING_COUNT])), // start
+		Undefined OD settings (max), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [19 + %02u],
 					// if COUNT changes, please change this 19
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->max[SMU_11_0_ODSETTING_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT), // count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, Undefined OD settings (min),
+	((&(bios->min[SMU_11_0_ODSETTING_COUNT])), // start
+		Undefined OD settings (min), // name 
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [19 + %02u],
 					// if COUNT changes, please change this 19
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->min[SMU_11_0_ODSETTING_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT), // count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
@@ -128,84 +131,88 @@ PPATUI_FUNCIFY(struct, smu_11_0_7_overdrive_table, atui_nullstruct,
 		((LANG_ENG, "Total number of supported settings"))
 	),
 
-	(NULL, Supported OD feature support flags,
+	(bios->cap, Supported OD feature support flags, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->cap, SMU_11_0_7_ODCAP_COUNT, // start, count
+			NULL, SMU_11_0_7_ODCAP_COUNT, // deferred start, count
 			SMU_11_0_7_ODFEATURE_CAP // enum
 		)), ((LANG_ENG, "OD feature support flags"))
 	),
 
-	(NULL, Supported Overdrive settings (max),
+	(bios->max, Supported Overdrive settings (max), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->max, SMU_11_0_7_ODSETTING_COUNT, // start, count
+			NULL, SMU_11_0_7_ODSETTING_COUNT, // deferred start, count
 			SMU_11_0_7_ODSETTING_ID // enum
 		)), ((LANG_ENG, "default maximum settings"))
 	),
-	(NULL, Supported Overdrive settings (min),
+	(bios->min, Supported Overdrive settings (min), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->min, SMU_11_0_7_ODSETTING_COUNT, // start, count
+			NULL, SMU_11_0_7_ODSETTING_COUNT, // deferred start, count
 			SMU_11_0_7_ODSETTING_ID // enum
 		)), ((LANG_ENG, "default minimum settings"))
 	),
-	(NULL, Supported Power Mode settings,
+	(bios->pm_setting, Supported Power Mode settings, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->pm_setting, SMU_11_0_7_PMSETTING_COUNT, // start, count
+			NULL, SMU_11_0_7_PMSETTING_COUNT, // deferred start, count
 			SMU_11_0_7_PWRMODE_SETTING // enum
 		)), ((LANG_ENG, "Optimized power mode feature settings"))
 	),
 
-	(NULL, Undefined OD feature support flags,
+	((&(bios->cap[SMU_11_0_7_ODCAP_COUNT])), // start
+		Undefined OD feature support flags, // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, OD feature [16 + %02u],
 					// if COUNT changes, please change this 16
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->cap[SMU_11_0_7_ODCAP_COUNT])),// start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_ODFEATURE - SMU_11_0_7_ODCAP_COUNT), // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "OD feature support flags"))
 	),
-	(NULL, Undefined Overdrive settings (max),
+	((&(bios->max[SMU_11_0_7_ODSETTING_COUNT])), // start
+		Undefined Overdrive settings (max), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [30 + %02u],
 					// if COUNT changes, please change this 30
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->max[SMU_11_0_7_ODSETTING_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT), // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "default maximum settings"))
 	),
-	(NULL, Undefined Overdrive settings (min),
+	((&(bios->min[SMU_11_0_7_ODSETTING_COUNT])), // start
+		Undefined Overdrive settings (min), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [30 + %02u],
 					// if COUNT changes, please change this 30
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->min[SMU_11_0_7_ODSETTING_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT), // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "default minimum settings"))
 	),
-	(NULL, Undefined Power Mode settings,
+	((&(bios->pm_setting[SMU_11_0_7_PMSETTING_COUNT])),
+		Undefined Power Mode settings,
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, pm_setting: [16 + %02u],
 					// if COUNT changes, please change this 16
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->pm_setting[SMU_11_0_7_PMSETTING_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_PMSETTING - SMU_11_0_7_PMSETTING_COUNT), // count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "Optimized power mode feature settings"))
@@ -228,43 +235,45 @@ PPATUI_FUNCIFY(struct, smu_11_0_power_saving_clock_table,
 		((LANG_ENG, "power_saving_clock_count = SMU_11_0_PPCLOCK_COUNT"))
 	),
 
-	(NULL, PowerSavingClock modes (max),
+	(bios->max, PowerSavingClock modes (max), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->max, SMU_11_0_PPCLOCK_COUNT, // start, count
+			NULL, SMU_11_0_PPCLOCK_COUNT, // deferred start, count
 			SMU_11_0_PPCLOCK_ID // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, PowerSavingClock modes (min),
+	(bios->min, PowerSavingClock modes (min), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->min, SMU_11_0_PPCLOCK_COUNT, // start, count
+			NULL, SMU_11_0_PPCLOCK_COUNT, // deferred start, count
 			SMU_11_0_PPCLOCK_ID // enum
 		)), (ATUI_NODESCR)
 	),
 
-	(NULL, Undefined PowerSavingClock Modes (max),
+	((&(bios->max[SMU_11_0_PPCLOCK_COUNT])), // start
+		Undefined PowerSavingClock Modes (max), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [10 + %02u],
 					// if COUNT changes, please change this 10
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->max[SMU_11_0_PPCLOCK_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT), // count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, Undefined PowerSavingClock Modes (min),
+	((&(bios->min[SMU_11_0_PPCLOCK_COUNT])), // start
+		Undefined PowerSavingClock Modes (min), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [10 + %02u],
 					// if COUNT changes, please change this 10
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->min[SMU_11_0_PPCLOCK_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT), // count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
@@ -284,46 +293,50 @@ PPATUI_FUNCIFY(struct, smu_11_0_7_power_saving_clock_table, atui_nullstruct,
 		((LANG_ENG, "power_saving_clock_count = SMU_11_0_7_PPCLOCK_COUNT"))
 	),
 
-	(NULL, PowerSavingClock modes (max),
+	(bios->max,
+		PowerSavingClock modes (max), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->max, SMU_11_0_7_PPCLOCK_COUNT, // start, count
+			NULL, SMU_11_0_7_PPCLOCK_COUNT, // deferred start, count
 			SMU_11_0_7_PPCLOCK_ID // enum
 		)),
 		((LANG_ENG, "PowerSavingClock Mode Clock Maximum array In MHz"))
 	),
-	(NULL, PowerSavingClock modes (min),
+	(bios->min,
+		PowerSavingClock modes (min), // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->min, SMU_11_0_7_PPCLOCK_COUNT, // start, count
+			NULL, SMU_11_0_7_PPCLOCK_COUNT, // deferred start, count
 			SMU_11_0_7_PPCLOCK_ID // enum
 		)),
 		((LANG_ENG, "PowerSavingClock Mode Clock Minimum array In MHz"))
 	),
 
-	(NULL, Undefined PowerSavingClock Modes (max),
+	((&(bios->max[SMU_11_0_7_PPCLOCK_COUNT])), // start
+		Undefined PowerSavingClock Modes (max), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, max: [13 + %02u],
 					// if COUNT changes, please change this 13
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->max[SMU_11_0_7_PPCLOCK_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT), // count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "PowerSavingClock Mode Clock Maximum array In MHz"))
 	),
-	(NULL, Undefined PowerSavingClock Modes (min),
+	((&(bios->min[SMU_11_0_7_PPCLOCK_COUNT])), // start
+		Undefined PowerSavingClock Modes (min), // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, min: [13 + %02u],
 					// if COUNT changes, please change this 13
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			(&(bios->min[SMU_11_0_7_PPCLOCK_COUNT])), // start
+			NULL, // deferred start
 			(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT), // count
 			ATUI_NULL // enum
 		)),
@@ -745,23 +758,23 @@ PPATUI_FUNCIFY(union, gfx_gpo_features, atui_nullstruct,
 )
 
 PPATUI_FUNCIFY(struct, PiecewiseLinearDroopInt_t, atui_nullstruct,
-	(NULL, Fset,
+	(bios->Fset, Fset, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Fset [%02u],
 				(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Fset, // start
+			NULL, // deferred start
 			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "in GHz"))
 	),
-	(NULL, Vdroop,
+	(bios->Vdroop, Vdroop, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Vdroop [%02u],
 				(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Vdroop, // start
+			NULL, // deferred start
 			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
 			ATUI_NULL // enum
 		)),
@@ -1065,137 +1078,135 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 
 	// struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
 
-	(NULL, FreqTableGfx,
+	(bios->FreqTableGfx, FreqTableGfx, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableGfx [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_GFXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableVclk,
+	(bios->FreqTableVclk, FreqTableVclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableVclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_VCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDclk,
+	(bios->FreqTableDclk, FreqTableDclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableEclk,
+	(bios->FreqTableEclk, FreqTableEclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableEclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableEclk, NUM_ECLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_ECLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableSocclk,
+	(bios->FreqTableSocclk, FreqTableSocclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableSocclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_SOCCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableUclk,
+	(bios->FreqTableUclk, FreqTableUclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableFclk,
+	(bios->FreqTableFclk, FreqTableFclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableFclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableFclk, NUM_FCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_FCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDcefclk,
+	(bios->FreqTableDcefclk, FreqTableDcefclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDcefclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			// start, count
-			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11,
+			NULL, NUM_DCEFCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDispclk,
+	(bios->FreqTableDispclk, FreqTableDispclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDispclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			// start, count
-			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11,
+			NULL, NUM_DISPCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTablePixclk,
+	(bios->FreqTablePixclk, FreqTablePixclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePixclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PIXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTablePhyclk,
+	(bios->FreqTablePhyclk, FreqTablePhyclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePhyclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PHYCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
 
-    (NULL, DcModeMaxFreq,
-        (ATUI_NAN, ATUI_DYNARRAY, (
-            (ATUI_NULL, FreqTablePhyclk[%s],
-                (ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-            ),
-            bios->DcModeMaxFreq, SMU11_PPT3_PPCLK_COUNT, // start, count
-            SMU11_PPT3_PPCLK // enum
-        )), ((LANG_ENG, "In MHz"))
-    ),
+	(bios->DcModeMaxFreq, DcModeMaxFreq, // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, FreqTablePhyclk[%s],
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			NULL, SMU11_PPT3_PPCLK_COUNT, // deferred start, count
+			SMU11_PPT3_PPCLK // enum
+		)), ((LANG_ENG, "In MHz"))
+	),
 
 	(bios->Padding8_Clks, Padding8_Clks,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, Mp0clkFreq,
+	(bios->Mp0clkFreq, Mp0clkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0clkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "In MHz"))
 	),
-	(NULL, Mp0DpmVoltage,
+	(bios->Mp0DpmVoltage, Mp0DpmVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0DpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG, "mV(Q2)"))
 	),
@@ -1241,30 +1252,30 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, PcieGenSpeed,
+	(bios->PcieGenSpeed, PcieGenSpeed, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e), (ATUI_NODESCR)
 			),
-			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, PcieLaneCount,
+	(bios->PcieLaneCount, PcieLaneCount, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e), (ATUI_NODESCR)
 			),
-			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, LclkFreq,
+	(bios->LclkFreq, LclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, LclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
@@ -1442,57 +1453,57 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	),
 
 
-	(NULL, XgmiLinkSpeed,
+	(bios->XgmiLinkSpeed, XgmiLinkSpeed, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkSpeed [%02u],
 				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_RATE_e), (ATUI_NODESCR)
 			),
-			bios->XgmiLinkSpeed, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiLinkWidth,
+	(bios->XgmiLinkWidth, XgmiLinkWidth, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkWidth [%02u],
 				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_WIDTH_e), (ATUI_NODESCR)
 			),
-			bios->XgmiLinkWidth, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiFclkFreq,
+	(bios->XgmiFclkFreq, XgmiFclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiFclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiFclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiUclkFreq,
+	(bios->XgmiUclkFreq, XgmiUclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiUclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiUclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiSocclkFreq,
+	(bios->XgmiSocclkFreq, XgmiSocclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiSocclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiSocclkFreq, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiSocVoltage,
+	(bios->XgmiSocVoltage, XgmiSocVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiSocVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiSocVoltage, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
@@ -1767,39 +1778,39 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, SocketPowerLimitAc,
+	(bios->SocketPowerLimitAc, SocketPowerLimitAc, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, SocketPowerLimitAcTau,
+	(bios->SocketPowerLimitAcTau, SocketPowerLimitAcTau, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, SocketPowerLimitDc,
+	(bios->SocketPowerLimitDc, SocketPowerLimitDc, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, SocketPowerLimitDcTau,
+	(bios->SocketPowerLimitDcTau, SocketPowerLimitDcTau, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PPT %u,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
@@ -1955,86 +1966,84 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 
 	//struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT8_PPCLK_COUNT];
 
-	(NULL, FreqTableGfx,
+	(bios->FreqTableGfx, FreqTableGfx, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableGfx [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_GFXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableVclk,
+	(bios->FreqTableVclk, FreqTableVclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableVclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_VCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableDclk,
+	(bios->FreqTableDclk, FreqTableDclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableSocclk,
+	(bios->FreqTableSocclk, FreqTableSocclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableSocclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_SOCCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableUclk,
+	(bios->FreqTableUclk, FreqTableUclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableDcefclk,
+	(bios->FreqTableDcefclk, FreqTableDcefclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDcefclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			// start, count
-			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11,
+			NULL, NUM_DCEFCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTableDispclk,
+	(bios->FreqTableDispclk, FreqTableDispclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDispclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			// start, count
-			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11,
+			NULL, NUM_DISPCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTablePixclk,
+	(bios->FreqTablePixclk, FreqTablePixclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePixclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PIXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
-	(NULL, FreqTablePhyclk,
+	(bios->FreqTablePhyclk, FreqTablePhyclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePhyclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PHYCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
@@ -2042,12 +2051,12 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, DcModeMaxFreq,
+	(bios->DcModeMaxFreq, DcModeMaxFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, DcModeMaxFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcModeMaxFreq, SMU11_PPT8_PPCLK_COUNT, // start, count
+			NULL, SMU11_PPT8_PPCLK_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"In MHz"))
 	),
@@ -2056,49 +2065,49 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, FreqTableUclkDiv,
+	(bios->FreqTableUclkDiv, FreqTableUclkDiv, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclkDiv [%02u],
 				(ATUI_DEC, ATUI_ENUM, UCLK_DIV_e), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 
-	(NULL, Mp0clkFreq,
+	(bios->Mp0clkFreq, Mp0clkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0clkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"in MHz"))
 	),
-	(NULL, Mp0DpmVoltage,
+	(bios->Mp0DpmVoltage, Mp0DpmVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0DpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
-	(NULL, MemVddciVoltage,
+	(bios->MemVddciVoltage, MemVddciVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, MemVddciVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemVddciVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
-	(NULL, MemMvddVoltage,
+	(bios->MemMvddVoltage, MemMvddVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, MemMvddVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemMvddVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), ((LANG_ENG,"mV(Q2)"))
 	),
@@ -2156,30 +2165,30 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, PcieGenSpeed,
+	(bios->PcieGenSpeed, PcieGenSpeed, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e), (ATUI_NODESCR)
 			),
-			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, PcieLaneCount,
+	(bios->PcieLaneCount, PcieLaneCount, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e), (ATUI_NODESCR)
 			),
-			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, LclkFreq,
+	(bios->LclkFreq, LclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, LclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
@@ -2700,74 +2709,74 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_infrastructure_limits,
 		atui_nullstruct,
-	(NULL, SocketPowerLimitAc,
+	(bios->SocketPowerLimitAc, SocketPowerLimitAc, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocketPowerLimitAc [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAc, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Watts"))
 	),
-	(NULL, SocketPowerLimitAcTau,
+	(bios->SocketPowerLimitAcTau, SocketPowerLimitAcTau, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocketPowerLimitAcTau [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitAcTau, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Time constant of LPF in ms"))
 	),
-	(NULL, SocketPowerLimitDc,
+	(bios->SocketPowerLimitDc, SocketPowerLimitDc, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocketPowerLimitDc [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDc, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Watts"))
 	),
-	(NULL, SocketPowerLimitDcTau,
+	(bios->SocketPowerLimitDcTau, SocketPowerLimitDcTau, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SocketPowerLimitDcTau [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SocketPowerLimitDcTau, PPT_THROTTLER_COUNT, // start, count
+			NULL, PPT_THROTTLER_COUNT, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Time constant of LPF in ms"))
 	),
 
-	(NULL, TdcLimit,
+	(bios->TdcLimit, TdcLimit, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, TdcLimit [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->TdcLimit, TDC_THROTTLER_COUNT_SMU11, // start, count
+			NULL, TDC_THROTTLER_COUNT_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Amps"))
 	),
-	(NULL, TdcLimitTau,
+	(bios->TdcLimitTau, TdcLimitTau, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, TdcLimitTau [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->TdcLimitTau, TDC_THROTTLER_COUNT_SMU11, // start, count
+			NULL, TDC_THROTTLER_COUNT_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Time constant of LPF in ms"))
 	),
 
-	(NULL, TemperatureLimit,
+	(bios->TemperatureLimit, TemperatureLimit, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->TemperatureLimit, TEMP_SMU_11_0_7_COUNT, // start, count
+			NULL, TEMP_SMU_11_0_7_COUNT, // deferred start, count
 			TEMP_SMU11_0_7_e // enum
 		)),
 		((LANG_ENG, "Celcius"))
@@ -2781,125 +2790,125 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_infrastructure_limits,
 
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_descriptors, atui_nullstruct,
-	(NULL, DpmDescriptor,
+	(bios->DpmDescriptor, DpmDescriptor, // start, name
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_NAN, ATUI_INLINE, dpm_descriptor_smu11_0x40),
 				(ATUI_NODESCR)
 			),
-			bios->DpmDescriptor, SMU11_PPT7_PPCLK_COUNT, // start, count
+			NULL, SMU11_PPT7_PPCLK_COUNT, // deferred start, count
 			SMU11_PPT7_PPCLK_e // enum
 		)), (ATUI_NODESCR)
 	)
 )
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_freq_tables, atui_nullstruct,
-	(NULL, FreqTableGfx,
+	(bios->FreqTableGfx, FreqTableGfx, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableGfx [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableGfx, NUM_GFXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_GFXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableVclk,
+	(bios->FreqTableVclk, FreqTableVclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableVclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableVclk, NUM_VCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_VCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDclk,
+	(bios->FreqTableDclk, FreqTableDclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDclk, NUM_DCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableSocclk,
+	(bios->FreqTableSocclk, FreqTableSocclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableSocclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableSocclk, NUM_SOCCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_SOCCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableUclk,
+	(bios->FreqTableUclk, FreqTableUclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclk, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDcefclk,
+	(bios->FreqTableDcefclk, FreqTableDcefclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDcefclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDcefclk, NUM_DCEFCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DCEFCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDispclk,
+	(bios->FreqTableDispclk, FreqTableDispclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDispclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDispclk, NUM_DISPCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DISPCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTablePixclk,
+	(bios->FreqTablePixclk, FreqTablePixclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePixclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePixclk, NUM_PIXCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PIXCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTablePhyclk,
+	(bios->FreqTablePhyclk, FreqTablePhyclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTablePhyclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTablePhyclk, NUM_PHYCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_PHYCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableDtbclk,
+	(bios->FreqTableDtbclk, FreqTableDtbclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableDtbclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableDtbclk, NUM_DTBCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_DTBCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
-	(NULL, FreqTableFclk,
+	(bios->FreqTableFclk, FreqTableFclk, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableFclk [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FreqTableFclk, NUM_FCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_FCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In MHz"))
@@ -2920,35 +2929,36 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, PerPartDroopModelGfxDfll,
+	(bios->PerPartDroopModelGfxDfll, PerPartDroopModelGfxDfll, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PerPartDroopModelGfxDfll [%02u],
 				(ATUI_NAN, ATUI_INLINE, droop_f32),
 				(ATUI_NODESCR)
 			),
-			bios->PerPartDroopModelGfxDfll, NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // start, count
+			NULL, // deferred start,
+			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "GHz ->V"))
 	),
 
-	(NULL, DcModeMaxFreq,
+	(bios->DcModeMaxFreq, DcModeMaxFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcModeMaxFreq, SMU11_PPT7_PPCLK_COUNT, // start, count
+			NULL, SMU11_PPT7_PPCLK_COUNT, // deferred start, count
 			SMU11_PPT7_PPCLK_e // enum
 		)),
 		((LANG_ENG, "In MHz"))
 	),
 
-	(NULL, FreqTableUclkDiv,
+	(bios->FreqTableUclkDiv, FreqTableUclkDiv, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FreqTableUclkDiv [%02u],
 				(ATUI_DEC, ATUI_ENUM, UCLK_DIV_e), (ATUI_NODESCR)
 			),
-			bios->FreqTableUclkDiv, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
@@ -2961,42 +2971,42 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, Mp0clkFreq,
+	(bios->Mp0clkFreq, Mp0clkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0clkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0clkFreq, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "in MHz"))
 	),
-	(NULL, Mp0DpmVoltage,
+	(bios->Mp0DpmVoltage, Mp0DpmVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, Mp0DpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->Mp0DpmVoltage, NUM_MP0CLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_MP0CLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "mV(Q2)"))
 	),
-	(NULL, MemVddciVoltage,
+	(bios->MemVddciVoltage, MemVddciVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, MemVddciVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemVddciVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "mV(Q2)"))
 	),
-	(NULL, MemMvddVoltage,
+	(bios->MemMvddVoltage, MemMvddVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, MemMvddVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->MemMvddVoltage, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "mV(Q2)"))
@@ -3090,12 +3100,12 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, FlopsPerByteTable,
+	(bios->FlopsPerByteTable, FlopsPerByteTable, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, FlopsPerByteTable [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FlopsPerByteTable, RLC_PACE_TABLE_NUM_LEVELS_SMU11, // start, count
+			NULL, RLC_PACE_TABLE_NUM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "Q8.8"))
@@ -3109,13 +3119,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, UclkDpmPstates,
+	(bios->UclkDpmPstates, UclkDpmPstates, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, UclkDpmPstates [%02u],
 				(ATUI_DEC, ATUI_ENUM, DPM_PSTATES_e),
 				(ATUI_NODESCR)
 			),
-			bios->UclkDpmPstates, NUM_UCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_UCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "4 DPM states."))
@@ -3137,32 +3147,32 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, PcieGenSpeed,
+	(bios->PcieGenSpeed, PcieGenSpeed, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieGenSpeed [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_SPEED_e),
 				(ATUI_NODESCR)
 			),
-			bios->PcieGenSpeed, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, PcieLaneCount,
+	(bios->PcieLaneCount, PcieLaneCount, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PcieLaneCount [%02u],
 				(ATUI_DEC, ATUI_ENUM, PCIE_WIDTH_e),
 				(ATUI_NODESCR)
 			),
-			bios->PcieLaneCount, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, LclkFreq,
+	(bios->LclkFreq, LclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, LclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->LclkFreq, NUM_LINK_LEVELS_SMU11, // start, count
+			NULL, NUM_LINK_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
@@ -3178,12 +3188,12 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_fan_control, atui_nullstruct,
 		((LANG_ENG, "Celcius"))
 	),
 
-	(NULL, FanGain,
+	(bios->FanGain, FanGain, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->FanGain, TEMP_SMU_11_0_7_COUNT, // start, count
+			NULL, TEMP_SMU_11_0_7_COUNT, // deferred start, count
 			TEMP_SMU11_0_7_e // enum
 		)), (ATUI_NODESCR)
 	),
@@ -3240,12 +3250,12 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_fan_control, atui_nullstruct,
 )
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
-	(NULL, OverrideAvfsGb,
+	(bios->OverrideAvfsGb, OverrideAvfsGb, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->OverrideAvfsGb, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)), (ATUI_NODESCR)
 	),
@@ -3257,13 +3267,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, qAvfsGb,
+	(bios->qAvfsGb, qAvfsGb, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, qAvfsGb: %s,
 				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 				(ATUI_NODESCR)
 			),
-			bios->qAvfsGb, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "GHz->V Override of fused curve"))
@@ -3280,13 +3290,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 		(ATUI_NAN, ATUI_INLINE, droop_f32),
 		((LANG_ENG, "GHz->V BtcGb"))
 	),
-	(NULL, qAgingGb,
+	(bios->qAgingGb, qAgingGb, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_NAN, ATUI_INLINE, linear_f32),
 				(ATUI_NODESCR)
 			),
-			bios->qAgingGb, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "GHz->V"))
@@ -3297,35 +3307,35 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 		((LANG_ENG, "GHz ->V"))
 	),
 
-	(NULL, qStaticVoltageOffset,
+	(bios->qStaticVoltageOffset, qStaticVoltageOffset, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_NAN, ATUI_INLINE, quadratic_f32),
 				(ATUI_NODESCR)
 			),
-			bios->qStaticVoltageOffset, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "GHz->V"))
 	),
 
-	(NULL, DcTol,
+	(bios->DcTol, DcTol, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcTol, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "mV Q2"))
 	),
 
-	(NULL, DcBtcEnabled,
+	(bios->DcBtcEnabled, DcBtcEnabled, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcBtcEnabled, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)), (ATUI_NODESCR)
 	),
@@ -3333,33 +3343,33 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(NULL, DcBtcMin,
+	(bios->DcBtcMin, DcBtcMin, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcBtcMin, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "mV Q2"))
 	),
-	(NULL, DcBtcMax,
+	(bios->DcBtcMax, DcBtcMax, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcBtcMax, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "mV Q2"))
 	),
 
-	(NULL, DcBtcGb,
+	(bios->DcBtcGb, DcBtcGb, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->DcBtcGb, AVFS_VOLTAGE_COUNT, // start, count
+			NULL, AVFS_VOLTAGE_COUNT, // deferred start, count
 			AVFS_VOLTAGE_TYPE_e // enum
 		)),
 		((LANG_ENG, "mV Q2"))
@@ -3367,26 +3377,26 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_avfs, atui_nullstruct,
 )
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_i2c_control, atui_nullstruct,
-	(NULL, Supported I2cControllers,
+	(bios->I2cControllers, Supported I2cControllers, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, %s,
 				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
 				(ATUI_NODESCR)
 			),
-			bios->I2cControllers, // start
+			NULL, // deferred start
 			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7, // count
 			I2cControllerName_SMU_11_0_7_e // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, Undefined I2cControllers,
+	((&(bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])), // start
+		Undefined I2cControllers, // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, I2cControllers [8 + %02u],
 					// if COUNT changes, please change this 8
 				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
 				(ATUI_NODESCR)
 			),
-			// start:
-			(&(bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])),
+			NULL, // deferred start
 			(NUM_I2C_CONTROLLERS_SMU11_0_7
 				- I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7
 			), // count
@@ -3441,22 +3451,22 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
-	(NULL, SmnclkDpmFreq,
+	(bios->SmnclkDpmFreq, SmnclkDpmFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SmnclkDpmFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SmnclkDpmFreq, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_SMNCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "in MHz"))
 	),
-	(NULL, SmnclkDpmVoltage,
+	(bios->SmnclkDpmVoltage, SmnclkDpmVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, SmnclkDpmVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->SmnclkDpmVoltage, NUM_SMNCLK_DPM_LEVELS_SMU11, // start, count
+			NULL, NUM_SMNCLK_DPM_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "mV(Q2)"))
@@ -3465,12 +3475,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 	(bios->PaddingAPCC, PaddingAPCC,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(NULL, PerPartDroopVsetGfxDfll,
+	(bios->PerPartDroopVsetGfxDfll, PerPartDroopVsetGfxDfll, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, PerPartDroopVsetGfxDfll [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->PerPartDroopVsetGfxDfll, NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // start, count
+			NULL, // deferred start
+			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "In mV(Q2)"))
@@ -3596,13 +3607,13 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 
-	(NULL, XgmiDpmPstates,
+	(bios->XgmiDpmPstates, XgmiDpmPstates, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiDpmPstates [%02u],
 				(ATUI_DEC, ATUI_ENUM, DPM_PSTATES_e),
 				(ATUI_NODESCR)
 			),
-			bios->XgmiDpmPstates, NUM_XGMI_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)),
 		((LANG_ENG, "2 DPM states, high and low."))
@@ -3911,42 +3922,42 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 	(bios->BoardPowerPadding, BoardPowerPadding,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(NULL, XgmiLinkSpeed,
+	(bios->XgmiLinkSpeed, XgmiLinkSpeed, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkSpeed [%02u],
 				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_RATE_e),
 				(ATUI_NODESCR)
 			),
-			bios->XgmiLinkSpeed, NUM_XGMI_PSTATE_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_PSTATE_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiLinkWidth,
+	(bios->XgmiLinkWidth, XgmiLinkWidth, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiLinkWidth [%02u],
 				(ATUI_DEC, ATUI_ENUM, XGMI_LINK_WIDTH_e),
 				(ATUI_NODESCR)
 			),
-			bios->XgmiLinkWidth, NUM_XGMI_PSTATE_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_PSTATE_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
 
-	(NULL, XgmiFclkFreq,
+	(bios->XgmiFclkFreq, XgmiFclkFreq, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiFclkFreq [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiFclkFreq, NUM_XGMI_PSTATE_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_PSTATE_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
-	(NULL, XgmiSocVoltage,
+	(bios->XgmiSocVoltage, XgmiSocVoltage, // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, XgmiSocVoltage [%02u],
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
-			bios->XgmiSocVoltage, NUM_XGMI_PSTATE_LEVELS_SMU11, // start, count
+			NULL, NUM_XGMI_PSTATE_LEVELS_SMU11, // deferred start, count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	),
