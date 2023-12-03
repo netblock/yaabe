@@ -184,12 +184,6 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set for the radix
 
 ********************************************************************************
 
-
-
-	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+\s+)([a-zA-Z0-9_]+))\[(a-zA-Z0-9_)+\];",
-		"(NULL, \g<5>,\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tbios->\g<5>, \g<6>,\n\t\t\tATUI_NULL\n\t\t)), (ATUI_NODESCR)\n\t),\n",s)
-
-
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
 	import re
@@ -205,7 +199,7 @@ def struct_to_atui(s):
 	#
 	# dynarrays part 1 (bulk of it):
 	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
-		"(NULL, \g<5>,\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tbios->\g<5>, \g<6>, // start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+		"(bios->\g<5>, \g<5>, // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<6>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	#
 	# embedded structs, create ATUI_INLINES from them:
 	s = re.sub("(\t+)(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \g<4>,\n\g<1>\t(ATUI_NAN, ATUI_INLINE, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
