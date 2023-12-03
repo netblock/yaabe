@@ -253,6 +253,11 @@ PPATUI_ENUMER(AVFS_VOLTAGE_TYPE_e,
 	AVFS_VOLTAGE_COUNT
 )
 
+PPATUI_ENUMER(GFXCLK_SOURCE_e,
+	GFXCLK_SOURCE_PLL,
+	GFXCLK_SOURCE_DFLL
+)
+
 
 /******************************************************************************/
 // smu_v11_0_pptable.h / smu11_driver_if.h

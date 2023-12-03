@@ -153,6 +153,11 @@ enum AVFS_VOLTAGE_TYPE_e {
 	AVFS_VOLTAGE_COUNT = 2,
 };
 
+enum GFXCLK_SOURCE_e:uint8_t {
+	GFXCLK_SOURCE_PLL = 0,
+	GFXCLK_SOURCE_DFLL = 1,
+};
+
 #pragma pack(pop) // restore old packing
 
 #include "smu11_driver_if.h"

@@ -726,7 +726,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	struct quadratic_f32 CksVoltageOffset;
 	uint8_t  Padding567[4];
 	uint16_t GfxclkDsMaxFreq; // in Mhz
-	uint8_t  GfxclkSource;    // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e GfxclkSource;    // 0 = PLL, 1 = DFLL
 	uint8_t  Padding456;
 
 	uint8_t  LowestUclkReservedForUlv; // Set this to 1 if UCLK DPM0 is reserved for ULV-mode only
@@ -996,7 +996,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t GfxclkFopt;         // in Mhz
 	uint8_t  Padding567[2];
 	uint16_t GfxclkDsMaxFreq;    // in MHz
-	uint8_t  GfxclkSource;       // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e GfxclkSource;       // 0 = PLL, 1 = DFLL
 	uint8_t  Padding456;
 
 	// UCLK section
@@ -1266,7 +1266,7 @@ struct smu11_smcpptable_v7_dpm_config {
 	uint16_t GfxclkFgfxoffEntry; // in Mhz
 	uint16_t GfxclkFinit;  // in Mhz
 	uint16_t GfxclkFidle;  // in MHz
-	uint8_t  GfxclkSource; // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e GfxclkSource; // 0 = PLL, 1 = DFLL
 	uint8_t  GfxclkPadding;
 
 	// GFX GPO

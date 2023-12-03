@@ -1237,7 +1237,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "in Mhz"))
 	),
 	(bios->GfxclkSource, "GfxclkSource",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_ENUM, GFXCLK_SOURCE_e),
 		((LANG_ENG, "0 = PLL, 1 = DFLL"))
 	),
 	(bios->Padding456, "Padding456",
@@ -2139,7 +2139,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		((LANG_ENG, "in MHz"))
 	),
 	(bios->GfxclkSource, "GfxclkSource",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_ENUM, GFXCLK_SOURCE_e),
 		((LANG_ENG, "0 = PLL, 1 = DFLL"))
 	),
 	(bios->Padding456, "Padding456",
@@ -3024,7 +3024,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
 		((LANG_ENG, "in MHz"))
 	),
 	(bios->GfxclkSource, "GfxclkSource",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_ENUM, GFXCLK_SOURCE_e),
 		((LANG_ENG, "0 = PLL, 1 = DFLL"))
 	),
 	(bios->GfxclkPadding, "GfxclkPadding",
