@@ -749,6 +749,7 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 		loc = regsettingblock_starting_point + regsetting_elementsize*i;
 		if (loc->block_id.u32umc_id_access == 0)
 			break; // AtomBIOS ends the datablock list with 0-fill.
+		assert(ATOMTREE_UMC_REG_MAX > i);
 		at_regblock->umc_reg_setting_list[i] = loc;
 	}
 	at_regblock->umc_reg_setting_list_length = i;
@@ -1606,6 +1607,7 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 	while(offset < vo41_array_size) {
 		vobj = start + offset;
 
+		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
 		vo41->voltage_objects[i].voltage_object = vobj;
 		switch(vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.

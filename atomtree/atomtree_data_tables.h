@@ -228,9 +228,7 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 */
 };
 
-// 64 is just atomtree allocation; real number is going to be less than or
-// equal to umc_reg_num, I believe.
-#define ATOMTREE_UMC_REG_NUM 64
+#define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
@@ -248,7 +246,7 @@ struct atomtree_umc_init_reg_block {
 	uint16_t umc_reg_setting_list_length;
 	uint16_t umc_reg_setting_list_element_size;
 	struct atom_umc_reg_setting_data_block* \
-		umc_reg_setting_list[ATOMTREE_UMC_REG_NUM];
+		umc_reg_setting_list[ATOMTREE_UMC_REG_MAX];
 };
 
 /*
@@ -313,7 +311,6 @@ struct atomtree_vram_info_header_v2_5 {
 
 	struct atomtree_umc_init_reg_block post_ucode_init;
 	struct atomtree_umc_init_reg_block strobe_mode_patch;
-	struct atom_vram_module_v11 vram_module[16];
 };
 
 struct atomtree_vram_info_header_v2_6 {
@@ -352,8 +349,11 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atomtree_umc_init_reg_block mc_init; // phy init? reg block anyway?
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 	struct atomtree_umc_init_reg_block umc_emuinit; //TODO this is a guess
-	void* rsvd_tables[2];
-	struct atomtree_vram_module_v3_0 vram_module[8];
+	void* rsvd_tables[2]; // reserved_sub_table_offset
+	struct atomtree_vram_module_v3_0 vram_module[
+		sizeof(((struct atom_vram_info_header_v3_0*)0)->vram_module)
+		/ sizeof(struct atom_vram_module_v3_0)
+	];
 };
 
 struct atomtree_vram_info {
@@ -379,6 +379,7 @@ struct atomtree_voltage_object_v4 {
 	uint16_t lut_entries; // has entries if i2c or gpio
 };
 
+#define ATOMTREE_VOLTAGE_OBJECTS_MAX 8 // keep score. navi10 has 8
 struct atomtree_voltageobject_info_v4_1 {
 	struct atomtree_voltageobject_info_v4_1* dot;
 	struct atomtree_voltageobject_info* dotdot;
@@ -386,7 +387,9 @@ struct atomtree_voltageobject_info_v4_1 {
 	struct atom_voltage_objects_info_v4_1* leaves;
 
 	uint16_t num_voltage_objects;
-	struct atomtree_voltage_object_v4 voltage_objects[64];
+	struct atomtree_voltage_object_v4 voltage_objects[
+		ATOMTREE_VOLTAGE_OBJECTS_MAX
+	];
 };
 
 

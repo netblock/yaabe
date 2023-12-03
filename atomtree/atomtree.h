@@ -27,7 +27,8 @@ typedef _Float64 float64_t;
 //typedef _Float128 float128_t; // currently unnecessary
 // AVX-512 does partial native 128-bit?
 
-// we're dealing with a byte-packed ABI.
+// we're dealing with a byte-packed little-endian ABI.
+static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
 static_assert(CHAR_BIT == 8);
 static_assert(sizeof(uint8_t) == 1);
 static_assert(sizeof(uint16_t) == 2);

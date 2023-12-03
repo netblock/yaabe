@@ -228,6 +228,9 @@ atui_branch* atui_branch_allocator(
 									dynarray_biosarray_i
 								);
 							}
+							assert(sizeof(((atui_leaf*)0)->name) > 
+								strlen(leaves[leaves_i].name)
+							); // have we wrote past our boundry?
 
 							if (leaves[leaves_i].type & ATUI_INLINE) {
 								branch_funcify_args.suggestbios =\
