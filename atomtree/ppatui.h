@@ -167,8 +167,8 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 // Some of these elements may be respectively replaced by their fancy type.
 // Unused fields are set to 0 via calloc.
 #define _PPATUI_FANCY_INIT(var, namestr, description_data, radix, fancytype)\
-	.name = #namestr,\
-	.origname = #namestr,\
+	.name = namestr,\
+	.origname = namestr,\
 	.varname = #var,\
 	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
 	.num_bytes = _PPATUI_FANCY_INIT_NULLPTR_SIZE(var),\
@@ -280,8 +280,8 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		var, namestr, description_data, radix, fancytype, fancydata)\
 	{\
 		/* numleaves is handled in the allocator*/\
-		.name = #namestr,\
-		.origname = #namestr,\
+		.name = namestr,\
+		.origname = namestr,\
 		.varname = #var,\
 		.type = (radix | fancytype),\
 		.val = var,\
