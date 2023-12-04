@@ -190,7 +190,7 @@ void atui_destroy_tree(atui_branch* tree);
 // funcify internal structs:
 
 struct atui_funcify_args {
-	char* rename;
+	const char8_t* rename;
 	// optionally rename the branch.
 
 	void* atomtree;
@@ -222,7 +222,6 @@ struct dynarray_bounds { // for ATUI_DYNARRAY
 };
 
 struct atui_branch_data {
-	const char8_t* const name;
 	const char8_t* const varname;
 
 	// leaves straightforward:

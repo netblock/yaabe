@@ -433,6 +433,11 @@ atui_branch* atui_branch_allocator(
 		.leaf_count = num_leaves,
 		.max_leaves = num_leaves,
 	};
-	strcpy(table->name, embryo->name);
+	if (args->rename) {
+		strcpy(table->name, args->rename);
+	} else {
+		strcpy(table->name, embryo->varname);
+	}
+	assert(strlen(table->name) < sizeof(((atui_branch*)0)->name));
 	return table;
 }

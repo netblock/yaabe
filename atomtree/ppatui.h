@@ -24,11 +24,13 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 
 // Thing to call to instanciate an atui_branch
 #define ATUI_MAKE_BRANCH(\
-		atom_struct_name, atomtree_pointer, bios_pointer,\
+		atom_struct_name,\
+		new_name, atomtree_pointer, bios_pointer,\
 		num_branches, branch_import_pointer)\
 \
 	_##atom_struct_name##_atui(\
 		&(const struct atui_funcify_args) {\
+			.rename = new_name,\
 			.atomtree = atomtree_pointer,\
 			.suggestbios = bios_pointer,\
 			.import_branches = branch_import_pointer,\
@@ -82,7 +84,6 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 	};\
 	const struct atui_branch_data branch_embryo = {\
-		.name = #atomtypesuffix,\
 		.varname = #atomtypesuffix,\
 \
 		.leaves_initial = leaves_initial,\

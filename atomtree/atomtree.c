@@ -26,7 +26,7 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 			switch (smc_dpm_info->ver) {
 				case v4_1:
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_1,
-						NULL,smc_dpm_info->v4_1, 0,NULL
+						NULL,  NULL,smc_dpm_info->v4_1, 0,NULL
 					);
 					break;
 				/*
@@ -35,7 +35,7 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 				*/
 				case v4_3:
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_3,
-						NULL,smc_dpm_info->v4_3, 0,NULL
+						NULL,  NULL,smc_dpm_info->v4_3, 0,NULL
 					);
 					break;
 				case v4_4:
@@ -45,11 +45,12 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 					);
 
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_4,
+						NULL,
 						NULL,smc_dpm_info->v4_4,  num_i2c_controllers_v4_4,NULL
 					);
 					for(i=0; i < num_i2c_controllers_v4_4; i++) {
 						atui_smudpm_i2c = ATUI_MAKE_BRANCH(
-							i2ccontrollerconfig_u32,
+							i2ccontrollerconfig_u32,  NULL,
 							NULL, &(smc_dpm_info->v4_4->i2ccontrollers[i]),
 							0, NULL
 						);
@@ -68,11 +69,12 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 					);
 
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_5,
+						NULL,
 						NULL,smc_dpm_info->v4_5,  num_i2c_controllers_v4_5,NULL
 					);
 					for(i=0; i < num_i2c_controllers_v4_5; i++) {
 						atui_smudpm_i2c = ATUI_MAKE_BRANCH(
-							smudpm_i2c_controller_config_v2,
+							smudpm_i2c_controller_config_v2,  NULL,
 							NULL, &(smc_dpm_info->v4_5->I2cControllers[i]),
 							0, NULL
 						);
@@ -101,10 +103,8 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 				default:
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
+						"smc_dpm_info (header only stub)",
 						NULL, smc_dpm_info->table_header,  0,NULL
-					);
-					sprintf(atui_smc_dpm_info->name,
-						"smc_dpm_info (header only stub)"
 					);
 					break;
 			}
@@ -137,35 +137,33 @@ inline static atui_branch* atomtree_dt_populate_firmwareinfo(
 			switch (firmwareinfo->ver) {
 				case v3_1:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
-						atom_firmware_info_v3_1,
+						atom_firmware_info_v3_1,  NULL,
 						NULL,firmwareinfo->v3_1,  0,NULL
 					);
 					break;
 				case v3_2:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
-						atom_firmware_info_v3_2,
+						atom_firmware_info_v3_2,  NULL,
 						NULL,firmwareinfo->v3_2,  0,NULL
 					);
 					break;
 				case v3_3:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
-						atom_firmware_info_v3_3,
+						atom_firmware_info_v3_3,  NULL,
 						NULL,firmwareinfo->v3_3,  0,NULL
 					);
 					break;
 				case v3_4:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
-						atom_firmware_info_v3_4,
+						atom_firmware_info_v3_4,  NULL,
 						NULL,firmwareinfo->v3_4,  0,NULL
 					);
 					break;
 				default:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
+						"firmwareinfo (header only stub)",
 						NULL,firmwareinfo->table_header,  0,NULL
-					);
-					sprintf(atui_firmwareinfo->name,
-						"firmwareinfo (header only stub)"
 					);
 					break;
 			}
@@ -194,10 +192,10 @@ inline static atui_branch* atomtree_dt_populate_lcd_info(
 			switch (lcd_info->ver) {
 				/*case v1_3: TODO from atombios.h */
 				case v2_1:
-					atui_lcd_timing = ATUI_MAKE_BRANCH(atom_dtd_format,
+					atui_lcd_timing = ATUI_MAKE_BRANCH(atom_dtd_format,  NULL,
 						NULL,&(lcd_info->v2_1->lcd_timing),  0,NULL
 					);
-					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lcd_info_v2_1,
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lcd_info_v2_1,  NULL,
 						NULL, lcd_info->leaves,
 						1, (atui_branch*const[]){atui_lcd_timing}
 					);
@@ -205,9 +203,9 @@ inline static atui_branch* atomtree_dt_populate_lcd_info(
 				default:
 					atui_lcd_info = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
+						"lcd_info (header only stub)",
 						NULL,lcd_info->table_header,  0,NULL
 					);
-					sprintf(atui_lcd_info->name, "lcd_info (header only stub)");
 					break;
 			}
 		}
@@ -242,14 +240,14 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			case v3_1:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_1,
-						NULL,smu_info->v3_1,  0,NULL
+						NULL,  NULL,smu_info->v3_1,  0,NULL
 					);
 				}
 				break;
 			case v3_2:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_2,
-						NULL,smu_info->v3_2,  0,NULL
+						NULL,  NULL,smu_info->v3_2,  0,NULL
 					);
 				}
 				if (smu_info->v3_2->smugoldenoffset) {
@@ -260,7 +258,7 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			case v3_3:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_3,
-						NULL,smu_info->v3_3,  0,NULL
+						NULL,  NULL,smu_info->v3_3,  0,NULL
 					);
 				}
 				if (smu_info->v3_3->smugoldenoffset) {
@@ -276,7 +274,7 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			case v3_5:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_5,
-						NULL,smu_info->v3_5,  0,NULL
+						NULL,  NULL,smu_info->v3_5,  0,NULL
 					);
 					if (smu_info->ver == v3_4) {
 						sprintf(atui_smu_info->name,
@@ -296,7 +294,7 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			case v3_6:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v3_6,
-						NULL,smu_info->v3_6,  0,NULL
+						NULL,  NULL,smu_info->v3_6,  0,NULL
 					);
 				}
 				if (smu_info->v3_6->smugoldenoffset) {
@@ -311,7 +309,7 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			case v4_0:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_smu_info_v4_0,
-						NULL,smu_info->v4_0,  0,NULL
+						NULL,  NULL,smu_info->v4_0,  0,NULL
 					);
 				}
 				if (smu_info->v4_0->smuinitoffset) {
@@ -322,9 +320,9 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 			default:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						"smu_info (header only stub)",
 						NULL,smu_info->table_header,  0,NULL
 					);
-					sprintf(atui_smu_info->name, "smu_info (header only stub)");
 				}
 				break;
 		}
@@ -357,20 +355,18 @@ inline static atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 			switch(fw_vram->ver) {
 				case v2_1:
 					atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_1,
-						NULL,fw_vram->v2_1,  0,NULL
+						NULL,  NULL,fw_vram->v2_1,  0,NULL
 					);
 					break;
 				case v2_2:
 					atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_2,
-						NULL,fw_vram->v2_2,  0,NULL
+						NULL,  NULL,fw_vram->v2_2,  0,NULL
 					);
 					break;
 				default:
 					atui_fw_vram = ATUI_MAKE_BRANCH(atom_common_table_header,
+						"vram_usagebyfirmware (header only stub)",
 						NULL,fw_vram->table_header,  0,NULL
-					);
-					sprintf(atui_fw_vram->name,
-						"vram_usagebyfirmware (header only stub)"
 					);
 					break;
 			}
@@ -410,14 +406,14 @@ inline static atui_branch* atomtree_dt_populate_gpio_pin_lut(
 				);
 				if (generate_atui) {
 					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
-						atom_common_table_header,
+						atom_common_table_header,  NULL,
 						NULL,gpio_pin_lut->table_header,
 						gpio_pin_lut->num_gpio_pins,NULL
 					);
 					sprintf(atui_gpio_pin_lut->name, "atom_gpio_pin_lut_v2_1");
 					for(i=0; i < gpio_pin_lut->num_gpio_pins; i++) {
 							atui_gpio_pin = ATUI_MAKE_BRANCH(
-								atom_gpio_pin_assignment_v2_1,
+								atom_gpio_pin_assignment_v2_1,  NULL,
 								NULL,&(gpio_pin_lut->v2_1->gpio_pin[i]),  0,NULL
 							);
 							sprintf(atui_gpio_pin->name, "%s [%02u]",
@@ -434,10 +430,8 @@ inline static atui_branch* atomtree_dt_populate_gpio_pin_lut(
 				if (generate_atui) {
 					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
+						"gpio_pin_lut (header only stub)",
 						NULL,gpio_pin_lut->table_header,  0,NULL
-					);
-					sprintf(atui_gpio_pin_lut->name,
-						"gpio_pin_lut (header only stub)"
 					);
 				}
 				break;
@@ -469,7 +463,7 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 			case v2_2:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_2,
-						NULL,gfx_info->v2_2,  0,NULL
+						NULL,  NULL,gfx_info->v2_2,  0,NULL
 					);
 				}
 				break;
@@ -480,7 +474,7 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_3,
-						NULL,gfx_info->v2_3,  0,NULL
+						NULL,  NULL,gfx_info->v2_3,  0,NULL
 					);
 				}
 				break;
@@ -491,7 +485,7 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_4,
-						NULL,gfx_info->v2_4,  0,NULL
+						NULL,  NULL,gfx_info->v2_4,  0,NULL
 					);
 				}
 				break;
@@ -502,7 +496,7 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_5,
-						NULL,gfx_info->v2_5,  0,NULL
+						NULL,  NULL,gfx_info->v2_5,  0,NULL
 					);
 				}
 				break;
@@ -513,13 +507,13 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-						NULL,gfx_info->table_header,  1,NULL
+						NULL,  NULL,gfx_info->table_header,  1,NULL
 					);
 					sprintf(atui_gfx_info->name, "atom_gfx_info_v2_6 (forced)");
 					atui_gfx_info->num_branches = 1;
 					atui_gfx_info->child_branches[0] = ATUI_MAKE_BRANCH(
 						atom_gfx_info_v2_5,
-						NULL,gfx_info->v2_6,  0,NULL
+						NULL,  NULL,gfx_info->v2_6,  0,NULL
 					);
 				}
 				break;
@@ -530,23 +524,23 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_7,
-						NULL,gfx_info->v2_7,  0,NULL
+						NULL,  NULL,gfx_info->v2_7,  0,NULL
 					);
 				}
 				break;
 			case v3_0:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v3_0,
-						NULL,gfx_info->v3_0,  0,NULL
+						NULL,  NULL,gfx_info->v3_0,  0,NULL
 					);
 				}
 				break;
 			default:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						"gfx_info (header only stub)",
 						NULL,gfx_info->table_header,  0,NULL
 					);
-					sprintf(atui_gfx_info->name, "gfx_info (header only stub)");
 				}
 				break;
 		}
@@ -593,36 +587,40 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					switch(*(ppt->smc_pptable_ver)) {
 						case 3:
 							atui_feature_control = ATUI_MAKE_BRANCH(
-								powerplay_feature_control_smu11_0x13,   NULL,
-								&(ppt->v12_0->smc_pptable.v3.features),
+								powerplay_feature_control_smu11_0x13,
+								NULL,
+								NULL, &(ppt->v12_0->smc_pptable.v3.features),
 								0,NULL
 							);
 							atui_i2c = ATUI_MAKE_BRANCH(
-								smu11_pptable_v3_i2c_u32,   NULL,
+								smu11_pptable_v3_i2c_u32,
+								NULL,  NULL,
 								&(ppt->v12_0->smc_pptable.v3.I2cControllers),
 								0,NULL
 							);
 							atui_smc_pptable = ATUI_MAKE_BRANCH(
 								smu11_smcpptable_v3,
-								NULL, &(ppt->v12_0->smc_pptable),
+								NULL,  NULL, &(ppt->v12_0->smc_pptable),
 								2, NULL
 							);
 							break;
 						default:
 						case 8:
 							atui_feature_control = ATUI_MAKE_BRANCH(
-								powerplay_feature_control_smu11_0x33,   NULL,
-								&(ppt->v12_0->smc_pptable.v8.features),
+								powerplay_feature_control_smu11_0x33,
+								NULL,
+								NULL, &(ppt->v12_0->smc_pptable.v8.features),
 								0,NULL
 							);
 							atui_i2c = ATUI_MAKE_BRANCH(
-								smu11_pptable_v8_i2c_u8mixed,   NULL,
+								smu11_pptable_v8_i2c_u8mixed,
+								NULL,  NULL,
 								&(ppt->v12_0->smc_pptable.v8.I2cControllers),
 								0,NULL
 							);
 							atui_smc_pptable = ATUI_MAKE_BRANCH(
 								smu11_smcpptable_v8,
-								NULL, &(ppt->v12_0->smc_pptable),
+								NULL,  NULL, &(ppt->v12_0->smc_pptable),
 								2, NULL
 							);
 							break;
@@ -632,11 +630,11 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					atui_smc_pptable->child_branches[1] = atui_i2c;
 
 					atui_powersaving_table = ATUI_MAKE_BRANCH(
-						smu_11_0_power_saving_clock_table,
+						smu_11_0_power_saving_clock_table, NULL,
 						NULL,&(ppt->v12_0->power_saving_clock),  0,NULL
 					);
 					atui_overdrive_table = ATUI_MAKE_BRANCH(
-						smu_11_0_overdrive_table,
+						smu_11_0_overdrive_table, NULL,
 						NULL,&(ppt->v12_0->overdrive_table),  0,NULL
 					);
 
@@ -645,7 +643,7 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 						atui_smc_pptable
 					};
 					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_powerplay_table,
-						NULL,ppt->v12_0,
+						NULL,  NULL,ppt->v12_0,
 						sizeof(atui_smu11ppt_kids)/sizeof(atui_branch*),
 						atui_smu11ppt_kids
 					);
@@ -662,12 +660,12 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 					atui_branch* const atui_smu11_0_7_ppt_kids[] = {
 						ATUI_MAKE_BRANCH(
 							smu11_smcpptable_v7,
-							NULL, &(ppt->v15_0->smc_pptable),
+							NULL,  NULL,&(ppt->v15_0->smc_pptable),
 							0, NULL
 						),
 					};
 					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_7_powerplay_table,
-						NULL,ppt->v15_0,
+						NULL,  NULL,ppt->v15_0,
 						sizeof(atui_smu11_0_7_ppt_kids)/sizeof(atui_branch*),
 						atui_smu11_0_7_ppt_kids
 					);
@@ -676,10 +674,8 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,
+						"smu_powerplay_table_header (header only stub)",
 						NULL,ppt->leaves,  0,NULL
-					);
-					sprintf(atui_ppt->name, "%s (header only stub)",
-						atui_ppt->varname
 					);
 				}
 				break;
@@ -761,16 +757,16 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 
 		atui_branch* const addr_info = ATUI_MAKE_BRANCH(
 			atom_umc_register_addr_info_access,
-			at_regblock,at_regblock->leaves,  0,NULL
+			NULL,  at_regblock,at_regblock->leaves,  0,NULL
 		);
 
 		atui_branch* const datablock = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_umc_reg_setting_data_block",
 			NULL,NULL,  at_regblock->umc_reg_setting_list_length,NULL
 		);
-		sprintf(datablock->name, "atom_umc_reg_setting_data_block");
 		for(i=0; i < at_regblock->umc_reg_setting_list_length; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_umc_reg_setting_data_block,
-				at_regblock,at_regblock->umc_reg_setting_list[i],  0,NULL
+				NULL,  at_regblock,at_regblock->umc_reg_setting_list[i],  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			datablock->child_branches[i] = tmp_branch;
@@ -782,7 +778,7 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 		const uint8_t num_regblock_children =
 			sizeof(regblock_children)/sizeof(atui_branch*);
 		atui_regblock = ATUI_MAKE_BRANCH(atom_umc_init_reg_block,
-			at_regblock, at_regblock->leaves,
+			NULL,  at_regblock, at_regblock->leaves,
 			num_regblock_children+num_extra_atuibranches, NULL
 		);
 		for(i=0; i < num_regblock_children; i++) {
@@ -907,12 +903,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 			/ sizeof(struct atom_vram_module_v9)
 		);
 		atui_branch* vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_vram_module_v9",
 			NULL,NULL,  num_vram_modules,NULL
 		);
-		sprintf(vram_module->name, "atom_vram_module_v9");
 		for(i=0; i < num_vram_modules; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v9,
-				NULL,&(vi23->leaves->vram_module[i]),  0,NULL
+				NULL,  NULL,&(vi23->leaves->vram_module[i]),  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			vram_module->child_branches[i] = tmp_branch;
@@ -926,7 +922,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		const uint8_t num_children = sizeof(vi23_children)/sizeof(atui_branch*);
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_3,
-			vi23,vi23->leaves,  num_children,vi23_children
+			NULL,  vi23,vi23->leaves,  num_children,vi23_children
 		);
 	}
 	return atui_vi;
@@ -976,10 +972,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 
 		if (generate_atui) {
 			atui_branch* const atui_navi_timings = ATUI_MAKE_BRANCH(
-				atui_nullstruct,  NULL,NULL,  *vi24->num_timing_straps,NULL
+				atui_nullstruct,
+				"umc_block_navi1_timings",
+				NULL,NULL,  *vi24->num_timing_straps,NULL
 			);
 			for(i=0; i < *vi24->num_timing_straps; i++) {
-				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings,
+				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings, NULL,
 					NULL,&(vi24->navi1_gddr6_timings[i]),  0,NULL
 				);
 				sprintf(tmp_branch->name, "%s (%i MHz)",
@@ -990,7 +988,6 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 			}
 			atui_navi_timings->num_branches = i;
 
-			sprintf(atui_navi_timings->name, "umc_block_navi1_timings");
 			sprintf(atui_memclkpatch->name, "mem_clk_patch_table");
 			atui_memclkpatch->child_branches[
 					atui_memclkpatch->num_branches
@@ -1041,11 +1038,11 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 			sizeof(vi24->dram_data_remap->bit_byte_remap)
 			/ sizeof(struct atom_gddr6_bit_byte_remap);
 		atui_dram_data_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,
-			NULL,vi24->dram_data_remap,  num_bit_byte_remap,NULL
+			NULL,  NULL,vi24->dram_data_remap,  num_bit_byte_remap,NULL
 		);
 		 atui_dram_data_remap->child_branches[0] = ATUI_MAKE_BRANCH(
 			atom_gddr6_bit_byte_remap,
-			NULL,&(vi24->dram_data_remap->bit_byte_remap[i]),  0,NULL
+			NULL,  NULL,&(vi24->dram_data_remap->bit_byte_remap[i]),  0,NULL
 		);
 	} else {
 		vi24->dram_data_remap = NULL;
@@ -1072,12 +1069,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 			/ sizeof(struct atom_vram_module_v10)
 		);
 		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
-			NULL,NULL,  num_vram_modules,NULL
+			NULL,  NULL,NULL,  num_vram_modules,NULL
 		);
 		sprintf(vram_module->name, "atom_vram_module_v10");
 		for(i=0; i < num_vram_modules; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v10,
-				NULL,&(vi24->leaves->vram_module[i]),  0,NULL
+				NULL,  NULL,&(vi24->leaves->vram_module[i]),  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			vram_module->child_branches[i] = tmp_branch;
@@ -1093,7 +1090,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_4,
-			vi24,vi24->leaves,   num_children,vi24_children
+			NULL,  vi24,vi24->leaves,   num_children,vi24_children
 		);
 	}
 	return atui_vi;
@@ -1137,12 +1134,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->gddr6_acstrap_count = i;
 		if (generate_atui) {
 			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
+				"atom_gddr6_ac_timing_v2_5",
 				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 			);
-			sprintf(atui_gddr6_ac_timings->name, "atom_gddr6_ac_timing_v2_5");
 			for(i=0; i < vi25->gddr6_acstrap_count; i++) {
 				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
-					NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
+					NULL,  NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
 				);
 				sprintf(tmp_branch->name, "%s (%u MHz)",
 					tmp_branch->varname,
@@ -1230,12 +1227,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 			/ sizeof(struct atom_vram_module_v11)
 		);
 		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_vram_module_v11",
 			NULL,NULL,  num_vram_modules,NULL
 		);
-		sprintf(vram_module->name, "atom_vram_module_v11");
 		for(i=0; i < num_vram_modules; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v11,
-				NULL,&(vi25->leaves->vram_module[i]),  0,NULL
+				NULL,  NULL,&(vi25->leaves->vram_module[i]),  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			vram_module->child_branches[i] = tmp_branch;
@@ -1251,7 +1248,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_5,
-			vi25,vi25->leaves,  num_children,vi25_children
+			NULL,  vi25,vi25->leaves,  num_children,vi25_children
 		);
 	}
 	return atui_vi;
@@ -1368,12 +1365,12 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 			/ sizeof(struct atom_vram_module_v9)
 		);
 		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_vram_module_v9",
 			NULL,NULL,  num_vram_modules,NULL
 		);
-		sprintf(vram_module->name, "atom_vram_module_v9");
 		for(i=0; i < num_vram_modules; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v9,
-				NULL,&(vi26->leaves->vram_module[i]),  0,NULL
+				NULL,  NULL,&(vi26->leaves->vram_module[i]),  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			vram_module->child_branches[i] = tmp_branch;
@@ -1389,7 +1386,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_5,
-			vi26,vi26->leaves,  num_children,vi26_children
+			NULL,  vi26,vi26->leaves,  num_children,vi26_children
 		);
 	}
 	return atui_vi;
@@ -1508,12 +1505,12 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 			/ sizeof(struct atom_vram_module_v3_0)
 		);
 		atui_branch* const vram_module = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_vram_module_v3.0",
 			NULL,NULL,  num_vram_modules,NULL
 		);
-		sprintf(vram_module->name, "atom_vram_module_v3.0");
 		for(i=0; i < num_vram_modules; i++) {
 			tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v3_0,
-				NULL,&(vi30->leaves->vram_module[i]),  0,NULL
+				NULL,  NULL,&(vi30->leaves->vram_module[i]),  0,NULL
 			);
 			sprintf(tmp_branch->name, "%s [%02u]", tmp_branch->varname, i);
 			vram_module->child_branches[i] = tmp_branch;
@@ -1528,7 +1525,7 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v3_0,
-			vi30,vi30->leaves,  num_children,vi30_children
+			NULL,  vi30,vi30->leaves,  num_children,vi30_children
 		);
 	}
 	return atui_vi;
@@ -1566,9 +1563,9 @@ inline static atui_branch* atomtree_dt_populate_vram_info(
 			default:
 				if (generate_atui) {
 					atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
+						"vram_info (header only stub)",
 						NULL,vram_info->table_header,  0,NULL
 					);
-					sprintf(atui_vi->name, "vram_info (header only stub)");
 				}
 				break;
 		}
@@ -1640,33 +1637,37 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 	struct atomtree_voltage_object_v4* at_vobj;
 	if (generate_atui) {
 		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"atom_voltage_objects_info_v4_1",
 			NULL,vo41->leaves,  vo41->num_voltage_objects,NULL
 		);
-		sprintf(atui_vo_info->name, "atom_voltage_objects_info_v4_1");
 		for(i=0; i < vo41->num_voltage_objects; i++) {
 			at_vobj = &(vo41->voltage_objects[i]);
 			switch(at_vobj->voltage_object->header.voltage_mode) {
 				case VOLTAGE_OBJ_GPIO_LUT:
 				case VOLTAGE_OBJ_PHASE_LUT:
 					tmp_branch = ATUI_MAKE_BRANCH(atom_gpio_voltage_object_v4,
+						NULL,
 						at_vobj, &(at_vobj->voltage_object->gpio_voltage_obj),
 						0, NULL
 					);
 					break;
 				case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
 					tmp_branch = ATUI_MAKE_BRANCH(atom_i2c_voltage_object_v4,
+						NULL,
 						at_vobj, &(at_vobj->voltage_object->i2c_voltage_obj),
 						0, NULL
 					);
 					break;
 				case VOLTAGE_OBJ_SVID2:
 					tmp_branch = ATUI_MAKE_BRANCH(atom_svid2_voltage_object_v4,
+						NULL,
 						at_vobj, &(at_vobj->voltage_object->svid2_voltage_obj),
 						0, NULL
 					);
 					break;
 				case VOLTAGE_OBJ_MERGED_POWER:
 					tmp_branch = ATUI_MAKE_BRANCH(atom_merged_voltage_object_v4,
+						NULL,
 						at_vobj, &(at_vobj->voltage_object->merged_voltage_obj),
 						0, NULL
 					);
@@ -1674,6 +1675,7 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 				case VOLTAGE_OBJ_EVV: // TODO does this get used by v4?
 				default:
 					tmp_branch = ATUI_MAKE_BRANCH(atom_voltage_object_header_v4,
+						NULL,
 						at_vobj,&(at_vobj->voltage_object->header),  0,NULL
 					);
 					break;
@@ -1717,10 +1719,8 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info(
 			default:
 				if (generate_atui) {
 					atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+						"voltageobject_info (header only stub)",
 						NULL,vo_info->table_header,  0,NULL
-					);
-					sprintf(atui_vo_info->name,
-						"voltageobject_info (header only stub)"
 					);
 				}
 				break;
@@ -1906,7 +1906,7 @@ inline static atui_branch* atomtree_populate_datatables(
 		);
 
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
-			data_table,data_table->leaves,  num_branches,child_branches
+			NULL,  data_table,data_table->leaves,  num_branches,child_branches
 		);
 	}
 	return atui_dt;
@@ -2028,12 +2028,12 @@ struct atom_tree* atombios_parse(
 		atui_branch* const rom_header_child_branches[] = {atui_dt};
 		atui_branch* const atui_rom_header = ATUI_MAKE_BRANCH(
 			atom_rom_header_v2_2,
-			atree, atree->leaves,
+			NULL,  atree, atree->leaves,
 			sizeof(rom_header_child_branches) / sizeof(atui_branch*),
 			rom_header_child_branches
 		);
 		atui_branch* const atui_atom_image = ATUI_MAKE_BRANCH(atombios_image,
-			 atree, atree->image,  1,NULL
+			 NULL,  atree, atree->image,  1,NULL
 		);
 		atui_atom_image->child_branches[atui_atom_image->num_branches] =
 			atui_rom_header;
