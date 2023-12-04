@@ -149,6 +149,10 @@ atui_branch* atui_branch_allocator(
 			uint16_t leafpattern_end = 0;
 			const struct atui_enum* dynarray_enum_taglist = NULL;
 
+			// for sprintf renaming and formatting the child leaf/branch
+			const char8_t* suggest_name;
+			char8_t* target_name;
+
 			leavesinit_i = 0;
 			while (leavesinit_i < num_leaves_initial) {
 				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
@@ -167,7 +171,6 @@ atui_branch* atui_branch_allocator(
 					if (!((dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE)
 						&& (dynarray_boundaries[dynentry_i].numleaves == 1))) {
 						leaves[leaves_i] = leaves_initial[leavesinit_i];
-						//leaves[leaves_i].val = dynarray_start_ptr;
 						if (dynarray_start_ptr) {
 							leaves[leaves_i].num_bytes = (
 								dynarray_length * dynarray_elementsize
@@ -207,50 +210,73 @@ atui_branch* atui_branch_allocator(
 									dynarray_patterns[leafpattern_i].branch_bud(
 										&branch_funcify_args
 									);
+								target_name = branches[branches_i]->name;
+
 								branches_i++;
-								leafpattern_i++;
-								continue;
+							} else {
+								leaves[leaves_i] =
+									dynarray_patterns[leafpattern_i];
+								leaves[leaves_i].val = dynarray_bios_pos;
+								if (leaves[leaves_i].type & ATUI_INLINE) {
+									branch_funcify_args.suggestbios =\
+										leaves[leaves_i].val;
+									inliners[inliners_i] =\
+										leaves[leaves_i].branch_bud(
+											&branch_funcify_args
+										);
+									leaves[leaves_i].inline_branch =
+										&(inliners[inliners_i]);
+									inliners_i++;
+								} else if (leaves[leaves_i].type & ATUI_STRING){
+									leaves[leaves_i].array_size = 1 + strlen(
+										leaves[leaves_i].u8
+									); // + 1 for null
+									leaves[leaves_i].num_bytes =
+										leaves[leaves_i].array_size;
+								}
+								target_name = leaves[leaves_i].name;
+
+								leaves_i++;
 							}
-							leaves[leaves_i] = dynarray_patterns[leafpattern_i];
-							leaves[leaves_i].val = dynarray_bios_pos;
+							suggest_name =
+								dynarray_patterns[leafpattern_i].origname;
 
 							if (dynarray_enum_taglist) { // could be hoisted
-								sprintf(leaves[leaves_i].name,
-									leaves[leaves_i].origname,
+								sprintf(target_name, suggest_name,
 									dynarray_enum_taglist[
 										dynarray_biosarray_i
 									].name,
 									dynarray_biosarray_i
 								);
 							} else {
-								sprintf(leaves[leaves_i].name,
-									leaves[leaves_i].origname,
+								sprintf(target_name, suggest_name,
 									dynarray_biosarray_i
 								);
 							}
-							assert(sizeof(((atui_leaf*)0)->name) > 
-								strlen(leaves[leaves_i].name)
-							); // have we wrote past our boundry?
-
-							if (leaves[leaves_i].type & ATUI_INLINE) {
-								branch_funcify_args.suggestbios =\
-									leaves[leaves_i].val;
-								inliners[inliners_i] =\
-									leaves[leaves_i].branch_bud(
-										&branch_funcify_args
-									);
-								leaves[leaves_i].inline_branch =
-									&(inliners[inliners_i]);
-								inliners_i++;
-							} else if (leaves[leaves_i].type & ATUI_STRING) {
-								leaves[leaves_i].array_size = 1 + strlen(
-									leaves[leaves_i].u8
-								); // + 1 for null
-								leaves[leaves_i].num_bytes =
-									leaves[leaves_i].array_size;
+							if (dynarray_patterns[leafpattern_i].type
+								& ATUI_INLINE){
+								strcpy(
+									inliners[inliners_i-1]->name, target_name
+								);
 							}
+							#ifndef NDEBUG
+								if (dynarray_patterns[leafpattern_i].type
+                                    & ATUI_PETIOLE) {
+									assert(sizeof(((atui_branch*)0)->name) > 
+										strlen(branches[branches_i-1]->name)
+									); // have we wrote past our boundry?
+								} else if (dynarray_patterns[leafpattern_i].type
+                                    & ATUI_INLINE) {
+									assert(sizeof(((atui_branch*)0)->name) > 
+										strlen(inliners[inliners_i-1]->name)
+									); // have we wrote past our boundry?
+								} else {
+									assert(sizeof(((atui_leaf*)0)->name) > 
+										strlen(leaves[leaves_i].name)
+									); // have we wrote past our boundry?
+								}
+							#endif
 
-							leaves_i++;
 							leafpattern_i++;
 						}
 						dynarray_biosarray_i++;
@@ -267,6 +293,10 @@ atui_branch* atui_branch_allocator(
 					);
 					leaves[leaves_i].inline_branch =
 						&(inliners[inliners_i]);
+					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
+					assert(sizeof(((atui_branch*)0)->name) > 
+						strlen(inliners[inliners_i]->name)
+					); // have we wrote past our boundry?
 
 					inliners_i++;
 					leaves_i++;
@@ -277,6 +307,13 @@ atui_branch* atui_branch_allocator(
 						leaves_initial[leavesinit_i].branch_bud(
 							&branch_funcify_args
 						);
+					strcpy(
+						branches[branches_i]->name,
+						leaves_initial[leavesinit_i].name
+					);
+					assert(sizeof(((atui_branch*)0)->name) > 
+						strlen(branches[branches_i]->name)
+					); // have we wrote past our boundry?
 					branches_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
@@ -304,6 +341,10 @@ atui_branch* atui_branch_allocator(
 						&branch_funcify_args
 					);
 					leaves[leaves_i].inline_branch = &(inliners[inliners_i]);
+					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
+					assert(sizeof(((atui_branch*)0)->name) > 
+						strlen(inliners[inliners_i]->name)
+					); // have we wrote past our boundry?
 					inliners_i++;
 					leaves_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
@@ -313,6 +354,13 @@ atui_branch* atui_branch_allocator(
 						leaves_initial[leavesinit_i].branch_bud(
 							&branch_funcify_args
 						);
+					strcpy(
+						branches[branches_i]->name,
+						leaves_initial[leavesinit_i].name
+					);
+					assert(sizeof(((atui_branch*)0)->name) > 
+						strlen(branches[branches_i]->name)
+					); // have we wrote past our boundry?
 					branches_i++;
 				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
 					leaves[leaves_i] = leaves_initial[leavesinit_i];
