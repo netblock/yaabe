@@ -38,7 +38,11 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 		}\
 	)
 
-
+// Add a child branch to a parent branch
+#define ATUI_ADD_BRANCH(parent, child)\
+	assert(parent->num_branches < parent->max_num_branches);\
+	parent->child_branches[parent->num_branches] = child;\
+	parent->num_branches++;
 
 // To define an array of string-val pairs of an enum.
 #define PPATUI_ENUMER(name, ...)\
