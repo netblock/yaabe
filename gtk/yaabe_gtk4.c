@@ -8,7 +8,7 @@ typedef struct yaabegtk_commons {
 	GtkApplication* yaabe_gtk;
 
 	GtkColumnView* leaves_view; // So branches can set leaves
-	GtkListView* branches_view; // So we can set the bios during GTK
+	GtkColumnView* branches_view; // So we can set the bios during GTK
 
 	// For gtk_widget_set_sensitive() -- don't allow when no bios is loaded
 	GtkWidget* save_buttons;
@@ -135,7 +135,13 @@ void destroy_atomtree_with_gtk(struct atom_tree* atree, bool free_bios) {
 
 
 
-
+static void generic_label_column_spawner(
+		GtkListItemFactory* factory, GtkListItem* list_item) {
+//TODO use https://docs.gtk.org/gtk4/class.Inscription.html
+	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_list_item_set_child(list_item, label);
+}
 static void leaves_label_column_spawner(
 		GtkListItemFactory* factory, GtkListItem* list_item) {
 // setup to spawn a UI skeleton
@@ -144,6 +150,7 @@ static void leaves_label_column_spawner(
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
 
 	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
 
 	gtk_list_item_set_child(list_item, expander);
@@ -171,11 +178,7 @@ static void leaves_offset_column_recycler(
 // bind data to the UI skeleton
 
 	yaabegtk_commons* const commons = commonsptr;
-
-	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
-		gtk_list_item_get_child(list_item)
-	);
-	GtkWidget* const label = gtk_tree_expander_get_child(expander);
+	GtkWidget* const label = gtk_list_item_get_child(list_item);
 
 	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
@@ -468,7 +471,6 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 	gtk_column_view_set_show_row_separators(leaves_list, true);
 	commons->leaves_view = leaves_list;
 
-
 	// Create and attach columns
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
@@ -506,7 +508,7 @@ inline static GtkWidget* create_leaves_pane(yaabegtk_commons* commons) {
 
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory,
-		"setup", G_CALLBACK(leaves_label_column_spawner), NULL
+		"setup", G_CALLBACK(generic_label_column_spawner), NULL
 	);
 	g_signal_connect(factory,
 		"bind", G_CALLBACK(leaves_offset_column_recycler), commons
@@ -601,58 +603,98 @@ inline static GtkSelectionModel* atui_gtk_model(yaabegtk_commons* commons) {
 
 
 
-static void branch_listitem_spawner(
+static void branch_name_column_spawner(
 		GtkSignalListItemFactory* factory, GtkListItem* list_item) {
 // setup
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
 
 	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
-	//gtk_tree_expander_set_indent_for_depth(GTK_TREE_EXPANDER(expander), true);
-	//gtk_tree_expander_set_hide_expander(GTK_TREE_EXPANDER(expander), false);
 
 	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
 
 	gtk_list_item_set_child(list_item, expander);
 }
-static void branch_listitem_recycler(
+static void branch_name_column_recycler(
 		GtkSignalListItemFactory* factory, GtkListItem* list_item) {
 // bind
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_list_item_get_child(list_item)
 	);
-	GtkWidget* const row_label = gtk_tree_expander_get_child(expander);
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 
 	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
 	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
-	gtk_label_set_text(GTK_LABEL(row_label), branch->name);
+	gtk_label_set_text(GTK_LABEL(label), branch->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
+}
+static void branch_type_column_recycler(
+		GtkSignalListItemFactory* factory, GtkListItem* list_item) {
+// bind
+
+	GtkWidget* const label = gtk_list_item_get_child(list_item);
+
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
+	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
+	g_object_unref(gobj_branch);
+
+	gtk_label_set_text(GTK_LABEL(label), branch->varname);
 }
 inline static GtkWidget* create_branches_pane(
 		yaabegtk_commons* commons, GtkSelectionModel* atui_model) {
 
-	GtkListItemFactory* const branch_list_factory =
-		gtk_signal_list_item_factory_new();
-	g_signal_connect(branch_list_factory,
-		"setup", G_CALLBACK(branch_listitem_spawner), NULL
+	// Columnview abstract
+	GtkColumnView* const branches_list = GTK_COLUMN_VIEW(
+		gtk_column_view_new(atui_model)
 	);
-	g_signal_connect(branch_list_factory,
-		"bind", G_CALLBACK(branch_listitem_recycler), NULL
-	);
-	GtkWidget* const listview = gtk_list_view_new(
-		atui_model, branch_list_factory
-	);
+	gtk_column_view_set_reorderable(branches_list, true);
+	//gtk_column_view_set_show_row_separators(branches_list, true);
+	gtk_column_view_set_show_column_separators(branches_list, true);
+	commons->branches_view = branches_list;
 
-	commons->branches_view = GTK_LIST_VIEW(listview);
+	// Create and attach columns
+	GtkListItemFactory* factory;
+	GtkColumnViewColumn* column;
+
+
+	factory = gtk_signal_list_item_factory_new();
+	g_signal_connect(factory,
+		"setup", G_CALLBACK(branch_name_column_spawner), NULL
+	);
+	g_signal_connect(factory,
+		"bind", G_CALLBACK(branch_name_column_recycler), NULL
+	);
+	column = gtk_column_view_column_new("Table", factory);
+	gtk_column_view_column_set_resizable(column, true);
+	gtk_column_view_column_set_expand(column, true);
+	gtk_column_view_append_column(branches_list, column);
+	g_object_unref(column);
+
+	factory = gtk_signal_list_item_factory_new();
+	g_signal_connect(factory,
+		"setup", G_CALLBACK(generic_label_column_spawner), NULL
+	);
+	g_signal_connect(factory,
+		"bind", G_CALLBACK(branch_type_column_recycler), NULL
+	);
+	column = gtk_column_view_column_new("Struct Type", factory);
+	gtk_column_view_column_set_resizable(column, true);
+	gtk_column_view_append_column(branches_list, column);
+	g_object_unref(column);
+
 
 	GtkWidget* const scrolledlist = gtk_scrolled_window_new();
-	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolledlist), listview);
+	gtk_scrolled_window_set_child(
+		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(branches_list)
+	);
 	GtkWidget* const frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
@@ -840,7 +882,7 @@ inline static void yaabegtk_load_bios(
 
 		commons->atomtree_root = atree;
 		GtkSelectionModel* const newmodel = atui_gtk_model(commons);
-		gtk_list_view_set_model(commons->branches_view, newmodel);
+		gtk_column_view_set_model(commons->branches_view, newmodel);
 		set_leaves_list(newmodel, 0,1, commons);
 
 		destroy_atomtree_with_gtk(oldtree, true);
@@ -932,7 +974,7 @@ static void reload_button_reload_bios(GtkWidget* button, gpointer commonsptr) {
 	commons->atomtree_root = new_tree;
 
 	GtkSelectionModel* const newmodel = atui_gtk_model(commons);
-	gtk_list_view_set_model(commons->branches_view, newmodel);
+	gtk_column_view_set_model(commons->branches_view, newmodel);
 	set_leaves_list(newmodel, 0,1, commons);
 
 	g_object_unref(newmodel);
@@ -1109,8 +1151,8 @@ hidden; when a file is set unhide it.
 	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
 	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
 	gtk_paned_set_shrink_end_child(GTK_PANED(tree_divider), false);
-	gtk_widget_set_size_request(branches_pane, 34, 50);
-	gtk_widget_set_size_request(leaves_pane, 66, 50);
+	//gtk_widget_set_size_request(branches_pane, 34, 50); // 1/3 horizontal
+	//gtk_widget_set_size_request(leaves_pane, 66, 50);  // 2/3
 	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
@@ -1146,7 +1188,7 @@ hidden; when a file is set unhide it.
 	);
 
 	set_editor_titlebar(commons);
-	gtk_window_set_default_size(window, 1000,563); // 16:9
+	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, button_pane_complex);
 	gtk_window_present(window);
 
