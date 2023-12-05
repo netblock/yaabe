@@ -494,14 +494,14 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 					);
 				}
 				break;
-			case v2_6:
+			case v2_6: // force v2.5
 				if (gfx_info->v2_6->gcgoldenoffset) {
 					gfx_info->gcgolden = gfx_info->leaves
 						+ gfx_info->v2_6->gcgoldenoffset;
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"atom_gfx_info_v2_6 (forced)",
+						"atom_gfx_info_v2_5 (forced)",
 						NULL,gfx_info->table_header,  1,NULL
 					);
 					ATUI_ADD_BRANCH(atui_gfx_info,
@@ -1021,18 +1021,8 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi24->dram_data_remap = (void*)vi24->leaves +
 			vi24->leaves->dram_data_remap_tbloffset;
-		const uint8_t num_bit_byte_remap =
-			sizeof(vi24->dram_data_remap->bit_byte_remap)
-			/ sizeof(struct atom_gddr6_bit_byte_remap);
-		atui_dram_data_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,
-			NULL,  NULL,vi24->dram_data_remap,  num_bit_byte_remap,NULL
-		);
-		ATUI_ADD_BRANCH(atui_dram_data_remap,
-			ATUI_MAKE_BRANCH(
-				atom_gddr6_bit_byte_remap,
-				NULL,  NULL,&(vi24->dram_data_remap->bit_byte_remap[i]),  0,NULL
-			)
-		);
+		if (generate_atui) {
+		}
 	} else {
 		vi24->dram_data_remap = NULL;
 	}
@@ -1176,6 +1166,11 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi25->dram_data_remap = (void*)vi25->leaves +
 			vi25->leaves->dram_data_remap_tbloffset;
+		if (generate_atui) {
+			atui_dram_data_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,
+				NULL,  NULL,vi25->dram_data_remap,  0,NULL
+			);
+		}
 	} else {
 		vi25->dram_data_remap = NULL;
 	}
@@ -1325,6 +1320,11 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi26->dram_data_remap = (void*)vi26->leaves +
 			vi26->leaves->dram_data_remap_tbloffset;
+		if (generate_atui) {
+			atui_dram_data_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,
+				NULL,  NULL,vi26->dram_data_remap,  0,NULL
+			);
+		}
 	} else {
 		vi26->dram_data_remap = NULL;
 	}
@@ -1431,8 +1431,14 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 
 	atui_branch* atui_dram_data_remap = NULL;
 	if (vi30->leaves->dram_data_remap_table_offset) {
+		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi30->dram_data_remap = (void*)vi30->leaves +
 			vi30->leaves->dram_data_remap_table_offset;
+		if (generate_atui) {
+			atui_dram_data_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,
+				NULL,  NULL,vi30->dram_data_remap,  0,NULL
+			);
+		}
 	} else {
 		vi30->dram_data_remap = NULL;
 	}

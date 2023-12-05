@@ -271,7 +271,8 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-	struct atom_gddr6_dram_data_remap* dram_data_remap;
+	//struct atom_gddr6_dram_data_remap* dram_data_remap;
+	struct atom_dram_data_remap* dram_data_remap;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
 	struct atomtree_umc_init_reg_block post_ucode_init;
 };
@@ -289,7 +290,12 @@ struct atomtree_vram_info_header_v2_4 {
 
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
 	struct atomtree_umc_init_reg_block mc_phyinit;
-	struct atom_gddr6_dram_data_remap* dram_data_remap;
+
+	// probably not gddr6 remap cause data looks significantly different in
+	// navi10, vs nav21 and navi31
+	//struct atom_gddr6_dram_data_remap* dram_data_remap;
+	struct atom_dram_data_remap* dram_data_remap;
+
 	struct atomtree_umc_init_reg_block post_ucode_init;
 };
 

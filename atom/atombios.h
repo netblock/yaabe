@@ -7516,7 +7516,7 @@ struct atom_vram_info_header_v2_2 {
 	struct atom_vram_module_v8 aVramInfo[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
 
-
+// TODO hook up vram_info v2.3 and v2.4 to this, for atui
 struct atom_dram_data_remap {
 	uint8_t  ByteRemapCh0;
 	uint8_t  ByteRemapCh1;
