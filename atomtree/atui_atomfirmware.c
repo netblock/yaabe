@@ -4,46 +4,46 @@ AtomTree iterable interface for UIs.
 See ppatui.h for the metaprogramming and atui.h for general API.
 
 ********************************************************************************
-pseudo-example:
-PPATUI_FUNCIFY(atomprefix, atomtype, atomtree_type,
-	(bios->namespace_var, "UI display name",
-		(radix, fancy, optional_fancy_args),
-		((lang, description)
-			(lang, description)
-		)
-	),
-	(bios->namespace_var, "UI display name",
-		(radix, fancy, optional_fancy_args),
-		((lang, description)
-			(lang, description)
-		)
-	)
-)
+************************** Basic Usage and Namespaces **************************
 ********************************************************************************
-
-WARNING: always have the last comma removed:
-	This is bad:  arg,arg,)
-	This is good: arg,arg)
-
-********************************************************************************
-********************************** Namespace ***********************************
-********************************************************************************
-
 There are two namespaces available, bios and atomtree.
 bios is the struct that the branch represents, straightforward.
 atomtree is an optional atomtree association that could be useful to pull in
 computed data; or even represent atomtree-computed data as leaves.
 
-declaration:
-PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
-	...
+declaration pseudo example:
+PPATUI_FUNCIFY(struct|union, bios_struct_namespace, atomtree_struct_namespace
+	(bios->namespace_var, "UI display name",
+		(radix, fancy, optional_fancy_args),
+		(
+			(lang, description),
+			(lang, description)
+		)
+	),
+	(atomtree->namespace_var, "UI display name",
+		(radix, fancy, optional_fancy_args),
+		(
+			(lang, "description"),
+			(lang, "description")
+		)
+	)
 )
 
-instantiation:
+instantiation pseudo example:
 atui_branch* foba = ATUI_MAKE_BRANCH(name_of_bios_struct,
+	"optional UI rename",
 	atomtree_pointer, bios_pointer,
 	number_of_child_branches, child_branches_array
 )
+
+
+After instantiation, to add a branch as a child to another branch,
+ATUI_ADD_BRANCH(parent_branch, child_branch);
+
+
+WARNING: always have the last comma removed:
+This is bad:  arg,arg,)
+This is good: arg,arg)
 
 ********************************************************************************
 *********************************** Radix *************************************
@@ -65,11 +65,16 @@ set based on the orignial C type.
 ********************************************************************************
 ATUI_BITFIELD:
 If the element should be viewed in base 2, but also has bitfields for children:
-	(bios->namespace_var, "UI display name",
-		(ATUI_BIN, ATUI_BITFIELD, (
-			(bitfield entry name, end_bit, start,  ATUI_DEC, (ATUI_NODESCR)),
-			(bitfield entry name, 7, 0, ATUI_DEC, (ATUI_NODESCR)),
-			("bitfield entry name", 31,8, (ATUI_DEC|ATUI_SIGNED), (ATUI_NODESCR)),
+	(source->namespace_var, "UI display name",
+		(radix, ATUI_BITFIELD, (
+			("bitfield entry name 0", end_bit, start_bit, radix,
+				(lang, "description"),
+				(lang, "description")
+			),
+			("bitfield entry name 1", 7, 0, ATUI_DEC, (ATUI_NODESCR)),
+			("bitfield entry name 2", 31,8, (ATUI_DEC|ATUI_SIGNED),
+				(ATUI_NODESCR)
+			),
 		)), (ATUI_NODESCR)
 	)
 
@@ -89,8 +94,8 @@ First populate the atui enum:
 		ENUM_ENTRY3,
 	)
 And then for the atui table,
-	(bios->namespace_var, "UI display name",
-		(ATUI_HEX, ATUI_ENUM, enum_struct_name),
+	(source->namespace_var, "UI display name",
+		(radix, ATUI_ENUM, enum_struct_name),
 		(ATUI_NODESCR)
 	)
 
@@ -98,34 +103,40 @@ And then for the atui table,
 ATUI_INLINE:
 If the element should reference a table, a atui_branch to inline as a
 collection of leaves,
-	(bios->namespace_var, "UI display name",
+	(source->namespace_var, "UI display name",
 		(ATUI_NAN, ATUI_INLINE, table_to_inline),
 		(ATUI_NODESCR)
 	)
 If you want to import just the leaves of the table, as if it was the leaves of
-the branch you're constructing, set the radix to ATUI_NODISPLAY
-Also make sure the table is populated with an ATUI_FUNCIFY()
+the branch you're constructing, set the radix to ATUI_NODISPLAY.
+
+While not practically useful, the name of the branch object will copy the UI
+display name of the leaf.
+
+Also make sure the table is defined with an ATUI_FUNCIFY().
 
 ********************************************************************************
 ATUI_PETIOLE:
 If the element should reference a table, a atui_branch to integrate as a child
 branch
-	(bios->namespace_var, "UI display name",
+	(source->namespace_var, "UI display name",
 		(ATUI_NAN, ATUI_PETIOLE, table_to_reference),
 		(ATUI_NODESCR)
 	)
 Since it isn't a leaf, but a reference to another branch, radix is ignored.
-Also make sure the table is populated with an ATUI_FUNCIFY()
+The name of the branch object will copy the UI display name of the leaf.
+
+Also make sure the table is populated with an ATUI_FUNCIFY().
 
 ********************************************************************************
 ATUI_STRING, ATUI_ARRAY:
 If the element is a dynanmically-sized 0-terminated string,
-	(bios->namespace_var, "UI display name",
+	(source->namespace_var, "UI display name",
 		(ATUI_NAN, ATUI_STRING),
 		(ATUI_NODESCR)
 	),
 or otherwise an array,
-	(bios->namespace_var, "UI display name",
+	(source->namespace_var, "UI display name",
 		(ATUI_HEX, ATUI_ARRAY),
 		(ATUI_NODESCR)
 	),
@@ -141,12 +152,13 @@ ATUI_DYNARRAY:
 	(source->array_start_pointer, "leaf top UI name",
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
-			(namespace_var, UI display name,
+			(ATUI_NULL, "UI display name",
 				(radix, fancy, optional_fancy_args),
-				((lang, description)
-					(lang, description)
+				(
+					(lang, "description"),
+					(lang, "description")
 				)
-			)
+			),
 			source->deferred_pointers, source->dynarray_number_of_elements,
 			enum_name
 		)),
@@ -161,11 +173,11 @@ The leaf pattern follows regular syntax, and can be a bitfield.
 
 dynarray_start_pointer is a direct pointer that is treated as the beginning of
 the array, such that access would be effectively, 
-	datatype* dataptr = &(source->array_start_pointer[i])
+	datatype* dataptr = &(source->array_start_pointer[i]);
 
 deferred_pointers is an array of pointers, each of which points an element,
 such that access would be effectively,
-	datatype* dataptr = source->deferred_pointers[i]
+	datatype* dataptr = source->deferred_pointers[i];
 
 dynarray_start_pointer is for contiguous isometric arrays; deferred_pointers is
 for arrays whose elements are not necessarily contiguous, and/or not
