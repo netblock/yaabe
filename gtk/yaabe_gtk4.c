@@ -1144,8 +1144,6 @@ hidden; when a file is set unhide it.
 
 	GtkWidget* const branches_pane = create_branches_pane(commons, atui_model);
 	GtkWidget* const leaves_pane = create_leaves_pane(commons);
-	set_leaves_list(atui_model, 0,1, commons);
-
 	GtkWidget* const tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_paned_set_resize_start_child(GTK_PANED(tree_divider), true);
 	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
@@ -1157,7 +1155,7 @@ hidden; when a file is set unhide it.
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
 	if (commons->atomtree_root) {
-		gtk_selection_model_select_item(atui_model, 0, true);
+		set_leaves_list(atui_model, 0,1, commons);
 	} else {
 		//gtk_widget_set_visible(tree_divider, false);
 	}
