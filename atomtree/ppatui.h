@@ -143,9 +143,29 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	int32_t:32, int32_t*:32, int32_t const*:32,\
 	int64_t:64, int64_t*:64, int64_t const*:64,\
 \
+	uq6_2_t:8, uq6_2_t*:8, uq6_2_t const*:8,\
+	uq4_4_t:8, uq4_4_t*:8, uq4_4_t const*:8,\
+	uq14_2_t:16, uq14_2_t*:16, uq14_2_t const*:16,\
+	uq8_8_t:16, uq8_8_t*:16, uq8_8_t const*:16,\
+	uq30_2_t:32, uq30_2_t*:32, uq30_2_t const*:32,\
+	uq16_16_t:32, uq16_16_t*:32, uq16_16_t const*:32,\
+\
 	float16_t:16, float16_t*:16, float16_t const*:16,\
 	float32_t:32, float32_t*:32, float32_t const*:32,\
 	float64_t:64, float64_t*:64, float64_t const*:64,\
+\
+	default:0\
+)
+
+#define _PPATUI_LEAF_FIXED_FRACTION_BITS(var) _Generic((var),\
+	uq6_2_t:2, uq6_2_t*:2, uq6_2_t const*:2,\
+	uq4_4_t:4, uq4_4_t*:4, uq4_4_t const*:4,\
+\
+	uq14_2_t:2, uq14_2_t*:2, uq14_2_t const*:2,\
+	uq8_8_t:8, uq8_8_t*:8, uq8_8_t const*:8,\
+\
+	uq30_2_t:2, uq30_2_t*:2, uq30_2_t const*:2,\
+	uq16_16_t:16, uq16_16_t*:16, uq16_16_t const*:16,\
 \
 	default:0\
 )
@@ -178,6 +198,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
 	.num_bytes = _PPATUI_FANCY_INIT_NULLPTR_SIZE(var),\
 	.array_size = 1,\
+	.fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(var),\
 	.total_bits = _PPATUI_LEAF_BITNESS(var),\
 	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\
 	.val = _PPATUI_FANCY_INIT_NULLPTR(var),\

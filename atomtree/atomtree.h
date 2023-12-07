@@ -21,9 +21,13 @@ typedef uint8_t char8_t;
 #include <uchar.h>
 #endif
 
+// weird bugs with sprintf when using _Floatn, but as long as we can assert
+// float/double will be fine.
 typedef _Float16 float16_t;
-typedef _Float32 float32_t;
-typedef _Float64 float64_t;
+//typedef _Float32 float32_t;
+//typedef _Float64 float64_t;
+typedef float float32_t;
+typedef double float64_t;
 //typedef _Float128 float128_t; // currently unnecessary
 // AVX-512 does partial native 128-bit?
 
@@ -50,18 +54,7 @@ struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
 static_assert(sizeof(struct _ninebytes) == 9);
 static_assert(sizeof(struct _tenbytes) == 10);
 
-//TODO Q-notation type
-// https://en.wikipedia.org/wiki/Q_(number_format)
-// "Q2" means Qm.2 where m fills the rest of the natural width
-/*
-typedef union {
-	uint16_t raw;
-	struct { uint16_t
-		fraction :1-0 +1,
-		integer :16-2 +1;
-	};
-} uq14_2_t;
-*/
+#include "qnotation.h"
 
 
 #include "ddrmoderegisters.h"

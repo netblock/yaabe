@@ -50,6 +50,7 @@ void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
 		raw_val <<= leaf->bitfield_lo;
 		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
 	}
+	assert(0);
 }
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	if (leaf->type & ATUI_ANY) {
@@ -61,35 +62,85 @@ int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 		val >>= remaining_bits; // rightshift on signed repeats sign
 		return val;
 	}
-	return (1ULL<<63);
+	assert(0);
 }
-void atui_leaf_set_val_fraction(atui_leaf* leaf, float32_t val) {
-	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
+void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
+	if ((leaf->type & ATUI_ANY) != ATUI_FRAC) {
+		assert(0);
+	}
+	if (leaf->fractional_bits) {
+		const float64_t frac = (val - floor(val)) * (1<<leaf->fractional_bits);
+		uint64_t fixed_val = floor(val);
+		fixed_val <<= leaf->fractional_bits;
+		fixed_val += frac;
 		switch(leaf->total_bits) {
+			case 8:
+				*(leaf->u8) = fixed_val;
+				return;
 			case 16:
-				*(leaf->f16) = val;
-				break;
+				*(leaf->u16) = fixed_val;
+				return;
 			case 32:
-				*(leaf->f32) = val;
-				break;
+				*(leaf->u32) = fixed_val;
+				return;
 			case 64:
-				*(leaf->f64) = val;
-				break;
+				*(leaf->u64) = fixed_val;
+				return;
 		}
 	}
-}
-float32_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
-	if ((leaf->type & ATUI_ANY) == ATUI_FRAC) {
-		switch(leaf->total_bits) {
-			case 16:
-				return *(leaf->f16);
-			case 32:
-				return *(leaf->f32);
-			case 64:
-				return *(leaf->f64);
-		}
+
+	switch(leaf->total_bits) { // else float
+		case 16:
+			*(leaf->f16) = val;
+			return;
+		case 32:
+			*(leaf->f32) = val;
+			return;
+		case 64:
+			*(leaf->f64) = val;
+			return;
 	}
-	return NAN;
+
+	assert(0);
+}
+float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
+	if ((leaf->type & ATUI_ANY) != ATUI_FRAC) {
+		assert(0);
+	}
+	if (leaf->fractional_bits) { // fixed-point
+		// f64 can represent represent ints up to 2**53 without rounding.
+		assert((leaf->total_bits - leaf->fractional_bits) < 53);
+		float64_t val;
+		switch(leaf->total_bits) {
+			case 8:
+				val = *(leaf->u8);
+				break;
+			case 16:
+				val = *(leaf->u16);
+				break;
+			case 32:
+				val = *(leaf->u32);
+				break;
+			case 64:
+				val = *(leaf->u64);
+				break;
+		};
+		val /= (1 << leaf->fractional_bits);
+		return val;
+	};
+
+	// else native float
+	switch(leaf->total_bits) {
+		case 16:
+			return *(leaf->f16);
+		case 32:
+			return *(leaf->f32);
+		case 64:
+			assert(0); // bump returns to 64.
+			return *(leaf->f64);
+	}
+
+	assert(0);
 }
 
 int64_t strtoll_2(const char8_t* str) {

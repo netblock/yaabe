@@ -94,8 +94,9 @@ struct _atui_leaf {
 	enum atui_type type; // how to display text, and other config data
 	uint32_t num_bytes; // number of bytes for quick leaf size
 	uint8_t array_size;
-	uint8_t total_bits;  // number of bits for the leaf
 
+	uint8_t fractional_bits; // if fixed-point	
+	uint8_t total_bits;  // number of bits for the leaf
 	uint8_t bitfield_hi; // bitfield range end
 	uint8_t bitfield_lo; // bitfield range start
 
@@ -114,15 +115,22 @@ struct _atui_leaf {
 	union {
 		const void* val;
 
-		uint8_t*   u8;
-		uint16_t*  u16;
-		uint32_t*  u32;
-		uint64_t*  u64;
+		uint8_t*  u8;
+		uint16_t* u16;
+		uint32_t* u32;
+		uint64_t* u64;
 
-		int8_t*    s8;
-		int16_t*   s16;
-		int32_t*   s32;
-		int64_t*   s64;
+		int8_t*   s8;
+		int16_t*  s16;
+		int32_t*  s32;
+		int64_t*  s64;
+
+		uq6_2_t*     u6_2;
+		uq4_4_t*     u4_4;
+		uq14_2_t*   u14_2;
+		uq8_8_t*     u8_8;
+		uq30_2_t*   u30_2;
+		uq16_16_t* u16_16;
 
 		float16_t* f16;
 		float32_t* f32;
@@ -173,8 +181,8 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
 void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val);
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf);
-void atui_leaf_set_val_fraction(atui_leaf* leaf, float32_t val);
-float32_t atui_leaf_get_val_fraction(atui_leaf* leaf);
+void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val);
+float64_t atui_leaf_get_val_fraction(atui_leaf* leaf);
 
 // TODO stroll that considers 0b prefix?
 int64_t strtoll_2(const char8_t* str);
