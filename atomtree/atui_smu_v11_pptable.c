@@ -849,68 +849,28 @@ PPATUI_FUNCIFY(struct, UclkDpmChangeRange_t, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, smu11_pptable_v3_i2c_u32, atomtree_powerplaytable,
-	(bios->i2ccontroller_vr_gfx, "i2ccontroller_vr_gfx",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_soc, "i2ccontroller_vr_soc",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_vddci, "i2ccontroller_vr_vddci",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_mvdd, "i2ccontroller_vr_mvdd",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_liquid_0, "i2ccontroller_liquid_0",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_liquid_1, "i2ccontroller_liquid_1",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_plx, "i2ccontroller_plx",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v3_i2c_control, atomtree_powerplaytable,
+	(bios->I2cControllers, "I2cControllers", // start, name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->I2cControllers, "%s",
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
+				(ATUI_NODESCR)
+			),
+			NULL, I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3, // deferred start, count
+			I2cControllerName_SMU_11_0_0_e // enum
+		)), (ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, smu11_pptable_v8_i2c_u8mixed, atomtree_powerplaytable,
-	(bios->i2ccontroller_vr_gfx, "i2ccontroller_vr_gfx",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_soc, "i2ccontroller_vr_soc",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_vddci, "i2ccontroller_vr_vddci",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_vr_mvdd, "i2ccontroller_vr_mvdd",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_liquid_0, "i2ccontroller_liquid_0",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_liquid_1, "i2ccontroller_liquid_1",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_plx, "i2ccontroller_plx",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
-	),
-	(bios->i2ccontroller_spare, "i2ccontroller_spare",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
-		(ATUI_NODESCR)
+PPATUI_FUNCIFY(struct, smu11_smcpptable_v8_i2c_control, atomtree_powerplaytable,
+	(bios->I2cControllers, "I2cControllers", // start, name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->I2cControllers, "%s",
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8_mixed),
+				(ATUI_NODESCR)
+			),
+			NULL, I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8, // deferred start, count
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
 	)
 )
 
@@ -921,6 +881,10 @@ I_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\r\t\t\t),\r\t\t\tbios->\2, \3 \/\/ start, c
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 	(bios->Version, "Version",
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->features, "features",
+		(ATUI_NAN, ATUI_INLINE, powerplay_feature_control_smu11_0x13),
+		(ATUI_NODESCR)
 	),
 
 	(bios->SocketPowerLimitAc0, "SocketPowerLimitAc0",
@@ -1759,7 +1723,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 		((LANG_ENG, "kHz"))
 	),
 
-//struct i2ccontrollerconfig_u32 I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11];
+	(bios->I2cControllers, "I2cControllers",
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v3_i2c_control),
+		(ATUI_NODESCR)
+	),
+
 
 	(bios->BoardReserved, "BoardReserved",
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -1776,6 +1744,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v3, atomtree_powerplaytable,
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	(bios->Version, "Version",
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->features, "features",
+		(ATUI_NAN, ATUI_PETIOLE, powerplay_feature_control_smu11_0x33),
+		(ATUI_NODESCR)
 	),
 
 	(bios->SocketPowerLimitAc, "SocketPowerLimitAc", // start, name
@@ -2476,7 +2449,10 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	//struct i2ccontrollerconfig_u8_mixed I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8];
+	(bios->I2cControllers, "I2cControllers",
+		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v8_i2c_control),
+		(ATUI_NODESCR)
+	),	
 
 	(bios->MaxVoltageStepGfx, "MaxVoltageStepGfx",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -4037,7 +4013,17 @@ PPATUI_FUNCIFY(struct, smu_11_0_powerplay_table, atomtree_powerplaytable,
 	(bios->reserve, "reserve",
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "Zero filled field reserved for future use"))
+	),
+
+	(bios->power_saving_clock, "power_saving_clock",
+		(ATUI_NAN, ATUI_PETIOLE, smu_11_0_power_saving_clock_table),
+		(ATUI_NODESCR)
+	),
+	(bios->overdrive_table, "overdrive_table",
+		(ATUI_NAN, ATUI_PETIOLE, smu_11_0_overdrive_table),
+		(ATUI_NODESCR)
 	)
+
 )
 
 PPATUI_FUNCIFY(struct, smu_11_0_7_powerplay_table, atui_nullstruct,

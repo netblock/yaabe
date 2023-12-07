@@ -2367,8 +2367,8 @@ enum I2cControllerName_e {
 	I2C_CONTROLLER_NAME_LIQUID_0   = 4,
 	I2C_CONTROLLER_NAME_LIQUID_1   = 5,
 	I2C_CONTROLLER_NAME_PLX        = 6,
-    I2C_CONTROLLER_NAME_FAN_INTAKE = 7,
 	I2C_CONTROLLER_NAME_SPARE      = 7, // Navi10, Navi21
+    I2C_CONTROLLER_NAME_FAN_INTAKE = 7, // SMU13
 
 	I2C_CONTROLLER_NAME_COUNT = 8,
 	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3 = 7,
@@ -3298,6 +3298,10 @@ struct atom_vram_info_header_v2_3 {
 	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
 
+struct atom_vram_module_v9_dummy_v2_3 { // dummy table for ATUI
+	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+};
+
 /******************************************************************************/
 // Data Table vram_info v3.0  structure
 /******************************************************************************/
@@ -3315,6 +3319,9 @@ struct atom_vram_module_v3_0 {
 	char8_t dram_pnstring[40];
 };
 
+struct atom_vram_module_v30_dummy_v3_0 { // dummy table for ATUI
+	struct   atom_vram_module_v3_0  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+};
 struct atom_vram_info_header_v3_0 {
 	struct atom_common_table_header table_header;
 	uint16_t mem_tuning_table_offset;
@@ -3344,7 +3351,7 @@ struct atom_vram_info_header_v3_0 {
 
 
 
-
+/*
 struct atom_umc_register_addr_info {
 	uint32_t umc_register_addr:24;
 	uint32_t umc_reg_type_ind:1; // flag
@@ -3354,6 +3361,7 @@ union atom_umc_register_addr_info_access_old {
 	struct atom_umc_register_addr_info umc_reg_addr;
 	uint32_t u32umc_reg_addr;
 };
+*/
 enum atom_umc_register_addr_info_flag {
 // atom_umc_register_addr_info.
 	b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  = 0x01,
@@ -3367,6 +3375,7 @@ union atom_umc_register_addr_info_access {
 	};
 };
 
+/*
 struct atom_umc_reg_setting_id_config {
 	uint32_t memclockrange:24;
 	uint32_t mem_blk_id:8;
@@ -3375,6 +3384,7 @@ union atom_umc_reg_setting_id_config_access_old {
 	struct atom_umc_reg_setting_id_config umc_id_access;
 	uint32_t u32umc_id_access;
 };
+*/
 union atom_umc_reg_setting_id_config_access {
 	uint32_t u32umc_id_access;
 	struct { uint32_t
@@ -3382,17 +3392,19 @@ union atom_umc_reg_setting_id_config_access {
 		mem_blk_id    :31-24 +1;
 	};
 };
-
-
 struct atom_umc_reg_setting_data_block {
 	union atom_umc_reg_setting_id_config_access  block_id;
 	uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
 };
 
+
 struct atom_umc_init_reg_block_header {
 // is the first two elements of atom_umc_init_reg_block, and is for sizeof()
 // math purposes only
 	uint16_t umc_reg_num; uint16_t reserved;
+};
+struct umc_reg_settings_dummy { // dummy table for ATUI
+	struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
 struct atom_umc_init_reg_block { // not literal, topological only
 	uint16_t umc_reg_num;
@@ -3400,7 +3412,6 @@ struct atom_umc_init_reg_block { // not literal, topological only
 
 	// for allocation purpose, the real number come from umc_reg_num;
 	union atom_umc_register_addr_info_access umc_reg_list[1];
-
 	struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
 
@@ -3433,6 +3444,9 @@ struct atom_vram_module_v10 {
 	char8_t dram_pnstring[20]; // part number end with '0'
 };
 
+struct atom_vram_module_v10_dummy_v2_4 { // dummy table for ATUI
+	struct   atom_vram_module_v10  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+};
 struct atom_vram_info_header_v2_4 {
 	struct   atom_common_table_header table_header;
 	uint16_t mem_adjust_tbloffset;       // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting
@@ -3480,7 +3494,8 @@ struct atom_vram_module_v11 {
 };
 
 struct atom_gddr6_ac_timing_v2_5 {
-	union atom_umc_reg_setting_id_config_access u32umc_id_access;	uint8_t  RL;
+	union atom_umc_reg_setting_id_config_access u32umc_id_access;
+	uint8_t  RL;
 	uint8_t  WL;
 	uint8_t  tRAS;
 	uint8_t  tRC;
@@ -3542,7 +3557,6 @@ struct atom_gddr6_ac_timing_v2_5 {
 	uint8_t  reserved[9];
 };
 
-
 // TODO atombios.h has ATOM_DRAM_DATA_REMAP
 struct atom_gddr6_bit_byte_remap {
 	uint32_t dphy_byteremap; // mmUMC_DPHY_ByteRemap
@@ -3553,13 +3567,15 @@ struct atom_gddr6_bit_byte_remap {
 	uint32_t aphy_bitremap1; // mmUMC_APHY_BitRemap1
 	uint32_t phy_dram;       // mmUMC_PHY_DRAM
 };
-
 struct atom_gddr6_dram_data_remap {
 	uint32_t table_size;
 	uint8_t  phyintf_ck_inverted[8]; // UMC_PHY_PHYINTF_CNTL.INV_CK
 	struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
 };
 
+struct atom_vram_module_v11_dummy_v2_5 { // dummy table for ATUI
+	struct   atom_vram_module_v11  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+};
 struct atom_vram_info_header_v2_5 {
 	struct   atom_common_table_header table_header;
 	uint16_t mem_adjust_tbloffset;        // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust settings
@@ -3592,6 +3608,9 @@ struct atom_vram_info_header_v2_6 {
 	uint8_t  umcip_max_ver;
 	uint8_t  mc_phy_tile_num;
 	struct atom_vram_module_v9 vram_module[16];
+};
+struct atom_vram_module_v9_dummy_v2_6 { // dummy table for ATUI
+	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
 /******************************************************************************/
 // Data Table voltageobject_info  structure

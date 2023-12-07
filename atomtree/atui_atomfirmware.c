@@ -1233,9 +1233,17 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
 	),
 
 
-	(bios->i2ccontrollers, "i2ccontrollers",
-		(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u32),
-		(ATUI_NODESCR)
+	(bios->i2ccontrollers, "I2C Controllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u32),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0]),
+			I2cControllerName_SMU_11_0_0_e // enum
+		)), (ATUI_NODESCR)
 	),
 
 
@@ -1280,6 +1288,18 @@ PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+	(bios->I2cControllers, "I2C Controllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, smudpm_i2c_controller_config_v2),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0]),
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
 	),
 
 	(bios->MaxVoltageStepGfx, "MaxVoltageStepGfx",
@@ -1952,6 +1972,10 @@ PPATUI_FUNCIFY(struct, atom_dtd_format, atomtree_lcd_info,
 PPATUI_FUNCIFY(struct, atom_lcd_info_v2_1, atomtree_lcd_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+		(bios->lcd_timing, "lcd_timing",
+		(ATUI_NAN, ATUI_PETIOLE, atom_dtd_format),
 		(ATUI_NODESCR)
 	),
 	(bios->backlight_pwm, "backlight_pwm",
@@ -2948,7 +2972,23 @@ PPATUI_FUNCIFY(struct, atom_gpio_pin_assignment_v2_1, atomtree_gpio_pin_lut,
 	)
 )
 
+PPATUI_FUNCIFY(struct, atom_gpio_pin_lut_v2_1, atomtree_gpio_pin_lut,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
 
+	(bios->gpio_pin, "gpio_pin", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->gpio_pin, "gpio_pin [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_gpio_pin_assignment_v2_1),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->num_gpio_pins, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
 
 
 PPATUI_FUNCIFY(struct, atom_gfx_info_v2_2, atomtree_gfx_info,
@@ -3532,7 +3572,6 @@ PPATUI_FUNCIFY(struct, atom_gddr6_bit_byte_remap, atui_nullstruct,
 		((LANG_ENG, "mmUMC_PHY_DRAM"))
 	)
 )
-
 PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 	(bios->table_size, "table_size",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -3627,6 +3666,33 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
+PPATUI_FUNCIFY(struct, atom_vram_module_v9_dummy_v2_3,
+		atomtree_vram_info_header_v2_3,
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->vram_module, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v9),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->leaves->vram_module_num, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(&(bios->vram_module[atomtree->leaves->vram_module_num]), // start
+		"vram_module", // name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->vram_module, "undefined vram_module [+%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_vram_module_v9),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			((sizeof(bios->vram_module)/sizeof(bios->vram_module[0]))
+			- atomtree->leaves->vram_module_num
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_3, atui_nullstruct,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
@@ -3655,60 +3721,6 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_3, atui_nullstruct,
 	(bios->tmrs_seq_offset, "tmrs_seq_offset",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "offset of HBM tmrs"))
-	),
-	(bios->post_ucode_init_offset, "post_ucode_init_offset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init"))
-	),
-	(bios->vram_rsd2, "vram_rsd2",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->vram_module_num, "vram_module_num",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "indicate number of VRAM module"))
-	),
-	(bios->umcip_min_ver, "umcip_min_ver",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->umcip_max_ver, "umcip_max_ver",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->mc_phy_tile_num, "mc_phy_tile_num",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
-	)
-)
-
-
-PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
-		atomtree_vram_info_header_v2_4,
-	(bios->table_header, "table_header",
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		(ATUI_NODESCR)
-	),
-	(bios->mem_adjust_tbloffset, "mem_adjust_tbloffset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting"))
-	),
-	(bios->mem_clk_patch_tbloffset, "mem_clk_patch_tbloffset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting"))
-	),
-	(bios->mc_adjust_pertile_tbloffset, "mc_adjust_pertile_tbloffset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings"))
-	),
-	(bios->mc_phyinit_tbloffset, "mc_phyinit_tbloffset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init set"))
-	),
-	(bios->dram_data_remap_tbloffset, "dram_data_remap_tbloffset",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "reserved for now"))
-	),
-	(bios->reserved, "reserved",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "offset of reserved"))
 	),
 	(bios->post_ucode_init_offset, "post_ucode_init_offset",
 		(ATUI_HEX, ATUI_NOFANCY),
@@ -3819,6 +3831,85 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10, atomtree_vram_info_header_v2_4,
 		((LANG_ENG, "part number end with '0'"))
 	)
 )
+PPATUI_FUNCIFY(struct, atom_vram_module_v10_dummy_v2_4,
+		atomtree_vram_info_header_v2_4,
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->vram_module, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v10),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->leaves->vram_module_num, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(&(bios->vram_module[atomtree->leaves->vram_module_num]), // start
+		"vram_module", // name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->vram_module, "undefined vram_module [+%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_vram_module_v10),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			((sizeof(bios->vram_module)/sizeof(bios->vram_module[0]))
+			- atomtree->leaves->vram_module_num
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_4,
+		atomtree_vram_info_header_v2_4,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->mem_adjust_tbloffset, "mem_adjust_tbloffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting"))
+	),
+	(bios->mem_clk_patch_tbloffset, "mem_clk_patch_tbloffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting"))
+	),
+	(bios->mc_adjust_pertile_tbloffset, "mc_adjust_pertile_tbloffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings"))
+	),
+	(bios->mc_phyinit_tbloffset, "mc_phyinit_tbloffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init set"))
+	),
+	(bios->dram_data_remap_tbloffset, "dram_data_remap_tbloffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "reserved for now"))
+	),
+	(bios->reserved, "reserved",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of reserved"))
+	),
+	(bios->post_ucode_init_offset, "post_ucode_init_offset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init"))
+	),
+	(bios->vram_rsd2, "vram_rsd2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vram_module_num, "vram_module_num",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate number of VRAM module"))
+	),
+	(bios->umcip_min_ver, "umcip_min_ver",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->umcip_max_ver, "umcip_max_ver",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_phy_tile_num, "mc_phy_tile_num",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
+	)
+)
 
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v11,
@@ -3915,7 +4006,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v11,
 	),
 
 	(bios->dram_pnstring, "dram_pnstring",
-		(ATUI_HEX, ATUI_ARRAY),
+		(ATUI_NAN, ATUI_ARRAY),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
@@ -4082,6 +4173,33 @@ PPATUI_FUNCIFY(struct, atom_gddr6_ac_timing_v2_5,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	)
 )
+PPATUI_FUNCIFY(struct, atom_vram_module_v11_dummy_v2_5,
+		atomtree_vram_info_header_v2_5,
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->vram_module, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v11),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->leaves->vram_module_num, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(&(bios->vram_module[atomtree->leaves->vram_module_num]), // start
+		"vram_module", // name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->vram_module, "undefined vram_module [+%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_vram_module_v11),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			((sizeof(bios->vram_module)/sizeof(bios->vram_module[0]))
+			- atomtree->leaves->vram_module_num
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_5,
 		atomtree_vram_info_header_v2_5,
 
@@ -4137,7 +4255,33 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_5,
 	)
 )
 
-
+PPATUI_FUNCIFY(struct, atom_vram_module_v9_dummy_v2_6,
+		atomtree_vram_info_header_v2_6,
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->vram_module, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v9),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->leaves->vram_module_num, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(&(bios->vram_module[atomtree->leaves->vram_module_num]), // start
+		"vram_module", // name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->vram_module, "undefined vram_module [+%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_vram_module_v9),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			((sizeof(bios->vram_module)/sizeof(bios->vram_module[0]))
+			- atomtree->leaves->vram_module_num
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6,
 		atomtree_vram_info_header_v2_6,
 	(bios->table_header, "table_header",
@@ -4216,6 +4360,33 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 	),
 	(bios->dram_pnstring, "dram_pnstring",
 		(ATUI_NAN, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_vram_module_v30_dummy_v3_0,
+		atomtree_vram_info_header_v3_0,
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(bios->vram_module, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v3_0),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->leaves->vram_module_num, // deferred start, count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+	(&(bios->vram_module[atomtree->leaves->vram_module_num]), // start
+		"vram_module", // name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(bios->vram_module, "undefined vram_module [+%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_vram_module_v3_0),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			((sizeof(bios->vram_module)/sizeof(bios->vram_module[0]))
+			- atomtree->leaves->vram_module_num
+			), // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, atom_vram_info_header_v3_0,
@@ -4310,18 +4481,7 @@ PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		(ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
-		atomtree_umc_init_reg_block,
-	(bios->umc_reg_num, "umc_reg_num",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->reserved, "reserved",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	)
-)
-PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access,
-		atomtree_umc_init_reg_block,
-
+PPATUI_FUNCIFY(union, atom_umc_reg_setting_id_config_access, atui_nullstruct,
 	(bios->u32umc_id_access, "u32umc_id_access",
 		(ATUI_BIN, ATUI_BITFIELD, (
 			("memclockrange", 23, 0, ATUI_DEC, (ATUI_NODESCR)),
@@ -4344,6 +4504,38 @@ PPATUI_FUNCIFY(struct, atom_umc_reg_setting_data_block,
 			NULL, *(atomtree->umc_reg_num), // deferred start. count
 			ATUI_NULL // enum
 		)),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, umc_reg_settings_dummy, atomtree_umc_init_reg_block,
+	(ATUI_NULL, "umc_reg_setting_list", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "umc_reg_setting_list [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_umc_reg_setting_data_block),
+				(ATUI_NODESCR)
+			),
+			atomtree->umc_reg_setting_list, // deferred start
+			atomtree->umc_reg_setting_list_length, // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
+		atomtree_umc_init_reg_block,
+	(bios->umc_reg_num, "umc_reg_num",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->reserved, "reserved",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	// data for umc_reg_list, umc_reg_setting_list are through atomtree
+	(ATUI_NULL, "umc_reg_list",
+		(ATUI_NAN, ATUI_PETIOLE, atom_umc_register_addr_info_access),
+		(ATUI_NODESCR)
+	),
+	(ATUI_NULL, "umc_reg_setting_list",
+		(ATUI_NAN, ATUI_PETIOLE, umc_reg_settings_dummy),
 		(ATUI_NODESCR)
 	)
 )

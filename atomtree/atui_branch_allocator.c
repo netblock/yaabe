@@ -186,7 +186,7 @@ atui_branch* atui_branch_allocator(
 
 					// for each element in the bios array
 					dynarray_biosarray_i = 0;
-				
+
 					while (dynarray_biosarray_i < dynarray_length) {
 						if (dynarray_start_ptr) { // direct array
 							dynarray_bios_pos = (

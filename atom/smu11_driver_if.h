@@ -615,24 +615,14 @@ struct UclkDpmChangeRange_t { // Used for 2-step UCLK DPM change workaround
 };
 
 
-struct smu11_pptable_v3_i2c_u32 {
-	struct i2ccontrollerconfig_u32 i2ccontroller_vr_gfx;
-	struct i2ccontrollerconfig_u32 i2ccontroller_vr_soc;
-	struct i2ccontrollerconfig_u32 i2ccontroller_vr_vddci;
-	struct i2ccontrollerconfig_u32 i2ccontroller_vr_mvdd;
-	struct i2ccontrollerconfig_u32 i2ccontroller_liquid_0;
-	struct i2ccontrollerconfig_u32 i2ccontroller_liquid_1;
-	struct i2ccontrollerconfig_u32 i2ccontroller_plx;
+struct smu11_smcpptable_v3_i2c_control {
+	struct i2ccontrollerconfig_u32 I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3];
 };
-struct smu11_pptable_v8_i2c_u8mixed {
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_gfx;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_soc;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_vddci;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_vr_mvdd;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_liquid_0;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_liquid_1;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_plx;
-	struct i2ccontrollerconfig_u8_mixed i2ccontroller_spare;
+
+struct smu11_smcpptable_v8_i2c_control {
+	struct i2ccontrollerconfig_u8_mixed I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+	];
 };
 
 
@@ -889,12 +879,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  FllGfxclkSpreadPercent; // Q4.4
 	uint16_t FllGfxclkSpreadFreq;    // kHz
 
-	union {
-		struct i2ccontrollerconfig_u32 I2cControllers[
-			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3
-		];
-		struct smu11_pptable_v3_i2c_u32 i2c_unroll;
-	};
+	struct smu11_smcpptable_v3_i2c_control I2cControllers;
 
 	uint32_t BoardReserved[10];
 
@@ -1112,12 +1097,7 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	// SECTION: BOARD PARAMETERS
 	// I2C Control
-	union {
-		struct i2ccontrollerconfig_u8_mixed I2cControllers[
-			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
-		];
-		struct smu11_pptable_v8_i2c_u8mixed i2c_unroll;
-	};
+	struct smu11_smcpptable_v8_i2c_control I2cControllers;
 
 	// SVI2 Board Parameters
 	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.

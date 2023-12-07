@@ -47,6 +47,8 @@ PPATUI_HEADERIFY(vram_usagebyfirmware_v2_2);
 
 
 PPATUI_HEADERIFY(atom_gpio_pin_assignment_v2_1);
+PPATUI_HEADERIFY(atom_gpio_pin_lut_v2_1);
+
 
 
 PPATUI_HEADERIFY(atom_gfx_info_v2_2);
@@ -71,7 +73,7 @@ PPATUI_HEADERIFY(atom_smu_info_v4_0);
 
 
 //PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
-PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
+//PPATUI_HEADERIFY(atom_umc_register_addr_info_access);
 PPATUI_HEADERIFY(atom_umc_init_reg_block);
 PPATUI_HEADERIFY(atom_umc_reg_setting_data_block);
 PPATUI_HEADERIFY(atom_umc_reg_setting_id_config_access);
@@ -80,19 +82,24 @@ PPATUI_HEADERIFY(atom_gddr6_bit_byte_remap);
 PPATUI_HEADERIFY(atom_gddr6_dram_data_remap);
 
 PPATUI_HEADERIFY(atom_vram_module_v9);
+PPATUI_HEADERIFY(atom_vram_module_v9_dummy_v2_3);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_3);
 
 PPATUI_HEADERIFY(atom_vram_module_v10);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
+PPATUI_HEADERIFY(atom_vram_module_v10_dummy_v2_4);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
 
 PPATUI_HEADERIFY(atom_vram_module_v11);
 PPATUI_HEADERIFY(atom_gddr6_ac_timing_v2_5);
+PPATUI_HEADERIFY(atom_vram_module_v11_dummy_v2_5);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_5);
 
+PPATUI_HEADERIFY(atom_vram_module_v9_dummy_v2_6);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_6);
 
 PPATUI_HEADERIFY(atom_vram_module_v3_0);
+PPATUI_HEADERIFY(atom_vram_module_v30_dummy_v3_0);
 PPATUI_HEADERIFY(atom_vram_info_header_v3_0);
 
 
@@ -139,16 +146,10 @@ PPATUI_HEADERIFY(droop_f32);
 // atui_smu_v11_pptable.c / smu_v11_pptable.h , smu11_driver_if.h
 
 PPATUI_HEADERIFY(smu_11_0_powerplay_table);
-PPATUI_HEADERIFY(smu_11_0_7_powerplay_table);
-PPATUI_HEADERIFY(smu_11_0_power_saving_clock_table);
-PPATUI_HEADERIFY(smu_11_0_overdrive_table);
 PPATUI_HEADERIFY(smu11_smcpptable_v3);
 PPATUI_HEADERIFY(smu11_smcpptable_v8);
+PPATUI_HEADERIFY(smu_11_0_7_powerplay_table);
 PPATUI_HEADERIFY(smu11_smcpptable_v7);
-PPATUI_HEADERIFY(powerplay_feature_control_smu11_0x13);
-PPATUI_HEADERIFY(powerplay_feature_control_smu11_0x33);
-PPATUI_HEADERIFY(smu11_pptable_v3_i2c_u32);
-PPATUI_HEADERIFY(smu11_pptable_v8_i2c_u8mixed);
 
 
 /******************************************************************************/
