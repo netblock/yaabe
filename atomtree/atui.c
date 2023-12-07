@@ -9,60 +9,64 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include <math.h>
 
 void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
-	if (leaf->type & ATUI_ANY) {
-		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		const uint64_t maxval = (1ULL << num_bits) - 1;
-		if (val > maxval)
-			val = maxval;
-
-		// ...11111 000.. 1111...
-		const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
-		val <<= leaf->bitfield_lo;
-		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+	if (!(leaf->type & ATUI_ANY)) {
+		assert(0);
 	}
+	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+	const uint64_t maxval = (1ULL << num_bits) - 1;
+	if (val > maxval)
+		val = maxval;
+
+	// ...11111 000.. 1111...
+	const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
+	val <<= leaf->bitfield_lo;
+	*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
 }
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
-	if (leaf->type & ATUI_ANY) {
-		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		const uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
-
-		return (*(leaf->u64) >> leaf->bitfield_lo) & premask;
+	if (!(leaf->type & ATUI_ANY)) {
+		assert(0);
 	}
-	return 0ULL - 1;
+	uint64_t val = *(leaf->u64);
+	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
+	val <<= num_unused_bits_hi; // delete unused upper
+	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
+
+	return val;
 }
 void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
+	if (!(leaf->type & ATUI_ANY)) {
+		assert(0);
+	}
+
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
-	if (leaf->type & ATUI_ANY) {
-		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		const uint64_t mask = (1ULL << num_bits) - 1;
-		const int64_t maxval = mask>>1; // max positive val 0111...
-		if (val > maxval) {
-			raw_val = maxval;
-		} else if (val < -maxval) {
-			raw_val = maxval+1; // Two's overflow. 1000.. is negative-most.
-		} else {
-			raw_val = val & mask; // Two's sign repeats to the right
-		}
-
-		// ...11111 000.. 1111...
-		const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
-		raw_val <<= leaf->bitfield_lo;
-		*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
+	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+	const uint64_t mask = (1ULL << num_bits) - 1;
+	const int64_t maxval = mask>>1; // max positive val 0111...
+	if (val > maxval) {
+		raw_val = maxval;
+	} else if (val < -maxval) {
+		raw_val = maxval+1; // Two's overflow. 1000.. is negative-most.
+	} else {
+		raw_val = val & mask; // Two's sign repeats to the right
 	}
-	assert(0);
+
+	// ...11111 000.. 1111...
+	const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
+	raw_val <<= leaf->bitfield_lo;
+	*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
 }
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
-	if (leaf->type & ATUI_ANY) {
-		const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-		const uint64_t premask = (1ULL << num_bits) - 1; // 0's the hi
-		int64_t val = (*(leaf->u64) >> leaf->bitfield_lo) & premask;
-		const uint8_t remaining_bits = sizeof(val)*8 - num_bits;
-		val <<= remaining_bits;
-		val >>= remaining_bits; // rightshift on signed repeats sign
-		return val;
+	if (!(leaf->type & ATUI_ANY)) {
+		assert(0);
 	}
-	assert(0);
+
+	int64_t val = *(leaf->u64);
+	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
+	val <<= num_unused_bits_hi; // delete unused upper
+	// rightshift on signed repeats sign
+	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
+	return val;
 }
 void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 	if ((leaf->type & ATUI_ANY) != ATUI_FRAC) {
