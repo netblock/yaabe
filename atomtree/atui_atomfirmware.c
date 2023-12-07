@@ -196,6 +196,8 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set for the radix
 
 ********************************************************************************
 
+	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
+		"(bios->\g<5>, \"\g<5>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<6>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
 	import re
@@ -210,8 +212,10 @@ def struct_to_atui(s):
 	s = re.sub("(struct) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
 	#
 	# dynarrays part 1 (bulk of it):
-	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
-		"(bios->\g<5>, \"\g<5>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<6>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+	s = re.sub("(((struct|union)\s+[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z0-9_]*)\];",
+		"(bios->\g<4>, \"\g<4>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<5>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float16_t|float32_t|float64_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
+		"(bios->\g<3>, \"\g<3>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<4>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	#
 	# embedded structs, create ATUI_INLINES from them:
 	s = re.sub("(\t+)(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \"\g<4>\",\n\g<1>\t(ATUI_NAN, ATUI_INLINE, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
@@ -232,8 +236,8 @@ def struct_to_atui(s):
 	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
 	s = re.sub("\),(\s+)?};", ")\n)", s)
 	#
-	# dynarrays part 2 (ATUI_NULL and counter for pattern):
-	s = re.sub("(\(ATUI_NAN, ATUI_DYNARRAY, \(\n\t+\()bios->[a-zA-Z0-9_]+, ([a-zA-Z0-9_]+),","\g<1>ATUI_NULL, \"\g<2> [%02u]\",",s)
+	# dynarrays part 2: "(ATUI_NULL" for leaf; and  "%02u" for pattern name
+	s = re.sub("(\(ATUI_NAN, ATUI_DYNARRAY, \(\n\t+\()[^,]+, ([^,]+)\"","\g<1>ATUI_NULL, \g<2> [%02u]\"",s)
 	#
 	print(s)
 
