@@ -13,9 +13,15 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 		assert(0);
 	}
 	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	const uint64_t maxval = (1ULL << num_bits) - 1;
-	if (val > maxval)
+	uint64_t maxval;
+	if (num_bits == sizeof(maxval)*8) { // unfortunately, (1ULL<<64) == 1
+		maxval = ~0;
+	} else {
+		maxval = (1ULL << num_bits) - 1;
+	}
+	if (val > maxval) {
 		val = maxval;
+	}
 
 	// ...11111 000.. 1111...
 	const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
