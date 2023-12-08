@@ -36,57 +36,33 @@ PPATUI_FUNCIFY(union, powerplay_platform_caps, atomtree_powerplaytable,
 
 
 PPATUI_FUNCIFY(struct, quadratic_f32, atomtree_powerplaytable,
-	(bios->a, "a (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->a, "a",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, "b (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, "b",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->c, "c (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->a, "a (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, "b (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, "c (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->c, "c",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, linear_f32, atomtree_powerplaytable,
-	(bios->m, "m (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->m, "m",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, "b (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->m, "m (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, "b (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, "b",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 PPATUI_FUNCIFY(struct, droop_f32, atomtree_powerplaytable,
-	(bios->a, "a (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->a, "a",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->b, "b (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->b, "b",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->c, "c (float)",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->a, "a (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->b, "b (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->c, "c (raw)",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	(bios->c, "c",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 

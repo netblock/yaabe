@@ -188,6 +188,24 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	default:0\
 )
 
+#define _PPATUI_LEAF_FRACTION(var) _Generic((var),\
+	float16_t:ATUI_FRAC, float16_t*:ATUI_FRAC, float16_t const*:ATUI_FRAC,\
+	float32_t:ATUI_FRAC, float32_t*:ATUI_FRAC, float32_t const*:ATUI_FRAC,\
+	float64_t:ATUI_FRAC, float64_t*:ATUI_FRAC, float64_t const*:ATUI_FRAC,\
+\
+	uq6_2_t:ATUI_FRAC, uq6_2_t*:ATUI_FRAC, uq6_2_t const*:ATUI_FRAC,\
+	uq4_4_t:ATUI_FRAC, uq4_4_t*:ATUI_FRAC, uq4_4_t const*:ATUI_FRAC,\
+\
+	uq14_2_t:ATUI_FRAC, uq14_2_t*:ATUI_FRAC, uq14_2_t const*:ATUI_FRAC,\
+	uq8_8_t:ATUI_FRAC, uq8_8_t*:ATUI_FRAC, uq8_8_t const*:ATUI_FRAC,\
+\
+	uq30_2_t:ATUI_FRAC, uq30_2_t*:ATUI_FRAC, uq30_2_t const*:ATUI_FRAC,\
+	uq16_16_t:ATUI_FRAC, uq16_16_t*:ATUI_FRAC, uq16_16_t const*:ATUI_FRAC,\
+\
+	default:0\
+)
+
+
 // TODO handle description_data
 // Some of these elements may be respectively replaced by their fancy type.
 // Unused fields are set to 0 via calloc.
@@ -195,7 +213,9 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	.name = namestr,\
 	.origname = namestr,\
 	.varname = #var,\
-	.type = (radix | _PPATUI_LEAF_SIGNED(var) | fancytype),\
+	.type = (radix | fancytype\
+			| _PPATUI_LEAF_SIGNED(var) | _PPATUI_LEAF_FRACTION(var)\
+			),\
 	.num_bytes = _PPATUI_FANCY_INIT_NULLPTR_SIZE(var),\
 	.array_size = 1,\
 	.fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(var),\

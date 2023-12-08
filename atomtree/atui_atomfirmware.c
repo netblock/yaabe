@@ -53,9 +53,8 @@ If the table element should be viewed as a number, set a radix. radix is one of
 ATUI_NAN, ATUI_DEC, ATUI_HEX, ATUI_OCT, ATUI_BIN.
 If the element should be omitted from UI display, set radix to ATUI_NODISPLAY
 
-If the element should be viewed as a decimal fraction number set the radix to
-ATUI_FRAC. Note that this radix has limited compatibility, and will not work
-with bitfields or arrays.
+ATUI_FRAC can signify if it should be viewed as a decimal fraction number. This
+is usually automatically set based on the orignial C type.
 
 ATUI_SIGNED can signify if it's a signed number. This is usually automatically
 set based on the orignial C type.
@@ -214,7 +213,7 @@ def struct_to_atui(s):
 	# dynarrays part 1 (bulk of it):
 	s = re.sub("(((struct|union)\s+[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z0-9_]*)\];",
 		"(bios->\g<4>, \"\g<4>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<5>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
-	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float16_t|float32_t|float64_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
+	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
 		"(bios->\g<3>, \"\g<3>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<4>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	#
 	# embedded structs, create ATUI_INLINES from them:
@@ -224,13 +223,10 @@ def struct_to_atui(s):
 	s = re.sub("(\t+)(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \"\g<4>\",\n\g<1>\t(ATUI_DEC, ATUI_ENUM, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# integers: intn_t/uintn_t/charn_t;
-	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# integer arrays, won't do embedded enums
 	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\g<1>),", s)
-	#
-	# floats:
-	s = re.sub("(\s+)(float16_t|float32_t|float64_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# take care of //-based comments
 	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)

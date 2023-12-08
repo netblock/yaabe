@@ -761,7 +761,7 @@ PPATUI_FUNCIFY(struct, PiecewiseLinearDroopInt_t, atui_nullstruct,
 	(bios->Fset, "Fset", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, "Fset [%02u]",
-				(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, // deferred start
 			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
@@ -772,7 +772,7 @@ PPATUI_FUNCIFY(struct, PiecewiseLinearDroopInt_t, atui_nullstruct,
 	(bios->Vdroop, "Vdroop", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, "Vdroop [%02u]",
-				(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, // deferred start
 			NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS, // count
@@ -3640,19 +3640,19 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 		((LANG_ENG, "VMIN_TO_PSM_DEGRADATION_GB"))
 	),
 	(bios->VcBtcPsmA, "VcBtcPsmA",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "A_PSM"))
 	),
 	(bios->VcBtcPsmB, "VcBtcPsmB",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "B_PSM"))
 	),
 	(bios->VcBtcVminA, "VcBtcVminA",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "A_VMIN"))
 	),
 	(bios->VcBtcVminB, "VcBtcVminB",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "B_VMIN"))
 	),
 

@@ -887,18 +887,18 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->FitControllerFailureRateLimit, "FitControllerFailureRateLimit",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Expected GFX Duty Cycle at Vmax."))
 	),
 	(bios->FitControllerGfxDutyCycle, "FitControllerGfxDutyCycle",
-		(ATUI_FRAC, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Expected SOC Duty Cycle at Vmax."))
 	),
 	(bios->FitControllerSocDutyCycle, "FitControllerSocDutyCycle",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->FitControllerSocOffset, "FitControllerSocOffset",
-		(ATUI_FRAC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 
 	(bios->GfxApccPlusResidencyLimit, "GfxApccPlusResidencyLimit",

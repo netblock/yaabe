@@ -69,7 +69,7 @@ int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	return val;
 }
 void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
-	if ((leaf->type & ATUI_ANY) != ATUI_FRAC) {
+	if (!(leaf->type & ATUI_FRAC)) {
 		assert(0);
 	}
 	if (leaf->fractional_bits) {
@@ -108,9 +108,10 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 	assert(0);
 }
 float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
-	if ((leaf->type & ATUI_ANY) != ATUI_FRAC) {
+	if (!(leaf->type &  ATUI_FRAC)) {
 		assert(0);
 	}
+
 	if (leaf->fractional_bits) { // fixed-point
 		// f64 can represent represent ints up to 2**53 without rounding.
 		assert((leaf->total_bits - leaf->fractional_bits) < 53);
@@ -140,7 +141,6 @@ float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
 		case 32:
 			return *(leaf->f32);
 		case 64:
-			assert(0); // bump returns to 64.
 			return *(leaf->f64);
 	}
 
@@ -249,7 +249,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			}
 		}
 	} else if (radix) {
-		if (radix == ATUI_FRAC) {
+		if (leaf->type & ATUI_FRAC) {
 			atui_leaf_set_val_fraction(leaf, strtod(text, NULL));
 		} else if (leaf->type & ATUI_SIGNED) {
 			atui_leaf_set_val_signed(leaf, strtoll_2(text));
@@ -272,17 +272,17 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 	// constructor arrays to be used with metaformat, and two sprintfs. See the
 	// radix-only part.
-	// NAN DEC HEX OCT BIN FLOAT
+	// NAN DEC HEX OCT BIN
 #ifdef C2X_COMPAT
-	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0", "%0"};
-	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "X", "G"};
-	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "X", "G"};
-	const uint8_t bases[] = {0, 10, 16, 8, 16, 10};
+	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
+	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "X"};
+	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "X"};
+	const uint8_t bases[] = {0, 10, 16, 8, 16};
 #else
-	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0", "%0"};
-	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "b", "G"};
-	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "b", "G"};
-	const uint8_t bases[] = {0, 10, 16, 8, 2, 10};
+	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+	const char8_t* const suffixes_unsigned[] = {"", "u", "X", "o", "b"};
+	const char8_t* const suffixes_signed[]   = {"", "i", "X", "o", "b"};
+	const uint8_t bases[] = {0, 10, 16, 8, 2};
 #endif
 	const char8_t* const metaformat = "%s%u%s"; // amogus
 	char8_t format[8];
@@ -308,7 +308,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 #endif
 
 	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
-		assert(radix != ATUI_FRAC);
+		assert(!(leaf->type & ATUI_FRAC));
 		// too hard cause floats can have many base-10 digits
 
 		num_digits = ceil( // round up because it's gonna be like x.9999
@@ -368,11 +368,8 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		memcpy(buffer, leaf->u8, leaf->array_size);
 		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
-		if (radix == ATUI_FRAC) {
-			sprintf(format, metaformat,
-				prefixes[radix], num_digits, suffixes_unsigned[radix]
-			);
-			sprintf(buffer, format, atui_leaf_get_val_fraction(leaf));
+		if (leaf->type & ATUI_FRAC) {
+			sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
 		} else if (leaf->type & ATUI_SIGNED) {
 			sprintf(format, metaformat,
 				prefixes[radix], num_digits, suffixes_signed[radix]

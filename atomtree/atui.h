@@ -56,27 +56,27 @@ static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 struct atui_nullstruct;
 
 // TODO move to bitfield?
-enum atui_type:uint32_t {
+enum atui_type:uint16_t {
 	ATUI_NAN  = 0x0, // Don't display a value
 	ATUI_DEC  = 0x1,
 	ATUI_HEX  = 0x2,
 	ATUI_OCT  = 0x3, // TODO not implemented
 	ATUI_BIN  = 0x4,
-	ATUI_FRAC = 0x5, // Both Q and float. TODO support Q notation.
-	ATUI_ANY  = 0xF, // Mask
+	ATUI_ANY  = 0x7, // Mask
 
-	ATUI_NOFANCY   = 1<<5, // Nothing fancy to the leaf
-	ATUI_NODISPLAY = 1<<6, // Don't display this leaf itself
-	ATUI_BITFIELD  = 1<<7, // Is a bitfield parent
-	ATUI_ENUM      = 1<<8, // See also PPATUI_FUNCIFY()
-	ATUI_STRING    = 1<<9, // Meant for human-readable text
-	ATUI_ARRAY    = 1<<10, // No technical difference from string
-	ATUI_INLINE   = 1<<11, // Pull in leaves from other tables
-	ATUI_PETIOLE  = 1<<12, // hard-attach a child branch
-	ATUI_DYNARRAY = 1<<13, // For runtime array lengths
+	ATUI_NOFANCY   = 1<<4, // Nothing fancy to the leaf
+	ATUI_NODISPLAY = 1<<5, // Don't display this leaf itself
+	ATUI_BITFIELD  = 1<<6, // Is a bitfield parent
+	ATUI_ENUM      = 1<<7, // See also PPATUI_FUNCIFY()
+	ATUI_STRING    = 1<<8, // Meant for human-readable text
+	ATUI_ARRAY     = 1<<9, // No technical difference from string
+	ATUI_INLINE   = 1<<10, // Pull in leaves from other tables
+	ATUI_PETIOLE  = 1<<11, // hard-attach a child branch
+	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
 
-	_ATUI_BITCHILD = 1<<16, // Internally set. Is a bitfield child.
-	ATUI_SIGNED   = 1<<17, // Internally-set. Signifies if it has a signing bit
+	_ATUI_BITCHILD = 1<<13, // Internally set. If it's a bitfield child.
+	ATUI_SIGNED    = 1<<14, // Internally-set. If it has a signing bit.
+	ATUI_FRAC     = 1<<15, // Internally-set. Both Q and float.
 };
 
 
@@ -91,8 +91,8 @@ struct _atui_leaf {
 	const char8_t* description[LANG_TOTALLANGS];
 
 
-	enum atui_type type; // how to display text, and other config data
 	uint32_t num_bytes; // number of bytes for quick leaf size
+	enum atui_type type; // how to display text, and other config data
 	uint8_t array_size;
 
 	uint8_t fractional_bits; // if fixed-point	
