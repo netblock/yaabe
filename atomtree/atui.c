@@ -73,10 +73,21 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 		assert(0);
 	}
 	if (leaf->fractional_bits) {
-		const float64_t frac = (val - floor(val)) * (1<<leaf->fractional_bits);
-		uint64_t fixed_val = floor(val);
-		fixed_val <<= leaf->fractional_bits;
-		fixed_val += frac;
+		const float64_t max_val = (
+			(float64_t)(1<<(leaf->total_bits - leaf->fractional_bits))
+			- ( (float64_t)(1) / (float64_t)(1<<leaf->fractional_bits))
+		);
+		uint64_t fixed_val;
+		if (val > max_val) {
+			fixed_val = (1<<leaf->total_bits)-1;
+		} else {
+			fixed_val = floor(val);
+			const float64_t frac = (
+				(val - floor(val)) * (1<<leaf->fractional_bits)
+			);
+			fixed_val <<= leaf->fractional_bits;
+			fixed_val += frac;
+		}
 		switch(leaf->total_bits) {
 			case 8:
 				*(leaf->u8) = fixed_val;
@@ -369,6 +380,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		if (leaf->type & ATUI_FRAC) {
+			// %G format can have agressive rounding: Q14.2 16383.75 -> 16383.8
 			sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
 		} else if (leaf->type & ATUI_SIGNED) {
 			sprintf(format, metaformat,
