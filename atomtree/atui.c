@@ -206,7 +206,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			case 8:
 				for(; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
-					leaf->u8[i] = (uint8_t)strtoll(buffer, NULL, base);
+					leaf->u8[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
 					if (text[j] == ' ')
 						j++;
@@ -215,7 +215,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			case 16:
 				for(; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
-					leaf->u16[i] = (uint16_t)strtoll(buffer, NULL, base);
+					leaf->u16[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
 					if (text[j] == ' ')
 						j++;
@@ -224,7 +224,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			case 32:
 				for(; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
-					leaf->u32[i] = (uint32_t)strtoll(buffer, NULL, base);
+					leaf->u32[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
 					if (text[j] == ' ')
 						j++;
@@ -233,7 +233,7 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 			case 64:
 				for(; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
-					leaf->u64[i] = (uint64_t)strtoll(buffer, NULL, base);
+					leaf->u64[i] = strtoull(buffer, NULL, base);
 					j += num_digits;
 					if (text[j] == ' ')
 						j++;
