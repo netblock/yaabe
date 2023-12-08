@@ -2566,8 +2566,8 @@ struct atom_smc_dpm_info_v4_5 {
 	struct smudpm_i2c_controller_config_v2  I2cControllers[8];
 
 	// SVI2 Board Parameters
-	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uint16_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 
 	uint8_t  VddGfxVrMapping;   // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;   // Use VR_MAPPING* bitfields
@@ -2613,24 +2613,23 @@ struct atom_smc_dpm_info_v4_5 {
 	uint8_t  padding8_4;
 
 	// GFXCLK PLL Spread Spectrum
-	// https://en.wikipedia.org/wiki/Q_(number_format)
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	// GFXCLK DFLL Spread Spectrum
 	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uint8_t  DfllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
 	uint16_t DfllGfxclkSpreadFreq;    // kHz
 
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	// SOCCLK Spread Spectrum
 	uint8_t  SoclkSpreadEnabled;  // on or off
-	uint8_t  SocclkSpreadPercent; // Q4.4
+	uq4_4_t  SocclkSpreadPercent; // Q4.4
 	uint16_t SocclkSpreadFreq;    // kHz
 
 	// Total board power
@@ -2638,7 +2637,7 @@ struct atom_smc_dpm_info_v4_5 {
 	uint16_t BoardPadding;
 
 	// Mvdd Svi2 Div Ratio Setting
-	uint32_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
 
 	uint32_t BoardReserved[9];
 
@@ -2649,8 +2648,8 @@ struct atom_smc_dpm_info_v4_6 {
 	// section: board parameters
 	uint32_t i2c_padding[3]; // old i2c control are moved to new area
 
-	uint16_t maxvoltagestepgfx; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
-	uint16_t maxvoltagestepsoc; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t maxvoltagestepgfx; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t maxvoltagestepsoc; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
 
 	uint8_t  vddgfxvrmapping; // use vr_mapping* bitfields
 	uint8_t  vddsocvrmapping; // use vr_mapping* bitfields
@@ -2686,23 +2685,23 @@ struct atom_smc_dpm_info_v4_6 {
 
 	// gfxclk pll spread spectrum
 	uint8_t  pllgfxclkspreadenabled; // on or off
-	uint8_t  pllgfxclkspreadpercent; // q4.4
+	uq4_4_t  pllgfxclkspreadpercent; // q4.4
 	uint16_t pllgfxclkspreadfreq;    // khz
 
 	// uclk spread spectrum
 	uint8_t  uclkspreadenabled; // on or off
-	uint8_t  uclkspreadpercent; // q4.4
+	uq4_4_t  uclkspreadpercent; // q4.4
 	uint16_t uclkspreadfreq;    // khz
 
 	// fclk spread spectrum
 	uint8_t  fclkspreadenabled; // on or off
-	uint8_t  fclkspreadpercent; // q4.4
+	uq4_4_t  fclkspreadpercent; // q4.4
 	uint16_t fclkspreadfreq;    // khz
 
 
 	// gfxclk fll spread spectrum
 	uint8_t  fllgfxclkspreadenabled; // on or off
-	uint8_t  fllgfxclkspreadpercent; // q4.4
+	uq4_4_t  fllgfxclkspreadpercent; // q4.4
 	uint16_t fllgfxclkspreadfreq;    // khz
 
 	// i2c controller structure
@@ -2736,8 +2735,8 @@ struct atom_smc_dpm_info_v4_7 {
 	struct smudpm_i2c_controller_config_v2  I2cControllers[8];
 
 	// SVI2 Board Parameters
-	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uint16_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
@@ -2784,22 +2783,22 @@ struct atom_smc_dpm_info_v4_7 {
 
 	// GFXCLK PLL Spread Spectrum
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	// GFXCLK DFLL Spread Spectrum
 	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uint8_t  DfllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
 	uint16_t DfllGfxclkSpreadFreq;    // kHz
 
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	// SOCCLK Spread Spectrum
 	uint8_t  SoclkSpreadEnabled;  // on or off
-	uint8_t  SocclkSpreadPercent; // Q4.4
+	uq4_4_t  SocclkSpreadPercent; // Q4.4
 	uint16_t SocclkSpreadFreq;    // kHz
 
 	// Total board power
@@ -2807,7 +2806,7 @@ struct atom_smc_dpm_info_v4_7 {
 	uint16_t BoardPadding;
 
 	// Mvdd Svi2 Div Ratio Setting
-	uint32_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
 
 	// GPIO pins for I2C communications with 2nd controller for Input Telemetry Sequence
 	uint8_t  GpioI2cScl; // Serial Clock
@@ -2882,7 +2881,7 @@ struct atom_smc_dpm_info_v4_9 {
 	uint8_t  Mem1Offset;     // in Amps
 	uint8_t  Padding_TelemetryMem1;
 
-	uint32_t MvddRatio; // This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t MvddRatio; // This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
 
 	// SECTION: GPIO Settings
 	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
@@ -2909,22 +2908,22 @@ struct atom_smc_dpm_info_v4_9 {
 
 	// GFXCLK PLL Spread Spectrum
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	// GFXCLK DFLL Spread Spectrum
 	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uint8_t  DfllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
 	uint16_t DfllGfxclkSpreadFreq;    // kHz
 
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	// FCLK Spread Spectrum
 	uint8_t  FclkSpreadEnabled; // on or off
-	uint8_t  FclkSpreadPercent; // Q4.4
+	uq4_4_t  FclkSpreadPercent; // Q4.4
 	uint16_t FclkSpreadFreq;    // kHz
 
 	// Section: Memory Config
@@ -2981,12 +2980,12 @@ struct atom_smc_dpm_info_v4_10 {
 
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	// FCLK Spread Spectrum
 	uint8_t  FclkSpreadEnabled; // on or off
-	uint8_t  FclkSpreadPercent; // Q4.4
+	uq4_4_t  FclkSpreadPercent; // Q4.4
 	uint16_t FclkSpreadFreq;    // kHz
 
 	// I2C Controller Structure
@@ -3907,6 +3906,7 @@ struct compute_gpu_clock_input_parameter_v1_8 {
 };
 
 
+// TODO Q?
 struct compute_gpu_clock_output_parameter_v1_8 {
 	struct { uint32_t
 		gpuclock_10khz:23-0 +1,  // Input= target clock, output = actual clock

@@ -435,11 +435,12 @@ struct atom_compute_clock_freq {
 };
 
 struct atom_s_mpll_fb_divider {
+	// TODO Q16.16?
 	uint16_t FbDivFrac;
 	uint16_t FbDiv;
 };
 
-struct COMPUTE_MEMORY_ENGINE_PLL_PARAMETERS_V3 {
+struct compute_memory_engine_pll_parameters_v3 {
 	union {
 		struct atom_compute_clock_freq Clock; // Input Parameter
 		uint32_t ClockParams; // uint32_t access for BE
@@ -515,6 +516,7 @@ struct compute_gpu_clock_input_parameters_v1_7 {
 
 struct compute_gpu_clock_output_parameters_v1_7 {
 	struct compute_memory_engine_pll_parameters_v4 Clock; // Output Parameter: ucPostDiv=DFS divider
+	// TODO Q16.16?
 	uint16_t Sclk_fcw_frac; // fractional divider of fcw = usSclk_fcw_frac/65536
 	uint16_t Sclk_fcw_int;  // integer divider of fcwc
 	uint8_t  SclkPostDiv;   // PLL post divider = 2^ucSclkPostDiv
@@ -566,6 +568,7 @@ struct compute_memory_clock_param_parameters_v2_2 {
 
 struct compute_memory_clock_param_parameters_v2_3 {
 	struct compute_memory_engine_pll_parameters_v4 Clock;
+	// TODO Q16.16?
 	uint16_t Mclk_fcw_frac; // fractional divider of fcw = usSclk_fcw_frac/65536
 	uint16_t Mclk_fcw_int;  // integer divider of fcwc
 };
@@ -1723,6 +1726,7 @@ struct pixel_clock_parameters_v5 {
                             // =1: other external clock source, which is pre-defined
                             // by VBIOS depend on the feature required.
                             // bit[7:5]: reserved.
+	// TODO is this Q?
 	uint32_t FbDivDecFrac;  // 20 bit feedback divider decimal fraction part, range from 1~999999 ( 0.000001 to 0.999999 )
 
 };
@@ -1762,6 +1766,7 @@ struct pixel_clock_parameters_v6 {
                             // =1: other external clock source, which is pre-defined
                             // by VBIOS depend on the feature required.
                             // bit[7:5]: reserved.
+	// TODO is this Q?
 	uint32_t FbDivDecFrac;  // 20 bit feedback divider decimal fraction part, range from 1~999999 ( 0.000001 to 0.999999 )
 
 };

@@ -670,9 +670,9 @@ struct BootValues_t {
 	uint32_t InitVcoFreqPll6;
 
 	// encoding will change depending on SVI2/SVI3
-	uint16_t InitGfx; // In mV(Q2) ,  should be 0?
-	uint16_t InitSoc; // In mV(Q2)
-	uint16_t InitU;   // In Mv(Q2) not applicable
+	uq14_2_t InitGfx; // In mV(Q2) ,  should be 0?
+	uq14_2_t InitSoc; // In mV(Q2)
+	uq14_2_t InitU;   // In Mv(Q2) not applicable
 
 	uint16_t Padding2;
 
@@ -725,11 +725,11 @@ struct AvfsDcBtcParams_smu13 {
 	uint8_t  DcBtcEnabled;
 	uint8_t  Padding[3];
 
-	uint16_t DcTol;    // mV Q2
-	uint16_t DcBtcGb;  // mV Q2
+	uq14_2_t DcTol;    // mV Q2
+	uq14_2_t DcBtcGb;  // mV Q2
 
-	uint16_t DcBtcMin; // mV Q2
-	uint16_t DcBtcMax; // mV Q2
+	uq14_2_t DcBtcMin; // mV Q2
+	uq14_2_t DcBtcMax; // mV Q2
 
 	struct linear_f32 DcBtcGbScalar;
 
@@ -738,7 +738,7 @@ struct AvfsDcBtcParams_smu13 {
 struct AvfsFuseOverride_smu13 {
 	uint16_t AvfsTemp[AVFS_TEMP_COUNT]; // in degrees C
 	uint16_t VftFMin;    // in MHz
-	uint16_t VInversion; // in mV Q2
+	uq14_2_t VInversion; // in mV Q2
 	struct quadratic_f32 qVft[AVFS_TEMP_COUNT];
 	struct quadratic_f32 qAvfsGb;
 	struct quadratic_f32 qAvfsGb2;
@@ -789,23 +789,23 @@ struct smu13_skutable_v39 { // SECTION: Version
 	// SECTION: FW DSTATE Settings
 	union fw_dstate_features_smu13_0x35 FwDStateMask;
 	// SECTION: Voltage Control Parameters
-	uint16_t UlvVoltageOffset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)
+	uq14_2_t UlvVoltageOffset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)
 
-	uint16_t UlvVoltageOffsetU;       // In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)
-	uint16_t DeepUlvVoltageOffsetSoc; // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE
+	uq14_2_t UlvVoltageOffsetU;       // In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)
+	uq14_2_t DeepUlvVoltageOffsetSoc; // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE
 	// Voltage Limits
-	uint16_t DefaultMaxVoltage[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Maximum voltage without FIT controller enabled
-	uint16_t BoostMaxVoltage[PMFW_VOLT_PLANE_COUNT];   // In mV(Q2) Maximum voltage with FIT controller enabled
+	uq14_2_t DefaultMaxVoltage[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Maximum voltage without FIT controller enabled
+	uq14_2_t BoostMaxVoltage[PMFW_VOLT_PLANE_COUNT];   // In mV(Q2) Maximum voltage with FIT controller enabled
 	// Vmin Optimizations
 	int16_t  VminTempHystersis[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature hysteresis for switching between low/high temperature values for Vmin
 	int16_t  VminTempThreshold[PMFW_VOLT_PLANE_COUNT];  // Celsius Temperature threshold for switching between low/high temperature values for Vmin
-	uint16_t Vmin_Hot_T0[PMFW_VOLT_PLANE_COUNT];       // In mV(Q2) Initial (pre-aging) Vset to be used at hot.
-	uint16_t Vmin_Cold_T0[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) Initial (pre-aging) Vset to be used at cold.
-	uint16_t Vmin_Hot_Eol[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) End-of-life Vset to be used at hot.
-	uint16_t Vmin_Cold_Eol[PMFW_VOLT_PLANE_COUNT];     // In mV(Q2) End-of-life Vset to be used at cold.
-	uint16_t Vmin_Aging_Offset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Worst-case aging margin
-	uint16_t Spare_Vmin_Plat_Offset_Hot[PMFW_VOLT_PLANE_COUNT];  // In mV(Q2) Platform offset apply to T0 Hot
-	uint16_t Spare_Vmin_Plat_Offset_Cold[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Platform offset apply to T0 Cold
+	uq14_2_t Vmin_Hot_T0[PMFW_VOLT_PLANE_COUNT];       // In mV(Q2) Initial (pre-aging) Vset to be used at hot.
+	uq14_2_t Vmin_Cold_T0[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) Initial (pre-aging) Vset to be used at cold.
+	uq14_2_t Vmin_Hot_Eol[PMFW_VOLT_PLANE_COUNT];      // In mV(Q2) End-of-life Vset to be used at hot.
+	uq14_2_t Vmin_Cold_Eol[PMFW_VOLT_PLANE_COUNT];     // In mV(Q2) End-of-life Vset to be used at cold.
+	uq14_2_t Vmin_Aging_Offset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Worst-case aging margin
+	uq14_2_t Spare_Vmin_Plat_Offset_Hot[PMFW_VOLT_PLANE_COUNT];  // In mV(Q2) Platform offset apply to T0 Hot
+	uq14_2_t Spare_Vmin_Plat_Offset_Cold[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2) Platform offset apply to T0 Cold
 	// This is a fixed/minimum VMIN aging degradation offset which is applied at T0. This reflects the minimum amount of aging already accounted for.
 	uint16_t VcBtcFixedVminAgingOffset[PMFW_VOLT_PLANE_COUNT]; // Linear offset or GB term to account for mis-correlation between PSM and Vmin shift trends across parts.
 	uint16_t VcBtcVmin2PsmDegrationGb[PMFW_VOLT_PLANE_COUNT];  // Scalar coefficient of the PSM aging degradation function
@@ -841,7 +841,7 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint32_t DcModeMaxFreq[SMU13_PPCLK_COUNT];                 // In MHz
 	// SECTION: DPM Configuration 2
 	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU13];          // in MHz
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU13];       // mV(Q2)
+	uq14_2_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU13];       // mV(Q2)
 
 	uint8_t  GfxclkSpare[2];
 	uint16_t GfxclkFreqCap;
@@ -874,7 +874,7 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint32_t GfxGpoSpare[10];
 	// GFX DCS
 
-	uint16_t DcsGfxOffVoltage;  // Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase
+	uq14_2_t DcsGfxOffVoltage;  // Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase
 	uint16_t PaddingDcs;
 
 	uint16_t DcsMinGfxOffTime;  // Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase
@@ -896,12 +896,12 @@ struct smu13_skutable_v39 { // SECTION: Version
 	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13];   // 4 DPM states
 	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13];
 
-	uint16_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
-	uint16_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
+	uq14_2_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
+	uq14_2_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
 	// FCLK Section
 
 	uint8_t  FclkDpmUPstates[NUM_FCLK_DPM_LEVELS_SMU13]; // U P-state ID associated with each FCLK DPM state.
-	uint16_t FclkDpmVddU[NUM_FCLK_DPM_LEVELS_SMU13]; // mV(Q2) Vset U voltage associated with each FCLK DPM state.
+	uq14_2_t FclkDpmVddU[NUM_FCLK_DPM_LEVELS_SMU13]; // mV(Q2) Vset U voltage associated with each FCLK DPM state.
 	uint16_t FclkDpmUSpeed[NUM_FCLK_DPM_LEVELS_SMU13]; // U speed associated with each FCLK DPM state
 	uint16_t FclkDpmDisallowPstateFreq;  // Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value
 	uint16_t PaddingFclk;
@@ -1050,7 +1050,7 @@ struct smu13_boardtable_v39 {
 	uint8_t  EnablePsi6[SVI_PLANE_COUNT]; // only applicable in SVI3
 	// SECTION: Voltage Regulator Settings
 	struct SviTelemetryScale_t SviTelemetryScale[SVI_PLANE_COUNT];
-	uint32_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
 
 	uint8_t  DownSlewRateVr[SVI_PLANE_COUNT];
 	// SECTION: GPIO Settings
@@ -1076,14 +1076,14 @@ struct smu13_boardtable_v39 {
 	uint8_t  LedError;       // GPIO number for Error Cases
 	// SECTION: Clock Spread Spectrum
 	// UCLK Spread Spectrum
-	uint8_t  UclkTrainingModeSpreadPercent; // Q4.4
+	uq4_4_t  UclkTrainingModeSpreadPercent; // Q4.4
 	uint8_t  UclkSpreadPadding;
 	uint16_t UclkSpreadFreq; // kHz
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadPercent[MEM_VENDOR_COUNT];
 	// FCLK Spread Spectrum
 	uint8_t  FclkSpreadPadding;
-	uint8_t  FclkSpreadPercent;  // Q4.4
+	uq4_4_t  FclkSpreadPercent;  // Q4.4
 	uint16_t FclkSpreadFreq;     // kHz
 	// Section: Memory Config
 	uint8_t  DramWidth; // Width of interface to the channel for each DRAM module. See DRAM_BIT_WIDTH_TYPE_e

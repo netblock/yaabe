@@ -667,8 +667,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t Tvr_SocLimit; // Celcius
 
 	// SECTION: ULV Settings
-	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uint16_t UlvVoltageOffsetGfx; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
 
 	uint8_t  UlvSmnclkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
 	uint8_t  UlvMp1clkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
@@ -677,14 +677,14 @@ struct smu11_smcpptable_v3 { // Vega20
 
 
 	// SECTION: Voltage Control Parameters
-	uint16_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uint16_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uint16_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uint16_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
 
 	// Q8.8?
-	uint16_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
-	uint16_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
 
 	//SECTION: DPM Config 1
 	struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
@@ -706,7 +706,7 @@ struct smu11_smcpptable_v3 { // Vega20
 
 	// SECTION: DPM Config 2
 	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // In MHz
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
 
 
 	uint16_t GfxclkFidle;    // in MHz
@@ -775,13 +775,13 @@ struct smu11_smcpptable_v3 { // Vega20
 
 	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	uint16_t DcTol[AVFS_VOLTAGE_COUNT]; // mV(Q2)
+	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
 	uint8_t  DcBtcEnabled[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_GfxBtc[2];
 
 	int16_t  DcBtcMin[AVFS_VOLTAGE_COUNT]; // is this actually signed? mV Q2
-	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV(Q2)
+	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
 	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
 	enum XGMI_LINK_WIDTH_e XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
@@ -798,8 +798,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	struct quadratic_f32 ReservedEquation2;
 	struct quadratic_f32 ReservedEquation3;
 
-	uint16_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
-	uint16_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
+	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
+	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
 
 	// APCC Settings
 	uint16_t MGpuFanBoostLimitRpm;
@@ -815,8 +815,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint32_t Padding32[3];
 
 	// SVI2 Board Parameters
-	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uint16_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 
 	uint8_t  VddGfxVrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;
@@ -864,19 +864,19 @@ struct smu11_smcpptable_v3 { // Vega20
 
 
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	uint8_t  FclkSpreadEnabled; // on or off
-	uint8_t  FclkSpreadPercent; // Q4.4
+	uq4_4_t  FclkSpreadPercent; // Q4.4
 	uint16_t FclkSpreadFreq;    // kHz
 
 	uint8_t  FllGfxclkSpreadEnabled; // on or off
-	uint8_t  FllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  FllGfxclkSpreadPercent; // Q4.4
 	uint16_t FllGfxclkSpreadFreq;    // kHz
 
 	struct smu11_smcpptable_v3_i2c_control I2cControllers;
@@ -925,8 +925,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	union fw_dstate_features_smu11_0x33 FwDStateMask;
 
 	// SECTION: ULV Settings
-	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uint16_t UlvVoltageOffsetGfx; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
 
 	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events
 	uint8_t  paddingRlcUlvParams[3];
@@ -936,18 +936,18 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint8_t  UlvGfxclkBypass; // 1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV
 	uint8_t  Padding234;
 
-	uint16_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
-	uint16_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
+	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
+	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
 
 
 	// SECTION: Voltage Control Parameters
-	uint16_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uint16_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uint16_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uint16_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
 
-	uint16_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
-	uint16_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
 
 	//SECTION: DPM Config 1
 	struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT8_PPCLK_COUNT];
@@ -970,9 +970,9 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	// SECTION: DPM Config 2
 	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // in MHz
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
-	uint16_t MemVddciVoltage[NUM_UCLK_DPM_LEVELS_SMU11]; // mV(Q2)
-	uint16_t MemMvddVoltage[NUM_UCLK_DPM_LEVELS_SMU11];  // mV(Q2)
+	uq14_2_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t MemVddciVoltage[NUM_UCLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t MemMvddVoltage[NUM_UCLK_DPM_LEVELS_SMU11];  // mV(Q2)
 	// GFXCLK DPM
 	uint16_t GfxclkFgfxoffEntry; // in Mhz
 	uint16_t GfxclkFinit;        // in Mhz
@@ -1049,13 +1049,13 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	uint16_t DcTol[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	uint8_t  DcBtcEnabled[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_GfxBtc[2];
 
-	uint16_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
-	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uq14_2_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	// SECTION: Advanced Options
 	uint32_t DebugOverrides;
@@ -1078,10 +1078,10 @@ struct smu11_smcpptable_v8 { // Navi10
 	// Temperature Dependent Vmin
 	uint16_t VDDGFX_TVmin;       //Celcius
 	uint16_t VDDSOC_TVmin;       //Celcius
-	uint16_t VDDGFX_Vmin_HiTemp; // mV Q2
-	uint16_t VDDGFX_Vmin_LoTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_HiTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_LoTemp; // mV Q2
+	uq14_2_t VDDGFX_Vmin_HiTemp; // mV Q2
+	uq14_2_t VDDGFX_Vmin_LoTemp; // mV Q2
+	uq14_2_t VDDSOC_Vmin_HiTemp; // mV Q2
+	uq14_2_t VDDSOC_Vmin_LoTemp; // mV Q2
 
 	uint16_t VDDGFX_TVminHystersis; // Celcius
 	uint16_t VDDSOC_TVminHystersis; // Celcius
@@ -1100,8 +1100,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	struct smu11_smcpptable_v8_i2c_control I2cControllers;
 
 	// SVI2 Board Parameters
-	uint16_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uint16_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
@@ -1149,22 +1149,22 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	// GFXCLK PLL Spread Spectrum
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	// GFXCLK DFLL Spread Spectrum
 	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uint8_t  DfllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
 	uint16_t DfllGfxclkSpreadFreq;    // kHz
 
 	// UCLK Spread Spectrum
 	uint8_t  UclkSpreadEnabled; // on or off
-	uint8_t  UclkSpreadPercent; // Q4.4
+	uq4_4_t  UclkSpreadPercent; // Q4.4
 	uint16_t UclkSpreadFreq;    // kHz
 
 	// SOCCLK Spread Spectrum
 	uint8_t  SoclkSpreadEnabled;  // on or off
-	uint8_t  SocclkSpreadPercent; // Q4.4
+	uq4_4_t  SocclkSpreadPercent; // Q4.4
 	uint16_t SocclkSpreadFreq;    // kHz
 
 	// Total board power
@@ -1172,7 +1172,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t BoardPadding;
 
 	// Mvdd Svi2 Div Ratio Setting
-	uint32_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t MvddRatio; // This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)
 
 	uint8_t  RenesesLoadLineEnabled;
 	uint8_t  GfxLoadlineResistance;
@@ -1238,10 +1238,10 @@ struct smu11_smcpptable_v7_dpm_config {
 	uint16_t FclkParamPadding;
 
 	// SECTION: DPM Config 2
-	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // in MHz
-	uint16_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
-	uint16_t MemVddciVoltage[NUM_UCLK_DPM_LEVELS_SMU11]; // mV(Q2)
-	uint16_t MemMvddVoltage[NUM_UCLK_DPM_LEVELS_SMU11];  // mV(Q2)
+	uq14_2_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // in MHz
+	uq14_2_t Mp0DpmVoltage[NUM_MP0CLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t MemVddciVoltage[NUM_UCLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t MemMvddVoltage[NUM_UCLK_DPM_LEVELS_SMU11];  // mV(Q2)
 	// GFXCLK DPM
 	uint16_t GfxclkFgfxoffEntry; // in Mhz
 	uint16_t GfxclkFinit;  // in Mhz
@@ -1262,7 +1262,7 @@ struct smu11_smcpptable_v7_dpm_config {
 	uint16_t GfxDcsFclkFopt; // Optimal FCLK for DCS in Mhz
 	uint16_t GfxDcsUclkFopt; // Optimal UCLK for DCS in Mhz
 
-	uint16_t DcsGfxOffVoltage;  // Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase
+	uq14_2_t DcsGfxOffVoltage;  // Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase
 
 	uint16_t DcsMinGfxOffTime;  // Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase
 	uint16_t DcsMaxGfxOffTime;  // Maximum amount of time PMFW can shut GFX OFF as part of GFX DCS phase at a stretch.
@@ -1274,7 +1274,7 @@ struct smu11_smcpptable_v7_dpm_config {
 
 	uint32_t DcsParamPadding[5];
 
-	uint16_t FlopsPerByteTable[RLC_PACE_TABLE_NUM_LEVELS_SMU11]; // Q8.8
+	uq8_8_t FlopsPerByteTable[RLC_PACE_TABLE_NUM_LEVELS_SMU11]; // Q8.8
 
 	// UCLK section
 	uint8_t  LowestUclkReservedForUlv; // Set this to 1 if UCLK DPM0 is reserved for ULV-mode only
@@ -1336,15 +1336,15 @@ struct smu11_smcpptable_v7_avfs {
 
 	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	uint16_t DcTol[AVFS_VOLTAGE_COUNT];  // mV Q2
+	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT];  // mV Q2
 
 	uint8_t  DcBtcEnabled[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_GfxBtc[2];
 
-	uint16_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
-	uint16_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uq14_2_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
+	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
-	uint16_t DcBtcGb[AVFS_VOLTAGE_COUNT];  // mV Q2
+	uq14_2_t DcBtcGb[AVFS_VOLTAGE_COUNT];  // mV Q2
 };
 struct smu11_smcpptable_v7_i2c_control {
 	// SECTION: I2C Control
@@ -1375,10 +1375,10 @@ struct smu11_smcpptable_v7 { // Navi21
 
 	//SECTION: SMNCLK DPM
 	uint16_t SmnclkDpmFreq[NUM_SMNCLK_DPM_LEVELS_SMU11];    // in MHz
-	uint16_t SmnclkDpmVoltage[NUM_SMNCLK_DPM_LEVELS_SMU11]; // mV(Q2)
+	uq14_2_t SmnclkDpmVoltage[NUM_SMNCLK_DPM_LEVELS_SMU11]; // mV(Q2)
 
 	uint32_t PaddingAPCC;
-	uint16_t PerPartDroopVsetGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS];  //In mV(Q2)
+	uq14_2_t PerPartDroopVsetGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS];  //In mV(Q2)
 	uint16_t PaddingPerPartDroop;
 
 	// SECTION: Throttler settings
@@ -1388,34 +1388,34 @@ struct smu11_smcpptable_v7 { // Navi21
 	union fw_dstate_features_smu11_0x40 FwDStateMask;
 
 	// SECTION: ULV Settings
-	uint16_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uint16_t UlvVoltageOffsetGfx; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
 
-	uint16_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
-	uint16_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
+	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
+	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
 
-	uint16_t SocLIVmin;        // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC
+	uq14_2_t SocLIVmin;        // In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC
 	uint16_t PaddingLIVmin;
 
 	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events
 	uint8_t  paddingRlcUlvParams[3];
 
 	// SECTION: Voltage Control Parameters
-	uint16_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uint16_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uint16_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uint16_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
 
-	uint16_t LoadLineResistanceGfx; // In mOhms Q8.8 with 8 fractional bits
-	uint16_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceGfx; // In mOhms Q8.8 with 8 fractional bits
+	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
 
 	// SECTION: Temperature Dependent Vmin
 	uint16_t VDDGFX_TVmin;       // Celcius
 	uint16_t VDDSOC_TVmin;       // Celcius
-	uint16_t VDDGFX_Vmin_HiTemp; // mV Q2
-	uint16_t VDDGFX_Vmin_LoTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_HiTemp; // mV Q2
-	uint16_t VDDSOC_Vmin_LoTemp; // mV Q2
+	uq14_2_t VDDGFX_Vmin_HiTemp; // mV Q2
+	uq14_2_t VDDGFX_Vmin_LoTemp; // mV Q2
+	uq14_2_t VDDSOC_Vmin_HiTemp; // mV Q2
+	uq14_2_t VDDSOC_Vmin_LoTemp; // mV Q2
 
 	uint16_t VDDGFX_TVminHystersis; // Celcius
 	uint16_t VDDSOC_TVminHystersis; // Celcius
@@ -1494,7 +1494,7 @@ struct smu11_smcpptable_v7 { // Navi21
 	int8_t   Mem1Offset;     // in Amps
 	uint8_t  Padding_TelemetryMem1;
 
-	uint32_t MvddRatio; // This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t MvddRatio; // This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
 
 	// SECTION: GPIO Settings
 	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
@@ -1521,12 +1521,12 @@ struct smu11_smcpptable_v7 { // Navi21
 
 	// GFXCLK PLL Spread Spectrum
 	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uint8_t  PllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
 	uint16_t PllGfxclkSpreadFreq;    // kHz
 
 	// GFXCLK DFLL Spread Spectrum
 	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uint8_t  DfllGfxclkSpreadPercent; // Q4.4
+	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
 	uint16_t DfllGfxclkSpreadFreq;    // kHz
 
 	// UCLK Spread Spectrum
@@ -1535,7 +1535,7 @@ struct smu11_smcpptable_v7 { // Navi21
 
 	// FCLK Spread Spectrum
 	uint8_t  FclkSpreadEnabled; // on or off
-	uint8_t  FclkSpreadPercent; // Q4.4
+	uq4_4_t  FclkSpreadPercent; // Q4.4
 	uint16_t FclkSpreadFreq;    // kHz
 
 	// Section: Memory Config
