@@ -21,8 +21,6 @@ future ideas:
 	* fdisk/parted like allocation viewer? atombios creator?
 	* live i2c smu communicator?
 
-*small:
-	* do we really care about dot and dotdot?
 *******************************************************************************/
 
 /*******************************************************************************
@@ -32,9 +30,6 @@ future ideas:
 #define ATOMTREE_DATA_TABLES_H
 
 struct atomtree_smc_dpm_info {
-	struct atomtree_smc_dpm_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
@@ -55,9 +50,6 @@ struct atomtree_smc_dpm_info {
 };
 
 struct atomtree_firmware_info {
-	struct atomtree_firmware_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
@@ -70,9 +62,6 @@ struct atomtree_firmware_info {
 	};
 };
 struct atomtree_lcd_info {
-	struct atomtree_lcd_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
@@ -85,9 +74,6 @@ struct atomtree_lcd_info {
 
 struct atomtree_smu_info {
 	// TODO explode the versions into their own atomtree entities?
-	struct atomtree_smu_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	void* smugolden; // not all smu_info versions have these
 	void* smuinit;
 
@@ -110,9 +96,6 @@ struct atomtree_smu_info {
 
 
 struct atomtree_vram_usagebyfirmware {
-	struct atomtree_vram_usagebyfirmware* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
@@ -124,9 +107,6 @@ struct atomtree_vram_usagebyfirmware {
 };
 
 struct atomtree_gpio_pin_lut {
-	struct atomtree_gpio_pin_lut* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	uint16_t num_gpio_pins;
 
 	enum atomtree_common_version ver;
@@ -140,9 +120,6 @@ struct atomtree_gpio_pin_lut {
 
 struct atomtree_gfx_info {
 	// TODO explode the versions into their own atomtree entities?
-	struct atomtree_gfx_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
-
 	void* gcgolden; // not all gfx_info versions have this
 
 	enum atomtree_common_version ver;
@@ -163,9 +140,6 @@ struct atomtree_gfx_info {
 
 struct atomtree_powerplaytable {
 	// What the fuck, AMD.
-
-	struct atomtree_powerplaytable* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
 
 	//struct PPTable_t* smc_pptable;
 	uint8_t* powerplay_table_ver; // as seen next to atom_common_table_header
@@ -232,9 +206,6 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
-	struct atomtree_umc_init_reg_block* dot;
-	struct atomtree_vram_info* dotdot;
-
 	union {
 		uint16_t* umc_reg_num;
 		uint16_t* umc_number_of_registers;
@@ -251,8 +222,6 @@ struct atomtree_umc_init_reg_block {
 
 /*
 struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
-	struct atomtree_gddr6_dram_data_remap* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_gddr6_bit_byte_remap* leaves; // nonzero if populated
 
 	//uint32_t table_size;
@@ -263,9 +232,6 @@ struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
 
 struct atomtree_vram_info_header_v2_3 {
 	struct atom_vram_info_header_v2_3* leaves; // nonzero if populated
-
-	struct atomtree_vram_info_header_v2_3* dot;
-	struct atomtree_vram_info* dotdot;
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
@@ -278,8 +244,6 @@ struct atomtree_vram_info_header_v2_3 {
 };
 
 struct atomtree_vram_info_header_v2_4 {
-	struct atomtree_vram_info_header_v2_4* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_4* leaves; // nonzero if populated
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -300,8 +264,6 @@ struct atomtree_vram_info_header_v2_4 {
 };
 
 struct atomtree_vram_info_header_v2_5 {
-	struct atomtree_vram_info_header_v2_5* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_5* leaves; // nonzero if populated
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -320,8 +282,6 @@ struct atomtree_vram_info_header_v2_5 {
 };
 
 struct atomtree_vram_info_header_v2_6 {
-	struct atomtree_vram_info_header_v2_6* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v2_6* leaves; // nonzero if populated
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -335,8 +295,6 @@ struct atomtree_vram_info_header_v2_6 {
 
 
 struct atomtree_vram_module_v3_0 { // TODO figure out child tables
-	struct atomtree_vram_module_v3_0* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_vram_module_v3_0* leaves; // nonzero if populated
 
 	void* dram_info;
@@ -345,8 +303,6 @@ struct atomtree_vram_module_v3_0 { // TODO figure out child tables
 };
 
 struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
-	struct atomtree_vram_info_header_v3_0* dot;
-	struct atomtree_vram_info* dotdot;
 	struct atom_vram_info_header_v3_0* leaves; // nonzero if populated
 
 	void* mem_tuning;
@@ -363,8 +319,6 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 };
 
 struct atomtree_vram_info {
-	struct atomtree_vram_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
 	union {
 		struct atom_common_table_header* table_header;
 		void* leaves;
@@ -387,9 +341,6 @@ struct atomtree_voltage_object_v4 {
 
 #define ATOMTREE_VOLTAGE_OBJECTS_MAX 8 // keep score. navi10 has 8
 struct atomtree_voltageobject_info_v4_1 {
-	struct atomtree_voltageobject_info_v4_1* dot;
-	struct atomtree_voltageobject_info* dotdot;
-
 	struct atom_voltage_objects_info_v4_1* leaves;
 
 	uint16_t num_voltage_objects;
@@ -400,8 +351,6 @@ struct atomtree_voltageobject_info_v4_1 {
 
 
 struct atomtree_voltageobject_info {
-	struct atomtree_voltageobject_info* dot;
-	struct atomtree_master_datatable_v2_1* dotdot;
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
@@ -422,8 +371,6 @@ struct atomtree_sw_datatable {
 };
 
 struct atomtree_master_datatable_v2_1 {
-	struct atomtree_master_datatable_v2_1* dot;
-	struct atom_tree* dotdot;
 	union {
 		struct atom_common_table_header* table_header;
 		struct atom_master_data_table_v2_1* leaves; // nonzero if populated

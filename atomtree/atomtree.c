@@ -5,22 +5,21 @@
 
 // TODO take advantage of ATUI_PETIOLE as much as possible
 
-inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_smc_dpm_info(
+		struct atomtree_smc_dpm_info* smc_dpm_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_smc_dpm_info = NULL;
 	atui_branch* atui_smudpm_i2c = NULL;
 	uint16_t i = 0;
 
-	struct atomtree_smc_dpm_info* const smc_dpm_info =
-		&(atree->data_table.smc_dpm_info);
-	smc_dpm_info->dot = smc_dpm_info;
-	smc_dpm_info->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->smc_dpm_info) {
+	if (bios_offset) {
 		// leaves is in a union with the structs.
-		smc_dpm_info->leaves =
-			atree->bios + atree->data_table.leaves->smc_dpm_info;
+		smc_dpm_info->leaves = atree->bios + bios_offset;
 		smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
 		if (generate_atui) {
 			switch (smc_dpm_info->ver) {
@@ -92,20 +91,19 @@ inline static atui_branch* atomtree_dt_populate_smc_dpm_info(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_firmwareinfo(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_firmwareinfo(
+		struct atomtree_firmware_info* firmwareinfo,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_firmwareinfo = NULL;
 
-	struct atomtree_firmware_info* const firmwareinfo =
-		&(atree->data_table.firmwareinfo);
-	firmwareinfo->dot = firmwareinfo;
-	firmwareinfo->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->firmwareinfo) {
+	if (bios_offset) {
 		// leaves is in a union with the structs.
-		firmwareinfo->leaves =
-			atree->bios + atree->data_table.leaves->firmwareinfo;
+		firmwareinfo->leaves = atree->bios + bios_offset;
 		firmwareinfo->ver = get_ver(firmwareinfo->table_header);
 		if (generate_atui) {
 			switch (firmwareinfo->ver) {
@@ -149,18 +147,19 @@ inline static atui_branch* atomtree_dt_populate_firmwareinfo(
 	return atui_firmwareinfo;
 }
 
-inline static atui_branch* atomtree_dt_populate_lcd_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_lcd_info(
+		struct atomtree_lcd_info* lcd_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_lcd_info = NULL;
 	atui_branch* atui_lcd_timing = NULL;
 
-	struct atomtree_lcd_info* const lcd_info = &(atree->data_table.lcd_info);
-	lcd_info->dot = lcd_info;
-	lcd_info->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->lcd_info) {
-		lcd_info->leaves = atree->bios + atree->data_table.leaves->lcd_info;
+	if (bios_offset) {
+		lcd_info->leaves = atree->bios + bios_offset;
 		lcd_info->ver = get_ver(lcd_info->table_header);
 		if (generate_atui) {
 			switch (lcd_info->ver) {
@@ -188,23 +187,22 @@ inline static atui_branch* atomtree_dt_populate_lcd_info(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_smu_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_smu_info(
+		struct atomtree_smu_info* smu_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_smu_info = NULL;
-
-	struct atomtree_smu_info* const smu_info = &(atree->data_table.smu_info);
-	smu_info->dot = smu_info;
-	smu_info->dotdot = &(atree->data_table);
 
 	smu_info->smugolden = NULL;
 	smu_info->smuinit = NULL;
 
 	// leaves is in a union with the structs.
-	if (atree->data_table.leaves->smu_info) {
-
-		smu_info->leaves = atree->bios + atree->data_table.leaves->smu_info;
-
+	if (bios_offset) {
+		smu_info->leaves = atree->bios + bios_offset;
 		smu_info->ver = get_ver(smu_info->table_header);
 		switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
 			case v3_1:
@@ -305,21 +303,18 @@ inline static atui_branch* atomtree_dt_populate_smu_info(
 
 
 
-inline static atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_vram_usagebyfirmware(
+		struct atomtree_vram_usagebyfirmware* fw_vram,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui) {
 
 	atui_branch* atui_fw_vram = NULL;
 
-	struct atomtree_vram_usagebyfirmware* const fw_vram =
-		&(atree->data_table.vram_usagebyfirmware);
-	fw_vram->dot = fw_vram;
-	fw_vram->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->vram_usagebyfirmware) {
+	if (bios_offset) {
 		// leaves is in a union with the structs.
-		fw_vram->leaves = atree->bios +
-			atree->data_table.leaves->vram_usagebyfirmware;
-
+		fw_vram->leaves = atree->bios + bios_offset;
 		fw_vram->ver = get_ver(fw_vram->table_header);
 		if (generate_atui) {
 			switch(fw_vram->ver) {
@@ -349,22 +344,20 @@ inline static atui_branch* atomtree_dt_populate_vram_usagebyfirmware(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_gpio_pin_lut(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_gpio_pin_lut(
+		struct atomtree_gpio_pin_lut* gpio_pin_lut,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_gpio_pin_lut = NULL;
 	atui_branch* atui_gpio_pin = NULL;
 	uint16_t i;
 
-	struct atomtree_gpio_pin_lut* const gpio_pin_lut =
-		&(atree->data_table.gpio_pin_lut);
-	gpio_pin_lut->dot = gpio_pin_lut;
-	gpio_pin_lut->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->gpio_pin_lut) {
-		gpio_pin_lut->leaves =
-			atree->bios + atree->data_table.leaves->gpio_pin_lut;
-
+	if (bios_offset) {
+		gpio_pin_lut->leaves = atree->bios + bios_offset;
 		gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
 		switch(gpio_pin_lut->ver) {
 			case v2_1:
@@ -399,20 +392,21 @@ inline static atui_branch* atomtree_dt_populate_gpio_pin_lut(
 	return atui_gpio_pin_lut;
 }
 
-inline static atui_branch* atomtree_dt_populate_gfx_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_gfx_info(
+		struct atomtree_gfx_info* gfx_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_gfx_info = NULL;
 
-	struct atomtree_gfx_info* const gfx_info = &(atree->data_table.gfx_info);
-	gfx_info->dot = gfx_info;
-	gfx_info->dotdot = &(atree->data_table);
 	gfx_info->gcgolden = NULL;
 
-	if (atree->data_table.leaves->gfx_info) {
+	if (bios_offset) {
 		// leaves is in a union with the structs.
-		gfx_info->leaves = atree->bios + atree->data_table.leaves->gfx_info;
-
+		gfx_info->leaves = atree->bios + bios_offset;
 		gfx_info->ver = get_ver(gfx_info->table_header);
 		switch(gfx_info->ver) {
 			case v2_2:
@@ -502,24 +496,21 @@ inline static atui_branch* atomtree_dt_populate_gfx_info(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_ppt(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_ppt(
+		struct atomtree_powerplaytable* ppt,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_ppt = NULL;
+	atui_branch* atui_smc_pptable = NULL;
 
-	struct atomtree_powerplaytable* const ppt = &(
-		atree->data_table.powerplayinfo
-	);
-	ppt->dot = ppt;
-	ppt->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->powerplayinfo) {
-		atui_branch* atui_smc_pptable = NULL;
-
+	if (bios_offset) {
+		ppt->leaves = atree->bios + bios_offset;
 		ppt->powerplay_table_ver = &(ppt->pphead->table_revision);
-
 		// leaves is in a union with the structs.
-		ppt->leaves = atree->bios + atree->data_table.leaves->powerplayinfo;
 		ppt->ver = get_ver(ppt->table_header);
 		switch(ppt->ver) {
 			case v14_0:
@@ -586,18 +577,15 @@ inline static atui_branch* atomtree_dt_populate_ppt(
 }
 
 
-static atui_branch* atomtree_populate_umc_init_reg_block(
-		struct atom_tree* atree,
+static atui_branch*
+atomtree_populate_umc_init_reg_block(
 		struct atomtree_umc_init_reg_block* at_regblock,
-		bool generate_atui, uint8_t num_extra_atuibranches) {
-
-	uint16_t i = 0;
-
+		bool generate_atui,
+		uint8_t num_extra_atuibranches
+		) {
 	// TODO: something something end is 0xFFFF ???
 
 	// regblock->leaves must be already populated.
-	at_regblock->dot = at_regblock;
-	at_regblock->dotdot = &(atree->data_table.vram_info);
 	/*
 	AMD, what the fuck? fuckin please be consistent. Use your common table
 	structure, and use your pointers. And why aren't your pointers starting
@@ -620,6 +608,8 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	and atom_umc_reg_setting_data_block's u32umc_reg_data follows
 	umc_reg_num.
 	*/
+	uint16_t i = 0;
+
 	at_regblock->umc_reg_list = at_regblock->leaves->umc_reg_list;
 	at_regblock->umc_number_of_registers = &(at_regblock->leaves->umc_reg_num);
 	const uint16_t umc_reg_list_size =
@@ -661,17 +651,16 @@ static atui_branch* atomtree_populate_umc_init_reg_block(
 	return atui_regblock;
 }
 
-inline static atui_branch* atomtree_populate_vram_info_v2_3(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_vram_info_v2_3(
+		struct atomtree_vram_info* vram_info,
+		bool generate_atui
+		) {
+
+	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
+	vi23->leaves = vram_info->leaves;
 
 	uint16_t i = 0;
-
-	struct atomtree_vram_info_header_v2_3* const vi23 =
-		&(atree->data_table.vram_info.v2_3);
-	vi23->dot = vi23;
-	vi23->dotdot = &(atree->data_table.vram_info);
-	vi23->leaves = atree->bios +
-		atree->data_table.leaves->vram_info;
 
 	// it might be better to keep atui generation for the reg blocks up here
 	// than in the ATUI_FUNCIFY for that it might not exist, and that we might
@@ -681,7 +670,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->mem_adjust_table.leaves = (void*)vi23->leaves +
 			vi23->leaves->mem_adjust_tbloffset;
 		atui_memadjust = atomtree_populate_umc_init_reg_block(
-			atree, &(vi23->mem_adjust_table), generate_atui, 0
+			&(vi23->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_memadjust->name, "mem_adjust_table");
@@ -695,7 +684,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->mem_clk_patch.leaves = (void*)vi23->leaves +
 			vi23->leaves->mem_clk_patch_tbloffset;
 		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			atree, &(vi23->mem_clk_patch), generate_atui, 0
+			&(vi23->mem_clk_patch), generate_atui, 0
 		);
 			if (generate_atui)
 				sprintf(atui_memclkpatch->name, "mem_clk_patch_table");
@@ -710,7 +699,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->mc_adjust_pertile.leaves = (void*)vi23->leaves +
 			vi23->leaves->mc_adjust_pertile_tbloffset;
 		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			atree, &(vi23->mc_adjust_pertile), generate_atui, 0
+			&(vi23->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
@@ -724,7 +713,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->mc_phyinit.leaves = (void*)vi23->leaves +
 			vi23->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			atree, &(vi23->mc_phyinit), generate_atui, 0
+			&(vi23->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_phyinit->name, "mc_phyinit_table");
@@ -760,7 +749,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 		vi23->post_ucode_init.leaves = (void*)vi23->leaves +
 			vi23->leaves->post_ucode_init_offset;
 		atui_branch* atui_postucode_init = atomtree_populate_umc_init_reg_block(
-			atree, &(vi23->post_ucode_init), generate_atui, 0
+			&(vi23->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui) {
 			sprintf(atui_postucode_init->name, "post_ucode_init");
@@ -792,27 +781,25 @@ inline static atui_branch* atomtree_populate_vram_info_v2_3(
 	return atui_vi;
 }
 
-inline static atui_branch* atomtree_populate_vram_info_v2_4(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_vram_info_v2_4(
+		struct atomtree_vram_info* vram_info,
+		bool generate_atui
+		) {
+
+	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
+	vi24->leaves = vram_info->leaves;
+	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
 
 	uint16_t i,j = 0;
 	atui_branch* tmp_branch = NULL;
-
-	struct atomtree_vram_info_header_v2_4* const vi24 =
-		&(atree->data_table.vram_info.v2_4);
-	vi24->dot = vi24;
-	vi24->dotdot = &(atree->data_table.vram_info);
-	vi24->leaves = atree->bios +
-		atree->data_table.leaves->vram_info;
-	struct atom_vram_info_header_v2_4* const leaves = vi24->leaves;
-
 
 	atui_branch* atui_memadjust = NULL;
 	if (vi24->leaves->mem_adjust_tbloffset) {
 		vi24->mem_adjust_table.leaves = (void*)vi24->leaves +
 			vi24->leaves->mem_adjust_tbloffset;
 		atui_memadjust = atomtree_populate_umc_init_reg_block(
-			atree, &(vi24->mem_adjust_table), generate_atui, 0
+			&(vi24->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_memadjust->name, "mem_adjust_table");
@@ -826,7 +813,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->mem_clk_patch.leaves = (void*)vi24->leaves +
 			vi24->leaves->mem_clk_patch_tbloffset;
 		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			atree, &(vi24->mem_clk_patch), generate_atui, 1 // 1 for timings
+			&(vi24->mem_clk_patch), generate_atui, 1 // 1 for timings
 		);
 
 		vi24->navi1_gddr6_timings = (struct umc_block_navi1_timings*)\
@@ -867,7 +854,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->mc_adjust_pertile.leaves = (void*)vi24->leaves +
 			vi24->leaves->mc_adjust_pertile_tbloffset;
 		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			atree, &(vi24->mc_adjust_pertile), generate_atui, 0
+			&(vi24->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
@@ -881,7 +868,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->mc_phyinit.leaves = (void*)vi24->leaves +
 			vi24->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			atree, &(vi24->mc_phyinit), generate_atui, 0
+			&(vi24->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_phyinit->name, "mc_phyinit_table");
@@ -906,7 +893,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 		vi24->post_ucode_init.leaves = (void*)vi24->leaves +
 			vi24->leaves->post_ucode_init_offset;
 		atui_postucode_init = atomtree_populate_umc_init_reg_block(
-			atree, &(vi24->post_ucode_init), generate_atui, 0
+			&(vi24->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_postucode_init->name, "post_ucode_init");
@@ -937,26 +924,24 @@ inline static atui_branch* atomtree_populate_vram_info_v2_4(
 	return atui_vi;
 }
 
-inline static atui_branch* atomtree_populate_vram_info_v2_5(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_vram_info_v2_5(
+		struct atomtree_vram_info* vram_info,
+		bool generate_atui
+		) {
+
+	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
+	vi25->leaves = vram_info->leaves;
 
 	uint16_t i = 0;
 	atui_branch* tmp_branch = NULL;
-
-	struct atomtree_vram_info_header_v2_5* const vi25 =
-		&(atree->data_table.vram_info.v2_5);
-	vi25->dot = vi25;
-	vi25->dotdot = &(atree->data_table.vram_info);
-	vi25->leaves = atree->bios +
-		atree->data_table.leaves->vram_info;
-
 
 	atui_branch* atui_memadjust = NULL;
 	if (vi25->leaves->mem_adjust_tbloffset) {
 		vi25->mem_adjust_table.leaves = (void*)vi25->leaves +
 			vi25->leaves->mem_adjust_tbloffset;
 		atui_memadjust = atomtree_populate_umc_init_reg_block(
-			atree, &(vi25->mem_adjust_table), generate_atui, 0
+			&(vi25->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_memadjust->name, "mem_adjust_table");
@@ -1001,7 +986,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->mc_adjust_pertile.leaves = (void*)vi25->leaves +
 			vi25->leaves->mc_adjust_pertile_tbloffset;
 		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			atree, &(vi25->mc_adjust_pertile), generate_atui, 0
+			&(vi25->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
@@ -1015,7 +1000,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->mc_phyinit.leaves = (void*)vi25->leaves +
 			vi25->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			atree, &(vi25->mc_phyinit), generate_atui, 0
+			&(vi25->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_phyinit->name, "mc_phyinit_table");
@@ -1044,7 +1029,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->post_ucode_init.leaves = (void*)vi25->leaves +
 			vi25->leaves->post_ucode_init_offset;
 		atui_postucode_init = atomtree_populate_umc_init_reg_block(
-			atree, &(vi25->post_ucode_init), generate_atui, 0
+			&(vi25->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_postucode_init->name, "post_ucode_init");
@@ -1058,7 +1043,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 		vi25->strobe_mode_patch.leaves = (void*)vi25->leaves +
 			vi25->leaves->strobe_mode_patch_tbloffset;
 		atui_strobe_mode_patch = atomtree_populate_umc_init_reg_block(
-			atree, &(vi25->strobe_mode_patch), generate_atui, 0
+			&(vi25->strobe_mode_patch), generate_atui, 0
 		);
 	} else {
 		vi25->strobe_mode_patch.leaves = NULL;
@@ -1087,26 +1072,24 @@ inline static atui_branch* atomtree_populate_vram_info_v2_5(
 	return atui_vi;
 }
 
-inline static atui_branch* atomtree_populate_vram_info_v2_6(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_vram_info_v2_6(
+		struct atomtree_vram_info* vram_info,
+		bool generate_atui
+		) {
+
+	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
+	vi26->leaves = vram_info->leaves;
 
 	uint16_t i = 0;
 	atui_branch* tmp_branch = NULL;
-
-	struct atomtree_vram_info_header_v2_6* const vi26 =
-		&(atree->data_table.vram_info.v2_6);
-	vi26->dot = vi26;
-	vi26->dotdot = &(atree->data_table.vram_info);
-	vi26->leaves = atree->bios +
-		atree->data_table.leaves->vram_info;
-
 
 	atui_branch* atui_memadjust = NULL;
 	if (vi26->leaves->mem_adjust_tbloffset) {
 		vi26->mem_adjust_table.leaves = (void*)vi26->leaves +
 			vi26->leaves->mem_adjust_tbloffset;
 		atui_memadjust = atomtree_populate_umc_init_reg_block(
-			atree, &(vi26->mem_adjust_table), generate_atui, 0
+			&(vi26->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_memadjust->name, "mem_adjust_table");
@@ -1120,7 +1103,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		vi26->mem_clk_patch.leaves = (void*)vi26->leaves +
 			vi26->leaves->mem_clk_patch_tbloffset;
 		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			atree, &(vi26->mem_clk_patch), generate_atui, 0
+			&(vi26->mem_clk_patch), generate_atui, 0
 		);
 
 		if (generate_atui)
@@ -1136,7 +1119,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		vi26->mc_adjust_pertile.leaves = (void*)vi26->leaves +
 			vi26->leaves->mc_adjust_pertile_tbloffset;
 		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			atree, &(vi26->mc_adjust_pertile), generate_atui, 0
+			&(vi26->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_mcadjpertile->name, "mc_adjust_pertile_table");
@@ -1150,7 +1133,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		vi26->mc_phyinit.leaves = (void*)vi26->leaves +
 			vi26->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			atree, &(vi26->mc_phyinit), generate_atui, 0
+			&(vi26->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_phyinit->name, "mc_phyinit_table");
@@ -1188,7 +1171,7 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 		vi26->post_ucode_init.leaves = (void*)vi26->leaves +
 			vi26->leaves->post_ucode_init_offset;
 		atui_postucode_init = atomtree_populate_umc_init_reg_block(
-			atree, &(vi26->post_ucode_init), generate_atui, 0
+			&(vi26->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_postucode_init->name, "post_ucode_init");
@@ -1219,18 +1202,17 @@ inline static atui_branch* atomtree_populate_vram_info_v2_6(
 	return atui_vi;
 }
 
-inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_vram_info_v3_0(// TODO finish this
+		struct atomtree_vram_info* vram_info,
+		bool generate_atui
+		) {
+
+	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
+	vi30->leaves = vram_info->leaves;
+
 	uint16_t i = 0;
 	atui_branch* tmp_branch = NULL;
-
-	struct atomtree_vram_info_header_v3_0* const vi30 =
-		&(atree->data_table.vram_info.v3_0);
-	vi30->dot = vi30;
-	vi30->dotdot = &(atree->data_table.vram_info);
-	vi30->leaves = atree->bios +
-		atree->data_table.leaves->vram_info;
-
 
 	atui_branch* atui_mem_tuning = NULL;
 	if (vi30->leaves->mem_tuning_table_offset) {
@@ -1263,7 +1245,7 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 		vi30->mc_init.leaves = (void*)vi30->leaves +
 			vi30->leaves->mc_init_table_offset;
 		atui_mc_init = atomtree_populate_umc_init_reg_block(
-			atree, &(vi30->mc_init), generate_atui, 0
+			&(vi30->mc_init), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_mc_init->name, "mc_init_table");
@@ -1292,7 +1274,7 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 		vi30->umc_emuinit.leaves = (void*)vi30->leaves +
 			vi30->leaves->umc_emuinit_table_offset;
 		atui_umc_emuinit = atomtree_populate_umc_init_reg_block(
-			atree, &(vi30->umc_emuinit), generate_atui, 0
+			&(vi30->umc_emuinit), generate_atui, 0
 		);
 		if (generate_atui)
 			sprintf(atui_umc_emuinit->name, "umc_emuinit_table");
@@ -1319,8 +1301,6 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 	struct atomtree_vram_module_v3_0* atvm;
 	for (i=0; i < vi30->leaves->vram_module_num; i++) {
 		atvm = &(vi30->vram_module[i]);
-		atvm->dot = atvm;
-		atvm->dotdot = &(atree->data_table.vram_info);
 		atvm->leaves = &(vi30->leaves->vram_module[i]);
 		if (atvm->leaves->dram_info_offset) {
 			atvm->dram_info =
@@ -1367,34 +1347,44 @@ inline static atui_branch* atomtree_populate_vram_info_v3_0(// TODO finish this
 	return atui_vi;
 }
 
-inline static atui_branch* atomtree_dt_populate_vram_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_vram_info(
+		struct atomtree_vram_info* vram_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_vi = NULL;
 
-	struct atomtree_vram_info* const vram_info = &(atree->data_table.vram_info);
-	vram_info->dot = vram_info;
-	vram_info->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->vram_info) {
-		vram_info->table_header =
-			atree->bios + atree->data_table.leaves->vram_info;
+	if (bios_offset) {
+		vram_info->leaves = atree->bios + bios_offset;
 		vram_info->ver = get_ver(vram_info->table_header);
 		switch (vram_info->ver) { // TODO: earlier tables than 2.3?
 			case v2_3:
-				atui_vi = atomtree_populate_vram_info_v2_3(atree,generate_atui);
+				atui_vi = atomtree_populate_vram_info_v2_3(
+					vram_info, generate_atui
+				);
 				break;
 			case v2_4:
-				atui_vi = atomtree_populate_vram_info_v2_4(atree,generate_atui);
+				atui_vi = atomtree_populate_vram_info_v2_4(
+					vram_info, generate_atui
+				);
 				break;
 			case v2_5:
-				atui_vi = atomtree_populate_vram_info_v2_5(atree,generate_atui);
+				atui_vi = atomtree_populate_vram_info_v2_5(
+					vram_info, generate_atui
+				);
 				break;
 			case v2_6:
-				atui_vi = atomtree_populate_vram_info_v2_6(atree,generate_atui);
+				atui_vi = atomtree_populate_vram_info_v2_6(
+					vram_info, generate_atui
+				);
 				break;
 			case v3_0:
-				atui_vi = atomtree_populate_vram_info_v3_0(atree,generate_atui);
+				atui_vi = atomtree_populate_vram_info_v3_0(
+					vram_info, generate_atui
+				);
 				break;
 			default:
 				if (generate_atui) {
@@ -1413,18 +1403,18 @@ inline static atui_branch* atomtree_dt_populate_vram_info(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_voltageobject_info_v4_1(
+		struct atomtree_voltageobject_info* vo_info,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_vo_info = NULL;
 	atui_branch* tmp_branch = NULL;
 	uint16_t i;
 
-	struct atomtree_voltageobject_info_v4_1* const vo41 =
-	&(atree->data_table.voltageobject_info.v4_1);
-	vo41->dot = vo41;
-	vo41->dotdot = &(atree->data_table.voltageobject_info);
-	vo41->leaves = atree->bios + atree->data_table.leaves->voltageobject_info;
+	struct atomtree_voltageobject_info_v4_1* const vo41 = &(vo_info->v4_1);
+	vo41->leaves = vo_info->leaves;
 
 
 	// get the size ofthe dynamically-sized voltage object array, and walk
@@ -1524,29 +1514,28 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info_v4_1(
 }
 
 
-inline static atui_branch* atomtree_dt_populate_voltageobject_info(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_dt_populate_voltageobject_info(
+		struct atomtree_voltageobject_info* vo_info,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
+		bool generate_atui
+		) {
 
 	atui_branch* atui_vo_info = NULL;
 
-	struct atomtree_voltageobject_info* const vo_info =
-		&(atree->data_table.voltageobject_info);
-	vo_info->dot = vo_info;
-	vo_info->dotdot = &(atree->data_table);
-
-	if (atree->data_table.leaves->voltageobject_info) {
-		vo_info->table_header =
-			atree->bios + atree->data_table.leaves->voltageobject_info;
+	if (bios_offset) {
+		vo_info->leaves = atree->bios + bios_offset;
 		vo_info->ver = get_ver(vo_info->table_header);
 		switch (vo_info->ver) {
 			case v4_1:
 				atui_vo_info = atomtree_dt_populate_voltageobject_info_v4_1(
-					atree, generate_atui
+					vo_info, generate_atui
 				);
 				break;
 			case v4_2: //hopefully v4_2 is the same
 				atui_vo_info = atomtree_dt_populate_voltageobject_info_v4_1(
-					atree, generate_atui
+					vo_info, generate_atui
 				);
 				sprintf(atui_vo_info->name,
 					"atom_voltage_objects_info_v4_1 (forced)");
@@ -1567,14 +1556,14 @@ inline static atui_branch* atomtree_dt_populate_voltageobject_info(
 	return atui_vo_info;
 }
 
-inline static atui_branch* atomtree_dt_populate_sw_datatables(
-		struct atom_tree* atree, bool generate_atui) {
-
+inline static atui_branch*
+atomtree_dt_populate_sw_datatables(
+		struct atomtree_master_datatable_v2_1* data_table,
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
 	// TODO have a table with a bunch of ATUI_INLINEs pointing at headers
 
-	struct atomtree_master_datatable_v2_1* const data_table = &(
-		atree->data_table
-	);
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
 	void* const bios = atree->bios;
 
@@ -1650,8 +1639,11 @@ inline static atui_branch* atomtree_dt_populate_sw_datatables(
 	return NULL;
 }
 
-inline static atui_branch* atomtree_populate_datatables(
-		struct atom_tree* atree, bool generate_atui) {
+inline static atui_branch*
+atomtree_populate_datatables(
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
 	//TODO double check pointer math if possible; some tables might be relative
 	// to master_datatable.
 
@@ -1659,8 +1651,6 @@ inline static atui_branch* atomtree_populate_datatables(
 		atree->data_table
 	);
 	void* const bios = atree->bios;
-	data_table->dot = data_table;
-	data_table->dotdot = atree;
 	data_table->leaves = bios + atree->leaves->masterdatatable_offset;
 	data_table->ver = get_ver(data_table->table_header);
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
@@ -1682,49 +1672,59 @@ inline static atui_branch* atomtree_populate_datatables(
 	}
 
 
-	atui_branch* const atui_smc_dpm_info =
-		atomtree_dt_populate_smc_dpm_info(atree, generate_atui);
+	atui_branch* const atui_smc_dpm_info = atomtree_dt_populate_smc_dpm_info(
+		&(data_table->smc_dpm_info), atree, leaves->smc_dpm_info, generate_atui
+	);
 
-	atui_branch* const atui_firmwareinfo =
-		atomtree_dt_populate_firmwareinfo(atree, generate_atui);
+	atui_branch* const atui_firmwareinfo = atomtree_dt_populate_firmwareinfo(
+		&(data_table->firmwareinfo), atree, leaves->firmwareinfo, generate_atui
+	);
 
+	atui_branch* const atui_lcd_info = atomtree_dt_populate_lcd_info(
+		&(data_table->lcd_info), atree, leaves->lcd_info, generate_atui
+	);
 
-	atui_branch* const atui_lcd_info =
-		atomtree_dt_populate_lcd_info(atree, generate_atui);
+	atui_branch* const atui_smu_info = atomtree_dt_populate_smu_info(
+		&(data_table->smu_info), atree, leaves->smu_info, generate_atui
+	);
 
+	atui_branch* const atui_fw_vram = atomtree_dt_populate_vram_usagebyfirmware(
+		&(data_table->vram_usagebyfirmware), atree,
+		leaves->vram_usagebyfirmware, generate_atui
+	);
 
-	atui_branch* const atui_smu_info =
-		atomtree_dt_populate_smu_info(atree, generate_atui);
+	atui_branch* const atui_gpio_pin_lut = atomtree_dt_populate_gpio_pin_lut(
+		&(data_table->gpio_pin_lut), atree, leaves->gpio_pin_lut, generate_atui
+	);
 
-	atui_branch* const atui_fw_vram =
-		atomtree_dt_populate_vram_usagebyfirmware(atree, generate_atui);
+	atui_branch* const atui_gfx_info = atomtree_dt_populate_gfx_info(
+		&(data_table->gfx_info), atree, leaves->gfx_info, generate_atui
+	);
 
-
-	atui_branch* const atui_gpio_pin_lut =
-		atomtree_dt_populate_gpio_pin_lut(atree, generate_atui);
-
-
-	atui_branch* const atui_gfx_info =
-		atomtree_dt_populate_gfx_info(atree, generate_atui);
-
-	atui_branch* const atui_ppt =
-		atomtree_dt_populate_ppt(atree, generate_atui);
+	atui_branch* const atui_ppt = atomtree_dt_populate_ppt(
+		&(data_table->powerplayinfo), atree,
+		leaves->powerplayinfo, generate_atui
+	);
 
 	//displayobjectinfo
 	//indirectioaccess
 	//umc_info
 	//dce_info
 
-	atui_branch* const atui_vram_info =
-		atomtree_dt_populate_vram_info(atree, generate_atui);
+	atui_branch* const atui_vram_info = atomtree_dt_populate_vram_info(
+		&(data_table->vram_info), atree, leaves->vram_info, generate_atui
+	);
 
 	//integratedsysteminfo
 	//asic_profiling_info
 	//voltageobject_info
 	atui_branch* const atui_voltageobject_info =
-		atomtree_dt_populate_voltageobject_info(atree, generate_atui);
+		atomtree_dt_populate_voltageobject_info(
+			&(data_table->voltageobject_info), atree,
+			leaves->voltageobject_info, generate_atui
+		);
 
-	atomtree_dt_populate_sw_datatables(atree, generate_atui);
+	atomtree_dt_populate_sw_datatables(data_table, atree, generate_atui);
 
 
 	atui_branch* atui_dt = NULL;
@@ -1749,7 +1749,10 @@ inline static atui_branch* atomtree_populate_datatables(
 	return atui_dt;
 }
 
-void atomtree_bios_checksum(struct atom_tree* atree) {
+void
+atomtree_bios_checksum(
+		struct atom_tree* atree
+		) {
 	const uint8_t* const bios = atree->bios;
 	const uint32_t bios_size = atree->bios_image_size;
 	uint8_t offset = 0;
@@ -1764,7 +1767,11 @@ void atomtree_bios_checksum(struct atom_tree* atree) {
 
 
 
-inline static void* bios_fastforward(void* biosfile, const uint32_t size) {
+inline static void*
+bios_fastforward(
+		void* biosfile,
+		const uint32_t size
+		) {
 	const struct atombios_image* image;
 	const void* const end = biosfile + size;
 	while(biosfile < end) {
@@ -1780,8 +1787,12 @@ inline static void* bios_fastforward(void* biosfile, const uint32_t size) {
 	return NULL;
 }
 
-struct atom_tree* atombios_parse(
-		void* alloced_bios, uint32_t allocsize, bool generate_atui) {
+struct atom_tree*
+atombios_parse(
+		void* alloced_bios,
+		uint32_t allocsize,
+		bool generate_atui
+		) {
 
 	void* const bios = bios_fastforward(alloced_bios, allocsize);
 	if (bios == NULL)
@@ -1789,8 +1800,6 @@ struct atom_tree* atombios_parse(
 	struct atombios_image* const image = bios;
 	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
 
-	atree->dot = atree;
-	atree->dotdot = NULL;
 	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
 	atree->alloced_bios = alloced_bios;
@@ -1882,13 +1891,17 @@ struct atom_tree* atombios_parse(
 }
 
 
-inline enum atomtree_common_version get_ver(
-		struct atom_common_table_header* header) {
+inline enum atomtree_common_version
+get_ver(
+		struct atom_common_table_header* header
+		) {
 	return (header->format_revision * 100) + header->content_revision;
 }
-inline void set_ver(
+inline void
+set_ver(
 		enum atomtree_common_version ver,
-		struct atom_common_table_header* header) {
+		struct atom_common_table_header* header
+		) {
 	header->format_revision = ver / 100;
 	header->content_revision = ver % 100;
 };
