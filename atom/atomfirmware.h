@@ -3697,9 +3697,10 @@ enum atom_i2c_voltage_control_flag {
 union loadline_psi1 {
 	uint8_t  loadline_psi1;
 	struct { uint8_t
-		loadline_setting :4-0 +1, // Core Loadline trim and offset trim
-		PSI1_L_enable    :5-5 +1,
-		reserved         :7-6 +1;
+		offset_trim    :1-0 +1,
+		loadline_slope :4-2 +1,
+		PSI1_L_enable  :5-5 +1,
+		reserved       :7-6 +1;
 	};
 };
 struct atom_svid2_voltage_object_v4 {

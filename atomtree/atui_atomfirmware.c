@@ -4661,9 +4661,10 @@ PPATUI_FUNCIFY(struct, atom_svid2_voltage_object_v4, atomtree_voltage_object_v4,
 	),
 	(bios->loadline_psi1.loadline_psi1, "loadline_psi1",
 		(ATUI_BIN, ATUI_BITFIELD, (
-			("loadline_setting", 4,0, ATUI_DEC, ((LANG_ENG, "core trim and offset trim"))),
-			("PSI1_L_enable",    5,5, ATUI_DEC, (ATUI_NODESCR)),
-			("reserved",         7,6, ATUI_HEX, (ATUI_NODESCR))
+			("offset_trim",    1,0, ATUI_DEC, (ATUI_NODESCR)),
+			("loadline_slope", 4,2, ATUI_DEC, (ATUI_NODESCR)),
+			("PSI1_L_enable",  5,5, ATUI_DEC, (ATUI_NODESCR)),
+			("reserved",       7,6, ATUI_HEX, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	),
 	(bios->psi0_l_vid_thresd, "psi0_l_vid_thresd",
