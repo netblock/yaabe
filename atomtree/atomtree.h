@@ -69,12 +69,22 @@ typedef struct _atui_branch atui_branch;
 #include "atomtree_data_tables.h"
 // see bottom for more includes
 
+struct atomtree_rom_header {
+	enum atomtree_common_version ver;
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct atom_rom_header_v1_1* v1_1;
+		struct atom_rom_header_v2_1* v2_1;
+		struct atom_rom_header_v2_2* v2_2;
+	};
+
+	// have rom_header children in main atom_tree.
+};
+
 // Nearly all do 13, Navi3 7900XT does 16? Increase if necessary.
 #define NUM_ATOMBIOS_STRINGS 16
-
 struct atom_tree {
-	struct atom_tree* dot;
-	void* dotdot;
 	// file handling
 	GFile* biosfile;
 	int64_t biosfile_size;
@@ -89,9 +99,8 @@ struct atom_tree {
 	uint8_t num_of_crawled_strings;
 	char8_t* atombios_strings[NUM_ATOMBIOS_STRINGS];
 
-	struct atom_rom_header_v2_2* leaves;
-
-	struct atomtree_master_datatable_v2_1 data_table;
+	struct atomtree_rom_header rom_header;
+	struct atomtree_master_datatable data_table;
 	//struct atom_master_cmdtable_v2_1 cmd_table; // atom_master_list_of_command_functions_v2_1 TODO
 
 
@@ -103,6 +112,7 @@ struct atom_tree {
 	uint32_t* crc_block;
 	char8_t* bootup_mesage;
 	void* int10;
+	void* pci_info;
 	void* psp_dir_table;
 
 	atui_branch* atui_root;

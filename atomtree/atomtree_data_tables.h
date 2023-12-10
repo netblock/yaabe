@@ -423,4 +423,16 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_sw_datatable sw_datatable34;
 };
 
+struct atomtree_master_datatable {
+	union {
+		void* leaves; // nonzero if populated
+		struct atom_common_table_header* table_header;
+	};
+
+	enum atomtree_common_version ver;
+	union {
+		struct atomtree_master_datatable_v2_1 v2_1;
+	};
+};
+
 #endif

@@ -1640,69 +1640,65 @@ atomtree_dt_populate_sw_datatables(
 }
 
 inline static atui_branch*
-atomtree_populate_datatables(
+atomtree_populate_master_datatable_v2_1(
+		struct atomtree_master_datatable* data_table,
 		struct atom_tree* atree,
 		bool generate_atui
 		) {
-	//TODO double check pointer math if possible; some tables might be relative
-	// to master_datatable.
 
-	struct atomtree_master_datatable_v2_1* const data_table = &(
-		atree->data_table
-	);
 	void* const bios = atree->bios;
-	data_table->leaves = bios + atree->leaves->masterdatatable_offset;
-	data_table->ver = get_ver(data_table->table_header);
+	struct atomtree_master_datatable_v2_1* const dt21 = &(data_table->v2_1);
+	dt21->leaves = data_table->leaves;
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
 
 
 	atui_branch* const atui_utilitypipeline = NULL;
 	if (leaves->utilitypipeline) {
-		data_table->utilitypipeline = bios + leaves->utilitypipeline;
+		dt21->utilitypipeline = bios + leaves->utilitypipeline;
 	} else {
-		data_table->utilitypipeline = NULL;
+		dt21->utilitypipeline = NULL;
 	}
 
 
 	atui_branch* const atui_multimedia_info = NULL;
 	if (leaves->multimedia_info) {
-		data_table->multimedia_info = bios + leaves->multimedia_info;
+		dt21->multimedia_info = bios + leaves->multimedia_info;
 	} else {
-		data_table->multimedia_info = NULL;
+		dt21->multimedia_info = NULL;
 	}
 
 
 	atui_branch* const atui_smc_dpm_info = atomtree_dt_populate_smc_dpm_info(
-		&(data_table->smc_dpm_info), atree, leaves->smc_dpm_info, generate_atui
+		&(dt21->smc_dpm_info), atree, leaves->smc_dpm_info, generate_atui
 	);
 
 	atui_branch* const atui_firmwareinfo = atomtree_dt_populate_firmwareinfo(
-		&(data_table->firmwareinfo), atree, leaves->firmwareinfo, generate_atui
+		&(dt21->firmwareinfo), atree, leaves->firmwareinfo, generate_atui
 	);
 
 	atui_branch* const atui_lcd_info = atomtree_dt_populate_lcd_info(
-		&(data_table->lcd_info), atree, leaves->lcd_info, generate_atui
+		&(dt21->lcd_info), atree, leaves->lcd_info, generate_atui
 	);
 
 	atui_branch* const atui_smu_info = atomtree_dt_populate_smu_info(
-		&(data_table->smu_info), atree, leaves->smu_info, generate_atui
+		&(dt21->smu_info), atree, leaves->smu_info, generate_atui
 	);
 
 	atui_branch* const atui_fw_vram = atomtree_dt_populate_vram_usagebyfirmware(
-		&(data_table->vram_usagebyfirmware), atree,
+		&(dt21->vram_usagebyfirmware), atree,
 		leaves->vram_usagebyfirmware, generate_atui
 	);
 
 	atui_branch* const atui_gpio_pin_lut = atomtree_dt_populate_gpio_pin_lut(
-		&(data_table->gpio_pin_lut), atree, leaves->gpio_pin_lut, generate_atui
+		&(dt21->gpio_pin_lut), atree, leaves->gpio_pin_lut, generate_atui
 	);
 
 	atui_branch* const atui_gfx_info = atomtree_dt_populate_gfx_info(
-		&(data_table->gfx_info), atree, leaves->gfx_info, generate_atui
+		&(dt21->gfx_info), atree, leaves->gfx_info, generate_atui
 	);
 
 	atui_branch* const atui_ppt = atomtree_dt_populate_ppt(
-		&(data_table->powerplayinfo), atree,
+		&(dt21->powerplayinfo), atree,
 		leaves->powerplayinfo, generate_atui
 	);
 
@@ -1712,7 +1708,7 @@ atomtree_populate_datatables(
 	//dce_info
 
 	atui_branch* const atui_vram_info = atomtree_dt_populate_vram_info(
-		&(data_table->vram_info), atree, leaves->vram_info, generate_atui
+		&(dt21->vram_info), atree, leaves->vram_info, generate_atui
 	);
 
 	//integratedsysteminfo
@@ -1720,11 +1716,11 @@ atomtree_populate_datatables(
 	//voltageobject_info
 	atui_branch* const atui_voltageobject_info =
 		atomtree_dt_populate_voltageobject_info(
-			&(data_table->voltageobject_info), atree,
+			&(dt21->voltageobject_info), atree,
 			leaves->voltageobject_info, generate_atui
 		);
 
-	atomtree_dt_populate_sw_datatables(data_table, atree, generate_atui);
+	atomtree_dt_populate_sw_datatables(dt21, atree, generate_atui);
 
 
 	atui_branch* atui_dt = NULL;
@@ -1743,93 +1739,114 @@ atomtree_populate_datatables(
 		);
 
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
-			NULL,  data_table,data_table->leaves,  num_branches,child_branches
+			NULL,  dt21,dt21->leaves,  num_branches,child_branches
 		);
 	}
 	return atui_dt;
 }
 
-void
-atomtree_bios_checksum(
-		struct atom_tree* atree
-		) {
-	const uint8_t* const bios = atree->bios;
-	const uint32_t bios_size = atree->bios_image_size;
-	uint8_t offset = 0;
-
-	for (uint32_t i=0; i < bios_size; i++)
-		offset += bios[i];
-
-	if (offset) // this test is unnecessary
-		atree->image->checksum -= offset;
-}
-
-
-
-
-inline static void*
-bios_fastforward(
-		void* biosfile,
-		const uint32_t size
-		) {
-	const struct atombios_image* image;
-	const void* const end = biosfile + size;
-	while(biosfile < end) {
-		image = biosfile;
-		//TODO is anyone bothering to check all the magic signs?
-		if ((image->atombios_magic == ATOM_BIOS_MAGIC)
-			&& (0 == strcmp(ATOM_ATI_MAGIC, image->atomati_magic))
-			) {
-			return biosfile;
-		}
-		biosfile++;
-	}
-	return NULL;
-}
-
-struct atom_tree*
-atombios_parse(
-		void* alloced_bios,
-		uint32_t allocsize,
+inline static atui_branch*
+atomtree_populate_datatables(
+		//struct atomtree_master_datatable* data_table,
+		struct atom_tree* atree,
+		uint16_t bios_offset,
 		bool generate_atui
 		) {
 
-	void* const bios = bios_fastforward(alloced_bios, allocsize);
-	if (bios == NULL)
-		return NULL;
-	struct atombios_image* const image = bios;
-	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
+	struct atomtree_master_datatable* const data_table = &(atree->data_table);
+	atui_branch* atui_dt = NULL;
 
-	atree->biosfile = NULL;
-	atree->biosfile_size = 0;
-	atree->alloced_bios = alloced_bios;
-
-
-	atree->bios = bios; //PIC code; going to be used as the '0' in places.
-	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
-
-	uint8_t* strs = atree->bios + image->atombios_strings_offset;
-	uint8_t num_of_crawled_strings = 0;
-	while(*strs) { // the last string ends with 00 00
-		assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
-		atree->atombios_strings[num_of_crawled_strings] = strs;
-		num_of_crawled_strings++;
-		strs += (strlen(strs) + 1);
+	if (bios_offset) {
+		data_table->leaves = atree->bios + bios_offset;
+		data_table->ver = get_ver(data_table->table_header);
+		switch (data_table->ver) {
+			case v2_1:
+				atui_dt = atomtree_populate_master_datatable_v2_1(
+					data_table, atree, generate_atui
+				);
+				break;
+			default:
+				if (generate_atui) {
+					atui_dt = ATUI_MAKE_BRANCH(
+						atom_common_table_header,
+						"atom_master_data_table (header only stub)",
+						NULL, data_table->table_header,  0,NULL
+					);
+				}
+				break;
+		}
+	} else {
+		data_table->leaves = NULL;
+		data_table->ver = nover;
 	}
-	atree->num_of_crawled_strings = num_of_crawled_strings;
+
+	return atui_dt;
+}
 
 
-	atree->leaves = bios + image->bios_header;
+inline static atui_branch*
+atomtree_populate_atom_rom_header_v2_2(
+		 struct atomtree_rom_header* rom_header,
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
+	struct atom_rom_header_v2_2* const leaves = rom_header->v2_2;
+	void* const bios = atree->bios;
 
-	atui_branch* const atui_dt =
-		atomtree_populate_datatables(atree, generate_atui);
-	// atomtree_populate_commandtables(atree); // TODO
+	if (leaves->crc_block_offset) {
+		atree->crc_block = bios + leaves->crc_block_offset;
+	} else {
+		atree->crc_block = NULL;
+	}
+	if (leaves->protectedmodeoffset) {
+		atree->protected_mode = bios + leaves->protectedmodeoffset;
+	} else {
+		atree->protected_mode = NULL;
+	}
+	if (leaves->configfilenameoffset) {
+		atree->config_filename = bios + leaves->configfilenameoffset;
+	} else {
+		atree->config_filename = NULL;
+	}
+	if (leaves->vbios_bootupmessageoffset) {
+		atree->bootup_mesage = bios + leaves->vbios_bootupmessageoffset;
+	} else {
+		atree->bootup_mesage = NULL;
+	}
+	if (leaves->int10_offset) {
+		atree->int10 = bios + leaves->int10_offset;
+	} else {
+		atree->int10 = NULL;
+	}
+	if (leaves->pci_info_offset) {
+		atree->pci_info = bios + leaves->pci_info_offset;
+	} else {
+		atree->pci_info = NULL;
+	}
+	if (leaves->pspdirtableoffset) {
+		atree->psp_dir_table = bios + leaves->pspdirtableoffset;
+	} else {
+		atree->psp_dir_table = NULL;
+	}
+	
 
-	atree->protected_mode = bios + atree->leaves->protectedmodeoffset;
-	atree->config_filename = bios + atree->leaves->configfilenameoffset;
+	//rom_header->data_table = &(atree->data_table);
+	atui_branch* const atui_dt = atomtree_populate_datatables(
+		atree, leaves->masterdatatable_offset, generate_atui
+	);
 
-	atree->crc_block = bios + atree->leaves->crc_block_offset;
-	/* TODO what are these locations?
+	atui_branch* atui_rom_header = NULL;
+	if (generate_atui) {
+		atui_rom_header = ATUI_MAKE_BRANCH(atom_rom_header_v2_2,
+			NULL,  NULL,rom_header->v2_2,
+			1, NULL
+		);
+		ATUI_ADD_BRANCH(atui_rom_header, atui_dt);		
+	}
+	return atui_rom_header;
+	/*
+	//atree->crc_block = bios + atree->leaves->crc_block_offset;
+	TODO what are these locations?
 	uint32_t crc = *(atree->crc_block);
 	zlib's crc32(0, startptr, bytes);
 	see also the sratch/crc.c brute-forcing tool
@@ -1862,22 +1879,113 @@ atombios_parse(
 		AMD.RX6900XT.16384.210108.rom
 		AMD.RX5700XT.8192.190616_1.rom
 	*/
+}
+
+inline static atui_branch*
+atomtree_populate_atom_rom_header(
+		struct atomtree_rom_header* rom_header,
+		struct atom_tree* atree,
+		uint16_t offset,
+		bool generate_atui
+		) {
+
+		atui_branch* atui_rom_header = NULL;
+
+		if (offset) {
+			rom_header->leaves = atree->bios + offset;
+			rom_header->ver = get_ver(rom_header->table_header);
+			switch (rom_header->ver) {
+				case v2_2:
+					atui_rom_header = atomtree_populate_atom_rom_header_v2_2(
+						rom_header, atree, generate_atui
+					);
+					break;
+				case v2_3: // forced
+					atui_rom_header = atomtree_populate_atom_rom_header_v2_2(
+						rom_header, atree, generate_atui
+					);
+					if (generate_atui) {
+						sprintf(atui_rom_header->name,
+							"%s (forced)", atui_rom_header->varname
+						);
+					}
+					break;
+				default:
+					if (generate_atui) {
+						atui_rom_header = ATUI_MAKE_BRANCH(
+							atom_common_table_header,
+							"atom_rom_header (header only stub)",
+							NULL, rom_header->table_header,  0,NULL
+						);
+					}
+					break;
+			}
+		} else {
+			rom_header->leaves = NULL;
+			rom_header->ver = nover;
+		}
+
+	return atui_rom_header;
+}
 
 
-	atree->bootup_mesage = bios + atree->leaves->vbios_bootupmessageoffset;
-	atree->int10 = bios + atree->leaves->int10_offset;
-	// any more between?
-	atree->psp_dir_table = bios + atree->leaves->pspdirtableoffset;
+inline static void*
+bios_fastforward(
+		void* biosfile,
+		const uint32_t size
+		) {
+	const struct atombios_image* image;
+	const void* const end = biosfile + size;
+	while(biosfile < end) {
+		image = biosfile;
+		//TODO is anyone bothering to check all the magic signs?
+		if ((image->atombios_magic == ATOM_BIOS_MAGIC)
+			&& (0 == strcmp(ATOM_ATI_MAGIC, image->atomati_magic))
+			) {
+			return biosfile;
+		}
+		biosfile++;
+	}
+	return NULL;
+}
+struct atom_tree*
+atombios_parse(
+		void* alloced_bios,
+		uint32_t allocsize,
+		bool generate_atui
+		) {
 
+	void* const bios = bios_fastforward(alloced_bios, allocsize);
+	if (bios == NULL)
+		return NULL;
+	struct atombios_image* const image = bios;
+	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
+
+	atree->biosfile = NULL;
+	atree->biosfile_size = 0;
+	atree->alloced_bios = alloced_bios;
+
+
+	atree->bios = bios; //PIC code; going to be used as the '0' in places.
+	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
+
+	uint8_t* strs = atree->bios + image->atombios_strings_offset;
+	uint8_t num_of_crawled_strings = 0;
+	while(*strs) { // the last string ends with 00 00
+		assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
+		atree->atombios_strings[num_of_crawled_strings] = strs;
+		num_of_crawled_strings++;
+		strs += (strlen(strs) + 1);
+	}
+	atree->num_of_crawled_strings = num_of_crawled_strings;
+
+	atui_branch* const atui_rom_header = atomtree_populate_atom_rom_header(
+		&(atree->rom_header), atree, image->bios_header, generate_atui
+	);
+
+	// atomtree_populate_commandtables(atree); // TODO
 
 	if (generate_atui) {
-		atui_branch* const rom_header_child_branches[] = {atui_dt};
-		atui_branch* const atui_rom_header = ATUI_MAKE_BRANCH(
-			atom_rom_header_v2_2,
-			NULL,  atree, atree->leaves,
-			sizeof(rom_header_child_branches) / sizeof(atui_branch*),
-			rom_header_child_branches
-		);
 		atui_branch* const atui_atom_image = ATUI_MAKE_BRANCH(atombios_image,
 			 NULL,  atree, atree->image,  1,NULL
 		);
@@ -1905,3 +2013,19 @@ set_ver(
 	header->format_revision = ver / 100;
 	header->content_revision = ver % 100;
 };
+
+
+void
+atomtree_bios_checksum(
+		struct atom_tree* atree
+		) {
+	const uint8_t* const bios = atree->bios;
+	const uint32_t bios_size = atree->bios_image_size;
+	uint8_t offset = 0;
+
+	for (uint32_t i=0; i < bios_size; i++)
+		offset += bios[i];
+
+	if (offset) // this test is unnecessary
+		atree->image->checksum -= offset;
+}
