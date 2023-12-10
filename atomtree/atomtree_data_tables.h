@@ -369,16 +369,78 @@ struct atomtree_sw_datatable {
 		struct atom_common_table_header* table_header;
 	};
 };
+struct atomtree_master_datatable_v1_1 {
+	union {
+		struct atom_common_table_header* table_header;
+		struct atom_master_data_table_v1_1* leaves; // nonzero if populated
+	};
+
+	// TODO relate these uint16t stuff to their tables. 
+	// a lot of the question associations are low effort.
+
+	struct atomtree_sw_datatable* utilitypipeline; //??
+
+	//struct atom_multimedia_info_v2_1* multimedia_info;
+	struct atom_multimedia_capability_info* multimedia_capability_info;
+	struct atom_multimedia_config_info* multimedia_config_info;
+	struct atom_standard_vesa_timing* vesa_timing;
+
+	struct atomtree_firmware_info firmwareinfo;
+
+	void* palette_data; // struct atom_dac_info ?
+
+	struct atomtree_lcd_info lcd_info;
+
+	//dig_transmitter_info_header_v3_1  atom_tmds_info ?
+	void* dig_transmitter_info;
+
+	struct atomtree_smu_info smu_info;
+
+	void* supported_devices_info; // atom_supported_devices_info
+	void* gpio_i2c_info; // atom_gpio_i2c_info ?
+
+	struct atomtree_vram_usagebyfirmware vram_usagebyfirmware;
+	struct atomtree_gpio_pin_lut gpio_pin_lut;
+
+	void* vesa_to_internal_mode; // atom_vesa_to_internal_mode_lut ?
+
+	struct atomtree_gfx_info gfx_info;
+	struct atomtree_powerplaytable powerplayinfo;
+
+	// atom_gpu_virtualization_info_v2_1  compassionate_data ?
+	void* gpu_virtualization_info;
+	void* save_restore_info; // ??  atom_display_device_priority_info ?
+	void* ppll_ss_info; // usure
+	void* oem_info; // atom_oem_info ?
+	void* xtmds_info; // atom_xtmds_info ?
+	void* mclk_ss_info; // ??  atom_asic_mvdd_info ?
+	void* object_header; // atom_object_header ?
+	void* indirect_io_access; // struct indirect_io_access ?
+	void* mc_init_parameter; // atom_mc_init_param_table ?
+	void* asic_vddc_info; // unsure
+	void* asic_internal_ss_info; // atom_asic_internal_ss_info
+	void* tv_video_mode;  // atom_disp_out_info ? atom_bios_int_tvstd_mode?
+
+	struct atomtree_vram_info vram_info;
+
+	// atom_memory_training_info  ASIC_MVDDQ_Info?
+	void* memory_training_info;
+	void* integrated_system_info;
+	void* asic_profiling_info;
+
+	struct atomtree_voltageobject_info voltageobject_info;
+
+	void* power_source_info;
+	void* service_info;
+};
 
 struct atomtree_master_datatable_v2_1 {
 	union {
 		struct atom_common_table_header* table_header;
 		struct atom_master_data_table_v2_1* leaves; // nonzero if populated
 	};
-	enum atomtree_common_version ver;
 
 	// TODO relate these uint16t stuff to their tables.
-	//struct common_header;
 	struct atomtree_sw_datatable* utilitypipeline; //??
 
 	struct atom_multimedia_info_v2_1* multimedia_info;
@@ -399,8 +461,6 @@ struct atomtree_master_datatable_v2_1 {
 
 	struct atomtree_vram_info vram_info;
 
-	uint16_t integratedsysteminfo;
-	uint16_t asic_profiling_info;
 	struct atomtree_voltageobject_info voltageobject_info;
 
 	// these aren't defined anywhere in AMDGPU.
@@ -431,6 +491,7 @@ struct atomtree_master_datatable {
 
 	enum atomtree_common_version ver;
 	union {
+		struct atomtree_master_datatable_v1_1 v1_1;
 		struct atomtree_master_datatable_v2_1 v2_1;
 	};
 };

@@ -6938,7 +6938,8 @@ struct atom_vesa_to_extended_mode {
 	uint16_t ExtendedModeNumber;
 };
 
-struct atom_vesa_to_intenal_mode_lut {
+//struct atom_vesa_to_intenal_mode_lut { // typo
+struct atom_vesa_to_internal_mode_lut {
 	struct atom_common_table_header table_header;
 	struct atom_vesa_to_extended_mode VESA_ToExtendedModeInfo[76];
 };

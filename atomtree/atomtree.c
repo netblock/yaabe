@@ -1556,8 +1556,268 @@ atomtree_dt_populate_voltageobject_info(
 	return atui_vo_info;
 }
 
+
+
 inline static atui_branch*
-atomtree_dt_populate_sw_datatables(
+atomtree_populate_master_datatable_v1_1(
+		struct atomtree_master_datatable* data_table,
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
+
+	void* const bios = atree->bios;
+	struct atomtree_master_datatable_v1_1* const dt11 = &(data_table->v1_1);
+	dt11->leaves = data_table->leaves;
+	struct atom_master_data_table_v1_1* const leaves = data_table->leaves;
+
+
+	atui_branch* const atui_utilitypipeline = NULL;
+	if (leaves->UtilityPipeLine) {
+		dt11->utilitypipeline = bios + leaves->UtilityPipeLine;
+	} else {
+		dt11->utilitypipeline = NULL;
+	}
+
+
+	atui_branch* const atui_multimedia_capability_info = NULL; // TODO
+	if (leaves->MultimediaCapabilityInfo) {
+		dt11->multimedia_capability_info =
+			bios + leaves->MultimediaCapabilityInfo;
+	} else {
+		dt11->multimedia_capability_info = NULL;
+	}
+	atui_branch* const atui_multimedia_config_info = NULL;
+	if (leaves->MultimediaConfigInfo) {
+		dt11->multimedia_config_info =
+			bios + leaves->MultimediaConfigInfo;
+	} else {
+		dt11->multimedia_config_info = NULL;
+	}
+
+	atui_branch* const atui_vesa_timing = NULL;
+	if (leaves->StandardVESA_Timing) {
+		dt11->vesa_timing = bios + leaves->StandardVESA_Timing;
+	} else {
+		dt11->vesa_timing = NULL;
+	}
+
+	atui_branch* const atui_firmwareinfo = atomtree_dt_populate_firmwareinfo(
+		&(dt11->firmwareinfo), atree, leaves->FirmwareInfo, generate_atui
+	);
+
+	atui_branch* const atui_palette_data = NULL;
+	if (leaves->PaletteData) {
+		dt11->palette_data = bios + leaves->PaletteData;
+	} else {
+		dt11->palette_data = NULL;
+	}
+
+	atui_branch* const atui_lcd_info = atomtree_dt_populate_lcd_info(
+		&(dt11->lcd_info), atree, leaves->LCD_Info, generate_atui
+	);
+
+	atui_branch* const atui_dig_transmitter_info = NULL;
+	if (leaves->DIGTransmitterInfo) {
+		dt11->dig_transmitter_info = bios + leaves->DIGTransmitterInfo;
+	} else {
+		dt11->dig_transmitter_info = NULL;
+	}
+
+	atui_branch* const atui_smu_info = atomtree_dt_populate_smu_info(
+		&(dt11->smu_info), atree, leaves->SMU_Info, generate_atui
+	);
+
+	atui_branch* const atui_supported_devices_info = NULL;
+	if (leaves->SupportedDevicesInfo) {
+		dt11->supported_devices_info = bios + leaves->SupportedDevicesInfo;
+	} else {
+		dt11->supported_devices_info = NULL;
+	}
+
+	atui_branch* const atui_gpio_i2c_info = NULL;
+	if (leaves->GPIO_I2C_Info) {
+		dt11->gpio_i2c_info = bios + leaves->GPIO_I2C_Info;
+	} else {
+		dt11->gpio_i2c_info = NULL;
+	}
+
+	atui_branch* const atui_fw_vram = atomtree_dt_populate_vram_usagebyfirmware(
+		&(dt11->vram_usagebyfirmware), atree,
+		leaves->VRAM_UsageByFirmware, generate_atui
+	);
+
+	atui_branch* const atui_gpio_pin_lut = atomtree_dt_populate_gpio_pin_lut(
+		&(dt11->gpio_pin_lut), atree, leaves->GPIO_Pin_LUT, generate_atui
+	);
+
+	atui_branch* const atui_vesa_to_internal_mode = NULL;
+	if (leaves->VESA_ToInternalModeLUT) {
+		dt11->vesa_to_internal_mode = bios + leaves->VESA_ToInternalModeLUT;
+	} else {
+		dt11->vesa_to_internal_mode = NULL;
+	}
+
+	atui_branch* const atui_gfx_info = atomtree_dt_populate_gfx_info(
+		&(dt11->gfx_info), atree, leaves->GFX_Info, generate_atui
+	);
+
+	atui_branch* const atui_ppt = atomtree_dt_populate_ppt(
+		&(dt11->powerplayinfo), atree,
+		leaves->PowerPlayInfo, generate_atui
+	);
+
+	atui_branch* const atui_gpu_virtualization_info = NULL;
+	if (leaves->GPUVirtualizationInfo) {
+		dt11->gpu_virtualization_info = bios + leaves->GPUVirtualizationInfo;
+	} else {
+		dt11->gpu_virtualization_info = NULL;
+	}
+
+	atui_branch* const atui_save_restore_info = NULL;
+	if (leaves->SaveRestoreInfo) {
+		dt11->save_restore_info = bios + leaves->SaveRestoreInfo;
+	} else {
+		dt11->save_restore_info = NULL;
+	}
+
+	atui_branch* const atui_ppll_ss_info = NULL;
+	if (leaves->PPLL_SS_Info) {
+		dt11->ppll_ss_info = bios + leaves->PPLL_SS_Info;
+	} else {
+		dt11->ppll_ss_info = NULL;
+	}
+
+	atui_branch* const atui_oem_info = NULL;
+	if (leaves->OemInfo) {
+		dt11->oem_info = bios + leaves->OemInfo;
+	} else {
+		dt11->oem_info = NULL;
+	}
+
+	atui_branch* const atui_xtmds_info = NULL;
+	if (leaves->XTMDS_Info) {
+		dt11->xtmds_info = bios + leaves->XTMDS_Info;
+	} else {
+		dt11->xtmds_info = NULL;
+	}
+
+	atui_branch* const atui_mclk_ss_info = NULL;
+	if (leaves->MclkSS_Info) {
+		dt11->mclk_ss_info = bios + leaves->MclkSS_Info;
+	} else {
+		dt11->mclk_ss_info = NULL;
+	}
+
+	atui_branch* const atui_object_header = NULL;
+	if (leaves->Object_Header) {
+		dt11->object_header = bios + leaves->Object_Header;
+	} else {
+		dt11->object_header = NULL;
+	}
+
+	atui_branch* const atui_indirect_io_access = NULL;
+	if (leaves->IndirectIOAccess) {
+		dt11->indirect_io_access = bios + leaves->IndirectIOAccess;
+	} else {
+		dt11->indirect_io_access = NULL;
+	}
+
+	atui_branch* const atui_mc_init_parameter = NULL;
+	if (leaves->MC_InitParameter) {
+		dt11->mc_init_parameter = bios + leaves->MC_InitParameter;
+	} else {
+		dt11->mc_init_parameter = NULL;
+	}
+
+	atui_branch* const atui_asic_vddc_info = NULL;
+	if (leaves->ASIC_VDDC_Info) {
+		dt11->asic_vddc_info = bios + leaves->ASIC_VDDC_Info;
+	} else {
+		dt11->asic_vddc_info = NULL;
+	}
+
+	atui_branch* const atui_asic_internal_ss_info = NULL;
+	if (leaves->ASIC_InternalSS_Info) {
+		dt11->asic_internal_ss_info = bios + leaves->ASIC_InternalSS_Info;
+	} else {
+		dt11->asic_internal_ss_info = NULL;
+	}
+
+	atui_branch* const atui_tv_video_mode = NULL;
+	if (leaves->TV_VideoMode) {
+		dt11->tv_video_mode = bios + leaves->TV_VideoMode;
+	} else {
+		dt11->tv_video_mode = NULL;
+	}
+
+	atui_branch* const atui_vram_info = atomtree_dt_populate_vram_info(
+		&(dt11->vram_info), atree, leaves->VRAM_Info, generate_atui
+	);
+
+	atui_branch* const atui_memory_training_info = NULL;
+	if (leaves->MemoryTrainingInfo) {
+		dt11->memory_training_info = bios + leaves->MemoryTrainingInfo;
+	} else {
+		dt11->memory_training_info = NULL;
+	}
+
+	atui_branch* const atui_integrated_system_info = NULL;
+	if (leaves->IntegratedSystemInfo) {
+		dt11->integrated_system_info = bios + leaves->IntegratedSystemInfo;
+	} else {
+		dt11->integrated_system_info = NULL;
+	}
+
+	atui_branch* const atui_asic_profiling_info = NULL;
+	if (leaves->ASIC_ProfilingInfo) {
+		dt11->asic_profiling_info = bios + leaves->ASIC_ProfilingInfo;
+	} else {
+		dt11->asic_profiling_info = NULL;
+	}
+
+	atui_branch* const atui_voltageobject_info =
+		atomtree_dt_populate_voltageobject_info(
+			&(dt11->voltageobject_info), atree,
+			leaves->VoltageObjectInfo, generate_atui
+		);
+
+	atui_branch* const atui_power_source_info = NULL;
+	if (leaves->PowerSourceInfo) {
+		dt11->power_source_info = bios + leaves->PowerSourceInfo;
+	} else {
+		dt11->power_source_info = NULL;
+	}
+
+	atui_branch* const atui_service_info = NULL;
+	if (leaves->ServiceInfo) {
+		dt11->service_info = bios + leaves->ServiceInfo;
+	} else {
+		dt11->service_info = NULL;
+	}
+
+
+	atui_branch* atui_dt = NULL;
+	if (generate_atui) {
+		atui_branch* const child_branches[] = {
+			atui_firmwareinfo, atui_lcd_info, atui_smu_info,
+			atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt,
+			atui_vram_info,
+			atui_voltageobject_info
+		};
+		const uint8_t num_branches = (
+			sizeof(child_branches) / sizeof(atui_branch*)
+		);
+
+		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v1_1,
+			NULL,  dt11,dt11->leaves,  num_branches,child_branches
+		);
+	}
+	return atui_dt;
+}
+
+
+inline static atui_branch*
+atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1* data_table,
 		struct atom_tree* atree,
 		bool generate_atui
@@ -1638,7 +1898,6 @@ atomtree_dt_populate_sw_datatables(
 
 	return NULL;
 }
-
 inline static atui_branch*
 atomtree_populate_master_datatable_v2_1(
 		struct atomtree_master_datatable* data_table,
@@ -1720,7 +1979,7 @@ atomtree_populate_master_datatable_v2_1(
 			leaves->voltageobject_info, generate_atui
 		);
 
-	atomtree_dt_populate_sw_datatables(dt21, atree, generate_atui);
+	atomtree_datatable_v2_1_populate_sw_datatables(dt21, atree, generate_atui);
 
 
 	atui_branch* atui_dt = NULL;
@@ -1760,6 +2019,11 @@ atomtree_populate_datatables(
 		data_table->leaves = atree->bios + bios_offset;
 		data_table->ver = get_ver(data_table->table_header);
 		switch (data_table->ver) {
+			case v1_1:
+				atui_dt = atomtree_populate_master_datatable_v1_1(
+					data_table, atree, generate_atui
+				);
+				break;
 			case v2_1:
 				atui_dt = atomtree_populate_master_datatable_v2_1(
 					data_table, atree, generate_atui

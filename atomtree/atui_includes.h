@@ -117,6 +117,9 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 PPATUI_HEADERIFY(atom_rom_header_v1_1);
 PPATUI_HEADERIFY(atom_rom_header_v2_1);
 
+PPATUI_HEADERIFY(atom_master_data_table_v1_1);
+
+
 /******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
 
