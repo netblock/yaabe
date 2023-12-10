@@ -1783,7 +1783,125 @@ atomtree_populate_datatables(
 	return atui_dt;
 }
 
+inline static atui_branch*
+atomtree_populate_atom_rom_header_v1_1(
+		 struct atomtree_rom_header* rom_header,
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
+	struct atom_rom_header_v1_1* const leaves = rom_header->v1_1;
+	void* const bios = atree->bios;
 
+	if (leaves->ProtectedModeInfoOffset) {
+		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
+	} else {
+		atree->protected_mode = NULL;
+	}
+	if (leaves->ConfigFilenameOffset) {
+		atree->config_filename = bios + leaves->ConfigFilenameOffset;
+	} else {
+		atree->config_filename = NULL;
+	}
+	if (leaves->CRC_BlockOffset) {
+		atree->crc_block = bios + leaves->CRC_BlockOffset;
+	} else {
+		atree->crc_block = NULL;
+	}
+	if (leaves->BIOS_BootupMessageOffset) {
+		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
+	} else {
+		atree->bootup_mesage = NULL;
+	}
+	if (leaves->Int10Offset) {
+		atree->int10 = bios + leaves->Int10Offset;
+	} else {
+		atree->int10 = NULL;
+	}
+	if (leaves->PCI_InfoOffset) {
+		atree->pci_info = bios + leaves->PCI_InfoOffset;
+	} else {
+		atree->pci_info = NULL;
+	}
+
+	atree->psp_dir_table = NULL;
+	
+
+	//rom_header->data_table = &(atree->data_table);
+	atui_branch* const atui_dt = atomtree_populate_datatables(
+		atree, leaves->MasterDataTableOffset, generate_atui
+	);
+
+	atui_branch* atui_rom_header = NULL;
+	if (generate_atui) {
+		atui_rom_header = ATUI_MAKE_BRANCH(atom_rom_header_v1_1,
+			NULL,  NULL,rom_header->v1_1,
+			1, NULL
+		);
+		ATUI_ADD_BRANCH(atui_rom_header, atui_dt);		
+	}
+	return atui_rom_header;
+}
+inline static atui_branch*
+atomtree_populate_atom_rom_header_v2_1(
+		 struct atomtree_rom_header* rom_header,
+		struct atom_tree* atree,
+		bool generate_atui
+		) {
+	struct atom_rom_header_v2_1* const leaves = rom_header->v2_1;
+	void* const bios = atree->bios;
+
+	if (leaves->ProtectedModeInfoOffset) {
+		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
+	} else {
+		atree->protected_mode = NULL;
+	}
+	if (leaves->ConfigFilenameOffset) {
+		atree->config_filename = bios + leaves->ConfigFilenameOffset;
+	} else {
+		atree->config_filename = NULL;
+	}
+	if (leaves->CRC_BlockOffset) {
+		atree->crc_block = bios + leaves->CRC_BlockOffset;
+	} else {
+		atree->crc_block = NULL;
+	}
+	if (leaves->BIOS_BootupMessageOffset) {
+		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
+	} else {
+		atree->bootup_mesage = NULL;
+	}
+	if (leaves->Int10Offset) {
+		atree->int10 = bios + leaves->Int10Offset;
+	} else {
+		atree->int10 = NULL;
+	}
+	if (leaves->PCI_InfoOffset) {
+		atree->pci_info = bios + leaves->PCI_InfoOffset;
+	} else {
+		atree->pci_info = NULL;
+	}
+	if (leaves->PSPDirTableOffset) {
+		atree->psp_dir_table = bios + leaves->PSPDirTableOffset;
+	} else {
+		atree->psp_dir_table = NULL;
+	}
+	
+
+	//rom_header->data_table = &(atree->data_table);
+	atui_branch* const atui_dt = atomtree_populate_datatables(
+		atree, leaves->MasterDataTableOffset, generate_atui
+	);
+
+	atui_branch* atui_rom_header = NULL;
+	if (generate_atui) {
+		atui_rom_header = ATUI_MAKE_BRANCH(atom_rom_header_v2_1,
+			NULL,  NULL,rom_header->v2_1,
+			1, NULL
+		);
+		ATUI_ADD_BRANCH(atui_rom_header, atui_dt);		
+	}
+	return atui_rom_header;
+}
 inline static atui_branch*
 atomtree_populate_atom_rom_header_v2_2(
 		 struct atomtree_rom_header* rom_header,
@@ -1793,11 +1911,6 @@ atomtree_populate_atom_rom_header_v2_2(
 	struct atom_rom_header_v2_2* const leaves = rom_header->v2_2;
 	void* const bios = atree->bios;
 
-	if (leaves->crc_block_offset) {
-		atree->crc_block = bios + leaves->crc_block_offset;
-	} else {
-		atree->crc_block = NULL;
-	}
 	if (leaves->protectedmodeoffset) {
 		atree->protected_mode = bios + leaves->protectedmodeoffset;
 	} else {
@@ -1807,6 +1920,11 @@ atomtree_populate_atom_rom_header_v2_2(
 		atree->config_filename = bios + leaves->configfilenameoffset;
 	} else {
 		atree->config_filename = NULL;
+	}
+	if (leaves->crc_block_offset) {
+		atree->crc_block = bios + leaves->crc_block_offset;
+	} else {
+		atree->crc_block = NULL;
 	}
 	if (leaves->vbios_bootupmessageoffset) {
 		atree->bootup_mesage = bios + leaves->vbios_bootupmessageoffset;
@@ -1847,6 +1965,7 @@ atomtree_populate_atom_rom_header_v2_2(
 	/*
 	//atree->crc_block = bios + atree->leaves->crc_block_offset;
 	TODO what are these locations?
+	TODO double-check if all rom_header has same place as v2.1
 	uint32_t crc = *(atree->crc_block);
 	zlib's crc32(0, startptr, bytes);
 	see also the sratch/crc.c brute-forcing tool
@@ -1895,6 +2014,16 @@ atomtree_populate_atom_rom_header(
 			rom_header->leaves = atree->bios + offset;
 			rom_header->ver = get_ver(rom_header->table_header);
 			switch (rom_header->ver) {
+				case v1_1:
+					atui_rom_header = atomtree_populate_atom_rom_header_v1_1(
+						rom_header, atree, generate_atui
+					);
+					break;
+				case v2_1:
+					atui_rom_header = atomtree_populate_atom_rom_header_v2_1(
+						rom_header, atree, generate_atui
+					);
+					break;
 				case v2_2:
 					atui_rom_header = atomtree_populate_atom_rom_header_v2_2(
 						rom_header, atree, generate_atui

@@ -199,10 +199,9 @@ struct atom_common_table_header {
 /******************************************************************************/
 // Structure stores the ROM header.
 /******************************************************************************/
-struct atom_rom_header { // TODO v1.1?
+struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 	struct atom_common_table_header table_header;
-	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios,
-                                   // atombios should init it as "ATOM", don't change the position
+	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -223,8 +222,7 @@ struct atom_rom_header { // TODO v1.1?
 
 struct atom_rom_header_v2_1 {
 	struct atom_common_table_header table_header;
-	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios,
-                                   // atombios should init it as "ATOM", don't change the position
+	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -2525,7 +2523,9 @@ struct tv_encoder_control_ps_allocation {
 /******************************************************************************/
 // Structure used in Data.mtb
 /******************************************************************************/
-struct atom_master_list_of_data_tables {
+//struct atom_master_list_of_data_tables {
+struct atom_master_data_table_v1_1 {
+	struct atom_common_table_header table_header;
 	uint16_t UtilityPipeLine;          // Offest for the utility to get parser info,Don't change this position!
 	uint16_t MultimediaCapabilityInfo; // Only used by MM Lib,latest version 1.1, not configuable from Bios, need to include the table to build Bios
 	uint16_t MultimediaConfigInfo;     // Only used by MM Lib,latest version 2.1, not configuable from Bios, need to include the table to build Bios
@@ -2563,10 +2563,10 @@ struct atom_master_list_of_data_tables {
 	uint16_t ServiceInfo;
 };
 
-struct atom_master_data_table {
+/*struct atom_master_data_table {
 	struct atom_common_table_header table_header;
 	struct atom_master_list_of_data_tables ListOfDataTables;
-};
+};*/
 
 // For backward compatible
 #define LVDS_Info          LCD_Info

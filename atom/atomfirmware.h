@@ -125,7 +125,7 @@ struct atom_rom_header_v2_2 {
 	struct atom_common_table_header table_header;
 	uint8_t  atom_bios_string[4]; // enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,
 	uint16_t bios_segment_address;
-	uint16_t protectedmodeoffset;
+	uint16_t protectedmodeoffset; // proctected mode info
 	uint16_t configfilenameoffset;
 	uint16_t crc_block_offset;
 	uint16_t vbios_bootupmessageoffset;

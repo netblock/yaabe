@@ -4,6 +4,8 @@ See ppatui.h for the metaprogramming
 
 atui_includes.h is about the headers for the ATUI_FUNCIFY() products, via
 ATUI_HEADERIFY()
+
+'<,'>s/\(^\s\*\)\?\([^,]\+\),\?/PPATUI_HEADERIFY(\2);
 */
 
 #ifndef ATUI_INCLUDES_H
@@ -110,6 +112,10 @@ PPATUI_HEADERIFY(atom_svid2_voltage_object_v4);
 PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 
+/******************************************************************************/
+// atui_atombios.c / atombios.h
+PPATUI_HEADERIFY(atom_rom_header_v1_1);
+PPATUI_HEADERIFY(atom_rom_header_v2_1);
 
 /******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
