@@ -251,7 +251,7 @@ enum DRAM_BIT_WIDTH_TYPE_e:uint8_t { // uint8_t  DramWidth;
 };
 
 // I2C Interface
-#define NUM_I2C_CONTROLLERS     8
+//#define NUM_I2C_CONTROLLERS     8
 
 #define I2C_CONTROLLER_ENABLED  1
 #define I2C_CONTROLLER_DISABLED 0
@@ -1031,7 +1031,9 @@ struct smu13_boardtable_v39 {
 	uint32_t Version; // should be unique to each board type
 
 	// SECTION: I2C Control
-	struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS];
+	struct i2ccontrollerconfig_u8 I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU13 // 8
+	];
 	// SECTION: SVI2 Board Parameters
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
 	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
@@ -1080,7 +1082,7 @@ struct smu13_boardtable_v39 {
 	uint8_t  UclkSpreadPadding;
 	uint16_t UclkSpreadFreq; // kHz
 	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadPercent[MEM_VENDOR_COUNT];
+	uq4_4_t  UclkSpreadPercent[MEM_VENDOR_COUNT];
 	// FCLK Spread Spectrum
 	uint8_t  FclkSpreadPadding;
 	uq4_4_t  FclkSpreadPercent;  // Q4.4
@@ -1107,6 +1109,11 @@ struct smu13_boardtable_v39 {
 
 struct smu13_smcpptable_v39 {
 	struct smu13_skutable_v39 SkuTable;
+	struct smu13_boardtable_v39 BoardTable;
+};
+
+struct atom_smc_dpm_info_table_13_0_7 {
+	struct atom_common_table_header table_header;
 	struct smu13_boardtable_v39 BoardTable;
 };
 

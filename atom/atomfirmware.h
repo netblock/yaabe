@@ -2470,6 +2470,16 @@ struct i2ccontrollerconfig_u8_mixed {
 	enum I2cControllerProtocol_u8 i2cprotocol;
 };
 
+/*struct smudpm_i2c_controller_config_v3 {
+	uint8_t  Enabled;
+	uint8_t  Speed;
+	uint8_t  SlaveAddress;
+	uint8_t  ControllerPort;
+	uint8_t  ControllerName;
+	uint8_t  ThermalThrotter;
+	uint8_t  I2cProtocol;
+	uint8_t  PaddingConfig;
+};*/
 
 struct atom_smc_dpm_info_v4_4 {
 	struct   atom_common_table_header table_header;
@@ -2548,6 +2558,7 @@ struct atom_smc_dpm_info_v4_4 {
 	uint32_t boardreserved[10];
 };
 
+/*
 struct smudpm_i2c_controller_config_v2 {
 	uint8_t  Enabled;
 	enum I2cControllerSpeed_u8 Speed;
@@ -2557,13 +2568,13 @@ struct smudpm_i2c_controller_config_v2 {
 	enum I2cControllerName_u8 ControllerName;
 	enum I2cControllerThrottler_u8 Throttler;
 	enum I2cControllerProtocol_u8 I2cProtocol;
-};
+};*/
 
 struct atom_smc_dpm_info_v4_5 {
 	struct   atom_common_table_header table_header;
 	// SECTION: BOARD PARAMETERS
 	// I2C Control
-	struct smudpm_i2c_controller_config_v2  I2cControllers[8];
+	struct i2ccontrollerconfig_u8_mixed  I2cControllers[8];
 
 	// SVI2 Board Parameters
 	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
@@ -2643,6 +2654,35 @@ struct atom_smc_dpm_info_v4_5 {
 
 };
 
+
+enum XGMI_LINK_RATE_e:uint8_t { // rate x Gbps
+	XGMI_LINK_RATE_2  = 2,
+	XGMI_LINK_RATE_4  = 4,
+	XGMI_LINK_RATE_8  = 8,
+	XGMI_LINK_RATE_12 = 12,
+	XGMI_LINK_RATE_16 = 16,
+	XGMI_LINK_RATE_17 = 17,
+	XGMI_LINK_RATE_18 = 18,
+	XGMI_LINK_RATE_19 = 19,
+	XGMI_LINK_RATE_20 = 20,
+	XGMI_LINK_RATE_21 = 21,
+	XGMI_LINK_RATE_22 = 22,
+	XGMI_LINK_RATE_23 = 23,
+	XGMI_LINK_RATE_24 = 24,
+	XGMI_LINK_RATE_25 = 25,
+	XGMI_LINK_RATE_COUNT = 26,
+};
+enum XGMI_LINK_WIDTH_e:uint8_t {
+	XGMI_LINK_WIDTH_1  = 0,
+	XGMI_LINK_WIDTH_2  = 2,
+	XGMI_LINK_WIDTH_4  = 3,
+	XGMI_LINK_WIDTH_8  = 4,
+	XGMI_LINK_WIDTH_9  = 5,
+	XGMI_LINK_WIDTH_16 = 6,
+	XGMI_LINK_WIDTH_COUNT = 7,
+};
+
+
 struct atom_smc_dpm_info_v4_6 {
 	struct   atom_common_table_header table_header;
 	// section: board parameters
@@ -2705,7 +2745,7 @@ struct atom_smc_dpm_info_v4_6 {
 	uint16_t fllgfxclkspreadfreq;    // khz
 
 	// i2c controller structure
-	struct smudpm_i2c_controller_config_v2 i2ccontrollers[8];
+	struct i2ccontrollerconfig_u8_mixed i2ccontrollers[8];
 
 	// memory section
 	uint32_t memorychannelenabled; // for dram use only, max 32 channels enabled bit mask.
@@ -2718,8 +2758,8 @@ struct atom_smc_dpm_info_v4_6 {
 	uint16_t boardpadding;
 
 	// section: xgmi training
-	uint8_t  xgmilinkspeed[4];
-	uint8_t  xgmilinkwidth[4];
+	enum XGMI_LINK_RATE_e xgmilinkspeed[4];
+	enum XGMI_LINK_WIDTH_e xgmilinkwidth[4];
 
 	uint16_t xgmifclkfreq[4];
 	uint16_t xgmisocvoltage[4];
@@ -2732,7 +2772,7 @@ struct atom_smc_dpm_info_v4_7 {
 	struct   atom_common_table_header table_header;
 	// SECTION: BOARD PARAMETERS
 	// I2C Control
-	struct smudpm_i2c_controller_config_v2  I2cControllers[8];
+	struct i2ccontrollerconfig_u8_mixed  I2cControllers[8];
 
 	// SVI2 Board Parameters
 	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
@@ -2829,16 +2869,6 @@ struct atom_smc_dpm_info_v4_7 {
 	uint32_t BoardReserved[5];
 };
 
-struct smudpm_i2c_controller_config_v3 {
-	uint8_t  Enabled;
-	uint8_t  Speed;
-	uint8_t  SlaveAddress;
-	uint8_t  ControllerPort;
-	uint8_t  ControllerName;
-	uint8_t  ThermalThrotter;
-	uint8_t  I2cProtocol;
-	uint8_t  PaddingConfig;
-};
 
 struct atom_smc_dpm_info_v4_9 {
 	struct   atom_common_table_header table_header;
@@ -2846,7 +2876,7 @@ struct atom_smc_dpm_info_v4_9 {
 	// SECTION: Gaming Clocks
 
 	// SECTION: I2C Control
-	struct smudpm_i2c_controller_config_v3  I2cControllers[16];
+	struct i2ccontrollerconfig_u8  I2cControllers[16];
 
 	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
 	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
@@ -2937,8 +2967,8 @@ struct atom_smc_dpm_info_v4_9 {
 	uint16_t BoardPowerPadding;
 
 	// SECTION: XGMI Training
-	uint8_t  XgmiLinkSpeed[4];
-	uint8_t  XgmiLinkWidth[4];
+	enum XGMI_LINK_RATE_e xgmilinkspeed[4];
+	enum XGMI_LINK_WIDTH_e xgmilinkwidth[4];
 
 	uint16_t XgmiFclkFreq[4];
 	uint16_t XgmiSocVoltage[4];
@@ -2989,7 +3019,7 @@ struct atom_smc_dpm_info_v4_10 {
 	uint16_t FclkSpreadFreq;    // kHz
 
 	// I2C Controller Structure
-	struct smudpm_i2c_controller_config_v3 I2cControllers[8];
+	struct i2ccontrollerconfig_u8 I2cControllers[8];
 
 	// GPIO pins for I2C communications with 2nd controller for Input Telemetry Sequence
 	uint8_t  GpioI2cScl; // Serial Clock

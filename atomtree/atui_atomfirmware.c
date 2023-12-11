@@ -564,8 +564,7 @@ PPATUI_FUNCIFY(union, psi_sel_mask, atui_nullstruct,
 
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_1, atomtree_smc_dpm_info,
 	(bios->table_header, "table_header",
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		(ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
 	),
 	(bios->liquid1_i2c_address, "liquid1_i2c_address",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -768,8 +767,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_1, atomtree_smc_dpm_info,
 )
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_3, atomtree_smc_dpm_info,
 	(bios->table_header, "table_header",
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		(ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
 	),
 	(bios->liquid1_i2c_address, "liquid1_i2c_address",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1065,8 +1063,7 @@ PPATUI_FUNCIFY(struct, i2ccontrollerconfig_u8_mixed, atui_nullstruct,
 
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
 	(bios->table_header, "table_header",
-		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
-		(ATUI_NODESCR)
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
 	),
 	(bios->i2c_padding, "i2c_padding",
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
@@ -1251,38 +1248,6 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_4, atomtree_smc_dpm_info,
 )
 
 
-
-// TODO ATUI_DYNARRAY with multiple leaves
-PPATUI_FUNCIFY(struct, smudpm_i2c_controller_config_v2, atomtree_smc_dpm_info,
-	(bios->Enabled, "Enabled",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->Speed, "Speed",
-		(ATUI_DEC, ATUI_ENUM, I2cControllerSpeed_e), (ATUI_NODESCR)
-	),
-	(bios->Padding, "Padding",
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
-	(bios->SlaveAddress, "SlaveAddress",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->ControllerPort, "ControllerPort",
-		(ATUI_DEC, ATUI_ENUM, I2cControllerPort_e), (ATUI_NODESCR)
-	),
-	(bios->ControllerName, "ControllerName",
-		(ATUI_DEC, ATUI_ENUM, I2cControllerName_e),
-		(ATUI_NODESCR)
-	),
-	(bios->Throttler, "Throttler",
-		(ATUI_DEC, ATUI_ENUM, I2cControllerThrottler_e),
-		(ATUI_NODESCR)
-	),
-	(bios->I2cProtocol, "I2cProtocol",
-		(ATUI_DEC, ATUI_ENUM, I2cControllerProtocol_e),
-		(ATUI_NODESCR)
-	)
-)
-
 PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
@@ -1290,7 +1255,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	(bios->I2cControllers, "I2C Controllers", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, "%s",
-				(ATUI_NAN, ATUI_PETIOLE, smudpm_i2c_controller_config_v2),
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8_mixed),
 				(ATUI_NODESCR)
 			),
 			NULL, // deferred start
@@ -1509,7 +1474,909 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 	)
 )
 
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_6, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+	(bios->i2c_padding, "i2c_padding",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "old i2c control are moved to new area"))
+	),
 
+	(bios->maxvoltagestepgfx, "maxvoltagestepgfx",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value."))
+	),
+	(bios->maxvoltagestepsoc, "maxvoltagestepsoc",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value."))
+	),
+
+	(bios->vddgfxvrmapping, "vddgfxvrmapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "use vr_mapping* bitfields"))
+	),
+	(bios->vddsocvrmapping, "vddsocvrmapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "use vr_mapping* bitfields"))
+	),
+	(bios->vddmemvrmapping, "vddmemvrmapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "use vr_mapping* bitfields"))
+	),
+	(bios->boardvrmapping, "boardvrmapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "use vr_mapping* bitfields"))
+	),
+
+	(bios->gfxulvphasesheddingmask, "gfxulvphasesheddingmask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set psi0/1 to 1 in ulv mode"))
+	),
+	(bios->externalsensorpresent, "externalsensorpresent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "external rdi connected to tmon (aka temp in)"))
+	),
+	(bios->padding8_v, "padding8_v",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "telemetry settings"))
+	),
+	(bios->gfxmaxcurrent, "gfxmaxcurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->gfxoffset, "gfxoffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->padding_telemetrygfx, "padding_telemetrygfx",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->socmaxcurrent, "socmaxcurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->socoffset, "socoffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->padding_telemetrysoc, "padding_telemetrysoc",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->memmaxcurrent, "memmaxcurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->memoffset, "memoffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->padding_telemetrymem, "padding_telemetrymem",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->boardmaxcurrent, "boardmaxcurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->boardoffset, "boardoffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in amps"))
+	),
+	(bios->padding_telemetryboardinput, "padding_telemetryboardinput",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "gpio settings"))
+	),
+	(bios->vr0hotgpio, "vr0hotgpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "gpio pin configured for vr0 hot event"))
+	),
+	(bios->vr0hotpolarity, "vr0hotpolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "gpio polarity for vr0 hot event"))
+	),
+	(bios->vr1hotgpio, "vr1hotgpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "gpio pin configured for vr1 hot event"))
+	),
+	(bios->vr1hotpolarity, "vr1hotpolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "gpio polarity for vr1 hot event"))
+	),
+
+	(bios->pllgfxclkspreadenabled, "pllgfxclkspreadenabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->pllgfxclkspreadpercent, "pllgfxclkspreadpercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->pllgfxclkspreadfreq, "pllgfxclkspreadfreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "khz"))
+	),
+
+	(bios->uclkspreadenabled, "uclkspreadenabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->uclkspreadpercent, "uclkspreadpercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->uclkspreadfreq, "uclkspreadfreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "khz"))
+	),
+
+	(bios->fclkspreadenabled, "fclkspreadenabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->fclkspreadpercent, "fclkspreadpercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fclkspreadfreq, "fclkspreadfreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "khz"))
+	),
+
+	(bios->fllgfxclkspreadenabled, "fllgfxclkspreadenabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->fllgfxclkspreadpercent, "fllgfxclkspreadpercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->fllgfxclkspreadfreq, "fllgfxclkspreadfreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "khz"))
+	),
+
+	(bios->i2ccontrollers, "i2ccontrollers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8_mixed),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0]),
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->memorychannelenabled, "memorychannelenabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "for dram use only, max 32 channels enabled bit mask."))
+	),
+
+	(bios->drambitwidth, "drambitwidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "for dram use only. see dram bit width type defines"))
+	),
+	(bios->paddingmem, "paddingmem",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "total board power"))
+	),
+	(bios->totalboardpower, "totalboardpower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "only needed for tcp estimated case, where tcp = tgp+total board power"))
+	),
+	(bios->boardpadding, "boardpadding",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "section: xgmi training"))
+	),
+	(bios->xgmilinkspeed, "xgmilinkspeed",
+		(ATUI_DEC, ATUI_ENUM, XGMI_LINK_RATE_e),
+		(ATUI_NODESCR)
+	),
+	(bios->xgmilinkwidth, "xgmilinkwidth",
+		(ATUI_DEC, ATUI_ENUM, XGMI_LINK_WIDTH_e),
+		(ATUI_NODESCR)
+	),
+
+	(bios->xgmifclkfreq, "xgmifclkfreq",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->xgmisocvoltage, "xgmisocvoltage",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "reserved"))
+	),
+	(bios->boardreserved, "boardreserved",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_7, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+	(bios->I2cControllers, "I2cControllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8_mixed),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0]),
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->MaxVoltageStepGfx, "MaxVoltageStepGfx",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
+	),
+	(bios->MaxVoltageStepSoc, "MaxVoltageStepSoc",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value."))
+	),
+
+	(bios->VddGfxVrMapping, "VddGfxVrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddSocVrMapping, "VddSocVrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem0VrMapping, "VddMem0VrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem1VrMapping, "VddMem1VrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+
+	(bios->GfxUlvPhaseSheddingMask, "GfxUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->SocUlvPhaseSheddingMask, "SocUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->ExternalSensorPresent, "ExternalSensorPresent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "External RDI connected to TMON (aka TEMP IN)"))
+	),
+	(bios->Padding8_V, "Padding8_V",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Telemetry Settings"))
+	),
+	(bios->GfxMaxCurrent, "GfxMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->GfxOffset, "GfxOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryGfx, "Padding_TelemetryGfx",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->SocMaxCurrent, "SocMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->SocOffset, "SocOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetrySoc, "Padding_TelemetrySoc",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Mem0MaxCurrent, "Mem0MaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Mem0Offset, "Mem0Offset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem0, "Padding_TelemetryMem0",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Mem1MaxCurrent, "Mem1MaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Mem1Offset, "Mem1Offset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem1, "Padding_TelemetryMem1",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Settings"))
+	),
+	(bios->AcDcGpio, "AcDcGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for AC/DC switching"))
+	),
+	(bios->AcDcPolarity, "AcDcPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->VR0HotGpio, "VR0HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
+	),
+	(bios->VR0HotPolarity, "VR0HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+
+	(bios->VR1HotGpio, "VR1HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR1 HOT event"))
+	),
+	(bios->VR1HotPolarity, "VR1HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(bios->GthrGpio, "GthrGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for GTHR Event"))
+	),
+	(bios->GthrPolarity, "GthrPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "replace GPIO polarity for GTHR"))
+	),
+
+	(bios->LedPin0, "LedPin0",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[0]"))
+	),
+	(bios->LedPin1, "LedPin1",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[1]"))
+	),
+	(bios->LedPin2, "LedPin2",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[2]"))
+	),
+	(bios->padding8_4, "padding8_4",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GFXCLK PLL Spread Spectrum"))
+	),
+	(bios->PllGfxclkSpreadEnabled, "PllGfxclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->PllGfxclkSpreadPercent, "PllGfxclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->PllGfxclkSpreadFreq, "PllGfxclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->DfllGfxclkSpreadEnabled, "DfllGfxclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->DfllGfxclkSpreadPercent, "DfllGfxclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DfllGfxclkSpreadFreq, "DfllGfxclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->UclkSpreadEnabled, "UclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->UclkSpreadPercent, "UclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->UclkSpreadFreq, "UclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->SoclkSpreadEnabled, "SoclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->SocclkSpreadPercent, "SocclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->SocclkSpreadFreq, "SocclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->TotalBoardPower, "TotalBoardPower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power"))
+	),
+	(bios->BoardPadding, "BoardPadding",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Mvdd Svi2 Div Ratio Setting"))
+	),
+
+	(bios->MvddRatio, "MvddRatio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)"))
+	),
+
+	(bios->GpioI2cScl, "GpioI2cScl",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Serial Clock"))
+	),
+	(bios->GpioI2cSda, "GpioI2cSda",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Serial Data"))
+	),
+	(bios->GpioPadding, "GpioPadding",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Additional LED Display Settings"))
+	),
+	(bios->LedPin3, "LedPin3",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[3] - PCIE GEN Speed"))
+	),
+	(bios->LedPin4, "LedPin4",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[4] - PMFW Error Status"))
+	),
+	(bios->LedEnableMask, "LedEnableMask",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->PowerLimitScalar, "PowerLimitScalar",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "[PPT_THROTTLER_COUNT]"))
+	),
+
+	(bios->MvddUlvPhaseSheddingMask, "MvddUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		(ATUI_NODESCR)
+	),
+	(bios->VddciUlvPhaseSheddingMask, "VddciUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		(ATUI_NODESCR)
+	),
+	(bios->Padding8_Psi1, "Padding8_Psi1",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding8_Psi2, "Padding8_Psi2",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->BoardReserved, "BoardReserved",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_9, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+
+	(bios->I2cControllers, "I2cControllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7, // count
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
+	),
+	(bios->I2cControllers, "Undefined I2cControllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "I2cControllers [8 + %02u]",
+				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			((sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0]))
+			- I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7
+			),
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->GpioScl, "GpioScl",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Number for SCL Line, used only for CKSVII2C1"))
+	),
+	(bios->GpioSda, "GpioSda",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO Number for SDA Line, used only for CKSVII2C1"))
+	),
+	(bios->FchUsbPdSlaveAddr, "FchUsbPdSlaveAddr",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For requesting USB PD controller S-states via FCH I2C when entering PME turn off"))
+	),
+	(bios->I2cSpare, "I2cSpare",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "SECTION: SVI2 Board Parameters"))
+	),
+	(bios->VddGfxVrMapping, "VddGfxVrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddSocVrMapping, "VddSocVrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem0VrMapping, "VddMem0VrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+	(bios->VddMem1VrMapping, "VddMem1VrMapping",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Use VR_MAPPING* bitfields"))
+	),
+
+	(bios->GfxUlvPhaseSheddingMask, "GfxUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->SocUlvPhaseSheddingMask, "SocUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->VddciUlvPhaseSheddingMask, "VddciUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+	(bios->MvddUlvPhaseSheddingMask, "MvddUlvPhaseSheddingMask",
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
+		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
+	),
+
+	(bios->GfxMaxCurrent, "GfxMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->GfxOffset, "GfxOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryGfx, "Padding_TelemetryGfx",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->SocMaxCurrent, "SocMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->SocOffset, "SocOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetrySoc, "Padding_TelemetrySoc",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Mem0MaxCurrent, "Mem0MaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Mem0Offset, "Mem0Offset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem0, "Padding_TelemetryMem0",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->Mem1MaxCurrent, "Mem1MaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Mem1Offset, "Mem1Offset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem1, "Padding_TelemetryMem1",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->MvddRatio, "MvddRatio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)"))
+	),
+
+	(bios->AcDcGpio, "AcDcGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for AC/DC switching"))
+	),
+	(bios->AcDcPolarity, "AcDcPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for AC/DC switching"))
+	),
+	(bios->VR0HotGpio, "VR0HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
+	),
+	(bios->VR0HotPolarity, "VR0HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+
+	(bios->VR1HotGpio, "VR1HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR1 HOT event"))
+	),
+	(bios->VR1HotPolarity, "VR1HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+	(bios->GthrGpio, "GthrGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for GTHR Event"))
+	),
+	(bios->GthrPolarity, "GthrPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "replace GPIO polarity for GTHR"))
+	),
+
+	(bios->LedPin0, "LedPin0",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[0]"))
+	),
+	(bios->LedPin1, "LedPin1",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[1]"))
+	),
+	(bios->LedPin2, "LedPin2",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for LedPin[2]"))
+	),
+	(bios->LedEnableMask, "LedEnableMask",
+		(ATUI_NODISPLAY, ATUI_INLINE, led_display_control),
+		(ATUI_NODESCR)
+	),
+
+	(bios->LedPcie, "LedPcie",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for PCIE results"))
+	),
+	(bios->LedError, "LedError",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO number for Error Cases"))
+	),
+	(bios->LedSpare1, "LedSpare1",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "SECTION: Clock Spread Spectrum"))
+	),
+
+	(bios->PllGfxclkSpreadEnabled, "PllGfxclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->PllGfxclkSpreadPercent, "PllGfxclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->PllGfxclkSpreadFreq, "PllGfxclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->DfllGfxclkSpreadEnabled, "DfllGfxclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->DfllGfxclkSpreadPercent, "DfllGfxclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->DfllGfxclkSpreadFreq, "DfllGfxclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->UclkSpreadEnabled, "UclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->UclkSpreadPercent, "UclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->UclkSpreadFreq, "UclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->FclkSpreadEnabled, "FclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->FclkSpreadPercent, "FclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->FclkSpreadFreq, "FclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->MemoryChannelEnabled, "MemoryChannelEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For DRAM use only, Max 32 channels enabled bit mask."))
+	),
+
+	(bios->DramBitWidth, "DramBitWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "For DRAM use only. See Dram Bit width type defines"))
+	),
+	(bios->PaddingMem1, "PaddingMem1",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Section: Total Board Power"))
+	),
+	(bios->TotalBoardPower, "TotalBoardPower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power"))
+	),
+	(bios->BoardPowerPadding, "BoardPowerPadding",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "SECTION: XGMI Training"))
+	),
+	(bios->xgmilinkspeed, "xgmilinkspeed",
+		(ATUI_DEC, ATUI_ENUM, XGMI_LINK_RATE_e),
+		(ATUI_NODESCR)
+	),
+	(bios->xgmilinkwidth, "xgmilinkwidth",
+		(ATUI_DEC, ATUI_ENUM, XGMI_LINK_WIDTH_e),
+		(ATUI_NODESCR)
+	),
+
+	(bios->XgmiFclkFreq, "XgmiFclkFreq",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->XgmiSocVoltage, "XgmiSocVoltage",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "SECTION: Board Reserved"))
+	),
+	(bios->BoardReserved, "BoardReserved",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_10, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header), (ATUI_NODESCR)
+	),
+	(bios->GfxMaxCurrent, "GfxMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->GfxOffset, "GfxOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryGfx, "Padding_TelemetryGfx",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->SocMaxCurrent, "SocMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->SocOffset, "SocOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetrySoc, "Padding_TelemetrySoc",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->MemMaxCurrent, "MemMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->MemOffset, "MemOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryMem, "Padding_TelemetryMem",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->BoardMaxCurrent, "BoardMaxCurrent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->BoardOffset, "BoardOffset",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "in Amps"))
+	),
+	(bios->Padding_TelemetryBoardInput, "Padding_TelemetryBoardInput",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Platform input telemetry voltage coefficient"))
+	),
+	(bios->BoardVoltageCoeffA, "BoardVoltageCoeffA",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "decode by /1000"))
+	),
+	(bios->BoardVoltageCoeffB, "BoardVoltageCoeffB",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "decode by /1000"))
+	),
+
+	(bios->VR0HotGpio, "VR0HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR0 HOT event"))
+	),
+	(bios->VR0HotPolarity, "VR0HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR0 HOT event"))
+	),
+	(bios->VR1HotGpio, "VR1HotGpio",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO pin configured for VR1 HOT event"))
+	),
+	(bios->VR1HotPolarity, "VR1HotPolarity",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "GPIO polarity for VR1 HOT event"))
+	),
+
+	(bios->UclkSpreadEnabled, "UclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->UclkSpreadPercent, "UclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->UclkSpreadFreq, "UclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->FclkSpreadEnabled, "FclkSpreadEnabled",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "on or off"))
+	),
+	(bios->FclkSpreadPercent, "FclkSpreadPercent",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Q4.4"))
+	),
+	(bios->FclkSpreadFreq, "FclkSpreadFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "kHz"))
+	),
+
+	(bios->I2cControllers, "I2cControllers", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7, // count
+			I2cControllerName_SMU_11_0_7_e // enum
+		)), (ATUI_NODESCR)
+	),
+
+	(bios->GpioI2cScl, "GpioI2cScl",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Serial Clock"))
+	),
+	(bios->GpioI2cSda, "GpioI2cSda",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Serial Data"))
+	),
+	(bios->spare5, "spare5",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+
+	(bios->reserved, "reserved",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
 
 
 

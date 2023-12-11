@@ -34,8 +34,11 @@ PPATUI_HEADERIFY(led_display_control);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_1);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_3);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_4);
-PPATUI_HEADERIFY(smudpm_i2c_controller_config_v2);
 PPATUI_HEADERIFY(atom_smc_dpm_info_v4_5);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_6);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_7);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_9);
+PPATUI_HEADERIFY(atom_smc_dpm_info_v4_10);
 
 
 PPATUI_HEADERIFY(atom_firmware_info_v3_1);
@@ -173,5 +176,5 @@ PPATUI_HEADERIFY(smu11_smcpptable_v7);
 
 PPATUI_HEADERIFY(smu_13_0_7_powerplay_table);
 PPATUI_HEADERIFY(smu13_smcpptable_v39);
-
+PPATUI_HEADERIFY(atom_smc_dpm_info_table_13_0_7);
 #endif

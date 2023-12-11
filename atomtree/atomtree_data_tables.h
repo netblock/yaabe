@@ -36,7 +36,6 @@ struct atomtree_smc_dpm_info {
 		struct atom_common_table_header* table_header;
 
 		struct atom_smc_dpm_info_v4_1* v4_1;
-		//struct atom_smc_dpm_info_v4_2* v4_2; // doesn't exist?
 		struct atom_smc_dpm_info_v4_3* v4_3;
 		struct atom_smc_dpm_info_v4_4* v4_4;
 		struct atom_smc_dpm_info_v4_5* v4_5;
@@ -45,7 +44,7 @@ struct atomtree_smc_dpm_info {
 		struct atom_smc_dpm_info_v4_8* v4_8;
 		struct atom_smc_dpm_info_v4_9* v4_9;
 		struct atom_smc_dpm_info_v4_10* v4_10;
-		//struct atom_smc_dpm_info_table_13_0_7 v5_0; // BoardTable_t
+		struct atom_smc_dpm_info_table_13_0_7* v5_0;
 	};
 };
 

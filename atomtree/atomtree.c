@@ -38,40 +38,41 @@ atomtree_dt_populate_smc_dpm_info(
 					);
 					break;
 				case v4_4:
-					const uint8_t num_i2c_controllers_v4_4 = (
-						sizeof(smc_dpm_info->v4_4->i2ccontrollers)
-						/ sizeof(struct i2ccontrollerconfig_u32)
-					);
-
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_4,
-						NULL,
-						NULL,smc_dpm_info->v4_4,  num_i2c_controllers_v4_4,NULL
+						NULL,  NULL,smc_dpm_info->v4_4,  0,NULL
 					);
 					break;
 				case v4_5:
-					const uint8_t num_i2c_controllers_v4_5 = (
-						sizeof(smc_dpm_info->v4_5->I2cControllers)
-						/ sizeof(struct smudpm_i2c_controller_config_v2)
-					);
-
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_5,
-						NULL,
-						NULL,smc_dpm_info->v4_5,  num_i2c_controllers_v4_5,NULL
+						NULL,  NULL,smc_dpm_info->v4_5,  0,NULL
 					);
 					break;
-				/*
 				case v4_6:
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_6,
+						NULL,  NULL,smc_dpm_info->v4_6,  0,NULL
+					);
 					break;
 				case v4_7:
-					break;
-				case v4_8:
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_7,
+						NULL,  NULL,smc_dpm_info->v4_7,  0,NULL
+					);
 					break;
 				case v4_9:
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(atom_smc_dpm_info_v4_9,
+						NULL,  NULL,smc_dpm_info->v4_9,  0,NULL
+					);
 					break;
 				case v4_10:
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(
+						atom_smc_dpm_info_v4_10,
+						NULL,  NULL,smc_dpm_info->v4_10,  0,NULL
+					);
 					break;
 				case v5_0:
-				*/
+					atui_smc_dpm_info = ATUI_MAKE_BRANCH(
+						atom_smc_dpm_info_table_13_0_7,
+						NULL,  NULL,smc_dpm_info->v5_0,  0,NULL
+					);
 					break;
 				default:
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(

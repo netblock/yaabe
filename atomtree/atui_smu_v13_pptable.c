@@ -1981,16 +1981,17 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "should be unique to each board type"))
 	),
-	//struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS];
 
 	(bios->I2cControllers, "I2cControllers", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "I2cControllers [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8),
 				(ATUI_NODESCR)
 			),
-			NULL, NUM_I2C_CONTROLLERS, // deferred start, count
-			ATUI_NULL // enum
+			NULL, // deferred start, count
+			// count:
+			sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0]),
+			I2cControllerName_SMU_13_0_7_e // enum
 		)), (ATUI_NODESCR)
 	),
 
@@ -2012,24 +2013,25 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 
 	(bios->GfxUlvPhaseSheddingMask, "GfxUlvPhaseSheddingMask",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
 	(bios->SocUlvPhaseSheddingMask, "SocUlvPhaseSheddingMask",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
 	(bios->VmempUlvPhaseSheddingMask, "VmempUlvPhaseSheddingMask",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
 	(bios->VddioUlvPhaseSheddingMask, "VddioUlvPhaseSheddingMask",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_NAN, ATUI_INLINE, psi_sel_mask),
 		((LANG_ENG, "set this to 1 to set PSI0/1 to 1 in ULV mode"))
 	),
+
 	(bios->SlaveAddrMapping, "SlaveAddrMapping", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "SlaveAddrMapping [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2038,7 +2040,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 	(bios->VrPsiSupport, "VrPsiSupport", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "VrPsiSupport [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2048,7 +2050,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 
 	(bios->PaddingPsi, "PaddingPsi", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "PaddingPsi [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2057,7 +2059,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 	(bios->EnablePsi6, "EnablePsi6", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "EnablePsi6 [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2067,7 +2069,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 	(bios->SviTelemetryScale, "SviTelemetryScale", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "SviTelemetryScale [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_NAN, ATUI_INLINE, SviTelemetryScale_t),
 				(ATUI_NODESCR)
 			),
@@ -2077,7 +2079,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 	(bios->VoltageTelemetryRatio, "VoltageTelemetryRatio", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "VoltageTelemetryRatio [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2088,7 +2090,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 
 	(bios->DownSlewRateVr, "DownSlewRateVr", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "DownSlewRateVr [%02u]",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, SVI_PLANE_COUNT, // deferred start, count
@@ -2144,7 +2146,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "GPIO number for LedPin[2]"))
 	),
 	(bios->LedEnableMask, "LedEnableMask",
-		(ATUI_NAN, ATUI_INLINE, led_display_control),
+		(ATUI_NODISPLAY, ATUI_INLINE, led_display_control),
 		(ATUI_NODESCR)
 	),
 
@@ -2169,7 +2171,7 @@ PPATUI_FUNCIFY(struct, smu13_boardtable_v39, atomtree_powerplaytable,
 	),
 	(bios->UclkSpreadPercent, "UclkSpreadPercent", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "UclkSpreadPercent (%s)",
+			(ATUI_NULL, "%s",
 				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 			),
 			NULL, MEM_VENDOR_COUNT, // deferred start, count
@@ -2234,6 +2236,17 @@ PPATUI_FUNCIFY(struct, smu13_smcpptable_v39, atomtree_powerplaytable,
 	),
 	(bios->BoardTable, "BoardTable",
 		(ATUI_NAN, ATUI_PETIOLE, smu13_boardtable_v39),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_smc_dpm_info_table_13_0_7, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->BoardTable, "BoardTable",
+		(ATUI_NODISPLAY, ATUI_PETIOLE, smu13_boardtable_v39),
 		(ATUI_NODESCR)
 	)
 )
