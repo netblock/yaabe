@@ -292,7 +292,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 	(bios->FirmwareRevision, "FirmwareRevision",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->DefaultEngineClock, "DefaultEngineClock",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -382,7 +382,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atui_nullstruct,
 		((LANG_ENG, "In 10Khz unit, the definitions above can't change!!!"))
 	),
 	(bios->FirmwareCapability, "FirmwareCapability",
-		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
 		(ATUI_NODESCR)
 	),
 	(bios->ReferenceClock, "ReferenceClock",
@@ -413,7 +413,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 	(bios->FirmwareRevision, "FirmwareRevision",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->DefaultEngineClock, "DefaultEngineClock",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -510,7 +510,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atui_nullstruct,
 		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
 	),
 	(bios->FirmwareCapability, "FirmwareCapability",
-		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
 		(ATUI_NODESCR)
 	),
 	(bios->ReferenceClock, "ReferenceClock",
@@ -541,7 +541,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 	(bios->FirmwareRevision, "FirmwareRevision",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->DefaultEngineClock, "DefaultEngineClock",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -642,7 +642,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atui_nullstruct,
 		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
 	),
 	(bios->FirmwareCapability, "FirmwareCapability",
-		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
 		(ATUI_NODESCR)
 	),
 	(bios->ReferenceClock, "ReferenceClock",
@@ -673,7 +673,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 	(bios->FirmwareRevision, "FirmwareRevision",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->DefaultEngineClock, "DefaultEngineClock",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -778,7 +778,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atui_nullstruct,
 		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
 	),
 	(bios->FirmwareCapability, "FirmwareCapability",
-		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
 		(ATUI_NODESCR)
 	),
 	(bios->ReferenceClock, "ReferenceClock",
@@ -809,7 +809,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atui_nullstruct,
 		(ATUI_NODESCR)
 	),
 	(bios->FirmwareRevision, "FirmwareRevision",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->DefaultEngineClock, "DefaultEngineClock",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -913,7 +913,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atui_nullstruct,
 		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
 	),
 	(bios->FirmwareCapability, "FirmwareCapability",
-		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
 		(ATUI_NODESCR)
 	),
 	(bios->CoreReferenceClock, "CoreReferenceClock",
