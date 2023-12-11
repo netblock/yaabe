@@ -381,7 +381,7 @@ enum atombios_firmware_capability_old {
 	ATOM_FIRMWARE_CAP_ENABLE_2ND_USB20PORT = 0x0008000,
 	ATOM_FIRMWARE_CAP_DYNAMIC_BOOT_CFG_ENABLE = 0x0020000,
 };
-union atombios_firmware_capability {
+union atombios_firmware_capability_v3 {
 	uint32_t firmware_capability;
 	struct { uint32_t
 		FIRMWARE_POSTED         :0-0 +1,
@@ -410,7 +410,7 @@ struct atom_firmware_info_v3_1 {
 	uint32_t firmware_revision;
 	uint32_t bootup_sclk_in10khz;
 	uint32_t bootup_mclk_in10khz;
-	union atombios_firmware_capability firmware_capability;
+	union atombios_firmware_capability_v3 firmware_capability;
 	uint32_t main_call_parser_entry; // direct address of main parser call in VBIOS binary.
 	uint32_t bios_scratch_reg_startaddr; // 1st bios scratch register dword address
 	uint16_t bootup_vddc_mv;
@@ -432,7 +432,7 @@ struct atom_firmware_info_v3_2 {
 	uint32_t firmware_revision;
 	uint32_t bootup_sclk_in10khz;
 	uint32_t bootup_mclk_in10khz;
-	union atombios_firmware_capability firmware_capability;
+	union atombios_firmware_capability_v3 firmware_capability;
 	uint32_t main_call_parser_entry; // direct address of main parser call in VBIOS binary.
 	uint32_t bios_scratch_reg_startaddr; // 1st bios scratch register dword address
 	uint16_t bootup_vddc_mv;
@@ -459,7 +459,7 @@ struct atom_firmware_info_v3_3 {
 	uint32_t firmware_revision;
 	uint32_t bootup_sclk_in10khz;
 	uint32_t bootup_mclk_in10khz;
-	union atombios_firmware_capability firmware_capability;
+	union atombios_firmware_capability_v3 firmware_capability;
 	uint32_t main_call_parser_entry; // direct address of main parser call in VBIOS binary.
 	uint32_t bios_scratch_reg_startaddr; // 1st bios scratch register dword address
 	uint16_t bootup_vddc_mv;
@@ -487,7 +487,7 @@ struct atom_firmware_info_v3_4 {
 	uint32_t firmware_revision;
 	uint32_t bootup_sclk_in10khz;
 	uint32_t bootup_mclk_in10khz;
-	union atombios_firmware_capability firmware_capability;
+	union atombios_firmware_capability_v3 firmware_capability;
 	uint32_t main_call_parser_entry; // direct address of main parser call in VBIOS binary.
 	uint32_t bios_scratch_reg_startaddr; // 1st bios scratch register dword address
 	uint16_t bootup_vddc_mv;

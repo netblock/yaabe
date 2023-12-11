@@ -264,3 +264,676 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v1_1, atui_nullstruct,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
+
+
+PPATUI_FUNCIFY(union, atombios_firmware_capability_v1, atui_nullstruct,
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("FirmwarePosted",         0,0, ATUI_DEC, (ATUI_NODESCR)),
+			("DualCRTC_Support",       1,1, ATUI_DEC, (ATUI_NODESCR)),
+			("ExtendedDesktopSupport", 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			("MemoryClockSS_Support",  3,3, ATUI_DEC, (ATUI_NODESCR)),
+			("EngineClockSS_Support",  4,4, ATUI_DEC, (ATUI_NODESCR)),
+			("GPUControlsBL",          5,5, ATUI_DEC, (ATUI_NODESCR)),
+			("WMI_SUPPORT",            6,6, ATUI_DEC, (ATUI_NODESCR)),
+			("PPMode_Assigned",        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			("HyperMemory_Support",    8,8, ATUI_DEC, (ATUI_NODESCR)),
+			("HyperMemory_Size",      12,9, ATUI_DEC, (ATUI_NODESCR)),
+			("PostWithoutModeSet",    13,13, ATUI_DEC, (ATUI_NODESCR)),
+			("SCL2Redefined",         14,14, ATUI_DEC, (ATUI_NODESCR)),
+			("Reserved",              15,15, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetEngineClock, "DriverTargetEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetMemoryClock, "DriverTargetMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Output, "MaxEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Output, "MaxMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxEngineClock, "ASICMaxEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxMemoryClock, "ASICMaxMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxTemperature, "ASICMaxTemperature",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding, "Padding",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->aulReservedForBIOS, "aulReservedForBIOS",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->MinEngineClockPLL_Input, "MinEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Input, "MaxEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Output, "MinEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Input, "MinMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Input, "MaxMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Output, "MinMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, the definitions above can't change!!!"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->ReferenceClock, "ReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->PM_RTS_Location, "PM_RTS_Location",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 starting location in ROM in 1Kb unit"))
+	),
+	(bios->PM_RTS_StreamSize, "PM_RTS_StreamSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 packets in Kb unit"))
+	),
+	(bios->Design_ID, "Design_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetEngineClock, "DriverTargetEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetMemoryClock, "DriverTargetMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Output, "MaxEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Output, "MaxMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxEngineClock, "ASICMaxEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxMemoryClock, "ASICMaxMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxTemperature, "ASICMaxTemperature",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MinAllowedBL_Level, "MinAllowedBL_Level",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding, "Padding",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->aulReservedForBIOS, "aulReservedForBIOS",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Input, "MinEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Input, "MaxEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Output, "MinEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Input, "MinMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Input, "MaxMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Output, "MinMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output_lower, "MinPixelClockPLL_Output_lower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->ReferenceClock, "ReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->PM_RTS_Location, "PM_RTS_Location",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 starting location in ROM in 1Kb unit"))
+	),
+	(bios->PM_RTS_StreamSize, "PM_RTS_StreamSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 packets in Kb unit"))
+	),
+	(bios->Design_ID, "Design_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetEngineClock, "DriverTargetEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetMemoryClock, "DriverTargetMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Output, "MaxEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Output, "MaxMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxEngineClock, "ASICMaxEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxMemoryClock, "ASICMaxMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxTemperature, "ASICMaxTemperature",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MinAllowedBL_Level, "MinAllowedBL_Level",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Padding, "Padding",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->aulReservedForBIOS, "aulReservedForBIOS",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Don't use them"))
+	),
+	(bios->_3DAccelerationEngineClock, "_3DAccelerationEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Input, "MinEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Input, "MaxEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Output, "MinEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Input, "MinMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Input, "MaxMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Output, "MinMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output_lower, "MinPixelClockPLL_Output_lower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->ReferenceClock, "ReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->PM_RTS_Location, "PM_RTS_Location",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 starting location in ROM in 1Kb unit"))
+	),
+	(bios->PM_RTS_StreamSize, "PM_RTS_StreamSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 packets in Kb unit"))
+	),
+	(bios->Design_ID, "Design_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetEngineClock, "DriverTargetEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DriverTargetMemoryClock, "DriverTargetMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Output, "MaxEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Output, "MaxMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxEngineClock, "ASICMaxEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxMemoryClock, "ASICMaxMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->ASICMaxTemperature, "ASICMaxTemperature",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MinAllowedBL_Level, "MinAllowedBL_Level",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BootUpVDDCVoltage, "BootUpVDDCVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MV unit"))
+	),
+	(bios->LcdMinPixelClockPLL_Output, "LcdMinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->LcdMaxPixelClockPLL_Output, "LcdMaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->_3DAccelerationEngineClock, "_3DAccelerationEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Input, "MinEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Input, "MaxEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Output, "MinEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Input, "MinMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Input, "MaxMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Output, "MinMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output_lower, "MinPixelClockPLL_Output_lower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->ReferenceClock, "ReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->PM_RTS_Location, "PM_RTS_Location",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 starting location in ROM in 1Kb unit"))
+	),
+	(bios->PM_RTS_StreamSize, "PM_RTS_StreamSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "RTS PM4 packets in Kb unit"))
+	),
+	(bios->Design_ID, "Design_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atui_nullstruct,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->Reserved1, "Reserved1",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MaxEngineClockPLL_Output, "MaxEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Output, "MaxMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->BinaryAlteredInfo, "BinaryAlteredInfo",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulASICMaxEngineClock"))
+	),
+	(bios->DefaultDispEngineClkFreq, "DefaultDispEngineClkFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Was ucASICMaxTemperature;"))
+	),
+	(bios->MinAllowedBL_Level, "MinAllowedBL_Level",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BootUpVDDCVoltage, "BootUpVDDCVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MV unit"))
+	),
+	(bios->LcdMinPixelClockPLL_Output, "LcdMinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->LcdMaxPixelClockPLL_Output, "LcdMaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->Reserved4, "Reserved4",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulAsicMaximumVoltage"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Input, "MinEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxEngineClockPLL_Input, "MaxEngineClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinEngineClockPLL_Output, "MinEngineClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Input, "MinMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxMemoryClockPLL_Input, "MaxMemoryClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinMemoryClockPLL_Output, "MinMemoryClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MinPixelClockPLL_Output_lower, "MinPixelClockPLL_Output_lower",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NAN, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->CoreReferenceClock, "CoreReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MemoryReferenceClock, "MemoryReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->UniphyDPModeExtClkFreq, "UniphyDPModeExtClkFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->Reserved5, "Reserved5",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+

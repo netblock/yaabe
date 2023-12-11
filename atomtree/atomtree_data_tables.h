@@ -55,6 +55,11 @@ struct atomtree_firmware_info {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
+		struct atom_firmware_info_v1_0* v1_0;
+		struct atom_firmware_info_v1_2* v1_2;
+		struct atom_firmware_info_v1_3* v1_3;
+		struct atom_firmware_info_v1_4* v1_4;
+		struct atom_firmware_info_v2_1* v2_1;
 		struct atom_firmware_info_v3_1* v3_1;
 		struct atom_firmware_info_v3_2* v3_2;
 		struct atom_firmware_info_v3_3* v3_3;

@@ -107,6 +107,36 @@ atomtree_dt_populate_firmwareinfo(
 		firmwareinfo->ver = get_ver(firmwareinfo->table_header);
 		if (generate_atui) {
 			switch (firmwareinfo->ver) {
+				case v1_0:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v1_0,  NULL,
+						NULL,firmwareinfo->v1_0,  0,NULL
+					);
+					break;
+				case v1_2:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v1_2,  NULL,
+						NULL,firmwareinfo->v1_2,  0,NULL
+					);
+					break;
+				case v1_3:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v1_3,  NULL,
+						NULL,firmwareinfo->v1_3,  0,NULL
+					);
+					break;
+				case v1_4:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v1_4,  NULL,
+						NULL,firmwareinfo->v1_4,  0,NULL
+					);
+					break;
+				case v2_1:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v2_1,  NULL,
+						NULL,firmwareinfo->v2_1,  0,NULL
+					);
+					break;
 				case v3_1:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
 						atom_firmware_info_v3_1,  NULL,

@@ -2635,8 +2635,28 @@ struct atom_multimedia_config_info {
 #define ATOM_BIOS_INFO_ENGINE_CLOCK_EXT_SS_SUPPORT  0x0010 // (valid from v2.1 ): =1: engclk ss enable with external ss chip
 
 
-#ifndef _H2INC
 
+
+union atombios_firmware_capability_v1 {
+	uint16_t FirmwareCapability;
+	struct { uint16_t
+		FirmwarePosted         :0-0 +1,
+		DualCRTC_Support       :1-1 +1,
+		ExtendedDesktopSupport :2-2 +1,
+		MemoryClockSS_Support  :3-3 +1,
+		EngineClockSS_Support  :4-4 +1,
+		GPUControlsBL          :5-5 +1,
+		WMI_SUPPORT            :6-6 +1,
+		PPMode_Assigned        :7-7 +1,
+		HyperMemory_Support    :8-8 +1,
+		HyperMemory_Size      :12-9 +1,
+		PostWithoutModeSet    :13-13 +1,
+		SCL2Redefined         :14-14 +1,
+		Reserved              :15-15 +1;
+	};
+};
+/* atombios_firmware_capability_v1 old:
+#ifndef _H2INC
 // Please don't add or expand this bitfield structure below, this one will retire soon.!
 struct atom_firmware_capability {
 	uint16_t FirmwarePosted:1;
@@ -2653,21 +2673,18 @@ struct atom_firmware_capability {
 	uint16_t SCL2Redefined:1;
 	uint16_t Reserved:1;
 };
-
 union atom_firmware_capability_access {
 	struct atom_firmware_capability Access;
 	uint16_t susAccess;
 };
-
 #else
-
 union atom_firmware_capability_access {
 	uint16_t susAccess;
 };
-
 #endif
+*/
 
-struct atom_firmware_info {
+struct atom_firmware_info_v1_0 { // TODO 1.1? 1.0?
 	struct atom_common_table_header table_header;
 	uint32_t FirmwareRevision;
 	uint32_t DefaultEngineClock;       // In 10Khz unit
@@ -2692,7 +2709,7 @@ struct atom_firmware_info {
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MinPixelClockPLL_Output;  // In 10Khz unit, the definitions above can't change!!!
-	union atom_firmware_capability_access usFirmwareCapability;
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t ReferenceClock;           // In 10Khz unit
 	uint16_t PM_RTS_Location;          // RTS PM4 starting location in ROM in 1Kb unit
 	uint8_t  PM_RTS_StreamSize;        // RTS PM4 packets in Kb unit
@@ -2727,7 +2744,7 @@ struct atom_firmware_info_v1_2 {
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MinPixelClockPLL_Output_lower; // In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output
-	union atom_firmware_capability_access usFirmwareCapability;
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t ReferenceClock;    // In 10Khz unit
 	uint16_t PM_RTS_Location;   // RTS PM4 starting location in ROM in 1Kb unit
 	uint8_t  PM_RTS_StreamSize; // RTS PM4 packets in Kb unit
@@ -2763,7 +2780,7 @@ struct atom_firmware_info_v1_3 {
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MinPixelClockPLL_Output_lower; // In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output
-	union atom_firmware_capability_access usFirmwareCapability;
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t ReferenceClock;           // In 10Khz unit
 	uint16_t PM_RTS_Location;          // RTS PM4 starting location in ROM in 1Kb unit
 	uint8_t  PM_RTS_StreamSize;        // RTS PM4 packets in Kb unit
@@ -2800,7 +2817,7 @@ struct atom_firmware_info_v1_4 {
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MinPixelClockPLL_Output_lower;  // In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output
-	union atom_firmware_capability_access usFirmwareCapability;
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t ReferenceClock;    // In 10Khz unit
 	uint16_t PM_RTS_Location;   // RTS PM4 starting location in ROM in 1Kb unit
 	uint8_t  PM_RTS_StreamSize; // RTS PM4 packets in Kb unit
@@ -2837,8 +2854,8 @@ struct atom_firmware_info_v2_1 {
 	uint16_t MaxPixelClock;            // In 10Khz unit, Max.  Pclk
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
-	uint16_t MinPixelClockPLL_Output_lower;  // In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output
-	union atom_firmware_capability_access usFirmwareCapability;
+	uint16_t MinPixelClockPLL_Output_lower; // In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t CoreReferenceClock;       // In 10Khz unit
 	uint16_t MemoryReferenceClock;     // In 10Khz unit
 	uint16_t UniphyDPModeExtClkFreq;   // In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock
@@ -2884,7 +2901,7 @@ struct atom_firmware_info_v2_2 {
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t BootUpVDDCIVoltage;       // In unit of mv; Was usMinPixelClockPLL_Output;
-	union atom_firmware_capability_access usFirmwareCapability;
+	union atombios_firmware_capability_v1 FirmwareCapability;
 	uint16_t CoreReferenceClock;       // In 10Khz unit
 	uint16_t MemoryReferenceClock;     // In 10Khz unit
 	uint16_t UniphyDPModeExtClkFreq;   // In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock

@@ -1515,7 +1515,7 @@ PPATUI_FUNCIFY(struct, atom_smc_dpm_info_v4_5, atomtree_smc_dpm_info,
 
 
 
-PPATUI_FUNCIFY(union, atombios_firmware_capability, atui_nullstruct,
+PPATUI_FUNCIFY(union, atombios_firmware_capability_v3, atui_nullstruct,
 	(bios->firmware_capability, "firmware_capability",
 		(ATUI_HEX, ATUI_BITFIELD, (
 			("FIRMWARE_POSTED",         0,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -1550,7 +1550,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_1, atomtree_firmware_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->firmware_capability, "firmware_capability",
-		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v3),
 		(ATUI_NODESCR)
 	),
 	(bios->main_call_parser_entry, "main_call_parser_entry",
@@ -1609,7 +1609,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_2, atomtree_firmware_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->firmware_capability, "firmware_capability",
-		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v3),
 		(ATUI_NODESCR)
 	),
 	(bios->main_call_parser_entry, "main_call_parser_entry",
@@ -1691,7 +1691,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_3, atomtree_firmware_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->firmware_capability, "firmware_capability",
-		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v3),
 		(ATUI_NODESCR)
 	),
 	(bios->main_call_parser_entry, "main_call_parser_entry",
@@ -1777,7 +1777,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v3_4, atomtree_firmware_info,
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->firmware_capability, "firmware_capability",
-		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability),
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v3),
 		(ATUI_NODESCR)
 	),
 	(bios->main_call_parser_entry, "main_call_parser_entry",

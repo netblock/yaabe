@@ -119,6 +119,11 @@ PPATUI_HEADERIFY(atom_rom_header_v2_1);
 
 PPATUI_HEADERIFY(atom_master_data_table_v1_1);
 
+PPATUI_HEADERIFY(atom_firmware_info_v1_0);
+PPATUI_HEADERIFY(atom_firmware_info_v1_2);
+PPATUI_HEADERIFY(atom_firmware_info_v1_3);
+PPATUI_HEADERIFY(atom_firmware_info_v1_4);
+PPATUI_HEADERIFY(atom_firmware_info_v2_1);
 
 /******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
