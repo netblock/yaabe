@@ -266,7 +266,8 @@ PPATUI_FUNCIFY(struct, atom_master_data_table_v1_1, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, atombios_firmware_capability_v1, atui_nullstruct,
+
+PPATUI_FUNCIFY(union, atombios_firmware_capability_v1, atomtree_firmware_info,
 	(bios->FirmwareCapability, "FirmwareCapability",
 		(ATUI_BIN, ATUI_BITFIELD, (
 			("FirmwarePosted",         0,0, ATUI_DEC, (ATUI_NODESCR)),
@@ -286,7 +287,7 @@ PPATUI_FUNCIFY(union, atombios_firmware_capability_v1, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atomtree_firmware_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -407,7 +408,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_0, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atomtree_firmware_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -535,7 +536,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_2, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atomtree_firmware_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -667,7 +668,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_3, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atomtree_firmware_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -803,7 +804,7 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v1_4, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atomtree_firmware_info,
 	(bios->table_header, "table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
 		(ATUI_NODESCR)
@@ -937,3 +938,161 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_1, atui_nullstruct,
 	)
 )
 
+PPATUI_FUNCIFY(union, product_branding_v2, atomtree_firmware_info,
+	(bios->ProductBranding, "ProductBranding",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("EMBEDDED_CAP", 1,0, ATUI_DEC,
+				((LANG_ENG, "Embedded feature level"))
+			),
+			("Reserved",     3,2, ATUI_DEC, ((LANG_ENG, "Reserved"))),
+			("BRANDING_ID",  7,4, ATUI_DEC, ((LANG_ENG, "Branding ID")))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_firmware_info_v2_2, atomtree_firmware_info,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->FirmwareRevision, "FirmwareRevision",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->DefaultEngineClock, "DefaultEngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->DefaultMemoryClock, "DefaultMemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->SPLL_OutputFreq, "SPLL_OutputFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->GPUPLL_OutputFreq, "GPUPLL_OutputFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->Reserved1, "Reserved1",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulMaxEngineClockPLL_Output; //In 10Khz unit*"))
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulMaxMemoryClockPLL_Output; //In 10Khz unit*"))
+	),
+	(bios->MaxPixelClockPLL_Output, "MaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->BinaryAlteredInfo, "BinaryAlteredInfo",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulASICMaxEngineClock  ?"))
+	),
+	(bios->DefaultDispEngineClkFreq, "DefaultDispEngineClkFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit. This is the frequency before DCDTO, corresponding to usBootUpVDDCVoltage."))
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was ucASICMaxTemperature;"))
+	),
+	(bios->MinAllowedBL_Level, "MinAllowedBL_Level",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BootUpVDDCVoltage, "BootUpVDDCVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MV unit"))
+	),
+	(bios->LcdMinPixelClockPLL_Output, "LcdMinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->LcdMaxPixelClockPLL_Output, "LcdMaxPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MHz unit"))
+	),
+	(bios->Reserved4, "Reserved4",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was ulAsicMaximumVoltage"))
+	),
+	(bios->MinPixelClockPLL_Output, "MinPixelClockPLL_Output",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->RemoteDisplayConfig, "RemoteDisplayConfig",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0=disable 1=enable"))
+	),
+	(bios->Reserved5, "Reserved5",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "Was usMinEngineClockPLL_Input and usMaxEngineClockPLL_Input"))
+	),
+	(bios->Reserved6, "Reserved6",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was usMinEngineClockPLL_Output and usMinMemoryClockPLL_Input"))
+	),
+	(bios->Reserved7, "Reserved7",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "Was usMaxMemoryClockPLL_Input and usMinMemoryClockPLL_Output"))
+	),
+	(bios->MaxPixelClock, "MaxPixelClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, Max.  Pclk used only for DAC"))
+	),
+	(bios->MinPixelClockPLL_Input, "MinPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MaxPixelClockPLL_Input, "MaxPixelClockPLL_Input",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->BootUpVDDCIVoltage, "BootUpVDDCIVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In unit of mv; Was usMinPixelClockPLL_Output;"))
+	),
+	(bios->FirmwareCapability, "FirmwareCapability",
+		(ATUI_NODISPLAY, ATUI_INLINE, atombios_firmware_capability_v1),
+		(ATUI_NODESCR)
+	),
+	(bios->CoreReferenceClock, "CoreReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->MemoryReferenceClock, "MemoryReferenceClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit"))
+	),
+	(bios->UniphyDPModeExtClkFreq, "UniphyDPModeExtClkFreq",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock"))
+	),
+	(bios->MemoryModule_ID, "MemoryModule_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Indicate what is the board design"))
+	),
+	(bios->CoolingSolution_ID, "CoolingSolution_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0: Air cooling; 1: Liquid cooling ... [COOLING_SOLUTION]"))
+	),
+	(bios->ProductBranding, "ProductBranding",
+		(ATUI_NODISPLAY, ATUI_INLINE, product_branding_v2),
+		(ATUI_NODESCR)
+	),
+	(bios->Reserved9, "Reserved9",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->BootUpMVDDCVoltage, "BootUpMVDDCVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In unit of mv; Was usMinPixelClockPLL_Output;"))
+	),
+	(bios->BootUpVDDGFXVoltage, "BootUpVDDGFXVoltage",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In unit of mv;"))
+	),
+	(bios->Reserved10, "Reserved10",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "New added comparing to previous version"))
+	)
+)

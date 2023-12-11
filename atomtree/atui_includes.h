@@ -124,6 +124,7 @@ PPATUI_HEADERIFY(atom_firmware_info_v1_2);
 PPATUI_HEADERIFY(atom_firmware_info_v1_3);
 PPATUI_HEADERIFY(atom_firmware_info_v1_4);
 PPATUI_HEADERIFY(atom_firmware_info_v2_1);
+PPATUI_HEADERIFY(atom_firmware_info_v2_2);
 
 
 /******************************************************************************/

@@ -137,6 +137,12 @@ atomtree_dt_populate_firmwareinfo(
 						NULL,firmwareinfo->v2_1,  0,NULL
 					);
 					break;
+				case v2_2:
+					atui_firmwareinfo = ATUI_MAKE_BRANCH(
+						atom_firmware_info_v2_2,  NULL,
+						NULL,firmwareinfo->v2_2,  0,NULL
+					);
+					break;
 				case v3_1:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
 						atom_firmware_info_v3_1,  NULL,

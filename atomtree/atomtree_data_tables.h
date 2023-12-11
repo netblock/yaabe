@@ -60,6 +60,7 @@ struct atomtree_firmware_info {
 		struct atom_firmware_info_v1_3* v1_3;
 		struct atom_firmware_info_v1_4* v1_4;
 		struct atom_firmware_info_v2_1* v2_1;
+		struct atom_firmware_info_v2_2* v2_2;
 		struct atom_firmware_info_v3_1* v3_1;
 		struct atom_firmware_info_v3_2* v3_2;
 		struct atom_firmware_info_v3_3* v3_3;

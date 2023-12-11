@@ -195,8 +195,6 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set for the radix
 
 ********************************************************************************
 
-	s = re.sub("((((struct|union)\s+)?[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
-		"(bios->\g<5>, \"\g<5>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<6>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
 	import re

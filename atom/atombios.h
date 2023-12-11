@@ -2864,16 +2864,22 @@ struct atom_firmware_info_v2_1 {
 
 };
 
+/*
 // the structure below to be used from NI
-// ucTableFormatRevision=2
-// ucTableContentRevision=2
-
 struct product_branding {
 	uint8_t  EMBEDDED_CAP:2; // Bit[1:0] Embedded feature level
 	uint8_t  Reserved:2;     // Bit[3:2] Reserved
 	uint8_t  BRANDING_ID:4;  // Bit[7:4] Branding ID
 };
-
+*/
+union product_branding_v2 {
+	uint8_t ProductBranding;
+	struct { uint8_t
+		EMBEDDED_CAP :1-0 +1, // Embedded feature level
+		Reserved     :3-2 +1, // Reserved
+		BRANDING_ID  :7-4 +1; // Branding ID
+	};
+};
 struct atom_firmware_info_v2_2 {
 	struct atom_common_table_header table_header;
 	uint32_t FirmwareRevision;
@@ -2893,11 +2899,11 @@ struct atom_firmware_info_v2_2 {
 	uint16_t LcdMaxPixelClockPLL_Output; // In MHz unit
 	uint32_t Reserved4;                // Was ulAsicMaximumVoltage
 	uint32_t MinPixelClockPLL_Output;  // In 10Khz unit
-	uint8_t  RemoteDisplayConfig;
+	uint8_t  RemoteDisplayConfig;      // 0=disable 1=enable
 	uint8_t  Reserved5[3];             // Was usMinEngineClockPLL_Input and usMaxEngineClockPLL_Input
 	uint32_t Reserved6;                // Was usMinEngineClockPLL_Output and usMinMemoryClockPLL_Input
 	uint32_t Reserved7;                // Was usMaxMemoryClockPLL_Input and usMinMemoryClockPLL_Output
-	uint16_t Reserved11;               // Was usMaxPixelClock;  //In 10Khz unit, Max.  Pclk used only for DAC
+	uint16_t MaxPixelClock;            //In 10Khz unit, Max.  Pclk used only for DAC
 	uint16_t MinPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t MaxPixelClockPLL_Input;   // In 10Khz unit
 	uint16_t BootUpVDDCIVoltage;       // In unit of mv; Was usMinPixelClockPLL_Output;
@@ -2907,7 +2913,7 @@ struct atom_firmware_info_v2_2 {
 	uint16_t UniphyDPModeExtClkFreq;   // In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock
 	uint8_t  MemoryModule_ID;          // Indicate what is the board design
 	uint8_t  CoolingSolution_ID;       // 0: Air cooling; 1: Liquid cooling ... [COOLING_SOLUTION]
-	struct product_branding ProductBranding; // Bit[7:4]ucBRANDING_ID: Branding ID, Bit[3:2]ucReserved: Reserved, Bit[1:0]ucEMBEDDED_CAP: Embedded feature level.
+	union  product_branding_v2 ProductBranding;
 	uint8_t  Reserved9;
 	uint16_t BootUpMVDDCVoltage;  // In unit of mv; Was usMinPixelClockPLL_Output;
 	uint16_t BootUpVDDGFXVoltage; // In unit of mv;
