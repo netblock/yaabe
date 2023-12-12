@@ -195,6 +195,8 @@ Leaf top UI name won't get displayed if ATUI_NODISPLAY is set for the radix
 
 ********************************************************************************
 
+
+
 python function to convert your bog-standard C struct into a basic ATUI format
 def struct_to_atui(s):
 	import re
@@ -211,7 +213,7 @@ def struct_to_atui(s):
 	# dynarrays part 1 (bulk of it):
 	s = re.sub("(((struct|union)\s+[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z0-9_]*)\];",
 		"(bios->\g<4>, \"\g<4>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<5>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
-	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
+	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t|uq[0-9]+_[0-9]+_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
 		"(bios->\g<3>, \"\g<3>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<4>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	#
 	# embedded structs, create ATUI_INLINES from them:
@@ -220,8 +222,8 @@ def struct_to_atui(s):
 	# embdedded enums; very similar to structs/unions:
 	s = re.sub("(\t+)(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \"\g<4>\",\n\g<1>\t(ATUI_DEC, ATUI_ENUM, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
 	#
-	# integers: intn_t/uintn_t/charn_t;
-	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
+	# integers: intn_t/uintn_t/charn_t/floatn_t/uqn_n_t
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t|uq[0-9]+_[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# integer arrays, won't do embedded enums
 	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\g<1>),", s)
@@ -234,7 +236,6 @@ def struct_to_atui(s):
 	s = re.sub("(\(ATUI_NAN, ATUI_DYNARRAY, \(\n\t+\()[^,]+, ([^,]+)\"","\g<1>ATUI_NULL, \g<2> [%02u]\"",s)
 	#
 	print(s)
-
 
 def bitfield_to_atui(s):
 	import re
