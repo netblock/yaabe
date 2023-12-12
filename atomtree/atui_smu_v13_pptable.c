@@ -141,7 +141,7 @@ PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atomtree_powerplaytable,
 		((LANG_ENG, "PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80"))
 	),
 	(bios->platform_caps, "platform_caps",
-		(ATUI_NAN, ATUI_INLINE, powerplay_platform_caps),
+		(ATUI_NODISPLAY, ATUI_INLINE, powerplay_platform_caps),
 		(ATUI_NODESCR)
 	),
 
@@ -184,7 +184,7 @@ PPATUI_FUNCIFY(struct, smu_13_0_7_powerplay_table, atomtree_powerplaytable,
 
 PPATUI_FUNCIFY(union, powerplay_feature_control_smu13, atomtree_powerplaytable,
 	(bios->feature_control, "feature_control",
-		(ATUI_BIN, ATUI_BITFIELD, (
+		(ATUI_HEX, ATUI_BITFIELD, (
 			("FW_DATA_READ",            0,0, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFXCLK",              1,1, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFX_POWER_OPTIMIZER", 2,2, ATUI_DEC, (ATUI_NODESCR)),
@@ -496,7 +496,7 @@ PPATUI_FUNCIFY(struct, BootValues_t, atomtree_powerplaytable,
 )
 
 PPATUI_FUNCIFY(struct, MsgLimits_t, atomtree_powerplaytable,
-	// unroll? dynarray inline?
+	// TODO unroll? dynarray inline?
 	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
 
 	(bios->Tdc, "Tdc", // start, name
@@ -906,7 +906,7 @@ PPATUI_FUNCIFY(struct, smu13_skutable_v39, atomtree_powerplaytable,
 		((LANG_ENG, "Percentage value. Used by APCC+ controller to control PCC residency to some value"))
 	),
 	(bios->ThrottlerControlMask, "ThrottlerControlMask",
-		(ATUI_NAN, ATUI_INLINE, throttler_control_smu13_0x35),
+		(ATUI_NODISPLAY, ATUI_INLINE, throttler_control_smu13_0x35),
 		(ATUI_NODESCR)
 	),
 

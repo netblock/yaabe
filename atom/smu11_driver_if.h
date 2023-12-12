@@ -780,7 +780,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  DcBtcEnabled[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_GfxBtc[2];
 
-	int16_t  DcBtcMin[AVFS_VOLTAGE_COUNT]; // is this actually signed? mV Q2
+	uq14_2_t  DcBtcMin[AVFS_VOLTAGE_COUNT];
 	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
 	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
@@ -981,7 +981,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t GfxclkFopt;         // in Mhz
 	uint8_t  Padding567[2];
 	uint16_t GfxclkDsMaxFreq;    // in MHz
-	enum GFXCLK_SOURCE_e GfxclkSource;       // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e GfxclkSource; // 0 = PLL, 1 = DFLL
 	uint8_t  Padding456;
 
 	// UCLK section
@@ -1058,7 +1058,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	// SECTION: Advanced Options
-	uint32_t DebugOverrides;
+	union  dpm_debug_override_smu11_0x33 DebugOverrides;
 	struct quadratic_f32 ReservedEquation0;
 	struct quadratic_f32 ReservedEquation1;
 	struct quadratic_f32 ReservedEquation2;
@@ -1204,9 +1204,6 @@ struct smu11_smcpptable_v7_infrastructure_limits {
 	uint32_t FitLimit; // Failures in time (failures per million parts over the defined lifetime)
 };
 
-struct smu11_smcpptable_v7_dpm_descriptors {
-	struct dpm_descriptor_smu11_0x40 DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
-};
 struct smu11_smcpptable_v7_dpm_freq_tables {
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU11];      // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU11];       // In MHz
@@ -1222,7 +1219,7 @@ struct smu11_smcpptable_v7_dpm_freq_tables {
 };
 struct smu11_smcpptable_v7_dpm_config {
 	//SECTION: DPM Config 1
-	struct smu11_smcpptable_v7_dpm_descriptors DpmDescriptors;
+	struct dpm_descriptor_smu11_0x40 DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
 
 	struct smu11_smcpptable_v7_dpm_freq_tables freq_tables;
 	uint32_t Paddingclks;
@@ -1560,7 +1557,7 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint8_t  PaddingUmcFlags[2];
 
 	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadPercent[16];
+	uq4_4_t  UclkSpreadPercent[16]; // unsure what the 16 is.
 
 	// SECTION: Board Reserved
 	uint32_t BoardReserved[11];

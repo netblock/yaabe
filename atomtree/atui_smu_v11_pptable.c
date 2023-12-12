@@ -347,7 +347,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_7_power_saving_clock_table, atui_nullstruct,
 
 PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x13, atomtree_powerplaytable,
 	(bios->feature_control, "feature_control",
-		(ATUI_BIN, ATUI_BITFIELD, (
+		(ATUI_HEX, ATUI_BITFIELD, (
 			("DPM_PREFETCHER", 0,0, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFXCLK",     1,1, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_UCLK",       2,2, ATUI_DEC, (ATUI_NODESCR)),
@@ -418,7 +418,7 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x13, atomtree_powerplayta
 
 PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x33, atomtree_powerplaytable,
 	(bios->feature_control, "feature_control",
-		(ATUI_BIN, ATUI_BITFIELD, (
+		(ATUI_HEX, ATUI_BITFIELD, (
 			("DPM_PREFETCHER",      0,0, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFXCLK",          1,1, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFX_PACE",        2,2, ATUI_DEC, (ATUI_NODESCR)),
@@ -488,7 +488,7 @@ PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x33, atomtree_powerplayta
 )
 PPATUI_FUNCIFY(union, powerplay_feature_control_smu11_0x40, atui_nullstruct,
 	(bios->feature_control, "feature_control",
-		(ATUI_BIN, ATUI_BITFIELD, (
+		(ATUI_HEX, ATUI_BITFIELD, (
 			("DPM_PREFETCHER",       0,0, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFXCLK",           1,1, ATUI_DEC, (ATUI_NODESCR)),
 			("DPM_GFX_GPO",          2,2, ATUI_DEC, (ATUI_NODESCR)),
@@ -1859,12 +1859,12 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->ThrottlerControlMask, "ThrottlerControlMask",
-		(ATUI_NAN, ATUI_INLINE, throttler_control_smu11_0x33),
+		(ATUI_NAN, ATUI_PETIOLE, throttler_control_smu11_0x33),
 		(ATUI_NODESCR)
 	),
 
 	(bios->FwDStateMask, "FwDStateMask",
-		(ATUI_NAN, ATUI_INLINE, fw_dstate_features_smu11_0x33),
+		(ATUI_NODISPLAY, ATUI_INLINE, fw_dstate_features_smu11_0x33),
 		(ATUI_NODESCR)
 	),
 
@@ -2316,11 +2316,11 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->DcTol[AVFS_VOLTAGE_GFX], "DcTol (GFX)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcTol[AVFS_VOLTAGE_SOC], "DcTol (SOC)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 
@@ -2336,24 +2336,25 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	),
 
 	(bios->DcBtcMin[AVFS_VOLTAGE_GFX], "DcBtcMin (GFX)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMin[AVFS_VOLTAGE_SOC], "DcBtcMin (SOC)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMax[AVFS_VOLTAGE_GFX], "DcBtcMax (GFX)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 	(bios->DcBtcMax[AVFS_VOLTAGE_SOC], "DcBtcMax (SOC)",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "mV(Q2)"))
 	),
 
 	(bios->DebugOverrides, "DebugOverrides",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NODISPLAY, ATUI_INLINE, dpm_debug_override_smu11_0x33),
+		(ATUI_NODESCR)
 	),
 	(bios->ReservedEquation0, "ReservedEquation0",
 		(ATUI_NAN, ATUI_INLINE, quadratic_f32),
@@ -2765,19 +2766,6 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_infrastructure_limits,
 )
 
 
-PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_descriptors, atui_nullstruct,
-	(bios->DpmDescriptor, "DpmDescriptor", // start, name
-		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
-			(ATUI_NULL, "%s",
-				(ATUI_NAN, ATUI_INLINE, dpm_descriptor_smu11_0x40),
-				(ATUI_NODESCR)
-			),
-			NULL, SMU11_PPT7_PPCLK_COUNT, // deferred start, count
-			SMU11_PPT7_PPCLK_e // enum
-		)), (ATUI_NODESCR)
-	)
-)
-
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_freq_tables, atui_nullstruct,
 	(bios->FreqTableGfx, "FreqTableGfx", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
@@ -2892,9 +2880,15 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_freq_tables, atui_nullstruct,
 )
 
 PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_dpm_config, atui_nullstruct,
-	(bios->DpmDescriptors, "DpmDescriptors",
-		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_dpm_descriptors),
-		(ATUI_NODESCR)
+	(bios->DpmDescriptor, "DpmDescriptor", // start, name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			(ATUI_NULL, "%s",
+				(ATUI_NAN, ATUI_PETIOLE, dpm_descriptor_smu11_0x40),
+				(ATUI_NODESCR)
+			),
+			NULL, SMU11_PPT7_PPCLK_COUNT, // deferred start, count
+			SMU11_PPT7_PPCLK_e // enum
+		)), (ATUI_NODESCR)
 	),
 	(bios->freq_tables, "freq_tables",
 		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v7_dpm_freq_tables),
@@ -3356,7 +3350,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7_i2c_control, atui_nullstruct,
 	(bios->I2cControllers, "Supported I2cControllers", // start, name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, "%s",
-				(ATUI_NAN, ATUI_INLINE, i2ccontrollerconfig_u8),
+				(ATUI_NAN, ATUI_PETIOLE, i2ccontrollerconfig_u8),
 				(ATUI_NODESCR)
 			),
 			NULL, // deferred start
@@ -3948,8 +3942,16 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v7, atui_nullstruct,
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 
-	(bios->UclkSpreadPercent, "UclkSpreadPercent",
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	(bios->UclkSpreadPercent, "UclkSpreadPercent", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "UclkSpreadPercent [%02u]",
+				(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			// count:
+			sizeof(bios->UclkSpreadPercent)/sizeof(bios->UclkSpreadPercent[0]),
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
 	),
 
 	(bios->BoardReserved, "BoardReserved",

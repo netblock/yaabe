@@ -893,7 +893,7 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint8_t  UseStrobeModeOptimizations; // Set to indicate that FW should use strobe mode optimizations
 	uint8_t  PaddingMem[3];
 
-	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13];   // 4 DPM states
+	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13]; // 4 DPM states
 	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13];
 
 	uq14_2_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
