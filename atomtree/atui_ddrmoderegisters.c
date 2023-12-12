@@ -299,7 +299,7 @@ PPATUI_FUNCIFY(union, gddr6_mr9, atui_nullstruct,
 PPATUI_FUNCIFY(union, gddr6_mr10, atui_nullstruct,
 	(bios->gddr6_mr10, "gddr6_mr10",
 		(ATUI_BIN, ATUI_BITFIELD, (
-			("VREFC_offset",  3,0, ATUI_DEC,
+			("VREFC_offset",  3,0, (ATUI_DEC|ATUI_SIGNED),
 				((LANG_ENG, "CA bus. Two's Complement? 0b1000=0 is a typo?"))
 			),
 			("WCK_inv_byte0", 5,4, ATUI_DEC,
