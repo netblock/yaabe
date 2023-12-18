@@ -2958,7 +2958,7 @@ struct atom_integrated_system_info {
 	uint16_t K8DataReturnTime; // in 0.01 us unit
 	uint8_t  MaxNBVoltage;
 	uint8_t  MinNBVoltage;
-	uint8_t  MemoryType; // [7:4]=1:DDR1;=2:DDR2;=3:DDR3.[3:0] is reserved
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  NumberOfCyclesInPeriod; // CG.FVTHROT_PWM_CTRL_REG0.NumberOfCyclesInPeriod
 	uint8_t  StartingPWM_HighTime; // CG.FVTHROT_PWM_CTRL_REG0.StartingPWM_HighTime
 	uint8_t  HTLinkWidth; // 16 bit vs. 8 bit
@@ -3019,7 +3019,7 @@ struct atom_integrated_system_info_v2 {
 	uint32_t OtherDisplayMisc;
 	uint32_t DDISlot1Config;
 	uint32_t DDISlot2Config;
-	uint8_t  MemoryType; // [3:0]=1:DDR1;=2:DDR2;=3:DDR3.[7:4] is reserved
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint8_t  DockingPinBit;
 	uint8_t  DockingPinPolarity;
@@ -3202,7 +3202,7 @@ struct atom_integrated_system_info_v5 {
 	uint32_t DDISlot3Config;
 	uint32_t DDISlot4Config;
 	uint32_t Reserved4[4];      // must be 0x0 for the reserved
-	uint8_t  MemoryType;        // [3:0]=1:DDR1;=2:DDR2;=3:DDR3.[7:4] is reserved
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint16_t Reserved;
 	uint32_t Reserved5[4];      // must be 0x0 for the reserved
@@ -5337,7 +5337,7 @@ struct atom_integrated_system_info_v6 {
 	uint16_t BootUpNBVoltage;
 	uint16_t ExtDispConnInfoOffset;
 	uint16_t PanelRefreshRateRange;
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint32_t CSR_M3_ARB_CNTL_DEFAULT[10];
 	uint32_t CSR_M3_ARB_CNTL_UVD[10];
@@ -5524,7 +5524,7 @@ struct atom_integrated_system_info_v1_7 {
 	uint16_t BootUpNBVoltage;
 	uint16_t ExtDispConnInfoOffset;
 	uint16_t PanelRefreshRateRange;
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint8_t  strVBIOSMsg[40];
 	union atom_tdp_config asTdpConfig;
@@ -5754,7 +5754,7 @@ struct atom_integrated_system_info_v1_8 {
 	uint16_t GPUReservedSysMemSize;
 	uint16_t ExtDispConnInfoOffset;
 	uint16_t PanelRefreshRateRange;
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint8_t  strVBIOSMsg[40];
 	union atom_tdp_config asTdpConfig;
@@ -5971,7 +5971,7 @@ struct atom_integrated_system_info_v1_9 {
 	uint16_t GPUReservedSysMemSize;
 	uint16_t ExtDispConnInfoOffset;
 	uint16_t PanelRefreshRateRange;
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint8_t  strVBIOSMsg[40];
 	union atom_tdp_config asTdpConfig;
@@ -6088,7 +6088,7 @@ struct atom_integrated_system_info_v1_10 {
 	uint16_t GPUReservedSysMemSize;
 	uint16_t ExtDispConnInfoOffset;
 	uint16_t PanelRefreshRateRange;
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  UMAChannelNumber;
 	uint32_t MsgReserved[10];
 	union atom_tdp_config asTdpConfig;
@@ -6971,7 +6971,7 @@ struct atom_vesa_to_internal_mode_lut {
 // ATOM Memory Related Data Structure
 /******************************************************************************/
 struct atom_memory_vendor_block {
-	uint8_t  MemoryType;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  MemoryVendor;
 	uint8_t  AdjMCId;
 	uint8_t  DynClkId;
@@ -6979,17 +6979,15 @@ struct atom_memory_vendor_block {
 };
 
 
+// like atom_umc_reg_setting_data_block
 struct atom_memory_setting_id_config {
 	uint32_t MemClockRange:24;
 	uint32_t ucMemBlkId:8;
 };
-
 union atom_memory_setting_id_config_access {
 	struct atom_memory_setting_id_config lAccess;
 	uint32_t Access;
 };
-
-
 struct atom_memory_setting_data_block {
 	union atom_memory_setting_id_config_access ulMemoryID;
 	uint32_t aulMemData[1];
@@ -6997,24 +6995,26 @@ struct atom_memory_setting_data_block {
 
 
 struct atom_init_reg_index_format {
+// like atom_umc_register_addr_info_access ??
 	uint16_t RegIndex;         // MC register index
 	uint8_t  PreRegDataLength; // offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf
 };
 
 
-struct atom_init_reg_block {
+struct atom_init_reg_block { // like atom_umc_init_reg_block, but with
 	uint16_t RegIndexTblSize; // size of asRegIndexBuf
 	uint16_t RegDataBlkSize;  // size of ATOM_MEMORY_SETTING_DATA_BLOCK
+	// of the struct itself? size of the RegDataBuf array?
 	struct atom_init_reg_index_format RegIndexBuf[1];
 	struct atom_memory_setting_data_block RegDataBuf[1];
 };
 
-#define END_OF_REG_INDEX_BLOCK  0x0ffff
+#define END_OF_REG_INDEX_BLOCK  0xffff
 #define END_OF_REG_DATA_BLOCK   0x00000000
 #define ATOM_INIT_REG_MASK_FLAG 0x80 // Not used in BIOS
 #define CLOCK_RANGE_HIGHEST     0x00ffffff
 
-#define VALUE_DWORD         SIZEOF uint32_t
+// #define VALUE_DWORD         SIZEOF uint32_t
 #define VALUE_SAME_AS_ABOVE 0
 #define VALUE_MASK_DWORD    0x84
 
@@ -7052,31 +7052,61 @@ struct atom_mc_init_param_table_v2_1 {
 };
 
 
-#define _4Mx16   0x2
-#define _4Mx32   0x3
-#define _8Mx16   0x12
-#define _8Mx32   0x13
-#define _8Mx128  0x15
-#define _16Mx16  0x22
-#define _16Mx32  0x23
-#define _16Mx128 0x25
-#define _32Mx16  0x32
-#define _32Mx32  0x33
-#define _32Mx128 0x35
-#define _64Mx8   0x41
-#define _64Mx16  0x42
-#define _64Mx32  0x43
-#define _64Mx128 0x45
-#define _128Mx8  0x51
-#define _128Mx16 0x52
-#define _128Mx32 0x53
-#define _256Mx8  0x61
-#define _256Mx16 0x62
-#define _256Mx32 0x63
-#define _512Mx8  0x71
-#define _512Mx16 0x72
+// wordcount x wordwidth in bits.
+// A 8Gbit GDDR6 has two 16-bit channels; 16 bit words and 4Gbits per channel.
+// 4Gbit/16 = 256Mwords; _256Mx16.
+enum DRAM_DENSITY_e:uint8_t {
+	// _4Mx4 = 0x00,
+	_4Mx16   = 0x02,
+	_4Mx32   = 0x03,
+	_8Mx16   = 0x12,
+	_8Mx32   = 0x13,
+	_8Mx128  = 0x15,
+	_16Mx16  = 0x22,
+	_16Mx32  = 0x23,
+	_16Mx128 = 0x25,
+	_32Mx16  = 0x32,
+	_32Mx32  = 0x33,
+	_32Mx128 = 0x35,
+	_64Mx8   = 0x41,
+	_64Mx16  = 0x42,
+	_64Mx32  = 0x43,
+	_64Mx128 = 0x45,
+	_128Mx8  = 0x51,
+	_128Mx16 = 0x52,
+	_128Mx32 = 0x53,
+	_256Mx8  = 0x61,
+	_256Mx16 = 0x62,
+	_256Mx32 = 0x63,
+	_512Mx8  = 0x71,
+	_512Mx16 = 0x72,
+
+/*
+	_768Mx16  = 0x82,
+*/
+};
+/* Is this better, or stick with enum?
+union dram_density { 
+	uint8_t  Density;
+	enum DRAM_DENSITY_e density_names;
+	struct { uint8_t
+		word_width :3-0 +1, // 2**(n+2)
+		word_count :7-4 +1; // 2**(n+2)
+	};
+};
+*/
 
 
+union memory_vendor_id {
+	uint8_t  MemoryVenderID; // Predefined,never change across designs or memory type/vender
+	struct { uint8_t
+		vendor_code :3-0 +1, // GDDR4 vendor ID; see SDRAM 3.11.5.8 section 12.
+		revision    :7-4 +1; // possibly DDR gen? see enum atom_dgpu_vram_type?
+	};
+};
+// TODO
+// see MEM_VENDOR_e in smu13.0.7 ??
+#define ATOM_VRAM_MODULE_MEMORY_VENDOR_ID_MASK 0xF
 #define SAMSUNG  0x1
 #define INFINEON 0x2
 #define ELPIDA   0x3
@@ -7095,15 +7125,15 @@ struct atom_mc_init_param_table_v2_1 {
 #define MEZZA    ELPIDA
 
 
-// ///////////Support for GDDR5 MC uCode to reside in upper 64K of ROM/////////////
-
+/******************************************************************************/
+// Support for GDDR5 MC uCode to reside in upper 64K of ROM
+/******************************************************************************/
 #define UCODE_ROM_START_ADDRESS 0x1b800
 #define UCODE_SIGNATURE      0x4375434d // 'MCuC' - MC uCode
-
 // uCode block header for reference
-
 struct mcucodeheader {
-	uint32_t Signature;
+	//uint32_t Signature;
+	char8_t  Signature[4]; // CuCM ?
 	uint8_t  Revision;
 	uint8_t  Checksum;
 	uint8_t  Reserved1;
@@ -7113,27 +7143,33 @@ struct mcucodeheader {
 	uint16_t Reserved3;
 	uint16_t Reserved4;
 };
-
-// ////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
 
 #define ATOM_MAX_NUMBER_OF_VRAM_MODULE 16
+union vram_module_channel_config {
+	uint8_t  ChannelConfig;
+	struct { uint8_t
+		channel_combo :3-0 +1,
+		channel_width :7-4 +1; // in number of 2
+	};
+};
 
-#define ATOM_VRAM_MODULE_MEMORY_VENDOR_ID_MASK 0xF
+
 struct atom_vram_module_v1 {
 	uint32_t Reserved;
 	uint16_t EMRSValue;
 	uint16_t MRSValue;
 	uint16_t Reserved2;
-	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
-	uint8_t  MemoryType;      // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4;[3:0] reserved;
-	uint8_t  MemoryVenderID;  // Predefined,never change across designs or memory type/vender
-	uint8_t  MemoryDeviceCfg; // [7:4]=0x0:4M;=0x1:8M;=0x2:16M;0x3:32M....[3:0]=0x0:x4;=0x1:x8;=0x2:x16;=0x3:x32...
-	uint8_t  Row;             // Number of Row,in power of 2;
-	uint8_t  Column;          // Number of Column,in power of 2;
-	uint8_t  Bank;            // Nunber of Bank;
-	uint8_t  Rank;            // Number of Rank, in power of 2
-	uint8_t  ChannelNum;      // Number of channel;
-	uint8_t  ChannelConfig;   // [3:0]=Indication of what channel combination;[4:7]=Channel bit width, in number of 2
+	uint8_t  ExtMemoryID;    // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
+	enum atom_dgpu_vram_type MemoryType;
+	union memory_vendor_id MemoryVenderID;
+	enum DRAM_DENSITY_e MemoryDeviceCfg;
+	uint8_t  Row;        // Number of Row,in power of 2;
+	uint8_t  Column;     // Number of Column,in power of 2;
+	uint8_t  Bank;       // Nunber of Bank;
+	uint8_t  Rank;       // Number of Rank, in power of 2
+	uint8_t  ChannelNum; // Number of channel;
+	union vram_module_channel_config ChannelConfig;
 	uint8_t  DefaultMVDDQ_ID; // Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;
 	uint8_t  DefaultMVDDC_ID; // Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;
 	uint8_t  Reserved3[2];
@@ -7142,24 +7178,24 @@ struct atom_vram_module_v1 {
 
 struct atom_vram_module_v2 {
 	uint32_t Reserved;
-	uint32_t Flags;           // To enable/disable functionalities based on memory type
-	uint32_t EngineClock;     // Override of default engine clock for particular memory type
-	uint32_t MemoryClock;     // Override of default memory clock for particular memory type
-	uint16_t EMRS2Value;      // EMRS2 Value is used for GDDR2 and GDDR4 memory type
-	uint16_t EMRS3Value;      // EMRS3 Value is used for GDDR2 and GDDR4 memory type
+	uint32_t Flags;       // To enable/disable functionalities based on memory type
+	uint32_t EngineClock; // Override of default engine clock for particular memory type
+	uint32_t MemoryClock; // Override of default memory clock for particular memory type
+	uint16_t EMRS2Value;  // EMRS2 Value is used for GDDR2 and GDDR4 memory type
+	uint16_t EMRS3Value;  // EMRS3 Value is used for GDDR2 and GDDR4 memory type
 	uint16_t EMRSValue;
 	uint16_t MRSValue;
 	uint16_t Reserved2;
-	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
-	uint8_t  MemoryType;      // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4;[3:0] - must not be used for now;
-	uint8_t  MemoryVenderID;  // Predefined,never change across designs or memory type/vender. If not predefined, vendor detection table gets executed
-	uint8_t  MemoryDeviceCfg; // [7:4]=0x0:4M;=0x1:8M;=0x2:16M;0x3:32M....[3:0]=0x0:x4;=0x1:x8;=0x2:x16;=0x3:x32...
-	uint8_t  Row;             // Number of Row,in power of 2;
-	uint8_t  Column;          // Number of Column,in power of 2;
-	uint8_t  Bank;            // Nunber of Bank;
-	uint8_t  Rank;            // Number of Rank, in power of 2
-	uint8_t  ChannelNum;      // Number of channel;
-	uint8_t  ChannelConfig;   // [3:0]=Indication of what channel combination;[4:7]=Channel bit width, in number of 2
+	uint8_t  ExtMemoryID; // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
+	enum atom_dgpu_vram_type MemoryType;
+	union memory_vendor_id MemoryVenderID;
+	enum DRAM_DENSITY_e MemoryDeviceCfg;
+	uint8_t  Row;        // Number of Row in power of 2
+	uint8_t  Column;     // Number of Column in power of 2
+	uint8_t  Bank;       // Nunber of Bank
+	uint8_t  Rank;       // Number of Rank, in power of 2
+	uint8_t  ChannelNum; // Number of channel
+	union vram_module_channel_config ChannelConfig;
 	uint8_t  DefaultMVDDQ_ID; // Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;
 	uint8_t  DefaultMVDDC_ID; // Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;
 	uint8_t  RefreshRateFactor;
@@ -7167,7 +7203,7 @@ struct atom_vram_module_v2 {
 };
 
 
-struct atom_memory_timing_format {
+struct atom_memory_timing_format { // GDDR4 and GDDR3, and DDR3. "EMRS" is for GDDR
 	uint32_t ClkRange; // memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing
 	union {
 		uint16_t MRS; // mode register
@@ -7220,7 +7256,7 @@ struct atom_memory_timing_format_v1 {
 	uint8_t  tFAW;
 	uint8_t  tAOND;
 	uint8_t  flag; // flag to control memory timing calculation. bit0= control EMRS2 Infineon
-// //////////////////////////////////GDDR parameters///////////////////////////////////
+	// GDDR parameters
 	uint8_t  tCCDL;
 	uint8_t  tCRCRL;
 	uint8_t  tCRCWL;
@@ -7255,7 +7291,7 @@ struct atom_memory_timing_format_v2 {
 	uint8_t  tFAW;
 	uint8_t  tAOND;
 	uint8_t  flag; // flag to control memory timing calculation. bit0= control EMRS2 Infineon
-// //////////////////////////////////GDDR parameters///////////////////////////////////
+	// GDDR parameters
 	uint8_t  tCCDL;
 	uint8_t  tCRCRL;
 	uint8_t  tCRCWL;
@@ -7271,19 +7307,27 @@ struct atom_memory_timing_format_v2 {
 	uint8_t  Reserved;
 };
 
+union mem_preamble {
+	uint8_t  Preamble;
+	struct { uint8_t
+		read  :3-0 +1,
+		write :7-4 +1;
+	};
+};
+
 
 struct atom_memory_format {
 	uint32_t DllDisClock;       // memory DLL will be disable when target memory clock is below this clock
 	union {
-	uint16_t EMRS2Value;        // EMRS2 Value is used for GDDR2 and GDDR4 memory type
-	uint16_t DDR3_Reserved;     // Not used for DDR3 memory
+		uint16_t EMRS2Value;    // EMRS2 Value is used for GDDR2 and GDDR4 memory type
+		uint16_t DDR3_Reserved; // Not used for DDR3 memory
 	};
 	union {
-	uint16_t EMRS3Value;        // EMRS3 Value is used for GDDR2 and GDDR4 memory type
-	uint16_t DDR3_MR3;          // Used for DDR3 memory
+		uint16_t EMRS3Value;    // EMRS3 Value is used for GDDR2 and GDDR4 memory type
+		uint16_t DDR3_MR3;      // Used for DDR3 memory
 	};
-	uint8_t  MemoryType;        // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4;[3:0] - must not be used for now;
-	uint8_t  MemoryVenderID;    // Predefined,never change across designs or memory type/vender. If not predefined, vendor detection table gets executed
+	enum atom_dgpu_vram_type MemoryType;
+	union memory_vendor_id MemoryVenderID;
 	uint8_t  Row;               // Number of Row,in power of 2;
 	uint8_t  Column;            // Number of Column,in power of 2;
 	uint8_t  Bank;              // Nunber of Bank;
@@ -7291,12 +7335,26 @@ struct atom_memory_format {
 	uint8_t  BurstSize;         // burst size, 0= burst size=4  1= burst size=8
 	uint8_t  DllDisBit;         // position of DLL Enable/Disable bit in EMRS ( Extended Mode Register )
 	uint8_t  RefreshRateFactor; // memory refresh rate in unit of ms
-	uint8_t  Density;           // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-	uint8_t  Preamble;          // [7:4] Write Preamble, [3:0] Read Preamble
+	enum DRAM_DENSITY_e Density;
+	union mem_preamble Preamble;
 	uint8_t  MemAttrib;         // Memory Device Addribute, like RDBI/WDBI etc
 	struct atom_memory_timing_format MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
 };
 
+
+/*
+// ATOM_VRAM_MODULE_V3.ucNPL_RT
+#define NPL_RT_MASK      0x0f
+#define BATTERY_ODT_MASK 0xc0
+*/
+union npl_rtdelay { // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
+	uint8_t  NPL_RT;
+	struct { uint8_t
+		npl_round_trip   :3-0 +1, // MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2.
+		reserved         :5-4 +1,
+		battery_odt_mask :7-6 +1;
+	};
+};
 
 struct atom_vram_module_v3 {
 	uint32_t ChannelMapCfg; // board dependent paramenter:Channel combination
@@ -7307,86 +7365,101 @@ struct atom_vram_module_v3 {
 	uint8_t  ChannelNum;    // board dependent parameter:Number of channel;
 	uint8_t  ChannelSize;   // board dependent parameter:32bit or 64bit
 	uint8_t  VREFI;         // board dependnt parameter: EXT or INT +160mv to -140mv
-	uint8_t  NPL_RT;        // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
+	union npl_rtdelay NPL_RT;
 	uint8_t  Flag;          // To enable/disable functionalities based on memory type
 	struct atom_memory_format Memory; // describ all of video memory parameters from memory spec
 };
 
 
-// ATOM_VRAM_MODULE_V3.ucNPL_RT
-#define NPL_RT_MASK      0x0f
-#define BATTERY_ODT_MASK 0xc0
-
 //#define ATOM_VRAM_MODULE ATOM_VRAM_MODULE_V3
-
-struct atom_vram_module_v4 {
-	uint32_t ChannelMapCfg;     // board dependent parameter: Channel combination
-	uint16_t ModuleSize;        // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
-	uint16_t PrivateReserved;   // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
-	uint16_t Reserved;
-	uint8_t  ExtMemoryID;       // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
-	uint8_t  MemoryType;        // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
-	uint8_t  ChannelNum;        // Number of channels present in this module config
-	uint8_t  ChannelWidth;      // 0 - 32 bits; 1 - 64 bits
-	uint8_t  Density;           // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-	uint8_t  Flag;              // To enable/disable functionalities based on memory type
-	uint8_t  Misc;              // bit0: 0 - single rank; 1 - dual rank;   bit2: 0 - burstlength 4, 1 - burstlength 8
-	uint8_t  VREFI;             // board dependent parameter
-	uint8_t  NPL_RT;            // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
-	uint8_t  Preamble;          // [7:4] Write Preamble, [3:0] Read Preamble
-	uint8_t  MemorySize;        // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
-	uint8_t  Reserved2[3];
-
-// compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
-	union {
-		uint16_t EMRS2Value;    // EMRS2 Value is used for GDDR2 and GDDR4 memory type
-		uint16_t DDR3_Reserved;
-	};
-	union {
-		uint16_t EMRS3Value;    // EMRS3 Value is used for GDDR2 and GDDR4 memory type
-		uint16_t DDR3_MR3;      // Used for DDR3 memory
-	};
-	uint8_t  MemoryVenderID;    // Predefined, If not predefined, vendor detection table gets executed
-	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
-	uint8_t  Reserved3[2];
-	struct atom_memory_timing_format MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
-};
-
+/*
 #define VRAM_MODULE_V4_MISC_RANK_MASK 0x3
 #define VRAM_MODULE_V4_MISC_DUAL_RANK 0x1
 #define VRAM_MODULE_V4_MISC_BL_MASK   0x4
 #define VRAM_MODULE_V4_MISC_BL8       0x4
 #define VRAM_MODULE_V4_MISC_DUAL_CS  0x10
+*/
+union vrammodule_misc {
+	uint8_t  Misc;
+	struct { uint8_t
+		dual_rank     :0-0 +1, // 0=single rank; 1=dual
+		Burstlength_8 :1-1 +1, // 0=BL4; 1=BL8
+		reserved1     :4-2 +1,
+		dual_cs       :5-5 +1,
+		reserved2     :7-6 +1;
+	};
+};
+
+struct atom_vram_module_v4 {
+	uint32_t ChannelMapCfg;   // board dependent parameter: Channel combination
+	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
+	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
+                              // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	uint16_t Reserved;
+	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
+	enum atom_dgpu_vram_type MemoryType;
+	uint8_t  ChannelNum;      // Number of channels present in this module config
+	uint8_t  ChannelWidth;    // 0 - 32 bits; 1 - 64 bits
+	enum DRAM_DENSITY_e Density;
+	uint8_t  Flag;            // To enable/disable functionalities based on memory type
+	union vrammodule_misc Misc;
+	uint8_t  VREFI;           // board dependent parameter
+	union npl_rtdelay NPL_RT;
+	union mem_preamble Preamble;
+	uint8_t  MemorySize;      // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
+                              // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
+	uint8_t  Reserved2[3];
+
+// compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
+	union {
+		uint16_t EMRS2Value;  // EMRS2 Value is used for GDDR2 and GDDR4 memory type
+		uint16_t DDR3_Reserved;
+	};
+	union {
+		uint16_t EMRS3Value;  // EMRS3 Value is used for GDDR2 and GDDR4 memory type
+		uint16_t DDR3_MR3;    // Used for DDR3 memory
+	};
+	union memory_vendor_id MemoryVenderID;
+	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
+	uint8_t  Reserved3[2];
+	struct atom_memory_timing_format MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
+};
+
+union cdr_bandwidth { // clock and data recovery?
+	uint8_t  CDR_Bandwidth;
+	struct { uint8_t
+		read_bandwidth  :3-0 +1,
+		write_bandwidth :7-4 +1;
+	};
+};
 
 struct atom_vram_module_v5 {
-	uint32_t ChannelMapCfg;     // board dependent parameter: Channel combination
-	uint16_t ModuleSize;        // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
-	uint16_t PrivateReserved;   // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	uint32_t ChannelMapCfg;   // board dependent parameter: Channel combination
+	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
+	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
+                              // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
-	uint8_t  ExtMemoryID;       // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
-	uint8_t  MemoryType;        // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
-	uint8_t  ChannelNum;        // Number of channels present in this module config
-	uint8_t  ChannelWidth;      // 0 - 32 bits; 1 - 64 bits
-	uint8_t  Density;           // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-	uint8_t  Flag;              // To enable/disable functionalities based on memory type
-	uint8_t  Misc;              // bit0: 0 - single rank; 1 - dual rank;   bit2: 0 - burstlength 4, 1 - burstlength 8
-	uint8_t  VREFI;             // board dependent parameter
-	uint8_t  NPL_RT;            // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
-	uint8_t  Preamble;          // [7:4] Write Preamble, [3:0] Read Preamble
-	uint8_t  MemorySize;        // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
+	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
+	enum atom_dgpu_vram_type MemoryType;
+	uint8_t  ChannelNum;      // Number of channels present in this module config
+	uint8_t  ChannelWidth;    // 0 - 32 bits; 1 - 64 bits
+	enum DRAM_DENSITY_e Density;
+	uint8_t  Flag;            // To enable/disable functionalities based on memory type
+	union vrammodule_misc Misc;
+	uint8_t  VREFI;           // board dependent parameter
+	union npl_rtdelay NPL_RT;
+	union mem_preamble Preamble;
+	uint8_t  MemorySize;      // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
+                              // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
 	uint8_t  Reserved3[3];
 
 // compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
 	uint16_t EMRS2Value;        // EMRS2 Value is used for GDDR2 and GDDR4 memory type
 	uint16_t EMRS3Value;        // EMRS3 Value is used for GDDR2 and GDDR4 memory type
-	uint8_t  MemoryVenderID;    // Predefined, If not predefined, vendor detection table gets executed
+	union memory_vendor_id MemoryVenderID;
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;         // FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth
-	uint8_t  CDR_Bandwidth;     // [0:3]=Read CDR bandwidth, [4:7] - Write CDR Bandwidth
+	union cdr_bandwidth CDR_Bandwidth;
 	struct atom_memory_timing_format_v1 MemTiming[5];// Memory Timing block sort from lower clock to higher clock
 };
 
@@ -7398,15 +7471,15 @@ struct atom_vram_module_v6 {
                                 // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
 	uint8_t  ExtMemoryID;       // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
-	uint8_t  MemoryType;        // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  ChannelNum;        // Number of channels present in this module config
 	uint8_t  ChannelWidth;      // 0 - 32 bits; 1 - 64 bits
-	uint8_t  Density;           // _8Mx32, _16Mx32, _16Mx16, _32Mx16
+	enum DRAM_DENSITY_e Density;
 	uint8_t  Flag;              // To enable/disable functionalities based on memory type
-	uint8_t  Misc;              // bit0: 0 - single rank; 1 - dual rank;   bit2: 0 - burstlength 4, 1 - burstlength 8
+	union vrammodule_misc Misc;
 	uint8_t  VREFI;             // board dependent parameter
-	uint8_t  NPL_RT;            // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
-	uint8_t  Preamble;          // [7:4] Write Preamble, [3:0] Read Preamble
+	union npl_rtdelay NPL_RT;
+	union mem_preamble Preamble;
 	uint8_t  MemorySize;        // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
                                 // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
 	uint8_t  Reserved2[3];
@@ -7414,10 +7487,10 @@ struct atom_vram_module_v6 {
 // compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
 	uint16_t EMRS2Value;        // EMRS2 Value is used for GDDR2 and GDDR4 memory type
 	uint16_t EMRS3Value;        // EMRS3 Value is used for GDDR2 and GDDR4 memory type
-	uint8_t  MemoryVenderID;    // Predefined, If not predefined, vendor detection table gets executed
+	union memory_vendor_id MemoryVenderID;
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;         // FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth
-	uint8_t  CDR_Bandwidth;     // [0:3]=Read CDR bandwidth, [4:7] - Write CDR Bandwidth
+	union cdr_bandwidth CDR_Bandwidth;
 	struct atom_memory_timing_format_v2 MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
 };
 
@@ -7428,28 +7501,34 @@ struct atom_vram_module_v7 {
 	uint16_t PrivateReserved;    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
 	uint8_t  ExtMemoryID;        // Current memory module ID
-	uint8_t  MemoryType;         // MEM_TYPE_DDR2/DDR3/GDDR3/GDDR5
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  ChannelNum;         // Number of mem. channels supported in this module
 	uint8_t  ChannelWidth;       // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-	uint8_t  Density;            // _8Mx32, _16Mx32, _16Mx16, _32Mx16
+	enum DRAM_DENSITY_e Density;
 	uint8_t  Reserve;            // In MC7x, the lower 4 bits are used as bit8-11 of memory size. In other MC code, it's not used.
-	uint8_t  Misc;               // RANK_OF_THISMEMORY etc.
+	union vrammodule_misc Misc;
 	uint8_t  VREFI;              // Not used.
-	uint8_t  NPL_RT;             // Round trip delay (MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2.
-	uint8_t  Preamble;           // [7:4] Write Preamble, [3:0] Read Preamble
+	union npl_rtdelay NPL_RT;
+	union mem_preamble Preamble;
 	uint8_t  MemorySize;         // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
 	uint16_t SEQSettingOffset;
 	uint8_t  Reserved;
 // Memory Module specific values
 	uint16_t EMRS2Value;         // EMRS2/MR2 Value.
 	uint16_t EMRS3Value;         // EMRS3/MR3 Value.
-	uint8_t  MemoryVenderID;     // [7:4] Revision, [3:0] Vendor code
+	union memory_vendor_id MemoryVenderID;
 	uint8_t  RefreshRateFactor;  // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;          // FIFO depth can be detected during vendor detection, here is hardcoded per memory
-	uint8_t  CDR_Bandwidth;      // [0:3]=Read CDR bandwidth, [4:7] - Write CDR Bandwidth
+	union cdr_bandwidth CDR_Bandwidth;
 	char8_t  strMemPNString[20]; // part number end with '0'.
 };
 
+union bank_col_counts {
+	struct { uint8_t
+		num_columns :1-0 +1, // encoded; actual = 8+n bits
+		num_banks   :3-2 +1; // encoded; actual = 2**(n+2) banks
+	};
+};
 
 struct atom_vram_module_v8 {
 // Design Specific Values
@@ -7458,12 +7537,12 @@ struct atom_vram_module_v8 {
 	uint16_t McRamCfg;           // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
 	uint8_t  ExtMemoryID;        // Current memory module ID
-	uint8_t  MemoryType;         // MEM_TYPE_DDR2/DDR3/GDDR3/GDDR5
+	enum atom_dgpu_vram_type MemoryType;
 	uint8_t  ChannelNum;         // Number of mem. channels supported in this module
 	uint8_t  ChannelWidth;       // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-	uint8_t  Density;            // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-	uint8_t  BankCol;            // bit[3:2]= BANK ( =2:16bank, =1:8bank, =0:4bank ) bit[1:0]=Col ( =2: 10 bit, =1:9bit, =0:8bit )
-	uint8_t  Misc;               // RANK_OF_THISMEMORY etc.
+	enum DRAM_DENSITY_e Density;
+	union bank_col_counts BankCol;
+	union vrammodule_misc Misc;
 	uint8_t  VREFI;              // Not used.
 	uint16_t Reserved;           // Not used
 	uint16_t MemorySize;         // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
@@ -7472,10 +7551,10 @@ struct atom_vram_module_v8 {
 // Memory Module specific values
 	uint16_t EMRS2Value;         // EMRS2/MR2 Value.
 	uint16_t EMRS3Value;         // EMRS3/MR3 Value.
-	uint8_t  MemoryVenderID;     // [7:4] Revision, [3:0] Vendor code
+	union memory_vendor_id MemoryVenderID;
 	uint8_t  RefreshRateFactor;  // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;          // FIFO depth can be detected during vendor detection, here is hardcoded per memory
-	uint8_t  CDR_Bandwidth;      // [0:3]=Read CDR bandwidth, [4:7] - Write CDR Bandwidth
+	union cdr_bandwidth CDR_Bandwidth;
 
 	uint32_t ChannelMapCfg1;     // channel mapping for channel8~15
 	uint32_t BankMapCfg;
@@ -7484,13 +7563,13 @@ struct atom_vram_module_v8 {
 };
 
 
-struct atom_vram_info_v2 {
+struct atom_vram_info_v1_2 {
 	struct atom_common_table_header table_header;
 	uint8_t  NumOfVRAMModule;
 	struct atom_vram_module_v3 aVramInfo[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
 
-struct atom_vram_info_v3 {
+struct atom_vram_info_v1_3 {
 	struct atom_common_table_header table_header;
 	uint16_t MemAdjustTblOffset;   // offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting
 	uint16_t MemClkPatchTblOffset; // offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting
@@ -7502,16 +7581,43 @@ struct atom_vram_info_v3 {
 
 };
 
-#define ATOM_VRAM_INFO_LAST        ATOM_VRAM_INFO_V3
+//#define ATOM_VRAM_INFO_LAST ATOM_VRAM_INFO_V3
 
-struct atom_vram_info_v4 {
+union mem_dq_7_0_byte_remap { // DQ line byte remap
+	uint8_t MemDQ7_0ByteRemap;
+	struct { uint8_t
+		byte0 :0-0 +1,
+		byte1 :1-1 +1,
+		byte2 :2-2 +1,
+		byte3 :3-3 +1,
+		byte4 :4-4 +1,
+		byte5 :5-5 +1,
+		byte6 :6-6 +1,
+		byte7 :7-7 +1;
+	};
+};
+
+union mem_dq_7_0_bit_remap {
+	uint32_t MemDQ7_0BitRemap;
+	struct { uint32_t
+		DQ0  :2-0 +1,
+		DQ1  :5-3 +1,
+		DQ2  :8-6 +1,
+		DQ3 :11-9 +1,
+		DQ4 :14-12 +1,
+		DQ5 :17-15 +1,
+		DQ6 :20-18 +1,
+		DQ7 :23-21 +1;
+	};
+};
+struct atom_vram_info_v1_4 {
 	struct atom_common_table_header table_header;
 	uint16_t MemAdjustTblOffset;   // offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting
 	uint16_t MemClkPatchTblOffset; // offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting
-	uint16_t Rerseved;
-	uint8_t  MemDQ7_0ByteRemap;    // DQ line byte remap, =0: Memory Data line BYTE0, =1: BYTE1, =2: BYTE2, =3: BYTE3
-	uint32_t MemDQ7_0BitRemap;     // each DQ line ( 7~0) use 3bits, like: DQ0=Bit[2:0], DQ1:[5:3], ... DQ7:[23:21]
-	uint8_t  Reservde[4];
+	uint16_t Reserved;
+	union mem_dq_7_0_byte_remap MemDQ7_0ByteRemap;
+	union mem_dq_7_0_bit_remap MemDQ7_0BitRemap;
+	uint8_t  Reserved2[4];
 	uint8_t  NumOfVRAMModule;
 	struct atom_vram_module_v4 aVramInfo[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 	struct atom_init_reg_block MemPatch; // for allocation
@@ -7626,7 +7732,7 @@ struct sw_i2c_io_data_parameters {
 /******************************************************************************/
 // VESA definition Portion
 /******************************************************************************/
-#define VESA_OEM_PRODUCT_REV '01.00'
+#define VESA_OEM_PRODUCT_REV "01.00"
 #define VESA_MODE_ATTRIBUTE_MODE_SUPPORT 0xBB // refer to VBE spec p.32, no TTY support
 #define VESA_MODE_WIN_ATTRIBUTE 7
 #define VESA_WIN_SIZE          64

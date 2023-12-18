@@ -3161,12 +3161,23 @@ struct atom_multimedia_info_v2_1 {
 /******************************************************************************/
 // Data Table umc_info  structure
 /******************************************************************************/
+
+// MC_MISC0__MEMORY_TYPE_*   ??
+// uint8_t  MemoryType;   ??
 enum atom_dgpu_vram_type:uint8_t {
+	//ATOM_DGPU_VRAM_TYPE_GDDR1 = 0x10,
+	//ATOM_DGPU_VRAM_TYPE_DDR1  = 0x20,
+	//ATOM_DGPU_VRAM_TYPE_DDR3  = 0x30,
+	//ATOM_DGPU_VRAM_TYPE_GDDR3 = 0x30,
+	//ATOM_DGPU_VRAM_TYPE_DDR4  = 0x40,
+	//ATOM_DGPU_VRAM_TYPE_GDDR4 = 0x40,
 	ATOM_DGPU_VRAM_TYPE_GDDR5 = 0x50,
+	//ATOM_DGPU_VRAM_TYPE_HBM   = 0x60,
 	ATOM_DGPU_VRAM_TYPE_HBM2  = 0x60,
 	ATOM_DGPU_VRAM_TYPE_HBM2E = 0x61,
 	ATOM_DGPU_VRAM_TYPE_GDDR6 = 0x70,
 	ATOM_DGPU_VRAM_TYPE_HBM3  = 0x80,
+	//ATOM_DGPU_VRAM_TYPE_DDR3  = 0xB0,
 };
 // umc_info.umc_config
 enum atom_umc_config_def_old {
@@ -3437,7 +3448,7 @@ struct umc_reg_settings_dummy { // dummy table for ATUI
 };
 struct atom_umc_init_reg_block { // not literal, topological only
 	uint16_t umc_reg_num;
-	uint16_t reserved;
+	uint16_t reserved; // RegDataBlkSize; likely umc_reg_setting_list as a whole
 
 	// for allocation purpose, the real number come from umc_reg_num;
 	union atom_umc_register_addr_info_access umc_reg_list[1];
