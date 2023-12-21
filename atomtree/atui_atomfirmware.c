@@ -237,6 +237,7 @@ def struct_to_atui(s):
 	#
 	print(s)
 
+
 def bitfield_to_atui(s):
 	import re
 	s = re.sub("(\n\t*)    ","\g<1>\t", s)
@@ -244,15 +245,27 @@ def bitfield_to_atui(s):
 	s = re.sub("(\n\t*)    ","\g<1>\t", s)
 	s = re.sub("(\n\t*)    ","\g<1>\t", s)
 	s = re.sub("[ \t]+\n", "\n", s)
-	s = s = re.sub("(union) ([a-zA-Z0-9_]+) {", "PPATUI_FUNCIFY(\g<1>, \g<2>, atui_nullstruct,",s)
-	s = re.sub("(PPATUI_FUNCIFY\([A-Za-z0-9_, ]+)(//.*)?\n((.*\n)+)?\s};\n};", "\g<1>\n\g<3>\t\t)), (ATUI_NODESCR)\g<2>\n\t)\n)", s)
-	s = re.sub("\(ATUI_NODESCR\)(\s*)//(\s*)(.*)", "((LANG_ENG, \"\g<3>\"))", s)
-	s = re.sub("[ \t]*uint[0-9]+_t[ \t]+([A-Za-z0-9_]+)[ \t]*;\s+struct { uint[0-9]+_t\n", "\t(bios->\g<1>, \"\g<1>\",\n\t\t(ATUI_BIN, ATUI_BITFIELD, (\n", s)
-	s = re.sub("([a-zA-Z0-9_]+)(\s*):([0-9]+)(\s*)-(\s*)([0-9]+)(\s*)\+1[,;][ \t]*", "\t(\"\g<1>\",\g<2>\g<3>\g<4>,\g<5>\g<6>, ATUI_DEC,", s)
-	s = re.sub("ATUI_DEC,(\s*)//(\s*)(.*)", "ATUI_DEC, ((LANG_ENG, \"\g<3>\"))),", s)
-	s = re.sub("ATUI_DEC,\n", "ATUI_DEC, (ATUI_NODESCR)),\n", s)
-	s = re.sub(",(\n\t\t\)\), )", "\g<1>", s)
+	#
+	# self (union):
+	s = re.sub("union\s+([a-zA-Z0-9_]+)\s*{", "PPATUI_FUNCIFY(union, \g<1>, atui_nullstruct,",s)
+	#
+	# raw data -> main bitfield leaf
+	s = re.sub("uint[0-9]+_t\s+([a-zA-Z0-9_]+);","(bios->\g<1>, \"\g<1>\",\n\t\t(ATUI_BIN, ATUI_BITFIELD, (", s)
+	#
+	# delete 'struct { type'
+	s = re.sub("\tstruct { uint[0-9]+_t\n", "", s)
+	#
+	# bitfield children:
+	s = re.sub("([a-zA-Z0-9_]+)( *):([0-9]+)-([0-9]+) \+1[,;]", "\t(\"\g<1>\",\g<2>\g<3>,\g<4>, ATUI_DEC, (ATUI_NODESCR)),", s)
+	#
+	# child comments:
+	s = re.sub(" \(ATUI_NODESCR\)\),(\s*)//\s*(.*)","\n\t\t\t\t((LANG_ENG, \"\g<2>\"))\n\t\t\t),",s)
+	#
+	# final:
+	s = re.sub(",\n\t};\n};", "\n\t\t)), (ATUI_NODESCR)\n\t)\n)", s)
 	print(s)
+
+
 */
 
 /* for atomfirmware.h */
