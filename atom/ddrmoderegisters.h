@@ -1,6 +1,39 @@
 /*
-Please refer to JESD 250. If unavailable consider,
+DDR1:
+Please refer to JESD 79 F.
+
+
+DDR2:
+Please refer to JESD 79-2 F.
+
+DDR3
+Please refer to JESD 79-3 F.
+
+
+GDDR2:
+Please refer to SDRAM 3.11.5.6 13.
+
+GDDR3:
+please refer to K4J52324QH-HJ08-Samsung-datasheet-17924974.pdf
+JEDEC is SDRAM 3.11.5.7, but is outdated.
+
+GDDR4:
+Please refer to SDRAM 3.11.5.8 16.01.
+
+GDDR5:
+Please refer to JESD 212 C.01.
+
+GDDR6:
+Please refer to JESD 250 D. If unavailable consider,
 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
+
+
+
+HBM1 and HBM2:
+Please refer to JESD 235 D.
+
+HBM3:
+Please refer to JESD 238 A.
 */
 
 #ifndef _DDRMODEREGISTERS_H_
@@ -8,34 +41,465 @@ Please refer to JESD 250. If unavailable consider,
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
+union ddr1_mr0 {
+	uint16_t ddr1_mr0;
+	struct { uint16_t
+		burst_length    :2-0 +1, // 1=BL2, 2=BL4, 3=BL8; all else reserved
+		burst_type      :3-3 +1, // 0=sequential, 1=interleave
+		tCL             :6-4 +1, // 2=2,3=3, 5=1.5,6=2.5, all else reseved
+		test_mode       :7-7 +1, // behaviour is vendor specific
+		DLL_reset       :8-8 +1, // self clearing
+		operating_rsvd :13-9 +1, // operation_mode reserved
+		ID             :15-14 +1;
+	};
+};
+union ddr1_emr1 {
+	uint16_t ddr1_emr1;
+	struct { uint16_t
+		DLL              :0-0 +1, // 0=enable
+		drive_strength   :1-1 +1, // 0=full, 1=reduced; (see SSTL_2, Class II)
+		reserved         :2-2 +1, // compatibility with early DDR1
+		operating_rsvd  :13-3 +1,
+		ID              :15-14 +1;
+	};
+};
+
+
+
+union ddr2_mr0 {
+	uint16_t ddr2_mr0;
+	struct { uint16_t
+		burst_length  :2-0 +1, // 2=BL4, 3=BL8; all else reserved
+		burst_type    :3-3 +1, // 0=sequential, 1=interleave
+		tCL           :6-4 +1, // tCL=n; 0,1,7=reserved
+		test_mode     :7-7 +1, // behaviour is vendor specific
+		DLL_reset     :8-8 +1, // self clearing
+		WR           :11-9 +1, // tWR = n+1
+		PD_exit_time :12-12 +1, // 0=fast, 1=slow
+		rsvd_15_13   :15-13 +1;
+	};
+};
+union ddr2_emr1 {
+	uint16_t ddr2_emr1;
+	struct { uint16_t
+		DLL              :0-0 +1, // 0=enable
+		drive_strength   :1-1 +1, // 0=full, 1=reduced
+		RTT_Nom_lo_bit   :2-2 +1, // A[6,2] -> Nom[1:0]
+		Additive_Latency :5-3 +1, // 0=0...  6+=reserved
+		RTT_Nom_hi_bit   :6-6 +1, // 0=disabled, 1=75 ohms, 2=150, 3=50
+		OCD_calibration  :9-7 +1, // 0=exit,1=drive1,2=drive2,4=adjust,7=default
+		DQS             :10-10 +1, // 0=enable
+		RDQS            :11-11 +1, // 0=disable
+		output_disable  :12-12 +1, // 1=turn off drivers for DQ, DQS, RDQS
+		rsvd_15_13      :15-13 +1;
+	};
+};
+union ddr2_emr2 {
+	uint16_t ddr2_emr2;
+	struct { uint16_t
+		PASR        :2-0 +1, // 0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111
+		DCC         :3-3 +1, // 0=disable; Duty Cycle Correction
+		rsvd_6_4    :6-4 +1, // reserved
+		HT_SRF      :7-7 +1, // 0=disable; hi-temp self-refresh mode
+		rsvd_12_8  :12-8 +1, // reserved
+		rsvd_15_13 :15-13 +1;
+	};
+};
+union ddr2_emr3 {
+	uint16_t ddr2_emr3;
+	struct { uint16_t
+		rsvd_15_0  :15-0 +1; // all reserved
+	};
+};
+
+
+
+union ddr3_mr0 {
+	uint16_t ddr3_mr0;
+	struct { uint16_t
+		burst_length    :1-0 +1, // 0=BL8, 1=OTF 4/8, 2=BC4, 3=reserved
+		CL_hi_bit       :2-2 +1, // A[2,6,5,4] -> CL[4:0]
+		read_burst_type :3-3 +1, // 0=nibble sequential, 1=interleave
+		CL_lo_bits      :6-4 +1, // tCL = 4+n
+		testmode        :7-7 +1, // behaviour is vendor specific
+		DLL_reset       :8-8 +1, // self clearing
+		WR             :11-9 +1, // tWR; 16,5,6,7,8,10,12,14
+		DLL_PPD        :12-12 +1, // 0=slow exit (DLL off), 1=fast (DLL on)
+		RFU_15_13      :15-13 +1;
+	};
+};
+union ddr3_mr1 {
+	uint16_t ddr3_mr1;
+	struct { uint16_t
+		DLL              :0-0 +1, // 0=enable
+		DrvStr_lo_bit    :1-1 +1, // 0=RZQ/6, 1=RZQ/7
+		RTTNom_lo_bit    :2-2 +1, // A[9,6,2] -> RTT_Nom[2:0]
+		Additive_Latency :4-3 +1, // 0=0, 1=tCL-1, 2=tCL-2, 3=reserved
+		DrvStr_hi_bit    :5-5 +1, // A[5,1] -> DrvStr[1:0]; 2,3=reserved
+		RTTNom_mid_bit   :6-6 +1, // 0=dis, RZQ/4, /2, /6, /12, /8,  6,7=rsvd
+		write_leveling   :7-7 +1, // 0=disabled
+		RFU_8            :8-8 +1, // reserved
+		RTTNom_hi_bit    :9-9 +1, // 2,4,6 only if writelevel on and drivers on
+		RFU_10          :10-10 +1, // reserved
+		TDQS            :11-11 +1, // 0=disabled; Termination Data Strobe pins
+		output_disable  :12-12 +1, // 1=turn off drivers for DQ, DQS, DQS#
+		RFU_15_13       :15-13 +1;
+	};
+};
+union ddr3_mr2 {
+	uint16_t ddr3_mr2;
+	struct { uint16_t
+		PASR       :2-0 +1, // 0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111
+		CWL        :5-3 +1, // tCWl = 5+n
+		ASR        :6-6 +1, // 0=manual; auto self refresh
+		SRT        :7-7 +1, // 0=normal, 1=extended; self refresh temp range
+		RFU_8      :8-8 +1, // reserved
+		RTT_WR    :10-9 +1, // 0=off, RZQ/4, /2, reserved
+		RFU_15_11 :15-11 +1;
+	};
+};
+union ddr3_mr3 {
+	uint16_t ddr3_mr3;
+	struct { uint16_t
+		MPR_location  :1-0 +1, // 0=predefined pattern for read sync, 1,2,3=RFU
+		MPR_operation :2-2 +1, // 0=normal, 1=dataflow from MPR
+		RFU_15_3     :15-3 +1;
+	};
+};
+
+
+union gddr2_mr0 {
+	uint16_t gddr2_mr0;
+	struct { uint16_t
+		burst_length :0-0 +1, // 0=4, 1=reserved
+		WL           :3-0 +1, // 1=1..7=7; 0=reserved
+		RL           :6-4 +1, // 8,9,10,rsvd,4,5,6,7
+		testmode     :7-7 +1, // behaviour is vendor specific
+		DLL_reset    :8-8 +1, // self clearing
+		WR          :11-9 +1, // tWR=n+1; 0,1,7=reserved
+		rsvd_15_12  :15-12 +1;
+	};
+};
+union gddr2_emr1 {
+	uint16_t gddr2_emr1;
+	struct { uint16_t
+		addrcmd_ODT      :1-0 +1, // 0=off 1=1xDQ, 2=2x, 3=4xDQ
+		data_ck_ODT      :3-2 +1, // 0=off, 1=auto cal., 2=60ohms, 3=120
+		additive_latency :4-4 +1, // 0=0, 1=1
+		DQS              :5-5 +1, // 0=differential, 1=single
+		DLL              :6-6 +1, // 0=off, 1=on
+		driver_Ron       :9-7 +1, // 0=60, 1=55 ... 7=25
+		rankness        :10-10 +1, // 0=single 1=multi
+		vendor_id       :11-11 +1, // 0=disabled 1=enabled
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr2_emr2 {
+	uint16_t gddr2_emr2;
+	struct { uint16_t
+		rsvd_1_0         :1-0 +1,
+		ODT_at_powerdown :2-2 +1, // 0=all off except CK, CKE, 1=EMRS/EMRS2
+		low_power_mode   :3-3 +1, // 0=self-refresh, 1=fast wakeup
+		CK_ODT           :5-4 +1, // 0=off, 1=1xDQ, 2=2x, 3=4xDQ
+		CS_ODT           :7-6 +1, // 0=off, 1=0.5x addrcmd, 2=1x, 3=reserved
+		CKE_ODT          :8-8 +1, // 0=off, 1=addrcmd
+		ODT_W_mode       :9-9 +1, // 0=enable 1=disable. "W" mode??
+		rsvd_11_10      :11-10 +1,
+		rsvd_15_12      :15-12 +1;
+	};
+};
+
+union gddr3_mr0 {
+	uint16_t gddr3_mr0;
+	struct { uint16_t
+		burst_length :1-0 +1, // 0,1=RFU, 2=BL4, 3=BL8
+		CL_hi_bit    :2-2 +1, // A[2,6,5,4]->tCL[3:0] | JEDEC says A[3] is for BL; BL[2:0]
+		burst_type   :3-3 +1, // 0=sequential 1=RFU
+		CL_lo_bits   :6-4 +1, // 8,9,10,11,rsvd,5,6,7,12,13,14,15, rsvd...
+		test_mode    :7-7 +1, // behaviour is vendor specific
+		DLL_reset    :8-8 +1, // self clearing
+		tWL         :11-9 +1, // 0=reserved; tCWL
+		rsvd_15_12  :15-12 +1;
+	};
+};
+union gddr3_emr1 {
+	uint16_t gddr3_emr1;
+	struct { uint16_t
+		drive_strength  :1-0 +1, // 0=auto cal. 1=30ohms, 2=40, 3=50
+		data_terminaton :3-2 +1, // 0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2
+		WR_lo_bits      :5-4 +1, // A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10
+		DLL             :6-6 +1, // 0=enable
+		rsvd_8_8        :8-8 +1, // reserved
+		R_on            :8-8 +1, // 0=40 ohms, 1=60 ohms; pull-up
+		vendor_ID      :10-10 +1, // 0=off
+		AddrCmd_term   :11-11 +1, // 0=inherit CKE, 1=CKE/2
+		rsvd_15_12     :15-12 +1;
+	};
+};
+
+
+
+union gddr4_mr0 {
+	uint16_t gddr4_mr0;
+	struct { uint16_t
+		WR        :2-0 +1, // Write recovery; 16,18,20, 6,8,10,12,14
+		tCL       :6-3 +1, // 16,17..21,22, 7,8,9..15
+		testmode  :7-7 +1, // behaviour is vendor specific
+		DLL_reset :8-8 +1, // self clearing
+		WL       :11-9 +1, // write latency; 0=RFU, 1=1..7=7
+		RFU_12   :12-12 +1, // reserved
+		ID       :15-13 +1; // MR 0
+	};
+};
+union gddr4_emr1 {
+	uint16_t gddr4_emr1;
+	struct { uint16_t
+		Drive_Term :1-0 +1, // 0=auto cal., 2=nominal (no compensation), 1,3=RFU. (drive: 40 down/60 up ; termination: 60/120; CA 60/120/240)
+		DQ_term    :3-2 +1, // 0=all off, 1=DQ off, 2=1/4, 3=1/2
+		tPreamble  :6-4 +1, // 0=1..  5..7=RFU. read/write preamble in tCK
+		DLL        :7-7 +1, // 0=enable
+		read_DBI   :8-8 +1, // 0=disable. data bus iversion
+		write_DBI  :9-9 +1, // 0=disable
+		DBI_mode  :10-10 +1, // 0=DC, 1=AC. optimise for DC/AC power reduction
+		Vendor_ID :11-11 +1, // 0=disable
+		RFU_12    :12-12 +1, // reserved
+		ID        :15-13 +1; // EMR 1
+	};
+};
+union gddr4_emr2 {
+	uint16_t gddr4_emr2;
+	struct { uint16_t
+		OCD_down_offset :2-0 +1, // Two's Compl. Driver/term pulldown offset
+		OCD_up_offset   :5-3 +1, // Two's Compl. Driver/terminator pullup offset
+		tRAS           :11-6 +1, // tRAS latency; 0=RFU, 1=1..63=63
+		RFU_12         :12-12 +1, // reserved
+		ID             :15-13 +1; // EMR 2
+	};
+};
+union gddr4_emr3 {
+	uint16_t gddr4_emr3;
+	struct { uint16_t
+		RFU           :4-0 +1, // reserved
+		LP_term       :5-5 +1, // 0=disabled
+		DRAM_info     :7-6 +1, // 0=vendor ID, 1=PERR_Info, 2,3=vendor specific
+		parity_reset  :8-8 +1, // 0=store, 1=reset; clear PERR_Info
+		parity_enable :9-9 +1, // 0=disable
+		parity_mask  :11-10 +1, // 0=DQ[7:0], 1=[15:8], 2=[23:16], 3=[31:24]
+		RFU_12       :12-12 +1, // reserved
+		ID           :15-13 +1; // EMR 3
+	};
+};
+
+
+
+union gddr5_mr0 {
+	uint16_t gddr5_mr0;
+	struct { uint16_t
+		WLmrs       :2-0 +1, // 0=RFU 1=1..7=7
+		CLmrs_lo    :6-3 +1, // tCL = 5+n. [MR8[0], MR0[6:3]] -> tCL[4:0]
+		testmode    :7-7 +1, // behavior is vendor specific
+		WR         :11-8 +1, // tWR = 4+n. [MR8[1], MR0[11:8]] -> tWR[4:0]
+		rsvd_15_12 :15-12 +1;
+	};
+};
+union gddr5_mr1 {
+	uint16_t gddr5_mr1;
+	struct { uint16_t
+		drive_strength     :1-0 +1, // 0=auto cal., 1,3=vendor, 2=nom (60/40)
+		data_termination   :3-2 +1, // 0=disabled, 1=ZQ, 2=ZQ/2, 3=RFU
+		addrcmd_term       :5-4 +1, // 0=inherit CKE_n, 1=ZQ, 2=ZQ/2, 3=disabled
+		calibration_update :6-6 +1, // 0=on; impedance calibration engine
+		PLL_DLL            :7-7 +1, // 0=off
+		read_DBI           :8-8 +1, // 0=on; data bus inversion
+		write_DBI          :9-9 +1, // 0=on; data bus inversion
+		address_BI        :10-10 +1, // 0=on; address bus inversion
+		PLLDLL_reset      :11-11 +1, // self clearing
+		rsvd_15_12        :15-12 +1;
+	};
+};
+union gddr5_mr2 {
+	uint16_t gddr5_mr2;
+	struct { uint16_t
+		drive_pulldown_offset :2-0 +1, // Two's Compl. vendor specific
+		drive_pullup_offset   :5-3 +1, // Two's Compl. vendor specific
+		data_wck_term_offset  :8-6 +1, // Two's Compl. vendor specific
+		AddrCmd_term_offset  :11-9 +1, // Two's Compl. vendor specific
+		rsvd_15_12           :15-12 +1;
+	};
+};
+union gddr5_mr3 {
+	uint16_t gddr5_mr3;
+	struct { uint16_t
+		self_refresh    :1-0 +1, // 0=32ms 1,2=vendor, 3=temp controlled
+		WCK01_invert    :2-2 +1, // phase invert
+		WCK23_invert    :3-3 +1, // phase invert
+		WCK2CK_training :4-4 +1, // 0=off; WCK to CK alignment training
+		RDQS_mode       :5-5 +1, // 0=off; EDC becomes RDQS
+		DRAM_info       :7-6 +1, // 0=off, 1=vendor ID, 2=temp, 3=vemdor spec.
+		WCK_termination :9-8 +1, // 0=dis, 1=ZQ/2, 2=ZQ, 3=RFU
+		bank_groups    :11-10 +1, // 0,1=off, 2=on tCCDL=4, 3=on tCCL=3
+		rsvd_15_12     :15-12 +1;
+	};
+};
+union gddr5_mr4 {
+	uint16_t gddr5_mr4;
+	struct { uint16_t
+		EDC_pattern  :3-0 +1, // little-endian-based burst position
+		CRCWL        :6-4 +1, // 7+n; CRC write latency
+		CRCRL        :8-8 +1, // 4,1,2,3; CRC read laency
+		read_CRC     :9-9 +1, // 0=on
+		write_crc   :10-10 +1, // 0=on
+		hold_invert :11-11 +1, // 1=inverted; EDC hold pattern inversion
+		rsvd_15_12  :15-12 +1;
+	};
+};
+union gddr5_mr5 {
+	uint16_t gddr5_mr5;
+	struct { uint16_t
+		LP1         :0-0 +1, // 0=off; power saving, relaxed core
+		LP2         :1-1 +1, // 0=off; power saving, WCK off during powerdown
+		LP3         :2-2 +1, // 0=off; training during refresh disabled
+		PLLDLL_BW   :5-3 +1, // vendor specific; PLL bandwidth
+		tRAS       :11-6 +1, // 0=RFU, 1=1..63=63
+		rsvd_15_12 :15-12 +1;
+	};
+};
+union gddr5_mr6 {
+	uint16_t gddr5_mr6;
+	struct { uint16_t
+		WCK2CK_alignment :0-0 +1, // 0=inside DRAM, 1=at balls
+		VREFD_merge      :1-1 +1, // 0=off 1=average VREFD and internal vref
+		VREFD_training   :2-2 +1, // 0=ff 1=train; self clearing
+		VREFD_source     :3-3 +1, // 0=VREFD pins, 1=internally generated
+		VREFD_offset_MU  :7-4 +1, // semi Two's Compl. -8 = 0/auto
+		VREFD_offset_AF :11-8 +1, // semi Two's Compl. -8 = 0/auto
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr7 {
+	uint16_t gddr5_mr7;
+	struct { uint16_t
+		PLL_standby     :0-0 +1, // 0=off 1=standby when self-refresh
+		PLL_fast_lock   :1-1 +1, // 1=faster lock but higher power; self clears
+		PLL_delay_comp  :2-2 +1, // 1=PLL feedback = WCK clock tree delay
+		low_freq_mode   :3-3 +1, // 1=reduced power for low freq
+		WCK2CK_autosync :4-4 +1, // 1=auto WCK2CK after PD exit
+		DQ_preamble     :5-5 +1, // 1=non-gapped READs will have 4UI preamble
+		temp_sensor     :6-6 +1, // 1=enable temperature sense
+		half_VREFD      :7-7 +1, // 0=0.7x 1=0.5x VDDQ
+		VDD_range       :9-8 +1, // 0=1.5V 1,2,3=vendor; adapt to different VDD
+		DCC            :11-10 +1, // 0=off, 1=start, 2=reset, 3=RFU; Duty Cycle Correction
+		rsvd_15_12     :15-12 +1;
+	};
+};
+union gddr5_mr8 {
+	uint16_t gddr5_mr8;
+	struct { uint16_t
+		CL_EHF      :0-0 +1, // tCL range extension; see MR0
+		WR_EHF      :1-1 +1, // tWR range extension; see MR0
+		EDC_HiZ     :2-2 +1, // 1=Hi-Z state; precedence over all other states
+		REFPB       :3-3 +1, // 1=per-bank refresh feature enable
+		rsvd_11_4  :11-4 +1, // reserved
+		rsvd_15_12 :15-12 +1;
+	};
+};
+union gddr5_mr9 {
+	uint16_t gddr5_mr9;
+	struct { uint16_t
+		vendor_specific :11-0 +1, // vendor specific features.
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr10 {
+	uint16_t gddr5_mr10;
+	struct { uint16_t
+		vendor_specific :11-0 +1, // vendor specific features.
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr11 {
+	uint16_t gddr5_mr11;
+	struct { uint16_t
+		PASR_banks_01   :0-0 +1, // exclude banks 0, 1
+		PASR_banks_23   :1-1 +1, // exclude banks 2, 3
+		PASR_banks_45   :2-2 +1, // exclude banks 4, 5
+		PASR_banks_67   :3-3 +1, // exclude banks 6, 7
+		PASR_banks_89   :4-4 +1, // exclude banks 8, 9
+		PASR_banks_1011 :5-5 +1, // exclude banks 10, 11
+		PASR_banks_1213 :6-6 +1, // exclude banks 12, 13
+		PASR_banks_1415 :7-7 +1, // exclude banks 14, 15
+		PASR_row_00     :8-8 +1, // exclude row segment A[13:12]=00 (MSB)
+		PASR_row_01     :9-9 +1, // exclude row segment A[13:12]=01 (MSB)
+		PASR_row_10    :10-10 +1, // exclude row segment A[13:12]=10 (MSB)
+		PASR_row_11    :11-11 +1, // exclude row segment A[13:12]=11 (MSB)
+		rsvd_15_12     :15-12 +1;
+	};
+	struct { uint16_t
+		PASR_bank_mask         :7-0 +1, // bank exclusion mask
+		PASR_row_segment_mask :11-8 +1, // row exclusion mask
+		rsvd_15_12__2         :15-12 +1;
+	};
+};
+union gddr5_mr12 {
+	uint16_t gddr5_mr12;
+	struct { uint16_t
+		vendor_specific :11-0 +1, // vendor specific features.
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr13 {
+	uint16_t gddr5_mr13;
+	struct { uint16_t
+		vendor_specific :11-0 +1, // vendor specific features.
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr14 {
+	uint16_t gddr5_mr14;
+	struct { uint16_t
+		vendor_specific :11-0 +1, // vendor specific features.
+		rsvd_15_12      :15-12 +1;
+	};
+};
+union gddr5_mr15 {
+	uint16_t gddr5_mr15;
+	struct { uint16_t
+		rsvd_7_0          :7-0 +1, 
+		MRE_0_disable     :8-8 +1, // 1=disable MRS commands on channel 0
+		MRE_1_disable     :9-9 +1, // 1=disable MRS commands on channel 1
+		address_training :10-10 +1, // 1=address training mode
+		RFU              :11-11 +1, // reserved
+		rsvd_15_12       :15-12 +1;
+	};
+};
+
+
 
 union gddr6_mr0 {
 	uint16_t gddr6_mr0; // raw data
 	struct { uint16_t
 		WLmrs    :2-0 +1, // tCWL, 8,9,10,11,12,5,6,7.
-		RLmrs    :6-3 +1, // tCL, starting from 5. See MR8 OP8, MR12 OP3
+		RLmrs_lo :6-3 +1, // tCL = 5+n. [MR12[3], MR8[8], MR0[6:3]] -> tCL[5:0]
 		testmode :7-7 +1, // Test mode; behavior is vendor specific
 		WRmrs   :11-8 +1, // tWR for auto-pre, 0=4,1=5..47=51. See MR8, MR12
 		ID      :15-12 +1; // MR 0
 	};
 };
-
 union gddr6_mr1 {
 	uint16_t gddr6_mr1; // raw data
 	struct { uint16_t
-		drive_stren  :1-0 +1, // 0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec
-		data_term    :3-2 +1, // 0=disabled 1=60ohm 2=120ohm 3=48ohm
-		PLLDLL_range :5-4 +1, // min-to-max WCK freq, vendor specific
-		Cal_Upd      :6-6 +1, // Auto Calibration Engine, 0=enabled.
-		PLL_DLL      :7-7 +1, // 0=disabled 1=enabled
-		RDBI         :8-8 +1, // Data Bus Inversion, for reads.   0=enabled
-		WDBI         :9-9 +1, // Data Bus Inversion, for writes.  1=disabled
-		CABI        :10-10 +1, // Command-address bus inversion.  0=enabled
-		PLLDLL_reset:14-11 +1, // 1 = reset. self-clears after reset.
-		ID          :15-12 +1; // MR 1
+		drive_stren   :1-0 +1, // 0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec
+		data_term     :3-2 +1, // 0=disabled 1=60ohm 2=120ohm 3=48ohm
+		PLLDLL_range  :5-4 +1, // min-to-max WCK freq, vendor specific
+		Cal_Upd       :6-6 +1, // Auto Calibration Engine, 0=enabled.
+		PLL_DLL       :7-7 +1, // 0=disabled 1=enabled
+		read_DBI      :8-8 +1, // Data Bus Inversion, for reads.   0=enabled
+		write_DBI     :9-9 +1, // Data Bus Inversion, for writes.  1=disabled
+		addrcmd_BI   :10-10 +1, // Command-address bus inversion.  0=enabled
+		PLLDLL_reset :14-11 +1, // 1 = reset. self-clears after reset.
+		ID           :15-12 +1; // MR 1
 	};
 };
-
 union gddr6_mr2 {
 	uint16_t gddr6_mr2; // raw data
 	struct { uint16_t
@@ -49,7 +513,6 @@ union gddr6_mr2 {
 		ID          :15-12 +1; // MR 2
 	};
 };
-
 union gddr6_mr3 {
 	uint16_t gddr6_mr3; // raw data
 	struct { uint16_t
@@ -61,8 +524,6 @@ union gddr6_mr3 {
 		ID                 :15-12 +1; // MR 3
 	};
 };
-
-
 union gddr6_mr4 {
 	uint16_t gddr6_mr4; // raw data
 	struct { uint16_t
@@ -75,7 +536,6 @@ union gddr6_mr4 {
 		ID              :15-12 +1; // MR 4
 	};
 };
-
 union gddr6_mr5 {
 	uint16_t gddr6_mr5; // raw data
 	struct { uint16_t
@@ -87,7 +547,6 @@ union gddr6_mr5 {
 		ID       :15-12 +1; // MR 5
 	};
 };
-
 union gddr6_mr6 {
 	uint16_t gddr6_mr6; // raw data
 	struct { uint16_t
@@ -96,7 +555,6 @@ union gddr6_mr6 {
 		ID          :15-12 +1; // MR 6
 	};
 };
-
 union gddr6_mr7 {
 	uint16_t gddr6_mr7; // raw data
 	struct { uint16_t
@@ -113,7 +571,6 @@ union gddr6_mr7 {
 		ID             :15-12 +1; // MR 7
 	};
 };
-
 union gddr6_mr8 {
 	uint16_t gddr6_mr8; // raw data
 	struct { uint16_t
@@ -129,7 +586,6 @@ union gddr6_mr8 {
 		ID          :15-12 +1; // MR 8
 	};
 };
-
 union gddr6_mr9 {
 	uint16_t gddr6_mr9; // raw data
 	struct { uint16_t
@@ -139,11 +595,10 @@ union gddr6_mr9 {
 		ID          :15-12 +1; // MR 9
 	};
 };
-
 union gddr6_mr10 {
 	uint16_t gddr6_mr10; // raw data
 	struct { uint16_t
-		VREFC_offset  :3-0 +1, // CA bus. Two's Complement? 0b1000=0 is a typo?
+		VREFC_offset  :3-0 +1, // CA bus. semi Two's Complement: -8=0
 		WCK_inv_byte0 :5-4 +1, // for WCK2CK training 0=0;1=90 degr;2=180;3=270
 		WCK_inv_byte1 :7-6 +1, // B1 on chan A, B0 on chan B ignored if WCK/word
 		WCK2CK        :8-8 +1, // 1=enable WCK2CK alignment training
@@ -152,19 +607,30 @@ union gddr6_mr10 {
 		ID           :15-12 +1; // MR 10
 	};
 };
-
 union gddr6_mr11 {
 	// 0=refresh enabled 1=refresh blocked for paticular segment or banks
 	uint16_t gddr6_mr11; // raw data
 	struct { uint16_t
-		PASR_2bank_mask  :7-0 +1,
-			// 1=banks0,1; 2=2,3; 4=4,5; 8=6,7 .. 128=14,15
-		PASR_rowseg_mask:11-8 +1,
-			// two MSB of row addr. 0=00;2=01;4=10;8=11 15=all
-	ID                  :15-12 +1; // MR 11
+		PASR_banks_01   :0-0 +1, // exclude banks 0, 1
+		PASR_banks_23   :1-1 +1, // exclude banks 2, 3
+		PASR_banks_45   :2-2 +1, // exclude banks 4, 5
+		PASR_banks_67   :3-3 +1, // exclude banks 6, 7
+		PASR_banks_89   :4-4 +1, // exclude banks 8, 9
+		PASR_banks_1011 :5-5 +1, // exclude banks 10, 11
+		PASR_banks_1213 :6-6 +1, // exclude banks 12, 13
+		PASR_banks_1415 :7-7 +1, // exclude banks 14, 15
+		PASR_row_00     :8-8 +1, // exclude row segment R[13:12]=00 (MSB)
+		PASR_row_01     :9-9 +1, // exclude row segment R[13:12]=01 (MSB)
+		PASR_row_10    :10-10 +1, // exclude row segment R[13:12]=10 (MSB)
+		PASR_row_11    :11-11 +1, // exclude row segment R[13:12]=11 (MSB)
+		ID             :15-12 +1; // MR 11
+	};
+	struct { uint16_t
+		PASR_bank_mask         :7-0 +1, // bank exclusion mask
+		PASR_row_segment_mask :11-8 +1, // row exclusion mask
+		ID__2                 :15-12 +1; // MR 11
 	};
 };
-
 union gddr6_mr12 {
 	uint16_t gddr6_mr12; // raw data
 	struct { uint16_t
@@ -178,7 +644,6 @@ union gddr6_mr12 {
 		ID       :15-12 +1; // MR 12
 	};
 };
-
 union gddr6_mr13 {
 	uint16_t gddr6_mr13; // raw data
 	struct { uint16_t
@@ -186,7 +651,6 @@ union gddr6_mr13 {
 		ID              :15-12 +1; // MR 13
 	};
 };
-
 union gddr6_mr14 {
 	uint16_t gddr6_mr14; // raw data
 	struct { uint16_t
@@ -194,7 +658,6 @@ union gddr6_mr14 {
 		ID              :15-12 +1; // MR 14
 	};
 };
-
 union gddr6_mr15 {
 	uint16_t gddr6_mr15; // raw data
 	struct { uint16_t
@@ -206,6 +669,262 @@ union gddr6_mr15 {
 	};
 };
 
+
+
+// HBM2 uses HBM1
+union hbm_mr0 {
+	uint8_t hbm_mr0;
+	struct { uint8_t
+		read_DBI       :0-0 +1, // 1=enable; data bus inversion, AC.
+		write_DBI      :1-1 +1, // 1=enable; data bus inversion, AC.
+		TCSR           :2-2 +1, // 1=enable; temperature-controlled self-refresh
+		rsvd_3_3       :3-3 +1, // reserved
+		read_parity    :4-4 +1, // 0=disable; DQ parity
+		write_parity   :5-5 +1, // 0=disable; DQ parity
+		addrcmd_parity :6-6 +1, // 0=disable; command-address parity
+		test_mode      :7-7 +1; // 1=Test mode; behavior is vendor specific
+	};
+};
+union hbm_mr1 {
+	uint8_t hbm_mr1;
+	struct { uint8_t
+		tWR       :4-0 +1, // 3=3,4=4...31=31. 0..2=reserved
+		nom_drive :7-5 +1; // 6mA,9,12,15,18, 5..7=reserved
+	};
+};
+union hbm_mr2 {
+	uint8_t hbm_mr2;
+	struct { uint8_t
+		WL :2-0 +1, // [MR4[4], MR2[2:0]] -> WL[3:0]; tWL=1+n
+		RL :7-3 +1; // [MR4[5], MR2[7:3]] -> RL[5:0]; tRL=2+n
+	};
+};
+union hbm_mr3 {
+	uint8_t hbm_mr3;
+	struct { uint8_t
+		tRAS         :5-0 +1, // 3=3... 63=63; 0,1,2=reserved
+		bank_groups  :6-6 +1, // 1=enable
+		burst_length :7-7 +1; // 0=BL2, 1=BL4
+	};
+};
+union hbm_mr4 {
+	uint8_t hbm_mr4;
+	struct { uint8_t
+		ECC      :0-0 +1, // 0=disabled; ECC and WDM are mutually exlusive.
+		WDM      :1-1 +1, // 0=enabled; write data mask
+		PL       :3-2 +1, // 0=0..3=3; parity latency
+		EWL      :4-4 +1, // extended write latency; see MR0
+		ERL      :5-5 +1, // extended read latency; see MR0
+		reserved :7-6 +1; // reserved
+	};
+};
+union hbm_mr5 {
+	uint8_t hbm_mr5;
+	struct { uint8_t
+		TRR_bank_address :3-0 +1, // 0=0; target bank of target row
+		reserved         :5-4 +1, // reserved
+		TRR_peudochannel :6-6 +1, // 0=PC0, 1=PC1
+		TRR_mode         :7-7 +1; // 0=disable; Target Row Refresh for rowhammer
+	};
+};
+union hbm_mr6 {
+	uint8_t hbm_mr6;
+	struct { uint8_t
+		reserved    :2-0 +1,
+		implicit_RP :7-3 +1; // tRP=n+2; imPRE has PRE implied with ACT.
+	};
+};
+union hbm_mr7 {
+	uint8_t hbm_mr7;
+	struct { uint8_t
+		DWORD_loopback :0-0 +1, // 0=disable; 1=link test (MISR) mode
+		DWORD_read_mux :2-1 +1, // 1=MISR regs, 2=Rx path, 3=LFSR sticky
+		DWORD_MISR     :5-3 +1, // 0=preset 0xAAAAA/0x00000, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write
+		reserved       :6-6 +1, // reserved
+		CATTRIP        :7-7 +1; // 0=clear pin, 1=assert to 1.
+	};
+};
+union hbm_mr8 {
+	uint8_t hbm_mr8;
+	struct { uint8_t
+		DA28_lockout :0-0 +1, // 1=if on chan A or E, hardlock DA port
+		reserved :7-1 +1; // reserved
+	};
+};
+union hbm_mr9 {
+	uint8_t hbm_mr9;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr10 {
+	uint8_t hbm_mr10;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr11 {
+	uint8_t hbm_mr11;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr12 {
+	uint8_t hbm_mr12;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr13 {
+	uint8_t hbm_mr13;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr14 {
+	uint8_t hbm_mr14;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm_mr15 {
+	uint8_t hbm_mr15;
+	struct { uint8_t
+		internal_vref :2-0 +1, // Two's: 0.50 - 0.04*n; 0=.50, 1=.46, 4=.54
+		reserved :7-3 +1; // reserved
+	};
+};
+// HBM2 uses HBM1
+
+
+union hbm3_mr0 {
+	uint8_t hbm3_mr0;
+	struct { uint8_t
+		read_DBI       :0-0 +1, // 1=enable; data bus inversion, AC.
+		write_DBI      :1-1 +1, // 1=enable; data bus inversion, AC.
+		TCSR           :2-2 +1, // 1=enable; temperature-controlled self-refresh
+		rsvd_3_3       :3-3 +1, // reserved
+		read_parity    :4-4 +1, // 0=disable; DQ parity
+		write_parity   :5-5 +1, // 0=disable; DQ parity
+		addrcmd_parity :6-6 +1, // 0=disable; command-address parity
+		test_mode      :7-7 +1; // 1=Test mode; behavior is vendor specific
+	};
+};
+union hbm3_mr1 {
+	uint8_t hbm3_mr1;
+	struct { uint8_t
+		tWL :4-0 +1, // 4=4..16=16,  0..3,17+ reserved
+		tPL :7-5 +1; // 0=0..4=4, 5+ reserved
+	};
+};
+union hbm3_mr2 {
+	uint8_t hbm3_mr2;
+	struct { uint8_t
+		tRL :7-0 +1; // 4=4..63=63,  0..3,64+ reserved
+	};
+};
+union hbm3_mr3 {
+	uint8_t hbm3_mr3;
+	struct { uint8_t
+		tWR :7-0 +1; // 4=4..63=63,  0..3,64+ reserved
+	};
+};
+union hbm3_mr4 {
+	uint8_t hbm3_mr4;
+	struct { uint8_t
+		tRAS :7-0 +1; // 4=4..63=63,  0..3,64+ reserved
+	};
+};
+union hbm3_mr5 {
+	uint8_t hbm3_mr5;
+	struct { uint8_t
+		tRTP :7-0 +1; // 2=2..15=15,  0,1 reserved
+	};
+};
+union hbm3_mr6 {
+	uint8_t hbm3_mr6;
+	struct { uint8_t
+		drive_down_strength :2-0 +1, // 0=8mA, 1=10, *2=12, 3=14, 4+ reserved
+		drive_up_strength   :5-3 +1, // 0=8mA, 1=10, *2=12, 3=14, 4+ reserved
+		reserved            :7-6 +1; // reserved
+	};
+};
+union hbm3_mr7 {
+	uint8_t hbm3_mr7;
+	struct { uint8_t
+		DWORD_loopback :0-0 +1, // 0=disable; 1=link test (MISR) mode
+		DWORD_read_mux :1-1 +1, // 0=MISR regs, 3=LFSR sticky
+		reserved_2_2   :2-2 +1, // reserved
+		DWORD_MISR     :5-3 +1, // 0=preset, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write
+		reserved_6_6   :6-6 +1, // reserved
+		CATTRIP        :7-7 +1; // 0=auto, 1=assert to 1.
+	};
+};
+union hbm3_mr8 {
+	uint8_t hbm3_mr8;
+	struct { uint8_t
+		DA_lockout         :0-0 +1, // 1=if on chan A or E, hardlock DA port
+		duty_cycle_monitor :1-1 +1, // 0=disabled
+		ECS_log_auto_clear :2-2 +1, // 0=disabled
+		WDQS2CK_training   :3-3 +1, // 0=disabled
+		RFM_levels         :5-4 +1, // 0=default, 1=A,2=B,3=C (1+ RFM required)
+		reserved           :7-6 +1; // reserved
+	};
+};
+union hbm3_mr9 {
+	uint8_t hbm3_mr9;
+	struct { uint8_t
+		metadata           :0-0 +1, // 1=read/writes have metadata
+		severity_reporting :1-1 +1, // 1=repoting
+		ECC_testmode       :2-2 +1, // 0=disable ECC engine test mode
+		ECC_test_pattern   :3-3 +1, // 0=CW0 (1's are errors), 1=CW1 (0=error)
+		ECS_via_REFab      :4-4 +1, // 0=disabled
+		ECS_during_SRF     :5-5 +1, // 0=disabled
+		ECS_multibit       :6-6 +1, // 0=correction of multibit errors disabled
+		ECS_logging        :7-7 +1; // 0=maintain, 1=reset
+	};
+};
+union hbm3_mr10 {
+	uint8_t hbm3_mr10;
+	struct { uint8_t
+		vendor_specific :7-0 +1;
+	};
+};
+union hbm3_mr11 {
+	uint8_t hbm3_mr11;
+	struct { uint8_t
+		DCA_WDQS0 :3-0 +1, // broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7
+		DCA_WDQS1 :7-4 +1; // broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7
+	};
+};
+union hbm3_mr12 {
+	uint8_t hbm3_mr12;
+	struct { uint8_t
+		vendor_specific :7-0 +1;
+	};
+};
+union hbm3_mr13 {
+	uint8_t hbm3_mr13;
+	struct { uint8_t
+		reserved :7-0 +1; // reserved
+	};
+};
+union hbm3_mr14 {
+	uint8_t hbm3_mr14;
+	struct { uint8_t
+		reserved_0_0 :0-0 +1, // reserved
+		VrefCA       :6-1 +1, // 0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)
+		reserved_7_7 :7-7 +1; // reserved
+	};
+};
+union hbm3_mr15 {
+	uint8_t hbm3_mr15;
+	struct { uint8_t
+		reserved_0_0 :0-0 +1, // reserved
+		VrefD        :6-1 +1, // 0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)
+		reserved_7_7 :7-7 +1; // reserved
+	};
+};
 
 #pragma pack(pop) // restore old packing
 
