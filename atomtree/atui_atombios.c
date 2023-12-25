@@ -1096,3 +1096,1305 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_2, atomtree_firmware_info,
 		((LANG_ENG, "New added comparing to previous version"))
 	)
 )
+
+
+
+PPATUI_FUNCIFY(union, memory_vendor_id, atui_nullstruct,
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("vendor_code", 3,0, ATUI_DEC,
+				((LANG_ENG, "GDDR vendor ID"))
+			),
+			("revision",    7,4, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, vram_module_channel_config, atui_nullstruct,
+	(bios->ChannelConfig, "ChannelConfig",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("channel_combo", 3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("channel_width", 7,4, ATUI_DEC,
+				((LANG_ENG, "in number of 2"))
+			)
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, npl_rtdelay, atui_nullstruct,
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("npl_round_trip",   3,0, ATUI_DEC,
+				((LANG_ENG, "MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2."))
+			),
+			("reserved",         5,4, ATUI_DEC, (ATUI_NODESCR)),
+			("battery_odt_mask", 7,6, ATUI_DEC, (ATUI_NODESCR))
+		)), ((LANG_ENG, "board dependent parameter:NPL round trip delay, used for calculate memory timing parameters"))
+	)
+)
+
+PPATUI_FUNCIFY(union, mem_preamble, atui_nullstruct,
+	(bios->Preamble, "Preamble",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("read",  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("write", 7,4, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, vrammodule_misc, atui_nullstruct,
+	(bios->Misc, "Misc",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("dual_rank",     0,0, ATUI_DEC,
+				((LANG_ENG, "0=single rank; 1=dual"))
+			),
+			("Burstlength_8", 1,1, ATUI_DEC,
+				((LANG_ENG, "0=BL4; 1=BL8"))
+			),
+			("reserved1",     4,2, ATUI_DEC, (ATUI_NODESCR)),
+			("dual_cs",       5,5, ATUI_DEC, (ATUI_NODESCR)),
+			("reserved2",     7,6, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, cdr_bandwidth, atui_nullstruct,
+	(bios->CDR_Bandwidth, "CDR_Bandwidth",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("read_bandwidth",  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("write_bandwidth", 7,4, ATUI_DEC, (ATUI_NODESCR))
+		)), ((LANG_ENG, "clock and data recovery?"))
+	)
+)
+
+PPATUI_FUNCIFY(union, bank_col_counts, atui_nullstruct,
+	(bios->BankCol, "BankCol",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("num_columns", 1,0, ATUI_DEC,
+				((LANG_ENG, "encoded; actual = 8+n bits"))
+			),
+			("num_banks",   3,2, ATUI_DEC,
+				((LANG_ENG, "encoded; actual = 2**(n+2) banks"))
+			)
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v1, atomtree_vram_module,
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->EMRSValue, "EMRSValue",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MRSValue, "MRSValue",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->MemoryDeviceCfg, "MemoryDeviceCfg",
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Row, "Row",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Row,in power of 2;"))
+	),
+	(bios->Column, "Column",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Column,in power of 2;"))
+	),
+	(bios->Bank, "Bank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Nunber of Bank;"))
+	),
+	(bios->Rank, "Rank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Rank, in power of 2"))
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of channel;"))
+	),
+	(bios->ChannelConfig, "ChannelConfig",
+		(ATUI_NODISPLAY, ATUI_INLINE, vram_module_channel_config),
+		(ATUI_NODESCR)
+	),
+	(bios->DefaultMVDDQ_ID, "DefaultMVDDQ_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;"))
+	),
+	(bios->DefaultMVDDC_ID, "DefaultMVDDC_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;"))
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v2, atomtree_vram_module,
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Flags, "Flags",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+	(bios->EngineClock, "EngineClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Override of default engine clock for particular memory type"))
+	),
+	(bios->MemoryClock, "MemoryClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Override of default memory clock for particular memory type"))
+	),
+	(bios->EMRS2Value, "EMRS2Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->EMRS3Value, "EMRS3Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->EMRSValue, "EMRSValue",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MRSValue, "MRSValue",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->MemoryDeviceCfg, "MemoryDeviceCfg",
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Row, "Row",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Row in power of 2"))
+	),
+	(bios->Column, "Column",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Column in power of 2"))
+	),
+	(bios->Bank, "Bank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Nunber of Bank"))
+	),
+	(bios->Rank, "Rank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Rank, in power of 2"))
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of channel"))
+	),
+	(bios->ChannelConfig, "ChannelConfig",
+		(ATUI_NODISPLAY, ATUI_INLINE, vram_module_channel_config),
+		(ATUI_NODESCR)
+	),
+	(bios->DefaultMVDDQ_ID, "DefaultMVDDQ_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;"))
+	),
+	(bios->DefaultMVDDC_ID, "DefaultMVDDC_ID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;"))
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_memory_timing_format, atomtree_vram_module,
+	(bios->ClkRange, "ClkRange",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
+	),
+	(bios->MR0, "MR0",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR1, "MR1",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->CL, "CL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->WL, "WL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRAS, "tRAS",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRC, "tRC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRFC, "tRFC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDR, "tRCDR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDW, "tRCDW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRP, "tRP",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRRD, "tRRD",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWR, "tWR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWTR, "tWTR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tPDIX, "tPDIX",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW, "tFAW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tAOND, "tAOND",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR2, "MR2",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "flag to control memory timing calculation. bit0= control EMRS2 Infineon"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_memory_timing_format_v1, atomtree_vram_module,
+	(bios->ClkRange, "ClkRange",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
+	),
+	(bios->MRS, "MRS",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "mode register"))
+	),
+	(bios->EMRS, "EMRS",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "extended mode register"))
+	),
+	(bios->CL, "CL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->WL, "WL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRAS, "tRAS",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRC, "tRC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRFC, "tRFC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDR, "tRCDR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDW, "tRCDW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRP, "tRP",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRRD, "tRRD",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWR, "tWR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWTR, "tWTR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tPDIX, "tPDIX",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW, "tFAW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tAOND, "tAOND",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->flag, "flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "flag to control memory timing calculation. bit0= control EMRS2 Infineon"))
+	),
+	(bios->tCCDL, "tCCDL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCRCRL, "tCRCRL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCRCWL, "tCRCWL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKE, "tCKE",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKRSE, "tCKRSE",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKRSX, "tCKRSX",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW32, "tFAW32",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR5, "MR5",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Terminator, "Terminator",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_memory_timing_format_v2, atomtree_vram_module,
+	(bios->ClkRange, "ClkRange",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
+	),
+	(bios->MRS, "MRS",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "mode register"))
+	),
+	(bios->EMRS, "EMRS",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "extended mode register"))
+	),
+	(bios->CL, "CL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->WL, "WL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRAS, "tRAS",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRC, "tRC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRFC, "tRFC",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDR, "tRCDR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRCDW, "tRCDW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRP, "tRP",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tRRD, "tRRD",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWR, "tWR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tWTR, "tWTR",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tPDIX, "tPDIX",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW, "tFAW",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tAOND, "tAOND",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->flag, "flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "flag to control memory timing calculation. bit0= control EMRS2 Infineon"))
+	),
+	(bios->tCCDL, "tCCDL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCRCRL, "tCRCRL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCRCWL, "tCRCWL",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKE, "tCKE",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKRSE, "tCKRSE",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tCKRSX, "tCKRSX",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->tFAW32, "tFAW32",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR4, "MR4",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR5, "MR5",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Terminator, "Terminator",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_memory_format, atomtree_vram_module,
+	(bios->DllDisClock, "DllDisClock",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "memory DLL will be disable when target memory clock is below this clock"))
+	),
+	(bios->MR2, "MR2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR3, "MR3",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->Row, "Row",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Row,in power of 2;"))
+	),
+	(bios->Column, "Column",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Column,in power of 2;"))
+	),
+	(bios->Bank, "Bank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Nunber of Bank;"))
+	),
+	(bios->Rank, "Rank",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of Rank, in power of 2"))
+	),
+	(bios->BurstSize, "BurstSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "burst size, 0= burst size=4  1= burst size=8"))
+	),
+	(bios->DllDisBit, "DllDisBit",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "position of DLL Enable/Disable bit in EMRS ( Extended Mode Register )"))
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "memory refresh rate in unit of ms"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Preamble, "Preamble",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_preamble),
+		(ATUI_NODESCR)
+	),
+	(bios->MemAttrib, "MemAttrib",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Memory Device Addribute, like RDBI/WDBI etc"))
+	),
+	(bios->MemTiming, "MemTiming", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "MemTiming [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->num_memory_timing_format, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent paramenter:Channel combination"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "size of ATOM_VRAM_MODULE_V3"))
+	),
+	(bios->DefaultMVDDQ, "DefaultMVDDQ",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Default Memory Core Voltage"))
+	),
+	(bios->DefaultMVDDC, "DefaultMVDDC",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Default Memory IO Voltage"))
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Number of channel;"))
+	),
+	(bios->ChannelSize, "ChannelSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:32bit or 64bit"))
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependnt parameter: EXT or INT +160mv to -140mv"))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Flag, "Flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+	(bios->Memory, "Memory",
+		(ATUI_NAN, ATUI_PETIOLE, atom_memory_format),
+		((LANG_ENG, "describe all of video memory parameters from memory spec"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter: Channel combination"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
+	),
+	(bios->PrivateReserved, "PrivateReserved",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of channels present in this module config"))
+	),
+	(bios->ChannelWidth, "ChannelWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0 - 32 bits; 1 - 64 bits"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Flag, "Flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+	(bios->Misc, "Misc",
+		(ATUI_NODISPLAY, ATUI_INLINE, vrammodule_misc),
+		(ATUI_NODESCR)
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter"))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Preamble, "Preamble",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_preamble),
+		(ATUI_NODESCR)
+	),
+	(bios->MemorySize, "MemorySize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros"))
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR2, "MR2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MR3, "MR3",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->MemTiming, "MemTiming", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "MemTiming [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->num_memory_timing_format, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter: Channel combination"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
+	),
+	(bios->PrivateReserved, "PrivateReserved",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of channels present in this module config"))
+	),
+	(bios->ChannelWidth, "ChannelWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0 - 32 bits; 1 - 64 bits"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Flag, "Flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+	(bios->Misc, "Misc",
+		(ATUI_NODISPLAY, ATUI_INLINE, vrammodule_misc),
+		(ATUI_NODESCR)
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter"))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Preamble, "Preamble",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_preamble),
+		(ATUI_NODESCR)
+	),
+	(bios->MemorySize, "MemorySize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros"))
+	),
+	(bios->Reserved3, "Reserved3",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->EMRS2Value, "EMRS2Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->EMRS3Value, "EMRS3Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->FIFODepth, "FIFODepth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth"))
+	),
+	(bios->CDR_Bandwidth, "CDR_Bandwidth",
+		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
+		(ATUI_NODESCR)
+	),
+	(bios->MemTiming, "MemTiming", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "MemTiming [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format_v1),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->num_memory_timing_format, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter: Channel combination"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
+	),
+	(bios->PrivateReserved, "PrivateReserved",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of channels present in this module config"))
+	),
+	(bios->ChannelWidth, "ChannelWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "0 - 32 bits; 1 - 64 bits"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Flag, "Flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+	(bios->Misc, "Misc",
+		(ATUI_NODISPLAY, ATUI_INLINE, vrammodule_misc),
+		(ATUI_NODESCR)
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter"))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Preamble, "Preamble",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_preamble),
+		(ATUI_NODESCR)
+	),
+	(bios->MemorySize, "MemorySize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros"))
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->EMRS2Value, "EMRS2Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->EMRS3Value, "EMRS3Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->FIFODepth, "FIFODepth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth"))
+	),
+	(bios->CDR_Bandwidth, "CDR_Bandwidth",
+		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
+		(ATUI_NODESCR)
+	),
+	(bios->MemTiming, "MemTiming", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "MemTiming [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format_v2),
+				(ATUI_NODESCR)
+			),
+			NULL, atomtree->num_memory_timing_format, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "mmMC_SHARED_CHREMAP"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Size of ATOM_VRAM_MODULE_V7"))
+	),
+	(bios->PrivateReserved, "PrivateReserved",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
+	),
+	(bios->EnableChannels, "EnableChannels",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "bit vector which indicate which channels are enabled"))
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Current memory module ID"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of mem. channels supported in this module"))
+	),
+	(bios->ChannelWidth, "ChannelWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->Reserve, "Reserve",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "In MC7x, the lower 4 bits are used as bit8-11 of memory size. In other MC code, it's not used."))
+	),
+	(bios->Misc, "Misc",
+		(ATUI_NODISPLAY, ATUI_INLINE, vrammodule_misc),
+		(ATUI_NODESCR)
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Not used."))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Preamble, "Preamble",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_preamble),
+		(ATUI_NODESCR)
+	),
+	(bios->MemorySize, "MemorySize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros"))
+	),
+	(bios->SEQSettingOffset, "SEQSettingOffset",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->EMRS2Value, "EMRS2Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS2/MR2 Value."))
+	),
+	(bios->EMRS3Value, "EMRS3Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS3/MR3 Value."))
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->FIFODepth, "FIFODepth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "FIFO depth can be detected during vendor detection, here is hardcoded per memory"))
+	),
+	(bios->CDR_Bandwidth, "CDR_Bandwidth",
+		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
+		(ATUI_NODESCR)
+	),
+	(bios->strMemPNString, "strMemPNString",
+		(ATUI_NAN, ATUI_ARRAY),
+		((LANG_ENG, "part number end with '0'."))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "mmMC_SHARED_CHREMAP"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Size of ATOM_VRAM_MODULE_V7"))
+	),
+	(bios->McRamCfg, "McRamCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
+	),
+	(bios->EnableChannels, "EnableChannels",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "bit vector which indicate which channels are enabled"))
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Current memory module ID"))
+	),
+	(bios->MemoryType, "MemoryType",
+		(ATUI_HEX, ATUI_ENUM, atom_dgpu_vram_type),
+		(ATUI_NODESCR)
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Number of mem. channels supported in this module"))
+	),
+	(bios->ChannelWidth, "ChannelWidth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
+	),
+	(bios->Density, "Density",
+		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_NODESCR)
+	),
+	(bios->BankCol, "BankCol",
+		(ATUI_NODISPLAY, ATUI_INLINE, bank_col_counts),
+		(ATUI_NODESCR)
+	),
+	(bios->Misc, "Misc",
+		(ATUI_NODISPLAY, ATUI_INLINE, vrammodule_misc),
+		(ATUI_NODESCR)
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Not used."))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Not used"))
+	),
+	(bios->MemorySize, "MemorySize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "Total memory size in unit of MB for CONFIG_MEMSIZE zeros"))
+	),
+	(bios->McTunningSetId, "McTunningSetId",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "MC phy registers set per."))
+	),
+	(bios->RowNum, "RowNum",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->EMRS2Value, "EMRS2Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS2/MR2 Value."))
+	),
+	(bios->EMRS3Value, "EMRS3Value",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "EMRS3/MR3 Value."))
+	),
+	(bios->MemoryVendorID, "MemoryVendorID",
+		(ATUI_NODISPLAY, ATUI_INLINE, memory_vendor_id),
+		(ATUI_NODESCR)
+	),
+	(bios->RefreshRateFactor, "RefreshRateFactor",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
+	),
+	(bios->FIFODepth, "FIFODepth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "FIFO depth can be detected during vendor detection, here is hardcoded per memory"))
+	),
+	(bios->CDR_Bandwidth, "CDR_Bandwidth",
+		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
+		(ATUI_NODESCR)
+	),
+
+	(bios->ChannelMapCfg1, "ChannelMapCfg1",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "channel mapping for channel8~15"))
+	),
+	(bios->BankMapCfg, "BankMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->strMemPNString, "strMemPNString",
+		(ATUI_NAN, ATUI_ARRAY),
+		((LANG_ENG, "part number end with '0'."))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_v1_2, atomtree_vram_info_v1_2,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->NumOfVRAMModule, "NumOfVRAMModule",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_v1_3, atomtree_vram_info_v1_3,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->MemAdjustTblOffset, "MemAdjustTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting"))
+	),
+	(bios->MemClkPatchTblOffset, "MemClkPatchTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->aVID_PinsShift, "aVID_PinsShift",
+		(ATUI_HEX, ATUI_ARRAY),
+		((LANG_ENG, "8 bit strap maximum+terminator"))
+	),
+	(bios->NumOfVRAMModule, "NumOfVRAMModule",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(union, mem_dq_7_0_byte_remap, atui_nullstruct,
+	(bios->MemDQ7_0ByteRemap, "MemDQ7_0ByteRemap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("byte0", 0,0, ATUI_DEC, (ATUI_NODESCR)),
+			("byte1", 1,1, ATUI_DEC, (ATUI_NODESCR)),
+			("byte2", 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			("byte3", 3,3, ATUI_DEC, (ATUI_NODESCR)),
+			("byte4", 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			("byte5", 5,5, ATUI_DEC, (ATUI_NODESCR)),
+			("byte6", 6,6, ATUI_DEC, (ATUI_NODESCR)),
+			("byte7", 7,7, ATUI_DEC, (ATUI_NODESCR))
+		)), ((LANG_ENG, "DQ line byte remap"))
+	)
+)
+PPATUI_FUNCIFY(union, mem_dq_7_0_bit_remap, atui_nullstruct,
+	(bios->MemDQ7_0BitRemap, "MemDQ7_0BitRemap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("DQ0",  2,0, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ1",  5,3, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ2",  8,6, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ3", 11,9, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ4", 14,12, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ5", 17,15, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ6", 20,18, ATUI_DEC, (ATUI_NODESCR)),
+			("DQ7", 23,21, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_v1_4, atomtree_vram_info_v1_4,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->MemAdjustTblOffset, "MemAdjustTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting"))
+	),
+	(bios->MemClkPatchTblOffset, "MemClkPatchTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->MemDQ7_0ByteRemap, "MemDQ7_0ByteRemap",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_dq_7_0_byte_remap),
+		(ATUI_NODESCR)
+	),
+	(bios->MemDQ7_0BitRemap, "MemDQ7_0BitRemap",
+		(ATUI_NODISPLAY, ATUI_INLINE, mem_dq_7_0_bit_remap),
+		(ATUI_NODESCR)
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->NumOfVRAMModule, "NumOfVRAMModule",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_1,
+		atomtree_vram_info_header_v2_1,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->MemAdjustTblOffset, "MemAdjustTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting"))
+	),
+	(bios->MemClkPatchTblOffset, "MemClkPatchTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting"))
+	),
+	(bios->PerBytePresetOffset, "PerBytePresetOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for Per Byte Offset Preset Settings"))
+	),
+	(bios->Reserved, "Reserved",
+		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	),
+	(bios->NumOfVRAMModule, "NumOfVRAMModule",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate number of VRAM module"))
+	),
+	(bios->MemoryClkPatchTblVer, "MemoryClkPatchTblVer",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "version of memory AC timing register list"))
+	),
+	(bios->VramModuleVer, "VramModuleVer",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate ATOM_VRAM_MODUE version"))
+	),
+	(bios->Reserved2, "Reserved2",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v7),
+				(ATUI_NODESCR)
+			),
+			NULL, bios->NumOfVRAMModule, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
+	)
+)
+
+PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_2,
+		atomtree_vram_info_header_v2_2,
+	(bios->table_header, "table_header",
+		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
+		(ATUI_NODESCR)
+	),
+	(bios->MemAdjustTblOffset, "MemAdjustTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting"))
+	),
+	(bios->MemClkPatchTblOffset, "MemClkPatchTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting"))
+	),
+	(bios->McAdjustPerTileTblOffset, "McAdjustPerTileTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for Per Byte Offset Preset Settings"))
+	),
+	(bios->McPhyInitTableOffset, "McPhyInitTableOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_INIT_REG_BLOCK structure for MC phy init set"))
+	),
+	(bios->DramDataRemapTblOffset, "DramDataRemapTblOffset",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset of ATOM_DRAM_DATA_REMAP array to indicate DRAM data lane to GPU mapping"))
+	),
+	(bios->Reserved1, "Reserved1",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->NumOfVRAMModule, "NumOfVRAMModule",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate number of VRAM module"))
+	),
+	(bios->MemoryClkPatchTblVer, "MemoryClkPatchTblVer",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "version of memory AC timing register list"))
+	),
+	(bios->VramModuleVer, "VramModuleVer",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate ATOM_VRAM_MODUE version"))
+	),
+	(bios->McPhyTileNum, "McPhyTileNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
+	),
+	(bios->vram_module, "vram_module", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "vram_module [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v8),
+				(ATUI_NODESCR)
+			),
+			NULL, bios->NumOfVRAMModule, // deferred start, count
+			ATUI_NULL // enum
+		)),
+		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
+	)
+)
+

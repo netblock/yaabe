@@ -208,6 +208,7 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 };
 
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
+#define atomtree_init_reg_block atomtree_umc_init_reg_block // TODO remove
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
@@ -234,6 +235,73 @@ struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
 	//struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
 };
 */
+
+struct atomtree_vram_module {
+	union {
+		void* leaves;
+		struct atom_vram_module_v1* v1_1;
+		struct atom_vram_module_v2* v1_2;
+		struct atom_vram_module_v3* v1_3;
+		struct atom_vram_module_v4* v1_4;
+		struct atom_vram_module_v5* v1_5;
+		struct atom_vram_module_v6* v1_6;
+		struct atom_vram_module_v7* v1_7;
+		struct atom_vram_module_v8* v1_8;
+		struct atom_vram_module_v9* v1_9;
+		struct atom_vram_module_v11* v1_11;
+		struct atom_vram_module_v3_0* v3_0;
+	};
+	enum atomtree_common_version ver;
+	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
+
+	// v3.0
+	void* dram_info;
+	void* mem_tuning;
+	void* tmrs_seq;
+};
+
+#define ATOMTREE_VRAM_MODULES_MAX 4 // keep score.
+struct atomtree_vram_info_v1_2 {
+	struct atom_vram_info_v1_2* leaves; // nonzero if populated
+
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+};
+
+struct atomtree_vram_info_v1_3 {
+	struct atom_vram_info_v1_3* leaves; // nonzero if populated
+
+	struct atomtree_init_reg_block mem_adjust_table;
+	struct atomtree_init_reg_block mem_clk_patch;
+
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+};
+
+struct atomtree_vram_info_v1_4 {
+	struct atom_vram_info_v1_4* leaves; // nonzero if populated
+
+	struct atomtree_init_reg_block mem_adjust_table;
+	struct atomtree_init_reg_block mem_clk_patch;
+
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+};
+
+struct atomtree_vram_info_header_v2_1 {
+	struct atom_vram_info_header_v2_1* leaves; // nonzero if populated
+
+	struct atomtree_init_reg_block mem_adjust_table;
+	struct atomtree_init_reg_block mem_clk_patch;
+	struct atomtree_init_reg_block per_byte_preset;
+};
+
+struct atomtree_vram_info_header_v2_2 {
+	struct atom_vram_info_header_v2_2* leaves; // nonzero if populated
+
+	struct atomtree_init_reg_block mem_adjust_table;
+	struct atomtree_init_reg_block mem_clk_patch;
+	struct atomtree_init_reg_block mc_adjust_pertile;
+	struct atomtree_init_reg_block mc_phyinit;
+	struct atom_dram_data_remap* dram_data_remap;
+};
 
 struct atomtree_vram_info_header_v2_3 {
 	struct atom_vram_info_header_v2_3* leaves; // nonzero if populated
@@ -331,6 +399,11 @@ struct atomtree_vram_info {
 
 	enum atomtree_common_version ver;
 	union {
+		struct atomtree_vram_info_v1_2 v1_2;
+		struct atomtree_vram_info_v1_3 v1_3;
+		struct atomtree_vram_info_v1_4 v1_4;
+		struct atomtree_vram_info_header_v2_1 v2_1;
+		struct atomtree_vram_info_header_v2_2 v2_2;
 		struct atomtree_vram_info_header_v2_3 v2_3;
 		struct atomtree_vram_info_header_v2_4 v2_4;
 		struct atomtree_vram_info_header_v2_5 v2_5;

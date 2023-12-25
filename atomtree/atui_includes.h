@@ -130,6 +130,17 @@ PPATUI_HEADERIFY(atom_firmware_info_v2_1);
 PPATUI_HEADERIFY(atom_firmware_info_v2_2);
 
 
+PPATUI_HEADERIFY(atom_vram_module_v3);
+PPATUI_HEADERIFY(atom_vram_module_v4);
+PPATUI_HEADERIFY(atom_vram_module_v5);
+PPATUI_HEADERIFY(atom_vram_module_v6);
+
+PPATUI_HEADERIFY(atom_vram_info_v1_2);
+PPATUI_HEADERIFY(atom_vram_info_v1_3);
+PPATUI_HEADERIFY(atom_vram_info_v1_4);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_1);
+PPATUI_HEADERIFY(atom_vram_info_header_v2_2);
+
 /******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
 
