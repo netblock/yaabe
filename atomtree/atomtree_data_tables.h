@@ -251,7 +251,6 @@ struct atomtree_vram_module {
 		struct atom_vram_module_v11* v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
-	enum atomtree_common_version ver;
 	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
 
 	// v3.0
@@ -260,10 +259,11 @@ struct atomtree_vram_module {
 	void* tmrs_seq;
 };
 
-#define ATOMTREE_VRAM_MODULES_MAX 4 // keep score.
+#define ATOMTREE_VRAM_MODULES_MAX (3+1) // keep score.
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves; // nonzero if populated
 
+	enum atomtree_common_version vram_module_ver;
 	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
@@ -273,6 +273,7 @@ struct atomtree_vram_info_v1_3 {
 	struct atomtree_init_reg_block mem_adjust_table;
 	struct atomtree_init_reg_block mem_clk_patch;
 
+	enum atomtree_common_version vram_module_ver;
 	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
@@ -282,6 +283,7 @@ struct atomtree_vram_info_v1_4 {
 	struct atomtree_init_reg_block mem_adjust_table;
 	struct atomtree_init_reg_block mem_clk_patch;
 
+	enum atomtree_common_version vram_module_ver;
 	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
@@ -291,6 +293,9 @@ struct atomtree_vram_info_header_v2_1 {
 	struct atomtree_init_reg_block mem_adjust_table;
 	struct atomtree_init_reg_block mem_clk_patch;
 	struct atomtree_init_reg_block per_byte_preset;
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v2_2 {
@@ -301,6 +306,9 @@ struct atomtree_vram_info_header_v2_2 {
 	struct atomtree_init_reg_block mc_adjust_pertile;
 	struct atomtree_init_reg_block mc_phyinit;
 	struct atom_dram_data_remap* dram_data_remap;
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v2_3 {

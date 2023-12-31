@@ -129,11 +129,17 @@ PPATUI_HEADERIFY(atom_firmware_info_v1_4);
 PPATUI_HEADERIFY(atom_firmware_info_v2_1);
 PPATUI_HEADERIFY(atom_firmware_info_v2_2);
 
-
+PPATUI_HEADERIFY(atom_vram_module_v1);
+PPATUI_HEADERIFY(atom_vram_module_v2);
+PPATUI_HEADERIFY(atom_memory_timing_format_v0);
+PPATUI_HEADERIFY(atom_memory_timing_format_v1);
+PPATUI_HEADERIFY(atom_memory_timing_format_v2);
 PPATUI_HEADERIFY(atom_vram_module_v3);
 PPATUI_HEADERIFY(atom_vram_module_v4);
 PPATUI_HEADERIFY(atom_vram_module_v5);
 PPATUI_HEADERIFY(atom_vram_module_v6);
+PPATUI_HEADERIFY(atom_vram_module_v7);
+PPATUI_HEADERIFY(atom_vram_module_v8);
 
 PPATUI_HEADERIFY(atom_vram_info_v1_2);
 PPATUI_HEADERIFY(atom_vram_info_v1_3);

@@ -689,6 +689,356 @@ atomtree_populate_umc_init_reg_block(
 }
 
 
+inline static void
+atomtree_populate_atom_memory_timing_format_v0(
+		atui_branch* parent,
+		enum atom_dgpu_vram_type memory_type,
+		struct atom_memory_timing_format_v0* format_v0_array,
+		uint8_t count
+		) {
+
+	uint8_t i;
+	atui_branch* atui_formattimings;
+	atui_branch* atui_mrs[3] = {NULL};
+
+	for (i=0; i < count; i++) {
+		switch (memory_type) { // mrs in straps
+			case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
+				atui_mrs[0] = ATUI_MAKE_BRANCH(ddr3_mr0,
+					NULL,  NULL,&(format_v0_array[i].MR0),  0,NULL
+				);
+				atui_mrs[1] = ATUI_MAKE_BRANCH(ddr3_mr1,
+					NULL,  NULL,&(format_v0_array[i].MR1),  0,NULL
+				);
+				atui_mrs[2] = ATUI_MAKE_BRANCH(ddr3_mr2,
+					NULL,  NULL,&(format_v0_array[i].MR2),  0,NULL
+				);
+				break;
+			case ATOM_DGPU_VRAM_TYPE_GDDR3:
+				atui_mrs[0] = ATUI_MAKE_BRANCH(gddr3_mr0,
+					NULL,  NULL,&(format_v0_array[i].MR0),  0,NULL
+				);
+				atui_mrs[1] = ATUI_MAKE_BRANCH(gddr3_emr1,
+					NULL,  NULL,&(format_v0_array[i].MR1),  0,NULL
+				);
+				// GDDR3 has no MR2
+				break;
+			case ATOM_DGPU_VRAM_TYPE_GDDR4:
+				atui_mrs[0] = ATUI_MAKE_BRANCH(gddr4_mr0,
+					NULL,  NULL,&(format_v0_array[i].MR0),  0,NULL
+				);
+				atui_mrs[1] = ATUI_MAKE_BRANCH(gddr4_emr1,
+					NULL,  NULL,&(format_v0_array[i].MR1),  0,NULL
+				);
+				atui_mrs[2] = ATUI_MAKE_BRANCH(gddr4_emr2,
+					NULL,  NULL,&(format_v0_array[i].MR2),  0,NULL
+				);
+				break;
+			default:
+				break;
+		};
+		atui_formattimings = ATUI_MAKE_BRANCH(atom_memory_timing_format_v0,
+			NULL,  NULL,&(format_v0_array[i]),
+			sizeof(atui_mrs)/sizeof(atui_branch*), atui_mrs
+		);
+		sprintf(atui_formattimings->name, "MemTiming (%u MHz)",
+			(format_v0_array[i].ClkRange/100)
+		);
+		ATUI_ADD_BRANCH(parent, atui_formattimings);
+	}
+}
+
+
+inline static atui_branch*
+atomtree_populate_vram_module(
+		struct atomtree_vram_module* vram_modules,
+		enum atomtree_common_version ver,
+		void* start,
+		uint8_t count,
+		bool generate_atui
+		) {
+
+	assert(count <= ATOMTREE_VRAM_MODULES_MAX);
+
+	void* vram_module_offset = start;
+	enum atom_dgpu_vram_type memory_type;
+	uint8_t num_memory_timing_format;
+	uint8_t i=0;
+
+	atui_branch* atui_module_entry;
+	atui_branch* atui_vrammodules = NULL;
+	atui_branch* atui_mrs[2] = {NULL};
+	if (generate_atui) {
+		atui_vrammodules = ATUI_MAKE_BRANCH(atui_nullstruct,
+			NULL,  NULL,NULL,  count,NULL
+		);
+	}
+
+	switch(ver) {
+		case v1_3: // atom_vram_module_v3. Will look very similar to v4
+			for(i=0; i < count; i++) {
+				vram_modules[i].v1_3 = vram_module_offset;
+				vram_modules[i].num_memory_timing_format = (
+					(vram_modules[i].v1_3->ModuleSize
+					- offsetof(struct atom_vram_module_v3, MemTiming)
+					) / sizeof(struct atom_memory_timing_format_v0)
+				);
+				vram_module_offset += vram_modules[i].v1_3->ModuleSize;
+			}
+
+			if (generate_atui) {
+				for (i=0; i < count; i++) {
+					num_memory_timing_format =
+							vram_modules[i].num_memory_timing_format;
+					memory_type = vram_modules[i].v1_3->MemoryType;
+
+					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v3,
+						NULL,  &(vram_modules[i]), vram_modules[i].v1_3,
+						(2+num_memory_timing_format), NULL // 2 is for MRs
+					);
+					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
+
+					assert(vram_modules[i].v1_3->MemoryVendorID.vendor_code
+						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
+							/ sizeof(struct atui_enum) )
+					);
+					sprintf(atui_module_entry->name, "%s (%s)",
+						atui_module_entry->varname,
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+							vram_modules[i].v1_3->MemoryVendorID.vendor_code
+						].name
+					);
+
+					switch (memory_type) { // mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(ddr3_mr2, NULL,
+									NULL,&(vram_modules[i].v1_3->MR2),  0,NULL
+								)
+							);
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(ddr3_mr3, NULL,
+									NULL,&(vram_modules[i].v1_3->MR3),  0,NULL
+								)
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR4:
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(gddr4_emr2, NULL,
+									NULL,&(vram_modules[i].v1_3->MR2),  0,NULL
+								)
+							);
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(gddr4_emr3, NULL,
+									NULL,&(vram_modules[i].v1_3->MR3),  0,NULL
+								)
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR3: // GDDR3 has no MR2,MR3
+						default:
+							break;
+					};
+
+					atomtree_populate_atom_memory_timing_format_v0(
+						atui_module_entry,
+						memory_type,
+						vram_modules[i].v1_3->MemTiming,
+						num_memory_timing_format
+					);
+				} // v3 per-module loop
+				strcpy(atui_vrammodules->name, atui_module_entry->varname);
+			} // v3 generate atui
+			break;
+
+		case v1_4: // atom_vram_module_v4. Will look very similar to v3
+			for(i=0; i < count; i++) {
+				vram_modules[i].v1_4 = vram_module_offset;
+				vram_modules[i].num_memory_timing_format = (
+					(vram_modules[i].v1_4->ModuleSize
+					- offsetof(struct atom_vram_module_v4, MemTiming)
+					) / sizeof(struct atom_memory_timing_format_v0)
+				);
+				vram_module_offset += vram_modules[i].v1_4->ModuleSize;
+			}
+
+			if (generate_atui) {
+				for (i=0; i < count; i++) {
+					num_memory_timing_format =
+							vram_modules[i].num_memory_timing_format;
+					memory_type = vram_modules[i].v1_4->MemoryType;
+
+					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v4,
+						NULL,  &(vram_modules[i]), vram_modules[i].v1_4,
+						(2+num_memory_timing_format), NULL // 2 is for MRs
+					);
+					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
+
+					assert(vram_modules[i].v1_4->MemoryVendorID.vendor_code
+						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
+							/ sizeof(struct atui_enum) )
+					);
+					sprintf(atui_module_entry->name, "%s (%s)",
+						atui_module_entry->varname,
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+							// make an assert? for loop?
+							vram_modules[i].v1_4->MemoryVendorID.vendor_code
+						].name
+					);
+
+					switch (memory_type) { // mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(ddr3_mr2, NULL,
+									NULL,&(vram_modules[i].v1_4->MR2),  0,NULL
+								)
+							);
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(ddr3_mr3, NULL,
+									NULL,&(vram_modules[i].v1_4->MR3),  0,NULL
+								)
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR4:
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(gddr4_emr2, NULL,
+									NULL,&(vram_modules[i].v1_4->MR2),  0,NULL
+								)
+							);
+							ATUI_ADD_BRANCH(atui_module_entry,
+								ATUI_MAKE_BRANCH(gddr4_emr3, NULL,
+									NULL,&(vram_modules[i].v1_4->MR3),  0,NULL
+								)
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR3: // GDDR3 has no MR2,MR3
+						default:
+							break;
+					};
+
+					atomtree_populate_atom_memory_timing_format_v0(
+						atui_module_entry,
+						memory_type,
+						vram_modules[i].v1_4->MemTiming,
+						num_memory_timing_format
+					);
+
+				} // v4 per-module loop
+				strcpy(atui_vrammodules->name, atui_module_entry->varname);
+			} // v4 generate atui
+			break;
+
+		case v1_7:
+			for(i=0; i < count; i++) {
+				vram_modules[i].v1_7 = vram_module_offset;
+				vram_module_offset += vram_modules[i].v1_7->ModuleSize;
+			}
+			if (generate_atui) {
+				for (i=0; i < count; i++) {
+					memory_type = vram_modules[i].v1_7->MemoryType;
+					switch (memory_type) { // mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_GDDR5:
+							atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr2,  NULL,
+								NULL,&(vram_modules[i].v1_7->MR2),  0,NULL
+							);
+							atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr3,  NULL,
+								NULL,&(vram_modules[i].v1_7->MR3),  0,NULL
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_HBM:
+							atui_mrs[0] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
+								NULL,&(vram_modules[i].v1_7->MR2),  0,NULL
+							);
+							atui_mrs[1] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
+								NULL,&(vram_modules[i].v1_7->MR3),  0,NULL
+							);
+							break;
+						default:
+							break;
+					};
+
+					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v7,
+						NULL,  &(vram_modules[i]), vram_modules[i].v1_7,
+						2, atui_mrs // 2 is for MRs
+					);
+					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
+
+					assert(vram_modules[i].v1_7->MemoryVendorID.vendor_code
+						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
+							/ sizeof(struct atui_enum) )
+					);
+					sprintf(atui_module_entry->name, "%s (%s)",
+						atui_module_entry->varname,
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+							// make an assert? for loop?
+							vram_modules[i].v1_7->MemoryVendorID.vendor_code
+						].name
+					);
+				} // v7 per-module loop
+				strcpy(atui_vrammodules->name, atui_module_entry->varname);
+			} // v7 generate atui
+			break;
+		case v1_8:
+			for(i=0; i < count; i++) {
+				vram_modules[i].v1_7 = vram_module_offset;
+				vram_module_offset += vram_modules[i].v1_7->ModuleSize;
+			}
+			if (generate_atui) {
+				for (i=0; i < count; i++) {
+					memory_type = vram_modules[i].v1_8->MemoryType;
+					switch (memory_type) { // mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_GDDR5:
+							atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr2,  NULL,
+								NULL,&(vram_modules[i].v1_8->MR2),  0,NULL
+							);
+							atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr3,  NULL,
+								NULL,&(vram_modules[i].v1_8->MR3),  0,NULL
+							);
+							break;
+						case ATOM_DGPU_VRAM_TYPE_HBM:
+							atui_mrs[0] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
+								NULL,&(vram_modules[i].v1_8->MR2),  0,NULL
+							);
+							atui_mrs[1] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
+								NULL,&(vram_modules[i].v1_8->MR3),  0,NULL
+							);
+							break;
+						default:
+							break;
+					};
+
+					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v8,
+						NULL,  &(vram_modules[i]), vram_modules[i].v1_8,
+						2, atui_mrs // 2 is for MRs
+					);
+					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
+
+					assert(vram_modules[i].v1_8->MemoryVendorID.vendor_code
+						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
+							/ sizeof(struct atui_enum) )
+					);
+					sprintf(atui_module_entry->name, "%s (%s)",
+						atui_module_entry->varname,
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+							// make an assert? for loop?
+							vram_modules[i].v1_8->MemoryVendorID.vendor_code
+						].name
+					);
+				} // v8 per-module loop
+				strcpy(atui_vrammodules->name, atui_module_entry->varname);
+			} // v8 generate atui
+			break;
+
+		case v1_1:
+		case v1_2:
+		case v1_5:
+		case v1_6:
+		default:
+			assert(0); // TODO implement
+			break;
+	}
+	return atui_vrammodules;
+}
+
 inline static atui_branch*
 atomtree_populate_vram_info_v1_2(
 		struct atomtree_vram_info* vram_info,
@@ -698,36 +1048,21 @@ atomtree_populate_vram_info_v1_2(
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
 	vi12->leaves = vram_info->leaves;
 
-	uint8_t i;
-
-	void* vram_module_offset = &(vi12->leaves->vram_module[0]);
-	assert(vi12->leaves->NumOfVRAMModule <= ATOMTREE_VRAM_MODULES_MAX);
-	for(i = 0; i < vi12->leaves->NumOfVRAMModule; i++) {
-		vi12->vram_modules[i].ver = v1_3;
-		vi12->vram_modules[i].v1_3 = vram_module_offset;
-		vi12->vram_modules[i].num_memory_timing_format = (
-			(vi12->vram_modules[i].v1_3->ModuleSize
-			- offsetof(struct atom_vram_module_v3, Memory.MemTiming)
-			) / sizeof(struct atom_memory_timing_format)
+	vi12->vram_module_ver = v1_3;
+	atui_branch* atui_vrammodules = NULL;
+	if (vi12->leaves->NumOfVRAMModule) {
+		atui_vrammodules = atomtree_populate_vram_module(
+			vi12->vram_modules, vi12->vram_module_ver,
+			vi12->leaves->vram_module, vi12->leaves->NumOfVRAMModule,
+			generate_atui
 		);
-		vram_module_offset += vi12->vram_modules[i].v1_3->ModuleSize;
 	}
 
-	atui_branch* atui_tmp_branch;
 	atui_branch* atui_vi = NULL;
 	if(generate_atui) {
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_2,
-			NULL,  vi12,vi12->leaves, vi12->leaves->NumOfVRAMModule,NULL
+			NULL,  vi12,vi12->leaves,  1,&atui_vrammodules
 		);
-		for(i = 0; i < vi12->leaves->NumOfVRAMModule; i++) {
-			atui_tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v3,  NULL,
-				&(vi12->vram_modules[i]), vi12->vram_modules[i].v1_3,  0,NULL
-			);
-			sprintf(atui_tmp_branch->name, "%s [%02u]",
-				atui_tmp_branch->varname, i
-			);
-			ATUI_ADD_BRANCH(atui_vi, atui_tmp_branch);
-		}
 	}
 
 	return atui_vi;
@@ -781,46 +1116,25 @@ atomtree_populate_vram_info_v1_3(
 		vi13->mem_clk_patch.leaves = NULL;
 	}
 
-	void* vram_module_offset = &(vi13->leaves->vram_module[0]);
-	assert(vi13->leaves->NumOfVRAMModule <= ATOMTREE_VRAM_MODULES_MAX);
-	for (i = 0; i < vi13->leaves->NumOfVRAMModule; i++) {
-		vi13->vram_modules[i].ver = v1_3;
-		vi13->vram_modules[i].v1_3 = vram_module_offset;
-		vi13->vram_modules[i].num_memory_timing_format = (
-			(vi13->vram_modules[i].v1_3->ModuleSize
-			- offsetof(struct atom_vram_module_v3, Memory.MemTiming)
-			) / sizeof(struct atom_memory_timing_format)
+	vi13->vram_module_ver = v1_3;
+	atui_branch* atui_vrammodules = NULL;
+	if (vi13->leaves->NumOfVRAMModule) {
+		atui_vrammodules = atomtree_populate_vram_module(
+			vi13->vram_modules, vi13->vram_module_ver,
+			vi13->leaves->vram_module, vi13->leaves->NumOfVRAMModule,
+			generate_atui
 		);
-		vram_module_offset += vi13->vram_modules[i].v1_3->ModuleSize;
 	}
 
-	atui_branch* atui_tmp_branch;
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi13_children[] = {
-			atui_memadjust, atui_memclkpatch
+			atui_memadjust, atui_memclkpatch, atui_vrammodules
 		};
-		const uint8_t num_children = (
-			sizeof(vi13_children)/sizeof(atui_branch*)
-			+ vi13->leaves->NumOfVRAMModule
-		);
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_3,
-			NULL,  vi13,vi13->leaves,  num_children, NULL
+			NULL,  vi13,vi13->leaves,
+			(sizeof(vi13_children)/sizeof(atui_branch*)), vi13_children
 		);
-		for (i = 0; i < (sizeof(vi13_children)/sizeof(atui_branch*)); i++) {
-			if (vi13_children[i]) {
-				ATUI_ADD_BRANCH(atui_vi, vi13_children[i]);
-			}
-		}
-		for (i = 0; i < vi13->leaves->NumOfVRAMModule; i++) {
-			atui_tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v3,  NULL,
-				&(vi13->vram_modules[i]), vi13->vram_modules[i].v1_3,  0,NULL
-			);
-			sprintf(atui_tmp_branch->name, "%s [%02u]",
-				atui_tmp_branch->varname, i
-			);
-			ATUI_ADD_BRANCH(atui_vi, atui_tmp_branch);
-		}
 	}
 
 	return atui_vi;
@@ -871,46 +1185,25 @@ atomtree_populate_vram_info_v1_4(
 		vi14->mem_clk_patch.leaves = NULL;
 	}
 
-	void* vram_module_offset = &(vi14->leaves->vram_module[0]);
-	assert(vi14->leaves->NumOfVRAMModule <= ATOMTREE_VRAM_MODULES_MAX);
-	for (i = 0; i < vi14->leaves->NumOfVRAMModule; i++) {
-		vi14->vram_modules[i].ver = v1_4;
-		vi14->vram_modules[i].v1_4 = vram_module_offset;
-		vi14->vram_modules[i].num_memory_timing_format = (
-			(vi14->vram_modules[i].v1_4->ModuleSize
-			- offsetof(struct atom_vram_module_v4, MemTiming)
-			) / sizeof(struct atom_memory_timing_format)
+	vi14->vram_module_ver = v1_4;
+	atui_branch* atui_vrammodules = NULL;
+	if (vi14->leaves->NumOfVRAMModule) {
+		atui_vrammodules = atomtree_populate_vram_module(
+			vi14->vram_modules, vi14->vram_module_ver,
+			vi14->leaves->vram_module, vi14->leaves->NumOfVRAMModule,
+			generate_atui
 		);
-		vram_module_offset += vi14->vram_modules[i].v1_4->ModuleSize;
 	}
 
-	atui_branch* atui_tmp_branch;
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi14_children[] = {
-			atui_memadjust, atui_memclkpatch
+			atui_memadjust, atui_memclkpatch, atui_vrammodules,
 		};
-		const uint8_t num_children = (
-			sizeof(vi14_children)/sizeof(atui_branch*)
-			+ vi14->leaves->NumOfVRAMModule
-		);
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_4,
-			NULL,  vi14,vi14->leaves,  num_children,NULL
+			NULL,  vi14,vi14->leaves,
+			(sizeof(vi14_children)/sizeof(atui_branch*)), vi14_children
 		);
-		for (i = 0; i < sizeof(vi14_children)/sizeof(atui_branch*); i++) {
-			if (vi14_children[i]) {
-				ATUI_ADD_BRANCH(atui_vi, vi14_children[i]);
-			}
-		}
-		for (i = 0; i < vi14->leaves->NumOfVRAMModule; i++) {
-			atui_tmp_branch = ATUI_MAKE_BRANCH(atom_vram_module_v3,  NULL,
-				&(vi14->vram_modules[i]), vi14->vram_modules[i].v1_3,  0,NULL
-			);
-			sprintf(atui_tmp_branch->name, "%s [%02u]",
-				atui_tmp_branch->varname, i
-			);
-			ATUI_ADD_BRANCH(atui_vi, atui_tmp_branch);
-		}
 	}
 
 	return atui_vi;
@@ -976,14 +1269,25 @@ atomtree_populate_vram_info_v2_1(
 		vi21->per_byte_preset.leaves = NULL;
 	}
 
+	vi21->vram_module_ver = v1_7;
+	atui_branch* atui_vrammodules = NULL;
+	if (vi21->leaves->NumOfVRAMModule) {
+		atui_vrammodules = atomtree_populate_vram_module(
+			vi21->vram_modules, vi21->vram_module_ver,
+			vi21->leaves->vram_module, vi21->leaves->NumOfVRAMModule,
+			generate_atui
+		);
+	}
+
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi21_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_perbytepreset
+			atui_memadjust, atui_memclkpatch, atui_perbytepreset,
+			atui_vrammodules
 		};
-		const uint8_t num_children = sizeof(vi21_children)/sizeof(atui_branch*);
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_1,
-			NULL,  vi21,vi21->leaves,  num_children,vi21_children
+			NULL,  vi21,vi21->leaves,
+			sizeof(vi21_children)/sizeof(atui_branch*), vi21_children
 		);
 	}
 
@@ -1076,14 +1380,25 @@ atomtree_populate_vram_info_v2_2(
 		vi22->dram_data_remap = NULL;
 	}
 
+	vi22->vram_module_ver = v1_8;
+	atui_branch* atui_vrammodules = NULL;
+	if (vi22->leaves->NumOfVRAMModule) {
+		atui_vrammodules = atomtree_populate_vram_module(
+			vi22->vram_modules, vi22->vram_module_ver,
+			vi22->leaves->vram_module, vi22->leaves->NumOfVRAMModule,
+			generate_atui
+		);
+	}
+
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi22_children[] = {
-			atui_memadjust, atui_memclkpatch, 
+			atui_memadjust, atui_memclkpatch,
+			atui_vrammodules
 		};
-		const uint8_t num_children = sizeof(vi22_children)/sizeof(atui_branch*);
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_2,
-			NULL,  vi22,vi22->leaves,  num_children,vi22_children
+			NULL,  vi22,vi22->leaves,
+			sizeof(vi22_children)/sizeof(atui_branch*),vi22_children
 		);
 	}
 

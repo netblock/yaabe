@@ -1264,11 +1264,11 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v2, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Override of default memory clock for particular memory type"))
 	),
-	(bios->EMRS2Value, "EMRS2Value",
+	(bios->MR2, "MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
 	),
-	(bios->EMRS3Value, "EMRS3Value",
+	(bios->MR3, "MR3",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
 	),
@@ -1337,7 +1337,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v2, atomtree_vram_module,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_memory_timing_format, atomtree_vram_module,
+PPATUI_FUNCIFY(struct, atom_memory_timing_format_v0, atomtree_vram_module,
 	(bios->ClkRange, "ClkRange",
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
@@ -1578,7 +1578,49 @@ PPATUI_FUNCIFY(struct, atom_memory_timing_format_v2, atomtree_vram_module,
 	)
 )
 
-PPATUI_FUNCIFY(struct, atom_memory_format, atomtree_vram_module,
+
+PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
+	(bios->ChannelMapCfg, "ChannelMapCfg",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent paramenter:Channel combination"))
+	),
+	(bios->ModuleSize, "ModuleSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "size of ATOM_VRAM_MODULE_V3"))
+	),
+	(bios->DefaultMVDDQ, "DefaultMVDDQ",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Default Memory Core Voltage"))
+	),
+	(bios->DefaultMVDDC, "DefaultMVDDC",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Default Memory IO Voltage"))
+	),
+	(bios->ExtMemoryID, "ExtMemoryID",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
+	),
+	(bios->ChannelNum, "ChannelNum",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:Number of channel;"))
+	),
+	(bios->ChannelSize, "ChannelSize",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependent parameter:32bit or 64bit"))
+	),
+	(bios->VREFI, "VREFI",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "board dependnt parameter: EXT or INT +160mv to -140mv"))
+	),
+	(bios->NPL_RT, "NPL_RT",
+		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
+		(ATUI_NODESCR)
+	),
+	(bios->Flag, "Flag",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, "To enable/disable functionalities based on memory type"))
+	),
+
 	(bios->DllDisClock, "DllDisClock",
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "memory DLL will be disable when target memory clock is below this clock"))
@@ -1636,65 +1678,6 @@ PPATUI_FUNCIFY(struct, atom_memory_format, atomtree_vram_module,
 	(bios->MemAttrib, "MemAttrib",
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Memory Device Addribute, like RDBI/WDBI etc"))
-	),
-	(bios->MemTiming, "MemTiming", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "MemTiming [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format),
-				(ATUI_NODESCR)
-			),
-			NULL, atomtree->num_memory_timing_format, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
-	)
-)
-
-
-PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
-	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent paramenter:Channel combination"))
-	),
-	(bios->ModuleSize, "ModuleSize",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "size of ATOM_VRAM_MODULE_V3"))
-	),
-	(bios->DefaultMVDDQ, "DefaultMVDDQ",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter:Default Memory Core Voltage"))
-	),
-	(bios->DefaultMVDDC, "DefaultMVDDC",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter:Default Memory IO Voltage"))
-	),
-	(bios->ExtMemoryID, "ExtMemoryID",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "An external indicator (by hardcode, callback or pin) to tell what is the current memory module"))
-	),
-	(bios->ChannelNum, "ChannelNum",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter:Number of channel;"))
-	),
-	(bios->ChannelSize, "ChannelSize",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter:32bit or 64bit"))
-	),
-	(bios->VREFI, "VREFI",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "board dependnt parameter: EXT or INT +160mv to -140mv"))
-	),
-	(bios->NPL_RT, "NPL_RT",
-		(ATUI_NODISPLAY, ATUI_INLINE, npl_rtdelay),
-		(ATUI_NODESCR)
-	),
-	(bios->Flag, "Flag",
-		(ATUI_DEC, ATUI_NOFANCY),
-		((LANG_ENG, "To enable/disable functionalities based on memory type"))
-	),
-	(bios->Memory, "Memory",
-		(ATUI_NAN, ATUI_PETIOLE, atom_memory_format),
-		((LANG_ENG, "describe all of video memory parameters from memory spec"))
 	)
 )
 
@@ -1777,17 +1760,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 	),
 	(bios->Reserved3, "Reserved3",
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
-	),
-	(bios->MemTiming, "MemTiming", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "MemTiming [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format),
-				(ATUI_NODESCR)
-			),
-			NULL, atomtree->num_memory_timing_format, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
 	)
 )
 
@@ -1855,11 +1827,11 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 	(bios->Reserved3, "Reserved3",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->EMRS2Value, "EMRS2Value",
+	(bios->MR2, "MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
 	),
-	(bios->EMRS3Value, "EMRS3Value",
+	(bios->MR3, "MR3",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
 	),
@@ -1878,17 +1850,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 	(bios->CDR_Bandwidth, "CDR_Bandwidth",
 		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
 		(ATUI_NODESCR)
-	),
-	(bios->MemTiming, "MemTiming", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "MemTiming [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format_v1),
-				(ATUI_NODESCR)
-			),
-			NULL, atomtree->num_memory_timing_format, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
 	)
 )
 
@@ -1955,11 +1916,11 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 	(bios->Reserved2, "Reserved2",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->EMRS2Value, "EMRS2Value",
+	(bios->MR2, "MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS2 Value is used for GDDR2 and GDDR4 memory type"))
 	),
-	(bios->EMRS3Value, "EMRS3Value",
+	(bios->MR3, "MR3",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS3 Value is used for GDDR2 and GDDR4 memory type"))
 	),
@@ -1978,17 +1939,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 	(bios->CDR_Bandwidth, "CDR_Bandwidth",
 		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
 		(ATUI_NODESCR)
-	),
-	(bios->MemTiming, "MemTiming", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "MemTiming [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_memory_timing_format_v2),
-				(ATUI_NODESCR)
-			),
-			NULL, atomtree->num_memory_timing_format, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "Memory Timing block sort from lower clock to higher clock"))
 	)
 )
 
@@ -2059,11 +2009,11 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 	(bios->Reserved, "Reserved",
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->EMRS2Value, "EMRS2Value",
+	(bios->MR2, "MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS2/MR2 Value."))
 	),
-	(bios->EMRS3Value, "EMRS3Value",
+	(bios->MR3, "MR3",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS3/MR3 Value."))
 	),
@@ -2153,11 +2103,11 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 	(bios->RowNum, "RowNum",
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->EMRS2Value, "EMRS2Value",
+	(bios->MR2, "MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS2/MR2 Value."))
 	),
-	(bios->EMRS3Value, "EMRS3Value",
+	(bios->MR3, "MR3",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, "EMRS3/MR3 Value."))
 	),
@@ -2220,7 +2170,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_v1_3, atomtree_vram_info_v1_3,
 	(bios->Reserved, "Reserved",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
-	(bios->aVID_PinsShift, "aVID_PinsShift",
+	(bios->VID_PinsShift, "VID_PinsShift",
 		(ATUI_HEX, ATUI_ARRAY),
 		((LANG_ENG, "8 bit strap maximum+terminator"))
 	),
@@ -2326,17 +2276,6 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_1,
 	),
 	(bios->Reserved2, "Reserved2",
 		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
-	),
-	(bios->vram_module, "vram_module", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "vram_module [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v7),
-				(ATUI_NODESCR)
-			),
-			NULL, bios->NumOfVRAMModule, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
 	)
 )
 
@@ -2384,17 +2323,5 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_2,
 	(bios->McPhyTileNum, "McPhyTileNum",
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset"))
-	),
-	(bios->vram_module, "vram_module", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
-			(ATUI_NULL, "vram_module [%02u]",
-				(ATUI_NAN, ATUI_PETIOLE, atom_vram_module_v8),
-				(ATUI_NODESCR)
-			),
-			NULL, bios->NumOfVRAMModule, // deferred start, count
-			ATUI_NULL // enum
-		)),
-		((LANG_ENG, "just for allocation, real number of blocks is in ucNumOfVRAMModule;"))
 	)
 )
-
