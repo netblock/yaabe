@@ -3162,6 +3162,96 @@ struct atom_multimedia_info_v2_1 {
 // Data Table umc_info  structure
 /******************************************************************************/
 
+// wordcount x wordwidth in bits.
+// A 8Gbit GDDR6 has two 16-bit channels; 16 bit words and 4Gbits per channel.
+// 4Gbit/16 = 256Mwords; _256Mx16.
+enum DRAM_DENSITY_e:uint8_t {
+	// _4Mx4 = 0x00,
+	_4Mx16   = 0x02,
+	_4Mx32   = 0x03,
+	_8Mx16   = 0x12,
+	_8Mx32   = 0x13,
+	_8Mx128  = 0x15,
+	_16Mx16  = 0x22,
+	_16Mx32  = 0x23,
+	_16Mx128 = 0x25,
+	_32Mx16  = 0x32,
+	_32Mx32  = 0x33,
+	_32Mx128 = 0x35,
+	_64Mx8   = 0x41,
+	_64Mx16  = 0x42,
+	_64Mx32  = 0x43,
+	_64Mx128 = 0x45,
+	_128Mx8  = 0x51,
+	_128Mx16 = 0x52,
+	_128Mx32 = 0x53,
+	_256Mx8  = 0x61,
+	_256Mx16 = 0x62,
+	_256Mx32 = 0x63,
+	_512Mx8  = 0x71,
+	_512Mx16 = 0x72,
+
+/*
+	_768Mx16  = 0x82,
+*/
+};
+/* Is this better, or stick with enum?
+union dram_density { 
+	uint8_t  Density;
+	enum DRAM_DENSITY_e density_names;
+	struct { uint8_t
+		word_width :3-0 +1, // 2**(n+2)
+		word_count :7-4 +1; // 2**(n+2)
+	};
+};
+*/
+
+union memory_vendor_id {
+	uint8_t  memory_vendor_id; // Predefined,never change across designs or memory type/vender
+	struct { uint8_t
+		vendor_code :3-0 +1, // GDDR vendor ID
+		revision    :7-4 +1; // possibly DDR gen? see enum atom_dgpu_vram_type?
+	};
+};
+/*
+// see MEM_VENDOR_e in smu13.0.7 It's similar but different enough
+#define ATOM_VRAM_MODULE_MEMORY_VENDOR_ID_MASK 0xF
+#define SAMSUNG  0x1
+#define INFINEON 0x2
+#define ELPIDA   0x3
+#define ETRON    0x4
+#define NANYA    0x5
+#define HYNIX    0x6
+#define MOSEL    0x7
+#define WINBOND  0x8
+#define ESMT     0x9
+#define MICRON   0xF
+
+#define QIMONDA  INFINEON
+#define PROMOS   MOSEL
+#define KRETON   INFINEON
+#define ELIXIR   NANYA
+#define MEZZA    ELPIDA
+*/
+enum GDDR_MEM_VENDOR_e { // Vendor codes as seen in GDDR specs
+	GDDR_GENERIC      = 0x0,
+	GDDR_SAMSUNG      = 0x1,
+	GDDR_INFINEON_QIMONDA_KRETON = 0x2,
+	GDDR_ELPIDA_MEZZA = 0x3,
+	GDDR_ETRON        = 0x4,
+	GDDR_NANYA_ELIXIR = 0x5,
+	GDDR_HYNIX        = 0x6,
+	GDDR_MOSEL_PROMOS = 0x7,
+	GDDR_WINBOND      = 0x8,
+	GDDR_ESMT         = 0x9,
+	GDDR_RESERVED_10  = 0xA, // GDDR5 is the last one with a sized list. GDDR6
+	GDDR_RESERVED_11  = 0xB, // made most irrelevant.
+	GDDR_RESERVED_12  = 0xC,
+	GDDR_RESERVED_13  = 0xD,
+	GDDR_RESERVED_14  = 0xE,
+	GDDR_MICRON       = 0xF,
+};
+
 // MC_MISC0__MEMORY_TYPE_*   ??
 // uint8_t  MemoryType;   ??
 enum atom_dgpu_vram_type:uint8_t {
@@ -3178,6 +3268,9 @@ enum atom_dgpu_vram_type:uint8_t {
 	ATOM_DGPU_VRAM_TYPE_HBM3  = 0x80,
 	ATOM_DGPU_VRAM_TYPE_DDR3  = 0xB0, // HIS.HD4350.512.091115.rom uses this
 };
+
+
+
 // umc_info.umc_config
 enum atom_umc_config_def_old {
 	UMC_CONFIG__ENABLE_1KB_INTERLEAVE_MODE = 0x00000001,
@@ -3299,96 +3392,6 @@ struct atom_umc_info_v4_0 {
 /******************************************************************************/
 // Data Table vram_info  structure
 /******************************************************************************/
-struct atom_vram_module_v9 {
-	// Design Specific Values
-	uint32_t memory_size;      // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
-	uint32_t channel_enable;   // bit vector, each bit indicate specific channel enable or not
-	uint32_t max_mem_clk;      // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
-	uint16_t reserved[3];
-	uint16_t mem_voltage;      // mem_voltage
-	uint16_t vram_module_size; // Size of atom_vram_module_v9
-	uint8_t  ext_memory_id;    // Current memory module ID
-	enum atom_dgpu_vram_type memory_type;
-	uint8_t  channel_num;      // Number of mem. channels supported in this module
-	uint8_t  channel_width;    // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-	uint8_t  density;          // _8Mx32, _16Mx32, _16Mx16, _32Mx16
-	uint8_t  tunningset_id;    // MC phy registers set per.
-	uint8_t  vender_rev_id;    // [7:4] Revision, [3:0] Vendor code
-	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
-	uint8_t  hbm_ven_rev_id;   // hbm_ven_rev_id
-	uint8_t  vram_rsd2;        // reserved
-	char8_t  dram_pnstring[20]; // part number end with '0'.
-};
-
-struct atom_vram_info_header_v2_3 {
-	struct   atom_common_table_header table_header;
-	uint16_t mem_adjust_tbloffset;        // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting
-	uint16_t mem_clk_patch_tbloffset;     // offset of atom_umc_init_reg_block structure for memory clock specific UMC setting
-	uint16_t mc_adjust_pertile_tbloffset; // offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings
-	uint16_t mc_phyinit_tbloffset;        // offset of atom_umc_init_reg_block structure for MC phy init set
-	uint16_t dram_data_remap_tbloffset;   // reserved for now
-	uint16_t tmrs_seq_offset;             // offset of HBM tmrs
-	uint16_t post_ucode_init_offset;      // offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init
-	uint16_t vram_rsd2;
-	uint8_t  vram_module_num;             // indicate number of VRAM module
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
-	uint8_t  mc_phy_tile_num;             // indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset
-	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-};
-
-struct atom_vram_module_v9_dummy_v2_3 { // dummy table for ATUI
-	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-};
-
-/******************************************************************************/
-// Data Table vram_info v3.0  structure
-/******************************************************************************/
-struct atom_vram_module_v3_0 {
-	uint8_t  density;
-	uint8_t  tunningset_id;
-	uint8_t  ext_memory_id;
-	uint8_t  dram_vendor_id;
-	uint16_t dram_info_offset;
-	uint16_t mem_tuning_offset;
-	uint16_t tmrs_seq_offset;
-	uint16_t reserved1;
-	uint32_t dram_size_per_ch;
-	uint32_t reserved[3];
-	char8_t dram_pnstring[40];
-};
-
-struct atom_vram_module_v30_dummy_v3_0 { // dummy table for ATUI
-	struct   atom_vram_module_v3_0  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-};
-struct atom_vram_info_header_v3_0 {
-	struct atom_common_table_header table_header;
-	uint16_t mem_tuning_table_offset;
-	uint16_t dram_info_table_offset;
-	uint16_t tmrs_table_offset;
-	uint16_t mc_init_table_offset;
-	uint16_t dram_data_remap_table_offset;
-	uint16_t umc_emuinit_table_offset;
-	uint16_t reserved_sub_table_offset[2];
-	uint8_t  vram_module_num;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
-	uint8_t  mc_phy_tile_num;
-	uint8_t  memory_type;
-	uint8_t  channel_num;
-	uint8_t  channel_width;
-	uint8_t  reserved1;
-	uint32_t channel_enable;
-	uint32_t channel1_enable;
-	uint32_t feature_enable;
-	uint32_t feature1_enable;
-	uint32_t hardcode_mem_size;
-	uint32_t reserved4[4];
-	struct atom_vram_module_v3_0 vram_module[8];
-};
-
-
-
 
 /*
 struct atom_umc_register_addr_info {
@@ -3436,7 +3439,6 @@ struct atom_umc_reg_setting_data_block {
 	uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
 };
 
-
 struct atom_umc_init_reg_block_header {
 // is the first two elements of atom_umc_init_reg_block, and is for sizeof()
 // math purposes only
@@ -3456,6 +3458,45 @@ struct atom_umc_init_reg_block { // not literal, topological only
 
 
 
+struct atom_vram_module_v9 {
+	// Design Specific Values
+	uint32_t memory_size;      // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
+	uint32_t channel_enable;   // bit vector, each bit indicate specific channel enable or not
+	uint32_t max_mem_clk;      // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
+	uint16_t reserved[3];
+	uint16_t mem_voltage;      // mem_voltage
+	uint16_t vram_module_size; // Size of atom_vram_module_v9
+	uint8_t  ext_memory_id;    // Current memory module ID
+	enum atom_dgpu_vram_type memory_type;
+	uint8_t  channel_num;      // Number of mem. channels supported in this module
+	uint8_t  channel_width;    // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
+	enum DRAM_DENSITY_e density;
+	uint8_t  tunningset_id;    // MC phy registers set per.
+	union memory_vendor_id vendor_rev_id; // [7:4] Revision, [3:0] Vendor code
+	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
+	uint8_t  hbm_ven_rev_id;   // hbm_ven_rev_id
+	uint8_t  vram_rsd2;        // reserved
+	char8_t  dram_pnstring[20]; // part number end with '0'.
+};
+
+struct atom_vram_info_header_v2_3 {
+	struct   atom_common_table_header table_header;
+	uint16_t mem_adjust_tbloffset;        // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting
+	uint16_t mem_clk_patch_tbloffset;     // offset of atom_umc_init_reg_block structure for memory clock specific UMC setting
+	uint16_t mc_adjust_pertile_tbloffset; // offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings
+	uint16_t mc_phyinit_tbloffset;        // offset of atom_umc_init_reg_block structure for MC phy init set
+	uint16_t dram_data_remap_tbloffset;   // reserved for now
+	uint16_t tmrs_seq_offset;             // offset of HBM tmrs
+	uint16_t post_ucode_init_offset;      // offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init
+	uint16_t vram_rsd2;
+	uint8_t  vram_module_num;             // indicate number of VRAM module
+	uint8_t  umcip_min_ver;
+	uint8_t  umcip_max_ver;
+	uint8_t  mc_phy_tile_num;             // indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset
+	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+};
+
+
 struct atom_vram_module_v10 {
 	// Design Specific Values
 	uint32_t memory_size;      // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
@@ -3468,9 +3509,9 @@ struct atom_vram_module_v10 {
 	enum atom_dgpu_vram_type memory_type;
 	uint8_t  channel_num;      // Number of mem. channels supported in this module
 	uint8_t  channel_width;    // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-	uint8_t  density;          // _8Mx32, _16Mx32, _16Mx16, _32Mx16
+	enum DRAM_DENSITY_e density;
 	uint8_t  tunningset_id;    // MC phy registers set per
-	uint8_t  vender_rev_id;    // [7:4] Revision, [3:0] Vendor code
+	union memory_vendor_id vendor_rev_id; // [7:4] Revision, [3:0] Vendor code
 	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  vram_flags;       // bit0= bankgroup enable
 	uint8_t  vram_rsd2;        // reserved
@@ -3483,9 +3524,6 @@ struct atom_vram_module_v10 {
 	char8_t dram_pnstring[20]; // part number end with '0'
 };
 
-struct atom_vram_module_v10_dummy_v2_4 { // dummy table for ATUI
-	struct   atom_vram_module_v10  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-};
 struct atom_vram_info_header_v2_4 {
 	struct   atom_common_table_header table_header;
 	uint16_t mem_adjust_tbloffset;       // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting
@@ -3513,10 +3551,10 @@ struct atom_vram_module_v11 {
 	enum atom_dgpu_vram_type memory_type;
 	uint8_t  channel_num;      // Number of mem. channels supported in this module
 	uint8_t  channel_width;    // CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT
-	uint8_t  density;          // _8Mx32, _16Mx32, _16Mx16, _32Mx16
+	enum DRAM_DENSITY_e density;
 	uint8_t  tunningset_id;    // MC phy registers set per.
 	uint16_t reserved[4];      // reserved
-	uint8_t  vender_rev_id;    // [7:4] Revision, [3:0] Vendor code
+	union memory_vendor_id vendor_rev_id; // [7:4] Revision, [3:0] Vendor code
 	uint8_t  refreshrate;      // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  vram_flags;       // bit0= bankgroup enable
 	uint8_t  vram_rsd2;        // reserved
@@ -3612,9 +3650,6 @@ struct atom_gddr6_dram_data_remap {
 	struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
 };
 
-struct atom_vram_module_v11_dummy_v2_5 { // dummy table for ATUI
-	struct   atom_vram_module_v11  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-};
 struct atom_vram_info_header_v2_5 {
 	struct   atom_common_table_header table_header;
 	uint16_t mem_adjust_tbloffset;        // offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust settings
@@ -3648,9 +3683,51 @@ struct atom_vram_info_header_v2_6 {
 	uint8_t  mc_phy_tile_num;
 	struct atom_vram_module_v9 vram_module[16];
 };
-struct atom_vram_module_v9_dummy_v2_6 { // dummy table for ATUI
-	struct atom_vram_module_v9 vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
+
+/******************************************************************************/
+// Data Table vram_info v3.0  structure
+/******************************************************************************/
+struct atom_vram_module_v3_0 {
+	enum DRAM_DENSITY_e density;
+	uint8_t  tunningset_id;
+	uint8_t  ext_memory_id;
+	union memory_vendor_id dram_vendor_id;
+	uint16_t dram_info_offset;
+	uint16_t mem_tuning_offset;
+	uint16_t tmrs_seq_offset;
+	uint16_t reserved1;
+	uint32_t dram_size_per_ch;
+	uint32_t reserved[3];
+	char8_t dram_pnstring[40];
 };
+
+struct atom_vram_info_header_v3_0 {
+	struct atom_common_table_header table_header;
+	uint16_t mem_tuning_table_offset;
+	uint16_t dram_info_table_offset;
+	uint16_t tmrs_table_offset;
+	uint16_t mc_init_table_offset;
+	uint16_t dram_data_remap_table_offset;
+	uint16_t umc_emuinit_table_offset;
+	uint16_t reserved_sub_table_offset[2];
+	uint8_t  vram_module_num;
+	uint8_t  umcip_min_ver;
+	uint8_t  umcip_max_ver;
+	uint8_t  mc_phy_tile_num;
+	enum atom_dgpu_vram_type memory_type;
+	uint8_t  channel_num;
+	uint8_t  channel_width;
+	uint8_t  reserved1;
+	uint32_t channel_enable;
+	uint32_t channel1_enable;
+	uint32_t feature_enable;
+	uint32_t feature1_enable;
+	uint32_t hardcode_mem_size;
+	uint32_t reserved4[4];
+	struct atom_vram_module_v3_0 vram_module[8];
+};
+
+
 /******************************************************************************/
 // Data Table voltageobject_info  structure
 /******************************************************************************/

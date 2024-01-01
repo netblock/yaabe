@@ -1098,18 +1098,6 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_2, atomtree_firmware_info,
 )
 
 
-
-PPATUI_FUNCIFY(union, memory_vendor_id, atui_nullstruct,
-	(bios->MemoryVendorID, "MemoryVendorID",
-		(ATUI_BIN, ATUI_BITFIELD, (
-			("vendor_code", 3,0, ATUI_DEC,
-				((LANG_ENG, "GDDR vendor ID"))
-			),
-			("revision",    7,4, ATUI_DEC, (ATUI_NODESCR))
-		)), (ATUI_NODESCR)
-	)
-)
-
 PPATUI_FUNCIFY(union, vram_module_channel_config, atui_nullstruct,
 	(bios->ChannelConfig, "ChannelConfig",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -2034,7 +2022,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 		(ATUI_NODESCR)
 	),
 	(bios->strMemPNString, "strMemPNString",
-		(ATUI_NAN, ATUI_ARRAY),
+		(ATUI_NAN, ATUI_STRING),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )
@@ -2139,7 +2127,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->strMemPNString, "strMemPNString",
-		(ATUI_NAN, ATUI_ARRAY),
+		(ATUI_NAN, ATUI_STRING),
 		((LANG_ENG, "part number end with '0'."))
 	)
 )

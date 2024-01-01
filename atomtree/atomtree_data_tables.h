@@ -248,6 +248,7 @@ struct atomtree_vram_module {
 		struct atom_vram_module_v7* v1_7;
 		struct atom_vram_module_v8* v1_8;
 		struct atom_vram_module_v9* v1_9;
+		struct atom_vram_module_v10* v1_10;
 		struct atom_vram_module_v11* v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
@@ -322,6 +323,9 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atom_dram_data_remap* dram_data_remap;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
 	struct atomtree_umc_init_reg_block post_ucode_init;
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v2_4 {
@@ -342,11 +346,13 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atom_dram_data_remap* dram_data_remap;
 
 	struct atomtree_umc_init_reg_block post_ucode_init;
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v2_5 {
-	struct atom_vram_info_header_v2_5* leaves; // nonzero if populated
-
+	struct atom_vram_info_header_v2_5* leaves; // nonzero if populateda
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 
 	struct atom_gddr6_ac_timing_v2_5* gddr6_ac_timings; // is an array
@@ -360,6 +366,9 @@ struct atomtree_vram_info_header_v2_5 {
 
 	struct atomtree_umc_init_reg_block post_ucode_init;
 	struct atomtree_umc_init_reg_block strobe_mode_patch;
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v2_6 {
@@ -372,15 +381,9 @@ struct atomtree_vram_info_header_v2_6 {
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block post_ucode_init;
-};
 
-
-struct atomtree_vram_module_v3_0 { // TODO figure out child tables
-	struct atom_vram_module_v3_0* leaves; // nonzero if populated
-
-	void* dram_info;
-	void* mem_tuning;
-	void* tmrs_seq;
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
@@ -393,10 +396,9 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 	struct atomtree_umc_init_reg_block umc_emuinit; //TODO this is a guess
 	void* rsvd_tables[2]; // reserved_sub_table_offset
-	struct atomtree_vram_module_v3_0 vram_module[
-		sizeof(((struct atom_vram_info_header_v3_0*)0)->vram_module)
-		/ sizeof(struct atom_vram_module_v3_0)
-	];
+
+	enum atomtree_common_version vram_module_ver;
+	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
 struct atomtree_vram_info {
