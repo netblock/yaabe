@@ -26,13 +26,49 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 	// ...11111 000.. 1111...
 	const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
 	val <<= leaf->bitfield_lo;
-	*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+
+	switch (leaf->total_bits) {
+		case 8:
+			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
+			break;
+		case 16:
+			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
+			break;
+		case 32:
+			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
+			break;
+		case 64:
+			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+			break;
+		default:
+			assert(0);
+			break;
+	}
 }
 uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
-	uint64_t val = *(leaf->u64);
+
+	uint64_t val;
+	switch (leaf->total_bits) {
+		case 8:
+			val = *(leaf->u8);
+			break;
+		case 16:
+			val = *(leaf->u16);
+			break;
+		case 32:
+			val = *(leaf->u32);
+			break;
+		case 64:
+			val = *(leaf->u64);
+			break;
+		default:
+			assert(0);
+			break;
+	}
+
 	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
 	val <<= num_unused_bits_hi; // delete unused upper
 	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
@@ -60,14 +96,49 @@ void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
 	// ...11111 000.. 1111...
 	const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
 	raw_val <<= leaf->bitfield_lo;
-	*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
+
+	switch (leaf->total_bits) {
+		case 8:
+			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
+			break;
+		case 16:
+			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
+			break;
+		case 32:
+			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
+			break;
+		case 64:
+			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+			break;
+		default:
+			assert(0);
+			break;
+	}
 }
 int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
 
-	int64_t val = *(leaf->u64);
+	int64_t val;
+	switch (leaf->total_bits) {
+		case 8:
+			val = *(leaf->s8);
+			break;
+		case 16:
+			val = *(leaf->s16);
+			break;
+		case 32:
+			val = *(leaf->s32);
+			break;
+		case 64:
+			val = *(leaf->s64);
+			break;
+		default:
+			assert(0);
+			break;
+	}
+
 	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
 	val <<= num_unused_bits_hi; // delete unused upper
 	// rightshift on signed repeats sign
@@ -107,6 +178,9 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 			case 64:
 				*(leaf->u64) = fixed_val;
 				return;
+			default:
+				assert(0);
+				break;
 		}
 	}
 
@@ -120,6 +194,9 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 		case 64:
 			*(leaf->f64) = val;
 			return;
+		default:
+			assert(0);
+			break;
 	}
 
 	assert(0);
@@ -146,6 +223,9 @@ float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
 			case 64:
 				val = *(leaf->u64);
 				break;
+			default:
+				assert(0);
+				break;
 		};
 		val /= (1 << leaf->fractional_bits);
 		return val;
@@ -159,6 +239,9 @@ float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
 			return *(leaf->f32);
 		case 64:
 			return *(leaf->f64);
+		default:
+			assert(0);
+			break;
 	}
 
 	assert(0);
