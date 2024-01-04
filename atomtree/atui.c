@@ -12,6 +12,7 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
+
 	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t maxval;
 	if (num_bits == sizeof(maxval)*8) { // unfortunately, (1ULL<<64) == 1
@@ -59,6 +60,7 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 			val = *(leaf->u16);
 			break;
 		case 32:
+			printf("%s %p\n", leaf->name, leaf->u32);
 			val = *(leaf->u32);
 			break;
 		case 64:
@@ -149,6 +151,7 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 	if (!(leaf->type & ATUI_FRAC)) {
 		assert(0);
 	}
+
 	if (leaf->fractional_bits) {
 		const float64_t max_val = (
 			(float64_t)(1<<(leaf->total_bits - leaf->fractional_bits))
@@ -490,7 +493,8 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 
 void atui_destroy_tree(atui_branch* tree) { // a reference implementation
-	while(tree->max_all_branch_count--)
+	while(tree->max_all_branch_count--) {
 		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
+	}
 	free(tree);
 }
