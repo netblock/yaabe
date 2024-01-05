@@ -207,8 +207,20 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 */
 };
 
+#define ATOMTREE_MC_REG_MAX  20 // keep score. Hawaii XT is 20
+struct atomtree_init_reg_block {
+	struct atom_init_reg_block* leaves; // nonzero if populated
+
+	struct atom_init_reg_index_format* register_index;
+	uint8_t num_index;
+
+	uint8_t num_data_blocks; // atom_init_reg_block's RegDataBuf
+	uint8_t num_data_entries; // struct atom_reg_setting_data_block's reg_data
+	uint8_t data_block_element_size;
+	struct atom_reg_setting_data_block* \
+		data_blocks[ATOMTREE_MC_REG_MAX];
+};
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
-#define atomtree_init_reg_block atomtree_umc_init_reg_block // TODO remove
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 

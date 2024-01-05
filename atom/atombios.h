@@ -6980,6 +6980,7 @@ struct atom_memory_vendor_block {
 
 
 // like atom_umc_reg_setting_data_block
+/*
 struct atom_memory_setting_id_config {
 	uint32_t MemClockRange:24;
 	uint32_t ucMemBlkId:8;
@@ -6992,22 +6993,37 @@ struct atom_memory_setting_data_block {
 	union atom_memory_setting_id_config_access ulMemoryID;
 	uint32_t aulMemData[1];
 };
-
+*/
+union atom_reg_setting_id_config_access {
+	uint32_t id_access;
+	struct { uint32_t
+		mem_clock_range :23-0 +1,
+		block_id        :31-24 +1;
+	};
+};
+struct atom_reg_setting_data_block {
+	union atom_reg_setting_id_config_access block_id;
+	uint32_t reg_data[1];
+};
 
 struct atom_init_reg_index_format {
 // like atom_umc_register_addr_info_access ??
 	uint16_t RegIndex;         // MC register index
 	uint8_t  PreRegDataLength; // offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf
 };
-
-
-struct atom_init_reg_block { // like atom_umc_init_reg_block, but with
-	uint16_t RegIndexTblSize; // size of asRegIndexBuf
-	uint16_t RegDataBlkSize;  // size of ATOM_MEMORY_SETTING_DATA_BLOCK
-	// of the struct itself? size of the RegDataBuf array?
-	struct atom_init_reg_index_format RegIndexBuf[1];
-	struct atom_memory_setting_data_block RegDataBuf[1];
+struct reg_settings_dummy { // dummy table for ATUI
+	struct atom_reg_setting_data_block RegDataBuf[1];
 };
+struct atom_init_reg_block {  // like atom_umc_init_reg_block
+	uint16_t RegIndexTblSize; // size of asRegIndexBuf
+	uint16_t RegDataBlkSize;  // size of each atom_memory_setting_data_block for RegDataBuf
+	struct atom_init_reg_index_format RegIndexBuf[1];
+	struct atom_reg_setting_data_block RegDataBuf[1];
+};
+#define VBIOS_MC_REGISTER_ARRAY_SIZE 32 // max
+#define VBIOS_MAX_AC_TIMING_ENTRIES 20 // max
+
+
 
 #define END_OF_REG_INDEX_BLOCK  0xffff
 #define END_OF_REG_DATA_BLOCK   0x00000000

@@ -604,6 +604,56 @@ atomtree_dt_populate_ppt(
 	return atui_ppt;
 }
 
+static atui_branch*
+atomtree_populate_init_reg_block(
+		struct atomtree_init_reg_block* at_regblock,
+		bool generate_atui,
+		uint8_t num_extra_atuibranches
+		) {
+	// UMC inititialisation registers, for vram_info 2.3 and newer
+	// regblock->leaves must be already populated.
+	/*
+	This works in a somewhat similar way to umc_init.
+	RegIndexTblSize determines RegIndexBuf's total size.
+	RegDataBuf starts after RegIndexBuf.
+	RegDataBlkSize is like a sizeof(struct) for RegDataBuf; meaning that
+	struct atom_reg_setting_data_block's reg_data length is implied through
+	RegDataBlkSize.
+	*/
+
+	struct atom_init_reg_block* const leaves = at_regblock->leaves;
+
+	at_regblock->num_index = 
+		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
+	at_regblock->register_index = leaves->RegIndexBuf;
+
+	at_regblock->data_block_element_size = leaves->RegDataBlkSize;
+	at_regblock->num_data_entries = (
+		(leaves->RegDataBlkSize
+			/ sizeof(uint32_t)
+		) -1 // -1 to not count block_id.
+	);
+	struct atom_reg_setting_data_block* loc =
+		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize;
+
+	uint16_t i = 0;
+	while (loc->block_id.id_access) {
+		assert(ATOMTREE_MC_REG_MAX > i);
+		at_regblock->data_blocks[i] = loc;
+		i++;
+		loc = (void*)loc + at_regblock->data_block_element_size;
+	}
+	at_regblock->num_data_blocks = i;
+
+	atui_branch* atui_regblock = NULL;
+	if (generate_atui) {
+		atui_regblock = ATUI_MAKE_BRANCH(atom_init_reg_block,
+			NULL,  at_regblock, at_regblock->leaves,
+			num_extra_atuibranches, NULL
+		);
+	}
+	return atui_regblock;
+}
 
 static atui_branch*
 atomtree_populate_umc_init_reg_block(
@@ -611,9 +661,9 @@ atomtree_populate_umc_init_reg_block(
 		bool generate_atui,
 		uint8_t num_extra_atuibranches
 		) {
-	// TODO: something something end is 0xFFFF ???
-
+	// UMC inititialisation registers, for vram_info 2.3 and newer
 	// regblock->leaves must be already populated.
+
 	/*
 	AMD, what the fuck? fuckin please be consistent. Use your common table
 	structure, and use your pointers. And why aren't your pointers starting
@@ -1280,14 +1330,12 @@ atomtree_populate_vram_info_v1_3(
 		vi13->mem_adjust_table.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemAdjustTblOffset;
 
-		/* regular init, not umc init
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi13->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, "mem_adjust_table");
 		}
-		*/
 	} else {
 		vi13->mem_adjust_table.leaves = NULL;
 	}
@@ -1297,14 +1345,12 @@ atomtree_populate_vram_info_v1_3(
 		vi13->mem_clk_patch.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemClkPatchTblOffset;
 
-		/* regular init, not umc init
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi13->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		}
-		*/
 	} else {
 		vi13->mem_clk_patch.leaves = NULL;
 	}
@@ -1346,14 +1392,12 @@ atomtree_populate_vram_info_v1_4(
 		vi14->mem_adjust_table.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemAdjustTblOffset;
 
-		/* regular init, not umc init
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi14->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, "mem_adjust_table");
 		}
-		*/
 	} else {
 		vi14->mem_adjust_table.leaves = NULL;
 	}
@@ -1363,14 +1407,12 @@ atomtree_populate_vram_info_v1_4(
 		vi14->mem_clk_patch.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemClkPatchTblOffset;
 
-		/* regular init, not umc init
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi14->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		}
-		*/
 	} else {
 		vi14->mem_clk_patch.leaves = NULL;
 	}
@@ -1410,14 +1452,12 @@ atomtree_populate_vram_info_v2_1(
 		vi21->mem_adjust_table.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemAdjustTblOffset;
 
-		/* regular init, not umc init
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi21->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, "mem_adjust_table");
 		}
-		*/
 	} else {
 		vi21->mem_adjust_table.leaves = NULL;
 	}
@@ -1427,14 +1467,12 @@ atomtree_populate_vram_info_v2_1(
 		vi21->mem_clk_patch.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemClkPatchTblOffset;
 
-		/* regular init, not umc init
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi21->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		}
-		*/
 	} else {
 		vi21->mem_clk_patch.leaves = NULL;
 	}
@@ -1444,14 +1482,12 @@ atomtree_populate_vram_info_v2_1(
 		vi21->per_byte_preset.leaves =
 			(void*)vi21->leaves + vi21->leaves->PerBytePresetOffset;
 
-		/* regular init, not umc init
 		atui_perbytepreset = atomtree_populate_init_reg_block(
 			&(vi21->per_byte_preset), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_perbytepreset->name, "mem_clk_patch_table");
 		}
-		*/
 	} else {
 		vi21->per_byte_preset.leaves = NULL;
 	}
@@ -1492,14 +1528,12 @@ atomtree_populate_vram_info_v2_2(
 		vi22->mem_adjust_table.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemAdjustTblOffset;
 
-		/* regular init, not umc init
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi22->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, "mem_adjust_table");
 		}
-		*/
 	} else {
 		vi22->mem_adjust_table.leaves = NULL;
 	}
@@ -1509,14 +1543,12 @@ atomtree_populate_vram_info_v2_2(
 		vi22->mem_clk_patch.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemClkPatchTblOffset;
 
-		/* regular init, not umc init
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi22->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		}
-		*/
 	} else {
 		vi22->mem_clk_patch.leaves = NULL;
 	}
@@ -1526,14 +1558,12 @@ atomtree_populate_vram_info_v2_2(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi22->mc_adjust_pertile.leaves =
 			(void*)vi22->leaves + vi22->leaves->McAdjustPerTileTblOffset;
-		/* regular init, not umc init
 		atui_mcadjpertile = atomtree_populate_init_reg_block(
 			&(vi22->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
 		}
-		*/
 	} else {
 		vi22->mc_adjust_pertile.leaves = NULL;
 	}
@@ -1542,14 +1572,12 @@ atomtree_populate_vram_info_v2_2(
 	if (vi22->leaves->McPhyInitTableOffset) {
 		vi22->mc_phyinit.leaves =
 			(void*)vi22->leaves + vi22->leaves->McPhyInitTableOffset;
-		/* regular init, not umc init
-		atui_phyinit = atomtree_populate_umc_init_reg_block(
+		atui_phyinit = atomtree_populate_init_reg_block(
 			&(vi22->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_phyinit->name, "mc_phyinit_table");
 		}
-		*/
 	} else {
 		vi22->mc_phyinit.leaves = NULL;
 	}

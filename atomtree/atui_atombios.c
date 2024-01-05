@@ -1098,6 +1098,85 @@ PPATUI_FUNCIFY(struct, atom_firmware_info_v2_2, atomtree_firmware_info,
 )
 
 
+
+PPATUI_FUNCIFY(struct, atom_init_reg_index_format, atui_nullstruct,
+	(bios->RegIndex, "RegIndex",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "MC register index"))
+	),
+	(bios->PreRegDataLength, "PreRegDataLength",
+		(ATUI_HEX, ATUI_NOFANCY),
+		((LANG_ENG, "offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf"))
+	)
+)
+PPATUI_FUNCIFY(union, atom_reg_setting_id_config_access, atui_nullstruct,
+	(bios->id_access, "id_access",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("mem_clock_range", 23, 0, ATUI_DEC, (ATUI_NODESCR)),
+			("block_id",        31,24, ATUI_DEC, (ATUI_NODESCR))
+		)),
+		(ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_reg_setting_data_block,
+		atomtree_init_reg_block,
+	(bios->block_id, "block ID",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_reg_setting_id_config_access),
+		(ATUI_NODESCR)
+	),
+	(bios->reg_data, "reg_data",
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "reg_data [%02u]",
+				(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+			),
+			NULL, atomtree->num_data_entries, // deferred start. count
+			ATUI_NULL // enum
+		)),
+		(ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, reg_settings_dummy, atomtree_init_reg_block,
+	(ATUI_NULL, "reg_setting_list", // start, name
+		(ATUI_NAN, ATUI_DYNARRAY, (
+			(ATUI_NULL, "reg_setting_list [%02u]",
+				(ATUI_NAN, ATUI_PETIOLE, atom_reg_setting_data_block),
+				(ATUI_NODESCR)
+			),
+			atomtree->data_blocks, // deferred start
+			atomtree->num_data_blocks, // count
+			ATUI_NULL // enum
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(struct, atom_init_reg_block,
+		atomtree_init_reg_block,
+	(bios->RegIndexTblSize, "RegIndexTblSize",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->RegDataBlkSize, "RegDataBlkSize",
+		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(atomtree->register_index, "RegIndexBuf", // start, name
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
+			// Leaf pattern:
+			(ATUI_NULL, "RegIndexBuf [%02u]",
+				(ATUI_NAN, ATUI_INLINE, atom_init_reg_index_format),
+				(ATUI_NODESCR)
+			),
+			NULL, // deferred start
+			atomtree->num_index, // count
+			ATUI_NULL // enum
+		)),
+		(ATUI_NODESCR)
+	),
+	// data for RegDataBuf is through atomtree
+	(ATUI_NULL, "RegDataBuf",
+		(ATUI_NAN, ATUI_PETIOLE, reg_settings_dummy),
+		(ATUI_NODESCR)
+	)
+)
+
+
 PPATUI_FUNCIFY(union, vram_module_channel_config, atui_nullstruct,
 	(bios->ChannelConfig, "ChannelConfig",
 		(ATUI_BIN, ATUI_BITFIELD, (
