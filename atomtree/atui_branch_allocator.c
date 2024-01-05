@@ -157,7 +157,7 @@ atui_branch* atui_branch_allocator(
 			while (leavesinit_i < num_leaves_initial) {
 				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
 					dynarray_start_ptr = leaves_initial[leavesinit_i].val;
-					deferred_start = 
+					deferred_start =
 						dynarray_boundaries[dynentry_i].deferred_start_array;
 					dynarray_elementsize =
 						dynarray_boundaries[dynentry_i].element_size;
@@ -262,16 +262,16 @@ atui_branch* atui_branch_allocator(
 							#ifndef NDEBUG
 								if (dynarray_patterns[leafpattern_i].type
                                     & ATUI_PETIOLE) {
-									assert(sizeof(((atui_branch*)0)->name) > 
+									assert(sizeof(((atui_branch*)0)->name) >
 										strlen(branches[branches_i-1]->name)
 									); // have we wrote past our boundry?
 								} else if (dynarray_patterns[leafpattern_i].type
                                     & ATUI_INLINE) {
-									assert(sizeof(((atui_branch*)0)->name) > 
+									assert(sizeof(((atui_branch*)0)->name) >
 										strlen(inliners[inliners_i-1]->name)
 									); // have we wrote past our boundry?
 								} else {
-									assert(sizeof(((atui_leaf*)0)->name) > 
+									assert(sizeof(((atui_leaf*)0)->name) >
 										strlen(leaves[leaves_i].name)
 									); // have we wrote past our boundry?
 								}
@@ -294,7 +294,7 @@ atui_branch* atui_branch_allocator(
 					leaves[leaves_i].inline_branch =
 						&(inliners[inliners_i]);
 					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
-					assert(sizeof(((atui_branch*)0)->name) > 
+					assert(sizeof(((atui_branch*)0)->name) >
 						strlen(inliners[inliners_i]->name)
 					); // have we wrote past our boundry?
 
@@ -311,7 +311,7 @@ atui_branch* atui_branch_allocator(
 						branches[branches_i]->name,
 						leaves_initial[leavesinit_i].name
 					);
-					assert(sizeof(((atui_branch*)0)->name) > 
+					assert(sizeof(((atui_branch*)0)->name) >
 						strlen(branches[branches_i]->name)
 					); // have we wrote past our boundry?
 					branches_i++;
@@ -342,7 +342,7 @@ atui_branch* atui_branch_allocator(
 					);
 					leaves[leaves_i].inline_branch = &(inliners[inliners_i]);
 					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
-					assert(sizeof(((atui_branch*)0)->name) > 
+					assert(sizeof(((atui_branch*)0)->name) >
 						strlen(inliners[inliners_i]->name)
 					); // have we wrote past our boundry?
 					inliners_i++;
@@ -358,7 +358,7 @@ atui_branch* atui_branch_allocator(
 						branches[branches_i]->name,
 						leaves_initial[leavesinit_i].name
 					);
-					assert(sizeof(((atui_branch*)0)->name) > 
+					assert(sizeof(((atui_branch*)0)->name) >
 						strlen(branches[branches_i]->name)
 					); // have we wrote past our boundry?
 					branches_i++;

@@ -464,7 +464,7 @@ union gddr5_mr14 {
 union gddr5_mr15 {
 	uint16_t gddr5_mr15;
 	struct { uint16_t
-		rsvd_7_0          :7-0 +1, 
+		rsvd_7_0          :7-0 +1,
 		MRE_0_disable     :8-8 +1, // 1=disable MRS commands on channel 0
 		MRE_1_disable     :9-9 +1, // 1=disable MRS commands on channel 1
 		address_training :10-10 +1, // 1=address training mode

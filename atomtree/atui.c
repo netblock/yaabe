@@ -60,7 +60,6 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 			val = *(leaf->u16);
 			break;
 		case 32:
-			printf("%s %p\n", leaf->name, leaf->u32);
 			val = *(leaf->u32);
 			break;
 		case 64:

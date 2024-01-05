@@ -475,7 +475,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.enum_taglist = PPATUI_ENUM_NAME(enum_name),\
 	},
 
-/* a problem with _Generics is that all expressions must be globally 
+/* a problem with _Generics is that all expressions must be globally
 syntaxically correct, meaning that
 	#define deref(var) _Generic((var), nullptr_t: 0, default: *(var))
 	deref(nullptr)

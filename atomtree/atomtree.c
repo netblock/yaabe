@@ -623,7 +623,7 @@ atomtree_populate_init_reg_block(
 
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
 
-	at_regblock->num_index = 
+	at_regblock->num_index =
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
 	at_regblock->register_index = leaves->RegIndexBuf;
 
@@ -3034,7 +3034,7 @@ atomtree_populate_atom_rom_header_v1_1(
 	}
 
 	atree->psp_dir_table = NULL;
-	
+
 
 	//rom_header->data_table = &(atree->data_table);
 	atui_branch* const atui_dt = atomtree_populate_datatables(
@@ -3095,7 +3095,7 @@ atomtree_populate_atom_rom_header_v2_1(
 	} else {
 		atree->psp_dir_table = NULL;
 	}
-	
+
 
 	//rom_header->data_table = &(atree->data_table);
 	atui_branch* const atui_dt = atomtree_populate_datatables(
@@ -3156,7 +3156,7 @@ atomtree_populate_atom_rom_header_v2_2(
 	} else {
 		atree->psp_dir_table = NULL;
 	}
-	
+
 
 	//rom_header->data_table = &(atree->data_table);
 	atui_branch* const atui_dt = atomtree_populate_datatables(

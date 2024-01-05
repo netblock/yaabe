@@ -171,7 +171,7 @@ atomtree.
 The leaf pattern follows regular syntax, and can be a bitfield.
 
 dynarray_start_pointer is a direct pointer that is treated as the beginning of
-the array, such that access would be effectively, 
+the array, such that access would be effectively,
 	datatype* dataptr = &(source->array_start_pointer[i]);
 
 deferred_pointers is an array of pointers, each of which points an element,

@@ -95,7 +95,7 @@ struct _atui_leaf {
 	enum atui_type type; // how to display text, and other config data
 	uint8_t array_size;
 
-	uint8_t fractional_bits; // if fixed-point	
+	uint8_t fractional_bits; // if fixed-point
 	uint8_t total_bits;  // number of bits for the leaf
 	uint8_t bitfield_hi; // bitfield range end
 	uint8_t bitfield_lo; // bitfield range start

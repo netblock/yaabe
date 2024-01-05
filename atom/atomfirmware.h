@@ -3190,13 +3190,12 @@ enum DRAM_DENSITY_e:uint8_t {
 	_256Mx32 = 0x63,
 	_512Mx8  = 0x71,
 	_512Mx16 = 0x72,
-
 /*
 	_768Mx16  = 0x82,
 */
 };
 /* Is this better, or stick with enum?
-union dram_density { 
+union dram_density {
 	uint8_t  Density;
 	enum DRAM_DENSITY_e density_names;
 	struct { uint8_t

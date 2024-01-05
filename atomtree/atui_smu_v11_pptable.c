@@ -99,7 +99,7 @@ PPATUI_FUNCIFY(struct, smu_11_0_overdrive_table, atomtree_powerplaytable,
 		)), (ATUI_NODESCR)
 	),
 	((&(bios->min[SMU_11_0_ODSETTING_COUNT])), // start
-		"Undefined OD settings (min)", // name 
+		"Undefined OD settings (min)", // name
 		(ATUI_NAN, ATUI_DYNARRAY, (
 			(ATUI_NULL, "min: [19 + %02u]",
 					// if COUNT changes, please change this 19
@@ -2453,7 +2453,7 @@ PPATUI_FUNCIFY(struct, smu11_smcpptable_v8, atomtree_powerplaytable, // Navi10
 	(bios->I2cControllers, "I2cControllers",
 		(ATUI_NAN, ATUI_PETIOLE, smu11_smcpptable_v8_i2c_control),
 		(ATUI_NODESCR)
-	),	
+	),
 
 	(bios->MaxVoltageStepGfx, "MaxVoltageStepGfx",
 		(ATUI_DEC, ATUI_NOFANCY),

@@ -475,7 +475,7 @@ struct atomtree_master_datatable_v1_1 {
 		struct atom_master_data_table_v1_1* leaves; // nonzero if populated
 	};
 
-	// TODO relate these uint16t stuff to their tables. 
+	// TODO relate these uint16t stuff to their tables.
 	// a lot of the question associations are low effort.
 
 	struct atomtree_sw_datatable* utilitypipeline; //??
