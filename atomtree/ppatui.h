@@ -132,6 +132,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	nullptr_t: 0,\
 	default: sizeof(var)\
 )
+
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
 	uint8_t:8, uint8_t*:8, uint8_t const*:8,\
 	uint16_t:16, uint16_t*:16, uint16_t const*:16,\
@@ -267,7 +268,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_FANCY_ATUI_ARRAY(\
 		var, name, description_data, radix, fancytype, ...)\
 	{\
-		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
+		_PPATUI_FANCY_INIT(var[0], name, description_data, radix, fancytype)\
 		.array_size = (sizeof(var)/sizeof(var[0])),\
 	},
 

@@ -565,16 +565,21 @@ struct atom_lcd_info_v2_1 {
 // Data Table gpio_pin_lut  structure
 /******************************************************************************/
 
+union atom_i2c_id_config {
+	uint8_t  i2c_id;
+	struct { uint8_t
+		i2c_line_mux :3-0 +1, // A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C
+		hw_engine_id :6-4 +1, // =1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines
+		hw_capable   :7-7 +1; // =0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)
+	};
+};
+
 union atom_gpioi2c_pin_id {
 	uint8_t  gpio_id;
+	union atom_i2c_id_config i2c_config;
 	struct { uint8_t
-		I2C_HW_LANE_MUX       :3-0 +1,
-		I2C_HW_ENGINE_ID_MASK :6-4 +1,
-		HW_CAP                :7-7 +1; // only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin
-	};
-	struct { uint8_t
-		GPIO_PINID : 6-0 +1, // enum atom_gpio_pin_assignment_gpio_id
-		_HW_CAP    : 7-7 +1;
+		GPIO_PINID :6-0 +1, // enum atom_gpio_pin_assignment_gpio_id
+		HW_CAP     :7-7 +1; // only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin
 	};
 };
 /* atom_gpio_pin_assignment.gpio_id definition */
@@ -706,15 +711,6 @@ enum atom_object_record_type_id:uint8_t {
 struct atom_common_record_header {
 	enum atom_object_record_type_id record_type;
 	uint8_t  record_size; // The size of the whole record in byte
-};
-
-union atom_i2c_id_config {
-	uint8_t  i2c_id;
-	struct { uint8_t
-		I2C_LineMux :3-0 +1, // A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C
-		HW_EngineID :6-4 +1, // =1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines
-		HW_Capable  :7-7 +1; // =0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)
-	};
 };
 
 struct atom_i2c_record {

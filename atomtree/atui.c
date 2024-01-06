@@ -15,8 +15,8 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 
 	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t maxval;
-	if (num_bits == sizeof(maxval)*8) { // unfortunately, (1ULL<<64) == 1
-		maxval = ~0;
+	if (num_bits == (sizeof(maxval) * CHAR_BIT)) { // (1ULL<<64) == 1
+		maxval = ~0ULL;
 	} else {
 		maxval = (1ULL << num_bits) - 1;
 	}
@@ -70,7 +70,11 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 			break;
 	}
 
-	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
+	const uint8_t num_unused_bits_hi = (
+		(sizeof(val) * CHAR_BIT)
+		 - leaf->bitfield_hi
+		 -1
+	 );
 	val <<= num_unused_bits_hi; // delete unused upper
 	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
 
@@ -140,7 +144,11 @@ int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 			break;
 	}
 
-	const uint8_t num_unused_bits_hi = sizeof(val)*8 - leaf->bitfield_hi -1;
+	const uint8_t num_unused_bits_hi = (
+		(sizeof(val) * CHAR_BIT)
+		- leaf->bitfield_hi
+		- 1
+	);
 	val <<= num_unused_bits_hi; // delete unused upper
 	// rightshift on signed repeats sign
 	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower

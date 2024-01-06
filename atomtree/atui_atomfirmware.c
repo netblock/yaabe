@@ -3819,15 +3819,36 @@ PPATUI_FUNCIFY(struct, vram_usagebyfirmware_v2_2,
 )
 
 
+PPATUI_FUNCIFY(union, atom_i2c_id_config, atui_nullstruct,
+	(bios->i2c_id, "i2c_id",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("i2c_line_mux", 3,0, ATUI_DEC,
+				((LANG_ENG, "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C"))
+			),
+			("hw_engine_id", 6,4, ATUI_DEC,
+				((LANG_ENG, "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines"))
+			),
+			("hw_capable",   7,7, ATUI_DEC,
+				((LANG_ENG, "=0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)"))
+			)
+		)), (ATUI_NODESCR)
+	)
+)
 
 
-//TODO ATUI_FANCY for bitfields
+
 PPATUI_FUNCIFY(union, atom_gpioi2c_pin_id, atomtree_gpio_pin_lut,
 	(bios->gpio_id, "gpio_id",
 		(ATUI_BIN, ATUI_BITFIELD, (
-			("I2C_HW_LANE_MUX",       3,0, ATUI_DEC, (ATUI_NODESCR)),
-			("I2C_HW_ENGINE_ID_MASK", 6,4, ATUI_DEC, (ATUI_NODESCR)),
-			("HW_CAP",                7,7, ATUI_DEC, ((LANG_ENG, "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin"))),
+			("i2c_line_mux", 3,0, ATUI_DEC,
+				((LANG_ENG, "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C"))
+			),
+			("hw_engine_id", 6,4, ATUI_DEC,
+				((LANG_ENG, "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines"))
+			),
+			("hw_capable",   7,7, ATUI_DEC,
+				((LANG_ENG, "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin"))
+			)
 			("GPIO_PINID", 6,0, ATUI_DEC, ((LANG_ENG, "enum of atom_gpio_pin_assignment_gpio_id")))
 		)), (ATUI_NODESCR)
 	)
@@ -4491,7 +4512,9 @@ PPATUI_FUNCIFY(union, memory_vendor_id, atui_nullstruct,
 
 PPATUI_FUNCIFY(union, atom_umc_register_addr_info_access,
 		atomtree_umc_init_reg_block,
-	(atomtree->register_info, "umc_reg_list", // start, name
+	// the uint32_t* typecast is about stripping the 'union' abstraction so that
+	// the preprocessor can correctly calculate the bitfield
+	(((uint32_t*)atomtree->register_info), "umc_reg_list", // start, name
 		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			// Leaf pattern:
 			(ATUI_NULL, "umc_reg_addr [%02u]",
@@ -5382,7 +5405,8 @@ PPATUI_FUNCIFY(struct, atom_i2c_voltage_object_v4, atomtree_voltage_object_v4,
 		((LANG_ENG, "Indicate Voltage Regulator Id"))
 	),
 	(bios->i2c_id, "i2c_id",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_i2c_id_config),
+		(ATUI_NODESCR)
 	),
 	(bios->i2c_slave_addr, "i2c_slave_addr",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
