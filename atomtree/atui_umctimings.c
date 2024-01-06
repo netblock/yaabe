@@ -418,7 +418,7 @@ PPATUI_FUNCIFY(struct, umc_block_navi1_timings,
 		atomtree_vram_info_header_v2_4,
 
 	(bios->block_id, "block_id",
-		(ATUI_NODISPLAY, ATUI_INLINE, atom_umc_reg_setting_id_config_access),
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
 	),
 

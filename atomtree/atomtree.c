@@ -610,7 +610,7 @@ atomtree_populate_init_reg_block(
 		bool generate_atui,
 		uint8_t num_extra_atuibranches
 		) {
-	// UMC inititialisation registers, for vram_info 2.3 and newer
+	// MC inititialisation registers, for vram_info 2.2 and older
 	// regblock->leaves must be already populated.
 	/*
 	This works in a somewhat similar way to umc_init.
@@ -623,32 +623,32 @@ atomtree_populate_init_reg_block(
 
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
 
-	at_regblock->num_index =
+	at_regblock->num_index = // will include final 0xFFFF
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
 	at_regblock->register_index = leaves->RegIndexBuf;
 
-	at_regblock->data_block_element_size = leaves->RegDataBlkSize;
 	at_regblock->num_data_entries = (
 		(leaves->RegDataBlkSize
-			/ sizeof(uint32_t)
-		) -1 // -1 to not count block_id.
+			- sizeof(((struct atom_reg_setting_data_block*)0)->block_id)
+		) / sizeof(((struct atom_reg_setting_data_block*)0)->reg_data[0])
 	);
-	struct atom_reg_setting_data_block* loc =
-		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize;
-
-	uint16_t i = 0;
-	while (loc->block_id.id_access) {
+	at_regblock->data_block_element_size = leaves->RegDataBlkSize;
+	struct atom_reg_setting_data_block* block = (  // starting point
+		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
+	);
+	uint8_t i = 0;
+	while (block->block_id.id_access) { // the datablock list ends with 0
 		assert(ATOMTREE_MC_REG_MAX > i);
-		at_regblock->data_blocks[i] = loc;
+		at_regblock->data_blocks[i] = block;
 		i++;
-		loc = (void*)loc + at_regblock->data_block_element_size;
+		block = (void*)block + at_regblock->data_block_element_size;
 	}
 	at_regblock->num_data_blocks = i;
 
 	atui_branch* atui_regblock = NULL;
 	if (generate_atui) {
 		atui_regblock = ATUI_MAKE_BRANCH(atom_init_reg_block,
-			NULL,  at_regblock, at_regblock->leaves,
+			NULL,  at_regblock, leaves,
 			num_extra_atuibranches, NULL
 		);
 	}
@@ -663,7 +663,6 @@ atomtree_populate_umc_init_reg_block(
 		) {
 	// UMC inititialisation registers, for vram_info 2.3 and newer
 	// regblock->leaves must be already populated.
-
 	/*
 	AMD, what the fuck? fuckin please be consistent. Use your common table
 	structure, and use your pointers. And why aren't your pointers starting
@@ -677,54 +676,47 @@ atomtree_populate_umc_init_reg_block(
 	Take a look at struct atom_umc_init_reg_block of atomfirmware.h.
 	This struct has 3 notable lists:
 	umc_reg_list, umc_reg_setting_list, and
-	atom_umc_reg_setting_data_block's u32umc_reg_data.
+	atom_umc_reg_setting_data_block's umc_reg_data.
 	These lists are all dynamically sized.
 
 	umc_reg_list follows umc_reg_num.
 	umc_reg_setting_list starts immediately after umc_reg_list.
-	umc_reg_setting_list does not follow umc_reg_num. but ends with 0-fill.
-	and atom_umc_reg_setting_data_block's u32umc_reg_data follows
+	umc_reg_setting_list does not follow umc_reg_num, but ends with 0-fill.
+	and atom_umc_reg_setting_data_block's umc_reg_data follows
 	umc_reg_num.
 	*/
-	uint16_t i = 0;
 
-	at_regblock->umc_reg_list = at_regblock->leaves->umc_reg_list;
-	at_regblock->umc_number_of_registers = &(at_regblock->leaves->umc_reg_num);
-	const uint16_t umc_reg_list_size = (
-		sizeof(union atom_umc_register_addr_info_access)
-		* (*at_regblock->umc_number_of_registers)
+	struct atom_umc_init_reg_block* const leaves = at_regblock->leaves;
+
+	at_regblock->register_info = leaves->umc_reg_list;
+	at_regblock->num_info = leaves->umc_reg_num;
+
+	at_regblock->num_data_entries = leaves->umc_reg_num;
+	at_regblock->data_block_element_size = (
+		sizeof(((struct atom_umc_reg_setting_data_block*)0)->block_id)
+		+ (sizeof(((struct atom_umc_reg_setting_data_block*)0)->umc_reg_data[0])
+			* at_regblock->num_data_entries
+		)
 	);
-
-	// regsettingblock_starting_point is umc_reg_setting_list[0]
-	void* const regsettingblock_starting_point = (
-		(void*)at_regblock->leaves
-		+ sizeof(struct atom_umc_init_reg_block_header)
-		+ umc_reg_list_size
+	struct atom_umc_reg_setting_data_block* block = (   // starting point
+		(void*)leaves->umc_reg_list
+		+ (sizeof(union atom_umc_register_addr_info_access)
+			* leaves->umc_reg_num
+		) // size of umc_reg_list
 	);
-
-	// the -1 is from the data_block struct already having the first element,
-	// the "u32umc_reg_data[1]".
-	const uint16_t regsetting_elementsize = (
-		sizeof(struct atom_umc_reg_setting_data_block)
-		+ ((*at_regblock->umc_number_of_registers-1) * sizeof(uint32_t))
-	);
-	at_regblock->umc_reg_setting_list_element_size = regsetting_elementsize;
-
-	struct atom_umc_reg_setting_data_block* loc;
-	for (i=0; i < *at_regblock->umc_number_of_registers ; i++) {
-		loc = regsettingblock_starting_point + regsetting_elementsize*i;
-		if (loc->block_id.u32umc_id_access == 0) {
-			break; // AtomBIOS ends the datablock list with 0-fill.
-		}
+	uint8_t i = 0;
+	while (block->block_id.id_access) { // the datablock list ends with 0
 		assert(ATOMTREE_UMC_REG_MAX > i);
-		at_regblock->umc_reg_setting_list[i] = loc;
+		at_regblock->data_blocks[i] = block;
+		i++;
+		block = (void*)block + at_regblock->data_block_element_size;
 	}
-	at_regblock->umc_reg_setting_list_length = i;
+	at_regblock->num_data_blocks = i;
 
 	atui_branch* atui_regblock = NULL;
 	if (generate_atui) {
 		atui_regblock = ATUI_MAKE_BRANCH(atom_umc_init_reg_block,
-			NULL,  at_regblock, at_regblock->leaves,
+			NULL,  at_regblock, leaves,
 			num_extra_atuibranches, NULL
 		);
 	}
@@ -784,7 +776,7 @@ atomtree_populate_atom_memory_timing_format_v0(
 			(sizeof(atui_mrs)/sizeof(atui_branch*)), atui_mrs
 		);
 		sprintf(atui_formattimings->name, "MemTiming (%u MHz)",
-			(format_v0_array[i].ClkRange/100)
+			(format_v0_array[i].ClkRange / 100)
 		);
 		ATUI_ADD_BRANCH(parent, atui_formattimings);
 	}
@@ -1773,24 +1765,24 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->mem_clk_patch), generate_atui, 1 // 1 for timings
 		);
 
-		vi24->navi1_gddr6_timings = (struct umc_block_navi1_timings*)\
-			vi24->mem_clk_patch.umc_reg_setting_list[0];
-		vi24->num_timing_straps =
-			&(vi24->mem_clk_patch.umc_reg_setting_list_length);
+		vi24->navi1_gddr6_timings = (
+			(struct umc_block_navi1_timings*) vi24->mem_clk_patch.data_blocks[0]
+		);
+		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
 
 		if (generate_atui) {
 			atui_branch* const atui_navi_timings = ATUI_MAKE_BRANCH(
-				atui_nullstruct,
-				"umc_block_navi1_timings",
+				atui_nullstruct,  "umc_block_navi1_timings",
 				NULL,NULL,  *vi24->num_timing_straps,NULL
 			);
+			struct umc_block_navi1_timings* timings = vi24->navi1_gddr6_timings;
 			for (i=0; i < *vi24->num_timing_straps; i++) {
 				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings,  NULL,
 					NULL,&(vi24->navi1_gddr6_timings[i]),  0,NULL
 				);
 				sprintf(tmp_branch->name, "%s (%i MHz)",
 					tmp_branch->varname,
-					(vi24->navi1_gddr6_timings[i].block_id.memclockrange / 100)
+					(timings[i].block_id.mem_clock_range / 100)
 				);
 				ATUI_ADD_BRANCH(atui_navi_timings, tmp_branch);
 			}
@@ -1910,23 +1902,21 @@ atomtree_populate_vram_info_v2_5(
 	if (vi25->leaves->gddr6_ac_timing_offset) {
 		vi25->gddr6_ac_timings =
 			(void*)vi25->leaves + vi25->leaves->gddr6_ac_timing_offset;
-		i = 0;
-		while (vi25->gddr6_ac_timings[i].u32umc_id_access.u32umc_id_access) {
-			i++;
-		}
+		for (i = 0; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
 		vi25->gddr6_acstrap_count = i;
 		if (generate_atui) {
 			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
 				"atom_gddr6_ac_timing_v2_5",
 				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 			);
+			struct atom_gddr6_ac_timing_v2_5* timings = vi25->gddr6_ac_timings;
 			for (i=0; i < vi25->gddr6_acstrap_count; i++) {
 				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
 					NULL,  NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
 				);
 				sprintf(tmp_branch->name, "%s (%u MHz)",
 					tmp_branch->varname,
-					vi25->gddr6_ac_timings[i].u32umc_id_access.memclockrange/100
+					(timings[i].block_id.mem_clock_range / 100)
 				);
 				ATUI_ADD_BRANCH(atui_gddr6_ac_timings, tmp_branch);
 			}

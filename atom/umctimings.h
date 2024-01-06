@@ -408,7 +408,7 @@ struct PMG_CMD {
 
 
 struct umc_block_navi1_timings {
-	union atom_umc_reg_setting_id_config_access  block_id; //frequency
+	union atom_mc_register_setting_id block_id; //frequency
 
 	struct UMCCTRL_MISC2 gddr6_mr5;
 	struct UMCCTRL_PMG_CMD_MRS gddr6_mr0;

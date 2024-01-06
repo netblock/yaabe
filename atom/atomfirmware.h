@@ -3408,7 +3408,7 @@ enum atom_umc_register_addr_info_flag {
 	b3ATOM_UMC_REG_ADD_INFO_INDIRECT_ACCESS  = 0x01,
 };
 union atom_umc_register_addr_info_access {
-	uint32_t u32umc_reg_addr;
+	uint32_t umc_reg_addr;
 	struct { uint32_t
 		umc_register_addr :23-0 +1,
 		umc_reg_type_ind  :24-24 +1, // flag
@@ -3421,28 +3421,23 @@ struct atom_umc_reg_setting_id_config {
 	uint32_t memclockrange:24;
 	uint32_t mem_blk_id:8;
 };
-union atom_umc_reg_setting_id_config_access_old {
+union atom_mc_register_setting_id_old {
 	struct atom_umc_reg_setting_id_config umc_id_access;
 	uint32_t u32umc_id_access;
 };
 */
-union atom_umc_reg_setting_id_config_access {
-	uint32_t u32umc_id_access;
+union atom_mc_register_setting_id {
+	uint32_t id_access;
 	struct { uint32_t
-		memclockrange :23-0 +1,
-		mem_blk_id    :31-24 +1;
+		mem_clock_range :23-0 +1,
+		mem_block_id    :31-24 +1;
 	};
 };
 struct atom_umc_reg_setting_data_block {
-	union atom_umc_reg_setting_id_config_access  block_id;
-	uint32_t u32umc_reg_data[1]; // umc_reg_num wide as well
+	union atom_mc_register_setting_id  block_id;
+	uint32_t umc_reg_data[1]; // umc_reg_num wide as well
 };
 
-struct atom_umc_init_reg_block_header {
-// is the first two elements of atom_umc_init_reg_block, and is for sizeof()
-// math purposes only
-	uint16_t umc_reg_num; uint16_t reserved;
-};
 struct umc_reg_settings_dummy { // dummy table for ATUI
 	struct atom_umc_reg_setting_data_block umc_reg_setting_list[1];
 };
@@ -3570,7 +3565,7 @@ struct atom_vram_module_v11 {
 };
 
 struct atom_gddr6_ac_timing_v2_5 {
-	union atom_umc_reg_setting_id_config_access u32umc_id_access;
+	union atom_mc_register_setting_id block_id;
 	uint8_t  RL;
 	uint8_t  WL;
 	uint8_t  tRAS;
