@@ -2381,6 +2381,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 	vo41->num_voltage_objects = i;
 	// TODO bounds checks for i and array size
 
+	int16_t naming_enum_i;
 	struct atomtree_voltage_object_v4* at_vobj;
 	if (generate_atui) {
 		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
@@ -2427,7 +2428,23 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 					);
 					break;
 			}
-			sprintf(tmp_branch->name, "%s [%u]", tmp_branch->varname, i);
+			naming_enum_i = atui_enum_bsearch(
+				at_vobj->voltage_object->header.voltage_type,
+				&(PPATUI_ENUM_NAME(atom_voltage_type))
+			);
+			if (naming_enum_i < 0) {
+				sprintf(tmp_branch->name, "%s (type %x)",
+					tmp_branch->varname,
+					at_vobj->voltage_object->header.voltage_type
+				);
+			} else {
+				sprintf(tmp_branch->name, "%s (%s)",
+					tmp_branch->varname,
+					PPATUI_ENUM_NAME(atom_voltage_type).enum_array[
+						naming_enum_i
+					].name
+				);
+			}
 			ATUI_ADD_BRANCH(atui_vo_info, tmp_branch);
 		}
 	}

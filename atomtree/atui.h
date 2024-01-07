@@ -141,7 +141,7 @@ struct _atui_leaf {
 	void* auxiliary; // any extra info to hang off if necessary
 };
 struct  _atui_branch {
-	char8_t name[48];
+	char8_t name[64];
 	const char8_t* varname;
 
 	const char8_t* description[LANG_TOTALLANGS];

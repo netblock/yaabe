@@ -2370,30 +2370,6 @@ struct set_voltage_parameters_v1_3 {
 	uint16_t VoltageLevel; // real voltage level in unit of mv or Voltage Phase (0, 1, 2, .. )
 };
 
-// ucVoltageType
-#define VOLTAGE_TYPE_VDDC       1
-#define VOLTAGE_TYPE_MVDDC      2
-#define VOLTAGE_TYPE_MVDDQ      3
-#define VOLTAGE_TYPE_VDDCI      4
-#define VOLTAGE_TYPE_VDDGFX     5
-#define VOLTAGE_TYPE_PCC        6
-#define VOLTAGE_TYPE_MVPP       7
-#define VOLTAGE_TYPE_LEDDPM     8
-#define VOLTAGE_TYPE_PCC_MVDD   9
-#define VOLTAGE_TYPE_PCIE_VDDC 10
-#define VOLTAGE_TYPE_PCIE_VDDR 11
-
-#define VOLTAGE_TYPE_GENERIC_I2C_1  0x11
-#define VOLTAGE_TYPE_GENERIC_I2C_2  0x12
-#define VOLTAGE_TYPE_GENERIC_I2C_3  0x13
-#define VOLTAGE_TYPE_GENERIC_I2C_4  0x14
-#define VOLTAGE_TYPE_GENERIC_I2C_5  0x15
-#define VOLTAGE_TYPE_GENERIC_I2C_6  0x16
-#define VOLTAGE_TYPE_GENERIC_I2C_7  0x17
-#define VOLTAGE_TYPE_GENERIC_I2C_8  0x18
-#define VOLTAGE_TYPE_GENERIC_I2C_9  0x19
-#define VOLTAGE_TYPE_GENERIC_I2C_10 0x1A
-
 // SET_VOLTAGE_PARAMETERS_V3.ucVoltageMode
 #define ATOM_SET_VOLTAGE            0 // Set voltage Level
 #define ATOM_INIT_VOLTAGE_REGULATOR 3 // Init Regulator
