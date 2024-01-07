@@ -895,13 +895,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_3->MemoryVendorID.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_3->MemoryVendorID.vendor_code
 						].name
 					);
@@ -971,13 +969,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_4->MemoryVendorID.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_4->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1060,13 +1056,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_7->MemoryVendorID.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_7->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1110,13 +1104,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_8->MemoryVendorID.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_8->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1141,13 +1133,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_9->vendor_rev_id.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_9->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1172,13 +1162,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_10->vendor_rev_id.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_10->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1203,13 +1191,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v1_11->vendor_rev_id.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_11->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1257,13 +1243,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vram_modules[i].v3_0->dram_vendor_id.vendor_code
-						<= ( sizeof(PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e))
-								/ sizeof(struct atui_enum)
-							)
+						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, "%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e)[
+						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v3_0->dram_vendor_id.vendor_code
 						].name
 					);

@@ -35,10 +35,15 @@ atui.h is about the core atui interface
 // see bottom for more includes
 
 
-// base struct for PPATUI_ENUMER() for ATUI_ENUM
-struct atui_enum {
+// for PPATUI_ENUMER() for ATUI_ENUM
+struct atui_enum_entry {
 	const char8_t* const name;
 	const int64_t val;
+};
+struct atui_enum {
+	const char8_t* const name;
+	const uint8_t num_entries;
+	const struct atui_enum_entry* const enum_array;
 };
 
 enum i18n_languages:int8_t {
@@ -87,9 +92,7 @@ struct _atui_leaf {
 	char8_t name[64];
 	const char8_t* origname;
 	const char8_t* varname;
-
 	const char8_t* description[LANG_TOTALLANGS];
-
 
 	uint32_t num_bytes; // number of bytes for quick leaf size
 	enum atui_type type; // how to display text, and other config data
@@ -102,9 +105,7 @@ struct _atui_leaf {
 
 	uint8_t num_child_leaves;
 
-
-	uint8_t num_enum_opts;
-	const struct atui_enum* enum_options; // array of text val pair
+	const struct atui_enum* enum_options; // if it has an associated enum
 
 	union {
 		atui_branch** inline_branch;
@@ -187,6 +188,12 @@ float64_t atui_leaf_get_val_fraction(atui_leaf* leaf);
 // TODO stroll that considers 0b prefix?
 int64_t strtoll_2(const char8_t* str);
 uint64_t strtoull_2(const char8_t* str);
+
+int16_t
+atui_enum_bsearch(
+		int64_t val,
+		const struct atui_enum* const enum_array
+		);
 
 
 // atui has auxiliary pointers to hang extra data off of and this deallocator

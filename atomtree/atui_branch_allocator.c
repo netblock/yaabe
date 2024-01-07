@@ -242,8 +242,11 @@ atui_branch* atui_branch_allocator(
 								dynarray_patterns[leafpattern_i].origname;
 
 							if (dynarray_enum_taglist) { // could be hoisted
+								assert(dynarray_enum_taglist->num_entries
+									> dynarray_biosarray_i
+								);
 								sprintf(target_name, suggest_name,
-									dynarray_enum_taglist[
+									dynarray_enum_taglist->enum_array[
 										dynarray_biosarray_i
 									].name,
 									dynarray_biosarray_i

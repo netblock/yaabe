@@ -497,6 +497,34 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 	return malloc_size;
 }
 
+int16_t
+atui_enum_bsearch(
+		int64_t val,
+		const struct atui_enum* const enum_set
+		) {
+	// binary search for atui_enum arrays.
+	// as a result, it assumes the array is sorted.
+	// this algo also finds the leftmost if there are duplicates
+	const struct atui_enum_entry* const enum_array = enum_set->enum_array;
+	uint8_t left = 0;
+	uint8_t mid;
+	uint8_t right = enum_set->num_entries;
+	while(left != right) {
+		mid = (left + right) >> 1;  // bitshift div-by-2
+		if (val <= enum_array[mid].val) {
+			right = mid;
+		} else {
+			left = mid + 1;
+		}
+	}
+	// left==right. mid will be off by 1, leftwise, if it's unique.
+	if (left == enum_set->num_entries) {
+		return -1;
+	} else {
+		return left;
+	}
+}
+
 
 
 void atui_destroy_tree(atui_branch* tree) { // a reference implementation

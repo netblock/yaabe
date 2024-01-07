@@ -45,12 +45,18 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 	parent->num_branches++;
 
 // To define an array of string-val pairs of an enum.
-#define PPATUI_ENUMER(name, ...)\
-\
-	static const struct atui_enum const PPATUI_ENUM_NAME(name)[] =\
-		{_PPATUI_ENUM_ENTRIES(__VA_ARGS__)};
+#define PPATUI_ENUMER(e_name, ...)\
+	static_assert(_PP_NUMARG(__VA_ARGS__) <= 255); /*pp funcs, some uint8_t*/\
+	static const struct atui_enum PPATUI_ENUM_NAME(e_name) = {\
+		.name = #e_name,\
+		.num_entries = _PP_NUMARG(__VA_ARGS__),\
+		.enum_array = (const struct atui_enum_entry[]) {\
+			_PPATUI_ENUM_ENTRIES(__VA_ARGS__)\
+		},\
+	};
+#define PPATUI_ENUM_NAME(enum_name) _atui_enum_##enum_name
 #define _PPATUI_EENTRY(o, enum_member) {.name=#enum_member, .val=enum_member},
-#define _atui_enum_ATUI_NULL NULL
+#define _atui_enum_ATUI_NULL ATUI_NULL
 
 
 // To define the header entries for the aformentioned allocator functions.
@@ -63,10 +69,6 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 // PPATUI function interface:
 #define PPATUI_FUNC_NAME(atomstruct)\
 	_##atomstruct##_atui
-
-//#define _atui_enum_ATUI_NULL NULL
-#define PPATUI_ENUM_NAME(enum_name)\
-	_atui_enum_##enum_name
 
 /***************************** PREPROCESSOR HELL *****************************/
 
@@ -124,11 +126,11 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_UNPACK1(to_depack)  _PPATUI_UNPACK0 to_depack
 #define _PPATUI_UNPACK0(...) __VA_ARGS__
 // the _Generic needs const*: not *const: for that const affects the next word
-#define _PPATUI_FANCY_INIT_NULLPTR(var) _Generic((var),\
+#define _PPATUI_NULLPTR(var) _Generic((var),\
 	nullptr_t: nullptr,\
 	default: &(var)\
 )
-#define _PPATUI_FANCY_INIT_NULLPTR_SIZE(var) _Generic((var),\
+#define _PPATUI_NULLPTR_SIZE(var) _Generic((var),\
 	nullptr_t: 0,\
 	default: sizeof(var)\
 )
@@ -217,12 +219,12 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 	.type = (radix | fancytype\
 			| _PPATUI_LEAF_SIGNED(var) | _PPATUI_LEAF_FRACTION(var)\
 			),\
-	.num_bytes = _PPATUI_FANCY_INIT_NULLPTR_SIZE(var),\
+	.num_bytes = _PPATUI_NULLPTR_SIZE(var),\
 	.array_size = 1,\
 	.fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(var),\
 	.total_bits = _PPATUI_LEAF_BITNESS(var),\
 	.bitfield_hi = _PPATUI_LEAF_BITNESS(var)-1,\
-	.val = _PPATUI_FANCY_INIT_NULLPTR(var),\
+	.val = _PPATUI_NULLPTR(var),\
 
 // Fancy common end
 
@@ -247,10 +249,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		var, name, description_data, radix, fancytype, enumname)\
 	{\
 		_PPATUI_FANCY_INIT(var, name, description_data, radix, fancytype)\
-		.enum_options = PPATUI_ENUM_NAME(enumname),\
-		.num_enum_opts = (\
-			sizeof(_atui_enum_##enumname)/sizeof(struct atui_enum)\
-		),\
+		.enum_options = &( PPATUI_ENUM_NAME(enumname) ),\
 	},
 
 
@@ -473,7 +472,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		.numleaves = _PPATUI_DYNAR_BOUNDS_JOBS(\
 			NUMLEAVES, _PPATUI_UNPACK0 leaf_pattern\
 		),\
-		.enum_taglist = PPATUI_ENUM_NAME(enum_name),\
+		.enum_taglist = _PPATUI_NULLPTR(PPATUI_ENUM_NAME(enum_name)),\
 	},
 
 /* a problem with _Generics is that all expressions must be globally
