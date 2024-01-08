@@ -117,16 +117,16 @@ atui_leaf_set_val_signed(
 
 	switch (leaf->total_bits) {
 		case 8:
-			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
+			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | raw_val;
 			break;
 		case 16:
-			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
+			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;
 			break;
 		case 32:
-			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
+			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;
 			break;
 		case 64:
-			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
 			break;
 		default:
 			assert(0);
