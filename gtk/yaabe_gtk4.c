@@ -48,8 +48,9 @@ alloc_branch_cache(
 	struct yaabe_gtkapp_model_cache* const models = branch->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = gobj_count;
-	if (gobj_count)
+	if (gobj_count) {
 		models->child_gobj[0] = NULL;
+	}
 }
 inline static void
 alloc_leaf_cache(
@@ -64,8 +65,9 @@ alloc_leaf_cache(
 	struct yaabe_gtkapp_model_cache* const models = leaf->auxiliary;
 	models->leaves_model = NULL;
 	models->child_gobj_count = num_children;
-	if (num_children)
+	if (num_children) {
 		models->child_gobj[0] = NULL;
+	}
 }
 
 
@@ -87,12 +89,13 @@ atui_destroy_tree_with_gtk(
 	if (tree->auxiliary != NULL) {
 		submodels = tree->auxiliary;
 
-		if(submodels->leaves_model != NULL)
+		if (submodels->leaves_model != NULL) {
 			g_object_unref(submodels->leaves_model);
-
+		}
 		child_gobj_count = submodels->child_gobj_count;
-		for (i=0; i < child_gobj_count; i++)
+		for (i=0; i < child_gobj_count; i++) {
 			g_object_unref(submodels->child_gobj[i]);
+		}
 
 		free(submodels);
 	}
@@ -102,9 +105,10 @@ atui_destroy_tree_with_gtk(
 	for(i=0; i < leaf_count; i++) {
 		submodels = tree->leaves[i].auxiliary;
 		if (submodels != NULL) {
-			if(submodels->leaves_model) // Should always be false
+			if(submodels->leaves_model) { // Should always be false
+				assert(0);
 				g_object_unref(submodels->leaves_model);
-
+			}
 			child_gobj_count = submodels->child_gobj_count;
 			for (j=0; j < child_gobj_count; j++) {
 				g_object_unref(submodels->child_gobj[j]);
@@ -118,8 +122,9 @@ atui_destroy_tree_with_gtk(
 	while(tree->max_all_branch_count) {
 		(tree->max_all_branch_count)--;
 		child_branch = tree->all_branches[tree->max_all_branch_count];
-		if (child_branch != NULL)
+		if (child_branch != NULL) {
 			atui_destroy_tree_with_gtk(child_branch);
+		}
 	}
 
 	free(tree);
@@ -136,9 +141,9 @@ destroy_atomtree_with_gtk(
 
 		if (free_bios) {
 			free(atree->alloced_bios);
-
-			if (atree->biosfile)
+			if (atree->biosfile) {
 				g_object_unref(atree->biosfile);
+			}
 		}
 
 		free(atree);
@@ -243,8 +248,9 @@ leaves_textbox_stray(
 	char8_t* buff = stack_buff;
 	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
-	if (has_mallocd)
+	if (has_mallocd) {
 		free(buff);
+	}
 }
 static void
 leaves_val_column_textbox_apply(
@@ -262,8 +268,9 @@ leaves_val_column_textbox_apply(
 	char8_t* buff = stack_buff;
 	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(textbox, buff);
-	if (has_mallocd)
+	if (has_mallocd) {
 		free(buff);
+	}
 }
 
 
@@ -302,8 +309,9 @@ leaves_val_column_recycler(
 	char8_t* buff = stack_buff;
 	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
 	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
-	if (has_mallocd)
+	if (has_mallocd) {
 		free(buff);
+	}
 
 	g_signal_connect(textbox,
 		"activate", G_CALLBACK(leaves_val_column_textbox_apply), leaf
@@ -461,8 +469,9 @@ leaves_tlmodel_func(
 
 		} else { // Use the cache
 			GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
-			for(i=0; i < leaf_cache->child_gobj_count; i++)
+			for(i=0; i < leaf_cache->child_gobj_count; i++) {
 				g_list_store_append(child_list, leaf_cache->child_gobj[i]);
+			}
 			children_model = G_LIST_MODEL(child_list);
 		}
 	}
@@ -511,8 +520,9 @@ set_leaves_list(
 	g_object_unref(gobj_branch);
 
 	struct yaabe_gtkapp_model_cache* const branch_models = branch->auxiliary;
-	if(branch_models->leaves_model == NULL) // if not cached, generate.
+	if(branch_models->leaves_model == NULL) { // if not cached, generate.
 		branchleaves_to_treemodel(branch);
+	}
 
 	gtk_column_view_set_model(commons->leaves_view,
 		branch_models->leaves_model
@@ -628,8 +638,9 @@ branch_tlmodel_func(
 				g_list_store_append(children, gobj_child);
 			}
 		} else {
-			for(i=0; i < branch_models->child_gobj_count; i++)
+			for(i=0; i < branch_models->child_gobj_count; i++) {
 				g_list_store_append(children, branch_models->child_gobj[i]);
+			}
 		}
 	}
 	return G_LIST_MODEL(children);
@@ -796,14 +807,16 @@ atomtree_from_gfile(
 	void* bios = NULL;
 
 	GFileInputStream* const readstream = g_file_read(biosfile, NULL, &ferror);
-	if (ferror)
+	if (ferror) {
 		goto exit1;
+	}
 
 	GFileInfo* const fi_size = g_file_query_info(biosfile,
 		G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &ferror
 	);
-	if (ferror)
+	if (ferror) {
 		goto exit2;
+	}
 
 	const int64_t filesize = g_file_info_get_size(fi_size);
 	g_object_unref(fi_size);
@@ -861,8 +874,9 @@ atomtree_save_to_gfile(
 			atree->biosfile, NULL, &ferror
 		);
 	}
-	if (ferror)
+	if (ferror) {
 		goto ferr0;
+	}
 
 	GIOStream* const biosstream = G_IO_STREAM(biosfilestream);
 	GOutputStream* const writestream = g_io_stream_get_output_stream(
@@ -873,15 +887,18 @@ atomtree_save_to_gfile(
 		writestream,  atree->alloced_bios,
 		atree->biosfile_size,  NULL,NULL,  &ferror
 	);
-	if (ferror)
+	if (ferror) {
 		goto ferr1;
+	}
 
 	g_output_stream_close(writestream, NULL, &ferror);
-	if (ferror)
+	if (ferror) {
 		goto ferr1;
+	}
 	g_io_stream_close(biosstream, NULL, &ferror);
-	if (ferror)
+	if (ferror) {
 		goto ferr1;
+	}
 
 
 	ferr1:
@@ -932,8 +949,9 @@ set_editor_titlebar(
 	gtk_window_set_title(editor_window, window_title);
 
 	free(window_title);
-	if (filename_length)
+	if (filename_length) {
 		g_free(filename);
+	}
 }
 inline static void
 filer_error_window(
@@ -973,8 +991,9 @@ yaabegtk_load_bios(
 	GError* ferror = NULL;
 
 	struct atom_tree* const atree = atomtree_from_gfile(biosfile, &ferror);
-	if (ferror)
+	if (ferror) {
 		goto ferr;
+	}
 
 	if (atree) {
 		struct atom_tree* const oldtree = commons->atomtree_root;
@@ -1019,13 +1038,15 @@ filedialog_load_and_set_bios(
 	GFile* const biosfile = gtk_file_dialog_open_finish(
 		filer, asyncfile, &ferror
 	);
-	if (ferror)
+	if (ferror) {
 		goto ferr_nomsg;
+	}
 
 	yaabegtk_load_bios(commons, biosfile, &ferror);
 	g_object_unref(biosfile);
-	if (ferror)
+	if (ferror) {
 		goto ferr_msg;
+	}
 	return;
 
 	ferr_msg:
@@ -1104,8 +1125,9 @@ save_button_same_file(
 	GError* ferror = NULL;
 
 	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
-	if (ferror)
+	if (ferror) {
 		goto ferr;
+	}
 
 	return;
 
@@ -1130,8 +1152,9 @@ filedialog_saveas_bios(
 	GFile* const new_biosfile = gtk_file_dialog_save_finish(
 		filer, asyncfile, &ferror
 	);
-	if (ferror)
+	if (ferror) {
 		goto ferr_nomsg;
+	}
 
 
 	GFile* const old_biosfile = commons->atomtree_root->biosfile;
@@ -1272,8 +1295,9 @@ hidden; when a file is set unhide it.
 	yaabegtk_commons* const commons = commonsptr;
 
 	GtkSelectionModel* atui_model = NULL;
-	 if (commons->atomtree_root)
+	if (commons->atomtree_root) {
 		atui_model = atui_gtk_model(commons);
+	}
 
 	GtkWidget* const branches_pane = create_branches_pane(commons, atui_model);
 	GtkWidget* const leaves_pane = create_leaves_pane(commons);
