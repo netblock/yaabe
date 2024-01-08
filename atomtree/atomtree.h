@@ -149,14 +149,28 @@ enum atomtree_common_version:uint16_t {
 	v18_11,v18_12,
 	maxver // a test if we're sane or not
 };
-enum atomtree_common_version get_ver(struct atom_common_table_header* header);
-void set_ver(enum atomtree_common_version ver, struct atom_common_table_header* header);
 
+enum atomtree_common_version
+get_ver(
+		const struct atom_common_table_header* header
+		);
+void
+set_ver(
+		enum atomtree_common_version ver,
+		struct atom_common_table_header* header
+		);
 
-void atomtree_bios_checksum(struct atom_tree* atree);
-struct atom_tree* atombios_parse(
-		void* bios, uint32_t alloc_size, bool generate_atui
-);
+void
+atomtree_bios_checksum(
+		struct atom_tree* atree
+		);
+
+struct atom_tree*
+atombios_parse(
+		void* bios,
+		uint32_t alloc_size,
+		bool generate_atui
+		);
 
 //#include "atui.h"
 

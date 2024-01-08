@@ -173,32 +173,72 @@ struct  _atui_branch {
 #define ATUI_LEAVES_STR_BUFFER 128
 
 // set the value from a string or array of 8-bit
-uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* buffer);
-uint16_t atui_get_to_text(atui_leaf*, char8_t** buffer_ptr);
+uint8_t
+atui_set_from_text(
+		atui_leaf* leaf,
+		const char8_t* buffer
+		);
+uint16_t
+atui_get_to_text(
+		const atui_leaf* leaf,
+		char8_t** buffer_ptr
+		);
 // returns malloc size
 
 // set or get the number value from the leaf
-void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val);
-uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf);
-void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val);
-int64_t atui_leaf_get_val_signed(atui_leaf* leaf);
-void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val);
-float64_t atui_leaf_get_val_fraction(atui_leaf* leaf);
+void
+atui_leaf_set_val_unsigned(
+		atui_leaf* leaf,
+		uint64_t val
+		);
+uint64_t
+atui_leaf_get_val_unsigned(
+		const atui_leaf* leaf
+		);
+
+void
+atui_leaf_set_val_signed(
+		atui_leaf* leaf,
+		int64_t val
+		);
+int64_t
+atui_leaf_get_val_signed(
+		const atui_leaf* leaf
+		);
+
+void
+atui_leaf_set_val_fraction(
+		atui_leaf* leaf,
+		float64_t val
+		);
+float64_t
+atui_leaf_get_val_fraction(
+		const atui_leaf* leaf
+		);
 
 // TODO stroll that considers 0b prefix?
-int64_t strtoll_2(const char8_t* str);
-uint64_t strtoull_2(const char8_t* str);
+int64_t
+strtoll_2(
+		const char8_t* str
+		);
+uint64_t
+strtoull_2(
+		const char8_t* str
+		);
 
 int16_t
 atui_enum_bsearch(
 		int64_t val,
-		const struct atui_enum* const enum_array
+		const struct atui_enum* enum_array
 		);
-
 
 // atui has auxiliary pointers to hang extra data off of and this deallocator
 // doesn't consider.
-void atui_destroy_tree(atui_branch* tree);
+void
+atui_destroy_tree(
+		atui_branch* tree
+		);
+
 
 
 
@@ -254,10 +294,11 @@ struct atui_branch_data {
 	const uint8_t num_branches_initial;
 
 };
-atui_branch* atui_branch_allocator(
+atui_branch*
+atui_branch_allocator(
 	const struct atui_branch_data* const embryo,
 	const struct atui_funcify_args* const args
-);
+	);
 
 
 #include "ppatui.h"

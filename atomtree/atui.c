@@ -8,7 +8,11 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include "atui.h"
 #include <math.h>
 
-void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
+void
+atui_leaf_set_val_unsigned(
+		atui_leaf* const leaf,
+		uint64_t val
+		) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
@@ -46,7 +50,11 @@ void atui_leaf_set_val_unsigned(atui_leaf* leaf, uint64_t val) {
 			break;
 	}
 }
-uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
+
+uint64_t
+atui_leaf_get_val_unsigned(
+		const atui_leaf* const leaf
+		) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
@@ -80,7 +88,12 @@ uint64_t atui_leaf_get_val_unsigned(atui_leaf* leaf) {
 
 	return val;
 }
-void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
+
+void
+atui_leaf_set_val_signed(
+		atui_leaf* const leaf,
+		const int64_t val
+		) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
@@ -120,7 +133,11 @@ void atui_leaf_set_val_signed(atui_leaf* leaf, int64_t val) {
 			break;
 	}
 }
-int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
+
+int64_t
+atui_leaf_get_val_signed(
+		const atui_leaf* const leaf
+		) {
 	if (!(leaf->type & ATUI_ANY)) {
 		assert(0);
 	}
@@ -154,7 +171,11 @@ int64_t atui_leaf_get_val_signed(atui_leaf* leaf) {
 	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
 	return val;
 }
-void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
+
+void
+atui_leaf_set_val_fraction(
+		atui_leaf* const leaf,
+		const float64_t val) {
 	if (!(leaf->type & ATUI_FRAC)) {
 		assert(0);
 	}
@@ -211,7 +232,11 @@ void atui_leaf_set_val_fraction(atui_leaf* leaf, float64_t val) {
 
 	assert(0);
 }
-float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
+
+float64_t
+atui_leaf_get_val_fraction(
+		const atui_leaf* const leaf
+		) {
 	if (!(leaf->type &  ATUI_FRAC)) {
 		assert(0);
 	}
@@ -257,7 +282,10 @@ float64_t atui_leaf_get_val_fraction(atui_leaf* leaf) {
 	assert(0);
 }
 
-int64_t strtoll_2(const char8_t* str) {
+int64_t
+strtoll_2(
+		const char8_t* str
+		) {
 	// TODO it seems the C2X's changes for the strto* hasn't landed yet
 	uint8_t base = 0; // 0 = auto
 	if ((str[0] == '0') && (str[1] == 'b')) {
@@ -266,7 +294,11 @@ int64_t strtoll_2(const char8_t* str) {
 	}
 	return strtoll(str, NULL, base);
 }
-uint64_t strtoull_2(const char8_t* str) {
+
+uint64_t
+strtoull_2(
+		const char8_t* str
+		) {
 	// TODO it seems the C2X's changes for the strto* hasn't landed yet
 	uint8_t base = 0; // 0 = auto
 	if ((str[0] == '0') && (str[1] == 'b')) {
@@ -277,7 +309,11 @@ uint64_t strtoull_2(const char8_t* str) {
 }
 
 
-uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
+uint8_t
+atui_set_from_text(
+		atui_leaf* const leaf,
+		const char8_t* const text
+		) {
 	//set the value of the leaf based on input text. Currently only support for
 	// numbers (including bitfields) and strings.
 
@@ -371,7 +407,12 @@ uint8_t atui_set_from_text(atui_leaf* leaf, const char8_t* text) {
 	}
 	return err;
 }
-uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
+
+uint16_t
+atui_get_to_text(
+		const atui_leaf* const leaf,
+		char8_t** buffer_ptr
+		) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
 
@@ -499,7 +540,7 @@ uint16_t atui_get_to_text(atui_leaf* leaf, char8_t** buffer_ptr) {
 
 int16_t
 atui_enum_bsearch(
-		int64_t val,
+		const int64_t val,
 		const struct atui_enum* const enum_set
 		) {
 	// binary search for atui_enum arrays.
@@ -527,7 +568,10 @@ atui_enum_bsearch(
 
 
 
-void atui_destroy_tree(atui_branch* tree) { // a reference implementation
+void
+atui_destroy_tree(
+		atui_branch* const tree
+		) { // a reference implementation
 	while(tree->max_all_branch_count--) {
 		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
 	}

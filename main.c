@@ -2,7 +2,11 @@
 #include "atui.h"
 #include "yaabe_gtk4.h"
 
-int main(int argc, char8_t** argv) {
+uint16_t
+main(
+		uint16_t const argc,
+		const char8_t* const* const argv
+		) {
 	struct atom_tree* atree = NULL;
 
 	if (argc > 1) {

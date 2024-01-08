@@ -7,9 +7,11 @@ atui_branch_allocator processes the data set up by the ATUI_FUNCIFY functions
 to spit out your branch
 
 */
-atui_branch* atui_branch_allocator(
+atui_branch*
+atui_branch_allocator(
 		const struct atui_branch_data* const embryo,
-		const struct atui_funcify_args* const args) {
+		const struct atui_funcify_args* const args
+		) {
 
 	const atui_leaf* const leaves_initial = embryo->leaves_initial;
 	const atui_leaf* const dynarray_patterns = embryo->dynarray_patterns;
