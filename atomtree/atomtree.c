@@ -1598,6 +1598,7 @@ atomtree_populate_vram_info_v2_3(
 	vi23->leaves = vram_info->leaves;
 
 	uint16_t i = 0;
+	atui_branch* tmp_branch = NULL;
 
 	atui_branch* atui_memadjust = NULL;
 	if (vi23->leaves->mem_adjust_tbloffset) {
@@ -1618,10 +1619,46 @@ atomtree_populate_vram_info_v2_3(
 		vi23->mem_clk_patch.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
 		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			&(vi23->mem_clk_patch), generate_atui, 0
+			&(vi23->mem_clk_patch), generate_atui, 1
 		);
+
+		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
+		vi23->hbm2_timings = vi23->mem_clk_patch.data_blocks[0];
+		if (vi23->mem_clk_patch.data_block_element_size
+			== sizeof(struct umc_block_vega10_timings)) {
+			vi23->vega21 = false;
+		} else {
+			vi23->vega21 = true;
+		}
+
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+
+			atui_branch* const atui_hbm2_timings = ATUI_MAKE_BRANCH(
+				atui_nullstruct, NULL,
+				NULL,NULL,  *vi23->num_timing_straps, NULL
+			);
+			ATUI_ADD_BRANCH(atui_memclkpatch, atui_hbm2_timings);
+			if (vi23->vega21) {
+				strcpy(atui_hbm2_timings->name,
+					"umc_block_vega21_timings (uncertain)"
+				);
+				// TODO 96 bytes
+			} else {
+				strcpy(atui_hbm2_timings->name,
+					"umc_block_vega10_timings (uncertain)"
+				);
+				for (i=0; i < *vi23->num_timing_straps; i++) {
+					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega10_timings,
+						NULL,  NULL,&(vi23->vega10_timings[i]),  0,NULL
+					);
+					sprintf(tmp_branch->name, "%s (%i MHz)",
+						tmp_branch->varname,
+						(vi23->vega10_timings[i].block_id.mem_clock_range / 100)
+					);
+					ATUI_ADD_BRANCH(atui_hbm2_timings, tmp_branch);
+				}
+			} 
 		}
 	} else {
 		vi23->mem_clk_patch.leaves = NULL;
@@ -1749,6 +1786,9 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->mem_clk_patch), generate_atui, 1 // 1 for timings
 		);
 
+		assert(sizeof(struct umc_block_navi1_timings)
+			== vi24->mem_clk_patch.data_block_element_size
+		);
 		vi24->navi1_gddr6_timings = (
 			(struct umc_block_navi1_timings*) vi24->mem_clk_patch.data_blocks[0]
 		);

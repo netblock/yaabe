@@ -132,6 +132,31 @@ PPATUI_FUNCIFY(union, DRAMTiming8, atui_nullstruct,
 )
 
 
+PPATUI_FUNCIFY(union, DRAMTiming9_HBM2, atui_nullstruct,
+	(bios->DRAMTiming9, "DRAMTiming9",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tWRWR_DD",   3,0, ATUI_DEC,
+				((LANG_ENG, "Different DIMM"))
+			),
+			("rsvd0",      7,4, ATUI_DEC, (ATUI_NODESCR)),
+			("tWRWR_SD",  11,8, ATUI_DEC,
+				((LANG_ENG, "Same DIMM"))
+			),
+			("rsvd1",     15,12, ATUI_DEC, (ATUI_NODESCR)),
+			("tWRWR_SC",  19,16, ATUI_DEC,
+				((LANG_ENG, "JEDEC tCCD_S"))
+			),
+			("rsvd2",     23,20, ATUI_DEC, (ATUI_NODESCR)),
+			("tWRWR_SCL", 27,24, ATUI_DEC,
+				((LANG_ENG, "tCCD_L"))
+			),
+			("rsvd3",     29,28, ATUI_DEC, (ATUI_NODESCR)),
+			("tWRWR_BAN", 31,30, ATUI_DEC,
+				((LANG_ENG, "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6"))
+			)
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(union, DRAMTiming9, atui_nullstruct,
 	(bios->DRAMTiming9, "DRAMTiming9",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -188,6 +213,16 @@ PPATUI_FUNCIFY(union, DRAMTiming13, atui_nullstruct,
 )
 
 
+PPATUI_FUNCIFY(union, DRAMTiming14_HBM2, atui_nullstruct,
+	(bios->DRAMTiming14, "DRAMTiming14",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tXS",   10,0, ATUI_DEC,
+				((LANG_ENG, "exit self refreh to not requiring a locked DLL"))
+			),
+			("rsvd0", 31,11, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(union, DRAMTiming14, atui_nullstruct,
 	(bios->DRAMTiming14, "DRAMTiming14",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -238,6 +273,22 @@ PPATUI_FUNCIFY(union, DRAMTiming16, atui_nullstruct,
 )
 
 
+PPATUI_FUNCIFY(union, DRAMTiming17_HBM2, atui_nullstruct,
+	(bios->DRAMTiming17, "DRAMTiming17",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tPD",           3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("tCKSRE",        9,4, ATUI_DEC, (ATUI_NODESCR)),
+			("tCKSRX",        15,10, ATUI_DEC, (ATUI_NODESCR)),
+			("PwrDownDly",    23,16, ATUI_DEC,
+				((LANG_ENG, "last command to PowerDown"))
+			),
+			("AggPwrDownDly", 29,24, ATUI_DEC,
+				((LANG_ENG, "last DRAM activity to precharge, for PD"))
+			),
+			("rsvd2",         31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(union, DRAMTiming17, atui_nullstruct,
 	(bios->DRAMTiming17, "DRAMTiming17",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -251,6 +302,18 @@ PPATUI_FUNCIFY(union, DRAMTiming17, atui_nullstruct,
 				((LANG_ENG, "last DRAM activity to precharge, for PD"))
 			),
 			("rsvd0",         31,31, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(union, DRAMTiming18_HBM2, atui_nullstruct,
+	(bios->DRAMTiming18, "DRAMTiming18",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tRFCSB", 10,0, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",  15,11, ATUI_DEC, (ATUI_NODESCR)),
+			("tSTAG",  23,16, ATUI_DEC, ((LANG_ENG, "ref-to-ref different rank"))),
+			("rsvd1",  31,24, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -282,6 +345,34 @@ PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
 )
 
 
+PPATUI_FUNCIFY(union, DRAMTiming22_HBM2, atui_nullstruct, // reverse-engineered; might be wrong.
+	(bios->DRAMTiming22, "DRAMTiming22",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("rsvd0",        1,0, ATUI_DEC,
+				((LANG_ENG, "makes n=3,3"))
+			),
+			("tRDDATA_EN",   6,2, ATUI_DEC,
+				((LANG_ENG, "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en"))
+			),
+			("rsvd1",        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_WRLAT",  13,8, ATUI_DEC,
+				((LANG_ENG, "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en"))
+			),
+			("rsvd2",       16,14, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_RDLAT",  22,17, ATUI_DEC,
+				((LANG_ENG, "dfi_rddata_en to dfi_rddata_vld dely"))
+			),
+			("rsvd3",       24,23, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_WRDATA", 27,25, ATUI_DEC,
+				((LANG_ENG, "dfi_wrdata_en to dfi_wrdata delay"))
+			),
+			("tPARIN_LAT",  29,28, ATUI_DEC,
+				((LANG_ENG, "ctrl signals to parity delay"))
+			),
+			("rsvd4",       31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
 	(bios->DRAMTiming22, "DRAMTiming22",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -358,6 +449,7 @@ PPATUI_FUNCIFY(union, DRAMTiming35, atui_nullstruct,
 	)
 )
 
+
 PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct,
 	(bios->DRAMTiming36, "DRAMTiming36",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -410,6 +502,103 @@ PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
 			),
 			("rsvd2",        31,11, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
+	(bios->block_id, "block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming1, "DRAMTiming1",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming1),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming2, "DRAMTiming2",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming3, "DRAMTiming3",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming3),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming4, "DRAMTiming4",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming4),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming5, "DRAMTiming5",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming5),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming6, "DRAMTiming6",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming6),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming7, "DRAMTiming7",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming7),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming8, "DRAMTiming8",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming8),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming9, "DRAMTiming9",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming9_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming10, "DRAMTiming10",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming10),
+		(ATUI_NODESCR)
+	),
+
+	(bios->DRAMTiming12, "DRAMTiming12",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
+		(ATUI_NODESCR)
+	),
+	(bios->unknown13, "unknown13",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->DRAMTiming14, "DRAMTiming14",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->unknown15, "unknown15",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->DRAMTiming16, "DRAMTiming16",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming16),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming17, "DRAMTiming17",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming17_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming18, "DRAMTiming18",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming18_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming21, "DRAMTiming21",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming21),
+		(ATUI_NODESCR)
+	),
+	(bios->unknown19, "unknown19",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->unknown20, "unknown20",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->tRFC, "tRFC",
+		(ATUI_NODISPLAY, ATUI_INLINE, TRFCTimingCS01),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming22, "DRAMTiming22",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming22_HBM2),
+		(ATUI_NODESCR)
 	)
 )
 

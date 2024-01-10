@@ -5,6 +5,9 @@ Open your JESD and your PPR/BKDG
 Some timings get removed depending on the target platform. If there's more than
 4 contiguous reserved bits, there's probably a timing for a different platform
 there.
+
+HBM2 and vega10 is manually reverse-engineered so it can be wrong.
+(vals from amdmemtweak is wrong)
 */
 
 #ifndef _UMCTIMINGS_H_
@@ -114,21 +117,22 @@ union DRAMTiming8 {
 	};
 };
 
-union DRAMTiming9 {
+union DRAMTiming9_HBM2 {
 	uint32_t DRAMTiming9;
 	struct { uint32_t
-		tWRWR_MW   :4-0 +1, // masked write; GDDR
-		rsvd0     :15-5 +1,
-		tWRWR_SC  :19-16 +1,
-		rsvd1     :23-20 +1,
-		tWRWR_SCL :29-24 +1,
-		tWRWR_BAN :31-30 +1;
+		tWRWR_DD   :3-0 +1, // Different DIMM
+		rsvd0      :7-4 +1,
+		tWRWR_SD  :11-8 +1, // Same DIMM
+		rsvd1     :15-12 +1,
+		tWRWR_SC  :19-16 +1, // JEDEC tCCD_S
+		rsvd2     :23-20 +1,
+		tWRWR_SCL :27-24 +1, // tCCD_L
+		rsvd3     :29-28 +1,
+		tWRWR_BAN :31-30 +1; // Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6
 	};
 };
-
-
 union DRAMTiming9_DDR4 {
-	uint32_t DRAMTiming9_DDR4;
+	uint32_t DRAMTiming9;
 	struct { uint32_t
 		tWRWR_DD     :3-0 +1,
 		rsvd0        :7-4 +1,
@@ -138,6 +142,17 @@ union DRAMTiming9_DDR4 {
 		tWRWR_SCDLR :23-20 +1,
 		tWRWR_SCL   :29-24 +1,
 		tWRWR_BAN   :31-30 +1;
+	};
+};
+union DRAMTiming9 { // GDDR6
+	uint32_t DRAMTiming9;
+	struct { uint32_t
+		tWRWR_MW   :4-0 +1, // masked write; GDDR
+		rsvd0     :15-5 +1,
+		tWRWR_SC  :19-16 +1,
+		rsvd1     :23-20 +1,
+		tWRWR_SCL :29-24 +1,
+		tWRWR_BAN :31-30 +1;
 	};
 };
 
@@ -192,6 +207,8 @@ union DRAMTiming12 {
 	};
 };
 
+
+
 union DRAMTiming13 {
 	uint32_t DRAMTiming13;
 	struct { uint32_t
@@ -216,6 +233,13 @@ union DRAMTiming13_DDR4 {
 	};
 };
 
+union DRAMTiming14_HBM2 {
+	uint32_t DRAMTiming14;
+	struct { uint32_t
+		tXS   :10-0 +1, // exit self refreh to not requiring a locked DLL
+		rsvd0 :31-11 +1;
+	};
+};
 union DRAMTiming14 {
 	uint32_t DRAMTiming14;
 	struct { uint32_t
@@ -239,6 +263,7 @@ union DRAMTiming15 { // DDR reliability RAS
 	};
 };
 
+
 union DRAMTiming16 {
 	uint32_t DRAMTiming16;
 	struct { uint32_t
@@ -247,6 +272,17 @@ union DRAMTiming16 {
 	};
 };
 
+union DRAMTiming17_HBM2 {
+	uint32_t DRAMTiming17;
+	struct { uint32_t
+		tPD           :3-0 +1,
+		tCKSRE        :9-4 +1,
+		tCKSRX        :15-10 +1,
+		PwrDownDly    :23-16 +1, // last command to PowerDown
+		AggPwrDownDly :29-24 +1, // last DRAM activity to precharge, for PD
+		rsvd2         :31-30 +1;
+	};
+};
 union DRAMTiming17 {
 	uint32_t DRAMTiming17;
 	struct { uint32_t
@@ -256,6 +292,16 @@ union DRAMTiming17 {
 		PwrDownDly    :24-17 +1, // last command to PowerDown
 		AggPwrDownDly :30-25 +1, // last DRAM activity to precharge, for PD
 		rsvd0         :31-31 +1;
+	};
+};
+
+union DRAMTiming18_HBM2 {
+	uint32_t DRAMTiming18;
+	struct { uint32_t
+		tRFCSB :10-0 +1,
+		rsvd0  :15-11 +1,
+		tSTAG  :23-16 +1, // ref-to-ref different rank
+		rsvd1  :31-24 +1;
 	};
 };
 
@@ -281,6 +327,21 @@ union DRAMTiming21 {
 	};
 };
 
+union DRAMTiming22_HBM2 { // reverse-engineered; might be wrong.
+	uint32_t DRAMTiming22;
+	struct { uint32_t
+		rsvd0        :1-0 +1, // makes n=3,3
+		tRDDATA_EN   :6-2 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
+		rsvd1        :7-7 +1,
+		tPHY_WRLAT  :13-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
+		rsvd2       :16-14 +1,
+		tPHY_RDLAT  :22-17 +1, // dfi_rddata_en to dfi_rddata_vld dely
+		rsvd3       :24-23 +1,
+		tPHY_WRDATA :27-25 +1, // dfi_wrdata_en to dfi_wrdata delay
+		tPARIN_LAT  :29-28 +1, // ctrl signals to parity delay
+		rsvd4       :31-30 +1;
+	};
+};
 union DRAMTiming22 { // "DFI" is shorthand for "DDR PHY"
 	uint32_t DRAMTiming22;
 	struct { uint32_t
@@ -388,7 +449,6 @@ union ChanPipeDly {
 };
 
 
-
 struct UMCCTRL_MISC2 {
 	union gddr6_mr5 gddr6_mr5;
 	uint16_t reserved;
@@ -406,6 +466,33 @@ struct PMG_CMD {
 	uint16_t reserved;
 };
 
+
+struct umc_block_vega10_timings { // 48 bytes. vega21 is 96 bytes
+	union atom_mc_register_setting_id block_id;
+	union DRAMTiming1 DRAMTiming1;
+	union DRAMTiming2 DRAMTiming2;
+	union DRAMTiming3 DRAMTiming3;
+	union DRAMTiming4 DRAMTiming4;
+	union DRAMTiming5 DRAMTiming5;
+	union DRAMTiming6 DRAMTiming6;
+	union DRAMTiming7 DRAMTiming7;
+	union DRAMTiming8 DRAMTiming8;
+	union DRAMTiming9_HBM2 DRAMTiming9;
+	union DRAMTiming10 DRAMTiming10;
+
+	union DRAMTiming12 DRAMTiming12;
+	uint32_t unknown13; // possibly [14:5] = tREFIpb (240ns)
+	union DRAMTiming14_HBM2 DRAMTiming14;
+	uint32_t unknown15; // unsure
+	union DRAMTiming16 DRAMTiming16;
+	union DRAMTiming17_HBM2 DRAMTiming17;
+	union DRAMTiming18_HBM2 DRAMTiming18;
+	union DRAMTiming21 DRAMTiming21;
+	uint32_t unknown19; // possibly lpexit?
+	uint32_t unknown20; // unsure
+	union TRFCTimingCS01 tRFC;
+	union DRAMTiming22_HBM2 DRAMTiming22;
+};
 
 struct umc_block_navi1_timings {
 	union atom_mc_register_setting_id block_id; //frequency

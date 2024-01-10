@@ -92,7 +92,6 @@ PPATUI_HEADERIFY(atom_vram_module_v9);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_3);
 
 PPATUI_HEADERIFY(atom_vram_module_v10);
-PPATUI_HEADERIFY(umc_block_navi1_timings);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_4);
 
 PPATUI_HEADERIFY(atom_vram_module_v11);
@@ -113,7 +112,15 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 
 /******************************************************************************/
+// atui_umctimings.c / umctimings.h
+
+PPATUI_HEADERIFY(umc_block_vega10_timings);
+PPATUI_HEADERIFY(umc_block_navi1_timings);
+
+
+/******************************************************************************/
 // atui_atombios.c / atombios.h
+
 PPATUI_HEADERIFY(atom_rom_header_v1_1);
 PPATUI_HEADERIFY(atom_rom_header_v2_1);
 
@@ -145,9 +152,9 @@ PPATUI_HEADERIFY(atom_vram_info_v1_4);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_1);
 PPATUI_HEADERIFY(atom_vram_info_header_v2_2);
 
+
 /******************************************************************************/
 // atui_ddrmoderegisters.c / ddrmoderegisters.h
-
 
 PPATUI_HEADERIFY(ddr1_mr0);
 PPATUI_HEADERIFY(ddr1_emr1);

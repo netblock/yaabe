@@ -322,7 +322,16 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atom_vram_info_header_v2_3* leaves; // nonzero if populated
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
+
 	struct atomtree_umc_init_reg_block mem_clk_patch;
+	bool vega21;
+	union {
+		void* hbm2_timings;
+		struct umc_block_vega10_timings* vega10_timings;
+		//struct umc_block_vega21_timings* vega21_timings;
+	};
+	uint8_t* num_timing_straps;
+
 	struct atomtree_umc_init_reg_block mc_adjust_pertile;
 	struct atomtree_umc_init_reg_block mc_phyinit;
 	//struct atom_gddr6_dram_data_remap* dram_data_remap;
