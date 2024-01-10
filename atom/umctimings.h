@@ -156,8 +156,6 @@ union DRAMTiming9 { // GDDR6
 	};
 };
 
-
-
 // tWRRD and tRDWR also follows the 'last clock of virtual CAS'.
 // LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD.
 // LD is about making sure one burst happens after the other.
@@ -198,7 +196,6 @@ union DRAMTiming11_DDR4 {
 	};
 };
 
-
 union DRAMTiming12 {
 	uint32_t DRAMTiming12;
 	struct { uint32_t
@@ -206,8 +203,6 @@ union DRAMTiming12 {
 		rsvd0 :31-16 +1;
 	};
 };
-
-
 
 union DRAMTiming13 {
 	uint32_t DRAMTiming13;
@@ -262,7 +257,6 @@ union DRAMTiming15 { // DDR reliability RAS
 		rsvd2       :31-30 +1;
 	};
 };
-
 
 union DRAMTiming16 {
 	uint32_t DRAMTiming16;
@@ -330,14 +324,15 @@ union DRAMTiming21 {
 union DRAMTiming22_HBM2 { // reverse-engineered; might be wrong.
 	uint32_t DRAMTiming22;
 	struct { uint32_t
-		rsvd0        :1-0 +1, // makes n=3,3
+		rsvd0_0      :1-0 +1, // makes n=3,3
 		tRDDATA_EN   :6-2 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
-		rsvd1        :7-7 +1,
-		tPHY_WRLAT  :13-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
-		rsvd2       :16-14 +1,
-		tPHY_RDLAT  :22-17 +1, // dfi_rddata_en to dfi_rddata_vld dely
-		rsvd3       :24-23 +1,
-		tPHY_WRDATA :27-25 +1, // dfi_wrdata_en to dfi_wrdata delay
+		rsvd0        :7-7 +1,
+		tPHY_WRLAT  :12-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
+		rsvd1       :15-13 +1,
+		tPHY_RDLAT  :21-16 +1, // dfi_rddata_en to dfi_rddata_vld dely
+		rsvd2       :23-22 +1,
+		tPHY_WRDATA :26-24 +1, // dfi_wrdata_en to dfi_wrdata delay
+		rsvd3       :27-27 +1,
 		tPARIN_LAT  :29-28 +1, // ctrl signals to parity delay
 		rsvd4       :31-30 +1;
 	};
@@ -347,13 +342,14 @@ union DRAMTiming22 { // "DFI" is shorthand for "DDR PHY"
 	struct { uint32_t
 		tRDDATA_EN   :6-0 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
 		rsvd0        :7-7 +1,
-		tPHY_WRLAT  :13-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
-		rsvd1       :16-14 +1,
-		tPHY_RDLAT  :22-17 +1, // dfi_rddata_en to dfi_rddata_vld dely
-		rsvd2       :24-23 +1,
-		tPHY_WRDATA :27-25 +1, // dfi_wrdata_en to dfi_wrdata delay
+		tPHY_WRLAT  :12-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
+		rsvd1       :15-13 +1,
+		tPHY_RDLAT  :21-16 +1, // dfi_rddata_en to dfi_rddata_vld dely
+		rsvd2       :23-22 +1,
+		tPHY_WRDATA :26-24 +1, // dfi_wrdata_en to dfi_wrdata delay
+		rsvd3       :27-27 +1,
 		tPARIN_LAT  :29-28 +1, // ctrl signals to parity delay
-		rsvd3       :31-30 +1;
+		rsvd4       :31-30 +1;
 	};
 };
 
@@ -448,7 +444,6 @@ union ChanPipeDly {
 	};
 };
 
-
 struct UMCCTRL_MISC2 {
 	union gddr6_mr5 gddr6_mr5;
 	uint16_t reserved;
@@ -491,7 +486,7 @@ struct umc_block_vega10_timings { // 48 bytes. vega21 is 96 bytes
 	uint32_t unknown19; // possibly lpexit?
 	uint32_t unknown20; // unsure
 	union TRFCTimingCS01 tRFC;
-	union DRAMTiming22_HBM2 DRAMTiming22;
+	union DRAMTiming22 DRAMTiming22;
 };
 
 struct umc_block_navi1_timings {

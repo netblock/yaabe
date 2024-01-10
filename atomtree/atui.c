@@ -13,9 +13,7 @@ atui_leaf_set_val_unsigned(
 		atui_leaf* const leaf,
 		uint64_t val
 		) {
-	if (!(leaf->type & ATUI_ANY)) {
-		assert(0);
-	}
+	assert(0 < (leaf->type & ATUI_ANY));
 
 	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t maxval;
@@ -55,9 +53,7 @@ uint64_t
 atui_leaf_get_val_unsigned(
 		const atui_leaf* const leaf
 		) {
-	if (!(leaf->type & ATUI_ANY)) {
-		assert(0);
-	}
+	assert(0 < (leaf->type & ATUI_ANY));
 
 	uint64_t val;
 	switch (leaf->total_bits) {
@@ -94,9 +90,7 @@ atui_leaf_set_val_signed(
 		atui_leaf* const leaf,
 		const int64_t val
 		) {
-	if (!(leaf->type & ATUI_ANY)) {
-		assert(0);
-	}
+	assert(0 < (leaf->type & ATUI_ANY));
 
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
@@ -138,9 +132,7 @@ int64_t
 atui_leaf_get_val_signed(
 		const atui_leaf* const leaf
 		) {
-	if (!(leaf->type & ATUI_ANY)) {
-		assert(0);
-	}
+	assert(0 < (leaf->type & ATUI_ANY));
 
 	int64_t val;
 	switch (leaf->total_bits) {
@@ -176,9 +168,7 @@ void
 atui_leaf_set_val_fraction(
 		atui_leaf* const leaf,
 		const float64_t val) {
-	if (!(leaf->type & ATUI_FRAC)) {
-		assert(0);
-	}
+	assert(!(leaf->type & ATUI_FRAC));
 
 	if (leaf->fractional_bits) {
 		const float64_t max_val = (
@@ -237,9 +227,7 @@ float64_t
 atui_leaf_get_val_fraction(
 		const atui_leaf* const leaf
 		) {
-	if (!(leaf->type &  ATUI_FRAC)) {
-		assert(0);
-	}
+	assert(!(leaf->type &  ATUI_FRAC));
 
 	if (leaf->fractional_bits) { // fixed-point
 		// f64 can represent represent ints up to 2**53 without rounding.
@@ -511,7 +499,7 @@ atui_get_to_text(
 
 	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		if (leaf->array_size >= ATUI_LEAVES_STR_BUFFER) {
+		if (leaf->array_size > ATUI_LEAVES_STR_BUFFER) {
 			malloc_size = leaf->array_size + 1;
 			buffer = malloc(malloc_size);
 			*buffer_ptr = buffer;

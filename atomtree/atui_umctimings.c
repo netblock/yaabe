@@ -58,7 +58,8 @@ PPATUI_FUNCIFY(union, DRAMTiming4, atui_nullstruct,
 			("tFAW",   6,0, ATUI_DEC, (ATUI_NODESCR)),
 			("rsvd0",  7,7, ATUI_DEC, (ATUI_NODESCR)),
 			("t32AW", 16,8, ATUI_DEC, (ATUI_NODESCR)),
-			("rsvd1", 31,17, ATUI_DEC, ((LANG_ENG, "1, tFAWSLR:6, 1, tFAWDLR:6, 1")))
+			("rsvd1", 31,17, ATUI_DEC,
+				((LANG_ENG, "1, tFAWSLR:6, 1, tFAWDLR:6, 1")))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -312,7 +313,8 @@ PPATUI_FUNCIFY(union, DRAMTiming18_HBM2, atui_nullstruct,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			("tRFCSB", 10,0, ATUI_DEC, (ATUI_NODESCR)),
 			("rsvd0",  15,11, ATUI_DEC, (ATUI_NODESCR)),
-			("tSTAG",  23,16, ATUI_DEC, ((LANG_ENG, "ref-to-ref different rank"))),
+			("tSTAG",  23,16, ATUI_DEC,
+				((LANG_ENG, "ref-to-ref different rank"))),
 			("rsvd1",  31,24, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
@@ -324,7 +326,8 @@ PPATUI_FUNCIFY(union, DRAMTiming20, atui_nullstruct,
 		(ATUI_BIN, ATUI_BITFIELD, (
 			("tRFCSB", 10,0, ATUI_DEC, (ATUI_NODESCR)),
 			("rsvd0",  15,11, ATUI_DEC, (ATUI_NODESCR)),
-			("tSTAG",  23,16, ATUI_DEC, ((LANG_ENG, "ref-to-ref different rank"))),
+			("tSTAG",  23,16, ATUI_DEC,
+				((LANG_ENG, "ref-to-ref different rank"))),
 			("rsvd1",  31,24, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
@@ -345,27 +348,28 @@ PPATUI_FUNCIFY(union, DRAMTiming21, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(union, DRAMTiming22_HBM2, atui_nullstruct, // reverse-engineered; might be wrong.
+PPATUI_FUNCIFY(union, DRAMTiming22_HBM2, atui_nullstruct,
 	(bios->DRAMTiming22, "DRAMTiming22",
 		(ATUI_BIN, ATUI_BITFIELD, (
-			("rsvd0",        1,0, ATUI_DEC,
+			("rsvd0_0",      1,0, ATUI_DEC,
 				((LANG_ENG, "makes n=3,3"))
 			),
 			("tRDDATA_EN",   6,2, ATUI_DEC,
 				((LANG_ENG, "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en"))
 			),
-			("rsvd1",        7,7, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_WRLAT",  13,8, ATUI_DEC,
+			("rsvd0",        7,7, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_WRLAT",  12,8, ATUI_DEC,
 				((LANG_ENG, "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en"))
 			),
-			("rsvd2",       16,14, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_RDLAT",  22,17, ATUI_DEC,
+			("rsvd1",       15,13, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_RDLAT",  21,16, ATUI_DEC,
 				((LANG_ENG, "dfi_rddata_en to dfi_rddata_vld dely"))
 			),
-			("rsvd3",       24,23, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_WRDATA", 27,25, ATUI_DEC,
+			("rsvd2",       23,22, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_WRDATA", 26,24, ATUI_DEC,
 				((LANG_ENG, "dfi_wrdata_en to dfi_wrdata delay"))
 			),
+			("rsvd3",       27,27, ATUI_DEC, (ATUI_NODESCR)),
 			("tPARIN_LAT",  29,28, ATUI_DEC,
 				((LANG_ENG, "ctrl signals to parity delay"))
 			),
@@ -380,25 +384,26 @@ PPATUI_FUNCIFY(union, DRAMTiming22, atui_nullstruct,
 				((LANG_ENG, "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en"))
 			),
 			("rsvd0",        7,7, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_WRLAT",  13,8, ATUI_DEC,
+			("tPHY_WRLAT",  12,8, ATUI_DEC,
 				((LANG_ENG, "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en"))
 			),
-			("rsvd1",       16,14, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_RDLAT",  22,17, ATUI_DEC,
+			("rsvd1",       15,13, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_RDLAT",  21,16, ATUI_DEC,
 				((LANG_ENG, "dfi_rddata_en to dfi_rddata_vld dely"))
 			),
-			("rsvd2",       24,23, ATUI_DEC, (ATUI_NODESCR)),
-			("tPHY_WRDATA", 27,25, ATUI_DEC,
+			("rsvd2",       23,22, ATUI_DEC, (ATUI_NODESCR)),
+			("tPHY_WRDATA", 26,24, ATUI_DEC,
 				((LANG_ENG, "dfi_wrdata_en to dfi_wrdata delay"))
 			),
+			("rsvd3",       27,27, ATUI_DEC, (ATUI_NODESCR)),
 			("tPARIN_LAT",  29,28, ATUI_DEC,
 				((LANG_ENG, "ctrl signals to parity delay"))
 			),
-			("rsvd3",       31,30, ATUI_DEC, (ATUI_NODESCR))
-		)),
-		((LANG_ENG, "\"DFI\" is shorthand for \"DDR PHY\""))
+			("rsvd4",       31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
 	)
 )
+
 
 
 PPATUI_FUNCIFY(union, DRAMTiming23, atui_nullstruct,
@@ -454,7 +459,8 @@ PPATUI_FUNCIFY(union, DRAMTiming36, atui_nullstruct,
 	(bios->DRAMTiming36, "DRAMTiming36",
 		(ATUI_BIN, ATUI_BITFIELD, (
 			("tWTRTR",     5,0, ATUI_DEC, ((LANG_ENG, "WRITE to WRTR"))),
-			("tREFTR",     11,6, ATUI_DEC, ((LANG_ENG, "was named tREFTT. REFab to RDTR/WRTR"))),
+			("tREFTR",     11,6, ATUI_DEC,
+				((LANG_ENG, "was named tREFTT. REFab to RDTR/WRTR"))),
 			("tTTROW",     17,12, ATUI_DEC, ((LANG_ENG, "??"))),
 			("tLDTLD",     23,18, ATUI_DEC, ((LANG_ENG, "JEDEC tLTLTR?"))),
 			("tUPDN",      29,24, ATUI_DEC, ((LANG_ENG, "??"))),
@@ -603,8 +609,7 @@ PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
 )
 
 
-PPATUI_FUNCIFY(struct, umc_block_navi1_timings,
-		atomtree_vram_info_header_v2_4,
+PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
 
 	(bios->block_id, "block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
