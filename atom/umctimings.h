@@ -486,7 +486,7 @@ struct umc_block_vega10_timings { // 48 bytes. vega21 is 96 bytes
 	uint32_t unknown19; // possibly lpexit?
 	uint32_t unknown20; // unsure
 	union TRFCTimingCS01 tRFC;
-	union DRAMTiming22 DRAMTiming22;
+	union DRAMTiming22_HBM2 DRAMTiming22;
 };
 
 struct umc_block_navi1_timings {

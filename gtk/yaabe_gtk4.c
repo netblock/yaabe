@@ -40,12 +40,12 @@ alloc_branch_cache(
 		) {
 	const uint16_t gobj_count = branch->num_branches;
 
-	branch->auxiliary = malloc(
+	branch->gtk_cache = malloc(
 		sizeof(struct yaabe_gtkapp_model_cache)
 		+ (gobj_count * sizeof(GObject*))
 	);
 
-	struct yaabe_gtkapp_model_cache* const models = branch->auxiliary;
+	struct yaabe_gtkapp_model_cache* const models = branch->gtk_cache;
 	models->leaves_model = NULL;
 	models->child_gobj_count = gobj_count;
 	if (gobj_count) {
@@ -57,12 +57,12 @@ alloc_leaf_cache(
 		atui_leaf* const leaf,
 		const uint16_t num_children
 		) {
-	leaf->auxiliary = malloc(
+	leaf->gtk_cache = malloc(
 		sizeof(struct yaabe_gtkapp_model_cache)
 		+ (num_children * sizeof(GObject*))
 	);
 
-	struct yaabe_gtkapp_model_cache* const models = leaf->auxiliary;
+	struct yaabe_gtkapp_model_cache* const models = leaf->gtk_cache;
 	models->leaves_model = NULL;
 	models->child_gobj_count = num_children;
 	if (num_children) {
@@ -76,7 +76,7 @@ atui_destroy_tree_with_gtk(
 		atui_branch* const tree
 		) {
 // Free and unref all the atui branches/leaves and the GTK-relevant stuff
-// hanging off of the ->auxiliary.
+// hanging off of the ->gtk_cache.
 // See also destroy_atomtree_with_gtk
 
 	uint16_t i = 0;
@@ -84,10 +84,10 @@ atui_destroy_tree_with_gtk(
 	uint16_t child_gobj_count;
 	struct yaabe_gtkapp_model_cache* submodels;
 
-	// The leaves gobjects should be sunk into the model, and auxiliary points
+	// The leaves gobjects should be sunk into the model, and gtk_cache points
 	// to the model.
-	if (tree->auxiliary != NULL) {
-		submodels = tree->auxiliary;
+	if (tree->gtk_cache != NULL) {
+		submodels = tree->gtk_cache;
 
 		if (submodels->leaves_model != NULL) {
 			g_object_unref(submodels->leaves_model);
@@ -103,7 +103,7 @@ atui_destroy_tree_with_gtk(
 	// Collapsable leaves in the leaves pane
 	const uint16_t leaf_count = tree->leaf_count;
 	for(i=0; i < leaf_count; i++) {
-		submodels = tree->leaves[i].auxiliary;
+		submodels = tree->leaves[i].gtk_cache;
 		if (submodels != NULL) {
 			if(submodels->leaves_model) { // Should always be false
 				assert(0);
@@ -431,7 +431,7 @@ leaves_tlmodel_func(
 
 	GObject* const gobj_parent = parent_ptr;
 	atui_leaf* const parent = g_object_get_data(gobj_parent, "leaf");
-	struct yaabe_gtkapp_model_cache* leaf_cache = parent->auxiliary;
+	struct yaabe_gtkapp_model_cache* leaf_cache = parent->gtk_cache;
 
 	GListModel* children_model = NULL;
 	uint16_t i = 0;
@@ -459,7 +459,7 @@ leaves_tlmodel_func(
 				children_model
 			);
 			alloc_leaf_cache(parent, child_gobj_count);
-			leaf_cache = parent->auxiliary;
+			leaf_cache = parent->gtk_cache;
 			for(i=0; i < child_gobj_count; i++) {
 				// Cache the gobjects because TreeListModel eats the GListStore
 				leaf_cache->child_gobj[i] = g_list_model_get_item(
@@ -498,8 +498,7 @@ branchleaves_to_treemodel(
 	);
 	// no_selection takes ownership of treemodel.
 
-	struct yaabe_gtkapp_model_cache* const branch_models = branch->auxiliary;
-	branch_models->leaves_model = sel_model;
+	branch->gtk_cache->leaves_model = sel_model;
 	g_object_ref(sel_model); // to cache
 }
 static void
@@ -519,13 +518,12 @@ set_leaves_list(
 	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
-	struct yaabe_gtkapp_model_cache* const branch_models = branch->auxiliary;
-	if(branch_models->leaves_model == NULL) { // if not cached, generate.
+	if(branch->gtk_cache->leaves_model == NULL) { // if not cached, generate.
 		branchleaves_to_treemodel(branch);
 	}
 
 	gtk_column_view_set_model(commons->leaves_view,
-		branch_models->leaves_model
+		branch->gtk_cache->leaves_model
 	);
 }
 
@@ -614,7 +612,7 @@ branch_tlmodel_func(
 
 	GObject* const gobj_parent = parent_ptr;
 	atui_branch* const parent = g_object_get_data(gobj_parent, "branch");
-	struct yaabe_gtkapp_model_cache* const branch_models = parent->auxiliary;
+	struct yaabe_gtkapp_model_cache* const branch_models = parent->gtk_cache;
 
 	GListStore* children = NULL;
 	int i = 0;

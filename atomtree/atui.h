@@ -84,7 +84,7 @@ enum atui_type:uint16_t {
 	ATUI_FRAC     = 1<<15, // Internally-set. Both Q and float.
 };
 
-
+struct yaabe_gtkapp_model_cache; // GTK
 struct atui_funcify_args; // internal use; see below
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
@@ -137,8 +137,10 @@ struct _atui_leaf {
 		float32_t* f32;
 		float64_t* f64;
 	};
-
-	void* auxiliary; // any extra info to hang off if necessary
+	union {
+		void* auxiliary; // any extra info to hang off if necessary
+		struct yaabe_gtkapp_model_cache* gtk_cache;
+	};
 };
 struct  _atui_branch {
 	char8_t name[64];
@@ -164,7 +166,10 @@ struct  _atui_branch {
 	atui_leaf* leaves;
 
 	void* atomleaves;
-	void* auxiliary; // alternative representation to leaves, if necessary
+	union {
+		void* auxiliary; // alternative representation to leaves, if necessary
+		struct yaabe_gtkapp_model_cache* gtk_cache;
+	};
 };
 
 

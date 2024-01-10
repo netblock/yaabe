@@ -56,7 +56,6 @@ static_assert(sizeof(struct _tenbytes) == 10);
 
 #include "qnotation.h"
 
-
 #include "ddrmoderegisters.h"
 #include "atomfirmware.h"
 #include "umctimings.h"
@@ -65,9 +64,9 @@ static_assert(sizeof(struct _tenbytes) == 10);
 
 enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;
-
 #include "atomtree_data_tables.h"
-// see bottom for more includes
+
+
 
 struct atomtree_rom_header {
 	enum atomtree_common_version ver;
@@ -172,9 +171,7 @@ atombios_parse(
 		bool generate_atui
 		);
 
-//#include "atui.h"
-
-// make sure we're not on byte packing
+// make sure we're not on 1-byte packing after all the including
 struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
 static_assert(sizeof(struct _twentyfourbytes) > 17);
 

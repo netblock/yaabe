@@ -4,7 +4,7 @@
 
 uint16_t
 main(
-		uint16_t const argc,
+		const uint16_t argc,
 		const char8_t* const* const argv
 		) {
 	struct atom_tree* atree = NULL;
