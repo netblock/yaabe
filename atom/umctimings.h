@@ -461,8 +461,69 @@ struct PMG_CMD {
 	uint16_t reserved;
 };
 
+/* From ElioVP's amdmemtweak. vals don't look right.
 
-struct umc_block_vega10_timings { // 48 bytes. vega21 is 96 bytes
+union SEQ_WR_CTL_D0_HBM1 {
+	uint32_t SEQ_WR_CTL_D0;
+	struct { uint32_t
+		DAT_DLY  :4-0 +1, // Data output latency
+		DQS_DLY  :9-5 +1, // DQS Latency
+		DQS_XTR :10-10 +1, // Write Preamble (ON/OFF)
+		OEN_DLY :15-11 +1, // Write cmd enable Latency
+		OEN_EXT :19-16 +1, // Output enable -> Data Burst (0 - 8 where 1 = 1 cycle, 5 = 5 cycles..)
+		OEN_SEL :21-20 +1,
+		CMD_DLY :22-22 +1,
+		ADR_DLY :23-23 +1,
+		rsvd0   :31-24 +1;
+	};
+};
+union SEQ_WR_CTL_D0_GDDR5 {
+	uint32_t SEQ_WR_CTL_D0;
+	struct { uint32_t
+		DAT_DLY     :3-0 +1, // Data output latency
+		DQS_DLY     :7-4 +1, // DQS Latency
+		DQS_XTR     :8-8 +1, // Write Preamble (ON/OFF)
+		DAT_2Y_DLY  :9-9 +1, // Delay data (QDR Mode!) (ON/OFF)
+		ADR_2Y_DLY :10-10 +1, // Delay addr (QDR Mode!) (ON/OFF)
+		CMD_2Y_DLY :11-11 +1, // Delay cmd (QDR Mode!) (ON/OFF)
+		OEN_DLY    :15-12 +1, // Write cmd enable Latency
+		OEN_EXT    :19-16 +1, // Output enable -> Data Burst (0 - 8 where 1 = 1 cycle, 5 = 5 cycles..)
+		OEN_SEL    :21-20 +1, 
+		rsvd0      :23-22 +1, 
+		ODT_DLY    :27-24 +1, // On-Die-Termination latency
+		ODT_EXT    :28-28 +1, // On-Die-Termination enable after burst
+		ADR_DLY    :29-29 +1,
+		CMD_DLY    :30-30 +1,
+		rsvd1      :31-31 +1;
+	};
+};
+union SEQ_PMG_TIMING {
+	uint32_t SEQ_PMG_TIMING;
+	struct { uint32_t
+		CKSRE        :2-0 +1, // Valid clock requirement after CKSRE
+		CKSRX        :5-3 +1, // Valid clock requirement before CKSRX
+		CKE_PULSE   :10-6 +1, // Minimum CKE pulse
+		CKE         :18-11 +1, 
+		SEQ_IDLE    :21-19 +1, // idle before deassert rdy to arb
+		SEQ_IDLE_SS :29-22 +1, // idle before deassert rdy to arb at ss
+		rsvd0       :31-30 +1;
+	};
+};
+struct mc_block_fiji_timings { // 40 bytes.
+	union atom_mc_register_setting_id block_id;
+	uint32_t t0; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D0;
+	uint32_t t1; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D1;
+	uint32_t t2; //union SEQ_PMG_TIMING SEQ_PMG_TIMING;
+	uint32_t t3;
+	uint32_t t4;
+	uint32_t t5;
+	uint32_t t6;
+	uint32_t t7;
+	uint32_t t8;
+};
+*/
+
+struct umc_block_vega10_timings { // 92 bytes. vega21 is 96 bytes
 	union atom_mc_register_setting_id block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;
@@ -489,7 +550,7 @@ struct umc_block_vega10_timings { // 48 bytes. vega21 is 96 bytes
 	union DRAMTiming22_HBM2 DRAMTiming22;
 };
 
-struct umc_block_navi1_timings {
+struct umc_block_navi1_timings { // 116 bytes
 	union atom_mc_register_setting_id block_id; //frequency
 
 	struct UMCCTRL_MISC2 gddr6_mr5;

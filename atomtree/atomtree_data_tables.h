@@ -309,7 +309,16 @@ struct atomtree_vram_info_header_v2_2 {
 	struct atom_vram_info_header_v2_2* leaves; // nonzero if populated
 
 	struct atomtree_init_reg_block mem_adjust_table;
+
 	struct atomtree_init_reg_block mem_clk_patch;
+	bool uses_polaris_timings;
+	union {
+		void* mem_timings;
+		//struct mc_block_fiji_timings* fiji_timings;
+		//struct mc_block_polaris_timings polaris_timings;
+	};
+	uint8_t* num_timing_straps;
+
 	struct atomtree_init_reg_block mc_adjust_pertile;
 	struct atomtree_init_reg_block mc_phyinit;
 	struct atom_dram_data_remap* dram_data_remap;
@@ -324,9 +333,9 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 
 	struct atomtree_umc_init_reg_block mem_clk_patch;
-	bool vega21;
+	bool uses_vega21_timings;
 	union {
-		void* hbm2_timings;
+		void* mem_timings;
 		struct umc_block_vega10_timings* vega10_timings;
 		//struct umc_block_vega21_timings* vega21_timings;
 	};
