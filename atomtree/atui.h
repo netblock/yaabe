@@ -178,7 +178,7 @@ struct  _atui_branch {
 #define ATUI_LEAVES_STR_BUFFER 128
 
 // set the value from a string or array of 8-bit
-uint8_t
+void
 atui_set_from_text(
 		atui_leaf* leaf,
 		const char8_t* buffer
