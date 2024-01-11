@@ -337,7 +337,7 @@ struct atomtree_vram_info_header_v2_3 {
 	union {
 		void* mem_timings;
 		struct umc_block_vega10_timings* vega10_timings;
-		//struct umc_block_vega21_timings* vega21_timings;
+		struct umc_block_vega21_timings* vega21_timings;
 	};
 	uint8_t* num_timing_straps;
 

@@ -1668,8 +1668,11 @@ atomtree_populate_vram_info_v2_3(
 		if (vi23->mem_clk_patch.data_block_element_size
 			== sizeof(struct umc_block_vega10_timings)) {
 			vi23->uses_vega21_timings = false;
-		} else {
+		} else if (vi23->mem_clk_patch.data_block_element_size
+			== sizeof(struct umc_block_vega21_timings)) {
 			vi23->uses_vega21_timings = true;
+		} else {
+			assert(0);
 		}
 
 		if (generate_atui) {
@@ -1684,7 +1687,16 @@ atomtree_populate_vram_info_v2_3(
 				strcpy(atui_mem_timings->name,
 					"umc_block_vega21_timings (uncertain)"
 				);
-				// TODO 96 bytes
+				for (i=0; i < *vi23->num_timing_straps; i++) {
+					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega21_timings,
+						NULL,  NULL,&(vi23->vega21_timings[i]),  0,NULL
+					);
+					sprintf(tmp_branch->name, "%s (%i MHz)",
+						tmp_branch->varname,
+						(vi23->vega21_timings[i].block_id.mem_clock_range / 100)
+					);
+					ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
+				}
 			} else {
 				strcpy(atui_mem_timings->name,
 					"umc_block_vega10_timings (uncertain)"

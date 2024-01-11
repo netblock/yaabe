@@ -63,7 +63,6 @@ union DRAMTiming4 {
 	};
 };
 
-
 union DRAMTiming5 {
 	uint32_t DRAMTiming5;
 	struct { uint32_t
@@ -324,7 +323,7 @@ union DRAMTiming21 {
 union DRAMTiming22_HBM2 { // reverse-engineered; might be wrong.
 	uint32_t DRAMTiming22;
 	struct { uint32_t
-		rsvd0_0      :1-0 +1, // makes n=3,3
+		rsvd0_0      :1-0 +1, // makes n=3,3 on vega10
 		tRDDATA_EN   :6-2 +1, // tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en
 		rsvd0        :7-7 +1,
 		tPHY_WRLAT  :12-8 +1, // tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en
@@ -523,7 +522,7 @@ struct mc_block_fiji_timings { // 40 bytes.
 };
 */
 
-struct umc_block_vega10_timings { // 92 bytes. vega21 is 96 bytes
+struct umc_block_vega10_timings { // 92 bytes
 	union atom_mc_register_setting_id block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;
@@ -537,7 +536,7 @@ struct umc_block_vega10_timings { // 92 bytes. vega21 is 96 bytes
 	union DRAMTiming10 DRAMTiming10;
 
 	union DRAMTiming12 DRAMTiming12;
-	uint32_t unknown13; // possibly [14:5] = tREFIpb (240ns)
+	union DRAMTiming13 DRAMTiming13;
 	union DRAMTiming14_HBM2 DRAMTiming14;
 	uint32_t unknown15; // unsure
 	union DRAMTiming16 DRAMTiming16;
@@ -548,6 +547,34 @@ struct umc_block_vega10_timings { // 92 bytes. vega21 is 96 bytes
 	uint32_t unknown20; // unsure
 	union TRFCTimingCS01 tRFC;
 	union DRAMTiming22_HBM2 DRAMTiming22;
+};
+
+struct umc_block_vega21_timings { // 96 bytes
+	union atom_mc_register_setting_id block_id;
+	union DRAMTiming1 DRAMTiming1;
+	union DRAMTiming2 DRAMTiming2;
+	union DRAMTiming3 DRAMTiming3;
+	union DRAMTiming4 DRAMTiming4;
+	union DRAMTiming5 DRAMTiming5;
+	union DRAMTiming6 DRAMTiming6;
+	union DRAMTiming7 DRAMTiming7;
+	union DRAMTiming8 DRAMTiming8;
+	union DRAMTiming9_HBM2 DRAMTiming9;
+	union DRAMTiming10 DRAMTiming10;
+
+	union DRAMTiming12 DRAMTiming12;
+	union DRAMTiming13 DRAMTiming13;
+	union DRAMTiming14_HBM2 DRAMTiming14;
+	uint32_t unknown15; // unsure
+	union DRAMTiming16 DRAMTiming16;
+	union DRAMTiming17_HBM2 DRAMTiming17;
+	union DRAMTiming18_HBM2 DRAMTiming18;
+	union DRAMTiming21 DRAMTiming21;
+	union DRAMTiming22 DRAMTiming22;
+	uint32_t unknown23; // unsure
+	union TRFCTimingCS01 tRFC;
+	union ChanPipeDly ChanPipeDly;
+	uint32_t unkown24; // unsure
 };
 
 struct umc_block_navi1_timings { // 116 bytes

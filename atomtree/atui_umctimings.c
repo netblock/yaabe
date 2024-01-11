@@ -562,9 +562,9 @@ PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
 		(ATUI_NODESCR)
 	),
-	(bios->unknown13, "unknown13",
-		(ATUI_BIN, ATUI_NOFANCY),
-		((LANG_ENG, "unsure"))
+	(bios->DRAMTiming13, "DRAMTiming13",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming13),
+		(ATUI_NODESCR)
 	),
 	(bios->DRAMTiming14, "DRAMTiming14",
 		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14_HBM2),
@@ -608,6 +608,106 @@ PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
 	)
 )
 
+
+PPATUI_FUNCIFY(struct, umc_block_vega21_timings, atomtree_vram_info_header_v2_3,
+	(bios->block_id, "block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming1, "DRAMTiming1",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming1),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming2, "DRAMTiming2",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming3, "DRAMTiming3",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming3),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming4, "DRAMTiming4",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming4),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming5, "DRAMTiming5",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming5),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming6, "DRAMTiming6",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming6),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming7, "DRAMTiming7",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming7),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming8, "DRAMTiming8",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming8),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming9, "DRAMTiming9",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming9_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming10, "DRAMTiming10",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming10),
+		(ATUI_NODESCR)
+	),
+
+	(bios->DRAMTiming12, "DRAMTiming12",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming12),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming13, "DRAMTiming13",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming13),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming14, "DRAMTiming14",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming14_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->unknown15, "unknown15",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->DRAMTiming16, "DRAMTiming16",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming16),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming17, "DRAMTiming17",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming17_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming18, "DRAMTiming18",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming18_HBM2),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming21, "DRAMTiming21",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming21),
+		(ATUI_NODESCR)
+	),
+	(bios->DRAMTiming22, "DRAMTiming22",
+		(ATUI_NODISPLAY, ATUI_INLINE, DRAMTiming22),
+		(ATUI_NODESCR)
+	),
+	(bios->unknown23, "unknown23",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	),
+	(bios->tRFC, "tRFC",
+		(ATUI_NODISPLAY, ATUI_INLINE, TRFCTimingCS01),
+		(ATUI_NODESCR)
+	),
+	(bios->ChanPipeDly, "ChanPipeDly",
+		(ATUI_NODISPLAY, ATUI_INLINE, ChanPipeDly),
+		(ATUI_NODESCR)
+	),
+	(bios->unkown24, "unkown24",
+		(ATUI_BIN, ATUI_NOFANCY),
+		((LANG_ENG, "unsure"))
+	)
+)
 
 PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
 
