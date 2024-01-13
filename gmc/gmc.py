@@ -160,6 +160,30 @@ union %s {
 		header_out += bf_string_end
 	return header_out
 
+
+def get_val_from_bf(val: int, field: dict):
+	return (val >> field["lo"]) & ( (1<<(field["hi"]-field["lo"])) -1)
+
+def bf_regression(bitfields: list, registers: list):
+	# the intent is to brute-force possible register definitions for a set of
+	# straps to the same field.
+	# Go through all bitfields and find the ones that have the 'rsvd' valued
+	# at 0
+	candidates = []
+	isbad = 0
+	for bf in bitfields:
+		isbad = 0
+		for r in registers:
+			for f in bf.entries:
+				if ((f["name"][:4] == "rsvd") and (get_val_from_bf(r, f))):
+					isbad = 1
+					break
+			if (isbad):
+				break
+		if not (isbad):
+			candidates.append(bf)
+	return candidates
+
 def main():
 	argc = len(argv)
 	assert (1 < argc)
@@ -170,6 +194,12 @@ def main():
 	if (2 < argc):
 		with open(argv[2], 'w', encoding="utf-8") as f:
 			f.write(bitfield_to_header(bitfields))
+
+	straps_to_be_tested = [] # CHANGE ME if you want!!
+	if len(straps_to_be_tested):
+		candidates = bf_regression(bitfields, straps_to_be_tested)
+		for c in candidates:
+			print(c.name)
 
 if (__name__ == "__main__"):
 	main()
