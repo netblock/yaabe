@@ -97,20 +97,24 @@ def asic_reg_to_bitfield(file_text: str):
 	bitfields = []
 	bf_i = -1;
 	current_bf_name = ""
+	old_bf_names = []
+
 	mask = 0; shift = 0
 
-	for k in pp_dict.keys():
+	keys = list(pp_dict.keys())
+	keys.sort()
+	for k in keys:
 		if (k[-4:] != "MASK"): # enter with a mask then find shift
 			continue
 		mask_key = k
 		shift_key = k[:-4] + "_SHIFT"
 		name_parts = shift_key.split("__")
-		# name_parts[0] is bitfield name
-		assert (name_parts[0] == mask_key.split("__")[0]), name_parts
 
 		if (name_parts[0] != current_bf_name):
-			bitfields.append(bitfield(name_parts[0].lower()))
+			assert(name_parts[0] not in old_bf_names)
+			old_bf_names.append(current_bf_name)
 			current_bf_name = name_parts[0]
+			bitfields.append(bitfield(name_parts[0].lower()))
 			bf_i += 1
 
 		if (pp_dict[mask_key][-1] == "L"): # python int() doesn't like C ints
@@ -124,7 +128,7 @@ def asic_reg_to_bitfield(file_text: str):
 
 		bitfields[bf_i].add_maskshift(name_parts[1].lower(), mask, shift)
 
-
+	bitfields = bitfields
 	for b in bitfields:
 		b.sort() # sort because we added in a disordered way
 		b.find_reserved()

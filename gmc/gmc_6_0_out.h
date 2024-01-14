@@ -107,24 +107,6 @@ union atc_ats_status {
 	};
 };
 
-union atc_l1_address_offset {
-	uint32_t atc_l1_address_offset;
-	struct { uint32_t
-		logical_address :31-0 +1;
-	};
-};
-
-union atc_l1_cntl {
-	uint32_t atc_l1_cntl;
-	struct { uint32_t
-		dont_need_ats_behavior :1-0 +1,
-		need_ats_behavior      :2-2 +1,
-		rsvd0                  :3-3 +1,
-		need_ats_snoop_default :4-4 +1,
-		rsvd1                  :31-5 +1;
-	};
-};
-
 union atc_l1rd_debug_tlb {
 	uint32_t atc_l1rd_debug_tlb;
 	struct { uint32_t
@@ -181,6 +163,24 @@ union atc_l1wr_status {
 	};
 };
 
+union atc_l1_address_offset {
+	uint32_t atc_l1_address_offset;
+	struct { uint32_t
+		logical_address :31-0 +1;
+	};
+};
+
+union atc_l1_cntl {
+	uint32_t atc_l1_cntl;
+	struct { uint32_t
+		dont_need_ats_behavior :1-0 +1,
+		need_ats_behavior      :2-2 +1,
+		rsvd0                  :3-3 +1,
+		need_ats_snoop_default :4-4 +1,
+		rsvd1                  :31-5 +1;
+	};
+};
+
 union atc_l2_cntl {
 	uint32_t atc_l2_cntl;
 	struct { uint32_t
@@ -210,70 +210,6 @@ union atc_misc_cg {
 		enable        :18-18 +1,
 		mem_ls_enable :19-19 +1,
 		rsvd1         :31-20 +1;
-	};
-};
-
-union atc_vm_aperture0_cntl2 {
-	uint32_t atc_vm_aperture0_cntl2;
-	struct { uint32_t
-		vmids_using_range :15-0 +1,
-		rsvd0             :31-16 +1;
-	};
-};
-
-union atc_vm_aperture0_cntl {
-	uint32_t atc_vm_aperture0_cntl;
-	struct { uint32_t
-		ats_access_mode :1-0 +1,
-		rsvd0           :31-2 +1;
-	};
-};
-
-union atc_vm_aperture0_high_addr {
-	uint32_t atc_vm_aperture0_high_addr;
-	struct { uint32_t
-		virtual_page_number :27-0 +1,
-		rsvd0               :31-28 +1;
-	};
-};
-
-union atc_vm_aperture0_low_addr {
-	uint32_t atc_vm_aperture0_low_addr;
-	struct { uint32_t
-		virtual_page_number :27-0 +1,
-		rsvd0               :31-28 +1;
-	};
-};
-
-union atc_vm_aperture1_cntl2 {
-	uint32_t atc_vm_aperture1_cntl2;
-	struct { uint32_t
-		vmids_using_range :15-0 +1,
-		rsvd0             :31-16 +1;
-	};
-};
-
-union atc_vm_aperture1_cntl {
-	uint32_t atc_vm_aperture1_cntl;
-	struct { uint32_t
-		ats_access_mode :1-0 +1,
-		rsvd0           :31-2 +1;
-	};
-};
-
-union atc_vm_aperture1_high_addr {
-	uint32_t atc_vm_aperture1_high_addr;
-	struct { uint32_t
-		virtual_page_number :27-0 +1,
-		rsvd0               :31-28 +1;
-	};
-};
-
-union atc_vm_aperture1_low_addr {
-	uint32_t atc_vm_aperture1_low_addr;
-	struct { uint32_t
-		virtual_page_number :27-0 +1,
-		rsvd0               :31-28 +1;
 	};
 };
 
@@ -441,6 +377,70 @@ union atc_vmid_pasid_mapping_update_status {
 		vmid14_remapping_finished :14-14 +1,
 		vmid15_remapping_finished :15-15 +1,
 		rsvd0                     :31-16 +1;
+	};
+};
+
+union atc_vm_aperture0_cntl2 {
+	uint32_t atc_vm_aperture0_cntl2;
+	struct { uint32_t
+		vmids_using_range :15-0 +1,
+		rsvd0             :31-16 +1;
+	};
+};
+
+union atc_vm_aperture0_cntl {
+	uint32_t atc_vm_aperture0_cntl;
+	struct { uint32_t
+		ats_access_mode :1-0 +1,
+		rsvd0           :31-2 +1;
+	};
+};
+
+union atc_vm_aperture0_high_addr {
+	uint32_t atc_vm_aperture0_high_addr;
+	struct { uint32_t
+		virtual_page_number :27-0 +1,
+		rsvd0               :31-28 +1;
+	};
+};
+
+union atc_vm_aperture0_low_addr {
+	uint32_t atc_vm_aperture0_low_addr;
+	struct { uint32_t
+		virtual_page_number :27-0 +1,
+		rsvd0               :31-28 +1;
+	};
+};
+
+union atc_vm_aperture1_cntl2 {
+	uint32_t atc_vm_aperture1_cntl2;
+	struct { uint32_t
+		vmids_using_range :15-0 +1,
+		rsvd0             :31-16 +1;
+	};
+};
+
+union atc_vm_aperture1_cntl {
+	uint32_t atc_vm_aperture1_cntl;
+	struct { uint32_t
+		ats_access_mode :1-0 +1,
+		rsvd0           :31-2 +1;
+	};
+};
+
+union atc_vm_aperture1_high_addr {
+	uint32_t atc_vm_aperture1_high_addr;
+	struct { uint32_t
+		virtual_page_number :27-0 +1,
+		rsvd0               :31-28 +1;
+	};
+};
+
+union atc_vm_aperture1_low_addr {
+	uint32_t atc_vm_aperture1_low_addr;
+	struct { uint32_t
+		virtual_page_number :27-0 +1,
+		rsvd0               :31-28 +1;
 	};
 };
 
@@ -659,6 +659,24 @@ union gmcon_stctrl_register_save_range2 {
 	};
 };
 
+union mclk_pwrmgt_cntl {
+	uint32_t mclk_pwrmgt_cntl;
+	struct { uint32_t
+		dll_speed      :4-0 +1,
+		rsvd0          :5-5 +1,
+		dll_ready      :6-6 +1,
+		mc_int_cntl    :7-7 +1,
+		mrdck0_pdnb    :8-8 +1,
+		mrdck1_pdnb    :9-9 +1,
+		rsvd1          :15-10 +1,
+		mrdck0_reset   :16-16 +1,
+		mrdck1_reset   :17-17 +1,
+		rsvd2          :23-18 +1,
+		dll_ready_read :24-24 +1,
+		rsvd3          :31-25 +1;
+	};
+};
+
 union mc_arb_addr_hash {
 	uint32_t mc_arb_addr_hash;
 	struct { uint32_t
@@ -772,16 +790,6 @@ union mc_arb_cg {
 	};
 };
 
-union mc_arb_dram_timing_1 {
-	uint32_t mc_arb_dram_timing_1;
-	struct { uint32_t
-		actrd     :7-0 +1,
-		actwr     :15-8 +1,
-		rasmactrd :23-16 +1,
-		rasmactwr :31-24 +1;
-	};
-};
-
 union mc_arb_dram_timing2_1 {
 	uint32_t mc_arb_dram_timing2_1;
 	struct { uint32_t
@@ -801,6 +809,16 @@ union mc_arb_dram_timing2 {
 		wrplusrp :23-16 +1,
 		bus_turn :28-24 +1,
 		rsvd0    :31-29 +1;
+	};
+};
+
+union mc_arb_dram_timing_1 {
+	uint32_t mc_arb_dram_timing_1;
+	struct { uint32_t
+		actrd     :7-0 +1,
+		actwr     :15-8 +1,
+		rasmactrd :23-16 +1,
+		rasmactwr :31-24 +1;
 	};
 };
 
@@ -858,15 +876,6 @@ union mc_arb_gecc2_cli {
 	};
 };
 
-union mc_arb_gecc2 {
-	uint32_t mc_arb_gecc2;
-	struct { uint32_t
-		close_bank_rmw :14-14 +1,
-		colfifo_water  :20-15 +1,
-		rsvd0          :31-21 +1;
-	};
-};
-
 union mc_arb_gecc2_debug2 {
 	uint32_t mc_arb_gecc2_debug2;
 	struct { uint32_t
@@ -888,33 +897,11 @@ union mc_arb_gecc2_debug {
 	};
 };
 
-union mc_arb_gecc2 {
-	uint32_t mc_arb_gecc2;
-	struct { uint32_t
-		enable        :0-0 +1,
-		ecc_mode      :2-1 +1,
-		rsvd0         :4-3 +1,
-		exor_bank_sel :6-5 +1,
-		rsvd1         :31-7 +1;
-	};
-};
-
 union mc_arb_gecc2_misc {
 	uint32_t mc_arb_gecc2_misc;
 	struct { uint32_t
 		streak_break :3-0 +1,
 		rsvd0        :31-4 +1;
-	};
-};
-
-union mc_arb_gecc2 {
-	uint32_t mc_arb_gecc2;
-	struct { uint32_t
-		page_bit0   :4-3 +1,
-		rsvd0       :6-5 +1,
-		no_gecc_cli :10-7 +1,
-		read_err    :13-11 +1,
-		rsvd1       :31-14 +1;
 	};
 };
 
@@ -937,6 +924,21 @@ union mc_arb_gecc2_status {
 		uncorr_clear1 :13-13 +1,
 		fed_clear1    :14-14 +1,
 		rsvd0         :31-15 +1;
+	};
+};
+
+union mc_arb_gecc2 {
+	uint32_t mc_arb_gecc2;
+	struct { uint32_t
+		enable         :0-0 +1,
+		ecc_mode       :2-1 +1,
+		page_bit0      :4-3 +1,
+		exor_bank_sel  :6-5 +1,
+		no_gecc_cli    :10-7 +1,
+		read_err       :13-11 +1,
+		close_bank_rmw :14-14 +1,
+		colfifo_water  :20-15 +1,
+		rsvd0          :31-21 +1;
 	};
 };
 
@@ -1666,14 +1668,6 @@ union mc_bist_saddr {
 	};
 };
 
-union mc_cg_config {
-	uint32_t mc_cg_config;
-	struct { uint32_t
-		index  :21-6 +1,
-		rsvd0  :31-22 +1;
-	};
-};
-
 union mc_cg_config_mcd {
 	uint32_t mc_cg_config_mcd;
 	struct { uint32_t
@@ -1699,7 +1693,8 @@ union mc_cg_config {
 		mcdy_wr_enable :2-2 +1,
 		mcdz_wr_enable :3-3 +1,
 		mc_rd_enable   :5-4 +1,
-		rsvd0          :31-6 +1;
+		index          :21-6 +1,
+		rsvd0          :31-22 +1;
 	};
 };
 
@@ -1785,6 +1780,15 @@ union mc_citf_dagb_dly {
 	};
 };
 
+union mc_citf_int_credits_wr {
+	uint32_t mc_citf_int_credits_wr;
+	struct { uint32_t
+		cntr_wr_hub :5-0 +1,
+		cntr_wr_lcl :11-6 +1,
+		rsvd0       :31-12 +1;
+	};
+};
+
 union mc_citf_int_credits {
 	uint32_t mc_citf_int_credits;
 	struct { uint32_t
@@ -1794,15 +1798,6 @@ union mc_citf_int_credits {
 		cntr_rd_hub_hp :23-18 +1,
 		cntr_rd_lcl    :29-24 +1,
 		rsvd1          :31-30 +1;
-	};
-};
-
-union mc_citf_int_credits_wr {
-	uint32_t mc_citf_int_credits_wr;
-	struct { uint32_t
-		cntr_wr_hub :5-0 +1,
-		cntr_wr_lcl :11-6 +1,
-		rsvd0       :31-12 +1;
 	};
 };
 
@@ -1940,13 +1935,6 @@ union mc_citf_xtra_enable {
 	};
 };
 
-union mc_config {
-	uint32_t mc_config;
-	struct { uint32_t
-		mcc_index_mode_enable :31-31 +1;
-	};
-};
-
 union mc_config_mcd {
 	uint32_t mc_config_mcd;
 	struct { uint32_t
@@ -1966,12 +1954,13 @@ union mc_config_mcd {
 union mc_config {
 	uint32_t mc_config;
 	struct { uint32_t
-		mcdw_wr_enable :0-0 +1,
-		mcdx_wr_enable :1-1 +1,
-		mcdy_wr_enable :2-2 +1,
-		mcdz_wr_enable :3-3 +1,
-		mc_rd_enable   :5-4 +1,
-		rsvd0          :31-6 +1;
+		mcdw_wr_enable        :0-0 +1,
+		mcdx_wr_enable        :1-1 +1,
+		mcdy_wr_enable        :2-2 +1,
+		mcdz_wr_enable        :3-3 +1,
+		mc_rd_enable          :5-4 +1,
+		rsvd0                 :30-6 +1,
+		mcc_index_mode_enable :31-31 +1;
 	};
 };
 
@@ -2134,18 +2123,6 @@ union mc_hub_rdreq_credits {
 	};
 };
 
-union mc_hub_rdreq_dmif {
-	uint32_t mc_hub_rdreq_dmif;
-	struct { uint32_t
-		enable          :0-0 +1,
-		rsvd0           :2-1 +1,
-		blackout_exempt :3-3 +1,
-		rsvd1           :10-4 +1,
-		lazy_timer      :14-11 +1,
-		rsvd2           :31-15 +1;
-	};
-};
-
 union mc_hub_rdreq_dmif_limit {
 	uint32_t mc_hub_rdreq_dmif_limit;
 	struct { uint32_t
@@ -2158,14 +2135,15 @@ union mc_hub_rdreq_dmif_limit {
 union mc_hub_rdreq_dmif {
 	uint32_t mc_hub_rdreq_dmif;
 	struct { uint32_t
+		enable             :0-0 +1,
 		prescale           :2-1 +1,
-		rsvd0              :3-3 +1,
+		blackout_exempt    :3-3 +1,
 		stall_mode         :5-4 +1,
 		stall_override     :6-6 +1,
 		maxburst           :10-7 +1,
-		rsvd1              :14-11 +1,
+		lazy_timer         :14-11 +1,
 		stall_override_wtm :15-15 +1,
-		rsvd2              :31-16 +1;
+		rsvd0              :31-16 +1;
 	};
 };
 
@@ -2376,8 +2354,8 @@ union mc_hub_rdreq_uvd {
 	};
 };
 
-union mc_hub_rdreq_vce {
-	uint32_t mc_hub_rdreq_vce;
+union mc_hub_rdreq_vceu {
+	uint32_t mc_hub_rdreq_vceu;
 	struct { uint32_t
 		enable             :0-0 +1,
 		prescale           :2-1 +1,
@@ -2391,8 +2369,8 @@ union mc_hub_rdreq_vce {
 	};
 };
 
-union mc_hub_rdreq_vceu {
-	uint32_t mc_hub_rdreq_vceu;
+union mc_hub_rdreq_vce {
+	uint32_t mc_hub_rdreq_vce;
 	struct { uint32_t
 		enable             :0-0 +1,
 		prescale           :2-1 +1,
@@ -2796,8 +2774,8 @@ union mc_hub_wdp_uvd {
 	};
 };
 
-union mc_hub_wdp_vce {
-	uint32_t mc_hub_wdp_vce;
+union mc_hub_wdp_vceu {
+	uint32_t mc_hub_wdp_vceu;
 	struct { uint32_t
 		enable             :0-0 +1,
 		prescale           :2-1 +1,
@@ -2811,8 +2789,8 @@ union mc_hub_wdp_vce {
 	};
 };
 
-union mc_hub_wdp_vceu {
-	uint32_t mc_hub_wdp_vceu;
+union mc_hub_wdp_vce {
+	uint32_t mc_hub_wdp_vce;
 	struct { uint32_t
 		enable             :0-0 +1,
 		prescale           :2-1 +1,
@@ -2841,21 +2819,6 @@ union mc_hub_wdp_wtm_cntl {
 	};
 };
 
-union mc_hub_wdp_xdma {
-	uint32_t mc_hub_wdp_xdma;
-	struct { uint32_t
-		enable                :0-0 +1,
-		rsvd0                 :2-1 +1,
-		blackout_exempt       :3-3 +1,
-		rsvd1                 :6-4 +1,
-		maxburst              :10-7 +1,
-		lazy_timer            :14-11 +1,
-		rsvd2                 :15-15 +1,
-		bypass_avail_override :16-16 +1,
-		rsvd3                 :31-17 +1;
-	};
-};
-
 union mc_hub_wdp_xdmam {
 	uint32_t mc_hub_wdp_xdmam;
 	struct { uint32_t
@@ -2875,13 +2838,16 @@ union mc_hub_wdp_xdmam {
 union mc_hub_wdp_xdma {
 	uint32_t mc_hub_wdp_xdma;
 	struct { uint32_t
-		prescale           :2-1 +1,
-		rsvd0              :3-3 +1,
-		stall_mode         :5-4 +1,
-		stall_override     :6-6 +1,
-		rsvd1              :14-7 +1,
-		stall_override_wtm :15-15 +1,
-		rsvd2              :31-16 +1;
+		enable                :0-0 +1,
+		prescale              :2-1 +1,
+		blackout_exempt       :3-3 +1,
+		stall_mode            :5-4 +1,
+		stall_override        :6-6 +1,
+		maxburst              :10-7 +1,
+		lazy_timer            :14-11 +1,
+		stall_override_wtm    :15-15 +1,
+		bypass_avail_override :16-16 +1,
+		rsvd0                 :31-17 +1;
 	};
 };
 
@@ -3785,26 +3751,6 @@ union mc_io_debug_cmd_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_cmd_rx_eq_d0 {
-	uint32_t mc_io_debug_cmd_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_cmd_rx_eq_d1 {
-	uint32_t mc_io_debug_cmd_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_cmd_rxphase_d0 {
 	uint32_t mc_io_debug_cmd_rxphase_d0;
 	struct { uint32_t
@@ -3817,6 +3763,26 @@ union mc_io_debug_cmd_rxphase_d0 {
 
 union mc_io_debug_cmd_rxphase_d1 {
 	uint32_t mc_io_debug_cmd_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_cmd_rx_eq_d0 {
+	uint32_t mc_io_debug_cmd_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_cmd_rx_eq_d1 {
+	uint32_t mc_io_debug_cmd_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -3985,26 +3951,6 @@ union mc_io_debug_dbi_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dbi_rx_eq_d0 {
-	uint32_t mc_io_debug_dbi_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dbi_rx_eq_d1 {
-	uint32_t mc_io_debug_dbi_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dbi_rxphase_d0 {
 	uint32_t mc_io_debug_dbi_rxphase_d0;
 	struct { uint32_t
@@ -4017,6 +3963,26 @@ union mc_io_debug_dbi_rxphase_d0 {
 
 union mc_io_debug_dbi_rxphase_d1 {
 	uint32_t mc_io_debug_dbi_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dbi_rx_eq_d0 {
+	uint32_t mc_io_debug_dbi_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dbi_rx_eq_d1 {
+	uint32_t mc_io_debug_dbi_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4205,26 +4171,6 @@ union mc_io_debug_dq1_rx_eq_pm_d1 {
 	};
 };
 
-union mc_io_debug_dqb0_cdr_phsize_d0 {
-	uint32_t mc_io_debug_dqb0_cdr_phsize_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb0_cdr_phsize_d1 {
-	uint32_t mc_io_debug_dqb0_cdr_phsize_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb0h_clksel_d0 {
 	uint32_t mc_io_debug_dqb0h_clksel_d0;
 	struct { uint32_t
@@ -4285,26 +4231,6 @@ union mc_io_debug_dqb0h_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb0h_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb0h_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb0h_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb0h_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb0h_rxphase_d0 {
 	uint32_t mc_io_debug_dqb0h_rxphase_d0;
 	struct { uint32_t
@@ -4317,6 +4243,26 @@ union mc_io_debug_dqb0h_rxphase_d0 {
 
 union mc_io_debug_dqb0h_rxphase_d1 {
 	uint32_t mc_io_debug_dqb0h_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb0h_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb0h_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb0h_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb0h_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4485,26 +4431,6 @@ union mc_io_debug_dqb0l_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb0l_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb0l_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb0l_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb0l_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb0l_rxphase_d0 {
 	uint32_t mc_io_debug_dqb0l_rxphase_d0;
 	struct { uint32_t
@@ -4517,6 +4443,26 @@ union mc_io_debug_dqb0l_rxphase_d0 {
 
 union mc_io_debug_dqb0l_rxphase_d1 {
 	uint32_t mc_io_debug_dqb0l_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb0l_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb0l_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb0l_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb0l_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4625,8 +4571,8 @@ union mc_io_debug_dqb0l_txslf_d1 {
 	};
 };
 
-union mc_io_debug_dqb1_cdr_phsize_d0 {
-	uint32_t mc_io_debug_dqb1_cdr_phsize_d0;
+union mc_io_debug_dqb0_cdr_phsize_d0 {
+	uint32_t mc_io_debug_dqb0_cdr_phsize_d0;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4635,8 +4581,8 @@ union mc_io_debug_dqb1_cdr_phsize_d0 {
 	};
 };
 
-union mc_io_debug_dqb1_cdr_phsize_d1 {
-	uint32_t mc_io_debug_dqb1_cdr_phsize_d1;
+union mc_io_debug_dqb0_cdr_phsize_d1 {
+	uint32_t mc_io_debug_dqb0_cdr_phsize_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4705,26 +4651,6 @@ union mc_io_debug_dqb1h_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb1h_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb1h_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb1h_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb1h_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb1h_rxphase_d0 {
 	uint32_t mc_io_debug_dqb1h_rxphase_d0;
 	struct { uint32_t
@@ -4737,6 +4663,26 @@ union mc_io_debug_dqb1h_rxphase_d0 {
 
 union mc_io_debug_dqb1h_rxphase_d1 {
 	uint32_t mc_io_debug_dqb1h_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb1h_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb1h_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb1h_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb1h_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -4905,26 +4851,6 @@ union mc_io_debug_dqb1l_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb1l_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb1l_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb1l_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb1l_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb1l_rxphase_d0 {
 	uint32_t mc_io_debug_dqb1l_rxphase_d0;
 	struct { uint32_t
@@ -4937,6 +4863,26 @@ union mc_io_debug_dqb1l_rxphase_d0 {
 
 union mc_io_debug_dqb1l_rxphase_d1 {
 	uint32_t mc_io_debug_dqb1l_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb1l_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb1l_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb1l_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb1l_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5045,8 +4991,8 @@ union mc_io_debug_dqb1l_txslf_d1 {
 	};
 };
 
-union mc_io_debug_dqb2_cdr_phsize_d0 {
-	uint32_t mc_io_debug_dqb2_cdr_phsize_d0;
+union mc_io_debug_dqb1_cdr_phsize_d0 {
+	uint32_t mc_io_debug_dqb1_cdr_phsize_d0;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5055,8 +5001,8 @@ union mc_io_debug_dqb2_cdr_phsize_d0 {
 	};
 };
 
-union mc_io_debug_dqb2_cdr_phsize_d1 {
-	uint32_t mc_io_debug_dqb2_cdr_phsize_d1;
+union mc_io_debug_dqb1_cdr_phsize_d1 {
+	uint32_t mc_io_debug_dqb1_cdr_phsize_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5125,26 +5071,6 @@ union mc_io_debug_dqb2h_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb2h_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb2h_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb2h_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb2h_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb2h_rxphase_d0 {
 	uint32_t mc_io_debug_dqb2h_rxphase_d0;
 	struct { uint32_t
@@ -5157,6 +5083,26 @@ union mc_io_debug_dqb2h_rxphase_d0 {
 
 union mc_io_debug_dqb2h_rxphase_d1 {
 	uint32_t mc_io_debug_dqb2h_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb2h_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb2h_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb2h_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb2h_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5325,26 +5271,6 @@ union mc_io_debug_dqb2l_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb2l_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb2l_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb2l_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb2l_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb2l_rxphase_d0 {
 	uint32_t mc_io_debug_dqb2l_rxphase_d0;
 	struct { uint32_t
@@ -5357,6 +5283,26 @@ union mc_io_debug_dqb2l_rxphase_d0 {
 
 union mc_io_debug_dqb2l_rxphase_d1 {
 	uint32_t mc_io_debug_dqb2l_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb2l_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb2l_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb2l_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb2l_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5465,8 +5411,8 @@ union mc_io_debug_dqb2l_txslf_d1 {
 	};
 };
 
-union mc_io_debug_dqb3_cdr_phsize_d0 {
-	uint32_t mc_io_debug_dqb3_cdr_phsize_d0;
+union mc_io_debug_dqb2_cdr_phsize_d0 {
+	uint32_t mc_io_debug_dqb2_cdr_phsize_d0;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5475,8 +5421,8 @@ union mc_io_debug_dqb3_cdr_phsize_d0 {
 	};
 };
 
-union mc_io_debug_dqb3_cdr_phsize_d1 {
-	uint32_t mc_io_debug_dqb3_cdr_phsize_d1;
+union mc_io_debug_dqb2_cdr_phsize_d1 {
+	uint32_t mc_io_debug_dqb2_cdr_phsize_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5545,26 +5491,6 @@ union mc_io_debug_dqb3h_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb3h_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb3h_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb3h_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb3h_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb3h_rxphase_d0 {
 	uint32_t mc_io_debug_dqb3h_rxphase_d0;
 	struct { uint32_t
@@ -5577,6 +5503,26 @@ union mc_io_debug_dqb3h_rxphase_d0 {
 
 union mc_io_debug_dqb3h_rxphase_d1 {
 	uint32_t mc_io_debug_dqb3h_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb3h_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb3h_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb3h_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb3h_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5745,26 +5691,6 @@ union mc_io_debug_dqb3l_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_dqb3l_rx_eq_d0 {
-	uint32_t mc_io_debug_dqb3l_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_dqb3l_rx_eq_d1 {
-	uint32_t mc_io_debug_dqb3l_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_dqb3l_rxphase_d0 {
 	uint32_t mc_io_debug_dqb3l_rxphase_d0;
 	struct { uint32_t
@@ -5777,6 +5703,26 @@ union mc_io_debug_dqb3l_rxphase_d0 {
 
 union mc_io_debug_dqb3l_rxphase_d1 {
 	uint32_t mc_io_debug_dqb3l_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb3l_rx_eq_d0 {
+	uint32_t mc_io_debug_dqb3l_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb3l_rx_eq_d1 {
+	uint32_t mc_io_debug_dqb3l_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -5885,6 +5831,26 @@ union mc_io_debug_dqb3l_txslf_d1 {
 	};
 };
 
+union mc_io_debug_dqb3_cdr_phsize_d0 {
+	uint32_t mc_io_debug_dqb3_cdr_phsize_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_dqb3_cdr_phsize_d1 {
+	uint32_t mc_io_debug_dqb3_cdr_phsize_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
 union mc_io_debug_edc_cdr_phsize_d0 {
 	uint32_t mc_io_debug_edc_cdr_phsize_d0;
 	struct { uint32_t
@@ -5965,6 +5931,26 @@ union mc_io_debug_edc_ofscal_d1 {
 	};
 };
 
+union mc_io_debug_edc_rxphase_d0 {
+	uint32_t mc_io_debug_edc_rxphase_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_edc_rxphase_d1 {
+	uint32_t mc_io_debug_edc_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
 union mc_io_debug_edc_rx_dyn_pm_d0 {
 	uint32_t mc_io_debug_edc_rx_dyn_pm_d0;
 	struct { uint32_t
@@ -6017,26 +6003,6 @@ union mc_io_debug_edc_rx_eq_pm_d0 {
 
 union mc_io_debug_edc_rx_eq_pm_d1 {
 	uint32_t mc_io_debug_edc_rx_eq_pm_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_edc_rxphase_d0 {
-	uint32_t mc_io_debug_edc_rxphase_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_edc_rxphase_d1 {
-	uint32_t mc_io_debug_edc_rxphase_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -7825,6 +7791,26 @@ union mc_io_debug_wcdr_ofscal_d1 {
 	};
 };
 
+union mc_io_debug_wcdr_rxphase_d0 {
+	uint32_t mc_io_debug_wcdr_rxphase_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_wcdr_rxphase_d1 {
+	uint32_t mc_io_debug_wcdr_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
 union mc_io_debug_wcdr_rx_dyn_pm_d0 {
 	uint32_t mc_io_debug_wcdr_rx_dyn_pm_d0;
 	struct { uint32_t
@@ -7877,26 +7863,6 @@ union mc_io_debug_wcdr_rx_eq_pm_d0 {
 
 union mc_io_debug_wcdr_rx_eq_pm_d1 {
 	uint32_t mc_io_debug_wcdr_rx_eq_pm_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_wcdr_rxphase_d0 {
-	uint32_t mc_io_debug_wcdr_rxphase_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_wcdr_rxphase_d1 {
-	uint32_t mc_io_debug_wcdr_rxphase_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -8065,26 +8031,6 @@ union mc_io_debug_wck_ofscal_d1 {
 	};
 };
 
-union mc_io_debug_wck_rx_eq_d0 {
-	uint32_t mc_io_debug_wck_rx_eq_d0;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
-union mc_io_debug_wck_rx_eq_d1 {
-	uint32_t mc_io_debug_wck_rx_eq_d1;
-	struct { uint32_t
-		value0 :7-0 +1,
-		value1 :15-8 +1,
-		value2 :23-16 +1,
-		value3 :31-24 +1;
-	};
-};
-
 union mc_io_debug_wck_rxphase_d0 {
 	uint32_t mc_io_debug_wck_rxphase_d0;
 	struct { uint32_t
@@ -8097,6 +8043,26 @@ union mc_io_debug_wck_rxphase_d0 {
 
 union mc_io_debug_wck_rxphase_d1 {
 	uint32_t mc_io_debug_wck_rxphase_d1;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_wck_rx_eq_d0 {
+	uint32_t mc_io_debug_wck_rx_eq_d0;
+	struct { uint32_t
+		value0 :7-0 +1,
+		value1 :15-8 +1,
+		value2 :23-16 +1,
+		value3 :31-24 +1;
+	};
+};
+
+union mc_io_debug_wck_rx_eq_d1 {
+	uint32_t mc_io_debug_wck_rx_eq_d1;
 	struct { uint32_t
 		value0 :7-0 +1,
 		value1 :15-8 +1,
@@ -8237,16 +8203,6 @@ union mc_io_dphy_str_cntl_d1 {
 	};
 };
 
-union mc_io_pad_cntl {
-	uint32_t mc_io_pad_cntl;
-	struct { uint32_t
-		atbsel    :23-20 +1,
-		atben     :29-24 +1,
-		atbsel_d1 :30-30 +1,
-		atbsel_d0 :31-31 +1;
-	};
-};
-
 union mc_io_pad_cntl_d0 {
 	uint32_t mc_io_pad_cntl_d0;
 	struct { uint32_t
@@ -8317,7 +8273,10 @@ union mc_io_pad_cntl {
 		rxphase_gray   :17-17 +1,
 		ovl_yclkon_d0  :18-18 +1,
 		ovl_yclkon_d1  :19-19 +1,
-		rsvd0          :31-20 +1;
+		atbsel         :23-20 +1,
+		atben          :29-24 +1,
+		atbsel_d1      :30-30 +1,
+		atbsel_d0      :31-31 +1;
 	};
 };
 
@@ -8606,24 +8565,6 @@ union mc_io_txcntl_dphy1_d1 {
 		txbypass         :26-26 +1,
 		pll_loopbck      :27-27 +1,
 		txbypass_data    :31-28 +1;
-	};
-};
-
-union mclk_pwrmgt_cntl {
-	uint32_t mclk_pwrmgt_cntl;
-	struct { uint32_t
-		dll_speed      :4-0 +1,
-		rsvd0          :5-5 +1,
-		dll_ready      :6-6 +1,
-		mc_int_cntl    :7-7 +1,
-		mrdck0_pdnb    :8-8 +1,
-		mrdck1_pdnb    :9-9 +1,
-		rsvd1          :15-10 +1,
-		mrdck0_reset   :16-16 +1,
-		mrdck1_reset   :17-17 +1,
-		rsvd2          :23-18 +1,
-		dll_ready_read :24-24 +1,
-		rsvd3          :31-25 +1;
 	};
 };
 
@@ -9374,28 +9315,6 @@ union mc_seq_dram_2 {
 	};
 };
 
-union mc_seq_dram {
-	uint32_t mc_seq_dram;
-	struct { uint32_t
-		adr_2ck :0-0 +1,
-		adr_mux :1-1 +1,
-		adr_df1 :2-2 +1,
-		ap8     :3-3 +1,
-		dat_df1 :4-4 +1,
-		dqs_df1 :5-5 +1,
-		dqm_df1 :6-6 +1,
-		dqm_act :7-7 +1,
-		rsvd0   :11-8 +1,
-		cke_dyn :12-12 +1,
-		cke_act :13-13 +1,
-		bo4     :14-14 +1,
-		dll_clr :15-15 +1,
-		dll_cnt :23-16 +1,
-		dat_inv :24-24 +1,
-		rsvd1   :31-25 +1;
-	};
-};
-
 union mc_seq_dram_error_insertion {
 	uint32_t mc_seq_dram_error_insertion;
 	struct { uint32_t
@@ -9407,15 +9326,28 @@ union mc_seq_dram_error_insertion {
 union mc_seq_dram {
 	uint32_t mc_seq_dram;
 	struct { uint32_t
+		adr_2ck     :0-0 +1,
+		adr_mux     :1-1 +1,
+		adr_df1     :2-2 +1,
+		ap8         :3-3 +1,
+		dat_df1     :4-4 +1,
+		dqs_df1     :5-5 +1,
+		dqm_df1     :6-6 +1,
+		dqm_act     :7-7 +1,
 		stb_cnt     :11-8 +1,
-		rsvd0       :24-12 +1,
+		cke_dyn     :12-12 +1,
+		cke_act     :13-13 +1,
+		bo4         :14-14 +1,
+		dll_clr     :15-15 +1,
+		dll_cnt     :23-16 +1,
+		dat_inv     :24-24 +1,
 		inv_acm     :25-25 +1,
 		odt_enb     :26-26 +1,
 		odt_act     :27-27 +1,
 		rst_ctl     :28-28 +1,
 		tri_mio_dyn :29-29 +1,
 		tri_cke     :30-30 +1,
-		rsvd1       :31-31 +1;
+		rsvd0       :31-31 +1;
 	};
 };
 
@@ -9603,14 +9535,6 @@ union mc_seq_misc9 {
 	};
 };
 
-union mc_seq_misc_timing2 {
-	uint32_t mc_seq_misc_timing2;
-	struct { uint32_t
-		faw    :12-8 +1,
-		rsvd0  :31-13 +1;
-	};
-};
-
 union mc_seq_misc_timing2_lp {
 	uint32_t mc_seq_misc_timing2_lp;
 	struct { uint32_t
@@ -9633,7 +9557,8 @@ union mc_seq_misc_timing2 {
 		pa2rdata :2-0 +1,
 		rsvd0    :3-3 +1,
 		pa2wdata :6-4 +1,
-		rsvd1    :12-7 +1,
+		rsvd1    :7-7 +1,
+		faw      :12-8 +1,
 		tredc    :15-13 +1,
 		twedc    :20-16 +1,
 		t32aw    :24-21 +1,
@@ -10314,17 +10239,17 @@ union mc_seq_sup_ir_stat {
 	};
 };
 
-union mc_seq_sup_pgm {
-	uint32_t mc_seq_sup_pgm;
-	struct { uint32_t
-		cntl   :31-0 +1;
-	};
-};
-
 union mc_seq_sup_pgm_stat {
 	uint32_t mc_seq_sup_pgm_stat;
 	struct { uint32_t
 		status :31-0 +1;
+	};
+};
+
+union mc_seq_sup_pgm {
+	uint32_t mc_seq_sup_pgm;
+	struct { uint32_t
+		cntl   :31-0 +1;
 	};
 };
 
@@ -10935,18 +10860,6 @@ union mc_seq_wcdr_ctrl {
 	};
 };
 
-union mc_seq_wr_ctl_2 {
-	uint32_t mc_seq_wr_ctl_2;
-	struct { uint32_t
-		dat_dly_h_d0 :0-0 +1,
-		dqs_dly_h_d0 :1-1 +1,
-		rsvd0        :2-2 +1,
-		dat_dly_h_d1 :3-3 +1,
-		dqs_dly_h_d1 :4-4 +1,
-		rsvd1        :31-5 +1;
-	};
-};
-
 union mc_seq_wr_ctl_2_lp {
 	uint32_t mc_seq_wr_ctl_2_lp;
 	struct { uint32_t
@@ -10964,27 +10877,14 @@ union mc_seq_wr_ctl_2_lp {
 union mc_seq_wr_ctl_2 {
 	uint32_t mc_seq_wr_ctl_2;
 	struct { uint32_t
+		dat_dly_h_d0 :0-0 +1,
+		dqs_dly_h_d0 :1-1 +1,
 		oen_dly_h_d0 :2-2 +1,
-		rsvd0        :4-3 +1,
+		dat_dly_h_d1 :3-3 +1,
+		dqs_dly_h_d1 :4-4 +1,
 		oen_dly_h_d1 :5-5 +1,
 		wcdr_en      :6-6 +1,
-		rsvd1        :31-7 +1;
-	};
-};
-
-union mc_seq_wr_ctl_d0 {
-	uint32_t mc_seq_wr_ctl_d0;
-	struct { uint32_t
-		dat_dly    :3-0 +1,
-		dqs_dly    :7-4 +1,
-		dqs_xtr    :8-8 +1,
-		dat_2y_dly :9-9 +1,
-		adr_2y_dly :10-10 +1,
-		cmd_2y_dly :11-11 +1,
-		rsvd0      :28-12 +1,
-		adr_dly    :29-29 +1,
-		cmd_dly    :30-30 +1,
-		rsvd1      :31-31 +1;
+		rsvd0        :31-7 +1;
 	};
 };
 
@@ -11012,26 +10912,18 @@ union mc_seq_wr_ctl_d0_lp {
 union mc_seq_wr_ctl_d0 {
 	uint32_t mc_seq_wr_ctl_d0;
 	struct { uint32_t
-		oen_dly :15-12 +1,
-		oen_ext :19-16 +1,
-		oen_sel :21-20 +1,
-		rsvd0   :23-22 +1,
-		odt_dly :27-24 +1,
-		odt_ext :28-28 +1,
-		rsvd1   :31-29 +1;
-	};
-};
-
-union mc_seq_wr_ctl_d1 {
-	uint32_t mc_seq_wr_ctl_d1;
-	struct { uint32_t
 		dat_dly    :3-0 +1,
 		dqs_dly    :7-4 +1,
 		dqs_xtr    :8-8 +1,
 		dat_2y_dly :9-9 +1,
 		adr_2y_dly :10-10 +1,
 		cmd_2y_dly :11-11 +1,
-		rsvd0      :28-12 +1,
+		oen_dly    :15-12 +1,
+		oen_ext    :19-16 +1,
+		oen_sel    :21-20 +1,
+		rsvd0      :23-22 +1,
+		odt_dly    :27-24 +1,
+		odt_ext    :28-28 +1,
 		adr_dly    :29-29 +1,
 		cmd_dly    :30-30 +1,
 		rsvd1      :31-31 +1;
@@ -11062,13 +10954,21 @@ union mc_seq_wr_ctl_d1_lp {
 union mc_seq_wr_ctl_d1 {
 	uint32_t mc_seq_wr_ctl_d1;
 	struct { uint32_t
-		oen_dly :15-12 +1,
-		oen_ext :19-16 +1,
-		oen_sel :21-20 +1,
-		rsvd0   :23-22 +1,
-		odt_dly :27-24 +1,
-		odt_ext :28-28 +1,
-		rsvd1   :31-29 +1;
+		dat_dly    :3-0 +1,
+		dqs_dly    :7-4 +1,
+		dqs_xtr    :8-8 +1,
+		dat_2y_dly :9-9 +1,
+		adr_2y_dly :10-10 +1,
+		cmd_2y_dly :11-11 +1,
+		oen_dly    :15-12 +1,
+		oen_ext    :19-16 +1,
+		oen_sel    :21-20 +1,
+		rsvd0      :23-22 +1,
+		odt_dly    :27-24 +1,
+		odt_ext    :28-28 +1,
+		adr_dly    :29-29 +1,
+		cmd_dly    :30-30 +1,
+		rsvd1      :31-31 +1;
 	};
 };
 
@@ -11861,16 +11761,6 @@ union mc_xbar_addr_dec {
 	};
 };
 
-union mc_xbar_arb {
-	uint32_t mc_xbar_arb;
-	struct { uint32_t
-		hubrd_highest             :0-0 +1,
-		disable_hub_stall_highest :1-1 +1,
-		break_burst_cid_change    :2-2 +1,
-		rsvd0                     :31-3 +1;
-	};
-};
-
 union mc_xbar_arb_max_burst {
 	uint32_t mc_xbar_arb_max_burst;
 	struct { uint32_t
@@ -11882,6 +11772,16 @@ union mc_xbar_arb_max_burst {
 		wr_port1 :23-20 +1,
 		wr_port2 :27-24 +1,
 		wr_port3 :31-28 +1;
+	};
+};
+
+union mc_xbar_arb {
+	uint32_t mc_xbar_arb;
+	struct { uint32_t
+		hubrd_highest             :0-0 +1,
+		disable_hub_stall_highest :1-1 +1,
+		break_burst_cid_change    :2-2 +1,
+		rsvd0                     :31-3 +1;
 	};
 };
 
@@ -12530,17 +12430,6 @@ union mc_xpb_clg_cfg9 {
 	};
 };
 
-union mc_xpb_clg_extra {
-	uint32_t mc_xpb_clg_extra;
-	struct { uint32_t
-		cmp0   :7-0 +1,
-		msk0   :15-8 +1,
-		rsvd0  :16-16 +1,
-		cmp1   :24-17 +1,
-		rsvd1  :31-25 +1;
-	};
-};
-
 union mc_xpb_clg_extra_rd {
 	uint32_t mc_xpb_clg_extra_rd;
 	struct { uint32_t
@@ -12556,10 +12445,12 @@ union mc_xpb_clg_extra_rd {
 union mc_xpb_clg_extra {
 	uint32_t mc_xpb_clg_extra;
 	struct { uint32_t
+		cmp0   :7-0 +1,
+		msk0   :15-8 +1,
 		vld0   :16-16 +1,
-		rsvd0  :24-17 +1,
+		cmp1   :24-17 +1,
 		vld1   :25-25 +1,
-		rsvd1  :31-26 +1;
+		rsvd0  :31-26 +1;
 	};
 };
 
@@ -13151,15 +13042,15 @@ union mc_xpb_rtr_src_aprtr9 {
 	};
 };
 
-union mc_xpb_sticky {
-	uint32_t mc_xpb_sticky;
+union mc_xpb_sticky_w1c {
+	uint32_t mc_xpb_sticky_w1c;
 	struct { uint32_t
 		bits   :31-0 +1;
 	};
 };
 
-union mc_xpb_sticky_w1c {
-	uint32_t mc_xpb_sticky_w1c;
+union mc_xpb_sticky {
+	uint32_t mc_xpb_sticky;
 	struct { uint32_t
 		bits   :31-0 +1;
 	};
