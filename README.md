@@ -67,6 +67,12 @@ https://github.com/Eliovp/amdmemorytweak
 
 https://github.com/andybf/atombioseditor
 
+https://github.com/ddobreff/amdmeminfo
+
+https://github.com/nerdralph/OhGodADecode
+
+https://nerdralph.blogspot.com/2017/05/gddr5-memory-timing-details.html
+
 https://www.igorslab.de/red-bios-editor-bios-eintraege-anpassen-optimieren-und-noch-stabiler-uebertakten-navi-unlimited
 
 https://github.com/cyring/CoreFreq
