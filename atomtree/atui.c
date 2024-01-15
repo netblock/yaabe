@@ -425,7 +425,7 @@ atui_get_to_text(
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
 #endif
 	const char8_t* const metaformat = "%s%u%s"; // amogus
-	char8_t format[8];
+	char8_t format[10];
 
 
 	const uint8_t radix = leaf->type & ATUI_ANY;
@@ -523,7 +523,7 @@ atui_get_to_text(
 			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
 		}
 	}
-
+	assert(strlen(format) < sizeof(format));
 	return malloc_size;
 }
 

@@ -9,7 +9,7 @@ VERSION = $(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
 VER_WINRC = $(VER_MAJOR),$(VER_MINOR),$(VER_PATCH),0 #for MS Resource Compiler
 
 MUTE_NOTES = -fcompare-debug-second # ppatui.h absolutely floods on error
-YAABE_DEBUG_CFLAGS = -g -Og $(MUTE_NOTES)
+YAABE_DEBUG_CFLAGS = -g -Og -fstack-protector $(MUTE_NOTES)
 YAABE_RELEASE_CFLAGS = -DNDEBUG -O3 -flto=auto -fuse-linker-plugin
 GTK_CFLAGS = `pkg-config --cflags gtk4`
 GTK_LDFLAGS = `pkg-config --libs gtk4`
