@@ -1645,8 +1645,8 @@ PPATUI_FUNCIFY(struct, atom_memory_timing_format_v2, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent paramenter:Channel combination"))
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1747,8 +1747,8 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter: Channel combination"))
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1830,8 +1830,8 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter: Channel combination"))
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -1919,8 +1919,8 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "board dependent parameter: Channel combination"))
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -2007,10 +2007,6 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 )
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
-	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "mmMC_SHARED_CHREMAP"))
-	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, "Size of ATOM_VRAM_MODULE_V7"))
@@ -2105,8 +2101,8 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, "mmMC_SHARED_CHREMAP"))
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc8_1),
+		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
 		(ATUI_DEC, ATUI_NOFANCY),
@@ -2193,7 +2189,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 	),
 
 	(bios->ChannelMapCfg1, "ChannelMapCfg1",
-		(ATUI_HEX, ATUI_NOFANCY),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap2_gmc8_1),
 		((LANG_ENG, "channel mapping for channel8~15"))
 	),
 	(bios->BankMapCfg, "BankMapCfg",

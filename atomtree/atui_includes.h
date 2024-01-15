@@ -114,6 +114,10 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 /******************************************************************************/
 // atui_umctimings.c / umctimings.h
 
+PPATUI_HEADERIFY(mc_shared_chremap_gmc6_0);
+PPATUI_HEADERIFY(mc_shared_chremap_gmc8_1);
+PPATUI_HEADERIFY(mc_shared_chremap2_gmc8_1);
+
 PPATUI_HEADERIFY(mc_block_polaris_timings);
 PPATUI_HEADERIFY(umc_block_vega10_timings);
 PPATUI_HEADERIFY(umc_block_vega21_timings);

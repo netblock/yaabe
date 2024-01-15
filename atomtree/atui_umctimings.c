@@ -6,6 +6,54 @@ See atui_atomfirmware.c for how to use PPATUI_FUNCIFY()
 #include "atomtree.h"
 #include "atui.h"
 
+PPATUI_FUNCIFY(union, mc_shared_chremap_gmc6_0, atui_nullstruct,
+	(bios->mc_shared_chremap, "mc_shared_chremap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("chan0",  2,0, ATUI_DEC, (ATUI_NODESCR)),
+			("chan1",  5,3, ATUI_DEC, (ATUI_NODESCR)),
+			("chan2",  8,6, ATUI_DEC, (ATUI_NODESCR)),
+			("chan3",  11,9, ATUI_DEC, (ATUI_NODESCR)),
+			("chan4",  14,12, ATUI_DEC, (ATUI_NODESCR)),
+			("chan5",  17,15, ATUI_DEC, (ATUI_NODESCR)),
+			("chan6",  20,18, ATUI_DEC, (ATUI_NODESCR)),
+			("chan7",  23,21, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",  31,24, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, mc_shared_chremap_gmc8_1, atui_nullstruct,
+	(bios->mc_shared_chremap, "mc_shared_chremap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("chan0",  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("chan1",  7,4, ATUI_DEC, (ATUI_NODESCR)),
+			("chan2",  11,8, ATUI_DEC, (ATUI_NODESCR)),
+			("chan3",  15,12, ATUI_DEC, (ATUI_NODESCR)),
+			("chan4",  19,16, ATUI_DEC, (ATUI_NODESCR)),
+			("chan5",  23,20, ATUI_DEC, (ATUI_NODESCR)),
+			("chan6",  27,24, ATUI_DEC, (ATUI_NODESCR)),
+			("chan7",  31,28, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_shared_chremap2_gmc8_1, atui_nullstruct,
+	(bios->mc_shared_chremap2, "mc_shared_chremap2",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("chan8",  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("chan9",  7,4, ATUI_DEC, (ATUI_NODESCR)),
+			("chan10", 11,8, ATUI_DEC, (ATUI_NODESCR)),
+			("chan11", 15,12, ATUI_DEC, (ATUI_NODESCR)),
+			("chan12", 19,16, ATUI_DEC, (ATUI_NODESCR)),
+			("chan13", 23,20, ATUI_DEC, (ATUI_NODESCR)),
+			("chan14", 27,24, ATUI_DEC, (ATUI_NODESCR)),
+			("chan15", 31,28, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+
+
 PPATUI_FUNCIFY(union, DRAMTiming1, atui_nullstruct,
 	(bios->DRAMTiming1, "DRAMTiming1",
 		(ATUI_BIN, ATUI_BITFIELD, (

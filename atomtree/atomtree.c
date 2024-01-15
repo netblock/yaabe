@@ -863,7 +863,7 @@ atomtree_populate_vram_module(
 
 	atui_branch* atui_module_entry;
 	atui_branch* atui_vrammodules = NULL;
-	atui_branch* atui_mrs[2] = {NULL};
+	atui_branch* atui_children[2] = {NULL};
 	if (generate_atui) {
 		atui_vrammodules = ATUI_MAKE_BRANCH(atui_nullstruct,
 			NULL,  NULL,NULL,  count,NULL
@@ -880,6 +880,7 @@ atomtree_populate_vram_module(
 					) / sizeof(struct atom_memory_timing_format_v0)
 				);
 				vram_module_offset += vram_modules[i].v1_3->ModuleSize;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 
 			if (generate_atui) {
@@ -954,6 +955,7 @@ atomtree_populate_vram_module(
 					) / sizeof(struct atom_memory_timing_format_v0)
 				);
 				vram_module_offset += vram_modules[i].v1_4->ModuleSize;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 
 			if (generate_atui) {
@@ -1024,24 +1026,45 @@ atomtree_populate_vram_module(
 			for (i=0; i < count; i++) {
 				vram_modules[i].v1_7 = vram_module_offset;
 				vram_module_offset += vram_modules[i].v1_7->ModuleSize;
+				if (vram_modules[i].v1_7->ChannelMapCfg >> 24) { // infer
+					// TODO explicit way to find GMC?
+					// does it follow vram_module ver? doesn't seem so
+					vram_modules[i].gmc_bitfields_ver = v8_1;
+				} else {
+					vram_modules[i].gmc_bitfields_ver = v6_0;
+				}
 			}
 			if (generate_atui) {
 				for (i=0; i < count; i++) {
+					if (v8_1 == vram_modules[i].gmc_bitfields_ver) {
+						atui_children[0] = ATUI_MAKE_BRANCH(
+							mc_shared_chremap_gmc8_1,  "ChannelMapCfg",
+							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc8_1),
+							0,NULL
+						);
+					} else { // 6.0
+						atui_children[0] = ATUI_MAKE_BRANCH(
+							mc_shared_chremap_gmc6_0,  "ChannelMapCfg",
+							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc6_0),
+							0,NULL
+						);
+					}
+
 					memory_type = vram_modules[i].v1_7->MemoryType;
 					switch (memory_type) { // mode registers directly in module
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
-							atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr2,  NULL,
+							atui_children[1] = ATUI_MAKE_BRANCH(gddr5_mr2, NULL,
 								NULL,&(vram_modules[i].v1_7->MR2),  0,NULL
 							);
-							atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr3,  NULL,
+							atui_children[2] = ATUI_MAKE_BRANCH(gddr5_mr3, NULL,
 								NULL,&(vram_modules[i].v1_7->MR3),  0,NULL
 							);
 							break;
 						case ATOM_DGPU_VRAM_TYPE_HBM:
-							atui_mrs[0] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
+							atui_children[1] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
 								NULL,&(vram_modules[i].v1_7->MR2),  0,NULL
 							);
-							atui_mrs[1] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
+							atui_children[2] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
 								NULL,&(vram_modules[i].v1_7->MR3),  0,NULL
 							);
 							break;
@@ -1051,7 +1074,7 @@ atomtree_populate_vram_module(
 
 					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v7,
 						NULL,  &(vram_modules[i]), vram_modules[i].v1_7,
-						2, atui_mrs // 2 is for MRs
+						(1+2), atui_children // 1 is ChannelMapCfg; 2 is for MRs
 					);
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
@@ -1072,24 +1095,25 @@ atomtree_populate_vram_module(
 			for (i=0; i < count; i++) {
 				vram_modules[i].v1_8 = vram_module_offset;
 				vram_module_offset += vram_modules[i].v1_8->ModuleSize;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 			if (generate_atui) {
 				for (i=0; i < count; i++) {
 					memory_type = vram_modules[i].v1_8->MemoryType;
 					switch (memory_type) { // mode registers directly in module
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
-							atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr2,  NULL,
+							atui_children[0] = ATUI_MAKE_BRANCH(gddr5_mr2, NULL,
 								NULL,&(vram_modules[i].v1_8->MR2),  0,NULL
 							);
-							atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr3,  NULL,
+							atui_children[1] = ATUI_MAKE_BRANCH(gddr5_mr3, NULL,
 								NULL,&(vram_modules[i].v1_8->MR3),  0,NULL
 							);
 							break;
 						case ATOM_DGPU_VRAM_TYPE_HBM:
-							atui_mrs[0] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
+							atui_children[0] = ATUI_MAKE_BRANCH(hbm_mr2,  NULL,
 								NULL,&(vram_modules[i].v1_8->MR2),  0,NULL
 							);
-							atui_mrs[1] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
+							atui_children[1] = ATUI_MAKE_BRANCH(hbm_mr3,  NULL,
 								NULL,&(vram_modules[i].v1_8->MR3),  0,NULL
 							);
 							break;
@@ -1099,7 +1123,7 @@ atomtree_populate_vram_module(
 
 					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v8,
 						NULL,  &(vram_modules[i]), vram_modules[i].v1_8,
-						2, atui_mrs // 2 is for MRs
+						2, atui_children // 2 is for MRs
 					);
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
@@ -1121,6 +1145,7 @@ atomtree_populate_vram_module(
 			for (i=0; i < count; i++) {
 				vram_modules[i].v1_9 = vram_module_offset;
 				vram_module_offset += vram_modules[i].v1_9->vram_module_size;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 			if (generate_atui) {
 				for (i=0; i < count; i++) {
@@ -1150,6 +1175,7 @@ atomtree_populate_vram_module(
 			for (i=0; i < count; i++) {
 				vram_modules[i].v1_10 = vram_module_offset;
 				vram_module_offset += vram_modules[i].v1_10->vram_module_size;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 			if (generate_atui) {
 				for (i=0; i < count; i++) {
@@ -1179,6 +1205,7 @@ atomtree_populate_vram_module(
 			for (i=0; i < count; i++) {
 				vram_modules[i].v1_11 = vram_module_offset;
 				vram_module_offset += vram_modules[i].v1_11->vram_module_size;
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 			}
 			if (generate_atui) {
 				for (i=0; i < count; i++) {
@@ -1209,6 +1236,7 @@ atomtree_populate_vram_module(
 				vram_modules[i].v3_0 = vram_module_offset;
 				//vram_module_offset += vram_modules[i].v3_0->vram_module_size;
 				vram_module_offset += sizeof(struct atom_vram_module_v3_0);
+				vram_modules[i].gmc_bitfields_ver = nover; // TODO
 
 				vram_modules[i].dram_info = NULL;
 				if (vram_modules[i].v3_0->dram_info_offset) {

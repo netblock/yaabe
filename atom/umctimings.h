@@ -15,6 +15,57 @@ HBM2 and vega10 is manually reverse-engineered so it can be wrong.
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
+/******************************************************************************/
+// Graphics Memory Controller registers
+/******************************************************************************/
+union mc_shared_chremap_gmc6_0 {
+	uint32_t mc_shared_chremap;
+	struct { uint32_t
+		chan0  :2-0 +1,
+		chan1  :5-3 +1,
+		chan2  :8-6 +1,
+		chan3  :11-9 +1,
+		chan4  :14-12 +1,
+		chan5  :17-15 +1,
+		chan6  :20-18 +1,
+		chan7  :23-21 +1,
+		rsvd0  :31-24 +1;
+	};
+};
+
+union mc_shared_chremap_gmc8_1 {
+	uint32_t mc_shared_chremap;
+	struct { uint32_t
+		chan0  :3-0 +1,
+		chan1  :7-4 +1,
+		chan2  :11-8 +1,
+		chan3  :15-12 +1,
+		chan4  :19-16 +1,
+		chan5  :23-20 +1,
+		chan6  :27-24 +1,
+		chan7  :31-28 +1;
+	};
+};
+union mc_shared_chremap2_gmc8_1 {
+	uint32_t mc_shared_chremap2;
+	struct { uint32_t
+		chan8  :3-0 +1,
+		chan9  :7-4 +1,
+		chan10 :11-8 +1,
+		chan11 :15-12 +1,
+		chan12 :19-16 +1,
+		chan13 :23-20 +1,
+		chan14 :27-24 +1,
+		chan15 :31-28 +1;
+	};
+};
+
+/******************************************************************************/
+// memory timings as seen in 'mem_clk_patch' based timing structures
+// will duplicate gmc timing structures
+/******************************************************************************/
+
+
 union DRAMTiming1 {
 	uint32_t DRAMTiming1;
 	struct { uint32_t
