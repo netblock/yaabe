@@ -315,7 +315,7 @@ struct atomtree_vram_info_header_v2_2 {
 	union {
 		void* mem_timings;
 		//struct mc_block_fiji_timings* fiji_timings;
-		//struct mc_block_polaris_timings polaris_timings;
+		struct mc_block_polaris_timings* polaris_timings;
 	};
 	uint8_t* num_timing_straps;
 

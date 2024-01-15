@@ -1525,21 +1525,21 @@ atomtree_populate_vram_info_v2_2(
 			&(vi22->mem_clk_patch), generate_atui, 1
 		);
 
-		/*
 		vi22->num_timing_straps = &(vi22->mem_clk_patch.num_data_blocks);
 		vi22->mem_timings = vi22->mem_clk_patch.data_blocks[0];
 		if (vi22->mem_clk_patch.data_block_element_size
-			== sizeof(struct mc_block_fiji_timings)) {
+			== sizeof(struct mc_block_polaris_timings)) {
+			vi22->uses_polaris_timings = true;
+		} else if (vi22->mem_clk_patch.data_block_element_size == 40) {
+			// TODO fiji
 			vi22->uses_polaris_timings = false;
 		} else {
-			vi22->uses_polaris_timings = true;
+			assert(0); // what else uses v2.2?
 		}
-		*/
 
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 
-			/*
 			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
                 atui_nullstruct,  NULL,
                 NULL,NULL,  *vi22->num_timing_straps, NULL
@@ -1549,10 +1549,21 @@ atomtree_populate_vram_info_v2_2(
 				strcpy(atui_mem_timings->name,
 					"mc_block_polaris_timings (uncertain)"
 				);
+				for (i=0; i < *vi22->num_timing_straps; i++) {
+					tmp_branch = ATUI_MAKE_BRANCH(mc_block_polaris_timings,
+						NULL,  NULL,&(vi22->polaris_timings[i]),  0,NULL
+					);
+					sprintf(tmp_branch->name, "%s (%i MHz)",
+						tmp_branch->varname,
+						(vi22->polaris_timings[i].block_id.mem_clock_range/100)
+					);
+					ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
+				}
 			} else {
 				strcpy(atui_mem_timings->name,
 					"mc_block_fiji_timings (uncertain)"
 				);
+				/*
 				for (i=0; i < *vi22->num_timing_straps; i++) {
 					tmp_branch = ATUI_MAKE_BRANCH(mc_block_fiji_timings,
 						NULL,  NULL,&(vi22->fiji_timings[i]),  0,NULL
@@ -1563,8 +1574,8 @@ atomtree_populate_vram_info_v2_2(
 					);
 					ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
 				}
+				*/
 			}
-			*/
 		}
 	} else {
 		vi22->mem_clk_patch.leaves = NULL;

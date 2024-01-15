@@ -510,6 +510,211 @@ PPATUI_FUNCIFY(union, ChanPipeDly, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
+PPATUI_FUNCIFY(union, mc_seq_wr_ctl_d1, atui_nullstruct,
+	(bios->mc_seq_wr_ctl_d1, "mc_seq_wr_ctl_d1",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("dat_dly",    3,0, ATUI_DEC, (ATUI_NODESCR)),
+			("dqs_dly",    7,4, ATUI_DEC, (ATUI_NODESCR)),
+			("dqs_xtr",    8,8, ATUI_DEC, (ATUI_NODESCR)),
+			("dat_2y_dly", 9,9, ATUI_DEC, (ATUI_NODESCR)),
+			("adr_2y_dly", 10,10, ATUI_DEC, (ATUI_NODESCR)),
+			("cmd_2y_dly", 11,11, ATUI_DEC, (ATUI_NODESCR)),
+			("oen_dly",    15,12, ATUI_DEC, (ATUI_NODESCR)),
+			("oen_ext",    19,16, ATUI_DEC, (ATUI_NODESCR)),
+			("oen_sel",    21,20, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",      23,22, ATUI_DEC, (ATUI_NODESCR)),
+			("odt_dly",    27,24, ATUI_DEC, (ATUI_NODESCR)),
+			("odt_ext",    28,28, ATUI_DEC, (ATUI_NODESCR)),
+			("adr_dly",    29,29, ATUI_DEC, (ATUI_NODESCR)),
+			("cmd_dly",    30,30, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd1",      31,31, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_wr_ctl_2, atui_nullstruct,
+	(bios->mc_seq_wr_ctl_2, "mc_seq_wr_ctl_2",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("dat_dly_h_d0", 0,0, ATUI_DEC, (ATUI_NODESCR)),
+			("dqs_dly_h_d0", 1,1, ATUI_DEC, (ATUI_NODESCR)),
+			("oen_dly_h_d0", 2,2, ATUI_DEC, (ATUI_NODESCR)),
+			("dat_dly_h_d1", 3,3, ATUI_DEC, (ATUI_NODESCR)),
+			("dqs_dly_h_d1", 4,4, ATUI_DEC, (ATUI_NODESCR)),
+			("oen_dly_h_d1", 5,5, ATUI_DEC, (ATUI_NODESCR)),
+			("wcdr_en",      6,6, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",        31,7, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, mc_seq_pmg_timing, atui_nullstruct,
+	(bios->mc_seq_pmg_timing, "mc_seq_pmg_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tcksre",         2,0, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",          3,3, ATUI_DEC, (ATUI_NODESCR)),
+			("tcksrx",         6,4, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd1",          7,7, ATUI_DEC, (ATUI_NODESCR)),
+			("tcke_pulse",     11,8, ATUI_DEC, (ATUI_NODESCR)),
+			("tcke",           17,12, ATUI_DEC, (ATUI_NODESCR)),
+			("seq_idle",       20,18, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd2",          22,21, ATUI_DEC, (ATUI_NODESCR)),
+			("tcke_pulse_msb", 23,23, ATUI_DEC, (ATUI_NODESCR)),
+			("seq_idle_ss",    31,24, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_ras_timing, atui_nullstruct,
+	(bios->mc_seq_ras_timing, "mc_seq_ras_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("trcdw",  4,0, ATUI_DEC, (ATUI_NODESCR)),
+			("trcdwa", 9,5, ATUI_DEC, (ATUI_NODESCR)),
+			("trcdr",  14,10, ATUI_DEC, (ATUI_NODESCR)),
+			("trcdra", 19,15, ATUI_DEC, (ATUI_NODESCR)),
+			("trrd",   23,20, ATUI_DEC, (ATUI_NODESCR)),
+			("trc",    30,24, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",  31,31, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_cas_timing, atui_nullstruct, // tCCD timings
+	(bios->mc_seq_cas_timing, "mc_seq_cas_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tnopw",  1,0, ATUI_DEC, (ATUI_NODESCR)),
+			("tnopr",  3,2, ATUI_DEC, (ATUI_NODESCR)),
+			("tr2w",   8,4, ATUI_DEC, (ATUI_NODESCR)),
+			("tccdl",  11,9, ATUI_DEC, (ATUI_NODESCR)),
+			("tr2r",   15,12, ATUI_DEC, (ATUI_NODESCR)),
+			("tw2r",   20,16, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",  23,21, ATUI_DEC, (ATUI_NODESCR)),
+			("tcl",    28,24, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd1",  31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_misc_timing, atui_nullstruct,
+	(bios->mc_seq_misc_timing, "mc_seq_misc_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("trp_wra", 6,0, ATUI_DEC,
+				((LANG_ENG, "autoprecharge?"))
+			),
+			("trp_rda", 13,7, ATUI_DEC,
+				((LANG_ENG, "autoprecharge?"))
+			),
+			("trp",     19,14, ATUI_DEC, (ATUI_NODESCR)),
+			("trfc",    28,20, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd2",   31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_misc_timing2, atui_nullstruct,
+	(bios->mc_seq_misc_timing2, "mc_seq_misc_timing2",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("pa2rdata", 2,0, ATUI_DEC,
+				((LANG_ENG, "parity to read?"))
+			),
+			("rsvd0",    3,3, ATUI_DEC, (ATUI_NODESCR)),
+			("pa2wdata", 6,4, ATUI_DEC,
+				((LANG_ENG, "parity to write?"))
+			),
+			("rsvd1",    7,7, ATUI_DEC, (ATUI_NODESCR)),
+			("faw",      12,8, ATUI_DEC, (ATUI_NODESCR)),
+			("tredc",    15,13, ATUI_DEC, (ATUI_NODESCR)),
+			("twedc",    20,16, ATUI_DEC, (ATUI_NODESCR)),
+			("t32aw",    24,21, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd2",    27,25, ATUI_DEC, (ATUI_NODESCR)),
+			("twdatatr", 31,28, ATUI_DEC,
+				((LANG_ENG, "classic tWTR?"))
+			)
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_arb_dram_timing, atui_nullstruct,
+	(bios->mc_arb_dram_timing, "mc_arb_dram_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("actrd",     7,0, ATUI_DEC, (ATUI_NODESCR)),
+			("actwr",     15,8, ATUI_DEC, (ATUI_NODESCR)),
+			("rasmactrd", 23,16, ATUI_DEC, (ATUI_NODESCR)),
+			("rasmactwr", 31,24, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_arb_dram_timing2, atui_nullstruct,
+	(bios->mc_arb_dram_timing2, "mc_arb_dram_timing2",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			("tRFCpb?",   7,0, ATUI_DEC, (ATUI_NODESCR)),
+			("rp",       15,8, ATUI_DEC, (ATUI_NODESCR)),
+			("wrplusrp", 23,16, ATUI_DEC, (ATUI_NODESCR)),
+			("bus_turn", 28,24, ATUI_DEC, (ATUI_NODESCR)),
+			("rsvd0",    31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+
+PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atomtree_vram_info_header_v2_2,
+	(bios->block_id, "block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl_d1, "mc_seq_wr_ctl_d1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_d1),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl_2, "mc_seq_wr_ctl_2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_2),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_pmg_timing, "mc_seq_pmg_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_pmg_timing),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_ras_timing, "mc_seq_ras_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_ras_timing),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_cas_timing, "mc_seq_cas_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_cas_timing),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing, "mc_seq_misc_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing2, "mc_seq_misc_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing2),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr5_mr0, "gddr5_mr0",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr0),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr5_mr1, "gddr5_mr1",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr1),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr5_mr4, "gddr5_mr4",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr4),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr5_mr5, "gddr5_mr5",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr5),
+		(ATUI_NODESCR)
+	),
+	(bios->gddr5_mr8, "gddr5_mr8",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr8),
+		(ATUI_NODESCR)
+	),
+	(bios->reserved, "reserved",
+		(ATUI_BIN, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing, "mc_arb_dram_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing2, "mc_arb_dram_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing2),
+		(ATUI_NODESCR)
+	)
+)
 
 
 PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
