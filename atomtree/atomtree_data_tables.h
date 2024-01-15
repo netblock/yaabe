@@ -207,7 +207,8 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 */
 };
 
-#define ATOMTREE_MC_REG_MAX  20 // keep score. Hawaii XT is 20
+#define ATOMTREE_MC_REG_MAX  24 // keep score.
+// Hawaii XT is 20; Sapphire.RX580.8192.170320.rom is 24
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block* leaves; // nonzero if populated
 
