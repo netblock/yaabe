@@ -23,15 +23,13 @@ class bitfield:
 	entries:list
 	ver_regnum:dict #version:(name,register_ID) sets
 
-	longest_name:int
+	longest_named:dict
 
 	def add_maskshift(self, name:str, mask:int, shift:int):
 		# inclusvie [] bitfield notation. [3:0] is 4 bits
 		num_bits = popcount(mask)
 		if (num_bits == 0):
 			return
-		if (len(name) > self.longest_name):
-			self.longest_name = len(name)
 		self.entries.append({
 			"name": name,
 			"hi": (shift + num_bits - 1),
@@ -68,9 +66,21 @@ class bitfield:
 				i += 1
 			i += 1
 
+	def find_longest_named(self):
+		longest = self.entries[0]
+		len_long = len(longest["name"])
+		len_e = 0
+		for e in self.entries[1:]:
+			len_e = len(e["name"])
+			if len_e >= len_long: # find little-endian leftmost longest
+				longest = e
+				len_long = len_e
+		self.longest_named = longest
+		return longest
+
 	def __init__(self, name:str):
 		self.name = name
-		self.longest_name = len("rsvd00")
+		self.longest = None
 		self.entries = []
 		self.ver_regnum = {}
 
@@ -210,7 +220,7 @@ union %s_%s {%s
 	uint32_t %s;
 	struct { uint32_t
 """
-	bf_string_mid = "\t\t%s %s:%u-%u +1,"
+	bf_string_mid = "\t\t%s%s:%u-%u +1,"
 	bf_string_end = """\
 	};
 };
@@ -245,10 +255,20 @@ union %s_%s {%s
 			ver_str = ver_str[:-1] # lop off last comma
 			bf_startvals = (name, vers[0], ver_str, name)
 			header_out += bf_string_start % bf_startvals
+
+			longest_named = bf.find_longest_named()
+			len_longest = len(longest_named["name"])
+			long_hi_double = (10 <= longest_named["hi"])
 			for entry in bf.entries:
+				len_entry = len(entry["name"])
+				num_spaces = (
+					len_longest - len_entry + 1
+					+      (long_hi_double and (10 > entry["hi"]))
+					- (not (long_hi_double or  (10 > entry["hi"])))
+				)
 				bf_midvals = (
 					entry["name"],
-					" " * (bf.longest_name - len(entry["name"])),
+					" " * num_spaces,
 					entry["hi"],
 					entry["lo"],
 				)
