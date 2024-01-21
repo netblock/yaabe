@@ -20,8 +20,10 @@ from sys import argv
 
 class bitfield:
 	name:str
-	entries:list
-	ver_regnum:dict #version:(name,register_ID) sets
+	entries:list # bitfield entries [{name hi lo}]
+	ver_addr:dict # version:(name, address) sets; by-version association
+	addr_ver:dict # address:(name, ver, ver..) sets; by-address association
+
 
 	longest_named:dict
 
@@ -82,17 +84,18 @@ class bitfield:
 		self.name = name
 		self.longest = None
 		self.entries = []
-		self.ver_regnum = {}
+		self.ver_addr = {}
+		self.addr_ver = {}
 
 def text_to_dict(file_text:str):
-	# primitive preprocessor parser
+	# very primitive preprocessor parser
 	pp_dict = {}
 	end = len(file_text)
 	i = 0
 	line = ""
 	parts = []
 	while (i < end):
-		if file_text[i:i+len("/*")] == "/*":
+		if file_text[i:i+len("/*")] == "/*": # skip /* */ comments
 			i+=2
 			while ((i < end) and (file_text[i:i+len("*/")] != "*/")):
 				i+=1
@@ -138,7 +141,8 @@ def shmask_filetext_to_bitfields(file_text:str):
 			bitfields.append(bitfield(name_parts[0]))
 			bf_i += 1
 
-		if (pp_dict[mask_key][-1] == "l"): # python int() doesn't like C ints
+		# python int() doesn't like C int suffixes
+		if (pp_dict[mask_key][-1] == "l"):
 			mask = int(pp_dict[mask_key][:-1], 16)
 		else:
 			mask = int(pp_dict[mask_key], 16)
@@ -160,24 +164,31 @@ def shmask_filetext_to_bitfields(file_text:str):
 
 def bitfields_attach_reg_ids(version:str, bitfields:dict, reg_name_id_pairs:dict):
 	bf_name = ""
-	for k in reg_name_id_pairs:
-		if k[:2] in ("ix", "mm"):
-			bf_name = k[2:]
+	address = 0
+	for reg_name in reg_name_id_pairs:
+		if reg_name[:2] in ("ix", "mm"):
+			bf_name = reg_name[2:]
 		else:
-			bf_name = k
+			bf_name = reg_name
 		if bf_name in bitfields:
 			bf = bitfields[bf_name]
-			assert(version not in bf.ver_regnum.keys())
-			bf.ver_regnum[version] = (k, int(reg_name_id_pairs[k],16))
+			assert(version not in bf.ver_addr.keys())
+			address = int(reg_name_id_pairs[reg_name], 16)
+			bf.ver_addr[version] = (reg_name, address)
+			bf.addr_ver[address] = [reg_name, version]
 		else:
 			print("WARNING: %s: %s has no shmask!" % (version, bf_name.upper()))
+
 
 def bitfields_intersect_add(bitfields_by_file:list):
 	# find if there are any duplicate bitfields (in name and in fields) and
 	# condense them
 	assert(0 < len(bitfields_by_file))
 
-	final_fields = {}
+	ver = ""
+	address = 0
+
+	final_fields = {} # name:[bf,bf]
 	for name in bitfields_by_file[0]: # blindly eat the first set
 		final_fields[name] = [bitfields_by_file[0][name]]
 	bitfields_by_file = bitfields_by_file[1:]
@@ -188,7 +199,16 @@ def bitfields_intersect_add(bitfields_by_file:list):
 			if name in final_fields:
 				for final_bf in final_fields[name]:
 					if bf.entries == final_bf.entries:
-						final_bf.ver_regnum.update(bf.ver_regnum)
+						final_bf.ver_addr.update(bf.ver_addr) # by version
+						ver = tuple(bf.ver_addr.keys())[0]
+						address = bf.ver_addr[ver][1]
+						if address in final_bf.addr_ver: # by address
+							assert(bf.ver_addr[ver][0] # name
+								== final_bf.addr_ver[address][0]
+							)
+							final_bf.addr_ver[address].append(ver)
+						else:
+							final_bf.addr_ver[address] = bf.addr_ver[address]
 						break
 				else:
 					final_fields[name].append(bf)
@@ -198,23 +218,28 @@ def bitfields_intersect_add(bitfields_by_file:list):
 
 
 def composite_bitfields_sort(composite_bitfields:dict):
-	# sort the version dict within each bitfield
+	# sort the version-address association dict within each bitfield
+	# sort the address-version association dict within each bitfield
 	# sort the order of the bitfields of a shared name based on the version
 	# sort the bitfields overall by name.
-	sort_f = lambda bf: tuple(bf.ver_regnum.keys())[-1]
+	sort_bf = lambda bf: tuple(bf.ver_addr.keys())[-1]
+	sort_addr = lambda dict_items: dict_items[-1]
+	ver_set = []
 	for name in composite_bitfields:
 		for bf in composite_bitfields[name]:
-			bf.ver_regnum = dict(sorted(bf.ver_regnum.items()))
-		composite_bitfields[name].sort(key=sort_f)
+			bf.ver_addr = dict(sorted(bf.ver_addr.items()))
+			for addr in bf.addr_ver:
+				ver_set = bf.addr_ver[addr][1:]
+				ver_set.sort()
+				bf.addr_ver[addr] = bf.addr_ver[addr][0:1] + ver_set
+			bf.addr_ver = dict(sorted(bf.addr_ver.items(), key=sort_addr))
+		composite_bitfields[name].sort(key=sort_bf)
 	return dict(sorted(composite_bitfields.items()))
 
 
-def clean_hex_str(hexstr:str):
-	return hex(int(he))
-
 def bitfield_to_header(composite_bitfields:dict):
-	regnum_str = "#define %s_%s %s\n"
-	ver_comment = " //"
+	def_index_str = "#define %s_%s %s%s\n"
+	comment_start = " //"
 	bf_string_start = """\
 union %s_%s {%s
 	uint32_t %s;
@@ -226,43 +251,51 @@ union %s_%s {%s
 };
 
 """
-	head_vals = (); bf_startvals = (); bf_midvals = () # for the %s
-	ver_str = "" # for ver_comment
+	def_addr_vals = (); bf_startvals = (); bf_midvals = () # for the %s
+	ver_str = "" # for comment_start
 	header_out = "" # the final buffer
 
 	composite_bitfields = composite_bitfields_sort(composite_bitfields)
-	ver_regnum = {}
-	vers = () # subscripting ver_comment
-	regnum_name = "" # for mm/ix and recapsing
-	regnum_val = ""
+	addr_ver = {}
+	addr_name = "" # for mm/ix and recapsing
+	addr_str = ""
 
 	for name in composite_bitfields:
 		for bf in composite_bitfields[name]:
-			ver_regnum = bf.ver_regnum
-			vers = tuple(ver_regnum)
-			ver_str = ver_comment
-			for ver in vers:
-				regnum_name = ver_regnum[ver][0]
-				assert(regnum_name[2:] == name)
-				if regnum_name[:2] in ("ix", "mm"): # caps name
-					regnum_name = regnum_name[:2] + regnum_name[2:].upper()
+			addr_ver = bf.addr_ver
+			for addr in addr_ver: #  #define mmNAME_ver 0xABCD // ver, ver
+				addr_name = addr_ver[addr][0]
+				assert(addr_name[2:] == name)
+				if addr_name[:2] in ("ix", "mm"): # caps name
+					addr_name = addr_name[:2] + addr_name[2:].upper()
 				else:
-					regnum_name.upper()
-				regnum_val = "0x%X" % ver_regnum[ver][1]
-				header_vals = (regnum_name, ver, regnum_val)
-				header_out += regnum_str % header_vals
+					addr_name.upper()
+
+				ver_str = comment_start # secondary versions
+				for ver in addr_ver[addr][1:]:
+					ver_str += " %s," % ver
+				ver_str = ver_str[:-1] # lop off last comma
+				ver = addr_ver[addr][1] # primary version
+
+				addr_str = "0x%X" % addr
+				def_addr_vals = (addr_name, ver, addr_str, ver_str)
+				header_out += def_index_str % def_addr_vals
+
+			# union name {
+			ver_str = comment_start
+			for ver in bf.ver_addr:
 				ver_str += " %s," % ver
 			ver_str = ver_str[:-1] # lop off last comma
-			bf_startvals = (name, vers[0], ver_str, name)
+			bf_startvals = (name, tuple(bf.ver_addr)[0], ver_str, name)
 			header_out += bf_string_start % bf_startvals
 
 			longest_named = bf.find_longest_named()
 			len_longest = len(longest_named["name"])
 			long_hi_double = (10 <= longest_named["hi"])
-			for entry in bf.entries:
+			for entry in bf.entries: #  name :hi-lo +1,
 				len_entry = len(entry["name"])
 				num_spaces = (
-					len_longest - len_entry + 1
+					len_longest - len_entry + 1 # push out, replace, extra
 					+      (long_hi_double and (10 > entry["hi"]))
 					- (not (long_hi_double or  (10 > entry["hi"])))
 				)
@@ -274,7 +307,9 @@ union %s_%s {%s
 				)
 				header_out += (bf_string_mid % bf_midvals) + "\n"
 			header_out = header_out[:-2] + ";\n" # comma to colon
-			header_out += bf_string_end
+
+			header_out += bf_string_end # }; };
+
 		header_out += "\n"
 
 	return header_out
@@ -325,7 +360,7 @@ def main(argc:int, argv:list):
 	reg_name_id_pairs = {}
 	bitfields_byfile = []
 
-	if mode == 0:
+	if mode == 0: # shmask.h d.h  shmask.h d.h
 		assert(5 <= argc)
 		output_file = argv[arg_i]
 		arg_i += 1
