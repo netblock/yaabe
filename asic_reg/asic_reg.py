@@ -22,8 +22,9 @@ class bitfield:
 	name:str
 	entries:list # bitfield entries [{name hi lo}]
 	num_bits:int
-	ver_addr:dict # version:(name, address) sets; by-version association
-	addr_ver:dict # address:(name, ver, ver..) sets; by-address association
+	ver_addr:dict # version:[name, address] sets; by-version association
+	addr_ver:dict # address:[name, ver, ver..] sets; by-address association
+	base_ver:dict # base_index:[ver, ver, ver..] sets
 
 	longest_named:dict
 
@@ -104,6 +105,7 @@ class bitfield:
 		self.num_bits = 0
 		self.ver_addr = {}
 		self.addr_ver = {}
+		self.base_ver = {}
 		self.longest = None
 
 
@@ -202,6 +204,8 @@ def shmask_filetext_to_bitfields(version:str, file_text:str):
 	return bitfields_dict
 
 def bitfields_attach_reg_ids(version:str, bitfields:dict, reg_name_id_pairs:dict):
+	base_idx_name = ""
+	base_index = 0
 	bf_name = ""
 	address = 0
 	for reg_name in reg_name_id_pairs:
@@ -211,9 +215,16 @@ def bitfields_attach_reg_ids(version:str, bitfields:dict, reg_name_id_pairs:dict
 			bf_name = reg_name[3:]
 		else:
 			bf_name = reg_name
-		if bf_name in bitfields:
+
+		base_idx_name = bf_name[:-9]
+		if ((reg_name[-9:] == '_base_idx') and (base_idx_name in bitfields)):
+			bf = bitfields[base_idx_name]
+			assert(version not in bf.base_ver), "%s %s" % (bf_name, version)
+			base_index = int(reg_name_id_pairs[reg_name])
+			bf.base_ver[base_index] = [version]
+		elif bf_name in bitfields:
 			bf = bitfields[bf_name]
-			assert(version not in bf.ver_addr.keys()), "%s %s" % (bf_name, version)
+			assert(version not in bf.ver_addr), "%s %s" % (bf_name, version)
 			address = c_literal_to_int(reg_name_id_pairs[reg_name])
 			bf.ver_addr[version] = (reg_name, address)
 			bf.addr_ver[address] = [reg_name, version]
@@ -226,6 +237,10 @@ def bitfields_attach_reg_ids(version:str, bitfields:dict, reg_name_id_pairs:dict
 		if version not in ver_addr:
 			print("WARNING: %s: %s has no offset!" % (version, bf_name.upper()))
 			ver_addr[version] = []
+		if not bitfields[bf_name].base_ver:
+			pass
+			#print("WARNING: %s: %s has no base offset!" %\
+			#	(version, bf_name.upper()))
 
 
 def bitfields_intersect_add(bitfields_by_file:list):
@@ -234,7 +249,8 @@ def bitfields_intersect_add(bitfields_by_file:list):
 	assert(0 < len(bitfields_by_file))
 
 	ver = ""
-	address = 0
+	addr = 0
+	base = 0
 
 	final_fields = {} # name:[bf,bf]
 	for name in bitfields_by_file[0]: # blindly eat the first set
@@ -248,13 +264,19 @@ def bitfields_intersect_add(bitfields_by_file:list):
 				for final_bf in final_fields[name]:
 					if bf.entries == final_bf.entries:
 						final_bf.ver_addr.update(bf.ver_addr) # by version
-						ver = tuple(bf.ver_addr.keys())[0]
+						ver = tuple(bf.ver_addr)[0]
 						if bf.ver_addr[ver]: # some versions don't have addrs
 							addr = bf.ver_addr[ver][1]
-							if addr in final_bf.addr_ver: # by addess
+							if addr in final_bf.addr_ver: # by address
 								final_bf.addr_ver[addr].append(ver)
 							else:
 								final_bf.addr_ver[addr] = bf.addr_ver[addr]
+						if bf.base_ver:
+							base = tuple(bf.base_ver)[0]
+							if base in final_bf.base_ver:
+								final_bf.base_ver[base].append(ver)
+							else:
+								final_bf.base_ver[base] = [ver]
 						break
 				else:
 					final_fields[name].append(bf)
@@ -273,18 +295,24 @@ def composite_bitfields_sort(composite_bitfields:dict):
 	key_veraddr = lambda d_items: [int(n) for n in d_items[0].split("_")]
 	key_addrver_vers = lambda v: [int(n) for n in v.split("_")]
 	key_addrver = lambda d_items: [int(n) for n in d_items[1][-1].split("_")]
+	key_basever_vers = key_addrver_vers
+	key_basever = key_addrver
 	key_bf = lambda bf: [int(n) for n in tuple(bf.ver_addr)[-1].split("_")]
 
 	ver_set = []
 	for name in composite_bitfields:
 		for bf in composite_bitfields[name]:
 			bf.ver_addr = dict(sorted(bf.ver_addr.items(), key=key_veraddr))
-			if (bf.addr_ver):
+			if bf.addr_ver:
 				for addr in bf.addr_ver:
 					ver_set = bf.addr_ver[addr][1:]
 					ver_set.sort(key=key_addrver_vers)
 					bf.addr_ver[addr] = bf.addr_ver[addr][0:1] + ver_set
 				bf.addr_ver = dict(sorted(bf.addr_ver.items(), key=key_addrver))
+			if bf.base_ver:
+				for base in bf.base_ver:
+					bf.base_ver[base].sort(key=key_basever_vers)
+				bf.base_ver = dict(sorted(bf.base_ver.items(), key=key_basever))
 		composite_bitfields[name].sort(key=key_bf)
 	return dict(sorted(composite_bitfields.items()))
 
@@ -310,19 +338,23 @@ union %s_%s {%s
 
 """
 	c_type = "" # uint32_t, etc
-	def_addr_vals = (); bf_startvals = (); bf_midvals = () # for the %s
+	define_vals = (); bf_startvals = (); bf_midvals = () # for the %s
 	ver_str = "" # for comment_start
 	header_out = "" # the final buffer
 
 	composite_bitfields = composite_bitfields_sort(composite_bitfields)
+	ver_addr = {}
 	addr_ver = {}
+	base_ver = {}
 	addr_name = "" # for mm/ix/reg and recapsing
 	addr_str = ""
 
 	for name in composite_bitfields:
 		for bf in composite_bitfields[name]:
-			ver_addr =  bf.ver_addr
+			ver_addr = bf.ver_addr
 			addr_ver = bf.addr_ver
+			base_ver = bf.base_ver
+
 			for addr in addr_ver: #  #define mmNAME_ver 0xABCD // ver, ver
 				addr_name = get_newest_index_name(addr, ver_addr, addr_ver)
 				if addr_name[:2] in ("ix", "mm"): # caps name
@@ -342,8 +374,32 @@ union %s_%s {%s
 				ver = addr_ver[addr][1] # primary version
 
 				addr_str = "0x%X" % addr
-				def_addr_vals = (addr_name, ver, addr_str, ver_str)
-				header_out += def_index_str % def_addr_vals
+				define_vals = (addr_name, ver, addr_str, ver_str)
+				header_out += def_index_str % define_vals
+
+			for base in base_ver: # #define mmNAME_BASE_IDX_ver 0 // ver, ver
+				addr_name = ver_addr[ base_ver[base][-1] ][0] # get latest name
+				if addr_name[:2] in ("ix", "mm"): # caps name
+					assert(addr_name[2:] == name), name
+					addr_name = addr_name[:2] + addr_name[2:].upper()
+				elif addr_name[:3] == "reg": # caps name
+					assert(addr_name[3:] == name), name
+					addr_name = addr_name[:3] + addr_name[3:].upper()
+				else:
+					assert(addr_name == name), name
+					addr_name.upper()
+				addr_name += "_BASE_IDX"
+
+				ver_str = comment_start # secondary versions
+				for ver in base_ver[base]:
+					ver_str += " %s," % ver
+				ver_str = ver_str[:-1] # lop off last comma
+				ver = base_ver[base][0] # primary version
+
+				define_vals = (addr_name, ver, base, ver_str)
+				header_out += def_index_str % define_vals
+
+				
 
 			# union name {
 			ver_str = comment_start
