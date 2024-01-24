@@ -7009,6 +7009,10 @@ struct atom_init_reg_block {  // like atom_umc_init_reg_block
 #define ATOM_INIT_REG_MASK_FLAG 0x80 // Not used in BIOS
 #define CLOCK_RANGE_HIGHEST     0x00ffffff
 
+// PreRegDataLength stuff:
+// the first nibble, if =4 is a 32-bit entry. =0 inherits value from previous.
+// The second nibble =8 is supposedly the end of AC timings but that doesn't
+// seem right.
 // #define VALUE_DWORD         SIZEOF uint32_t
 #define VALUE_SAME_AS_ABOVE 0
 #define VALUE_MASK_DWORD    0x84

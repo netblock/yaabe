@@ -1557,6 +1557,10 @@ atomtree_populate_vram_info_v2_2(
 		vi22->mem_timings = vi22->mem_clk_patch.data_blocks[0];
 		if (vi22->mem_clk_patch.data_block_element_size
 			== sizeof(struct mc_block_polaris_timings)) {
+			assert(assert_reg_index(
+				vi22->mem_clk_patch.register_index,
+				mc_block_polaris_timings_addresses
+			));
 			vi22->uses_polaris_timings = true;
 		} else if (vi22->mem_clk_patch.data_block_element_size == 40) {
 			// TODO fiji
