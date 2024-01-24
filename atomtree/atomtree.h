@@ -57,6 +57,7 @@ static_assert(sizeof(struct _tenbytes) == 10);
 #include "qnotation.h"
 
 #include "ddrmoderegisters.h"
+#include "gmc.h"
 #include "atomfirmware.h"
 #include "umctimings.h"
 #include "powerplay.h"
