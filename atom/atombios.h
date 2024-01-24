@@ -7277,7 +7277,7 @@ struct atom_memory_timing_format_v2 {
 
 
 struct atom_vram_module_v3 {
-	union mc_shared_chremap_gmc6_0 ChannelMapCfg; // board dependent paramenter:Channel combination
+	union mc_shared_chremap_6_0 ChannelMapCfg; // board dependent paramenter:Channel combination
 	uint16_t ModuleSize;    // size of ATOM_VRAM_MODULE_V3
 	uint16_t DefaultMVDDQ;  // board dependent parameter:Default Memory Core Voltage
 	uint16_t DefaultMVDDC;  // board dependent parameter:Default Memory IO Voltage
@@ -7309,7 +7309,7 @@ struct atom_vram_module_v3 {
 
 
 struct atom_vram_module_v4 {
-	union mc_shared_chremap_gmc6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
+	union mc_shared_chremap_6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
 	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
 	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
@@ -7337,7 +7337,7 @@ struct atom_vram_module_v4 {
 
 
 struct atom_vram_module_v5 {
-	union mc_shared_chremap_gmc6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
+	union mc_shared_chremap_6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
 	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
 	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
@@ -7366,7 +7366,7 @@ struct atom_vram_module_v5 {
 
 
 struct atom_vram_module_v6 {
-	union mc_shared_chremap_gmc6_0 ChannelMapCfg;     // board dependent parameter: Channel combination
+	union mc_shared_chremap_6_0 ChannelMapCfg;     // board dependent parameter: Channel combination
 	uint16_t ModuleSize;        // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
 	uint16_t PrivateReserved;   // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
                                 // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
@@ -7398,8 +7398,8 @@ struct atom_vram_module_v7 {
 // Design Specific Values
 	union {
 		uint32_t ChannelMapCfg; // mmMC_SHARED_CHREMAP
-		union mc_shared_chremap_gmc6_0 ChannelMapCfg_gmc6_0;
-		union mc_shared_chremap_gmc8_1 ChannelMapCfg_gmc8_1;
+		union mc_shared_chremap_6_0 ChannelMapCfg_gmc6_0;
+		union mc_shared_chremap_7_1 ChannelMapCfg_gmc7_1;
 	};
 	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
 	uint16_t PrivateReserved;    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
@@ -7429,7 +7429,7 @@ struct atom_vram_module_v7 {
 
 struct atom_vram_module_v8 {
 // Design Specific Values
-	union mc_shared_chremap_gmc8_1 ChannelMapCfg;
+	union mc_shared_chremap_7_1 ChannelMapCfg;
 	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
 	uint16_t McRamCfg;           // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
@@ -7453,7 +7453,7 @@ struct atom_vram_module_v8 {
 	uint8_t  FIFODepth;          // FIFO depth can be detected during vendor detection, here is hardcoded per memory
 	union cdr_bandwidth CDR_Bandwidth;
 
-	union mc_shared_chremap2_gmc8_1 ChannelMapCfg1; // channel mapping for channel8~15
+	union mc_shared_chremap2_7_1 ChannelMapCfg1; // channel mapping for channel8~15
 	uint32_t BankMapCfg;
 	uint32_t Reserved2;
 	char8_t  strMemPNString[20]; // part number end with '0'.

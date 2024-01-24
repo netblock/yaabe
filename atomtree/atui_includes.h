@@ -112,11 +112,24 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 
 /******************************************************************************/
-// atui_umctimings.c / umctimings.h
+// atui_gmc.c / gmc.h
 
-PPATUI_HEADERIFY(mc_shared_chremap_gmc6_0);
-PPATUI_HEADERIFY(mc_shared_chremap_gmc8_1);
-PPATUI_HEADERIFY(mc_shared_chremap2_gmc8_1);
+PPATUI_HEADERIFY(mc_arb_dram_timing_6_0);
+PPATUI_HEADERIFY(mc_arb_dram_timing2_6_0);
+PPATUI_HEADERIFY(mc_seq_cas_timing_6_0);
+PPATUI_HEADERIFY(mc_seq_misc_timing_6_0);
+PPATUI_HEADERIFY(mc_seq_misc_timing2_6_0);
+PPATUI_HEADERIFY(mc_seq_pmg_timing_6_0);
+PPATUI_HEADERIFY(mc_seq_ras_timing_6_0);
+PPATUI_HEADERIFY(mc_seq_wr_ctl_2_6_0);
+PPATUI_HEADERIFY(mc_seq_wr_ctl_d0_6_0);
+PPATUI_HEADERIFY(mc_shared_chremap_6_0);
+PPATUI_HEADERIFY(mc_shared_chremap_7_1);
+PPATUI_HEADERIFY(mc_shared_chremap2_7_1);
+
+
+/******************************************************************************/
+// atui_umctimings.c / umctimings.h
 
 PPATUI_HEADERIFY(mc_block_polaris_timings);
 PPATUI_HEADERIFY(umc_block_vega10_timings);

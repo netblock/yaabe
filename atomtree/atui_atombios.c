@@ -1645,7 +1645,7 @@ PPATUI_FUNCIFY(struct, atom_memory_timing_format_v2, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_6_0),
 		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
@@ -1747,7 +1747,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v3, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_6_0),
 		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
@@ -1830,7 +1830,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_6_0),
 		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
@@ -1919,7 +1919,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc6_0),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_6_0),
 		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
@@ -2101,7 +2101,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 	(bios->ChannelMapCfg, "ChannelMapCfg",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_gmc8_1),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap_7_1),
 		(ATUI_NODESCR)
 	),
 	(bios->ModuleSize, "ModuleSize",
@@ -2189,7 +2189,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 	),
 
 	(bios->ChannelMapCfg1, "ChannelMapCfg1",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap2_gmc8_1),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_shared_chremap2_7_1),
 		((LANG_ENG, "channel mapping for channel8~15"))
 	),
 	(bios->BankMapCfg, "BankMapCfg",

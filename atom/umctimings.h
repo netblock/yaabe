@@ -1,5 +1,5 @@
 /*
-C bitfield structs; don't forget we're little-endian.
+Manual or otherwise hacked versions of AMD registers
 
 Open your JESD and your PPR/BKDG
 Some timings get removed depending on the target platform. If there's more than
@@ -14,51 +14,6 @@ HBM2 and vega10 is manually reverse-engineered so it can be wrong.
 #define _UMCTIMINGS_H_
 
 #pragma pack(push, 1) // bios data must use byte alignment
-
-/******************************************************************************/
-// Graphics Memory Controller registers
-/******************************************************************************/
-union mc_shared_chremap_gmc6_0 {
-	uint32_t mc_shared_chremap;
-	struct { uint32_t
-		chan0  :2-0 +1,
-		chan1  :5-3 +1,
-		chan2  :8-6 +1,
-		chan3  :11-9 +1,
-		chan4  :14-12 +1,
-		chan5  :17-15 +1,
-		chan6  :20-18 +1,
-		chan7  :23-21 +1,
-		rsvd0  :31-24 +1;
-	};
-};
-
-union mc_shared_chremap_gmc8_1 {
-	uint32_t mc_shared_chremap;
-	struct { uint32_t
-		chan0  :3-0 +1,
-		chan1  :7-4 +1,
-		chan2  :11-8 +1,
-		chan3  :15-12 +1,
-		chan4  :19-16 +1,
-		chan5  :23-20 +1,
-		chan6  :27-24 +1,
-		chan7  :31-28 +1;
-	};
-};
-union mc_shared_chremap2_gmc8_1 {
-	uint32_t mc_shared_chremap2;
-	struct { uint32_t
-		chan8  :3-0 +1,
-		chan9  :7-4 +1,
-		chan10 :11-8 +1,
-		chan11 :15-12 +1,
-		chan12 :19-16 +1,
-		chan13 :23-20 +1,
-		chan14 :27-24 +1,
-		chan15 :31-28 +1;
-	};
-};
 
 /******************************************************************************/
 // memory timings as seen in 'mem_clk_patch' based timing structures
@@ -494,127 +449,6 @@ union ChanPipeDly {
 	};
 };
 
-
-union mc_seq_wr_ctl_d1 {
-	uint32_t mc_seq_wr_ctl_d1;
-	struct { uint32_t
-		dat_dly     :3-0 +1,
-		dqs_dly     :7-4 +1,
-		dqs_xtr     :8-8 +1,
-		dat_2y_dly  :9-9 +1,
-		adr_2y_dly :10-10 +1,
-		cmd_2y_dly :11-11 +1,
-		oen_dly    :15-12 +1,
-		oen_ext    :19-16 +1,
-		oen_sel    :21-20 +1,
-		rsvd0      :23-22 +1,
-		odt_dly    :27-24 +1,
-		odt_ext    :28-28 +1,
-		adr_dly    :29-29 +1,
-		cmd_dly    :30-30 +1,
-		rsvd1      :31-31 +1;
-	};
-};
-union mc_seq_wr_ctl_2 {
-	uint32_t mc_seq_wr_ctl_2;
-	struct { uint32_t
-		dat_dly_h_d0 :0-0 +1,
-		dqs_dly_h_d0 :1-1 +1,
-		oen_dly_h_d0 :2-2 +1,
-		dat_dly_h_d1 :3-3 +1,
-		dqs_dly_h_d1 :4-4 +1,
-		oen_dly_h_d1 :5-5 +1,
-		wcdr_en      :6-6 +1,
-		rsvd0       :31-7 +1;
-	};
-};
-
-union mc_seq_pmg_timing {
-	uint32_t mc_seq_pmg_timing;
-	struct { uint32_t
-		tcksre          :2-0 +1,
-		rsvd0           :3-3 +1,
-		tcksrx          :6-4 +1,
-		rsvd1           :7-7 +1,
-		tcke_pulse     :11-8 +1,
-		tcke           :17-12 +1,
-		seq_idle       :20-18 +1,
-		rsvd2          :22-21 +1,
-		tcke_pulse_msb :23-23 +1,
-		seq_idle_ss    :31-24 +1;
-	};
-};
-union mc_seq_ras_timing {
-	uint32_t mc_seq_ras_timing;
-	struct { uint32_t
-		trcdw   :4-0 +1,
-		trcdwa  :9-5 +1,
-		trcdr  :14-10 +1,
-		trcdra :19-15 +1,
-		trrd   :23-20 +1,
-		trc    :30-24 +1,
-		rsvd0  :31-31 +1;
-	};
-};
-union mc_seq_cas_timing { // tCCD timings
-	uint32_t mc_seq_cas_timing;
-	struct { uint32_t
-		tnopw  :1-0 +1,
-		tnopr  :3-2 +1,
-		tr2w   :8-4 +1,
-		tccdl :11-9 +1,
-		tr2r  :15-12 +1,
-		tw2r  :20-16 +1,
-		rsvd0 :23-21 +1,
-		tcl   :28-24 +1,
-		rsvd1 :31-29 +1;
-	};
-};
-union mc_seq_misc_timing {
-	uint32_t mc_seq_misc_timing;
-	struct { uint32_t
-		trp_wra  :6-0 +1, // autoprecharge?
-		trp_rda :13-7 +1, // autoprecharge?
-		trp     :19-14 +1,
-		trfc    :28-20 +1,
-		rsvd2   :31-29 +1;
-	};
-};
-union mc_seq_misc_timing2 {
-	uint32_t mc_seq_misc_timing2;
-	struct { uint32_t
-		pa2rdata  :2-0 +1, //parity to read?
-		rsvd0     :3-3 +1,
-		pa2wdata  :6-4 +1, // parity to write?
-		rsvd1     :7-7 +1,
-		faw      :12-8 +1,
-		tredc    :15-13 +1,
-		twedc    :20-16 +1,
-		t32aw    :24-21 +1,
-		rsvd2    :27-25 +1,
-		twdatatr :31-28 +1; // classic tWTR?
-	};
-};
-union mc_arb_dram_timing {
-	uint32_t mc_arb_dram_timing;
-	struct { uint32_t
-		actrd      :7-0 +1,
-		actwr     :15-8 +1,
-		rasmactrd :23-16 +1,
-		rasmactwr :31-24 +1;
-	};
-};
-union mc_arb_dram_timing2 {
-	uint32_t mc_arb_dram_timing2;
-	struct { uint32_t
-		tRFCpb    :7-0 +1, // unsure
-		rp       :15-8 +1,
-		wrplusrp :23-16 +1,
-		bus_turn :28-24 +1,
-		rsvd0    :31-29 +1;
-	};
-};
-
 struct UMCCTRL_MISC2 {
 	union gddr6_mr5 gddr6_mr5;
 	uint16_t reserved;
@@ -631,6 +465,19 @@ struct PMG_CMD {
 	union gddr6_mr8 gddr6_mr8;
 	uint16_t reserved;
 };
+
+
+union mc_seq_misc_timing_6_0_o { // override of mc_seq_misc_timing_6_0
+	uint32_t mc_seq_misc_timing;
+	struct { uint32_t
+		trp_wra  :6-0 +1, // autoprecharge?
+		trp_rda :13-7 +1, // autoprecharge?
+		trp     :19-14 +1,
+		trfc    :28-20 +1,
+		rsvd2   :31-29 +1;
+	};
+};
+
 
 /* From ElioVP's amdmemtweak. vals don't look right.
 
@@ -694,23 +541,33 @@ struct mc_block_fiji_timings { // 40 bytes.
 };
 */
 
-struct mc_block_polaris_timings { // 52 bytes. Uncertain.
-	union atom_mc_register_setting_id block_id;
-	union mc_seq_wr_ctl_d1 mc_seq_wr_ctl_d1;
-	union mc_seq_wr_ctl_2 mc_seq_wr_ctl_2;
-	union mc_seq_pmg_timing mc_seq_pmg_timing;
-	union mc_seq_ras_timing mc_seq_ras_timing;
-	union mc_seq_cas_timing mc_seq_cas_timing;
-	union mc_seq_misc_timing mc_seq_misc_timing;
-	union mc_seq_misc_timing2 mc_seq_misc_timing2;
-	union gddr5_mr0 gddr5_mr0; // seq_misc1
+struct mc_seq_misc1_gddr5 { // see MC_SEQ_MISC1_6_0
+	union gddr5_mr0 gddr5_mr0;
 	union gddr5_mr1 gddr5_mr1;
-	union gddr5_mr4 gddr5_mr4; // sec_misc3
+};
+struct mc_seq_misc3_gddr5 { // see MC_SEQ_MISC3_6_0
+	union gddr5_mr4 gddr5_mr4;
 	union gddr5_mr5 gddr5_mr5;
-	union gddr5_mr8 gddr5_mr8; // sec_misc8
+};
+struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
+	union gddr5_mr8 gddr5_mr8;
 	uint16_t reserved;
-	union mc_arb_dram_timing mc_arb_dram_timing;
-	union mc_arb_dram_timing2 mc_arb_dram_timing2;
+};
+
+struct mc_block_polaris_timings { // 52 bytes.
+	union atom_mc_register_setting_id block_id;
+	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
+	union mc_seq_wr_ctl_2_6_0      mc_seq_wr_ctl_2;
+	union mc_seq_pmg_timing_6_0    mc_seq_pmg_timing;
+	union mc_seq_ras_timing_6_0    mc_seq_ras_timing;
+	union mc_seq_cas_timing_6_0    mc_seq_cas_timing;
+	union mc_seq_misc_timing_6_0_o mc_seq_misc_timing;
+	union mc_seq_misc_timing2_6_0  mc_seq_misc_timing2;
+	struct mc_seq_misc1_gddr5      mc_seq_misc1;
+	struct mc_seq_misc3_gddr5      mc_seq_misc3;
+	struct mc_seq_misc8_gddr5      mc_seq_misc8;
+	union mc_arb_dram_timing_6_0   mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
 };
 
 struct umc_block_vega10_timings { // 92 bytes. Uncertain.

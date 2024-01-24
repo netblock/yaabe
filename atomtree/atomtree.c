@@ -1038,13 +1038,13 @@ atomtree_populate_vram_module(
 				for (i=0; i < count; i++) {
 					if (v8_1 == vram_modules[i].gmc_bitfields_ver) {
 						atui_children[0] = ATUI_MAKE_BRANCH(
-							mc_shared_chremap_gmc8_1,  "ChannelMapCfg",
-							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc8_1),
+							mc_shared_chremap_7_1,  "ChannelMapCfg",
+							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc7_1),
 							0,NULL
 						);
 					} else { // 6.0
 						atui_children[0] = ATUI_MAKE_BRANCH(
-							mc_shared_chremap_gmc6_0,  "ChannelMapCfg",
+							mc_shared_chremap_6_0,  "ChannelMapCfg",
 							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc6_0),
 							0,NULL
 						);
@@ -1578,9 +1578,6 @@ atomtree_populate_vram_info_v2_2(
             );
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 			if (vi22->uses_polaris_timings) {
-				strcpy(atui_mem_timings->name,
-					"mc_block_polaris_timings (uncertain)"
-				);
 				for (i=0; i < *vi22->num_timing_straps; i++) {
 					tmp_branch = ATUI_MAKE_BRANCH(mc_block_polaris_timings,
 						NULL,  NULL,&(vi22->polaris_timings[i]),  0,NULL
