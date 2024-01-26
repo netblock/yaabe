@@ -1459,6 +1459,7 @@ atomtree_populate_vram_info_v2_1(
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi21->mem_adjust_table), generate_atui, 0
 		);
+
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, "mem_adjust_table");
 		}

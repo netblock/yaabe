@@ -7010,13 +7010,26 @@ struct atom_init_reg_block {  // like atom_umc_init_reg_block
 #define CLOCK_RANGE_HIGHEST     0x00ffffff
 
 // PreRegDataLength stuff:
-// the first nibble, if =4 is a 32-bit entry. =0 inherits value from previous.
+// the first nibble, if =4 is data from array; =0 inherits value from previous.
 // The second nibble =8 is supposedly the end of AC timings but that doesn't
 // seem right.
 // #define VALUE_DWORD         SIZEOF uint32_t
+#define DATA_FROM_TABLE     4
 #define VALUE_SAME_AS_ABOVE 0
 #define VALUE_MASK_DWORD    0x84
+/* purely a guess:
+union PreRegDataLength {
+	uint8_t PreRegDataLength;
+	struct { uint8_t
+		some_flag  :0-0 +1, // unsure
+		access     :2-1 +1, // 0=previous, 1=?? 2=from bios; 3=unsure
+		reserved   :5-3 +1, // never seen 1'd before
+		end_of_AC  :6-6 +1, // end of ram timings; unsure
+		some_other :7-7 +1; // unsure
+	};
+};
 
+*/
 #define INDEX_ACCESS_RANGE_BEGIN  (VALUE_DWORD + 1)
 #define INDEX_ACCESS_RANGE_END    (INDEX_ACCESS_RANGE_BEGIN + 1)
 #define VALUE_INDEX_ACCESS_SINGLE (INDEX_ACCESS_RANGE_END + 1)
