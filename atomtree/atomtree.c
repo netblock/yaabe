@@ -76,7 +76,7 @@ atomtree_dt_populate_smc_dpm_info(
 				default:
 					atui_smc_dpm_info = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
-						"smc_dpm_info (header only stub)",
+						u8"smc_dpm_info (header only stub)",
 						NULL, smc_dpm_info->table_header,  0,NULL
 					);
 					break;
@@ -169,7 +169,7 @@ atomtree_dt_populate_firmwareinfo(
 				default:
 					atui_firmwareinfo = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
-						"firmwareinfo (header only stub)",
+						u8"firmwareinfo (header only stub)",
 						NULL,firmwareinfo->table_header,  0,NULL
 					);
 					break;
@@ -207,7 +207,7 @@ atomtree_dt_populate_lcd_info(
 				default:
 					atui_lcd_info = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
-						"lcd_info (header only stub)",
+						u8"lcd_info (header only stub)",
 						NULL,lcd_info->table_header,  0,NULL
 					);
 					break;
@@ -279,7 +279,7 @@ atomtree_dt_populate_smu_info(
 						NULL,  NULL,smu_info->v3_5,  0,NULL
 					);
 					if (smu_info->ver == v3_4) {
-						sprintf(atui_smu_info->name, "%s (forced)",
+						sprintf(atui_smu_info->name, u8"%s (forced)",
 							atui_smu_info->varname
 						);
 					}
@@ -322,7 +322,7 @@ atomtree_dt_populate_smu_info(
 			default:
 				if (generate_atui) {
 					atui_smu_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"smu_info (header only stub)",
+						u8"smu_info (header only stub)",
 						NULL,smu_info->table_header,  0,NULL
 					);
 				}
@@ -363,7 +363,7 @@ atomtree_dt_populate_vram_usagebyfirmware(
 					break;
 				default:
 					atui_fw_vram = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"vram_usagebyfirmware (header only stub)",
+						u8"vram_usagebyfirmware (header only stub)",
 						NULL,fw_vram->table_header,  0,NULL
 					);
 					break;
@@ -410,7 +410,7 @@ atomtree_dt_populate_gpio_pin_lut(
 				if (generate_atui) {
 					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
-						"gpio_pin_lut (header only stub)",
+						u8"gpio_pin_lut (header only stub)",
 						NULL,gpio_pin_lut->table_header,  0,NULL
 					);
 				}
@@ -488,7 +488,7 @@ atomtree_dt_populate_gfx_info(
 				}
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_5,
-						"atom_gfx_info_v2_5 (forced)",
+						u8"atom_gfx_info_v2_5 (forced)",
 						NULL,gfx_info->v2_6,  0,NULL
 					);
 				}
@@ -514,7 +514,7 @@ atomtree_dt_populate_gfx_info(
 			default:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"gfx_info (header only stub)",
+						u8"gfx_info (header only stub)",
 						NULL,gfx_info->table_header,  0,NULL
 					);
 				}
@@ -590,7 +590,7 @@ atomtree_dt_populate_ppt(
 			default:
 				if (generate_atui) {
 					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,
-						"smu_powerplay_table_header (header only stub)",
+						u8"smu_powerplay_table_header (header only stub)",
 						NULL,ppt->leaves,  0,NULL
 					);
 				}
@@ -775,7 +775,7 @@ atomtree_populate_atom_memory_timing_format_v0(
 			NULL,  NULL,&(format_v0_array[i]),
 			(sizeof(atui_mrs)/sizeof(atui_branch*)), atui_mrs
 		);
-		sprintf(atui_formattimings->name, "MemTiming (%u MHz)",
+		sprintf(atui_formattimings->name, u8"MemTiming (%u MHz)",
 			(format_v0_array[i].ClkRange / 100)
 		);
 		ATUI_ADD_BRANCH(parent, atui_formattimings);
@@ -898,7 +898,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_3->MemoryVendorID.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_3->MemoryVendorID.vendor_code
@@ -973,7 +973,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_4->MemoryVendorID.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_4->MemoryVendorID.vendor_code
@@ -1038,13 +1038,13 @@ atomtree_populate_vram_module(
 				for (i=0; i < count; i++) {
 					if (v8_1 == vram_modules[i].gmc_bitfields_ver) {
 						atui_children[0] = ATUI_MAKE_BRANCH(
-							mc_shared_chremap_7_1,  "ChannelMapCfg",
+							mc_shared_chremap_7_1,  u8"ChannelMapCfg",
 							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc7_1),
 							0,NULL
 						);
 					} else { // 6.0
 						atui_children[0] = ATUI_MAKE_BRANCH(
-							mc_shared_chremap_6_0,  "ChannelMapCfg",
+							mc_shared_chremap_6_0,  u8"ChannelMapCfg",
 							NULL, &(vram_modules[i].v1_7->ChannelMapCfg_gmc6_0),
 							0,NULL
 						);
@@ -1081,7 +1081,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_7->MemoryVendorID.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_7->MemoryVendorID.vendor_code
@@ -1130,7 +1130,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_8->MemoryVendorID.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_8->MemoryVendorID.vendor_code
@@ -1160,7 +1160,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_9->vendor_rev_id.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_9->vendor_rev_id.vendor_code
@@ -1190,7 +1190,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_10->vendor_rev_id.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_10->vendor_rev_id.vendor_code
@@ -1220,7 +1220,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v1_11->vendor_rev_id.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v1_11->vendor_rev_id.vendor_code
@@ -1273,7 +1273,7 @@ atomtree_populate_vram_module(
 					assert(vram_modules[i].v3_0->dram_vendor_id.vendor_code
 						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
 					);
-					sprintf(atui_module_entry->name, "%s (%s)",
+					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
 						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
 							vram_modules[i].v3_0->dram_vendor_id.vendor_code
@@ -1338,7 +1338,7 @@ atomtree_populate_vram_info_v1_3(
 			&(vi13->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi13->mem_adjust_table.leaves = NULL;
@@ -1353,7 +1353,7 @@ atomtree_populate_vram_info_v1_3(
 			&(vi13->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
 	} else {
 		vi13->mem_clk_patch.leaves = NULL;
@@ -1400,7 +1400,7 @@ atomtree_populate_vram_info_v1_4(
 			&(vi14->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi14->mem_adjust_table.leaves = NULL;
@@ -1415,7 +1415,7 @@ atomtree_populate_vram_info_v1_4(
 			&(vi14->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
 	} else {
 		vi14->mem_clk_patch.leaves = NULL;
@@ -1461,7 +1461,7 @@ atomtree_populate_vram_info_v2_1(
 		);
 
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi21->mem_adjust_table.leaves = NULL;
@@ -1476,7 +1476,7 @@ atomtree_populate_vram_info_v2_1(
 			&(vi21->mem_clk_patch), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
 	} else {
 		vi21->mem_clk_patch.leaves = NULL;
@@ -1491,7 +1491,7 @@ atomtree_populate_vram_info_v2_1(
 			&(vi21->per_byte_preset), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_perbytepreset->name, "mem_clk_patch_table");
+			strcpy(atui_perbytepreset->name, u8"mem_clk_patch_table");
 		}
 	} else {
 		vi21->per_byte_preset.leaves = NULL;
@@ -1540,7 +1540,7 @@ atomtree_populate_vram_info_v2_2(
 			&(vi22->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi22->mem_adjust_table.leaves = NULL;
@@ -1571,7 +1571,7 @@ atomtree_populate_vram_info_v2_2(
 		}
 
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 
 			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
                 atui_nullstruct,  NULL,
@@ -1583,7 +1583,7 @@ atomtree_populate_vram_info_v2_2(
 					tmp_branch = ATUI_MAKE_BRANCH(mc_block_polaris_timings,
 						NULL,  NULL,&(vi22->polaris_timings[i]),  0,NULL
 					);
-					sprintf(tmp_branch->name, "%s (%i MHz)",
+					sprintf(tmp_branch->name, u8"%s (%i MHz)",
 						tmp_branch->varname,
 						(vi22->polaris_timings[i].block_id.mem_clock_range/100)
 					);
@@ -1591,14 +1591,14 @@ atomtree_populate_vram_info_v2_2(
 				}
 			} else {
 				strcpy(atui_mem_timings->name,
-					"mc_block_fiji_timings (uncertain)"
+					u8"mc_block_fiji_timings (uncertain)"
 				);
 				/*
 				for (i=0; i < *vi22->num_timing_straps; i++) {
 					tmp_branch = ATUI_MAKE_BRANCH(mc_block_fiji_timings,
 						NULL,  NULL,&(vi22->fiji_timings[i]),  0,NULL
 					);
-					sprintf(tmp_branch->name, "%s (%i MHz)",
+					sprintf(tmp_branch->name, u8"%s (%i MHz)",
 						tmp_branch->varname,
 						(vi22->fiji_timings[i].block_id.mem_clock_range / 100)
 					);
@@ -1620,7 +1620,7 @@ atomtree_populate_vram_info_v2_2(
 			&(vi22->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
 	} else {
 		vi22->mc_adjust_pertile.leaves = NULL;
@@ -1634,7 +1634,7 @@ atomtree_populate_vram_info_v2_2(
 			&(vi22->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, "mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
 		}
 	} else {
 		vi22->mc_phyinit.leaves = NULL;
@@ -1690,7 +1690,7 @@ atomtree_populate_vram_info_v2_3(
 			&(vi23->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi23->mem_adjust_table.leaves = NULL;
@@ -1717,7 +1717,7 @@ atomtree_populate_vram_info_v2_3(
 		}
 
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 
 			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
 				atui_nullstruct, NULL,
@@ -1726,13 +1726,13 @@ atomtree_populate_vram_info_v2_3(
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 			if (vi23->uses_vega21_timings) {
 				strcpy(atui_mem_timings->name,
-					"umc_block_vega21_timings (uncertain)"
+					u8"umc_block_vega21_timings (uncertain)"
 				);
 				for (i=0; i < *vi23->num_timing_straps; i++) {
 					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega21_timings,
 						NULL,  NULL,&(vi23->vega21_timings[i]),  0,NULL
 					);
-					sprintf(tmp_branch->name, "%s (%i MHz)",
+					sprintf(tmp_branch->name, u8"%s (%i MHz)",
 						tmp_branch->varname,
 						(vi23->vega21_timings[i].block_id.mem_clock_range / 100)
 					);
@@ -1740,13 +1740,13 @@ atomtree_populate_vram_info_v2_3(
 				}
 			} else {
 				strcpy(atui_mem_timings->name,
-					"umc_block_vega10_timings (uncertain)"
+					u8"umc_block_vega10_timings (uncertain)"
 				);
 				for (i=0; i < *vi23->num_timing_straps; i++) {
 					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega10_timings,
 						NULL,  NULL,&(vi23->vega10_timings[i]),  0,NULL
 					);
-					sprintf(tmp_branch->name, "%s (%i MHz)",
+					sprintf(tmp_branch->name, u8"%s (%i MHz)",
 						tmp_branch->varname,
 						(vi23->vega10_timings[i].block_id.mem_clock_range / 100)
 					);
@@ -1767,7 +1767,7 @@ atomtree_populate_vram_info_v2_3(
 			&(vi23->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
 	} else {
 		vi23->mc_adjust_pertile.leaves = NULL;
@@ -1781,7 +1781,7 @@ atomtree_populate_vram_info_v2_3(
 			&(vi23->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, "mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
 		}
 	} else {
 		vi23->mc_phyinit.leaves = NULL;
@@ -1816,7 +1816,7 @@ atomtree_populate_vram_info_v2_3(
 			&(vi23->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_postucode_init->name, "post_ucode_init");
+			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
 	} else {
 		vi23->post_ucode_init.leaves = NULL;
@@ -1866,7 +1866,7 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi24->mem_adjust_table.leaves = NULL;
@@ -1890,7 +1890,7 @@ atomtree_populate_vram_info_v2_4(
 
 		if (generate_atui) {
 			atui_branch* const atui_navi_timings = ATUI_MAKE_BRANCH(
-				atui_nullstruct,  "umc_block_navi1_timings",
+				atui_nullstruct,  u8"umc_block_navi1_timings",
 				NULL,NULL,  *vi24->num_timing_straps,NULL
 			);
 			struct umc_block_navi1_timings* timings = vi24->navi1_gddr6_timings;
@@ -1898,14 +1898,14 @@ atomtree_populate_vram_info_v2_4(
 				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings,  NULL,
 					NULL,&(vi24->navi1_gddr6_timings[i]),  0,NULL
 				);
-				sprintf(tmp_branch->name, "%s (%i MHz)",
+				sprintf(tmp_branch->name, u8"%s (%i MHz)",
 					tmp_branch->varname,
 					(timings[i].block_id.mem_clock_range / 100)
 				);
 				ATUI_ADD_BRANCH(atui_navi_timings, tmp_branch);
 			}
 
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_navi_timings);
 		}
 	} else {
@@ -1923,7 +1923,7 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
 	} else {
 		vi24->mc_adjust_pertile.leaves = NULL;
@@ -1937,7 +1937,7 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, "mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
 		}
 	} else {
 		vi24->mc_phyinit.leaves = NULL;
@@ -1962,7 +1962,7 @@ atomtree_populate_vram_info_v2_4(
 			&(vi24->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_postucode_init->name, "post_ucode_init");
+			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
 	} else {
 		vi24->post_ucode_init.leaves = NULL;
@@ -2010,7 +2010,7 @@ atomtree_populate_vram_info_v2_5(
 			&(vi25->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi25->mem_adjust_table.leaves = NULL;
@@ -2024,7 +2024,7 @@ atomtree_populate_vram_info_v2_5(
 		vi25->gddr6_acstrap_count = i;
 		if (generate_atui) {
 			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-				"atom_gddr6_ac_timing_v2_5",
+				u8"atom_gddr6_ac_timing_v2_5",
 				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 			);
 			struct atom_gddr6_ac_timing_v2_5* timings = vi25->gddr6_ac_timings;
@@ -2032,7 +2032,7 @@ atomtree_populate_vram_info_v2_5(
 				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
 					NULL,  NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
 				);
-				sprintf(tmp_branch->name, "%s (%u MHz)",
+				sprintf(tmp_branch->name, u8"%s (%u MHz)",
 					tmp_branch->varname,
 					(timings[i].block_id.mem_clock_range / 100)
 				);
@@ -2053,7 +2053,7 @@ atomtree_populate_vram_info_v2_5(
 			&(vi25->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
 	} else {
 		vi25->mc_adjust_pertile.leaves = NULL;
@@ -2067,7 +2067,7 @@ atomtree_populate_vram_info_v2_5(
 			&(vi25->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, "mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
 		}
 	} else {
 		vi25->mc_phyinit.leaves = NULL;
@@ -2095,7 +2095,7 @@ atomtree_populate_vram_info_v2_5(
 			&(vi25->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_postucode_init->name, "post_ucode_init");
+			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
 	} else {
 		vi25->post_ucode_init.leaves = NULL;
@@ -2154,7 +2154,7 @@ atomtree_populate_vram_info_v2_6(
 			&(vi26->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, "mem_adjust_table");
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi26->mem_adjust_table.leaves = NULL;
@@ -2169,7 +2169,7 @@ atomtree_populate_vram_info_v2_6(
 		);
 
 		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
 	} else {
 		vi26->mem_clk_patch.leaves = NULL;
@@ -2184,7 +2184,7 @@ atomtree_populate_vram_info_v2_6(
 			&(vi26->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, "mc_adjust_pertile_table");
+			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
 	} else {
 		vi26->mc_adjust_pertile.leaves = NULL;
@@ -2198,7 +2198,7 @@ atomtree_populate_vram_info_v2_6(
 			&(vi26->mc_phyinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, "mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
 		}
 	} else {
 		vi26->mc_phyinit.leaves = NULL;
@@ -2236,7 +2236,7 @@ atomtree_populate_vram_info_v2_6(
 			&(vi26->post_ucode_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_postucode_init->name, "post_ucode_init");
+			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
 	} else {
 		vi26->post_ucode_init.leaves = NULL;
@@ -2307,7 +2307,7 @@ atomtree_populate_vram_info_v3_0(// TODO finish this
 			&(vi30->mc_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mc_init->name, "mc_init_table");
+			strcpy(atui_mc_init->name, u8"mc_init_table");
 		}
 	} else {
 		vi30->mc_init.leaves = NULL;
@@ -2335,7 +2335,7 @@ atomtree_populate_vram_info_v3_0(// TODO finish this
 			&(vi30->umc_emuinit), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_umc_emuinit->name, "umc_emuinit_table");
+			strcpy(atui_umc_emuinit->name, u8"umc_emuinit_table");
 		}
 	} else {
 		vi30->umc_emuinit.leaves = NULL;
@@ -2442,7 +2442,7 @@ atomtree_dt_populate_vram_info(
 			default:
 				if (generate_atui) {
 					atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"vram_info (header only stub)",
+						u8"vram_info (header only stub)",
 						NULL,vram_info->table_header,  0,NULL
 					);
 				}
@@ -2519,7 +2519,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 	struct atomtree_voltage_object_v4* at_vobj;
 	if (generate_atui) {
 		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-			"atom_voltage_objects_info_v4_1",
+			u8"atom_voltage_objects_info_v4_1",
 			NULL,vo41->leaves,  vo41->num_voltage_objects,NULL
 		);
 		for (i=0; i < vo41->num_voltage_objects; i++) {
@@ -2567,12 +2567,12 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 				&(PPATUI_ENUM_NAME(atom_voltage_type))
 			);
 			if (naming_enum_i < 0) {
-				sprintf(tmp_branch->name, "%s (type %x)",
+				sprintf(tmp_branch->name, u8"%s (type %x)",
 					tmp_branch->varname,
 					at_vobj->voltage_object->header.voltage_type
 				);
 			} else {
-				sprintf(tmp_branch->name, "%s (%s)",
+				sprintf(tmp_branch->name, u8"%s (%s)",
 					tmp_branch->varname,
 					PPATUI_ENUM_NAME(atom_voltage_type).enum_array[
 						naming_enum_i
@@ -2609,13 +2609,13 @@ atomtree_dt_populate_voltageobject_info(
 					vo_info, generate_atui
 				);
 				strcpy(atui_vo_info->name,
-					"atom_voltage_objects_info_v4_1 (forced)"
+					u8"atom_voltage_objects_info_v4_1 (forced)"
 				);
 				break;
 			default:
 				if (generate_atui) {
 					atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-						"voltageobject_info (header only stub)",
+						u8"voltageobject_info (header only stub)",
 						NULL,vo_info->table_header,  0,NULL
 					);
 				}
@@ -3103,7 +3103,7 @@ atomtree_populate_datatables(
 				if (generate_atui) {
 					atui_dt = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
-						"atom_master_data_table (header only stub)",
+						u8"atom_master_data_table (header only stub)",
 						NULL, data_table->table_header,  0,NULL
 					);
 				}
@@ -3366,7 +3366,7 @@ atomtree_populate_atom_rom_header(
 						rom_header, atree, generate_atui
 					);
 					if (generate_atui) {
-						sprintf(atui_rom_header->name, "%s (forced)",
+						sprintf(atui_rom_header->name, u8"%s (forced)",
 							atui_rom_header->varname
 						);
 					}
@@ -3375,7 +3375,7 @@ atomtree_populate_atom_rom_header(
 					if (generate_atui) {
 						atui_rom_header = ATUI_MAKE_BRANCH(
 							atom_common_table_header,
-							"atom_rom_header (header only stub)",
+							u8"atom_rom_header (header only stub)",
 							NULL, rom_header->table_header,  0,NULL
 						);
 					}

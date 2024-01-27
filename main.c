@@ -2,10 +2,10 @@
 #include "atui.h"
 #include "yaabe_gtk4.h"
 
-uint16_t
+int
 main(
-		const uint16_t argc,
-		const char8_t* const* const argv
+		const int argc,
+		const char* const* const argv
 		) {
 	struct atom_tree* atree = NULL;
 

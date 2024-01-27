@@ -48,14 +48,14 @@ ppatui.h contains the preprocessor hell for stuff like PPATUI_FUNCIFY()
 #define PPATUI_ENUMER(e_name, ...)\
 	static_assert(_PP_NUMARG(__VA_ARGS__) <= 255); /*pp funcs, some uint8_t*/\
 	static const struct atui_enum PPATUI_ENUM_NAME(e_name) = {\
-		.name = #e_name,\
+		.name = u8###e_name,\
 		.num_entries = _PP_NUMARG(__VA_ARGS__),\
 		.enum_array = (const struct atui_enum_entry[]) {\
 			_PPATUI_ENUM_ENTRIES(__VA_ARGS__)\
 		},\
 	};
 #define PPATUI_ENUM_NAME(enum_name) _atui_enum_##enum_name
-#define _PPATUI_EENTRY(o, enum_member) {.name=#enum_member, .val=enum_member},
+#define _PPATUI_EENTRY(o, enum_member) {.name=u8###enum_member, .val=enum_member},
 #define _atui_enum_ATUI_NULL ATUI_NULL
 
 
@@ -90,7 +90,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		_PPATUI_DYNARRAY(BOUNDS, __VA_ARGS__)\
 	};\
 	const struct atui_branch_data branch_embryo = {\
-		.varname = #atomtypesuffix,\
+		.varname = u8###atomtypesuffix,\
 \
 		.leaves_initial = leaves_initial,\
 		.dynarray_patterns = dynarray_patterns,\
@@ -215,7 +215,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 #define _PPATUI_FANCY_INIT(var, namestr, description_data, radix, fancytype)\
 	.name = namestr,\
 	.origname = namestr,\
-	.varname = #var,\
+	.varname = u8###var,\
 	.type = (radix | fancytype\
 			| _PPATUI_LEAF_SIGNED(var) | _PPATUI_LEAF_FRACTION(var)\
 			),\
@@ -328,7 +328,7 @@ PPATUI_HEADERIFY(atomtypesuffix) {\
 		/* numleaves is handled in the allocator*/\
 		.name = namestr,\
 		.origname = namestr,\
-		.varname = #var,\
+		.varname = u8###var,\
 		.type = (radix | fancytype),\
 		.val = var,\
 	},

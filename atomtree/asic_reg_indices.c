@@ -67,7 +67,7 @@ register_set_print_tables(
 		const struct register_set* const reg_set,
 		const uint16_t num_reg_set_addresses
 		) {
-	const char8_t* const struct_entry = "\tunion %s  %s;\n";
+	const char8_t* const struct_entry = u8"\tunion %s  %s;\n";
 	
 	const char8_t* reg_name;
 	char* token_save;
@@ -91,10 +91,10 @@ register_set_print_tables(
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
 
-		printf("\t%s,\n", reg_set[set_loc].name);
+		printf(u8"\t%s,\n", reg_set[set_loc].name);
 	}
 
-	printf("\nEND: %u regs\nSTART\n\n", rii);
+	printf(u8"\nEND: %u regs\nSTART\n\n", rii);
 	// print bitfield struct body
 	unions = 0;
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
@@ -108,9 +108,9 @@ register_set_print_tables(
 
 		// lop off prefix
 		reg_name = reg_set[set_loc].name;
-		if (strncmp(reg_name, "mm",2) || strncmp(reg_name, "ix",2)) {
+		if (strncmp(reg_name, u8"mm",2) || strncmp(reg_name, u8"ix",2)) {
 			reg_name += 2;
-		} else if (strncmp(reg_name, "reg",3)) {
+		} else if (strncmp(reg_name, u8"reg",3)) {
 			reg_name += 3;
 		} else {
 			reg_name += 0;
@@ -129,13 +129,13 @@ register_set_print_tables(
 		// could be faster, but it isn't critical
 		token_save = NULL;
 		name = var_name;
-		token = strtok_r(temp_buffer, "_", &token_save);
+		token = strtok_r(temp_buffer, u8"_", &token_save);
 		while (token) {
 			if (0 == is_number(token)) { 
 				name = memccpy(name, token, '\0', sizeof(var_name));
 				*(name-1) = '_';
 			}
-			token = strtok_r(NULL, "_", &token_save);
+			token = strtok_r(NULL, u8"_", &token_save);
 		}
 		assert(name > var_name);
 		assert(strlen(var_name) < sizeof(var_name));
@@ -144,5 +144,5 @@ register_set_print_tables(
 		printf(struct_entry, union_name, var_name);
 		unions++;
 	}
-	printf("\nEND: %u unions\n\n",unions);
+	printf(u8"\nEND: %u unions\n\n",unions);
 }
