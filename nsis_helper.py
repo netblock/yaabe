@@ -30,13 +30,18 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 	)
 	shutil.copy(exe_file, stage_dir)
 	shutil.copy(os.path.join(source_dir, "LICENSE"), stage_dir)
+
+	# cygpath translates / into an absolute path drive letter and all
+	root = subprocess.check_output(("cygpath", "-m", "/"), text=True)
+	root = root.strip().replace("/", os.path.sep)
+	host_share_dir = os.path.join(root, "mingw64", "share")
 	shutil.copytree(
-		"/mingw64/share/glib-2.0/schemas",
+		os.path.join(host_share_dir, "glib-2.0", "schemas"),
 		glib_dir,
 		dirs_exist_ok=True
 	)
 	shutil.copytree(
-		"/mingw64/share/glib-2.0/icons",
+		os.path.join(host_share_dir, "icons"),
 		share_dir,
 		dirs_exist_ok=True
 	)
@@ -45,28 +50,30 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 	shared_objs = set()
 	enlist_shared_objs(exe_file, shared_objs)
 	for obj in shared_objs:
-		shutil.copy(obj, stage_dir)
+		obj_cleaned_path = os.path.join(
+			root,
+			obj[1:].replace("/", os.path.sep) # strip first /, replace
+		)
+		shutil.copy(obj_cleaned_path, stage_dir)
 
 def main(argc:int, argv:list):
 	assert (argc >= 9)
-	glib_compile_schemas = argv[1]
-	makensis = argv[2]
-	nsis_conf = argv[3] 
-	source_dir = argv[4]
-	exe_file = argv[5]
-	stage_dir = argv[6]
-	output_exe = argv[7]
-	project_ver = argv[8]
+	nsis_conf = argv[1] 
+	source_dir = argv[2]
+	exe_file = argv[3]
+	stage_dir = argv[4]
+	output_exe = argv[5]
+	project_ver = argv[6]
 
 	gather_assets(source_dir, exe_file, stage_dir)
 
 	subprocess.run((
-		glib_compile_schemas,
+		"glib-compile-schemas",
 		os.path.join(stage_dir, "share", "glib-2.0", "schemas"),
 	))
 
 	subprocess.run((
-		makensis,
+		"makensis",
 		"-NOCD", # nsis would cd to the .nsi
 		"-V2",
 		"-Dyaabe_version=" + project_ver,

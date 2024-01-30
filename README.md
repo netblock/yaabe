@@ -45,23 +45,23 @@ cd build && meson compile
 ### Windows
 
 Install [MSYS2](https://www.msys2.org) (MSYS2 must be installed on an NTFS
-partition. FAT and ReFS doesn't work), and when in the msys2 shell, install
-mingw toolchain and the gtk4 libraries, 
+partition as FAT and ReFS filesystems are incompatible).
+
+Launch MSYS2's MINGW64 environment by running `mingw64.exe` (you should see a
+purple "MINGW64" in your command prompt).
+
+Install mingw toolchain and the gtk4 libraries, 
 
 ```shell
 pacman -Syuu # update if it's an old install
 pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4 mingw-w64-x86_64-nsis mingw-w64-x86_64-meson
 ```
 
-(The msys2 shell root `/` is the msys2 install location. Your current working
-directory when you open the msys2 shell is your username under `home/`). Plop
+The msys2 shell root `/` is the msys2 install location. Your current working
+directory when you open the msys2 shell is your username under `home/`. Plop
 the YAABE source in a place you can reach it within msys2, cd to it, and then,
 
 ```shell
-# it's better to set MSYS2_PATH_TYPE=inherit in /msys2.ini
-# but for a quick-n'-dirty, export
-export PATH="$PATH:/mingw64/bin"
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/mingw64/lib/pkgconfig"
 meson setup build
 cd build && meson compile
 ```

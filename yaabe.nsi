@@ -67,6 +67,7 @@ SectionEnd
 Section "Uninstall"
 	Delete "$instDIR\*.dll"
 	Delete "$INSTDIR\yaabe.exe"
+	Delete "$INSTDIR\LICENSE"
 	Delete "$INSTDIR\uninstall.exe"
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\share"

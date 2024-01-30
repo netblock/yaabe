@@ -32,7 +32,6 @@ if 'debug' == get_option('buildtype')
 endif
 
 if 'windows' == target_machine.system()
-	exe_suffix = '.exe'
 	# msys2 isn't caught up with C23
 	add_project_arguments('-DC2X_COMPAT', language:'c')
 
@@ -49,17 +48,16 @@ if 'windows' == target_machine.system()
 			'VER_PATCH': ver_array[2]
 		})
 	))
-else
-	exe_suffix = ''
 endif
 
 src = atomtree_files + gtk_files + main_files
 all_deps = external_depends
-yaabe = executable('yaabe' + exe_suffix,
+yaabe = executable('yaabe',
 	sources: src,
 	include_directories: include_dirs,
 	dependencies: all_deps,
-	install: true
+	install: true,
+	win_subsystem: 'windows',
 )
 
 if get_option('nsis_installer')
@@ -68,11 +66,11 @@ if get_option('nsis_installer')
 	assert('windows' == target_machine.system(), msys2_err)
 
 	pypath = import('python').find_installation()
-	makensis = find_program('makensis', native: true, required: true)
-	glib_compile_schemas = find_program(
-		'glib-compile-schemas',
-		native: true, required: true
-	)
+
+	#find_program('makensis', native: true, required: true)
+	#find_program('glib-compile-schemas', native: true, required: true)
+	#find_program('ldd', native:true, required: true)
+	#find_program('cygpath', native:true, required: true)
 
 	nsis_target = custom_target('nsis_installer',
 		depends: yaabe,
@@ -85,8 +83,6 @@ if get_option('nsis_installer')
 		command: [
 			pypath,
 			files('nsis_helper.py'),
-			glib_compile_schemas,
-			makensis,
 			'@INPUT0@', # .nsi
 			'@CURRENT_SOURCE_DIR@', # gtk-assets, others
 			'@INPUT1@', # yaabe.exe
