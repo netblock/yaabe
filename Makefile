@@ -1,4 +1,4 @@
-#TODO move to a build system like meson
+# DEPRICATED use meson
 CC=cc
 WINDRES=windres
 
@@ -64,12 +64,8 @@ nsis-installer: windows
 	cp -r gtk-assets/* $(NSIS_STAGE_DIR)
 	cp -r /mingw64/share/glib-2.0/schemas $(NSIS_STAGE_DIR)/share/glib-2.0
 	cp -r /mingw64/share/icons $(NSIS_STAGE_DIR)/share
-	if [ -d third-party/Windows-10/gtk-4.0/ ]; then \
-		mkdir -p $(NSIS_STAGE_DIR)/share/themes/Windows-10; \
-		cp -r third-party/Windows-10/gtk-4.0 $(NSIS_STAGE_DIR)/share/themes/Windows-10; \
-	fi
 	glib-compile-schemas $(NSIS_STAGE_DIR)/share/glib-2.0/schemas
-	makensis -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version="$(VERSION)" yaabe.nsi
+	makensis -NOCD -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version="$(VERSION)" -D yaabe_outfile="yaabeinstaller-$(VERSION).exe" yaabe.nsi
 
 
 

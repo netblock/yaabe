@@ -13,7 +13,7 @@ VIAddVersionKey /LANG=0 "ProductVersion" "${yaabe_version}"
 VIAddVersionKey /LANG=0 "FileDescription" "https://github.com/netblock/yaabe"
 VIAddVersionKey /LANG=0 "LegalCopyright" "Copyright Netblock"
 VIProductVersion "${yaabe_version}.0"
-Outfile "yaabeinstaller-${yaabe_version}.exe"
+Outfile "${yaabe_outfile}"
 SetCompressor /solid lzma
 
 RequestExecutionLevel admin
@@ -27,7 +27,7 @@ ShowInstDetails show
 
 
 #!insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE"
+!insertmacro MUI_PAGE_LICENSE "${nsis_stage_dir}\LICENSE"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 

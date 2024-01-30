@@ -1,0 +1,34 @@
+#include <windows.h>
+
+// the @var@ is meson
+#define ver_fourpartcomma @VER_MAJOR@,@VER_MINOR@,@VER_PATCH@,0
+#define ver_fourpartdot "@VER_MAJOR@.@VER_MINOR@.@VER_PATCH@.0"
+#if @IS_RELEASE@
+#define file_flags VS_FF_PRERELEASE
+#else
+#define file_flags VS_FF_DEBUG
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION ver_fourpartcomma
+	PRODUCTVERSION ver_fourpartcomma
+	FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+	FILEFLAGS file_flags
+	FILEOS VOS_NT_WINDOWS32 // TODO No 64-bit?
+	FILETYPE VFT_APP
+	FILESUBTYPE VFT2_UNKNOWN
+	{
+		BLOCK "StringFileInfo" {
+			BLOCK "040904B0" { // 0x0409 == US English; 0x04B0 == Unicode
+				VALUE "ProductName", "YAABE BIOS Editor"
+				VALUE "FileVersion", ver_fourpartdot
+				VALUE "ProductVersion", ver_fourpartdot
+				VALUE "FileDescription", "https://github.com/netblock/yaabe"
+				VALUE "OriginalFilename", "yaabe.exe"
+				VALUE "LegalCopyright", "Copyright Netblock"
+			}
+		}
+		BLOCK "VarFileInfo" {
+			VALUE "Translation", 0x0409, 0x04B0
+		}
+}

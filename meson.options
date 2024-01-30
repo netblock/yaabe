@@ -1,0 +1,3 @@
+option('nsis_installer', type : 'boolean', value : false,
+	description : 'create a installer wizard for windows'
+)
