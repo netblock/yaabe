@@ -1,6 +1,6 @@
 project('yaabe', 'c',
 	version: '0.3.0',
-	meson_version: '1.2.3',
+	meson_version: '>= 1.2.3',
 	default_options: [
   		'c_std=c2x',
   		'buildtype=debug',
@@ -12,8 +12,14 @@ project('yaabe', 'c',
 cc = meson.get_compiler('c')
 external_depends = [
 	cc.find_library('m', required: true),
-	dependency('gtk4', version: '>= 4.10.0'),
+	dependency('gtk4', version: '>= 4.10.0', required: true),
 ]
+
+
+include_dirs = include_directories(['atom', 'atomtree','gtk'])
+subdir('atomtree')
+subdir('gtk')
+main_files = files('main.c')
 
 
 if 'debug' == get_option('buildtype')
@@ -47,11 +53,6 @@ else
 	exe_suffix = ''
 endif
 
-
-include_dirs = include_directories(['atom', 'atomtree','gtk'])
-subdir('atomtree')
-subdir('gtk')
-main_files = [files(['main.c'])]
 src = atomtree_files + gtk_files + main_files
 all_deps = external_depends
 yaabe = executable('yaabe' + exe_suffix,
@@ -65,7 +66,6 @@ if get_option('nsis_installer')
 	msys2_err = 'We pluck dlls from msys2. https://www.msys2.org'
 	fs = import('fs')
 	assert('windows' == target_machine.system(), msys2_err)
-	assert(fs.is_dir('/mingw64'), msys2_err)
 
 	pypath = import('python').find_installation()
 	makensis = find_program('makensis', native: true, required: true)

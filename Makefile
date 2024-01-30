@@ -58,6 +58,7 @@ windows: _yaabe-windows
 nsis-installer: windows
 	mkdir -p $(NSIS_STAGE_DIR)/share/glib-2.0 $(NSIS_STAGE_DIR)/share/themes
 	cp yaabe.exe $(NSIS_STAGE_DIR)
+	cp LICENSE $(NSIS_STAGE_DIR)
 	ldd $(NSIS_STAGE_DIR)/yaabe.exe | \
 		grep "\/mingw.*\.dll" -o | \
 		xargs -I{} cp "{}" $(NSIS_STAGE_DIR)
@@ -65,7 +66,7 @@ nsis-installer: windows
 	cp -r /mingw64/share/glib-2.0/schemas $(NSIS_STAGE_DIR)/share/glib-2.0
 	cp -r /mingw64/share/icons $(NSIS_STAGE_DIR)/share
 	glib-compile-schemas $(NSIS_STAGE_DIR)/share/glib-2.0/schemas
-	makensis -NOCD -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version="$(VERSION)" -D yaabe_outfile="yaabeinstaller-$(VERSION).exe" yaabe.nsi
+	makensis -NOCD -Dnsis_stage_dir=$(NSIS_STAGE_DIR) -Dyaabe_version="$(VERSION)" -Dyaabe_outfile="yaabeinstaller-$(VERSION).exe" yaabe.nsi
 
 
 

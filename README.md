@@ -49,7 +49,7 @@ partition. FAT and ReFS doesn't work), and when in the msys2 shell, install
 mingw toolchain and the gtk4 libraries, 
 
 ```shell
-pacman -Syu # update if it's an old install
+pacman -Syuu # update if it's an old install
 pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-gtk4 mingw-w64-x86_64-nsis mingw-w64-x86_64-meson
 ```
 

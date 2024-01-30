@@ -1,6 +1,6 @@
 #include <windows.h>
 
-// the @var@ is meson
+// the @ var @ is meson
 #define ver_fourpartcomma @VER_MAJOR@,@VER_MINOR@,@VER_PATCH@,0
 #define ver_fourpartdot "@VER_MAJOR@.@VER_MINOR@.@VER_PATCH@.0"
 #if @IS_RELEASE@
