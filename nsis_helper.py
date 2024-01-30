@@ -57,7 +57,7 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 		shutil.copy(obj_cleaned_path, stage_dir)
 
 def main(argc:int, argv:list):
-	assert (argc >= 9)
+	assert (argc >= 7)
 	nsis_conf = argv[1] 
 	source_dir = argv[2]
 	exe_file = argv[3]
