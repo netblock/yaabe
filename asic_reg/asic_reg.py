@@ -488,11 +488,24 @@ Considers %s versions: %s
 #ifndef %s_SEARCHFIELD_H
 #define %s_SEARCHFIELD_H
 
-static const struct register_set %s_reg_set[] = {
+static const struct register_set_entry _%s_reg_set_entries[] = {
 """
 	preprossor_str = "\tRSE(%s)\n"
 	header_ender = """\
 };
+
+static const struct register_set %s_reg_set = {
+	.num_reg_set_addresses = ( // %u
+		sizeof(_%s_reg_set_entries) / sizeof(struct register_set_entry)
+	),
+	.set_name = u8"%s",
+	.entries = _%s_reg_set_entries,
+};
+
+static_assert( // reserve leftmost bit as flag for register_set_bsearch
+	(sizeof(_%s_reg_set_entries) / sizeof(struct register_set_entry)
+	) < 0x7FFF // %u
+);
 
 #endif
 """
@@ -500,7 +513,6 @@ static const struct register_set %s_reg_set[] = {
 	versions.sort(key=lambda v: [int(n) for n in v.split("_")])
 	ver_str = ", ".join(versions)
 	out_text = header_header % (ip_name, ver_str, ip_name, ip_name, ip_name)
-
 
 	reg_list = {} # addr:[name,name]
 	addr_name = ""
@@ -521,12 +533,17 @@ static const struct register_set %s_reg_set[] = {
 				else:
 					reg_list[addr] = [addr_name]
 
+	entry_count = 0
 	reg_list = dict(sorted(reg_list.items()))
 	for addr in reg_list:
+		entry_count += len(reg_list[addr])
 		reg_list[addr].sort()
 		for name in reg_list[addr]:
 			out_text += preprossor_str % name
-	out_text += header_ender
+	out_text += header_ender % (
+		ip_name, entry_count, ip_name, ip_name, ip_name, # struct
+		ip_name, entry_count # assert
+	)
 	return out_text
 
 # mode == 2

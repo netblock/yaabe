@@ -6,6 +6,8 @@ Also some tools to help write register definition tables; chiefly the ones
 involving struct register_set.
 The intended purpose of register_set_print_tables is to have it adjacent to
 atomtree_populate_init_reg_block.
+
+register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set);
 */
 
 #ifndef ASIC_REG_INDICES_H
@@ -13,26 +15,31 @@ atomtree_populate_init_reg_block.
 
 // check the bottom for more includes
 
-struct register_set { // register set entry
+
+struct register_set_entry { // register set entry
 	uint16_t address; // mm,ix,reg prefixed defines
 	const char8_t* name;
+};
+struct register_set {
+	uint16_t num_reg_set_addresses;
+	const char8_t* set_name;
+	const struct register_set_entry* entries;
 };
 #define RSE(reg_name)\
 	{\
 		.address = reg_name,\
-		.name = #reg_name,\
+		.name = u8###reg_name,\
 	},
+
 int16_t
 register_set_bsearch(
 		const struct register_set* reg_set,
-		uint16_t num_reg_set_addresses,
 		uint16_t address
 		);
 void
 register_set_print_tables(
-		const struct atom_init_reg_index_format* register_index,
-		const struct register_set* reg_set,
-		uint16_t num_reg_set_addresses
+		const struct atomtree_init_reg_block* at_regblock,
+		const struct register_set* reg_set
 		);
 
 
@@ -61,7 +68,6 @@ static const uint16_t mc_block_polaris_timings_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-// only used during to develop the 'addresses' tables and 'bitfield' structs
-//#include "gmc_searchfield.h"
+#include "gmc_searchfield.h"
 
 #endif

@@ -6,7 +6,7 @@ Considers GMC versions: 6_0, 7_0, 7_1, 8_1, 8_2
 #ifndef GMC_SEARCHFIELD_H
 #define GMC_SEARCHFIELD_H
 
-static const struct register_set GMC_reg_set[] = {
+static const struct register_set_entry _GMC_reg_set_entries[] = {
 	RSE(ixMC_IO_DEBUG_UP_0_6_0)
 	RSE(ixMC_TSM_DEBUG_GCNT_6_0)
 	RSE(ixMC_IO_DEBUG_UP_1_6_0)
@@ -1958,5 +1958,18 @@ static const struct register_set GMC_reg_set[] = {
 	RSE(mmMC_VM_MB_L1_TLS0_PROTECTION_FAULT_STATUS_8_1)
 	RSE(mmMC_VM_MB_L1_TLS0_PROTECTION_FAULT_ADDR_8_1)
 };
+
+static const struct register_set GMC_reg_set = {
+	.num_reg_set_addresses = ( // 1950
+		sizeof(_GMC_reg_set_entries) / sizeof(struct register_set_entry)
+	),
+	.set_name = u8"GMC",
+	.entries = _GMC_reg_set_entries,
+};
+
+static_assert( // reserve leftmost bit as flag for register_set_bsearch
+	(sizeof(_GMC_reg_set_entries) / sizeof(struct register_set_entry)
+	) < 0x7FFF // 1950
+);
 
 #endif

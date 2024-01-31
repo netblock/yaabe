@@ -18,26 +18,28 @@ assert_reg_index(
 int16_t
 register_set_bsearch(
 		const struct register_set* const reg_set,
-		const uint16_t num_reg_set_addresses,
 		const uint16_t address
 		) {
 	// binary search for register_set
 	// as a result, it assumes the array is sorted.
 	// this algo also finds the leftmost if there are duplicates
-	assert(num_reg_set_addresses < 0x7FFF); // reserve leftmost bit as flag
+
+	// reserve leftmost bit as flag
+
+	const struct register_set_entry* const set_array = reg_set->entries;
 	uint16_t left = 0;
 	uint16_t mid;
-	uint16_t right = num_reg_set_addresses;
+	uint16_t right = reg_set->num_reg_set_addresses;
 	while (left != right) {
 		mid = (left + right) >> 1;  // bitshift div-by-2
-		if (address <= reg_set[mid].address) {
+		if (address <= set_array[mid].address) {
 			right = mid;
 		} else {
 			left = mid + 1;
 		}
 	}
 	// left==right. mid will be off by 1, leftwise, if it's unique.
-	if (left == num_reg_set_addresses) {
+	if (left == reg_set->num_reg_set_addresses) {
 		return -1;
 	} else {
 		return left;
@@ -63,10 +65,11 @@ is_number(
 
 void
 register_set_print_tables(
-		const struct atom_init_reg_index_format* const register_index,
-		const struct register_set* const reg_set,
-		const uint16_t num_reg_set_addresses
+		const struct atomtree_init_reg_block* const at_regblock,
+		const struct register_set* const reg_set
 		) {
+	const struct atom_init_reg_index_format* const register_index =
+		at_regblock->register_index;
 	const char8_t* const struct_entry = u8"\tunion %s  %s;\n";
 	
 	const char8_t* reg_name;
@@ -81,17 +84,15 @@ register_set_print_tables(
 	int16_t set_loc;
 	uint16_t rii, unions;
 
-	printf("\nSTART\n\n");
+	printf(u8"\nSTART\n\n");
 	// print assert-reg-index body
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
-		set_loc = register_set_bsearch(
-			reg_set, num_reg_set_addresses, register_index[rii].RegIndex
-		);
+		set_loc = register_set_bsearch(reg_set, register_index[rii].RegIndex);
 
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
 
-		printf(u8"\t%s,\n", reg_set[set_loc].name);
+		printf(u8"\t%s,\n", reg_set->entries[set_loc].name);
 	}
 
 	printf(u8"\nEND: %u regs\nSTART\n\n", rii);
@@ -102,12 +103,10 @@ register_set_print_tables(
 			// first nibble is byte count of reg entry; if not 4, skip
 			continue;
 		}
-		set_loc = register_set_bsearch(
-			reg_set, num_reg_set_addresses, register_index[rii].RegIndex
-		);
+		set_loc = register_set_bsearch(reg_set, register_index[rii].RegIndex);
 
 		// lop off prefix
-		reg_name = reg_set[set_loc].name;
+		reg_name = reg_set->entries[set_loc].name;
 		if (strncmp(reg_name, u8"mm",2) || strncmp(reg_name, u8"ix",2)) {
 			reg_name += 2;
 		} else if (strncmp(reg_name, u8"reg",3)) {

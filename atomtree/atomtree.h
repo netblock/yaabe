@@ -62,11 +62,11 @@ static_assert(sizeof(struct _tenbytes) == 10);
 #include "umctimings.h"
 #include "powerplay.h"
 #include "atombios.h"
-#include "asic_reg_indices.h"
 
 enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;
 #include "atomtree_data_tables.h"
+#include "asic_reg_indices.h"
 
 
 
