@@ -114,19 +114,7 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 /******************************************************************************/
 // atui_gmc.c / gmc.h
 
-PPATUI_HEADERIFY(mc_arb_dram_timing_6_0);
-PPATUI_HEADERIFY(mc_arb_dram_timing2_6_0);
-PPATUI_HEADERIFY(mc_seq_cas_timing_6_0);
-PPATUI_HEADERIFY(mc_seq_misc_timing_6_0);
-PPATUI_HEADERIFY(mc_seq_misc_timing2_6_0);
-PPATUI_HEADERIFY(mc_seq_pmg_timing_6_0);
-PPATUI_HEADERIFY(mc_seq_ras_timing_6_0);
-PPATUI_HEADERIFY(mc_seq_wr_ctl_2_6_0);
-PPATUI_HEADERIFY(mc_seq_wr_ctl_d0_6_0);
-PPATUI_HEADERIFY(mc_shared_chremap_6_0);
-PPATUI_HEADERIFY(mc_shared_chremap_7_1);
-PPATUI_HEADERIFY(mc_shared_chremap2_7_1);
-
+#include "atui_gmc.h"
 
 /******************************************************************************/
 // atui_umctimings.c / umctimings.h
