@@ -61,8 +61,10 @@ yaabe = executable('yaabe',
 )
 
 if get_option('nsis_installer')
-	msys2_err = 'We pluck dlls from msys2. https://www.msys2.org'
+	msys2_err = 'We pluck assets from MSYS2 for the installer. https://www.msys2.org'
 	fs = import('fs')
+	mingw64_path = run_command('cygpath', '-m', '/mingw64').stdout().strip()
+	assert(fs.is_dir(mingw64_path), msys2_err)
 	assert('windows' == target_machine.system(), msys2_err)
 
 	pypath = import('python').find_installation()

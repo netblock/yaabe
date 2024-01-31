@@ -37,12 +37,12 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 	host_share_dir = os.path.join(root, "mingw64", "share")
 	shutil.copytree(
 		os.path.join(host_share_dir, "glib-2.0", "schemas"),
-		glib_dir,
+		os.path.join(glib_dir, "schemas"),
 		dirs_exist_ok=True
 	)
 	shutil.copytree(
 		os.path.join(host_share_dir, "icons"),
-		share_dir,
+		os.path.join(share_dir, "icons"),
 		dirs_exist_ok=True
 	)
 
