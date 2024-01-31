@@ -89,7 +89,7 @@ struct atui_funcify_args; // internal use; see below
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
-	char8_t name[64];
+	char8_t name[72];
 	const char8_t* origname;
 	const char8_t* varname;
 	const char8_t* description[LANG_TOTALLANGS];
