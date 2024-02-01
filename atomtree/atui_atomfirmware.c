@@ -212,24 +212,24 @@ def struct_to_atui(s):
 	#
 	# dynarrays part 1 (bulk of it):
 	s = re.sub("(((struct|union)\s+[a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+))\[([a-zA-Z0-9_]*)\];",
-		"(bios->\g<4>, \"\g<4>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<5>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+		"(bios->\g<4>, u8\"\g<4>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<5>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	s = re.sub("((u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t|uq[0-9]+_[0-9]+_t)\s+([a-zA-Z0-9_]+))\[([a-zA-Z_][a-zA-Z0-9_]*)\];",
-		"(bios->\g<3>, \"\g<3>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<4>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
+		"(bios->\g<3>, u8\"\g<3>\", // start, name\n\t\t(ATUI_NAN, ATUI_DYNARRAY, (\n\t\t\t\g<1>;\n\t\t\tNULL, \g<4>, // deferred start, count\n\t\t\tATUI_NULL // enum\n\t\t)), (ATUI_NODESCR)\n\t),",s)
 	#
 	# embedded structs, create ATUI_INLINES from them:
-	s = re.sub("(\t+)(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \"\g<4>\",\n\g<1>\t(ATUI_NAN, ATUI_INLINE, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
+	s = re.sub("(\t+)(union|struct)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, u8\"\g<4>\",\n\g<1>\t(ATUI_NAN, ATUI_INLINE, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# embdedded enums; very similar to structs/unions:
-	s = re.sub("(\t+)(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, \"\g<4>\",\n\g<1>\t(ATUI_DEC, ATUI_ENUM, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
+	s = re.sub("(\t+)(enum)\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_]+)(\[[0-9]+\])?;", "\g<1>(bios->\g<4>, u8\"\g<4>\",\n\g<1>\t(ATUI_DEC, ATUI_ENUM, \g<3>),\n\g<1>\t(ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# integers: intn_t/uintn_t/charn_t/floatn_t/uqn_n_t
-	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t|uq[0-9]+_[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t|float[0-9]+_t|uq[0-9]+_[0-9]+_t)\s+([a-zA-Z0-9_]+)(\s+)?;", "\g<1>(bios->\g<3>, u8\"\g<3>\",\n\g<1>\t(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# integer arrays, won't do embedded enums
-	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "\g<1>(bios->\g<3>, \"\g<3>\",\n\g<1>\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\g<1>),", s)
+	s = re.sub("(\t+)(u?int[0-9]+_t|char[0-9]+_t)\s+([a-zA-Z0-9_]+)\s?+\[[0-9]+\]\s?+;", "\g<1>(bios->\g<3>, u8\"\g<3>\",\n\g<1>\t(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)\n\g<1>),", s)
 	#
 	# take care of //-based comments
-	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, \"\g<5>\"))\g<2>", s)
+	s = re.sub("(\s+)?\(ATUI_NODESCR\)(\n\t\),)(\s+)?//(\s+)?(.*)", "\n\t\t((LANG_ENG, u8\"\g<5>\"))\g<2>", s)
 	s = re.sub("\),(\s+)?};", ")\n)", s)
 	#
 	# dynarrays part 2: "(ATUI_NULL" for leaf; and  "%02u" for pattern name
@@ -250,16 +250,16 @@ def bitfield_to_atui(s):
 	s = re.sub("union\s+([a-zA-Z0-9_]+)\s*{", "PPATUI_FUNCIFY(union, \g<1>, atui_nullstruct,",s)
 	#
 	# raw data -> main bitfield leaf
-	s = re.sub("uint[0-9]+_t\s+([a-zA-Z0-9_]+);","(bios->\g<1>, \"\g<1>\",\n\t\t(ATUI_BIN, ATUI_BITFIELD, (", s)
+	s = re.sub("uint[0-9]+_t\s+([a-zA-Z0-9_]+);","(bios->\g<1>, u8\"\g<1>\",\n\t\t(ATUI_BIN, ATUI_BITFIELD, (", s)
 	#
 	# delete 'struct { type'
 	s = re.sub("\tstruct { uint[0-9]+_t\n", "", s)
 	#
 	# bitfield children:
-	s = re.sub("([a-zA-Z0-9_]+)( *):([0-9]+)-([0-9]+) \+1[,;]", "\t(\"\g<1>\",\g<2>\g<3>,\g<4>, ATUI_DEC, (ATUI_NODESCR)),", s)
+	s = re.sub("([a-zA-Z0-9_]+)( *):([0-9]+)-([0-9]+) \+1[,;]", "\t(u8\"\g<1>\",\g<2>\g<3>,\g<4>, ATUI_DEC, (ATUI_NODESCR)),", s)
 	#
 	# child comments:
-	s = re.sub(" \(ATUI_NODESCR\)\),(\s*)//\s*(.*)","\n\t\t\t\t((LANG_ENG, \"\g<2>\"))\n\t\t\t),",s)
+	s = re.sub(" \(ATUI_NODESCR\)\),(\s*)//\s*(.*)","\n\t\t\t\t((LANG_ENG, u8\"\g<2>\"))\n\t\t\t),",s)
 	#
 	# final:
 	s = re.sub(",\n\t};\n};", "\n\t\t)), (ATUI_NODESCR)\n\t)\n)", s)
