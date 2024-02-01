@@ -95,7 +95,7 @@ register_set_print_tables(
 		printf(u8"\t%s,\n", reg_set->entries[set_loc].name);
 	}
 
-	printf(u8"\nEND: %u regs\nSTART\n\n", rii);
+	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
 	// print bitfield struct body
 	unions = 0;
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
@@ -143,5 +143,5 @@ register_set_print_tables(
 		printf(struct_entry, union_name, var_name);
 		unions++;
 	}
-	printf(u8"\nEND: %u unions\n\n",unions);
+	printf(u8"\nEND: %u+1 unions\n\n",unions); // is block_id
 }

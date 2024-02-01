@@ -207,18 +207,51 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 */
 };
 
+enum register_block_type:uint8_t {
+	reg_block_unknown,
+	reg_block_mem_adust,
+	reg_block_mem_clk_patch,
+	reg_block_phy_init,
+
+};
+enum common_register_sequence:uint8_t {
+	common_set_unknown,
+
+	// reg_block_mem_clk_patch:
+	timings_set_islands,
+	timings_set_fiji,
+	timings_set_polaris,
+	timings_set_vega10,
+	timings_set_vega21,
+	timings_set_navi1,
+};
+
 #define ATOMTREE_MC_REG_MAX  24 // keep score.
 // Hawaii XT is 20; Sapphire.RX580.8192.170320.rom is 24
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block* leaves; // nonzero if populated
 
-	struct atom_init_reg_index_format* register_index;
 	uint8_t num_index;
+	struct atom_init_reg_index_format* register_index;
 
 	uint8_t num_data_blocks; // atom_init_reg_block's RegDataBuf
 	uint8_t num_data_entries; // atom_reg_setting_data_block's reg_data
 	uint16_t data_block_element_size;
 	struct atom_reg_setting_data_block* data_blocks[ATOMTREE_MC_REG_MAX];
+
+	// init_reg_block is a generalised structure format. The meaning of the data
+	// depends on the register_index against an definition lookup table.
+	// However, register_index is hard to understand, but there are common
+	// sequences.
+	enum register_block_type reg_type; // type of table
+	enum common_register_sequence reg_set; // denote a common sequence
+	union {
+		void* data_sets;
+
+		// reg_block_mem_clk_patch:
+		struct mc_block_islands_gddr5_timings* islands_timings;
+		struct mc_block_polaris_timings* polaris_timings;
+	};
 };
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
 struct atomtree_umc_init_reg_block {
@@ -313,13 +346,6 @@ struct atomtree_vram_info_header_v2_2 {
 	struct atomtree_init_reg_block mem_adjust_table;
 
 	struct atomtree_init_reg_block mem_clk_patch;
-	bool uses_polaris_timings;
-	union {
-		void* mem_timings;
-		//struct mc_block_fiji_timings* fiji_timings;
-		struct mc_block_polaris_timings* polaris_timings;
-	};
-	uint8_t* num_timing_straps;
 
 	struct atomtree_init_reg_block mc_adjust_pertile;
 	struct atomtree_init_reg_block mc_phyinit;
@@ -336,6 +362,8 @@ struct atomtree_vram_info_header_v2_3 {
 
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	bool uses_vega21_timings;
+	// TODO hoisted method stays until address sequence can be figured for
+	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
 	union {
 		void* mem_timings;
 		struct umc_block_vega10_timings* vega10_timings;
@@ -360,6 +388,8 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 
 	struct atomtree_umc_init_reg_block mem_clk_patch;
+	// TODO hoisted method stays until address sequence can be figured for
+	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
 	struct umc_block_navi1_timings* navi1_gddr6_timings;
 	uint8_t* num_timing_straps;
 

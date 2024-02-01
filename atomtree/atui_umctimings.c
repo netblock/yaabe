@@ -528,6 +528,72 @@ PPATUI_FUNCIFY(union, mc_seq_misc_timing_6_0_o, atui_nullstruct,
 	)
 )
 
+PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl_d0, u8"mc_seq_wr_ctl_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl, u8"mc_seq_wr_ctl",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_ras_timing, u8"mc_seq_ras_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_ras_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_cas_timing, u8"mc_seq_cas_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_cas_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing, u8"mc_seq_misc_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing2, u8"mc_seq_misc_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_pmg_timing, u8"mc_seq_pmg_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_pmg_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc1.gddr5_mr0, u8"gddr5_mr0",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr0),
+		((LANG_ENG, u8"seq_misc1"))
+	),
+	(bios->mc_seq_misc1.gddr5_mr1, u8"gddr5_mr1",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr1),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc3.gddr5_mr4, u8"gddr5_mr4",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr4),
+		((LANG_ENG, u8"seq_misc3"))
+	),
+	(bios->mc_seq_misc3.gddr5_mr5, u8"gddr5_mr5",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr5),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc8.gddr5_mr8, u8"gddr5_mr8",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr8),
+		((LANG_ENG, u8"seq_misc8"))
+	),
+	(bios->mc_seq_misc8.reserved, u8"reserved",
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing, u8"mc_arb_dram_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing2, u8"mc_arb_dram_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing2_6_0),
+		(ATUI_NODESCR)
+	)
+)
+
 
 PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atomtree_vram_info_header_v2_2,
 	(bios->block_id, u8"block_id",

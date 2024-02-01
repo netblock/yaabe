@@ -551,11 +551,28 @@ struct mc_seq_misc3_gddr5 { // see MC_SEQ_MISC3_6_0
 };
 struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
 	union gddr5_mr8 gddr5_mr8;
-	uint16_t reserved;
+	uint16_t reserved; // nonzero. unsure
+};
+
+struct mc_block_islands_gddr5_timings {
+	// Northern, Southern, Sea, Volcanic Islands
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
+	union mc_seq_wr_ctl_2_6_0      mc_seq_wr_ctl;
+	union mc_seq_ras_timing_6_0    mc_seq_ras_timing;
+	union mc_seq_cas_timing_6_0    mc_seq_cas_timing;
+	union mc_seq_misc_timing_6_0   mc_seq_misc_timing;
+	union mc_seq_misc_timing2_6_0  mc_seq_misc_timing2;
+	union mc_seq_pmg_timing_6_0    mc_seq_pmg_timing;
+	struct mc_seq_misc1_gddr5      mc_seq_misc1;
+	struct mc_seq_misc3_gddr5      mc_seq_misc3;
+	struct mc_seq_misc8_gddr5      mc_seq_misc8;
+	union mc_arb_dram_timing_6_0   mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
 };
 
 struct mc_block_polaris_timings { // 52 bytes.
-	union atom_mc_register_setting_id block_id;
+	union atom_mc_register_setting_id  block_id;
 	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
 	union mc_seq_wr_ctl_2_6_0      mc_seq_wr_ctl_2;
 	union mc_seq_pmg_timing_6_0    mc_seq_pmg_timing;
@@ -571,7 +588,7 @@ struct mc_block_polaris_timings { // 52 bytes.
 };
 
 struct umc_block_vega10_timings { // 92 bytes. Uncertain.
-	union atom_mc_register_setting_id block_id;
+	union atom_mc_register_setting_id  block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;
 	union DRAMTiming3 DRAMTiming3;
