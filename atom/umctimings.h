@@ -467,7 +467,7 @@ struct PMG_CMD {
 };
 
 
-union mc_seq_misc_timing_6_0_o { // override of mc_seq_misc_timing_6_0
+union mc_seq_misc_timing_6_0_o { // override of mc_seq_misc_timing_6_0 -> 9.0?
 	uint32_t mc_seq_misc_timing;
 	struct { uint32_t
 		trp_wra  :6-0 +1, // autoprecharge?
@@ -475,6 +475,48 @@ union mc_seq_misc_timing_6_0_o { // override of mc_seq_misc_timing_6_0
 		trp     :19-14 +1,
 		trfc    :28-20 +1,
 		rsvd2   :31-29 +1;
+	};
+};
+union mc_seq_misc_timing2_6_0_o { // override of mc_seq_misc_timing2_6_0 -> 9.0?
+	uint32_t raw_data;
+	struct { uint32_t
+		pa2rdata  :3-0 +1,
+		pa2wdata  :7-4 +1,
+		faw      :12-8 +1,
+		tredc    :15-13 +1,
+		twedc    :20-16 +1,
+		t32aw    :24-21 +1,
+		_rsvd02  :27-25 +1,
+		twdatatr :31-28 +1;
+	};
+};
+union mc_seq_cmd_6_0_o { // override of mc_seq_cmd_6_0 -> 9.0?
+	uint32_t raw_data;
+	struct { uint32_t
+		adr      :15-0 +1,
+		mop      :19-16 +1,
+		end      :20-20 +1,
+		csb      :22-21 +1,
+		_rsvd00  :23-23 +1,
+		chan0    :24-24 +1,
+		chan1    :25-25 +1,
+		chan2    :26-26 +1,
+		chan3    :27-27 +1,
+		adr_msb1 :28-28 +1,
+		adr_msb0 :29-29 +1,
+		_rsvd02  :31-30 +1;
+	};
+};
+union mc_seq_cas_timing_6_0_o { // override of mc_seq_cas_timing_6_0 -> 9.0?
+	uint32_t raw_data;
+	struct { uint32_t
+		tnopw    :4-0 +1,
+		tnopr    :9-5 +1,
+		tr2w    :14-10 +1,
+		tr2r    :18-15 +1,
+		tw2r    :23-19 +1,
+		tcl     :28-24 +1,
+		_rsvd01 :31-29 +1;
 	};
 };
 
@@ -551,10 +593,10 @@ struct mc_seq_misc3_gddr5 { // see MC_SEQ_MISC3_6_0
 };
 struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
 	union gddr5_mr8 gddr5_mr8;
-	uint16_t reserved; // nonzero. unsure
+	union gddr5_mr7 gddr5_mr7; // guess, might be wrong
 };
 
-struct mc_block_islands_gddr5_timings {
+struct mc_block_islands_gddr5_timings { // 52 bytes
 	// Northern, Southern, Sea, Volcanic Islands
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
@@ -569,6 +611,19 @@ struct mc_block_islands_gddr5_timings {
 	struct mc_seq_misc8_gddr5      mc_seq_misc8;
 	union mc_arb_dram_timing_6_0   mc_arb_dram_timing;
 	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
+};
+
+struct mc_block_fiji_timings { // 40 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_cas_timing_6_0_o    mc_seq_cas_timing;
+	union mc_seq_misc_timing2_6_0_o  mc_seq_misc_timing2;
+	union mc_seq_rd_ctl_d0_6_0       mc_seq_rd_ctl_d0;
+	union mc_seq_wr_ctl_d0_6_0       mc_seq_wr_ctl_d0;
+	union mc_seq_cmd_6_0_o           mc_seq_cmd;
+	union mc_seq_rxframing_edc_d1_6_0  mc_seq_rxframing_edc_d1;
+	union mc_arb_dram_timing_6_0     mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0    mc_arb_dram_timing2;
+	union mc_arb_burst_time_8_1      mc_arb_burst_time;
 };
 
 struct mc_block_polaris_timings { // 52 bytes.

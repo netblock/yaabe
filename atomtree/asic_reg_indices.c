@@ -3,11 +3,14 @@
 #include <string.h>
 
 uint8_t
-assert_reg_index(
+regcmp(
 		const struct atom_init_reg_index_format* const index,
 		const uint16_t* const expectation
 		) {
 	for (uint8_t i=0; expectation[i] != END_OF_REG_INDEX_BLOCK; i++) {
+		assert(index[i].RegIndex != END_OF_REG_INDEX_BLOCK);
+		// expectation has no end
+
 		if (index[i].RegIndex != expectation[i]) {
 			return 0;
 		}
@@ -16,7 +19,7 @@ assert_reg_index(
 }
 
 int16_t
-register_set_bsearch(
+regset_bsearch_left(
 		const struct register_set* const reg_set,
 		const uint16_t address
 		) {
@@ -43,6 +46,39 @@ register_set_bsearch(
 		return -1;
 	} else {
 		return left;
+	}
+}
+
+int16_t
+regset_bsearch_right(
+		const struct register_set* const reg_set,
+		const uint16_t address
+		) {
+	// binary search for register_set
+	// as a result, it assumes the array is sorted.
+	// this algo also finds the rightmost if there are duplicates
+
+	// reserve leftmost bit as flag
+
+	const struct register_set_entry* const set_array = reg_set->entries;
+	uint16_t left = 0;
+	uint16_t mid;
+	uint16_t right = reg_set->num_reg_set_addresses;
+	while (left != right) {
+		mid = (left + right) >> 1;  
+		if (address < set_array[mid].address) {
+			right = mid;
+		} else {
+			left = mid + 1;
+		}
+	}
+	// left==right.
+	// left==mid==right and will be off by +1, if rightside element is unique
+	// left == (mid+1) if right-side element is not unique.
+	if (left == reg_set->num_reg_set_addresses) {
+		return -1;
+	} else {
+		return left - 1;
 	}
 }
 
@@ -84,15 +120,16 @@ register_set_print_tables(
 	int16_t set_loc;
 	uint16_t rii, unions;
 
+
+	uint16_t val;
+
 	printf(u8"\nSTART\n\n");
 	// print assert-reg-index body
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
-		set_loc = register_set_bsearch(reg_set, register_index[rii].RegIndex);
-
+		set_loc = regset_bsearch_right(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
-
-		printf(u8"\t%s,\n", reg_set->entries[set_loc].name);
+		printf(u8"\t%s\n", reg_set->entries[set_loc].name);
 	}
 
 	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
@@ -103,7 +140,7 @@ register_set_print_tables(
 			// first nibble is byte count of reg entry; if not 4, skip
 			continue;
 		}
-		set_loc = register_set_bsearch(reg_set, register_index[rii].RegIndex);
+		set_loc = regset_bsearch_right(reg_set, register_index[rii].RegIndex);
 
 		// lop off prefix
 		reg_name = reg_set->entries[set_loc].name;

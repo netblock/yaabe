@@ -677,19 +677,27 @@ atomtree_populate_init_mem_clk_patch(
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
-		if (assert_reg_index(index, mc_block_polaris_timings_addresses)) {
+		if (regcmp(index, mc_block_polaris_timings_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
-		} else {
-			assert(assert_reg_index(
-				index, mc_block_islands_gddr5_timings_addresses
-			));
+		} else if (regcmp(index, mc_block_islands_gddr5_timings_addresses)
+				|| regcmp(index, mc_block_islands_gddr5_timings_addresses_type2)
+				) {
 			// Northern, Southern, Sea, Volcanic Islands
 			mem_clk_patch->reg_set = timings_set_islands;
 		}
+	} else if (10 == mem_clk_patch->num_index) {
+		if (regcmp(index, mc_block_fiji_timings_addresses)) {
+			mem_clk_patch->reg_set = timings_set_fiji;
+		}
 	}
-	//register_set_print_tables(mem_clk_patch, &GMC_reg_set);
-	assert(mem_clk_patch->reg_set); // unknown timings sequence
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
+	#ifndef NDEBUG
+	register_set_print_tables(mem_clk_patch, &GMC_reg_set);
+	if (0 == mem_clk_patch->reg_set) {
+		register_set_print_tables(mem_clk_patch, &GMC_reg_set);
+		assert(mem_clk_patch->reg_set); // unknown timings sequence
+	}
+	#endif
 
 	if (generate_atui) {
 		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
@@ -708,6 +716,11 @@ atomtree_populate_init_mem_clk_patch(
 				case timings_set_islands:
 					atui_strap_func = PPATUI_FUNC_NAME(
 						mc_block_islands_gddr5_timings
+					);
+					break;
+				case timings_set_fiji:
+					atui_strap_func = PPATUI_FUNC_NAME(
+						mc_block_fiji_timings
 					);
 					break;
 				case timings_set_polaris:

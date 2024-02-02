@@ -527,6 +527,52 @@ PPATUI_FUNCIFY(union, mc_seq_misc_timing_6_0_o, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
+PPATUI_FUNCIFY(union, mc_seq_misc_timing2_6_0_o, atui_nullstruct,
+	(bios->raw_data, u8"mc_seq_misc_timing2",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"pa2rdata",  3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"pa2wdata",  7,4, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"faw",      12,8, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tredc",    15,13, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"twedc",    20,16, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"t32aw",    24,21, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"_rsvd02",  27,25, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"twdatatr", 31,28, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_seq_cmd_6_0_o, atui_nullstruct,
+	(bios->raw_data, u8"mc_seq_cmd",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"adr",      15,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"mop",      19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"end",      20,20, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"csb",      22,21, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"_rsvd00",  23,23, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chan0",    24,24, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chan1",    25,25, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chan2",    26,26, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chan3",    27,27, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"adr_msb1", 28,28, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"adr_msb0", 29,29, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"_rsvd02",  31,30, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(union, mc_seq_cas_timing_6_0_o, atui_nullstruct,
+	(bios->raw_data, u8"mc_seq_cas_timing",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"tnopw",    4,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tnopr",    9,5, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tr2w",    14,10, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tr2r",    18,15, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tw2r",    23,19, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"tcl",     28,24, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"_rsvd01", 31,29, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 
 PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	(bios->block_id, u8"block_id",
@@ -563,7 +609,7 @@ PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	),
 	(bios->mc_seq_misc1.gddr5_mr0, u8"gddr5_mr0",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr0),
-		((LANG_ENG, u8"seq_misc1"))
+		(ATUI_NODESCR)
 	),
 	(bios->mc_seq_misc1.gddr5_mr1, u8"gddr5_mr1",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr1),
@@ -571,18 +617,19 @@ PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	),
 	(bios->mc_seq_misc3.gddr5_mr4, u8"gddr5_mr4",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr4),
-		((LANG_ENG, u8"seq_misc3"))
+		(ATUI_NODESCR)
 	),
 	(bios->mc_seq_misc3.gddr5_mr5, u8"gddr5_mr5",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr5),
 		(ATUI_NODESCR)
 	),
+	(bios->mc_seq_misc8.gddr5_mr7, u8"gddr5_mr7",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr7),
+		(ATUI_NODESCR)
+	),
 	(bios->mc_seq_misc8.gddr5_mr8, u8"gddr5_mr8",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr8),
-		((LANG_ENG, u8"seq_misc8"))
-	),
-	(bios->mc_seq_misc8.reserved, u8"reserved",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_NODESCR)
 	),
 	(bios->mc_arb_dram_timing, u8"mc_arb_dram_timing",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing_6_0),
@@ -594,8 +641,50 @@ PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	)
 )
 
+PPATUI_FUNCIFY(struct, mc_block_fiji_timings, atui_nullstruct,
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_cas_timing, u8"mc_seq_cas_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_cas_timing_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing2, u8"mc_seq_misc_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing2_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_rd_ctl_d0, u8"mc_seq_rd_ctl_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_rd_ctl_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl_d0, u8"mc_seq_wr_ctl_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_cmd, u8"mc_seq_cmd",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_cmd_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_rxframing_edc_d1, u8"mc_seq_rxframing_edc_d1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_rxframing_edc_d1_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing, u8"mc_arb_dram_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing2, u8"mc_arb_dram_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_burst_time, u8"mc_arb_burst_time",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_burst_time_8_1),
+		(ATUI_NODESCR)
+	)
+)
 
-PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atomtree_vram_info_header_v2_2,
+PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -644,12 +733,13 @@ PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atomtree_vram_info_header_v2_2,
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr5),
 		(ATUI_NODESCR)
 	),
+	(bios->mc_seq_misc8.gddr5_mr7, u8"gddr5_mr7",
+		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr7),
+		(ATUI_NODESCR)
+	),
 	(bios->mc_seq_misc8.gddr5_mr8, u8"gddr5_mr8",
 		(ATUI_NODISPLAY, ATUI_INLINE, gddr5_mr8),
 		((LANG_ENG, u8"seq_misc8"))
-	),
-	(bios->mc_seq_misc8.reserved, u8"reserved",
-		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->mc_arb_dram_timing, u8"mc_arb_dram_timing",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing_6_0),

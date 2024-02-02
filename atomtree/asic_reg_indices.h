@@ -32,7 +32,12 @@ struct register_set {
 	},
 
 int16_t
-register_set_bsearch(
+regset_bsearch_left(
+		const struct register_set* reg_set,
+		uint16_t address
+		);
+int16_t
+regset_bsearch_right(
 		const struct register_set* reg_set,
 		uint16_t address
 		);
@@ -43,9 +48,9 @@ register_set_print_tables(
 		);
 
 
-
+// compare register index sequences. expectation asserts END_OF_REG_INDEX_BLOCK
 uint8_t
-assert_reg_index(
+regcmp(
 		const struct atom_init_reg_index_format* index,
 		const uint16_t* expectation
 		);
@@ -66,6 +71,35 @@ static const uint16_t mc_block_islands_gddr5_timings_addresses[] = {
 	mmMC_SEQ_MISC8_6_0,
 	mmMC_ARB_DRAM_TIMING_6_0,
 	mmMC_ARB_DRAM_TIMING2_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
+static const uint16_t mc_block_islands_gddr5_timings_addresses_type2[] = {
+	mmMC_SEQ_WR_CTL_D0_6_0,
+	mmMC_SEQ_WR_CTL_D1_6_0,
+	mmMC_SEQ_WR_CTL_2_6_0,
+	mmMC_SEQ_RAS_TIMING_6_0,
+	mmMC_SEQ_CAS_TIMING_6_0,
+	mmMC_SEQ_MISC_TIMING_6_0,
+	mmMC_SEQ_MISC_TIMING2_6_0,
+	mmMC_SEQ_PMG_TIMING_6_0,
+	mmMC_SEQ_MISC1_6_0,
+	mmMC_SEQ_RESERVE_M_6_0,
+	mmMC_SEQ_MISC8_6_0,
+	mmMC_ARB_DRAM_TIMING_6_0,
+	mmMC_ARB_DRAM_TIMING2_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
+
+static const uint16_t mc_block_fiji_timings_addresses[] = {
+	mmMC_SEQ_CAS_TIMING_6_0,
+	mmMC_SEQ_MISC_TIMING2_6_0,
+	mmMC_SEQ_RD_CTL_D0_6_0,
+	mmMC_SEQ_WR_CTL_D0_6_0,
+	mmMC_SEQ_CMD_6_0,
+	mmMC_SEQ_RXFRAMING_EDC_D1_6_0,
+	mmMC_ARB_DRAM_TIMING_6_0,
+	mmMC_ARB_DRAM_TIMING2_6_0,
+	mmMC_ARB_BURST_TIME_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
 
