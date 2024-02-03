@@ -17,7 +17,6 @@ regcmp(
 	}
 	return 1;
 }
-
 int16_t
 regset_bsearch_left(
 		const struct register_set* const reg_set,
@@ -102,8 +101,19 @@ is_number(
 void
 register_set_print_tables(
 		const struct atomtree_init_reg_block* const at_regblock,
-		const struct register_set* const reg_set
+		const struct register_set* const reg_set,
+		const bool newest
 		) {
+	int16_t (* regset_bsearch)(
+			const struct register_set* reg_set,
+			uint16_t address
+			); // function pointer
+	if (newest) {
+		regset_bsearch = regset_bsearch_right;
+	} else {
+		regset_bsearch = regset_bsearch_left;
+	}
+
 	const struct atom_init_reg_index_format* const register_index =
 		at_regblock->register_index;
 	const char8_t* const struct_entry = u8"\tunion %s  %s;\n";
@@ -126,10 +136,10 @@ register_set_print_tables(
 	printf(u8"\nSTART\n\n");
 	// print assert-reg-index body
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
-		set_loc = regset_bsearch_right(reg_set, register_index[rii].RegIndex);
+		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
-		printf(u8"\t%s\n", reg_set->entries[set_loc].name);
+		printf(u8"\t%s,\n", reg_set->entries[set_loc].name);
 	}
 
 	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
@@ -140,7 +150,7 @@ register_set_print_tables(
 			// first nibble is byte count of reg entry; if not 4, skip
 			continue;
 		}
-		set_loc = regset_bsearch_right(reg_set, register_index[rii].RegIndex);
+		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 
 		// lop off prefix
 		reg_name = reg_set->entries[set_loc].name;

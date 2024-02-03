@@ -692,9 +692,8 @@ atomtree_populate_init_mem_clk_patch(
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
 	#ifndef NDEBUG
-	register_set_print_tables(mem_clk_patch, &GMC_reg_set);
 	if (0 == mem_clk_patch->reg_set) {
-		register_set_print_tables(mem_clk_patch, &GMC_reg_set);
+		register_set_print_tables(mem_clk_patch, &GMC_reg_set, true);
 		assert(mem_clk_patch->reg_set); // unknown timings sequence
 	}
 	#endif
@@ -1442,6 +1441,8 @@ atomtree_populate_vram_info_v1_3(
 
 	atui_branch* atui_memclkpatch = NULL;
 	if (vi13->leaves->MemClkPatchTblOffset) {
+		// TODO at least for R600, what is in here isn't timings, and gmc.h
+		// doesn't decode them right.
 		vi13->mem_clk_patch.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemClkPatchTblOffset;
 
@@ -1504,6 +1505,7 @@ atomtree_populate_vram_info_v1_4(
 
 	atui_branch* atui_memclkpatch = NULL;
 	if (vi14->leaves->MemClkPatchTblOffset) {
+		// TODO See atomtree_populate_vram_info_v1_3
 		vi14->mem_clk_patch.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemClkPatchTblOffset;
 

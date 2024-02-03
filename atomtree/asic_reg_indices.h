@@ -44,7 +44,8 @@ regset_bsearch_right(
 void
 register_set_print_tables(
 		const struct atomtree_init_reg_block* at_regblock,
-		const struct register_set* reg_set
+		const struct register_set* reg_set,
+		bool newest // suggest oldest or newest if there's multiple versions
 		);
 
 
@@ -55,6 +56,53 @@ regcmp(
 		const uint16_t* expectation
 		);
 
+/******************************************************************************/
+// Address arrays from reg_index as a fingerprint for what struct to use.
+// see umctimings.h and gmc.h
+/******************************************************************************/
+
+static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = {
+	mmMC_ARB_PERF_CID_7_1,
+	mmMC_ARB_SNOOP_8_1,
+	mmMC_ARB_LAZY1_WR_6_0,
+	mmMC_ARB_AGE_RD_6_0,
+	mmMC_ARB_GRUB_8_1,
+	mmMC_ARB_GECC2_6_0,
+	mmMC_ARB_AGE_WR_6_0,
+	mmMC_ARB_RFSH_CNTL_6_0,
+	mmMC_ARB_RTT_CNTL0_6_0,
+	mmMC_ARB_RTT_CNTL1_6_0,
+	mmMC_ARB_REMREQ_6_0,
+	mmMC_ARB_REPLAY_6_0,
+	mmMC_ARB_RTT_CNTL2_6_0,
+	mmMC_ARB_RTT_DEBUG_6_0,
+	mmMC_ARB_RET_CREDITS_RD_6_0,
+	mmMC_ARB_RET_CREDITS_WR_6_0,
+	mmMC_ARB_RAMCFG_6_0,
+	mmMC_ARB_POP_6_0,
+	mmMC_ARB_CG_6_0,
+	mmMC_ARB_GRUB_REALTIME_WR_8_1,
+	END_OF_REG_INDEX_BLOCK
+};
+static const uint16_t mc_block_r600_gddr4_memclkpatch_addresses[] = {
+	mmMC_ARB_PERF_CID_7_1,
+	mmMC_ARB_SNOOP_8_1,
+	mmMC_ARB_LAZY1_WR_6_0,
+	mmMC_ARB_AGE_RD_6_0,
+	mmMC_ARB_GRUB_8_1,
+	mmMC_ARB_GECC2_6_0,
+	mmMC_ARB_AGE_WR_6_0,
+	mmMC_ARB_RFSH_CNTL_6_0,
+	mmMC_ARB_RTT_CNTL0_6_0,
+	mmMC_ARB_RTT_CNTL1_6_0,
+	mmMC_ARB_REMREQ_6_0,
+	mmMC_ARB_REPLAY_6_0,
+	mmMC_ARB_RTT_CNTL2_6_0,
+	mmMC_ARB_RTT_DEBUG_6_0,
+	mmMC_ARB_RET_CREDITS_RD_6_0,
+	mmMC_ARB_RET_CREDITS_WR_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
 
 static const uint16_t mc_block_islands_gddr5_timings_addresses[] = {
 	// Northern, Southern, Sea, Volcanic Islands
@@ -119,6 +167,8 @@ static const uint16_t mc_block_polaris_timings_addresses[] = {
 	mmMC_ARB_DRAM_TIMING2_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
+
+/******************************************************************************/
 
 #include "gmc_searchfield.h"
 
