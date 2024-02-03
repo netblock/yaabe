@@ -1700,7 +1700,8 @@ atomtree_populate_vram_info_v2_2(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi22_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_vrammodules
+			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, atui_phyinit,
+			atui_vrammodules
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_2,
 			NULL,  vi22,vi22->leaves,

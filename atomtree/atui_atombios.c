@@ -2293,7 +2293,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_v1_4, atomtree_vram_info_v1_4,
 		(ATUI_NODISPLAY, ATUI_INLINE, mem_dq_7_0_bit_remap),
 		(ATUI_NODESCR)
 	),
-	(bios->Reserved2, u8"Reserved2",
+	(bios->VID_PinsShift, u8"VID_PinsShift",
 		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
 	),
 	(bios->NumOfVRAMModule, u8"NumOfVRAMModule",

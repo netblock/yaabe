@@ -7541,7 +7541,7 @@ struct atom_vram_info_v1_4 {
 	uint16_t Reserved;
 	union mem_dq_7_0_byte_remap MemDQ7_0ByteRemap;
 	union mem_dq_7_0_bit_remap MemDQ7_0BitRemap;
-	uint8_t  Reserved2[4]; // VID_PinsShift 
+	uint8_t  VID_PinsShift[4];
 	uint8_t  NumOfVRAMModule;
 	struct atom_vram_module_v4 vram_module[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 	struct atom_init_reg_block MemPatch; // for allocation
