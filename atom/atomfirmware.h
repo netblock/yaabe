@@ -3491,6 +3491,46 @@ struct atom_umc_init_reg_block { // not literal, topological only
 };
 
 
+union dphy_bitremap0 {
+	uint32_t raw_data;
+	struct { uint32_t
+		bit0     :3-0 +1,
+		bit1     :7-4 +1,
+		bit2     :11-8 +1,
+		bit3    :15-12 +1,
+		bit4    :19-16 +1,
+		bit5    :23-20 +1,
+		bit6    :27-24 +1,
+		bit7    :31-28 +1;
+	};
+};
+union dphy_byteremap0 {
+	uint32_t raw_data;
+	struct { uint32_t
+		byte0     :3-0 +1,
+		byte1     :7-4 +1,
+		byte2     :11-8 +1,
+		byte3    :15-12 +1,
+		byte4    :19-16 +1,
+		byte5    :23-20 +1,
+		byte6    :27-24 +1,
+		byte7    :31-28 +1;
+	};
+};
+struct atom_gddr6_bit_byte_remap {
+	union dphy_byteremap0 dphy_byteremap; //mmUMC_DPHY_ByteRemap
+	union dphy_bitremap0 dphy_bitremap0;  //mmUMC_DPHY_BitRemap0
+	union dphy_bitremap0 dphy_bitremap1;  //mmUMC_DPHY_BitRemap1
+	union dphy_bitremap0 dphy_bitremap2;  //mmUMC_DPHY_BitRemap2
+	union dphy_bitremap0 aphy_bitremap0;  //mmUMC_APHY_BitRemap0
+	union dphy_bitremap0 aphy_bitremap1;  //mmUMC_APHY_BitRemap1
+	uint32_t phy_dram; // mmUMC_PHY_DRAM
+};
+struct atom_gddr6_dram_data_remap {
+	uint32_t table_size;
+	uint8_t  phyintf_ck_inverted[8]; // UMC_PHY_PHYINTF_CNTL.INV_CK
+	struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
+};
 
 struct atom_vram_module_v9 {
 	// Design Specific Values
@@ -3666,22 +3706,6 @@ struct atom_gddr6_ac_timing_v2_5 {
 	uint8_t  tREFTR;
 	uint8_t  VNDR;
 	uint8_t  reserved[9];
-};
-
-// TODO atombios.h has ATOM_DRAM_DATA_REMAP
-struct atom_gddr6_bit_byte_remap {
-	uint32_t dphy_byteremap; // mmUMC_DPHY_ByteRemap
-	uint32_t dphy_bitremap0; // mmUMC_DPHY_BitRemap0
-	uint32_t dphy_bitremap1; // mmUMC_DPHY_BitRemap1
-	uint32_t dphy_bitremap2; // mmUMC_DPHY_BitRemap2
-	uint32_t aphy_bitremap0; // mmUMC_APHY_BitRemap0
-	uint32_t aphy_bitremap1; // mmUMC_APHY_BitRemap1
-	uint32_t phy_dram;       // mmUMC_PHY_DRAM
-};
-struct atom_gddr6_dram_data_remap {
-	uint32_t table_size;
-	uint8_t  phyintf_ck_inverted[8]; // UMC_PHY_PHYINTF_CNTL.INV_CK
-	struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
 };
 
 struct atom_vram_info_header_v2_5 {

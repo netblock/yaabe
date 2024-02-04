@@ -573,6 +573,16 @@ PPATUI_FUNCIFY(union, mc_seq_cas_timing_6_0_o, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
+PPATUI_FUNCIFY(union, mc_seq_byte_remap_d0_6_0_o, atui_nullstruct,
+	(bios->raw_data, u8"mc_seq_byte_remap_d0_6_0_o",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"byte0",    1,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte1",    3,2, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte2",    5,4, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte3",    7,6, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
 
 PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	(bios->block_id, u8"block_id",

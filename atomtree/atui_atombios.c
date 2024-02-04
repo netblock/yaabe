@@ -1244,6 +1244,48 @@ PPATUI_FUNCIFY(union, bank_col_counts, atui_nullstruct,
 	)
 )
 
+PPATUI_FUNCIFY(struct, mc_atom_dram_data_remap, atui_nullstruct,
+	(bios->ByteRemapCh0, u8"ByteRemapCh0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_byte_remap_d0_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->ByteRemapCh1, u8"ByteRemapCh1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_byte_remap_d0_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte0BitRemapCh0, u8"Byte0BitRemapCh0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte1BitRemapCh0, u8"Byte1BitRemapCh0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte2BitRemapCh0, u8"Byte2BitRemapCh0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte3BitRemapCh0, u8"Byte3BitRemapCh0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte0BitRemapCh1, u8"Byte0BitRemapCh1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte1BitRemapCh1, u8"Byte1BitRemapCh1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte2BitRemapCh1, u8"Byte2BitRemapCh1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->Byte3BitRemapCh1, u8"Byte3BitRemapCh1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
+		(ATUI_NODESCR)
+	)
+)
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v1, atomtree_vram_module,
 	(bios->Reserved, u8"Reserved",
@@ -2239,36 +2281,6 @@ PPATUI_FUNCIFY(struct, atom_vram_info_v1_3, atomtree_vram_info_v1_3,
 	)
 )
 
-
-PPATUI_FUNCIFY(union, mem_dq_7_0_byte_remap, atui_nullstruct,
-	(bios->MemDQ7_0ByteRemap, u8"MemDQ7_0ByteRemap",
-		(ATUI_BIN, ATUI_BITFIELD, (
-			(u8"byte0", 0,0, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte1", 1,1, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte2", 2,2, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte3", 3,3, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte4", 4,4, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte5", 5,5, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte6", 6,6, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"byte7", 7,7, ATUI_DEC, (ATUI_NODESCR))
-		)), ((LANG_ENG, u8"DQ line byte remap"))
-	)
-)
-PPATUI_FUNCIFY(union, mem_dq_7_0_bit_remap, atui_nullstruct,
-	(bios->MemDQ7_0BitRemap, u8"MemDQ7_0BitRemap",
-		(ATUI_BIN, ATUI_BITFIELD, (
-			(u8"DQ0",  2,0, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ1",  5,3, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ2",  8,6, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ3", 11,9, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ4", 14,12, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ5", 17,15, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ6", 20,18, ATUI_DEC, (ATUI_NODESCR)),
-			(u8"DQ7", 23,21, ATUI_DEC, (ATUI_NODESCR))
-		)), (ATUI_NODESCR)
-	)
-)
-
 PPATUI_FUNCIFY(struct, atom_vram_info_v1_4, atomtree_vram_info_v1_4,
 	(bios->table_header, u8"table_header",
 		(ATUI_NAN, ATUI_INLINE, atom_common_table_header),
@@ -2286,11 +2298,11 @@ PPATUI_FUNCIFY(struct, atom_vram_info_v1_4, atomtree_vram_info_v1_4,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->MemDQ7_0ByteRemap, u8"MemDQ7_0ByteRemap",
-		(ATUI_NODISPLAY, ATUI_INLINE, mem_dq_7_0_byte_remap),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_byte_remap_d0_6_0_o),
 		(ATUI_NODESCR)
 	),
 	(bios->MemDQ7_0BitRemap, u8"MemDQ7_0BitRemap",
-		(ATUI_NODISPLAY, ATUI_INLINE, mem_dq_7_0_bit_remap),
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_bit_remap_b0_d0_6_0),
 		(ATUI_NODESCR)
 	),
 	(bios->VID_PinsShift, u8"VID_PinsShift",

@@ -119,6 +119,7 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 /******************************************************************************/
 // atui_umctimings.c / umctimings.h
 
+PPATUI_HEADERIFY(mc_seq_byte_remap_d0_6_0_o);
 PPATUI_HEADERIFY(mc_block_islands_gddr5_timings);
 PPATUI_HEADERIFY(mc_block_fiji_timings);
 PPATUI_HEADERIFY(mc_block_polaris_timings);
@@ -142,6 +143,7 @@ PPATUI_HEADERIFY(atom_firmware_info_v1_4);
 PPATUI_HEADERIFY(atom_firmware_info_v2_1);
 PPATUI_HEADERIFY(atom_firmware_info_v2_2);
 
+PPATUI_HEADERIFY(mc_atom_dram_data_remap);
 PPATUI_HEADERIFY(atom_init_reg_block);
 PPATUI_HEADERIFY(atom_vram_module_v1);
 PPATUI_HEADERIFY(atom_vram_module_v2);

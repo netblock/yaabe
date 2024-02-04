@@ -519,6 +519,15 @@ union mc_seq_cas_timing_6_0_o { // override of mc_seq_cas_timing_6_0 -> 9.0?
 		_rsvd01 :31-29 +1;
 	};
 };
+union mc_seq_byte_remap_d0_6_0_o {
+	uint8_t raw_data;
+	struct { uint32_t
+		byte0    :1-0 +1,
+		byte1    :3-2 +1,
+		byte2    :5-4 +1,
+		byte3    :7-6 +1;
+	};
+};
 
 
 /* From ElioVP's amdmemtweak. vals don't look right.

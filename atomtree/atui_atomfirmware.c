@@ -4442,30 +4442,60 @@ PPATUI_FUNCIFY(struct, atom_gfx_info_v3_0, atomtree_gfx_info,
 )
 
 
+
+PPATUI_FUNCIFY(union, dphy_bitremap0, atui_nullstruct,
+	(bios->raw_data, u8"dphy_bitremap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"bit0",     3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit1",     7,4, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit2",     11,8, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit3",    15,12, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit4",    19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit5",    23,20, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit6",    27,24, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"bit7",    31,28, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, dphy_byteremap0, atui_nullstruct,
+	(bios->raw_data, u8"dphy_byteremap",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"byte0",     3,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte1",     7,4, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte2",     11,8, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte3",    15,12, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte4",    19,16, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte5",    23,20, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte6",    27,24, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"byte7",    31,28, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+
 PPATUI_FUNCIFY(struct, atom_gddr6_bit_byte_remap, atui_nullstruct,
 	(bios->dphy_byteremap, u8"dphy_byteremap",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_DPHY_ByteRemap"))
+		(ATUI_NAN, ATUI_INLINE, dphy_byteremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap0, u8"dphy_bitremap0",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_DPHY_BitRemap0"))
+		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap1, u8"dphy_bitremap1",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_DPHY_BitRemap1"))
+		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap2, u8"dphy_bitremap2",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_DPHY_BitRemap2"))
+		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->aphy_bitremap0, u8"aphy_bitremap0",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_APHY_BitRemap0"))
+		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->aphy_bitremap1, u8"aphy_bitremap1",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"mmUMC_APHY_BitRemap1"))
+		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODESCR)
 	),
 	(bios->phy_dram, u8"phy_dram",
 		(ATUI_HEX, ATUI_NOFANCY),
@@ -4487,9 +4517,9 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 				(ATUI_NODESCR)
 			),
 			NULL, // deferred start
-			(sizeof(bios->bit_byte_remap)
-				/ sizeof(struct atom_gddr6_bit_byte_remap) // count
-			),
+			((bios->table_size - offsetof(typeof(*bios), bit_byte_remap))
+				/ sizeof(struct atom_gddr6_bit_byte_remap)
+			), // count
 			ATUI_NULL // enum
 		)), (ATUI_NODESCR)
 	)
@@ -4589,8 +4619,6 @@ PPATUI_FUNCIFY(struct, atom_umc_init_reg_block,
 		(ATUI_NODESCR)
 	)
 )
-
-
 
 PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 	(bios->memory_size, u8"memory_size",

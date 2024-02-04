@@ -7152,6 +7152,19 @@ union bank_col_counts {
 	};
 };
 
+struct mc_atom_dram_data_remap { // DQ remaping
+	union mc_seq_byte_remap_d0_6_0_o ByteRemapCh0;
+	union mc_seq_byte_remap_d0_6_0_o ByteRemapCh1;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte0BitRemapCh0;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte1BitRemapCh0;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte2BitRemapCh0;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte3BitRemapCh0;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte0BitRemapCh1;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte1BitRemapCh1;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte2BitRemapCh1;
+	union mc_seq_bit_remap_b0_d0_6_0 Byte3BitRemapCh1;
+};
+
 struct atom_vram_module_v1 {
 	uint32_t Reserved;
 	uint16_t EMRSValue;
@@ -7493,54 +7506,13 @@ struct atom_vram_info_v1_3 {
 
 //#define ATOM_VRAM_INFO_LAST ATOM_VRAM_INFO_V3
 
-union mem_dq_7_0_byte_remap { // DQ line byte remap
-	uint8_t MemDQ7_0ByteRemap;
-	struct { uint8_t
-		byte0 :0-0 +1,
-		byte1 :1-1 +1,
-		byte2 :2-2 +1,
-		byte3 :3-3 +1,
-		byte4 :4-4 +1,
-		byte5 :5-5 +1,
-		byte6 :6-6 +1,
-		byte7 :7-7 +1;
-	};
-};
-
-union mem_dq_7_0_bit_remap {
-	uint32_t MemDQ7_0BitRemap;
-	struct { uint32_t
-		DQ0  :2-0 +1,
-		DQ1  :5-3 +1,
-		DQ2  :8-6 +1,
-		DQ3 :11-9 +1,
-		DQ4 :14-12 +1,
-		DQ5 :17-15 +1,
-		DQ6 :20-18 +1,
-		DQ7 :23-21 +1;
-	};
-};
-// TODO hook up vram_info v2.3 and v2.4 to this, for atui
-struct atom_dram_data_remap {
-	uint8_t  ByteRemapCh0;
-	uint8_t  ByteRemapCh1;
-	uint32_t Byte0BitRemapCh0;
-	uint32_t Byte1BitRemapCh0;
-	uint32_t Byte2BitRemapCh0;
-	uint32_t Byte3BitRemapCh0;
-	uint32_t Byte0BitRemapCh1;
-	uint32_t Byte1BitRemapCh1;
-	uint32_t Byte2BitRemapCh1;
-	uint32_t Byte3BitRemapCh1;
-};
-
 struct atom_vram_info_v1_4 {
 	struct atom_common_table_header table_header;
 	uint16_t MemAdjustTblOffset;   // offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting
 	uint16_t MemClkPatchTblOffset; // offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting
 	uint16_t Reserved;
-	union mem_dq_7_0_byte_remap MemDQ7_0ByteRemap;
-	union mem_dq_7_0_bit_remap MemDQ7_0BitRemap;
+	union mc_seq_byte_remap_d0_6_0_o MemDQ7_0ByteRemap;
+	union mc_seq_bit_remap_b0_d0_6_0 MemDQ7_0BitRemap;
 	uint8_t  VID_PinsShift[4];
 	uint8_t  NumOfVRAMModule;
 	struct atom_vram_module_v4 vram_module[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
