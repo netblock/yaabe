@@ -658,10 +658,72 @@ atomtree_populate_init_reg_block(
 	return atui_regblock;
 }
 
+
+static void
+get_memory_vendor_part_strs(
+		const struct atomtree_vram_module* const vram_module,
+		const enum atomtree_common_version vram_module_ver,
+		const char8_t** const vendor_part_output
+		) {
+	union memory_vendor_id vendor_rev_id;
+	vendor_part_output[1] = NULL;
+	switch (vram_module_ver) {
+		case v1_1:
+			 vendor_rev_id = vram_module->v1_1->MemoryVendorID;
+			 break;
+		case v1_2:
+			 vendor_rev_id = vram_module->v1_2->MemoryVendorID;
+			 break;
+		case v1_3:
+			 vendor_rev_id = vram_module->v1_3->MemoryVendorID;
+			 break;
+		case v1_4:
+			 vendor_rev_id = vram_module->v1_4->MemoryVendorID;
+			 break;
+		case v1_5:
+			 vendor_rev_id = vram_module->v1_5->MemoryVendorID;
+			 break;
+		case v1_6:
+			 vendor_rev_id = vram_module->v1_6->MemoryVendorID;
+			 break;
+		case v1_7:
+			 vendor_rev_id = vram_module->v1_7->MemoryVendorID;
+			 vendor_part_output[1] = vram_module->v1_7->strMemPNString;
+			 break;
+		case v1_8:
+			 vendor_rev_id = vram_module->v1_8->MemoryVendorID;
+			 vendor_part_output[1] = vram_module->v1_8->strMemPNString;
+			 break;
+		case v1_9:
+			 vendor_rev_id = vram_module->v1_9->vendor_rev_id;
+			 vendor_part_output[1] = vram_module->v1_9->dram_pnstring;
+			 break;
+		case v1_10:
+			 vendor_rev_id = vram_module->v1_10->vendor_rev_id;
+			 vendor_part_output[1] = vram_module->v1_10->dram_pnstring;
+			 break;
+		case v1_11:
+			 vendor_rev_id = vram_module->v1_11->vendor_rev_id;
+			 vendor_part_output[1] = vram_module->v1_11->dram_pnstring;
+			 break;
+		case v3_0:
+			 vendor_rev_id = vram_module->v3_0->dram_vendor_id;
+			 vendor_part_output[1] = vram_module->v3_0->dram_pnstring;
+			 break;
+		default: assert(0);
+	}
+	const struct atui_enum* const vendors = 
+		&PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e);
+	assert(vendor_rev_id.vendor_code < vendors->num_entries);
+	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
+}
+
 static atui_branch*
 atomtree_populate_init_mem_clk_patch(
 		struct atomtree_init_reg_block* const mem_clk_patch,
-		const bool generate_atui
+		const bool generate_atui,
+		const struct atomtree_vram_module* const vram_modules,
+		const enum atomtree_common_version vram_module_ver
 		) {
 	atui_branch* const atui_memclkpatch = atomtree_populate_init_reg_block(
 		mem_clk_patch, generate_atui, 1
@@ -731,15 +793,31 @@ atomtree_populate_init_mem_clk_patch(
 					assert(0);
 					break;
 			}
+			const char8_t* vendor_part[2];
 			for (uint8_t i = 0; i < mem_clk_patch->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
-				sprintf(atui_strap->name, u8"%s (%u MHz)",
-					atui_strap->varname,
-					(data_blocks[i]->block_id.mem_clock_range / 100)
-				);
-				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 				ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
+
+				get_memory_vendor_part_strs(
+					&(vram_modules[data_blocks[i]->block_id.mem_block_id]),
+					vram_module_ver,
+					vendor_part
+				);
+				if (v1_7 <= vram_module_ver) {
+					sprintf(atui_strap->name, u8"Timings %s (%s): %u MHz",
+						vendor_part[1],
+						vendor_part[0],
+						(data_blocks[i]->block_id.mem_clock_range / 100)
+					);
+				} else {
+					// atom_vram_module_v6 and older don't have part strings
+					sprintf(atui_strap->name, u8"Timings %s %u MHz",
+						vendor_part[0],
+						(data_blocks[i]->block_id.mem_clock_range / 100)
+					);
+				}
+				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 			}
 			if (mem_clk_patch->num_data_entries) {
 				strcpy(atui_mem_timings->name, atui_strap->varname);
@@ -1565,17 +1643,6 @@ atomtree_populate_vram_info_v2_1(
 		vi21->mem_adjust_table.leaves = NULL;
 	}
 
-	atui_branch* atui_memclkpatch = NULL;
-	if (vi21->leaves->MemClkPatchTblOffset) {
-		vi21->mem_clk_patch.leaves =
-			(void*)vi21->leaves + vi21->leaves->MemClkPatchTblOffset;
-		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
-			&(vi21->mem_clk_patch), generate_atui
-		);
-	} else {
-		vi21->mem_clk_patch.leaves = NULL;
-	}
-
 	atui_branch* atui_perbytepreset = NULL;
 	if (vi21->leaves->PerBytePresetOffset) {
 		vi21->per_byte_preset.leaves =
@@ -1597,6 +1664,21 @@ atomtree_populate_vram_info_v2_1(
 		atui_vrammodules = atomtree_populate_vram_module(
 			vram_info, generate_atui
 		);
+	}
+
+	// populate memclkpatch after vram_modules to gather info for atui
+	atui_branch* atui_memclkpatch = NULL;
+	if (vi21->leaves->MemClkPatchTblOffset) {
+		vi21->mem_clk_patch.leaves =
+			(void*)vi21->leaves + vi21->leaves->MemClkPatchTblOffset;
+		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
+			&(vi21->mem_clk_patch),
+			generate_atui,
+			vi21->vram_modules,
+			vi21->vram_module_ver
+		);
+	} else {
+		vi21->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_vi = NULL;
@@ -1638,17 +1720,6 @@ atomtree_populate_vram_info_v2_2(
 		}
 	} else {
 		vi22->mem_adjust_table.leaves = NULL;
-	}
-
-	atui_branch* atui_memclkpatch = NULL;
-	if (vi22->leaves->MemClkPatchTblOffset) {
-		vi22->mem_clk_patch.leaves =
-			(void*)vi22->leaves + vi22->leaves->MemClkPatchTblOffset;
-		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
-			&(vi22->mem_clk_patch), generate_atui
-		);
-	} else {
-		vi22->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_mcadjpertile = NULL;
@@ -1697,6 +1768,21 @@ atomtree_populate_vram_info_v2_2(
 		);
 	}
 
+	// populate memclkpatch after vram_modules to gather info for atui
+	atui_branch* atui_memclkpatch = NULL;
+	if (vi22->leaves->MemClkPatchTblOffset) {
+		vi22->mem_clk_patch.leaves =
+			(void*)vi22->leaves + vi22->leaves->MemClkPatchTblOffset;
+		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
+			&(vi22->mem_clk_patch),
+			generate_atui,
+			vi22->vram_modules,
+			vi22->vram_module_ver
+		);
+	} else {
+		vi22->mem_clk_patch.leaves = NULL;
+	}
+
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi22_children[] = {
@@ -1735,68 +1821,6 @@ atomtree_populate_vram_info_v2_3(
 		}
 	} else {
 		vi23->mem_adjust_table.leaves = NULL;
-	}
-
-	atui_branch* atui_memclkpatch = NULL;
-	if (vi23->leaves->mem_clk_patch_tbloffset) {
-		vi23->mem_clk_patch.leaves =
-			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
-		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			&(vi23->mem_clk_patch), generate_atui, 1
-		);
-
-		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
-		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
-		if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct umc_block_vega10_timings)) {
-			vi23->uses_vega21_timings = false;
-		} else if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct umc_block_vega21_timings)) {
-			vi23->uses_vega21_timings = true;
-		} else {
-			assert(0);
-		}
-
-		if (generate_atui) {
-			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
-
-			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
-				atui_nullstruct, NULL,
-				NULL,NULL,  *vi23->num_timing_straps, NULL
-			);
-			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
-			if (vi23->uses_vega21_timings) {
-				strcpy(atui_mem_timings->name,
-					u8"umc_block_vega21_timings (uncertain)"
-				);
-				for (i=0; i < *vi23->num_timing_straps; i++) {
-					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega21_timings,
-						NULL,  NULL,&(vi23->vega21_timings[i]),  0,NULL
-					);
-					sprintf(tmp_branch->name, u8"%s (%i MHz)",
-						tmp_branch->varname,
-						(vi23->vega21_timings[i].block_id.mem_clock_range / 100)
-					);
-					ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
-				}
-			} else {
-				strcpy(atui_mem_timings->name,
-					u8"umc_block_vega10_timings (uncertain)"
-				);
-				for (i=0; i < *vi23->num_timing_straps; i++) {
-					tmp_branch = ATUI_MAKE_BRANCH(umc_block_vega10_timings,
-						NULL,  NULL,&(vi23->vega10_timings[i]),  0,NULL
-					);
-					sprintf(tmp_branch->name, u8"%s (%i MHz)",
-						tmp_branch->varname,
-						(vi23->vega10_timings[i].block_id.mem_clock_range / 100)
-					);
-					ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
-				}
-			} 
-		}
-	} else {
-		vi23->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_mcadjpertile = NULL;
@@ -1871,6 +1895,78 @@ atomtree_populate_vram_info_v2_3(
 		);
 	}
 
+	// populate memclkpatch after vram_modules to gather info for atui
+	atui_branch* atui_memclkpatch = NULL;
+	if (vi23->leaves->mem_clk_patch_tbloffset) {
+		vi23->mem_clk_patch.leaves =
+			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
+		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
+			&(vi23->mem_clk_patch), generate_atui, 1
+		);
+
+		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
+		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
+		if (vi23->mem_clk_patch.data_block_element_size
+			== sizeof(struct umc_block_vega10_timings)) {
+			vi23->uses_vega21_timings = false;
+		} else if (vi23->mem_clk_patch.data_block_element_size
+			== sizeof(struct umc_block_vega21_timings)) {
+			vi23->uses_vega21_timings = true;
+		} else {
+			assert(0);
+		}
+
+		if (generate_atui) {
+			const struct atomtree_umc_init_reg_block* const mem_clk_patch =
+				&(vi23->mem_clk_patch);
+			const struct atom_reg_setting_data_block* const* const data_blocks =
+				(const struct atom_reg_setting_data_block* const* const)
+				vi23->mem_clk_patch.data_blocks;
+
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
+				atui_nullstruct, NULL,
+				NULL,NULL, mem_clk_patch->num_data_blocks,NULL
+			);
+			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
+
+			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+			struct atui_funcify_args func_args = {0};
+			if (vi23->uses_vega21_timings) {
+				atui_strap_func = PPATUI_FUNC_NAME(umc_block_vega21_timings);
+			} else {
+				atui_strap_func = PPATUI_FUNC_NAME(umc_block_vega10_timings);
+			}
+			const char8_t* vendor_part[2];
+			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
+				func_args.suggestbios = data_blocks[i];
+				tmp_branch = atui_strap_func(&func_args);
+				ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
+
+				get_memory_vendor_part_strs(
+					&(vi23->vram_modules[
+						data_blocks[i]->block_id.mem_block_id
+					]),
+					vi23->vram_module_ver,
+					vendor_part
+				);
+				sprintf(tmp_branch->name, u8"Timings %s (%s) %u MHz",
+					vendor_part[1],
+					vendor_part[0],
+					(data_blocks[i]->block_id.mem_clock_range / 100)
+				);
+				assert(strlen(tmp_branch->name) < sizeof(tmp_branch->name));
+			}
+			if (mem_clk_patch->num_data_entries) {
+				strcpy(atui_mem_timings->name, tmp_branch->varname);
+			}
+		}
+	} else {
+		vi23->mem_clk_patch.leaves = NULL;
+		vi23->mem_timings = NULL;
+		vi23->num_timing_straps = NULL;
+	}
+
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi23_children[] = {
@@ -1911,48 +2007,6 @@ atomtree_populate_vram_info_v2_4(
 		}
 	} else {
 		vi24->mem_adjust_table.leaves = NULL;
-	}
-
-	atui_branch* atui_memclkpatch = NULL;
-	if (vi24->leaves->mem_clk_patch_tbloffset) {
-		vi24->mem_clk_patch.leaves =
-			(void*)vi24->leaves + vi24->leaves->mem_clk_patch_tbloffset;
-		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
-			&(vi24->mem_clk_patch), generate_atui, 1 // 1 for timings
-		);
-
-		assert(sizeof(struct umc_block_navi1_timings)
-			== vi24->mem_clk_patch.data_block_element_size
-		);
-		vi24->navi1_gddr6_timings = (
-			(struct umc_block_navi1_timings*) vi24->mem_clk_patch.data_blocks[0]
-		);
-		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
-
-		if (generate_atui) {
-			atui_branch* const atui_navi_timings = ATUI_MAKE_BRANCH(
-				atui_nullstruct,  u8"umc_block_navi1_timings",
-				NULL,NULL,  *vi24->num_timing_straps,NULL
-			);
-			struct umc_block_navi1_timings* timings = vi24->navi1_gddr6_timings;
-			for (i=0; i < *vi24->num_timing_straps; i++) {
-				tmp_branch = ATUI_MAKE_BRANCH(umc_block_navi1_timings,  NULL,
-					NULL,&(vi24->navi1_gddr6_timings[i]),  0,NULL
-				);
-				sprintf(tmp_branch->name, u8"%s (%i MHz)",
-					tmp_branch->varname,
-					(timings[i].block_id.mem_clock_range / 100)
-				);
-				ATUI_ADD_BRANCH(atui_navi_timings, tmp_branch);
-			}
-
-			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
-			ATUI_ADD_BRANCH(atui_memclkpatch, atui_navi_timings);
-		}
-	} else {
-		vi24->mem_clk_patch.leaves = NULL;
-		vi24->navi1_gddr6_timings = NULL;
-		vi24->num_timing_straps = 0;
 	}
 
 	atui_branch* atui_mcadjpertile = NULL;
@@ -2017,6 +2071,67 @@ atomtree_populate_vram_info_v2_4(
 		);
 	}
 
+	// populate memclkpatch after vram_modules to gather info for atui
+	atui_branch* atui_memclkpatch = NULL;
+	if (vi24->leaves->mem_clk_patch_tbloffset) {
+		vi24->mem_clk_patch.leaves =
+			(void*)vi24->leaves + vi24->leaves->mem_clk_patch_tbloffset;
+		atui_memclkpatch = atomtree_populate_umc_init_reg_block(
+			&(vi24->mem_clk_patch), generate_atui, 1
+		);
+
+		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
+		vi24->navi1_gddr6_timings = 
+			(struct umc_block_navi1_timings*)vi24->mem_clk_patch.data_blocks[0];
+
+		if (generate_atui) {
+			const struct atomtree_umc_init_reg_block* const mem_clk_patch =
+				&(vi24->mem_clk_patch);
+			const struct atom_reg_setting_data_block* const* const data_blocks =
+				(const struct atom_reg_setting_data_block* const* const)
+				vi24->mem_clk_patch.data_blocks;
+
+			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
+				atui_nullstruct, NULL,
+				NULL,NULL, mem_clk_patch->num_data_blocks,NULL
+			);
+			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
+
+			// to have similar topology like the rest
+			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+			atui_strap_func = PPATUI_FUNC_NAME(umc_block_navi1_timings);
+			struct atui_funcify_args func_args = {0};
+			const char8_t* vendor_part[2];
+			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
+				func_args.suggestbios = data_blocks[i];
+				tmp_branch = atui_strap_func(&func_args);
+				ATUI_ADD_BRANCH(atui_mem_timings, tmp_branch);
+
+				get_memory_vendor_part_strs(
+					&(vi24->vram_modules[
+						data_blocks[i]->block_id.mem_block_id
+					]),
+					vi24->vram_module_ver,
+					vendor_part
+				);
+				sprintf(tmp_branch->name, u8"Timings %s (%s) %u MHz",
+					vendor_part[1],
+					vendor_part[0],
+					(data_blocks[i]->block_id.mem_clock_range / 100)
+				);
+				assert(strlen(tmp_branch->name) < sizeof(tmp_branch->name));
+			}
+			if (mem_clk_patch->num_data_entries) {
+				strcpy(atui_mem_timings->name, tmp_branch->varname);
+			}
+		}
+	} else {
+		vi24->mem_clk_patch.leaves = NULL;
+		vi24->navi1_gddr6_timings = NULL;
+		vi24->num_timing_straps = NULL;
+	}
+
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi24_children[] = {
@@ -2055,34 +2170,6 @@ atomtree_populate_vram_info_v2_5(
 		}
 	} else {
 		vi25->mem_adjust_table.leaves = NULL;
-	}
-
-	atui_branch* atui_gddr6_ac_timings = NULL;
-	if (vi25->leaves->gddr6_ac_timing_offset) {
-		vi25->gddr6_ac_timings =
-			(void*)vi25->leaves + vi25->leaves->gddr6_ac_timing_offset;
-		for (i = 0; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
-		vi25->gddr6_acstrap_count = i;
-		if (generate_atui) {
-			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-				u8"atom_gddr6_ac_timing_v2_5",
-				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
-			);
-			struct atom_gddr6_ac_timing_v2_5* timings = vi25->gddr6_ac_timings;
-			for (i=0; i < vi25->gddr6_acstrap_count; i++) {
-				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
-					NULL,  NULL, &(vi25->gddr6_ac_timings[i]),  0,NULL
-				);
-				sprintf(tmp_branch->name, u8"%s (%u MHz)",
-					tmp_branch->varname,
-					(timings[i].block_id.mem_clock_range / 100)
-				);
-				ATUI_ADD_BRANCH(atui_gddr6_ac_timings, tmp_branch);
-			}
-		}
-	} else {
-		vi25->gddr6_ac_timings = NULL;
-		vi25->gddr6_acstrap_count = 0;
 	}
 
 	atui_branch* atui_mcadjpertile = NULL;
@@ -2160,6 +2247,47 @@ atomtree_populate_vram_info_v2_5(
 			vram_info, generate_atui
 		);
 	}
+
+	// populate the timings after vram_modules to gather info for atui
+	atui_branch* atui_gddr6_ac_timings = NULL;
+	if (vi25->leaves->gddr6_ac_timing_offset) {
+		vi25->gddr6_ac_timings =
+			(void*)vi25->leaves + vi25->leaves->gddr6_ac_timing_offset;
+		for (i = 0; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
+		vi25->gddr6_acstrap_count = i;
+
+		if (generate_atui) {
+			atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
+				u8"atom_gddr6_ac_timing_v2_5",
+				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
+			);
+			const struct atom_gddr6_ac_timing_v2_5* const timings =
+				vi25->gddr6_ac_timings;
+			const char8_t* vendor_part[2];
+			for (i=0; i < vi25->gddr6_acstrap_count; i++) {
+				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
+					NULL,  NULL,&(timings[i]),  0,NULL
+				);
+				ATUI_ADD_BRANCH(atui_gddr6_ac_timings, tmp_branch);
+
+				get_memory_vendor_part_strs(
+					&(vi25->vram_modules[timings[i].block_id.mem_block_id]),
+					vi25->vram_module_ver,
+					vendor_part
+				);
+				sprintf(tmp_branch->name, u8"Timings %s (%s) %u MHz",
+					vendor_part[1],
+					vendor_part[0],
+					(timings[i].block_id.mem_clock_range / 100)
+				);
+				assert(strlen(tmp_branch->name) < sizeof(tmp_branch->name));
+			}
+		}
+	} else {
+		vi25->gddr6_ac_timings = NULL;
+		vi25->gddr6_acstrap_count = 0;
+	}
+
 
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
