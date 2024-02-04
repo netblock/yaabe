@@ -3269,23 +3269,26 @@ union memory_vendor_id {
 #define ELIXIR   NANYA
 #define MEZZA    ELPIDA
 */
-enum GDDR_MEM_VENDOR_e { // Vendor codes as seen in GDDR specs
-	GDDR_GENERIC      = 0x0,
-	GDDR_SAMSUNG      = 0x1,
-	GDDR_INFINEON_QIMONDA_KRETON = 0x2,
-	GDDR_ELPIDA_MEZZA = 0x3,
-	GDDR_ETRON        = 0x4,
-	GDDR_NANYA_ELIXIR = 0x5,
-	GDDR_HYNIX        = 0x6,
-	GDDR_MOSEL_PROMOS = 0x7,
-	GDDR_WINBOND      = 0x8,
-	GDDR_ESMT         = 0x9,
-	GDDR_RESERVED_10  = 0xA, // GDDR5 is the last one with a sized list. GDDR6
-	GDDR_RESERVED_11  = 0xB, // made most irrelevant.
-	GDDR_RESERVED_12  = 0xC,
-	GDDR_RESERVED_13  = 0xD,
-	GDDR_RESERVED_14  = 0xE,
-	GDDR_MICRON       = 0xF,
+enum GDDR_MEM_VENDOR_e {
+	// Vendor codes as seen in GDDR specs. AMD usually uses some form of this.
+	// There are two vendor ID specs from JEDEC: JEP 106, and the 4-bit GDDR
+	// spec. Unfortunately, they're not compatible with each other.
+	GENERIC      = 0x0,
+	SAMSUNG      = 0x1,
+	INFINEON_QIMONDA_KRETON = 0x2,
+	ELPIDA_MEZZA = 0x3,
+	ETRON        = 0x4,
+	NANYA_ELIXIR = 0x5,
+	HYNIX        = 0x6,
+	MOSEL_PROMOS = 0x7,
+	WINBOND      = 0x8,
+	ESMT         = 0x9,
+	RESERVED_10  = 0xA, // GDDR5 is the last one with a sized list. GDDR6
+	RESERVED_11  = 0xB, // made most irrelevant.
+	RESERVED_12  = 0xC,
+	RESERVED_13  = 0xD,
+	RESERVED_14  = 0xE,
+	MICRON       = 0xF,
 };
 
 // MC_MISC0__MEMORY_TYPE_*   ??
