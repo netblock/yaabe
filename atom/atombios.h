@@ -7233,6 +7233,8 @@ struct atom_memory_timing_format_v0 {
 	uint8_t  tFAW;
 	uint8_t  tAOND;
 	uint16_t MR2; // flag to control memory timing calculation. bit0= control EMRS2 Infineon
+	// if it's GDDR5 (module's MemoryType), table is v1;
+	// u16 MR2 morphs into u8 flag + u8 tCCDL
 };
 
 struct atom_memory_timing_format_v1 {
@@ -7263,7 +7265,7 @@ struct atom_memory_timing_format_v1 {
 	uint8_t  tCKRSX;
 	uint8_t  tFAW32;
 	uint16_t  MR5;
-	uint8_t  Terminator;
+	uint8_t  Terminator; // if this is not 0xFF, it might go into v2.
 };
 
 struct atom_memory_timing_format_v2 {
@@ -7516,7 +7518,6 @@ struct atom_vram_info_v1_4 {
 	uint8_t  VID_PinsShift[4];
 	uint8_t  NumOfVRAMModule;
 	struct atom_vram_module_v4 vram_module[ATOM_MAX_NUMBER_OF_VRAM_MODULE]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
-	struct atom_init_reg_block MemPatch; // for allocation
 };
 
 struct atom_vram_info_header_v2_1 {

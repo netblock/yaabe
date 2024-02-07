@@ -292,8 +292,12 @@ struct atomtree_vram_module {
 		struct atom_vram_module_v11* v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
-	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
+	enum atomtree_common_version vram_module_ver;
+
 	enum atomtree_common_version gmc_bitfields_ver;
+
+	enum atomtree_common_version memory_timing_format_ver;
+	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
 
 	// v3.0
 	void* dram_info;
