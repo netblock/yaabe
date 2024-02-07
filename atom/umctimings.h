@@ -521,11 +521,27 @@ union mc_seq_cas_timing_6_0_o { // override of mc_seq_cas_timing_6_0 -> 9.0?
 };
 union mc_seq_byte_remap_d0_6_0_o {
 	uint8_t raw_data;
-	struct { uint32_t
+	struct { uint8_t
 		byte0    :1-0 +1,
 		byte1    :3-2 +1,
 		byte2    :5-4 +1,
 		byte3    :7-6 +1;
+	};
+};
+
+union mc_arb_ramcfg_7_0_o {
+	uint16_t raw_data;
+	struct { uint16_t
+		noofbank           :1-0 +1,
+		noofranks          :2-2 +1,
+		noofrows           :5-3 +1,
+		noofcols           :7-6 +1,
+		chansize           :8-8 +1,
+		burstlength        :9-9 +1,
+		rsv_2             :10-10 +1,
+		chansize_override :11-11 +1,
+		noofgroups        :12-12 +1,
+		rsv_4             :15-13 +1;
 	};
 };
 

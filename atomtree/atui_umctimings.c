@@ -559,7 +559,6 @@ PPATUI_FUNCIFY(union, mc_seq_cmd_6_0_o, atui_nullstruct,
 		)), (ATUI_NODESCR)
 	)
 )
-
 PPATUI_FUNCIFY(union, mc_seq_cas_timing_6_0_o, atui_nullstruct,
 	(bios->raw_data, u8"mc_seq_cas_timing",
 		(ATUI_BIN, ATUI_BITFIELD, (
@@ -574,12 +573,28 @@ PPATUI_FUNCIFY(union, mc_seq_cas_timing_6_0_o, atui_nullstruct,
 	)
 )
 PPATUI_FUNCIFY(union, mc_seq_byte_remap_d0_6_0_o, atui_nullstruct,
-	(bios->raw_data, u8"mc_seq_byte_remap_d0_6_0_o",
+	(bios->raw_data, u8"mc_seq_byte_remap_d0",
 		(ATUI_BIN, ATUI_BITFIELD, (
 			(u8"byte0",    1,0, ATUI_DEC, (ATUI_NODESCR)),
 			(u8"byte1",    3,2, ATUI_DEC, (ATUI_NODESCR)),
 			(u8"byte2",    5,4, ATUI_DEC, (ATUI_NODESCR)),
 			(u8"byte3",    7,6, ATUI_DEC, (ATUI_NODESCR))
+		)), (ATUI_NODESCR)
+	)
+)
+PPATUI_FUNCIFY(union, mc_arb_ramcfg_7_0_o, atui_nullstruct,
+	(bios->raw_data, u8"mc_arb_ramcfg",
+		(ATUI_BIN, ATUI_BITFIELD, (
+			(u8"noofbank",           1,0, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"noofranks",          2,2, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"noofrows",           5,3, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"noofcols",           7,6, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chansize",           8,8, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"burstlength",        9,9, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"rsv_2",             10,10, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"chansize_override", 11,11, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"noofgroups",        12,12, ATUI_DEC, (ATUI_NODESCR)),
+			(u8"rsv_4",             15,13, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )

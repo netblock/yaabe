@@ -3641,7 +3641,7 @@ struct atom_vram_module_v11 {
 	union gddr6_mr7 gddr6_mr7;
 	union gddr6_mr8 gddr6_mr8;
 
-	char8_t    dram_pnstring[40];  // part number end with '0'.
+	char8_t dram_pnstring[40]; // part number end with '0'.
 };
 
 struct atom_gddr6_ac_timing_v2_5 {

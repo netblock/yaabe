@@ -7148,7 +7148,8 @@ union bank_col_counts {
 	uint8_t BankCol;
 	struct { uint8_t
 		num_columns :1-0 +1, // encoded; actual = 8+n bits
-		num_banks   :3-2 +1; // encoded; actual = 2**(n+2) banks
+		num_banks   :3-2 +1, // encoded; actual = 2**(n+2) banks
+		rsvd0       :7-4 +1;
 	};
 };
 
@@ -7339,7 +7340,8 @@ struct atom_vram_module_v3 {
 struct atom_vram_module_v4 {
 	union mc_shared_chremap_6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
 	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
-	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	union mc_arb_ramcfg_7_0_o mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+
 	uint16_t Reserved;
 	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
 	enum atom_dgpu_vram_type MemoryType;
@@ -7367,7 +7369,8 @@ struct atom_vram_module_v4 {
 struct atom_vram_module_v5 {
 	union mc_shared_chremap_6_0 ChannelMapCfg;   // board dependent parameter: Channel combination
 	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
-	uint16_t PrivateReserved; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	union mc_arb_ramcfg_7_0_o mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+
 	uint16_t Reserved;
 	uint8_t  ExtMemoryID;     // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
 	enum atom_dgpu_vram_type MemoryType;
@@ -7396,8 +7399,7 @@ struct atom_vram_module_v5 {
 struct atom_vram_module_v6 {
 	union mc_shared_chremap_6_0 ChannelMapCfg;     // board dependent parameter: Channel combination
 	uint16_t ModuleSize;        // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
-	uint16_t PrivateReserved;   // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	union mc_arb_ramcfg_7_0_o mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
 	uint8_t  ExtMemoryID;       // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
 	enum atom_dgpu_vram_type MemoryType;
@@ -7430,7 +7432,8 @@ struct atom_vram_module_v7 {
 		union mc_shared_chremap_7_1 ChannelMapCfg_gmc7_1;
 	};
 	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
-	uint16_t PrivateReserved;    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	union mc_arb_ramcfg_7_0_o mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
 	uint8_t  ExtMemoryID;        // Current memory module ID
 	enum atom_dgpu_vram_type MemoryType;
@@ -7459,7 +7462,7 @@ struct atom_vram_module_v8 {
 // Design Specific Values
 	union mc_shared_chremap_7_1 ChannelMapCfg;
 	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
-	uint16_t McRamCfg;           // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+	union mc_arb_ramcfg_7_0_o mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
 	uint8_t  ExtMemoryID;        // Current memory module ID
 	enum atom_dgpu_vram_type MemoryType;

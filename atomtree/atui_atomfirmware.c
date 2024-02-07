@@ -4530,10 +4530,10 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 PPATUI_FUNCIFY(union, memory_vendor_id, atui_nullstruct,
 	(bios->memory_vendor_id, u8"memory_vendor_id",
 		(ATUI_BIN, ATUI_BITFIELD, (
-			(u8"vendor_code", 3,0, ATUI_DEC,
+			(u8"vendor_code", 3,0, ATUI_HEX,
 				((LANG_ENG, u8"GDDR vendor ID"))
 			),
-			(u8"revision",    7,4, ATUI_DEC, (ATUI_NODESCR))
+			(u8"revision",    7,4, ATUI_HEX, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -4661,7 +4661,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v9, atui_nullstruct,
 		((LANG_ENG, u8"CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
 	),
 	(bios->density, u8"density",
-		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
 		(ATUI_NODESCR)
 	),
 	(bios->tunningset_id, u8"tunningset_id",
@@ -4783,7 +4783,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v10, atomtree_vram_info_header_v2_4,
 		((LANG_ENG, u8"CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
 	),
 	(bios->density, u8"density",
-		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
 		(ATUI_NODESCR)
 	),
 	(bios->tunningset_id, u8"tunningset_id",
@@ -4917,7 +4917,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v11,
 		((LANG_ENG, u8"CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT"))
 	),
 	(bios->density, u8"density",
-		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
 		(ATUI_NODESCR)
 	),
 	(bios->tunningset_id, u8"tunningset_id",
@@ -5244,7 +5244,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_6,
 PPATUI_FUNCIFY(struct, atom_vram_module_v3_0,
 		atomtree_vram_info_header_v3_0,
 	(bios->density, u8"density",
-		(ATUI_DEC, ATUI_ENUM, DRAM_DENSITY_e),
+		(ATUI_HEX, ATUI_ENUM, DRAM_DENSITY_e),
 		(ATUI_NODESCR)
 	),
 	(bios->tunningset_id, u8"tunningset_id",

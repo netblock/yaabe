@@ -120,6 +120,7 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 // atui_umctimings.c / umctimings.h
 
 PPATUI_HEADERIFY(mc_seq_byte_remap_d0_6_0_o);
+PPATUI_HEADERIFY(mc_arb_ramcfg_7_0_o);
 PPATUI_HEADERIFY(mc_block_islands_gddr5_timings);
 PPATUI_HEADERIFY(mc_block_fiji_timings);
 PPATUI_HEADERIFY(mc_block_polaris_timings);

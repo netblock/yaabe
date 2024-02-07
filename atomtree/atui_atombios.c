@@ -1239,7 +1239,8 @@ PPATUI_FUNCIFY(union, bank_col_counts, atui_nullstruct,
 			),
 			(u8"num_banks",   3,2, ATUI_DEC,
 				((LANG_ENG, u8"encoded; actual = 2**(n+2) banks"))
-			)
+			),
+			(u8"rsvd0",       7,4, ATUI_DEC, (ATUI_NODESCR))
 		)), (ATUI_NODESCR)
 	)
 )
@@ -1796,9 +1797,9 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
 	),
-	(bios->PrivateReserved, u8"PrivateReserved",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	(bios->mc_arb_ramcfg, u8"mc_arb_ramcfg",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_ramcfg_7_0_o),
+		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
 	),
 	(bios->Reserved, u8"Reserved",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1879,9 +1880,9 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v5, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
 	),
-	(bios->PrivateReserved, u8"PrivateReserved",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	(bios->mc_arb_ramcfg, u8"mc_arb_ramcfg",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_ramcfg_7_0_o),
+		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
 	),
 	(bios->Reserved, u8"Reserved",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -1968,9 +1969,9 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v6, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE"))
 	),
-	(bios->PrivateReserved, u8"PrivateReserved",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS"))
+	(bios->mc_arb_ramcfg, u8"mc_arb_ramcfg",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_ramcfg_7_0_o),
+		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
 	),
 	(bios->Reserved, u8"Reserved",
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
@@ -2053,9 +2054,9 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"Size of ATOM_VRAM_MODULE_V7"))
 	),
-	(bios->PrivateReserved, u8"PrivateReserved",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
+	(bios->mc_arb_ramcfg, u8"mc_arb_ramcfg",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_ramcfg_7_0_o),
+		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
 	),
 	(bios->EnableChannels, u8"EnableChannels",
 		(ATUI_HEX, ATUI_NOFANCY),
@@ -2150,9 +2151,9 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"Size of ATOM_VRAM_MODULE_V7"))
 	),
-	(bios->McRamCfg, u8"McRamCfg",
-		(ATUI_HEX, ATUI_NOFANCY),
-		((LANG_ENG, u8"MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
+	(bios->mc_arb_ramcfg, u8"mc_arb_ramcfg",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_ramcfg_7_0_o),
+		((LANG_ENG, u8"BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"))
 	),
 	(bios->EnableChannels, u8"EnableChannels",
 		(ATUI_HEX, ATUI_NOFANCY),
