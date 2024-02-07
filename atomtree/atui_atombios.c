@@ -1508,11 +1508,11 @@ PPATUI_FUNCIFY(struct, atom_memory_timing_format_v1, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
 	),
-	(bios->MRS, u8"MRS",
+	(bios->MR0, u8"MR0",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, u8"mode register"))
 	),
-	(bios->EMRS, u8"EMRS",
+	(bios->MR1, u8"MR1",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, u8"extended mode register"))
 	),
@@ -1596,11 +1596,11 @@ PPATUI_FUNCIFY(struct, atom_memory_timing_format_v2, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing"))
 	),
-	(bios->MRS, u8"MRS",
+	(bios->MR0, u8"MR0",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, u8"mode register"))
 	),
-	(bios->EMRS, u8"EMRS",
+	(bios->MR1, u8"MR1",
 		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, u8"extended mode register"))
 	),

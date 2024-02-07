@@ -7233,15 +7233,16 @@ struct atom_memory_timing_format_v0 {
 	uint8_t  tPDIX;
 	uint8_t  tFAW;
 	uint8_t  tAOND;
-	uint16_t MR2; // flag to control memory timing calculation. bit0= control EMRS2 Infineon
-	// if it's GDDR5 (module's MemoryType), table is v1;
-	// u16 MR2 morphs into u8 flag + u8 tCCDL
+	union {
+		uint16_t MR2;  // non-G DDR2/DDR3 only.
+		uint16_t flag; // if GDDR, if non-zero, move into v1.
+		// (flag non-zeros by GDDR tCCDL)
+	};
 };
-
 struct atom_memory_timing_format_v1 {
 	uint32_t ClkRange; // memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing
-	uint16_t MRS;      // mode register
-	uint16_t EMRS;     // extended mode register
+	uint16_t MR0; // mode register
+	uint16_t MR1; // extended mode register
 	uint8_t  CL;
 	uint8_t  WL;
 	uint8_t  tRAS;
@@ -7266,13 +7267,13 @@ struct atom_memory_timing_format_v1 {
 	uint8_t  tCKRSX;
 	uint8_t  tFAW32;
 	uint16_t  MR5;
-	uint8_t  Terminator; // if this is not 0xFF, it might go into v2.
+	uint8_t  Terminator; // if this is not 0xFF, go into v2.
+	// MR5 beomes MR4; Terminator becomes lo of MR5.
 };
-
 struct atom_memory_timing_format_v2 {
 	uint32_t ClkRange; // memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing
-	uint16_t MRS;      // mode register
-	uint16_t EMRS;     // extended mode register
+	uint16_t MR0; // mode register
+	uint16_t MR1; // extended mode register
 	uint8_t  CL;
 	uint8_t  WL;
 	uint8_t  tRAS;
@@ -7301,7 +7302,13 @@ struct atom_memory_timing_format_v2 {
 	uint8_t  Terminator;
 	uint8_t  Reserved;
 };
-
+union atom_memory_timing_format {
+	// move to v1 if v0.MR2 is non-0 and not DDR2/DDR3.
+	// move to v2 if v1.Terminator is not 0xFF.
+	struct atom_memory_timing_format_v0 v0;
+	struct atom_memory_timing_format_v1 v1;
+	struct atom_memory_timing_format_v2 v2;
+};
 
 
 
@@ -7333,7 +7340,7 @@ struct atom_vram_module_v3 {
 	enum DRAM_DENSITY_e Density;
 	union mem_preamble Preamble;
 	uint8_t  MemAttrib;         // Memory Device Addribute, like RDBI/WDBI etc
-	struct atom_memory_timing_format_v0 MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
+	union atom_memory_timing_format MemTiming[1]; // Memory Timing block sort from lower clock to higher clock
 };
 
 
@@ -7362,7 +7369,7 @@ struct atom_vram_module_v4 {
 	union memory_vendor_id MemoryVendorID;
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  Reserved3[2];
-	struct atom_memory_timing_format_v0 MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
+	union atom_memory_timing_format MemTiming[1]; // Memory Timing block sort from lower clock to higher clock
 };
 
 
@@ -7392,7 +7399,7 @@ struct atom_vram_module_v5 {
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;         // FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth
 	union cdr_bandwidth CDR_Bandwidth;
-	struct atom_memory_timing_format_v1 MemTiming[5];// Memory Timing block sort from lower clock to higher clock
+	union atom_memory_timing_format MemTiming[1];// Memory Timing block sort from lower clock to higher clock
 };
 
 
@@ -7421,7 +7428,7 @@ struct atom_vram_module_v6 {
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;         // FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth
 	union cdr_bandwidth CDR_Bandwidth;
-	struct atom_memory_timing_format_v2 MemTiming[5]; // Memory Timing block sort from lower clock to higher clock
+	union atom_memory_timing_format MemTiming[1]; // Memory Timing block sort from lower clock to higher clock
 };
 
 struct atom_vram_module_v7 {

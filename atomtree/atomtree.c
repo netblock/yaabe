@@ -900,27 +900,35 @@ inline static atui_branch*
 atomtree_populate_atom_memory_timing_format(
 		struct atomtree_vram_module* const vram_module,
 		const enum atom_dgpu_vram_type memory_type,
-		const void* const timing_format_start,
+		const union atom_memory_timing_format* const timing_format_start,
 		const uint16_t straps_total_size,
 		const bool generate_atui
 		) {
+	union {
+		const void* raw;
+		const struct atom_memory_timing_format_v0* v0; 
+		const struct atom_memory_timing_format_v1* v1;
+		const struct atom_memory_timing_format_v2* v2; 
+	} strap;
+	strap.raw = timing_format_start;
 
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	uint8_t table_size;
 	if (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5) {
-		vram_module->memory_timing_format_ver = v1_1;
-		table_size = sizeof(struct atom_memory_timing_format_v1);
-		atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v1);
+		if (0xFF == strap.v1->Terminator) {
+			vram_module->memory_timing_format_ver = v1_1;
+			table_size = sizeof(struct atom_memory_timing_format_v1);
+			atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v1);
+		} else {
+			assert(0xFF == strap.v2->Terminator);
+			vram_module->memory_timing_format_ver = v1_2;
+			table_size = sizeof(struct atom_memory_timing_format_v2);
+			atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v2);
+		}
 	} else {
 		vram_module->memory_timing_format_ver = v1_0;
 		table_size = sizeof(struct atom_memory_timing_format_v0);
 		atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v0);
-	/*
-	} else {
-		vram_module->memory_timing_format_ver = v1_2;
-		table_size = sizeof(struct atom_memory_timing_format_v2);
-		atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v2);
-	*/
 	}
 	const uint8_t count = straps_total_size / table_size;
 	vram_module->num_memory_timing_format = count;
@@ -931,25 +939,25 @@ atomtree_populate_atom_memory_timing_format(
 			NULL,  NULL,NULL,  count,NULL
 		);
 
-		union {
-			// v0's MR2 can be a flag for v1, for that MR2 holds v1's tCCDL
-			const void* raw;
-			const struct atom_memory_timing_format_v0* v0; 
-			const struct atom_memory_timing_format_v1* v1; // v1 morphs from v0 
-
-			// if v1.Terminator is not 0xFF?
-			const struct atom_memory_timing_format_v1* v2; 
-		} strap;
-		strap.raw = timing_format_start;
-
 		atui_branch* atui_formattimings;
 		struct atui_funcify_args func_args = {0};
-		atui_branch* atui_mrs[3] = {NULL};
+		atui_branch* atui_mrs[4] = {NULL};
 		func_args.import_branches = atui_mrs;
 		func_args.num_import_branches = (sizeof(atui_mrs)/sizeof(atui_branch*));
 
 		for (uint8_t i=0; i < count; i++) {
 			switch (memory_type) { // mrs in straps
+				case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
+					atui_mrs[0] = ATUI_MAKE_BRANCH(ddr2_mr0,
+						NULL,  NULL,&(strap.v0->MR0),  0,NULL
+					);
+					atui_mrs[1] = ATUI_MAKE_BRANCH(ddr2_emr1,
+						NULL,  NULL,&(strap.v0->MR1),  0,NULL
+					);
+					atui_mrs[2] = ATUI_MAKE_BRANCH(ddr2_emr2,
+						NULL,  NULL,&(strap.v0->MR2),  0,NULL
+					);
+					break;
 				case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
 					atui_mrs[0] = ATUI_MAKE_BRANCH(ddr3_mr0,
 						NULL,  NULL,&(strap.v0->MR0),  0,NULL
@@ -982,15 +990,30 @@ atomtree_populate_atom_memory_timing_format(
 					);
 					break;
 				case ATOM_DGPU_VRAM_TYPE_GDDR5:
-					atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr0,
-						NULL,  NULL,&(strap.v0->MR0),  0,NULL
-					);
-					atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr1,
-						NULL,  NULL,&(strap.v0->MR1),  0,NULL
-					);
-					atui_mrs[2] = ATUI_MAKE_BRANCH(gddr5_mr5,
-						NULL,  NULL,&(strap.v1->MR5),  0,NULL
-					);
+					if (vram_module->memory_timing_format_ver == v1_1) {
+						atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr0,
+							NULL,  NULL,&(strap.v1->MR0),  0,NULL
+						);
+						atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr1,
+							NULL,  NULL,&(strap.v1->MR1),  0,NULL
+						);
+						atui_mrs[2] = ATUI_MAKE_BRANCH(gddr5_mr5,
+							NULL,  NULL,&(strap.v1->MR5),  0,NULL
+						);
+					} else {
+						atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr0,
+							NULL,  NULL,&(strap.v2->MR0),  0,NULL
+						);
+						atui_mrs[1] = ATUI_MAKE_BRANCH(gddr5_mr1,
+							NULL,  NULL,&(strap.v2->MR1),  0,NULL
+						);
+						atui_mrs[2] = ATUI_MAKE_BRANCH(gddr5_mr4,
+							NULL,  NULL,&(strap.v2->MR4),  0,NULL
+						);
+						atui_mrs[3] = ATUI_MAKE_BRANCH(gddr5_mr5,
+							NULL,  NULL,&(strap.v2->MR5),  0,NULL
+						);
+					}
 					break;
 				default:
 					break;
@@ -1123,6 +1146,14 @@ atomtree_populate_vram_module(
 				if (generate_atui) {
 					switch (vmod->v1_3->MemoryType) {
 						// mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
+							atui_children[0] = ATUI_MAKE_BRANCH(ddr2_emr2,
+								NULL,  NULL,&(vmod->v1_3->MR2),  0,NULL
+							);
+							atui_children[1] = ATUI_MAKE_BRANCH(ddr2_emr3,
+								NULL,  NULL,&(vmod->v1_3->MR3),  0,NULL
+							);
+							break;
 						case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
 							atui_children[0] = ATUI_MAKE_BRANCH(ddr3_mr2,
 								NULL,  NULL,&(vmod->v1_3->MR2),  0,NULL
@@ -1196,6 +1227,14 @@ atomtree_populate_vram_module(
 				if (generate_atui) {
 					switch (vmod->v1_4->MemoryType) {
 						// mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
+							atui_children[0] = ATUI_MAKE_BRANCH(ddr2_emr2,
+								NULL,  NULL,&(vmod->v1_4->MR2),  0,NULL
+							);
+							atui_children[1] = ATUI_MAKE_BRANCH(ddr2_emr3,
+								NULL,  NULL,&(vmod->v1_4->MR3),  0,NULL
+							);
+							break;
 						case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
 							atui_children[0] = ATUI_MAKE_BRANCH(ddr3_mr2,
 								NULL,  NULL,&(vmod->v1_4->MR2),  0,NULL
@@ -1226,7 +1265,7 @@ atomtree_populate_vram_module(
 							atui_children[1] = NULL;
 							break;
 					};
-					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v3,
+					atui_module_entry = ATUI_MAKE_BRANCH(atom_vram_module_v4,
 						NULL,  vmod, vmod->v1_4,
 						num_atui_children, atui_children
 					);

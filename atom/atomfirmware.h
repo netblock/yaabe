@@ -3293,9 +3293,11 @@ enum GDDR_MEM_VENDOR_e {
 
 // MC_MISC0__MEMORY_TYPE_*   ??
 // uint8_t  MemoryType;   ??
+// MC_SEQ_MISC0. see radeon cikd.h et al.
 enum atom_dgpu_vram_type:uint8_t {
 	ATOM_DGPU_VRAM_TYPE_GDDR1 = 0x10,
-	ATOM_DGPU_VRAM_TYPE_DDR1  = 0x20,
+	ATOM_DGPU_VRAM_TYPE_DDR1  = 0x10,
+	ATOM_DGPU_VRAM_TYPE_DDR2  = 0x20,
 	ATOM_DGPU_VRAM_TYPE_GDDR3 = 0x30,
 	ATOM_DGPU_VRAM_TYPE_DDR4  = 0x40,
 	ATOM_DGPU_VRAM_TYPE_GDDR4 = 0x40,
