@@ -85,7 +85,7 @@ static inline bool
 is_number(
 		const char8_t* str
 		) {
-	if (*str) {
+	if (str) {
 		do {
 			if (0 == isdigit(*str)) {
 				return 0;
@@ -128,7 +128,7 @@ register_set_print_tables(
 	uint8_t s_i;
 
 	int16_t set_loc;
-	uint16_t rii, unions;
+	uint16_t rii;
 
 
 	uint16_t val;
@@ -144,12 +144,25 @@ register_set_print_tables(
 
 	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
 	// print bitfield struct body
-	unions = 0;
+
+	uint16_t unions = 0;
+	bool access_range = 0;
+	uint8_t pre_reg_data_lo;
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
-		if ( 4 != (register_index[rii].PreRegDataLength&0xF) ) {
-			// first nibble is byte count of reg entry; if not 4, skip
+		pre_reg_data_lo = register_index[rii].PreRegDataLength & 0xF;
+		if (VALUE_SAME_AS_ABOVE == pre_reg_data_lo) {
 			continue;
 		}
+		if (access_range) {
+			if (INDEX_ACCESS_RANGE_END == pre_reg_data_lo) {
+				access_range = 0;
+			}
+			continue;
+		}
+		if (INDEX_ACCESS_RANGE_BEGIN == pre_reg_data_lo) {
+			access_range = 1;
+		}
+
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 
 		// lop off prefix
@@ -186,7 +199,7 @@ register_set_print_tables(
 		assert(name > var_name);
 		assert(strlen(var_name) < sizeof(var_name));
 		*(name-1) = '\0';
-
+		
 		printf(struct_entry, union_name, var_name);
 		unions++;
 	}
