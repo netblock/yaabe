@@ -56,9 +56,15 @@ regcmp(
 		const uint16_t* expectation
 		);
 
+
+
 /******************************************************************************/
 // Address arrays from reg_index as a fingerprint for what struct to use.
 // see umctimings.h and gmc.h
+/******************************************************************************/
+
+/******************************************************************************/
+// mem_clk_patch
 /******************************************************************************/
 
 static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = {
@@ -169,6 +175,82 @@ static const uint16_t mc_block_polaris_timings_addresses[] = {
 };
 
 /******************************************************************************/
+// mem_adjust_table
+// uncertain the accuracy of all of these tables.
+/******************************************************************************/
+
+static const uint16_t mc_block_islands_gddr5_adjust_addresses[] = {
+	mmMC_SEQ_IO_RESERVE_D0_6_0,
+	mmMC_SEQ_IO_RESERVE_D1_6_0,
+	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
+	mmMC_IO_TXCNTL_DPHY0_D1_6_0,
+	mmMC_IO_TXCNTL_DPHY1_D0_6_0,
+	mmMC_IO_TXCNTL_DPHY1_D1_6_0,
+	mmMC_IO_TXCNTL_APHY_D0_6_0,
+	mmMC_IO_TXCNTL_APHY_D1_6_0,
+	mmMC_IO_RXCNTL_DPHY0_D0_6_0,
+	mmMC_IO_RXCNTL_DPHY0_D1_6_0,
+	mmMC_IO_RXCNTL_DPHY1_D0_6_0,
+	mmMC_IO_RXCNTL_DPHY1_D1_6_0,
+	mmMC_IO_DPHY_STR_CNTL_D0_6_0,
+	mmMC_IO_DPHY_STR_CNTL_D1_6_0,
+	mmMC_IO_APHY_STR_CNTL_D0_6_0,
+	mmMC_IO_APHY_STR_CNTL_D1_6_0,
+	mmMC_PMG_CFG_6_0,
+	mmMC_PMG_AUTO_CFG_6_0,
+	mmMC_SEQ_PMG_TIMING_6_0,
+	mmMC_SEQ_WR_CTL_D0_6_0,
+	mmMC_SEQ_WR_CTL_D1_6_0,
+	mmMC_IO_PAD_CNTL_D0_6_0,
+	mmMC_IO_PAD_CNTL_D1_6_0,
+	ixMC_IO_DEBUG_UP_0_6_0,
+	mmMC_CONFIG_6_0,
+	ixMC_IO_DEBUG_UP_1_6_0,
+	ixMC_IO_DEBUG_UP_9_6_0,
+	mmMC_CONFIG_6_0,
+	ixMC_IO_DEBUG_UP_1_6_0,
+	ixMC_IO_DEBUG_UP_9_6_0,
+	mmMC_CONFIG_6_0,
+	ixMC_IO_DEBUG_UP_1_6_0,
+	ixMC_IO_DEBUG_UP_9_6_0,
+	mmMC_CONFIG_6_0,
+	ixMC_IO_DEBUG_UP_1_6_0,
+	ixMC_IO_DEBUG_UP_9_6_0,
+	mmMC_CONFIG_6_0,
+	ixMC_IO_DEBUG_UP_2_6_0,
+	ixMC_IO_DEBUG_UP_3_6_0,
+	ixMC_IO_DEBUG_UP_4_6_0,
+	ixMC_IO_DEBUG_UP_5_6_0,
+	ixMC_IO_DEBUG_UP_11_6_0,
+	ixMC_IO_DEBUG_UP_12_6_0,
+	ixMC_IO_DEBUG_UP_13_6_0,
+	ixMC_IO_DEBUG_UP_14_6_0,
+	ixMC_IO_DEBUG_UP_15_6_0,
+	mmMC_SEQ_RESERVE_0_S_6_0,
+	mmMC_SEQ_MISC5_6_0,
+	mmMC_SEQ_MISC4_6_0,
+	mmMC_SEQ_MISC6_6_0,
+	mmMC_SEQ_MISC7_6_0,
+	ixMC_IO_DEBUG_DQB0L_RX_VREF_CAL_D0_6_0,
+	ixMC_IO_DEBUG_DQB1H_RX_VREF_CAL_D0_6_0,
+	ixMC_IO_DEBUG_DQB2L_RX_VREF_CAL_D0_6_0,
+	ixMC_IO_DEBUG_DQB3H_RX_VREF_CAL_D0_6_0,
+	ixMC_IO_DEBUG_DBI_RX_VREF_CAL_D0_6_0,
+	ixMC_IO_DEBUG_DQB0_CDR_PHSIZE_D0_6_0,
+	ixMC_IO_DEBUG_DQB1_CDR_PHSIZE_D0_6_0,
+	ixMC_IO_DEBUG_DBI_CDR_PHSIZE_D0_6_0,
+	ixMC_IO_DEBUG_ADDRL_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ADDRL_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_ADDRH_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ADDRH_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_ACMD_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ACMD_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_CMD_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_CMD_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_CK_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_CK_TXPHASE_D1_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
 
 #include "gmc_searchfield.h"
 

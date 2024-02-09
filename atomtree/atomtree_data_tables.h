@@ -209,13 +209,16 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 
 enum register_block_type:uint8_t {
 	reg_block_unknown,
-	reg_block_mem_adust,
+	reg_block_mem_adjust_table,
 	reg_block_mem_clk_patch,
 	reg_block_phy_init,
 
 };
 enum common_register_sequence:uint8_t {
 	common_set_unknown,
+
+	// reg_block_mem_adjust_table:
+	adjust_set_islands,
 
 	// reg_block_mem_clk_patch:
 	timings_set_islands,

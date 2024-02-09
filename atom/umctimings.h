@@ -544,6 +544,21 @@ union mc_arb_ramcfg_7_0_o {
 		rsv_4             :15-13 +1;
 	};
 };
+union mc_io_aphy_str_cntl_d0_6_0_o {
+	uint32_t raw_data;
+	struct { uint32_t
+		pstr_off_a     :5-0 +1,
+		nstr_off_a    :11-6 +1,
+		pstr_off_d_rd :17-12 +1,
+		nstr_off_d_rd :23-18 +1,
+		use_a_cal     :24-24 +1,
+		use_d_rd_cal  :25-25 +1,
+		cal_sel       :27-26 +1,
+		load_a_str    :28-28 +1,
+		load_d_rd_str :29-29 +1,
+		_rsvd01       :31-30 +1;
+	};
+};
 
 
 /* From ElioVP's amdmemtweak. vals don't look right.
@@ -620,6 +635,10 @@ struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
 	union gddr5_mr8 gddr5_mr8;
 	union gddr5_mr7 gddr5_mr7; // guess, might be wrong
 };
+
+/******************************************************************************/
+// mem_clk_patch
+/******************************************************************************/
 
 struct mc_block_islands_gddr5_timings { // 52 bytes
 	// Northern, Southern, Sea, Volcanic Islands
@@ -756,6 +775,62 @@ struct umc_block_navi1_timings { // 116 bytes. A little more certain.
 	union DRAMTiming36 DRAMTiming36;
 	union TRFCTimingCS01 tRFC;
 	union ChanPipeDly ChanPipeDly;
+};
+
+/******************************************************************************/
+// mem_adjust_table
+// uncertain the accuracy of all of these tables.
+/******************************************************************************/
+
+struct mc_block_islands_gddr5_adjust { // 196 bytes
+	// Northern, Southern, Sea, Volcanic Islands
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
+	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
+	union mc_io_dphy_str_cntl_d0_6_0   mc_io_dphy_str_cntl_d0;
+	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
+	union mc_pmg_cfg_6_0         mc_pmg_cfg;
+	union mc_pmg_auto_cfg_6_0    mc_pmg_auto_cfg;
+	union mc_seq_pmg_timing_6_0  mc_seq_pmg_timing;
+	union mc_seq_wr_ctl_d0_6_0   mc_seq_wr_ctl_d0;
+	union mc_io_pad_cntl_d0_6_0  mc_io_pad_cntl_d0;
+	union mc_io_pad_cntl_d1_6_0  mc_io_pad_cntl_d1;
+	union mc_io_debug_up_0_6_0   mc_io_debug_up;
+	union mc_config_6_0          mc_config_0;
+	union mc_io_debug_up_1_6_0   mc_io_debug_up_1__0;
+	union mc_io_debug_up_9_6_0   mc_io_debug_up_9__0;
+	union mc_config_6_0          mc_config_1_9__0;
+	union mc_io_debug_up_1_6_0   mc_io_debug_up_1__1;
+	union mc_io_debug_up_9_6_0   mc_io_debug_up_9__1;
+	union mc_config_6_0          mc_config_1_9__1;
+	union mc_io_debug_up_1_6_0   mc_io_debug_up_1__2;
+	union mc_io_debug_up_9_6_0   mc_io_debug_up_9__2;
+	union mc_config_6_0          mc_config_1_9__2;
+	union mc_io_debug_up_1_6_0   mc_io_debug_up_1__3;
+	union mc_io_debug_up_9_6_0   mc_io_debug_up_9__3;
+	union mc_config_6_0          mc_config_1_9__3;
+	union mc_io_debug_up_2_6_0   mc_io_debug_up_2;
+	union mc_io_debug_up_3_6_0   mc_io_debug_up_3;
+	union mc_io_debug_up_4_6_0   mc_io_debug_up_4;
+	union mc_io_debug_up_5_6_0   mc_io_debug_up_5;
+	union mc_io_debug_up_11_6_0  mc_io_debug_up_11;
+	union mc_io_debug_up_12_6_0  mc_io_debug_up_12;
+	union mc_io_debug_up_13_6_0  mc_io_debug_up_13;
+	union mc_io_debug_up_14_6_0  mc_io_debug_up_14;
+	union mc_io_debug_up_15_6_0  mc_io_debug_up_15;
+	union mc_seq_reserve_0_s_6_0 mc_seq_reserve_0_s;
+	union mc_seq_misc5_6_0  mc_seq_misc5;
+	union mc_seq_misc4_6_0  mc_seq_misc4;
+	union mc_seq_misc6_6_0  mc_seq_misc6;
+	union mc_seq_misc7_6_0  mc_seq_misc7;
+	union mc_io_debug_dqb0l_rx_vref_cal_d0_6_0 mc_io_debug_dqb0l_rx_vref_cal_d0;
+	union mc_io_debug_dqb2l_rx_vref_cal_d0_6_0 mc_io_debug_dqb2l_rx_vref_cal_d0;
+	union mc_io_debug_dbi_rx_vref_cal_d0_6_0   mc_io_debug_dbi_rx_vref_cal_d0;
+	union mc_io_debug_dqb1_cdr_phsize_d0_6_0   mc_io_debug_dqb1_cdr_phsize_d0;
+	union mc_io_debug_addrl_txphase_d0_6_0     mc_io_debug_addrl_txphase_d0;
+	union mc_io_debug_acmd_txphase_d0_6_0      mc_io_debug_acmd_txphase_d0;
+	union mc_io_debug_cmd_txphase_d0_6_0       mc_io_debug_cmd_txphase_d0;
+	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 };
 
 #pragma pack(pop) // restore old packing

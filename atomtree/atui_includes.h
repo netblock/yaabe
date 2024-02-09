@@ -128,6 +128,7 @@ PPATUI_HEADERIFY(umc_block_vega10_timings);
 PPATUI_HEADERIFY(umc_block_vega21_timings);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 
+PPATUI_HEADERIFY(mc_block_islands_gddr5_adjust);
 
 /******************************************************************************/
 // atui_atombios.c / atombios.h
