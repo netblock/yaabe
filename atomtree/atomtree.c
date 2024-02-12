@@ -738,25 +738,31 @@ atomtree_populate_init_mem_adjust_table(
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
+	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (64 == mem_adjust_table->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_exo_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_exo_gddr5_adjust);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_cayman_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_cayman_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_cayman_gddr5_adjust);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_oland_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_oland_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_oland_gddr5_adjust);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_grenada_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_grenada_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_grenada_gddr5_adjust);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_bonaire_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_bonaire_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_bonaire_gddr5_adjust);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
@@ -778,38 +784,7 @@ atomtree_populate_init_mem_adjust_table(
 			ATUI_ADD_BRANCH(atui_memadjust, atui_mem_timings);
 
 			atui_branch* atui_strap;
-			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
-			switch (mem_adjust_table->reg_set) {
-				case adjust_set_cayman_gddr5:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_cayman_gddr5_adjust
-					);
-					break;
-				case adjust_set_oland_gddr5:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_oland_gddr5_adjust
-					);
-					break;
-				case adjust_set_exo_gddr5:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_exo_gddr5_adjust
-					);
-					break;
-				case adjust_set_bonaire_gddr5:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_bonaire_gddr5_adjust
-					);
-					break;
-				case adjust_set_grenada_gddr5:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_grenada_gddr5_adjust
-					);
-					break;
-				default:
-					assert(0);
-					break;
-			}
 			const char8_t* vendor_part[2];
 			for (uint8_t i = 0; i < mem_adjust_table->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
@@ -870,18 +845,22 @@ atomtree_populate_init_mem_clk_patch(
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
+	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_block_polaris_timings_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_polaris_timings);
 		} else if (regcmp(index, mc_block_islands_gddr5_timings_addresses)
 				|| regcmp(index, mc_block_islands_gddr5_timings_addresses_type2)
 				) {
 			// Northern, Southern, Sea, Volcanic Islands
 			mem_clk_patch->reg_set = timings_set_islands;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_islands_gddr5_timings);
 		}
 	} else if (10 == mem_clk_patch->num_index) {
 		if (regcmp(index, mc_block_fiji_timings_addresses)) {
 			mem_clk_patch->reg_set = timings_set_fiji;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_timings);
 		}
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
@@ -903,28 +882,7 @@ atomtree_populate_init_mem_clk_patch(
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 
 			atui_branch* atui_strap;
-			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
-			switch (mem_clk_patch->reg_set) {
-				case timings_set_islands:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_islands_gddr5_timings
-					);
-					break;
-				case timings_set_fiji:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_fiji_timings
-					);
-					break;
-				case timings_set_polaris:
-					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_polaris_timings
-					);
-					break;
-				default:
-					assert(0);
-					break;
-			}
 			const char8_t* vendor_part[2];
 			for (uint8_t i = 0; i < mem_clk_patch->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];

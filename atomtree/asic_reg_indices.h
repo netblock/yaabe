@@ -67,7 +67,7 @@ regcmp(
 // mem_clk_patch
 /******************************************************************************/
 
-static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = {
+static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = { 
 	mmMC_ARB_PERF_CID_7_1,
 	mmMC_ARB_SNOOP_8_1,
 	mmMC_ARB_LAZY1_WR_6_0,
@@ -110,7 +110,7 @@ static const uint16_t mc_block_r600_gddr4_memclkpatch_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_islands_gddr5_timings_addresses[] = {
+static const uint16_t mc_block_islands_gddr5_timings_addresses[] = { // 13+1
 	// Northern, Southern, Sea, Volcanic Islands
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
@@ -127,7 +127,7 @@ static const uint16_t mc_block_islands_gddr5_timings_addresses[] = {
 	mmMC_ARB_DRAM_TIMING2_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mc_block_islands_gddr5_timings_addresses_type2[] = {
+static const uint16_t mc_block_islands_gddr5_timings_addresses_type2[] = {//13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
 	mmMC_SEQ_WR_CTL_2_6_0,
@@ -144,7 +144,7 @@ static const uint16_t mc_block_islands_gddr5_timings_addresses_type2[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_fiji_timings_addresses[] = {
+static const uint16_t mc_block_fiji_timings_addresses[] = { // 9+1
 	mmMC_SEQ_CAS_TIMING_6_0,
 	mmMC_SEQ_MISC_TIMING2_6_0,
 	mmMC_SEQ_RD_CTL_D0_6_0,
@@ -157,7 +157,7 @@ static const uint16_t mc_block_fiji_timings_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_polaris_timings_addresses[] = {
+static const uint16_t mc_block_polaris_timings_addresses[] = { // 13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
 	mmMC_SEQ_WR_CTL_2_6_0,
