@@ -220,14 +220,14 @@ enum common_register_sequence:uint8_t {
 	// reg_block_mem_adjust_table:
 	// adjust_set_
 	// adjust_set_evergreen_ddr3,
-	adjust_set_cayman_gddr5,
 	adjust_set_caicos_ddr3,
-	adjust_set_oland_gddr5,
-	adjust_set_exo_gddr5,
-	adjust_set_bonaire_gddr5,
+	adjust_set_cayman_gddr5,
+	adjust_set_oland_verde_gddr5,
 	adjust_set_pitcairn_gddr5,
+	adjust_set_tahiti_gddr5,
+	adjust_set_exo_gddr5,
 	adjust_set_tonga_gddr5,
-	adjust_set_grenada_gddr5,
+	adjust_set_hawaii_grenada_gddr5,
 	adjust_set_fiji_gddr5,
 	adjust_set_polaris_gddr5_type_1,
 	adjust_set_polaris_gddr5_type_2,
@@ -262,6 +262,18 @@ struct atomtree_init_reg_block {
 	enum common_register_sequence reg_set; // denote a common sequence
 	union {
 		void* data_sets;
+
+		struct mc_block_caicos_ddr3_adjust*    caicos_ddr3;
+		struct mc_block_cayman_gddr5_adjust*   cayman_gddr5;
+		struct mc_block_oland_verde_gddr5_adjust* oland_verde_gddr5;
+		struct mc_block_pitcairn_gddr5_adjust* pitcairn_gddr5;
+		struct mc_block_tahiti_gddr5_adjust*   tahiti_gddr5;
+		struct mc_block_exo_gddr5_adjust*      exo_gddr5;
+		struct mc_block_tonga_gddr5_adjust*    tonga_gddr5;
+		struct mc_block_hawaii_grenada_gddr5_adjust* hawaii_grenada_gddr5;
+		struct mc_block_fiji_gddr5_adjust*     fiji_gddr5;
+		struct mc_block_polaris_gddr5_type_1_adjust* polaris_gddr5_type_1;
+		struct mc_block_polaris_gddr5_type_2_adjust* polaris_gddr5_type_2;
 
 		// reg_block_mem_clk_patch:
 		struct mc_block_islands_gddr5_timings* islands_timings;

@@ -779,9 +779,11 @@ atomtree_populate_init_mem_adjust_table(
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_cayman_gddr5_adjust);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_oland_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_oland_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_oland_gddr5_adjust);
+		if (regcmp(index, mc_block_oland_verde_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_oland_verde_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_block_oland_verde_gddr5_adjust
+			);
 		}
 	} else if (124 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_pitcairn_gddr5_adjust_addresses)) {
@@ -789,14 +791,16 @@ atomtree_populate_init_mem_adjust_table(
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_pitcairn_gddr5_adjust);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_grenada_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_grenada_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_grenada_gddr5_adjust);
+		if (regcmp(index, mc_block_hawaii_grenada_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_hawaii_grenada_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_block_hawaii_grenada_gddr5_adjust
+			);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_bonaire_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_bonaire_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_bonaire_gddr5_adjust);
+		if (regcmp(index, mc_block_tahiti_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_tahiti_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_tahiti_gddr5_adjust);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];

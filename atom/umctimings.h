@@ -815,6 +815,36 @@ struct mc_block__gddr5_adjust { //  bytes
 };
 */
 
+struct mc_block_caicos_ddr3_adjust { // 108 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
+	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
+	union mc_io_txcntl_aphy_d0_6_0     mc_io_txcntl_aphy_d0;
+	union mc_io_rxcntl_dphy0_d0_6_0    mc_io_rxcntl_dphy0_d0;
+	union mc_io_dphy_str_cntl_d0_7_1   mc_io_dphy_str_cntl_d0;
+	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
+	union mc_pmg_cfg_6_0        mc_pmg_cfg;
+	union mc_pmg_auto_cfg_6_0   mc_pmg_auto_cfg;
+	union mc_seq_pmg_timing_6_0 mc_seq_pmg_timing;
+	union mc_seq_wr_ctl_d0_6_0  mc_seq_wr_ctl_d0;
+	union mc_io_pad_cntl_d0_6_0 mc_io_pad_cntl_d0;
+	union mc_io_pad_cntl_d1_6_0 mc_io_pad_cntl_d1;
+	union mc_io_debug_dqb0l_rxphase_d0_6_0 mc_io_debug_dqb0l_rxphase_d0;
+	union mc_io_debug_dqb0l_rxphase_d1_6_0 mc_io_debug_dqb0l_rxphase_d1;
+	union mc_io_debug_wck_rxphase_d0_6_0   mc_io_debug_wck_rxphase_d0;
+	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
+	union mc_io_debug_dbi_rxphase_d0_6_0   mc_io_debug_dbi_rxphase_d0;
+	union mc_io_debug_dqb0l_txphase_d0_6_0 mc_io_debug_dqb0l_txphase_d0;
+	union mc_io_debug_dqb0l_txphase_d1_6_0 mc_io_debug_dqb0l_txphase_d1;
+	union mc_io_debug_dbi_txphase_d0_6_0   mc_io_debug_dbi_txphase_d0;
+	union mc_io_debug_wck_txphase_d0_6_0   mc_io_debug_wck_txphase_d0;
+	union mc_io_debug_edc_txphase_d0_6_0   mc_io_debug_edc_txphase_d0;
+	union mc_io_debug_ck_txphase_d0_6_0    mc_io_debug_ck_txphase_d0;
+	union mc_io_debug_addrl_txphase_d0_6_0 mc_io_debug_addrl_txphase_d0;
+	union mc_io_debug_acmd_txphase_d0_6_0  mc_io_debug_acmd_txphase_d0;
+	union mc_io_debug_cmd_txphase_d0_6_0   mc_io_debug_cmd_txphase_d0;
+};
+
 struct mc_block_cayman_gddr5_adjust { // 196 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
@@ -827,7 +857,7 @@ struct mc_block_cayman_gddr5_adjust { // 196 bytes
 	union mc_seq_wr_ctl_d0_6_0   mc_seq_wr_ctl_d0;
 	union mc_io_pad_cntl_d0_6_0  mc_io_pad_cntl_d0;
 	union mc_io_pad_cntl_d1_6_0  mc_io_pad_cntl_d1;
-	union mc_io_debug_up_0_6_0   mc_io_debug_up;
+	union mc_io_debug_up_0_6_0   mc_io_debug_up_0;
 	union mc_config_6_0          mc_config_0;
 	union mc_io_debug_up_1_6_0   mc_io_debug_up_1__0;
 	union mc_io_debug_up_9_6_0   mc_io_debug_up_9__0;
@@ -865,37 +895,8 @@ struct mc_block_cayman_gddr5_adjust { // 196 bytes
 	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 };
 
-struct mc_block_caicos_ddr3_adjust { // 108 bytes
-	union atom_mc_register_setting_id  block_id;
-	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
-	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
-	union mc_io_txcntl_aphy_d0_6_0     mc_io_txcntl_aphy_d0;
-	union mc_io_rxcntl_dphy0_d0_6_0    mc_io_rxcntl_dphy0_d0;
-	union mc_io_dphy_str_cntl_d0_7_1   mc_io_dphy_str_cntl_d0;
-	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
-	union mc_pmg_cfg_6_0        mc_pmg_cfg;
-	union mc_pmg_auto_cfg_6_0   mc_pmg_auto_cfg;
-	union mc_seq_pmg_timing_6_0 mc_seq_pmg_timing;
-	union mc_seq_wr_ctl_d0_6_0  mc_seq_wr_ctl_d0;
-	union mc_io_pad_cntl_d0_6_0 mc_io_pad_cntl_d0;
-	union mc_io_pad_cntl_d1_6_0 mc_io_pad_cntl_d1;
-	union mc_io_debug_dqb0l_rxphase_d0_6_0 mc_io_debug_dqb0l_rxphase_d0;
-	union mc_io_debug_dqb0l_rxphase_d1_6_0 mc_io_debug_dqb0l_rxphase_d1;
-	union mc_io_debug_wck_rxphase_d0_6_0   mc_io_debug_wck_rxphase_d0;
-	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
-	union mc_io_debug_dbi_rxphase_d0_6_0   mc_io_debug_dbi_rxphase_d0;
-	union mc_io_debug_dqb0l_txphase_d0_6_0 mc_io_debug_dqb0l_txphase_d0;
-	union mc_io_debug_dqb0l_txphase_d1_6_0 mc_io_debug_dqb0l_txphase_d1;
-	union mc_io_debug_dbi_txphase_d0_6_0   mc_io_debug_dbi_txphase_d0;
-	union mc_io_debug_wck_txphase_d0_6_0   mc_io_debug_wck_txphase_d0;
-	union mc_io_debug_edc_txphase_d0_6_0   mc_io_debug_edc_txphase_d0;
-	union mc_io_debug_ck_txphase_d0_6_0    mc_io_debug_ck_txphase_d0;
-	union mc_io_debug_addrl_txphase_d0_6_0 mc_io_debug_addrl_txphase_d0;
-	union mc_io_debug_acmd_txphase_d0_6_0  mc_io_debug_acmd_txphase_d0;
-	union mc_io_debug_cmd_txphase_d0_6_0   mc_io_debug_cmd_txphase_d0;
-};
 
-struct mc_block_oland_gddr5_adjust { // 232 bytes
+struct mc_block_oland_verde_gddr5_adjust { // 232 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -956,42 +957,7 @@ struct mc_block_oland_gddr5_adjust { // 232 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mc_block_exo_gddr5_adjust { // 128 bytes
-	union atom_mc_register_setting_id  block_id;
-	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
-	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
-	union mc_io_txcntl_aphy_d0_6_0     mc_io_txcntl_aphy_d0;
-	union mc_io_rxcntl_dphy0_d0_6_0    mc_io_rxcntl_dphy0_d0;
-	union mc_io_rxcntl1_dphy0_d0_7_1   mc_io_rxcntl1_dphy0_d0;
-	union mc_io_dphy_str_cntl_d0_7_1   mc_io_dphy_str_cntl_d0;
-	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
-	union mc_pmg_cfg_6_0        mc_pmg_cfg;
-	union mc_pmg_auto_cfg_6_0   mc_pmg_auto_cfg;
-	union mc_seq_rd_ctl_d0_6_0  mc_seq_rd_ctl_d0;
-	union mc_io_pad_cntl_d0_6_0 mc_io_pad_cntl_d0;
-	union mc_io_pad_cntl_d1_6_0 mc_io_pad_cntl_d1;
-	union mc_phy_timing_2_7_1   mc_phy_timing;
-	union mc_io_debug_dqb0l_rxphase_d0_6_0 mc_io_debug_dqb0l_rxphase_d0;
-	union mc_io_debug_dqb0l_rxphase_d1_6_0 mc_io_debug_dqb0l_rxphase_d1;
-	union mc_io_debug_wck_rxphase_d0_6_0   mc_io_debug_wck_rxphase_d0;
-	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
-	union mc_io_debug_dbi_rxphase_d0_6_0   mc_io_debug_dbi_rxphase_d0;
-	union mc_io_debug_dqb0l_txphase_d0_6_0 mc_io_debug_dqb0l_txphase_d0;
-	union mc_io_debug_dqb0l_txphase_d1_6_0 mc_io_debug_dqb0l_txphase_d1;
-	union mc_io_debug_dbi_txphase_d0_6_0   mc_io_debug_dbi_txphase_d0;
-	union mc_io_debug_wck_txphase_d0_6_0   mc_io_debug_wck_txphase_d0;
-	union mc_io_debug_edc_txphase_d0_6_0   mc_io_debug_edc_txphase_d0;
-	union mc_io_debug_ck_txphase_d0_6_0    mc_io_debug_ck_txphase_d0;
-	union mc_io_debug_addrl_txphase_d0_6_0 mc_io_debug_addrl_txphase_d0;
-	union mc_io_debug_acmd_txphase_d0_6_0  mc_io_debug_acmd_txphase_d0;
-	union mc_io_debug_cmd_txphase_d0_6_0   mc_io_debug_cmd_txphase_d0;
-	union mc_io_debug_addrl_clksel_d0_6_0  mc_io_debug_addrl_clksel_d0;
-	union mc_io_debug_addrl_clksel_d1_6_0  mc_io_debug_addrl_clksel_d1;
-	union mc_seq_misc5_6_0    mc_seq_misc5;
-	union mc_seq_fifo_ctl_7_1 mc_seq_fifo_ctl;
-};
-
-struct mc_block_bonaire_gddr5_adjust { // 304 bytes
+struct mc_block_pitcairn_gddr5_adjust { // 284 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1005,7 +971,81 @@ struct mc_block_bonaire_gddr5_adjust { // 304 bytes
 	union mc_seq_rd_ctl_d0_6_0    mc_seq_rd_ctl_d0;
 	union mc_io_pad_cntl_d0_6_0   mc_io_pad_cntl_d0;
 	union mc_io_pad_cntl_d1_6_0   mc_io_pad_cntl_d1;
-	union mc_phy_timing_2_7_1     mc_phy_timing;
+	union mc_phy_timing_2_7_1     mc_phy_timing_2;
+	union mc_tsm_debug_gcnt_6_0   mc_tsm_debug_gcnt;
+	union mc_tsm_debug_misc_6_0   mc_tsm_debug_misc;
+	union mc_tsm_debug_bcnt0_6_0  mc_tsm_debug_bcnt0;
+	union mc_tsm_debug_bcnt1_6_0  mc_tsm_debug_bcnt1;
+	union mc_tsm_debug_bcnt2_6_0  mc_tsm_debug_bcnt2;
+	union mc_tsm_debug_bcnt7_6_0  mc_tsm_debug_bcnt7;
+	union mc_tsm_debug_bcnt8_6_0  mc_tsm_debug_bcnt8;
+	union mc_tsm_debug_bcnt9_6_0  mc_tsm_debug_bcnt9;
+	union mc_tsm_debug_bcnt10_6_0 mc_tsm_debug_bcnt10;
+	union mc_io_debug_up_14_6_0   mc_io_debug_up_14;
+	union mc_io_debug_up_15_6_0   mc_io_debug_up_15;
+	union mc_seq_reserve_0_s_7_1  mc_seq_reserve_0_s;
+	union mc_seq_misc5_6_0  mc_seq_misc5;
+	union mc_seq_misc4_6_0  mc_seq_misc4;
+	union mc_seq_misc6_6_0  mc_seq_misc6;
+	union mc_seq_misc7_6_0  mc_seq_misc7;
+	union mc_seq_misc9_6_0  mc_seq_misc9;
+	union mc_arb_rtt_cntl0_6_0  mc_arb_rtt_cntl0;
+	union mc_arb_rtt_cntl1_6_0  mc_arb_rtt_cntl1;
+	union mc_arb_rtt_cntl2_6_0  mc_arb_rtt_cntl2;
+	union mc_io_debug_addrl_txphase_d0_6_0     mc_io_debug_addrl_txphase_d0;
+	union mc_io_debug_acmd_txphase_d0_6_0      mc_io_debug_acmd_txphase_d0;
+	union mc_io_debug_cmd_txphase_d0_6_0       mc_io_debug_cmd_txphase_d0;
+	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
+	union mc_io_debug_dqb0l_ofscal_d0_6_0      mc_io_debug_dqb0l_ofscal_d0;
+	union mc_io_debug_dqb0l_ofscal_d1_6_0      mc_io_debug_dqb0l_ofscal_d1;
+	union mc_io_debug_cmd_ofscal_d0_6_0        mc_io_debug_cmd_ofscal_d0;
+	union mc_io_debug_dqb0_cdr_phsize_d0_6_0   mc_io_debug_dqb0_cdr_phsize_d0;
+	union mc_io_debug_dqb0_cdr_phsize_d1_6_0   mc_io_debug_dqb0_cdr_phsize_d1;
+	union mc_io_debug_dqb0l_rx_eq_d0_6_0       mc_io_debug_dqb0l_rx_eq_d0;
+	union mc_io_debug_dqb0l_rx_eq_d1_6_0       mc_io_debug_dqb0l_rx_eq_d1;
+	union mc_io_debug_wck_rx_eq_d0_6_0         mc_io_debug_wck_rx_eq_d0;
+	union mc_io_debug_wcdr_cdr_phsize_d0_6_0   mc_io_debug_wcdr_cdr_phsize_d0;
+	union mc_io_debug_dbi_txbst_pd_d0_6_0      mc_io_debug_dbi_txbst_pd_d0;
+	union mc_io_debug_dbi_txbst_pu_d0_6_0      mc_io_debug_dbi_txbst_pu_d0;
+	union mc_io_debug_edc_txbst_pd_d0_6_0      mc_io_debug_edc_txbst_pd_d0;
+	union mc_io_debug_edc_txbst_pu_d0_6_0      mc_io_debug_edc_txbst_pu_d0;
+	union mc_io_debug_dqb0l_txbst_pd_d0_6_0    mc_io_debug_dqb0l_txbst_pd_d0;
+	union mc_io_debug_dqb0l_txbst_pd_d1_6_0    mc_io_debug_dqb0l_txbst_pd_d1;
+	union mc_io_debug_dqb0l_txbst_pu_d0_6_0    mc_io_debug_dqb0l_txbst_pu_d0;
+	union mc_io_debug_dqb0l_txbst_pu_d1_6_0    mc_io_debug_dqb0l_txbst_pu_d1;
+	union mc_io_debug_ck_txbst_pd_d0_6_0       mc_io_debug_ck_txbst_pd_d0;
+	union mc_io_debug_ck_txbst_pd_d1_6_0       mc_io_debug_ck_txbst_pd_d1;
+	union mc_io_debug_ck_txbst_pu_d0_6_0       mc_io_debug_ck_txbst_pu_d0;
+	union mc_io_debug_ck_txbst_pu_d1_6_0       mc_io_debug_ck_txbst_pu_d1;
+	union mc_io_debug_dbi_ofscal_d0_6_0        mc_io_debug_dbi_ofscal_d0;
+	union mc_io_debug_edc_ofscal_d0_6_0        mc_io_debug_edc_ofscal_d0;
+	union mc_io_debug_wck_ofscal_d0_6_0        mc_io_debug_wck_ofscal_d0;
+	union mc_io_debug_edc_cdr_phsize_d0_6_0    mc_io_debug_edc_cdr_phsize_d0;
+	union mc_io_debug_acmd_ofscal_d0_6_0       mc_io_debug_acmd_ofscal_d0;
+	union mc_io_debug_dbi_cdr_phsize_d0_6_0    mc_io_debug_dbi_cdr_phsize_d0;
+	union mc_io_debug_dbi_rx_eq_d0_6_0         mc_io_debug_dbi_rx_eq_d0;
+	union mc_io_debug_edc_rx_eq_d0_6_0         mc_io_debug_edc_rx_eq_d0;
+	union mc_io_cdrcntl_d0_6_0                 mc_io_cdrcntl_d0;
+	union mc_io_cdrcntl1_d0_6_0                mc_io_cdrcntl1_d0;
+	union mc_io_debug_dqb0l_rx_vref_cal_d0_6_0 mc_io_debug_dqb0l_rx_vref_cal_d0;
+	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
+};
+
+struct mc_block_tahiti_gddr5_adjust { // 304 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
+	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
+	union mc_io_txcntl_aphy_d0_6_0     mc_io_txcntl_aphy_d0;
+	union mc_io_rxcntl_dphy0_d0_6_0    mc_io_rxcntl_dphy0_d0;
+	union mc_io_rxcntl1_dphy0_d0_7_1   mc_io_rxcntl1_dphy0_d0;
+	union mc_io_dphy_str_cntl_d0_7_1   mc_io_dphy_str_cntl_d0;
+	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
+	union mc_pmg_cfg_6_0          mc_pmg_cfg;
+	union mc_pmg_auto_cfg_6_0     mc_pmg_auto_cfg;
+	union mc_seq_rd_ctl_d0_6_0    mc_seq_rd_ctl_d0;
+	union mc_io_pad_cntl_d0_6_0   mc_io_pad_cntl_d0;
+	union mc_io_pad_cntl_d1_6_0   mc_io_pad_cntl_d1;
+	union mc_phy_timing_2_7_1     mc_phy_timing_2;
 	union mc_tsm_debug_gcnt_6_0   mc_tsm_debug_gcnt;
 	union mc_tsm_debug_misc_6_0   mc_tsm_debug_misc;
 	union mc_tsm_debug_bcnt0_6_0  mc_tsm_debug_bcnt0;
@@ -1070,7 +1110,7 @@ struct mc_block_bonaire_gddr5_adjust { // 304 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mc_block_pitcairn_gddr5_adjust { // 284 bytes
+struct mc_block_exo_gddr5_adjust { // 128 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1079,71 +1119,31 @@ struct mc_block_pitcairn_gddr5_adjust { // 284 bytes
 	union mc_io_rxcntl1_dphy0_d0_7_1   mc_io_rxcntl1_dphy0_d0;
 	union mc_io_dphy_str_cntl_d0_7_1   mc_io_dphy_str_cntl_d0;
 	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
-	union mc_pmg_cfg_6_0          mc_pmg_cfg;
-	union mc_pmg_auto_cfg_6_0     mc_pmg_auto_cfg;
-	union mc_seq_rd_ctl_d0_6_0    mc_seq_rd_ctl_d0;
-	union mc_io_pad_cntl_d0_6_0   mc_io_pad_cntl_d0;
-	union mc_io_pad_cntl_d1_6_0   mc_io_pad_cntl_d1;
-	union mc_phy_timing_2_7_1     mc_phy_timing;
-	union mc_tsm_debug_gcnt_6_0   mc_tsm_debug_gcnt;
-	union mc_tsm_debug_misc_6_0   mc_tsm_debug_misc;
-	union mc_tsm_debug_bcnt0_6_0  mc_tsm_debug_bcnt0;
-	union mc_tsm_debug_bcnt1_6_0  mc_tsm_debug_bcnt1;
-	union mc_tsm_debug_bcnt2_6_0  mc_tsm_debug_bcnt2;
-	union mc_tsm_debug_bcnt7_6_0  mc_tsm_debug_bcnt7;
-	union mc_tsm_debug_bcnt8_6_0  mc_tsm_debug_bcnt8;
-	union mc_tsm_debug_bcnt9_6_0  mc_tsm_debug_bcnt9;
-	union mc_tsm_debug_bcnt10_6_0 mc_tsm_debug_bcnt10;
-	union mc_io_debug_up_14_6_0   mc_io_debug_up_14;
-	union mc_io_debug_up_15_6_0   mc_io_debug_up_15;
-	union mc_seq_reserve_0_s_7_1  mc_seq_reserve_0_s;
-	union mc_seq_misc5_6_0  mc_seq_misc5;
-	union mc_seq_misc4_6_0  mc_seq_misc4;
-	union mc_seq_misc6_6_0  mc_seq_misc6;
-	union mc_seq_misc7_6_0  mc_seq_misc7;
-	union mc_seq_misc9_6_0  mc_seq_misc9;
-	union mc_arb_rtt_cntl0_6_0  mc_arb_rtt_cntl0;
-	union mc_arb_rtt_cntl1_6_0  mc_arb_rtt_cntl1;
-	union mc_arb_rtt_cntl2_6_0  mc_arb_rtt_cntl2;
-	union mc_io_debug_addrl_txphase_d0_6_0     mc_io_debug_addrl_txphase_d0;
-	union mc_io_debug_acmd_txphase_d0_6_0      mc_io_debug_acmd_txphase_d0;
-	union mc_io_debug_cmd_txphase_d0_6_0       mc_io_debug_cmd_txphase_d0;
-	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
-	union mc_io_debug_dqb0l_ofscal_d0_6_0      mc_io_debug_dqb0l_ofscal_d0;
-	union mc_io_debug_dqb0l_ofscal_d1_6_0      mc_io_debug_dqb0l_ofscal_d1;
-	union mc_io_debug_cmd_ofscal_d0_6_0        mc_io_debug_cmd_ofscal_d0;
-	union mc_io_debug_dqb0_cdr_phsize_d0_6_0   mc_io_debug_dqb0_cdr_phsize_d0;
-	union mc_io_debug_dqb0_cdr_phsize_d1_6_0   mc_io_debug_dqb0_cdr_phsize_d1;
-	union mc_io_debug_dqb0l_rx_eq_d0_6_0       mc_io_debug_dqb0l_rx_eq_d0;
-	union mc_io_debug_dqb0l_rx_eq_d1_6_0       mc_io_debug_dqb0l_rx_eq_d1;
-	union mc_io_debug_wck_rx_eq_d0_6_0         mc_io_debug_wck_rx_eq_d0;
-	union mc_io_debug_wcdr_cdr_phsize_d0_6_0   mc_io_debug_wcdr_cdr_phsize_d0;
-	union mc_io_debug_dbi_txbst_pd_d0_6_0      mc_io_debug_dbi_txbst_pd_d0;
-	union mc_io_debug_dbi_txbst_pu_d0_6_0      mc_io_debug_dbi_txbst_pu_d0;
-	union mc_io_debug_edc_txbst_pd_d0_6_0      mc_io_debug_edc_txbst_pd_d0;
-	union mc_io_debug_edc_txbst_pu_d0_6_0      mc_io_debug_edc_txbst_pu_d0;
-	union mc_io_debug_dqb0l_txbst_pd_d0_6_0    mc_io_debug_dqb0l_txbst_pd_d0;
-	union mc_io_debug_dqb0l_txbst_pd_d1_6_0    mc_io_debug_dqb0l_txbst_pd_d1;
-	union mc_io_debug_dqb0l_txbst_pu_d0_6_0    mc_io_debug_dqb0l_txbst_pu_d0;
-	union mc_io_debug_dqb0l_txbst_pu_d1_6_0    mc_io_debug_dqb0l_txbst_pu_d1;
-	union mc_io_debug_ck_txbst_pd_d0_6_0       mc_io_debug_ck_txbst_pd_d0;
-	union mc_io_debug_ck_txbst_pd_d1_6_0       mc_io_debug_ck_txbst_pd_d1;
-	union mc_io_debug_ck_txbst_pu_d0_6_0       mc_io_debug_ck_txbst_pu_d0;
-	union mc_io_debug_ck_txbst_pu_d1_6_0       mc_io_debug_ck_txbst_pu_d1;
-	union mc_io_debug_dbi_ofscal_d0_6_0        mc_io_debug_dbi_ofscal_d0;
-	union mc_io_debug_edc_ofscal_d0_6_0        mc_io_debug_edc_ofscal_d0;
-	union mc_io_debug_wck_ofscal_d0_6_0        mc_io_debug_wck_ofscal_d0;
-	union mc_io_debug_edc_cdr_phsize_d0_6_0    mc_io_debug_edc_cdr_phsize_d0;
-	union mc_io_debug_acmd_ofscal_d0_6_0       mc_io_debug_acmd_ofscal_d0;
-	union mc_io_debug_dbi_cdr_phsize_d0_6_0    mc_io_debug_dbi_cdr_phsize_d0;
-	union mc_io_debug_dbi_rx_eq_d0_6_0         mc_io_debug_dbi_rx_eq_d0;
-	union mc_io_debug_edc_rx_eq_d0_6_0         mc_io_debug_edc_rx_eq_d0;
-	union mc_io_cdrcntl_d0_6_0                 mc_io_cdrcntl_d0;
-	union mc_io_cdrcntl1_d0_6_0                mc_io_cdrcntl1_d0;
-	union mc_io_debug_dqb0l_rx_vref_cal_d0_6_0 mc_io_debug_dqb0l_rx_vref_cal_d0;
-	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
+	union mc_pmg_cfg_6_0        mc_pmg_cfg;
+	union mc_pmg_auto_cfg_6_0   mc_pmg_auto_cfg;
+	union mc_seq_rd_ctl_d0_6_0  mc_seq_rd_ctl_d0;
+	union mc_io_pad_cntl_d0_6_0 mc_io_pad_cntl_d0;
+	union mc_io_pad_cntl_d1_6_0 mc_io_pad_cntl_d1;
+	union mc_phy_timing_2_7_1   mc_phy_timing_2;
+	union mc_io_debug_dqb0l_rxphase_d0_6_0 mc_io_debug_dqb0l_rxphase_d0;
+	union mc_io_debug_dqb0l_rxphase_d1_6_0 mc_io_debug_dqb0l_rxphase_d1;
+	union mc_io_debug_wck_rxphase_d0_6_0   mc_io_debug_wck_rxphase_d0;
+	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
+	union mc_io_debug_dbi_rxphase_d0_6_0   mc_io_debug_dbi_rxphase_d0;
+	union mc_io_debug_dqb0l_txphase_d0_6_0 mc_io_debug_dqb0l_txphase_d0;
+	union mc_io_debug_dqb0l_txphase_d1_6_0 mc_io_debug_dqb0l_txphase_d1;
+	union mc_io_debug_dbi_txphase_d0_6_0   mc_io_debug_dbi_txphase_d0;
+	union mc_io_debug_wck_txphase_d0_6_0   mc_io_debug_wck_txphase_d0;
+	union mc_io_debug_edc_txphase_d0_6_0   mc_io_debug_edc_txphase_d0;
+	union mc_io_debug_ck_txphase_d0_6_0    mc_io_debug_ck_txphase_d0;
+	union mc_io_debug_addrl_txphase_d0_6_0 mc_io_debug_addrl_txphase_d0;
+	union mc_io_debug_acmd_txphase_d0_6_0  mc_io_debug_acmd_txphase_d0;
+	union mc_io_debug_cmd_txphase_d0_6_0   mc_io_debug_cmd_txphase_d0;
+	union mc_io_debug_addrl_clksel_d0_6_0  mc_io_debug_addrl_clksel_d0;
+	union mc_io_debug_addrl_clksel_d1_6_0  mc_io_debug_addrl_clksel_d1;
+	union mc_seq_misc5_6_0    mc_seq_misc5;
+	union mc_seq_fifo_ctl_7_1 mc_seq_fifo_ctl;
 };
-
 
 struct mc_block_tonga_gddr5_adjust { // 96 bytes
 	union atom_mc_register_setting_id  block_id;
@@ -1172,12 +1172,7 @@ struct mc_block_tonga_gddr5_adjust { // 96 bytes
 	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
 };
 
-struct mc_block_fiji_gddr5_adjust { // 8 bytes
-	union atom_mc_register_setting_id  block_id;
-	union mc_seq_rxframing_dbi_d1_6_0_o  mc_seq_rxframing_dbi_d1;
-};
-
-struct mc_block_grenada_gddr5_adjust { // 288 bytes
+struct mc_block_hawaii_grenada_gddr5_adjust { // 288 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1191,7 +1186,7 @@ struct mc_block_grenada_gddr5_adjust { // 288 bytes
 	union mc_seq_rd_ctl_d0_6_0    mc_seq_rd_ctl_d0;
 	union mc_io_pad_cntl_d0_6_0   mc_io_pad_cntl_d0;
 	union mc_io_pad_cntl_d1_6_0   mc_io_pad_cntl_d1;
-	union mc_phy_timing_2_7_1     mc_phy_timing;
+	union mc_phy_timing_2_7_1     mc_phy_timing_2;
 	union mc_tsm_debug_gcnt_6_0   mc_tsm_debug_gcnt;
 	union mc_tsm_debug_misc_6_0   mc_tsm_debug_misc;
 	union mc_tsm_debug_bcnt0_6_0  mc_tsm_debug_bcnt0;
@@ -1251,6 +1246,11 @@ struct mc_block_grenada_gddr5_adjust { // 288 bytes
 	union mc_io_cdrcntl1_d0_6_0                mc_io_cdrcntl1_d0;
 	union mc_io_debug_dqb0l_rx_vref_cal_d0_6_0 mc_io_debug_dqb0l_rx_vref_cal_d0;
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
+};
+
+struct mc_block_fiji_gddr5_adjust { // 8 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_rxframing_dbi_d1_6_0_o  mc_seq_rxframing_dbi_d1;
 };
 
 struct mc_block_polaris_gddr5_type_1_adjust { // 24 bytes
