@@ -738,9 +738,25 @@ atomtree_populate_init_mem_adjust_table(
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	if (70 == mem_adjust_table->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_block_islands_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_islands;
+	if (64 == mem_adjust_table->num_index) { // optimisation heuristic
+		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_exo_gddr5;
+		}
+	} else if (70 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_cayman_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_cayman_gddr5;
+		}
+	} else if (98 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_oland_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_oland_gddr5;
+		}
+	} else if (127 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_grenada_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_grenada_gddr5;
+		}
+	} else if (134 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_bonaire_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_bonaire_gddr5;
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
@@ -764,10 +780,30 @@ atomtree_populate_init_mem_adjust_table(
 			atui_branch* atui_strap;
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
-			switch(mem_adjust_table->reg_set) {
-				case adjust_set_islands:
+			switch (mem_adjust_table->reg_set) {
+				case adjust_set_cayman_gddr5:
 					atui_strap_func = PPATUI_FUNC_NAME(
-						mc_block_islands_gddr5_adjust
+						mc_block_cayman_gddr5_adjust
+					);
+					break;
+				case adjust_set_oland_gddr5:
+					atui_strap_func = PPATUI_FUNC_NAME(
+						mc_block_oland_gddr5_adjust
+					);
+					break;
+				case adjust_set_exo_gddr5:
+					atui_strap_func = PPATUI_FUNC_NAME(
+						mc_block_exo_gddr5_adjust
+					);
+					break;
+				case adjust_set_bonaire_gddr5:
+					atui_strap_func = PPATUI_FUNC_NAME(
+						mc_block_bonaire_gddr5_adjust
+					);
+					break;
+				case adjust_set_grenada_gddr5:
+					atui_strap_func = PPATUI_FUNC_NAME(
+						mc_block_grenada_gddr5_adjust
 					);
 					break;
 				default:
@@ -798,7 +834,7 @@ atomtree_populate_init_mem_adjust_table(
 				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 			}
 			if (mem_adjust_table->num_data_entries) {
-				sprintf(atui_mem_timings->name, "%s (uncertain)",
+				sprintf(atui_mem_timings->name, "%s (has inaccuracies)",
 					atui_strap->varname
 				);
 				assert(strlen(atui_mem_timings->name)
@@ -869,7 +905,7 @@ atomtree_populate_init_mem_clk_patch(
 			atui_branch* atui_strap;
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
-			switch(mem_clk_patch->reg_set) {
+			switch (mem_clk_patch->reg_set) {
 				case timings_set_islands:
 					atui_strap_func = PPATUI_FUNC_NAME(
 						mc_block_islands_gddr5_timings
@@ -1857,21 +1893,20 @@ atomtree_populate_vram_info_v2_1(
 	if (vi21->leaves->MemAdjustTblOffset) {
 		vi21->mem_adjust_table.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemAdjustTblOffset;
-
+		/*
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi21->mem_adjust_table), generate_atui, 0
 		);
-		/*
+		if (generate_atui) {
+			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+		}
+		*/
 		atui_memadjust = atomtree_populate_init_mem_adjust_table(
 			&(vi21->mem_adjust_table),
 			generate_atui,
 			vi21->vram_modules
 		);
-		*/
-
-		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
-		}
+		//*/
 	} else {
 		vi21->mem_adjust_table.leaves = NULL;
 	}
@@ -1941,13 +1976,19 @@ atomtree_populate_vram_info_v2_2(
 	if (vi22->leaves->MemAdjustTblOffset) {
 		vi22->mem_adjust_table.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemAdjustTblOffset;
-
+		/*
 		atui_memadjust = atomtree_populate_init_reg_block(
 			&(vi22->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_memadjust->name, u8"mem_adjust_table");
 		}
+		*/
+		atui_memadjust = atomtree_populate_init_mem_adjust_table(
+			&(vi22->mem_adjust_table),
+			generate_atui,
+			vi22->vram_modules
+		);
 	} else {
 		vi22->mem_adjust_table.leaves = NULL;
 	}
