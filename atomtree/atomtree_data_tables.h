@@ -221,10 +221,16 @@ enum common_register_sequence:uint8_t {
 	// adjust_set_
 	// adjust_set_evergreen_ddr3,
 	adjust_set_cayman_gddr5,
+	adjust_set_caicos_ddr3,
 	adjust_set_oland_gddr5,
 	adjust_set_exo_gddr5,
 	adjust_set_bonaire_gddr5,
+	adjust_set_pitcairn_gddr5,
+	adjust_set_tonga_gddr5,
 	adjust_set_grenada_gddr5,
+	adjust_set_fiji_gddr5,
+	adjust_set_polaris_gddr5_type_1,
+	adjust_set_polaris_gddr5_type_2,
 
 	// reg_block_mem_clk_patch:
 	timings_set_islands,

@@ -129,10 +129,16 @@ PPATUI_HEADERIFY(umc_block_vega21_timings);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 
 PPATUI_HEADERIFY(mc_block_cayman_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_caicos_ddr3_adjust);
 PPATUI_HEADERIFY(mc_block_oland_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_exo_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_bonaire_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_pitcairn_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_tonga_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_grenada_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_fiji_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_1_adjust);
+PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_2_adjust);
 
 /******************************************************************************/
 // atui_atombios.c / atombios.h

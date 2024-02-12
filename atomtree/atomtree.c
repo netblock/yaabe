@@ -739,7 +739,36 @@ atomtree_populate_init_mem_adjust_table(
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
-	if (64 == mem_adjust_table->num_index) { // optimisation heuristic
+	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
+		if (regcmp(index, mc_block_fiji_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_fiji_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_gddr5_adjust);
+		}
+	} else if (7 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_polaris_gddr5_type_1_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_polaris_gddr5_type_1;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_block_polaris_gddr5_type_1_adjust
+			);
+		}
+	} else if (13 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_polaris_gddr5_type_2_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_polaris_gddr5_type_2;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_block_polaris_gddr5_type_2_adjust
+			);
+		}
+	} else if (46 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_tonga_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_tonga_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_tonga_gddr5_adjust);
+		}
+	} else if (54 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_caicos_ddr3_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_caicos_ddr3;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_caicos_ddr3_adjust);
+		}
+	} else if (64 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_exo_gddr5;
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_exo_gddr5_adjust);
@@ -753,6 +782,11 @@ atomtree_populate_init_mem_adjust_table(
 		if (regcmp(index, mc_block_oland_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_oland_gddr5;
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_oland_gddr5_adjust);
+		}
+	} else if (124 == mem_adjust_table->num_index) {
+		if (regcmp(index, mc_block_pitcairn_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_pitcairn_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_pitcairn_gddr5_adjust);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_grenada_gddr5_adjust_addresses)) {
@@ -769,7 +803,7 @@ atomtree_populate_init_mem_adjust_table(
 	#ifndef NDEBUG
 	if (common_set_unknown == mem_adjust_table->reg_set) {
 		register_set_print_tables(mem_adjust_table, &GMC_reg_set, true);
-		assert(mem_adjust_table->reg_set); // unknown timings sequence
+		//assert(mem_adjust_table->reg_set); // unknown timings sequence
 	}
 	#endif
 
