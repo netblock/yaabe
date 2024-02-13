@@ -120,18 +120,18 @@ register_set_print_tables(
 	
 	const char8_t* reg_name;
 	char* token_save;
-	char8_t* token;
+	const char8_t* token;
+	char8_t tokens[16][16];
+	uint8_t num_tokens;
+	uint8_t tokens_i;
 	char8_t temp_buffer[64];
-	char8_t var_name[64];
-	char8_t* name;
+	char8_t name_buffer[64];
+	char8_t* name_ptr;
 	char8_t union_name[64];
-	uint8_t s_i;
+	uint8_t str_i;
 
 	int16_t set_loc;
 	uint16_t rii;
-
-
-	uint16_t val;
 
 	printf(u8"\nSTART\n\n");
 	// print assert-reg-index body
@@ -176,31 +176,43 @@ register_set_print_tables(
 		}
 
 		// lower case, and copy into temp buffer for tokenisation
-		for (s_i=0; reg_name[s_i]; s_i++) {
-			temp_buffer[s_i] = tolower(reg_name[s_i]);
+		for (str_i=0; reg_name[str_i]; str_i++) {
+			temp_buffer[str_i] = tolower(reg_name[str_i]);
 		}
-		temp_buffer[s_i] = '\0';
+		temp_buffer[str_i] = '\0';
 		assert(strlen(temp_buffer) < sizeof(temp_buffer));
 
 		strcpy(union_name, temp_buffer);
 
+
 		// lop off the version bits at the end
-		// could be faster, but it isn't critical
+		tokens_i = 0;
 		token_save = NULL;
-		name = var_name;
+		name_ptr = name_buffer;
 		token = strtok_r(temp_buffer, u8"_", &token_save);
-		while (token) {
-			if (0 == is_number(token)) { 
-				name = memccpy(name, token, '\0', sizeof(var_name));
-				*(name-1) = '_';
-			}
+		while (token) { // tokenise the string
+			assert(strlen(token) < sizeof(tokens[0]));
+			strcpy(tokens[tokens_i], token);
+			tokens_i++;
 			token = strtok_r(NULL, u8"_", &token_save);
 		}
-		assert(name > var_name);
-		assert(strlen(var_name) < sizeof(var_name));
-		*(name-1) = '\0';
-		
-		printf(struct_entry, union_name, var_name);
+		assert(tokens_i);
+		// lop off trailing tokens that are numbers
+		tokens_i--;
+		for (; (0 < tokens_i) && is_number(tokens[tokens_i]); tokens_i--);
+		num_tokens = tokens_i + 1; //tokens_i++;
+		for (tokens_i=0; tokens_i < num_tokens; tokens_i++) { // join the str
+			name_ptr = memccpy(
+				name_ptr, tokens[tokens_i], '\0', sizeof(name_buffer)
+			);
+			*(name_ptr-1) = '_';
+		}
+		assert(name_ptr > name_buffer);
+		assert(strlen(name_buffer) < sizeof(name_buffer));
+		*(name_ptr-1) = '\0';
+
+
+		printf(struct_entry, union_name, name_buffer);
 		unions++;
 	}
 	printf(u8"\nEND: %u+1 unions\n\n",unions); // is block_id
