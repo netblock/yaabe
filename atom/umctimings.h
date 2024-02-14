@@ -664,9 +664,35 @@ struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
 	union gddr5_mr7 gddr5_mr7; // guess, might be wrong
 };
 
+struct mc_seq_misc1_ddr3 {
+	union ddr3_mr0  mr0;
+	union ddr3_mr1  mr1;
+};
+struct mc_seq_misc3_ddr3 {
+	union ddr3_mr2  mr2;
+	union ddr3_mr3  mr3;
+};
+
 /******************************************************************************/
 // mem_clk_patch
 /******************************************************************************/
+
+struct mc_block_islands_ddr3_timings { // 52 bytes
+	// Northern, Southern, Sea, Volcanic Islands
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_wr_ctl_d0_6_0    mc_seq_wr_ctl_d0;
+	union mc_seq_wr_ctl_2_6_0     mc_seq_wr_ctl;
+	union mc_seq_ras_timing_6_0   mc_seq_ras_timing;
+	union mc_seq_cas_timing_6_0   mc_seq_cas_timing;
+	union mc_seq_misc_timing_6_0  mc_seq_misc_timing;
+	union mc_seq_misc_timing2_6_0 mc_seq_misc_timing2;
+	union mc_seq_pmg_timing_6_0   mc_seq_pmg_timing;
+	struct mc_seq_misc1_ddr3 mc_seq_misc1;
+	struct mc_seq_misc3_ddr3 mc_seq_misc3;
+	union mc_seq_misc8_6_0   mc_seq_misc8;
+	union mc_arb_dram_timing_6_0  mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0 mc_arb_dram_timing2;
+};
 
 struct mc_block_islands_gddr5_timings { // 52 bytes
 	// Northern, Southern, Sea, Volcanic Islands
@@ -815,7 +841,7 @@ struct mc_block__gddr5_adjust { //  bytes
 };
 */
 
-struct mc_block_caicos_ddr3_adjust { // 108 bytes
+struct mc_block_caicos_turks_ddr3_adjust { // 108 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1248,7 +1274,7 @@ struct mc_block_hawaii_grenada_gddr5_adjust { // 288 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mc_block_fiji_gddr5_adjust { // 8 bytes
+struct mc_block_fiji_adjust { // 8 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_rxframing_dbi_d1_6_0_o  mc_seq_rxframing_dbi_d1;
 };

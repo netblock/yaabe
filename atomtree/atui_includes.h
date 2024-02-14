@@ -121,6 +121,7 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 PPATUI_HEADERIFY(mc_seq_byte_remap_d0_6_0_o);
 PPATUI_HEADERIFY(mc_arb_ramcfg_7_0_o);
+PPATUI_HEADERIFY(mc_block_islands_ddr3_timings);
 PPATUI_HEADERIFY(mc_block_islands_gddr5_timings);
 PPATUI_HEADERIFY(mc_block_fiji_timings);
 PPATUI_HEADERIFY(mc_block_polaris_timings);
@@ -128,7 +129,7 @@ PPATUI_HEADERIFY(umc_block_vega10_timings);
 PPATUI_HEADERIFY(umc_block_vega21_timings);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 
-PPATUI_HEADERIFY(mc_block_caicos_ddr3_adjust);
+PPATUI_HEADERIFY(mc_block_caicos_turks_ddr3_adjust);
 PPATUI_HEADERIFY(mc_block_cayman_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_oland_verde_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_pitcairn_gddr5_adjust);
@@ -136,7 +137,7 @@ PPATUI_HEADERIFY(mc_block_tahiti_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_exo_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_tonga_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_hawaii_grenada_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_fiji_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_fiji_adjust);
 PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_1_adjust);
 PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_2_adjust);
 

@@ -717,6 +717,28 @@ get_memory_vendor_part_strs(
 	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
 }
 
+static enum atom_dgpu_vram_type
+get_vram_type(
+		const struct atomtree_vram_module* const vram_module
+		) {
+	switch (vram_module->vram_module_ver) {
+		case v1_1:  return vram_module->v1_1->MemoryType;
+		case v1_2:  return vram_module->v1_2->MemoryType;
+		case v1_3:  return vram_module->v1_3->MemoryType;
+		case v1_4:  return vram_module->v1_4->MemoryType;
+		case v1_5:  return vram_module->v1_5->MemoryType;
+		case v1_6:  return vram_module->v1_6->MemoryType;
+		case v1_7:  return vram_module->v1_7->MemoryType;
+		case v1_8:  return vram_module->v1_8->MemoryType;
+		case v1_9:  return vram_module->v1_9->memory_type;
+		case v1_10: return vram_module->v1_10->memory_type;
+		case v1_11: return vram_module->v1_11->memory_type;
+		case v3_0:
+		default: assert(0);
+	}
+}
+
+
 static atui_branch*
 atomtree_populate_init_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
@@ -728,6 +750,9 @@ atomtree_populate_init_mem_adjust_table(
 	);
 	mem_adjust_table->reg_type = reg_block_mem_adjust_table;
 
+	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+		&(vram_modules[0])
+	);
 	const enum atomtree_common_version vram_module_ver =
 		vram_modules[0].vram_module_ver;
 	const struct atom_init_reg_index_format* const index =
@@ -740,9 +765,9 @@ atomtree_populate_init_mem_adjust_table(
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_block_fiji_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_fiji_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_gddr5_adjust);
+		if (regcmp(index, mc_block_fiji_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_fiji;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_adjust);
 		}
 	} else if (7 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_polaris_gddr5_type_1_adjust_addresses)) {
@@ -764,9 +789,11 @@ atomtree_populate_init_mem_adjust_table(
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_tonga_gddr5_adjust);
 		}
 	} else if (54 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_caicos_ddr3_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_caicos_ddr3;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_caicos_ddr3_adjust);
+		if (regcmp(index, mc_block_caicos_turks_ddr3_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_caicos_turks_ddr3;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_block_caicos_turks_ddr3_adjust
+			);
 		}
 	} else if (64 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
@@ -824,15 +851,36 @@ atomtree_populate_init_mem_adjust_table(
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
 			const char8_t* vendor_part[2];
+			const bool atom_vram_module_v8_hack = (
+				// uniquely, atom_vram_module_v8 uses McTunningSetId to ID
+				// mem_adjust table. It seems to exist as a way to exlude the
+				// 'generic' vram_module.
+				(v1_8 == vram_modules[0].vram_module_ver)
+				&& (GENERIC == vram_modules[0].v1_8->MemoryVendorID.vendor_code)
+			);
 			for (uint8_t i = 0; i < mem_adjust_table->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
 				ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
 
 				get_memory_vendor_part_strs(
-					&(vram_modules[data_blocks[i]->block_id.mem_block_id]),
+					&(vram_modules[
+						data_blocks[i]->block_id.mem_block_id
+						+ atom_vram_module_v8_hack
+					]),
 					vendor_part
 				);
+				#ifndef NDEBUG
+				if (v1_8 == vram_module_ver) {
+					assert((
+						vram_modules[
+							data_blocks[i]->block_id.mem_block_id
+							+ atom_vram_module_v8_hack
+						].v1_8->McTunningSetId
+						) == (data_blocks[i]->block_id.mem_block_id)
+					);
+				}
+				#endif
 				if (v1_7 <= vram_module_ver) {
 					sprintf(atui_strap->name, u8"vendor adjust %s (%s)",
 						vendor_part[1],
@@ -873,6 +921,9 @@ atomtree_populate_init_mem_clk_patch(
 	);
 	mem_clk_patch->reg_type = reg_block_mem_clk_patch;
 
+	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+		&(vram_modules[0])
+	);
 	const enum atomtree_common_version vram_module_ver =
 		vram_modules[0].vram_module_ver;
 	const struct atom_init_reg_index_format* const index =
@@ -888,12 +939,21 @@ atomtree_populate_init_mem_clk_patch(
 		if (regcmp(index, mc_block_polaris_timings_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_polaris_timings);
-		} else if (regcmp(index, mc_block_islands_gddr5_timings_addresses)
-				|| regcmp(index, mc_block_islands_gddr5_timings_addresses_type2)
+		} else if (regcmp(index, mc_block_islands_timings_type_1_addresses)
+				|| regcmp(index, mc_block_islands_timings_type_2_addresses)
 				) {
 			// Northern, Southern, Sea, Volcanic Islands
-			mem_clk_patch->reg_set = timings_set_islands;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_islands_gddr5_timings);
+			if (vram_type == ATOM_DGPU_VRAM_TYPE_DDR3) {
+				mem_clk_patch->reg_set = timings_set_islands_ddr3;
+				atui_strap_func = PPATUI_FUNC_NAME(
+					mc_block_islands_ddr3_timings
+				);
+			} else {
+				mem_clk_patch->reg_set = timings_set_islands_gddr5;
+				atui_strap_func = PPATUI_FUNC_NAME(
+					mc_block_islands_gddr5_timings
+				);
+			}
 		}
 	} else if (10 == mem_clk_patch->num_index) {
 		if (regcmp(index, mc_block_fiji_timings_addresses)) {
@@ -1448,6 +1508,14 @@ atomtree_populate_vram_module(
 
 					switch (vmod->v1_7->MemoryType) {
 						// mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_DDR3:
+							atui_children[1] = ATUI_MAKE_BRANCH(ddr3_mr2, NULL,
+								NULL,&(vmod->v1_7->MR2),  0,NULL
+							);
+							atui_children[2] = ATUI_MAKE_BRANCH(ddr3_mr3, NULL,
+								NULL,&(vmod->v1_7->MR3),  0,NULL
+							);
+							break;
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
 							atui_children[1] = ATUI_MAKE_BRANCH(gddr5_mr2, NULL,
 								NULL,&(vmod->v1_7->MR2),  0,NULL

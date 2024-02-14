@@ -110,7 +110,7 @@ static const uint16_t mc_block_r600_gddr4_memclkpatch_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_islands_gddr5_timings_addresses[] = { // 13+1
+static const uint16_t mc_block_islands_timings_type_1_addresses[] = { // 13+1
 	// Northern, Southern, Sea, Volcanic Islands
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
@@ -127,7 +127,7 @@ static const uint16_t mc_block_islands_gddr5_timings_addresses[] = { // 13+1
 	mmMC_ARB_DRAM_TIMING2_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mc_block_islands_gddr5_timings_addresses_type2[] = {
+static const uint16_t mc_block_islands_timings_type_2_addresses[] = {
 	// 13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
@@ -185,7 +185,7 @@ static const uint16_t mc_block__gddr5_adjust_addresses[] = { // +1
 };
 */
 
-static const uint16_t mc_block_caicos_ddr3_adjust_addresses[] = { // 53+1
+static const uint16_t mc_block_caicos_turks_ddr3_adjust_addresses[] = { // 53+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -928,7 +928,7 @@ static const uint16_t mc_block_hawaii_grenada_gddr5_adjust_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_fiji_gddr5_adjust_addresses[] = { // 1+1
+static const uint16_t mc_block_fiji_adjust_addresses[] = { // 1+1
 	mmMC_SEQ_RXFRAMING_DBI_D1_6_0,
 	END_OF_REG_INDEX_BLOCK
 };

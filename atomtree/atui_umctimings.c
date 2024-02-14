@@ -629,7 +629,69 @@ PPATUI_FUNCIFY(union, mc_seq_rxframing_dbi_d1_6_0_o, atui_nullstruct,
 	)
 )
 
-
+PPATUI_FUNCIFY(struct, mc_block_islands_ddr3_timings, atui_nullstruct, // 52 bytes
+	// Northern, Southern, Sea, Volcanic Islands
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl_d0, u8"mc_seq_wr_ctl_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_wr_ctl, u8"mc_seq_wr_ctl",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_wr_ctl_2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_ras_timing, u8"mc_seq_ras_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_ras_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_cas_timing, u8"mc_seq_cas_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_cas_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing, u8"mc_seq_misc_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc_timing2, u8"mc_seq_misc_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc_timing2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_pmg_timing, u8"mc_seq_pmg_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_pmg_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc1.mr0, u8"mr0",
+		(ATUI_NODISPLAY, ATUI_INLINE, ddr3_mr0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc1.mr1, u8"mr1",
+		(ATUI_NODISPLAY, ATUI_INLINE, ddr3_mr1),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc3.mr2, u8"mr2",
+		(ATUI_NODISPLAY, ATUI_INLINE, ddr3_mr2),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc3.mr3, u8"mr3",
+		(ATUI_NODISPLAY, ATUI_INLINE, ddr3_mr3),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc8, u8"mc_seq_misc8",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc8_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing, u8"mc_arb_dram_timing",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_arb_dram_timing2, u8"mc_arb_dram_timing2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_arb_dram_timing2_6_0),
+		(ATUI_NODESCR)
+	)
+)
 
 PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	(bios->block_id, u8"block_id",
@@ -1137,7 +1199,7 @@ PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_caicos_ddr3_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_block_caicos_turks_ddr3_adjust, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2794,7 +2856,7 @@ PPATUI_FUNCIFY(struct, mc_block_hawaii_grenada_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_fiji_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_block_fiji_adjust, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
