@@ -221,6 +221,8 @@ enum common_register_sequence:uint8_t {
 	// adjust_set_
 	// adjust_set_evergreen_ddr3,
 	adjust_set_caicos_turks_ddr3,
+	adjust_set_turks_gddr5,
+	adjust_set_barts_gddr5,
 	adjust_set_cayman_gddr5,
 	adjust_set_oland_verde_gddr5,
 	adjust_set_pitcairn_gddr5,

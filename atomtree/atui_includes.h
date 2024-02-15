@@ -130,6 +130,8 @@ PPATUI_HEADERIFY(umc_block_vega21_timings);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 
 PPATUI_HEADERIFY(mc_block_caicos_turks_ddr3_adjust);
+PPATUI_HEADERIFY(mc_block_turks_gddr5_adjust);
+PPATUI_HEADERIFY(mc_block_barts_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_cayman_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_oland_verde_gddr5_adjust);
 PPATUI_HEADERIFY(mc_block_pitcairn_gddr5_adjust);

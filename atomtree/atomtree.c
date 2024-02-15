@@ -799,11 +799,17 @@ atomtree_populate_init_mem_adjust_table(
 		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_exo_gddr5;
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_exo_gddr5_adjust);
+		} else if (regcmp(index, mc_block_turks_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_turks_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_turks_gddr5_adjust);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_cayman_gddr5_adjust_addresses)) {
 			mem_adjust_table->reg_set = adjust_set_cayman_gddr5;
 			atui_strap_func = PPATUI_FUNC_NAME(mc_block_cayman_gddr5_adjust);
+		} else if (regcmp(index, mc_block_barts_gddr5_adjust_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_barts_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_block_barts_gddr5_adjust);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
 		if (regcmp(index, mc_block_oland_verde_gddr5_adjust_addresses)) {
@@ -1957,20 +1963,11 @@ atomtree_populate_vram_info_v2_1(
 	if (vi21->leaves->MemAdjustTblOffset) {
 		vi21->mem_adjust_table.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemAdjustTblOffset;
-		/*
-		atui_memadjust = atomtree_populate_init_reg_block(
-			&(vi21->mem_adjust_table), generate_atui, 0
-		);
-		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
-		}
-		*/
 		atui_memadjust = atomtree_populate_init_mem_adjust_table(
 			&(vi21->mem_adjust_table),
 			generate_atui,
 			vi21->vram_modules
 		);
-		//*/
 	} else {
 		vi21->mem_adjust_table.leaves = NULL;
 	}
