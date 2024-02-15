@@ -41,10 +41,10 @@ regset_bsearch_left(
 		}
 	}
 	// left==right. mid will be off by 1, leftwise, if it's unique.
-	if (left == reg_set->num_reg_set_addresses) {
-		return -1;
-	} else {
+	if (address == set_array[left].address) {
 		return left;
+	} else {
+		return -1;
 	}
 }
 
@@ -74,10 +74,11 @@ regset_bsearch_right(
 	// left==right.
 	// left==mid==right and will be off by +1, if rightside element is unique
 	// left == (mid+1) if right-side element is not unique.
-	if (left == reg_set->num_reg_set_addresses) {
-		return -1;
+	right--;
+	if (address == set_array[right].address) {
+		return right;
 	} else {
-		return left - 1;
+		return -1;
 	}
 }
 
