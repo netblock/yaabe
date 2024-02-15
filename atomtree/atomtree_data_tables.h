@@ -218,21 +218,19 @@ enum common_register_sequence:uint8_t {
 	common_set_unknown,
 
 	// reg_block_mem_adjust_table:
-	// adjust_set_
-	// adjust_set_evergreen_ddr3,
-	adjust_set_caicos_turks_ddr3,
-	adjust_set_turks_gddr5,
-	adjust_set_barts_gddr5,
-	adjust_set_cayman_gddr5,
-	adjust_set_oland_verde_gddr5,
-	adjust_set_pitcairn_gddr5,
-	adjust_set_tahiti_gddr5,
-	adjust_set_exo_gddr5,
-	adjust_set_tonga_gddr5,
-	adjust_set_hawaii_grenada_gddr5,
-	adjust_set_fiji,
-	adjust_set_polaris_gddr5_type_1,
-	adjust_set_polaris_gddr5_type_2,
+	adjust_set_terascale2_ddr3,  // Caicos, Turks
+	adjust_set_terascale2_gddr5_type3, // Turks
+	adjust_set_terascale2_gddr5_type4, // Barts
+	adjust_set_terascale3_gddr5, // Cayman
+	adjust_set_gcn1_gddr5_type1, // Oland, Cape Verde
+	adjust_set_gcn1_gddr5_type2, // Pitcairn
+	adjust_set_gcn1_gddr5_type3, // Tahiti
+	adjust_set_gcn1_gddr5_type4, // Exo
+	adjust_set_gcn2_gddr5, // Bonaire, Hawaii, Grenada
+	adjust_set_gcn3_gddr5, // Tonga
+	adjust_set_gcn3_hbm1,  // Fiji
+	adjust_set_gcn4_gddr5_type1, // Polaris
+	adjust_set_gcn4_gddr5_type2, // Polaris
 
 	// reg_block_mem_clk_patch:
 	timings_set_islands_ddr3,
@@ -266,17 +264,19 @@ struct atomtree_init_reg_block {
 	union {
 		void* data_sets;
 
-		struct mc_block_caicos_ddr3_adjust*    caicos_ddr3;
-		struct mc_block_cayman_gddr5_adjust*   cayman_gddr5;
-		struct mc_block_oland_verde_gddr5_adjust* oland_verde_gddr5;
-		struct mc_block_pitcairn_gddr5_adjust* pitcairn_gddr5;
-		struct mc_block_tahiti_gddr5_adjust*   tahiti_gddr5;
-		struct mc_block_exo_gddr5_adjust*      exo_gddr5;
-		struct mc_block_tonga_gddr5_adjust*    tonga_gddr5;
-		struct mc_block_hawaii_grenada_gddr5_adjust* hawaii_grenada_gddr5;
-		struct mc_block_fiji_adjust*  fiji;
-		struct mc_block_polaris_gddr5_type_1_adjust* polaris_gddr5_type_1;
-		struct mc_block_polaris_gddr5_type_2_adjust* polaris_gddr5_type_2;
+		struct mem_adjust_terascale2_ddr3*  terascale2_ddr3;
+		struct mem_adjust_terascale2_gddr5_type3*  terascale2_gddr5_type3;
+		struct mem_adjust_terascale2_gddr5_type4*  terascale2_gddr5_type4;
+		struct mem_adjust_terascale3_gddr5*  terascale3_gddr5;
+		struct mem_adjust_gcn1_gddr5_type1*  gcn1_gddr5_type1;
+		struct mem_adjust_gcn1_gddr5_type2*  gcn1_gddr5_type2;
+		struct mem_adjust_gcn1_gddr5_type3*  gcn1_gddr5_type3;
+		struct mem_adjust_gcn1_gddr5_type4*  gcn1_gddr5_type4;
+		struct mem_adjust_gcn2_gddr5* gcn2_gddr5;
+		struct mem_adjust_gcn3_gddr5* gcn3_gddr5;
+		struct mem_adjust_gcn3_hbm1*  gcn3_hbm1;
+		struct mem_adjust_gcn4_gddr5_type1*  gcn4_gddr5_type1;
+		struct mem_adjust_gcn4_gddr5_type2*  gcn4_gddr5_type2;
 
 		// reg_block_mem_clk_patch:
 		struct mc_block_islands_gddr5_timings* islands_timings;

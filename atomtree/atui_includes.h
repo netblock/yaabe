@@ -129,19 +129,19 @@ PPATUI_HEADERIFY(umc_block_vega10_timings);
 PPATUI_HEADERIFY(umc_block_vega21_timings);
 PPATUI_HEADERIFY(umc_block_navi1_timings);
 
-PPATUI_HEADERIFY(mc_block_caicos_turks_ddr3_adjust);
-PPATUI_HEADERIFY(mc_block_turks_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_barts_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_cayman_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_oland_verde_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_pitcairn_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_tahiti_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_exo_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_tonga_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_hawaii_grenada_gddr5_adjust);
-PPATUI_HEADERIFY(mc_block_fiji_adjust);
-PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_1_adjust);
-PPATUI_HEADERIFY(mc_block_polaris_gddr5_type_2_adjust);
+PPATUI_HEADERIFY(mem_adjust_terascale2_ddr3);
+PPATUI_HEADERIFY(mem_adjust_terascale2_gddr5_type3);
+PPATUI_HEADERIFY(mem_adjust_terascale2_gddr5_type4);
+PPATUI_HEADERIFY(mem_adjust_terascale3_gddr5);
+PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type1);
+PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type2);
+PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type3);
+PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type4);
+PPATUI_HEADERIFY(mem_adjust_gcn2_gddr5);
+PPATUI_HEADERIFY(mem_adjust_gcn3_gddr5);
+PPATUI_HEADERIFY(mem_adjust_gcn3_hbm1);
+PPATUI_HEADERIFY(mem_adjust_gcn4_gddr5_type1);
+PPATUI_HEADERIFY(mem_adjust_gcn4_gddr5_type2);
 
 /******************************************************************************/
 // atui_atombios.c / atombios.h

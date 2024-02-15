@@ -765,75 +765,69 @@ atomtree_populate_init_mem_adjust_table(
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_block_fiji_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_fiji;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_adjust);
+		if (regcmp(index, mem_adjust_gcn3_hbm1_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn3_hbm1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn3_hbm1);
 		}
 	} else if (7 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_polaris_gddr5_type_1_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_polaris_gddr5_type_1;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_block_polaris_gddr5_type_1_adjust
-			);
+		if (regcmp(index, mem_adjust_gcn4_gddr5_type1_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn4_gddr5_type1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn4_gddr5_type1);
 		}
 	} else if (13 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_polaris_gddr5_type_2_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_polaris_gddr5_type_2;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_block_polaris_gddr5_type_2_adjust
-			);
+		if (regcmp(index, mem_adjust_gcn4_gddr5_type2_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn4_gddr5_type2;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn4_gddr5_type2);
 		}
 	} else if (46 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_tonga_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_tonga_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_tonga_gddr5_adjust);
+		if (regcmp(index, mem_adjust_gcn3_gddr5_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn3_gddr5);
 		}
 	} else if (54 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_caicos_turks_ddr3_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_caicos_turks_ddr3;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_block_caicos_turks_ddr3_adjust
-			);
+		if (regcmp(index, mem_adjust_terascale2_ddr3_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_terascale2_ddr3;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_terascale2_ddr3);
 		}
 	} else if (64 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_exo_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_exo_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_exo_gddr5_adjust);
-		} else if (regcmp(index, mc_block_turks_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_turks_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_turks_gddr5_adjust);
+		if (regcmp(index, mem_adjust_gcn1_gddr5_type4_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type4;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type4);
+		} else if (regcmp(index, mem_adjust_terascale2_gddr5_type3_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_terascale2_gddr5_type3;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mem_adjust_terascale2_gddr5_type3
+			);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_cayman_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_cayman_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_cayman_gddr5_adjust);
-		} else if (regcmp(index, mc_block_barts_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_barts_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_barts_gddr5_adjust);
+		if (regcmp(index, mem_adjust_terascale3_gddr5_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_terascale3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_terascale3_gddr5);
+		} else if (regcmp(index, mem_adjust_terascale2_gddr5_type4_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_terascale2_gddr5_type4;
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mem_adjust_terascale2_gddr5_type4
+			);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_oland_verde_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_oland_verde_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_block_oland_verde_gddr5_adjust
-			);
+		if (regcmp(index, mem_adjust_gcn1_gddr5_type1_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type1);
 		}
 	} else if (124 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_pitcairn_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_pitcairn_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_pitcairn_gddr5_adjust);
+		if (regcmp(index, mem_adjust_gcn1_gddr5_type2_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type2;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type2);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_hawaii_grenada_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_hawaii_grenada_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_block_hawaii_grenada_gddr5_adjust
-			);
+		if (regcmp(index, mem_adjust_gcn2_gddr5_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn2_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn2_gddr5);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
-		if (regcmp(index, mc_block_tahiti_gddr5_adjust_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_tahiti_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_tahiti_gddr5_adjust);
+		if (regcmp(index, mem_adjust_gcn1_gddr5_type3_addresses)) {
+			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type3;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type3);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];

@@ -127,8 +127,7 @@ static const uint16_t mc_block_islands_timings_type_1_addresses[] = { // 13+1
 	mmMC_ARB_DRAM_TIMING2_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mc_block_islands_timings_type_2_addresses[] = {
-	// 13+1
+static const uint16_t mc_block_islands_timings_type_2_addresses[] = { // 13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
 	mmMC_SEQ_WR_CTL_2_6_0,
@@ -180,12 +179,12 @@ static const uint16_t mc_block_polaris_timings_addresses[] = { // 13+1
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
 /*
-static const uint16_t mc_block__gddr5_adjust_addresses[] = { // +1
+static const uint16_t mem_adjust__gddr5_addresses[] = { // +1
 	END_OF_REG_INDEX_BLOCK
 };
 */
 
-static const uint16_t mc_block_caicos_turks_ddr3_adjust_addresses[] = { // 53+1
+static const uint16_t mem_adjust_terascale2_ddr3_addresses[] = { // 53+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -242,7 +241,7 @@ static const uint16_t mc_block_caicos_turks_ddr3_adjust_addresses[] = { // 53+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_turks_gddr5_adjust_addresses[] = { // 63+1
+static const uint16_t mem_adjust_terascale2_gddr5_type3_addresses[] = { // 63+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -308,7 +307,7 @@ static const uint16_t mc_block_turks_gddr5_adjust_addresses[] = { // 63+1
 	ixMC_IO_DEBUG_CK_TXPHASE_D1_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mc_block_barts_gddr5_adjust_addresses[] = { // 69+1
+static const uint16_t mem_adjust_terascale2_gddr5_type4_addresses[] = { // 69+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -381,7 +380,7 @@ static const uint16_t mc_block_barts_gddr5_adjust_addresses[] = { // 69+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_cayman_gddr5_adjust_addresses[] = { // 69+1
+static const uint16_t mem_adjust_terascale3_gddr5_addresses[] = { // 69+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -454,7 +453,7 @@ static const uint16_t mc_block_cayman_gddr5_adjust_addresses[] = { // 69+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_oland_verde_gddr5_adjust_addresses[] = { // 97+1
+static const uint16_t mem_adjust_gcn1_gddr5_type1_addresses[] = { // 97+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -555,7 +554,7 @@ static const uint16_t mc_block_oland_verde_gddr5_adjust_addresses[] = { // 97+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_pitcairn_gddr5_adjust_addresses[] = { // 123+1
+static const uint16_t mem_adjust_gcn1_gddr5_type2_addresses[] = { // 123+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -682,7 +681,7 @@ static const uint16_t mc_block_pitcairn_gddr5_adjust_addresses[] = { // 123+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_tahiti_gddr5_adjust_addresses[] = { // 133+1
+static const uint16_t mem_adjust_gcn1_gddr5_type3_addresses[] = { // 133+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -819,7 +818,7 @@ static const uint16_t mc_block_tahiti_gddr5_adjust_addresses[] = { // 133+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_exo_gddr5_adjust_addresses[] = { // 63+1
+static const uint16_t mem_adjust_gcn1_gddr5_type4_addresses[] = { // 63+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -886,58 +885,7 @@ static const uint16_t mc_block_exo_gddr5_adjust_addresses[] = { // 63+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-
-static const uint16_t mc_block_tonga_gddr5_adjust_addresses[] = { // 45+1
-	mmMC_IO_RXCNTL_DPHY0_D0_6_0,
-	mmMC_IO_RXCNTL_DPHY0_D1_6_0,
-	mmMC_IO_RXCNTL_DPHY1_D0_6_0,
-	mmMC_IO_RXCNTL_DPHY1_D1_6_0,
-	mmMC_IO_RXCNTL1_DPHY0_D0_7_1,
-	mmMC_IO_RXCNTL1_DPHY0_D1_7_1,
-	mmMC_IO_RXCNTL1_DPHY1_D0_7_1,
-	mmMC_IO_RXCNTL1_DPHY1_D1_7_1,
-	mmMC_IO_APHY_STR_CNTL_D0_6_0,
-	mmMC_IO_APHY_STR_CNTL_D1_6_0,
-	ixMC_TSM_DEBUG_BCNT2_6_0,
-	mmMC_SEQ_RESERVE_1_S_6_0,
-	mmMC_SEQ_MISC5_6_0,
-	mmMC_SEQ_MISC4_6_0,
-	mmMC_SEQ_MISC6_6_0,
-	mmMC_SEQ_MISC7_6_0,
-	mmMC_SEQ_MISC9_6_0,
-	ixMC_IO_DEBUG_ADDRL_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_ADDRL_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_ADDRH_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_ADDRH_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_ACMD_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_ACMD_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_CMD_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_CMD_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_CK_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_CK_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_DQB0L_CLKSEL_D0_6_0,
-	ixMC_IO_DEBUG_EDC_CLKSEL_D0_6_0,
-	ixMC_IO_DEBUG_DQB0L_CLKSEL_D1_6_0,
-	ixMC_IO_DEBUG_EDC_CLKSEL_D1_6_0,
-	ixMC_IO_DEBUG_WCK_CLKSEL_D0_6_0,
-	ixMC_IO_DEBUG_WCK_CLKSEL_D1_6_0,
-	ixMC_IO_DEBUG_DQB0L_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_DBI_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_DQB0L_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_DBI_TXPHASE_D1_6_0,
-	ixMC_IO_DEBUG_WCK_TXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_WCK_TXPHASE_D1_6_0,
-	mmMC_SEQ_TXFRAMING_BYTE0_D0_6_0,
-	mmMC_SEQ_TXFRAMING_DBI_D0_6_0,
-	mmMC_SEQ_TXFRAMING_BYTE0_D1_6_0,
-	mmMC_SEQ_TXFRAMING_DBI_D1_6_0,
-	ixMC_IO_DEBUG_EDC_RXPHASE_D0_6_0,
-	ixMC_IO_DEBUG_EDC_RXPHASE_D1_6_0,
-	END_OF_REG_INDEX_BLOCK
-};
-
-static const uint16_t mc_block_hawaii_grenada_gddr5_adjust_addresses[] = {
-	// 126+1
+static const uint16_t mem_adjust_gcn2_gddr5_addresses[] = { // 126+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -1067,13 +1015,61 @@ static const uint16_t mc_block_hawaii_grenada_gddr5_adjust_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_fiji_adjust_addresses[] = { // 1+1
+static const uint16_t mem_adjust_gcn3_gddr5_addresses[] = { // 45+1
+	mmMC_IO_RXCNTL_DPHY0_D0_6_0,
+	mmMC_IO_RXCNTL_DPHY0_D1_6_0,
+	mmMC_IO_RXCNTL_DPHY1_D0_6_0,
+	mmMC_IO_RXCNTL_DPHY1_D1_6_0,
+	mmMC_IO_RXCNTL1_DPHY0_D0_7_1,
+	mmMC_IO_RXCNTL1_DPHY0_D1_7_1,
+	mmMC_IO_RXCNTL1_DPHY1_D0_7_1,
+	mmMC_IO_RXCNTL1_DPHY1_D1_7_1,
+	mmMC_IO_APHY_STR_CNTL_D0_6_0,
+	mmMC_IO_APHY_STR_CNTL_D1_6_0,
+	ixMC_TSM_DEBUG_BCNT2_6_0,
+	mmMC_SEQ_RESERVE_1_S_6_0,
+	mmMC_SEQ_MISC5_6_0,
+	mmMC_SEQ_MISC4_6_0,
+	mmMC_SEQ_MISC6_6_0,
+	mmMC_SEQ_MISC7_6_0,
+	mmMC_SEQ_MISC9_6_0,
+	ixMC_IO_DEBUG_ADDRL_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ADDRL_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_ADDRH_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ADDRH_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_ACMD_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_ACMD_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_CMD_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_CMD_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_CK_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_CK_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_DQB0L_CLKSEL_D0_6_0,
+	ixMC_IO_DEBUG_EDC_CLKSEL_D0_6_0,
+	ixMC_IO_DEBUG_DQB0L_CLKSEL_D1_6_0,
+	ixMC_IO_DEBUG_EDC_CLKSEL_D1_6_0,
+	ixMC_IO_DEBUG_WCK_CLKSEL_D0_6_0,
+	ixMC_IO_DEBUG_WCK_CLKSEL_D1_6_0,
+	ixMC_IO_DEBUG_DQB0L_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_DBI_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_DQB0L_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_DBI_TXPHASE_D1_6_0,
+	ixMC_IO_DEBUG_WCK_TXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_WCK_TXPHASE_D1_6_0,
+	mmMC_SEQ_TXFRAMING_BYTE0_D0_6_0,
+	mmMC_SEQ_TXFRAMING_DBI_D0_6_0,
+	mmMC_SEQ_TXFRAMING_BYTE0_D1_6_0,
+	mmMC_SEQ_TXFRAMING_DBI_D1_6_0,
+	ixMC_IO_DEBUG_EDC_RXPHASE_D0_6_0,
+	ixMC_IO_DEBUG_EDC_RXPHASE_D1_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
+
+static const uint16_t mem_adjust_gcn3_hbm1_addresses[] = { // 1+1
 	mmMC_SEQ_RXFRAMING_DBI_D1_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_polaris_gddr5_type_1_adjust_addresses[] = {
-	// 6+1
+static const uint16_t mem_adjust_gcn4_gddr5_type1_addresses[] = { // 6+1
 	mmMC_SEQ_MISC4_6_0,
 	mmMC_SEQ_MISC5_6_0,
 	mmMC_IO_PAD_CNTL_D1_6_0,
@@ -1083,8 +1079,7 @@ static const uint16_t mc_block_polaris_gddr5_type_1_adjust_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_polaris_gddr5_type_2_adjust_addresses[] = {
-	// 12+1
+static const uint16_t mem_adjust_gcn4_gddr5_type2_addresses[] = { // 12+1
 	mmMC_SEQ_MISC0_6_0,
 	mmMC_SEQ_MISC4_6_0,
 	mmMC_SEQ_MISC5_6_0,

@@ -1199,7 +1199,7 @@ PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_caicos_turks_ddr3_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_terascale2_ddr3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1309,7 +1309,7 @@ PPATUI_FUNCIFY(struct, mc_block_caicos_turks_ddr3_adjust, atui_nullstruct,
 		(ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, mc_block_turks_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1484,7 +1484,7 @@ PPATUI_FUNCIFY(struct, mc_block_turks_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_barts_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type4, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1683,7 +1683,7 @@ PPATUI_FUNCIFY(struct, mc_block_barts_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_cayman_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_terascale3_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1875,7 +1875,7 @@ PPATUI_FUNCIFY(struct, mc_block_cayman_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_oland_verde_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2110,7 +2110,7 @@ PPATUI_FUNCIFY(struct, mc_block_oland_verde_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_pitcairn_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type2, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2397,7 +2397,7 @@ PPATUI_FUNCIFY(struct, mc_block_pitcairn_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_tahiti_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2704,7 +2704,7 @@ PPATUI_FUNCIFY(struct, mc_block_tahiti_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_exo_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type4, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2835,106 +2835,7 @@ PPATUI_FUNCIFY(struct, mc_block_exo_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_tonga_gddr5_adjust, atui_nullstruct,
-	(bios->block_id, u8"block_id",
-		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_rxcntl_dphy0_d0, u8"mc_io_rxcntl_dphy0_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_rxcntl_dphy0_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_rxcntl1_dphy0_d0, u8"mc_io_rxcntl1_dphy0_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_rxcntl1_dphy0_d0_7_1),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_aphy_str_cntl_d0, u8"mc_io_aphy_str_cntl_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_aphy_str_cntl_d0_6_0_o),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_tsm_debug_bcnt2, u8"mc_tsm_debug_bcnt2",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_tsm_debug_bcnt2_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_reserve_1_s, u8"mc_seq_reserve_1_s",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_reserve_1_s_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_misc5, u8"mc_seq_misc5",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc5_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_misc4, u8"mc_seq_misc4",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc4_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_misc6, u8"mc_seq_misc6",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc6_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_misc7, u8"mc_seq_misc7",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc7_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_misc9, u8"mc_seq_misc9",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc9_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_addrl_txphase_d0, u8"mc_io_debug_addrl_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_addrl_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_acmd_txphase_d0, u8"mc_io_debug_acmd_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_acmd_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_cmd_txphase_d0, u8"mc_io_debug_cmd_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_cmd_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_ck_txphase_d0, u8"mc_io_debug_ck_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_ck_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_dqb0l_clksel_d0, u8"mc_io_debug_dqb0l_clksel_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_clksel_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_dqb0l_clksel_d1, u8"mc_io_debug_dqb0l_clksel_d1",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_clksel_d1_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_wck_clksel_d0, u8"mc_io_debug_wck_clksel_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_wck_clksel_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_dqb0l_txphase_d0, u8"mc_io_debug_dqb0l_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_dqb0l_txphase_d1, u8"mc_io_debug_dqb0l_txphase_d1",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_txphase_d1_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_wck_txphase_d0, u8"mc_io_debug_wck_txphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_wck_txphase_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_txframing_byte0_d0, u8"mc_seq_txframing_byte0_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_txframing_byte0_d0_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_seq_txframing_byte0_d1, u8"mc_seq_txframing_byte0_d1",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_txframing_byte0_d1_6_0),
-		(ATUI_NODESCR)
-	),
-	(bios->mc_io_debug_edc_rxphase_d0, u8"mc_io_debug_edc_rxphase_d0",
-		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_edc_rxphase_d0_6_0),
-		(ATUI_NODESCR)
-	)
-)
-
-PPATUI_FUNCIFY(struct, mc_block_hawaii_grenada_gddr5_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn2_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3229,7 +3130,106 @@ PPATUI_FUNCIFY(struct, mc_block_hawaii_grenada_gddr5_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_fiji_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn3_gddr5, atui_nullstruct,
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_rxcntl_dphy0_d0, u8"mc_io_rxcntl_dphy0_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_rxcntl_dphy0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_rxcntl1_dphy0_d0, u8"mc_io_rxcntl1_dphy0_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_rxcntl1_dphy0_d0_7_1),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_aphy_str_cntl_d0, u8"mc_io_aphy_str_cntl_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_aphy_str_cntl_d0_6_0_o),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_tsm_debug_bcnt2, u8"mc_tsm_debug_bcnt2",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_tsm_debug_bcnt2_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_reserve_1_s, u8"mc_seq_reserve_1_s",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_reserve_1_s_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc5, u8"mc_seq_misc5",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc5_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc4, u8"mc_seq_misc4",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc4_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc6, u8"mc_seq_misc6",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc6_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc7, u8"mc_seq_misc7",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc7_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_misc9, u8"mc_seq_misc9",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc9_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_addrl_txphase_d0, u8"mc_io_debug_addrl_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_addrl_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_acmd_txphase_d0, u8"mc_io_debug_acmd_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_acmd_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_cmd_txphase_d0, u8"mc_io_debug_cmd_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_cmd_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_ck_txphase_d0, u8"mc_io_debug_ck_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_ck_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_dqb0l_clksel_d0, u8"mc_io_debug_dqb0l_clksel_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_clksel_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_dqb0l_clksel_d1, u8"mc_io_debug_dqb0l_clksel_d1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_clksel_d1_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_wck_clksel_d0, u8"mc_io_debug_wck_clksel_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_wck_clksel_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_dqb0l_txphase_d0, u8"mc_io_debug_dqb0l_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_dqb0l_txphase_d1, u8"mc_io_debug_dqb0l_txphase_d1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_txphase_d1_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_wck_txphase_d0, u8"mc_io_debug_wck_txphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_wck_txphase_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_txframing_byte0_d0, u8"mc_seq_txframing_byte0_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_txframing_byte0_d0_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_seq_txframing_byte0_d1, u8"mc_seq_txframing_byte0_d1",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_txframing_byte0_d1_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_edc_rxphase_d0, u8"mc_io_debug_edc_rxphase_d0",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_edc_rxphase_d0_6_0),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, mem_adjust_gcn3_hbm1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3240,7 +3240,7 @@ PPATUI_FUNCIFY(struct, mc_block_fiji_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_polaris_gddr5_type_1_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3267,7 +3267,7 @@ PPATUI_FUNCIFY(struct, mc_block_polaris_gddr5_type_1_adjust, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_polaris_gddr5_type_2_adjust, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type2, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
