@@ -830,9 +830,10 @@ atomtree_populate_init_mem_adjust_table(
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
 	#ifndef NDEBUG
-	if (common_set_unknown == mem_adjust_table->reg_set) {
+	if (mem_adjust_table->num_index
+		&& common_set_unknown == mem_adjust_table->reg_set) {
 		register_set_print_tables(mem_adjust_table, &GMC_reg_set, true);
-		//assert(mem_adjust_table->reg_set); // unknown timings sequence
+		assert(mem_adjust_table->reg_set); // unknown adjust sequence
 	}
 	#endif
 
@@ -840,11 +841,11 @@ atomtree_populate_init_mem_adjust_table(
 		strcpy(atui_memadjust->name, u8"mem_adjust_table");
 
 		if (mem_adjust_table->reg_set) {
-			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
+			atui_branch* const atui_adjust_set = ATUI_MAKE_BRANCH(
 				atui_nullstruct,
 				NULL,  NULL,NULL,  mem_adjust_table->num_data_blocks, NULL
 			);
-			ATUI_ADD_BRANCH(atui_memadjust, atui_mem_timings);
+			ATUI_ADD_BRANCH(atui_memadjust, atui_adjust_set);
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
@@ -859,7 +860,7 @@ atomtree_populate_init_mem_adjust_table(
 			for (uint8_t i = 0; i < mem_adjust_table->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
-				ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
+				ATUI_ADD_BRANCH(atui_adjust_set, atui_strap);
 
 				get_memory_vendor_part_strs(
 					&(vram_modules[
@@ -893,13 +894,13 @@ atomtree_populate_init_mem_adjust_table(
 				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 			}
 			if (mem_adjust_table->num_data_entries) {
-				sprintf(atui_mem_timings->name, "%s (has inaccuracies)",
+				sprintf(atui_adjust_set->name, "%s (has inaccuracies)",
 					atui_strap->varname
 				);
-				assert(strlen(atui_mem_timings->name)
-					< sizeof(atui_mem_timings->name)
+				assert(strlen(atui_adjust_set->name)
+					< sizeof(atui_adjust_set->name)
 				);
-				//strcpy(atui_mem_timings->name, atui_strap->varname);
+				//strcpy(atui_adjust_set->name, atui_strap->varname);
 			}
 		}
 	}
@@ -961,7 +962,8 @@ atomtree_populate_init_mem_clk_patch(
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
 	#ifndef NDEBUG
-	if (common_set_unknown == mem_clk_patch->reg_set) {
+	if (mem_clk_patch->num_index
+		&& common_set_unknown == mem_clk_patch->reg_set) {
 		register_set_print_tables(mem_clk_patch, &GMC_reg_set, true);
 		assert(mem_clk_patch->reg_set); // unknown timings sequence
 	}
@@ -1038,7 +1040,6 @@ atomtree_populate_init_mc_adjust_pertile(
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
-	
 	if (2 == mc_adjust_pertile->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_adjust_gcn4_gddr5_addresses)) {
 			mc_adjust_pertile->reg_set = mc_adjust_set_gcn4_gddr5;
@@ -1056,7 +1057,7 @@ atomtree_populate_init_mc_adjust_pertile(
 	if (mc_adjust_pertile->num_index
 		&& common_set_unknown == mc_adjust_pertile->reg_set) {
 		register_set_print_tables(mc_adjust_pertile, &GMC_reg_set, true);
-		assert(mc_adjust_pertile->reg_set); // unknown timings sequence
+		assert(mc_adjust_pertile->reg_set); // unknown adjust sequence
 	}
 	#endif
 
@@ -1064,31 +1065,31 @@ atomtree_populate_init_mc_adjust_pertile(
 		strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile");
 
 		if (mc_adjust_pertile->reg_set) {
-			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
+			atui_branch* const atui_adjust_set = ATUI_MAKE_BRANCH(
 				atui_nullstruct,
 				NULL,  NULL,NULL,  mc_adjust_pertile->num_data_blocks, NULL
 			);
-			ATUI_ADD_BRANCH(atui_mcadjpertile, atui_mem_timings);
+			ATUI_ADD_BRANCH(atui_mcadjpertile, atui_adjust_set);
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
 			for (uint8_t i = 0; i < mc_adjust_pertile->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
-				ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
+				ATUI_ADD_BRANCH(atui_adjust_set, atui_strap);
 				sprintf(atui_strap->name, u8"%s [%u]",
 					atui_strap->varname,   i
 				);
 				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 			}
 			if (mc_adjust_pertile->num_data_entries) {
-				sprintf(atui_mem_timings->name, "%s (has inaccuracies)",
+				sprintf(atui_adjust_set->name, "%s (has inaccuracies)",
 					atui_strap->varname
 				);
-				assert(strlen(atui_mem_timings->name)
-					< sizeof(atui_mem_timings->name)
+				assert(strlen(atui_adjust_set->name)
+					< sizeof(atui_adjust_set->name)
 				);
-				//strcpy(atui_mem_timings->name, atui_strap->varname);
+				//strcpy(atui_adjust_set->name, atui_strap->varname);
 			}
 		}
 	}

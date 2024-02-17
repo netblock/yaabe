@@ -269,23 +269,32 @@ struct atomtree_init_reg_block {
 	union {
 		void* data_sets;
 
-		struct mem_adjust_terascale2_ddr3*  terascale2_ddr3;
-		struct mem_adjust_terascale2_gddr5_type3*  terascale2_gddr5_type3;
-		struct mem_adjust_terascale2_gddr5_type4*  terascale2_gddr5_type4;
-		struct mem_adjust_terascale3_gddr5*  terascale3_gddr5;
-		struct mem_adjust_gcn1_gddr5_type1*  gcn1_gddr5_type1;
-		struct mem_adjust_gcn1_gddr5_type2*  gcn1_gddr5_type2;
-		struct mem_adjust_gcn1_gddr5_type3*  gcn1_gddr5_type3;
-		struct mem_adjust_gcn1_gddr5_type4*  gcn1_gddr5_type4;
-		struct mem_adjust_gcn2_gddr5* gcn2_gddr5;
-		struct mem_adjust_gcn3_gddr5* gcn3_gddr5;
-		struct mem_adjust_gcn3_hbm1*  gcn3_hbm1;
-		struct mem_adjust_gcn4_gddr5_type1*  gcn4_gddr5_type1;
-		struct mem_adjust_gcn4_gddr5_type2*  gcn4_gddr5_type2;
+		// reg_block_mem_adjust_table:
+		struct mem_adjust_terascale2_ddr3*  mem_adjust_terascale2_ddr3;
+		struct mem_adjust_terascale2_gddr5_type3*
+			mem_adjust_terascale2_gddr5_type3;
+		struct mem_adjust_terascale2_gddr5_type4*
+			mem_adjust_terascale2_gddr5_type4;
+		struct mem_adjust_terascale3_gddr5*  mem_adjust_terascale3_gddr5;
+		struct mem_adjust_gcn1_gddr5_type1*  mem_adjust_gcn1_gddr5_type1;
+		struct mem_adjust_gcn1_gddr5_type2*  mem_adjust_gcn1_gddr5_type2;
+		struct mem_adjust_gcn1_gddr5_type3*  mem_adjust_gcn1_gddr5_type3;
+		struct mem_adjust_gcn1_gddr5_type4*  mem_adjust_gcn1_gddr5_type4;
+		struct mem_adjust_gcn2_gddr5* mem_adjust_gcn2_gddr5;
+		struct mem_adjust_gcn3_gddr5* mem_adjust_gcn3_gddr5;
+		struct mem_adjust_gcn3_hbm1*  mem_adjust_gcn3_hbm1;
+		struct mem_adjust_gcn4_gddr5_type1*  mem_adjust_gcn4_gddr5_type1;
+		struct mem_adjust_gcn4_gddr5_type2*  mem_adjust_gcn4_gddr5_type2;
 
 		// reg_block_mem_clk_patch:
-		struct mc_block_islands_gddr5_timings* islands_timings;
+		struct mc_block_islands_ddr3_timings*  islands_ddr3_timings;
+		struct mc_block_islands_gddr5_timings* islands_gddr5_timings;
+		struct mc_block_fiji_timings*    fiji_timings;
 		struct mc_block_polaris_timings* polaris_timings;
+		
+		// reg_block_mc_adjust_pertile:
+		struct mc_adjust_gcn3_gddr5* mc_adjust_gcn3_gddr5;
+		struct mc_adjust_gcn4_gddr5* mc_adjust_gcn4_gddr5;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
