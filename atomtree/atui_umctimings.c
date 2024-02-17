@@ -3313,3 +3313,31 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type2, atui_nullstruct,
 		(ATUI_NODESCR)
 	)
 )
+
+PPATUI_FUNCIFY(struct, mc_adjust_gcn3_gddr5, atui_nullstruct,
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_tsm_debug_flag, u8"mc_tsm_debug_flag",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_tsm_debug_flag_6_0),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_tsm_debug_bcnt6, u8"mc_tsm_debug_bcnt6",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_tsm_debug_bcnt6_6_0),
+		(ATUI_NODESCR)
+	)
+)
+
+PPATUI_FUNCIFY(struct, mc_adjust_gcn4_gddr5, atui_nullstruct,
+	(bios->block_id, u8"block_id",
+		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
+		(ATUI_NODESCR)
+	),
+	(bios->mc_io_debug_up_14, u8"mc_io_debug_up_14",
+		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_up_14_6_0),
+		(ATUI_NODESCR)
+	)
+)
+
+

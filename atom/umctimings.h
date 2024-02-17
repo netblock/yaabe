@@ -1400,6 +1400,23 @@ struct mem_adjust_gcn4_gddr5_type2 { // 44 bytes
 	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
 };
 
+/******************************************************************************/
+// mc_adjust_pertile table
+// uncertain the accuracy of all of these tables.
+/******************************************************************************/
+
+struct mc_adjust_gcn3_gddr5 { // 12 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_tsm_debug_flag_6_0  mc_tsm_debug_flag;
+	union mc_tsm_debug_bcnt6_6_0 mc_tsm_debug_bcnt6;
+};
+
+struct mc_adjust_gcn4_gddr5 { // 8 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_io_debug_up_14_6_0  mc_io_debug_up_14;
+};
+
+
 #pragma pack(pop) // restore old packing
 
 #endif

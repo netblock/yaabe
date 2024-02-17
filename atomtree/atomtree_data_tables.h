@@ -211,8 +211,9 @@ enum register_block_type:uint8_t {
 	reg_block_unknown,
 	reg_block_mem_adjust_table,
 	reg_block_mem_clk_patch,
+	reg_block_mc_adjust_pertile,
 	reg_block_phy_init,
-
+	reg_block_last,
 };
 enum common_register_sequence:uint8_t {
 	common_set_unknown,
@@ -240,6 +241,10 @@ enum common_register_sequence:uint8_t {
 	timings_set_vega10,
 	timings_set_vega21,
 	timings_set_navi1,
+
+	// reg_block_mc_adjust_pertile:
+	mc_adjust_set_gcn3_gddr5,
+	mc_adjust_set_gcn4_gddr5,
 };
 
 #define ATOMTREE_MC_REG_MAX  24 // keep score.

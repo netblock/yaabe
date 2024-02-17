@@ -1095,6 +1095,22 @@ static const uint16_t mem_adjust_gcn4_gddr5_type2_addresses[] = { // 12+1
 	END_OF_REG_INDEX_BLOCK
 };
 
+/******************************************************************************/
+// mc_adjust_pertile table
+// uncertain the accuracy of all of these tables.
+/******************************************************************************/
+
+static const uint16_t mc_adjust_gcn3_gddr5_addresses[] = { // 2+1
+	ixMC_TSM_DEBUG_FLAG_6_0,
+	ixMC_TSM_DEBUG_BCNT6_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
+
+static const uint16_t mc_adjust_gcn4_gddr5_addresses[] = { // 1+1
+	ixMC_IO_DEBUG_UP_14_6_0,
+	END_OF_REG_INDEX_BLOCK
+};
+
 #include "gmc_searchfield.h"
 
 #endif

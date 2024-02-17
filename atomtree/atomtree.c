@@ -658,7 +658,6 @@ atomtree_populate_init_reg_block(
 	return atui_regblock;
 }
 
-
 static void
 get_memory_vendor_part_strs(
 		const struct atomtree_vram_module* const vram_module,
@@ -737,7 +736,6 @@ get_vram_type(
 		default: assert(0);
 	}
 }
-
 
 static atui_branch*
 atomtree_populate_init_mem_adjust_table(
@@ -1013,6 +1011,89 @@ atomtree_populate_init_mem_clk_patch(
 	}
 
 	return atui_memclkpatch;
+}
+
+static atui_branch*
+atomtree_populate_init_mc_adjust_pertile(
+		struct atomtree_init_reg_block* const mc_adjust_pertile,
+		const bool generate_atui,
+		const struct atomtree_vram_module* const vram_modules
+		) {
+	atui_branch* const atui_mcadjpertile = atomtree_populate_init_reg_block(
+		mc_adjust_pertile, generate_atui, 1
+	);
+	mc_adjust_pertile->reg_type = reg_block_mc_adjust_pertile;
+
+	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+		&(vram_modules[0])
+	);
+	const enum atomtree_common_version vram_module_ver =
+		vram_modules[0].vram_module_ver;
+	const struct atom_init_reg_index_format* const index =
+		mc_adjust_pertile->register_index;
+	const struct atom_reg_setting_data_block* const* const data_blocks =
+	(const struct atom_reg_setting_data_block* const* const)
+		mc_adjust_pertile->data_blocks;
+
+	// go by static tables instead of individually constructing the bitfields
+	// because static tables offers a more consise, typed API.
+	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	
+	if (2 == mc_adjust_pertile->num_index) { // optimisation heuristic
+		if (regcmp(index, mc_adjust_gcn4_gddr5_addresses)) {
+			mc_adjust_pertile->reg_set = mc_adjust_set_gcn4_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_adjust_gcn4_gddr5);
+		}
+	} else if (3 == mc_adjust_pertile->num_index) {
+		if (regcmp(index, mc_adjust_gcn3_gddr5_addresses)) {
+			mc_adjust_pertile->reg_set = mc_adjust_set_gcn3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_adjust_gcn3_gddr5);
+		}
+	}
+	
+	mc_adjust_pertile->data_sets = mc_adjust_pertile->data_blocks[0];
+	#ifndef NDEBUG
+	if (mc_adjust_pertile->num_index
+		&& common_set_unknown == mc_adjust_pertile->reg_set) {
+		register_set_print_tables(mc_adjust_pertile, &GMC_reg_set, true);
+		assert(mc_adjust_pertile->reg_set); // unknown timings sequence
+	}
+	#endif
+
+	if (generate_atui) {
+		strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile");
+
+		if (mc_adjust_pertile->reg_set) {
+			atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
+				atui_nullstruct,
+				NULL,  NULL,NULL,  mc_adjust_pertile->num_data_blocks, NULL
+			);
+			ATUI_ADD_BRANCH(atui_mcadjpertile, atui_mem_timings);
+
+			atui_branch* atui_strap;
+			struct atui_funcify_args func_args = {0};
+			for (uint8_t i = 0; i < mc_adjust_pertile->num_data_blocks; i++) {
+				func_args.suggestbios = data_blocks[i];
+				atui_strap = atui_strap_func(&func_args);
+				ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
+				sprintf(atui_strap->name, u8"%s [%u]",
+					atui_strap->varname,   i
+				);
+				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
+			}
+			if (mc_adjust_pertile->num_data_entries) {
+				sprintf(atui_mem_timings->name, "%s (has inaccuracies)",
+					atui_strap->varname
+				);
+				assert(strlen(atui_mem_timings->name)
+					< sizeof(atui_mem_timings->name)
+				);
+				//strcpy(atui_mem_timings->name, atui_strap->varname);
+			}
+		}
+	}
+
+	return atui_mcadjpertile;
 }
 
 static atui_branch*
@@ -2066,12 +2147,19 @@ atomtree_populate_vram_info_v2_2(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi22->mc_adjust_pertile.leaves =
 			(void*)vi22->leaves + vi22->leaves->McAdjustPerTileTblOffset;
+		/*
 		atui_mcadjpertile = atomtree_populate_init_reg_block(
 			&(vi22->mc_adjust_pertile), generate_atui, 0
 		);
 		if (generate_atui) {
 			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
 		}
+		*/
+		atui_mcadjpertile = atomtree_populate_init_mc_adjust_pertile(
+			&(vi22->mc_adjust_pertile),
+			generate_atui,
+			vi22->vram_modules
+		);
 	} else {
 		vi22->mc_adjust_pertile.leaves = NULL;
 	}
