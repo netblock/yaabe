@@ -629,7 +629,7 @@ PPATUI_FUNCIFY(union, mc_seq_rxframing_dbi_d1_6_0_o, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_islands_ddr3_timings, atui_nullstruct, // 52 bytes
+PPATUI_FUNCIFY(struct, timings_set_islands_ddr3, atui_nullstruct,
 	// Northern, Southern, Sea, Volcanic Islands
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
@@ -693,7 +693,7 @@ PPATUI_FUNCIFY(struct, mc_block_islands_ddr3_timings, atui_nullstruct, // 52 byt
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
+PPATUI_FUNCIFY(struct, timings_set_islands_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -760,7 +760,7 @@ PPATUI_FUNCIFY(struct, mc_block_islands_gddr5_timings, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_fiji_timings, atui_nullstruct,
+PPATUI_FUNCIFY(struct, timings_set_fiji, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -803,7 +803,7 @@ PPATUI_FUNCIFY(struct, mc_block_fiji_timings, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atui_nullstruct,
+PPATUI_FUNCIFY(struct, timings_set_polaris, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -870,7 +870,7 @@ PPATUI_FUNCIFY(struct, mc_block_polaris_timings, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
+PPATUI_FUNCIFY(struct, timings_set_vega10, atomtree_vram_info_header_v2_3,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -967,7 +967,7 @@ PPATUI_FUNCIFY(struct, umc_block_vega10_timings, atomtree_vram_info_header_v2_3,
 )
 
 
-PPATUI_FUNCIFY(struct, umc_block_vega21_timings, atomtree_vram_info_header_v2_3,
+PPATUI_FUNCIFY(struct, timings_set_vega21, atomtree_vram_info_header_v2_3,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1067,7 +1067,7 @@ PPATUI_FUNCIFY(struct, umc_block_vega21_timings, atomtree_vram_info_header_v2_3,
 	)
 )
 
-PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
+PPATUI_FUNCIFY(struct, timings_set_navi1, atomtree_vram_info_header_v2_4,
 
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
@@ -1199,7 +1199,8 @@ PPATUI_FUNCIFY(struct, umc_block_navi1_timings, atomtree_vram_info_header_v2_4,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_terascale2_ddr3, atui_nullstruct,
+
+PPATUI_FUNCIFY(struct, mem_adjust_set_terascale2_ddr3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1309,7 +1310,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale2_ddr3, atui_nullstruct,
 		(ATUI_NODESCR)
 	)
 )
-PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type3, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_terascale2_gddr5_type3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1484,7 +1485,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type3, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type4, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_terascale2_gddr5_type4, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1649,11 +1650,13 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type4, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc7_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb2l_rx_vref_cal_d0, u8"mc_io_debug_dqb2l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb2l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb2l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb2l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
@@ -1683,7 +1686,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale2_gddr5_type4, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_terascale3_gddr5, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_terascale3_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -1841,11 +1844,13 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale3_gddr5, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_seq_misc7_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb2l_rx_vref_cal_d0, u8"mc_io_debug_dqb2l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb2l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb2l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb2l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
@@ -1875,7 +1880,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_terascale3_gddr5, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn1_gddr5_type1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2100,17 +2105,19 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type1, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_cdrcntl1_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1, u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d1_6_0),
 		(ATUI_NODESCR)
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type2, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn1_gddr5_type2, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2387,17 +2394,19 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type2, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_cdrcntl1_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1, u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d1_6_0),
 		(ATUI_NODESCR)
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type3, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn1_gddr5_type3, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2694,17 +2703,19 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type3, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_cdrcntl1_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1, u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d1_6_0),
 		(ATUI_NODESCR)
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type4, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn1_gddr5_type4, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -2835,7 +2846,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn1_gddr5_type4, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn2_gddr5, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn2_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3120,17 +3131,19 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn2_gddr5, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_cdrcntl1_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1, u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d1_6_0),
 		(ATUI_NODESCR)
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn3_gddr5, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn3_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3229,7 +3242,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn3_gddr5, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn3_hbm1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn3_hbm1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3240,7 +3253,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn3_hbm1, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn4_gddr5_type1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3267,7 +3280,7 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type1, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type2, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mem_adjust_set_gcn4_gddr5_type2, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3314,7 +3327,8 @@ PPATUI_FUNCIFY(struct, mem_adjust_gcn4_gddr5_type2, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_adjust_gcn3_gddr5, atui_nullstruct,
+
+PPATUI_FUNCIFY(struct, mc_tile_adjust_set_gcn3_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3329,7 +3343,7 @@ PPATUI_FUNCIFY(struct, mc_adjust_gcn3_gddr5, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_adjust_gcn4_gddr5, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_tile_adjust_set_gcn4_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3341,7 +3355,7 @@ PPATUI_FUNCIFY(struct, mc_adjust_gcn4_gddr5, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, mc_phy_init_gcn3_hbm1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_phy_init_set_gcn3_hbm1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3400,7 +3414,7 @@ PPATUI_FUNCIFY(struct, mc_phy_init_gcn3_hbm1, atui_nullstruct,
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_phy_init_gcn3_gddr5, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_phy_init_set_gcn3_gddr5, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3777,17 +3791,19 @@ PPATUI_FUNCIFY(struct, mc_phy_init_gcn3_gddr5, atui_nullstruct,
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_cdrcntl1_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0, u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d0,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d0",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d0_6_0),
 		(ATUI_NODESCR)
 	),
-	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1, u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
+	(bios->mc_io_debug_dqb0l_rx_vref_cal_d1,
+		u8"mc_io_debug_dqb0l_rx_vref_cal_d1",
 		(ATUI_NODISPLAY, ATUI_INLINE, mc_io_debug_dqb0l_rx_vref_cal_d1_6_0),
 		(ATUI_NODESCR)
 	)
 )
 
-PPATUI_FUNCIFY(struct, mc_phy_init_gcn4_gddr5_type1, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_phy_init_set_gcn4_gddr5_type1, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)
@@ -3883,7 +3899,7 @@ PPATUI_FUNCIFY(struct, mc_phy_init_gcn4_gddr5_type1, atui_nullstruct,
 )
 
 
-PPATUI_FUNCIFY(struct, mc_phy_init_gcn4_gddr5_type2, atui_nullstruct,
+PPATUI_FUNCIFY(struct, mc_phy_init_set_gcn4_gddr5_type2, atui_nullstruct,
 	(bios->block_id, u8"block_id",
 		(ATUI_NODISPLAY, ATUI_INLINE, atom_mc_register_setting_id),
 		(ATUI_NODESCR)

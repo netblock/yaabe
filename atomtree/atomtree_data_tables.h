@@ -209,29 +209,29 @@ struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
 
 enum register_block_type:uint8_t {
 	reg_block_unknown,
-	reg_block_mem_adjust_table,
+	reg_block_mem_adjust,
 	reg_block_mem_clk_patch,
-	reg_block_mc_adjust_pertile,
+	reg_block_mc_tile_adjust,
 	reg_block_mc_phy_init,
 	reg_block_last,
 };
 enum common_register_sequence:uint8_t {
 	common_set_unknown,
 
-	// reg_block_mem_adjust_table:
-	adjust_set_terascale2_ddr3,  // Caicos, Turks
-	adjust_set_terascale2_gddr5_type3, // Turks
-	adjust_set_terascale2_gddr5_type4, // Barts
-	adjust_set_terascale3_gddr5, // Cayman
-	adjust_set_gcn1_gddr5_type1, // Oland, Cape Verde
-	adjust_set_gcn1_gddr5_type2, // Pitcairn
-	adjust_set_gcn1_gddr5_type3, // Tahiti
-	adjust_set_gcn1_gddr5_type4, // Exo
-	adjust_set_gcn2_gddr5, // Bonaire, Hawaii, Grenada
-	adjust_set_gcn3_gddr5, // Tonga
-	adjust_set_gcn3_hbm1,  // Fiji
-	adjust_set_gcn4_gddr5_type1, // Polaris
-	adjust_set_gcn4_gddr5_type2, // Polaris
+	// reg_block_mem_adjust:
+	mem_adjust_set_terascale2_ddr3,  // Caicos, Turks
+	mem_adjust_set_terascale2_gddr5_type3, // Turks
+	mem_adjust_set_terascale2_gddr5_type4, // Barts
+	mem_adjust_set_terascale3_gddr5, // Cayman
+	mem_adjust_set_gcn1_gddr5_type1, // Oland, Cape Verde
+	mem_adjust_set_gcn1_gddr5_type2, // Pitcairn
+	mem_adjust_set_gcn1_gddr5_type3, // Tahiti
+	mem_adjust_set_gcn1_gddr5_type4, // Exo
+	mem_adjust_set_gcn2_gddr5, // Bonaire, Hawaii, Grenada
+	mem_adjust_set_gcn3_gddr5, // Tonga
+	mem_adjust_set_gcn3_hbm1,  // Fiji
+	mem_adjust_set_gcn4_gddr5_type1, // Polaris
+	mem_adjust_set_gcn4_gddr5_type2, // Polaris
 
 	// reg_block_mem_clk_patch:
 	timings_set_islands_ddr3,
@@ -242,9 +242,9 @@ enum common_register_sequence:uint8_t {
 	timings_set_vega21,
 	timings_set_navi1,
 
-	// reg_block_mc_adjust_pertile:
-	mc_adjust_set_gcn3_gddr5,
-	mc_adjust_set_gcn4_gddr5,
+	// reg_block_mc_tile_adjust:
+	mc_tile_adjust_set_gcn3_gddr5,
+	mc_tile_adjust_set_gcn4_gddr5,
 
 	// reg_block_mc_phy_init:
 	mc_phy_init_set_gcn3_hbm1,  // Fiji
@@ -275,38 +275,40 @@ struct atomtree_init_reg_block {
 	union {
 		void* data_sets;
 
-		// reg_block_mem_adjust_table:
-		struct mem_adjust_terascale2_ddr3*  mem_adjust_terascale2_ddr3;
-		struct mem_adjust_terascale2_gddr5_type3*
-			mem_adjust_terascale2_gddr5_type3;
-		struct mem_adjust_terascale2_gddr5_type4*
-			mem_adjust_terascale2_gddr5_type4;
-		struct mem_adjust_terascale3_gddr5*  mem_adjust_terascale3_gddr5;
-		struct mem_adjust_gcn1_gddr5_type1*  mem_adjust_gcn1_gddr5_type1;
-		struct mem_adjust_gcn1_gddr5_type2*  mem_adjust_gcn1_gddr5_type2;
-		struct mem_adjust_gcn1_gddr5_type3*  mem_adjust_gcn1_gddr5_type3;
-		struct mem_adjust_gcn1_gddr5_type4*  mem_adjust_gcn1_gddr5_type4;
-		struct mem_adjust_gcn2_gddr5* mem_adjust_gcn2_gddr5;
-		struct mem_adjust_gcn3_gddr5* mem_adjust_gcn3_gddr5;
-		struct mem_adjust_gcn3_hbm1*  mem_adjust_gcn3_hbm1;
-		struct mem_adjust_gcn4_gddr5_type1*  mem_adjust_gcn4_gddr5_type1;
-		struct mem_adjust_gcn4_gddr5_type2*  mem_adjust_gcn4_gddr5_type2;
+		// reg_block_mem_adjust:
+		struct mem_adjust_set_terascale2_ddr3*  mem_adjust_set_terascale2_ddr3;
+		struct mem_adjust_set_terascale2_gddr5_type3*
+			mem_adjust_set_terascale2_gddr5_type3;
+		struct mem_adjust_set_terascale2_gddr5_type4*
+			mem_adjust_set_terascale2_gddr5_type4;
+		struct mem_adjust_set_terascale3_gddr5* mem_adjust_set_terascale3_gddr5;
+		struct mem_adjust_set_gcn1_gddr5_type1* mem_adjust_set_gcn1_gddr5_type1;
+		struct mem_adjust_set_gcn1_gddr5_type2* mem_adjust_set_gcn1_gddr5_type2;
+		struct mem_adjust_set_gcn1_gddr5_type3* mem_adjust_set_gcn1_gddr5_type3;
+		struct mem_adjust_set_gcn1_gddr5_type4* mem_adjust_set_gcn1_gddr5_type4;
+		struct mem_adjust_set_gcn2_gddr5* mem_adjust_set_gcn2_gddr5;
+		struct mem_adjust_set_gcn3_gddr5* mem_adjust_set_gcn3_gddr5;
+		struct mem_adjust_set_gcn3_hbm1*  mem_adjust_set_gcn3_hbm1;
+		struct mem_adjust_set_gcn4_gddr5_type1* mem_adjust_set_gcn4_gddr5_type1;
+		struct mem_adjust_set_gcn4_gddr5_type2* mem_adjust_set_gcn4_gddr5_type2;
 
 		// reg_block_mem_clk_patch:
-		struct mc_block_islands_ddr3_timings*  islands_ddr3_timings;
-		struct mc_block_islands_gddr5_timings* islands_gddr5_timings;
-		struct mc_block_fiji_timings*    fiji_timings;
-		struct mc_block_polaris_timings* polaris_timings;
+		struct timings_set_islands_ddr3*  timings_set_islands_ddr3;
+		struct timings_set_islands_gddr5* timings_set_islands_gddr5;
+		struct timings_set_fiji*    timings_set_fiji;
+		struct timings_set_polaris* timings_set_polaris;
 		
-		// reg_block_mc_adjust_pertile:
-		struct mc_adjust_gcn3_gddr5* mc_adjust_gcn3_gddr5;
-		struct mc_adjust_gcn4_gddr5* mc_adjust_gcn4_gddr5;
+		// reg_block_mc_tile_adjust:
+		struct mc_tile_adjust_gcn3_gddr5* mc_tile_adjust_gcn3_gddr5;
+		struct mc_tile_adjust_gcn4_gddr5* mc_tile_adjust_gcn4_gddr5;
 
 		// reg_block_mc_phy_init:
-		struct mc_phy_init_gcn3_hbm1* mc_phy_init_gcn3_hbm1;
-		struct mc_phy_init_gcn3_gddr5* mc_phy_init_gcn3_gddr5;
-		struct mc_phy_init_gcn4_gddr5_type1* mc_phy_init_gcn4_gddr5_type1;
-		struct mc_phy_init_gcn4_gddr5_type2* mc_phy_init_gcn4_gddr5_type2;
+		struct mc_phy_init_set_gcn3_hbm1* mc_phy_init_set_gcn3_hbm1;
+		struct mc_phy_init_set_gcn3_gddr5* mc_phy_init_set_gcn3_gddr5;
+		struct mc_phy_init_set_gcn4_gddr5_type1*
+			mc_phy_init_set_gcn4_gddr5_type1;
+		struct mc_phy_init_set_gcn4_gddr5_type2*
+			mc_phy_init_set_gcn4_gddr5_type2;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
@@ -407,8 +409,8 @@ struct atomtree_vram_info_header_v2_2 {
 
 	struct atomtree_init_reg_block mem_clk_patch;
 
-	struct atomtree_init_reg_block mc_adjust_pertile;
-	struct atomtree_init_reg_block mc_phyinit;
+	struct atomtree_init_reg_block mc_tile_adjust;
+	struct atomtree_init_reg_block mc_phy_init;
 	struct mc_atom_dram_data_remap* dram_data_remap;
 
 	enum atomtree_common_version vram_module_ver;
@@ -426,13 +428,13 @@ struct atomtree_vram_info_header_v2_3 {
 	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
 	union {
 		void* mem_timings;
-		struct umc_block_vega10_timings* vega10_timings;
-		struct umc_block_vega21_timings* vega21_timings;
+		struct timings_set_vega10_timings* vega10;
+		struct timings_set_vega21_timings* vega21;
 	};
 	uint8_t* num_timing_straps;
 
-	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-	struct atomtree_umc_init_reg_block mc_phyinit;
+	struct atomtree_umc_init_reg_block mc_tile_adjust;
+	struct atomtree_umc_init_reg_block mc_phy_init;
 	//struct atom_gddr6_dram_data_remap* dram_data_remap;
 	struct umc_atom_dram_data_remap* dram_data_remap;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
@@ -450,11 +452,11 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	// TODO hoisted method stays until address sequence can be figured for
 	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
-	struct umc_block_navi1_timings* navi1_gddr6_timings;
+	struct timings_set_navi1* navi1_gddr6_timings;
 	uint8_t* num_timing_straps;
 
-	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-	struct atomtree_umc_init_reg_block mc_phyinit;
+	struct atomtree_umc_init_reg_block mc_tile_adjust;
+	struct atomtree_umc_init_reg_block mc_phy_init;
 
 	// probably not gddr6 remap cause data looks significantly different in
 	// navi10, vs nav21 and navi31
@@ -474,8 +476,8 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atom_gddr6_ac_timing_v2_5* gddr6_ac_timings; // is an array
 	uint8_t gddr6_acstrap_count;
 
-	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-	struct atomtree_umc_init_reg_block mc_phyinit;
+	struct atomtree_umc_init_reg_block mc_tile_adjust;
+	struct atomtree_umc_init_reg_block mc_phy_init;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 
 	//uint16_t reserved; // offset of reserved
@@ -492,8 +494,8 @@ struct atomtree_vram_info_header_v2_6 {
 
 	struct atomtree_umc_init_reg_block mem_adjust_table;
 	struct atomtree_umc_init_reg_block mem_clk_patch;
-	struct atomtree_umc_init_reg_block mc_adjust_pertile;
-	struct atomtree_umc_init_reg_block mc_phyinit;
+	struct atomtree_umc_init_reg_block mc_tile_adjust;
+	struct atomtree_umc_init_reg_block mc_phy_init;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block post_ucode_init;

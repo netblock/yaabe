@@ -121,35 +121,36 @@ PPATUI_HEADERIFY(atom_merged_voltage_object_v4);
 
 PPATUI_HEADERIFY(mc_seq_byte_remap_d0_6_0_o);
 PPATUI_HEADERIFY(mc_arb_ramcfg_7_0_o);
-PPATUI_HEADERIFY(mc_block_islands_ddr3_timings);
-PPATUI_HEADERIFY(mc_block_islands_gddr5_timings);
-PPATUI_HEADERIFY(mc_block_fiji_timings);
-PPATUI_HEADERIFY(mc_block_polaris_timings);
-PPATUI_HEADERIFY(umc_block_vega10_timings);
-PPATUI_HEADERIFY(umc_block_vega21_timings);
-PPATUI_HEADERIFY(umc_block_navi1_timings);
 
-PPATUI_HEADERIFY(mem_adjust_terascale2_ddr3);
-PPATUI_HEADERIFY(mem_adjust_terascale2_gddr5_type3);
-PPATUI_HEADERIFY(mem_adjust_terascale2_gddr5_type4);
-PPATUI_HEADERIFY(mem_adjust_terascale3_gddr5);
-PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type1);
-PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type2);
-PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type3);
-PPATUI_HEADERIFY(mem_adjust_gcn1_gddr5_type4);
-PPATUI_HEADERIFY(mem_adjust_gcn2_gddr5);
-PPATUI_HEADERIFY(mem_adjust_gcn3_gddr5);
-PPATUI_HEADERIFY(mem_adjust_gcn3_hbm1);
-PPATUI_HEADERIFY(mem_adjust_gcn4_gddr5_type1);
-PPATUI_HEADERIFY(mem_adjust_gcn4_gddr5_type2);
+PPATUI_HEADERIFY(timings_set_islands_ddr3);
+PPATUI_HEADERIFY(timings_set_islands_gddr5);
+PPATUI_HEADERIFY(timings_set_fiji);
+PPATUI_HEADERIFY(timings_set_polaris);
+PPATUI_HEADERIFY(timings_set_vega10);
+PPATUI_HEADERIFY(timings_set_vega21);
+PPATUI_HEADERIFY(timings_set_navi1);
 
-PPATUI_HEADERIFY(mc_adjust_gcn3_gddr5);
-PPATUI_HEADERIFY(mc_adjust_gcn4_gddr5);
+PPATUI_HEADERIFY(mem_adjust_set_terascale2_ddr3);
+PPATUI_HEADERIFY(mem_adjust_set_terascale2_gddr5_type3);
+PPATUI_HEADERIFY(mem_adjust_set_terascale2_gddr5_type4);
+PPATUI_HEADERIFY(mem_adjust_set_terascale3_gddr5);
+PPATUI_HEADERIFY(mem_adjust_set_gcn1_gddr5_type1);
+PPATUI_HEADERIFY(mem_adjust_set_gcn1_gddr5_type2);
+PPATUI_HEADERIFY(mem_adjust_set_gcn1_gddr5_type3);
+PPATUI_HEADERIFY(mem_adjust_set_gcn1_gddr5_type4);
+PPATUI_HEADERIFY(mem_adjust_set_gcn2_gddr5);
+PPATUI_HEADERIFY(mem_adjust_set_gcn3_gddr5);
+PPATUI_HEADERIFY(mem_adjust_set_gcn3_hbm1);
+PPATUI_HEADERIFY(mem_adjust_set_gcn4_gddr5_type1);
+PPATUI_HEADERIFY(mem_adjust_set_gcn4_gddr5_type2);
 
-PPATUI_HEADERIFY(mc_phy_init_gcn3_hbm1);
-PPATUI_HEADERIFY(mc_phy_init_gcn3_gddr5);
-PPATUI_HEADERIFY(mc_phy_init_gcn4_gddr5_type1);
-PPATUI_HEADERIFY(mc_phy_init_gcn4_gddr5_type2);
+PPATUI_HEADERIFY(mc_tile_adjust_set_gcn3_gddr5);
+PPATUI_HEADERIFY(mc_tile_adjust_set_gcn4_gddr5);
+
+PPATUI_HEADERIFY(mc_phy_init_set_gcn3_hbm1);
+PPATUI_HEADERIFY(mc_phy_init_set_gcn3_gddr5);
+PPATUI_HEADERIFY(mc_phy_init_set_gcn4_gddr5_type1);
+PPATUI_HEADERIFY(mc_phy_init_set_gcn4_gddr5_type2);
 
 /******************************************************************************/
 // atui_atombios.c / atombios.h

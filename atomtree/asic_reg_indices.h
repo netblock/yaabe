@@ -64,7 +64,7 @@ regcmp(
 /******************************************************************************/
 
 /******************************************************************************/
-// mem_clk_patch
+// mem_clk_patch table; timings
 /******************************************************************************/
 
 static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = { 
@@ -110,7 +110,7 @@ static const uint16_t mc_block_r600_gddr4_memclkpatch_addresses[] = {
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_islands_timings_type_1_addresses[] = { // 13+1
+static const uint16_t timings_set_islands_type1_addresses[] = { // 13+1
 	// Northern, Southern, Sea, Volcanic Islands
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
@@ -127,7 +127,7 @@ static const uint16_t mc_block_islands_timings_type_1_addresses[] = { // 13+1
 	mmMC_ARB_DRAM_TIMING2_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mc_block_islands_timings_type_2_addresses[] = { // 13+1
+static const uint16_t timings_set_islands_type2_addresses[] = { // 13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
 	mmMC_SEQ_WR_CTL_2_6_0,
@@ -144,7 +144,7 @@ static const uint16_t mc_block_islands_timings_type_2_addresses[] = { // 13+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_fiji_timings_addresses[] = { // 9+1
+static const uint16_t timings_set_fiji_addresses[] = { // 9+1
 	mmMC_SEQ_CAS_TIMING_6_0,
 	mmMC_SEQ_MISC_TIMING2_6_0,
 	mmMC_SEQ_RD_CTL_D0_6_0,
@@ -157,7 +157,7 @@ static const uint16_t mc_block_fiji_timings_addresses[] = { // 9+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_block_polaris_timings_addresses[] = { // 13+1
+static const uint16_t timings_set_polaris_addresses[] = { // 13+1
 	mmMC_SEQ_WR_CTL_D0_6_0,
 	mmMC_SEQ_WR_CTL_D1_6_0,
 	mmMC_SEQ_WR_CTL_2_6_0,
@@ -175,16 +175,11 @@ static const uint16_t mc_block_polaris_timings_addresses[] = { // 13+1
 };
 
 /******************************************************************************/
-// mem_adjust_table
+// mem_adjust table
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
-/*
-static const uint16_t mem_adjust__gddr5_addresses[] = { // +1
-	END_OF_REG_INDEX_BLOCK
-};
-*/
 
-static const uint16_t mem_adjust_terascale2_ddr3_addresses[] = { // 53+1
+static const uint16_t mem_adjust_set_terascale2_ddr3_addresses[] = { // 53+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -241,7 +236,7 @@ static const uint16_t mem_adjust_terascale2_ddr3_addresses[] = { // 53+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_terascale2_gddr5_type3_addresses[] = { // 63+1
+static const uint16_t mem_adjust_set_terascale2_gddr5_type3_addresses[] = { // 63+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -307,7 +302,8 @@ static const uint16_t mem_adjust_terascale2_gddr5_type3_addresses[] = { // 63+1
 	ixMC_IO_DEBUG_CK_TXPHASE_D1_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
-static const uint16_t mem_adjust_terascale2_gddr5_type4_addresses[] = { // 69+1
+
+static const uint16_t mem_adjust_set_terascale2_gddr5_type4_addresses[] = { // 69+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -380,7 +376,7 @@ static const uint16_t mem_adjust_terascale2_gddr5_type4_addresses[] = { // 69+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_terascale3_gddr5_addresses[] = { // 69+1
+static const uint16_t mem_adjust_set_terascale3_gddr5_addresses[] = { // 69+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -453,7 +449,7 @@ static const uint16_t mem_adjust_terascale3_gddr5_addresses[] = { // 69+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn1_gddr5_type1_addresses[] = { // 97+1
+static const uint16_t mem_adjust_set_gcn1_gddr5_type1_addresses[] = { // 97+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -554,7 +550,7 @@ static const uint16_t mem_adjust_gcn1_gddr5_type1_addresses[] = { // 97+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn1_gddr5_type2_addresses[] = { // 123+1
+static const uint16_t mem_adjust_set_gcn1_gddr5_type2_addresses[] = { // 123+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -681,7 +677,7 @@ static const uint16_t mem_adjust_gcn1_gddr5_type2_addresses[] = { // 123+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn1_gddr5_type3_addresses[] = { // 133+1
+static const uint16_t mem_adjust_set_gcn1_gddr5_type3_addresses[] = { // 133+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -818,7 +814,7 @@ static const uint16_t mem_adjust_gcn1_gddr5_type3_addresses[] = { // 133+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn1_gddr5_type4_addresses[] = { // 63+1
+static const uint16_t mem_adjust_set_gcn1_gddr5_type4_addresses[] = { // 63+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -885,7 +881,7 @@ static const uint16_t mem_adjust_gcn1_gddr5_type4_addresses[] = { // 63+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn2_gddr5_addresses[] = { // 126+1
+static const uint16_t mem_adjust_set_gcn2_gddr5_addresses[] = { // 126+1
 	mmMC_SEQ_IO_RESERVE_D0_6_0,
 	mmMC_SEQ_IO_RESERVE_D1_6_0,
 	mmMC_IO_TXCNTL_DPHY0_D0_6_0,
@@ -1015,7 +1011,7 @@ static const uint16_t mem_adjust_gcn2_gddr5_addresses[] = { // 126+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn3_gddr5_addresses[] = { // 45+1
+static const uint16_t mem_adjust_set_gcn3_gddr5_addresses[] = { // 45+1
 	mmMC_IO_RXCNTL_DPHY0_D0_6_0,
 	mmMC_IO_RXCNTL_DPHY0_D1_6_0,
 	mmMC_IO_RXCNTL_DPHY1_D0_6_0,
@@ -1064,12 +1060,12 @@ static const uint16_t mem_adjust_gcn3_gddr5_addresses[] = { // 45+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn3_hbm1_addresses[] = { // 1+1
+static const uint16_t mem_adjust_set_gcn3_hbm1_addresses[] = { // 1+1
 	mmMC_SEQ_RXFRAMING_DBI_D1_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn4_gddr5_type1_addresses[] = { // 6+1
+static const uint16_t mem_adjust_set_gcn4_gddr5_type1_addresses[] = { // 6+1
 	mmMC_SEQ_MISC4_6_0,
 	mmMC_SEQ_MISC5_6_0,
 	mmMC_IO_PAD_CNTL_D1_6_0,
@@ -1079,7 +1075,7 @@ static const uint16_t mem_adjust_gcn4_gddr5_type1_addresses[] = { // 6+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mem_adjust_gcn4_gddr5_type2_addresses[] = { // 12+1
+static const uint16_t mem_adjust_set_gcn4_gddr5_type2_addresses[] = { // 12+1
 	mmMC_SEQ_MISC0_6_0,
 	mmMC_SEQ_MISC4_6_0,
 	mmMC_SEQ_MISC5_6_0,
@@ -1096,17 +1092,17 @@ static const uint16_t mem_adjust_gcn4_gddr5_type2_addresses[] = { // 12+1
 };
 
 /******************************************************************************/
-// mc_adjust_pertile table
+// mc_tile_adjust table
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
 
-static const uint16_t mc_adjust_gcn3_gddr5_addresses[] = { // 2+1
+static const uint16_t mc_tile_adjust_set_gcn3_gddr5_addresses[] = { // 2+1
 	ixMC_TSM_DEBUG_FLAG_6_0,
 	ixMC_TSM_DEBUG_BCNT6_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_adjust_gcn4_gddr5_addresses[] = { // 1+1
+static const uint16_t mc_tile_adjust_set_gcn4_gddr5_addresses[] = { // 1+1
 	ixMC_IO_DEBUG_UP_14_6_0,
 	END_OF_REG_INDEX_BLOCK
 };
@@ -1116,8 +1112,7 @@ static const uint16_t mc_adjust_gcn4_gddr5_addresses[] = { // 1+1
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
 
-
-static const uint16_t mc_phy_init_gcn3_hbm1_addresses[] = { // 13+1
+static const uint16_t mc_phy_init_set_gcn3_hbm1_addresses[] = { // 13+1
 	mmMC_IO_PAD_CNTL_6_0,
 	mmMC_IO_PAD_CNTL_D0_6_0,
 	mmMC_SEQ_PERF_SEQ_CNT_A_I0_6_0,
@@ -1134,7 +1129,7 @@ static const uint16_t mc_phy_init_gcn3_hbm1_addresses[] = { // 13+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_phy_init_gcn3_gddr5_addresses[] = { // 164+1
+static const uint16_t mc_phy_init_set_gcn3_gddr5_addresses[] = { // 164+1
 	mmMPLL_SEQ_UCODE_1_6_0,
 	mmMPLL_SEQ_UCODE_2_6_0,
 	mmMC_SEQ_DRAM_7_1,
@@ -1302,7 +1297,7 @@ static const uint16_t mc_phy_init_gcn3_gddr5_addresses[] = { // 164+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_phy_init_gcn4_gddr5_type1_addresses[] = { // 24+1
+static const uint16_t mc_phy_init_set_gcn4_gddr5_type1_addresses[] = { // 24+1
 	mmMC_SEQ_MISC0_6_0,
 	mmMC_SEQ_MISC4_6_0,
 	mmMC_SEQ_MISC5_6_0,
@@ -1330,7 +1325,7 @@ static const uint16_t mc_phy_init_gcn4_gddr5_type1_addresses[] = { // 24+1
 	END_OF_REG_INDEX_BLOCK
 };
 
-static const uint16_t mc_phy_init_gcn4_gddr5_type2_addresses[] = { // 18+1
+static const uint16_t mc_phy_init_set_gcn4_gddr5_type2_addresses[] = { // 18+1
 	mmMC_SEQ_MISC0_6_0,
 	mmMC_SEQ_MISC6_6_0,
 	mmMC_SEQ_MISC7_6_0,

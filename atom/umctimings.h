@@ -622,7 +622,7 @@ union SEQ_PMG_TIMING {
 		rsvd0       :31-30 +1;
 	};
 };
-struct mc_block_fiji_timings { // 40 bytes.
+struct timings_set_fiji { // 40 bytes.
 	union atom_mc_register_setting_id block_id;
 	uint32_t t0; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D0;
 	uint32_t t1; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D1;
@@ -677,7 +677,7 @@ struct mc_seq_misc3_ddr3 {
 // mem_clk_patch
 /******************************************************************************/
 
-struct mc_block_islands_ddr3_timings { // 52 bytes
+struct timings_set_islands_ddr3 { // 52 bytes
 	// Northern, Southern, Sea, Volcanic Islands
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_wr_ctl_d0_6_0    mc_seq_wr_ctl_d0;
@@ -694,7 +694,7 @@ struct mc_block_islands_ddr3_timings { // 52 bytes
 	union mc_arb_dram_timing2_6_0 mc_arb_dram_timing2;
 };
 
-struct mc_block_islands_gddr5_timings { // 52 bytes
+struct timings_set_islands_gddr5 { // 52 bytes
 	// Northern, Southern, Sea, Volcanic Islands
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
@@ -711,7 +711,7 @@ struct mc_block_islands_gddr5_timings { // 52 bytes
 	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
 };
 
-struct mc_block_fiji_timings { // 40 bytes
+struct timings_set_fiji { // 40 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_cas_timing_6_0_o    mc_seq_cas_timing;
 	union mc_seq_misc_timing2_6_0_o  mc_seq_misc_timing2;
@@ -724,7 +724,7 @@ struct mc_block_fiji_timings { // 40 bytes
 	union mc_arb_burst_time_8_1      mc_arb_burst_time;
 };
 
-struct mc_block_polaris_timings { // 52 bytes.
+struct timings_set_polaris { // 52 bytes.
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
 	union mc_seq_wr_ctl_2_6_0      mc_seq_wr_ctl_2;
@@ -740,7 +740,7 @@ struct mc_block_polaris_timings { // 52 bytes.
 	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
 };
 
-struct umc_block_vega10_timings { // 92 bytes. Uncertain.
+struct timings_set_vega10 { // 92 bytes. Uncertain.
 	union atom_mc_register_setting_id  block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;
@@ -767,7 +767,7 @@ struct umc_block_vega10_timings { // 92 bytes. Uncertain.
 	union DRAMTiming22_HBM2 DRAMTiming22;
 };
 
-struct umc_block_vega21_timings { // 96 bytes. Uncertain.
+struct timings_set_vega21 { // 96 bytes. Uncertain.
 	union atom_mc_register_setting_id block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;
@@ -795,7 +795,7 @@ struct umc_block_vega21_timings { // 96 bytes. Uncertain.
 	uint32_t unkown24; // unsure
 };
 
-struct umc_block_navi1_timings { // 116 bytes. A little more certain.
+struct timings_set_navi1 { // 116 bytes. A little more certain.
 	union atom_mc_register_setting_id block_id; //frequency
 
 	struct UMCCTRL_MISC2 gddr6_mr5;
@@ -832,16 +832,11 @@ struct umc_block_navi1_timings { // 116 bytes. A little more certain.
 };
 
 /******************************************************************************/
-// mem_adjust_table
+// mem_adjust table
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
-/*
-struct mem_adjust__gddr5 { //  bytes
-	union atom_mc_register_setting_id  block_id;
-};
-*/
 
-struct mem_adjust_terascale2_ddr3 { // 108 bytes
+struct mem_adjust_set_terascale2_ddr3 { // 108 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -871,7 +866,7 @@ struct mem_adjust_terascale2_ddr3 { // 108 bytes
 	union mc_io_debug_cmd_txphase_d0_6_0   mc_io_debug_cmd_txphase_d0;
 };
 
-struct mem_adjust_terascale2_gddr5_type3 { // 172 bytes
+struct mem_adjust_set_terascale2_gddr5_type3 { // 172 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -917,7 +912,7 @@ struct mem_adjust_terascale2_gddr5_type3 { // 172 bytes
 	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 };
 
-struct mem_adjust_terascale2_gddr5_type4 { // 196 bytes
+struct mem_adjust_set_terascale2_gddr5_type4 { // 196 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -969,7 +964,7 @@ struct mem_adjust_terascale2_gddr5_type4 { // 196 bytes
 	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 
 };
-struct mem_adjust_terascale3_gddr5 { // 196 bytes
+struct mem_adjust_set_terascale3_gddr5 { // 196 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1020,7 +1015,7 @@ struct mem_adjust_terascale3_gddr5 { // 196 bytes
 };
 
 
-struct mem_adjust_gcn1_gddr5_type1 { // 232 bytes
+struct mem_adjust_set_gcn1_gddr5_type1 { // 232 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1081,7 +1076,7 @@ struct mem_adjust_gcn1_gddr5_type1 { // 232 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mem_adjust_gcn1_gddr5_type2 { // 284 bytes
+struct mem_adjust_set_gcn1_gddr5_type2 { // 284 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1155,7 +1150,7 @@ struct mem_adjust_gcn1_gddr5_type2 { // 284 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mem_adjust_gcn1_gddr5_type3 { // 304 bytes
+struct mem_adjust_set_gcn1_gddr5_type3 { // 304 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1234,7 +1229,7 @@ struct mem_adjust_gcn1_gddr5_type3 { // 304 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mem_adjust_gcn1_gddr5_type4 { // 128 bytes
+struct mem_adjust_set_gcn1_gddr5_type4 { // 128 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1269,7 +1264,7 @@ struct mem_adjust_gcn1_gddr5_type4 { // 128 bytes
 	union mc_seq_fifo_ctl_7_1 mc_seq_fifo_ctl;
 };
 
-struct mem_adjust_gcn2_gddr5 { // 288 bytes
+struct mem_adjust_set_gcn2_gddr5 { // 288 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
 	union mc_io_txcntl_dphy0_d0_6_0    mc_io_txcntl_dphy0_d0;
@@ -1345,7 +1340,7 @@ struct mem_adjust_gcn2_gddr5 { // 288 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mem_adjust_gcn3_gddr5 { // 96 bytes
+struct mem_adjust_set_gcn3_gddr5 { // 96 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_io_rxcntl_dphy0_d0_6_0    mc_io_rxcntl_dphy0_d0;
 	union mc_io_rxcntl1_dphy0_d0_7_1   mc_io_rxcntl1_dphy0_d0;
@@ -1372,12 +1367,12 @@ struct mem_adjust_gcn3_gddr5 { // 96 bytes
 	union mc_io_debug_edc_rxphase_d0_6_0   mc_io_debug_edc_rxphase_d0;
 };
 
-struct mem_adjust_gcn3_hbm1 { // 8 bytes
+struct mem_adjust_set_gcn3_hbm1 { // 8 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_rxframing_dbi_d1_6_0_o  mc_seq_rxframing_dbi_d1;
 };
 
-struct mem_adjust_gcn4_gddr5_type1 { // 24 bytes
+struct mem_adjust_set_gcn4_gddr5_type1 { // 24 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_misc4_6_0  mc_seq_misc4;
 	union mc_seq_misc5_6_0  mc_seq_misc5;
@@ -1386,7 +1381,7 @@ struct mem_adjust_gcn4_gddr5_type1 { // 24 bytes
 	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
 };
 
-struct mem_adjust_gcn4_gddr5_type2 { // 44 bytes
+struct mem_adjust_set_gcn4_gddr5_type2 { // 44 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_misc0_6_0  mc_seq_misc0;
 	union mc_seq_misc4_6_0  mc_seq_misc4;
@@ -1401,17 +1396,17 @@ struct mem_adjust_gcn4_gddr5_type2 { // 44 bytes
 };
 
 /******************************************************************************/
-// mc_adjust_pertile table
+// mc_tile_adjust table
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
 
-struct mc_adjust_gcn3_gddr5 { // 12 bytes
+struct mc_tile_adjust_set_gcn3_gddr5 { // 12 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_tsm_debug_flag_6_0  mc_tsm_debug_flag;
 	union mc_tsm_debug_bcnt6_6_0 mc_tsm_debug_bcnt6;
 };
 
-struct mc_adjust_gcn4_gddr5 { // 8 bytes
+struct mc_tile_adjust_set_gcn4_gddr5 { // 8 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_io_debug_up_14_6_0  mc_io_debug_up_14;
 };
@@ -1421,7 +1416,7 @@ struct mc_adjust_gcn4_gddr5 { // 8 bytes
 // uncertain the accuracy of all of these tables.
 /******************************************************************************/
 
-struct mc_phy_init_gcn3_hbm1 { // 56 bytes
+struct mc_phy_init_set_gcn3_hbm1 { // 56 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_io_pad_cntl_6_0     mc_io_pad_cntl;
 	union mc_io_pad_cntl_d0_6_0  mc_io_pad_cntl_d0;
@@ -1438,7 +1433,7 @@ struct mc_phy_init_gcn3_hbm1 { // 56 bytes
 	union mc_tsm_debug_bcnt4_6_0 mc_tsm_debug_bcnt4;
 };
 
-struct mc_phy_init_gcn3_gddr5 { // 384 bytes
+struct mc_phy_init_set_gcn3_gddr5 { // 384 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mpll_seq_ucode_1_6_0  mpll_seq_ucode_1;
 	union mpll_seq_ucode_2_6_0  mpll_seq_ucode_2;
@@ -1537,7 +1532,7 @@ struct mc_phy_init_gcn3_gddr5 { // 384 bytes
 	union mc_io_debug_dqb0l_rx_vref_cal_d1_6_0 mc_io_debug_dqb0l_rx_vref_cal_d1;
 };
 
-struct mc_phy_init_gcn4_gddr5_type1 { // 92 bytes
+struct mc_phy_init_set_gcn4_gddr5_type1 { // 92 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_misc0_6_0  mc_seq_misc0;
 	union mc_seq_misc4_6_0  mc_seq_misc4;
@@ -1563,7 +1558,7 @@ struct mc_phy_init_gcn4_gddr5_type1 { // 92 bytes
 	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
 };
 
-struct mc_phy_init_gcn4_gddr5_type2 { // 72 bytes
+struct mc_phy_init_set_gcn4_gddr5_type2 { // 72 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_misc0_6_0  mc_seq_misc0;
 	union mc_seq_misc6_6_0  mc_seq_misc6;

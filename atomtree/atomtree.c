@@ -738,15 +738,15 @@ get_vram_type(
 }
 
 static atui_branch*
-atomtree_populate_init_mem_adjust_table(
+atomtree_populate_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
 		const bool generate_atui,
 		const struct atomtree_vram_module* const vram_modules
 		) {
-	atui_branch* const atui_memadjust = atomtree_populate_init_reg_block(
+	atui_branch* const atui_mem_adjust = atomtree_populate_init_reg_block(
 		mem_adjust_table, generate_atui, 1
 	);
-	mem_adjust_table->reg_type = reg_block_mem_adjust_table;
+	mem_adjust_table->reg_type = reg_block_mem_adjust;
 
 	const enum atom_dgpu_vram_type vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -763,69 +763,73 @@ atomtree_populate_init_mem_adjust_table(
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
-		if (regcmp(index, mem_adjust_gcn3_hbm1_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn3_hbm1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn3_hbm1);
+		if (regcmp(index, mem_adjust_set_gcn3_hbm1_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn3_hbm1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn3_hbm1);
 		}
 	} else if (7 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn4_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn4_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn4_gddr5_type1);
+		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type1_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn4_gddr5_type1);
 		}
 	} else if (13 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn4_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn4_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn4_gddr5_type2);
+		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type2_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type2;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn4_gddr5_type2);
 		}
 	} else if (46 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn3_gddr5_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn3_gddr5);
+		if (regcmp(index, mem_adjust_set_gcn3_gddr5_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn3_gddr5);
 		}
 	} else if (54 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_terascale2_ddr3_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_terascale2_ddr3;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_terascale2_ddr3);
+		if (regcmp(index, mem_adjust_set_terascale2_ddr3_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_terascale2_ddr3;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_terascale2_ddr3);
 		}
 	} else if (64 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn1_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type4;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type4);
-		} else if (regcmp(index, mem_adjust_terascale2_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_terascale2_gddr5_type3;
+		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type4_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type4;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type4);
+		} else if (regcmp(
+					index, mem_adjust_set_terascale2_gddr5_type3_addresses
+				)) {
+			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type3;
 			atui_strap_func = PPATUI_FUNC_NAME(
-				mem_adjust_terascale2_gddr5_type3
+				mem_adjust_set_terascale2_gddr5_type3
 			);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_terascale3_gddr5_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_terascale3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_terascale3_gddr5);
-		} else if (regcmp(index, mem_adjust_terascale2_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_terascale2_gddr5_type4;
+		if (regcmp(index, mem_adjust_set_terascale3_gddr5_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_terascale3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_terascale3_gddr5);
+		} else if (regcmp(
+					index, mem_adjust_set_terascale2_gddr5_type4_addresses
+				)) {
+			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type4;
 			atui_strap_func = PPATUI_FUNC_NAME(
-				mem_adjust_terascale2_gddr5_type4
+				mem_adjust_set_terascale2_gddr5_type4
 			);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn1_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type1);
+		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type1_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type1;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type1);
 		}
 	} else if (124 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn1_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type2);
+		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type2_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type2;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type2);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn2_gddr5_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn2_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn2_gddr5);
+		if (regcmp(index, mem_adjust_set_gcn2_gddr5_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn2_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn2_gddr5);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_gcn1_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = adjust_set_gcn1_gddr5_type3;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_gcn1_gddr5_type3);
+		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type3_addresses)) {
+			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type3;
+			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type3);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
@@ -838,14 +842,14 @@ atomtree_populate_init_mem_adjust_table(
 	#endif
 
 	if (generate_atui) {
-		strcpy(atui_memadjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 
 		if (mem_adjust_table->reg_set) {
 			atui_branch* const atui_adjust_set = ATUI_MAKE_BRANCH(
 				atui_nullstruct,
 				NULL,  NULL,NULL,  mem_adjust_table->num_data_blocks, NULL
 			);
-			ATUI_ADD_BRANCH(atui_memadjust, atui_adjust_set);
+			ATUI_ADD_BRANCH(atui_mem_adjust, atui_adjust_set);
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
@@ -905,12 +909,12 @@ atomtree_populate_init_mem_adjust_table(
 		}
 	}
 
-	return atui_memadjust;
+	return atui_mem_adjust;
 }
 
 
 static atui_branch*
-atomtree_populate_init_mem_clk_patch(
+atomtree_populate_mem_clk_patch(
 		struct atomtree_init_reg_block* const mem_clk_patch,
 		const bool generate_atui,
 		const struct atomtree_vram_module* const vram_modules
@@ -935,29 +939,25 @@ atomtree_populate_init_mem_clk_patch(
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_block_polaris_timings_addresses)) {
+		if (regcmp(index, timings_set_polaris_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_polaris_timings);
-		} else if (regcmp(index, mc_block_islands_timings_type_1_addresses)
-				|| regcmp(index, mc_block_islands_timings_type_2_addresses)
+			atui_strap_func = PPATUI_FUNC_NAME(timings_set_polaris);
+		} else if (regcmp(index, timings_set_islands_type1_addresses)
+				|| regcmp(index, timings_set_islands_type2_addresses)
 				) {
 			// Northern, Southern, Sea, Volcanic Islands
 			if (vram_type == ATOM_DGPU_VRAM_TYPE_DDR3) {
 				mem_clk_patch->reg_set = timings_set_islands_ddr3;
-				atui_strap_func = PPATUI_FUNC_NAME(
-					mc_block_islands_ddr3_timings
-				);
+				atui_strap_func = PPATUI_FUNC_NAME(timings_set_islands_ddr3);
 			} else {
 				mem_clk_patch->reg_set = timings_set_islands_gddr5;
-				atui_strap_func = PPATUI_FUNC_NAME(
-					mc_block_islands_gddr5_timings
-				);
+				atui_strap_func = PPATUI_FUNC_NAME(timings_set_islands_gddr5);
 			}
 		}
 	} else if (10 == mem_clk_patch->num_index) {
-		if (regcmp(index, mc_block_fiji_timings_addresses)) {
+		if (regcmp(index, timings_set_fiji_addresses)) {
 			mem_clk_patch->reg_set = timings_set_fiji;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_block_fiji_timings);
+			atui_strap_func = PPATUI_FUNC_NAME(timings_set_fiji);
 		}
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
@@ -1016,15 +1016,15 @@ atomtree_populate_init_mem_clk_patch(
 }
 
 static atui_branch*
-atomtree_populate_init_mc_adjust_pertile(
-		struct atomtree_init_reg_block* const mc_adjust_pertile,
+atomtree_populate_mc_tile_adjust(
+		struct atomtree_init_reg_block* const mc_tile_adjust,
 		const bool generate_atui,
 		const struct atomtree_vram_module* const vram_modules
 		) {
-	atui_branch* const atui_mcadjpertile = atomtree_populate_init_reg_block(
-		mc_adjust_pertile, generate_atui, 1
+	atui_branch* const atui_mc_tile_adjust = atomtree_populate_init_reg_block(
+		mc_tile_adjust, generate_atui, 1
 	);
-	mc_adjust_pertile->reg_type = reg_block_mc_adjust_pertile;
+	mc_tile_adjust->reg_type = reg_block_mc_tile_adjust;
 
 	const enum atom_dgpu_vram_type vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -1032,48 +1032,48 @@ atomtree_populate_init_mc_adjust_pertile(
 	const enum atomtree_common_version vram_module_ver =
 		vram_modules[0].vram_module_ver;
 	const struct atom_init_reg_index_format* const index =
-		mc_adjust_pertile->register_index;
+		mc_tile_adjust->register_index;
 	const struct atom_reg_setting_data_block* const* const data_blocks =
 	(const struct atom_reg_setting_data_block* const* const)
-		mc_adjust_pertile->data_blocks;
+		mc_tile_adjust->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
-	if (2 == mc_adjust_pertile->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_adjust_gcn4_gddr5_addresses)) {
-			mc_adjust_pertile->reg_set = mc_adjust_set_gcn4_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_adjust_gcn4_gddr5);
+	if (2 == mc_tile_adjust->num_index) { // optimisation heuristic
+		if (regcmp(index, mc_tile_adjust_set_gcn4_gddr5_addresses)) {
+			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn4_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_tile_adjust_set_gcn4_gddr5);
 		}
-	} else if (3 == mc_adjust_pertile->num_index) {
-		if (regcmp(index, mc_adjust_gcn3_gddr5_addresses)) {
-			mc_adjust_pertile->reg_set = mc_adjust_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_adjust_gcn3_gddr5);
+	} else if (3 == mc_tile_adjust->num_index) {
+		if (regcmp(index, mc_tile_adjust_set_gcn3_gddr5_addresses)) {
+			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn3_gddr5;
+			atui_strap_func = PPATUI_FUNC_NAME(mc_tile_adjust_set_gcn3_gddr5);
 		}
 	}
 	
-	mc_adjust_pertile->data_sets = mc_adjust_pertile->data_blocks[0];
+	mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
 	#ifndef NDEBUG
-	if (1 < mc_adjust_pertile->num_index
-		&& common_set_unknown == mc_adjust_pertile->reg_set) {
-		register_set_print_tables(mc_adjust_pertile, &GMC_reg_set, true);
-		assert(mc_adjust_pertile->reg_set); // unknown adjust sequence
+	if (1 < mc_tile_adjust->num_index
+		&& common_set_unknown == mc_tile_adjust->reg_set) {
+		register_set_print_tables(mc_tile_adjust, &GMC_reg_set, true);
+		assert(mc_tile_adjust->reg_set); // unknown adjust sequence
 	}
 	#endif
 
 	if (generate_atui) {
-		strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile");
+		strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust");
 
-		if (mc_adjust_pertile->reg_set) {
+		if (mc_tile_adjust->reg_set) {
 			atui_branch* const atui_adjust_set = ATUI_MAKE_BRANCH(
 				atui_nullstruct,
-				NULL,  NULL,NULL,  mc_adjust_pertile->num_data_blocks, NULL
+				NULL,  NULL,NULL,  mc_tile_adjust->num_data_blocks, NULL
 			);
-			ATUI_ADD_BRANCH(atui_mcadjpertile, atui_adjust_set);
+			ATUI_ADD_BRANCH(atui_mc_tile_adjust, atui_adjust_set);
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
-			for (uint8_t i = 0; i < mc_adjust_pertile->num_data_blocks; i++) {
+			for (uint8_t i = 0; i < mc_tile_adjust->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
 				ATUI_ADD_BRANCH(atui_adjust_set, atui_strap);
@@ -1082,7 +1082,7 @@ atomtree_populate_init_mc_adjust_pertile(
 				);
 				assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
 			}
-			if (mc_adjust_pertile->num_data_entries) {
+			if (mc_tile_adjust->num_data_entries) {
 				sprintf(atui_adjust_set->name, "%s (has inaccuracies)",
 					atui_strap->varname
 				);
@@ -1094,7 +1094,7 @@ atomtree_populate_init_mc_adjust_pertile(
 		}
 	}
 
-	return atui_mcadjpertile;
+	return atui_mc_tile_adjust;
 }
 
 static atui_branch*
@@ -1123,24 +1123,28 @@ atomtree_populate_init_mc_phy_init(
 	// because static tables offers a more consise, typed API.
 	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 	if (14 == mc_phy_init->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_phy_init_gcn3_hbm1_addresses)) {
+		if (regcmp(index, mc_phy_init_set_gcn3_hbm1_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn3_hbm1;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_gcn3_hbm1);
+			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_set_gcn3_hbm1);
 		}
 	} else if (19 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_gcn4_gddr5_type2_addresses)) {
+		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type2_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_gcn4_gddr5_type2);
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_phy_init_set_gcn4_gddr5_type2
+			);
 		}
 	} else if (25 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_gcn4_gddr5_type1_addresses)) {
+		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type1_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_gcn4_gddr5_type1);
+			atui_strap_func = PPATUI_FUNC_NAME(
+				mc_phy_init_set_gcn4_gddr5_type1
+			);
 		}
 	} else if (165 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_gcn3_gddr5_addresses)) {
+		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_gcn3_gddr5);
+			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_set_gcn3_gddr5);
 		}
 	}
 	
@@ -2000,16 +2004,15 @@ atomtree_populate_vram_info_v1_3(
 	// it might be better to keep atui generation for the reg blocks up here
 	// than in the ATUI_FUNCIFY for that it might not exist, and that we might
 	// want to attach stuff to it, like timing strap definitions.
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi13->leaves->MemAdjustTblOffset) {
 		vi13->mem_adjust_table.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemAdjustTblOffset;
-
-		atui_memadjust = atomtree_populate_init_reg_block(
+		atui_mem_adjust = atomtree_populate_init_reg_block(
 			&(vi13->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi13->mem_adjust_table.leaves = NULL;
@@ -2021,7 +2024,6 @@ atomtree_populate_vram_info_v1_3(
 		// doesn't decode them right.
 		vi13->mem_clk_patch.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemClkPatchTblOffset;
-
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi13->mem_clk_patch), generate_atui, 0
 		);
@@ -2036,7 +2038,7 @@ atomtree_populate_vram_info_v1_3(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi13_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_vrammodules
+			atui_mem_adjust, atui_memclkpatch, atui_vrammodules
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_3,
 			NULL,  vi13,vi13->leaves,
@@ -2064,16 +2066,15 @@ atomtree_populate_vram_info_v1_4(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi14->leaves->MemAdjustTblOffset) {
 		vi14->mem_adjust_table.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemAdjustTblOffset;
-
-		atui_memadjust = atomtree_populate_init_reg_block(
+		atui_mem_adjust = atomtree_populate_init_reg_block(
 			&(vi14->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi14->mem_adjust_table.leaves = NULL;
@@ -2084,7 +2085,6 @@ atomtree_populate_vram_info_v1_4(
 		// TODO See atomtree_populate_vram_info_v1_3
 		vi14->mem_clk_patch.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemClkPatchTblOffset;
-
 		atui_memclkpatch = atomtree_populate_init_reg_block(
 			&(vi14->mem_clk_patch), generate_atui, 0
 		);
@@ -2099,7 +2099,7 @@ atomtree_populate_vram_info_v1_4(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi14_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_vrammodules,
+			atui_mem_adjust, atui_memclkpatch, atui_vrammodules,
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_4,
 			NULL,  vi14,vi14->leaves,
@@ -2127,11 +2127,11 @@ atomtree_populate_vram_info_v2_1(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi21->leaves->MemAdjustTblOffset) {
 		vi21->mem_adjust_table.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemAdjustTblOffset;
-		atui_memadjust = atomtree_populate_init_mem_adjust_table(
+		atui_mem_adjust = atomtree_populate_mem_adjust_table(
 			&(vi21->mem_adjust_table),
 			generate_atui,
 			vi21->vram_modules
@@ -2144,7 +2144,7 @@ atomtree_populate_vram_info_v2_1(
 	if (vi21->leaves->MemClkPatchTblOffset) {
 		vi21->mem_clk_patch.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemClkPatchTblOffset;
-		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
+		atui_memclkpatch = atomtree_populate_mem_clk_patch(
 			&(vi21->mem_clk_patch),
 			generate_atui,
 			vi21->vram_modules
@@ -2157,7 +2157,6 @@ atomtree_populate_vram_info_v2_1(
 	if (vi21->leaves->PerBytePresetOffset) {
 		vi21->per_byte_preset.leaves =
 			(void*)vi21->leaves + vi21->leaves->PerBytePresetOffset;
-
 		atui_perbytepreset = atomtree_populate_init_reg_block(
 			&(vi21->per_byte_preset), generate_atui, 0
 		);
@@ -2172,7 +2171,7 @@ atomtree_populate_vram_info_v2_1(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi21_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_perbytepreset,
+			atui_mem_adjust, atui_memclkpatch, atui_perbytepreset,
 			atui_vrammodules
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_1,
@@ -2201,19 +2200,11 @@ atomtree_populate_vram_info_v2_2(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi22->leaves->MemAdjustTblOffset) {
 		vi22->mem_adjust_table.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemAdjustTblOffset;
-		/*
-		atui_memadjust = atomtree_populate_init_reg_block(
-			&(vi22->mem_adjust_table), generate_atui, 0
-		);
-		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
-		}
-		*/
-		atui_memadjust = atomtree_populate_init_mem_adjust_table(
+		atui_mem_adjust = atomtree_populate_mem_adjust_table(
 			&(vi22->mem_adjust_table),
 			generate_atui,
 			vi22->vram_modules
@@ -2226,7 +2217,7 @@ atomtree_populate_vram_info_v2_2(
 	if (vi22->leaves->MemClkPatchTblOffset) {
 		vi22->mem_clk_patch.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemClkPatchTblOffset;
-		atui_memclkpatch = atomtree_populate_init_mem_clk_patch(
+		atui_memclkpatch = atomtree_populate_mem_clk_patch(
 			&(vi22->mem_clk_patch),
 			generate_atui,
 			vi22->vram_modules
@@ -2235,45 +2226,37 @@ atomtree_populate_vram_info_v2_2(
 		vi22->mem_clk_patch.leaves = NULL;
 	}
 
-	atui_branch* atui_mcadjpertile = NULL;
+	atui_branch* atui_mc_tile_adjust = NULL;
 	if (vi22->leaves->McAdjustPerTileTblOffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi22->mc_adjust_pertile.leaves =
+		vi22->mc_tile_adjust.leaves =
 			(void*)vi22->leaves + vi22->leaves->McAdjustPerTileTblOffset;
-		/*
-		atui_mcadjpertile = atomtree_populate_init_reg_block(
-			&(vi22->mc_adjust_pertile), generate_atui, 0
-		);
-		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
-		}
-		*/
-		atui_mcadjpertile = atomtree_populate_init_mc_adjust_pertile(
-			&(vi22->mc_adjust_pertile),
+		atui_mc_tile_adjust = atomtree_populate_mc_tile_adjust(
+			&(vi22->mc_tile_adjust),
 			generate_atui,
 			vi22->vram_modules
 		);
 	} else {
-		vi22->mc_adjust_pertile.leaves = NULL;
+		vi22->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi22->leaves->McPhyInitTableOffset) {
-		vi22->mc_phyinit.leaves =
+		vi22->mc_phy_init.leaves =
 			(void*)vi22->leaves + vi22->leaves->McPhyInitTableOffset;
 		atui_phyinit = atomtree_populate_init_reg_block(
-			&(vi22->mc_phyinit), generate_atui, 0
+			&(vi22->mc_phy_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
-		atui_mcadjpertile = atomtree_populate_init_mc_phy_init(
-			&(vi22->mc_phyinit),
+		atui_mc_tile_adjust = atomtree_populate_init_mc_phy_init(
+			&(vi22->mc_phy_init),
 			generate_atui,
 			vi22->vram_modules
 		);
 	} else {
-		vi22->mc_phyinit.leaves = NULL;
+		vi22->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2293,7 +2276,7 @@ atomtree_populate_vram_info_v2_2(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi22_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, atui_phyinit,
+			atui_mem_adjust, atui_memclkpatch, atui_mc_tile_adjust, atui_phyinit,
 			atui_dram_remap, atui_vrammodules
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_2,
@@ -2325,15 +2308,15 @@ atomtree_populate_vram_info_v2_3(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi23->leaves->mem_adjust_tbloffset) {
 		vi23->mem_adjust_table.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_adjust_tbloffset;
-		atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atui_mem_adjust = atomtree_populate_umc_init_reg_block(
 			&(vi23->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi23->mem_adjust_table.leaves = NULL;
@@ -2350,10 +2333,10 @@ atomtree_populate_vram_info_v2_3(
 		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
 		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
 		if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct umc_block_vega10_timings)) {
+			== sizeof(struct timings_set_vega10)) {
 			vi23->uses_vega21_timings = false;
 		} else if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct umc_block_vega21_timings)) {
+			== sizeof(struct timings_set_vega21)) {
 			vi23->uses_vega21_timings = true;
 		} else {
 			assert(0);
@@ -2376,9 +2359,9 @@ atomtree_populate_vram_info_v2_3(
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
 			if (vi23->uses_vega21_timings) {
-				atui_strap_func = PPATUI_FUNC_NAME(umc_block_vega21_timings);
+				atui_strap_func = PPATUI_FUNC_NAME(timings_set_vega21);
 			} else {
-				atui_strap_func = PPATUI_FUNC_NAME(umc_block_vega10_timings);
+				atui_strap_func = PPATUI_FUNC_NAME(timings_set_vega10);
 			}
 			const char8_t* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -2409,33 +2392,33 @@ atomtree_populate_vram_info_v2_3(
 		vi23->num_timing_straps = NULL;
 	}
 
-	atui_branch* atui_mcadjpertile = NULL;
+	atui_branch* atui_mc_tile_adjust = NULL;
 	if (vi23->leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi23->mc_adjust_pertile.leaves =
+		vi23->mc_tile_adjust.leaves =
 			(void*)vi23->leaves + vi23->leaves->mc_adjust_pertile_tbloffset;
-		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			&(vi23->mc_adjust_pertile), generate_atui, 0
+		atui_mc_tile_adjust = atomtree_populate_umc_init_reg_block(
+			&(vi23->mc_tile_adjust), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
+			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
 	} else {
-		vi23->mc_adjust_pertile.leaves = NULL;
+		vi23->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi23->leaves->mc_phyinit_tbloffset) {
-		vi23->mc_phyinit.leaves =
+		vi23->mc_phy_init.leaves =
 			(void*)vi23->leaves + vi23->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			&(vi23->mc_phyinit), generate_atui, 0
+			&(vi23->mc_phy_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
 	} else {
-		vi23->mc_phyinit.leaves = NULL;
+		vi23->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2479,7 +2462,7 @@ atomtree_populate_vram_info_v2_3(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi23_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_mcadjpertile, atui_phyinit,
+			atui_mem_adjust, atui_memclkpatch, atui_mc_tile_adjust, atui_phyinit,
 			atui_dram_remap, atui_hbm_tmrs, atui_postucode_init,
 			atui_vrammodules
 		};
@@ -2513,15 +2496,15 @@ atomtree_populate_vram_info_v2_4(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi24->leaves->mem_adjust_tbloffset) {
 		vi24->mem_adjust_table.leaves =
 			(void*)vi24->leaves + vi24->leaves->mem_adjust_tbloffset;
-		atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atui_mem_adjust = atomtree_populate_umc_init_reg_block(
 			&(vi24->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi24->mem_adjust_table.leaves = NULL;
@@ -2537,7 +2520,7 @@ atomtree_populate_vram_info_v2_4(
 
 		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
 		vi24->navi1_gddr6_timings = 
-			(struct umc_block_navi1_timings*)vi24->mem_clk_patch.data_blocks[0];
+			(struct timings_set_navi1*)vi24->mem_clk_patch.data_blocks[0];
 
 		if (generate_atui) {
 			const struct atomtree_umc_init_reg_block* const mem_clk_patch =
@@ -2555,7 +2538,7 @@ atomtree_populate_vram_info_v2_4(
 
 			// to have similar topology like the rest
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
-			atui_strap_func = PPATUI_FUNC_NAME(umc_block_navi1_timings);
+			atui_strap_func = PPATUI_FUNC_NAME(timings_set_navi1);
 			struct atui_funcify_args func_args = {0};
 			const char8_t* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -2586,33 +2569,33 @@ atomtree_populate_vram_info_v2_4(
 		vi24->num_timing_straps = NULL;
 	}
 
-	atui_branch* atui_mcadjpertile = NULL;
+	atui_branch* atui_mc_tile_adjust = NULL;
 	if (vi24->leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi24->mc_adjust_pertile.leaves =
+		vi24->mc_tile_adjust.leaves =
 			(void*)vi24->leaves + vi24->leaves->mc_adjust_pertile_tbloffset;
-		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			&(vi24->mc_adjust_pertile), generate_atui, 0
+		atui_mc_tile_adjust = atomtree_populate_umc_init_reg_block(
+			&(vi24->mc_tile_adjust), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
+			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
 	} else {
-		vi24->mc_adjust_pertile.leaves = NULL;
+		vi24->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi24->leaves->mc_phyinit_tbloffset) {
-		vi24->mc_phyinit.leaves =
+		vi24->mc_phy_init.leaves =
 			(void*)vi24->leaves + vi24->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			&(vi24->mc_phyinit), generate_atui, 0
+			&(vi24->mc_phy_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
 	} else {
-		vi24->mc_phyinit.leaves = NULL;
+		vi24->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2645,7 +2628,7 @@ atomtree_populate_vram_info_v2_4(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi24_children[] = {
-			atui_memadjust, atui_memclkpatch, atui_mcadjpertile,
+			atui_mem_adjust, atui_memclkpatch, atui_mc_tile_adjust,
 			atui_dram_remap, atui_phyinit, atui_postucode_init,
 			atui_vrammodules
 		};
@@ -2677,15 +2660,15 @@ atomtree_populate_vram_info_v2_5(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi25->leaves->mem_adjust_tbloffset) {
 		vi25->mem_adjust_table.leaves =
 			(void*)vi25->leaves + vi25->leaves->mem_adjust_tbloffset;
-		atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atui_mem_adjust = atomtree_populate_umc_init_reg_block(
 			&(vi25->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi25->mem_adjust_table.leaves = NULL;
@@ -2729,33 +2712,33 @@ atomtree_populate_vram_info_v2_5(
 		vi25->gddr6_acstrap_count = 0;
 	}
 
-	atui_branch* atui_mcadjpertile = NULL;
+	atui_branch* atui_mc_tile_adjust = NULL;
 	if (vi25->leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi25->mc_adjust_pertile.leaves =
+		vi25->mc_tile_adjust.leaves =
 			(void*)vi25->leaves + vi25->leaves->mc_adjust_pertile_tbloffset;
-		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			&(vi25->mc_adjust_pertile), generate_atui, 0
+		atui_mc_tile_adjust = atomtree_populate_umc_init_reg_block(
+			&(vi25->mc_tile_adjust), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
+			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
 	} else {
-		vi25->mc_adjust_pertile.leaves = NULL;
+		vi25->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi25->leaves->mc_phyinit_tbloffset) {
-		vi25->mc_phyinit.leaves =
+		vi25->mc_phy_init.leaves =
 			(void*)vi25->leaves + vi25->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			&(vi25->mc_phyinit), generate_atui, 0
+			&(vi25->mc_phy_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
 	} else {
-		vi25->mc_phyinit.leaves = NULL;
+		vi25->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2801,7 +2784,7 @@ atomtree_populate_vram_info_v2_5(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi25_children[] = {
-			atui_memadjust, atui_gddr6_ac_timings, atui_mcadjpertile,
+			atui_mem_adjust, atui_gddr6_ac_timings, atui_mc_tile_adjust,
 			atui_phyinit, atui_dram_remap, atui_postucode_init,
 			atui_strobe_mode_patch, atui_vrammodules,
 		};
@@ -2833,15 +2816,15 @@ atomtree_populate_vram_info_v2_6(
 		);
 	}
 
-	atui_branch* atui_memadjust = NULL;
+	atui_branch* atui_mem_adjust = NULL;
 	if (vi26->leaves->mem_adjust_tbloffset) {
 		vi26->mem_adjust_table.leaves =
 			(void*)vi26->leaves + vi26->leaves->mem_adjust_tbloffset;
-		atui_memadjust = atomtree_populate_umc_init_reg_block(
+		atui_mem_adjust = atomtree_populate_umc_init_reg_block(
 			&(vi26->mem_adjust_table), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_memadjust->name, u8"mem_adjust_table");
+			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
 	} else {
 		vi26->mem_adjust_table.leaves = NULL;
@@ -2862,33 +2845,33 @@ atomtree_populate_vram_info_v2_6(
 		vi26->mem_clk_patch.leaves = NULL;
 	}
 
-	atui_branch* atui_mcadjpertile = NULL;
+	atui_branch* atui_mc_tile_adjust = NULL;
 	if (vi26->leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi26->mc_adjust_pertile.leaves =
+		vi26->mc_tile_adjust.leaves =
 			(void*)vi26->leaves + vi26->leaves->mc_adjust_pertile_tbloffset;
-		atui_mcadjpertile = atomtree_populate_umc_init_reg_block(
-			&(vi26->mc_adjust_pertile), generate_atui, 0
+		atui_mc_tile_adjust = atomtree_populate_umc_init_reg_block(
+			&(vi26->mc_tile_adjust), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_mcadjpertile->name, u8"mc_adjust_pertile_table");
+			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
 	} else {
-		vi26->mc_adjust_pertile.leaves = NULL;
+		vi26->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi26->leaves->mc_phyinit_tbloffset) {
-		vi26->mc_phyinit.leaves =
+		vi26->mc_phy_init.leaves =
 			(void*)vi26->leaves + vi26->leaves->mc_phyinit_tbloffset;
 		atui_phyinit = atomtree_populate_umc_init_reg_block(
-			&(vi26->mc_phyinit), generate_atui, 0
+			&(vi26->mc_phy_init), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phyinit_table");
+			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
 	} else {
-		vi26->mc_phyinit.leaves = NULL;
+		vi26->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_tmrs_seq = NULL;
@@ -2933,7 +2916,7 @@ atomtree_populate_vram_info_v2_6(
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi26_children[] = {
-			atui_memadjust, atui_mcadjpertile, atui_phyinit,
+			atui_mem_adjust, atui_mc_tile_adjust, atui_phyinit,
 			atui_dram_remap, atui_tmrs_seq, atui_postucode_init,
 			atui_vrammodules,
 		};
