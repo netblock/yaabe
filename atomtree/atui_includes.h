@@ -146,6 +146,11 @@ PPATUI_HEADERIFY(mem_adjust_gcn4_gddr5_type2);
 PPATUI_HEADERIFY(mc_adjust_gcn3_gddr5);
 PPATUI_HEADERIFY(mc_adjust_gcn4_gddr5);
 
+PPATUI_HEADERIFY(mc_phy_init_gcn3_hbm1);
+PPATUI_HEADERIFY(mc_phy_init_gcn3_gddr5);
+PPATUI_HEADERIFY(mc_phy_init_gcn4_gddr5_type1);
+PPATUI_HEADERIFY(mc_phy_init_gcn4_gddr5_type2);
+
 /******************************************************************************/
 // atui_atombios.c / atombios.h
 

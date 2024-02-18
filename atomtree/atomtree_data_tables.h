@@ -212,7 +212,7 @@ enum register_block_type:uint8_t {
 	reg_block_mem_adjust_table,
 	reg_block_mem_clk_patch,
 	reg_block_mc_adjust_pertile,
-	reg_block_phy_init,
+	reg_block_mc_phy_init,
 	reg_block_last,
 };
 enum common_register_sequence:uint8_t {
@@ -245,6 +245,12 @@ enum common_register_sequence:uint8_t {
 	// reg_block_mc_adjust_pertile:
 	mc_adjust_set_gcn3_gddr5,
 	mc_adjust_set_gcn4_gddr5,
+
+	// reg_block_mc_phy_init:
+	mc_phy_init_set_gcn3_hbm1,  // Fiji
+	mc_phy_init_set_gcn3_gddr5, // Tonga
+	mc_phy_init_set_gcn4_gddr5_type1, // all other Polaris
+	mc_phy_init_set_gcn4_gddr5_type2, // polaris20
 };
 
 #define ATOMTREE_MC_REG_MAX  24 // keep score.
@@ -295,6 +301,12 @@ struct atomtree_init_reg_block {
 		// reg_block_mc_adjust_pertile:
 		struct mc_adjust_gcn3_gddr5* mc_adjust_gcn3_gddr5;
 		struct mc_adjust_gcn4_gddr5* mc_adjust_gcn4_gddr5;
+
+		// reg_block_mc_phy_init:
+		struct mc_phy_init_gcn3_hbm1* mc_phy_init_gcn3_hbm1;
+		struct mc_phy_init_gcn3_gddr5* mc_phy_init_gcn3_gddr5;
+		struct mc_phy_init_gcn4_gddr5_type1* mc_phy_init_gcn4_gddr5_type1;
+		struct mc_phy_init_gcn4_gddr5_type2* mc_phy_init_gcn4_gddr5_type2;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
