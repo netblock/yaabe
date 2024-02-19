@@ -299,8 +299,8 @@ struct atomtree_init_reg_block {
 		struct timings_set_polaris* timings_set_polaris;
 		
 		// reg_block_mc_tile_adjust:
-		struct mc_tile_adjust_gcn3_gddr5* mc_tile_adjust_gcn3_gddr5;
-		struct mc_tile_adjust_gcn4_gddr5* mc_tile_adjust_gcn4_gddr5;
+		struct mc_tile_adjust_set_gcn3_gddr5* mc_tile_adjust_set_gcn3_gddr5;
+		struct mc_tile_adjust_set_gcn4_gddr5* mc_tile_adjust_set_gcn4_gddr5;
 
 		// reg_block_mc_phy_init:
 		struct mc_phy_init_set_gcn3_hbm1* mc_phy_init_set_gcn3_hbm1;

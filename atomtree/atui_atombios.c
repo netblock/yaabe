@@ -1865,8 +1865,13 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v4, atomtree_vram_module,
 		(ATUI_DEC, ATUI_NOFANCY),
 		((LANG_ENG, u8"[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)"))
 	),
-	(bios->Reserved3, u8"Reserved3",
-		(ATUI_HEX, ATUI_ARRAY), (ATUI_NODESCR)
+	(bios->FIFODepth, u8"FIFODepth",
+		(ATUI_DEC, ATUI_NOFANCY),
+		((LANG_ENG, u8"FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth"))
+	),
+	(bios->CDR_Bandwidth, u8"CDR_Bandwidth",
+		(ATUI_NODISPLAY, ATUI_INLINE, cdr_bandwidth),
+		(ATUI_NODESCR)
 	)
 )
 
@@ -2110,7 +2115,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v7, atomtree_vram_module,
 		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->Reserved, u8"Reserved",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	),
 	(bios->MR2, u8"MR2",
 		(ATUI_HEX, ATUI_NOFANCY),
@@ -2192,7 +2197,7 @@ PPATUI_FUNCIFY(struct, atom_vram_module_v8, atomtree_vram_module,
 		((LANG_ENG, u8"Not used."))
 	),
 	(bios->Reserved, u8"Reserved",
-		(ATUI_DEC, ATUI_NOFANCY),
+		(ATUI_HEX, ATUI_NOFANCY),
 		((LANG_ENG, u8"Not used"))
 	),
 	(bios->MemorySize, u8"MemorySize",
@@ -2348,7 +2353,7 @@ PPATUI_FUNCIFY(struct, atom_vram_info_header_v2_1,
 		((LANG_ENG, u8"indicate ATOM_VRAM_MODUE version"))
 	),
 	(bios->Reserved2, u8"Reserved2",
-		(ATUI_DEC, ATUI_NOFANCY), (ATUI_NODESCR)
+		(ATUI_HEX, ATUI_NOFANCY), (ATUI_NODESCR)
 	)
 )
 

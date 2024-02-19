@@ -89,13 +89,13 @@ is_number(
 	if (str) {
 		do {
 			if (0 == isdigit(*str)) {
-				return 0;
+				return false;
 			}
 			str++;
 		} while (*str);
-		return 1;
+		return true;
 	} else {
-		return 0;
+		return false;
 	}
 }
 

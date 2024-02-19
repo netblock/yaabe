@@ -529,8 +529,8 @@ atui_get_to_text(
 
 int16_t
 atui_enum_bsearch(
-		const int64_t val,
-		const struct atui_enum* const enum_set
+		const struct atui_enum* const enum_set,
+		const int64_t val
 		) {
 	// binary search for atui_enum arrays.
 	// as a result, it assumes the array is sorted.
@@ -548,10 +548,10 @@ atui_enum_bsearch(
 		}
 	}
 	// left==right. mid will be off by 1, leftwise, if it's unique.
-	if (left == enum_set->num_entries) {
-		return -1;
-	} else {
+	if (val == enum_array[left].val) {
 		return left;
+	} else {
+		return -1;
 	}
 }
 

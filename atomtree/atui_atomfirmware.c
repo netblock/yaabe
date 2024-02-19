@@ -4474,27 +4474,27 @@ PPATUI_FUNCIFY(union, dphy_byteremap0, atui_nullstruct,
 
 PPATUI_FUNCIFY(struct, atom_gddr6_bit_byte_remap, atui_nullstruct,
 	(bios->dphy_byteremap, u8"dphy_byteremap",
-		(ATUI_NAN, ATUI_INLINE, dphy_byteremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_byteremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap0, u8"dphy_bitremap0",
-		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_bitremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap1, u8"dphy_bitremap1",
-		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_bitremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->dphy_bitremap2, u8"dphy_bitremap2",
-		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_bitremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->aphy_bitremap0, u8"aphy_bitremap0",
-		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_bitremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->aphy_bitremap1, u8"aphy_bitremap1",
-		(ATUI_NAN, ATUI_INLINE, dphy_bitremap0),
+		(ATUI_NODISPLAY, ATUI_INLINE, dphy_bitremap0),
 		(ATUI_NODESCR)
 	),
 	(bios->phy_dram, u8"phy_dram",
@@ -4511,7 +4511,7 @@ PPATUI_FUNCIFY(struct, atom_gddr6_dram_data_remap, atui_nullstruct,
 		((LANG_ENG, u8"UMC_PHY_PHYINTF_CNTL.INV_CK"))
 	),
 	(bios->bit_byte_remap, u8"atom_gddr6_bit_byte_remap", // start, name
-		(ATUI_NAN, ATUI_DYNARRAY, (
+		(ATUI_NODISPLAY, ATUI_DYNARRAY, (
 			(ATUI_NULL, u8"bit_byte_remap [%02u]",
 				(ATUI_NAN, ATUI_INLINE, atom_gddr6_bit_byte_remap),
 				(ATUI_NODESCR)

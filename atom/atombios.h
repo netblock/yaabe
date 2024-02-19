@@ -7367,7 +7367,8 @@ struct atom_vram_module_v4 {
 	uint16_t MR3;
 	union memory_vendor_id MemoryVendorID;
 	uint8_t  RefreshRateFactor; // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
-	uint8_t  Reserved3[2];
+	uint8_t  FIFODepth;         // FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth
+	union cdr_bandwidth CDR_Bandwidth;
 	union atom_memory_timing_format MemTiming[1]; // Memory Timing block sort from lower clock to higher clock
 };
 
@@ -7521,7 +7522,7 @@ struct atom_vram_info_v1_4 {
 	struct atom_common_table_header table_header;
 	uint16_t MemAdjustTblOffset;   // offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting
 	uint16_t MemClkPatchTblOffset; // offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting
-	uint16_t Reserved;
+	uint16_t Reserved; // unsure. doesn't seem to be per_byte_preset
 	union mc_seq_byte_remap_d0_6_0_o MemDQ7_0ByteRemap;
 	union mc_seq_bit_remap_b0_d0_6_0 MemDQ7_0BitRemap;
 	uint8_t  VID_PinsShift[4];

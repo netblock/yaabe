@@ -233,8 +233,8 @@ strtoull_2(
 
 int16_t
 atui_enum_bsearch(
-		int64_t val,
-		const struct atui_enum* enum_array
+		const struct atui_enum* enum_array,
+		int64_t val
 		);
 
 // atui has auxiliary pointers to hang extra data off of and this deallocator

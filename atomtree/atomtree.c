@@ -2095,7 +2095,6 @@ atomtree_populate_vram_info_v1_4(
 		vi14->mem_clk_patch.leaves = NULL;
 	}
 
-
 	atui_branch* atui_vi = NULL;
 	if (generate_atui) {
 		atui_branch* const vi14_children[] = {
@@ -2155,6 +2154,7 @@ atomtree_populate_vram_info_v2_1(
 
 	atui_branch* atui_perbytepreset = NULL;
 	if (vi21->leaves->PerBytePresetOffset) {
+		// TODO unsure what lies beyond; never seen this true.
 		vi21->per_byte_preset.leaves =
 			(void*)vi21->leaves + vi21->leaves->PerBytePresetOffset;
 		atui_perbytepreset = atomtree_populate_init_reg_block(
@@ -2244,12 +2244,6 @@ atomtree_populate_vram_info_v2_2(
 	if (vi22->leaves->McPhyInitTableOffset) {
 		vi22->mc_phy_init.leaves =
 			(void*)vi22->leaves + vi22->leaves->McPhyInitTableOffset;
-		atui_phyinit = atomtree_populate_init_reg_block(
-			&(vi22->mc_phy_init), generate_atui, 0
-		);
-		if (generate_atui) {
-			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
-		}
 		atui_mc_tile_adjust = atomtree_populate_init_mc_phy_init(
 			&(vi22->mc_phy_init),
 			generate_atui,
@@ -3228,8 +3222,8 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 					break;
 			}
 			naming_enum_i = atui_enum_bsearch(
-				at_vobj->voltage_object->header.voltage_type,
-				&(PPATUI_ENUM_NAME(atom_voltage_type))
+				&(PPATUI_ENUM_NAME(atom_voltage_type)),
+				at_vobj->voltage_object->header.voltage_type
 			);
 			if (naming_enum_i < 0) {
 				sprintf(tmp_branch->name, u8"%s (type %x)",
