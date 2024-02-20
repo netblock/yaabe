@@ -368,7 +368,7 @@ atui_set_from_text(
 		}
 	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		char8_t* null_exit = memccpy(leaf->u8, text, '\0', array_size);
+		char8_t* const null_exit = memccpy(leaf->u8, text, '\0', array_size);
 
 		if (leaf->type & ATUI_STRING) {
 			/* ATUI_STRING's length is implicitly defined by the null
@@ -377,11 +377,11 @@ atui_set_from_text(
 			the remaining bytes with spaces to push the null back to its
 			original position.
 			*/
-			const uint8_t bytes_left = leaf->u8 + array_size - null_exit;
-			if (null_exit && bytes_left) {
+			if (null_exit) {
+				const uint16_t bytes_left = leaf->u8 + array_size - null_exit;
 				memset(null_exit-1, ' ', bytes_left); // -1 eats memccpy's 0.
-				leaf->u8[array_size-1] = '\0';
 			}
+			leaf->u8[array_size-1] = '\0';
 		}
 	} else if (radix) {
 		if (leaf->type & ATUI_FRAC) {
