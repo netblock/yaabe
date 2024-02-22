@@ -145,18 +145,18 @@ enum SMU_13_0_7_PPCLOCK_ID {
 
 union smu13_smc_pptables {
 	uint32_t smc_pptable_ver;
-	struct smu13_smcpptable_v39 v39;
+	struct smu13_smcpptable_v39  v39;
 };
 
 struct smu_13_0_7_powerplay_table {
-	struct atom_common_table_header header; // For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0
+	struct atom_common_table_header  header; // For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0
 	uint8_t  table_revision;  // For PLUM_BONITO, table_revision = 2
 	uint8_t  padding;
 	uint16_t table_size;      // Driver portion table size. The offset to smc_pptable including header size
 	uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
 	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
 	uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80
-	union powerplay_platform_caps platform_caps;
+	union powerplay_platform_caps  platform_caps;
 
 	uint8_t  thermal_controller_type; // one of SMU_13_0_7_PP_THERMALCONTROLLER
 
@@ -167,9 +167,9 @@ struct smu_13_0_7_powerplay_table {
 
 	uint32_t reserve[45];
 
-	struct smu_13_0_7_overdrive_table overdrive_table;
+	struct smu_13_0_7_overdrive_table  overdrive_table;
 	uint8_t  padding1;
-	union smu13_smc_pptables smc_pptable; // PPTable_t in the driver_if.h
+	union smu13_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
 };
 
 #pragma pack(pop) // restore old packing

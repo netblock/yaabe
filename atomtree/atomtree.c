@@ -3,8 +3,6 @@
 #include "atomtree.h"
 #include "atui.h"
 
-// TODO take advantage of ATUI_PETIOLE as much as possible
-
 inline static atui_branch*
 atomtree_dt_populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
@@ -710,7 +708,7 @@ get_memory_vendor_part_strs(
 			 break;
 		default: assert(0);
 	}
-	const struct atui_enum* const vendors = 
+	const struct atui_enum* const vendors =
 		&PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e);
 	assert(vendor_rev_id.vendor_code < vendors->num_entries);
 	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
@@ -912,7 +910,6 @@ atomtree_populate_mem_adjust_table(
 	return atui_mem_adjust;
 }
 
-
 static atui_branch*
 atomtree_populate_mem_clk_patch(
 		struct atomtree_init_reg_block* const mem_clk_patch,
@@ -1051,7 +1048,7 @@ atomtree_populate_mc_tile_adjust(
 			atui_strap_func = PPATUI_FUNC_NAME(mc_tile_adjust_set_gcn3_gddr5);
 		}
 	}
-	
+
 	mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
 	#ifndef NDEBUG
 	if (1 < mc_tile_adjust->num_index
@@ -1147,7 +1144,7 @@ atomtree_populate_init_mc_phy_init(
 			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_set_gcn3_gddr5);
 		}
 	}
-	
+
 	mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
 	#ifndef NDEBUG
 	if (1 < mc_phy_init->num_index
@@ -1192,6 +1189,7 @@ atomtree_populate_init_mc_phy_init(
 
 	return atui_phy_init;
 }
+
 
 static atui_branch*
 atomtree_populate_umc_init_reg_block(
@@ -1272,9 +1270,9 @@ atomtree_populate_atom_memory_timing_format(
 		) {
 	union {
 		const void* raw;
-		const struct atom_memory_timing_format_v0* v0; 
+		const struct atom_memory_timing_format_v0* v0;
 		const struct atom_memory_timing_format_v1* v1;
-		const struct atom_memory_timing_format_v2* v2; 
+		const struct atom_memory_timing_format_v2* v2;
 	} strap;
 	strap.raw = timing_format_start;
 
@@ -1486,7 +1484,7 @@ atomtree_populate_vram_module(
 			NULL,  NULL,NULL,  count,NULL
 		);
 	}
-	
+
 	switch(vram_module_ver) {
 		case v1_3: // atom_vram_module_v3. Will look very similar to v4
 			for (i=0; i < count; i++) {
@@ -2161,7 +2159,7 @@ atomtree_populate_vram_info_v2_1(
 			&(vi21->per_byte_preset), generate_atui, 0
 		);
 		if (generate_atui) {
-			strcpy(atui_perbytepreset->name, u8"mem_clk_patch_table");
+			strcpy(atui_perbytepreset->name, u8"per_byte_preset_table");
 		}
 	} else {
 		vi21->per_byte_preset.leaves = NULL;
@@ -2513,7 +2511,7 @@ atomtree_populate_vram_info_v2_4(
 		);
 
 		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
-		vi24->navi1_gddr6_timings = 
+		vi24->navi1_gddr6_timings =
 			(struct timings_set_navi1*)vi24->mem_clk_patch.data_blocks[0];
 
 		if (generate_atui) {
@@ -3779,7 +3777,7 @@ atomtree_populate_datatables(
 
 inline static atui_branch*
 atomtree_populate_atom_rom_header_v1_1(
-		 struct atomtree_rom_header* const rom_header,
+		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
 		const bool generate_atui
 		) {
@@ -3837,7 +3835,7 @@ atomtree_populate_atom_rom_header_v1_1(
 
 inline static atui_branch*
 atomtree_populate_atom_rom_header_v2_1(
-		 struct atomtree_rom_header* const rom_header,
+		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
 		const bool generate_atui
 		) {
@@ -3898,7 +3896,7 @@ atomtree_populate_atom_rom_header_v2_1(
 
 inline static atui_branch*
 atomtree_populate_atom_rom_header_v2_2(
-		 struct atomtree_rom_header* const rom_header,
+		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
 		const bool generate_atui
 		) {

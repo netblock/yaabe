@@ -16,10 +16,9 @@ HBM2 and vega10 is manually reverse-engineered so it can be wrong.
 #pragma pack(push, 1) // bios data must use byte alignment
 
 /******************************************************************************/
-// memory timings as seen in 'mem_clk_patch' based timing structures
+// memory timings as seen in reg_init based timing structures in vram_info
 // will duplicate gmc timing structures
 /******************************************************************************/
-
 
 union DRAMTiming1 {
 	uint32_t DRAMTiming1;
@@ -573,68 +572,6 @@ union mc_seq_rxframing_dbi_d1_6_0_o {
 	};
 };
 
-
-/* From ElioVP's amdmemtweak. vals don't look right.
-
-union SEQ_WR_CTL_D0_HBM1 {
-	uint32_t SEQ_WR_CTL_D0;
-	struct { uint32_t
-		DAT_DLY  :4-0 +1, // Data output latency
-		DQS_DLY  :9-5 +1, // DQS Latency
-		DQS_XTR :10-10 +1, // Write Preamble (ON/OFF)
-		OEN_DLY :15-11 +1, // Write cmd enable Latency
-		OEN_EXT :19-16 +1, // Output enable -> Data Burst (0 - 8 where 1 = 1 cycle, 5 = 5 cycles..)
-		OEN_SEL :21-20 +1,
-		CMD_DLY :22-22 +1,
-		ADR_DLY :23-23 +1,
-		rsvd0   :31-24 +1;
-	};
-};
-union SEQ_WR_CTL_D0_GDDR5 {
-	uint32_t SEQ_WR_CTL_D0;
-	struct { uint32_t
-		DAT_DLY     :3-0 +1, // Data output latency
-		DQS_DLY     :7-4 +1, // DQS Latency
-		DQS_XTR     :8-8 +1, // Write Preamble (ON/OFF)
-		DAT_2Y_DLY  :9-9 +1, // Delay data (QDR Mode!) (ON/OFF)
-		ADR_2Y_DLY :10-10 +1, // Delay addr (QDR Mode!) (ON/OFF)
-		CMD_2Y_DLY :11-11 +1, // Delay cmd (QDR Mode!) (ON/OFF)
-		OEN_DLY    :15-12 +1, // Write cmd enable Latency
-		OEN_EXT    :19-16 +1, // Output enable -> Data Burst (0 - 8 where 1 = 1 cycle, 5 = 5 cycles..)
-		OEN_SEL    :21-20 +1, 
-		rsvd0      :23-22 +1, 
-		ODT_DLY    :27-24 +1, // On-Die-Termination latency
-		ODT_EXT    :28-28 +1, // On-Die-Termination enable after burst
-		ADR_DLY    :29-29 +1,
-		CMD_DLY    :30-30 +1,
-		rsvd1      :31-31 +1;
-	};
-};
-union SEQ_PMG_TIMING {
-	uint32_t SEQ_PMG_TIMING;
-	struct { uint32_t
-		CKSRE        :2-0 +1, // Valid clock requirement after CKSRE
-		CKSRX        :5-3 +1, // Valid clock requirement before CKSRX
-		CKE_PULSE   :10-6 +1, // Minimum CKE pulse
-		CKE         :18-11 +1, 
-		SEQ_IDLE    :21-19 +1, // idle before deassert rdy to arb
-		SEQ_IDLE_SS :29-22 +1, // idle before deassert rdy to arb at ss
-		rsvd0       :31-30 +1;
-	};
-};
-struct timings_set_fiji { // 40 bytes.
-	union atom_mc_register_setting_id block_id;
-	uint32_t t0; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D0;
-	uint32_t t1; //union SEQ_WR_CTL_D0_HBM1 SEQ_WR_CTL_D1;
-	uint32_t t2; //union SEQ_PMG_TIMING SEQ_PMG_TIMING;
-	uint32_t t3;
-	uint32_t t4;
-	uint32_t t5;
-	uint32_t t6;
-	uint32_t t7;
-	uint32_t t8;
-};
-*/
 union mc_seq_misc0 {
 	uint32_t mc_seq_misc0;
 	struct { uint32_t
@@ -646,7 +583,6 @@ union mc_seq_misc0 {
 		memory_type   :31-24 +1;
 	};
 };
-
 struct mc_seq_misc1_gddr5 { // see MC_SEQ_MISC1_6_0
 	union gddr5_mr0 gddr5_mr0;
 	union gddr5_mr1 gddr5_mr1;
@@ -663,7 +599,6 @@ struct mc_seq_misc8_gddr5 { // see MC_SEQ_MISC8_6_0
 	union gddr5_mr8 gddr5_mr8;
 	union gddr5_mr7 gddr5_mr7; // guess, might be wrong
 };
-
 struct mc_seq_misc1_ddr3 {
 	union ddr3_mr0  mr0;
 	union ddr3_mr1  mr1;
@@ -672,6 +607,7 @@ struct mc_seq_misc3_ddr3 {
 	union ddr3_mr2  mr2;
 	union ddr3_mr3  mr3;
 };
+
 
 /******************************************************************************/
 // mem_clk_patch
@@ -831,6 +767,7 @@ struct timings_set_navi1 { // 116 bytes. A little more certain.
 	union ChanPipeDly ChanPipeDly;
 };
 
+
 /******************************************************************************/
 // mem_adjust table
 // uncertain the accuracy of all of these tables.
@@ -964,6 +901,7 @@ struct mem_adjust_set_terascale2_gddr5_type4 { // 196 bytes
 	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 
 };
+
 struct mem_adjust_set_terascale3_gddr5 { // 196 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_seq_io_reserve_d0_6_0     mc_seq_io_reserve_d0;
@@ -1013,7 +951,6 @@ struct mem_adjust_set_terascale3_gddr5 { // 196 bytes
 	union mc_io_debug_cmd_txphase_d0_6_0       mc_io_debug_cmd_txphase_d0;
 	union mc_io_debug_ck_txphase_d0_6_0        mc_io_debug_ck_txphase_d0;
 };
-
 
 struct mem_adjust_set_gcn1_gddr5_type1 { // 232 bytes
 	union atom_mc_register_setting_id  block_id;
@@ -1395,6 +1332,7 @@ struct mem_adjust_set_gcn4_gddr5_type2 { // 44 bytes
 	union mc_io_aphy_str_cntl_d0_6_0_o mc_io_aphy_str_cntl_d0;
 };
 
+
 /******************************************************************************/
 // mc_tile_adjust table
 // uncertain the accuracy of all of these tables.
@@ -1410,6 +1348,7 @@ struct mc_tile_adjust_set_gcn4_gddr5 { // 8 bytes
 	union atom_mc_register_setting_id  block_id;
 	union mc_io_debug_up_14_6_0  mc_io_debug_up_14;
 };
+
 
 /******************************************************************************/
 // mc_phy_init table

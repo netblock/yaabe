@@ -278,11 +278,11 @@ struct SwI2cRequest_t {
 	uint8_t  SlaveAddress;      // Slave address of device
 	uint8_t  NumCmds;           // Number of commands
 
-	struct SwI2cCmd_t SwI2cCmds[MAX_SW_I2C_COMMANDS];
+	struct SwI2cCmd_t  SwI2cCmds[MAX_SW_I2C_COMMANDS];
 }; // SW I2C Request Table
 
 struct SwI2cRequestExternal_t {
-	struct SwI2cRequest_t SwI2cRequest;
+	struct SwI2cRequest_t  SwI2cRequest;
 
 	uint32_t Spare[8];
 	uint32_t MmHubPadding[8]; // SMU internal use
@@ -376,8 +376,8 @@ struct DpmDescriptor_t {
 	uint8_t  Padding;
 	uint8_t  SnapToDiscrete;        // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels;     // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
-	enum FOPT_CALC_e CalculateFopt; // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
-	struct linear_f32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	enum FOPT_CALC_e  CalculateFopt; // Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e
+	struct linear_f32  ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
 	uint32_t Padding3[3];
 	uint16_t Padding4;
 	uint16_t FoptimalDc; // Foptimal frequency in DC power mode.
@@ -731,7 +731,7 @@ struct AvfsDcBtcParams_smu13 {
 	uq14_2_t DcBtcMin; // mV Q2
 	uq14_2_t DcBtcMax; // mV Q2
 
-	struct linear_f32 DcBtcGbScalar;
+	struct linear_f32  DcBtcGbScalar;
 
 };
 
@@ -739,9 +739,9 @@ struct AvfsFuseOverride_smu13 {
 	uint16_t AvfsTemp[AVFS_TEMP_COUNT]; // in degrees C
 	uint16_t VftFMin;    // in MHz
 	uq14_2_t VInversion; // in mV Q2
-	struct quadratic_f32 qVft[AVFS_TEMP_COUNT];
-	struct quadratic_f32 qAvfsGb;
-	struct quadratic_f32 qAvfsGb2;
+	struct quadratic_f32  qVft[AVFS_TEMP_COUNT];
+	struct quadratic_f32  qAvfsGb;
+	struct quadratic_f32  qAvfsGb2;
 };
 
 struct smu13_skutable_v39 { // SECTION: Version
@@ -749,13 +749,13 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint32_t Version; // should be unique to each SKU(i.e if any value changes in below structure then this value must be different)
 	// SECTION: Feature Control
 
-	union powerplay_feature_control_smu13 features;
+	union powerplay_feature_control_smu13  features;
 
 	// SECTION: Miscellaneous Configuration
-	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
-	enum CUSTOMER_VARIANT_e CustomerVariant;  // To specify if this PPTable is intended for a particular customer.
+	enum PwrConfig_e  TotalPowerConfig; // Determines how PMFW calculates the power.
+	enum CUSTOMER_VARIANT_e  CustomerVariant;  // To specify if this PPTable is intended for a particular customer.
 	uint8_t  MemoryTemperatureTypeMask; // Bit mapping indicating which methods of memory temperature reading are enabled. Use defines from MEM_TEMP_*BIT
-	enum SMARTSHIFT_VERSION_e SmartShiftVersion; // Determine what SmartShift feature version is supported
+	enum SMARTSHIFT_VERSION_e  SmartShiftVersion; // Determine what SmartShift feature version is supported
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT]; // In Watts. Power limit that PMFW attempts to control to in AC mode. Multiple limits supported
 	uint16_t SocketPowerLimitDc[PPT_THROTTLER_COUNT]; // In Watts. Power limit that PMFW attempts to control to in DC mode. Multiple limits supported
@@ -785,9 +785,9 @@ struct smu13_skutable_v39 { // SECTION: Version
 
 	uint32_t GfxApccPlusResidencyLimit; // Percentage value. Used by APCC+ controller to control PCC residency to some value
 	// SECTION: Throttler settings
-	union throttler_control_smu13_0x35 ThrottlerControlMask;
+	union throttler_control_smu13_0x35  ThrottlerControlMask;
 	// SECTION: FW DSTATE Settings
-	union fw_dstate_features_smu13_0x35 FwDStateMask;
+	union fw_dstate_features_smu13_0x35  FwDStateMask;
 	// SECTION: Voltage Control Parameters
 	uq14_2_t UlvVoltageOffset[PMFW_VOLT_PLANE_COUNT]; // In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)
 
@@ -820,11 +820,11 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 	uint16_t SocketPowerLimitDcTau[PPT_THROTTLER_COUNT]; // Time constant of LPF in ms
 
-	struct quadratic_f32 Vmin_droop;
+	struct quadratic_f32  Vmin_droop;
 	uint32_t SpareVmin[9];
 
 	// SECTION: DPM Configuration 1
-	struct DpmDescriptor_t DpmDescriptor[SMU13_PPCLK_COUNT];
+	struct DpmDescriptor_t  DpmDescriptor[SMU13_PPCLK_COUNT];
 
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU13];        // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU13];         // In MHz
@@ -893,8 +893,8 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint8_t  UseStrobeModeOptimizations; // Set to indicate that FW should use strobe mode optimizations
 	uint8_t  PaddingMem[3];
 
-	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13]; // 4 DPM states
-	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13];
+	enum DPM_PSTATES_e  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU13]; // 4 DPM states
+	enum UCLK_DIV_e  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU13];
 
 	uq14_2_t MemVmempVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
 	uq14_2_t MemVddioVoltage[NUM_UCLK_DPM_LEVELS_SMU13]; // mV(Q2)
@@ -906,8 +906,8 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint16_t FclkDpmDisallowPstateFreq;  // Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value
 	uint16_t PaddingFclk;
 	// Link DPM Settings
-	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU13];
-	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU13];
+	enum PCIE_SPEED_e  PcieGenSpeed[NUM_LINK_LEVELS_SMU13];
+	enum PCIE_WIDTH_e  PcieLaneCount[NUM_LINK_LEVELS_SMU13];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU13];
 	// SECTION: Fan Control
 	uint16_t FanStopTemp[SMU_13_0_7_TEMP_COUNT];  // Celsius
@@ -975,7 +975,7 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint32_t V2F_vmax_range_low;
 	uint32_t V2F_vmax_range_high;
 
-	struct AvfsDcBtcParams_smu13 DcBtcGfxParams;
+	struct AvfsDcBtcParams_smu13  DcBtcGfxParams;
 
 	uint32_t GfxAvfsSpare[32];
 	// SECTION: VDD_SOC AVFS
@@ -984,29 +984,29 @@ struct smu13_skutable_v39 { // SECTION: Version
 	uint8_t  MinSocAvfsRevision;
 	uint8_t  SocAvfsPadding[2];
 
-	struct AvfsFuseOverride_smu13 SocAvfsFuseOverride[AVFS_D_COUNT];
+	struct AvfsFuseOverride_smu13  SocAvfsFuseOverride[AVFS_D_COUNT];
 
-	struct droop_f32 dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
+	struct droop_f32  dBtcGbSoc[AVFS_D_COUNT]; // GHz->V BtcGb
 
-	struct linear_f32 qAgingGb[AVFS_D_COUNT]; // GHz->V
+	struct linear_f32  qAgingGb[AVFS_D_COUNT]; // GHz->V
 
-	struct quadratic_f32 qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
+	struct quadratic_f32  qStaticVoltageOffset[AVFS_D_COUNT]; // GHz->V
 
-	struct AvfsDcBtcParams_smu13 DcBtcSocParams[AVFS_D_COUNT];
+	struct AvfsDcBtcParams_smu13  DcBtcSocParams[AVFS_D_COUNT];
 
 	uint32_t SocAvfsSpare[32];
 	// SECTION: Boot clock and voltage values
-	struct BootValues_t BootValues;
+	struct BootValues_t  BootValues;
 	// SECTION: Driver Reported Clocks
-	struct DriverReportedClocks_t DriverReportedClocks;
+	struct DriverReportedClocks_t  DriverReportedClocks;
 	// SECTION: Message Limits
-	struct MsgLimits_t MsgLimits;
+	struct MsgLimits_t  MsgLimits;
 	// SECTION: OverDrive Limits
-	struct overdrivelimits_smu13 OverDriveLimitsMin;
-	struct overdrivelimits_smu13 OverDriveLimitsBasicMax;
-	struct overdrivelimits_smu13 OverDriveLimitsAdvancedMax;
+	struct overdrivelimits_smu13  OverDriveLimitsMin;
+	struct overdrivelimits_smu13  OverDriveLimitsBasicMax;
+	struct overdrivelimits_smu13  OverDriveLimitsAdvancedMax;
 	// SECTION: Advanced Options
-	union dpm_debug_override_smu13 DebugOverrides;
+	union dpm_debug_override_smu13  DebugOverrides;
 	// Section: Total Board Power idle vs active coefficients
 	uint8_t  TotalBoardPowerSupport;
 	uint8_t  TotalBoardPowerPadding[3];
@@ -1016,9 +1016,9 @@ struct smu13_skutable_v39 { // SECTION: Version
 	int16_t  TotalBoardPowerM;
 	int16_t  TotalBoardPowerB;
 
-	struct quadratic_f32 qFeffCoeffGameClock[POWER_SOURCE_COUNT];
-	struct quadratic_f32 qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
-	struct quadratic_f32 qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32  qFeffCoeffGameClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32  qFeffCoeffBaseClock[POWER_SOURCE_COUNT];
+	struct quadratic_f32  qFeffCoeffBoostClock[POWER_SOURCE_COUNT];
 	// SECTION: Sku Reserved
 	uint32_t Spare[43];
 	// Padding for MMHUB - do not modify this
@@ -1040,10 +1040,10 @@ struct smu13_boardtable_v39 {
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	union psi_sel_mask GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask VmempUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask VddioUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  VmempUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  VddioUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	// SECTION SVI3 Board Parameters
 	uint8_t  SlaveAddrMapping[SVI_PLANE_COUNT];
 	uint8_t  VrPsiSupport[SVI_PLANE_COUNT];
@@ -1051,7 +1051,7 @@ struct smu13_boardtable_v39 {
 	uint8_t  PaddingPsi[SVI_PLANE_COUNT];
 	uint8_t  EnablePsi6[SVI_PLANE_COUNT]; // only applicable in SVI3
 	// SECTION: Voltage Regulator Settings
-	struct SviTelemetryScale_t SviTelemetryScale[SVI_PLANE_COUNT];
+	struct SviTelemetryScale_t  SviTelemetryScale[SVI_PLANE_COUNT];
 	uq16_16_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
 
 	uint8_t  DownSlewRateVr[SVI_PLANE_COUNT];
@@ -1072,7 +1072,7 @@ struct smu13_boardtable_v39 {
 	uint8_t  LedPin0;        // GPIO number for LedPin[0]
 	uint8_t  LedPin1;        // GPIO number for LedPin[1]
 	uint8_t  LedPin2;        // GPIO number for LedPin[2]
-	union led_display_control LedEnableMask;
+	union led_display_control  LedEnableMask;
 
 	uint8_t  LedPcie;        // GPIO number for PCIE results
 	uint8_t  LedError;       // GPIO number for Error Cases
@@ -1108,13 +1108,13 @@ struct smu13_boardtable_v39 {
 };
 
 struct smu13_smcpptable_v39 {
-	struct smu13_skutable_v39 SkuTable;
-	struct smu13_boardtable_v39 BoardTable;
+	struct smu13_skutable_v39  SkuTable;
+	struct smu13_boardtable_v39  BoardTable;
 };
 
 struct atom_smc_dpm_info_table_13_0_7 {
-	struct atom_common_table_header table_header;
-	struct smu13_boardtable_v39 BoardTable;
+	struct atom_common_table_header  table_header;
+	struct smu13_boardtable_v39  BoardTable;
 };
 
 #pragma pack(pop) // restore old packing

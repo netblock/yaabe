@@ -589,22 +589,22 @@ enum TEMP_SMU11_0_7_e {
 };
 
 
-//typedef struct dpm_descriptor_smu11 DpmDescriptor_t;
+//typedef struct dpm_descriptor_smu11  DpmDescriptor_t;
 struct dpm_descriptor_smu11 { // works for driver_if ver 0x13 0x33
-	enum VOLTAGE_MODE_e VoltageMode;
+	enum VOLTAGE_MODE_e  VoltageMode;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to # discrete levels used
 	uint8_t  padding;
-	struct linear_f32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
-	struct quadratic_f32 slowslow_curve;   // Slow-slow curve (GHz->V)
+	struct linear_f32  ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	struct quadratic_f32  slowslow_curve;   // Slow-slow curve (GHz->V)
 };
 struct dpm_descriptor_smu11_0x40 {
-	enum VOLTAGE_MODE_e VoltageMode;
+	enum VOLTAGE_MODE_e  VoltageMode;
 	uint8_t  SnapToDiscrete;    // 0 - Fine grained DPM, 1 - Discrete DPM
 	uint8_t  NumDiscreteLevels; // Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to # discrete levels used
 	uint8_t  Padding;
-	struct linear_f32 ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
-	struct quadratic_f32 SsCurve; // Slow-slow curve (GHz->V)
+	struct linear_f32  ConversionToAvfsClk; // Transfer function to AVFS Clock (GHz->GHz)
+	struct quadratic_f32  SsCurve; // Slow-slow curve (GHz->V)
 	uint16_t SsFmin; // Fmin for SS curve. If SS curve is selected, will use V@SSFmin for F <= Fmin
 	uint16_t Padding16;
 };
@@ -616,7 +616,7 @@ struct UclkDpmChangeRange_t { // Used for 2-step UCLK DPM change workaround
 
 
 struct smu11_smcpptable_v3_i2c_control {
-	struct i2ccontrollerconfig_u32 I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3];
+	struct i2ccontrollerconfig_u32  I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3];
 };
 
 struct smu11_smcpptable_v8_i2c_control {
@@ -631,7 +631,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	// copied comments from smc_smu11_pptable_v8
 	uint32_t Version;
 
-	union powerplay_feature_control_smu11_0x13 features;
+	union powerplay_feature_control_smu11_0x13  features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc0;
@@ -687,7 +687,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
 
 	//SECTION: DPM Config 1
-	struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
+	struct dpm_descriptor_smu11  DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
 
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU11];      // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU11];       // In MHz
@@ -713,18 +713,18 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t GfxclkSlewRate; // for PLL babystepping???
 	uint16_t CksEnableFreq;
 	uint16_t Padding789;
-	struct quadratic_f32 CksVoltageOffset;
+	struct quadratic_f32  CksVoltageOffset;
 	uint8_t  Padding567[4];
 	uint16_t GfxclkDsMaxFreq; // in Mhz
-	enum GFXCLK_SOURCE_e GfxclkSource;    // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e  GfxclkSource;    // 0 = PLL, 1 = DFLL
 	uint8_t  Padding456;
 
 	uint8_t  LowestUclkReservedForUlv; // Set this to 1 if UCLK DPM0 is reserved for ULV-mode only
 	uint8_t  Padding8_Uclk[3];
 
 	// Link DPM Settings
-	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
-	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_SPEED_e  PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_WIDTH_e  PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 
 	// GFXCLK Thermal DPM (formerly 'Boost' Settings
@@ -766,14 +766,14 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_Avfs[2];
 
-	struct quadratic_f32 qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
+	struct quadratic_f32  qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
 	struct droop_f32  dBtcGbGfxCksOn;
 	struct droop_f32  dBtcGbGfxCksOff;
 	struct droop_f32  dBtcGbGfxAfll; // dfll?
 	struct droop_f32  dBtcGbSoc;     // GHz->V BtcGb
-	struct linear_f32 qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct linear_f32  qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct quadratic_f32  qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
 	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
@@ -783,8 +783,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uq14_2_t  DcBtcMin[AVFS_VOLTAGE_COUNT];
 	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV(Q2)
 
-	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
-	enum XGMI_LINK_WIDTH_e XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
+	enum XGMI_LINK_RATE_e  XgmiLinkSpeed[NUM_XGMI_LEVELS_SMU11];
+	enum XGMI_LINK_WIDTH_e  XgmiLinkWidth[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiFclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiUclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS_SMU11];
@@ -792,11 +792,11 @@ struct smu11_smcpptable_v3 { // Vega20
 
 
 	// SECTION: Advanced Options
-	union  dpm_debug_override_smu11_0x13 DebugOverrides;
-	struct quadratic_f32 ReservedEquation0;
-	struct quadratic_f32 ReservedEquation1;
-	struct quadratic_f32 ReservedEquation2;
-	struct quadratic_f32 ReservedEquation3;
+	union dpm_debug_override_smu11_0x13  DebugOverrides;
+	struct quadratic_f32  ReservedEquation0;
+	struct quadratic_f32  ReservedEquation1;
+	struct quadratic_f32  ReservedEquation2;
+	struct quadratic_f32  ReservedEquation3;
 
 	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
 	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
@@ -823,8 +823,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  VddMem0VrMapping;
 	uint8_t  VddMem1VrMapping;
 
-	union psi_sel_mask GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 
@@ -879,7 +879,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uq4_4_t  FllGfxclkSpreadPercent; // Q4.4
 	uint16_t FllGfxclkSpreadFreq;    // kHz
 
-	struct smu11_smcpptable_v3_i2c_control I2cControllers;
+	struct smu11_smcpptable_v3_i2c_control  I2cControllers;
 
 	uint32_t BoardReserved[10];
 
@@ -890,7 +890,7 @@ struct smu11_smcpptable_v3 { // Vega20
 struct smu11_smcpptable_v8 { // Navi10
 	uint32_t Version;
 
-	union powerplay_feature_control_smu11_0x33 features;
+	union powerplay_feature_control_smu11_0x33  features;
 
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];
@@ -919,10 +919,10 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t PpmTemperatureThreshold;
 
 	// SECTION: Throttler settings
-	union throttler_control_smu11_0x33 ThrottlerControlMask;
+	union throttler_control_smu11_0x33  ThrottlerControlMask;
 
 	// SECTION: FW DSTATE Settings
-	union fw_dstate_features_smu11_0x33 FwDStateMask;
+	union fw_dstate_features_smu11_0x33  FwDStateMask;
 
 	// SECTION: ULV Settings
 	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
@@ -950,7 +950,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
 
 	//SECTION: DPM Config 1
-	struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT8_PPCLK_COUNT];
+	struct dpm_descriptor_smu11  DpmDescriptor[SMU11_PPT8_PPCLK_COUNT];
 
 	uint16_t FreqTableGfx[NUM_GFXCLK_DPM_LEVELS_SMU11];      // In MHz
 	uint16_t FreqTableVclk[NUM_VCLK_DPM_LEVELS_SMU11];       // In MHz
@@ -966,7 +966,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t DcModeMaxFreq[SMU11_PPT8_PPCLK_COUNT]; // In MHz
 	uint16_t Padding8_Clks;
 
-	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11];
+	enum UCLK_DIV_e  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11];
 
 	// SECTION: DPM Config 2
 	uint16_t Mp0clkFreq[NUM_MP0CLK_DPM_LEVELS_SMU11];    // in MHz
@@ -981,7 +981,7 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t GfxclkFopt;         // in Mhz
 	uint8_t  Padding567[2];
 	uint16_t GfxclkDsMaxFreq;    // in MHz
-	enum GFXCLK_SOURCE_e GfxclkSource; // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e  GfxclkSource; // 0 = PLL, 1 = DFLL
 	uint8_t  Padding456;
 
 	// UCLK section
@@ -993,8 +993,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint8_t  PaddingMem[2];
 
 	// Link DPM Settings
-	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
-	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_SPEED_e  PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_WIDTH_e  PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 
 	// GFXCLK Thermal DPM (formerly 'Boost' Settings)
@@ -1041,13 +1041,13 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
 	uint8_t  Padding8_Avfs[2];
 
-	struct quadratic_f32 qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
+	struct quadratic_f32  qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
 	struct droop_f32  dBtcGbGfxPll;  // GHz->V BtcGb
 	struct droop_f32  dBtcGbGfxDfll; // GHz->V BtcGb
 	struct droop_f32  dBtcGbSoc;     // GHz->V BtcGb
-	struct linear_f32 qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct linear_f32  qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct quadratic_f32  qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
 	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT]; // mV Q2
 
@@ -1058,14 +1058,14 @@ struct smu11_smcpptable_v8 { // Navi10
 	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
 
 	// SECTION: Advanced Options
-	union  dpm_debug_override_smu11_0x33 DebugOverrides;
-	struct quadratic_f32 ReservedEquation0;
-	struct quadratic_f32 ReservedEquation1;
-	struct quadratic_f32 ReservedEquation2;
-	struct quadratic_f32 ReservedEquation3;
+	union dpm_debug_override_smu11_0x33  DebugOverrides;
+	struct quadratic_f32  ReservedEquation0;
+	struct quadratic_f32  ReservedEquation1;
+	struct quadratic_f32  ReservedEquation2;
+	struct quadratic_f32  ReservedEquation3;
 
 	// Total Power configuration
-	enum PwrConfig_e TotalPowerConfig;
+	enum PwrConfig_e  TotalPowerConfig;
 	uint8_t  TotalPowerSpare1;
 	uint16_t TotalPowerSpare2;
 
@@ -1097,7 +1097,7 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	// SECTION: BOARD PARAMETERS
 	// I2C Control
-	struct smu11_smcpptable_v8_i2c_control I2cControllers;
+	struct smu11_smcpptable_v8_i2c_control  I2cControllers;
 
 	// SVI2 Board Parameters
 	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
@@ -1219,16 +1219,16 @@ struct smu11_smcpptable_v7_dpm_freq_tables {
 };
 struct smu11_smcpptable_v7_dpm_config {
 	//SECTION: DPM Config 1
-	struct dpm_descriptor_smu11_0x40 DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
+	struct dpm_descriptor_smu11_0x40  DpmDescriptor[SMU11_PPT7_PPCLK_COUNT];
 
-	struct smu11_smcpptable_v7_dpm_freq_tables freq_tables;
+	struct smu11_smcpptable_v7_dpm_freq_tables  freq_tables;
 	uint32_t Paddingclks;
 
-	struct droop_f32 PerPartDroopModelGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS]; // GHz ->V
+	struct droop_f32  PerPartDroopModelGfxDfll[NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS]; // GHz ->V
 
 	uint32_t DcModeMaxFreq[SMU11_PPT7_PPCLK_COUNT]; // In MHz
 
-	enum UCLK_DIV_e FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11];
+	enum UCLK_DIV_e  FreqTableUclkDiv[NUM_UCLK_DPM_LEVELS_SMU11];
 
 	// Used for MALL performance boost
 	uint16_t FclkBoostFreq; // In Mhz
@@ -1243,13 +1243,13 @@ struct smu11_smcpptable_v7_dpm_config {
 	uint16_t GfxclkFgfxoffEntry; // in Mhz
 	uint16_t GfxclkFinit;  // in Mhz
 	uint16_t GfxclkFidle;  // in MHz
-	enum GFXCLK_SOURCE_e GfxclkSource; // 0 = PLL, 1 = DFLL
+	enum GFXCLK_SOURCE_e  GfxclkSource; // 0 = PLL, 1 = DFLL
 	uint8_t  GfxclkPadding;
 
 	// GFX GPO
-	union gfx_gpo_features GfxGpoSubFeatureMask;
-	union gfx_gpo_features GfxGpoEnabledWorkPolicyMask; // Any policy that GPO can be enabled
-	union gfx_gpo_features GfxGpoDisabledWorkPolicyMask; // Any policy that GPO can be disabled
+	union gfx_gpo_features  GfxGpoSubFeatureMask;
+	union gfx_gpo_features  GfxGpoEnabledWorkPolicyMask; // Any policy that GPO can be enabled
+	union gfx_gpo_features  GfxGpoDisabledWorkPolicyMask; // Any policy that GPO can be disabled
 	uint8_t  GfxGpoPadding[1];
 	uint32_t GfxGpoVotingAllow; // For indicating which feature changes should result in a GPO table recalculation
 
@@ -1277,17 +1277,17 @@ struct smu11_smcpptable_v7_dpm_config {
 	uint8_t  LowestUclkReservedForUlv; // Set this to 1 if UCLK DPM0 is reserved for ULV-mode only
 	uint8_t  PaddingMem[3];
 
-	enum DPM_PSTATES_e UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU11]; // 4 DPM states.
+	enum DPM_PSTATES_e  UclkDpmPstates[NUM_UCLK_DPM_LEVELS_SMU11]; // 4 DPM states.
 
 	// Used for 2-Step UCLK change workaround
-	struct UclkDpmChangeRange_t UclkDpmSrcFreqRange;  // In Mhz
-	struct UclkDpmChangeRange_t UclkDpmTargFreqRange; // In Mhz
+	struct UclkDpmChangeRange_t  UclkDpmSrcFreqRange;  // In Mhz
+	struct UclkDpmChangeRange_t  UclkDpmTargFreqRange; // In Mhz
 	uint16_t UclkDpmMidstepFreq; // In Mhz
 	uint16_t UclkMidstepPadding;
 
 	// Link DPM Settings
-	enum PCIE_SPEED_e PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
-	enum PCIE_WIDTH_e PcieLaneCount[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_SPEED_e  PcieGenSpeed[NUM_LINK_LEVELS_SMU11];
+	enum PCIE_WIDTH_e  PcieLaneCount[NUM_LINK_LEVELS_SMU11];
 	uint16_t LclkFreq[NUM_LINK_LEVELS_SMU11];
 };
 struct smu11_smcpptable_v7_fan_control {
@@ -1320,18 +1320,18 @@ struct smu11_smcpptable_v7_avfs {
 	// SECTION: AVFS
 	// Overrides
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
-	enum DfllDroopModelSelect_e dBtcGbGfxDfllModelSelect;
+	enum DfllDroopModelSelect_e  dBtcGbGfxDfllModelSelect;
 	uint8_t  Padding8_Avfs;
 
-	struct quadratic_f32 qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
-	struct droop_f32 dBtcGbGfxPll;  // GHz->V BtcGb
-	struct droop_f32 dBtcGbGfxDfll; // GHz->V BtcGb
-	struct droop_f32 dBtcGbSoc;     // GHz->V BtcGb
-	struct linear_f32 qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct quadratic_f32  qAvfsGb[AVFS_VOLTAGE_COUNT]; // GHz->V Override of fused curve
+	struct droop_f32  dBtcGbGfxPll;  // GHz->V BtcGb
+	struct droop_f32  dBtcGbGfxDfll; // GHz->V BtcGb
+	struct droop_f32  dBtcGbSoc;     // GHz->V BtcGb
+	struct linear_f32  qAgingGb[AVFS_VOLTAGE_COUNT]; // GHz->V
 
-	struct PiecewiseLinearDroopInt_t PiecewiseLinearDroopIntGfxDfll; // GHz ->V
+	struct PiecewiseLinearDroopInt_t  PiecewiseLinearDroopIntGfxDfll; // GHz ->V
 
-	struct quadratic_f32 qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
+	struct quadratic_f32  qStaticVoltageOffset[AVFS_VOLTAGE_COUNT]; // GHz->V
 
 	uq14_2_t DcTol[AVFS_VOLTAGE_COUNT];  // mV Q2
 
@@ -1345,7 +1345,7 @@ struct smu11_smcpptable_v7_avfs {
 };
 struct smu11_smcpptable_v7_i2c_control {
 	// SECTION: I2C Control
-	struct i2ccontrollerconfig_u8 I2cControllers[NUM_I2C_CONTROLLERS_SMU11_0_7];
+	struct i2ccontrollerconfig_u8  I2cControllers[NUM_I2C_CONTROLLERS_SMU11_0_7];
 
 	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
 	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
@@ -1358,13 +1358,13 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint32_t Version;
 
 	// SECTION: Feature Enablement
-	union powerplay_feature_control_smu11_0x40 features;
+	union powerplay_feature_control_smu11_0x40  features;
 
 	// SECTION: Infrastructure Limits
-	struct smu11_smcpptable_v7_infrastructure_limits infrastructure_limits;
+	struct smu11_smcpptable_v7_infrastructure_limits  infrastructure_limits;
 
 	// SECTION: Power Configuration
-	enum PwrConfig_e TotalPowerConfig; // Determines how PMFW calculates the power.
+	enum PwrConfig_e  TotalPowerConfig; // Determines how PMFW calculates the power.
 	uint8_t  TotalPowerPadding[3];
 
 	// SECTION: APCC Settings
@@ -1379,10 +1379,10 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t PaddingPerPartDroop;
 
 	// SECTION: Throttler settings
-	union throttler_control_smu11_0x40 ThrottlerControlMask;
+	union throttler_control_smu11_0x40  ThrottlerControlMask;
 
 	// SECTION: FW DSTATE Settings
-	union fw_dstate_features_smu11_0x40 FwDStateMask;
+	union fw_dstate_features_smu11_0x40  FwDStateMask;
 
 	// SECTION: ULV Settings
 	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
@@ -1418,26 +1418,26 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 
 	//SECTION: DPM Config 1 & 2
-	struct smu11_smcpptable_v7_dpm_config dpm_config;
+	struct smu11_smcpptable_v7_dpm_config  dpm_config;
 
 	// SECTION: Fan Control
-	struct smu11_smcpptable_v7_fan_control fan_control;
+	struct smu11_smcpptable_v7_fan_control  fan_control;
 
 	// SECTION: AVFS
-	struct smu11_smcpptable_v7_avfs avfs;
+	struct smu11_smcpptable_v7_avfs  avfs;
 	// SECTION: XGMI
-	enum DPM_PSTATES_e XgmiDpmPstates[NUM_XGMI_LEVELS_SMU11]; // 2 DPM states, high and low.
+	enum DPM_PSTATES_e  XgmiDpmPstates[NUM_XGMI_LEVELS_SMU11]; // 2 DPM states, high and low.
 	uint8_t  XgmiDpmSpare[2];
 
 	// SECTION: Advanced Options
-	union dpm_debug_override_smu11_0x40 DebugOverrides;
-	struct quadratic_f32 ReservedEquation0;
-	struct quadratic_f32 ReservedEquation1;
-	struct quadratic_f32 ReservedEquation2;
-	struct quadratic_f32 ReservedEquation3;
+	union dpm_debug_override_smu11_0x40  DebugOverrides;
+	struct quadratic_f32  ReservedEquation0;
+	struct quadratic_f32  ReservedEquation1;
+	struct quadratic_f32  ReservedEquation2;
+	struct quadratic_f32  ReservedEquation3;
 
 	// SECTION: Sku Reserved
-	enum CUSTOMER_VARIANT_e CustomerVariant;
+	enum CUSTOMER_VARIANT_e  CustomerVariant;
 
 	//VC BTC parameters are only applicable to VDD_GFX domain
 	uint8_t  VcBtcEnabled;
@@ -1461,7 +1461,7 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint32_t GamingClk[6];
 
 	// SECTION: I2C Control
-	struct smu11_smcpptable_v7_i2c_control i2c_control;
+	struct smu11_smcpptable_v7_i2c_control  i2c_control;
 
 	// SECTION: SVI2 Board Parameters
 	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
@@ -1469,10 +1469,10 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	union psi_sel_mask GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
 
 	// SECTION: Telemetry Settings
 	uint16_t GfxMaxCurrent; // in Amps
@@ -1508,7 +1508,7 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint8_t  LedPin0; // GPIO number for LedPin[0]
 	uint8_t  LedPin1; // GPIO number for LedPin[1]
 	uint8_t  LedPin2; // GPIO number for LedPin[2]
-	union led_display_control LedEnableMask;
+	union led_display_control  LedEnableMask;
 
 	uint8_t  LedPcie;  // GPIO number for PCIE results
 	uint8_t  LedError; // GPIO number for Error Cases
@@ -1545,8 +1545,8 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t TotalBoardPower; // Only needed for TCP Estimated case, where TCP = TGP+Total Board Power
 	uint16_t BoardPowerPadding;
 	// SECTION: XGMI Training
-	enum XGMI_LINK_RATE_e XgmiLinkSpeed[NUM_XGMI_PSTATE_LEVELS_SMU11];
-	enum XGMI_LINK_WIDTH_e XgmiLinkWidth[NUM_XGMI_PSTATE_LEVELS_SMU11];
+	enum XGMI_LINK_RATE_e  XgmiLinkSpeed[NUM_XGMI_PSTATE_LEVELS_SMU11];
+	enum XGMI_LINK_WIDTH_e  XgmiLinkWidth[NUM_XGMI_PSTATE_LEVELS_SMU11];
 
 	uint16_t XgmiFclkFreq[NUM_XGMI_PSTATE_LEVELS_SMU11];
 	uint16_t XgmiSocVoltage[NUM_XGMI_PSTATE_LEVELS_SMU11];

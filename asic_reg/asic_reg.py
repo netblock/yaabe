@@ -4,7 +4,7 @@
 #asic_reg.py mode files
 # mode = 0
 # Convert an inputted asic_reg shift-mask files into C bitfields, with relevant
-# register number definition adjacent. 
+# register number definition adjacent.
 # If multiple shmask-d pairs are given, find commonality and associate versions.
 # gmc.py 0 gmc_out.h gmc_8_1_sh_mask.h gmc_8_1_d.h
 # gmc.py 0 gmc_out.h gmc_8_1_sh_mask.h gmc_8_1_d.h gmc_7_0_sh_mask.h gmc_7_0_d.h
@@ -74,7 +74,7 @@ class bitfield:
 		lo = 0
 		entries_i = 0
 		entries_end = len(self.entries)
-	
+
 		while (entries_i <= entries_end):
 			if (entries_i == entries_end):
 				hi_end = self.num_bits
@@ -174,7 +174,7 @@ def c_literal_to_int(literal:str):
 def shmask_filetext_to_bitfields(version:str, file_text:str):
 	# the mask-shift pairs in the sh_mask.h files may not be physically
 	# adjacent within the header file, so do a primitive preprocessor parse for
-	# a basic namespace (the python dict). 
+	# a basic namespace (the python dict).
 	pp_dict = text_to_dict(version, file_text)
 	assert(0 == (len(pp_dict) % 2))
 
@@ -268,7 +268,7 @@ def bitfields_intersect_add(bitfields_by_file:list):
 	bitfields_by_file = bitfields_by_file[1:]
 
 	for bf_set in bitfields_by_file: # then compare
-		for name in bf_set: 
+		for name in bf_set:
 			bf = bf_set[name]
 			if name in final_fields:
 				for final_bf in final_fields[name]:
@@ -434,7 +434,7 @@ union %s_%s {%s
 				define_vals = (addr_name, ver, base, ver_str)
 				out_text += def_index_str % define_vals
 
-				
+
 
 			# union name {
 			ver_str = comment_start
@@ -614,7 +614,7 @@ PPATUI_FUNCIFY(union, %s_%s, atui_nullstruct,
 					out_text += mid_text
 				else:
 					out_text += (
-						"%s\n\t\t\t\t%s\n\t\t\t%s" % 
+						"%s\n\t\t\t\t%s\n\t\t\t%s" %
 						(mid_part1, bf_string_mid_2, bf_string_mid_3)
 					)
 			out_text = out_text[:-2] + "\n" # eat comma

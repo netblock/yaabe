@@ -46,7 +46,7 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 		dirs_exist_ok=True
 	)
 
-	# gtk is nonstandard on windows; find all relevant mingw .dlls 
+	# gtk is nonstandard on windows; find all relevant mingw .dlls
 	shared_objs = set()
 	enlist_shared_objs(exe_file, shared_objs)
 	for obj in shared_objs:
@@ -58,7 +58,7 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 
 def main(argc:int, argv:list):
 	assert (argc >= 7)
-	nsis_conf = argv[1] 
+	nsis_conf = argv[1]
 	source_dir = argv[2]
 	exe_file = argv[3]
 	stage_dir = argv[4]

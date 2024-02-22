@@ -67,7 +67,7 @@ regcmp(
 // mem_clk_patch table; timings
 /******************************************************************************/
 
-static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = { 
+static const uint16_t mc_block_r600_gddr3_memclkpatch_addresses[] = {
 	mmMC_ARB_PERF_CID_7_1,
 	mmMC_ARB_SNOOP_8_1,
 	mmMC_ARB_LAZY1_WR_6_0,

@@ -64,7 +64,7 @@ regset_bsearch_right(
 	uint16_t mid;
 	uint16_t right = reg_set->num_reg_set_addresses;
 	while (left != right) {
-		mid = (left + right) >> 1;  
+		mid = (left + right) >> 1;
 		if (address < set_array[mid].address) {
 			right = mid;
 		} else {
@@ -118,7 +118,7 @@ register_set_print_tables(
 	const struct atom_init_reg_index_format* const register_index =
 		at_regblock->register_index;
 	const char8_t* const struct_entry = u8"\tunion %s  %s;\n";
-	
+
 	const char8_t* reg_name;
 	char* token_save;
 	const char8_t* token;

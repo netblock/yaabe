@@ -297,7 +297,7 @@ struct atomtree_init_reg_block {
 		struct timings_set_islands_gddr5* timings_set_islands_gddr5;
 		struct timings_set_fiji*    timings_set_fiji;
 		struct timings_set_polaris* timings_set_polaris;
-		
+
 		// reg_block_mc_tile_adjust:
 		struct mc_tile_adjust_set_gcn3_gddr5* mc_tile_adjust_set_gcn3_gddr5;
 		struct mc_tile_adjust_set_gcn4_gddr5* mc_tile_adjust_set_gcn4_gddr5;
@@ -337,17 +337,17 @@ struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
 struct atomtree_vram_module {
 	union {
 		void* leaves;
-		struct atom_vram_module_v1* v1_1;
-		struct atom_vram_module_v2* v1_2;
-		struct atom_vram_module_v3* v1_3;
-		struct atom_vram_module_v4* v1_4;
-		struct atom_vram_module_v5* v1_5;
-		struct atom_vram_module_v6* v1_6;
-		struct atom_vram_module_v7* v1_7;
-		struct atom_vram_module_v8* v1_8;
-		struct atom_vram_module_v9* v1_9;
-		struct atom_vram_module_v10* v1_10;
-		struct atom_vram_module_v11* v1_11;
+		struct atom_vram_module_v1*   v1_1;
+		struct atom_vram_module_v2*   v1_2;
+		struct atom_vram_module_v3*   v1_3;
+		struct atom_vram_module_v4*   v1_4;
+		struct atom_vram_module_v5*   v1_5;
+		struct atom_vram_module_v6*   v1_6;
+		struct atom_vram_module_v7*   v1_7;
+		struct atom_vram_module_v8*   v1_8;
+		struct atom_vram_module_v9*   v1_9;
+		struct atom_vram_module_v10*  v1_10;
+		struct atom_vram_module_v11*  v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
 	enum atomtree_common_version vram_module_ver;
@@ -480,8 +480,6 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_umc_init_reg_block mc_phy_init;
 	struct atom_gddr6_dram_data_remap* dram_data_remap;
 
-	//uint16_t reserved; // offset of reserved
-
 	struct atomtree_umc_init_reg_block post_ucode_init;
 	struct atomtree_umc_init_reg_block strobe_mode_patch;
 
@@ -521,8 +519,8 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 
 struct atomtree_vram_info {
 	union {
-		struct atom_common_table_header* table_header;
 		void* leaves;
+		struct atom_common_table_header* table_header;
 	};
 
 	enum atomtree_common_version ver;

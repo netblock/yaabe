@@ -152,6 +152,7 @@ PPATUI_HEADERIFY(mc_phy_init_set_gcn3_gddr5);
 PPATUI_HEADERIFY(mc_phy_init_set_gcn4_gddr5_type1);
 PPATUI_HEADERIFY(mc_phy_init_set_gcn4_gddr5_type2);
 
+
 /******************************************************************************/
 // atui_atombios.c / atombios.h
 

@@ -7,7 +7,7 @@
 #pragma pack(push, 1) // bios data must use byte alignment
 
 struct smu_powerplay_table_header {
-	struct atom_common_table_header header;
+	struct atom_common_table_header  header;
 	uint8_t  table_revision;
 	uint16_t table_size; // Driver portion table size. The offset to smc_pptable including header size
 };
@@ -27,20 +27,20 @@ union powerplay_platform_caps {
 };
 
 
-//typedef struct quadratic_f32 QuadraticInt_t;
+//typedef struct quadratic_f32  QuadraticInt_t;
 struct quadratic_f32 {
 	float32_t a;
 	float32_t b;
 	float32_t c;
 };
 
-//typedef struct linear_f32 LinearInt_t;
+//typedef struct linear_f32  LinearInt_t;
 struct linear_f32 {
 	float32_t m;
 	float32_t b;
 };
 
-//typedef struct droop_f32 DroopInt_t;
+//typedef struct droop_f32  DroopInt_t;
 struct droop_f32 {
 	float32_t a;
 	float32_t b;

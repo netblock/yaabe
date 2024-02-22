@@ -231,17 +231,17 @@ struct smu_11_0_7_power_saving_clock_table {
 
 union smu11_smc_pptables {
 	uint32_t smc_pptable_ver;
-	struct smu11_smcpptable_v3 v3;
-	struct smu11_smcpptable_v8 v8;
-	struct smu11_smcpptable_v7 v7;
+	struct smu11_smcpptable_v3  v3;
+	struct smu11_smcpptable_v8  v8;
+	struct smu11_smcpptable_v7  v7;
 };
 
 struct smu_11_0_powerplay_table {
-	struct smu_powerplay_table_header header;
+	struct smu_powerplay_table_header  header;
 	uint32_t golden_pp_id;
 	uint32_t golden_revision;
 	uint16_t format_id;
-	union powerplay_platform_caps platform_caps;
+	union powerplay_platform_caps  platform_caps;
 
 	uint8_t  thermal_controller_type; // one of SMU_11_0_PP_THERMALCONTROLLER
 
@@ -254,18 +254,18 @@ struct smu_11_0_powerplay_table {
 
 	uint16_t reserve[6]; // Zero filled field reserved for future use
 
-	struct smu_11_0_power_saving_clock_table power_saving_clock;
-	struct smu_11_0_overdrive_table overdrive_table;
+	struct smu_11_0_power_saving_clock_table  power_saving_clock;
+	struct smu_11_0_overdrive_table  overdrive_table;
 
-	union smu11_smc_pptables smc_pptable; // PPTable_t in the driver_if.h
+	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
 };
 
 struct smu_11_0_7_powerplay_table {
-	struct smu_powerplay_table_header header;
+	struct smu_powerplay_table_header  header;
 	uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
 	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
 	uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For sienna_cichlid this should be 0x80
-	union powerplay_platform_caps platform_caps; // POWERPLAYABLE::ulPlatformCaps
+	union powerplay_platform_caps  platform_caps; // POWERPLAYABLE::ulPlatformCaps
 	uint8_t  thermal_controller_type; // one of SMU_11_0_7_PP_THERMALCONTROLLER
 
 	uint16_t small_power_limit1;
@@ -275,10 +275,10 @@ struct smu_11_0_7_powerplay_table {
 
 	uint16_t reserve[8]; // Zero filled field reserved for future use
 
-	struct smu_11_0_7_power_saving_clock_table power_saving_clock;
-	struct smu_11_0_7_overdrive_table overdrive_table;
+	struct smu_11_0_7_power_saving_clock_table  power_saving_clock;
+	struct smu_11_0_7_overdrive_table  overdrive_table;
 
-	union smu11_smc_pptables smc_pptable; // PPTable_t in smu11_driver_if.h
+	union smu11_smc_pptables  smc_pptable; // PPTable_t in smu11_driver_if.h
 };
 
 
