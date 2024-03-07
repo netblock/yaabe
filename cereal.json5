@@ -1,0 +1,81 @@
+// https://json5.org/
+
+{class: "branch",
+global_default: { // set defaults
+	branch_defaults: {
+		c_prefix: "union",
+		atomtree: "atui_nullstruct",
+	},
+	leaf_defaults: { // has dominance over what is sett in branch
+		generic: {
+			access: "bios->raw_data", 
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+		},
+
+	}
+}, branches: [
+
+
+{ // gmc
+	c_type: "atc_ats_cntl_6_0",
+	leaves: [{
+		name: "atc_ats_cntl",
+		display: "ATUI_BIN",
+		fancy_data: [
+			{name: "disable_atc", hi: 0, lo: 0},
+			{name: "disable_pri", hi: 1, lo: 1},
+		]
+	}]
+},
+
+{
+	c_prefix: "struct", c_type: "atom_master_data_table_v2_1",
+	atomtree: "atomtree_master_datatable_v2_1",
+	name: "atom_master_data_table_v2_1",
+	description: [
+		{language: "english", text: "..."},
+	],
+	leaves: [
+		{
+			access: "bios->table_header", 
+			name: "table_header",
+			fancy: "ATUI_PETIOLE", fancy_data: "atom_common_table_header",
+			description: [
+				{language: "english", text: "..."},
+			],
+		}, {
+			access: "bios->utilitypipeline",
+			name: "utilitypipeline",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "Offest for the utility to get parser info, Don't change this position!"},
+			],
+		}, {
+			access: "atomtree->array",
+			name: "utilitypipeline2",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY",
+			fancy_data: {
+				deferred: "atomtree->array2",
+				count: "atomtree->arraycount",
+				enum: "NULL",
+				pattern: [
+					{
+						name: "string [%02u]",
+						fancy: "ATUI_STRING"
+					},
+				],
+			},
+		},
+	],
+},
+
+]}
