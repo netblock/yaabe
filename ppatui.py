@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # a preprocessor that consumes json5 files to produce c source files for
 # atomtree atui.
 # ppatui.py input.json5 output.c
@@ -356,10 +359,11 @@ indent + "{\n"
 			leaf_text_extra %= (leaf.hi, leaf.lo)
 		elif leaf.fancy in ("ATUI_PETIOLE", "ATUI_INLINE"):
 			leaf_text_extra = (
-				child_indent + ".branch_bud = %s,\n"
+				child_indent + ".branch_bud = PPATUI_FUNC_NAME(%s),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_DYNARRAY":
+			access_var = leaf.access + "[0]"
 			leaf_text_extra = ""
 			#leaf_text_extra = (
 			#	child_indent + ".num_child_leaves = %u,\n"
@@ -394,7 +398,7 @@ indent + "{\n"
 + child_indent + ".element_size = sizeof(%s[0]),\n"
 + child_indent + ".dynarray_length = %s,\n"
 + child_indent + ".numleaves = %u,\n"
-+ child_indent + ".enum_taglist = %s,\n"
++ child_indent + ".enum_taglist = _PPATUI_NULLPTR(PPATUI_ENUM_NAME(%s)),\n"
 + indent + "},\n"
 )
 	access = ""

@@ -10,6 +10,8 @@ project('yaabe', 'c',
 )
 
 cc = meson.get_compiler('c')
+ppatui = find_program('ppatui.py', native: true, required: true)
+
 external_depends = [
 	cc.find_library('m', required: true),
 	dependency('gtk4', version: '>= 4.10.0', required: true),
@@ -23,9 +25,7 @@ main_files = files('main.c')
 
 
 if 'debug' == get_option('buildtype')
-	# -fcompare-debug-second mutes the 'note:' spam for ppatui
 	add_project_arguments(
-		'-fcompare-debug-second',
 		'-fstack-protector-strong',
 		language:'c'
 	)
@@ -50,7 +50,7 @@ if 'windows' == target_machine.system()
 	))
 endif
 
-src = atomtree_files + gtk_files + main_files
+src = atomtree_source + gtk_files + main_files
 all_deps = external_depends
 yaabe = executable('yaabe',
 	sources: src,
