@@ -24,7 +24,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming1",
@@ -33,66 +32,42 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming1",
 							name: "tCL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "tRAS",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "15",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "tRCDRD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "22",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "tRCDWR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming1",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -103,7 +78,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming2",
@@ -112,10 +86,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming2",
 							name: "tRC_S",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -123,10 +94,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming2",
 							name: "tRC_L",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "8",
 							description: [
@@ -134,34 +102,22 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming2",
 							name: "tRP_S",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming2",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "22",
 						},
 						{
-							access: "bios->DRAMTiming2",
 							name: "tRP_L",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming2",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -172,7 +128,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming3",
@@ -181,34 +136,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming3",
 							name: "tRRD_S",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming3",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "5",
 						},
 						{
-							access: "bios->DRAMTiming3",
 							name: "tRRD_L",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming3",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "13",
 							description: [
@@ -216,18 +159,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming3",
 							name: "tRTP",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming3",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "29",
 						},
@@ -238,7 +175,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming4",
@@ -247,34 +183,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming4",
 							name: "tFAW",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming4",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->DRAMTiming4",
 							name: "t32AW",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "16",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming4",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "17",
 							description: [
@@ -288,7 +212,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming5",
@@ -297,50 +220,32 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming5",
 							name: "tWL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming5",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
 						{
-							access: "bios->DRAMTiming5",
 							name: "tWTRS",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming5",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
 						{
-							access: "bios->DRAMTiming5",
 							name: "tWTRL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "22",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming5",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "23",
 						},
@@ -351,7 +256,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming6",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming6",
@@ -360,18 +264,12 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming6",
 							name: "tWR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming6",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "7",
 						},
@@ -382,7 +280,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming7",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming7",
@@ -391,66 +288,42 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming7",
 							name: "PPD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "tCRCRL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "tRREFD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "14",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "tCRCWL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "15",
 						},
 						{
-							access: "bios->DRAMTiming7",
 							name: "tRCPAGE",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "20",
 						},
@@ -461,7 +334,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming8",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming8",
@@ -473,10 +345,7 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming8",
 							name: "tRDRD_DD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -484,18 +353,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "tRDRD_SD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -503,18 +366,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "tRDRD_SC",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 							description: [
@@ -522,18 +379,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "20",
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "tRDRD_SCL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "24",
 							description: [
@@ -541,18 +392,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "28",
 						},
 						{
-							access: "bios->DRAMTiming8",
 							name: "tRDRD_BAN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 							description: [
@@ -566,7 +411,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming9_HBM2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming9",
@@ -575,10 +419,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_DD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -586,18 +427,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_SD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -605,18 +440,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_SC",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 							description: [
@@ -624,18 +453,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "20",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_SCL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "24",
 							description: [
@@ -643,18 +466,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "28",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_BAN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 							description: [
@@ -668,7 +485,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming9",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming9",
@@ -677,10 +493,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_MW",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -688,42 +501,27 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "5",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_SC",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "20",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_SCL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming9",
 							name: "tWRWR_BAN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -734,7 +532,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming10",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming10",
@@ -746,50 +543,32 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming10",
 							name: "tWRRD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "tRDWR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "14",
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "RDRspDelay",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "tREFTTAdj",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "22",
 							description: [
@@ -797,10 +576,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming10",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "29",
 						},
@@ -811,7 +587,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming12",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming12",
@@ -820,10 +595,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming12",
 							name: "tREFI",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "0",
 							description: [
@@ -831,10 +603,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming12",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "16",
 						},
@@ -845,7 +614,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming13",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming13",
@@ -854,34 +622,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming13",
 							name: "tMRD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming13",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
 						{
-							access: "bios->DRAMTiming13",
 							name: "tMOD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "8",
 						},
 						{
-							access: "bios->DRAMTiming13",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "14",
 						},
@@ -892,7 +648,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming14_HBM2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming14",
@@ -901,10 +656,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming14",
 							name: "tXS",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 							description: [
@@ -912,10 +664,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming14",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "11",
 						},
@@ -926,7 +675,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming14",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming14",
@@ -935,10 +683,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming14",
 							name: "tXS",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 							description: [
@@ -946,18 +691,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming14",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "11",
 						},
 						{
-							access: "bios->DRAMTiming14",
 							name: "tDLLK",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "26",
 							lo: "16",
 							description: [
@@ -965,10 +704,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming14",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "27",
 						},
@@ -979,7 +715,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming15",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming15",
@@ -991,10 +726,7 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming15",
 							name: "AlertCrcDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 							description: [
@@ -1002,18 +734,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "AlertParDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "8",
 							description: [
@@ -1021,10 +747,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "PL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "18",
 							lo: "15",
 							description: [
@@ -1032,18 +755,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "22",
 							lo: "19",
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "RankBusyDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "23",
 							description: [
@@ -1051,10 +768,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming15",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -1065,7 +779,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming16",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming16",
@@ -1074,18 +787,12 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming16",
 							name: "tXSMRS",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming16",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "11",
 						},
@@ -1096,7 +803,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming17_HBM2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming17",
@@ -1105,34 +811,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming17",
 							name: "tPD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "tCKSRE",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "tCKSRX",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "10",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "PwrDownDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "16",
 							description: [
@@ -1140,10 +834,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "AggPwrDownDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 							description: [
@@ -1151,10 +842,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -1165,7 +853,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming17",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming17",
@@ -1174,34 +861,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming17",
 							name: "tPD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "tCKSRE",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "5",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "tCKSRX",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "16",
 							lo: "11",
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "PwrDownDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "24",
 							lo: "17",
 							description: [
@@ -1209,10 +884,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "AggPwrDownDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "30",
 							lo: "25",
 							description: [
@@ -1220,10 +892,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming17",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "31",
 						},
@@ -1234,7 +903,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming18_HBM2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming18",
@@ -1243,26 +911,17 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming18",
 							name: "tRFCSB",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming18",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "11",
 						},
 						{
-							access: "bios->DRAMTiming18",
 							name: "tSTAG",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "16",
 							description: [
@@ -1270,10 +929,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming18",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "24",
 						},
@@ -1284,7 +940,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming20",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming20",
@@ -1293,26 +948,17 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming20",
 							name: "tRFCSB",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming20",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "11",
 						},
 						{
-							access: "bios->DRAMTiming20",
 							name: "tSTAG",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "16",
 							description: [
@@ -1320,10 +966,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming20",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "24",
 						},
@@ -1334,7 +977,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming21",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming21",
@@ -1343,50 +985,32 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming21",
 							name: "tXP",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming21",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "6",
 						},
 						{
-							access: "bios->DRAMTiming21",
 							name: "tCPDED",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming21",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "20",
 						},
 						{
-							access: "bios->DRAMTiming21",
 							name: "tCKE",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming21",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "29",
 						},
@@ -1397,7 +1021,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming22_HBM2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming22",
@@ -1406,10 +1029,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd0_0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1417,10 +1037,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tRDDATA_EN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "2",
 							description: [
@@ -1428,18 +1045,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_WRLAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 							description: [
@@ -1447,18 +1058,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_RDLAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "16",
 							description: [
@@ -1466,18 +1071,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "22",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_WRDATA",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "26",
 							lo: "24",
 							description: [
@@ -1485,18 +1084,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "27",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPARIN_LAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "28",
 							description: [
@@ -1504,10 +1097,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd4",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -1518,7 +1108,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming22",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming22",
@@ -1527,10 +1116,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming22",
 							name: "tRDDATA_EN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 							description: [
@@ -1538,18 +1124,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_WRLAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 							description: [
@@ -1557,18 +1137,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_RDLAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "16",
 							description: [
@@ -1576,18 +1150,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "22",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPHY_WRDATA",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "26",
 							lo: "24",
 							description: [
@@ -1595,18 +1163,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "27",
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "tPARIN_LAT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "28",
 							description: [
@@ -1614,10 +1176,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming22",
 							name: "rsvd4",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -1628,7 +1187,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming23",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming23",
@@ -1637,10 +1195,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming23",
 							name: "LpDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 							description: [
@@ -1648,18 +1203,12 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming23",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
 						{
-							access: "bios->DRAMTiming23",
 							name: "LpExitDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "8",
 							description: [
@@ -1667,26 +1216,17 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming23",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "14",
 						},
 						{
-							access: "bios->DRAMTiming23",
 							name: "CKESTAGDLY",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 						},
 						{
-							access: "bios->DRAMTiming23",
 							name: "rsvd3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "20",
 						},
@@ -1697,7 +1237,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming34",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming34",
@@ -1706,42 +1245,27 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming34",
 							name: "tPhyupd_resp",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->DRAMTiming34",
 							name: "tRDEDC_EN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "4",
 						},
 						{
-							access: "bios->DRAMTiming34",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 						},
 						{
-							access: "bios->DRAMTiming34",
 							name: "tWREDC_EN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "18",
 							lo: "12",
 						},
 						{
-							access: "bios->DRAMTiming34",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "19",
 						},
@@ -1752,7 +1276,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming35",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming35",
@@ -1764,10 +1287,7 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming35",
 							name: "ReceiverWait",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 							description: [
@@ -1775,10 +1295,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming35",
 							name: "CmdStageCnt",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "11",
 							description: [
@@ -1786,26 +1303,17 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming35",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "22",
 						},
 						{
-							access: "bios->DRAMTiming35",
 							name: "tWRMPR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 						},
 						{
-							access: "bios->DRAMTiming35",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -1816,7 +1324,6 @@
 		{
 			c_prefix: "union",
 			c_type: "DRAMTiming36",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->DRAMTiming36",
@@ -1828,10 +1335,7 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->DRAMTiming36",
 							name: "tWTRTR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 							description: [
@@ -1839,10 +1343,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "tREFTR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -1850,10 +1351,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "tTTROW",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "17",
 							lo: "12",
 							description: [
@@ -1861,10 +1359,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "tLDTLD",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "18",
 							description: [
@@ -1872,10 +1367,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "tUPDN",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "24",
 							description: [
@@ -1883,10 +1375,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "tREFTR_MSB",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "30",
 							lo: "30",
 							description: [
@@ -1894,10 +1383,7 @@
 							],
 						},
 						{
-							access: "bios->DRAMTiming36",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "31",
 						},
@@ -1908,7 +1394,6 @@
 		{
 			c_prefix: "union",
 			c_type: "TRFCTimingCS01",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->TRFCTimingCS01",
@@ -1917,18 +1402,12 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->TRFCTimingCS01",
 							name: "tRFC",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 						},
 						{
-							access: "bios->TRFCTimingCS01",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "11",
 						},
@@ -1939,7 +1418,6 @@
 		{
 			c_prefix: "union",
 			c_type: "TRFCTimingCS01_DDR4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->TRFCTimingCS01_DDR4",
@@ -1948,26 +1426,17 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->TRFCTimingCS01_DDR4",
 							name: "tRFC",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "0",
 						},
 						{
-							access: "bios->TRFCTimingCS01_DDR4",
 							name: "tRFC2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "21",
 							lo: "11",
 						},
 						{
-							access: "bios->TRFCTimingCS01_DDR4",
 							name: "tRFC4",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "22",
 						},
@@ -1978,7 +1447,6 @@
 		{
 			c_prefix: "union",
 			c_type: "ChanPipeDly",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ChanPipeDly",
@@ -1987,10 +1455,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ChanPipeDly",
 							name: "TXCtrlChanDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1998,18 +1463,12 @@
 							],
 						},
 						{
-							access: "bios->ChanPipeDly",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 						},
 						{
-							access: "bios->ChanPipeDly",
 							name: "TXDataChanDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -2017,18 +1476,12 @@
 							],
 						},
 						{
-							access: "bios->ChanPipeDly",
 							name: "rsvd1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->ChanPipeDly",
 							name: "RXDataChanDly",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "8",
 							description: [
@@ -2036,10 +1489,7 @@
 							],
 						},
 						{
-							access: "bios->ChanPipeDly",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "11",
 						},
@@ -2050,7 +1500,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_misc_timing_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->mc_seq_misc_timing",
@@ -2059,10 +1508,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->mc_seq_misc_timing",
 							name: "trp_wra",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 							description: [
@@ -2070,10 +1516,7 @@
 							],
 						},
 						{
-							access: "bios->mc_seq_misc_timing",
 							name: "trp_rda",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "7",
 							description: [
@@ -2081,26 +1524,17 @@
 							],
 						},
 						{
-							access: "bios->mc_seq_misc_timing",
 							name: "trp",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "14",
 						},
 						{
-							access: "bios->mc_seq_misc_timing",
 							name: "trfc",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "20",
 						},
 						{
-							access: "bios->mc_seq_misc_timing",
 							name: "rsvd2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "29",
 						},
@@ -2111,7 +1545,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_misc_timing2_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2120,66 +1553,42 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "pa2rdata",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "pa2wdata",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
 						{
-							access: "bios->raw_data",
 							name: "faw",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tredc",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
 						{
-							access: "bios->raw_data",
 							name: "twedc",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "20",
 							lo: "16",
 						},
 						{
-							access: "bios->raw_data",
 							name: "t32aw",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "24",
 							lo: "21",
 						},
 						{
-							access: "bios->raw_data",
 							name: "_rsvd02",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "25",
 						},
 						{
-							access: "bios->raw_data",
 							name: "twdatatr",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "28",
 						},
@@ -2190,7 +1599,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_cmd_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2199,98 +1607,62 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "adr",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "mop",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 						},
 						{
-							access: "bios->raw_data",
 							name: "end",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "20",
 							lo: "20",
 						},
 						{
-							access: "bios->raw_data",
 							name: "csb",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "22",
 							lo: "21",
 						},
 						{
-							access: "bios->raw_data",
 							name: "_rsvd00",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "23",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chan0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "24",
 							lo: "24",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chan1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "25",
 							lo: "25",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chan2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "26",
 							lo: "26",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chan3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "27",
 						},
 						{
-							access: "bios->raw_data",
 							name: "adr_msb1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "28",
 						},
 						{
-							access: "bios->raw_data",
 							name: "adr_msb0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "29",
 						},
 						{
-							access: "bios->raw_data",
 							name: "_rsvd02",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -2301,7 +1673,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_cas_timing_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2310,58 +1681,37 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "tnopw",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tnopr",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "5",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tr2w",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "10",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tr2r",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "18",
 							lo: "15",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tw2r",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "19",
 						},
 						{
-							access: "bios->raw_data",
 							name: "tcl",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "24",
 						},
 						{
-							access: "bios->raw_data",
 							name: "_rsvd01",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "29",
 						},
@@ -2372,7 +1722,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_byte_remap_d0_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2381,34 +1730,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "byte0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "byte1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 						},
 						{
-							access: "bios->raw_data",
 							name: "byte2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 						},
 						{
-							access: "bios->raw_data",
 							name: "byte3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
@@ -2419,7 +1756,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_arb_ramcfg_7_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2428,82 +1764,52 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "noofbank",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "noofranks",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 						},
 						{
-							access: "bios->raw_data",
 							name: "noofrows",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 						},
 						{
-							access: "bios->raw_data",
 							name: "noofcols",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chansize",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 						},
 						{
-							access: "bios->raw_data",
 							name: "burstlength",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 						},
 						{
-							access: "bios->raw_data",
 							name: "rsv_2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 						},
 						{
-							access: "bios->raw_data",
 							name: "chansize_override",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 						},
 						{
-							access: "bios->raw_data",
 							name: "noofgroups",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 						},
 						{
-							access: "bios->raw_data",
 							name: "rsv_4",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -2514,7 +1820,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_io_aphy_str_cntl_d0_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2523,82 +1828,52 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "pstr_off_a",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "nstr_off_a",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 						},
 						{
-							access: "bios->raw_data",
 							name: "pstr_off_d_rd",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "17",
 							lo: "12",
 						},
 						{
-							access: "bios->raw_data",
 							name: "nstr_off_d_rd",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "18",
 						},
 						{
-							access: "bios->raw_data",
 							name: "use_a_cal",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "24",
 							lo: "24",
 						},
 						{
-							access: "bios->raw_data",
 							name: "use_d_rd_cal",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "25",
 							lo: "25",
 						},
 						{
-							access: "bios->raw_data",
 							name: "cal_sel",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "26",
 						},
 						{
-							access: "bios->raw_data",
 							name: "load_a_str",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "28",
 							lo: "28",
 						},
 						{
-							access: "bios->raw_data",
 							name: "load_d_rd_str",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "29",
 							lo: "29",
 						},
 						{
-							access: "bios->raw_data",
 							name: "_rsvd01",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "30",
 						},
@@ -2609,7 +1884,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mc_seq_rxframing_dbi_d1_6_0_o",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->raw_data",
@@ -2618,66 +1892,42 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->raw_data",
 							name: "dbi0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi3",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi4",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "19",
 							lo: "16",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi5",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "23",
 							lo: "20",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi6",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "27",
 							lo: "24",
 						},
 						{
-							access: "bios->raw_data",
 							name: "dbi7",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "28",
 						},
@@ -2686,9 +1936,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_islands_ddr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -2798,9 +2046,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_islands_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -2917,9 +2163,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_fiji",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -2994,9 +2238,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_polaris",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -3122,7 +2364,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_vega10",
 			atomtree: "atomtree_vram_info_header_v2_3",
 			leaves: [
@@ -3228,7 +2469,6 @@
 					access: "bios->unknown15",
 					name: "unknown15",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DRAMTiming16",
@@ -3262,13 +2502,11 @@
 					access: "bios->unknown19",
 					name: "unknown19",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->unknown20",
 					name: "unknown20",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRFC",
@@ -3287,7 +2525,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_vega21",
 			atomtree: "atomtree_vram_info_header_v2_3",
 			leaves: [
@@ -3393,7 +2630,6 @@
 					access: "bios->unknown15",
 					name: "unknown15",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DRAMTiming16",
@@ -3434,7 +2670,6 @@
 					access: "bios->unknown23",
 					name: "unknown23",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRFC",
@@ -3454,12 +2689,10 @@
 					access: "bios->unkown24",
 					name: "unkown24",
 					display: "ATUI_BIN",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "timings_set_navi1",
 			atomtree: "atomtree_vram_info_header_v2_4",
 			leaves: [
@@ -3480,8 +2713,6 @@
 				{
 					access: "bios->gddr6_mr5.reserved",
 					name: "gddr6_mr5_reserved",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->gddr6_mr0.gddr6_mr0",
@@ -3493,14 +2724,10 @@
 				{
 					access: "bios->gddr6_mr0.reserved",
 					name: "gddr6_mr0_reserved",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->UMCCTRL_PMG_CMD_EMRS",
 					name: "UMCCTRL_PMG_CMD_EMRS",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->gddr6_mr4.gddr6_mr4",
@@ -3512,8 +2739,6 @@
 				{
 					access: "bios->gddr6_mr4.reserved",
 					name: "gddr6_mr4_reserved",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->gddr6_mr8.gddr6_mr8",
@@ -3525,8 +2750,6 @@
 				{
 					access: "bios->gddr6_mr8.reserved",
 					name: "gddr6_mr8_reserved",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DRAMTiming1",
@@ -3692,9 +2915,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_terascale2_ddr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -3888,9 +3109,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_terascale2_gddr5_type3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -4196,9 +3415,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_terascale2_gddr5_type4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -4546,9 +3763,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_terascale3_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -4882,9 +4097,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn1_gddr5_type1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -5295,9 +4508,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn1_gddr5_type2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -5799,9 +5010,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn1_gddr5_type3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -6338,9 +5547,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn1_gddr5_type4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -6569,9 +5776,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn2_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7087,9 +6292,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn3_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7262,9 +6465,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn3_hbm1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7283,9 +6484,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn4_gddr5_type1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7332,9 +6531,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mem_adjust_set_gcn4_gddr5_type2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7416,9 +6613,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_tile_adjust_set_gcn3_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7444,9 +6639,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_tile_adjust_set_gcn4_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7465,9 +6658,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_phy_init_set_gcn3_hbm1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -7570,9 +6761,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_phy_init_set_gcn3_gddr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -8249,9 +7438,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_phy_init_set_gcn4_gddr5_type1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",
@@ -8417,9 +7604,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_phy_init_set_gcn4_gddr5_type2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->block_id",

@@ -235,12 +235,11 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 
 			if not ("enum" in leaf.fancy_data):
 				leaf.fancy_data["enum"] = "NULL"
-			if leaf.access and (leaf.access not in ("NULL", "ATUI_NULL")):
-				# TODO clean ATUI_NULL
-				access = leaf.access + "[0]" # direct array
+			if leaf.access:
+				access = leaf.access # direct array
 			else:
-				leaf.access = None
-				access = fancy_data["deferred"] + "[0][0]" # array of pointers
+				access = fancy_data["deferred"] # array of pointers
+			access += "[0]"
 
 			old_default = leaf_defaults["dynpattern"]
 			new_default = old_default.copy()
@@ -324,30 +323,35 @@ indent + "{\n"
 + child_indent + ".fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
 + child_indent + ".total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
 + child_indent + ".bitfield_hi = _PPATUI_LEAF_BITNESS(%s) - 1,\n"
-+ child_indent + ".val = _PPATUI_NULLPTR(%s),\n"
++ child_indent + ".val = %s,\n"
 + "%s"
 + indent + "},\n"
 )
 
 	leaf_text_extra = "" # if there is any extra leaf elements
-	access_var = ""
+	var_meta = ""
 	leaves_text = ""
 
 	for leaf in leaves:
-		access_var = leaf.access
-		if leaf.fancy in ("ATUI_NOFANCY", "ATUI_STRING"):
+		var_access = "&(%s)" % leaf.access
+		var_meta = leaf.access
+		if leaf.fancy == "ATUI_NOFANCY":
 			leaf_text_extra = ""
 		elif leaf.fancy == "ATUI_ENUM":
 			leaf_text_extra = (
 				child_indent + ".enum_options = &(PPATUI_ENUM_NAME(%s)),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
+		elif leaf.fancy == "ATUI_STRING":
+			var_access = leaf.access
+			leaf_text_extra = ""
 		elif leaf.fancy == "ATUI_ARRAY":
-			access_var = leaf.access + "[0]"
+			var_access = leaf.access
+			var_meta = leaf.access + "[0]"
 			leaf_text_extra = (
 				child_indent + ".array_size = (sizeof(%s)/sizeof(%s)),\n"
 			)
-			leaf_text_extra %= (leaf.access, access_var)
+			leaf_text_extra %= (leaf.access, var_meta)
 		elif leaf.fancy == "ATUI_BITFIELD":
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
@@ -360,15 +364,20 @@ indent + "{\n"
 			)
 			leaf_text_extra %= (leaf.hi, leaf.lo)
 		elif leaf.fancy in ("ATUI_PETIOLE", "ATUI_INLINE"):
+			if not leaf.access:
+				var_access = "NULL"
+				var_meta = "NULL"
 			leaf_text_extra = (
 				child_indent + ".branch_bud = PPATUI_FUNC_NAME(%s),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_DYNARRAY":
 			if leaf.access:
-				access_var = leaf.access + "[0]"
+				var_access = leaf.access
+				var_meta = leaf.access + "[0]"
 			else:
-				access_var = "ATUI_NULL" #TODO depricate
+				var_access = "NULL"
+				var_meta = leaf.fancy_data["deferred"] + "[0][0]"
 			leaf_text_extra = ""
 			#leaf_text_extra = (
 			#	child_indent + ".num_child_leaves = %u,\n"
@@ -387,15 +396,24 @@ indent + "{\n"
 		leaf.name = leaf.name.replace("\"","\\\"")
 
 		leaves_text += leaf_template % (
-			leaf.name, leaf.name, leaf.access,
-			leaf.display, leaf.fancy, access_var, access_var,
-			access_var, access_var, access_var, access_var, access_var,
+			leaf.name, leaf.name, var_access,
+			leaf.display, leaf.fancy, var_meta, var_meta,
+			var_meta, var_meta, var_meta, var_meta,  var_access,
 			leaf_text_extra
 		)
 		if leaf.fancy == "ATUI_BITFIELD":
 			leaves_text += leaves_to_text(leaf.fancy_data, child_indent)
 	return leaves_text
 		
+
+def num_dynpattern_leaves(pattern:list):
+	num_leaves = len(pattern)
+	for leaf in pattern:
+		if leaf.fancy == "ATUI_BITFIELD":
+			num_leaves += len(leaf.fancy_data)
+		elif leaf.fancy == "ATUI_DYNARRAY":
+			num_leaves += num_dynpattern_leaves(leaf.fancy_data["pattern"])
+	return num_leaves
 
 def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
 	child_indent = indent + "\t"
@@ -417,7 +435,7 @@ indent + "{\n"
 		leaf.fancy_data["deferred"],
 		access,
 		leaf.fancy_data["count"],
-		len(leaf.fancy_data["pattern"]),
+		num_dynpattern_leaves(leaf.fancy_data["pattern"]),
 		leaf.fancy_data["enum"],
 	)
 

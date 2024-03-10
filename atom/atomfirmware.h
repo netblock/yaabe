@@ -140,7 +140,7 @@ struct atombios_image {
 	uint8_t  reserved4[15];
 	uint16_t atombios_strings_offset; // 0x6E
 	uint8_t  reserved5[16];
-	uint8_t  vbios_part_number; // 0x80 ; only use if number_of_strings == 0
+	uint8_t  vbios_part_number[1]; // 0x80 ; only use if number_of_strings == 0
 	uint8_t  reserved6[19];
 	uint8_t  asic_bus_mem_type[20];  // 0x94.
 	// asic_bus_mem_type is ATI; AMD uses atombios_strings_offset.

@@ -36,14 +36,10 @@
 				{
 					access: "bios->table_revision",
 					name: "table_revision",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->table_size",
 					name: "table_size",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
@@ -59,10 +55,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->platform_caps",
 							name: "powerplay",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -70,10 +63,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "sbios_powersource",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -81,10 +71,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "hardware_dc",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -92,10 +79,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "BACO",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -103,10 +87,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "MACO",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -114,10 +95,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "shadow_pstate",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -125,10 +103,7 @@
 							],
 						},
 						{
-							access: "bios->platform_caps",
 							name: "reserved",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "31",
 							lo: "6",
 						},
@@ -144,20 +119,14 @@
 				{
 					access: "bios->a",
 					name: "a",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->b",
 					name: "b",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->c",
 					name: "c",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
@@ -169,14 +138,10 @@
 				{
 					access: "bios->m",
 					name: "m",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->b",
 					name: "b",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
@@ -188,20 +153,14 @@
 				{
 					access: "bios->a",
 					name: "a",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->b",
 					name: "b",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->c",
 					name: "c",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
@@ -217,34 +176,22 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->LedEnableMask",
 							name: "GFX_DPM",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 						},
 						{
-							access: "bios->LedEnableMask",
 							name: "PCIE",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 						},
 						{
-							access: "bios->LedEnableMask",
 							name: "ERROR",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 						},
 						{
-							access: "bios->LedEnableMask",
 							name: "reserved",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "3",
 						},

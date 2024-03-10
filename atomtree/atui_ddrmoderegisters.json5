@@ -2,7 +2,7 @@
 	class: "branch",
 	global_default: {
 		branch_defaults: {
-			c_prefix: "struct",
+			c_prefix: "union",
 			atomtree: "atui_nullstruct",
 		},
 		leaf_defaults: {
@@ -22,9 +22,7 @@
 	},
 	branches: [
 		{
-			c_prefix: "union",
 			c_type: "ddr1_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr1_mr0",
@@ -33,10 +31,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr1_mr0",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -44,10 +40,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "burst_type",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -55,10 +49,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "tCL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -66,10 +58,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "test_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -77,10 +67,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -88,10 +76,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "operating_rsvd",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "9",
 							description: [
@@ -99,10 +85,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_mr0",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "14",
 						},
@@ -111,9 +95,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr1_emr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr1_emr1",
@@ -122,10 +104,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr1_emr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -133,10 +113,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_emr1",
 							name: "drive_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -144,10 +122,8 @@
 							],
 						},
 						{
-							access: "bios->ddr1_emr1",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -155,18 +131,14 @@
 							],
 						},
 						{
-							access: "bios->ddr1_emr1",
 							name: "operating_rsvd",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "3",
 						},
 						{
-							access: "bios->ddr1_emr1",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "14",
 						},
@@ -175,9 +147,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr2_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr2_mr0",
@@ -186,10 +156,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr2_mr0",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -197,10 +165,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "burst_type",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -208,10 +174,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "tCL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -219,10 +183,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "test_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -230,10 +192,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -241,10 +201,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -252,10 +210,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "PD_exit_time",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -263,10 +219,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_mr0",
 							name: "rsvd_15_13",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -275,9 +229,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr2_emr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr2_emr1",
@@ -286,10 +238,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr2_emr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -297,10 +247,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "drive_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -308,10 +256,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "RTT_Nom_lo_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -319,10 +265,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "Additive_Latency",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -330,10 +274,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "RTT_Nom_hi_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -341,10 +283,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "OCD_calibration",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "7",
 							description: [
@@ -352,10 +292,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "DQS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -363,10 +301,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "RDQS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -374,10 +310,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "output_disable",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -385,10 +319,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr1",
 							name: "rsvd_15_13",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -397,9 +329,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr2_emr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr2_emr2",
@@ -408,10 +338,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr2_emr2",
 							name: "PASR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -419,10 +347,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr2",
 							name: "DCC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -430,10 +356,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr2",
 							name: "rsvd_6_4",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -441,10 +365,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr2",
 							name: "HT_SRF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -452,10 +374,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr2",
 							name: "rsvd_12_8",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "8",
 							description: [
@@ -463,10 +383,8 @@
 							],
 						},
 						{
-							access: "bios->ddr2_emr2",
 							name: "rsvd_15_13",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -475,9 +393,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr2_emr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr2_emr3",
@@ -486,10 +402,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr2_emr3",
 							name: "rsvd_15_0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "0",
 							description: [
@@ -501,9 +415,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr3_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr3_mr0",
@@ -512,10 +424,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr3_mr0",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -523,10 +433,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "CL_hi_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -534,10 +442,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "read_burst_type",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -545,10 +451,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "CL_lo_bits",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -556,10 +460,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -567,10 +469,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -578,10 +478,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -589,10 +487,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "DLL_PPD",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -600,10 +496,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr0",
 							name: "RFU_15_13",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -612,9 +506,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr3_mr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr3_mr1",
@@ -623,10 +515,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr3_mr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -634,10 +524,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "DrvStr_lo_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -645,10 +533,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RTTNom_lo_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -656,10 +542,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "Additive_Latency",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "3",
 							description: [
@@ -667,10 +551,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "DrvStr_hi_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -678,10 +560,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RTTNom_mid_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -689,10 +569,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "write_leveling",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -700,10 +578,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RFU_8",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -711,10 +587,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RTTNom_hi_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -722,10 +596,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RFU_10",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -733,10 +605,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "TDQS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -744,10 +614,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "output_disable",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -755,10 +623,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr1",
 							name: "RFU_15_13",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 						},
@@ -767,9 +633,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr3_mr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr3_mr2",
@@ -778,10 +642,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr3_mr2",
 							name: "PASR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -789,10 +651,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "CWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -800,10 +660,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "ASR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -811,10 +669,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "SRT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -822,10 +678,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "RFU_8",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -833,10 +687,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "RTT_WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "9",
 							description: [
@@ -844,10 +696,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr2",
 							name: "RFU_15_11",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "11",
 						},
@@ -856,9 +706,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "ddr3_mr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ddr3_mr3",
@@ -867,10 +715,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ddr3_mr3",
 							name: "MPR_location",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -878,10 +724,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr3",
 							name: "MPR_operation",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -889,10 +733,8 @@
 							],
 						},
 						{
-							access: "bios->ddr3_mr3",
 							name: "RFU_15_3",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "3",
 						},
@@ -901,9 +743,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr2_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr2_mr0",
@@ -912,10 +752,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr2_mr0",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -923,10 +761,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "WL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -934,10 +770,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "RL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -945,10 +779,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -956,10 +788,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -967,10 +797,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -978,10 +806,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_mr0",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -990,9 +816,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr2_emr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr2_emr1",
@@ -1001,10 +825,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr2_emr1",
 							name: "addrcmd_ODT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1012,10 +834,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "data_ck_ODT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1023,10 +843,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "additive_latency",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -1034,10 +852,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "DQS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -1045,10 +861,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -1056,10 +870,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "driver_Ron",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "7",
 							description: [
@@ -1067,10 +879,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "rankness",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1078,10 +888,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "vendor_id",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1089,10 +897,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr1",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1101,9 +907,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr2_emr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr2_emr2",
@@ -1112,18 +916,14 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr2_emr2",
 							name: "rsvd_1_0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "ODT_at_powerdown",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1131,10 +931,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "low_power_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -1142,10 +940,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "CK_ODT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -1153,10 +949,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "CS_ODT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -1164,10 +958,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "CKE_ODT",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1175,10 +967,8 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "ODT_W_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1186,18 +976,14 @@
 							],
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "rsvd_11_10",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 						},
 						{
-							access: "bios->gddr2_emr2",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1206,9 +992,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr3_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr3_mr0",
@@ -1217,10 +1001,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr3_mr0",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1228,10 +1010,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "CL_hi_bit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1239,10 +1019,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "burst_type",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -1250,10 +1028,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "CL_lo_bits",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -1261,10 +1037,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "test_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1272,10 +1046,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1283,10 +1055,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "tWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -1294,10 +1064,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_mr0",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1306,9 +1074,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr3_emr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr3_emr1",
@@ -1317,10 +1083,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr3_emr1",
 							name: "drive_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1328,10 +1092,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "data_terminaton",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1339,10 +1101,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "WR_lo_bits",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -1350,10 +1110,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -1361,10 +1119,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "rsvd_8_8",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1372,10 +1128,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "R_on",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1383,10 +1137,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "vendor_ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1394,10 +1146,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "AddrCmd_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1405,10 +1155,8 @@
 							],
 						},
 						{
-							access: "bios->gddr3_emr1",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1417,9 +1165,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr4_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr4_mr0",
@@ -1428,10 +1174,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr4_mr0",
 							name: "WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1439,10 +1183,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "tCL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -1450,10 +1192,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1461,10 +1201,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "DLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1472,10 +1210,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "WL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -1483,10 +1219,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "RFU_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1494,10 +1228,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_mr0",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1509,9 +1241,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr4_emr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr4_emr1",
@@ -1520,10 +1250,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr4_emr1",
 							name: "Drive_Term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1531,10 +1259,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "DQ_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1542,10 +1268,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "tPreamble",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -1553,10 +1277,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1564,10 +1286,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "read_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1575,10 +1295,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "write_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1586,10 +1304,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "DBI_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1597,10 +1313,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "Vendor_ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1608,10 +1322,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "RFU_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1619,10 +1331,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr1",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1634,9 +1344,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr4_emr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr4_emr2",
@@ -1645,10 +1353,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr4_emr2",
 							name: "OCD_down_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1656,10 +1362,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr2",
 							name: "OCD_up_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -1667,10 +1371,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr2",
 							name: "tRAS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -1678,10 +1380,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr2",
 							name: "RFU_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1689,10 +1389,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr2",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1704,9 +1402,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr4_emr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr4_emr3",
@@ -1715,10 +1411,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr4_emr3",
 							name: "RFU",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -1726,10 +1420,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "LP_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -1737,10 +1429,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "DRAM_info",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -1748,10 +1438,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "parity_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1759,10 +1447,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "parity_enable",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1770,10 +1456,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "parity_mask",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -1781,10 +1465,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "RFU_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1792,10 +1474,8 @@
 							],
 						},
 						{
-							access: "bios->gddr4_emr3",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1807,9 +1487,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr0",
@@ -1818,10 +1496,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr0",
 							name: "WLmrs",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1829,10 +1505,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr0",
 							name: "CLmrs_lo",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -1840,10 +1514,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr0",
 							name: "testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1851,10 +1523,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr0",
 							name: "WR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -1862,10 +1532,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr0",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1874,9 +1542,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr1",
@@ -1885,10 +1551,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr1",
 							name: "drive_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1896,10 +1560,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "data_termination",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1907,10 +1569,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "addrcmd_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -1918,10 +1578,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "calibration_update",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -1929,10 +1587,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "PLL_DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1940,10 +1596,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "read_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1951,10 +1605,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "write_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1962,10 +1614,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "address_BI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1973,10 +1623,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "PLLDLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1984,10 +1632,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr1",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -1996,9 +1642,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr2",
@@ -2007,10 +1651,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr2",
 							name: "drive_pulldown_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -2018,10 +1660,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr2",
 							name: "drive_pullup_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -2029,10 +1669,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr2",
 							name: "data_wck_term_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "6",
 							description: [
@@ -2040,10 +1678,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr2",
 							name: "AddrCmd_term_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -2051,10 +1687,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr2",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2063,9 +1697,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr3",
@@ -2074,10 +1706,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr3",
 							name: "self_refresh",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -2085,10 +1715,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "WCK01_invert",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2096,10 +1724,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "WCK23_invert",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2107,10 +1733,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "WCK2CK_training",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -2118,10 +1742,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "RDQS_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -2129,10 +1751,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "DRAM_info",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -2140,10 +1760,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "WCK_termination",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -2151,10 +1769,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "bank_groups",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -2162,10 +1778,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr3",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2174,9 +1788,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr4",
@@ -2185,10 +1797,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr4",
 							name: "EDC_pattern",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -2196,10 +1806,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "CRCWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -2207,10 +1815,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "CRCRL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2218,10 +1824,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "read_CRC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2229,10 +1833,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "write_crc",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2240,10 +1842,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "hold_invert",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2251,10 +1851,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr4",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2263,9 +1861,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr5",
@@ -2274,10 +1870,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr5",
 							name: "LP1",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2285,10 +1879,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr5",
 							name: "LP2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2296,10 +1888,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr5",
 							name: "LP3",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2307,10 +1897,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr5",
 							name: "PLLDLL_BW",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -2318,10 +1906,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr5",
 							name: "tRAS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -2329,10 +1915,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr5",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2341,9 +1925,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr6",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr6",
@@ -2352,10 +1934,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr6",
 							name: "WCK2CK_alignment",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2363,10 +1943,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "VREFD_merge",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2374,10 +1952,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "VREFD_training",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2385,10 +1961,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "VREFD_source",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2396,10 +1970,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "VREFD_offset_MU",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 							description: [
@@ -2407,10 +1979,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "VREFD_offset_AF",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -2418,10 +1988,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr6",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2430,9 +1998,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr7",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr7",
@@ -2441,10 +2007,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr7",
 							name: "PLL_standby",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2452,10 +2016,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "PLL_fast_lock",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2463,10 +2025,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "PLL_delay_comp",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2474,10 +2034,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "low_freq_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2485,10 +2043,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "WCK2CK_autosync",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -2496,10 +2052,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "DQ_preamble",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -2507,10 +2061,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "temp_sensor",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -2518,10 +2070,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "half_VREFD",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2529,10 +2079,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "VDD_range",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -2540,10 +2088,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "DCC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -2551,10 +2097,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr7",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2563,9 +2107,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr8",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr8",
@@ -2574,10 +2116,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr8",
 							name: "CL_EHF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2585,10 +2125,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr8",
 							name: "WR_EHF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2596,10 +2134,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr8",
 							name: "EDC_HiZ",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2607,10 +2143,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr8",
 							name: "REFPB",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2618,10 +2152,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr8",
 							name: "rsvd_11_4",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "4",
 							description: [
@@ -2629,10 +2161,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr8",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2641,9 +2171,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr9",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr9",
@@ -2652,10 +2180,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr9",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2663,10 +2189,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr9",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2675,9 +2199,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr10",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr10",
@@ -2686,10 +2208,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr10",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2697,10 +2217,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr10",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2709,9 +2227,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr11",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr11",
@@ -2720,10 +2236,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_01",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2731,10 +2245,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_23",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2742,10 +2254,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_45",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2753,10 +2263,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_67",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2764,10 +2272,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_89",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -2775,10 +2281,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_1011",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -2786,10 +2290,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_1213",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -2797,10 +2299,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_banks_1415",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2808,10 +2308,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_row_00",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2819,10 +2317,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_row_01",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2830,10 +2326,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_row_10",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2841,10 +2335,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_row_11",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2852,18 +2344,14 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_bank_mask",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -2871,10 +2359,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "PASR_row_segment_mask",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -2882,10 +2368,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr11",
 							name: "rsvd_15_12__2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2894,9 +2378,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr12",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr12",
@@ -2905,10 +2387,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr12",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2916,10 +2396,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr12",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2928,9 +2406,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr13",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr13",
@@ -2939,10 +2415,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr13",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2950,10 +2424,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr13",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2962,9 +2434,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr14",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr14",
@@ -2973,10 +2443,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr14",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2984,10 +2452,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr14",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -2996,9 +2462,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr5_mr15",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr5_mr15",
@@ -3007,18 +2471,14 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr5_mr15",
 							name: "rsvd_7_0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 						},
 						{
-							access: "bios->gddr5_mr15",
 							name: "MRE_0_disable",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3026,10 +2486,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr15",
 							name: "MRE_1_disable",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3037,10 +2495,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr15",
 							name: "address_training",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -3048,10 +2504,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr15",
 							name: "RFU",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -3059,10 +2513,8 @@
 							],
 						},
 						{
-							access: "bios->gddr5_mr15",
 							name: "rsvd_15_12",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 						},
@@ -3071,9 +2523,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr0",
@@ -3082,10 +2532,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr0",
 							name: "WLmrs",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -3093,10 +2541,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr0",
 							name: "RLmrs_lo",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -3104,10 +2550,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr0",
 							name: "testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3115,10 +2559,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr0",
 							name: "WRmrs",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -3126,10 +2568,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr0",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3141,9 +2581,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr1",
@@ -3152,10 +2590,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr1",
 							name: "drive_stren",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -3163,10 +2599,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "data_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -3174,10 +2608,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "PLLDLL_range",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -3185,10 +2617,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "Cal_Upd",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3196,10 +2626,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "PLL_DLL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3207,10 +2635,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "read_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3218,10 +2644,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "write_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3229,10 +2653,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "addrcmd_BI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -3240,10 +2662,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "PLLDLL_reset",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "11",
 							description: [
@@ -3251,10 +2671,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr1",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3266,9 +2684,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr2",
@@ -3277,10 +2693,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr2",
 							name: "OCD_up",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -3288,10 +2702,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "OCD_down",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -3299,10 +2711,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "self_refresh",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -3310,10 +2720,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "EDC_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3321,10 +2729,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "RDQS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3332,10 +2738,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "CADT_SRF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -3343,10 +2747,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "EDC_HR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -3354,10 +2756,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr2",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3369,9 +2769,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr3",
@@ -3380,10 +2778,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr3",
 							name: "dataWCK_term_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -3391,10 +2787,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr3",
 							name: "CA_term_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -3402,10 +2796,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr3",
 							name: "DRAM_info",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -3413,10 +2805,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr3",
 							name: "WR_scaling",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -3424,10 +2814,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr3",
 							name: "bank_groups",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3435,10 +2823,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr3",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3450,9 +2836,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr4",
@@ -3461,10 +2845,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr4",
 							name: "EDC_hold_pattern",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -3472,10 +2854,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "CRCWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -3483,10 +2863,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "CRCRL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "7",
 							description: [
@@ -3494,10 +2872,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "RDCRC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3505,10 +2881,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "WRCRC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -3516,10 +2890,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "EDC_hold_invert",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -3527,10 +2899,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr4",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3542,9 +2912,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr5",
@@ -3553,10 +2921,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr5",
 							name: "LP1",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3564,10 +2930,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr5",
 							name: "LP2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3575,10 +2939,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr5",
 							name: "LP3",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3586,10 +2948,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr5",
 							name: "PLLDLL_BW",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -3597,10 +2957,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr5",
 							name: "RAS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -3608,10 +2966,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr5",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3623,9 +2979,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr6",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr6",
@@ -3634,10 +2988,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr6",
 							name: "VREFD_level",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "0",
 							description: [
@@ -3645,10 +2997,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr6",
 							name: "pin_subaddr",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "7",
 							description: [
@@ -3656,10 +3006,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr6",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3671,9 +3019,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr7",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr7",
@@ -3682,10 +3028,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr7",
 							name: "WCK2CK_AP",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3693,10 +3037,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "hibernate",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3704,10 +3046,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "PLL_delay_comp",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3715,10 +3055,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "low_freq_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -3726,10 +3064,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "WCK2CK_autosync",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3737,10 +3073,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "DQ_preamble",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3748,10 +3082,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "half_VREFC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3759,10 +3091,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "half_VREFD",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3770,10 +3100,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "VDD_range",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -3781,10 +3109,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "WCK_DCC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3792,10 +3118,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr7",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3807,9 +3131,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr8",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr8",
@@ -3818,10 +3140,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr8",
 							name: "CA_low_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -3829,10 +3149,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "CA_high_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -3840,10 +3158,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "CA_TO",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3851,10 +3167,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "EDC_hiZ",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3862,10 +3176,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "CK_auto_cal",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3873,10 +3185,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "REFpb",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3884,10 +3194,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "RL_EHF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3895,10 +3203,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "WR_EHF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3906,10 +3212,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "CK_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3917,10 +3221,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr8",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3932,9 +3234,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr9",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr9",
@@ -3943,10 +3243,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr9",
 							name: "DFE",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -3954,10 +3252,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr9",
 							name: "RFU",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -3965,10 +3261,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr9",
 							name: "pin_subaddr",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "7",
 							description: [
@@ -3976,10 +3270,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr9",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3991,9 +3283,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr10",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr10",
@@ -4002,10 +3292,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr10",
 							name: "VREFC_offset",
 							display: "(ATUI_DEC|ATUI_SIGNED)",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -4013,10 +3301,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "WCK_inv_byte0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -4024,10 +3310,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "WCK_inv_byte1",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -4035,10 +3319,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "WCK2CK",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -4046,10 +3328,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "WCK_ratio",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -4057,10 +3337,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "WCK_term",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -4068,10 +3346,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr10",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4083,9 +3359,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr11",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr11",
@@ -4094,10 +3368,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_01",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4105,10 +3377,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_23",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4116,10 +3386,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_45",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4127,10 +3395,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_67",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4138,10 +3404,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_89",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4149,10 +3413,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_1011",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4160,10 +3422,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_1213",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4171,10 +3431,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_banks_1415",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4182,10 +3440,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_row_00",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -4193,10 +3449,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_row_01",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -4204,10 +3458,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_row_10",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -4215,10 +3467,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_row_11",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -4226,10 +3476,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4237,10 +3485,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_bank_mask",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4248,10 +3494,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "PASR_row_segment_mask",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -4259,10 +3503,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr11",
 							name: "ID__2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4274,9 +3516,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr12",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr12",
@@ -4285,10 +3525,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr12",
 							name: "VDDQ_off",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4296,10 +3534,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "P2BR_addr",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4307,10 +3543,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "PRBS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4318,10 +3552,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "RL_EHF2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4329,10 +3561,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "CRCWL_EHF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4340,10 +3570,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "WR_EHF2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4351,10 +3579,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "RFU",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -4362,10 +3588,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr12",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4377,9 +3601,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr13",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr13",
@@ -4388,10 +3610,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr13",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -4399,10 +3619,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr13",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4414,9 +3632,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr14",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr14",
@@ -4425,10 +3641,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr14",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -4436,10 +3650,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr14",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4451,9 +3663,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "gddr6_mr15",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->gddr6_mr15",
@@ -4462,10 +3672,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->gddr6_mr15",
 							name: "MRS_to_chan_A",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4473,10 +3681,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr15",
 							name: "MRS_to_chan_B",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4484,10 +3690,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr15",
 							name: "CA_training",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -4495,10 +3699,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr15",
 							name: "unused",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "11",
 							lo: "4",
 							description: [
@@ -4506,10 +3708,8 @@
 							],
 						},
 						{
-							access: "bios->gddr6_mr15",
 							name: "ID",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -4521,9 +3721,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr0",
@@ -4532,10 +3730,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr0",
 							name: "read_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4543,10 +3739,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "write_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4554,10 +3748,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "TCSR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4565,10 +3757,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "rsvd_3_3",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4576,10 +3766,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "read_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4587,10 +3775,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "write_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4598,10 +3784,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "addrcmd_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4609,10 +3793,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr0",
 							name: "test_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4624,9 +3806,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr1",
@@ -4635,10 +3815,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr1",
 							name: "tWR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -4646,10 +3824,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr1",
 							name: "nom_drive",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "5",
 							description: [
@@ -4661,9 +3837,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr2",
@@ -4672,10 +3846,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr2",
 							name: "WL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -4683,10 +3855,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr2",
 							name: "RL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -4698,9 +3868,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr3",
@@ -4709,10 +3877,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr3",
 							name: "tRAS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "0",
 							description: [
@@ -4720,10 +3886,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr3",
 							name: "bank_groups",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4731,10 +3895,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr3",
 							name: "burst_length",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4746,9 +3908,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr4",
@@ -4757,10 +3917,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr4",
 							name: "ECC",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4768,10 +3926,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr4",
 							name: "WDM",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4779,10 +3935,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr4",
 							name: "PL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -4790,10 +3944,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr4",
 							name: "EWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4801,10 +3953,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr4",
 							name: "ERL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4812,10 +3962,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr4",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -4827,9 +3975,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr5",
@@ -4838,10 +3984,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr5",
 							name: "TRR_bank_address",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -4849,10 +3993,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr5",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -4860,10 +4002,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr5",
 							name: "TRR_peudochannel",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4871,10 +4011,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr5",
 							name: "TRR_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4886,9 +4024,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr6",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr6",
@@ -4897,18 +4033,14 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr6",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 						},
 						{
-							access: "bios->hbm_mr6",
 							name: "implicit_RP",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -4920,9 +4052,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr7",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr7",
@@ -4931,10 +4061,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr7",
 							name: "DWORD_loopback",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4942,10 +4070,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr7",
 							name: "DWORD_read_mux",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "1",
 							description: [
@@ -4953,10 +4079,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr7",
 							name: "DWORD_MISR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -4964,10 +4088,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr7",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4975,10 +4097,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr7",
 							name: "CATTRIP",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4990,9 +4110,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr8",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr8",
@@ -5001,10 +4119,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr8",
 							name: "DA28_lockout",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5012,10 +4128,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr8",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "1",
 							description: [
@@ -5027,9 +4141,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr9",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr9",
@@ -5038,10 +4150,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr9",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5053,9 +4163,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr10",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr10",
@@ -5064,10 +4172,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr10",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5079,9 +4185,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr11",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr11",
@@ -5090,10 +4194,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr11",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5105,9 +4207,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr12",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr12",
@@ -5116,10 +4216,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr12",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5131,9 +4229,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr13",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr13",
@@ -5142,10 +4238,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr13",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5157,9 +4251,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr14",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr14",
@@ -5168,10 +4260,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr14",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5183,9 +4273,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm_mr15",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm_mr15",
@@ -5194,10 +4282,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm_mr15",
 							name: "internal_vref",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -5205,10 +4291,8 @@
 							],
 						},
 						{
-							access: "bios->hbm_mr15",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -5220,9 +4304,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr0",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr0",
@@ -5231,10 +4313,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr0",
 							name: "read_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5242,10 +4322,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "write_DBI",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -5253,10 +4331,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "TCSR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -5264,10 +4340,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "rsvd_3_3",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -5275,10 +4349,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "read_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -5286,10 +4358,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "write_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -5297,10 +4367,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "addrcmd_parity",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -5308,10 +4376,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr0",
 							name: "test_mode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -5323,9 +4389,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr1",
@@ -5334,10 +4398,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr1",
 							name: "tWL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -5345,10 +4407,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr1",
 							name: "tPL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "5",
 							description: [
@@ -5360,9 +4420,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr2",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr2",
@@ -5371,10 +4429,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr2",
 							name: "tRL",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5386,9 +4442,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr3",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr3",
@@ -5397,10 +4451,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr3",
 							name: "tWR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5412,9 +4464,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr4",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr4",
@@ -5423,10 +4473,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr4",
 							name: "tRAS",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5438,9 +4486,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr5",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr5",
@@ -5449,10 +4495,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr5",
 							name: "tRTP",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5464,9 +4508,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr6",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr6",
@@ -5475,10 +4517,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr6",
 							name: "drive_down_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -5486,10 +4526,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr6",
 							name: "drive_up_strength",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -5497,10 +4535,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr6",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -5512,9 +4548,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr7",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr7",
@@ -5523,10 +4557,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr7",
 							name: "DWORD_loopback",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5534,10 +4566,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr7",
 							name: "DWORD_read_mux",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -5545,10 +4575,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr7",
 							name: "reserved_2_2",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -5556,10 +4584,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr7",
 							name: "DWORD_MISR",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -5567,10 +4593,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr7",
 							name: "reserved_6_6",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -5578,10 +4602,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr7",
 							name: "CATTRIP",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -5593,9 +4615,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr8",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr8",
@@ -5604,10 +4624,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr8",
 							name: "DA_lockout",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5615,10 +4633,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr8",
 							name: "duty_cycle_monitor",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -5626,10 +4642,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr8",
 							name: "ECS_log_auto_clear",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -5637,10 +4651,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr8",
 							name: "WDQS2CK_training",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -5648,10 +4660,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr8",
 							name: "RFM_levels",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -5659,10 +4669,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr8",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -5674,9 +4682,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr9",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr9",
@@ -5685,10 +4691,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr9",
 							name: "metadata",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5696,10 +4700,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "severity_reporting",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -5707,10 +4709,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECC_testmode",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -5718,10 +4718,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECC_test_pattern",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -5729,10 +4727,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECS_via_REFab",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -5740,10 +4736,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECS_during_SRF",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -5751,10 +4745,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECS_multibit",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -5762,10 +4754,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr9",
 							name: "ECS_logging",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -5777,9 +4767,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr10",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr10",
@@ -5788,10 +4776,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr10",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 						},
@@ -5800,9 +4786,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr11",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr11",
@@ -5811,10 +4795,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr11",
 							name: "DCA_WDQS0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -5822,10 +4804,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr11",
 							name: "DCA_WDQS1",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 							description: [
@@ -5837,9 +4817,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr12",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr12",
@@ -5848,10 +4826,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr12",
 							name: "vendor_specific",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 						},
@@ -5860,9 +4836,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr13",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr13",
@@ -5871,10 +4845,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr13",
 							name: "reserved",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -5886,9 +4858,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr14",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr14",
@@ -5897,10 +4867,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr14",
 							name: "reserved_0_0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5908,10 +4876,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr14",
 							name: "VrefCA",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "1",
 							description: [
@@ -5919,10 +4885,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr14",
 							name: "reserved_7_7",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -5934,9 +4898,7 @@
 			],
 		},
 		{
-			c_prefix: "union",
 			c_type: "hbm3_mr15",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->hbm3_mr15",
@@ -5945,10 +4907,8 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->hbm3_mr15",
 							name: "reserved_0_0",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -5956,10 +4916,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr15",
 							name: "VrefD",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "1",
 							description: [
@@ -5967,10 +4925,8 @@
 							],
 						},
 						{
-							access: "bios->hbm3_mr15",
 							name: "reserved_7_7",
 							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 							description: [

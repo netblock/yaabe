@@ -22,9 +22,7 @@
 	},
 	branches: [
 		{
-			c_prefix: "struct",
 			c_type: "atom_rom_header_v1_1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->table_header",
@@ -46,98 +44,81 @@
 					access: "bios->BiosRuntimeSegmentAddress",
 					name: "BiosRuntimeSegmentAddress",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ProtectedModeInfoOffset",
 					name: "ProtectedModeInfoOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ConfigFilenameOffset",
 					name: "ConfigFilenameOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CRC_BlockOffset",
 					name: "CRC_BlockOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BIOS_BootupMessageOffset",
 					name: "BIOS_BootupMessageOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Int10Offset",
 					name: "Int10Offset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PciBusDevInitCode",
 					name: "PciBusDevInitCode",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->IoBaseAddress",
 					name: "IoBaseAddress",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SubsystemVendorID",
 					name: "SubsystemVendorID",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SubsystemID",
 					name: "SubsystemID",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PCI_InfoOffset",
 					name: "PCI_InfoOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MasterCommandTableOffset",
 					name: "MasterCommandTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MasterDataTableOffset",
 					name: "MasterDataTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtendedFunctionCode",
 					name: "ExtendedFunctionCode",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_rom_header_v2_1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->table_header",
@@ -159,104 +140,86 @@
 					access: "bios->BiosRuntimeSegmentAddress",
 					name: "BiosRuntimeSegmentAddress",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ProtectedModeInfoOffset",
 					name: "ProtectedModeInfoOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ConfigFilenameOffset",
 					name: "ConfigFilenameOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CRC_BlockOffset",
 					name: "CRC_BlockOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BIOS_BootupMessageOffset",
 					name: "BIOS_BootupMessageOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Int10Offset",
 					name: "Int10Offset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PciBusDevInitCode",
 					name: "PciBusDevInitCode",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->IoBaseAddress",
 					name: "IoBaseAddress",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SubsystemVendorID",
 					name: "SubsystemVendorID",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SubsystemID",
 					name: "SubsystemID",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PCI_InfoOffset",
 					name: "PCI_InfoOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MasterCommandTableOffset",
 					name: "MasterCommandTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MasterDataTableOffset",
 					name: "MasterDataTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtendedFunctionCode",
 					name: "ExtendedFunctionCode",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PSPDirTableOffset",
 					name: "PSPDirTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_master_data_table_v1_1",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->table_header",
@@ -269,211 +232,176 @@
 					access: "bios->UtilityPipeLine",
 					name: "UtilityPipeLine",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MultimediaCapabilityInfo",
 					name: "MultimediaCapabilityInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MultimediaConfigInfo",
 					name: "MultimediaConfigInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->StandardVESA_Timing",
 					name: "StandardVESA_Timing",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareInfo",
 					name: "FirmwareInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PaletteData",
 					name: "PaletteData",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LCD_Info",
 					name: "LCD_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DIGTransmitterInfo",
 					name: "DIGTransmitterInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SMU_Info",
 					name: "SMU_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SupportedDevicesInfo",
 					name: "SupportedDevicesInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->GPIO_I2C_Info",
 					name: "GPIO_I2C_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VRAM_UsageByFirmware",
 					name: "VRAM_UsageByFirmware",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->GPIO_Pin_LUT",
 					name: "GPIO_Pin_LUT",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VESA_ToInternalModeLUT",
 					name: "VESA_ToInternalModeLUT",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->GFX_Info",
 					name: "GFX_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PowerPlayInfo",
 					name: "PowerPlayInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->GPUVirtualizationInfo",
 					name: "GPUVirtualizationInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SaveRestoreInfo",
 					name: "SaveRestoreInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PPLL_SS_Info",
 					name: "PPLL_SS_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->OemInfo",
 					name: "OemInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->XTMDS_Info",
 					name: "XTMDS_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MclkSS_Info",
 					name: "MclkSS_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Object_Header",
 					name: "Object_Header",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->IndirectIOAccess",
 					name: "IndirectIOAccess",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MC_InitParameter",
 					name: "MC_InitParameter",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASIC_VDDC_Info",
 					name: "ASIC_VDDC_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASIC_InternalSS_Info",
 					name: "ASIC_InternalSS_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->TV_VideoMode",
 					name: "TV_VideoMode",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VRAM_Info",
 					name: "VRAM_Info",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryTrainingInfo",
 					name: "MemoryTrainingInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->IntegratedSystemInfo",
 					name: "IntegratedSystemInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASIC_ProfilingInfo",
 					name: "ASIC_ProfilingInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VoltageObjectInfo",
 					name: "VoltageObjectInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PowerSourceInfo",
 					name: "PowerSourceInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ServiceInfo",
 					name: "ServiceInfo",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
@@ -489,106 +417,67 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->FirmwareCapability",
 							name: "FirmwarePosted",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "DualCRTC_Support",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "ExtendedDesktopSupport",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "2",
 							lo: "2",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "MemoryClockSS_Support",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "3",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "EngineClockSS_Support",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "4",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "GPUControlsBL",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "WMI_SUPPORT",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "6",
 							lo: "6",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "PPMode_Assigned",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "7",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "HyperMemory_Support",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "8",
 							lo: "8",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "HyperMemory_Size",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "12",
 							lo: "9",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "PostWithoutModeSet",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "13",
 							lo: "13",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "SCL2Redefined",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "14",
 							lo: "14",
 						},
 						{
-							access: "bios->FirmwareCapability",
 							name: "Reserved",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "15",
 							lo: "15",
 						},
@@ -597,7 +486,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v1_0",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -612,67 +500,46 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetEngineClock",
 					name: "DriverTargetEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetMemoryClock",
 					name: "DriverTargetMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Output",
 					name: "MaxEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Output",
 					name: "MaxMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxEngineClock",
 					name: "ASICMaxEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxMemoryClock",
 					name: "ASICMaxMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxTemperature",
 					name: "ASICMaxTemperature",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Padding",
@@ -695,62 +562,42 @@
 				{
 					access: "bios->MinEngineClockPLL_Input",
 					name: "MinEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Input",
 					name: "MaxEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Output",
 					name: "MinEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Input",
 					name: "MinMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Input",
 					name: "MaxMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Output",
 					name: "MinMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -762,37 +609,27 @@
 				{
 					access: "bios->ReferenceClock",
 					name: "ReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_Location",
 					name: "PM_RTS_Location",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_StreamSize",
 					name: "PM_RTS_StreamSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Design_ID",
 					name: "Design_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v1_2",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -807,73 +644,50 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetEngineClock",
 					name: "DriverTargetEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetMemoryClock",
 					name: "DriverTargetMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Output",
 					name: "MaxEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Output",
 					name: "MaxMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxEngineClock",
 					name: "ASICMaxEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxMemoryClock",
 					name: "ASICMaxMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxTemperature",
 					name: "ASICMaxTemperature",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinAllowedBL_Level",
 					name: "MinAllowedBL_Level",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Padding",
@@ -896,68 +710,46 @@
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Input",
 					name: "MinEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Input",
 					name: "MaxEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Output",
 					name: "MinEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Input",
 					name: "MinMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Input",
 					name: "MaxMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Output",
 					name: "MinMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output_lower",
 					name: "MinPixelClockPLL_Output_lower",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -969,37 +761,27 @@
 				{
 					access: "bios->ReferenceClock",
 					name: "ReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_Location",
 					name: "PM_RTS_Location",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_StreamSize",
 					name: "PM_RTS_StreamSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Design_ID",
 					name: "Design_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v1_3",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -1014,73 +796,50 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetEngineClock",
 					name: "DriverTargetEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetMemoryClock",
 					name: "DriverTargetMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Output",
 					name: "MaxEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Output",
 					name: "MaxMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxEngineClock",
 					name: "ASICMaxEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxMemoryClock",
 					name: "ASICMaxMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxTemperature",
 					name: "ASICMaxTemperature",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinAllowedBL_Level",
 					name: "MinAllowedBL_Level",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Padding",
@@ -1094,80 +853,54 @@
 				{
 					access: "bios->aulReservedForBIOS",
 					name: "aulReservedForBIOS",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->_3DAccelerationEngineClock",
 					name: "_3DAccelerationEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Input",
 					name: "MinEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Input",
 					name: "MaxEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Output",
 					name: "MinEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Input",
 					name: "MinMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Input",
 					name: "MaxMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Output",
 					name: "MinMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output_lower",
 					name: "MinPixelClockPLL_Output_lower",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -1179,37 +912,27 @@
 				{
 					access: "bios->ReferenceClock",
 					name: "ReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_Location",
 					name: "PM_RTS_Location",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_StreamSize",
 					name: "PM_RTS_StreamSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Design_ID",
 					name: "Design_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v1_4",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -1224,163 +947,110 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetEngineClock",
 					name: "DriverTargetEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DriverTargetMemoryClock",
 					name: "DriverTargetMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Output",
 					name: "MaxEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Output",
 					name: "MaxMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxEngineClock",
 					name: "ASICMaxEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxMemoryClock",
 					name: "ASICMaxMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ASICMaxTemperature",
 					name: "ASICMaxTemperature",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinAllowedBL_Level",
 					name: "MinAllowedBL_Level",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpVDDCVoltage",
 					name: "BootUpVDDCVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMinPixelClockPLL_Output",
 					name: "LcdMinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMaxPixelClockPLL_Output",
 					name: "LcdMaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->_3DAccelerationEngineClock",
 					name: "_3DAccelerationEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Input",
 					name: "MinEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Input",
 					name: "MaxEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Output",
 					name: "MinEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Input",
 					name: "MinMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Input",
 					name: "MaxMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Output",
 					name: "MinMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output_lower",
 					name: "MinPixelClockPLL_Output_lower",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -1392,37 +1062,27 @@
 				{
 					access: "bios->ReferenceClock",
 					name: "ReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_Location",
 					name: "PM_RTS_Location",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PM_RTS_StreamSize",
 					name: "PM_RTS_StreamSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Design_ID",
 					name: "Design_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v2_1",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -1437,163 +1097,110 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved1",
 					name: "Reserved1",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Output",
 					name: "MaxEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Output",
 					name: "MaxMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BinaryAlteredInfo",
 					name: "BinaryAlteredInfo",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultDispEngineClkFreq",
 					name: "DefaultDispEngineClkFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved3",
 					name: "Reserved3",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinAllowedBL_Level",
 					name: "MinAllowedBL_Level",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpVDDCVoltage",
 					name: "BootUpVDDCVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMinPixelClockPLL_Output",
 					name: "LcdMinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMaxPixelClockPLL_Output",
 					name: "LcdMaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved4",
 					name: "Reserved4",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Input",
 					name: "MinEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxEngineClockPLL_Input",
 					name: "MaxEngineClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinEngineClockPLL_Output",
 					name: "MinEngineClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Input",
 					name: "MinMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxMemoryClockPLL_Input",
 					name: "MaxMemoryClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinMemoryClockPLL_Output",
 					name: "MinMemoryClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output_lower",
 					name: "MinPixelClockPLL_Output_lower",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -1605,26 +1212,18 @@
 				{
 					access: "bios->CoreReferenceClock",
 					name: "CoreReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryReferenceClock",
 					name: "MemoryReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->UniphyDPModeExtClkFreq",
 					name: "UniphyDPModeExtClkFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved5",
@@ -1646,10 +1245,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ProductBranding",
 							name: "EMBEDDED_CAP",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1657,10 +1253,7 @@
 							],
 						},
 						{
-							access: "bios->ProductBranding",
 							name: "Reserved",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1668,10 +1261,7 @@
 							],
 						},
 						{
-							access: "bios->ProductBranding",
 							name: "BRANDING_ID",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 							description: [
@@ -1683,7 +1273,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_firmware_info_v2_2",
 			atomtree: "atomtree_firmware_info",
 			leaves: [
@@ -1698,109 +1287,78 @@
 					access: "bios->FirmwareRevision",
 					name: "FirmwareRevision",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultEngineClock",
 					name: "DefaultEngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMemoryClock",
 					name: "DefaultMemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SPLL_OutputFreq",
 					name: "SPLL_OutputFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->GPUPLL_OutputFreq",
 					name: "GPUPLL_OutputFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved1",
 					name: "Reserved1",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Output",
 					name: "MaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BinaryAlteredInfo",
 					name: "BinaryAlteredInfo",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultDispEngineClkFreq",
 					name: "DefaultDispEngineClkFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved3",
 					name: "Reserved3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinAllowedBL_Level",
 					name: "MinAllowedBL_Level",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpVDDCVoltage",
 					name: "BootUpVDDCVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMinPixelClockPLL_Output",
 					name: "LcdMinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->LcdMaxPixelClockPLL_Output",
 					name: "LcdMaxPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved4",
 					name: "Reserved4",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Output",
 					name: "MinPixelClockPLL_Output",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->RemoteDisplayConfig",
 					name: "RemoteDisplayConfig",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved5",
@@ -1815,37 +1373,27 @@
 					access: "bios->Reserved6",
 					name: "Reserved6",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved7",
 					name: "Reserved7",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClock",
 					name: "MaxPixelClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MinPixelClockPLL_Input",
 					name: "MinPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MaxPixelClockPLL_Input",
 					name: "MaxPixelClockPLL_Input",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpVDDCIVoltage",
 					name: "BootUpVDDCIVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FirmwareCapability",
@@ -1857,32 +1405,22 @@
 				{
 					access: "bios->CoreReferenceClock",
 					name: "CoreReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryReferenceClock",
 					name: "MemoryReferenceClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->UniphyDPModeExtClkFreq",
 					name: "UniphyDPModeExtClkFreq",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryModule_ID",
 					name: "MemoryModule_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CoolingSolution_ID",
 					name: "CoolingSolution_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ProductBranding",
@@ -1894,20 +1432,14 @@
 				{
 					access: "bios->Reserved9",
 					name: "Reserved9",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpMVDDCVoltage",
 					name: "BootUpMVDDCVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BootUpVDDGFXVoltage",
 					name: "BootUpVDDGFXVoltage",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved10",
@@ -1921,26 +1453,21 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_init_reg_index_format",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->RegIndex",
 					name: "RegIndex",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PreRegDataLength",
 					name: "PreRegDataLength",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_reg_setting_data_block",
 			atomtree: "atomtree_init_reg_block",
 			leaves: [
@@ -1962,10 +1489,8 @@
 						count: "atomtree->num_data_entries",
 						pattern: [
 							{
-								access: "ATUI_NULL",
 								name: "reg_data [%02u]",
 								display: "ATUI_HEX",
-								fancy: "ATUI_NOFANCY",
 							},
 						],
 					},
@@ -1973,7 +1498,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "reg_index_dummy",
 			atomtree: "atomtree_init_reg_block",
 			leaves: [
@@ -1988,7 +1512,6 @@
 						count: "atomtree->num_index",
 						pattern: [
 							{
-								access: "ATUI_NULL",
 								name: "RegIndexBuf [%02u]",
 								display: "ATUI_NAN",
 								fancy: "ATUI_INLINE",
@@ -2000,12 +1523,10 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "reg_settings_dummy",
 			atomtree: "atomtree_init_reg_block",
 			leaves: [
 				{
-					access: "ATUI_NULL",
 					name: "reg_setting_list",
 					display: "ATUI_NAN",
 					fancy: "ATUI_DYNARRAY",
@@ -2015,7 +1536,6 @@
 						count: "atomtree->num_data_blocks",
 						pattern: [
 							{
-								access: "ATUI_NULL",
 								name: "reg_setting_list [%02u]",
 								display: "ATUI_NAN",
 								fancy: "ATUI_PETIOLE",
@@ -2027,31 +1547,24 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_init_reg_block",
 			atomtree: "atomtree_init_reg_block",
 			leaves: [
 				{
 					access: "bios->RegIndexTblSize",
 					name: "RegIndexTblSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->RegDataBlkSize",
 					name: "RegDataBlkSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
-					access: "ATUI_NULL",
 					name: "RegIndexBuf",
 					display: "ATUI_NAN",
 					fancy: "ATUI_PETIOLE",
 					fancy_data: "reg_index_dummy",
 				},
 				{
-					access: "ATUI_NULL",
 					name: "RegDataBuf",
 					display: "ATUI_NAN",
 					fancy: "ATUI_PETIOLE",
@@ -2062,7 +1575,6 @@
 		{
 			c_prefix: "union",
 			c_type: "vram_module_channel_config",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ChannelConfig",
@@ -2071,18 +1583,12 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->ChannelConfig",
 							name: "channel_combo",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->ChannelConfig",
 							name: "channel_width",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 							description: [
@@ -2096,7 +1602,6 @@
 		{
 			c_prefix: "union",
 			c_type: "npl_rtdelay",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->NPL_RT",
@@ -2108,10 +1613,7 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->NPL_RT",
 							name: "npl_round_trip",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -2119,18 +1621,12 @@
 							],
 						},
 						{
-							access: "bios->NPL_RT",
 							name: "reserved",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "4",
 						},
 						{
-							access: "bios->NPL_RT",
 							name: "battery_odt_mask",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
@@ -2141,7 +1637,6 @@
 		{
 			c_prefix: "union",
 			c_type: "mem_preamble",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->Preamble",
@@ -2150,18 +1645,12 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->Preamble",
 							name: "read",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->Preamble",
 							name: "write",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
@@ -2172,7 +1661,6 @@
 		{
 			c_prefix: "union",
 			c_type: "vrammodule_misc",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->Misc",
@@ -2181,10 +1669,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->Misc",
 							name: "dual_rank",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2192,10 +1677,7 @@
 							],
 						},
 						{
-							access: "bios->Misc",
 							name: "Burstlength_8",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2203,26 +1685,17 @@
 							],
 						},
 						{
-							access: "bios->Misc",
 							name: "reserved1",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "4",
 							lo: "2",
 						},
 						{
-							access: "bios->Misc",
 							name: "dual_cs",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "5",
 							lo: "5",
 						},
 						{
-							access: "bios->Misc",
 							name: "reserved2",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "6",
 						},
@@ -2233,7 +1706,6 @@
 		{
 			c_prefix: "union",
 			c_type: "cdr_bandwidth",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->CDR_Bandwidth",
@@ -2245,18 +1717,12 @@
 					],
 					fancy_data: [
 						{
-							access: "bios->CDR_Bandwidth",
 							name: "read_bandwidth",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "0",
 						},
 						{
-							access: "bios->CDR_Bandwidth",
 							name: "write_bandwidth",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
@@ -2267,7 +1733,6 @@
 		{
 			c_prefix: "union",
 			c_type: "bank_col_counts",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->BankCol",
@@ -2276,10 +1741,7 @@
 					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
-							access: "bios->BankCol",
 							name: "num_columns",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -2287,10 +1749,7 @@
 							],
 						},
 						{
-							access: "bios->BankCol",
 							name: "num_banks",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -2298,10 +1757,7 @@
 							],
 						},
 						{
-							access: "bios->BankCol",
 							name: "rsvd0",
-							display: "ATUI_DEC",
-							fancy: "_ATUI_BITCHILD",
 							hi: "7",
 							lo: "4",
 						},
@@ -2310,9 +1766,7 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "mc_atom_dram_data_remap",
-			atomtree: "atui_nullstruct",
 			leaves: [
 				{
 					access: "bios->ByteRemapCh0",
@@ -2387,7 +1841,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v1",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -2395,31 +1848,25 @@
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->EMRSValue",
 					name: "EMRSValue",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MRSValue",
 					name: "MRSValue",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -2445,32 +1892,22 @@
 				{
 					access: "bios->Row",
 					name: "Row",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Column",
 					name: "Column",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Bank",
 					name: "Bank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Rank",
 					name: "Rank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelConfig",
@@ -2482,14 +1919,10 @@
 				{
 					access: "bios->DefaultMVDDQ_ID",
 					name: "DefaultMVDDQ_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMVDDC_ID",
 					name: "DefaultMVDDC_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved3",
@@ -2500,7 +1933,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v2",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -2508,61 +1940,47 @@
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Flags",
 					name: "Flags",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->EngineClock",
 					name: "EngineClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryClock",
 					name: "MemoryClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->EMRSValue",
 					name: "EMRSValue",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MRSValue",
 					name: "MRSValue",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -2588,32 +2006,22 @@
 				{
 					access: "bios->Row",
 					name: "Row",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Column",
 					name: "Column",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Bank",
 					name: "Bank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Rank",
 					name: "Rank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelConfig",
@@ -2625,20 +2033,14 @@
 				{
 					access: "bios->DefaultMVDDQ_ID",
 					name: "DefaultMVDDQ_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMVDDC_ID",
 					name: "DefaultMVDDC_ID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved3",
@@ -2649,472 +2051,331 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_memory_timing_format_v0",
 			atomtree: "atomtree_vram_module",
 			leaves: [
 				{
 					access: "bios->ClkRange",
 					name: "ClkRange",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR0",
 					name: "MR0",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR1",
 					name: "MR1",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CL",
 					name: "CL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->WL",
 					name: "WL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRAS",
 					name: "tRAS",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRC",
 					name: "tRC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRFC",
 					name: "tRFC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDR",
 					name: "tRCDR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDW",
 					name: "tRCDW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRP",
 					name: "tRP",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRRD",
 					name: "tRRD",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWR",
 					name: "tWR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWTR",
 					name: "tWTR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tPDIX",
 					name: "tPDIX",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tFAW",
 					name: "tFAW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tAOND",
 					name: "tAOND",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_memory_timing_format_v1",
 			atomtree: "atomtree_vram_module",
 			leaves: [
 				{
 					access: "bios->ClkRange",
 					name: "ClkRange",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR0",
 					name: "MR0",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR1",
 					name: "MR1",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CL",
 					name: "CL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->WL",
 					name: "WL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRAS",
 					name: "tRAS",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRC",
 					name: "tRC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRFC",
 					name: "tRFC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDR",
 					name: "tRCDR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDW",
 					name: "tRCDW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRP",
 					name: "tRP",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRRD",
 					name: "tRRD",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWR",
 					name: "tWR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWTR",
 					name: "tWTR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tPDIX",
 					name: "tPDIX",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tFAW",
 					name: "tFAW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tAOND",
 					name: "tAOND",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->flag",
 					name: "flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCCDL",
 					name: "tCCDL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCRCRL",
 					name: "tCRCRL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCRCWL",
 					name: "tCRCWL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKE",
 					name: "tCKE",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKRSE",
 					name: "tCKRSE",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKRSX",
 					name: "tCKRSX",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tFAW32",
 					name: "tFAW32",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR5",
 					name: "MR5",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Terminator",
 					name: "Terminator",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_memory_timing_format_v2",
 			atomtree: "atomtree_vram_module",
 			leaves: [
 				{
 					access: "bios->ClkRange",
 					name: "ClkRange",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR0",
 					name: "MR0",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR1",
 					name: "MR1",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CL",
 					name: "CL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->WL",
 					name: "WL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRAS",
 					name: "tRAS",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRC",
 					name: "tRC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRFC",
 					name: "tRFC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDR",
 					name: "tRCDR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRCDW",
 					name: "tRCDW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRP",
 					name: "tRP",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tRRD",
 					name: "tRRD",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWR",
 					name: "tWR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tWTR",
 					name: "tWTR",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tPDIX",
 					name: "tPDIX",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tFAW",
 					name: "tFAW",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tAOND",
 					name: "tAOND",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->flag",
 					name: "flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCCDL",
 					name: "tCCDL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCRCRL",
 					name: "tCRCRL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCRCWL",
 					name: "tCRCWL",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKE",
 					name: "tCKE",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKRSE",
 					name: "tCKRSE",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tCKRSX",
 					name: "tCKRSX",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->tFAW32",
 					name: "tFAW32",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR4",
 					name: "MR4",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR5",
 					name: "MR5",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Terminator",
 					name: "Terminator",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v3",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -3128,44 +2389,30 @@
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMVDDQ",
 					name: "DefaultMVDDQ",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DefaultMVDDC",
 					name: "DefaultMVDDC",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelSize",
 					name: "ChannelSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NPL_RT",
@@ -3177,26 +2424,20 @@
 				{
 					access: "bios->Flag",
 					name: "Flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DllDisClock",
 					name: "DllDisClock",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3215,49 +2456,34 @@
 				{
 					access: "bios->Row",
 					name: "Row",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Column",
 					name: "Column",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Bank",
 					name: "Bank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Rank",
 					name: "Rank",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->BurstSize",
 					name: "BurstSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DllDisBit",
 					name: "DllDisBit",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
@@ -3271,13 +2497,10 @@
 				{
 					access: "bios->MemAttrib",
 					name: "MemAttrib",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v4",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -3291,8 +2514,6 @@
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->mc_arb_ramcfg",
@@ -3308,13 +2529,10 @@
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3326,27 +2544,20 @@
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelWidth",
 					name: "ChannelWidth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
 				{
 					access: "bios->Flag",
 					name: "Flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Misc",
@@ -3358,8 +2569,6 @@
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NPL_RT",
@@ -3378,26 +2587,21 @@
 				{
 					access: "bios->MemorySize",
 					name: "MemorySize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryVendorID",
@@ -3409,14 +2613,10 @@
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FIFODepth",
 					name: "FIFODepth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CDR_Bandwidth",
@@ -3428,7 +2628,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v5",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -3442,8 +2641,6 @@
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->mc_arb_ramcfg",
@@ -3459,13 +2656,10 @@
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3477,27 +2671,20 @@
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelWidth",
 					name: "ChannelWidth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
 				{
 					access: "bios->Flag",
 					name: "Flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Misc",
@@ -3509,8 +2696,6 @@
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NPL_RT",
@@ -3529,26 +2714,21 @@
 				{
 					access: "bios->MemorySize",
 					name: "MemorySize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved3",
 					name: "Reserved3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryVendorID",
@@ -3560,14 +2740,10 @@
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FIFODepth",
 					name: "FIFODepth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CDR_Bandwidth",
@@ -3579,7 +2755,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v6",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -3593,8 +2768,6 @@
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->mc_arb_ramcfg",
@@ -3610,13 +2783,10 @@
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3628,27 +2798,20 @@
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelWidth",
 					name: "ChannelWidth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
 				{
 					access: "bios->Flag",
 					name: "Flag",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Misc",
@@ -3660,8 +2823,6 @@
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NPL_RT",
@@ -3680,26 +2841,21 @@
 				{
 					access: "bios->MemorySize",
 					name: "MemorySize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryVendorID",
@@ -3711,14 +2867,10 @@
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FIFODepth",
 					name: "FIFODepth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CDR_Bandwidth",
@@ -3730,15 +2882,12 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v7",
 			atomtree: "atomtree_vram_module",
 			leaves: [
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->mc_arb_ramcfg",
@@ -3754,13 +2903,10 @@
 					access: "bios->EnableChannels",
 					name: "EnableChannels",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3772,27 +2918,20 @@
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelWidth",
 					name: "ChannelWidth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
 				{
 					access: "bios->Reserve",
 					name: "Reserve",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Misc",
@@ -3804,8 +2943,6 @@
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NPL_RT",
@@ -3824,32 +2961,26 @@
 				{
 					access: "bios->MemorySize",
 					name: "MemorySize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->SEQSettingOffset",
 					name: "SEQSettingOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryVendorID",
@@ -3861,14 +2992,10 @@
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FIFODepth",
 					name: "FIFODepth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CDR_Bandwidth",
@@ -3889,7 +3016,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_module_v8",
 			atomtree: "atomtree_vram_module",
 			leaves: [
@@ -3903,8 +3029,6 @@
 				{
 					access: "bios->ModuleSize",
 					name: "ModuleSize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->mc_arb_ramcfg",
@@ -3920,13 +3044,10 @@
 					access: "bios->EnableChannels",
 					name: "EnableChannels",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ExtMemoryID",
 					name: "ExtMemoryID",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryType",
@@ -3938,19 +3059,14 @@
 				{
 					access: "bios->ChannelNum",
 					name: "ChannelNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->ChannelWidth",
 					name: "ChannelWidth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Density",
 					name: "Density",
-					display: "ATUI_DEC",
 					fancy: "ATUI_ENUM",
 					fancy_data: "DRAM_DENSITY_e",
 				},
@@ -3971,44 +3087,33 @@
 				{
 					access: "bios->VREFI",
 					name: "VREFI",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemorySize",
 					name: "MemorySize",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->McTunningSetId",
 					name: "McTunningSetId",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->RowNum",
 					name: "RowNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR2",
 					name: "MR2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MR3",
 					name: "MR3",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryVendorID",
@@ -4020,14 +3125,10 @@
 				{
 					access: "bios->RefreshRateFactor",
 					name: "RefreshRateFactor",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->FIFODepth",
 					name: "FIFODepth",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->CDR_Bandwidth",
@@ -4050,13 +3151,11 @@
 					access: "bios->BankMapCfg",
 					name: "BankMapCfg",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->strMemPNString",
@@ -4070,7 +3169,6 @@
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_info_v1_2",
 			atomtree: "atomtree_vram_info_v1_2",
 			leaves: [
@@ -4084,13 +3182,10 @@
 				{
 					access: "bios->NumOfVRAMModule",
 					name: "NumOfVRAMModule",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_info_v1_3",
 			atomtree: "atomtree_vram_info_v1_3",
 			leaves: [
@@ -4105,19 +3200,16 @@
 					access: "bios->MemAdjustTblOffset",
 					name: "MemAdjustTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemClkPatchTblOffset",
 					name: "MemClkPatchTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VID_PinsShift",
@@ -4131,13 +3223,10 @@
 				{
 					access: "bios->NumOfVRAMModule",
 					name: "NumOfVRAMModule",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_info_v1_4",
 			atomtree: "atomtree_vram_info_v1_4",
 			leaves: [
@@ -4152,19 +3241,16 @@
 					access: "bios->MemAdjustTblOffset",
 					name: "MemAdjustTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemClkPatchTblOffset",
 					name: "MemClkPatchTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
 					name: "Reserved",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemDQ7_0ByteRemap",
@@ -4189,13 +3275,10 @@
 				{
 					access: "bios->NumOfVRAMModule",
 					name: "NumOfVRAMModule",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_info_header_v2_1",
 			atomtree: "atomtree_vram_info_header_v2_1",
 			leaves: [
@@ -4210,19 +3293,16 @@
 					access: "bios->MemAdjustTblOffset",
 					name: "MemAdjustTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemClkPatchTblOffset",
 					name: "MemClkPatchTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->PerBytePresetOffset",
 					name: "PerBytePresetOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved",
@@ -4233,31 +3313,23 @@
 				{
 					access: "bios->NumOfVRAMModule",
 					name: "NumOfVRAMModule",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryClkPatchTblVer",
 					name: "MemoryClkPatchTblVer",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VramModuleVer",
 					name: "VramModuleVer",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved2",
 					name: "Reserved2",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
 		{
-			c_prefix: "struct",
 			c_type: "atom_vram_info_header_v2_2",
 			atomtree: "atomtree_vram_info_header_v2_2",
 			leaves: [
@@ -4272,61 +3344,47 @@
 					access: "bios->MemAdjustTblOffset",
 					name: "MemAdjustTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemClkPatchTblOffset",
 					name: "MemClkPatchTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->McAdjustPerTileTblOffset",
 					name: "McAdjustPerTileTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->McPhyInitTableOffset",
 					name: "McPhyInitTableOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->DramDataRemapTblOffset",
 					name: "DramDataRemapTblOffset",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->Reserved1",
 					name: "Reserved1",
 					display: "ATUI_HEX",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->NumOfVRAMModule",
 					name: "NumOfVRAMModule",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->MemoryClkPatchTblVer",
 					name: "MemoryClkPatchTblVer",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->VramModuleVer",
 					name: "VramModuleVer",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 				{
 					access: "bios->McPhyTileNum",
 					name: "McPhyTileNum",
-					display: "ATUI_DEC",
-					fancy: "ATUI_NOFANCY",
 				},
 			],
 		},
