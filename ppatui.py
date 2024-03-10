@@ -235,9 +235,11 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 
 			if not ("enum" in leaf.fancy_data):
 				leaf.fancy_data["enum"] = "NULL"
-			if leaf.access:
+			if leaf.access and (leaf.access not in ("NULL", "ATUI_NULL")):
+				# TODO clean ATUI_NULL
 				access = leaf.access + "[0]" # direct array
 			else:
+				leaf.access = None
 				access = fancy_data["deferred"] + "[0][0]" # array of pointers
 
 			old_default = leaf_defaults["dynpattern"]
@@ -299,7 +301,7 @@ indent + ".description = {\n"
 	descr_texts = ""
 	for d in descriptions:
 		if d:
-			descr_texts += des_entry_template % d
+			descr_texts += des_entry_template % d.replace("\"","\\\"")
 		else:
 			descr_texts += des_null_entry_template
 	return descr_template % descr_texts
@@ -317,7 +319,7 @@ indent + "{\n"
 + child_indent + "\t| _PPATUI_LEAF_SIGNED(%s)\n"
 + child_indent + "\t| _PPATUI_LEAF_FRACTION(%s)\n"
 + child_indent + "),\n"
-+ child_indent + ".num_bytes = _PPATUI_LEAF_SIGNED(%s),\n"
++ child_indent + ".num_bytes = _PPATUI_NULLPTR_SIZE(%s),\n"
 + child_indent + ".array_size = 1,\n"
 + child_indent + ".fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
 + child_indent + ".total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
@@ -363,7 +365,10 @@ indent + "{\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_DYNARRAY":
-			access_var = leaf.access + "[0]"
+			if leaf.access:
+				access_var = leaf.access + "[0]"
+			else:
+				access_var = "ATUI_NULL" #TODO depricate
 			leaf_text_extra = ""
 			#leaf_text_extra = (
 			#	child_indent + ".num_child_leaves = %u,\n"
@@ -378,6 +383,8 @@ indent + "{\n"
 			assert 0, leaf.fancy
 
 		leaf_text_extra += description_to_text(leaf.description, child_indent)
+
+		leaf.name = leaf.name.replace("\"","\\\"")
 
 		leaves_text += leaf_template % (
 			leaf.name, leaf.name, leaf.access,
@@ -394,7 +401,7 @@ def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
 	child_indent = indent + "\t"
 	bounds_template = (
 indent + "{\n"
-+ child_indent + ".deferred_start_array = %s,\n"
++ child_indent + ".deferred_start_array = (const void* const*) %s,\n"
 + child_indent + ".element_size = sizeof(%s[0]),\n"
 + child_indent + ".dynarray_length = %s,\n"
 + child_indent + ".numleaves = %u,\n"
@@ -405,7 +412,7 @@ indent + "{\n"
 	if leaf.access:
 		access = leaf.access # direct array
 	else:
-		access = fancy_data["deferred"] + "[0]" # array of pointers
+		access = leaf.fancy_data["deferred"] + "[0]" # array of pointers
 	return bounds_template % (
 		leaf.fancy_data["deferred"],
 		access,
