@@ -359,8 +359,8 @@ indent + "{\n"
 			leaf_text_extra %= (len(leaf.fancy_data),)
 		elif leaf.fancy == "_ATUI_BITCHILD":
 			leaf_text_extra = (
-				child_indent + ".bitfield_hi = %s,\n"
-				+ child_indent + ".bitfield_lo = %s,\n"
+				child_indent + ".bitfield_hi = %u,\n"
+				+ child_indent + ".bitfield_lo = %u,\n"
 			)
 			leaf_text_extra %= (leaf.hi, leaf.lo)
 		elif leaf.fancy in ("ATUI_PETIOLE", "ATUI_INLINE"):

@@ -1,203 +1,166 @@
-{
-	class: "branch",
-	global_default: {
-		branch_defaults: {
-			c_prefix: "struct",
-			atomtree: "atui_nullstruct",
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atui_nullstruct",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
 		},
-		leaf_defaults: {
-			generic: {
-				display: "ATUI_DEC",
-				fancy: "ATUI_NOFANCY",
-			},
-			bitchild: {
-				display: "ATUI_DEC",
-				fancy: "ATUI_NOFANCY",
-			},
-			dynpattern: {
-				display: "ATUI_DEC",
-				fancy: "ATUI_NOFANCY",
-			},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
 		},
 	},
-	branches: [
+}, branches: [
+{
+	c_prefix: "struct",
+	c_type: "smu_powerplay_table_header",
+	atomtree: "atomtree_powerplaytable",
+	leaves: [
 		{
-			c_prefix: "struct",
-			c_type: "smu_powerplay_table_header",
-			atomtree: "atomtree_powerplaytable",
-			leaves: [
-				{
-					access: "bios->header",
-					name: "atom_common_table_header",
-					display: "ATUI_NAN",
-					fancy: "ATUI_INLINE",
-					fancy_data: "atom_common_table_header",
-				},
-				{
-					access: "bios->table_revision",
-					name: "table_revision",
-				},
-				{
-					access: "bios->table_size",
-					name: "table_size",
-				},
-			],
+			access: "bios->header",
+			name: "atom_common_table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->table_revision",
+			name: "table_revision",
+		}, {
+			access: "bios->table_size",
+			name: "table_size",
 		},
+	],
+}, {
+	c_prefix: "union",
+	c_type: "powerplay_platform_caps",
+	atomtree: "atomtree_powerplaytable",
+	leaves: [
 		{
-			c_prefix: "union",
-			c_type: "powerplay_platform_caps",
-			atomtree: "atomtree_powerplaytable",
-			leaves: [
+			access: "bios->platform_caps",
+			name: "platform_caps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
 				{
-					access: "bios->platform_caps",
-					name: "platform_caps",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
-					fancy_data: [
-						{
-							name: "powerplay",
-							hi: "0",
-							lo: "0",
-							description: [
-								{language: "english", text: "whether CCC needs to show Powerplay page."},
-							],
-						},
-						{
-							name: "sbios_powersource",
-							hi: "1",
-							lo: "1",
-							description: [
-								{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS."},
-							],
-						},
-						{
-							name: "hardware_dc",
-							hi: "2",
-							lo: "2",
-							description: [
-								{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly."},
-							],
-						},
-						{
-							name: "BACO",
-							hi: "3",
-							lo: "3",
-							description: [
-								{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode."},
-							],
-						},
-						{
-							name: "MACO",
-							hi: "4",
-							lo: "4",
-							description: [
-								{language: "english", text: "whether board supports the MACO circuitry."},
-							],
-						},
-						{
-							name: "shadow_pstate",
-							hi: "5",
-							lo: "5",
-							description: [
-								{language: "english", text: "whether board supports the Shadow Pstate."},
-							],
-						},
-						{
-							name: "reserved",
-							hi: "31",
-							lo: "6",
-						},
+					name: "powerplay",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "whether CCC needs to show Powerplay page."},
 					],
-				},
-			],
-		},
-		{
-			c_prefix: "struct",
-			c_type: "quadratic_f32",
-			atomtree: "atomtree_powerplaytable",
-			leaves: [
-				{
-					access: "bios->a",
-					name: "a",
-				},
-				{
-					access: "bios->b",
-					name: "b",
-				},
-				{
-					access: "bios->c",
-					name: "c",
-				},
-			],
-		},
-		{
-			c_prefix: "struct",
-			c_type: "linear_f32",
-			atomtree: "atomtree_powerplaytable",
-			leaves: [
-				{
-					access: "bios->m",
-					name: "m",
-				},
-				{
-					access: "bios->b",
-					name: "b",
-				},
-			],
-		},
-		{
-			c_prefix: "struct",
-			c_type: "droop_f32",
-			atomtree: "atomtree_powerplaytable",
-			leaves: [
-				{
-					access: "bios->a",
-					name: "a",
-				},
-				{
-					access: "bios->b",
-					name: "b",
-				},
-				{
-					access: "bios->c",
-					name: "c",
-				},
-			],
-		},
-		{
-			c_prefix: "union",
-			c_type: "led_display_control",
-			atomtree: "atui_nullstruct",
-			leaves: [
-				{
-					access: "bios->LedEnableMask",
-					name: "LedEnableMask",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
-					fancy_data: [
-						{
-							name: "GFX_DPM",
-							hi: "0",
-							lo: "0",
-						},
-						{
-							name: "PCIE",
-							hi: "1",
-							lo: "1",
-						},
-						{
-							name: "ERROR",
-							hi: "2",
-							lo: "2",
-						},
-						{
-							name: "reserved",
-							hi: "7",
-							lo: "3",
-						},
+				}, {
+					name: "sbios_powersource",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS."},
 					],
+				}, {
+					name: "hardware_dc",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly."},
+					],
+				}, {
+					name: "BACO",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode."},
+					],
+				}, {
+					name: "MACO",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "whether board supports the MACO circuitry."},
+					],
+				}, {
+					name: "shadow_pstate",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "whether board supports the Shadow Pstate."},
+					],
+				}, {
+					name: "reserved",
+					hi: 31, lo: 6,
 				},
 			],
 		},
 	],
-}
+}, {
+	c_prefix: "struct",
+	c_type: "quadratic_f32",
+	atomtree: "atomtree_powerplaytable",
+	leaves: [
+		{
+			access: "bios->a",
+			name: "a",
+		}, {
+			access: "bios->b",
+			name: "b",
+		}, {
+			access: "bios->c",
+			name: "c",
+		},
+	],
+}, {
+	c_prefix: "struct",
+	c_type: "linear_f32",
+	atomtree: "atomtree_powerplaytable",
+	leaves: [
+		{
+			access: "bios->m",
+			name: "m",
+		}, {
+			access: "bios->b",
+			name: "b",
+		},
+	],
+}, {
+	c_prefix: "struct",
+	c_type: "droop_f32",
+	atomtree: "atomtree_powerplaytable",
+	leaves: [
+		{
+			access: "bios->a",
+			name: "a",
+		}, {
+			access: "bios->b",
+			name: "b",
+		}, {
+			access: "bios->c",
+			name: "c",
+		},
+	],
+}, {
+	c_prefix: "union",
+	c_type: "led_display_control",
+	atomtree: "atui_nullstruct",
+	leaves: [
+		{
+			access: "bios->LedEnableMask",
+			name: "LedEnableMask",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "GFX_DPM",
+					hi: 0, lo: 0,
+				}, {
+					name: "PCIE",
+					hi: 1, lo: 1,
+				}, {
+					name: "ERROR",
+					hi: 2, lo: 2,
+				}, {
+					name: "reserved",
+					hi: 7, lo: 3,
+				},
+			],
+		},
+	],
+},
+
+],}
