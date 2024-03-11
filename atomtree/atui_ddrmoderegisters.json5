@@ -7,8 +7,8 @@
 		},
 		leaf_defaults: {
 			generic: {
-				display: "ATUI_DEC",
-				fancy: "ATUI_NOFANCY",
+				display: "ATUI_BIN",
+				fancy: "ATUI_BITFIELD",
 			},
 			bitchild: {
 				display: "ATUI_DEC",
@@ -27,12 +27,9 @@
 				{
 					access: "bios->ddr1_mr0",
 					name: "ddr1_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -41,7 +38,6 @@
 						},
 						{
 							name: "burst_type",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -50,7 +46,6 @@
 						},
 						{
 							name: "tCL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -59,7 +54,6 @@
 						},
 						{
 							name: "test_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -68,7 +62,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -77,7 +70,6 @@
 						},
 						{
 							name: "operating_rsvd",
-							display: "ATUI_DEC",
 							hi: "13",
 							lo: "9",
 							description: [
@@ -86,7 +78,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "14",
 						},
@@ -100,12 +91,9 @@
 				{
 					access: "bios->ddr1_emr1",
 					name: "ddr1_emr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -114,7 +102,6 @@
 						},
 						{
 							name: "drive_strength",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -123,7 +110,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -132,13 +118,11 @@
 						},
 						{
 							name: "operating_rsvd",
-							display: "ATUI_DEC",
 							hi: "13",
 							lo: "3",
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "14",
 						},
@@ -152,12 +136,9 @@
 				{
 					access: "bios->ddr2_mr0",
 					name: "ddr2_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -166,7 +147,6 @@
 						},
 						{
 							name: "burst_type",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -175,7 +155,6 @@
 						},
 						{
 							name: "tCL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -184,7 +163,6 @@
 						},
 						{
 							name: "test_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -193,7 +171,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -202,7 +179,6 @@
 						},
 						{
 							name: "WR",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -211,7 +187,6 @@
 						},
 						{
 							name: "PD_exit_time",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -220,7 +195,6 @@
 						},
 						{
 							name: "rsvd_15_13",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 						},
@@ -234,12 +208,9 @@
 				{
 					access: "bios->ddr2_emr1",
 					name: "ddr2_emr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -248,7 +219,6 @@
 						},
 						{
 							name: "drive_strength",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -257,7 +227,6 @@
 						},
 						{
 							name: "RTT_Nom_lo_bit",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -266,7 +235,6 @@
 						},
 						{
 							name: "Additive_Latency",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -275,7 +243,6 @@
 						},
 						{
 							name: "RTT_Nom_hi_bit",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -284,7 +251,6 @@
 						},
 						{
 							name: "OCD_calibration",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "7",
 							description: [
@@ -293,7 +259,6 @@
 						},
 						{
 							name: "DQS",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -302,7 +267,6 @@
 						},
 						{
 							name: "RDQS",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -311,7 +275,6 @@
 						},
 						{
 							name: "output_disable",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -320,7 +283,6 @@
 						},
 						{
 							name: "rsvd_15_13",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 						},
@@ -334,12 +296,9 @@
 				{
 					access: "bios->ddr2_emr2",
 					name: "ddr2_emr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "PASR",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -348,7 +307,6 @@
 						},
 						{
 							name: "DCC",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -357,7 +315,6 @@
 						},
 						{
 							name: "rsvd_6_4",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -366,7 +323,6 @@
 						},
 						{
 							name: "HT_SRF",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -375,7 +331,6 @@
 						},
 						{
 							name: "rsvd_12_8",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "8",
 							description: [
@@ -384,7 +339,6 @@
 						},
 						{
 							name: "rsvd_15_13",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 						},
@@ -398,12 +352,9 @@
 				{
 					access: "bios->ddr2_emr3",
 					name: "ddr2_emr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "rsvd_15_0",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "0",
 							description: [
@@ -420,12 +371,9 @@
 				{
 					access: "bios->ddr3_mr0",
 					name: "ddr3_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -434,7 +382,6 @@
 						},
 						{
 							name: "CL_hi_bit",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -443,7 +390,6 @@
 						},
 						{
 							name: "read_burst_type",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -452,7 +398,6 @@
 						},
 						{
 							name: "CL_lo_bits",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -461,7 +406,6 @@
 						},
 						{
 							name: "testmode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -470,7 +414,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -479,7 +422,6 @@
 						},
 						{
 							name: "WR",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -488,7 +430,6 @@
 						},
 						{
 							name: "DLL_PPD",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -497,7 +438,6 @@
 						},
 						{
 							name: "RFU_15_13",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 						},
@@ -511,12 +451,9 @@
 				{
 					access: "bios->ddr3_mr1",
 					name: "ddr3_mr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -525,7 +462,6 @@
 						},
 						{
 							name: "DrvStr_lo_bit",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -534,7 +470,6 @@
 						},
 						{
 							name: "RTTNom_lo_bit",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -543,7 +478,6 @@
 						},
 						{
 							name: "Additive_Latency",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "3",
 							description: [
@@ -552,7 +486,6 @@
 						},
 						{
 							name: "DrvStr_hi_bit",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -561,7 +494,6 @@
 						},
 						{
 							name: "RTTNom_mid_bit",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -570,7 +502,6 @@
 						},
 						{
 							name: "write_leveling",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -579,7 +510,6 @@
 						},
 						{
 							name: "RFU_8",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -588,7 +518,6 @@
 						},
 						{
 							name: "RTTNom_hi_bit",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -597,7 +526,6 @@
 						},
 						{
 							name: "RFU_10",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -606,7 +534,6 @@
 						},
 						{
 							name: "TDQS",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -615,7 +542,6 @@
 						},
 						{
 							name: "output_disable",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -624,7 +550,6 @@
 						},
 						{
 							name: "RFU_15_13",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 						},
@@ -638,12 +563,9 @@
 				{
 					access: "bios->ddr3_mr2",
 					name: "ddr3_mr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "PASR",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -652,7 +574,6 @@
 						},
 						{
 							name: "CWL",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -661,7 +582,6 @@
 						},
 						{
 							name: "ASR",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -670,7 +590,6 @@
 						},
 						{
 							name: "SRT",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -679,7 +598,6 @@
 						},
 						{
 							name: "RFU_8",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -688,7 +606,6 @@
 						},
 						{
 							name: "RTT_WR",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "9",
 							description: [
@@ -697,7 +614,6 @@
 						},
 						{
 							name: "RFU_15_11",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "11",
 						},
@@ -711,12 +627,9 @@
 				{
 					access: "bios->ddr3_mr3",
 					name: "ddr3_mr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "MPR_location",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -725,7 +638,6 @@
 						},
 						{
 							name: "MPR_operation",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -734,7 +646,6 @@
 						},
 						{
 							name: "RFU_15_3",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "3",
 						},
@@ -748,12 +659,9 @@
 				{
 					access: "bios->gddr2_mr0",
 					name: "gddr2_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -762,7 +670,6 @@
 						},
 						{
 							name: "WL",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -771,7 +678,6 @@
 						},
 						{
 							name: "RL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -780,7 +686,6 @@
 						},
 						{
 							name: "testmode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -789,7 +694,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -798,7 +702,6 @@
 						},
 						{
 							name: "WR",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -807,7 +710,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -821,12 +723,9 @@
 				{
 					access: "bios->gddr2_emr1",
 					name: "gddr2_emr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "addrcmd_ODT",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -835,7 +734,6 @@
 						},
 						{
 							name: "data_ck_ODT",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -844,7 +742,6 @@
 						},
 						{
 							name: "additive_latency",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -853,7 +750,6 @@
 						},
 						{
 							name: "DQS",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -862,7 +758,6 @@
 						},
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -871,7 +766,6 @@
 						},
 						{
 							name: "driver_Ron",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "7",
 							description: [
@@ -880,7 +774,6 @@
 						},
 						{
 							name: "rankness",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -889,7 +782,6 @@
 						},
 						{
 							name: "vendor_id",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -898,7 +790,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -912,18 +803,14 @@
 				{
 					access: "bios->gddr2_emr2",
 					name: "gddr2_emr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "rsvd_1_0",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 						},
 						{
 							name: "ODT_at_powerdown",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -932,7 +819,6 @@
 						},
 						{
 							name: "low_power_mode",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -941,7 +827,6 @@
 						},
 						{
 							name: "CK_ODT",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -950,7 +835,6 @@
 						},
 						{
 							name: "CS_ODT",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -959,7 +843,6 @@
 						},
 						{
 							name: "CKE_ODT",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -968,7 +851,6 @@
 						},
 						{
 							name: "ODT_W_mode",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -977,13 +859,11 @@
 						},
 						{
 							name: "rsvd_11_10",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -997,12 +877,9 @@
 				{
 					access: "bios->gddr3_mr0",
 					name: "gddr3_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1011,7 +888,6 @@
 						},
 						{
 							name: "CL_hi_bit",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1020,7 +896,6 @@
 						},
 						{
 							name: "burst_type",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -1029,7 +904,6 @@
 						},
 						{
 							name: "CL_lo_bits",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -1038,7 +912,6 @@
 						},
 						{
 							name: "test_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1047,7 +920,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1056,7 +928,6 @@
 						},
 						{
 							name: "tWL",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -1065,7 +936,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1079,12 +949,9 @@
 				{
 					access: "bios->gddr3_emr1",
 					name: "gddr3_emr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "drive_strength",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1093,7 +960,6 @@
 						},
 						{
 							name: "data_terminaton",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1102,7 +968,6 @@
 						},
 						{
 							name: "WR_lo_bits",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -1111,7 +976,6 @@
 						},
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -1120,7 +984,6 @@
 						},
 						{
 							name: "rsvd_8_8",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1129,7 +992,6 @@
 						},
 						{
 							name: "R_on",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1138,7 +1000,6 @@
 						},
 						{
 							name: "vendor_ID",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1147,7 +1008,6 @@
 						},
 						{
 							name: "AddrCmd_term",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1156,7 +1016,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1170,12 +1029,9 @@
 				{
 					access: "bios->gddr4_mr0",
 					name: "gddr4_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WR",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1184,7 +1040,6 @@
 						},
 						{
 							name: "tCL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -1193,7 +1048,6 @@
 						},
 						{
 							name: "testmode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1202,7 +1056,6 @@
 						},
 						{
 							name: "DLL_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1211,7 +1064,6 @@
 						},
 						{
 							name: "WL",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "9",
 							description: [
@@ -1220,7 +1072,6 @@
 						},
 						{
 							name: "RFU_12",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1229,7 +1080,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1246,12 +1096,9 @@
 				{
 					access: "bios->gddr4_emr1",
 					name: "gddr4_emr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "Drive_Term",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1260,7 +1107,6 @@
 						},
 						{
 							name: "DQ_term",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1269,7 +1115,6 @@
 						},
 						{
 							name: "tPreamble",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -1278,7 +1123,6 @@
 						},
 						{
 							name: "DLL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1287,7 +1131,6 @@
 						},
 						{
 							name: "read_DBI",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1296,7 +1139,6 @@
 						},
 						{
 							name: "write_DBI",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1305,7 +1147,6 @@
 						},
 						{
 							name: "DBI_mode",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1314,7 +1155,6 @@
 						},
 						{
 							name: "Vendor_ID",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1323,7 +1163,6 @@
 						},
 						{
 							name: "RFU_12",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1332,7 +1171,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1349,8 +1187,6 @@
 				{
 					access: "bios->gddr4_emr2",
 					name: "gddr4_emr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "OCD_down_offset",
@@ -1372,7 +1208,6 @@
 						},
 						{
 							name: "tRAS",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -1381,7 +1216,6 @@
 						},
 						{
 							name: "RFU_12",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1390,7 +1224,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1407,12 +1240,9 @@
 				{
 					access: "bios->gddr4_emr3",
 					name: "gddr4_emr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "RFU",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -1421,7 +1251,6 @@
 						},
 						{
 							name: "LP_term",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -1430,7 +1259,6 @@
 						},
 						{
 							name: "DRAM_info",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -1439,7 +1267,6 @@
 						},
 						{
 							name: "parity_reset",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1448,7 +1275,6 @@
 						},
 						{
 							name: "parity_enable",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1457,7 +1283,6 @@
 						},
 						{
 							name: "parity_mask",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -1466,7 +1291,6 @@
 						},
 						{
 							name: "RFU_12",
-							display: "ATUI_DEC",
 							hi: "12",
 							lo: "12",
 							description: [
@@ -1475,7 +1299,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "13",
 							description: [
@@ -1492,12 +1315,9 @@
 				{
 					access: "bios->gddr5_mr0",
 					name: "gddr5_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WLmrs",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -1506,7 +1326,6 @@
 						},
 						{
 							name: "CLmrs_lo",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -1515,7 +1334,6 @@
 						},
 						{
 							name: "testmode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1524,7 +1342,6 @@
 						},
 						{
 							name: "WR",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -1533,7 +1350,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1547,12 +1363,9 @@
 				{
 					access: "bios->gddr5_mr1",
 					name: "gddr5_mr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "drive_strength",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1561,7 +1374,6 @@
 						},
 						{
 							name: "data_termination",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -1570,7 +1382,6 @@
 						},
 						{
 							name: "addrcmd_term",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -1579,7 +1390,6 @@
 						},
 						{
 							name: "calibration_update",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -1588,7 +1398,6 @@
 						},
 						{
 							name: "PLL_DLL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -1597,7 +1406,6 @@
 						},
 						{
 							name: "read_DBI",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1606,7 +1414,6 @@
 						},
 						{
 							name: "write_DBI",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1615,7 +1422,6 @@
 						},
 						{
 							name: "address_BI",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1624,7 +1430,6 @@
 						},
 						{
 							name: "PLLDLL_reset",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1633,7 +1438,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1647,8 +1451,6 @@
 				{
 					access: "bios->gddr5_mr2",
 					name: "gddr5_mr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "drive_pulldown_offset",
@@ -1688,7 +1490,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1702,12 +1503,9 @@
 				{
 					access: "bios->gddr5_mr3",
 					name: "gddr5_mr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "self_refresh",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -1716,7 +1514,6 @@
 						},
 						{
 							name: "WCK01_invert",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1725,7 +1522,6 @@
 						},
 						{
 							name: "WCK23_invert",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -1734,7 +1530,6 @@
 						},
 						{
 							name: "WCK2CK_training",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -1743,7 +1538,6 @@
 						},
 						{
 							name: "RDQS_mode",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -1752,7 +1546,6 @@
 						},
 						{
 							name: "DRAM_info",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -1761,7 +1554,6 @@
 						},
 						{
 							name: "WCK_termination",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -1770,7 +1562,6 @@
 						},
 						{
 							name: "bank_groups",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -1779,7 +1570,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1793,12 +1583,9 @@
 				{
 					access: "bios->gddr5_mr4",
 					name: "gddr5_mr4",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "EDC_pattern",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -1807,7 +1594,6 @@
 						},
 						{
 							name: "CRCWL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -1816,7 +1602,6 @@
 						},
 						{
 							name: "CRCRL",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -1825,7 +1610,6 @@
 						},
 						{
 							name: "read_CRC",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -1834,7 +1618,6 @@
 						},
 						{
 							name: "write_crc",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -1843,7 +1626,6 @@
 						},
 						{
 							name: "hold_invert",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -1852,7 +1634,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1866,12 +1647,9 @@
 				{
 					access: "bios->gddr5_mr5",
 					name: "gddr5_mr5",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "LP1",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -1880,7 +1658,6 @@
 						},
 						{
 							name: "LP2",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -1889,7 +1666,6 @@
 						},
 						{
 							name: "LP3",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1898,7 +1674,6 @@
 						},
 						{
 							name: "PLLDLL_BW",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -1907,7 +1682,6 @@
 						},
 						{
 							name: "tRAS",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -1916,7 +1690,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -1930,12 +1703,9 @@
 				{
 					access: "bios->gddr5_mr6",
 					name: "gddr5_mr6",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WCK2CK_alignment",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -1944,7 +1714,6 @@
 						},
 						{
 							name: "VREFD_merge",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -1953,7 +1722,6 @@
 						},
 						{
 							name: "VREFD_training",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -1962,7 +1730,6 @@
 						},
 						{
 							name: "VREFD_source",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -1989,7 +1756,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2003,12 +1769,9 @@
 				{
 					access: "bios->gddr5_mr7",
 					name: "gddr5_mr7",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "PLL_standby",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2017,7 +1780,6 @@
 						},
 						{
 							name: "PLL_fast_lock",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2026,7 +1788,6 @@
 						},
 						{
 							name: "PLL_delay_comp",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2035,7 +1796,6 @@
 						},
 						{
 							name: "low_freq_mode",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2044,7 +1804,6 @@
 						},
 						{
 							name: "WCK2CK_autosync",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -2053,7 +1812,6 @@
 						},
 						{
 							name: "DQ_preamble",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -2062,7 +1820,6 @@
 						},
 						{
 							name: "temp_sensor",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -2071,7 +1828,6 @@
 						},
 						{
 							name: "half_VREFD",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2080,7 +1836,6 @@
 						},
 						{
 							name: "VDD_range",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -2089,7 +1844,6 @@
 						},
 						{
 							name: "DCC",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -2098,7 +1852,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2112,12 +1865,9 @@
 				{
 					access: "bios->gddr5_mr8",
 					name: "gddr5_mr8",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "CL_EHF",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2126,7 +1876,6 @@
 						},
 						{
 							name: "WR_EHF",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2135,7 +1884,6 @@
 						},
 						{
 							name: "EDC_HiZ",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2144,7 +1892,6 @@
 						},
 						{
 							name: "REFPB",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2153,7 +1900,6 @@
 						},
 						{
 							name: "rsvd_11_4",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "4",
 							description: [
@@ -2162,7 +1908,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2176,12 +1921,9 @@
 				{
 					access: "bios->gddr5_mr9",
 					name: "gddr5_mr9",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2190,7 +1932,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2204,12 +1945,9 @@
 				{
 					access: "bios->gddr5_mr10",
 					name: "gddr5_mr10",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2218,7 +1956,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2232,12 +1969,9 @@
 				{
 					access: "bios->gddr5_mr11",
 					name: "gddr5_mr11",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "PASR_banks_01",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2246,7 +1980,6 @@
 						},
 						{
 							name: "PASR_banks_23",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2255,7 +1988,6 @@
 						},
 						{
 							name: "PASR_banks_45",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2264,7 +1996,6 @@
 						},
 						{
 							name: "PASR_banks_67",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -2273,7 +2004,6 @@
 						},
 						{
 							name: "PASR_banks_89",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -2282,7 +2012,6 @@
 						},
 						{
 							name: "PASR_banks_1011",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -2291,7 +2020,6 @@
 						},
 						{
 							name: "PASR_banks_1213",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -2300,7 +2028,6 @@
 						},
 						{
 							name: "PASR_banks_1415",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2309,7 +2036,6 @@
 						},
 						{
 							name: "PASR_row_00",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2318,7 +2044,6 @@
 						},
 						{
 							name: "PASR_row_01",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2327,7 +2052,6 @@
 						},
 						{
 							name: "PASR_row_10",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2336,7 +2060,6 @@
 						},
 						{
 							name: "PASR_row_11",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2345,13 +2068,11 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
 						{
 							name: "PASR_bank_mask",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -2360,7 +2081,6 @@
 						},
 						{
 							name: "PASR_row_segment_mask",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -2369,7 +2089,6 @@
 						},
 						{
 							name: "rsvd_15_12__2",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2383,12 +2102,9 @@
 				{
 					access: "bios->gddr5_mr12",
 					name: "gddr5_mr12",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2397,7 +2113,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2411,12 +2126,9 @@
 				{
 					access: "bios->gddr5_mr13",
 					name: "gddr5_mr13",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2425,7 +2137,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2439,12 +2150,9 @@
 				{
 					access: "bios->gddr5_mr14",
 					name: "gddr5_mr14",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -2453,7 +2161,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2467,18 +2174,14 @@
 				{
 					access: "bios->gddr5_mr15",
 					name: "gddr5_mr15",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "rsvd_7_0",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 						},
 						{
 							name: "MRE_0_disable",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2487,7 +2190,6 @@
 						},
 						{
 							name: "MRE_1_disable",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2496,7 +2198,6 @@
 						},
 						{
 							name: "address_training",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2505,7 +2206,6 @@
 						},
 						{
 							name: "RFU",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2514,7 +2214,6 @@
 						},
 						{
 							name: "rsvd_15_12",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 						},
@@ -2528,12 +2227,9 @@
 				{
 					access: "bios->gddr6_mr0",
 					name: "gddr6_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WLmrs",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -2542,7 +2238,6 @@
 						},
 						{
 							name: "RLmrs_lo",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "3",
 							description: [
@@ -2551,7 +2246,6 @@
 						},
 						{
 							name: "testmode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2560,7 +2254,6 @@
 						},
 						{
 							name: "WRmrs",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -2569,7 +2262,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2586,12 +2278,9 @@
 				{
 					access: "bios->gddr6_mr1",
 					name: "gddr6_mr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "drive_stren",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -2600,7 +2289,6 @@
 						},
 						{
 							name: "data_term",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -2609,7 +2297,6 @@
 						},
 						{
 							name: "PLLDLL_range",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -2618,7 +2305,6 @@
 						},
 						{
 							name: "Cal_Upd",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -2627,7 +2313,6 @@
 						},
 						{
 							name: "PLL_DLL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -2636,7 +2321,6 @@
 						},
 						{
 							name: "read_DBI",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2645,7 +2329,6 @@
 						},
 						{
 							name: "write_DBI",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2654,7 +2337,6 @@
 						},
 						{
 							name: "addrcmd_BI",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2663,7 +2345,6 @@
 						},
 						{
 							name: "PLLDLL_reset",
-							display: "ATUI_DEC",
 							hi: "14",
 							lo: "11",
 							description: [
@@ -2672,7 +2353,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2689,8 +2369,6 @@
 				{
 					access: "bios->gddr6_mr2",
 					name: "gddr6_mr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "OCD_up",
@@ -2712,7 +2390,6 @@
 						},
 						{
 							name: "self_refresh",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -2721,7 +2398,6 @@
 						},
 						{
 							name: "EDC_mode",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -2730,7 +2406,6 @@
 						},
 						{
 							name: "RDQS",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2739,7 +2414,6 @@
 						},
 						{
 							name: "CADT_SRF",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2748,7 +2422,6 @@
 						},
 						{
 							name: "EDC_HR",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2757,7 +2430,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2774,8 +2446,6 @@
 				{
 					access: "bios->gddr6_mr3",
 					name: "gddr6_mr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "dataWCK_term_offset",
@@ -2797,7 +2467,6 @@
 						},
 						{
 							name: "DRAM_info",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -2806,7 +2475,6 @@
 						},
 						{
 							name: "WR_scaling",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -2815,7 +2483,6 @@
 						},
 						{
 							name: "bank_groups",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -2824,7 +2491,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2841,12 +2507,9 @@
 				{
 					access: "bios->gddr6_mr4",
 					name: "gddr6_mr4",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "EDC_hold_pattern",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -2855,7 +2518,6 @@
 						},
 						{
 							name: "CRCWL",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -2864,7 +2526,6 @@
 						},
 						{
 							name: "CRCRL",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "7",
 							description: [
@@ -2873,7 +2534,6 @@
 						},
 						{
 							name: "RDCRC",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -2882,7 +2542,6 @@
 						},
 						{
 							name: "WRCRC",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -2891,7 +2550,6 @@
 						},
 						{
 							name: "EDC_hold_invert",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -2900,7 +2558,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2917,12 +2574,9 @@
 				{
 					access: "bios->gddr6_mr5",
 					name: "gddr6_mr5",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "LP1",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -2931,7 +2585,6 @@
 						},
 						{
 							name: "LP2",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -2940,7 +2593,6 @@
 						},
 						{
 							name: "LP3",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -2949,7 +2601,6 @@
 						},
 						{
 							name: "PLLDLL_BW",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -2958,7 +2609,6 @@
 						},
 						{
 							name: "RAS",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -2967,7 +2617,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -2984,12 +2633,9 @@
 				{
 					access: "bios->gddr6_mr6",
 					name: "gddr6_mr6",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "VREFD_level",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "0",
 							description: [
@@ -2998,7 +2644,6 @@
 						},
 						{
 							name: "pin_subaddr",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "7",
 							description: [
@@ -3007,7 +2652,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3024,12 +2668,9 @@
 				{
 					access: "bios->gddr6_mr7",
 					name: "gddr6_mr7",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WCK2CK_AP",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3038,7 +2679,6 @@
 						},
 						{
 							name: "hibernate",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3047,7 +2687,6 @@
 						},
 						{
 							name: "PLL_delay_comp",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3056,7 +2695,6 @@
 						},
 						{
 							name: "low_freq_mode",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -3065,7 +2703,6 @@
 						},
 						{
 							name: "WCK2CK_autosync",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3074,7 +2711,6 @@
 						},
 						{
 							name: "DQ_preamble",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3083,7 +2719,6 @@
 						},
 						{
 							name: "half_VREFC",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3092,7 +2727,6 @@
 						},
 						{
 							name: "half_VREFD",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3101,7 +2735,6 @@
 						},
 						{
 							name: "VDD_range",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "8",
 							description: [
@@ -3110,7 +2743,6 @@
 						},
 						{
 							name: "WCK_DCC",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3119,7 +2751,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3136,12 +2767,9 @@
 				{
 					access: "bios->gddr6_mr8",
 					name: "gddr6_mr8",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "CA_low_term",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "0",
 							description: [
@@ -3150,7 +2778,6 @@
 						},
 						{
 							name: "CA_high_term",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -3159,7 +2786,6 @@
 						},
 						{
 							name: "CA_TO",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3168,7 +2794,6 @@
 						},
 						{
 							name: "EDC_hiZ",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3177,7 +2802,6 @@
 						},
 						{
 							name: "CK_auto_cal",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3186,7 +2810,6 @@
 						},
 						{
 							name: "REFpb",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3195,7 +2818,6 @@
 						},
 						{
 							name: "RL_EHF",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3204,7 +2826,6 @@
 						},
 						{
 							name: "WR_EHF",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3213,7 +2834,6 @@
 						},
 						{
 							name: "CK_term",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3222,7 +2842,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3239,12 +2858,9 @@
 				{
 					access: "bios->gddr6_mr9",
 					name: "gddr6_mr9",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DFE",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -3253,7 +2869,6 @@
 						},
 						{
 							name: "RFU",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "4",
 							description: [
@@ -3262,7 +2877,6 @@
 						},
 						{
 							name: "pin_subaddr",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "7",
 							description: [
@@ -3271,7 +2885,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3288,8 +2901,6 @@
 				{
 					access: "bios->gddr6_mr10",
 					name: "gddr6_mr10",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "VREFC_offset",
@@ -3302,7 +2913,6 @@
 						},
 						{
 							name: "WCK_inv_byte0",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -3311,7 +2921,6 @@
 						},
 						{
 							name: "WCK_inv_byte1",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -3320,7 +2929,6 @@
 						},
 						{
 							name: "WCK2CK",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3329,7 +2937,6 @@
 						},
 						{
 							name: "WCK_ratio",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3338,7 +2945,6 @@
 						},
 						{
 							name: "WCK_term",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "10",
 							description: [
@@ -3347,7 +2953,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3364,12 +2969,9 @@
 				{
 					access: "bios->gddr6_mr11",
 					name: "gddr6_mr11",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "PASR_banks_01",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3378,7 +2980,6 @@
 						},
 						{
 							name: "PASR_banks_23",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3387,7 +2988,6 @@
 						},
 						{
 							name: "PASR_banks_45",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3396,7 +2996,6 @@
 						},
 						{
 							name: "PASR_banks_67",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -3405,7 +3004,6 @@
 						},
 						{
 							name: "PASR_banks_89",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3414,7 +3012,6 @@
 						},
 						{
 							name: "PASR_banks_1011",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3423,7 +3020,6 @@
 						},
 						{
 							name: "PASR_banks_1213",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3432,7 +3028,6 @@
 						},
 						{
 							name: "PASR_banks_1415",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3441,7 +3036,6 @@
 						},
 						{
 							name: "PASR_row_00",
-							display: "ATUI_DEC",
 							hi: "8",
 							lo: "8",
 							description: [
@@ -3450,7 +3044,6 @@
 						},
 						{
 							name: "PASR_row_01",
-							display: "ATUI_DEC",
 							hi: "9",
 							lo: "9",
 							description: [
@@ -3459,7 +3052,6 @@
 						},
 						{
 							name: "PASR_row_10",
-							display: "ATUI_DEC",
 							hi: "10",
 							lo: "10",
 							description: [
@@ -3468,7 +3060,6 @@
 						},
 						{
 							name: "PASR_row_11",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "11",
 							description: [
@@ -3477,7 +3068,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3486,7 +3076,6 @@
 						},
 						{
 							name: "PASR_bank_mask",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -3495,7 +3084,6 @@
 						},
 						{
 							name: "PASR_row_segment_mask",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "8",
 							description: [
@@ -3504,7 +3092,6 @@
 						},
 						{
 							name: "ID__2",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3521,12 +3108,9 @@
 				{
 					access: "bios->gddr6_mr12",
 					name: "gddr6_mr12",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "VDDQ_off",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3535,7 +3119,6 @@
 						},
 						{
 							name: "P2BR_addr",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3544,7 +3127,6 @@
 						},
 						{
 							name: "PRBS",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3553,7 +3135,6 @@
 						},
 						{
 							name: "RL_EHF2",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -3562,7 +3143,6 @@
 						},
 						{
 							name: "CRCWL_EHF",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3571,7 +3151,6 @@
 						},
 						{
 							name: "WR_EHF2",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3580,7 +3159,6 @@
 						},
 						{
 							name: "RFU",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "6",
 							description: [
@@ -3589,7 +3167,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3606,12 +3183,9 @@
 				{
 					access: "bios->gddr6_mr13",
 					name: "gddr6_mr13",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -3620,7 +3194,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3637,12 +3210,9 @@
 				{
 					access: "bios->gddr6_mr14",
 					name: "gddr6_mr14",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "0",
 							description: [
@@ -3651,7 +3221,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3668,12 +3237,9 @@
 				{
 					access: "bios->gddr6_mr15",
 					name: "gddr6_mr15",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "MRS_to_chan_A",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3682,7 +3248,6 @@
 						},
 						{
 							name: "MRS_to_chan_B",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3691,7 +3256,6 @@
 						},
 						{
 							name: "CA_training",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -3700,7 +3264,6 @@
 						},
 						{
 							name: "unused",
-							display: "ATUI_DEC",
 							hi: "11",
 							lo: "4",
 							description: [
@@ -3709,7 +3272,6 @@
 						},
 						{
 							name: "ID",
-							display: "ATUI_DEC",
 							hi: "15",
 							lo: "12",
 							description: [
@@ -3726,12 +3288,9 @@
 				{
 					access: "bios->hbm_mr0",
 					name: "hbm_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "read_DBI",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3740,7 +3299,6 @@
 						},
 						{
 							name: "write_DBI",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3749,7 +3307,6 @@
 						},
 						{
 							name: "TCSR",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -3758,7 +3315,6 @@
 						},
 						{
 							name: "rsvd_3_3",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -3767,7 +3323,6 @@
 						},
 						{
 							name: "read_parity",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3776,7 +3331,6 @@
 						},
 						{
 							name: "write_parity",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3785,7 +3339,6 @@
 						},
 						{
 							name: "addrcmd_parity",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3794,7 +3347,6 @@
 						},
 						{
 							name: "test_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3811,12 +3363,9 @@
 				{
 					access: "bios->hbm_mr1",
 					name: "hbm_mr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tWR",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -3825,7 +3374,6 @@
 						},
 						{
 							name: "nom_drive",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "5",
 							description: [
@@ -3842,12 +3390,9 @@
 				{
 					access: "bios->hbm_mr2",
 					name: "hbm_mr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "WL",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -3856,7 +3401,6 @@
 						},
 						{
 							name: "RL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -3873,12 +3417,9 @@
 				{
 					access: "bios->hbm_mr3",
 					name: "hbm_mr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tRAS",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "0",
 							description: [
@@ -3887,7 +3428,6 @@
 						},
 						{
 							name: "bank_groups",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -3896,7 +3436,6 @@
 						},
 						{
 							name: "burst_length",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -3913,12 +3452,9 @@
 				{
 					access: "bios->hbm_mr4",
 					name: "hbm_mr4",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "ECC",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -3927,7 +3463,6 @@
 						},
 						{
 							name: "WDM",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -3936,7 +3471,6 @@
 						},
 						{
 							name: "PL",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "2",
 							description: [
@@ -3945,7 +3479,6 @@
 						},
 						{
 							name: "EWL",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -3954,7 +3487,6 @@
 						},
 						{
 							name: "ERL",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -3963,7 +3495,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -3980,12 +3511,9 @@
 				{
 					access: "bios->hbm_mr5",
 					name: "hbm_mr5",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "TRR_bank_address",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -3994,7 +3522,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -4003,7 +3530,6 @@
 						},
 						{
 							name: "TRR_peudochannel",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4012,7 +3538,6 @@
 						},
 						{
 							name: "TRR_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4029,18 +3554,14 @@
 				{
 					access: "bios->hbm_mr6",
 					name: "hbm_mr6",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 						},
 						{
 							name: "implicit_RP",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -4057,12 +3578,9 @@
 				{
 					access: "bios->hbm_mr7",
 					name: "hbm_mr7",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DWORD_loopback",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4071,7 +3589,6 @@
 						},
 						{
 							name: "DWORD_read_mux",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "1",
 							description: [
@@ -4080,7 +3597,6 @@
 						},
 						{
 							name: "DWORD_MISR",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -4089,7 +3605,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4098,7 +3613,6 @@
 						},
 						{
 							name: "CATTRIP",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4115,12 +3629,9 @@
 				{
 					access: "bios->hbm_mr8",
 					name: "hbm_mr8",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DA28_lockout",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4129,7 +3640,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "1",
 							description: [
@@ -4146,12 +3656,9 @@
 				{
 					access: "bios->hbm_mr9",
 					name: "hbm_mr9",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4168,12 +3675,9 @@
 				{
 					access: "bios->hbm_mr10",
 					name: "hbm_mr10",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4190,12 +3694,9 @@
 				{
 					access: "bios->hbm_mr11",
 					name: "hbm_mr11",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4212,12 +3713,9 @@
 				{
 					access: "bios->hbm_mr12",
 					name: "hbm_mr12",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4234,12 +3732,9 @@
 				{
 					access: "bios->hbm_mr13",
 					name: "hbm_mr13",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4256,12 +3751,9 @@
 				{
 					access: "bios->hbm_mr14",
 					name: "hbm_mr14",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4278,12 +3770,9 @@
 				{
 					access: "bios->hbm_mr15",
 					name: "hbm_mr15",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "internal_vref",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -4292,7 +3781,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "3",
 							description: [
@@ -4309,12 +3797,9 @@
 				{
 					access: "bios->hbm3_mr0",
 					name: "hbm3_mr0",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "read_DBI",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4323,7 +3808,6 @@
 						},
 						{
 							name: "write_DBI",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4332,7 +3816,6 @@
 						},
 						{
 							name: "TCSR",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4341,7 +3824,6 @@
 						},
 						{
 							name: "rsvd_3_3",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4350,7 +3832,6 @@
 						},
 						{
 							name: "read_parity",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4359,7 +3840,6 @@
 						},
 						{
 							name: "write_parity",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4368,7 +3848,6 @@
 						},
 						{
 							name: "addrcmd_parity",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4377,7 +3856,6 @@
 						},
 						{
 							name: "test_mode",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4394,12 +3872,9 @@
 				{
 					access: "bios->hbm3_mr1",
 					name: "hbm3_mr1",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tWL",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "0",
 							description: [
@@ -4408,7 +3883,6 @@
 						},
 						{
 							name: "tPL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "5",
 							description: [
@@ -4425,12 +3899,9 @@
 				{
 					access: "bios->hbm3_mr2",
 					name: "hbm3_mr2",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tRL",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4447,12 +3918,9 @@
 				{
 					access: "bios->hbm3_mr3",
 					name: "hbm3_mr3",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tWR",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4469,12 +3937,9 @@
 				{
 					access: "bios->hbm3_mr4",
 					name: "hbm3_mr4",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tRAS",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4491,12 +3956,9 @@
 				{
 					access: "bios->hbm3_mr5",
 					name: "hbm3_mr5",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "tRTP",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4513,12 +3975,9 @@
 				{
 					access: "bios->hbm3_mr6",
 					name: "hbm3_mr6",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "drive_down_strength",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "0",
 							description: [
@@ -4527,7 +3986,6 @@
 						},
 						{
 							name: "drive_up_strength",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -4536,7 +3994,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -4553,12 +4010,9 @@
 				{
 					access: "bios->hbm3_mr7",
 					name: "hbm3_mr7",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DWORD_loopback",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4567,7 +4021,6 @@
 						},
 						{
 							name: "DWORD_read_mux",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4576,7 +4029,6 @@
 						},
 						{
 							name: "reserved_2_2",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4585,7 +4037,6 @@
 						},
 						{
 							name: "DWORD_MISR",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "3",
 							description: [
@@ -4594,7 +4045,6 @@
 						},
 						{
 							name: "reserved_6_6",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4603,7 +4053,6 @@
 						},
 						{
 							name: "CATTRIP",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4620,12 +4069,9 @@
 				{
 					access: "bios->hbm3_mr8",
 					name: "hbm3_mr8",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DA_lockout",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4634,7 +4080,6 @@
 						},
 						{
 							name: "duty_cycle_monitor",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4643,7 +4088,6 @@
 						},
 						{
 							name: "ECS_log_auto_clear",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4652,7 +4096,6 @@
 						},
 						{
 							name: "WDQS2CK_training",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4661,7 +4104,6 @@
 						},
 						{
 							name: "RFM_levels",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "4",
 							description: [
@@ -4670,7 +4112,6 @@
 						},
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "6",
 							description: [
@@ -4687,12 +4128,9 @@
 				{
 					access: "bios->hbm3_mr9",
 					name: "hbm3_mr9",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "metadata",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4701,7 +4139,6 @@
 						},
 						{
 							name: "severity_reporting",
-							display: "ATUI_DEC",
 							hi: "1",
 							lo: "1",
 							description: [
@@ -4710,7 +4147,6 @@
 						},
 						{
 							name: "ECC_testmode",
-							display: "ATUI_DEC",
 							hi: "2",
 							lo: "2",
 							description: [
@@ -4719,7 +4155,6 @@
 						},
 						{
 							name: "ECC_test_pattern",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "3",
 							description: [
@@ -4728,7 +4163,6 @@
 						},
 						{
 							name: "ECS_via_REFab",
-							display: "ATUI_DEC",
 							hi: "4",
 							lo: "4",
 							description: [
@@ -4737,7 +4171,6 @@
 						},
 						{
 							name: "ECS_during_SRF",
-							display: "ATUI_DEC",
 							hi: "5",
 							lo: "5",
 							description: [
@@ -4746,7 +4179,6 @@
 						},
 						{
 							name: "ECS_multibit",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "6",
 							description: [
@@ -4755,7 +4187,6 @@
 						},
 						{
 							name: "ECS_logging",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4772,12 +4203,9 @@
 				{
 					access: "bios->hbm3_mr10",
 					name: "hbm3_mr10",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 						},
@@ -4791,12 +4219,9 @@
 				{
 					access: "bios->hbm3_mr11",
 					name: "hbm3_mr11",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "DCA_WDQS0",
-							display: "ATUI_DEC",
 							hi: "3",
 							lo: "0",
 							description: [
@@ -4805,7 +4230,6 @@
 						},
 						{
 							name: "DCA_WDQS1",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "4",
 							description: [
@@ -4822,12 +4246,9 @@
 				{
 					access: "bios->hbm3_mr12",
 					name: "hbm3_mr12",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "vendor_specific",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 						},
@@ -4841,12 +4262,9 @@
 				{
 					access: "bios->hbm3_mr13",
 					name: "hbm3_mr13",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "0",
 							description: [
@@ -4863,12 +4281,9 @@
 				{
 					access: "bios->hbm3_mr14",
 					name: "hbm3_mr14",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved_0_0",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4877,7 +4292,6 @@
 						},
 						{
 							name: "VrefCA",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "1",
 							description: [
@@ -4886,7 +4300,6 @@
 						},
 						{
 							name: "reserved_7_7",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
@@ -4903,12 +4316,9 @@
 				{
 					access: "bios->hbm3_mr15",
 					name: "hbm3_mr15",
-					display: "ATUI_BIN",
-					fancy: "ATUI_BITFIELD",
 					fancy_data: [
 						{
 							name: "reserved_0_0",
-							display: "ATUI_DEC",
 							hi: "0",
 							lo: "0",
 							description: [
@@ -4917,7 +4327,6 @@
 						},
 						{
 							name: "VrefD",
-							display: "ATUI_DEC",
 							hi: "6",
 							lo: "1",
 							description: [
@@ -4926,7 +4335,6 @@
 						},
 						{
 							name: "reserved_7_7",
-							display: "ATUI_DEC",
 							hi: "7",
 							lo: "7",
 							description: [
