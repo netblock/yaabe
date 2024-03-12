@@ -33,7 +33,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position"},
+				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
 			],
 		}, {
 			access: "bios->BiosRuntimeSegmentAddress",
@@ -83,10 +83,16 @@ global_default: {
 			access: "bios->MasterCommandTableOffset",
 			name: "MasterCommandTableOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Offest for SW to get all command table offsets, Don't change the position",},
+			],
 		}, {
 			access: "bios->MasterDataTableOffset",
 			name: "MasterDataTableOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Offest for SW to get all data table offsets, Don't change the position",},
+			],
 		}, {
 			access: "bios->ExtendedFunctionCode",
 			name: "ExtendedFunctionCode",
@@ -111,7 +117,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position"},
+				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
 			],
 		}, {
 			access: "bios->BiosRuntimeSegmentAddress",
@@ -161,10 +167,16 @@ global_default: {
 			access: "bios->MasterCommandTableOffset",
 			name: "MasterCommandTableOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Offest for SW to get all command table offsets, Don't change the position",},
+			],
 		}, {
 			access: "bios->MasterDataTableOffset",
 			name: "MasterDataTableOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Offest for SW to get all data table offsets, Don't change the position",},
+			],
 		}, {
 			access: "bios->ExtendedFunctionCode",
 			name: "ExtendedFunctionCode",
@@ -191,138 +203,240 @@ global_default: {
 			access: "bios->UtilityPipeLine",
 			name: "UtilityPipeLine",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Offest for the utility to get parser info,Don't change this position!",},
+			],
 		}, {
 			access: "bios->MultimediaCapabilityInfo",
 			name: "MultimediaCapabilityInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by MM Lib,latest version 1.1, not configuable from Bios, need to include the table to build Bios",},
+			],
 		}, {
 			access: "bios->MultimediaConfigInfo",
 			name: "MultimediaConfigInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by MM Lib,latest version 2.1, not configuable from Bios, need to include the table to build Bios",},
+			],
 		}, {
 			access: "bios->StandardVESA_Timing",
 			name: "StandardVESA_Timing",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by Bios",},
+			],
 		}, {
 			access: "bios->FirmwareInfo",
 			name: "FirmwareInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.4",},
+			],
 		}, {
 			access: "bios->PaletteData",
 			name: "PaletteData",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by BIOS",},
+			],
 		}, {
 			access: "bios->LCD_Info",
 			name: "LCD_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.3, was called LVDS_Info",},
+			],
 		}, {
 			access: "bios->DIGTransmitterInfo",
 			name: "DIGTransmitterInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Internal used by VBIOS only version 3.1",},
+			],
 		}, {
 			access: "bios->SMU_Info",
 			name: "SMU_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.1",},
+			],
 		}, {
 			access: "bios->SupportedDevicesInfo",
 			name: "SupportedDevicesInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Will be obsolete from R600",},
+			],
 		}, {
 			access: "bios->GPIO_I2C_Info",
 			name: "GPIO_I2C_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.2 will be used from R600",},
+			],
 		}, {
 			access: "bios->VRAM_UsageByFirmware",
 			name: "VRAM_UsageByFirmware",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.3 will be used from R600",},
+			],
 		}, {
 			access: "bios->GPIO_Pin_LUT",
 			name: "GPIO_Pin_LUT",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.1",},
+			],
 		}, {
 			access: "bios->VESA_ToInternalModeLUT",
 			name: "VESA_ToInternalModeLUT",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by Bios",},
+			],
 		}, {
 			access: "bios->GFX_Info",
 			name: "GFX_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 2.1 will be used from R600",},
+			],
 		}, {
 			access: "bios->PowerPlayInfo",
 			name: "PowerPlayInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 2.1,new design from R600",},
+			],
 		}, {
 			access: "bios->GPUVirtualizationInfo",
 			name: "GPUVirtualizationInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Will be obsolete from R600",},
+			],
 		}, {
 			access: "bios->SaveRestoreInfo",
 			name: "SaveRestoreInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by Bios",},
+			],
 		}, {
 			access: "bios->PPLL_SS_Info",
 			name: "PPLL_SS_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.2, used to call SS_Info, change to new name because of int ASIC SS info",},
+			],
 		}, {
 			access: "bios->OemInfo",
 			name: "OemInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Defined and used by external SW, should be obsolete soon",},
+			],
 		}, {
 			access: "bios->XTMDS_Info",
 			name: "XTMDS_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Will be obsolete from R600",},
+			],
 		}, {
 			access: "bios->MclkSS_Info",
 			name: "MclkSS_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.1, only enabled when ext SS chip is used",},
+			],
 		}, {
 			access: "bios->Object_Header",
 			name: "Object_Header",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components,latest version 1.1",},
+			],
 		}, {
 			access: "bios->IndirectIOAccess",
 			name: "IndirectIOAccess",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by Bios,this table position can't change at all!!",},
+			],
 		}, {
 			access: "bios->MC_InitParameter",
 			name: "MC_InitParameter",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by command table",},
+			],
 		}, {
 			access: "bios->ASIC_VDDC_Info",
 			name: "ASIC_VDDC_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Will be obsolete from R600",},
+			],
 		}, {
 			access: "bios->ASIC_InternalSS_Info",
 			name: "ASIC_InternalSS_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "New tabel name from R600, used to be called \"ASIC_MVDDC_Info\"",},
+			],
 		}, {
 			access: "bios->TV_VideoMode",
 			name: "TV_VideoMode",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by command table",},
+			],
 		}, {
 			access: "bios->VRAM_Info",
 			name: "VRAM_Info",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Only used by command table, latest version 1.3",},
+			],
 		}, {
 			access: "bios->MemoryTrainingInfo",
 			name: "MemoryTrainingInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Used for VBIOS and Diag utility for memory training purpose since R600. the new table rev start from 2.1",},
+			],
 		}, {
 			access: "bios->IntegratedSystemInfo",
 			name: "IntegratedSystemInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components",},
+			],
 		}, {
 			access: "bios->ASIC_ProfilingInfo",
 			name: "ASIC_ProfilingInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "New table name from R600, used to be called \"ASIC_VDDCI_Info\" for pre-R600",},
+			],
 		}, {
 			access: "bios->VoltageObjectInfo",
 			name: "VoltageObjectInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components, latest version 1.1",},
+			],
 		}, {
 			access: "bios->PowerSourceInfo",
 			name: "PowerSourceInfo",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Shared by various SW components, latest versoin 1.1",},
+			],
 		}, {
 			access: "bios->ServiceInfo",
 			name: "ServiceInfo",
@@ -398,30 +512,57 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetEngineClock",
 			name: "DriverTargetEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetMemoryClock",
 			name: "DriverTargetMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Output",
 			name: "MaxMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxEngineClock",
 			name: "ASICMaxEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxMemoryClock",
 			name: "ASICMaxMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxTemperature",
 			name: "ASICMaxTemperature",
@@ -431,7 +572,7 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Don't use them"},
+				{language: "english", text: "Don't use them",},
 			],
 		}, {
 			access: "bios->aulReservedForBIOS",
@@ -439,38 +580,68 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Don't use them"},
+				{language: "english", text: "Don't use them",},
 			],
 		}, {
 			access: "bios->MinEngineClockPLL_Input",
 			name: "MinEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Input",
 			name: "MaxEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Output",
 			name: "MinEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Input",
 			name: "MinMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Input",
 			name: "MaxMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Output",
 			name: "MinMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit, the definitions above can't change!!!",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -479,19 +650,34 @@ global_default: {
 		}, {
 			access: "bios->ReferenceClock",
 			name: "ReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_Location",
 			name: "PM_RTS_Location",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "RTS PM4 starting location in ROM in 1Kb unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_StreamSize",
 			name: "PM_RTS_StreamSize",
+			description: [
+				{language: "english", text: "RTS PM4 packets in Kb unit",},
+			],
 		}, {
 			access: "bios->Design_ID",
 			name: "Design_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		},
 	],
 }, {
@@ -510,30 +696,57 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetEngineClock",
 			name: "DriverTargetEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetMemoryClock",
 			name: "DriverTargetMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Output",
 			name: "MaxMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxEngineClock",
 			name: "ASICMaxEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxMemoryClock",
 			name: "ASICMaxMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxTemperature",
 			name: "ASICMaxTemperature",
@@ -546,7 +759,7 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Don't use them"},
+				{language: "english", text: "Don't use them",},
 			],
 		}, {
 			access: "bios->aulReservedForBIOS",
@@ -554,41 +767,74 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Don't use them"},
+				{language: "english", text: "Don't use them",},
 			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Input",
 			name: "MinEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Input",
 			name: "MaxEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Output",
 			name: "MinEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Input",
 			name: "MinMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Input",
 			name: "MaxMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Output",
 			name: "MinMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output_lower",
 			name: "MinPixelClockPLL_Output_lower",
+			description: [
+				{language: "english", text: "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -597,19 +843,34 @@ global_default: {
 		}, {
 			access: "bios->ReferenceClock",
 			name: "ReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_Location",
 			name: "PM_RTS_Location",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "RTS PM4 starting location in ROM in 1Kb unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_StreamSize",
 			name: "PM_RTS_StreamSize",
+			description: [
+				{language: "english", text: "RTS PM4 packets in Kb unit",},
+			],
 		}, {
 			access: "bios->Design_ID",
 			name: "Design_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		},
 	],
 }, {
@@ -628,30 +889,57 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetEngineClock",
 			name: "DriverTargetEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetMemoryClock",
 			name: "DriverTargetMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Output",
 			name: "MaxMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxEngineClock",
 			name: "ASICMaxEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxMemoryClock",
 			name: "ASICMaxMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxTemperature",
 			name: "ASICMaxTemperature",
@@ -664,47 +952,86 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Don't use them"},
+				{language: "english", text: "Don't use them",},
 			],
 		}, {
 			access: "bios->aulReservedForBIOS",
 			name: "aulReservedForBIOS",
+			description: [
+				{language: "english", text: "Don't use them",},
+			],
 		}, {
 			access: "bios->_3DAccelerationEngineClock",
 			name: "_3DAccelerationEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Input",
 			name: "MinEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Input",
 			name: "MaxEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Output",
 			name: "MinEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Input",
 			name: "MinMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Input",
 			name: "MaxMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Output",
 			name: "MinMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output_lower",
 			name: "MinPixelClockPLL_Output_lower",
+			description: [
+				{language: "english", text: "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -713,19 +1040,34 @@ global_default: {
 		}, {
 			access: "bios->ReferenceClock",
 			name: "ReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_Location",
 			name: "PM_RTS_Location",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "RTS PM4 starting location in ROM in 1Kb unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_StreamSize",
 			name: "PM_RTS_StreamSize",
+			description: [
+				{language: "english", text: "RTS PM4 packets in Kb unit",},
+			],
 		}, {
 			access: "bios->Design_ID",
 			name: "Design_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		},
 	],
 }, {
@@ -744,30 +1086,57 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetEngineClock",
 			name: "DriverTargetEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DriverTargetMemoryClock",
 			name: "DriverTargetMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Output",
 			name: "MaxMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxEngineClock",
 			name: "ASICMaxEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxMemoryClock",
 			name: "ASICMaxMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->ASICMaxTemperature",
 			name: "ASICMaxTemperature",
@@ -777,48 +1146,93 @@ global_default: {
 		}, {
 			access: "bios->BootUpVDDCVoltage",
 			name: "BootUpVDDCVoltage",
+			description: [
+				{language: "english", text: "In MV unit",},
+			],
 		}, {
 			access: "bios->LcdMinPixelClockPLL_Output",
 			name: "LcdMinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->LcdMaxPixelClockPLL_Output",
 			name: "LcdMaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->_3DAccelerationEngineClock",
 			name: "_3DAccelerationEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Input",
 			name: "MinEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Input",
 			name: "MaxEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Output",
 			name: "MinEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Input",
 			name: "MinMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Input",
 			name: "MaxMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Output",
 			name: "MinMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output_lower",
 			name: "MinPixelClockPLL_Output_lower",
+			description: [
+				{language: "english", text: "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -827,19 +1241,34 @@ global_default: {
 		}, {
 			access: "bios->ReferenceClock",
 			name: "ReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_Location",
 			name: "PM_RTS_Location",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "RTS PM4 starting location in ROM in 1Kb unit",},
+			],
 		}, {
 			access: "bios->PM_RTS_StreamSize",
 			name: "PM_RTS_StreamSize",
+			description: [
+				{language: "english", text: "RTS PM4 packets in Kb unit",},
+			],
 		}, {
 			access: "bios->Design_ID",
 			name: "Design_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		},
 	],
 }, {
@@ -858,9 +1287,15 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->Reserved1",
 			name: "Reserved1",
@@ -870,69 +1305,132 @@ global_default: {
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Output",
 			name: "MaxMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->BinaryAlteredInfo",
 			name: "BinaryAlteredInfo",
+			description: [
+				{language: "english", text: "Was ulASICMaxEngineClock",},
+			],
 		}, {
 			access: "bios->DefaultDispEngineClkFreq",
 			name: "DefaultDispEngineClkFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->Reserved3",
 			name: "Reserved3",
+			description: [
+				{language: "english", text: "Was ucASICMaxTemperature;",},
+			],
 		}, {
 			access: "bios->MinAllowedBL_Level",
 			name: "MinAllowedBL_Level",
 		}, {
 			access: "bios->BootUpVDDCVoltage",
 			name: "BootUpVDDCVoltage",
+			description: [
+				{language: "english", text: "In MV unit",},
+			],
 		}, {
 			access: "bios->LcdMinPixelClockPLL_Output",
 			name: "LcdMinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->LcdMaxPixelClockPLL_Output",
 			name: "LcdMaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->Reserved4",
 			name: "Reserved4",
+			description: [
+				{language: "english", text: "Was ulAsicMaximumVoltage",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Input",
 			name: "MinEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxEngineClockPLL_Input",
 			name: "MaxEngineClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinEngineClockPLL_Output",
 			name: "MinEngineClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Input",
 			name: "MinMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxMemoryClockPLL_Input",
 			name: "MaxMemoryClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinMemoryClockPLL_Output",
 			name: "MinMemoryClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output_lower",
 			name: "MinPixelClockPLL_Output_lower",
+			description: [
+				{language: "english", text: "In 10Khz unit - lower 16bit of ulMinPixelClockPLL_Output",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -941,15 +1439,27 @@ global_default: {
 		}, {
 			access: "bios->CoreReferenceClock",
 			name: "CoreReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MemoryReferenceClock",
 			name: "MemoryReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->UniphyDPModeExtClkFreq",
 			name: "UniphyDPModeExtClkFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->Reserved5",
 			name: "Reserved5",
@@ -971,19 +1481,19 @@ global_default: {
 					name: "EMBEDDED_CAP",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "Embedded feature level"},
+						{language: "english", text: "Embedded feature level",},
 					],
 				}, {
 					name: "Reserved",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "Reserved"},
+						{language: "english", text: "Reserved",},
 					],
 				}, {
 					name: "BRANDING_ID",
 					hi: 7, lo: 4,
 					description: [
-						{language: "english", text: "Branding ID"},
+						{language: "english", text: "Branding ID",},
 					],
 				},
 			],
@@ -1005,86 +1515,152 @@ global_default: {
 		}, {
 			access: "bios->DefaultEngineClock",
 			name: "DefaultEngineClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->DefaultMemoryClock",
 			name: "DefaultMemoryClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->SPLL_OutputFreq",
 			name: "SPLL_OutputFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->GPUPLL_OutputFreq",
 			name: "GPUPLL_OutputFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->Reserved1",
 			name: "Reserved1",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was ulMaxEngineClockPLL_Output; //In 10Khz unit*",},
+			],
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was ulMaxMemoryClockPLL_Output; //In 10Khz unit*",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Output",
 			name: "MaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->BinaryAlteredInfo",
 			name: "BinaryAlteredInfo",
+			description: [
+				{language: "english", text: "Was ulASICMaxEngineClock  ?",},
+			],
 		}, {
 			access: "bios->DefaultDispEngineClkFreq",
 			name: "DefaultDispEngineClkFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit. This is the frequency before DCDTO, corresponding to usBootUpVDDCVoltage.",},
+			],
 		}, {
 			access: "bios->Reserved3",
 			name: "Reserved3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was ucASICMaxTemperature;",},
+			],
 		}, {
 			access: "bios->MinAllowedBL_Level",
 			name: "MinAllowedBL_Level",
 		}, {
 			access: "bios->BootUpVDDCVoltage",
 			name: "BootUpVDDCVoltage",
+			description: [
+				{language: "english", text: "In MV unit",},
+			],
 		}, {
 			access: "bios->LcdMinPixelClockPLL_Output",
 			name: "LcdMinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->LcdMaxPixelClockPLL_Output",
 			name: "LcdMaxPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In MHz unit",},
+			],
 		}, {
 			access: "bios->Reserved4",
 			name: "Reserved4",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was ulAsicMaximumVoltage",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Output",
 			name: "MinPixelClockPLL_Output",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->RemoteDisplayConfig",
 			name: "RemoteDisplayConfig",
+			description: [
+				{language: "english", text: "0=disable 1=enable",},
+			],
 		}, {
 			access: "bios->Reserved5",
 			name: "Reserved5",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Was usMinEngineClockPLL_Input and usMaxEngineClockPLL_Input"},
+				{language: "english", text: "Was usMinEngineClockPLL_Input and usMaxEngineClockPLL_Input",},
 			],
 		}, {
 			access: "bios->Reserved6",
 			name: "Reserved6",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was usMinEngineClockPLL_Output and usMinMemoryClockPLL_Input",},
+			],
 		}, {
 			access: "bios->Reserved7",
 			name: "Reserved7",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Was usMaxMemoryClockPLL_Input and usMinMemoryClockPLL_Output",},
+			],
 		}, {
 			access: "bios->MaxPixelClock",
 			name: "MaxPixelClock",
+			description: [
+				{language: "english", text: "In 10Khz unit, Max.  Pclk used only for DAC",},
+			],
 		}, {
 			access: "bios->MinPixelClockPLL_Input",
 			name: "MinPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MaxPixelClockPLL_Input",
 			name: "MaxPixelClockPLL_Input",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->BootUpVDDCIVoltage",
 			name: "BootUpVDDCIVoltage",
+			description: [
+				{language: "english", text: "In unit of mv; Was usMinPixelClockPLL_Output;",},
+			],
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
@@ -1093,18 +1669,33 @@ global_default: {
 		}, {
 			access: "bios->CoreReferenceClock",
 			name: "CoreReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->MemoryReferenceClock",
 			name: "MemoryReferenceClock",
+			description: [
+				{language: "english", text: "In 10Khz unit",},
+			],
 		}, {
 			access: "bios->UniphyDPModeExtClkFreq",
 			name: "UniphyDPModeExtClkFreq",
+			description: [
+				{language: "english", text: "In 10Khz unit, if it is 0, In DP Mode Uniphy Input clock from internal PPLL, otherwise Input clock from external Spread clock",},
+			],
 		}, {
 			access: "bios->MemoryModule_ID",
 			name: "MemoryModule_ID",
+			description: [
+				{language: "english", text: "Indicate what is the board design",},
+			],
 		}, {
 			access: "bios->CoolingSolution_ID",
 			name: "CoolingSolution_ID",
+			description: [
+				{language: "english", text: "0: Air cooling; 1: Liquid cooling ... [COOLING_SOLUTION]",},
+			],
 		}, {
 			access: "bios->ProductBranding",
 			name: "ProductBranding",
@@ -1116,16 +1707,22 @@ global_default: {
 		}, {
 			access: "bios->BootUpMVDDCVoltage",
 			name: "BootUpMVDDCVoltage",
+			description: [
+				{language: "english", text: "In unit of mv; Was usMinPixelClockPLL_Output;",},
+			],
 		}, {
 			access: "bios->BootUpVDDGFXVoltage",
 			name: "BootUpVDDGFXVoltage",
+			description: [
+				{language: "english", text: "In unit of mv;",},
+			],
 		}, {
 			access: "bios->Reserved10",
 			name: "Reserved10",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "New added comparing to previous version"},
+				{language: "english", text: "New added comparing to previous version",},
 			],
 		},
 	],
@@ -1136,10 +1733,16 @@ global_default: {
 			access: "bios->RegIndex",
 			name: "RegIndex",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "MC register index",},
+			],
 		}, {
 			access: "bios->PreRegDataLength",
 			name: "PreRegDataLength",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf",},
+			],
 		},
 	],
 }, {
@@ -1247,7 +1850,7 @@ global_default: {
 					name: "channel_width",
 					hi: 7, lo: 4,
 					description: [
-						{language: "english", text: "in number of 2"},
+						{language: "english", text: "in number of 2",},
 					],
 				},
 			],
@@ -1263,14 +1866,14 @@ global_default: {
 			display: "ATUI_BIN",
 			fancy: "ATUI_BITFIELD",
 			description: [
-				{language: "english", text: "board dependent parameter:NPL round trip delay, used for calculate memory timing parameters"},
+				{language: "english", text: "board dependent parameter:NPL round trip delay, used for calculate memory timing parameters",},
 			],
 			fancy_data: [
 				{
 					name: "npl_round_trip",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2."},
+						{language: "english", text: "MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2.",},
 					],
 				}, {
 					name: "reserved",
@@ -1314,13 +1917,13 @@ global_default: {
 					name: "dual_rank",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=single rank; 1=dual"},
+						{language: "english", text: "0=single rank; 1=dual",},
 					],
 				}, {
 					name: "Burstlength_8",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=BL4; 1=BL8"},
+						{language: "english", text: "0=BL4; 1=BL8",},
 					],
 				}, {
 					name: "reserved1",
@@ -1345,7 +1948,7 @@ global_default: {
 			display: "ATUI_BIN",
 			fancy: "ATUI_BITFIELD",
 			description: [
-				{language: "english", text: "clock and data recovery?"},
+				{language: "english", text: "clock and data recovery?",},
 			],
 			fancy_data: [
 				{
@@ -1371,13 +1974,13 @@ global_default: {
 					name: "num_columns",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "encoded; actual = 8+n bits"},
+						{language: "english", text: "encoded; actual = 8+n bits",},
 					],
 				}, {
 					name: "num_banks",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "encoded; actual = 2**(n+2) banks"},
+						{language: "english", text: "encoded; actual = 2**(n+2) banks",},
 					],
 				}, {
 					name: "rsvd0",
@@ -1464,6 +2067,9 @@ global_default: {
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -1482,18 +2088,33 @@ global_default: {
 		}, {
 			access: "bios->Row",
 			name: "Row",
+			description: [
+				{language: "english", text: "Number of Row,in power of 2;",},
+			],
 		}, {
 			access: "bios->Column",
 			name: "Column",
+			description: [
+				{language: "english", text: "Number of Column,in power of 2;",},
+			],
 		}, {
 			access: "bios->Bank",
 			name: "Bank",
+			description: [
+				{language: "english", text: "Nunber of Bank;",},
+			],
 		}, {
 			access: "bios->Rank",
 			name: "Rank",
+			description: [
+				{language: "english", text: "Number of Rank, in power of 2",},
+			],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of channel;",},
+			],
 		}, {
 			access: "bios->ChannelConfig",
 			name: "ChannelConfig",
@@ -1502,9 +2123,15 @@ global_default: {
 		}, {
 			access: "bios->DefaultMVDDQ_ID",
 			name: "DefaultMVDDQ_ID",
+			description: [
+				{language: "english", text: "Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;",},
+			],
 		}, {
 			access: "bios->DefaultMVDDC_ID",
 			name: "DefaultMVDDC_ID",
+			description: [
+				{language: "english", text: "Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;",},
+			],
 		}, {
 			access: "bios->Reserved3",
 			name: "Reserved3",
@@ -1523,20 +2150,35 @@ global_default: {
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
+			description: [
+				{language: "english", text: "To enable/disable functionalities based on memory type",},
+			],
 		}, {
 			access: "bios->EngineClock",
 			name: "EngineClock",
+			description: [
+				{language: "english", text: "Override of default engine clock for particular memory type",},
+			],
 		}, {
 			access: "bios->MemoryClock",
 			name: "MemoryClock",
+			description: [
+				{language: "english", text: "Override of default memory clock for particular memory type",},
+			],
 		}, {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS2 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->MR3",
 			name: "MR3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS3 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->EMRSValue",
 			name: "EMRSValue",
@@ -1552,6 +2194,9 @@ global_default: {
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -1570,18 +2215,33 @@ global_default: {
 		}, {
 			access: "bios->Row",
 			name: "Row",
+			description: [
+				{language: "english", text: "Number of Row in power of 2",},
+			],
 		}, {
 			access: "bios->Column",
 			name: "Column",
+			description: [
+				{language: "english", text: "Number of Column in power of 2",},
+			],
 		}, {
 			access: "bios->Bank",
 			name: "Bank",
+			description: [
+				{language: "english", text: "Nunber of Bank",},
+			],
 		}, {
 			access: "bios->Rank",
 			name: "Rank",
+			description: [
+				{language: "english", text: "Number of Rank, in power of 2",},
+			],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of channel",},
+			],
 		}, {
 			access: "bios->ChannelConfig",
 			name: "ChannelConfig",
@@ -1590,9 +2250,15 @@ global_default: {
 		}, {
 			access: "bios->DefaultMVDDQ_ID",
 			name: "DefaultMVDDQ_ID",
+			description: [
+				{language: "english", text: "Default MVDDQ setting for this memory block, ID linking to MVDDQ info table to find real set-up data;",},
+			],
 		}, {
 			access: "bios->DefaultMVDDC_ID",
 			name: "DefaultMVDDC_ID",
+			description: [
+				{language: "english", text: "Default MVDDC setting for this memory block, ID linking to MVDDC info table to find real set-up data;",},
+			],
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
@@ -1610,6 +2276,9 @@ global_default: {
 		{
 			access: "bios->ClkRange",
 			name: "ClkRange",
+			description: [
+				{language: "english", text: "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing",},
+			],
 		}, {
 			access: "bios->MR0",
 			name: "MR0",
@@ -1664,6 +2333,9 @@ global_default: {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "flag to control memory timing calculation. bit0= control EMRS2 Infineon",},
+			],
 		},
 	],
 }, {
@@ -1673,14 +2345,23 @@ global_default: {
 		{
 			access: "bios->ClkRange",
 			name: "ClkRange",
+			description: [
+				{language: "english", text: "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing",},
+			],
 		}, {
 			access: "bios->MR0",
 			name: "MR0",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "mode register",},
+			],
 		}, {
 			access: "bios->MR1",
 			name: "MR1",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "extended mode register",},
+			],
 		}, {
 			access: "bios->CL",
 			name: "CL",
@@ -1726,6 +2407,9 @@ global_default: {
 		}, {
 			access: "bios->flag",
 			name: "flag",
+			description: [
+				{language: "english", text: "flag to control memory timing calculation. bit0= control EMRS2 Infineon",},
+			],
 		}, {
 			access: "bios->tCCDL",
 			name: "tCCDL",
@@ -1763,14 +2447,23 @@ global_default: {
 		{
 			access: "bios->ClkRange",
 			name: "ClkRange",
+			description: [
+				{language: "english", text: "memory clock in 10kHz unit, when target memory clock is below this clock, use this memory timing",},
+			],
 		}, {
 			access: "bios->MR0",
 			name: "MR0",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "mode register",},
+			],
 		}, {
 			access: "bios->MR1",
 			name: "MR1",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "extended mode register",},
+			],
 		}, {
 			access: "bios->CL",
 			name: "CL",
@@ -1816,6 +2509,9 @@ global_default: {
 		}, {
 			access: "bios->flag",
 			name: "flag",
+			description: [
+				{language: "english", text: "flag to control memory timing calculation. bit0= control EMRS2 Infineon",},
+			],
 		}, {
 			access: "bios->tCCDL",
 			name: "tCCDL",
@@ -1866,24 +2562,45 @@ global_default: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "size of ATOM_VRAM_MODULE_V3",},
+			],
 		}, {
 			access: "bios->DefaultMVDDQ",
 			name: "DefaultMVDDQ",
+			description: [
+				{language: "english", text: "board dependent parameter:Default Memory Core Voltage",},
+			],
 		}, {
 			access: "bios->DefaultMVDDC",
 			name: "DefaultMVDDC",
+			description: [
+				{language: "english", text: "board dependent parameter:Default Memory IO Voltage",},
+			],
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "board dependent parameter:Number of channel;",},
+			],
 		}, {
 			access: "bios->ChannelSize",
 			name: "ChannelSize",
+			description: [
+				{language: "english", text: "board dependent parameter:32bit or 64bit",},
+			],
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "board dependnt parameter: EXT or INT +160mv to -140mv",},
+			],
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
@@ -1892,9 +2609,15 @@ global_default: {
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
+			description: [
+				{language: "english", text: "To enable/disable functionalities based on memory type",},
+			],
 		}, {
 			access: "bios->DllDisClock",
 			name: "DllDisClock",
+			description: [
+				{language: "english", text: "memory DLL will be disable when target memory clock is below this clock",},
+			],
 		}, {
 			access: "bios->MR2",
 			name: "MR2",
@@ -1916,24 +2639,45 @@ global_default: {
 		}, {
 			access: "bios->Row",
 			name: "Row",
+			description: [
+				{language: "english", text: "Number of Row,in power of 2;",},
+			],
 		}, {
 			access: "bios->Column",
 			name: "Column",
+			description: [
+				{language: "english", text: "Number of Column,in power of 2;",},
+			],
 		}, {
 			access: "bios->Bank",
 			name: "Bank",
+			description: [
+				{language: "english", text: "Nunber of Bank;",},
+			],
 		}, {
 			access: "bios->Rank",
 			name: "Rank",
+			description: [
+				{language: "english", text: "Number of Rank, in power of 2",},
+			],
 		}, {
 			access: "bios->BurstSize",
 			name: "BurstSize",
+			description: [
+				{language: "english", text: "burst size, 0= burst size=4  1= burst size=8",},
+			],
 		}, {
 			access: "bios->DllDisBit",
 			name: "DllDisBit",
+			description: [
+				{language: "english", text: "position of DLL Enable/Disable bit in EMRS ( Extended Mode Register )",},
+			],
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "memory refresh rate in unit of ms",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -1946,6 +2690,9 @@ global_default: {
 		}, {
 			access: "bios->MemAttrib",
 			name: "MemAttrib",
+			description: [
+				{language: "english", text: "Memory Device Addribute, like RDBI/WDBI etc",},
+			],
 		},
 	],
 }, {
@@ -1960,13 +2707,16 @@ global_default: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",},
+			],
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
-				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"},
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
 			],
 		}, {
 			access: "bios->Reserved",
@@ -1975,6 +2725,9 @@ global_default: {
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -1983,9 +2736,15 @@ global_default: {
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of channels present in this module config",},
+			],
 		}, {
 			access: "bios->ChannelWidth",
 			name: "ChannelWidth",
+			description: [
+				{language: "english", text: "0 - 32 bits; 1 - 64 bits",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -1993,6 +2752,9 @@ global_default: {
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
+			description: [
+				{language: "english", text: "To enable/disable functionalities based on memory type",},
+			],
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
@@ -2001,6 +2763,9 @@ global_default: {
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "board dependent parameter",},
+			],
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
@@ -2014,6 +2779,9 @@ global_default: {
 		}, {
 			access: "bios->MemorySize",
 			name: "MemorySize",
+			description: [
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros",},
+			],
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
@@ -2034,9 +2802,15 @@ global_default: {
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
+			],
 		}, {
 			access: "bios->FIFODepth",
 			name: "FIFODepth",
+			description: [
+				{language: "english", text: "FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth",},
+			],
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
@@ -2056,13 +2830,16 @@ global_default: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",},
+			],
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
-				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"},
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
 			],
 		}, {
 			access: "bios->Reserved",
@@ -2071,6 +2848,9 @@ global_default: {
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -2079,9 +2859,15 @@ global_default: {
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of channels present in this module config",},
+			],
 		}, {
 			access: "bios->ChannelWidth",
 			name: "ChannelWidth",
+			description: [
+				{language: "english", text: "0 - 32 bits; 1 - 64 bits",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -2089,6 +2875,9 @@ global_default: {
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
+			description: [
+				{language: "english", text: "To enable/disable functionalities based on memory type",},
+			],
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
@@ -2097,6 +2886,9 @@ global_default: {
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "board dependent parameter",},
+			],
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
@@ -2110,6 +2902,9 @@ global_default: {
 		}, {
 			access: "bios->MemorySize",
 			name: "MemorySize",
+			description: [
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros",},
+			],
 		}, {
 			access: "bios->Reserved3",
 			name: "Reserved3",
@@ -2118,10 +2913,16 @@ global_default: {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS2 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->MR3",
 			name: "MR3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS3 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -2130,9 +2931,15 @@ global_default: {
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
+			],
 		}, {
 			access: "bios->FIFODepth",
 			name: "FIFODepth",
+			description: [
+				{language: "english", text: "FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth",},
+			],
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
@@ -2152,13 +2959,16 @@ global_default: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",},
+			],
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
-				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"},
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
 			],
 		}, {
 			access: "bios->Reserved",
@@ -2167,6 +2977,9 @@ global_default: {
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "An external indicator (by hardcode, callback or pin) to tell what is the current memory module",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -2175,9 +2988,15 @@ global_default: {
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of channels present in this module config",},
+			],
 		}, {
 			access: "bios->ChannelWidth",
 			name: "ChannelWidth",
+			description: [
+				{language: "english", text: "0 - 32 bits; 1 - 64 bits",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -2185,6 +3004,9 @@ global_default: {
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
+			description: [
+				{language: "english", text: "To enable/disable functionalities based on memory type",},
+			],
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
@@ -2193,6 +3015,9 @@ global_default: {
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "board dependent parameter",},
+			],
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
@@ -2206,6 +3031,9 @@ global_default: {
 		}, {
 			access: "bios->MemorySize",
 			name: "MemorySize",
+			description: [
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros",},
+			],
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
@@ -2214,10 +3042,16 @@ global_default: {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS2 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->MR3",
 			name: "MR3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS3 Value is used for GDDR2 and GDDR4 memory type",},
+			],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -2226,9 +3060,15 @@ global_default: {
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
+			],
 		}, {
 			access: "bios->FIFODepth",
 			name: "FIFODepth",
+			description: [
+				{language: "english", text: "FIFO depth supposes to be detected during vendor detection, but if we dont do vendor detection we have to hardcode FIFO Depth",},
+			],
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
@@ -2243,21 +3083,30 @@ global_default: {
 		{
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "Size of ATOM_VRAM_MODULE_V7",},
+			],
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
-				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"},
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
 			],
 		}, {
 			access: "bios->EnableChannels",
 			name: "EnableChannels",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "bit vector which indicate which channels are enabled",},
+			],
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "Current memory module ID",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -2266,9 +3115,15 @@ global_default: {
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of mem. channels supported in this module",},
+			],
 		}, {
 			access: "bios->ChannelWidth",
 			name: "ChannelWidth",
+			description: [
+				{language: "english", text: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -2276,6 +3131,9 @@ global_default: {
 		}, {
 			access: "bios->Reserve",
 			name: "Reserve",
+			description: [
+				{language: "english", text: "In MC7x, the lower 4 bits are used as bit8-11 of memory size. In other MC code, it's not used.",},
+			],
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
@@ -2284,6 +3142,9 @@ global_default: {
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "Not used.",},
+			],
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
@@ -2297,6 +3158,9 @@ global_default: {
 		}, {
 			access: "bios->MemorySize",
 			name: "MemorySize",
+			description: [
+				{language: "english", text: "Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros",},
+			],
 		}, {
 			access: "bios->SEQSettingOffset",
 			name: "SEQSettingOffset",
@@ -2309,10 +3173,16 @@ global_default: {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS2/MR2 Value.",},
+			],
 		}, {
 			access: "bios->MR3",
 			name: "MR3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS3/MR3 Value.",},
+			],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -2321,9 +3191,15 @@ global_default: {
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
+			],
 		}, {
 			access: "bios->FIFODepth",
 			name: "FIFODepth",
+			description: [
+				{language: "english", text: "FIFO depth can be detected during vendor detection, here is hardcoded per memory",},
+			],
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
@@ -2335,7 +3211,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_STRING",
 			description: [
-				{language: "english", text: "part number end with '0'."},
+				{language: "english", text: "part number end with '0'.",},
 			],
 		},
 	],
@@ -2351,21 +3227,30 @@ global_default: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
+			description: [
+				{language: "english", text: "Size of ATOM_VRAM_MODULE_V7",},
+			],
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
-				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)"},
+				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
 			],
 		}, {
 			access: "bios->EnableChannels",
 			name: "EnableChannels",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "bit vector which indicate which channels are enabled",},
+			],
 		}, {
 			access: "bios->ExtMemoryID",
 			name: "ExtMemoryID",
+			description: [
+				{language: "english", text: "Current memory module ID",},
+			],
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
@@ -2374,9 +3259,15 @@ global_default: {
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
+			description: [
+				{language: "english", text: "Number of mem. channels supported in this module",},
+			],
 		}, {
 			access: "bios->ChannelWidth",
 			name: "ChannelWidth",
+			description: [
+				{language: "english", text: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",},
+			],
 		}, {
 			access: "bios->Density",
 			name: "Density",
@@ -2394,16 +3285,28 @@ global_default: {
 		}, {
 			access: "bios->VREFI",
 			name: "VREFI",
+			description: [
+				{language: "english", text: "Not used.",},
+			],
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Not used",},
+			],
 		}, {
 			access: "bios->MemorySize",
 			name: "MemorySize",
+			description: [
+				{language: "english", text: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",},
+			],
 		}, {
 			access: "bios->McTunningSetId",
 			name: "McTunningSetId",
+			description: [
+				{language: "english", text: "MC phy registers set per.",},
+			],
 		}, {
 			access: "bios->RowNum",
 			name: "RowNum",
@@ -2411,10 +3314,16 @@ global_default: {
 			access: "bios->MR2",
 			name: "MR2",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS2/MR2 Value.",},
+			],
 		}, {
 			access: "bios->MR3",
 			name: "MR3",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "EMRS3/MR3 Value.",},
+			],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -2423,9 +3332,15 @@ global_default: {
 		}, {
 			access: "bios->RefreshRateFactor",
 			name: "RefreshRateFactor",
+			description: [
+				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
+			],
 		}, {
 			access: "bios->FIFODepth",
 			name: "FIFODepth",
+			description: [
+				{language: "english", text: "FIFO depth can be detected during vendor detection, here is hardcoded per memory",},
+			],
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
@@ -2437,7 +3352,7 @@ global_default: {
 			display: "ATUI_NODISPLAY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap2_7_1",
 			description: [
-				{language: "english", text: "channel mapping for channel8~15"},
+				{language: "english", text: "channel mapping for channel8~15",},
 			],
 		}, {
 			access: "bios->BankMapCfg",
@@ -2453,7 +3368,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_STRING",
 			description: [
-				{language: "english", text: "part number end with '0'."},
+				{language: "english", text: "part number end with '0'.",},
 			],
 		},
 	],
@@ -2484,10 +3399,16 @@ global_default: {
 			access: "bios->MemAdjustTblOffset",
 			name: "MemAdjustTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting",},
+			],
 		}, {
 			access: "bios->MemClkPatchTblOffset",
 			name: "MemClkPatchTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting",},
+			],
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
@@ -2498,7 +3419,7 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "8 bit strap maximum+terminator"},
+				{language: "english", text: "8 bit strap maximum+terminator",},
 			],
 		}, {
 			access: "bios->NumOfVRAMModule",
@@ -2518,10 +3439,16 @@ global_default: {
 			access: "bios->MemAdjustTblOffset",
 			name: "MemAdjustTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting",},
+			],
 		}, {
 			access: "bios->MemClkPatchTblOffset",
 			name: "MemClkPatchTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting",},
+			],
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
@@ -2559,14 +3486,23 @@ global_default: {
 			access: "bios->MemAdjustTblOffset",
 			name: "MemAdjustTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting",},
+			],
 		}, {
 			access: "bios->MemClkPatchTblOffset",
 			name: "MemClkPatchTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting",},
+			],
 		}, {
 			access: "bios->PerBytePresetOffset",
 			name: "PerBytePresetOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for Per Byte Offset Preset Settings",},
+			],
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
@@ -2575,12 +3511,21 @@ global_default: {
 		}, {
 			access: "bios->NumOfVRAMModule",
 			name: "NumOfVRAMModule",
+			description: [
+				{language: "english", text: "indicate number of VRAM module",},
+			],
 		}, {
 			access: "bios->MemoryClkPatchTblVer",
 			name: "MemoryClkPatchTblVer",
+			description: [
+				{language: "english", text: "version of memory AC timing register list",},
+			],
 		}, {
 			access: "bios->VramModuleVer",
 			name: "VramModuleVer",
+			description: [
+				{language: "english", text: "indicate ATOM_VRAM_MODUE version",},
+			],
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
@@ -2600,22 +3545,37 @@ global_default: {
 			access: "bios->MemAdjustTblOffset",
 			name: "MemAdjustTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory vendor specific MC adjust setting",},
+			],
 		}, {
 			access: "bios->MemClkPatchTblOffset",
 			name: "MemClkPatchTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for memory clock specific MC setting",},
+			],
 		}, {
 			access: "bios->McAdjustPerTileTblOffset",
 			name: "McAdjustPerTileTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for Per Byte Offset Preset Settings",},
+			],
 		}, {
 			access: "bios->McPhyInitTableOffset",
 			name: "McPhyInitTableOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_INIT_REG_BLOCK structure for MC phy init set",},
+			],
 		}, {
 			access: "bios->DramDataRemapTblOffset",
 			name: "DramDataRemapTblOffset",
 			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of ATOM_DRAM_DATA_REMAP array to indicate DRAM data lane to GPU mapping",},
+			],
 		}, {
 			access: "bios->Reserved1",
 			name: "Reserved1",
@@ -2623,15 +3583,27 @@ global_default: {
 		}, {
 			access: "bios->NumOfVRAMModule",
 			name: "NumOfVRAMModule",
+			description: [
+				{language: "english", text: "indicate number of VRAM module",},
+			],
 		}, {
 			access: "bios->MemoryClkPatchTblVer",
 			name: "MemoryClkPatchTblVer",
+			description: [
+				{language: "english", text: "version of memory AC timing register list",},
+			],
 		}, {
 			access: "bios->VramModuleVer",
 			name: "VramModuleVer",
+			description: [
+				{language: "english", text: "indicate ATOM_VRAM_MODUE version",},
+			],
 		}, {
 			access: "bios->McPhyTileNum",
 			name: "McPhyTileNum",
+			description: [
+				{language: "english", text: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",},
+			],
 		},
 	],
 },

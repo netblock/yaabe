@@ -30,37 +30,37 @@ global_default: {
 					name: "burst_length",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "1=BL2, 2=BL4, 3=BL8; all else reserved"},
+						{language: "english", text: "1=BL2, 2=BL4, 3=BL8; all else reserved",},
 					],
 				}, {
 					name: "burst_type",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=sequential, 1=interleave"},
+						{language: "english", text: "0=sequential, 1=interleave",},
 					],
 				}, {
 					name: "tCL",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "2=2,3=3, 5=1.5,6=2.5, all else reseved"},
+						{language: "english", text: "2=2,3=3, 5=1.5,6=2.5, all else reseved",},
 					],
 				}, {
 					name: "test_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "operating_rsvd",
 					hi: 13, lo: 9,
 					description: [
-						{language: "english", text: "operation_mode reserved"},
+						{language: "english", text: "operation_mode reserved",},
 					],
 				}, {
 					name: "ID",
@@ -80,19 +80,19 @@ global_default: {
 					name: "DLL",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "drive_strength",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=full, 1=reduced; (see SSTL_2, Class II)"},
+						{language: "english", text: "0=full, 1=reduced; (see SSTL_2, Class II)",},
 					],
 				}, {
 					name: "reserved",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "compatibility with early DDR1"},
+						{language: "english", text: "compatibility with early DDR1",},
 					],
 				}, {
 					name: "operating_rsvd",
@@ -115,43 +115,43 @@ global_default: {
 					name: "burst_length",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "2=BL4, 3=BL8; all else reserved"},
+						{language: "english", text: "2=BL4, 3=BL8; all else reserved",},
 					],
 				}, {
 					name: "burst_type",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=sequential, 1=interleave"},
+						{language: "english", text: "0=sequential, 1=interleave",},
 					],
 				}, {
 					name: "tCL",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "tCL=n; 0,1,7=reserved"},
+						{language: "english", text: "tCL=n; 0,1,7=reserved",},
 					],
 				}, {
 					name: "test_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "WR",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "tWR = n+1"},
+						{language: "english", text: "tWR = n+1",},
 					],
 				}, {
 					name: "PD_exit_time",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "0=fast, 1=slow"},
+						{language: "english", text: "0=fast, 1=slow",},
 					],
 				}, {
 					name: "rsvd_15_13",
@@ -171,55 +171,55 @@ global_default: {
 					name: "DLL",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "drive_strength",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=full, 1=reduced"},
+						{language: "english", text: "0=full, 1=reduced",},
 					],
 				}, {
 					name: "RTT_Nom_lo_bit",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "A[6,2] -> Nom[1:0]"},
+						{language: "english", text: "A[6,2] -> Nom[1:0]",},
 					],
 				}, {
 					name: "Additive_Latency",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "0=0...  6+=reserved"},
+						{language: "english", text: "0=0...  6+=reserved",},
 					],
 				}, {
 					name: "RTT_Nom_hi_bit",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=disabled, 1=75 ohms, 2=150, 3=50"},
+						{language: "english", text: "0=disabled, 1=75 ohms, 2=150, 3=50",},
 					],
 				}, {
 					name: "OCD_calibration",
 					hi: 9, lo: 7,
 					description: [
-						{language: "english", text: "0=exit,1=drive1,2=drive2,4=adjust,7=default"},
+						{language: "english", text: "0=exit,1=drive1,2=drive2,4=adjust,7=default",},
 					],
 				}, {
 					name: "DQS",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "RDQS",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0=disable"},
+						{language: "english", text: "0=disable",},
 					],
 				}, {
 					name: "output_disable",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "1=turn off drivers for DQ, DQS, RDQS"},
+						{language: "english", text: "1=turn off drivers for DQ, DQS, RDQS",},
 					],
 				}, {
 					name: "rsvd_15_13",
@@ -239,31 +239,31 @@ global_default: {
 					name: "PASR",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111"},
+						{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",},
 					],
 				}, {
 					name: "DCC",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=disable; Duty Cycle Correction"},
+						{language: "english", text: "0=disable; Duty Cycle Correction",},
 					],
 				}, {
 					name: "rsvd_6_4",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "HT_SRF",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=disable; hi-temp self-refresh mode"},
+						{language: "english", text: "0=disable; hi-temp self-refresh mode",},
 					],
 				}, {
 					name: "rsvd_12_8",
 					hi: 12, lo: 8,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "rsvd_15_13",
@@ -283,7 +283,7 @@ global_default: {
 					name: "rsvd_15_0",
 					hi: 15, lo: 0,
 					description: [
-						{language: "english", text: "all reserved"},
+						{language: "english", text: "all reserved",},
 					],
 				},
 			],
@@ -300,49 +300,49 @@ global_default: {
 					name: "burst_length",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=BL8, 1=OTF 4/8, 2=BC4, 3=reserved"},
+						{language: "english", text: "0=BL8, 1=OTF 4/8, 2=BC4, 3=reserved",},
 					],
 				}, {
 					name: "CL_hi_bit",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "A[2,6,5,4] -> CL[4:0]"},
+						{language: "english", text: "A[2,6,5,4] -> CL[4:0]",},
 					],
 				}, {
 					name: "read_burst_type",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=nibble sequential, 1=interleave"},
+						{language: "english", text: "0=nibble sequential, 1=interleave",},
 					],
 				}, {
 					name: "CL_lo_bits",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "tCL = 4+n"},
+						{language: "english", text: "tCL = 4+n",},
 					],
 				}, {
 					name: "testmode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "WR",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "tWR; 16,5,6,7,8,10,12,14"},
+						{language: "english", text: "tWR; 16,5,6,7,8,10,12,14",},
 					],
 				}, {
 					name: "DLL_PPD",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "0=slow exit (DLL off), 1=fast (DLL on)"},
+						{language: "english", text: "0=slow exit (DLL off), 1=fast (DLL on)",},
 					],
 				}, {
 					name: "RFU_15_13",
@@ -362,73 +362,73 @@ global_default: {
 					name: "DLL",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "DrvStr_lo_bit",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=RZQ/6, 1=RZQ/7"},
+						{language: "english", text: "0=RZQ/6, 1=RZQ/7",},
 					],
 				}, {
 					name: "RTTNom_lo_bit",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "A[9,6,2] -> RTT_Nom[2:0]"},
+						{language: "english", text: "A[9,6,2] -> RTT_Nom[2:0]",},
 					],
 				}, {
 					name: "Additive_Latency",
 					hi: 4, lo: 3,
 					description: [
-						{language: "english", text: "0=0, 1=tCL-1, 2=tCL-2, 3=reserved"},
+						{language: "english", text: "0=0, 1=tCL-1, 2=tCL-2, 3=reserved",},
 					],
 				}, {
 					name: "DrvStr_hi_bit",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "A[5,1] -> DrvStr[1:0]; 2,3=reserved"},
+						{language: "english", text: "A[5,1] -> DrvStr[1:0]; 2,3=reserved",},
 					],
 				}, {
 					name: "RTTNom_mid_bit",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=dis, RZQ/4, /2, /6, /12, /8,  6,7=rsvd"},
+						{language: "english", text: "0=dis, RZQ/4, /2, /6, /12, /8,  6,7=rsvd",},
 					],
 				}, {
 					name: "write_leveling",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "RFU_8",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "RTTNom_hi_bit",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "2,4,6 only if writelevel on and drivers on"},
+						{language: "english", text: "2,4,6 only if writelevel on and drivers on",},
 					],
 				}, {
 					name: "RFU_10",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "TDQS",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0=disabled; Termination Data Strobe pins"},
+						{language: "english", text: "0=disabled; Termination Data Strobe pins",},
 					],
 				}, {
 					name: "output_disable",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "1=turn off drivers for DQ, DQS, DQS#"},
+						{language: "english", text: "1=turn off drivers for DQ, DQS, DQS#",},
 					],
 				}, {
 					name: "RFU_15_13",
@@ -448,37 +448,37 @@ global_default: {
 					name: "PASR",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111"},
+						{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",},
 					],
 				}, {
 					name: "CWL",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "tCWl = 5+n"},
+						{language: "english", text: "tCWl = 5+n",},
 					],
 				}, {
 					name: "ASR",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=manual; auto self refresh"},
+						{language: "english", text: "0=manual; auto self refresh",},
 					],
 				}, {
 					name: "SRT",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=normal, 1=extended; self refresh temp range"},
+						{language: "english", text: "0=normal, 1=extended; self refresh temp range",},
 					],
 				}, {
 					name: "RFU_8",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "RTT_WR",
 					hi: 10, lo: 9,
 					description: [
-						{language: "english", text: "0=off, RZQ/4, /2, reserved"},
+						{language: "english", text: "0=off, RZQ/4, /2, reserved",},
 					],
 				}, {
 					name: "RFU_15_11",
@@ -498,13 +498,13 @@ global_default: {
 					name: "MPR_location",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=predefined pattern for read sync, 1,2,3=RFU"},
+						{language: "english", text: "0=predefined pattern for read sync, 1,2,3=RFU",},
 					],
 				}, {
 					name: "MPR_operation",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=normal, 1=dataflow from MPR"},
+						{language: "english", text: "0=normal, 1=dataflow from MPR",},
 					],
 				}, {
 					name: "RFU_15_3",
@@ -524,37 +524,37 @@ global_default: {
 					name: "burst_length",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=4, 1=reserved"},
+						{language: "english", text: "0=4, 1=reserved",},
 					],
 				}, {
 					name: "WL",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "1=1..7=7; 0=reserved"},
+						{language: "english", text: "1=1..7=7; 0=reserved",},
 					],
 				}, {
 					name: "RL",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "8,9,10,rsvd,4,5,6,7"},
+						{language: "english", text: "8,9,10,rsvd,4,5,6,7",},
 					],
 				}, {
 					name: "testmode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "WR",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "tWR=n+1; 0,1,7=reserved"},
+						{language: "english", text: "tWR=n+1; 0,1,7=reserved",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -574,49 +574,49 @@ global_default: {
 					name: "addrcmd_ODT",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=off 1=1xDQ, 2=2x, 3=4xDQ"},
+						{language: "english", text: "0=off 1=1xDQ, 2=2x, 3=4xDQ",},
 					],
 				}, {
 					name: "data_ck_ODT",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=off, 1=auto cal., 2=60ohms, 3=120"},
+						{language: "english", text: "0=off, 1=auto cal., 2=60ohms, 3=120",},
 					],
 				}, {
 					name: "additive_latency",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "0=0, 1=1"},
+						{language: "english", text: "0=0, 1=1",},
 					],
 				}, {
 					name: "DQS",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=differential, 1=single"},
+						{language: "english", text: "0=differential, 1=single",},
 					],
 				}, {
 					name: "DLL",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=off, 1=on"},
+						{language: "english", text: "0=off, 1=on",},
 					],
 				}, {
 					name: "driver_Ron",
 					hi: 9, lo: 7,
 					description: [
-						{language: "english", text: "0=60, 1=55 ... 7=25"},
+						{language: "english", text: "0=60, 1=55 ... 7=25",},
 					],
 				}, {
 					name: "rankness",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=single 1=multi"},
+						{language: "english", text: "0=single 1=multi",},
 					],
 				}, {
 					name: "vendor_id",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0=disabled 1=enabled"},
+						{language: "english", text: "0=disabled 1=enabled",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -639,37 +639,37 @@ global_default: {
 					name: "ODT_at_powerdown",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=all off except CK, CKE, 1=EMRS/EMRS2"},
+						{language: "english", text: "0=all off except CK, CKE, 1=EMRS/EMRS2",},
 					],
 				}, {
 					name: "low_power_mode",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=self-refresh, 1=fast wakeup"},
+						{language: "english", text: "0=self-refresh, 1=fast wakeup",},
 					],
 				}, {
 					name: "CK_ODT",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "0=off, 1=1xDQ, 2=2x, 3=4xDQ"},
+						{language: "english", text: "0=off, 1=1xDQ, 2=2x, 3=4xDQ",},
 					],
 				}, {
 					name: "CS_ODT",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "0=off, 1=0.5x addrcmd, 2=1x, 3=reserved"},
+						{language: "english", text: "0=off, 1=0.5x addrcmd, 2=1x, 3=reserved",},
 					],
 				}, {
 					name: "CKE_ODT",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=off, 1=addrcmd"},
+						{language: "english", text: "0=off, 1=addrcmd",},
 					],
 				}, {
 					name: "ODT_W_mode",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=enable 1=disable. \"W\" mode??"},
+						{language: "english", text: "0=enable 1=disable. \"W\" mode??",},
 					],
 				}, {
 					name: "rsvd_11_10",
@@ -692,43 +692,43 @@ global_default: {
 					name: "burst_length",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0,1=RFU, 2=BL4, 3=BL8"},
+						{language: "english", text: "0,1=RFU, 2=BL4, 3=BL8",},
 					],
 				}, {
 					name: "CL_hi_bit",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "A[2,6,5,4]->tCL[3:0] | JEDEC says A[3] is for BL; BL[2:0]"},
+						{language: "english", text: "A[2,6,5,4]->tCL[3:0] | JEDEC says A[3] is for BL; BL[2:0]",},
 					],
 				}, {
 					name: "burst_type",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=sequential 1=RFU"},
+						{language: "english", text: "0=sequential 1=RFU",},
 					],
 				}, {
 					name: "CL_lo_bits",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "8,9,10,11,rsvd,5,6,7,12,13,14,15, rsvd..."},
+						{language: "english", text: "8,9,10,11,rsvd,5,6,7,12,13,14,15, rsvd...",},
 					],
 				}, {
 					name: "test_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "tWL",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "0=reserved; tCWL"},
+						{language: "english", text: "0=reserved; tCWL",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -748,49 +748,49 @@ global_default: {
 					name: "drive_strength",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=auto cal. 1=30ohms, 2=40, 3=50"},
+						{language: "english", text: "0=auto cal. 1=30ohms, 2=40, 3=50",},
 					],
 				}, {
 					name: "data_terminaton",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2"},
+						{language: "english", text: "0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2",},
 					],
 				}, {
 					name: "WR_lo_bits",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10"},
+						{language: "english", text: "A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10",},
 					],
 				}, {
 					name: "DLL",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "rsvd_8_8",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "R_on",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=40 ohms, 1=60 ohms; pull-up"},
+						{language: "english", text: "0=40 ohms, 1=60 ohms; pull-up",},
 					],
 				}, {
 					name: "vendor_ID",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=off"},
+						{language: "english", text: "0=off",},
 					],
 				}, {
 					name: "AddrCmd_term",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0=inherit CKE, 1=CKE/2"},
+						{language: "english", text: "0=inherit CKE, 1=CKE/2",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -810,43 +810,43 @@ global_default: {
 					name: "WR",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "Write recovery; 16,18,20, 6,8,10,12,14"},
+						{language: "english", text: "Write recovery; 16,18,20, 6,8,10,12,14",},
 					],
 				}, {
 					name: "tCL",
 					hi: 6, lo: 3,
 					description: [
-						{language: "english", text: "16,17..21,22, 7,8,9..15"},
+						{language: "english", text: "16,17..21,22, 7,8,9..15",},
 					],
 				}, {
 					name: "testmode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behaviour is vendor specific"},
+						{language: "english", text: "behaviour is vendor specific",},
 					],
 				}, {
 					name: "DLL_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "WL",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "write latency; 0=RFU, 1=1..7=7"},
+						{language: "english", text: "write latency; 0=RFU, 1=1..7=7",},
 					],
 				}, {
 					name: "RFU_12",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 13,
 					description: [
-						{language: "english", text: "MR 0"},
+						{language: "english", text: "MR 0",},
 					],
 				},
 			],
@@ -863,61 +863,61 @@ global_default: {
 					name: "Drive_Term",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=auto cal., 2=nominal (no compensation), 1,3=RFU. (drive: 40 down/60 up ; termination: 60/120; CA 60/120/240)"},
+						{language: "english", text: "0=auto cal., 2=nominal (no compensation), 1,3=RFU. (drive: 40 down/60 up ; termination: 60/120; CA 60/120/240)",},
 					],
 				}, {
 					name: "DQ_term",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=all off, 1=DQ off, 2=1/4, 3=1/2"},
+						{language: "english", text: "0=all off, 1=DQ off, 2=1/4, 3=1/2",},
 					],
 				}, {
 					name: "tPreamble",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "0=1..  5..7=RFU. read/write preamble in tCK"},
+						{language: "english", text: "0=1..  5..7=RFU. read/write preamble in tCK",},
 					],
 				}, {
 					name: "DLL",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=enable"},
+						{language: "english", text: "0=enable",},
 					],
 				}, {
 					name: "read_DBI",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=disable. data bus iversion"},
+						{language: "english", text: "0=disable. data bus iversion",},
 					],
 				}, {
 					name: "write_DBI",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=disable"},
+						{language: "english", text: "0=disable",},
 					],
 				}, {
 					name: "DBI_mode",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=DC, 1=AC. optimise for DC/AC power reduction"},
+						{language: "english", text: "0=DC, 1=AC. optimise for DC/AC power reduction",},
 					],
 				}, {
 					name: "Vendor_ID",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0=disable"},
+						{language: "english", text: "0=disable",},
 					],
 				}, {
 					name: "RFU_12",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 13,
 					description: [
-						{language: "english", text: "EMR 1"},
+						{language: "english", text: "EMR 1",},
 					],
 				},
 			],
@@ -935,32 +935,32 @@ global_default: {
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "Two's Compl. Driver/term pulldown offset"},
+						{language: "english", text: "Two's Compl. Driver/term pulldown offset",},
 					],
 				}, {
 					name: "OCD_up_offset",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "Two's Compl. Driver/terminator pullup offset"},
+						{language: "english", text: "Two's Compl. Driver/terminator pullup offset",},
 					],
 				}, {
 					name: "tRAS",
 					hi: 11, lo: 6,
 					description: [
-						{language: "english", text: "tRAS latency; 0=RFU, 1=1..63=63"},
+						{language: "english", text: "tRAS latency; 0=RFU, 1=1..63=63",},
 					],
 				}, {
 					name: "RFU_12",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 13,
 					description: [
-						{language: "english", text: "EMR 2"},
+						{language: "english", text: "EMR 2",},
 					],
 				},
 			],
@@ -977,49 +977,49 @@ global_default: {
 					name: "RFU",
 					hi: 4, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "LP_term",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "DRAM_info",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "0=vendor ID, 1=PERR_Info, 2,3=vendor specific"},
+						{language: "english", text: "0=vendor ID, 1=PERR_Info, 2,3=vendor specific",},
 					],
 				}, {
 					name: "parity_reset",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=store, 1=reset; clear PERR_Info"},
+						{language: "english", text: "0=store, 1=reset; clear PERR_Info",},
 					],
 				}, {
 					name: "parity_enable",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=disable"},
+						{language: "english", text: "0=disable",},
 					],
 				}, {
 					name: "parity_mask",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0=DQ[7:0], 1=[15:8], 2=[23:16], 3=[31:24]"},
+						{language: "english", text: "0=DQ[7:0], 1=[15:8], 2=[23:16], 3=[31:24]",},
 					],
 				}, {
 					name: "RFU_12",
 					hi: 12, lo: 12,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 13,
 					description: [
-						{language: "english", text: "EMR 3"},
+						{language: "english", text: "EMR 3",},
 					],
 				},
 			],
@@ -1036,25 +1036,25 @@ global_default: {
 					name: "WLmrs",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "0=RFU 1=1..7=7"},
+						{language: "english", text: "0=RFU 1=1..7=7",},
 					],
 				}, {
 					name: "CLmrs_lo",
 					hi: 6, lo: 3,
 					description: [
-						{language: "english", text: "tCL = 5+n. [MR8[0], MR0[6:3]] -> tCL[4:0]"},
+						{language: "english", text: "tCL = 5+n. [MR8[0], MR0[6:3]] -> tCL[4:0]",},
 					],
 				}, {
 					name: "testmode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "behavior is vendor specific"},
+						{language: "english", text: "behavior is vendor specific",},
 					],
 				}, {
 					name: "WR",
 					hi: 11, lo: 8,
 					description: [
-						{language: "english", text: "tWR = 4+n. [MR8[1], MR0[11:8]] -> tWR[4:0]"},
+						{language: "english", text: "tWR = 4+n. [MR8[1], MR0[11:8]] -> tWR[4:0]",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1074,55 +1074,55 @@ global_default: {
 					name: "drive_strength",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=auto cal., 1,3=vendor, 2=nom (60/40)"},
+						{language: "english", text: "0=auto cal., 1,3=vendor, 2=nom (60/40)",},
 					],
 				}, {
 					name: "data_termination",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=disabled, 1=ZQ, 2=ZQ/2, 3=RFU"},
+						{language: "english", text: "0=disabled, 1=ZQ, 2=ZQ/2, 3=RFU",},
 					],
 				}, {
 					name: "addrcmd_term",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "0=inherit CKE_n, 1=ZQ, 2=ZQ/2, 3=disabled"},
+						{language: "english", text: "0=inherit CKE_n, 1=ZQ, 2=ZQ/2, 3=disabled",},
 					],
 				}, {
 					name: "calibration_update",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=on; impedance calibration engine"},
+						{language: "english", text: "0=on; impedance calibration engine",},
 					],
 				}, {
 					name: "PLL_DLL",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=off"},
+						{language: "english", text: "0=off",},
 					],
 				}, {
 					name: "read_DBI",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=on; data bus inversion"},
+						{language: "english", text: "0=on; data bus inversion",},
 					],
 				}, {
 					name: "write_DBI",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=on; data bus inversion"},
+						{language: "english", text: "0=on; data bus inversion",},
 					],
 				}, {
 					name: "address_BI",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=on; address bus inversion"},
+						{language: "english", text: "0=on; address bus inversion",},
 					],
 				}, {
 					name: "PLLDLL_reset",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "self clearing"},
+						{language: "english", text: "self clearing",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1143,28 +1143,28 @@ global_default: {
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "Two's Compl. vendor specific"},
+						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "drive_pullup_offset",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "Two's Compl. vendor specific"},
+						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "data_wck_term_offset",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 8, lo: 6,
 					description: [
-						{language: "english", text: "Two's Compl. vendor specific"},
+						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "AddrCmd_term_offset",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 11, lo: 9,
 					description: [
-						{language: "english", text: "Two's Compl. vendor specific"},
+						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1184,49 +1184,49 @@ global_default: {
 					name: "self_refresh",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=32ms 1,2=vendor, 3=temp controlled"},
+						{language: "english", text: "0=32ms 1,2=vendor, 3=temp controlled",},
 					],
 				}, {
 					name: "WCK01_invert",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "phase invert"},
+						{language: "english", text: "phase invert",},
 					],
 				}, {
 					name: "WCK23_invert",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "phase invert"},
+						{language: "english", text: "phase invert",},
 					],
 				}, {
 					name: "WCK2CK_training",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "0=off; WCK to CK alignment training"},
+						{language: "english", text: "0=off; WCK to CK alignment training",},
 					],
 				}, {
 					name: "RDQS_mode",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=off; EDC becomes RDQS"},
+						{language: "english", text: "0=off; EDC becomes RDQS",},
 					],
 				}, {
 					name: "DRAM_info",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "0=off, 1=vendor ID, 2=temp, 3=vemdor spec."},
+						{language: "english", text: "0=off, 1=vendor ID, 2=temp, 3=vemdor spec.",},
 					],
 				}, {
 					name: "WCK_termination",
 					hi: 9, lo: 8,
 					description: [
-						{language: "english", text: "0=dis, 1=ZQ/2, 2=ZQ, 3=RFU"},
+						{language: "english", text: "0=dis, 1=ZQ/2, 2=ZQ, 3=RFU",},
 					],
 				}, {
 					name: "bank_groups",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCL=3"},
+						{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCL=3",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1246,37 +1246,37 @@ global_default: {
 					name: "EDC_pattern",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "little-endian-based burst position"},
+						{language: "english", text: "little-endian-based burst position",},
 					],
 				}, {
 					name: "CRCWL",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "7+n; CRC write latency"},
+						{language: "english", text: "7+n; CRC write latency",},
 					],
 				}, {
 					name: "CRCRL",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "4,1,2,3; CRC read laency"},
+						{language: "english", text: "4,1,2,3; CRC read laency",},
 					],
 				}, {
 					name: "read_CRC",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=on"},
+						{language: "english", text: "0=on",},
 					],
 				}, {
 					name: "write_crc",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "0=on"},
+						{language: "english", text: "0=on",},
 					],
 				}, {
 					name: "hold_invert",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "1=inverted; EDC hold pattern inversion"},
+						{language: "english", text: "1=inverted; EDC hold pattern inversion",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1296,31 +1296,31 @@ global_default: {
 					name: "LP1",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=off; power saving, relaxed core"},
+						{language: "english", text: "0=off; power saving, relaxed core",},
 					],
 				}, {
 					name: "LP2",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=off; power saving, WCK off during powerdown"},
+						{language: "english", text: "0=off; power saving, WCK off during powerdown",},
 					],
 				}, {
 					name: "LP3",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=off; training during refresh disabled"},
+						{language: "english", text: "0=off; training during refresh disabled",},
 					],
 				}, {
 					name: "PLLDLL_BW",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "vendor specific; PLL bandwidth"},
+						{language: "english", text: "vendor specific; PLL bandwidth",},
 					],
 				}, {
 					name: "tRAS",
 					hi: 11, lo: 6,
 					description: [
-						{language: "english", text: "0=RFU, 1=1..63=63"},
+						{language: "english", text: "0=RFU, 1=1..63=63",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1340,39 +1340,39 @@ global_default: {
 					name: "WCK2CK_alignment",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=inside DRAM, 1=at balls"},
+						{language: "english", text: "0=inside DRAM, 1=at balls",},
 					],
 				}, {
 					name: "VREFD_merge",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=off 1=average VREFD and internal vref"},
+						{language: "english", text: "0=off 1=average VREFD and internal vref",},
 					],
 				}, {
 					name: "VREFD_training",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=ff 1=train; self clearing"},
+						{language: "english", text: "0=ff 1=train; self clearing",},
 					],
 				}, {
 					name: "VREFD_source",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=VREFD pins, 1=internally generated"},
+						{language: "english", text: "0=VREFD pins, 1=internally generated",},
 					],
 				}, {
 					name: "VREFD_offset_MU",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 7, lo: 4,
 					description: [
-						{language: "english", text: "semi Two's Compl. -8 = 0/auto"},
+						{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
 					],
 				}, {
 					name: "VREFD_offset_AF",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 11, lo: 8,
 					description: [
-						{language: "english", text: "semi Two's Compl. -8 = 0/auto"},
+						{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1392,61 +1392,61 @@ global_default: {
 					name: "PLL_standby",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=off 1=standby when self-refresh"},
+						{language: "english", text: "0=off 1=standby when self-refresh",},
 					],
 				}, {
 					name: "PLL_fast_lock",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "1=faster lock but higher power; self clears"},
+						{language: "english", text: "1=faster lock but higher power; self clears",},
 					],
 				}, {
 					name: "PLL_delay_comp",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=PLL feedback = WCK clock tree delay"},
+						{language: "english", text: "1=PLL feedback = WCK clock tree delay",},
 					],
 				}, {
 					name: "low_freq_mode",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "1=reduced power for low freq"},
+						{language: "english", text: "1=reduced power for low freq",},
 					],
 				}, {
 					name: "WCK2CK_autosync",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "1=auto WCK2CK after PD exit"},
+						{language: "english", text: "1=auto WCK2CK after PD exit",},
 					],
 				}, {
 					name: "DQ_preamble",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "1=non-gapped READs will have 4UI preamble"},
+						{language: "english", text: "1=non-gapped READs will have 4UI preamble",},
 					],
 				}, {
 					name: "temp_sensor",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "1=enable temperature sense"},
+						{language: "english", text: "1=enable temperature sense",},
 					],
 				}, {
 					name: "half_VREFD",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=0.7x 1=0.5x VDDQ"},
+						{language: "english", text: "0=0.7x 1=0.5x VDDQ",},
 					],
 				}, {
 					name: "VDD_range",
 					hi: 9, lo: 8,
 					description: [
-						{language: "english", text: "0=1.5V 1,2,3=vendor; adapt to different VDD"},
+						{language: "english", text: "0=1.5V 1,2,3=vendor; adapt to different VDD",},
 					],
 				}, {
 					name: "DCC",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0=off, 1=start, 2=reset, 3=RFU; Duty Cycle Correction"},
+						{language: "english", text: "0=off, 1=start, 2=reset, 3=RFU; Duty Cycle Correction",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1466,31 +1466,31 @@ global_default: {
 					name: "CL_EHF",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "tCL range extension; see MR0"},
+						{language: "english", text: "tCL range extension; see MR0",},
 					],
 				}, {
 					name: "WR_EHF",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "tWR range extension; see MR0"},
+						{language: "english", text: "tWR range extension; see MR0",},
 					],
 				}, {
 					name: "EDC_HiZ",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=Hi-Z state; precedence over all other states"},
+						{language: "english", text: "1=Hi-Z state; precedence over all other states",},
 					],
 				}, {
 					name: "REFPB",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "1=per-bank refresh feature enable"},
+						{language: "english", text: "1=per-bank refresh feature enable",},
 					],
 				}, {
 					name: "rsvd_11_4",
 					hi: 11, lo: 4,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1510,7 +1510,7 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1530,7 +1530,7 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1550,73 +1550,73 @@ global_default: {
 					name: "PASR_banks_01",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "exclude banks 0, 1"},
+						{language: "english", text: "exclude banks 0, 1",},
 					],
 				}, {
 					name: "PASR_banks_23",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "exclude banks 2, 3"},
+						{language: "english", text: "exclude banks 2, 3",},
 					],
 				}, {
 					name: "PASR_banks_45",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "exclude banks 4, 5"},
+						{language: "english", text: "exclude banks 4, 5",},
 					],
 				}, {
 					name: "PASR_banks_67",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "exclude banks 6, 7"},
+						{language: "english", text: "exclude banks 6, 7",},
 					],
 				}, {
 					name: "PASR_banks_89",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "exclude banks 8, 9"},
+						{language: "english", text: "exclude banks 8, 9",},
 					],
 				}, {
 					name: "PASR_banks_1011",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "exclude banks 10, 11"},
+						{language: "english", text: "exclude banks 10, 11",},
 					],
 				}, {
 					name: "PASR_banks_1213",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "exclude banks 12, 13"},
+						{language: "english", text: "exclude banks 12, 13",},
 					],
 				}, {
 					name: "PASR_banks_1415",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "exclude banks 14, 15"},
+						{language: "english", text: "exclude banks 14, 15",},
 					],
 				}, {
 					name: "PASR_row_00",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "exclude row segment A[13:12]=00 (MSB)"},
+						{language: "english", text: "exclude row segment A[13:12]=00 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_01",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "exclude row segment A[13:12]=01 (MSB)"},
+						{language: "english", text: "exclude row segment A[13:12]=01 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_10",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "exclude row segment A[13:12]=10 (MSB)"},
+						{language: "english", text: "exclude row segment A[13:12]=10 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_11",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "exclude row segment A[13:12]=11 (MSB)"},
+						{language: "english", text: "exclude row segment A[13:12]=11 (MSB)",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1625,13 +1625,13 @@ global_default: {
 					name: "PASR_bank_mask",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "bank exclusion mask"},
+						{language: "english", text: "bank exclusion mask",},
 					],
 				}, {
 					name: "PASR_row_segment_mask",
 					hi: 11, lo: 8,
 					description: [
-						{language: "english", text: "row exclusion mask"},
+						{language: "english", text: "row exclusion mask",},
 					],
 				}, {
 					name: "rsvd_15_12__2",
@@ -1651,7 +1651,7 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1671,7 +1671,7 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1691,7 +1691,7 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1714,25 +1714,25 @@ global_default: {
 					name: "MRE_0_disable",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "1=disable MRS commands on channel 0"},
+						{language: "english", text: "1=disable MRS commands on channel 0",},
 					],
 				}, {
 					name: "MRE_1_disable",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "1=disable MRS commands on channel 1"},
+						{language: "english", text: "1=disable MRS commands on channel 1",},
 					],
 				}, {
 					name: "address_training",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "1=address training mode"},
+						{language: "english", text: "1=address training mode",},
 					],
 				}, {
 					name: "RFU",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "rsvd_15_12",
@@ -1752,31 +1752,31 @@ global_default: {
 					name: "WLmrs",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "tCWL, 8,9,10,11,12,5,6,7."},
+						{language: "english", text: "tCWL, 8,9,10,11,12,5,6,7.",},
 					],
 				}, {
 					name: "RLmrs_lo",
 					hi: 6, lo: 3,
 					description: [
-						{language: "english", text: "tCL = 5+n. [MR12[3], MR8[8], MR0[6:3]] -> tCL[5:0]"},
+						{language: "english", text: "tCL = 5+n. [MR12[3], MR8[8], MR0[6:3]] -> tCL[5:0]",},
 					],
 				}, {
 					name: "testmode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "Test mode; behavior is vendor specific"},
+						{language: "english", text: "Test mode; behavior is vendor specific",},
 					],
 				}, {
 					name: "WRmrs",
 					hi: 11, lo: 8,
 					description: [
-						{language: "english", text: "tWR for auto-pre, 0=4,1=5..47=51. See MR8, MR12"},
+						{language: "english", text: "tWR for auto-pre, 0=4,1=5..47=51. See MR8, MR12",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 0"},
+						{language: "english", text: "MR 0",},
 					],
 				},
 			],
@@ -1793,61 +1793,61 @@ global_default: {
 					name: "drive_stren",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec"},
+						{language: "english", text: "0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec",},
 					],
 				}, {
 					name: "data_term",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=disabled 1=60ohm 2=120ohm 3=48ohm"},
+						{language: "english", text: "0=disabled 1=60ohm 2=120ohm 3=48ohm",},
 					],
 				}, {
 					name: "PLLDLL_range",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "min-to-max WCK freq, vendor specific"},
+						{language: "english", text: "min-to-max WCK freq, vendor specific",},
 					],
 				}, {
 					name: "Cal_Upd",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "Auto Calibration Engine, 0=enabled."},
+						{language: "english", text: "Auto Calibration Engine, 0=enabled.",},
 					],
 				}, {
 					name: "PLL_DLL",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=disabled 1=enabled"},
+						{language: "english", text: "0=disabled 1=enabled",},
 					],
 				}, {
 					name: "read_DBI",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "Data Bus Inversion, for reads.   0=enabled"},
+						{language: "english", text: "Data Bus Inversion, for reads.   0=enabled",},
 					],
 				}, {
 					name: "write_DBI",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "Data Bus Inversion, for writes.  1=disabled"},
+						{language: "english", text: "Data Bus Inversion, for writes.  1=disabled",},
 					],
 				}, {
 					name: "addrcmd_BI",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "Command-address bus inversion.  0=enabled"},
+						{language: "english", text: "Command-address bus inversion.  0=enabled",},
 					],
 				}, {
 					name: "PLLDLL_reset",
 					hi: 14, lo: 11,
 					description: [
-						{language: "english", text: "1 = reset. self-clears after reset."},
+						{language: "english", text: "1 = reset. self-clears after reset.",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 1"},
+						{language: "english", text: "MR 1",},
 					],
 				},
 			],
@@ -1865,50 +1865,50 @@ global_default: {
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "output driver pullup offset. 0=0, Two's Compl."},
+						{language: "english", text: "output driver pullup offset. 0=0, Two's Compl.",},
 					],
 				}, {
 					name: "OCD_down",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "pulldown. See JES250D Figure 33."},
+						{language: "english", text: "pulldown. See JES250D Figure 33.",},
 					],
 				}, {
 					name: "self_refresh",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "0=32ms, 1-2 vendor specific, 3=temp controlled"},
+						{language: "english", text: "0=32ms, 1-2 vendor specific, 3=temp controlled",},
 					],
 				}, {
 					name: "EDC_mode",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "0=full data rate, 1=half"},
+						{language: "english", text: "0=full data rate, 1=half",},
 					],
 				}, {
 					name: "RDQS",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "1 = EDC pins will act as RDQS; no CRC."},
+						{language: "english", text: "1 = EDC pins will act as RDQS; no CRC.",},
 					],
 				}, {
 					name: "CADT_SRF",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "Self refesh while CA training"},
+						{language: "english", text: "Self refesh while CA training",},
 					],
 				}, {
 					name: "EDC_HR",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "EDC hold data rate 0=full, 1=half"},
+						{language: "english", text: "EDC hold data rate 0=full, 1=half",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 2"},
+						{language: "english", text: "MR 2",},
 					],
 				},
 			],
@@ -1926,38 +1926,38 @@ global_default: {
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "DQ, DBI & WCK termination offset. Two's"},
+						{language: "english", text: "DQ, DBI & WCK termination offset. Two's",},
 					],
 				}, {
 					name: "CA_term_offset",
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "command address. See MR2."},
+						{language: "english", text: "command address. See MR2.",},
 					],
 				}, {
 					name: "DRAM_info",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "0=off 1=vndr ID1 2=temp 3=vndr ID2"},
+						{language: "english", text: "0=off 1=vndr ID1 2=temp 3=vndr ID2",},
 					],
 				}, {
 					name: "WR_scaling",
 					hi: 9, lo: 8,
 					description: [
-						{language: "english", text: "1x 2x 3x value of tWR in MR8 and MR0"},
+						{language: "english", text: "1x 2x 3x value of tWR in MR8 and MR0",},
 					],
 				}, {
 					name: "bank_groups",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCDL=3"},
+						{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCDL=3",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 3"},
+						{language: "english", text: "MR 3",},
 					],
 				},
 			],
@@ -1974,43 +1974,43 @@ global_default: {
 					name: "EDC_hold_pattern",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "little-endian. pattern during EDC idle"},
+						{language: "english", text: "little-endian. pattern during EDC idle",},
 					],
 				}, {
 					name: "CRCWL",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "15,16,RFU,10,11..21,RFU. See MR12 OP4"},
+						{language: "english", text: "15,16,RFU,10,11..21,RFU. See MR12 OP4",},
 					],
 				}, {
 					name: "CRCRL",
 					hi: 8, lo: 7,
 					description: [
-						{language: "english", text: "CRC latency for reads. 4,1,2,3."},
+						{language: "english", text: "CRC latency for reads. 4,1,2,3.",},
 					],
 				}, {
 					name: "RDCRC",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "read CRC 0=enable"},
+						{language: "english", text: "read CRC 0=enable",},
 					],
 				}, {
 					name: "WRCRC",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "write CRC 0=enable"},
+						{language: "english", text: "write CRC 0=enable",},
 					],
 				}, {
 					name: "EDC_hold_invert",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "0 = EDC hold pattern not inverted"},
+						{language: "english", text: "0 = EDC hold pattern not inverted",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 4"},
+						{language: "english", text: "MR 4",},
 					],
 				},
 			],
@@ -2027,37 +2027,37 @@ global_default: {
 					name: "LP1",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=off, Low Power Mode 1, relax several core params"},
+						{language: "english", text: "0=off, Low Power Mode 1, relax several core params",},
 					],
 				}, {
 					name: "LP2",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "WCK recievers turned off during powerdown."},
+						{language: "english", text: "WCK recievers turned off during powerdown.",},
 					],
 				}, {
 					name: "LP3",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "no read/write training and temp reads during REFab"},
+						{language: "english", text: "no read/write training and temp reads during REFab",},
 					],
 				}, {
 					name: "PLLDLL_BW",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "PLL/DLL bandwidth. All except 0 vendor specific"},
+						{language: "english", text: "PLL/DLL bandwidth. All except 0 vendor specific",},
 					],
 				}, {
 					name: "RAS",
 					hi: 11, lo: 6,
 					description: [
-						{language: "english", text: "0,1,2...63. tRAS for auto precharge"},
+						{language: "english", text: "0,1,2...63. tRAS for auto precharge",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 5"},
+						{language: "english", text: "MR 5",},
 					],
 				},
 			],
@@ -2074,19 +2074,19 @@ global_default: {
 					name: "VREFD_level",
 					hi: 6, lo: 0,
 					description: [
-						{language: "english", text: "0.005x steps of VDDQ, from 0=0.49x to 95=0.965x"},
+						{language: "english", text: "0.005x steps of VDDQ, from 0=0.49x to 95=0.965x",},
 					],
 				}, {
 					name: "pin_subaddr",
 					hi: 11, lo: 7,
 					description: [
-						{language: "english", text: "pin to configure the VREFD for. See JESD250"},
+						{language: "english", text: "pin to configure the VREFD for. See JESD250",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 6"},
+						{language: "english", text: "MR 6",},
 					],
 				},
 			],
@@ -2103,67 +2103,67 @@ global_default: {
 					name: "WCK2CK_AP",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "WCK alignment point. 0=inside 1=at balls"},
+						{language: "english", text: "WCK alignment point. 0=inside 1=at balls",},
 					],
 				}, {
 					name: "hibernate",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "1=Hibernate Self Refresh mode. self clearing"},
+						{language: "english", text: "1=Hibernate Self Refresh mode. self clearing",},
 					],
 				}, {
 					name: "PLL_delay_comp",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=(PLL feedback delay == WCK clock tree)"},
+						{language: "english", text: "1=(PLL feedback delay == WCK clock tree)",},
 					],
 				}, {
 					name: "low_freq_mode",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "1=reduce power of input RX, clock trees"},
+						{language: "english", text: "1=reduce power of input RX, clock trees",},
 					],
 				}, {
 					name: "WCK2CK_autosync",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "1=auto sync, reduces WCK2CK MRS to 2."},
+						{language: "english", text: "1=auto sync, reduces WCK2CK MRS to 2.",},
 					],
 				}, {
 					name: "DQ_preamble",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "1=preamble on DQ, DBI_n for gapped reads."},
+						{language: "english", text: "1=preamble on DQ, DBI_n for gapped reads.",},
 					],
 				}, {
 					name: "half_VREFC",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=0.7x VDDQ, 1=0.5x See MR6, MR9"},
+						{language: "english", text: "0=0.7x VDDQ, 1=0.5x See MR6, MR9",},
 					],
 				}, {
 					name: "half_VREFD",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=prog'd VREFD,DFE. 1=0.5x VDDQ. See MR6,MR9"},
+						{language: "english", text: "0=prog'd VREFD,DFE. 1=0.5x VDDQ. See MR6,MR9",},
 					],
 				}, {
 					name: "VDD_range",
 					hi: 9, lo: 8,
 					description: [
-						{language: "english", text: "0>1>2>3. Adapt to lower VDD voltages"},
+						{language: "english", text: "0>1>2>3. Adapt to lower VDD voltages",},
 					],
 				}, {
 					name: "WCK_DCC",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "Duty Cycle Corr. 0=off,1=start,2=RFU,3=hold"},
+						{language: "english", text: "Duty Cycle Corr. 0=off,1=start,2=RFU,3=hold",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 7"},
+						{language: "english", text: "MR 7",},
 					],
 				},
 			],
@@ -2180,61 +2180,61 @@ global_default: {
 					name: "CA_low_term",
 					hi: 1, lo: 0,
 					description: [
-						{language: "english", text: "0=disable, 1=60ohm, 2=120, 3=rsvd. For CA[3:0]"},
+						{language: "english", text: "0=disable, 1=60ohm, 2=120, 3=rsvd. For CA[3:0]",},
 					],
 				}, {
 					name: "CA_high_term",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "For CA[10:4]"},
+						{language: "english", text: "For CA[10:4]",},
 					],
 				}, {
 					name: "CA_TO",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "Command Address Termin. Override 1=use CAL,CAH"},
+						{language: "english", text: "Command Address Termin. Override 1=use CAL,CAH",},
 					],
 				}, {
 					name: "EDC_hiZ",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "1=Hi-Z state. Precidence over all other states."},
+						{language: "english", text: "1=Hi-Z state. Precidence over all other states.",},
 					],
 				}, {
 					name: "CK_auto_cal",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=auto calib. during REFab disabled, 1=enabled"},
+						{language: "english", text: "0=auto calib. during REFab disabled, 1=enabled",},
 					],
 				}, {
 					name: "REFpb",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=per-bank, 1=per-2-bank"},
+						{language: "english", text: "0=per-bank, 1=per-2-bank",},
 					],
 				}, {
 					name: "RL_EHF",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "Extends RLmrs of MR0 from 4 to 5 bits."},
+						{language: "english", text: "Extends RLmrs of MR0 from 4 to 5 bits.",},
 					],
 				}, {
 					name: "WR_EHF",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "Extends WRmrs of MR0 from 4 to 5 bits."},
+						{language: "english", text: "Extends WRmrs of MR0 from 4 to 5 bits.",},
 					],
 				}, {
 					name: "CK_term",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0=reset, 1=60ohm,2=120-ohm, 3=disabled"},
+						{language: "english", text: "0=reset, 1=60ohm,2=120-ohm, 3=disabled",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 8"},
+						{language: "english", text: "MR 8",},
 					],
 				},
 			],
@@ -2251,25 +2251,25 @@ global_default: {
 					name: "DFE",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "0=off, in steps of +-0.5% VDDQ or 7mV"},
+						{language: "english", text: "0=off, in steps of +-0.5% VDDQ or 7mV",},
 					],
 				}, {
 					name: "RFU",
 					hi: 6, lo: 4,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "pin_subaddr",
 					hi: 11, lo: 7,
 					description: [
-						{language: "english", text: "see JESD250"},
+						{language: "english", text: "see JESD250",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 9"},
+						{language: "english", text: "MR 9",},
 					],
 				},
 			],
@@ -2287,43 +2287,43 @@ global_default: {
 					display: "(ATUI_DEC|ATUI_SIGNED)",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "CA bus. semi Two's Complement: -8=0"},
+						{language: "english", text: "CA bus. semi Two's Complement: -8=0",},
 					],
 				}, {
 					name: "WCK_inv_byte0",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "for WCK2CK training 0=0;1=90 degr;2=180;3=270"},
+						{language: "english", text: "for WCK2CK training 0=0;1=90 degr;2=180;3=270",},
 					],
 				}, {
 					name: "WCK_inv_byte1",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "B1 on chan A, B0 on chan B ignored if WCK/word"},
+						{language: "english", text: "B1 on chan A, B0 on chan B ignored if WCK/word",},
 					],
 				}, {
 					name: "WCK2CK",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "1=enable WCK2CK alignment training"},
+						{language: "english", text: "1=enable WCK2CK alignment training",},
 					],
 				}, {
 					name: "WCK_ratio",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "0=half data rate, 1=full data rate"},
+						{language: "english", text: "0=half data rate, 1=full data rate",},
 					],
 				}, {
 					name: "WCK_term",
 					hi: 11, lo: 10,
 					description: [
-						{language: "english", text: "0=disabled, 1=60 ohm, 2=120, 3=reserved"},
+						{language: "english", text: "0=disabled, 1=60 ohm, 2=120, 3=reserved",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 10"},
+						{language: "english", text: "MR 10",},
 					],
 				},
 			],
@@ -2340,97 +2340,97 @@ global_default: {
 					name: "PASR_banks_01",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "exclude banks 0, 1"},
+						{language: "english", text: "exclude banks 0, 1",},
 					],
 				}, {
 					name: "PASR_banks_23",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "exclude banks 2, 3"},
+						{language: "english", text: "exclude banks 2, 3",},
 					],
 				}, {
 					name: "PASR_banks_45",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "exclude banks 4, 5"},
+						{language: "english", text: "exclude banks 4, 5",},
 					],
 				}, {
 					name: "PASR_banks_67",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "exclude banks 6, 7"},
+						{language: "english", text: "exclude banks 6, 7",},
 					],
 				}, {
 					name: "PASR_banks_89",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "exclude banks 8, 9"},
+						{language: "english", text: "exclude banks 8, 9",},
 					],
 				}, {
 					name: "PASR_banks_1011",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "exclude banks 10, 11"},
+						{language: "english", text: "exclude banks 10, 11",},
 					],
 				}, {
 					name: "PASR_banks_1213",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "exclude banks 12, 13"},
+						{language: "english", text: "exclude banks 12, 13",},
 					],
 				}, {
 					name: "PASR_banks_1415",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "exclude banks 14, 15"},
+						{language: "english", text: "exclude banks 14, 15",},
 					],
 				}, {
 					name: "PASR_row_00",
 					hi: 8, lo: 8,
 					description: [
-						{language: "english", text: "exclude row segment R[13:12]=00 (MSB)"},
+						{language: "english", text: "exclude row segment R[13:12]=00 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_01",
 					hi: 9, lo: 9,
 					description: [
-						{language: "english", text: "exclude row segment R[13:12]=01 (MSB)"},
+						{language: "english", text: "exclude row segment R[13:12]=01 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_10",
 					hi: 10, lo: 10,
 					description: [
-						{language: "english", text: "exclude row segment R[13:12]=10 (MSB)"},
+						{language: "english", text: "exclude row segment R[13:12]=10 (MSB)",},
 					],
 				}, {
 					name: "PASR_row_11",
 					hi: 11, lo: 11,
 					description: [
-						{language: "english", text: "exclude row segment R[13:12]=11 (MSB)"},
+						{language: "english", text: "exclude row segment R[13:12]=11 (MSB)",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 11"},
+						{language: "english", text: "MR 11",},
 					],
 				}, {
 					name: "PASR_bank_mask",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "bank exclusion mask"},
+						{language: "english", text: "bank exclusion mask",},
 					],
 				}, {
 					name: "PASR_row_segment_mask",
 					hi: 11, lo: 8,
 					description: [
-						{language: "english", text: "row exclusion mask"},
+						{language: "english", text: "row exclusion mask",},
 					],
 				}, {
 					name: "ID__2",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 11"},
+						{language: "english", text: "MR 11",},
 					],
 				},
 			],
@@ -2447,49 +2447,49 @@ global_default: {
 					name: "VDDQ_off",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=disabled. For Hibernate Self Refresh"},
+						{language: "english", text: "0=disabled. For Hibernate Self Refresh",},
 					],
 				}, {
 					name: "P2BR_addr",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=LSB/BA0 1=MSB/BA3. Select \"Dont Care\" for REFp2b"},
+						{language: "english", text: "0=LSB/BA0 1=MSB/BA3. Select \"Dont Care\" for REFp2b",},
 					],
 				}, {
 					name: "PRBS",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=Psudorandom bit stream instead of EDC hold"},
+						{language: "english", text: "1=Psudorandom bit stream instead of EDC hold",},
 					],
 				}, {
 					name: "RL_EHF2",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "Extends RLmrs from 5 bits to 6 bits. See MR0, MR8"},
+						{language: "english", text: "Extends RLmrs from 5 bits to 6 bits. See MR0, MR8",},
 					],
 				}, {
 					name: "CRCWL_EHF",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "Extends CRCWL from 3 bits to 4 bits. See MR4."},
+						{language: "english", text: "Extends CRCWL from 3 bits to 4 bits. See MR4.",},
 					],
 				}, {
 					name: "WR_EHF2",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "Extends WRmrs from 5 bits to 6 bits. See MR0, MR8"},
+						{language: "english", text: "Extends WRmrs from 5 bits to 6 bits. See MR0, MR8",},
 					],
 				}, {
 					name: "RFU",
 					hi: 11, lo: 6,
 					description: [
-						{language: "english", text: "reserved."},
+						{language: "english", text: "reserved.",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 12"},
+						{language: "english", text: "MR 12",},
 					],
 				},
 			],
@@ -2506,13 +2506,13 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 13"},
+						{language: "english", text: "MR 13",},
 					],
 				},
 			],
@@ -2529,13 +2529,13 @@ global_default: {
 					name: "vendor_specific",
 					hi: 11, lo: 0,
 					description: [
-						{language: "english", text: "vendor specific features."},
+						{language: "english", text: "vendor specific features.",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 14"},
+						{language: "english", text: "MR 14",},
 					],
 				},
 			],
@@ -2552,31 +2552,31 @@ global_default: {
 					name: "MRS_to_chan_A",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "MRS to the two channels for individual config"},
+						{language: "english", text: "MRS to the two channels for individual config",},
 					],
 				}, {
 					name: "MRS_to_chan_B",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=unblocked 1=blocked"},
+						{language: "english", text: "0=unblocked 1=blocked",},
 					],
 				}, {
 					name: "CA_training",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=off 1=rising of CK, 2=falling, 3=CABI_n,CA10"},
+						{language: "english", text: "0=off 1=rising of CK, 2=falling, 3=CABI_n,CA10",},
 					],
 				}, {
 					name: "unused",
 					hi: 11, lo: 4,
 					description: [
-						{language: "english", text: "defined to be absent"},
+						{language: "english", text: "defined to be absent",},
 					],
 				}, {
 					name: "ID",
 					hi: 15, lo: 12,
 					description: [
-						{language: "english", text: "MR 15"},
+						{language: "english", text: "MR 15",},
 					],
 				},
 			],
@@ -2593,49 +2593,49 @@ global_default: {
 					name: "read_DBI",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "1=enable; data bus inversion, AC."},
+						{language: "english", text: "1=enable; data bus inversion, AC.",},
 					],
 				}, {
 					name: "write_DBI",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "1=enable; data bus inversion, AC."},
+						{language: "english", text: "1=enable; data bus inversion, AC.",},
 					],
 				}, {
 					name: "TCSR",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=enable; temperature-controlled self-refresh"},
+						{language: "english", text: "1=enable; temperature-controlled self-refresh",},
 					],
 				}, {
 					name: "rsvd_3_3",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "read_parity",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "0=disable; DQ parity"},
+						{language: "english", text: "0=disable; DQ parity",},
 					],
 				}, {
 					name: "write_parity",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=disable; DQ parity"},
+						{language: "english", text: "0=disable; DQ parity",},
 					],
 				}, {
 					name: "addrcmd_parity",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=disable; command-address parity"},
+						{language: "english", text: "0=disable; command-address parity",},
 					],
 				}, {
 					name: "test_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "1=Test mode; behavior is vendor specific"},
+						{language: "english", text: "1=Test mode; behavior is vendor specific",},
 					],
 				},
 			],
@@ -2652,13 +2652,13 @@ global_default: {
 					name: "tWR",
 					hi: 4, lo: 0,
 					description: [
-						{language: "english", text: "3=3,4=4...31=31. 0..2=reserved"},
+						{language: "english", text: "3=3,4=4...31=31. 0..2=reserved",},
 					],
 				}, {
 					name: "nom_drive",
 					hi: 7, lo: 5,
 					description: [
-						{language: "english", text: "6mA,9,12,15,18, 5..7=reserved"},
+						{language: "english", text: "6mA,9,12,15,18, 5..7=reserved",},
 					],
 				},
 			],
@@ -2675,13 +2675,13 @@ global_default: {
 					name: "WL",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "[MR4[4], MR2[2:0]] -> WL[3:0]; tWL=1+n"},
+						{language: "english", text: "[MR4[4], MR2[2:0]] -> WL[3:0]; tWL=1+n",},
 					],
 				}, {
 					name: "RL",
 					hi: 7, lo: 3,
 					description: [
-						{language: "english", text: "[MR4[5], MR2[7:3]] -> RL[5:0]; tRL=2+n"},
+						{language: "english", text: "[MR4[5], MR2[7:3]] -> RL[5:0]; tRL=2+n",},
 					],
 				},
 			],
@@ -2698,19 +2698,19 @@ global_default: {
 					name: "tRAS",
 					hi: 5, lo: 0,
 					description: [
-						{language: "english", text: "3=3... 63=63; 0,1,2=reserved"},
+						{language: "english", text: "3=3... 63=63; 0,1,2=reserved",},
 					],
 				}, {
 					name: "bank_groups",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "1=enable"},
+						{language: "english", text: "1=enable",},
 					],
 				}, {
 					name: "burst_length",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=BL2, 1=BL4"},
+						{language: "english", text: "0=BL2, 1=BL4",},
 					],
 				},
 			],
@@ -2727,37 +2727,37 @@ global_default: {
 					name: "ECC",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=disabled; ECC and WDM are mutually exlusive."},
+						{language: "english", text: "0=disabled; ECC and WDM are mutually exlusive.",},
 					],
 				}, {
 					name: "WDM",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=enabled; write data mask"},
+						{language: "english", text: "0=enabled; write data mask",},
 					],
 				}, {
 					name: "PL",
 					hi: 3, lo: 2,
 					description: [
-						{language: "english", text: "0=0..3=3; parity latency"},
+						{language: "english", text: "0=0..3=3; parity latency",},
 					],
 				}, {
 					name: "EWL",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "extended write latency; see MR0"},
+						{language: "english", text: "extended write latency; see MR0",},
 					],
 				}, {
 					name: "ERL",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "extended read latency; see MR0"},
+						{language: "english", text: "extended read latency; see MR0",},
 					],
 				}, {
 					name: "reserved",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2774,25 +2774,25 @@ global_default: {
 					name: "TRR_bank_address",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "0=0; target bank of target row"},
+						{language: "english", text: "0=0; target bank of target row",},
 					],
 				}, {
 					name: "reserved",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "TRR_peudochannel",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=PC0, 1=PC1"},
+						{language: "english", text: "0=PC0, 1=PC1",},
 					],
 				}, {
 					name: "TRR_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=disable; Target Row Refresh for rowhammer"},
+						{language: "english", text: "0=disable; Target Row Refresh for rowhammer",},
 					],
 				},
 			],
@@ -2812,7 +2812,7 @@ global_default: {
 					name: "implicit_RP",
 					hi: 7, lo: 3,
 					description: [
-						{language: "english", text: "tRP=n+2; imPRE has PRE implied with ACT."},
+						{language: "english", text: "tRP=n+2; imPRE has PRE implied with ACT.",},
 					],
 				},
 			],
@@ -2829,31 +2829,31 @@ global_default: {
 					name: "DWORD_loopback",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=disable; 1=link test (MISR) mode"},
+						{language: "english", text: "0=disable; 1=link test (MISR) mode",},
 					],
 				}, {
 					name: "DWORD_read_mux",
 					hi: 2, lo: 1,
 					description: [
-						{language: "english", text: "1=MISR regs, 2=Rx path, 3=LFSR sticky"},
+						{language: "english", text: "1=MISR regs, 2=Rx path, 3=LFSR sticky",},
 					],
 				}, {
 					name: "DWORD_MISR",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "0=preset 0xAAAAA/0x00000, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write"},
+						{language: "english", text: "0=preset 0xAAAAA/0x00000, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",},
 					],
 				}, {
 					name: "reserved",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "CATTRIP",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=clear pin, 1=assert to 1."},
+						{language: "english", text: "0=clear pin, 1=assert to 1.",},
 					],
 				},
 			],
@@ -2870,13 +2870,13 @@ global_default: {
 					name: "DA28_lockout",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "1=if on chan A or E, hardlock DA port"},
+						{language: "english", text: "1=if on chan A or E, hardlock DA port",},
 					],
 				}, {
 					name: "reserved",
 					hi: 7, lo: 1,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2893,7 +2893,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2910,7 +2910,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2927,7 +2927,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2944,7 +2944,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2961,7 +2961,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2978,7 +2978,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -2995,13 +2995,13 @@ global_default: {
 					name: "internal_vref",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "Two's: 0.50 - 0.04*n; 0=.50, 1=.46, 4=.54"},
+						{language: "english", text: "Two's: 0.50 - 0.04*n; 0=.50, 1=.46, 4=.54",},
 					],
 				}, {
 					name: "reserved",
 					hi: 7, lo: 3,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3018,49 +3018,49 @@ global_default: {
 					name: "read_DBI",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "1=enable; data bus inversion, AC."},
+						{language: "english", text: "1=enable; data bus inversion, AC.",},
 					],
 				}, {
 					name: "write_DBI",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "1=enable; data bus inversion, AC."},
+						{language: "english", text: "1=enable; data bus inversion, AC.",},
 					],
 				}, {
 					name: "TCSR",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "1=enable; temperature-controlled self-refresh"},
+						{language: "english", text: "1=enable; temperature-controlled self-refresh",},
 					],
 				}, {
 					name: "rsvd_3_3",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "read_parity",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "0=disable; DQ parity"},
+						{language: "english", text: "0=disable; DQ parity",},
 					],
 				}, {
 					name: "write_parity",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=disable; DQ parity"},
+						{language: "english", text: "0=disable; DQ parity",},
 					],
 				}, {
 					name: "addrcmd_parity",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=disable; command-address parity"},
+						{language: "english", text: "0=disable; command-address parity",},
 					],
 				}, {
 					name: "test_mode",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "1=Test mode; behavior is vendor specific"},
+						{language: "english", text: "1=Test mode; behavior is vendor specific",},
 					],
 				},
 			],
@@ -3077,13 +3077,13 @@ global_default: {
 					name: "tWL",
 					hi: 4, lo: 0,
 					description: [
-						{language: "english", text: "4=4..16=16,  0..3,17+ reserved"},
+						{language: "english", text: "4=4..16=16,  0..3,17+ reserved",},
 					],
 				}, {
 					name: "tPL",
 					hi: 7, lo: 5,
 					description: [
-						{language: "english", text: "0=0..4=4, 5+ reserved"},
+						{language: "english", text: "0=0..4=4, 5+ reserved",},
 					],
 				},
 			],
@@ -3100,7 +3100,7 @@ global_default: {
 					name: "tRL",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "4=4..63=63,  0..3,64+ reserved"},
+						{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
 					],
 				},
 			],
@@ -3117,7 +3117,7 @@ global_default: {
 					name: "tWR",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "4=4..63=63,  0..3,64+ reserved"},
+						{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
 					],
 				},
 			],
@@ -3134,7 +3134,7 @@ global_default: {
 					name: "tRAS",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "4=4..63=63,  0..3,64+ reserved"},
+						{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
 					],
 				},
 			],
@@ -3151,7 +3151,7 @@ global_default: {
 					name: "tRTP",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "2=2..15=15,  0,1 reserved"},
+						{language: "english", text: "2=2..15=15,  0,1 reserved",},
 					],
 				},
 			],
@@ -3168,19 +3168,19 @@ global_default: {
 					name: "drive_down_strength",
 					hi: 2, lo: 0,
 					description: [
-						{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved"},
+						{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",},
 					],
 				}, {
 					name: "drive_up_strength",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved"},
+						{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",},
 					],
 				}, {
 					name: "reserved",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3197,37 +3197,37 @@ global_default: {
 					name: "DWORD_loopback",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "0=disable; 1=link test (MISR) mode"},
+						{language: "english", text: "0=disable; 1=link test (MISR) mode",},
 					],
 				}, {
 					name: "DWORD_read_mux",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=MISR regs, 3=LFSR sticky"},
+						{language: "english", text: "0=MISR regs, 3=LFSR sticky",},
 					],
 				}, {
 					name: "reserved_2_2",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "DWORD_MISR",
 					hi: 5, lo: 3,
 					description: [
-						{language: "english", text: "0=preset, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write"},
+						{language: "english", text: "0=preset, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",},
 					],
 				}, {
 					name: "reserved_6_6",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "CATTRIP",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=auto, 1=assert to 1."},
+						{language: "english", text: "0=auto, 1=assert to 1.",},
 					],
 				},
 			],
@@ -3244,37 +3244,37 @@ global_default: {
 					name: "DA_lockout",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "1=if on chan A or E, hardlock DA port"},
+						{language: "english", text: "1=if on chan A or E, hardlock DA port",},
 					],
 				}, {
 					name: "duty_cycle_monitor",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "ECS_log_auto_clear",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "WDQS2CK_training",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "RFM_levels",
 					hi: 5, lo: 4,
 					description: [
-						{language: "english", text: "0=default, 1=A,2=B,3=C (1+ RFM required)"},
+						{language: "english", text: "0=default, 1=A,2=B,3=C (1+ RFM required)",},
 					],
 				}, {
 					name: "reserved",
 					hi: 7, lo: 6,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3291,49 +3291,49 @@ global_default: {
 					name: "metadata",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "1=read/writes have metadata"},
+						{language: "english", text: "1=read/writes have metadata",},
 					],
 				}, {
 					name: "severity_reporting",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "1=repoting"},
+						{language: "english", text: "1=repoting",},
 					],
 				}, {
 					name: "ECC_testmode",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "0=disable ECC engine test mode"},
+						{language: "english", text: "0=disable ECC engine test mode",},
 					],
 				}, {
 					name: "ECC_test_pattern",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "0=CW0 (1's are errors), 1=CW1 (0=error)"},
+						{language: "english", text: "0=CW0 (1's are errors), 1=CW1 (0=error)",},
 					],
 				}, {
 					name: "ECS_via_REFab",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "ECS_during_SRF",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "0=disabled"},
+						{language: "english", text: "0=disabled",},
 					],
 				}, {
 					name: "ECS_multibit",
 					hi: 6, lo: 6,
 					description: [
-						{language: "english", text: "0=correction of multibit errors disabled"},
+						{language: "english", text: "0=correction of multibit errors disabled",},
 					],
 				}, {
 					name: "ECS_logging",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "0=maintain, 1=reset"},
+						{language: "english", text: "0=maintain, 1=reset",},
 					],
 				},
 			],
@@ -3364,13 +3364,13 @@ global_default: {
 					name: "DCA_WDQS0",
 					hi: 3, lo: 0,
 					description: [
-						{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7"},
+						{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",},
 					],
 				}, {
 					name: "DCA_WDQS1",
 					hi: 7, lo: 4,
 					description: [
-						{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7"},
+						{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",},
 					],
 				},
 			],
@@ -3401,7 +3401,7 @@ global_default: {
 					name: "reserved",
 					hi: 7, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3418,19 +3418,19 @@ global_default: {
 					name: "reserved_0_0",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "VrefCA",
 					hi: 6, lo: 1,
 					description: [
-						{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)"},
+						{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",},
 					],
 				}, {
 					name: "reserved_7_7",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3447,19 +3447,19 @@ global_default: {
 					name: "reserved_0_0",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "VrefD",
 					hi: 6, lo: 1,
 					description: [
-						{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)"},
+						{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",},
 					],
 				}, {
 					name: "reserved_7_7",
 					hi: 7, lo: 7,
 					description: [
-						{language: "english", text: "reserved"},
+						{language: "english", text: "reserved",},
 					],
 				},
 			],
@@ -3467,4 +3467,4 @@ global_default: {
 	],
 },
 
-],}
+], }

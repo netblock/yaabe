@@ -35,6 +35,9 @@ global_default: {
 		}, {
 			access: "bios->table_size",
 			name: "table_size",
+			description: [
+				{language: "english", text: "Driver portion table size. The offset to smc_pptable including header size",},
+			],
 		},
 	],
 }, {
@@ -51,37 +54,37 @@ global_default: {
 					name: "powerplay",
 					hi: 0, lo: 0,
 					description: [
-						{language: "english", text: "whether CCC needs to show Powerplay page."},
+						{language: "english", text: "whether CCC needs to show Powerplay page.",},
 					],
 				}, {
 					name: "sbios_powersource",
 					hi: 1, lo: 1,
 					description: [
-						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS."},
+						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
 					],
 				}, {
 					name: "hardware_dc",
 					hi: 2, lo: 2,
 					description: [
-						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly."},
+						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
 					],
 				}, {
 					name: "BACO",
 					hi: 3, lo: 3,
 					description: [
-						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode."},
+						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
 					],
 				}, {
 					name: "MACO",
 					hi: 4, lo: 4,
 					description: [
-						{language: "english", text: "whether board supports the MACO circuitry."},
+						{language: "english", text: "whether board supports the MACO circuitry.",},
 					],
 				}, {
 					name: "shadow_pstate",
 					hi: 5, lo: 5,
 					description: [
-						{language: "english", text: "whether board supports the Shadow Pstate."},
+						{language: "english", text: "whether board supports the Shadow Pstate.",},
 					],
 				}, {
 					name: "reserved",
@@ -163,4 +166,4 @@ global_default: {
 	],
 },
 
-],}
+], }
