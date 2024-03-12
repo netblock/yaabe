@@ -1,3 +1,7 @@
+/*
+Considers GMC versions: 6_0, 7_0, 7_1, 8_1, 8_2
+*/
+
 {class: "branch",
 global_default: {
 	branch_defaults: {

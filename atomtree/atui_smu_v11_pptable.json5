@@ -1,3 +1,5 @@
+/* For smu_v11_pptable.h and smu11_driver_if.h -- navi1 PowerPlay tables */
+
 {class: "branch",
 global_default: {
 	branch_defaults: {
@@ -53,11 +55,10 @@ global_default: {
 			access: "bios->cap",
 			name: "Supported OD feature support flags",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "support flag",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_ODCAP_COUNT",
 				enum: "SMU_11_0_ODFEATURE_CAP",
@@ -71,16 +72,15 @@ global_default: {
 			access: "(&(bios->cap[SMU_11_0_ODCAP_COUNT]))",
 			name: "Undefined OD feature support flags",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "support flag",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 14
 						name: "OD feature [14 + %02u]",
 					},
 				],
@@ -122,7 +122,7 @@ global_default: {
 				count: "(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 19
 						name: "max: [19 + %02u]",
 					},
 				],
@@ -176,11 +176,10 @@ global_default: {
 			access: "bios->cap",
 			name: "Supported OD feature support flags",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "OD feature support flags",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_ODCAP_COUNT",
 				enum: "SMU_11_0_7_ODFEATURE_CAP",
@@ -194,11 +193,10 @@ global_default: {
 			access: "bios->max",
 			name: "Supported Overdrive settings (max)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "default maximum settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_ODSETTING_COUNT",
 				enum: "SMU_11_0_7_ODSETTING_ID",
@@ -212,11 +210,10 @@ global_default: {
 			access: "bios->min",
 			name: "Supported Overdrive settings (min)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "default minimum settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_ODSETTING_COUNT",
 				enum: "SMU_11_0_7_ODSETTING_ID",
@@ -230,11 +227,10 @@ global_default: {
 			access: "bios->pm_setting",
 			name: "Supported Power Mode settings",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Optimized power mode feature settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_PMSETTING_COUNT",
 				enum: "SMU_11_0_7_PWRMODE_SETTING",
@@ -248,16 +244,15 @@ global_default: {
 			access: "(&(bios->cap[SMU_11_0_7_ODCAP_COUNT]))",
 			name: "Undefined OD feature support flags",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "OD feature support flags",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_ODFEATURE - SMU_11_0_7_ODCAP_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 16
 						name: "OD feature [16 + %02u]",
 					},
 				],
@@ -266,16 +261,15 @@ global_default: {
 			access: "(&(bios->max[SMU_11_0_7_ODSETTING_COUNT]))",
 			name: "Undefined Overdrive settings (max)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "default maximum settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 30
 						name: "max: [30 + %02u]",
 					},
 				],
@@ -284,16 +278,15 @@ global_default: {
 			access: "(&(bios->min[SMU_11_0_7_ODSETTING_COUNT]))",
 			name: "Undefined Overdrive settings (min)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "default minimum settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 30
 						name: "min: [30 + %02u]",
 					},
 				],
@@ -302,16 +295,15 @@ global_default: {
 			access: "(&(bios->pm_setting[SMU_11_0_7_PMSETTING_COUNT]))",
 			name: "Undefined Power Mode settings",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Optimized power mode feature settings",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_PMSETTING - SMU_11_0_7_PMSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 16
 						name: "pm_setting: [16 + %02u]",
 					},
 				],
@@ -379,7 +371,7 @@ global_default: {
 				count: "(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 10
 						name: "max: [10 + %02u]",
 					},
 				],
@@ -393,7 +385,7 @@ global_default: {
 				count: "(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 10
 						name: "min: [10 + %02u]",
 					},
 				],
@@ -427,11 +419,10 @@ global_default: {
 			access: "bios->max",
 			name: "PowerSavingClock modes (max)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_PPCLOCK_COUNT",
 				enum: "SMU_11_0_7_PPCLOCK_ID",
@@ -445,11 +436,10 @@ global_default: {
 			access: "bios->min",
 			name: "PowerSavingClock modes (min)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_11_0_7_PPCLOCK_COUNT",
 				enum: "SMU_11_0_7_PPCLOCK_ID",
@@ -463,16 +453,15 @@ global_default: {
 			access: "(&(bios->max[SMU_11_0_7_PPCLOCK_COUNT]))",
 			name: "Undefined PowerSavingClock Modes (max)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 13
 						name: "max: [13 + %02u]",
 					},
 				],
@@ -481,16 +470,15 @@ global_default: {
 			access: "(&(bios->min[SMU_11_0_7_PPCLOCK_COUNT]))",
 			name: "Undefined PowerSavingClock Modes (min)",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{ // if COUNT changes, please change this 13 
 						name: "min: [13 + %02u]",
 					},
 				],
@@ -1648,11 +1636,10 @@ global_default: {
 			access: "bios->Fset",
 			name: "Fset",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "in GHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
 				enum: "ATUI_NULL",
@@ -1666,11 +1653,10 @@ global_default: {
 			access: "bios->Vdroop",
 			name: "Vdroop",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "in V",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
 				enum: "ATUI_NULL",
@@ -2040,11 +2026,10 @@ global_default: {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2058,11 +2043,10 @@ global_default: {
 			access: "bios->FreqTableVclk",
 			name: "FreqTableVclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_VCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2076,11 +2060,10 @@ global_default: {
 			access: "bios->FreqTableDclk",
 			name: "FreqTableDclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2094,11 +2077,10 @@ global_default: {
 			access: "bios->FreqTableEclk",
 			name: "FreqTableEclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_ECLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2112,11 +2094,10 @@ global_default: {
 			access: "bios->FreqTableSocclk",
 			name: "FreqTableSocclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2130,11 +2111,10 @@ global_default: {
 			access: "bios->FreqTableUclk",
 			name: "FreqTableUclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2148,11 +2128,10 @@ global_default: {
 			access: "bios->FreqTableFclk",
 			name: "FreqTableFclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2166,11 +2145,10 @@ global_default: {
 			access: "bios->FreqTableDcefclk",
 			name: "FreqTableDcefclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2184,11 +2162,10 @@ global_default: {
 			access: "bios->FreqTableDispclk",
 			name: "FreqTableDispclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2202,11 +2179,10 @@ global_default: {
 			access: "bios->FreqTablePixclk",
 			name: "FreqTablePixclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2220,11 +2196,10 @@ global_default: {
 			access: "bios->FreqTablePhyclk",
 			name: "FreqTablePhyclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2238,11 +2213,10 @@ global_default: {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU11_PPT3_PPCLK_COUNT",
 				enum: "SMU11_PPT3_PPCLK",
@@ -2260,11 +2234,10 @@ global_default: {
 			access: "bios->Mp0clkFreq",
 			name: "Mp0clkFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -2278,11 +2251,10 @@ global_default: {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3301,11 +3273,10 @@ global_default: {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3319,11 +3290,10 @@ global_default: {
 			access: "bios->FreqTableVclk",
 			name: "FreqTableVclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_VCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3337,11 +3307,10 @@ global_default: {
 			access: "bios->FreqTableDclk",
 			name: "FreqTableDclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3355,11 +3324,10 @@ global_default: {
 			access: "bios->FreqTableSocclk",
 			name: "FreqTableSocclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3373,11 +3341,10 @@ global_default: {
 			access: "bios->FreqTableUclk",
 			name: "FreqTableUclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3391,11 +3358,10 @@ global_default: {
 			access: "bios->FreqTableDcefclk",
 			name: "FreqTableDcefclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3409,11 +3375,10 @@ global_default: {
 			access: "bios->FreqTableDispclk",
 			name: "FreqTableDispclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3427,11 +3392,10 @@ global_default: {
 			access: "bios->FreqTablePixclk",
 			name: "FreqTablePixclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3445,11 +3409,10 @@ global_default: {
 			access: "bios->FreqTablePhyclk",
 			name: "FreqTablePhyclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3468,11 +3431,10 @@ global_default: {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU11_PPT8_PPCLK_COUNT",
 				enum: "ATUI_NULL",
@@ -3505,11 +3467,10 @@ global_default: {
 			access: "bios->Mp0clkFreq",
 			name: "Mp0clkFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "in MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3523,11 +3484,10 @@ global_default: {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3541,11 +3501,10 @@ global_default: {
 			access: "bios->MemVddciVoltage",
 			name: "MemVddciVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -3559,11 +3518,10 @@ global_default: {
 			access: "bios->MemMvddVoltage",
 			name: "MemMvddVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4365,11 +4323,10 @@ global_default: {
 			access: "bios->SocketPowerLimitAc",
 			name: "SocketPowerLimitAc",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Watts",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
@@ -4383,11 +4340,10 @@ global_default: {
 			access: "bios->SocketPowerLimitAcTau",
 			name: "SocketPowerLimitAcTau",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Time constant of LPF in ms",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
@@ -4401,11 +4357,10 @@ global_default: {
 			access: "bios->SocketPowerLimitDc",
 			name: "SocketPowerLimitDc",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Watts",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
@@ -4419,11 +4374,10 @@ global_default: {
 			access: "bios->SocketPowerLimitDcTau",
 			name: "SocketPowerLimitDcTau",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Time constant of LPF in ms",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
@@ -4437,11 +4391,10 @@ global_default: {
 			access: "bios->TdcLimit",
 			name: "TdcLimit",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Amps",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
 				enum: "ATUI_NULL",
@@ -4455,11 +4408,10 @@ global_default: {
 			access: "bios->TdcLimitTau",
 			name: "TdcLimitTau",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Time constant of LPF in ms",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
 				enum: "ATUI_NULL",
@@ -4473,11 +4425,10 @@ global_default: {
 			access: "bios->TemperatureLimit",
 			name: "TemperatureLimit",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Celcius",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TEMP_SMU_11_0_7_COUNT",
 				enum: "TEMP_SMU11_0_7_e",
@@ -4502,11 +4453,10 @@ global_default: {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4520,11 +4470,10 @@ global_default: {
 			access: "bios->FreqTableVclk",
 			name: "FreqTableVclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_VCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4538,11 +4487,10 @@ global_default: {
 			access: "bios->FreqTableDclk",
 			name: "FreqTableDclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4556,11 +4504,10 @@ global_default: {
 			access: "bios->FreqTableSocclk",
 			name: "FreqTableSocclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4574,11 +4521,10 @@ global_default: {
 			access: "bios->FreqTableUclk",
 			name: "FreqTableUclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4592,11 +4538,10 @@ global_default: {
 			access: "bios->FreqTableDcefclk",
 			name: "FreqTableDcefclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4610,11 +4555,10 @@ global_default: {
 			access: "bios->FreqTableDispclk",
 			name: "FreqTableDispclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4628,11 +4572,10 @@ global_default: {
 			access: "bios->FreqTablePixclk",
 			name: "FreqTablePixclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4646,11 +4589,10 @@ global_default: {
 			access: "bios->FreqTablePhyclk",
 			name: "FreqTablePhyclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4664,11 +4606,10 @@ global_default: {
 			access: "bios->FreqTableDtbclk",
 			name: "FreqTableDtbclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_DTBCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4682,11 +4623,10 @@ global_default: {
 			access: "bios->FreqTableFclk",
 			name: "FreqTableFclk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4729,11 +4669,10 @@ global_default: {
 			access: "bios->PerPartDroopModelGfxDfll",
 			name: "PerPartDroopModelGfxDfll",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "GHz ->V",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
 				enum: "ATUI_NULL",
@@ -4749,11 +4688,10 @@ global_default: {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU11_PPT7_PPCLK_COUNT",
 				enum: "SMU11_PPT7_PPCLK_e",
@@ -4791,11 +4729,10 @@ global_default: {
 			access: "bios->Mp0clkFreq",
 			name: "Mp0clkFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "in MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4809,11 +4746,10 @@ global_default: {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4827,11 +4763,10 @@ global_default: {
 			access: "bios->MemVddciVoltage",
 			name: "MemVddciVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4845,11 +4780,10 @@ global_default: {
 			access: "bios->MemMvddVoltage",
 			name: "MemMvddVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -4987,11 +4921,10 @@ global_default: {
 			access: "bios->FlopsPerByteTable",
 			name: "FlopsPerByteTable",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "Q8.8",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "RLC_PACE_TABLE_NUM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -5016,11 +4949,10 @@ global_default: {
 			access: "bios->UclkDpmPstates",
 			name: "UclkDpmPstates",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "4 DPM states.",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -5209,11 +5141,10 @@ global_default: {
 			access: "bios->qAvfsGb",
 			name: "qAvfsGb",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "GHz->V Override of fused curve",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5253,11 +5184,10 @@ global_default: {
 			access: "bios->qAgingGb",
 			name: "qAgingGb",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5281,11 +5211,10 @@ global_default: {
 			access: "bios->qStaticVoltageOffset",
 			name: "qStaticVoltageOffset",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5301,11 +5230,10 @@ global_default: {
 			access: "bios->DcTol",
 			name: "DcTol",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5338,11 +5266,10 @@ global_default: {
 			access: "bios->DcBtcMin",
 			name: "DcBtcMin",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5356,11 +5283,10 @@ global_default: {
 			access: "bios->DcBtcMax",
 			name: "DcBtcMax",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5374,11 +5300,10 @@ global_default: {
 			access: "bios->DcBtcGb",
 			name: "DcBtcGb",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
@@ -5418,7 +5343,7 @@ global_default: {
 				count: "(NUM_I2C_CONTROLLERS_SMU11_0_7 - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
+					{  // if COUNT changes, please change this 8
 						name: "I2cControllers [8 + %02u]",
 						display: "ATUI_NAN",
 						fancy: "ATUI_INLINE", fancy_data: "i2ccontrollerconfig_u8",
@@ -5485,11 +5410,10 @@ global_default: {
 			access: "bios->SmnclkDpmFreq",
 			name: "SmnclkDpmFreq",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "in MHz",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -5503,11 +5427,10 @@ global_default: {
 			access: "bios->SmnclkDpmVoltage",
 			name: "SmnclkDpmVoltage",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
 				enum: "ATUI_NULL",
@@ -5524,11 +5447,10 @@ global_default: {
 			access: "bios->PerPartDroopVsetGfxDfll",
 			name: "PerPartDroopVsetGfxDfll",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "In mV(Q2)",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
 				enum: "ATUI_NULL",
@@ -5698,11 +5620,10 @@ global_default: {
 			access: "bios->XgmiDpmPstates",
 			name: "XgmiDpmPstates",
 			display: "ATUI_NAN",
-			fancy: "ATUI_DYNARRAY",
 			description: [
 				{language: "english", text: "2 DPM states, high and low.",},
 			],
-			fancy_data: {
+			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
 				enum: "ATUI_NULL",

@@ -1,3 +1,5 @@
+/* For umctimings.h -- hand-written AMD registers and register tables */
+
 {class: "branch",
 global_default: {
 	branch_defaults: {
@@ -1425,7 +1427,7 @@ global_default: {
 			],
 		},
 	],
-}, {
+}, { // Northern, Southern, Sea, Volcanic Islands
 	c_type: "timings_set_islands_ddr3",
 	leaves: [
 		{

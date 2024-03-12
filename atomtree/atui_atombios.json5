@@ -1,3 +1,5 @@
+/* For atombios.h */
+
 {class: "branch",
 global_default: {
 	branch_defaults: {
@@ -1824,7 +1826,7 @@ global_default: {
 		}, {
 			access: "bios->RegDataBlkSize",
 			name: "RegDataBlkSize",
-		}, {
+		}, {  // data for RegIndexBuf and RegDataBuf is through atomtree
 			name: "RegIndexBuf",
 			display: "ATUI_NAN",
 			fancy: "ATUI_PETIOLE", fancy_data: "reg_index_dummy",

@@ -1,3 +1,5 @@
+/* For atomfirmware.h */
+
 {class: "branch",
 global_default: {
 	branch_defaults: {
@@ -5626,7 +5628,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
-		}, {
+		}, { // data for umc_reg_list, umc_reg_setting_list are through atomtree
 			name: "umc_reg_list",
 			display: "ATUI_NAN",
 			fancy: "ATUI_PETIOLE", fancy_data: "atom_umc_register_addr_info_access",

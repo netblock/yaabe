@@ -1,3 +1,5 @@
+/* For powerplay.h -- common powerplay definitions */
+
 {class: "branch",
 global_default: {
 	branch_defaults: {
