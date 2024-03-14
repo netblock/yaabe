@@ -1,3 +1,52 @@
+# Format
+
+ATUI's metaprogramming is represented in JSON5, and what kind of data it holds
+is determined with the `class` attribute.
+
+the top-level as follows
+``` json5
+{class: "branch",
+global_default: {
+	...
+}, branches: [
+	...
+], }
+```
+
+
+# global\_default
+
+`global_default` holds branch and leaf data that will be used to infer missing
+fields in all branches and leaves.
+
+For `leaf_defaults`, the `generic` is for all leaves, except for bitfield
+children and dynarray patterns, which are what `bitchild` and `dynpattern` are
+for respectively.
+
+``` json5
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atui_nullstruct",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+	},
+},
+```
+
+
 # Basic Usage and Namespaces
 
 There are two namespaces available, `bios` and `atomtree`.
@@ -196,7 +245,7 @@ Also make sure the table is populated with an ATUI\_FUNCIFY().
 
 ### ATUI\_STRING / ATUI\_ARRAY
 
-If the element is a dynanmically-sized 0-terminated string, set the `fancy` to
+If the element is a dynamically-sized 0-terminated string, set the `fancy` to
 `ATUI_STRING`. 
 
 If it's an array, data will be represented in the radix of your choosing, with
@@ -272,7 +321,7 @@ necessarily equally-sized (eg strings, for `ATUI_STRING`).
 
 If an enum should tag along for UI/naming purposes, state an enum; otherwise
 state the enum name as `ATUI_NULL` . The enum will be walked through
-sequentually in the order as it is defined with `PPATUI_ENUMER()`.
-Futhermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
+sequentially in the order as it is defined with `PPATUI_ENUMER()`.
+Furthermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
 
 Leaf top UI name won't get displayed if `ATUI_NODISPLAY` is set for the radix,
