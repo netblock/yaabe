@@ -10,7 +10,7 @@ project('yaabe', 'c',
 )
 
 cc = meson.get_compiler('c')
-ppatui = find_program('ppatui.py', native: true, required: true)
+ppatui = find_program('scripts/ppatui.py', native: true, required: true)
 
 external_depends = [
 	cc.find_library('m', required: true),
@@ -84,7 +84,7 @@ if get_option('nsis_installer')
 		output: 'yaabe-installer-' + meson.project_version() + '.exe',
 		command: [
 			pypath,
-			files('nsis_helper.py'),
+			files('scripts/nsis_helper.py'),
 			'@INPUT0@', # .nsi
 			'@CURRENT_SOURCE_DIR@', # gtk-assets, others
 			'@INPUT1@', # yaabe.exe
