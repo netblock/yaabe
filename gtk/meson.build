@@ -1,2 +1,5 @@
-gtk_source = ['yaabe_gtk4.c']
-gtk_files = files(gtk_source)
+include_dirs += include_directories('.')
+
+yaabe_src += files(
+	'yaabe_gtk4.c',
+)

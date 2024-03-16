@@ -10,27 +10,36 @@ project('yaabe', 'c',
 )
 
 cc = meson.get_compiler('c')
-ppatui = find_program('scripts/ppatui.py', native: true, required: true)
-
-external_depends = [
-	cc.find_library('m', required: true),
-	dependency('gtk4', version: '>= 4.10.0', required: true),
-]
-internal_depends = []
-
-
-include_dirs = include_directories(['atom', 'atomtree','gtk'])
-subdir('atomtree')
-subdir('gtk')
-main_files = files('main.c')
-
-
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
 		'-fstack-protector-strong',
 		language:'c'
 	)
 endif
+
+external_depends = [
+	cc.find_library('m', required: true),
+	dependency('gtk4', version: '>= 4.10.0', required: true),
+]
+
+ppatui = find_program('scripts/ppatui.py', native: true, required: true)
+json5_to_c = generator(ppatui,
+	arguments: ['@INPUT@', '@OUTPUT@'],
+	output: '@BASENAME@.c',
+)
+json5_to_h = generator(ppatui,
+	arguments: ['@INPUT@', '@OUTPUT@'],
+	output: '@BASENAME@.h',
+)
+
+internal_depends = []
+include_dirs = []
+yaabe_src = []
+subdir('atomtree')
+subdir('gtk')
+yaabe_src += files('main.c')
+include_dirs += include_directories('atom')
+
 
 if 'windows' == target_machine.system()
 	# msys2 isn't caught up with C23
@@ -39,7 +48,7 @@ if 'windows' == target_machine.system()
 	# windows resource compiler .rc file
 	ver_array = meson.project_version().split('.')
 	windows = import('windows')
-	main_files += windows.compile_resources(configure_file(
+	yaabe_src += windows.compile_resources(configure_file(
 		input: files('yaabewindows.rc.in'),
 		output: 'yaabewindows.rc',
 		configuration: configuration_data({
@@ -51,12 +60,10 @@ if 'windows' == target_machine.system()
 	))
 endif
 
-src = atomtree_source + gtk_files + main_files
-all_deps = external_depends + internal_depends
 yaabe = executable('yaabe',
-	sources: src,
+	sources: yaabe_src,
 	include_directories: include_dirs,
-	dependencies: all_deps,
+	dependencies: (external_depends + internal_depends),
 	install: true,
 	win_subsystem: 'windows',
 )
@@ -92,6 +99,6 @@ if get_option('nsis_installer')
 			'@PRIVATE_DIR@', # stage
 			'@OUTPUT@', # installer exe
 			meson.project_version()
-		]
+		],
 	)
 endif
