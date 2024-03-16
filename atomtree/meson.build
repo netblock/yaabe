@@ -34,3 +34,14 @@ atomtree_source = [
 	atui_tables_sources,
 	files(atui_tables_source_files + atomtree_sources),
 ]
+
+
+json5_to_h = generator(ppatui,
+	arguments: ['@INPUT@', '@OUTPUT@'],
+	output: '@BASENAME@.h',
+)
+internal_depends += declare_dependency(
+	sources: json5_to_h.process(files(
+		'atui_enums.json5',
+	)),
+)

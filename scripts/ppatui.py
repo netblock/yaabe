@@ -9,6 +9,35 @@ import sys
 import copy
 import json5
 
+def description_to_text(description:dict, indent:str):
+	if (description is None):
+		return ""
+	lang_type = ""
+	languages = ("english",)
+	descriptions = [None,]
+	descr_index = 0
+	for trans in description:
+		descr_index = languages.index(trans["language"])
+		descriptions[descr_index] = trans["text"]
+
+	child_indent = indent + "\t"
+	descr_template = (
+indent + ".description = {\n"
++ "%s"
++ indent + "},\n"
+	)
+
+	des_entry_template = child_indent + "u8\"%s\",\n"
+	des_null_entry_template = child_indent + "NULL,\n"
+
+	descr_texts = ""
+	for d in descriptions:
+		if d:
+			descr_texts += des_entry_template % d.replace("\"","\\\"")
+		else:
+			descr_texts += des_null_entry_template
+	return descr_template % descr_texts
+
 
 def enum_to_h(atui_data:dict):
 	assert(atui_data["class"] == "enum")
@@ -25,22 +54,43 @@ static_assert(%u <= 255); // uint8_t limits
 static const struct atui_enum PPATUI_ENUM_NAME(%s) = {
 	.name = u8"%s",
 	.num_entries = %u,
+%s\
 	.enum_array = (const struct atui_enum_entry[]) {
 %s\
 	},
 };
 """
-	enum_entry_template = "\t\t{.name = u8\"%s\", .val = %s},\n"
+	enum_entry_template = """\
+		{
+			.name = u8\"%s\",
+			.val = %s,
+%s\
+		},
+"""
 
 	out_text = enum_file_start
 	enum_entries = ""
+	entry_name = ""
+	descr_text = ""
 	for enum in atui_data["enums"]:
 		enum_entries = ""
 		for entry in enum["constants"]:
-			enum_entries += enum_entry_template % (entry, entry)
+			entry_name = entry["name"]
+			#if "description" in entry:
+			#	descr_text = description_to_text(entry["description"], "\t\t\t")
+			#else:
+			#	descr_text = ""
+			enum_entries += enum_entry_template % (
+				entry_name, entry_name, descr_text
+			)
+		#if "description" in enum:
+		#	descr_text = description_to_text(entry["description"], "\t")
+		#else:
+		#	descr_text = ""
 		out_text += enum_template % (
 			len(enum["constants"]), # assert
-			enum["name"], enum["name"], len(enum["constants"]), enum_entries
+			enum["name"], enum["name"], len(enum["constants"]),
+			descr_text, enum_entries
 		)
 	return out_text + enum_file_end
 
@@ -275,35 +325,6 @@ def infer_branch_data(defaults:dict, branch:atui_branch):
 
 	if branch.leaves:
 		infer_leaf_data(defaults, "generic", branch.leaves)
-
-def description_to_text(description:dict, indent:str):
-	if (description is None):
-		return ""
-	lang_type = ""
-	languages = ("english",)
-	descriptions = [None,]
-	descr_index = 0
-	for trans in description:
-		descr_index = languages.index(trans["language"])
-		descriptions[descr_index] = trans["text"]
-
-	child_indent = indent + "\t"
-	descr_template = (
-indent + ".description = {\n"
-+ "%s"
-+ indent + "},\n"
-	)
-
-	des_entry_template = child_indent + "u8\"%s\",\n"
-	des_null_entry_template = child_indent + "NULL,\n"
-
-	descr_texts = ""
-	for d in descriptions:
-		if d:
-			descr_texts += des_entry_template % d.replace("\"","\\\"")
-		else:
-			descr_texts += des_null_entry_template
-	return descr_template % descr_texts
 
 
 def leaves_to_text(leaves:list, indent:str):

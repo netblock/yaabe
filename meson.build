@@ -16,6 +16,7 @@ external_depends = [
 	cc.find_library('m', required: true),
 	dependency('gtk4', version: '>= 4.10.0', required: true),
 ]
+internal_depends = []
 
 
 include_dirs = include_directories(['atom', 'atomtree','gtk'])
@@ -51,7 +52,7 @@ if 'windows' == target_machine.system()
 endif
 
 src = atomtree_source + gtk_files + main_files
-all_deps = external_depends
+all_deps = external_depends + internal_depends
 yaabe = executable('yaabe',
 	sources: src,
 	include_directories: include_dirs,
