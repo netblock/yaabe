@@ -13,7 +13,7 @@ cc = meson.get_compiler('c')
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
 		'-fstack-protector-strong',
-		language:'c'
+		language: 'c',
 	)
 endif
 
@@ -24,11 +24,11 @@ external_depends = [
 
 ppatui = find_program('scripts/ppatui.py', native: true, required: true)
 json5_to_c = generator(ppatui,
-	arguments: ['@INPUT@', '@OUTPUT@'],
+	arguments: '-s -o @OUTPUT@ -i @INPUT@'.split(),
 	output: '@BASENAME@.c',
 )
 json5_to_h = generator(ppatui,
-	arguments: ['@INPUT@', '@OUTPUT@'],
+	arguments: '-d -o @OUTPUT@ -i @INPUT@'.split(),
 	output: '@BASENAME@.h',
 )
 
@@ -69,30 +69,31 @@ yaabe = executable('yaabe',
 )
 
 if get_option('nsis_installer')
+
+	# dummy requirements for nsis_helper.py
+	find_program('makensis', native: true, required: true)
+	find_program('glib-compile-schemas', native: true, required: true)
+	find_program('ldd', native:true, required: true)
+
+	cygpath = find_program('cygpath', native:true, required: true)
+	nsis_helper = find_program('scripts/nsis_helper.py', required: true)
+
 	msys2_err = 'We pluck assets from MSYS2 for the installer. https://www.msys2.org'
 	fs = import('fs')
-	mingw64_path = run_command('cygpath', '-m', '/mingw64').stdout().strip()
+	mingw64_path = run_command(cygpath, '-m', '/mingw64').stdout().strip()
 	assert(fs.is_dir(mingw64_path), msys2_err)
 	assert('windows' == target_machine.system(), msys2_err)
 
-	pypath = import('python').find_installation()
-
-	#find_program('makensis', native: true, required: true)
-	#find_program('glib-compile-schemas', native: true, required: true)
-	#find_program('ldd', native:true, required: true)
-	#find_program('cygpath', native:true, required: true)
-
 	nsis_target = custom_target('nsis_installer',
 		depends: yaabe,
-		build_always_stale: true,
+		build_by_default: true,
 		input: [
 			files('yaabe.nsi'),
 			yaabe,
 		],
 		output: 'yaabe-installer-' + meson.project_version() + '.exe',
 		command: [
-			pypath,
-			files('scripts/nsis_helper.py'),
+			nsis_helper,		
 			'@INPUT0@', # .nsi
 			'@CURRENT_SOURCE_DIR@', # gtk-assets, others
 			'@INPUT1@', # yaabe.exe

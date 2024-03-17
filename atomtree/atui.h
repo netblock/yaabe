@@ -308,6 +308,5 @@ atui_branch_allocator(
 
 #include "ppatui.h"
 #include "atui_includes.h"
-#include "atui_enums.h"
 
 #endif
