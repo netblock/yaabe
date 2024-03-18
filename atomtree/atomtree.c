@@ -708,8 +708,7 @@ get_memory_vendor_part_strs(
 			 break;
 		default: assert(0);
 	}
-	const struct atui_enum* const vendors =
-		&PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e);
+	const struct atui_enum* const vendors = &ATUI_ENUM(GDDR_MEM_VENDOR_e);
 	assert(vendor_rev_id.vendor_code < vendors->num_entries);
 	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
 }
@@ -763,71 +762,67 @@ atomtree_populate_mem_adjust_table(
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
 		if (regcmp(index, mem_adjust_set_gcn3_hbm1_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn3_hbm1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn3_hbm1);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_hbm1);
 		}
 	} else if (7 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type1_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn4_gddr5_type1);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type1);
 		}
 	} else if (13 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type2_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn4_gddr5_type2);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type2);
 		}
 	} else if (46 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn3_gddr5_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn3_gddr5);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5);
 		}
 	} else if (54 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_terascale2_ddr3_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_terascale2_ddr3;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_terascale2_ddr3);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_ddr3);
 		}
 	} else if (64 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type4_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type4;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type4);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type4);
 		} else if (regcmp(
 					index, mem_adjust_set_terascale2_gddr5_type3_addresses
 				)) {
 			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type3;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mem_adjust_set_terascale2_gddr5_type3
-			);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type3);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_terascale3_gddr5_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_terascale3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_terascale3_gddr5);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale3_gddr5);
 		} else if (regcmp(
 					index, mem_adjust_set_terascale2_gddr5_type4_addresses
 				)) {
 			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type4;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mem_adjust_set_terascale2_gddr5_type4
-			);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type4);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type1_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type1);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type1);
 		}
 	} else if (124 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type2_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type2);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type2);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn2_gddr5_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn2_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn2_gddr5);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn2_gddr5);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type3_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type3;
-			atui_strap_func = PPATUI_FUNC_NAME(mem_adjust_set_gcn1_gddr5_type3);
+			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type3);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
@@ -938,23 +933,23 @@ atomtree_populate_mem_clk_patch(
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
 		if (regcmp(index, timings_set_polaris_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
-			atui_strap_func = PPATUI_FUNC_NAME(timings_set_polaris);
+			atui_strap_func = ATUI_FUNC(timings_set_polaris);
 		} else if (regcmp(index, timings_set_islands_type1_addresses)
 				|| regcmp(index, timings_set_islands_type2_addresses)
 				) {
 			// Northern, Southern, Sea, Volcanic Islands
 			if (vram_type == ATOM_DGPU_VRAM_TYPE_DDR3) {
 				mem_clk_patch->reg_set = timings_set_islands_ddr3;
-				atui_strap_func = PPATUI_FUNC_NAME(timings_set_islands_ddr3);
+				atui_strap_func = ATUI_FUNC(timings_set_islands_ddr3);
 			} else {
 				mem_clk_patch->reg_set = timings_set_islands_gddr5;
-				atui_strap_func = PPATUI_FUNC_NAME(timings_set_islands_gddr5);
+				atui_strap_func = ATUI_FUNC(timings_set_islands_gddr5);
 			}
 		}
 	} else if (10 == mem_clk_patch->num_index) {
 		if (regcmp(index, timings_set_fiji_addresses)) {
 			mem_clk_patch->reg_set = timings_set_fiji;
-			atui_strap_func = PPATUI_FUNC_NAME(timings_set_fiji);
+			atui_strap_func = ATUI_FUNC(timings_set_fiji);
 		}
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
@@ -1040,12 +1035,12 @@ atomtree_populate_mc_tile_adjust(
 	if (2 == mc_tile_adjust->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_tile_adjust_set_gcn4_gddr5_addresses)) {
 			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn4_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_tile_adjust_set_gcn4_gddr5);
+			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn4_gddr5);
 		}
 	} else if (3 == mc_tile_adjust->num_index) {
 		if (regcmp(index, mc_tile_adjust_set_gcn3_gddr5_addresses)) {
 			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_tile_adjust_set_gcn3_gddr5);
+			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn3_gddr5);
 		}
 	}
 
@@ -1122,26 +1117,22 @@ atomtree_populate_init_mc_phy_init(
 	if (14 == mc_phy_init->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_phy_init_set_gcn3_hbm1_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn3_hbm1;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_set_gcn3_hbm1);
+			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_hbm1);
 		}
 	} else if (19 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type2_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type2;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_phy_init_set_gcn4_gddr5_type2
-			);
+			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type2);
 		}
 	} else if (25 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type1_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type1;
-			atui_strap_func = PPATUI_FUNC_NAME(
-				mc_phy_init_set_gcn4_gddr5_type1
-			);
+			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type1);
 		}
 	} else if (165 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn3_gddr5;
-			atui_strap_func = PPATUI_FUNC_NAME(mc_phy_init_set_gcn3_gddr5);
+			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5);
 		}
 	}
 
@@ -1282,17 +1273,17 @@ atomtree_populate_atom_memory_timing_format(
 		if (0xFF == strap.v1->Terminator) {
 			vram_module->memory_timing_format_ver = v1_1;
 			table_size = sizeof(struct atom_memory_timing_format_v1);
-			atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v1);
+			atui_strap_func = ATUI_FUNC(atom_memory_timing_format_v1);
 		} else {
 			assert(0xFF == strap.v2->Terminator);
 			vram_module->memory_timing_format_ver = v1_2;
 			table_size = sizeof(struct atom_memory_timing_format_v2);
-			atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v2);
+			atui_strap_func = ATUI_FUNC(atom_memory_timing_format_v2);
 		}
 	} else {
 		vram_module->memory_timing_format_ver = v1_0;
 		table_size = sizeof(struct atom_memory_timing_format_v0);
-		atui_strap_func = PPATUI_FUNC_NAME(atom_memory_timing_format_v0);
+		atui_strap_func = ATUI_FUNC(atom_memory_timing_format_v0);
 	}
 	const uint8_t count = straps_total_size / table_size;
 	vram_module->num_memory_timing_format = count;
@@ -1555,11 +1546,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_3->MemoryVendorID.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_3->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1636,11 +1627,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_4->MemoryVendorID.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_4->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1721,11 +1712,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_7->MemoryVendorID.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_7->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1779,11 +1770,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_8->MemoryVendorID.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_8->MemoryVendorID.vendor_code
 						].name
 					);
@@ -1814,11 +1805,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_9->vendor_rev_id.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_9->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1849,11 +1840,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_10->vendor_rev_id.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_10->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1881,11 +1872,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v1_11->vendor_rev_id.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v1_11->vendor_rev_id.vendor_code
 						].name
 					);
@@ -1935,11 +1926,11 @@ atomtree_populate_vram_module(
 					ATUI_ADD_BRANCH(atui_vrammodules, atui_module_entry);
 
 					assert(vmod->v3_0->dram_vendor_id.vendor_code
-						<= PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).num_entries
+						<= ATUI_ENUM(GDDR_MEM_VENDOR_e).num_entries
 					);
 					sprintf(atui_module_entry->name, u8"%s (%s)",
 						atui_module_entry->varname,
-						PPATUI_ENUM_NAME(GDDR_MEM_VENDOR_e).enum_array[
+						ATUI_ENUM(GDDR_MEM_VENDOR_e).enum_array[
 							vmod->v3_0->dram_vendor_id.vendor_code
 						].name
 					);
@@ -2351,9 +2342,9 @@ atomtree_populate_vram_info_v2_3(
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
 			struct atui_funcify_args func_args = {0};
 			if (vi23->uses_vega21_timings) {
-				atui_strap_func = PPATUI_FUNC_NAME(timings_set_vega21);
+				atui_strap_func = ATUI_FUNC(timings_set_vega21);
 			} else {
-				atui_strap_func = PPATUI_FUNC_NAME(timings_set_vega10);
+				atui_strap_func = ATUI_FUNC(timings_set_vega10);
 			}
 			const char8_t* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -2530,7 +2521,7 @@ atomtree_populate_vram_info_v2_4(
 
 			// to have similar topology like the rest
 			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
-			atui_strap_func = PPATUI_FUNC_NAME(timings_set_navi1);
+			atui_strap_func = ATUI_FUNC(timings_set_navi1);
 			struct atui_funcify_args func_args = {0};
 			const char8_t* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -3220,7 +3211,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 					break;
 			}
 			naming_enum_i = atui_enum_bsearch(
-				&(PPATUI_ENUM_NAME(atom_voltage_type)),
+				&(ATUI_ENUM(atom_voltage_type)),
 				at_vobj->voltage_object->header.voltage_type
 			);
 			if (naming_enum_i < 0) {
@@ -3231,7 +3222,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 			} else {
 				sprintf(tmp_branch->name, u8"%s (%s)",
 					tmp_branch->varname,
-					PPATUI_ENUM_NAME(atom_voltage_type).enum_array[
+					ATUI_ENUM(atom_voltage_type).enum_array[
 						naming_enum_i
 					].name
 				);

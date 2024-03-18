@@ -54,7 +54,7 @@ def enum_to_h(atui_data:dict, fname:str):
 	header_end = "\n#endif\n"
 	enum_template = """
 static_assert(%u <= 255); // uint8_t limits
-static const struct atui_enum PPATUI_ENUM_NAME(%s) = {
+static const struct atui_enum ATUI_ENUM(%s) = {
 	.name = u8"%s",
 	.num_entries = %u,
 %s\
@@ -153,21 +153,6 @@ class atui_leaf:
 			self.hi = leaf["hi"]
 		else:
 			self.hi = None
-
-		#old_leaves = []
-		#new_leaves = []
-		#if not (self.fancy_data is None):
-		#	if (self.fancy == "ATUI_BITFIELD"):
-		#		print(leaf.fancy_data)
-		#		old_leaves = self.fancy_data
-		#		self.fancy_data = new_leaves
-		#	elif (self.fancy == "ATUI_DYNARRAY"):
-		#		if ("pattern" in self.fancy_data):
-		#			old_leaves = self.fancy_data["pattern"]
-		#			self.fancy_data = self.fancy_data.copy()
-		#			self.fancy_data["pattern"] = new_leaves
-		#for leaf in old_leaves:
-		#	new_leaves.append(atui_leaf(leaf))
 
 
 class atui_branch:
@@ -369,7 +354,7 @@ indent + "{\n"
 			leaf_text_extra = ""
 		elif leaf.fancy == "ATUI_ENUM":
 			leaf_text_extra = (
-				child_indent + ".enum_options = &(PPATUI_ENUM_NAME(%s)),\n"
+				child_indent + ".enum_options = &(ATUI_ENUM(%s)),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_STRING":
@@ -398,7 +383,7 @@ indent + "{\n"
 				var_access = "NULL"
 				var_meta = "NULL"
 			leaf_text_extra = (
-				child_indent + ".branch_bud = PPATUI_FUNC_NAME(%s),\n"
+				child_indent + ".branch_bud = ATUI_FUNC(%s),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_DYNARRAY":
@@ -454,7 +439,7 @@ indent + "{\n"
 + child_indent + ".element_size = sizeof(%s[0]),\n"
 + child_indent + ".dynarray_length = %s,\n"
 + child_indent + ".numleaves = %u,\n"
-+ child_indent + ".enum_taglist = _PPATUI_NULLPTR(PPATUI_ENUM_NAME(%s)),\n"
++ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
 + indent + "},\n"
 )
 	access = ""
