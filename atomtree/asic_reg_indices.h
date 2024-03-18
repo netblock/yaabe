@@ -42,7 +42,7 @@ regset_bsearch_right(
 		uint16_t address
 		);
 void
-register_set_print_tables(
+register_set_print_tables( // entirely a developer's tool
 		const struct atomtree_init_reg_block* at_regblock,
 		const struct register_set* reg_set,
 		bool newest // suggest oldest or newest if there's multiple versions

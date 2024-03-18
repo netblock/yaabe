@@ -12,6 +12,7 @@ import pathlib
 import argparse
 
 def description_to_text(description:dict, indent:str):
+	# description segment meant for a segment of a c file
 	if (description is None):
 		return ""
 	lang_type = ""
@@ -78,6 +79,7 @@ static const struct atui_enum PPATUI_ENUM_NAME(%s) = {
 		enum_entries = ""
 		for entry in enum["constants"]:
 			entry_name = entry["name"]
+			# TODO implement C-side
 			#if "description" in entry:
 			#	descr_text = description_to_text(entry["description"], "\t\t\t")
 			#else:
@@ -212,6 +214,8 @@ class atui_branch:
 
 
 def populate_branch_defaults(defaults:dict):
+	# defaults may not explicitly have every intended attribute, so make them
+	# exist with NoneType
 	default_leaf_types = set(("generic", "bitchild", "dynpattern"))
 	leaves = {}
 	if "leaf_defaults" in defaults:
@@ -236,7 +240,7 @@ def populate_branch_defaults(defaults:dict):
 	return classed_defaults
 
 def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
-	# infer missing data on a branche's leaves based on what already exists for
+	# infer missing data on a branch's leaves based on what already exists for
 	# a leaf, and the global_defaults
 
 	leaf_defaults = defaults["leaf_defaults"]
@@ -332,6 +336,7 @@ def infer_branch_data(defaults:dict, branch:atui_branch, infer_leaves:bool=True)
 
 
 def leaves_to_text(leaves:list, indent:str):
+	# leaves to text meant for a segment of a c file
 	child_indent = indent + "\t"
 	leaf_template = (
 indent + "{\n"
@@ -441,6 +446,7 @@ def num_dynpattern_leaves(pattern:list):
 	return num_leaves
 
 def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
+	# ATUI_DYNARRAY boundaries
 	child_indent = indent + "\t"
 	bounds_template = (
 indent + "{\n"
@@ -465,6 +471,7 @@ indent + "{\n"
 	)
 
 def branches_to_c(atui_data:dict, fname:str):
+	# atui branches to text meant for a c file
 	assert(atui_data["class"] == "branch")
 	assert(type(atui_data["branches"]) is list)
 
@@ -554,6 +561,7 @@ PPATUI_HEADERIFY(%s) {
 
 
 def branches_to_h(atui_data:dict, fname:str):
+	# c header text from atui branches
 	assert(atui_data["class"] == "branch")
 	assert(type(atui_data["branches"]) is list)
 

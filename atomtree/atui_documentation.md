@@ -174,14 +174,14 @@ radix alongside its main radix.
 ### ATUI\_ENUM
 
 If the element should have a list of text-val pairs, an enum,
-First populate the atui enum in `atui_enums.h`:
+First populate the atui enum in `atui_enums.json5`:
 
-```
-PPATUI_ENUMER(enum_struct_name,
-	ENUM_ENTRY1,
-	ENUM_ENTRY2,
-	ENUM_ENTRY3,
-)
+``` json5
+{name: "enum_struct_name"
+	{name: "ENUM_ENTRY1",},
+	{name: "ENUM_ENTRY2",},
+	{name: "ENUM_ENTRY3",},
+]},
 ```
 
 And then for the atui leaf,

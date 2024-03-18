@@ -48,6 +48,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 	)
 	text = re.sub("};","\t],\n},", text)
 
+	# ATUI_DYNARRAY
 	dynarray = """\
 		{
 			access: "bios->\g<3>",
@@ -75,6 +76,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# ATUI_INLINE
 	inline = """\
 \g<1>	{
 \g<1>		access: "bios->\g<4>",
@@ -90,6 +92,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# ATUI_ENUM
 	enum = """\
 \g<1>	{
 \g<1>		access: "bios->\g<4>",
@@ -108,6 +111,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# ATUI_NOFANCY
 	simple_nums = """\
 \g<1>	{
 \g<1>		access: "bios->\g<3>",
@@ -125,6 +129,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# ATUI_ARRAY
 	num_arrays = """\
 \g<1>	{
 \g<1>		access: "bios->\g<3>",
@@ -140,6 +145,7 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# descriptions
 	descriptions = """\
 \g<1>description: [
 \g<1>	{language: "english", text: "\g<2>",},
@@ -210,6 +216,7 @@ def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
 	)
 
 
+	# main leaf
 	bitfield_leaf = """\
 \g<1>	{
 \g<1>		access: "bios->\g<3>",
@@ -224,8 +231,10 @@ def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 	
+	# eat struct { uint
 	text = re.sub("\tstruct { uint[0-9]+_t\n", "", text)
 
+	# bitfield enries
 	bit_child = """\
 \g<1>		{
 \g<1>			name: "\g<2>",
@@ -241,6 +250,7 @@ def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# descriptions
 	descriptions = """\
 \g<1>description: [
 \g<1>	{language: "english", text: "\g<2>",},
@@ -263,7 +273,6 @@ def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
 		print(text)
 	else:
 		return text
-
 
 
 def enum_to_atui(text, explicit_attributes=False, print_text=True):
@@ -290,6 +299,7 @@ def enum_to_atui(text, explicit_attributes=False, print_text=True):
 
 	text = re.sub("\"","\\\"",text) # for comments
 
+	# main enum body
 	enum_text = """\
 {name: "\g<2>",
 	__ATUIDESCR\g<4>
@@ -302,6 +312,7 @@ def enum_to_atui(text, explicit_attributes=False, print_text=True):
 	)
 	text = re.sub("};","]},", text)
 
+	# enum entries
 	var_text = """\
 		{name: "\g<2>",
 			__ATUIDESCR\g<4>
@@ -313,6 +324,7 @@ def enum_to_atui(text, explicit_attributes=False, print_text=True):
 		text
 	)
 
+	# descriptions
 	descriptions = """\
 \g<1>description: [
 \g<1>	{language: "english", text: "\g<2>",},

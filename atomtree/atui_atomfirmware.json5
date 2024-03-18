@@ -21,7 +21,7 @@ global_default: {
 		},
 	},
 }, branches: [
-{
+{// basic empty branch mainly to have collapsables
 	c_type: "atui_nullstruct", leaves: [],
 },
 
@@ -5522,6 +5522,9 @@ global_default: {
 	atomtree: "atomtree_umc_init_reg_block",
 	leaves: [
 		{
+			// the uint32_t* typecast is about stripping the 'union'
+			// abstraction so that the preprocessor can correctly calculate
+			// the bitfield
 			access: "((uint32_t*)atomtree->register_info)",
 			name: "umc_reg_list",
 			display: "ATUI_NODISPLAY",

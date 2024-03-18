@@ -938,6 +938,9 @@ global_default: {
 	],
 }, {
 	c_type: "MsgLimits_t",
+	// TODO unroll? dynarray inline?
+	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
+
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{

@@ -9,7 +9,7 @@ atui_branches = files(
 	'atui_umctimings.json5',
 )
 
-internal_depends += declare_dependency(
+internal_depends += declare_dependency( # header generaton
 	sources: json5_to_h.process(
 		atui_branches,
 		'atui_enums.json5',
@@ -25,6 +25,6 @@ atomtree_sources = files(
 	'atui.c',
 )
 yaabe_src += [
-	json5_to_c.process(atui_branches),
+	json5_to_c.process(atui_branches), # c file generaton
 	atomtree_sources,
 ]

@@ -9,16 +9,9 @@ represented; for example what radix it is best viewed in, or has an associated
 enum, or is a member of a bitfield. Furthermore, there are meta leaves that
 describe or refer to other leaves.
 
-ATUI heavily relies on metaprogramming (currently C preprocessor) to abstract
-away the programatic consequences of the underlying allocation and setup.
-For how to use ATUI_FUNCIFY() see atui_atomfirmware.c
-For how to use ATUI_MAKE_BRANCH() See ppatui.h
-
-
-declaration:
-PPATUI_FUNCIFY(struct|union, bios_namespace, atomtree_namespace
-    ...
-)
+ATUI heavily relies on metaprogramming to abstract away the programatic
+consequences of the underlying allocation and setup. For how to write the tables
+see atui_documentation.md
 
 instantiation:
 atui_branch* foba = ATUI_MAKE_BRANCH(name_of_bios_struct,
@@ -35,7 +28,6 @@ atui.h is about the core atui interface
 // see bottom for more includes
 
 
-// for PPATUI_ENUMER() for ATUI_ENUM
 struct atui_enum_entry {
 	const char8_t* const name;
 	const int64_t val;
@@ -81,7 +73,7 @@ enum atui_type:uint16_t {
 
 	_ATUI_BITCHILD = 1<<13, // Internally set. If it's a bitfield child.
 	ATUI_SIGNED    = 1<<14, // Internally-set. If it has a signing bit.
-	ATUI_FRAC     = 1<<15, // Internally-set. Both Q and float.
+	ATUI_FRAC      = 1<<15, // Internally-set. Both Q and float.
 };
 
 struct yaabe_gtkapp_model_cache; // GTK
@@ -94,7 +86,7 @@ struct _atui_leaf {
 	const char8_t* varname;
 	const char8_t* description[LANG_TOTALLANGS];
 
-	uint32_t num_bytes; // number of bytes for quick leaf size
+	uint32_t num_bytes;  // number of bytes for quick leaf size
 	enum atui_type type; // how to display text, and other config data
 	uint8_t array_size;
 

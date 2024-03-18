@@ -22,6 +22,7 @@ external_depends = [
 	dependency('gtk4', version: '>= 4.10.0', required: true),
 ]
 
+# source/header generators
 ppatui = find_program('scripts/ppatui.py', native: true, required: true)
 json5_to_c = generator(ppatui,
 	arguments: '-s -o @OUTPUT@ -i @INPUT@'.split(),
@@ -69,7 +70,6 @@ yaabe = executable('yaabe',
 )
 
 if get_option('nsis_installer')
-
 	# dummy requirements for nsis_helper.py
 	find_program('makensis', native: true, required: true)
 	find_program('glib-compile-schemas', native: true, required: true)

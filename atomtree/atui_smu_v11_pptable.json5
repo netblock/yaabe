@@ -2022,7 +2022,9 @@ global_default: {
 			description: [
 				{language: "english", text: "In mOhms with 8 fractional bits",},
 			],
-		}, {
+		},
+		// struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
+		{
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
 			display: "ATUI_NAN",
@@ -3000,7 +3002,7 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "smu11_smcpptable_v8",
+	c_type: "smu11_smcpptable_v8", // Navi10
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
