@@ -101,8 +101,11 @@ struct _atui_leaf {
 
 	union {
 		atui_branch** inline_branch;
+		atui_leaf* child_leaves;
+
 		// allocator-funcify use only:
 		atui_branch* (* branch_bud)(const struct atui_funcify_args*);
+		const struct subleaf_meta* template_leaves;
 	};
 
 	union {
@@ -140,17 +143,14 @@ struct  _atui_branch {
 
 	const char8_t* description[LANG_TOTALLANGS];
 
-	atui_branch** child_branches;
+	atui_branch** child_branches; // petiole + import
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
-	atui_branch** all_branches;
+	atui_branch** all_branches; // child + inline
 
-	uint8_t num_branches;
-	uint8_t max_num_branches;
-
+	uint8_t num_branches; // child branches
+	uint8_t max_num_branches; // import alloc'd but may not use
 	uint8_t num_inline_branches;
-	uint8_t max_num_inline_branches;
-
-	uint8_t max_all_branch_count;
+	uint8_t max_all_branch_count; // child+inline, import alloc'd may not use
 
 
 	uint16_t leaf_count;
@@ -235,6 +235,11 @@ void
 atui_destroy_tree(
 		atui_branch* tree
 		);
+void
+_atui_destroy_leaves( 
+		atui_leaf* leaves,
+		uint8_t num_leaves
+		);
 
 
 
@@ -258,16 +263,17 @@ struct atui_funcify_args {
 	// If the child branches are preallocated, walk across this. This array
 	// must have num_import_branches elements. NULLs allowed.
 
-	uint16_t num_import_branches;
+	uint8_t num_import_branches;
 	// Number of imported child branches this atui_branch will have.*/
 };
 
-struct dynarray_bounds { // for ATUI_DYNARRAY
-	const void* const* const deferred_start_array;
+struct subleaf_meta {
 	const uint32_t element_size; // Size of bios element. For pointer math.
-	const uint16_t dynarray_length; // The number of elements in the bios array
+	const uint8_t dynarray_length; // The number of elements in the bios array
+	const bool deferred_start_array;
 
-	const uint16_t numleaves; // number of leaves within the pattern.
+	const uint8_t numleaves; // number of leaves within the pattern.
+	const atui_leaf* sub_leaves;
 
 	// optional enum for name sprintf'ing
 	const struct atui_enum* const enum_taglist;
@@ -277,19 +283,17 @@ struct atui_branch_data {
 	const char8_t* const varname;
 
 	// leaves straightforward:
-	const atui_leaf* const leaves_initial;
+	const atui_leaf* const leaves_init;
 
 	// the collection of leaf patterns for all dynarrays in the branch:
-	const atui_leaf* const dynarray_patterns;
+	//const atui_leaf* const dynarray_patterns;
 	// dynarray metadata:
-	const struct dynarray_bounds* const dynarray_boundaries;
+	//const struct dynarray_bounds* const dynarray_boundaries;
 
-	const uint8_t num_leaves_initial;
-	const uint8_t num_dynarray_sets;
-
-	const uint8_t num_inline_initial;
-	const uint8_t num_branches_initial;
-
+	const uint8_t num_leaves_init; // sizeof(); does not include kids
+	const uint16_t computed_num_leaves;
+	const uint16_t computed_num_inline;
+	const uint16_t computed_num_petiole;
 };
 atui_branch*
 atui_branch_allocator(

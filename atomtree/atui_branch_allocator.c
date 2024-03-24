@@ -1,448 +1,327 @@
 #include "atomtree.h"
 #include "atui.h"
 
+// TODO fake malloc that uses the precalc'd alloc
+
 /* AtomTree iterable interface for UIs
 
 atui_branch_allocator processes the data set up by the ATUI_FUNCIFY functions
 to spit out your branch
 
 */
+
+// The leaves and branches arrays will be walked through via pointer math
+struct leaf_array {
+	atui_leaf* pos; // position
+	atui_leaf* end;
+};
+struct leaf_array_const {
+	const atui_leaf* pos;
+	const atui_leaf* end;
+};
+struct branch_array {
+	atui_branch** pos;
+	atui_branch** end;
+};
+struct global_tracker {
+	struct branch_array inliners;
+	struct branch_array branches; // initially petiole-only
+	struct atui_funcify_args branch_args;
+};
+struct dynarray_position {
+	union {
+		const void* ptr; // union writes
+		const void* direct;
+		const void* const* deffer;
+	} pos;
+	union {
+		const void* ptr; // union writes
+		const void* direct;
+		const void* const* deffer;
+	} end;
+};
+
+struct level_data {
+	struct leaf_array target;
+	struct leaf_array_const feed;
+
+	struct dynarray_position dynpos;
+	const void* suggestbios;
+	const struct atui_enum* nametag;
+	uint8_t name_num;
+	bool rename;
+};
+
+static void
+atui_leaves_printer(
+		struct global_tracker* const global,
+		struct level_data* const level
+		) {
+	struct branch_array* const inliners = &(global->inliners);
+	struct branch_array* const branches = &(global->branches);
+
+	struct leaf_array* const leaves = &(level->target);
+	struct leaf_array_const* const active = &(level->feed);
+
+	
+	const char8_t* nametag;
+	if (level->nametag) {
+		nametag = level->nametag->enum_array[level->name_num].name;
+	} else {
+		nametag = NULL;
+	}
+
+	struct level_data sub_leaves;
+	const struct subleaf_meta* sub_meta;
+	struct dynarray_position dynpos;
+	uint8_t num_leaves;
+
+	while (active->pos < active->end) {
+		if (active->pos->type & ATUI_PETIOLE) {
+			if (level->suggestbios) {
+				global->branch_args.suggestbios = level->suggestbios;
+			} else {
+				global->branch_args.suggestbios = active->pos->val;
+			}
+			assert(branches->pos < branches->end);
+			*(branches->pos) = active->pos->branch_bud(&(global->branch_args));
+			if (level->rename) {
+				if (nametag) {
+					sprintf((*branches->pos)->name, active->pos->origname,
+						nametag, level->name_num
+					);
+				} else {
+					sprintf((*branches->pos)->name, active->pos->origname,
+						level->name_num
+					);
+				}
+			}
+
+			branches->pos++;
+			active->pos++;
+			continue;
+		}
+
+		assert(leaves->pos < leaves->end);
+		*(leaves->pos) = *(active->pos);
+		if (level->suggestbios) {
+			leaves->pos->val = level->suggestbios;
+		}
+		if (level->rename) {
+			if (nametag) {
+				sprintf(leaves->pos->name, leaves->pos->origname,
+					nametag, level->name_num
+				);
+			} else {
+				sprintf(leaves->pos->name, leaves->pos->origname,
+					level->name_num
+				);
+			}
+		}
+
+		if (active->pos->type &
+				(ATUI_NOFANCY|ATUI_ENUM|ATUI_ARRAY|_ATUI_BITCHILD)
+				) {
+			// nothing more
+		} else if (active->pos->type & ATUI_BITFIELD) {
+			//sub_meta = active->pos->template_leaves;
+			num_leaves = active->pos->template_leaves->numleaves;
+			sub_leaves = (struct level_data){0};
+	
+			sub_leaves.suggestbios = active->pos->val;
+			sub_leaves.feed.pos = active->pos->template_leaves->sub_leaves;
+			sub_leaves.feed.end = sub_leaves.feed.pos;
+			sub_leaves.feed.end += num_leaves; // automatic pointer math
+			sub_leaves.target.pos = calloc(num_leaves, sizeof(atui_leaf));
+			sub_leaves.target.end = sub_leaves.target.pos;
+			sub_leaves.target.end += num_leaves;
+
+			leaves->pos->child_leaves = sub_leaves.target.pos;
+			assert(leaves->pos->num_child_leaves == num_leaves);
+			//leaves->pos->num_child_leaves = num_leaves;
+
+			atui_leaves_printer(global, &sub_leaves);
+		} else if (active->pos->type & ATUI_INLINE) {
+			assert(inliners->pos < inliners->end);
+			global->branch_args.suggestbios = leaves->pos->val;
+			*(inliners->pos) = active->pos->branch_bud(&(global->branch_args));
+			leaves->pos->inline_branch = inliners->pos;
+			inliners->pos++;
+		} else if (active->pos->type & ATUI_DYNARRAY) {
+			sub_meta = active->pos->template_leaves;
+			const atui_leaf* const feed_start = sub_meta->sub_leaves;
+			dynpos.pos.ptr = active->pos->val;
+			dynpos.end.ptr = active->pos->val;
+
+			//sub_leaves = (struct level_data){0};
+			sub_leaves.name_num = 0;
+			sub_leaves.rename = true;
+			sub_leaves.nametag = sub_meta->enum_taglist;
+
+			num_leaves = sub_meta->numleaves;
+			sub_leaves.feed.pos = feed_start;
+			sub_leaves.feed.end = feed_start;
+			sub_leaves.feed.end += num_leaves;
+			num_leaves *= sub_meta->dynarray_length;
+			sub_leaves.target.pos = calloc(num_leaves, sizeof(atui_leaf));
+			sub_leaves.target.end = sub_leaves.target.pos;
+			sub_leaves.target.end += num_leaves;
+
+			leaves->pos->child_leaves = sub_leaves.target.pos;
+
+			if (sub_meta->deferred_start_array) {
+				dynpos.end.deffer += sub_meta->dynarray_length;
+				while (dynpos.pos.deffer < dynpos.end.deffer) {
+					sub_leaves.suggestbios = *dynpos.pos.deffer;
+					atui_leaves_printer(global, &sub_leaves);
+					sub_leaves.feed.pos = feed_start;
+					dynpos.pos.deffer++;
+					sub_leaves.name_num++;
+				}
+			} else {
+				dynpos.end.direct += (
+					sub_meta->element_size * sub_meta->dynarray_length
+				);
+				while (dynpos.pos.direct < dynpos.end.direct) {
+					sub_leaves.suggestbios = dynpos.pos.direct;
+					atui_leaves_printer(global, &sub_leaves);
+					sub_leaves.feed.pos = feed_start;
+					dynpos.pos.direct += sub_meta->element_size;
+					sub_leaves.name_num++;
+				}
+			}
+
+			leaves->pos->num_child_leaves = ( // petiole doesn't get counted
+				sub_leaves.target.pos - leaves->pos->child_leaves
+			);
+			if (sub_meta->deferred_start_array) {
+				if (leaves->pos->num_child_leaves) {
+					leaves->pos->val = *(const void* const*)(leaves->pos->val);
+					const atui_leaf* const last_child = &(
+						leaves->pos->child_leaves[
+							leaves->pos->num_child_leaves - 1
+						]
+					);
+					assert(last_child->val > leaves->pos->val);
+					leaves->pos->num_bytes = (
+						last_child->val + last_child->num_bytes
+						- leaves->pos->val
+					);
+				} else {
+					leaves->pos->val = NULL;
+					leaves->pos->num_bytes = 0;
+				}
+			} else {
+				leaves->pos->num_bytes = (
+					sub_meta->element_size * sub_meta->dynarray_length
+				);
+			}
+		} else if (active->pos->type & ATUI_STRING) {
+			leaves->pos->array_size = 1 + strlen(leaves->pos->u8); // +1 is NULL
+			leaves->pos->num_bytes = leaves->pos->array_size;
+		}
+		leaves->pos++;
+		active->pos++;
+	}
+}
+
 atui_branch*
 atui_branch_allocator(
 		const struct atui_branch_data* const embryo,
 		const struct atui_funcify_args* const args
 		) {
 
-	const atui_leaf* const leaves_initial = embryo->leaves_initial;
-	const atui_leaf* const dynarray_patterns = embryo->dynarray_patterns;
-	const struct dynarray_bounds* const dynarray_boundaries =\
-		embryo->dynarray_boundaries;
-	const uint8_t num_branches_initial = embryo->num_branches_initial;
-	const uint8_t num_leaves_initial = embryo->num_leaves_initial;
-	const uint8_t num_inline_initial = embryo->num_inline_initial;
-	const uint8_t num_dynarray_sets = embryo->num_dynarray_sets;
+	struct global_tracker tracker = {0};
 
-	const uint16_t num_import_branches = args->num_import_branches;
-	atui_branch* const* const import_branches = args->import_branches;
+	uint8_t max_num_branches = (
+		embryo->computed_num_petiole + args->num_import_branches
+	);
+	uint8_t num_all_branches = max_num_branches + embryo->computed_num_inline;
 
-	void* mallocvoid = NULL; // temporary malloc partitioning pointer
-	atui_branch* table = NULL;
-
-
-	// child branches:
-	atui_branch** branches = NULL;
-	uint16_t branches_i = 0;
-	uint16_t num_branches = 0; // num used
-	uint16_t max_num_branches = 0; // num alloc'd
-
-	// import allocates but doesn't necessarily populate
-	uint16_t importbranches_i = 0;
-
-	// inliners:
-	uint16_t inliners_i = 0;
-	atui_branch** inliners = NULL;
-	uint16_t num_inliners = 0;
-
-	// child branches + inliners.
-	// alloc them adjacently for easy single-loop free().
-	uint16_t max_all_branch_count = 0;
-	atui_branch** all_branches = NULL;
-
-	// arguments for inliners and petiole branches
-	struct atui_funcify_args branch_funcify_args = {
-		//.rename=NULL,
-		.atomtree=args->atomtree, .suggestbios=NULL,
-		.import_branches=NULL, .num_import_branches=0,
-	};
-	// leaves
-	uint16_t leavesinit_i = 0;
-	uint16_t leaves_i = 0;
-	atui_leaf* leaves = NULL;
-	uint16_t num_leaves = 0;
-
-	max_num_branches = num_branches_initial + num_import_branches;
-	uint16_t dynarray_total_branches = 0;
-
-	if (num_leaves_initial) {
-		uint16_t leafpattern_i = 0;
-		uint16_t dynentry_i = 0;
-		uint16_t dynarray_total_leaves = 0;
-		uint16_t dynarray_total_inline = 0;
-		uint16_t petiole_only_dynarrays = 0;
-		for (; dynentry_i < num_dynarray_sets; dynentry_i++) {
-			// except for bitfield, we assume there's gonna be exactly one
-			// pattern leaf.
-			if (dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE) {
-				dynarray_total_branches +=
-					dynarray_boundaries[dynentry_i].dynarray_length;
-				petiole_only_dynarrays++;
-			} else if (dynarray_patterns[leafpattern_i].type & ATUI_INLINE) {
-				dynarray_total_inline +=
-					dynarray_boundaries[dynentry_i].dynarray_length;
-			}
-			dynarray_total_leaves += (
-				dynarray_boundaries[dynentry_i].dynarray_length
-				* dynarray_boundaries[dynentry_i].numleaves
-			);
-
-			leafpattern_i += dynarray_boundaries[dynentry_i].numleaves;
-		}
-
-		max_num_branches += dynarray_total_branches;
-		num_inliners = num_inline_initial + dynarray_total_inline;
-		max_all_branch_count = max_num_branches + num_inliners;
-		num_leaves = (
-			embryo->num_leaves_initial
-			+ dynarray_total_leaves
-			- num_branches_initial // ATUI_PETIOLE
-			- dynarray_total_branches // ATUI_PETIOLE in ATUI_DYNARRAY
-			- petiole_only_dynarrays
-			// future multi-leaf dynarray support:
-			// dyn petiole could be partially pp'd: count how many petiole in
-			// pattern
-		);
-		// calloc hands over 0'd memory
-		mallocvoid = calloc(1,
-			sizeof(atui_branch)
-			+ (max_all_branch_count * sizeof(atui_branch*))
-			+ (num_leaves * sizeof(atui_leaf))
-		);
-		/* topology:
-		main table
-		all branches:
-			child
-			inline
-		leaves
-		*/
-		table = mallocvoid;
-		mallocvoid += sizeof(atui_branch);
-		if (max_all_branch_count) {
-			all_branches = mallocvoid;
-			if (max_num_branches) {
-				branches = mallocvoid;
-				mallocvoid += (max_num_branches * sizeof(atui_branch*));
-			}
-			if (num_inliners) {
-				inliners = mallocvoid;
-				mallocvoid += (num_inliners * sizeof(atui_branch*));
-			}
-		}
-		leaves = mallocvoid;
-		mallocvoid = NULL; // we are done partitioning
-
-
-		if (num_dynarray_sets) {
-			// If there's more than one ATUI_DYNARRAY in this branch:
-			dynentry_i = 0;
-
-			// Array in the bios:
-			const void* dynarray_start_ptr = NULL; // array itself
-			const void* const* deferred_start = NULL; // array of pointers
-			uint16_t dynarray_biosarray_i = 0;
-			uint32_t dynarray_elementsize = 0;
-			uint16_t dynarray_length = 0;
-			// for multi-leaf playback
-			const void* dynarray_bios_pos = NULL;
-
-			// Leaf playback for each element in the bios array:
-			leafpattern_i = 0;
-			uint16_t leafpattern_numleaves = 0;
-			uint16_t leafpattern_start = 0;
-			uint16_t leafpattern_end = 0;
-			const struct atui_enum* dynarray_enum_taglist = NULL;
-
-			// for sprintf renaming and formatting the child leaf/branch
-			const char8_t* suggest_name;
-			char8_t* target_name;
-
-			leavesinit_i = 0;
-			while (leavesinit_i < num_leaves_initial) {
-				if (leaves_initial[leavesinit_i].type & ATUI_DYNARRAY) {
-					dynarray_start_ptr = leaves_initial[leavesinit_i].val;
-					deferred_start =
-						dynarray_boundaries[dynentry_i].deferred_start_array;
-					dynarray_elementsize =
-						dynarray_boundaries[dynentry_i].element_size;
-					dynarray_length =
-						dynarray_boundaries[dynentry_i].dynarray_length;
-					leafpattern_numleaves =
-						dynarray_boundaries[dynentry_i].numleaves;
-					dynarray_enum_taglist =
-						dynarray_boundaries[dynentry_i].enum_taglist;
-
-					if (!((dynarray_patterns[leafpattern_i].type & ATUI_PETIOLE)
-						&& (dynarray_boundaries[dynentry_i].numleaves == 1))) {
-						leaves[leaves_i] = leaves_initial[leavesinit_i];
-						if (dynarray_start_ptr) {
-							leaves[leaves_i].num_bytes = (
-								dynarray_length * dynarray_elementsize
-							);
-						}
-						leaves[leaves_i].num_child_leaves = (
-							dynarray_length * leafpattern_numleaves
-						);
-						leaves_i++; // we've child leaves to print
-					}
-
-					leafpattern_end = leafpattern_start + leafpattern_numleaves;
-
-					// for each element in the bios array
-					dynarray_biosarray_i = 0;
-
-					while (dynarray_biosarray_i < dynarray_length) {
-						if (dynarray_start_ptr) { // direct array
-							dynarray_bios_pos = (
-								dynarray_start_ptr
-								+ (dynarray_biosarray_i * dynarray_elementsize)
-							);
-						} else { // array of arbitrarily-targeted pointers
-							dynarray_bios_pos =
-								deferred_start[dynarray_biosarray_i];
-						}
-
-						// for each each leaf in the leaf pattern set
-						leafpattern_i = leafpattern_start;
-						while (leafpattern_i < leafpattern_end) {
-							if (dynarray_patterns[leafpattern_i].type
-									& ATUI_PETIOLE) {
-								branch_funcify_args.suggestbios =\
-									dynarray_bios_pos;
-								// TODO have suggestname
-								branches[branches_i] =\
-									dynarray_patterns[leafpattern_i].branch_bud(
-										&branch_funcify_args
-									);
-								target_name = branches[branches_i]->name;
-
-								branches_i++;
-							} else {
-								leaves[leaves_i] =
-									dynarray_patterns[leafpattern_i];
-								leaves[leaves_i].val = dynarray_bios_pos;
-								if (leaves[leaves_i].type & ATUI_INLINE) {
-									branch_funcify_args.suggestbios =\
-										leaves[leaves_i].val;
-									inliners[inliners_i] =\
-										leaves[leaves_i].branch_bud(
-											&branch_funcify_args
-										);
-									leaves[leaves_i].inline_branch =
-										&(inliners[inliners_i]);
-									inliners_i++;
-								} else if (leaves[leaves_i].type & ATUI_STRING){
-									leaves[leaves_i].array_size = 1 + strlen(
-										leaves[leaves_i].u8
-									); // + 1 for null
-									leaves[leaves_i].num_bytes =
-										leaves[leaves_i].array_size;
-								}
-								target_name = leaves[leaves_i].name;
-
-								leaves_i++;
-							}
-							suggest_name =
-								dynarray_patterns[leafpattern_i].origname;
-
-							if (dynarray_enum_taglist) { // could be hoisted
-								assert(dynarray_enum_taglist->num_entries
-									> dynarray_biosarray_i
-								);
-								sprintf(target_name, suggest_name,
-									dynarray_enum_taglist->enum_array[
-										dynarray_biosarray_i
-									].name,
-									dynarray_biosarray_i
-								);
-							} else {
-								sprintf(target_name, suggest_name,
-									dynarray_biosarray_i
-								);
-							}
-							if (dynarray_patterns[leafpattern_i].type
-								& ATUI_INLINE){
-								strcpy(
-									inliners[inliners_i-1]->name, target_name
-								);
-							}
-							#ifndef NDEBUG
-								if (dynarray_patterns[leafpattern_i].type
-                                    & ATUI_PETIOLE) {
-									assert(sizeof(((atui_branch*)0)->name) >
-										strlen(branches[branches_i-1]->name)
-									); // have we wrote past our boundry?
-								} else if (dynarray_patterns[leafpattern_i].type
-                                    & ATUI_INLINE) {
-									assert(sizeof(((atui_branch*)0)->name) >
-										strlen(inliners[inliners_i-1]->name)
-									); // have we wrote past our boundry?
-								} else {
-									assert(sizeof(((atui_leaf*)0)->name) >
-										strlen(leaves[leaves_i].name)
-									); // have we wrote past our boundry?
-								}
-							#endif
-
-							leafpattern_i++;
-						}
-						dynarray_biosarray_i++;
-					}
-					leafpattern_start = leafpattern_end;
-					dynentry_i++;
-
-// If not dynarray (still has dynarray siblings):
-				} else if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					branch_funcify_args.suggestbios = leaves[leaves_i].val;
-					inliners[inliners_i] = leaves[leaves_i].branch_bud(
-						&branch_funcify_args
-					);
-					leaves[leaves_i].inline_branch =
-						&(inliners[inliners_i]);
-					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
-					assert(sizeof(((atui_branch*)0)->name) >
-						strlen(inliners[inliners_i]->name)
-					); // have we wrote past our boundry?
-
-					inliners_i++;
-					leaves_i++;
-				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
-					branch_funcify_args.suggestbios =\
-						leaves_initial[leavesinit_i].val;
-					branches[branches_i] =\
-						leaves_initial[leavesinit_i].branch_bud(
-							&branch_funcify_args
-						);
-					strcpy(
-						branches[branches_i]->name,
-						leaves_initial[leavesinit_i].name
-					);
-					assert(sizeof(((atui_branch*)0)->name) >
-						strlen(branches[branches_i]->name)
-					); // have we wrote past our boundry?
-					branches_i++;
-				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves[leaves_i].array_size = 1 + strlen( // +1 for null
-						leaves_initial[leavesinit_i].u8
-					);
-					leaves[leaves_i].num_bytes = leaves[leaves_i].array_size;
-					leaves_i++;
-				} else {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves_i++;
-				}
-				leavesinit_i++;
-			}
-		} else {
-// minor hoist:  handle leaves if there's no dynarray at all:
-			inliners_i = 0;
-			leaves_i = 0;
-			leavesinit_i = 0;
-			while (leavesinit_i < num_leaves_initial) {
-				if (leaves_initial[leavesinit_i].type & ATUI_INLINE) {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					branch_funcify_args.suggestbios = leaves[leaves_i].val;
-					inliners[inliners_i] = leaves[leaves_i].branch_bud(
-						&branch_funcify_args
-					);
-					leaves[leaves_i].inline_branch = &(inliners[inliners_i]);
-					strcpy(inliners[inliners_i]->name, leaves[leaves_i].name);
-					assert(sizeof(((atui_branch*)0)->name) >
-						strlen(inliners[inliners_i]->name)
-					); // have we wrote past our boundry?
-					inliners_i++;
-					leaves_i++;
-				} else if (leaves_initial[leavesinit_i].type & ATUI_PETIOLE) {
-					branch_funcify_args.suggestbios =\
-						leaves_initial[leavesinit_i].val;
-					branches[branches_i] =\
-						leaves_initial[leavesinit_i].branch_bud(
-							&branch_funcify_args
-						);
-					strcpy(
-						branches[branches_i]->name,
-						leaves_initial[leavesinit_i].name
-					);
-					assert(sizeof(((atui_branch*)0)->name) >
-						strlen(branches[branches_i]->name)
-					); // have we wrote past our boundry?
-					branches_i++;
-				} else if (leaves_initial[leavesinit_i].type & ATUI_STRING) {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves[leaves_i].array_size = 1 + strlen( // +1 for null
-						leaves_initial[leavesinit_i].u8
-					);
-					leaves[leaves_i].num_bytes = leaves[leaves_i].array_size;
-					leaves_i++;
-				} else {
-					leaves[leaves_i] = leaves_initial[leavesinit_i];
-					leaves_i++;
-				}
-				leavesinit_i++;
-			}
-		}
-
-// Handle if there's no leaves at all:
-	} else {
-		// calloc hands over 0'd memory
-		mallocvoid = calloc(1,
-			sizeof(atui_branch)
-			+ (max_num_branches * sizeof(atui_branch*))
-		);
-		table = mallocvoid;
-		mallocvoid += sizeof(atui_branch);
+	atui_branch* table;
+	void* mallocvoid; // temporary malloc partitioning pointer
+	/* topology:
+	main table
+	all branches:
+		child
+		inline
+	leaves
+	*/
+	mallocvoid = calloc(1,
+		sizeof(atui_branch)
+		+ (num_all_branches * sizeof(atui_branch*))
+		+ (embryo->num_leaves_init * sizeof(atui_leaf))
+		//+ (embryo->computed_num_leaves * sizeof(atui_leaf)) //TODO fake malloc
+	);
+	table = mallocvoid;
+	mallocvoid += sizeof(atui_branch);
+	if (num_all_branches) {
+		table->all_branches = mallocvoid;
+		table->max_num_branches = max_num_branches;
+		table->max_all_branch_count = num_all_branches;
 		if (max_num_branches) {
-			all_branches = mallocvoid;
-			branches = mallocvoid;
+			// handle table->max_num_branches at the end, for import
+			table->child_branches = mallocvoid;
+			tracker.branches.pos = mallocvoid;
+			tracker.branches.end = mallocvoid;
+			tracker.branches.end += embryo->computed_num_petiole;
+			mallocvoid += (max_num_branches * sizeof(atui_branch*));
 		}
-		mallocvoid = NULL; // we are done partitioning
+		if (embryo->computed_num_inline) {
+			table->num_inline_branches = embryo->computed_num_inline;
+			table->inline_branches = mallocvoid;
+			tracker.inliners.pos = mallocvoid;
+			tracker.inliners.end = mallocvoid;
+			tracker.inliners.end += embryo->computed_num_inline;
+			mallocvoid += (embryo->computed_num_inline * sizeof(atui_branch*));
+		}
 	}
 
-	assert(leaves_i == num_leaves);
-	assert(inliners_i == num_inliners);
-	assert(branches_i == (num_branches_initial + dynarray_total_branches));
+	if (embryo->computed_num_leaves) {
+		table->leaves = mallocvoid;
+		mallocvoid = NULL; // we are done partitioning
 
-// Handle non-inline branches:
-	if (max_num_branches) {
-		if (import_branches) {
-			importbranches_i = 0;
-			while (importbranches_i < num_import_branches) {
-				if (import_branches[importbranches_i]) {
-					branches[branches_i] =\
-						(atui_branch*)import_branches[importbranches_i];
-					branches_i++;
-				}
-				importbranches_i++;
+		tracker.branch_args.atomtree = args->atomtree;
+		struct level_data first_leaves = {0};
+
+		first_leaves.feed.pos = embryo->leaves_init;
+		first_leaves.feed.end = embryo->leaves_init;
+		first_leaves.feed.end += embryo->num_leaves_init;
+		first_leaves.target.pos = table->leaves;
+		first_leaves.target.end = table->leaves;
+		first_leaves.target.end += embryo->num_leaves_init;
+		atui_leaves_printer(&tracker, &first_leaves);
+
+		//table->max_leaves = (
+		//	embryo->computed_num_leaves - embryo->computed_num_petiole
+		//); // TODO
+		table->max_leaves = embryo->num_leaves_init;
+		// petiole doesn't get counted
+		table->leaf_count = first_leaves.target.pos - table->leaves;
+	}
+	assert(tracker.branches.pos == tracker.branches.end);
+	assert(tracker.inliners.pos == tracker.inliners.end);
+
+	if (args->import_branches) {
+		tracker.branches.end += args->num_import_branches;
+		for (uint8_t i=0; i < args->num_import_branches; i++) {
+			if (args->import_branches[i]) {
+				assert(tracker.branches.pos < tracker.branches.end);
+				*(tracker.branches.pos) = args->import_branches[i];
+				tracker.branches.pos++;
 			}
 		}
-
-		num_branches = branches_i;
-
 	}
+	table->num_branches = tracker.branches.pos - table->child_branches;
 
-	*table = (atui_branch) {
-		.varname = embryo->varname,
-		.atomleaves = (void*)(args->suggestbios),
-		.child_branches = branches,
-		.num_branches = num_branches,
-		.max_num_branches = max_num_branches,
 
-		.inline_branches = inliners,
-		.num_inline_branches = num_inliners,
-		.max_num_inline_branches = num_inliners,
-
-		.all_branches = all_branches,
-		.max_all_branch_count = max_all_branch_count,
-
-		.leaves = leaves,
-		.leaf_count = num_leaves,
-		.max_leaves = num_leaves,
-	};
+	table->varname = embryo->varname;
 	if (args->rename) {
 		strcpy(table->name, args->rename);
 	} else {
 		strcpy(table->name, embryo->varname);
 	}
 	assert(strlen(table->name) < sizeof(((atui_branch*)0)->name));
+
 	return table;
 }

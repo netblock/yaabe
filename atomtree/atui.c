@@ -556,6 +556,20 @@ atui_enum_bsearch(
 }
 
 
+void
+_atui_destroy_leaves(
+		atui_leaf* const leaves,
+		const uint8_t num_leaves
+		) {
+	for (uint16_t i = 0; i < num_leaves; i++) {
+		if (leaves[i].num_child_leaves) {
+			_atui_destroy_leaves(
+				leaves[i].child_leaves, leaves[i].num_child_leaves
+			);
+			free(leaves[i].child_leaves);
+		}
+	}
+}
 
 void
 atui_destroy_tree(
@@ -564,5 +578,6 @@ atui_destroy_tree(
 	while(tree->max_all_branch_count--) {
 		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
 	}
+	_atui_destroy_leaves(tree->leaves, tree->leaf_count);
 	free(tree);
 }

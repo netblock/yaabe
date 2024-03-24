@@ -104,7 +104,7 @@ atui_destroy_tree_with_gtk(
 	const uint16_t leaf_count = tree->leaf_count;
 	for(i=0; i < leaf_count; i++) {
 		submodels = tree->leaves[i].gtk_cache;
-		if (submodels != NULL) {
+		if (submodels) {
 			if(submodels->leaves_model) { // Should always be false
 				assert(0);
 				g_object_unref(submodels->leaves_model);
@@ -113,10 +113,11 @@ atui_destroy_tree_with_gtk(
 			for (j=0; j < child_gobj_count; j++) {
 				g_object_unref(submodels->child_gobj[j]);
 			}
-
 			free(submodels);
 		}
 	}
+
+	_atui_destroy_leaves(tree->leaves, leaf_count);
 
 	atui_branch* child_branch;
 	while(tree->max_all_branch_count) {
@@ -366,17 +367,15 @@ atui_inline_pullin_gliststore(
 // If the parent leaf has children that aren't adjacent, but the parent is
 // labeled with ATUI_NODISPLAY, pull them in.
 
-	GObject* gobj_child = NULL;
-	atui_leaf* atui_children = NULL;
-	atui_leaf* leaf = NULL;
-	uint16_t num_children = 0;
-	uint16_t i = 0;
+	assert(parent->type & ATUI_INLINE);
 
-	if (parent->type & ATUI_INLINE) {
-		atui_branch* const branch = *(parent->inline_branch);
-		num_children = branch->leaf_count;
-		atui_children = branch->leaves;
-	}
+	GObject* gobj_child;
+	atui_leaf* leaf;
+	uint16_t i;
+
+	atui_branch* const branch = *(parent->inline_branch);
+	atui_leaf* const atui_children = branch->leaves;
+	uint16_t num_children = branch->leaf_count;
 
 	for(i=0; i < num_children; i++) {
 		leaf = &(atui_children[i]);
@@ -386,7 +385,6 @@ atui_inline_pullin_gliststore(
 			g_object_set_data(gobj_child, "leaf", leaf);
 			g_list_store_append(list, gobj_child);
 			g_object_unref(gobj_child);
-			i += leaf->num_child_leaves;
 		} else if (leaf->type & ATUI_INLINE) {
 			atui_inline_pullin_gliststore(leaf, list);
 		}
@@ -407,12 +405,11 @@ atui_leaves_to_glistmodel(
 
 	for(i=0; i < num_children; i++) {
 		leaf = &(children[i]);
-		if ( (leaf->type & ATUI_NODISPLAY)==0 ) {
+		if ( 0 == (leaf->type & ATUI_NODISPLAY) ) {
 			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 			g_object_set_data(gobj_child, "leaf", leaf);
 			g_list_store_append(child_list, gobj_child);
 			g_object_unref(gobj_child);
-			i += leaf->num_child_leaves;
 		} else if (leaf->type & ATUI_INLINE) {
 			atui_inline_pullin_gliststore(leaf, child_list);
 		}
@@ -449,7 +446,7 @@ leaves_tlmodel_func(
 				child_leaves = branch->leaves;
 			} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
 				num_children = parent->num_child_leaves;
-				child_leaves = parent+1;
+				child_leaves = parent->child_leaves;
 			}
 			children_model = atui_leaves_to_glistmodel(
 				child_leaves, num_children

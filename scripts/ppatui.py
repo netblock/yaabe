@@ -101,14 +101,15 @@ static const struct atui_enum ATUI_ENUM(%s) = {
 
 
 class atui_leaf:
-	default_type:str
-	access:str
+	default_type:str  # for defaults; meta
+	access:str # var
+	access_meta:str # for c preprocessor stuff
 	name:str
 	display:str
 	fancy:str
 	fancy_data:None #dict, str, list
 	description:dict
-	lo:str
+	lo:str # bitfield children
 	hi:str
 
 	def copy(self):
@@ -123,8 +124,10 @@ class atui_leaf:
 			self.default_type = None
 		if "access" in leafkeys:
 			self.access = leaf["access"]
+			self.access_meta = leaf["access"]
 		else:
 			self.access = None
+			self.access_meta = None
 		if "name" in leafkeys:
 			self.name = leaf["name"]
 		else:
@@ -236,6 +239,8 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 
 		if leaf.access is None:
 			leaf.access = leaf_default.access
+		if leaf.access_meta is None:
+			leaf.access_meta = leaf_default.access_meta
 		if leaf.display is None:
 			leaf.display = leaf_default.display
 		if leaf.fancy is None:
@@ -253,6 +258,7 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 		old_default = None
 		child_leaf = None
 		access = ""
+		access_meta = ""
 		if leaf.fancy == "ATUI_BITFIELD":
 			fancy_data = copy.copy(leaf.fancy_data)
 			leaf.fancy_data = []
@@ -262,7 +268,8 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 			old_default = leaf_defaults["bitchild"]
 			new_default = old_default.copy()
 			leaf_defaults["bitchild"] = new_default
-			new_default.access = leaf.access
+			#new_default.access = leaf.access # unnecessary
+			new_default.access_meta = leaf.access_meta # c preprocessor stuff
 			new_default.fancy = "_ATUI_BITCHILD"
 			infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
 
@@ -277,15 +284,15 @@ def infer_leaf_data(defaults:dict, leaf_select:str, leaves:list):
 			if not ("enum" in leaf.fancy_data):
 				leaf.fancy_data["enum"] = "NULL"
 			if leaf.access:
-				access = leaf.access # direct array
+				access_meta = leaf.access_meta # direct array
 			else:
-				access = fancy_data["deferred"] # array of pointers
-			access += "[0]"
+				access_meta = fancy_data["deferred"] # array of pointers
+			access_meta += "[0]" # c preprocessor stuff
 
 			old_default = leaf_defaults["dynpattern"]
 			new_default = old_default.copy()
 			leaf_defaults["dynpattern"] = new_default
-			new_default.access = access
+			new_default.access_meta = access_meta
 			infer_leaf_data(defaults, "dynpattern", pattern)
 
 			leaf_defaults["dynpattern"] = old_default
@@ -319,6 +326,83 @@ def infer_branch_data(defaults:dict, branch:atui_branch, infer_leaves:bool=True)
 	if infer_leaves and branch.leaves:
 		infer_leaf_data(defaults, "generic", branch.leaves)
 
+def num_dynpattern_leaves(pattern:list):
+	num_leaves = len(pattern)
+	for leaf in pattern:
+		if leaf.fancy == "ATUI_BITFIELD":
+			num_leaves += len(leaf.fancy_data)
+		elif leaf.fancy == "ATUI_DYNARRAY":
+			num_leaves += num_dynpattern_leaves(leaf.fancy_data["pattern"])
+	return num_leaves
+
+def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
+	# ATUI_DYNARRAY boundaries
+	child_indent = indent + "\t"
+	bounds_template = (
+"{\n"
++ child_indent + ".deferred_start_array = %s,\n"
++ child_indent + ".element_size = sizeof(%s[0]),\n"
++ child_indent + ".dynarray_length = %s,\n"
++ child_indent + ".numleaves = %u,\n"
++ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
++ child_indent + ".pattern = (const atui_leaf[]) {\n"
++ "%s"
++ child_indent + "},\n"
++ indent + "},\n"
+)
+	access = ""
+	if leaf.access:
+		access = leaf.access # direct array
+	else:
+		access = leaf.fancy_data["deferred"] + "[0]" # array of pointers
+	return bounds_template % (
+		str(not leaf.access).lower(),
+		access,
+		leaf.fancy_data["count"],
+		len(leaf.fancy_data["pattern"]),
+		leaf.fancy_data["enum"],
+		leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
+	)
+
+def leaf_to_subleaf(leaf:atui_leaf, indent:str):
+	# if a leaf has sub leaves. See also: struct subleaf_meta
+	child_indent = indent + "\t"
+	bounds_template = (
+"{\n"
++ child_indent + ".element_size = %s,\n"
++ child_indent + ".dynarray_length = %s,\n"
++ child_indent + ".deferred_start_array = %s,\n"
++ child_indent + ".numleaves = %u,\n"
++ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
++ child_indent + ".sub_leaves = (const atui_leaf[]) {\n"
++ "%s"
++ child_indent + "},\n"
++ indent + "},"
+)
+	bounds_vals = ()
+	if leaf.fancy == "ATUI_DYNARRAY":
+		access_meta = ""
+		if leaf.access_meta:
+			access_meta = leaf.access_meta # direct array
+		else:
+			access_meta = leaf.fancy_data["deferred"]+"[0]" # array of pointers
+		bounds_vals = (
+			"sizeof(%s[0])" % access_meta,
+			leaf.fancy_data["count"],
+			str(not leaf.access_meta).lower(),
+			len(leaf.fancy_data["pattern"]),
+			leaf.fancy_data["enum"],
+			leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
+		)
+	elif leaf.fancy == "ATUI_BITFIELD":
+		bounds_vals = (
+			"0", "0", "0",
+			len(leaf.fancy_data),
+			"ATUI_NULL",
+			leaves_to_text(leaf.fancy_data, child_indent+"\t"),
+		)
+
+	return bounds_template % bounds_vals
 
 def leaves_to_text(leaves:list, indent:str):
 	# leaves to text meant for a segment of a c file
@@ -348,8 +432,15 @@ indent + "{\n"
 	leaves_text = ""
 
 	for leaf in leaves:
-		var_access = "&(%s)" % leaf.access
-		var_meta = leaf.access
+		if leaf.access:
+			var_access = "&(%s)" % leaf.access
+		else:
+			var_access = "NULL"
+		if leaf.access_meta: 
+			var_meta = leaf.access_meta
+		else:
+			var_meta = "NULL"
+
 		if leaf.fancy == "ATUI_NOFANCY":
 			leaf_text_extra = ""
 		elif leaf.fancy == "ATUI_ENUM":
@@ -358,11 +449,13 @@ indent + "{\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == "ATUI_STRING":
-			var_access = leaf.access
+			if leaf.access:
+				var_access = leaf.access
 			leaf_text_extra = ""
 		elif leaf.fancy == "ATUI_ARRAY":
-			var_access = leaf.access
-			var_meta = leaf.access + "[0]"
+			if leaf.access:
+				var_access = leaf.access
+			var_meta = leaf.access_meta + "[0]"
 			leaf_text_extra = (
 				child_indent + ".array_size = (sizeof(%s)/sizeof(%s)),\n"
 			)
@@ -370,8 +463,13 @@ indent + "{\n"
 		elif leaf.fancy == "ATUI_BITFIELD":
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
+				+ child_indent +
+					".template_leaves = & (const struct subleaf_meta) %s\n"
 			)
-			leaf_text_extra %= (len(leaf.fancy_data),)
+			leaf_text_extra %= (
+				len(leaf.fancy_data),
+				leaf_to_subleaf(leaf, child_indent),
+			)
 		elif leaf.fancy == "_ATUI_BITCHILD":
 			leaf_text_extra = (
 				child_indent + ".bitfield_hi = %u,\n"
@@ -379,9 +477,6 @@ indent + "{\n"
 			)
 			leaf_text_extra %= (leaf.hi, leaf.lo)
 		elif leaf.fancy in ("ATUI_PETIOLE", "ATUI_INLINE"):
-			if not leaf.access:
-				var_access = "NULL"
-				var_meta = "NULL"
 			leaf_text_extra = (
 				child_indent + ".branch_bud = ATUI_FUNC(%s),\n"
 			)
@@ -389,20 +484,18 @@ indent + "{\n"
 		elif leaf.fancy == "ATUI_DYNARRAY":
 			if leaf.access:
 				var_access = leaf.access
-				var_meta = leaf.access + "[0]"
+				var_meta = leaf.access_meta + "[0]"
 			else:
-				var_access = "NULL"
-				var_meta = leaf.fancy_data["deferred"] + "[0][0]"
-			leaf_text_extra = ""
-			#leaf_text_extra = (
-			#	child_indent + ".num_child_leaves = %u,\n"
-			#	+ child_indent + ".child_leaves = (const atui_leaf[]){\n%s\n"
-			#	+ child_indent + "},\n"
-			#)
-			#leaf_text_extra %= (
-			#	len(leaf.fancy_data["pattern"]),
-			#	leaves_to_text(leaf.fancy_data["pattern"], child_indent)
-			#)
+				var_access = leaf.fancy_data["deferred"]
+			if leaf.access_meta:
+				var_meta = leaf.access_meta + "[0]"
+			else:
+				var_meta = leaf.fancy_data["deferred"] + "[0]"
+			leaf_text_extra = (
+				child_indent +
+					".template_leaves = & (const struct subleaf_meta) %s\n"
+			)
+			leaf_text_extra %= (leaf_to_subleaf(leaf, child_indent),)
 		else:
 			assert 0, leaf.fancy
 
@@ -416,44 +509,51 @@ indent + "{\n"
 			var_meta, var_meta, var_meta, var_meta,  var_access,
 			leaf_text_extra
 		)
-		if leaf.fancy == "ATUI_BITFIELD":
-			leaves_text += leaves_to_text(leaf.fancy_data, child_indent)
 	return leaves_text
 		
 
-def num_dynpattern_leaves(pattern:list):
-	num_leaves = len(pattern)
-	for leaf in pattern:
-		if leaf.fancy == "ATUI_BITFIELD":
-			num_leaves += len(leaf.fancy_data)
-		elif leaf.fancy == "ATUI_DYNARRAY":
-			num_leaves += num_dynpattern_leaves(leaf.fancy_data["pattern"])
-	return num_leaves
+def deep_count_leaves(counters: list, leaves:list, counters_template:list):
+	# go through all the leaves, recursively, to develop a string
 
-def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
-	# ATUI_DYNARRAY boundaries
-	child_indent = indent + "\t"
-	bounds_template = (
-indent + "{\n"
-+ child_indent + ".deferred_start_array = (const void* const*) %s,\n"
-+ child_indent + ".element_size = sizeof(%s[0]),\n"
-+ child_indent + ".dynarray_length = %s,\n"
-+ child_indent + ".numleaves = %u,\n"
-+ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
-+ indent + "},\n"
-)
-	access = ""
-	if leaf.access:
-		access = leaf.access # direct array
-	else:
-		access = leaf.fancy_data["deferred"] + "[0]" # array of pointers
-	return bounds_template % (
-		leaf.fancy_data["deferred"],
-		access,
-		leaf.fancy_data["count"],
-		num_dynpattern_leaves(leaf.fancy_data["pattern"]),
-		leaf.fancy_data["enum"],
-	)
+	#counters_template = [0 for i in range(6)]
+	#for i in range(1,6,2): counters_template[i] = "0"
+
+	# 0: non-dynarray-pattern leaves
+	# 1: dynarray leaves
+	# 2: inline
+	# 3: dynarray inline
+	# 4: petiole
+	# 5: dynarray petiole
+	nest_dynarray = "+ (%s * (%u + %s))"
+	sub_counters = []
+	dynlength = ""
+	counters[0] += len(leaves)
+	for leaf in leaves:
+		if leaf.fancy == "ATUI_INLINE":
+			counters[2] += 1
+		elif leaf.fancy == "ATUI_PETIOLE":
+			counters[4] += 1
+		#elif leaf.fancy == "ATUI_BITFIELD":
+		#	counters[0] += len(leaf.fancy_data)
+		elif leaf.fancy == "ATUI_DYNARRAY":
+			sub_counters = counters_template.copy()
+			# We're in dynarray. The dynarray segments of subcounters  will be
+			# non-'0' if there is a nested dynarray.
+			dynlength = leaf.fancy_data["count"]
+			deep_count_leaves(
+				sub_counters, leaf.fancy_data["pattern"],  counters_template
+			)
+			counters[1] += nest_dynarray % (dynlength, 
+				sub_counters[0], sub_counters[1]
+			)
+			counters[3] += nest_dynarray % (dynlength, 
+				sub_counters[2], sub_counters[3]
+			)
+			counters[5] += nest_dynarray % (dynlength, 
+				sub_counters[4], sub_counters[5]
+			)
+
+
 
 def branches_to_c(atui_data:dict, fname:str):
 	# atui branches to text meant for a c file
@@ -481,33 +581,22 @@ PPATUI_HEADERIFY(%s) {
 	const %s %s* const bios = args->suggestbios;
 	const struct %s* const atomtree = args->atomtree;
 
-	const atui_leaf leaves_initial[] = {
-%s\
-	};
-	const atui_leaf dynarray_patterns[] = {
-%s\
-	};
-	const struct dynarray_bounds dynarray_boundaries[] = {
+	const atui_leaf leaves_init[] = {
 %s\
 	};
 	const struct atui_branch_data branch_embryo = {
 		.varname = u8"%s",
-
-		.leaves_initial = leaves_initial,
-		.dynarray_patterns = dynarray_patterns,
-		.dynarray_boundaries = dynarray_boundaries,
-		.num_leaves_initial = sizeof(leaves_initial)/sizeof(atui_leaf),
-		.num_dynarray_sets = (
-			sizeof(dynarray_boundaries)/sizeof(struct dynarray_bounds)
-		),
-		.num_inline_initial = %u,
-		.num_branches_initial = %u,
+		.leaves_init = leaves_init,
+		.num_leaves_init = sizeof(leaves_init)/sizeof(atui_leaf),
+		.computed_num_leaves = %s,
+		.computed_num_inline = %s,
+		.computed_num_petiole = %s,
 	};
 
 	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
 
 	/* some things are kept in uint8_t */
-	static_assert((sizeof(leaves_initial)/sizeof(atui_leaf)) < 255);
+	static_assert((sizeof(leaves_init)/sizeof(atui_leaf)) < 255);
 
 	return atui_branch_allocator(&branch_embryo, args);
 }
@@ -518,27 +607,23 @@ PPATUI_HEADERIFY(%s) {
 	num_inline = 0
 	num_petiole = 0
 
+	# for deep count
+	counters_template = [0 for i in range(6)]
+	for i in range(1,6,2): counters_template[i] = "0" # 3 pairs of 0,""
+	counters = []
+
 	out_text = cfile_start
 	for branch in branches:
-		dynarray_patterns_text = dynarray_bounds_text = ""
-		num_inline = 0
-		num_petiole = 0
-		for leaf in branch.leaves:
-			if leaf.fancy == "ATUI_DYNARRAY":
-				dynarray_patterns_text += leaves_to_text(
-					leaf.fancy_data["pattern"], "\t\t"
-				)
-				dynarray_bounds_text += leaf_to_dynbounds(leaf, "\t\t")
-			elif leaf.fancy == "ATUI_INLINE":
-				num_inline += 1
-			elif leaf.fancy == "ATUI_PETIOLE":
-				num_petiole += 1
-				
+		counters = counters_template.copy()
+		deep_count_leaves(counters, branch.leaves, counters_template)
+
 		out_text += branch_template % (
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
 			leaves_to_text(branch.leaves, "\t\t"),
-			dynarray_patterns_text, dynarray_bounds_text,
-			branch.name, num_inline, num_petiole, # embryo
+			branch.name, # embryo
+			"(%u + %s)" % (counters[0], counters[1]),
+			"(%u + %s)" % (counters[2], counters[3]),
+			"(%u + %s)" % (counters[4], counters[5]),
 			branch.name, # assert
 		)
 
