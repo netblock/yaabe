@@ -5,7 +5,10 @@ import subprocess
 
 # enviornment assumes msys2
 
-def enlist_shared_objs(linked_obj:str, objs:set):
+def enlist_shared_objs(
+		linked_obj:str,
+		objs:set
+		):
 	# objdump -p is unnecessarily more powerful
 	# ntldd is unexplored; might ultimately be the same as msys2 ldd
 	out = subprocess.check_output(("ldd", linked_obj), text=True)
@@ -19,7 +22,11 @@ def enlist_shared_objs(linked_obj:str, objs:set):
 			objs.add(lib)
 			enlist_shared_objs(lib, objs)
 
-def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
+def gather_assets(
+		source_dir:str,
+		exe_file:str,
+		stage_dir:str
+		):
 	share_dir = os.path.join(stage_dir, "share")
 	glib_dir = os.path.join(share_dir, "glib-2.0")
 	themes_dir = os.path.join(stage_dir, "themes")
@@ -56,7 +63,10 @@ def gather_assets(source_dir:str, exe_file:str, stage_dir:str):
 		)
 		shutil.copy(obj_cleaned_path, stage_dir)
 
-def main(argc:int, argv:list):
+def main(
+		argc:int,
+		argv:list
+		):
 	assert (argc >= 7)
 	nsis_conf = argv[1]
 	source_dir = argv[2]

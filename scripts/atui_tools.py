@@ -3,7 +3,11 @@ import re
 # In the python shell,
 # from scripts.atui_tools import *
 
-def struct_to_atui(text, explicit_attributes=False, print_text=True):
+def struct_to_atui(
+		text,
+		explicit_attributes=False,
+		print_text=True
+		):
 
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
@@ -172,7 +176,11 @@ def struct_to_atui(text, explicit_attributes=False, print_text=True):
 		return text
 
 
-def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
+def bitfield_to_atui(
+		text,
+		explicit_attributes=False,
+		print_text=True
+		):
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
@@ -275,7 +283,11 @@ def bitfield_to_atui(text, explicit_attributes=False, print_text=True):
 		return text
 
 
-def enum_to_atui(text, explicit_attributes=False, print_text=True):
+def enum_to_atui(
+		text,
+		explicit_attributes=False,
+		print_text=True
+		):
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
