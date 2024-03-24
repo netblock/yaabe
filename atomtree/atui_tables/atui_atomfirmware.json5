@@ -2199,7 +2199,7 @@ global_default: {
 				],
 			},
 		}, {
-			access: "bios->I2cControllers",
+			access: "(&bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])",
 			name: "Undefined I2cControllers",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
