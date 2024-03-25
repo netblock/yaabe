@@ -1777,7 +1777,7 @@ global_default: {
 		{
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3",
@@ -1800,7 +1800,7 @@ global_default: {
 		{
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
@@ -2669,7 +2669,7 @@ global_default: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dpm_debug_override_smu11_0x13",
 		}, {
 			access: "bios->ReservedEquation0",
@@ -3176,7 +3176,7 @@ global_default: {
 		}, {
 			access: "bios->FwDStateMask",
 			name: "FwDStateMask",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "fw_dstate_features_smu11_0x33",
 		}, {
 			access: "bios->UlvVoltageOffsetSoc",
@@ -3891,7 +3891,7 @@ global_default: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dpm_debug_override_smu11_0x33",
 		}, {
 			access: "bios->ReservedEquation0",
@@ -4646,7 +4646,7 @@ global_default: {
 		{
 			access: "bios->DpmDescriptor",
 			name: "DpmDescriptor",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU11_PPT7_PPCLK_COUNT",
@@ -5644,7 +5644,7 @@ global_default: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dpm_debug_override_smu11_0x40",
 		}, {
 			access: "bios->ReservedEquation0",
@@ -6160,7 +6160,7 @@ global_default: {
 		}, {
 			access: "bios->platform_caps.platform_caps",
 			name: "platform_caps",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "powerplay_platform_caps",
 		}, {
 			access: "bios->thermal_controller_type",

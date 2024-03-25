@@ -53,7 +53,7 @@ static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 struct atui_nullstruct;
 
 // TODO move to bitfield?
-enum atui_type:uint16_t {
+enum atui_type:uint32_t {
 	ATUI_NAN  = 0x0, // Don't display a value
 	ATUI_DEC  = 0x1,
 	ATUI_HEX  = 0x2,
@@ -61,19 +61,22 @@ enum atui_type:uint16_t {
 	ATUI_BIN  = 0x4,
 	ATUI_ANY  = 0x7, // Mask
 
-	ATUI_NOFANCY   = 1<<4, // Nothing fancy to the leaf
+	ATUI_SUBONLY   = 1<<4, // show only the children
 	ATUI_NODISPLAY = 1<<5, // Don't display this leaf itself
-	ATUI_BITFIELD  = 1<<6, // Is a bitfield parent
-	ATUI_ENUM      = 1<<7, // See also PPATUI_FUNCIFY()
-	ATUI_STRING    = 1<<8, // Meant for human-readable text
-	ATUI_ARRAY     = 1<<9, // No technical difference from string
-	ATUI_INLINE   = 1<<10, // Pull in leaves from other tables
-	ATUI_PETIOLE  = 1<<11, // hard-attach a child branch
-	ATUI_DYNARRAY = 1<<12, // For runtime array lengths
 
-	_ATUI_BITCHILD = 1<<13, // Internally set. If it's a bitfield child.
-	ATUI_SIGNED    = 1<<14, // Internally-set. If it has a signing bit.
-	ATUI_FRAC      = 1<<15, // Internally-set. Both Q and float.
+	ATUI_NOFANCY   = 1<<8, // Nothing fancy to the leaf
+	ATUI_BITFIELD  = 1<<9, // Is a bitfield parent
+	ATUI_ENUM     = 1<<10, // See also PPATUI_FUNCIFY()
+	ATUI_STRING   = 1<<11, // Meant for human-readable text
+	ATUI_ARRAY    = 1<<12, // No technical difference from string
+	ATUI_INLINE   = 1<<13, // Pull in leaves from other tables
+	ATUI_PETIOLE  = 1<<14, // hard-attach a child branch
+	ATUI_DYNARRAY = 1<<15, // For runtime array lengths
+
+
+	_ATUI_BITCHILD = 1<<17, // Internally set. If it's a bitfield child.
+	ATUI_SIGNED    = 1<<18, // Internally-set. If it has a signing bit.
+	ATUI_FRAC      = 1<<19, // Internally-set. Both Q and float.
 };
 
 struct yaabe_gtkapp_model_cache; // GTK

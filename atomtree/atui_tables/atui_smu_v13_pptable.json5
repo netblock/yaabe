@@ -220,7 +220,7 @@ global_default: {
 		}, {
 			access: "bios->platform_caps",
 			name: "platform_caps",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "powerplay_platform_caps",
 		}, {
 			access: "bios->thermal_controller_type",
@@ -1484,7 +1484,7 @@ global_default: {
 		}, {
 			access: "bios->ThrottlerControlMask",
 			name: "ThrottlerControlMask",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "throttler_control_smu13_0x35",
 		}, {
 			access: "bios->FwDStateMask",
@@ -3309,7 +3309,7 @@ global_default: {
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",
@@ -3450,7 +3450,7 @@ global_default: {
 		}, {
 			access: "bios->BoardTable",
 			name: "BoardTable",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_PETIOLE", fancy_data: "smu13_boardtable_v39",
 		},
 	],

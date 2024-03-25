@@ -647,7 +647,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->ReferenceClock",
@@ -840,7 +840,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->ReferenceClock",
@@ -1037,7 +1037,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->ReferenceClock",
@@ -1238,7 +1238,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->ReferenceClock",
@@ -1436,7 +1436,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->CoreReferenceClock",
@@ -1666,7 +1666,7 @@ global_default: {
 		}, {
 			access: "bios->FirmwareCapability",
 			name: "FirmwareCapability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v1",
 		}, {
 			access: "bios->CoreReferenceClock",
@@ -1701,7 +1701,7 @@ global_default: {
 		}, {
 			access: "bios->ProductBranding",
 			name: "ProductBranding",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "product_branding_v2",
 		}, {
 			access: "bios->Reserved9",
@@ -1754,7 +1754,7 @@ global_default: {
 		{
 			access: "bios->block_id",
 			name: "block ID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_mc_register_setting_id",
 		}, {
 			access: "bios->reg_data",
@@ -1780,7 +1780,7 @@ global_default: {
 		{
 			access: "atomtree->register_index",
 			name: "RegIndexBuf",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_index",
@@ -1997,52 +1997,52 @@ global_default: {
 		{
 			access: "bios->ByteRemapCh0",
 			name: "ByteRemapCh0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_byte_remap_d0_6_0_o",
 		}, {
 			access: "bios->ByteRemapCh1",
 			name: "ByteRemapCh1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_byte_remap_d0_6_0_o",
 		}, {
 			access: "bios->Byte0BitRemapCh0",
 			name: "Byte0BitRemapCh0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte1BitRemapCh0",
 			name: "Byte1BitRemapCh0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte2BitRemapCh0",
 			name: "Byte2BitRemapCh0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte3BitRemapCh0",
 			name: "Byte3BitRemapCh0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte0BitRemapCh1",
 			name: "Byte0BitRemapCh1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte1BitRemapCh1",
 			name: "Byte1BitRemapCh1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte2BitRemapCh1",
 			name: "Byte2BitRemapCh1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->Byte3BitRemapCh1",
 			name: "Byte3BitRemapCh1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		},
 	],
@@ -2080,7 +2080,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->MemoryDeviceCfg",
@@ -2120,7 +2120,7 @@ global_default: {
 		}, {
 			access: "bios->ChannelConfig",
 			name: "ChannelConfig",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vram_module_channel_config",
 		}, {
 			access: "bios->DefaultMVDDQ_ID",
@@ -2207,7 +2207,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->MemoryDeviceCfg",
@@ -2247,7 +2247,7 @@ global_default: {
 		}, {
 			access: "bios->ChannelConfig",
 			name: "ChannelConfig",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vram_module_channel_config",
 		}, {
 			access: "bios->DefaultMVDDQ_ID",
@@ -2559,7 +2559,7 @@ global_default: {
 		{
 			access: "bios->ChannelMapCfg",
 			name: "ChannelMapCfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap_6_0",
 		}, {
 			access: "bios->ModuleSize",
@@ -2606,7 +2606,7 @@ global_default: {
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "npl_rtdelay",
 		}, {
 			access: "bios->Flag",
@@ -2636,7 +2636,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->Row",
@@ -2687,7 +2687,7 @@ global_default: {
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mem_preamble",
 		}, {
 			access: "bios->MemAttrib",
@@ -2704,7 +2704,7 @@ global_default: {
 		{
 			access: "bios->ChannelMapCfg",
 			name: "ChannelMapCfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap_6_0",
 		}, {
 			access: "bios->ModuleSize",
@@ -2715,7 +2715,7 @@ global_default: {
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
 				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
@@ -2760,7 +2760,7 @@ global_default: {
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vrammodule_misc",
 		}, {
 			access: "bios->VREFI",
@@ -2771,12 +2771,12 @@ global_default: {
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "npl_rtdelay",
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mem_preamble",
 		}, {
 			access: "bios->MemorySize",
@@ -2799,7 +2799,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->RefreshRateFactor",
@@ -2816,7 +2816,7 @@ global_default: {
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "cdr_bandwidth",
 		},
 	],
@@ -2827,7 +2827,7 @@ global_default: {
 		{
 			access: "bios->ChannelMapCfg",
 			name: "ChannelMapCfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap_6_0",
 		}, {
 			access: "bios->ModuleSize",
@@ -2838,7 +2838,7 @@ global_default: {
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
 				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
@@ -2883,7 +2883,7 @@ global_default: {
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vrammodule_misc",
 		}, {
 			access: "bios->VREFI",
@@ -2894,12 +2894,12 @@ global_default: {
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "npl_rtdelay",
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mem_preamble",
 		}, {
 			access: "bios->MemorySize",
@@ -2928,7 +2928,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->RefreshRateFactor",
@@ -2945,7 +2945,7 @@ global_default: {
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "cdr_bandwidth",
 		},
 	],
@@ -2956,7 +2956,7 @@ global_default: {
 		{
 			access: "bios->ChannelMapCfg",
 			name: "ChannelMapCfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap_6_0",
 		}, {
 			access: "bios->ModuleSize",
@@ -2967,7 +2967,7 @@ global_default: {
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
 				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
@@ -3012,7 +3012,7 @@ global_default: {
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vrammodule_misc",
 		}, {
 			access: "bios->VREFI",
@@ -3023,12 +3023,12 @@ global_default: {
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "npl_rtdelay",
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mem_preamble",
 		}, {
 			access: "bios->MemorySize",
@@ -3057,7 +3057,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->RefreshRateFactor",
@@ -3074,7 +3074,7 @@ global_default: {
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "cdr_bandwidth",
 		},
 	],
@@ -3091,7 +3091,7 @@ global_default: {
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
 				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
@@ -3139,7 +3139,7 @@ global_default: {
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vrammodule_misc",
 		}, {
 			access: "bios->VREFI",
@@ -3150,12 +3150,12 @@ global_default: {
 		}, {
 			access: "bios->NPL_RT",
 			name: "NPL_RT",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "npl_rtdelay",
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mem_preamble",
 		}, {
 			access: "bios->MemorySize",
@@ -3188,7 +3188,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->RefreshRateFactor",
@@ -3205,7 +3205,7 @@ global_default: {
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "cdr_bandwidth",
 		}, {
 			access: "bios->strMemPNString",
@@ -3224,7 +3224,7 @@ global_default: {
 		{
 			access: "bios->ChannelMapCfg",
 			name: "ChannelMapCfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap_7_1",
 		}, {
 			access: "bios->ModuleSize",
@@ -3235,7 +3235,7 @@ global_default: {
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_arb_ramcfg_7_0_o",
 			description: [
 				{language: "english", text: "BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)",},
@@ -3277,12 +3277,12 @@ global_default: {
 		}, {
 			access: "bios->BankCol",
 			name: "BankCol",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "bank_col_counts",
 		}, {
 			access: "bios->Misc",
 			name: "Misc",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "vrammodule_misc",
 		}, {
 			access: "bios->VREFI",
@@ -3329,7 +3329,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->RefreshRateFactor",
@@ -3346,12 +3346,12 @@ global_default: {
 		}, {
 			access: "bios->CDR_Bandwidth",
 			name: "CDR_Bandwidth",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "cdr_bandwidth",
 		}, {
 			access: "bios->ChannelMapCfg1",
 			name: "ChannelMapCfg1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_shared_chremap2_7_1",
 			description: [
 				{language: "english", text: "channel mapping for channel8~15",},
@@ -3458,12 +3458,12 @@ global_default: {
 		}, {
 			access: "bios->MemDQ7_0ByteRemap",
 			name: "MemDQ7_0ByteRemap",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_byte_remap_d0_6_0_o",
 		}, {
 			access: "bios->MemDQ7_0BitRemap",
 			name: "MemDQ7_0BitRemap",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "mc_seq_bit_remap_b0_d0_6_0",
 		}, {
 			access: "bios->VID_PinsShift",

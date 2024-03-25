@@ -127,7 +127,11 @@ If the leaf should exist as a visual entry but shouldn't display a value, set
 the `display` to `ATUI_NAN`.
 
 If the leaf should be omitted from UI display entirely, set the `display` to
-`ATUI_NODISPLAY`. Note that this will still display its children if it has any.
+`ATUI_NODISPLAY`. Note that this will prevent display its children if it has
+any. If the leaf's children should be viewed anyway, set the `display` to
+`ATUI_SUBONLY`.
+
+
 
 
 ## Fancy Types
@@ -214,7 +218,7 @@ collection of leaves,
 ```
 
 If you want to import just the leaves of the table, as if it was the leaves of
-the branch you're constructing, set the `display` to `ATUI_NODISPLAY`.
+the branch you're constructing, set the `display` to `ATUI_SUBONLY`.
 
 While not practically useful, the name of the branch object will copy the UI
 display name of the leaf.
@@ -324,4 +328,4 @@ state the enum name as `ATUI_NULL` . The enum will be walked through
 sequentially in the order as it is defined with `PPATUI_ENUMER()`.
 Furthermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
 
-Leaf top UI name won't get displayed if `ATUI_NODISPLAY` is set for the radix,
+Leaf top UI name won't get displayed if `ATUI_SUBONLY` is set for the display,

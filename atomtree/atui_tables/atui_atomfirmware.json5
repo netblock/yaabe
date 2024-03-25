@@ -458,7 +458,7 @@ global_default: {
 		{
 			access: "bios->sel_mask",
 			name: "sel_mask",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_BITFIELD", fancy_data: [
 				{
 					name: "VR0_PLANE0_PSI0",
@@ -2429,7 +2429,7 @@ global_default: {
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",
@@ -2838,7 +2838,7 @@ global_default: {
 		}, {
 			access: "bios->firmware_capability",
 			name: "firmware_capability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v3",
 		}, {
 			access: "bios->main_call_parser_entry",
@@ -2915,7 +2915,7 @@ global_default: {
 		}, {
 			access: "bios->firmware_capability",
 			name: "firmware_capability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v3",
 		}, {
 			access: "bios->main_call_parser_entry",
@@ -3023,7 +3023,7 @@ global_default: {
 		}, {
 			access: "bios->firmware_capability",
 			name: "firmware_capability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v3",
 		}, {
 			access: "bios->main_call_parser_entry",
@@ -3140,7 +3140,7 @@ global_default: {
 		}, {
 			access: "bios->firmware_capability",
 			name: "firmware_capability",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atombios_firmware_capability_v3",
 		}, {
 			access: "bios->main_call_parser_entry",
@@ -3394,7 +3394,7 @@ global_default: {
 		}, {
 			access: "bios->miscinfo",
 			name: "miscinfo",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_dtd_format_modemiscinfo",
 		}, {
 			access: "bios->atom_mode_id",
@@ -4665,7 +4665,7 @@ global_default: {
 		}, {
 			access: "bios->gpio_id",
 			name: "gpio_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_gpioi2c_pin_id",
 		}, {
 			access: "bios->reserved",
@@ -5423,32 +5423,32 @@ global_default: {
 		{
 			access: "bios->dphy_byteremap",
 			name: "dphy_byteremap",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_byteremap0",
 		}, {
 			access: "bios->dphy_bitremap0",
 			name: "dphy_bitremap0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->dphy_bitremap1",
 			name: "dphy_bitremap1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->dphy_bitremap2",
 			name: "dphy_bitremap2",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->aphy_bitremap0",
 			name: "aphy_bitremap0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->aphy_bitremap1",
 			name: "aphy_bitremap1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->phy_dram",
@@ -5477,7 +5477,7 @@ global_default: {
 		}, {
 			access: "bios->bit_byte_remap",
 			name: "atom_gddr6_bit_byte_remap",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "((bios->table_size - offsetof(typeof(*bios), bit_byte_remap)) / sizeof(struct atom_gddr6_bit_byte_remap) )",
@@ -5527,7 +5527,7 @@ global_default: {
 			// the bitfield
 			access: "((uint32_t*)atomtree->register_info)",
 			name: "umc_reg_list",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_info",
@@ -5581,7 +5581,7 @@ global_default: {
 		{
 			access: "bios->block_id",
 			name: "UMC block ID",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_mc_register_setting_id",
 		}, {
 			access: "bios->umc_reg_data",
@@ -5720,7 +5720,7 @@ global_default: {
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->refreshrate",
@@ -5913,7 +5913,7 @@ global_default: {
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->refreshrate",
@@ -5936,22 +5936,22 @@ global_default: {
 		}, {
 			access: "bios->gddr6_mr10",
 			name: "gddr6_mr10",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr10",
 		}, {
 			access: "bios->gddr6_mr1",
 			name: "gddr6_mr1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr1",
 		}, {
 			access: "bios->gddr6_mr2",
 			name: "gddr6_mr2",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr2",
 		}, {
 			access: "bios->gddr6_mr7",
 			name: "gddr6_mr7",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr7",
 		}, {
 			access: "bios->dram_pnstring",
@@ -6121,7 +6121,7 @@ global_default: {
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->refreshrate",
@@ -6147,37 +6147,37 @@ global_default: {
 		}, {
 			access: "bios->gddr6_mr10",
 			name: "gddr6_mr10",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr10",
 		}, {
 			access: "bios->gddr6_mr0",
 			name: "gddr6_mr0",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr0",
 		}, {
 			access: "bios->gddr6_mr1",
 			name: "gddr6_mr1",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr1",
 		}, {
 			access: "bios->gddr6_mr2",
 			name: "gddr6_mr2",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr2",
 		}, {
 			access: "bios->gddr6_mr4",
 			name: "gddr6_mr4",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr4",
 		}, {
 			access: "bios->gddr6_mr7",
 			name: "gddr6_mr7",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr7",
 		}, {
 			access: "bios->gddr6_mr8",
 			name: "gddr6_mr8",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "gddr6_mr8",
 		}, {
 			access: "bios->dram_pnstring",
@@ -6196,7 +6196,7 @@ global_default: {
 		{
 			access: "bios->block_id",
 			name: "block_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_mc_register_setting_id",
 		}, {
 			access: "bios->RL",
@@ -6438,7 +6438,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->mem_adjust_tbloffset",
@@ -6504,7 +6504,7 @@ global_default: {
 		}, {
 			access: "bios->dram_vendor_id",
 			name: "dram_vendor_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "memory_vendor_id",
 		}, {
 			access: "bios->dram_info_offset",
@@ -6544,7 +6544,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->mem_tuning_table_offset",
@@ -6740,7 +6740,7 @@ global_default: {
 		}, {
 			access: "bios->i2c_id",
 			name: "i2c_id",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_INLINE", fancy_data: "atom_i2c_id_config",
 		}, {
 			access: "bios->i2c_slave_addr",
@@ -6770,7 +6770,7 @@ global_default: {
 		}, {
 			access: "bios->i2cdatalut",
 			name: "i2cdatalut",
-			display: "ATUI_NODISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",

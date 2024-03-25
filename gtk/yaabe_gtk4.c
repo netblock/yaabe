@@ -360,33 +360,39 @@ leaves_val_column_cleaner(
 
 
 static void
-atui_inline_pullin_gliststore(
-		const atui_leaf* const parent,
-		GListStore* const list
+atui_leaves_pullin_gliststore(
+		atui_leaf* const leaves,
+		GListStore* const list,
+		const uint16_t num_leaves
 		) {
 // If the parent leaf has children that aren't adjacent, but the parent is
-// labeled with ATUI_NODISPLAY, pull them in.
-
-	assert(parent->type & ATUI_INLINE);
+// labeled with ATUI_SUBONLY, pull them in.
 
 	GObject* gobj_child;
 	atui_leaf* leaf;
-	uint16_t i;
 
-	atui_branch* const branch = *(parent->inline_branch);
-	atui_leaf* const atui_children = branch->leaves;
-	uint16_t num_children = branch->leaf_count;
-
-	for(i=0; i < num_children; i++) {
-		leaf = &(atui_children[i]);
-
-		if ( 0 == (leaf->type & ATUI_NODISPLAY) ) {
+	for(uint16_t i=0; i < num_leaves; i++) {
+		leaf = &(leaves[i]);
+		if (leaf->type & ATUI_NODISPLAY) {
+			// ignore the leaf
+		} else if (leaf->type & ATUI_SUBONLY) {
+			assert(leaf->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY));
+			if (leaf->type & ATUI_INLINE) {
+				atui_branch* const branch = *(leaf->inline_branch);
+				atui_leaves_pullin_gliststore(
+					branch->leaves, list, branch->leaf_count
+				);
+			//} else if (leaf->type & (ATUI_BITFIELD|ATUI_DYNARRAY)) {
+			} else {
+				atui_leaves_pullin_gliststore(
+					leaf->child_leaves, list, leaf->num_child_leaves
+				);
+			}
+		} else {
 			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 			g_object_set_data(gobj_child, "leaf", leaf);
 			g_list_store_append(list, gobj_child);
 			g_object_unref(gobj_child);
-		} else if (leaf->type & ATUI_INLINE) {
-			atui_inline_pullin_gliststore(leaf, list);
 		}
 	}
 }
@@ -396,25 +402,8 @@ atui_leaves_to_glistmodel(
 		const uint16_t num_children
 		) {
 // Creates a rudimentary model from an array of atui_leaf's
-
-	atui_leaf* leaf = NULL;
-	GObject* gobj_child = NULL;
-	uint16_t i = 0;
-
 	GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
-
-	for(i=0; i < num_children; i++) {
-		leaf = &(children[i]);
-		if ( 0 == (leaf->type & ATUI_NODISPLAY) ) {
-			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-			g_object_set_data(gobj_child, "leaf", leaf);
-			g_list_store_append(child_list, gobj_child);
-			g_object_unref(gobj_child);
-		} else if (leaf->type & ATUI_INLINE) {
-			atui_inline_pullin_gliststore(leaf, child_list);
-		}
-	}
-
+	atui_leaves_pullin_gliststore(children, child_list, num_children);
 	return G_LIST_MODEL(child_list);
 }
 
@@ -437,20 +426,17 @@ leaves_tlmodel_func(
 
 		// If no cached gobjects, generate and cache them; otherwise use cache.
 		if (leaf_cache == NULL) {
-			uint16_t num_children = 0;
-			atui_leaf* child_leaves = NULL;
-
 			if (parent->type & ATUI_INLINE) {
-				atui_branch* branch = *(parent->inline_branch);
-				num_children = branch->leaf_count;
-				child_leaves = branch->leaves;
-			} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
-				num_children = parent->num_child_leaves;
-				child_leaves = parent->child_leaves;
+				atui_branch* const branch = *(parent->inline_branch);
+				children_model = atui_leaves_to_glistmodel(
+					branch->leaves, branch->leaf_count
+				);
+			} else {
+			//} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
+				children_model = atui_leaves_to_glistmodel(
+					 parent->child_leaves, parent->num_child_leaves
+				);
 			}
-			children_model = atui_leaves_to_glistmodel(
-				child_leaves, num_children
-			);
 
 			const uint16_t child_gobj_count = g_list_model_get_n_items(
 				children_model
