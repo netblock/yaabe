@@ -311,12 +311,6 @@ def infer_leaf_data(
 
 			leaf_defaults["dynpattern"] = old_default
 
-		if (leaf.fancy in
-				("ATUI_DYNARRAY", "ATUI_STRING","ATUI_INLINE","ATUI_PETIOLE")
-				):
-			if leaf.display not in ("ATUI_NODISPLAY", "ATUI_NAN"):
-				leaf.display = "ATUI_NAN"
-
 
 def infer_branch_data(
 		defaults:dict,

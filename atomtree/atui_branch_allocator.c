@@ -128,7 +128,7 @@ atui_leaves_printer(
 			num_leaves = active->pos->template_leaves->numleaves;
 			sub_leaves = (struct level_data){0};
 	
-			sub_leaves.suggestbios = active->pos->val;
+			sub_leaves.suggestbios = leaves->pos->val;
 			sub_leaves.feed.pos = active->pos->template_leaves->sub_leaves;
 			sub_leaves.feed.end = sub_leaves.feed.pos;
 			sub_leaves.feed.end += num_leaves; // automatic pointer math
