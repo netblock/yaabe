@@ -11,6 +11,28 @@ import json5
 import pathlib
 import argparse
 
+ATUI_NOFANCY   = 0
+ATUI_BITFIELD  = 1
+ATUI_ENUM      = 2
+ATUI_STRING    = 3
+ATUI_ARRAY     = 4
+ATUI_INLINE    = 5
+ATUI_PETIOLE   = 6
+ATUI_DYNARRAY  = 7
+_ATUI_BITCHILD = 8
+
+ATUI_FANCY_TYPES = (
+	"ATUI_NOFANCY",
+	"ATUI_BITFIELD",
+	"ATUI_ENUM",
+	"ATUI_STRING",
+	"ATUI_ARRAY",
+	"ATUI_INLINE",
+	"ATUI_PETIOLE",
+	"ATUI_DYNARRAY",
+	"_ATUI_BITCHILD",
+)
+
 def description_to_text(
 		description:dict,
 		indent:str
@@ -143,7 +165,7 @@ class atui_leaf:
 		else:
 			self.display = None
 		if "fancy" in leafkeys:
-			self.fancy = leaf["fancy"]
+			self.fancy = ATUI_FANCY_TYPES.index(leaf["fancy"])
 		else:
 			self.fancy = None
 		if "fancy_data" in leafkeys:
@@ -273,7 +295,7 @@ def infer_leaf_data(
 		child_leaf = None
 		access = ""
 		access_meta = ""
-		if leaf.fancy == "ATUI_BITFIELD":
+		if leaf.fancy == ATUI_BITFIELD:
 			fancy_data = copy.copy(leaf.fancy_data)
 			leaf.fancy_data = []
 			for l in fancy_data:
@@ -284,11 +306,11 @@ def infer_leaf_data(
 			leaf_defaults["bitchild"] = new_default
 			#new_default.access = leaf.access # unnecessary
 			new_default.access_meta = leaf.access_meta # c preprocessor stuff
-			new_default.fancy = "_ATUI_BITCHILD"
+			new_default.fancy = _ATUI_BITCHILD
 			infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
 
 			leaf_defaults["bitchild"] = old_default
-		elif leaf.fancy == "ATUI_DYNARRAY":
+		elif leaf.fancy == ATUI_DYNARRAY:
 			fancy_data = copy.copy(leaf.fancy_data)
 			pattern = []
 			leaf.fancy_data["pattern"] = pattern
@@ -341,9 +363,9 @@ def infer_branch_data(
 def num_dynpattern_leaves(pattern:list):
 	num_leaves = len(pattern)
 	for leaf in pattern:
-		if leaf.fancy == "ATUI_BITFIELD":
+		if leaf.fancy == ATUI_BITFIELD:
 			num_leaves += len(leaf.fancy_data)
-		elif leaf.fancy == "ATUI_DYNARRAY":
+		elif leaf.fancy == ATUI_DYNARRAY:
 			num_leaves += num_dynpattern_leaves(leaf.fancy_data["pattern"])
 	return num_leaves
 
@@ -395,7 +417,7 @@ def leaf_to_subleaf(
 + indent + "},"
 )
 	bounds_vals = ()
-	if leaf.fancy == "ATUI_DYNARRAY":
+	if leaf.fancy == ATUI_DYNARRAY:
 		access_meta = ""
 		if leaf.access_meta:
 			access_meta = leaf.access_meta # direct array
@@ -409,7 +431,7 @@ def leaf_to_subleaf(
 			leaf.fancy_data["enum"],
 			leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
 		)
-	elif leaf.fancy == "ATUI_BITFIELD":
+	elif leaf.fancy == ATUI_BITFIELD:
 		bounds_vals = (
 			"0", "0", "0",
 			len(leaf.fancy_data),
@@ -458,18 +480,18 @@ indent + "{\n"
 		else:
 			var_meta = "NULL"
 
-		if leaf.fancy == "ATUI_NOFANCY":
+		if leaf.fancy == ATUI_NOFANCY:
 			leaf_text_extra = ""
-		elif leaf.fancy == "ATUI_ENUM":
+		elif leaf.fancy == ATUI_ENUM:
 			leaf_text_extra = (
 				child_indent + ".enum_options = &(ATUI_ENUM(%s)),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
-		elif leaf.fancy == "ATUI_STRING":
+		elif leaf.fancy == ATUI_STRING:
 			if leaf.access:
 				var_access = leaf.access
 			leaf_text_extra = ""
-		elif leaf.fancy == "ATUI_ARRAY":
+		elif leaf.fancy == ATUI_ARRAY:
 			if leaf.access:
 				var_access = leaf.access
 			var_meta = leaf.access_meta + "[0]"
@@ -477,7 +499,7 @@ indent + "{\n"
 				child_indent + ".array_size = (sizeof(%s)/sizeof(%s)),\n"
 			)
 			leaf_text_extra %= (leaf.access, var_meta)
-		elif leaf.fancy == "ATUI_BITFIELD":
+		elif leaf.fancy == ATUI_BITFIELD:
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
 				+ child_indent +
@@ -487,18 +509,18 @@ indent + "{\n"
 				len(leaf.fancy_data),
 				leaf_to_subleaf(leaf, child_indent),
 			)
-		elif leaf.fancy == "_ATUI_BITCHILD":
+		elif leaf.fancy == _ATUI_BITCHILD:
 			leaf_text_extra = (
 				child_indent + ".bitfield_hi = %u,\n"
 				+ child_indent + ".bitfield_lo = %u,\n"
 			)
 			leaf_text_extra %= (leaf.hi, leaf.lo)
-		elif leaf.fancy in ("ATUI_PETIOLE", "ATUI_INLINE"):
+		elif leaf.fancy in (ATUI_PETIOLE, ATUI_INLINE):
 			leaf_text_extra = (
 				child_indent + ".branch_bud = ATUI_FUNC(%s),\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
-		elif leaf.fancy == "ATUI_DYNARRAY":
+		elif leaf.fancy == ATUI_DYNARRAY:
 			if leaf.access:
 				var_access = leaf.access
 				var_meta = leaf.access_meta + "[0]"
@@ -522,7 +544,7 @@ indent + "{\n"
 
 		leaves_text += leaf_template % (
 			leaf.name, leaf.name,
-			leaf.display, leaf.fancy, var_meta, var_meta,
+			leaf.display, ATUI_FANCY_TYPES[leaf.fancy], var_meta, var_meta,
 			var_meta, var_meta, var_meta, var_meta,  var_access,
 			leaf_text_extra
 		)
@@ -550,13 +572,13 @@ def deep_count_leaves(
 	dynlength = ""
 	counters[0] += len(leaves)
 	for leaf in leaves:
-		if leaf.fancy == "ATUI_INLINE":
+		if leaf.fancy == ATUI_INLINE:
 			counters[2] += 1
-		elif leaf.fancy == "ATUI_PETIOLE":
+		elif leaf.fancy == ATUI_PETIOLE:
 			counters[4] += 1
-		#elif leaf.fancy == "ATUI_BITFIELD":
+		#elif leaf.fancy == ATUI_BITFIELD:
 		#	counters[0] += len(leaf.fancy_data)
-		elif leaf.fancy == "ATUI_DYNARRAY":
+		elif leaf.fancy == ATUI_DYNARRAY:
 			sub_counters = counters_template.copy()
 			# We're in dynarray. The dynarray segments of subcounters  will be
 			# non-'0' if there is a nested dynarray.
