@@ -429,7 +429,6 @@ def leaves_to_text(
 indent + "{\n"
 + child_indent + ".name = u8\"%s\",\n"
 + child_indent + ".origname = u8\"%s\",\n"
-+ child_indent + ".varname = u8\"%s\",\n"
 + child_indent + ".type = (\n"
 + child_indent + "\t%s | %s\n"
 + child_indent + "\t| _PPATUI_LEAF_SIGNED(%s)\n"
@@ -522,7 +521,7 @@ indent + "{\n"
 		leaf.name = leaf.name.replace("\"","\\\"")
 
 		leaves_text += leaf_template % (
-			leaf.name, leaf.name, var_access,
+			leaf.name, leaf.name,
 			leaf.display, leaf.fancy, var_meta, var_meta,
 			var_meta, var_meta, var_meta, var_meta,  var_access,
 			leaf_text_extra
@@ -610,7 +609,7 @@ PPATUI_HEADERIFY(%s) {
 %s\
 	};
 	const struct atui_branch_data branch_embryo = {
-		.varname = u8"%s",
+		.origname = u8"%s",
 		.leaves_init = leaves_init,
 		.num_leaves_init = sizeof(leaves_init)/sizeof(atui_leaf),
 		.computed_num_leaves = %s,

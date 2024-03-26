@@ -89,7 +89,6 @@ typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
 	char8_t name[72];
 	const char8_t* origname;
-	const char8_t* varname;
 	const char8_t* description[LANG_TOTALLANGS];
 
 	uint32_t num_bytes;  // number of bytes for quick leaf size
@@ -145,7 +144,7 @@ struct _atui_leaf {
 };
 struct  _atui_branch {
 	char8_t name[64];
-	const char8_t* varname;
+	const char8_t* origname;
 
 	const char8_t* description[LANG_TOTALLANGS];
 
@@ -287,7 +286,7 @@ struct subleaf_meta {
 };
 
 struct atui_branch_data {
-	const char8_t* const varname;
+	const char8_t* const origname;
 
 	// leaves straightforward:
 	const atui_leaf* const leaves_init;

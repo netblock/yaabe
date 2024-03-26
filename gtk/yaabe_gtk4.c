@@ -359,9 +359,9 @@ leaves_tlmodel_func(
 	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)
 			&& (-1 < parent->num_gobj)
 			) {
-		atui_leaf* leaves;
-		uint16_t num_leaves;
 		if (NULL == parent->child_gobj_cache) {
+			atui_leaf* leaves;
+			uint16_t num_leaves;
 			if (parent->type & ATUI_INLINE) {
 				atui_branch* const branch = *(parent->inline_branch);
 				leaves = branch->leaves;
@@ -674,7 +674,7 @@ branch_type_column_recycler(
 	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
-	gtk_label_set_text(GTK_LABEL(label), branch->varname);
+	gtk_label_set_text(GTK_LABEL(label), branch->origname);
 }
 inline static GtkWidget*
 create_branches_pane(

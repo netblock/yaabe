@@ -83,6 +83,7 @@ atui_leaves_printer(
 			} else {
 				global->branch_args.suggestbios = active->pos->val;
 			}
+			global->branch_args.rename = NULL;
 			assert(branches->pos < branches->end);
 			*(branches->pos) = active->pos->branch_bud(&(global->branch_args));
 			if (level->rename) {
@@ -143,6 +144,7 @@ atui_leaves_printer(
 			atui_leaves_printer(global, &sub_leaves);
 		} else if (active->pos->type & ATUI_INLINE) {
 			assert(inliners->pos < inliners->end);
+			global->branch_args.rename = leaves->pos->name;
 			global->branch_args.suggestbios = leaves->pos->val;
 			*(inliners->pos) = active->pos->branch_bud(&(global->branch_args));
 			leaves->pos->inline_branch = inliners->pos;
@@ -315,11 +317,11 @@ atui_branch_allocator(
 	table->num_branches = tracker.branches.pos - table->child_branches;
 
 
-	table->varname = embryo->varname;
+	table->origname = embryo->origname;
 	if (args->rename) {
 		strcpy(table->name, args->rename);
 	} else {
-		strcpy(table->name, embryo->varname);
+		strcpy(table->name, embryo->origname);
 	}
 	assert(strlen(table->name) < sizeof(((atui_branch*)0)->name));
 

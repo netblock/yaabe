@@ -14,6 +14,7 @@ atui_leaf_set_val_unsigned(
 		uint64_t val
 		) {
 	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
 
 	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t maxval;
@@ -54,6 +55,7 @@ atui_leaf_get_val_unsigned(
 		const atui_leaf* const leaf
 		) {
 	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
 
 	uint64_t val;
 	switch (leaf->total_bits) {
@@ -91,6 +93,7 @@ atui_leaf_set_val_signed(
 		const int64_t val
 		) {
 	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
 
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
@@ -133,6 +136,7 @@ atui_leaf_get_val_signed(
 		const atui_leaf* const leaf
 		) {
 	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
 
 	int64_t val;
 	switch (leaf->total_bits) {
@@ -169,6 +173,7 @@ atui_leaf_set_val_fraction(
 		atui_leaf* const leaf,
 		const float64_t val) {
 	assert(leaf->type & ATUI_FRAC);
+	assert(leaf->val);
 
 	if (leaf->fractional_bits) {
 		const float64_t max_val = (
@@ -228,6 +233,7 @@ atui_leaf_get_val_fraction(
 		const atui_leaf* const leaf
 		) {
 	assert(leaf->type & ATUI_FRAC);
+	assert(leaf->val);
 
 	if (leaf->fractional_bits) { // fixed-point
 		// f64 can represent represent ints up to 2**53 without rounding.
@@ -302,8 +308,9 @@ atui_set_from_text(
 		atui_leaf* const leaf,
 		const char8_t* const text
 		) {
-	//set the value of the leaf based on input text. Currently only support for
+	// set the value of the leaf based on input text. Currently only support for
 	// numbers (including bitfields) and strings.
+	assert(leaf->val);
 
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
 
@@ -404,6 +411,11 @@ atui_get_to_text(
 		) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
+
+	//assert(leaf->val);
+	if (NULL == leaf->val) { // TODO move back to assert once we have to-UI-type
+		return 0;
+	}
 
 	uint16_t malloc_size = 0;
 	uint16_t i=0,j=0;
