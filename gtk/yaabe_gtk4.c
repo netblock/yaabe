@@ -16,114 +16,50 @@ typedef struct yaabegtk_commons {
 
 } yaabegtk_commons;
 
-struct yaabe_gtkapp_model_cache { // to cache
-	// If this struct is attached to a branch, this caches the depth 0
-	// TreeListModel elements of the branch's leaves if it has leaves.
-	GtkSelectionModel* leaves_model;
-
-	/*
-	If this struct is attached to a branch, child_gobj caches the simple
-	GOBject wrapper for the child branches, to be used in the TreeListModel in
-	the branches pane.
-
-	If this struct is attached to a leaf, child_gobj caches the simple
-	GOBject wrapper for the child leaves, to be used if the TreeListModel in
-	the leaves pane.
-	*/
-	uint16_t child_gobj_count;
-	GObject* child_gobj[];
-};
-
-inline static void
-alloc_branch_cache(
-		atui_branch* const branch
+static void
+_atui_destroy_leaves_with_gtk(
+		atui_leaf* const leaves,
+		const uint8_t num_leaves
 		) {
-	const uint16_t gobj_count = branch->num_branches;
-
-	branch->gtk_cache = malloc(
-		sizeof(struct yaabe_gtkapp_model_cache)
-		+ (gobj_count * sizeof(GObject*))
-	);
-
-	struct yaabe_gtkapp_model_cache* const models = branch->gtk_cache;
-	models->leaves_model = NULL;
-	models->child_gobj_count = gobj_count;
-	if (gobj_count) {
-		models->child_gobj[0] = NULL;
+	for (uint16_t i=0; i < num_leaves; i++) {
+		if (leaves[i].child_gobj_cache) {
+			for (uint16_t g=0; g < leaves[i].num_gobj; g++) {
+				g_object_unref(leaves[i].child_gobj_cache[g]);
+			}
+			free(leaves[i].child_gobj_cache);
+		}
+		if (leaves[i].num_child_leaves) {
+			_atui_destroy_leaves_with_gtk(
+				leaves[i].child_leaves, leaves[i].num_child_leaves
+			);
+			free(leaves[i].child_leaves);
+		}
 	}
 }
-inline static void
-alloc_leaf_cache(
-		atui_leaf* const leaf,
-		const uint16_t num_children
-		) {
-	leaf->gtk_cache = malloc(
-		sizeof(struct yaabe_gtkapp_model_cache)
-		+ (num_children * sizeof(GObject*))
-	);
-
-	struct yaabe_gtkapp_model_cache* const models = leaf->gtk_cache;
-	models->leaves_model = NULL;
-	models->child_gobj_count = num_children;
-	if (num_children) {
-		models->child_gobj[0] = NULL;
-	}
-}
-
-
 void
 atui_destroy_tree_with_gtk(
 		atui_branch* const tree
 		) {
 // Free and unref all the atui branches/leaves and the GTK-relevant stuff
-// hanging off of the ->gtk_cache.
 // See also destroy_atomtree_with_gtk
 
-	uint16_t i = 0;
-	uint16_t j = 0;
-	uint16_t child_gobj_count;
-	struct yaabe_gtkapp_model_cache* submodels;
-
-	// The leaves gobjects should be sunk into the model, and gtk_cache points
-	// to the model.
-	if (tree->gtk_cache != NULL) {
-		submodels = tree->gtk_cache;
-
-		if (submodels->leaves_model != NULL) {
-			g_object_unref(submodels->leaves_model);
+	if (tree->child_gobj_cache) {
+		for (uint16_t g=0; g < tree->num_gobj; g++) {
+			g_object_unref(tree->child_gobj_cache[g]);
 		}
-		child_gobj_count = submodels->child_gobj_count;
-		for (i=0; i < child_gobj_count; i++) {
-			g_object_unref(submodels->child_gobj[i]);
-		}
-
-		free(submodels);
+		free(tree->child_gobj_cache);
+	}
+	if (tree->leaves_model) {
+		g_object_unref(tree->leaves_model);
 	}
 
-	// Collapsable leaves in the leaves pane
-	const uint16_t leaf_count = tree->leaf_count;
-	for(i=0; i < leaf_count; i++) {
-		submodels = tree->leaves[i].gtk_cache;
-		if (submodels) {
-			if(submodels->leaves_model) { // Should always be false
-				assert(0);
-				g_object_unref(submodels->leaves_model);
-			}
-			child_gobj_count = submodels->child_gobj_count;
-			for (j=0; j < child_gobj_count; j++) {
-				g_object_unref(submodels->child_gobj[j]);
-			}
-			free(submodels);
-		}
-	}
-
-	_atui_destroy_leaves(tree->leaves, leaf_count);
+	_atui_destroy_leaves_with_gtk(tree->leaves, tree->leaf_count);
 
 	atui_branch* child_branch;
-	while(tree->max_all_branch_count) {
+	while (tree->max_all_branch_count) {
 		(tree->max_all_branch_count)--;
 		child_branch = tree->all_branches[tree->max_all_branch_count];
-		if (child_branch != NULL) {
+		if (child_branch) {
 			atui_destroy_tree_with_gtk(child_branch);
 		}
 	}
@@ -415,47 +351,49 @@ leaves_tlmodel_func(
 // GtkTreeListModelCreateModelFunc for leaves
 // Creates the children models for the collapsable tree, of the leaves pane.
 
+	GListModel* children_model = NULL;
+
 	GObject* const gobj_parent = parent_ptr;
 	atui_leaf* const parent = g_object_get_data(gobj_parent, "leaf");
-	struct yaabe_gtkapp_model_cache* leaf_cache = parent->gtk_cache;
 
-	GListModel* children_model = NULL;
-	uint16_t i = 0;
-
-	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
-
-		// If no cached gobjects, generate and cache them; otherwise use cache.
-		if (leaf_cache == NULL) {
+	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)
+			&& (-1 < parent->num_gobj)
+			) {
+		atui_leaf* leaves;
+		uint16_t num_leaves;
+		if (NULL == parent->child_gobj_cache) {
 			if (parent->type & ATUI_INLINE) {
 				atui_branch* const branch = *(parent->inline_branch);
-				children_model = atui_leaves_to_glistmodel(
-					branch->leaves, branch->leaf_count
-				);
+				leaves = branch->leaves;
+				num_leaves = branch->leaf_count;
 			} else {
 			//} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
-				children_model = atui_leaves_to_glistmodel(
-					 parent->child_leaves, parent->num_child_leaves
+				leaves = parent->child_leaves;
+				num_leaves = parent->num_child_leaves;
+			}
+			if (num_leaves) {
+				children_model = atui_leaves_to_glistmodel(leaves, num_leaves);
+				parent->num_gobj = g_list_model_get_n_items(children_model);
+				parent->child_gobj_cache = malloc(
+					parent->num_gobj * sizeof(GObject*)
 				);
+				uint16_t i;
+				for (i=0; i < parent->num_gobj; i++) {
+					// g_list_model_get_item refs the gobject for us
+					parent->child_gobj_cache[i] = g_list_model_get_item(
+						children_model, i
+					);
+				}
+				assert(i < INT16_MAX); // 32k leaves?!
+			} else {
+				parent->num_gobj = -1; // flag for dead-ends
 			}
-
-			const uint16_t child_gobj_count = g_list_model_get_n_items(
-				children_model
+		} else {
+			GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
+			g_list_store_splice(children,0,  0,
+				(void**)parent->child_gobj_cache, parent->num_gobj
 			);
-			alloc_leaf_cache(parent, child_gobj_count);
-			leaf_cache = parent->gtk_cache;
-			for(i=0; i < child_gobj_count; i++) {
-				// Cache the gobjects because TreeListModel eats the GListStore
-				leaf_cache->child_gobj[i] = g_list_model_get_item(
-					children_model, i
-				); // Get_item automatically ref++'s the object.
-			}
-
-		} else { // Use the cache
-			GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
-			for(i=0; i < leaf_cache->child_gobj_count; i++) {
-				g_list_store_append(child_list, leaf_cache->child_gobj[i]);
-			}
-			children_model = G_LIST_MODEL(child_list);
+			children_model = G_LIST_MODEL(children);
 		}
 	}
 	return children_model;
@@ -481,7 +419,7 @@ branchleaves_to_treemodel(
 	);
 	// no_selection takes ownership of treemodel.
 
-	branch->gtk_cache->leaves_model = sel_model;
+	branch->leaves_model = sel_model;
 	g_object_ref(sel_model); // to cache
 }
 static void
@@ -501,12 +439,12 @@ set_leaves_list(
 	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
-	if(branch->gtk_cache->leaves_model == NULL) { // if not cached, generate.
+	if (NULL == branch->leaves_model) { // if not cached, generate.
 		branchleaves_to_treemodel(branch);
 	}
 
 	gtk_column_view_set_model(commons->leaves_view,
-		branch->gtk_cache->leaves_model
+		branch->leaves_model
 	);
 }
 
@@ -582,9 +520,24 @@ create_leaves_pane(
 }
 
 
-
-
-
+static void
+atui_branches_pullin_gliststore(
+		const atui_branch* const parent,
+		GListStore* const list
+		) {
+	GObject* gobj_child;
+	atui_branch* child;
+	uint8_t i;
+	for (i=0; i < parent->num_inline_branches; i++) {
+		atui_branches_pullin_gliststore(parent->inline_branches[i], list);
+	}
+	for (i=0; i < parent->num_branches; i++) {
+		gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
+		g_object_set_data(gobj_child, "branch", parent->child_branches[i]);
+		g_list_store_append(list, gobj_child);
+		g_object_unref(gobj_child);
+	}
+}
 static GListModel*
 branch_tlmodel_func(
 		gpointer const parent_ptr,
@@ -595,37 +548,44 @@ branch_tlmodel_func(
 
 	GObject* const gobj_parent = parent_ptr;
 	atui_branch* const parent = g_object_get_data(gobj_parent, "branch");
-	struct yaabe_gtkapp_model_cache* const branch_models = parent->gtk_cache;
 
-	GListStore* children = NULL;
-	int i = 0;
+	GListModel* children_model = NULL;
 
-	if (parent->num_branches) {
-		children = g_list_store_new(G_TYPE_OBJECT);
-
-		// If no cached gobjects, generate and cache them; otherwise use cache.
-		if (branch_models->child_gobj[0] == NULL) {
-			GObject* gobj_child;
-			for(i=0; i < parent->num_branches; i++) {
-				// The cache is also for the leaves
-				alloc_branch_cache(parent->child_branches[i]);
-
-				gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-				g_object_set_data(gobj_child,
-					"branch", parent->child_branches[i]
+	if (parent->max_all_branch_count && (-1 < parent->num_gobj)) {
+		GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
+		if (NULL == parent->child_gobj_cache) {
+			atui_branches_pullin_gliststore(parent, children);
+			children_model = G_LIST_MODEL(children);
+			
+			parent->num_gobj = g_list_model_get_n_items(children_model);
+			if (parent->num_gobj) {
+				parent->child_gobj_cache = malloc(
+					parent->num_gobj * sizeof(GObject*)
 				);
-
-				branch_models->child_gobj[i] = gobj_child;
-				g_list_store_append(children, gobj_child);
+				uint16_t i;
+				for (i=0; i < parent->num_gobj; i++) {
+					// g_list_model_get_item refs the gobject for us
+					parent->child_gobj_cache[i] = g_list_model_get_item(
+						children_model, i
+					);
+				}
+				assert(i < INT16_MAX); // 32k branches?!
+			} else {
+				g_object_unref(children_model);
+				children_model = NULL;
+				parent->num_gobj = -1; // flag for dead-ends
 			}
 		} else {
-			for(i=0; i < branch_models->child_gobj_count; i++) {
-				g_list_store_append(children, branch_models->child_gobj[i]);
-			}
+			g_list_store_splice(children,0,  0,
+				(void**)parent->child_gobj_cache, parent->num_gobj
+			);
+			children_model = G_LIST_MODEL(children);
 		}
 	}
-	return G_LIST_MODEL(children);
+	return children_model;
 }
+
+
 inline static GtkSelectionModel*
 atui_gtk_model(
 		yaabegtk_commons* const commons
@@ -634,7 +594,6 @@ atui_gtk_model(
 // branches pane
 
 	atui_branch* const atui_root = commons->atomtree_root->atui_root;
-	alloc_branch_cache(atui_root);
 
 	GObject* const gbranch = g_object_new(G_TYPE_OBJECT, NULL);
 	g_object_set_data(gbranch, "branch", atui_root);

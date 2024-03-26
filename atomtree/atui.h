@@ -27,6 +27,9 @@ atui.h is about the core atui interface
 
 // see bottom for more includes
 
+// GTK4 stuff; header simplification because we're dealing with only pointers.
+typedef struct _GObject GObject;
+typedef struct _GtkSelectionModel GtkSelectionModel;
 
 struct atui_enum_entry {
 	const char8_t* const name;
@@ -100,6 +103,8 @@ struct _atui_leaf {
 
 	uint8_t num_child_leaves;
 
+	int16_t num_gobj; // for child_gobj_cache
+
 	const struct atui_enum* enum_options; // if it has an associated enum
 
 	union {
@@ -135,10 +140,8 @@ struct _atui_leaf {
 		float32_t* f32;
 		float64_t* f64;
 	};
-	union {
-		void* auxiliary; // any extra info to hang off if necessary
-		struct yaabe_gtkapp_model_cache* gtk_cache;
-	};
+
+	GObject** child_gobj_cache; // GObject cache of child leaves for GTK
 };
 struct  _atui_branch {
 	char8_t name[64];
@@ -161,10 +164,11 @@ struct  _atui_branch {
 	atui_leaf* leaves;
 
 	void* atomleaves;
-	union {
-		void* auxiliary; // alternative representation to leaves, if necessary
-		struct yaabe_gtkapp_model_cache* gtk_cache;
-	};
+
+	int16_t num_gobj;
+
+	GObject** child_gobj_cache; // GObject cache of child branches for GTK
+	GtkSelectionModel* leaves_model; // composited leaves cache for GTK
 };
 
 
