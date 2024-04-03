@@ -34,11 +34,13 @@ typedef struct _GtkSelectionModel GtkSelectionModel;
 struct atui_enum_entry {
 	const char8_t* const name;
 	const int64_t val;
+	uint16_t name_length;
 };
 struct atui_enum {
 	const char8_t* const name;
 	const uint8_t num_entries;
 	const struct atui_enum_entry* const enum_array;
+	uint16_t name_length;
 };
 
 enum i18n_languages:int8_t {
@@ -105,6 +107,7 @@ struct _atui_leaf {
 	int16_t num_gobj; // for child_gobj_cache
 
 	const struct atui_enum* enum_options; // if it has an associated enum
+	GtkSelectionModel* enum_model; // composited enum cache for GTK
 
 	union {
 		atui_branch** inline_branch;
@@ -227,6 +230,13 @@ strtoll_2(
 uint64_t
 strtoull_2(
 		const char8_t* str
+		);
+
+void
+atui_enum_entry_to_text(
+		char8_t* buffer,
+		const atui_leaf* leaf,
+		const struct atui_enum_entry* enum_entry
 		);
 
 int16_t

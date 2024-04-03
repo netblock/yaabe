@@ -21,18 +21,23 @@ _atui_destroy_leaves_with_gtk(
 		atui_leaf* const leaves,
 		const uint8_t num_leaves
 		) {
-	for (uint16_t i=0; i < num_leaves; i++) {
-		if (leaves[i].child_gobj_cache) {
-			for (uint16_t g=0; g < leaves[i].num_gobj; g++) {
-				g_object_unref(leaves[i].child_gobj_cache[g]);
+	atui_leaf* leaf = leaves;
+	atui_leaf* leaf_end = leaves + num_leaves;
+	for (; leaf < leaf_end; leaf++) {
+		if (leaf->child_gobj_cache) {
+			for (uint16_t g=0; g < leaf->num_gobj; g++) {
+				g_object_unref(leaf->child_gobj_cache[g]);
 			}
-			free(leaves[i].child_gobj_cache);
+			free(leaf->child_gobj_cache);
 		}
-		if (leaves[i].num_child_leaves) {
+		if (leaf->num_child_leaves) {
 			_atui_destroy_leaves_with_gtk(
-				leaves[i].child_leaves, leaves[i].num_child_leaves
+				leaf->child_leaves, leaf->num_child_leaves
 			);
-			free(leaves[i].child_leaves);
+			free(leaf->child_leaves);
+		}
+		if (leaf->enum_model) {
+			g_object_unref(leaf->enum_model);
 		}
 	}
 }
@@ -120,7 +125,8 @@ leaves_label_column_spawner(
 static void
 leaves_name_column_recycler(
 		const GtkListItemFactory* const factory,
-		GtkListItem* const list_item) {
+		GtkListItem* const list_item
+		) {
 // bind data to the UI skeleton
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
@@ -168,105 +174,296 @@ leaves_offset_column_recycler(
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
 
-static void
-leaves_textbox_stray(
-		const GtkEventControllerFocus* const focus_sense,
-		const gpointer const leaf_gptr
-		) {
-// If the value wasn't applied with enter, sync the text back to the actual
-// data when keyboard leaves the textbox
-	GtkWidget* const textbox = gtk_event_controller_get_widget(
-		GTK_EVENT_CONTROLLER(focus_sense)
-	);
-	const atui_leaf* const leaf = leaf_gptr;
 
+
+
+inline static void
+leaf_sets_editable(
+		const atui_leaf* const leaf,
+		GtkEditable* const editable
+		) {
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
 	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
-	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
+	gtk_editable_set_text(editable, buff);
 	if (has_mallocd) {
 		free(buff);
 	}
 }
 static void
-leaves_val_column_textbox_apply(
-		GtkEditable* const textbox,
+leaves_editable_stray(
+		const GtkEventControllerFocus* const focus_sense,
+		const atui_leaf* const leaf
+		) {
+// If the value wasn't applied with enter, sync the text back to the actual
+// data when keyboard leaves the textbox
+
+	GtkWidget* editable = gtk_stack_get_visible_child(GTK_STACK(
+		gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(focus_sense))
+	));
+	if (leaf->type & ATUI_ENUM) {
+		editable = gtk_widget_get_last_child(editable);
+	} // editable is actually in a box, see leaves_val_column_spawner
+	leaf_sets_editable(leaf, GTK_EDITABLE(editable));
+}
+static void
+leaves_val_column_editable_apply(
+		GtkEditable* const editable,
 		gpointer const leaf_gptr
 		) {
 // Only way to apply the value is to hit enter
+	atui_set_from_text(leaf_gptr, gtk_editable_get_text(editable));
+	leaf_sets_editable(leaf_gptr, editable);
+}
 
-	atui_leaf* const leaf = leaf_gptr;
 
-	atui_set_from_text(leaf, gtk_editable_get_text(textbox));
 
+static void
+enum_label_column_recycler(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item
+		) {
+// bind
+	GtkLabel* const label = GTK_LABEL(gtk_list_item_get_child(list_item));
+	GObject* const enum_gobj = gtk_list_item_get_item(list_item);
+	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+		enum_gobj, "enum"
+	);
+	const atui_leaf* const leaf = g_object_get_data(
+		enum_gobj, "leaf"
+	);
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
-	char8_t* buff = stack_buff;
-	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
-	gtk_editable_set_text(textbox, buff);
-	if (has_mallocd) {
-		free(buff);
+	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
+	gtk_label_set_text(label, stack_buff);
+	// g_object_unref(enum_gobj); // no need to unref from list_item_get_item
+}
+static void
+enum_list_sets_editable(
+		GtkListView* const enum_list,
+		const guint position,
+		GtkEditable* const editable
+		) {
+	GObject* const enum_gobj = gtk_single_selection_get_selected_item(
+		GTK_SINGLE_SELECTION(gtk_list_view_get_model(enum_list))
+	);
+	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+		enum_gobj, "enum"
+	);
+	const atui_leaf* const leaf = g_object_get_data(
+		enum_gobj, "leaf"
+	);
+	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
+	stack_buff[0] = '\0';
+	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
+	gtk_editable_set_text(editable, stack_buff);
+	// g_object_unref(enum_gobj); // no need to unref from single..get_selected
+}
+static void
+enum_list_sets_leaf(
+		GtkListView* const enum_list,
+		const guint position
+		) {
+	GObject* const enum_gobj = gtk_single_selection_get_selected_item(
+		GTK_SINGLE_SELECTION(gtk_list_view_get_model(enum_list))
+	);
+	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+		enum_gobj, "enum"
+	);
+	atui_leaf* const leaf = g_object_get_data(
+		enum_gobj, "leaf"
+	);
+	if (leaf->type & ATUI_SIGNED) {
+		atui_leaf_set_val_signed(leaf, enum_entry->val);
+	} else {
+		atui_leaf_set_val_unsigned(leaf, enum_entry->val);
 	}
+	// g_object_unref(enum_gobj); // no need to unref from single..get_selected
+}
+static void
+enummenu_sets_selection(
+		GtkToggleButton* const button,
+		GtkListView* const enum_list
+		) {
+	if (gtk_toggle_button_get_active(button)) {
+		GtkSingleSelection* const enum_model = GTK_SINGLE_SELECTION(
+			gtk_list_view_get_model(enum_list)
+		);
+		gtk_single_selection_set_selected(enum_model, 0);
+		GObject* const enum_gobj = gtk_single_selection_get_selected_item(
+			enum_model
+		);
+		atui_leaf* const leaf = g_object_get_data(
+			enum_gobj, "leaf"
+		);
+
+		int64_t val;
+		if (leaf->type & ATUI_SIGNED) {
+			val = atui_leaf_get_val_signed(leaf);
+		} else {
+			val = atui_leaf_get_val_unsigned(leaf);
+		}
+		int16_t index = atui_enum_bsearch(leaf->enum_options, val);
+		if (-1 < index) {
+			gtk_single_selection_set_selected(enum_model, index);
+		} else {
+			gtk_selection_model_unselect_all(GTK_SELECTION_MODEL(enum_model));
+		}
+	}
+}
+inline static GtkWidget*
+construct_enum_dropdown(
+		) {
+	GtkEntry* const enumentry = GTK_ENTRY(gtk_entry_new());
+	gtk_widget_set_hexpand(GTK_WIDGET(enumentry), true);
+
+	GtkListItemFactory* const list_factory = gtk_signal_list_item_factory_new();
+	g_signal_connect(list_factory,
+		"setup", G_CALLBACK(generic_label_column_spawner), NULL
+	);
+	g_signal_connect(list_factory,
+		"bind", G_CALLBACK(enum_label_column_recycler), NULL
+	);
+	GtkWidget* const enum_list = gtk_list_view_new(NULL, list_factory);
+
+	GtkPopover* const popover = GTK_POPOVER(gtk_popover_new());
+	gtk_popover_set_has_arrow(popover, false);
+	gtk_popover_set_child(popover, enum_list);
+
+	g_signal_connect(enum_list,
+		"activate", G_CALLBACK(enum_list_sets_editable), GTK_EDITABLE(enumentry)
+	);
+	g_signal_connect(enum_list,
+		"activate", G_CALLBACK(enum_list_sets_leaf), NULL
+	);
+	g_signal_connect_swapped(enum_list,
+		"activate", G_CALLBACK(gtk_popover_popdown), popover
+	);
+
+	GtkMenuButton* const enummenu = GTK_MENU_BUTTON(gtk_menu_button_new());
+	gtk_menu_button_set_direction(enummenu, GTK_ARROW_RIGHT);
+	g_signal_connect(gtk_widget_get_first_child(GTK_WIDGET(enummenu)),
+		// ToggleButton. MenuButton's 'activate' is broken?
+		"toggled", G_CALLBACK(enummenu_sets_selection), enum_list
+	);
+	gtk_menu_button_set_popover(enummenu, GTK_WIDGET(popover));
+
+
+
+	GtkWidget* const enumdropdown = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_box_append(GTK_BOX(enumdropdown), GTK_WIDGET(enummenu));
+	gtk_box_append(GTK_BOX(enumdropdown), GTK_WIDGET(enumentry));
+	return enumdropdown;
+}
+inline static GtkSelectionModel*
+get_enum_menu_listmodel(
+		atui_leaf* const leaf
+		) {
+	if (NULL == leaf->enum_model) {
+		GListStore* list = g_list_store_new(G_TYPE_OBJECT);
+		const struct atui_enum* const atuienum = leaf->enum_options;
+		GObject* gobj_child;
+
+		for (uint8_t i=0; i < atuienum->num_entries; i++) {
+			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
+			g_object_set_data(gobj_child, "enum",
+				(struct atui_enum_entry*) &(atuienum->enum_array[i]) // de-const
+			);
+			g_object_set_data(gobj_child, "leaf", leaf);
+			g_list_store_append(list, gobj_child);
+			g_object_unref(gobj_child);
+		}
+		GtkSingleSelection* const enum_model = gtk_single_selection_new(
+			G_LIST_MODEL(list)
+		);
+		gtk_single_selection_set_can_unselect(enum_model, true);
+		gtk_single_selection_set_autoselect(enum_model, false);
+		leaf->enum_model = GTK_SELECTION_MODEL(enum_model);
+		g_object_ref(leaf->enum_model); // to cache
+	}
+	return leaf->enum_model;
 }
 
 
 static void
 leaves_val_column_spawner(
 		const GtkListItemFactory* const factory,
-		GtkListItem* const list_item) {
+		GtkListItem* const list_item
+		) {
 // setup
+	GtkStack* const widget_bag = GTK_STACK(gtk_stack_new());
+	gtk_list_item_set_child(list_item, GTK_WIDGET(widget_bag));
 
-	GtkWidget* const textbox = gtk_text_new();
-	gtk_text_set_input_purpose(GTK_TEXT(textbox), GTK_INPUT_PURPOSE_DIGITS);
-
-	// for leaves_textbox_stray()
+	// for leaves_editable_stray()
 	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
-	gtk_widget_add_controller(textbox, focus_sense);
+	gtk_widget_add_controller(GTK_WIDGET(widget_bag), focus_sense);
 	// widget takes ownership of the controller, no need to unref.
 
-	gtk_list_item_set_child(list_item, textbox);
+
+	// numbers, strings
+	//sub_widget = gtk_text_new();
+	GtkWidget* const regular = gtk_entry_new();
+	gtk_stack_add_named(widget_bag, regular, "text");
+
+	// enums
+	GtkWidget* const enumdropdown = construct_enum_dropdown();
+	gtk_stack_add_named(widget_bag, enumdropdown, "enum");
 }
+
 static void
 leaves_val_column_recycler(
 		const GtkListItemFactory* const factory,
 		GtkListItem* const list_item
 		) {
 // bind
-
-	GtkWidget* const textbox = gtk_list_item_get_child(list_item);
-
 	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
 	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
-	g_object_unref(gobj_leaf);
+	GtkStack* const widget_bag = GTK_STACK(gtk_list_item_get_child(list_item));
 
-	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
-	stack_buff[0] = '\0';
-	char8_t* buff = stack_buff;
-	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
-	gtk_editable_set_text(GTK_EDITABLE(textbox), buff);
-	if (has_mallocd) {
-		free(buff);
+	if (leaf->type & (ATUI_ANY|ATUI_STRING|ATUI_ARRAY)) {
+		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
+		GtkWidget* editable;
+		if (leaf->type & ATUI_ENUM) {
+			gtk_stack_set_visible_child_name(widget_bag, "enum");
+			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
+			GtkListView* const enum_list = GTK_LIST_VIEW(gtk_popover_get_child(
+				gtk_menu_button_get_popover(
+					GTK_MENU_BUTTON(gtk_widget_get_first_child(enumbox))
+				)
+			));
+			GtkSelectionModel* const enum_model = get_enum_menu_listmodel(leaf);
+
+			gtk_list_view_set_model(enum_list, enum_model);
+			editable = gtk_widget_get_last_child(enumbox);
+		} else {
+			gtk_stack_set_visible_child_name(widget_bag, "text");
+			editable = gtk_stack_get_visible_child(widget_bag);
+		}
+
+		leaf_sets_editable(leaf, GTK_EDITABLE(editable));
+
+		g_signal_connect(editable,
+			"activate", G_CALLBACK(leaves_val_column_editable_apply), leaf
+		);
+
+
+		GListModel* const controllers = gtk_widget_observe_controllers(
+			GTK_WIDGET(widget_bag)
+		);
+		GtkEventController* const focus_sense = g_list_model_get_item(
+			controllers, 0
+		);
+		g_signal_connect(focus_sense,
+			"leave", G_CALLBACK(leaves_editable_stray), leaf
+		);
+		g_object_unref(controllers);
+		g_object_unref(focus_sense);
+	} else {
+		gtk_widget_set_visible(GTK_WIDGET(widget_bag), false);
 	}
-
-	g_signal_connect(textbox,
-		"activate", G_CALLBACK(leaves_val_column_textbox_apply), leaf
-	);
-
-
-	GListModel* const controller_list = gtk_widget_observe_controllers(
-		textbox
-	);
-	GtkEventController* const focus_sense = g_list_model_get_item(
-		controller_list, 0
-	);
-	g_signal_connect(focus_sense,
-		"leave", G_CALLBACK(leaves_textbox_stray), leaf
-	);
-	g_object_unref(controller_list);
-	g_object_unref(focus_sense);
-
+	g_object_unref(gobj_leaf);
 }
 static void
 leaves_val_column_cleaner(
@@ -275,23 +472,40 @@ leaves_val_column_cleaner(
 		) {
 // unbind
 // Signals need to be removed, else they build up
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
+	g_object_unref(gobj_leaf);
 
-	GtkWidget* const textbox = gtk_list_item_get_child(list_item);
+	if (leaf->type & (ATUI_ANY|ATUI_STRING)) {
+		GtkStack* const widget_bag = GTK_STACK(gtk_list_item_get_child(
+			list_item
+		));
 
-	g_signal_handlers_disconnect_matched(textbox, G_SIGNAL_MATCH_FUNC,
-		0,0,NULL,  G_CALLBACK(leaves_val_column_textbox_apply),  NULL
-	);
+		GtkWidget* const visible = gtk_stack_get_visible_child(widget_bag);
+		GtkWidget* editable;
+		if (leaf->type & ATUI_ENUM) {
+			editable = gtk_widget_get_last_child(visible);
+		} else {
+			editable = visible;
+		}
+		g_signal_handlers_disconnect_matched(editable, G_SIGNAL_MATCH_FUNC,
+			0,0,NULL,  G_CALLBACK(leaves_val_column_editable_apply),  NULL
+		);
 
-	GListModel* const controller_list = gtk_widget_observe_controllers(textbox);
 
-	GtkEventController* const focus_sense = g_list_model_get_item(
-		controller_list, 0
-	);
-	g_signal_handlers_disconnect_matched(focus_sense, G_SIGNAL_MATCH_FUNC,
-		0,0,NULL,  G_CALLBACK(leaves_textbox_stray),  NULL
-	);
-	g_object_unref(controller_list);
-	g_object_unref(focus_sense);
+		GListModel* const controllers = gtk_widget_observe_controllers(
+			GTK_WIDGET(widget_bag)
+		);
+		GtkEventController* const focus_sense = g_list_model_get_item(
+			controllers, 0
+		);
+		g_signal_handlers_disconnect_matched(focus_sense, G_SIGNAL_MATCH_FUNC,
+			0,0,NULL,  G_CALLBACK(leaves_editable_stray),  NULL
+		);
+		g_object_unref(controllers);
+		g_object_unref(focus_sense);
+	}
 }
 
 

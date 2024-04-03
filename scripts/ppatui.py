@@ -80,9 +80,15 @@ def enum_to_h(
 
 """
 	header_end = "\n#endif\n"
-	enum_template = """
+
+	enum_entry_assert_template = """\
+static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
+"""
+	enum_template = """\
 static_assert(%u <= 255); // uint8_t limits
+static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
 static const struct atui_enum ATUI_ENUM(%s) = {
+	.name_length = sizeof(u8"%s") - 1,
 	.name = u8"%s",
 	.num_entries = %u,
 %s\
@@ -90,38 +96,44 @@ static const struct atui_enum ATUI_ENUM(%s) = {
 %s\
 	},
 };
+
 """
 	enum_entry_template = """\
 		{
 			.name = u8\"%s\",
 			.val = %s,
+			.name_length = sizeof(u8"%s") - 1,
 %s\
 		},
 """
 
 	out_text = header_header % (fname.upper(), fname.upper())
 	enum_entries = ""
+	enum_entries_asserts = ""
 	entry_name = ""
 	descr_text = ""
 	for enum in atui_data["enums"]:
 		enum_entries = ""
+		enum_entries_asserts = ""
 		for entry in enum["constants"]:
 			entry_name = entry["name"]
+			out_text += enum_entry_assert_template % entry_name
 			# TODO implement C-side
 			#if "description" in entry:
 			#	descr_text = description_to_text(entry["description"], "\t\t\t")
 			#else:
 			#	descr_text = ""
 			enum_entries += enum_entry_template % (
-				entry_name, entry_name, descr_text
+				entry_name, entry_name, entry_name, descr_text
 			)
+
 		#if "description" in enum:
 		#	descr_text = description_to_text(entry["description"], "\t")
 		#else:
 		#	descr_text = ""
 		out_text += enum_template % (
-			len(enum["constants"]), # assert
-			enum["name"], enum["name"], len(enum["constants"]),
+			len(enum["constants"]), enum["name"], # assert
+			enum["name"], enum["name"], enum["name"], len(enum["constants"]),
 			descr_text, enum_entries
 		)
 	return out_text + header_end

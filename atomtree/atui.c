@@ -315,7 +315,7 @@ atui_set_from_text(
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
 
 	uint8_t err = 0;
-	uint16_t i=0,j = 0;
+	uint16_t i,j;
 	char8_t buffer[65];
 
 	const uint8_t array_size = leaf->array_size;
@@ -329,6 +329,7 @@ atui_set_from_text(
 			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
 			/ log(base)
 		);
+		i = 0; j = 0;
 		buffer[num_digits] = '\0';
 		while(text[j] == ' ') // cut off leading spaces
 			j++;
@@ -391,6 +392,26 @@ atui_set_from_text(
 			leaf->u8[array_size-1] = '\0';
 		}
 	} else if (radix) {
+		if (leaf->type & ATUI_ENUM) {
+			const struct atui_enum* const enum_set = leaf->enum_options;
+			const struct atui_enum_entry* entry;
+			int16_t str_diff;
+			for (i=0; i < enum_set->num_entries; i++) {
+				entry = &(enum_set->enum_array[i]);
+				str_diff = strncmp(entry->name, text, entry->name_length);
+				if (0 == str_diff) {
+					break;
+				}
+			}
+			if (0 == str_diff) {
+				if (leaf->type & ATUI_SIGNED) {
+					atui_leaf_set_val_signed(leaf, entry->val);
+				} else {
+					atui_leaf_set_val_unsigned(leaf, entry->val);
+				}
+				return;
+			}
+		}
 		if (leaf->type & ATUI_FRAC) {
 			atui_leaf_set_val_fraction(leaf, strtod(text, NULL));
 		} else if (leaf->type & ATUI_SIGNED) {
@@ -404,27 +425,11 @@ atui_set_from_text(
 	}
 }
 
-uint16_t
-atui_get_to_text(
-		const atui_leaf* const leaf,
-		char8_t** buffer_ptr
+inline static uint16_t
+_get_sprintf_format_from_leaf(
+		char8_t* const format,
+		const atui_leaf* const leaf
 		) {
-	// Convert the value of a leaf to text. Currently only support for numbers,
-	// and strings.
-
-	//assert(leaf->val);
-	if (NULL == leaf->val) { // TODO move back to assert once we have to-UI-type
-		return 0;
-	}
-
-	uint16_t malloc_size = 0;
-	uint16_t i=0,j=0;
-	char8_t* buffer = *buffer_ptr;
-
-
-	// constructor arrays to be used with metaformat, and two sprintfs. See the
-	// radix-only part.
-	// NAN DEC HEX OCT BIN
 #ifdef C2X_COMPAT
 	const char8_t* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
 	const char8_t* const suffixes_unsigned[] = {"", "llu", "llX", "llo", "llX"};
@@ -437,7 +442,6 @@ atui_get_to_text(
 	const uint8_t bases[] = {0, 10, 16, 8, 2};
 #endif
 	const char8_t* const metaformat = "%s%u%s"; // amogus
-	char8_t format[10];
 
 
 	const uint8_t radix = leaf->type & ATUI_ANY;
@@ -470,7 +474,43 @@ atui_get_to_text(
 
 		sprintf(format, "%s%u%s ", "%0", num_digits, suffixes_unsigned[radix]);
 		num_digits += 1; // 1 for the space in between segments.
+	} else if (radix) {
+		if (leaf->type & ATUI_FRAC) {
+			// %G format can have agressive rounding: Q14.2 16383.75 -> 16383.8
+			strcpy(format, "%G");
+		} else if (leaf->type & ATUI_SIGNED) {
+			sprintf(format, metaformat,
+				prefixes[radix], num_digits, suffixes_signed[radix]
+			);
+		} else {
+			sprintf(format, metaformat,
+				prefixes[radix], num_digits, suffixes_unsigned[radix]
+			);
+		}
+	}
 
+	return num_digits;
+}
+
+uint16_t
+atui_get_to_text(
+		const atui_leaf* const leaf,
+		char8_t** buffer_ptr
+		) {
+	// Convert the value of a leaf to text. Currently only support for numbers,
+	// and strings.
+
+	assert(leaf->val);
+
+	uint16_t malloc_size = 0;
+	char8_t* buffer = *buffer_ptr;
+
+	char8_t format[10];
+	const uint8_t radix = leaf->type & ATUI_ANY;
+	const uint8_t num_digits = _get_sprintf_format_from_leaf(format, leaf);
+
+	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
+		assert(!(leaf->type & ATUI_FRAC));
 		malloc_size = (num_digits * leaf->array_size) + 1;
 		if (malloc_size > ATUI_LEAVES_STR_BUFFER) {
 			buffer = malloc(malloc_size);
@@ -479,6 +519,7 @@ atui_get_to_text(
 		} else {
 			malloc_size = 0;
 		}
+		uint16_t i=0,j=0;
 		switch (leaf->total_bits) {
 			case 8:
 				for(; i < leaf->array_size; i++) {
@@ -520,23 +561,62 @@ atui_get_to_text(
 		memcpy(buffer, leaf->u8, leaf->array_size);
 		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
-		if (leaf->type & ATUI_FRAC) {
+		if (leaf->type & ATUI_ENUM) {
+			int64_t val;
+			if (leaf->type & ATUI_SIGNED) {
+				val = atui_leaf_get_val_signed(leaf);
+			} else {
+				val = atui_leaf_get_val_unsigned(leaf);
+			}
+			int16_t index = atui_enum_bsearch(leaf->enum_options, val);
+			if (-1 < index) {
+				char8_t format_2[15]; // stage 2
+				sprintf(format_2, " : %s", format);
+				assert(strlen(format_2) < sizeof(format_2));
+
+				char8_t* walked = memccpy(
+					buffer, leaf->enum_options->enum_array[index].name,
+					'\0', ATUI_LEAVES_STR_BUFFER
+				); // walk the buffer
+				sprintf(walked-1, format_2, val); // -1 eats previous \0
+				assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
+			} else {
+				sprintf(buffer, format, val);
+			}
+		} else if (leaf->type & ATUI_FRAC) {
 			// %G format can have agressive rounding: Q14.2 16383.75 -> 16383.8
 			sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
 		} else if (leaf->type & ATUI_SIGNED) {
-			sprintf(format, metaformat,
-				prefixes[radix], num_digits, suffixes_signed[radix]
-			);
 			sprintf(buffer, format, atui_leaf_get_val_signed(leaf));
 		} else {
-			sprintf(format, metaformat,
-				prefixes[radix], num_digits, suffixes_unsigned[radix]
-			);
 			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
 		}
 	}
 	assert(strlen(format) < sizeof(format));
 	return malloc_size;
+}
+
+void
+atui_enum_entry_to_text(
+		char8_t* const buffer,
+		const atui_leaf* const leaf,
+		const struct atui_enum_entry* const enum_entry
+		) {
+	assert(leaf->type & (ATUI_ANY|ATUI_ENUM));
+
+	char8_t format_1[10]; // stage 1
+	char8_t format_2[15]; // stage 2
+	_get_sprintf_format_from_leaf(format_1, leaf);
+	assert(strlen(format_1) < sizeof(format_1));
+	sprintf(format_2, " : %s", format_1);
+	assert(strlen(format_2) < sizeof(format_2));
+
+	char8_t* walked = memccpy(
+		buffer, enum_entry->name,
+		'\0', ATUI_LEAVES_STR_BUFFER
+	); // walk the buffer
+	sprintf(walked-1, format_2, enum_entry->val);  // -1 eats previous \0
+	assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
 }
 
 int16_t
@@ -566,7 +646,6 @@ atui_enum_bsearch(
 		return -1;
 	}
 }
-
 
 void
 _atui_destroy_leaves(
