@@ -2,7 +2,7 @@
 #define YAABE_GTK4_H
 
 struct atom_tree*
-atomtree_from_gfile(
+atomtree_load_from_gfile(
 		GFile* biosfile,
 		GError** ferror_out
 		);

@@ -12,7 +12,7 @@ main(
 	if (argc > 1) {
 		GError* ferror = NULL;
 		GFile* const biosfile = g_file_new_for_path(argv[1]);
-		atree = atomtree_from_gfile(biosfile, &ferror);
+		atree = atomtree_load_from_gfile(biosfile, &ferror);
 		if (ferror) {
 			printf("%s\n", ferror->message);
 			g_error_free(ferror);

@@ -185,14 +185,14 @@ leaf_sets_editable(
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	const uint16_t has_mallocd = atui_get_to_text(leaf, &buff);
+	const uint16_t has_mallocd = atui_leaf_to_text(leaf, &buff);
 	gtk_editable_set_text(editable, buff);
 	if (has_mallocd) {
 		free(buff);
 	}
 }
 static void
-leaves_editable_stray(
+leaves_editable_stray_reset(
 		const GtkEventControllerFocus* const focus_sense,
 		const atui_leaf* const leaf
 		) {
@@ -208,12 +208,12 @@ leaves_editable_stray(
 	leaf_sets_editable(leaf, GTK_EDITABLE(editable));
 }
 static void
-leaves_val_column_editable_apply(
+editable_sets_leaf(
 		GtkEditable* const editable,
 		gpointer const leaf_gptr
 		) {
 // Only way to apply the value is to hit enter
-	atui_set_from_text(leaf_gptr, gtk_editable_get_text(editable));
+	atui_leaf_from_text(leaf_gptr, gtk_editable_get_text(editable));
 	leaf_sets_editable(leaf_gptr, editable);
 }
 
@@ -395,7 +395,7 @@ leaves_val_column_spawner(
 	GtkStack* const widget_bag = GTK_STACK(gtk_stack_new());
 	gtk_list_item_set_child(list_item, GTK_WIDGET(widget_bag));
 
-	// for leaves_editable_stray()
+	// for leaves_editable_stray_reset()
 	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
 	gtk_widget_add_controller(GTK_WIDGET(widget_bag), focus_sense);
 	// widget takes ownership of the controller, no need to unref.
@@ -445,7 +445,7 @@ leaves_val_column_recycler(
 		leaf_sets_editable(leaf, GTK_EDITABLE(editable));
 
 		g_signal_connect(editable,
-			"activate", G_CALLBACK(leaves_val_column_editable_apply), leaf
+			"activate", G_CALLBACK(editable_sets_leaf), leaf
 		);
 
 
@@ -456,7 +456,7 @@ leaves_val_column_recycler(
 			controllers, 0
 		);
 		g_signal_connect(focus_sense,
-			"leave", G_CALLBACK(leaves_editable_stray), leaf
+			"leave", G_CALLBACK(leaves_editable_stray_reset), leaf
 		);
 		g_object_unref(controllers);
 		g_object_unref(focus_sense);
@@ -490,7 +490,7 @@ leaves_val_column_cleaner(
 			editable = visible;
 		}
 		g_signal_handlers_disconnect_matched(editable, G_SIGNAL_MATCH_FUNC,
-			0,0,NULL,  G_CALLBACK(leaves_val_column_editable_apply),  NULL
+			0,0,NULL,  G_CALLBACK(editable_sets_leaf),  NULL
 		);
 
 
@@ -501,7 +501,7 @@ leaves_val_column_cleaner(
 			controllers, 0
 		);
 		g_signal_handlers_disconnect_matched(focus_sense, G_SIGNAL_MATCH_FUNC,
-			0,0,NULL,  G_CALLBACK(leaves_editable_stray),  NULL
+			0,0,NULL,  G_CALLBACK(leaves_editable_stray_reset),  NULL
 		);
 		g_object_unref(controllers);
 		g_object_unref(focus_sense);
@@ -558,7 +558,7 @@ atui_leaves_to_glistmodel(
 }
 
 static GListModel*
-leaves_tlmodel_func(
+leaves_treelist_generate_children(
 		gpointer const parent_ptr,
 		const gpointer const d // unused
 		) {
@@ -626,7 +626,7 @@ branchleaves_to_treemodel(
 	);
 
 	GtkTreeListModel* const treemodel = gtk_tree_list_model_new(
-		leavesmodel, false, true, leaves_tlmodel_func, NULL,NULL
+		leavesmodel, false, true, leaves_treelist_generate_children, NULL,NULL
 	);
 	GtkSelectionModel* const sel_model = GTK_SELECTION_MODEL(
 		gtk_no_selection_new(G_LIST_MODEL(treemodel))
@@ -637,7 +637,7 @@ branchleaves_to_treemodel(
 	g_object_ref(sel_model); // to cache
 }
 static void
-set_leaves_list(
+set_active_leaves_list(
 		GtkSelectionModel* const model,
 		const guint position,
 		const guint n_items,
@@ -753,7 +753,7 @@ atui_branches_pullin_gliststore(
 	}
 }
 static GListModel*
-branch_tlmodel_func(
+branches_treelist_generate_children(
 		gpointer const parent_ptr,
 		const gpointer const data
 		) {
@@ -801,7 +801,7 @@ branch_tlmodel_func(
 
 
 inline static GtkSelectionModel*
-atui_gtk_model(
+create_root_model(
 		yaabegtk_commons* const commons
 		) {
 // Generate the very first model, of the tippy top of the tree, for the
@@ -815,9 +815,10 @@ atui_gtk_model(
 	g_list_store_append(ls_model, gbranch);
 	g_object_unref(gbranch);
 
-	// TreeList, along with branch_tlmodel_func, creates our collapsable model.
+	// TreeList, along with branches_treelist_generate_children, creates our collapsable model.
 	GtkTreeListModel* const tlist_atui = gtk_tree_list_model_new(
-		G_LIST_MODEL(ls_model), false, true, branch_tlmodel_func, NULL,NULL
+		G_LIST_MODEL(ls_model), false, true,
+		branches_treelist_generate_children, NULL,NULL
 	);
 
 	GtkSingleSelection* const sel_model = gtk_single_selection_new(
@@ -826,7 +827,7 @@ atui_gtk_model(
 
 	// Change the leaves pane's model based on the what is selected in branches
 	g_signal_connect(sel_model,
-		"selection-changed", G_CALLBACK(set_leaves_list), commons
+		"selection-changed", G_CALLBACK(set_active_leaves_list), commons
 	);
 
 	return GTK_SELECTION_MODEL(sel_model);
@@ -951,7 +952,7 @@ create_branches_pane(
 
 
 struct atom_tree*
-atomtree_from_gfile(
+atomtree_load_from_gfile(
 		GFile* const biosfile,
 		GError** const ferror_out
 		) {
@@ -1144,7 +1145,7 @@ yaabegtk_load_bios(
 
 	GError* ferror = NULL;
 
-	struct atom_tree* const atree = atomtree_from_gfile(biosfile, &ferror);
+	struct atom_tree* const atree = atomtree_load_from_gfile(biosfile, &ferror);
 	if (ferror) {
 		goto ferr;
 	}
@@ -1153,9 +1154,9 @@ yaabegtk_load_bios(
 		struct atom_tree* const oldtree = commons->atomtree_root;
 
 		commons->atomtree_root = atree;
-		GtkSelectionModel* const newmodel = atui_gtk_model(commons);
+		GtkSelectionModel* const newmodel = create_root_model(commons);
 		gtk_column_view_set_model(commons->branches_view, newmodel);
-		set_leaves_list(newmodel, 0,1, commons);
+		set_active_leaves_list(newmodel, 0,1, commons);
 
 		destroy_atomtree_with_gtk(oldtree, true);
 		g_object_unref(newmodel);
@@ -1258,9 +1259,9 @@ reload_button_reload_bios(
 	new_tree->biosfile_size = old_tree->biosfile_size;
 	commons->atomtree_root = new_tree;
 
-	GtkSelectionModel* const newmodel = atui_gtk_model(commons);
+	GtkSelectionModel* const newmodel = create_root_model(commons);
 	gtk_column_view_set_model(commons->branches_view, newmodel);
-	set_leaves_list(newmodel, 0,1, commons);
+	set_active_leaves_list(newmodel, 0,1, commons);
 
 	g_object_unref(newmodel);
 	destroy_atomtree_with_gtk(old_tree, false);
@@ -1355,7 +1356,7 @@ saveas_button_name_bios(
 }
 
 inline static GtkWidget*
-buttons_box(
+construct_loadsave_buttons_box(
 		yaabegtk_commons* const commons
 		) {
 
@@ -1437,7 +1438,7 @@ dropped_file_open_bios(
 }
 
 static void
-app_activate(
+yaabe_app_activate(
 		GtkApplication* const gtkapp,
 		gpointer const commonsptr
 		) {
@@ -1450,7 +1451,7 @@ hidden; when a file is set unhide it.
 
 	GtkSelectionModel* atui_model = NULL;
 	if (commons->atomtree_root) {
-		atui_model = atui_gtk_model(commons);
+		atui_model = create_root_model(commons);
 	}
 
 	GtkWidget* const branches_pane = create_branches_pane(commons, atui_model);
@@ -1466,7 +1467,7 @@ hidden; when a file is set unhide it.
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
 	if (commons->atomtree_root) {
-		set_leaves_list(atui_model, 0,1, commons);
+		set_active_leaves_list(atui_model, 0,1, commons);
 	} else {
 		//gtk_widget_set_visible(tree_divider, false);
 	}
@@ -1475,7 +1476,7 @@ hidden; when a file is set unhide it.
 	GtkWidget* const button_pane_complex = gtk_box_new(
 		GTK_ORIENTATION_VERTICAL, 5
 	);
-	GtkWidget* const buttonboxes = buttons_box(commons);
+	GtkWidget* const buttonboxes = construct_loadsave_buttons_box(commons);
 	gtk_widget_set_vexpand(tree_divider, true);
 	gtk_box_append(GTK_BOX(button_pane_complex), tree_divider);
 	gtk_box_append(GTK_BOX(button_pane_complex), buttonboxes);
@@ -1525,7 +1526,7 @@ yaabe_gtk(
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(commons.yaabe_gtk,
-		"activate", G_CALLBACK(app_activate), &commons
+		"activate", G_CALLBACK(yaabe_app_activate), &commons
 	);
 	const int8_t status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL

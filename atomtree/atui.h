@@ -180,12 +180,12 @@ struct  _atui_branch {
 
 // set the value from a string or array of 8-bit
 void
-atui_set_from_text(
+atui_leaf_from_text(
 		atui_leaf* leaf,
 		const char8_t* buffer
 		);
 uint16_t
-atui_get_to_text(
+atui_leaf_to_text(
 		const atui_leaf* leaf,
 		char8_t** buffer_ptr
 		);

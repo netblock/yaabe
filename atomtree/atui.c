@@ -304,7 +304,7 @@ strtoull_2(
 
 
 void
-atui_set_from_text(
+atui_leaf_from_text(
 		atui_leaf* const leaf,
 		const char8_t* const text
 		) {
@@ -493,7 +493,7 @@ _get_sprintf_format_from_leaf(
 }
 
 uint16_t
-atui_get_to_text(
+atui_leaf_to_text(
 		const atui_leaf* const leaf,
 		char8_t** buffer_ptr
 		) {
