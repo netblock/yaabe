@@ -240,7 +240,12 @@ atui_enum_entry_to_text(
 		);
 
 int16_t
-atui_enum_bsearch(
+atui_enum_bsearch( // binary; left
+		const struct atui_enum* enum_array,
+		int64_t val
+		);
+int16_t
+atui_enum_lsearch( // linear; left
 		const struct atui_enum* enum_array,
 		int64_t val
 		);

@@ -568,7 +568,7 @@ atui_get_to_text(
 			} else {
 				val = atui_leaf_get_val_unsigned(leaf);
 			}
-			int16_t index = atui_enum_bsearch(leaf->enum_options, val);
+			int16_t index = atui_enum_lsearch(leaf->enum_options, val);
 			if (-1 < index) {
 				char8_t format_2[15]; // stage 2
 				sprintf(format_2, " : %s", format);
@@ -645,6 +645,20 @@ atui_enum_bsearch(
 	} else {
 		return -1;
 	}
+}
+int16_t
+atui_enum_lsearch(
+		const struct atui_enum* const enum_set,
+		const int64_t val
+		) {
+	// linear search for atui_enum arrays.
+	// this algo also finds the leftmost if there are duplicates
+	for (uint8_t i=0; i < enum_set->num_entries; i++) {
+		if (val == enum_set->enum_array[i].val) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 void

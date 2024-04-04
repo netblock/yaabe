@@ -304,7 +304,7 @@ enummenu_sets_selection(
 		} else {
 			val = atui_leaf_get_val_unsigned(leaf);
 		}
-		int16_t index = atui_enum_bsearch(leaf->enum_options, val);
+		int16_t index = atui_enum_lsearch(leaf->enum_options, val);
 		if (-1 < index) {
 			gtk_single_selection_set_selected(enum_model, index);
 		} else {
