@@ -509,8 +509,9 @@ indent + "{\n"
 			var_meta = leaf.access_meta + "[0]"
 			leaf_text_extra = (
 				child_indent + ".array_size = (sizeof(%s)/sizeof(%s)),\n"
+				+ child_indent + ".num_bytes = sizeof(%s),\n"
 			)
-			leaf_text_extra %= (leaf.access, var_meta)
+			leaf_text_extra %= (leaf.access, var_meta, leaf.access)
 		elif leaf.fancy == ATUI_BITFIELD:
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
