@@ -9,301 +9,6 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include <math.h>
 
 void
-atui_leaf_set_val_unsigned(
-		atui_leaf* const leaf,
-		uint64_t val
-		) {
-	assert(leaf->type & ATUI_ANY);
-	assert(leaf->val);
-
-	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	uint64_t maxval;
-	if (num_bits == (sizeof(maxval) * CHAR_BIT)) { // (1ULL<<64) == 1
-		maxval = ~0ULL;
-	} else {
-		maxval = (1ULL << num_bits) - 1;
-	}
-	if (val > maxval) {
-		val = maxval;
-	}
-
-	// ...11111 000.. 1111...
-	const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
-	val <<= leaf->bitfield_lo;
-
-	switch (leaf->total_bits) {
-		case 8:
-			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
-			break;
-		case 16:
-			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
-			break;
-		case 32:
-			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
-			break;
-		case 64:
-			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
-			break;
-		default:
-			assert(0);
-			break;
-	}
-}
-
-uint64_t
-atui_leaf_get_val_unsigned(
-		const atui_leaf* const leaf
-		) {
-	assert(leaf->type & ATUI_ANY);
-	assert(leaf->val);
-
-	uint64_t val;
-	switch (leaf->total_bits) {
-		case 8:
-			val = *(leaf->u8);
-			break;
-		case 16:
-			val = *(leaf->u16);
-			break;
-		case 32:
-			val = *(leaf->u32);
-			break;
-		case 64:
-			val = *(leaf->u64);
-			break;
-		default:
-			assert(0);
-			break;
-	}
-
-	const uint8_t num_unused_bits_hi = (
-		(sizeof(val) * CHAR_BIT)
-		 - leaf->bitfield_hi
-		 -1
-	 );
-	val <<= num_unused_bits_hi; // delete unused upper
-	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
-
-	return val;
-}
-
-void
-atui_leaf_set_val_signed(
-		atui_leaf* const leaf,
-		const int64_t val
-		) {
-	assert(leaf->type & ATUI_ANY);
-	assert(leaf->val);
-
-	// handle Two's Complement on arbitrarily-sized ints
-	uint64_t raw_val; // some bit math preserves the sign
-	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	const uint64_t mask = (1ULL << num_bits) - 1;
-	const int64_t maxval = mask>>1; // max positive val 0111...
-	if (val > maxval) {
-		raw_val = maxval;
-	} else if (val < -maxval) {
-		raw_val = maxval+1; // Two's overflow. 1000.. is negative-most.
-	} else {
-		raw_val = val & mask; // Two's sign repeats to the right
-	}
-
-	// ...11111 000.. 1111...
-	const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
-	raw_val <<= leaf->bitfield_lo;
-
-	switch (leaf->total_bits) {
-		case 8:
-			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | raw_val;
-			break;
-		case 16:
-			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;
-			break;
-		case 32:
-			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;
-			break;
-		case 64:
-			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
-			break;
-		default:
-			assert(0);
-			break;
-	}
-}
-
-int64_t
-atui_leaf_get_val_signed(
-		const atui_leaf* const leaf
-		) {
-	assert(leaf->type & ATUI_ANY);
-	assert(leaf->val);
-
-	int64_t val;
-	switch (leaf->total_bits) {
-		case 8:
-			val = *(leaf->s8);
-			break;
-		case 16:
-			val = *(leaf->s16);
-			break;
-		case 32:
-			val = *(leaf->s32);
-			break;
-		case 64:
-			val = *(leaf->s64);
-			break;
-		default:
-			assert(0);
-			break;
-	}
-
-	const uint8_t num_unused_bits_hi = (
-		(sizeof(val) * CHAR_BIT)
-		- leaf->bitfield_hi
-		- 1
-	);
-	val <<= num_unused_bits_hi; // delete unused upper
-	// rightshift on signed repeats sign
-	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
-	return val;
-}
-
-void
-atui_leaf_set_val_fraction(
-		atui_leaf* const leaf,
-		const float64_t val) {
-	assert(leaf->type & ATUI_FRAC);
-	assert(leaf->val);
-
-	if (leaf->fractional_bits) {
-		const float64_t max_val = (
-			(float64_t)(1<<(leaf->total_bits - leaf->fractional_bits))
-			- ( (float64_t)(1) / (float64_t)(1<<leaf->fractional_bits))
-		);
-		uint64_t fixed_val;
-		if (val > max_val) {
-			fixed_val = (1<<leaf->total_bits)-1;
-		} else {
-			fixed_val = floor(val);
-			const float64_t frac = (
-				(val - floor(val)) * (1<<leaf->fractional_bits)
-			);
-			fixed_val <<= leaf->fractional_bits;
-			fixed_val += frac;
-		}
-		switch(leaf->total_bits) {
-			case 8:
-				*(leaf->u8) = fixed_val;
-				return;
-			case 16:
-				*(leaf->u16) = fixed_val;
-				return;
-			case 32:
-				*(leaf->u32) = fixed_val;
-				return;
-			case 64:
-				*(leaf->u64) = fixed_val;
-				return;
-			default:
-				assert(0);
-				break;
-		}
-	}
-
-	switch(leaf->total_bits) { // else float
-		case 16:
-			*(leaf->f16) = val;
-			return;
-		case 32:
-			*(leaf->f32) = val;
-			return;
-		case 64:
-			*(leaf->f64) = val;
-			return;
-		default:
-			assert(0);
-			break;
-	}
-
-	assert(0);
-}
-
-float64_t
-atui_leaf_get_val_fraction(
-		const atui_leaf* const leaf
-		) {
-	assert(leaf->type & ATUI_FRAC);
-	assert(leaf->val);
-
-	if (leaf->fractional_bits) { // fixed-point
-		// f64 can represent represent ints up to 2**53 without rounding.
-		assert((leaf->total_bits - leaf->fractional_bits) < 53);
-		float64_t val;
-		switch(leaf->total_bits) {
-			case 8:
-				val = *(leaf->u8);
-				break;
-			case 16:
-				val = *(leaf->u16);
-				break;
-			case 32:
-				val = *(leaf->u32);
-				break;
-			case 64:
-				val = *(leaf->u64);
-				break;
-			default:
-				assert(0);
-				break;
-		};
-		val /= (1 << leaf->fractional_bits);
-		return val;
-	};
-
-	// else native float
-	switch(leaf->total_bits) {
-		case 16:
-			return *(leaf->f16);
-		case 32:
-			return *(leaf->f32);
-		case 64:
-			return *(leaf->f64);
-		default:
-			assert(0);
-			break;
-	}
-
-	assert(0);
-}
-
-int64_t
-strtoll_2(
-		const char8_t* str
-		) {
-	// TODO it seems the C2X's changes for the strto* hasn't landed yet
-	uint8_t base = 0; // 0 = auto
-	if ((str[0] == '0') && (str[1] == 'b')) {
-		base = 2;
-		str += 2;
-	}
-	return strtoll(str, NULL, base);
-}
-
-uint64_t
-strtoull_2(
-		const char8_t* str
-		) {
-	// TODO it seems the C2X's changes for the strto* hasn't landed yet
-	uint8_t base = 0; // 0 = auto
-	if ((str[0] == '0') && (str[1] == 'b')) {
-		base = 2;
-		str += 2;
-	}
-	return strtoull(str, NULL, base);
-}
-
-
-void
 atui_leaf_from_text(
 		atui_leaf* const leaf,
 		const char8_t* const text
@@ -596,6 +301,275 @@ atui_leaf_to_text(
 	return malloc_size;
 }
 
+
+
+void
+atui_leaf_set_val_unsigned(
+		atui_leaf* const leaf,
+		uint64_t val
+		) {
+	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
+
+	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+	uint64_t maxval;
+	if (num_bits == (sizeof(maxval) * CHAR_BIT)) { // (1ULL<<64) == 1
+		maxval = ~0ULL;
+	} else {
+		maxval = (1ULL << num_bits) - 1;
+	}
+	if (val > maxval) {
+		val = maxval;
+	}
+
+	// ...11111 000.. 1111...
+	const uint64_t tokeep_mask = ~(maxval << leaf->bitfield_lo);
+	val <<= leaf->bitfield_lo;
+
+	switch (leaf->total_bits) {
+		case 8:
+			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
+			break;
+		case 16:
+			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
+			break;
+		case 32:
+			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
+			break;
+		case 64:
+			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
+			break;
+		default:
+			assert(0);
+			break;
+	}
+}
+uint64_t
+atui_leaf_get_val_unsigned(
+		const atui_leaf* const leaf
+		) {
+	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
+
+	uint64_t val;
+	switch (leaf->total_bits) {
+		case 8:
+			val = *(leaf->u8);
+			break;
+		case 16:
+			val = *(leaf->u16);
+			break;
+		case 32:
+			val = *(leaf->u32);
+			break;
+		case 64:
+			val = *(leaf->u64);
+			break;
+		default:
+			assert(0);
+			break;
+	}
+
+	const uint8_t num_unused_bits_hi = (
+		(sizeof(val) * CHAR_BIT)
+		 - leaf->bitfield_hi
+		 -1
+	 );
+	val <<= num_unused_bits_hi; // delete unused upper
+	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
+
+	return val;
+}
+
+void
+atui_leaf_set_val_signed(
+		atui_leaf* const leaf,
+		const int64_t val
+		) {
+	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
+
+	// handle Two's Complement on arbitrarily-sized ints
+	uint64_t raw_val; // some bit math preserves the sign
+	const uint8_t num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
+	const uint64_t mask = (1ULL << num_bits) - 1;
+	const int64_t maxval = mask>>1; // max positive val 0111...
+	if (val > maxval) {
+		raw_val = maxval;
+	} else if (val < -maxval) {
+		raw_val = maxval+1; // Two's overflow. 1000.. is negative-most.
+	} else {
+		raw_val = val & mask; // Two's sign repeats to the right
+	}
+
+	// ...11111 000.. 1111...
+	const uint64_t tokeep_mask = ~(mask << leaf->bitfield_lo);
+	raw_val <<= leaf->bitfield_lo;
+
+	switch (leaf->total_bits) {
+		case 8:
+			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | raw_val;
+			break;
+		case 16:
+			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;
+			break;
+		case 32:
+			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;
+			break;
+		case 64:
+			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
+			break;
+		default:
+			assert(0);
+			break;
+	}
+}
+int64_t
+atui_leaf_get_val_signed(
+		const atui_leaf* const leaf
+		) {
+	assert(leaf->type & ATUI_ANY);
+	assert(leaf->val);
+
+	int64_t val;
+	switch (leaf->total_bits) {
+		case 8:
+			val = *(leaf->s8);
+			break;
+		case 16:
+			val = *(leaf->s16);
+			break;
+		case 32:
+			val = *(leaf->s32);
+			break;
+		case 64:
+			val = *(leaf->s64);
+			break;
+		default:
+			assert(0);
+			break;
+	}
+
+	const uint8_t num_unused_bits_hi = (
+		(sizeof(val) * CHAR_BIT)
+		- leaf->bitfield_hi
+		- 1
+	);
+	val <<= num_unused_bits_hi; // delete unused upper
+	// rightshift on signed repeats sign
+	val >>= (num_unused_bits_hi + leaf->bitfield_lo); // delete lower
+	return val;
+}
+
+void
+atui_leaf_set_val_fraction(
+		atui_leaf* const leaf,
+		const float64_t val) {
+	assert(leaf->type & ATUI_FRAC);
+	assert(leaf->val);
+
+	if (leaf->fractional_bits) {
+		const float64_t max_val = (
+			(float64_t)(1<<(leaf->total_bits - leaf->fractional_bits))
+			- ( (float64_t)(1) / (float64_t)(1<<leaf->fractional_bits))
+		);
+		uint64_t fixed_val;
+		if (val > max_val) {
+			fixed_val = (1<<leaf->total_bits)-1;
+		} else {
+			fixed_val = floor(val);
+			const float64_t frac = (
+				(val - floor(val)) * (1<<leaf->fractional_bits)
+			);
+			fixed_val <<= leaf->fractional_bits;
+			fixed_val += frac;
+		}
+		switch(leaf->total_bits) {
+			case 8:
+				*(leaf->u8) = fixed_val;
+				return;
+			case 16:
+				*(leaf->u16) = fixed_val;
+				return;
+			case 32:
+				*(leaf->u32) = fixed_val;
+				return;
+			case 64:
+				*(leaf->u64) = fixed_val;
+				return;
+			default:
+				assert(0);
+				break;
+		}
+	}
+
+	switch(leaf->total_bits) { // else float
+		case 16:
+			*(leaf->f16) = val;
+			return;
+		case 32:
+			*(leaf->f32) = val;
+			return;
+		case 64:
+			*(leaf->f64) = val;
+			return;
+		default:
+			assert(0);
+			break;
+	}
+
+	assert(0);
+}
+float64_t
+atui_leaf_get_val_fraction(
+		const atui_leaf* const leaf
+		) {
+	assert(leaf->type & ATUI_FRAC);
+	assert(leaf->val);
+
+	if (leaf->fractional_bits) { // fixed-point
+		// f64 can represent represent ints up to 2**53 without rounding.
+		assert((leaf->total_bits - leaf->fractional_bits) < 53);
+		float64_t val;
+		switch(leaf->total_bits) {
+			case 8:
+				val = *(leaf->u8);
+				break;
+			case 16:
+				val = *(leaf->u16);
+				break;
+			case 32:
+				val = *(leaf->u32);
+				break;
+			case 64:
+				val = *(leaf->u64);
+				break;
+			default:
+				assert(0);
+				break;
+		};
+		val /= (1 << leaf->fractional_bits);
+		return val;
+	};
+
+	// else native float
+	switch(leaf->total_bits) {
+		case 16:
+			return *(leaf->f16);
+		case 32:
+			return *(leaf->f32);
+		case 64:
+			return *(leaf->f64);
+		default:
+			assert(0);
+			break;
+	}
+
+	assert(0);
+}
+
+
+
 void
 atui_enum_entry_to_text(
 		char8_t* const buffer,
@@ -661,6 +635,7 @@ atui_enum_lsearch(
 	return -1;
 }
 
+
 void
 _atui_destroy_leaves(
 		atui_leaf* const leaves,
@@ -675,7 +650,6 @@ _atui_destroy_leaves(
 		}
 	}
 }
-
 void
 atui_destroy_tree(
 		atui_branch* const tree
@@ -686,3 +660,30 @@ atui_destroy_tree(
 	_atui_destroy_leaves(tree->leaves, tree->leaf_count);
 	free(tree);
 }
+
+
+int64_t
+strtoll_2(
+		const char8_t* str
+		) {
+	// TODO it seems the C2X's changes for the strto* hasn't landed yet
+	uint8_t base = 0; // 0 = auto
+	if ((str[0] == '0') && (str[1] == 'b')) {
+		base = 2;
+		str += 2;
+	}
+	return strtoll(str, NULL, base);
+}
+uint64_t
+strtoull_2(
+		const char8_t* str
+		) {
+	// TODO it seems the C2X's changes for the strto* hasn't landed yet
+	uint8_t base = 0; // 0 = auto
+	if ((str[0] == '0') && (str[1] == 'b')) {
+		base = 2;
+		str += 2;
+	}
+	return strtoull(str, NULL, base);
+}
+

@@ -31,6 +31,15 @@ atui.h is about the core atui interface
 typedef struct _GObject GObject;
 typedef struct _GtkSelectionModel GtkSelectionModel;
 
+// https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
+static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
+// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
+// relevant for that branch:
+struct atui_nullstruct;
+
+struct atui_funcify_args; // internal use; see below
+
+
 struct atui_enum_entry {
 	const char8_t* const name;
 	const int64_t val;
@@ -43,6 +52,7 @@ struct atui_enum {
 	uint16_t name_length;
 };
 
+
 enum i18n_languages:int8_t {
 	LANG_NOLANG = -1,
 
@@ -51,11 +61,6 @@ enum i18n_languages:int8_t {
 	LANG_TOTALLANGS
 };
 
-// https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
-static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
-// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
-// relevant for that branch:
-struct atui_nullstruct;
 
 // TODO move to bitfield?
 enum atui_type:uint32_t {
@@ -83,9 +88,6 @@ enum atui_type:uint32_t {
 	ATUI_SIGNED    = 1<<18, // Internally-set. If it has a signing bit.
 	ATUI_FRAC      = 1<<19, // Internally-set. Both Q and float.
 };
-
-struct yaabe_gtkapp_model_cache; // GTK
-struct atui_funcify_args; // internal use; see below
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
@@ -145,17 +147,17 @@ struct _atui_leaf {
 
 	GObject** child_gobj_cache; // GObject cache of child leaves for GTK
 };
-struct  _atui_branch {
+struct _atui_branch {
 	char8_t name[64];
 	const char8_t* origname;
 
 	const char8_t* description[LANG_TOTALLANGS];
 
-	atui_branch** child_branches; // petiole + import
+	atui_branch** child_branches;  // petiole + import
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
-	atui_branch** all_branches; // child + inline
+	atui_branch** all_branches;    // child + inline
 
-	uint8_t num_branches; // child branches
+	uint8_t num_branches;     // child branches
 	uint8_t max_num_branches; // import alloc'd but may not use
 	uint8_t num_inline_branches;
 	uint8_t max_all_branch_count; // child+inline, import alloc'd may not use
@@ -178,18 +180,16 @@ struct  _atui_branch {
 // reccomended buffer size for the upcomming text functions
 #define ATUI_LEAVES_STR_BUFFER 128
 
-// set the value from a string or array of 8-bit
 void
-atui_leaf_from_text(
+atui_leaf_from_text( // set the value from a string or array of 8-bit
 		atui_leaf* leaf,
 		const char8_t* buffer
 		);
-uint16_t
+uint16_t // returns malloc size
 atui_leaf_to_text(
 		const atui_leaf* leaf,
 		char8_t** buffer_ptr
 		);
-// returns malloc size
 
 // set or get the number value from the leaf
 void
@@ -222,15 +222,6 @@ atui_leaf_get_val_fraction(
 		const atui_leaf* leaf
 		);
 
-// TODO stroll that considers 0b prefix?
-int64_t
-strtoll_2(
-		const char8_t* str
-		);
-uint64_t
-strtoull_2(
-		const char8_t* str
-		);
 
 void
 atui_enum_entry_to_text(
@@ -263,6 +254,15 @@ _atui_destroy_leaves(
 		);
 
 
+// TODO stroll that considers 0b prefix?
+int64_t
+strtoll_2(
+		const char8_t* str
+		);
+uint64_t
+strtoull_2(
+		const char8_t* str
+		);
 
 
 // funcify internal structs:
@@ -289,7 +289,7 @@ struct atui_funcify_args {
 };
 
 struct subleaf_meta {
-	const uint32_t element_size; // Size of bios element. For pointer math.
+	const uint32_t element_size;   // Size of bios element. For pointer math.
 	const uint8_t dynarray_length; // The number of elements in the bios array
 	const bool deferred_start_array;
 
@@ -306,16 +306,12 @@ struct atui_branch_data {
 	// leaves straightforward:
 	const atui_leaf* const leaves_init;
 
-	// the collection of leaf patterns for all dynarrays in the branch:
-	//const atui_leaf* const dynarray_patterns;
-	// dynarray metadata:
-	//const struct dynarray_bounds* const dynarray_boundaries;
-
 	const uint8_t num_leaves_init; // sizeof(); does not include kids
 	const uint16_t computed_num_leaves;
 	const uint16_t computed_num_inline;
 	const uint16_t computed_num_petiole;
 };
+
 atui_branch*
 atui_branch_allocator(
 	const struct atui_branch_data* const embryo,
