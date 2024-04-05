@@ -325,5 +325,7 @@ atui_branch_allocator(
 	}
 	assert(strlen(table->name) < sizeof(((atui_branch*)0)->name));
 
+	memcpy(table->description, embryo->description, sizeof(table->description));
+
 	return table;
 }

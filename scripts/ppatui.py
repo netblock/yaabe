@@ -118,19 +118,18 @@ static const struct atui_enum ATUI_ENUM(%s) = {
 		for entry in enum["constants"]:
 			entry_name = entry["name"]
 			out_text += enum_entry_assert_template % entry_name
-			# TODO implement C-side
-			#if "description" in entry:
-			#	descr_text = description_to_text(entry["description"], "\t\t\t")
-			#else:
-			#	descr_text = ""
+			if "description" in entry:
+				descr_text = description_to_text(entry["description"], "\t\t\t")
+			else:
+				descr_text = ""
 			enum_entries += enum_entry_template % (
 				entry_name, entry_name, entry_name, descr_text
 			)
 
-		#if "description" in enum:
-		#	descr_text = description_to_text(entry["description"], "\t")
-		#else:
-		#	descr_text = ""
+		if "description" in enum:
+			descr_text = description_to_text(entry["description"], "\t")
+		else:
+			descr_text = ""
 		out_text += enum_template % (
 			len(enum["constants"]), enum["name"], # assert
 			enum["name"], enum["name"], enum["name"], len(enum["constants"]),
@@ -645,6 +644,7 @@ PPATUI_HEADERIFY(%s) {
 	};
 	const struct atui_branch_data branch_embryo = {
 		.origname = u8"%s",
+%s\
 		.leaves_init = leaves_init,
 		.num_leaves_init = sizeof(leaves_init)/sizeof(atui_leaf),
 		.computed_num_leaves = %s,
@@ -680,6 +680,7 @@ PPATUI_HEADERIFY(%s) {
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
 			leaves_to_text(branch.leaves, "\t\t"),
 			branch.name, # embryo
+			description_to_text(branch.description, "\t\t"),
 			"(%u + %s)" % (counters[0], counters[1]),
 			"(%u + %s)" % (counters[2], counters[3]),
 			"(%u + %s)" % (counters[4], counters[5]),

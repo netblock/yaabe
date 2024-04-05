@@ -93,9 +93,24 @@ destroy_atomtree_with_gtk(
 }
 
 
-
-
-
+static gboolean
+leaves_label_tooltip(
+		const GtkWidget* const label,
+		const gint x,
+		const gint y,
+		const gboolean keyboard_mode,
+		GtkTooltip* const tooltip,
+		const atui_leaf* const leaf
+		) {
+// tooltip callback
+	const uint8_t current_lang = LANG_ENGLISH;
+	if (leaf->description[current_lang]) {
+		gtk_tooltip_set_text(tooltip, leaf->description[current_lang]);
+		return true;
+	} else {
+		return false;
+	}
+}
 static void
 generic_label_column_spawner(
 		const GtkListItemFactory* const factory,
@@ -104,6 +119,7 @@ generic_label_column_spawner(
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
 	GtkWidget* const label = gtk_label_new(NULL);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_has_tooltip(label, true);
 	gtk_list_item_set_child(list_item, label);
 }
 static void
@@ -112,14 +128,13 @@ leaves_label_column_spawner(
 		GtkListItem* const list_item
 		) {
 // setup to spawn a UI skeleton
+	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_has_tooltip(label, true);
 
 	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
-
-	GtkWidget* const label = gtk_label_new(NULL);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
-
 	gtk_list_item_set_child(list_item, expander);
 }
 static void
@@ -128,19 +143,37 @@ leaves_name_column_recycler(
 		GtkListItem* const list_item
 		) {
 // bind data to the UI skeleton
-
-	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
-		gtk_list_item_get_child(list_item)
-	);
-	GtkWidget* const label = gtk_tree_expander_get_child(expander);
-
 	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
 	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
+
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item)
+	);
+
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
+	g_signal_connect(label,
+		"query-tooltip", G_CALLBACK(leaves_label_tooltip), leaf
+	);
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
+}
+static void
+leaves_name_column_cleaner(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item
+		) {
+// unbind
+// Signals need to be removed, else they build up
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item)
+	);
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
+	g_signal_handlers_disconnect_matched(label, G_SIGNAL_MATCH_FUNC,
+		0,0,NULL,  G_CALLBACK(leaves_label_tooltip),  NULL
+	);
 }
 
 static void
@@ -218,7 +251,24 @@ editable_sets_leaf(
 }
 
 
-
+static gboolean
+enum_label_tooltip(
+		const GtkWidget* const label,
+		const gint x,
+		const gint y,
+		const gboolean keyboard_mode,
+		GtkTooltip* const tooltip,
+		const struct atui_enum_entry* const enum_entry
+		) {
+// tooltip callback
+	const uint8_t current_lang = LANG_ENGLISH;
+	if (enum_entry->description[current_lang]) {
+		gtk_tooltip_set_text(tooltip, enum_entry->description[current_lang]);
+		return true;
+	} else {
+		return false;
+	}
+}
 static void
 enum_label_column_recycler(
 		const GtkListItemFactory* const factory,
@@ -226,6 +276,7 @@ enum_label_column_recycler(
 		) {
 // bind
 	GtkLabel* const label = GTK_LABEL(gtk_list_item_get_child(list_item));
+
 	GObject* const enum_gobj = gtk_list_item_get_item(list_item);
 	const struct atui_enum_entry* const enum_entry = g_object_get_data(
 		enum_gobj, "enum"
@@ -237,7 +288,24 @@ enum_label_column_recycler(
 	stack_buff[0] = '\0';
 	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
 	gtk_label_set_text(label, stack_buff);
+
+	g_signal_connect(label,
+		"query-tooltip", G_CALLBACK(enum_label_tooltip),
+		(struct atui_enum_entry*) enum_entry // deconst
+	);
 	// g_object_unref(enum_gobj); // no need to unref from list_item_get_item
+}
+static void
+enum_label_column_cleaner(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item
+		) {
+// unbind
+// Signals need to be removed, else they build up
+	GtkWidget* const label = gtk_list_item_get_child(list_item);
+	g_signal_handlers_disconnect_matched(label, G_SIGNAL_MATCH_FUNC,
+		0,0,NULL,  G_CALLBACK(enum_label_tooltip),  NULL
+	);
 }
 static void
 enum_list_sets_editable(
@@ -324,6 +392,9 @@ construct_enum_dropdown(
 	);
 	g_signal_connect(list_factory,
 		"bind", G_CALLBACK(enum_label_column_recycler), NULL
+	);
+	g_signal_connect(list_factory,
+		"unbind", G_CALLBACK(enum_label_column_cleaner), NULL
 	);
 	GtkWidget* const enum_list = gtk_list_view_new(NULL, list_factory);
 
@@ -687,6 +758,9 @@ create_leaves_pane(
 	g_signal_connect(factory,
 		"bind", G_CALLBACK(leaves_name_column_recycler), NULL
 	);
+	g_signal_connect(factory,
+		"unbind", G_CALLBACK(leaves_name_column_cleaner), NULL
+	);
 	column = gtk_column_view_column_new("names", factory);
 	gtk_column_view_column_set_resizable(column, true);
 	gtk_column_view_append_column(leaves_list, column);
@@ -837,21 +911,37 @@ create_root_model(
 
 
 
+static gboolean
+branches_label_tooltip(
+		const GtkWidget* const label,
+		const gint x,
+		const gint y,
+		const gboolean keyboard_mode,
+		GtkTooltip* const tooltip,
+		const atui_branch* const branch
+		) {
+// tooltip callback
+	const uint8_t current_lang = LANG_ENGLISH;
+	if (branch->description[current_lang]) {
+		gtk_tooltip_set_text(tooltip, branch->description[current_lang]);
+		return true;
+	} else {
+		return false;
+	}
+}
 static void
 branch_name_column_spawner(
 		const GtkSignalListItemFactory* const factory,
 		GtkListItem* const list_item
 		) {
 // setup
-//TODO use https://docs.gtk.org/gtk4/class.Inscription.html
+	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_has_tooltip(label, true);
 
 	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
-
-	GtkWidget* const label = gtk_label_new(NULL);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_tree_expander_set_child(GTK_TREE_EXPANDER(expander), label);
-
 	gtk_list_item_set_child(list_item, expander);
 }
 static void
@@ -860,20 +950,37 @@ branch_name_column_recycler(
 		GtkListItem* const list_item
 		) {
 // bind
-
-	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
-		gtk_list_item_get_child(list_item)
-	);
-	GtkWidget* const label = gtk_tree_expander_get_child(expander);
-
 	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
 	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
 	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
 	g_object_unref(gobj_branch);
 
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item)
+	);
+
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
+	g_signal_connect(label,
+		"query-tooltip", G_CALLBACK(branches_label_tooltip), branch
+	);
 	gtk_label_set_text(GTK_LABEL(label), branch->name);
 
 	gtk_tree_expander_set_list_row(expander, tree_list_item);
+}
+static void
+branches_name_column_cleaner(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item
+		) {
+// unbind
+// Signals need to be removed, else they build up
+	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
+		gtk_list_item_get_child(list_item)
+	);
+	GtkWidget* const label = gtk_tree_expander_get_child(expander);
+	g_signal_handlers_disconnect_matched(label, G_SIGNAL_MATCH_FUNC,
+		0,0,NULL,  G_CALLBACK(branches_label_tooltip),  NULL
+	);
 }
 static void
 branch_type_column_recycler(

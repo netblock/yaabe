@@ -40,17 +40,6 @@ struct atui_nullstruct;
 struct atui_funcify_args; // internal use; see below
 
 
-struct atui_enum_entry {
-	const char8_t* const name;
-	const int64_t val;
-	uint16_t name_length;
-};
-struct atui_enum {
-	const char8_t* const name;
-	const uint8_t num_entries;
-	const struct atui_enum_entry* const enum_array;
-	uint16_t name_length;
-};
 
 
 enum i18n_languages:int8_t {
@@ -59,6 +48,20 @@ enum i18n_languages:int8_t {
 	LANG_ENGLISH = 0,
 
 	LANG_TOTALLANGS
+};
+
+struct atui_enum_entry {
+	const char8_t* const name;
+	const char8_t* const description[LANG_TOTALLANGS];
+	const int64_t val;
+	const uint16_t name_length;
+};
+struct atui_enum {
+	const char8_t* const name;
+	const char8_t* const description[LANG_TOTALLANGS];
+	const struct atui_enum_entry* const enum_array;
+	const uint8_t num_entries;
+	const uint16_t name_length;
 };
 
 
@@ -302,6 +305,7 @@ struct subleaf_meta {
 
 struct atui_branch_data {
 	const char8_t* const origname;
+	const char8_t* const description[LANG_TOTALLANGS];
 
 	// leaves straightforward:
 	const atui_leaf* const leaves_init;

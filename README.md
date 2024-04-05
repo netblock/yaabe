@@ -5,9 +5,8 @@ data structures of the VBIOS, rather than just the notable tidbits an
 overclocker may want.
 
 This VBIOS editor does not hold your hand; it exposes a lot and you should have
-an idea what you're looking for and what it does. Until I get descriptions up
-and running, it is recommended to view the header files under `atom/` in
-tandem.
+an idea what you're looking for and what it does. It is recommended to view the 
+header files under `atom/` in tandem.
 
 ## TODO
 
