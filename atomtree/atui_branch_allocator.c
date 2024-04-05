@@ -196,7 +196,7 @@ atui_leaves_printer(
 			leaves->pos->num_child_leaves = ( // petiole doesn't get counted
 				sub_leaves.target.pos - leaves->pos->child_leaves
 			);
-			if (sub_meta->deferred_start_array) {
+			if (sub_meta->deferred_start_array) { // num_bytes
 				if (leaves->pos->num_child_leaves) {
 					leaves->pos->val = *(const void* const*)(leaves->pos->val);
 					const atui_leaf* const last_child = &(
@@ -204,12 +204,17 @@ atui_leaves_printer(
 							leaves->pos->num_child_leaves - 1
 						]
 					);
-					assert(last_child->val > leaves->pos->val);
-					leaves->pos->num_bytes = (
-						last_child->val + last_child->num_bytes
-						- leaves->pos->val
-					);
+					if (last_child->num_bytes) {
+						assert(last_child->val >= leaves->pos->val);
+						leaves->pos->num_bytes = (
+							last_child->val + last_child->num_bytes
+							- leaves->pos->val
+						);
+					} else {
+						goto dynarray_deferred_num_bytes_failure;
+					}
 				} else {
+					dynarray_deferred_num_bytes_failure:
 					leaves->pos->val = NULL;
 					leaves->pos->num_bytes = 0;
 				}

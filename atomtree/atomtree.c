@@ -4081,13 +4081,15 @@ atombios_parse(
 	atree->bios = bios; //PIC code; going to be used as the '0' in places.
 	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
 
-	uint8_t* strs = atree->bios + image->atombios_strings_offset;
 	uint8_t num_of_crawled_strings = 0;
-	while (*strs) { // the last string ends with 00 00
-		assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
-		atree->atombios_strings[num_of_crawled_strings] = strs;
-		num_of_crawled_strings++;
-		strs += (strlen(strs) + 1);
+	if (image->atombios_strings_offset) {
+		uint8_t* strs = atree->bios + image->atombios_strings_offset;
+		while (*strs) { // the last string ends with 00 00
+			assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
+			atree->atombios_strings[num_of_crawled_strings] = strs;
+			num_of_crawled_strings++;
+			strs += (strlen(strs) + 1);
+		}
 	}
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 
