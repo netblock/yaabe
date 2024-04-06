@@ -93,6 +93,282 @@ destroy_atomtree_with_gtk(
 }
 
 
+
+
+static void
+atui_leaves_pullin_gliststore(
+		atui_leaf* const leaves,
+		GListStore* const list,
+		const uint16_t num_leaves
+		) {
+// If the parent leaf has children that aren't adjacent, but the parent is
+// labeled with ATUI_SUBONLY, pull them in.
+	GObject* gobj_child;
+	atui_leaf* leaf;
+
+	for(uint16_t i=0; i < num_leaves; i++) {
+		leaf = &(leaves[i]);
+		if (leaf->type & ATUI_NODISPLAY) {
+			// ignore the leaf
+		} else if (leaf->type & ATUI_SUBONLY) {
+			assert(leaf->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY));
+			if (leaf->type & ATUI_INLINE) {
+				atui_branch* const branch = *(leaf->inline_branch);
+				atui_leaves_pullin_gliststore(
+					branch->leaves, list, branch->leaf_count
+				);
+			//} else if (leaf->type & (ATUI_BITFIELD|ATUI_DYNARRAY)) {
+			} else {
+				atui_leaves_pullin_gliststore(
+					leaf->child_leaves, list, leaf->num_child_leaves
+				);
+			}
+		} else {
+			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
+			g_object_set_data(gobj_child, "leaf", leaf);
+			g_list_store_append(list, gobj_child);
+			g_object_unref(gobj_child);
+		}
+	}
+}
+inline static GListModel*
+atui_leaves_to_glistmodel(
+		atui_leaf* const children,
+		const uint16_t num_children
+		) {
+// Creates a rudimentary model from an array of atui_leaf's
+	GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
+	atui_leaves_pullin_gliststore(children, child_list, num_children);
+	return G_LIST_MODEL(child_list);
+}
+static GListModel*
+leaves_treelist_generate_children(
+		gpointer const parent_ptr,
+		const gpointer const d // unused
+		) {
+// GtkTreeListModelCreateModelFunc for leaves
+// Creates the children models for the collapsable tree, of the leaves pane.
+
+	GListModel* children_model = NULL;
+
+	GObject* const gobj_parent = parent_ptr;
+	atui_leaf* const parent = g_object_get_data(gobj_parent, "leaf");
+
+	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)
+			&& (-1 < parent->num_gobj)
+			) {
+		if (NULL == parent->child_gobj_cache) {
+			atui_leaf* leaves;
+			uint16_t num_leaves;
+			if (parent->type & ATUI_INLINE) {
+				atui_branch* const branch = *(parent->inline_branch);
+				leaves = branch->leaves;
+				num_leaves = branch->leaf_count;
+			} else {
+			//} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
+				leaves = parent->child_leaves;
+				num_leaves = parent->num_child_leaves;
+			}
+			if (num_leaves) {
+				children_model = atui_leaves_to_glistmodel(leaves, num_leaves);
+				parent->num_gobj = g_list_model_get_n_items(children_model);
+				parent->child_gobj_cache = malloc(
+					parent->num_gobj * sizeof(GObject*)
+				);
+				uint16_t i;
+				for (i=0; i < parent->num_gobj; i++) {
+					// g_list_model_get_item refs the gobject for us
+					parent->child_gobj_cache[i] = g_list_model_get_item(
+						children_model, i
+					);
+				}
+				assert(i < INT16_MAX); // 32k leaves?!
+			} else {
+				parent->num_gobj = -1; // flag for dead-ends
+			}
+		} else {
+			GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
+			g_list_store_splice(children,0,  0,
+				(void**)parent->child_gobj_cache, parent->num_gobj
+			);
+			children_model = G_LIST_MODEL(children);
+		}
+	}
+	return children_model;
+}
+inline static void
+branchleaves_to_treemodel(
+		atui_branch* const branch
+		) {
+// Turns the 'level 0' leaves of a branch into a model for the leaves pane.
+// Also generates its cache.
+
+	GListModel* const leavesmodel = atui_leaves_to_glistmodel(
+		branch->leaves, branch->leaf_count
+	);
+
+	GtkTreeListModel* const treemodel = gtk_tree_list_model_new(
+		leavesmodel, false, true, leaves_treelist_generate_children, NULL,NULL
+	);
+	GtkSelectionModel* const sel_model = GTK_SELECTION_MODEL(
+		gtk_no_selection_new(G_LIST_MODEL(treemodel))
+	);
+	// no_selection takes ownership of treemodel.
+
+	branch->leaves_model = sel_model;
+	g_object_ref(sel_model); // to cache
+}
+static void
+branch_selection_sets_leaves_list(
+		GtkSelectionModel* const model,
+		const guint position,
+		const guint n_items,
+		yaabegtk_commons* const commons
+		) {
+// Signal callback
+// Change the leaves pane's model based on the what is selected in brances
+	GtkTreeListRow* const tree_list_item =
+		gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
+	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
+	g_object_unref(gobj_branch);
+
+	if (NULL == branch->leaves_model) { // if not cached, generate.
+		branchleaves_to_treemodel(branch);
+	}
+
+	gtk_column_view_set_model(commons->leaves_view, branch->leaves_model);
+}
+static void
+atui_branches_pullin_gliststore(
+		const atui_branch* const parent,
+		GListStore* const list
+		) {
+	GObject* gobj_child;
+	atui_branch* child;
+	uint8_t i;
+	for (i=0; i < parent->num_inline_branches; i++) {
+		atui_branches_pullin_gliststore(parent->inline_branches[i], list);
+	}
+	for (i=0; i < parent->num_branches; i++) {
+		gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
+		g_object_set_data(gobj_child, "branch", parent->child_branches[i]);
+		g_list_store_append(list, gobj_child);
+		g_object_unref(gobj_child);
+	}
+}
+static GListModel*
+branches_treelist_generate_children(
+		gpointer const parent_ptr,
+		const gpointer const data
+		) {
+// GtkTreeListModelCreateModelFunc for branches
+// Creates the children models for the collapsable tree, of the branches pane.
+	GObject* const gobj_parent = parent_ptr;
+	atui_branch* const parent = g_object_get_data(gobj_parent, "branch");
+
+	GListModel* children_model = NULL;
+
+	if (parent->max_all_branch_count && (-1 < parent->num_gobj)) {
+		GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
+		if (NULL == parent->child_gobj_cache) {
+			atui_branches_pullin_gliststore(parent, children);
+			children_model = G_LIST_MODEL(children);
+			
+			parent->num_gobj = g_list_model_get_n_items(children_model);
+			if (parent->num_gobj) {
+				parent->child_gobj_cache = malloc(
+					parent->num_gobj * sizeof(GObject*)
+				);
+				uint16_t i;
+				for (i=0; i < parent->num_gobj; i++) {
+					// g_list_model_get_item refs the gobject for us
+					parent->child_gobj_cache[i] = g_list_model_get_item(
+						children_model, i
+					);
+				}
+				assert(i < INT16_MAX); // 32k branches?!
+			} else {
+				g_object_unref(children_model);
+				children_model = NULL;
+				parent->num_gobj = -1; // flag for dead-ends
+			}
+		} else {
+			g_list_store_splice(children,0,  0,
+				(void**)parent->child_gobj_cache, parent->num_gobj
+			);
+			children_model = G_LIST_MODEL(children);
+		}
+	}
+	return children_model;
+}
+inline static GtkSelectionModel*
+create_root_model(
+		yaabegtk_commons* const commons
+		) {
+// Generate the very first model, of the tippy top of the tree, for the
+// branches pane
+	atui_branch* const atui_root = commons->atomtree_root->atui_root;
+
+	GObject* const gbranch = g_object_new(G_TYPE_OBJECT, NULL);
+	g_object_set_data(gbranch, "branch", atui_root);
+	GListStore* const ls_model = g_list_store_new(G_TYPE_OBJECT);
+	g_list_store_append(ls_model, gbranch);
+	g_object_unref(gbranch);
+
+	// TreeList, along with branches_treelist_generate_children, creates our
+	// collapsable model.
+	GtkTreeListModel* const tlist_atui = gtk_tree_list_model_new(
+		G_LIST_MODEL(ls_model), false, true,
+		branches_treelist_generate_children, NULL,NULL
+	);
+
+	GtkSingleSelection* const sel_model = gtk_single_selection_new(
+		G_LIST_MODEL(tlist_atui)
+	);
+
+	// Change the leaves pane's model based on the what is selected in branches
+	g_signal_connect(sel_model,
+		"selection-changed",
+		G_CALLBACK(branch_selection_sets_leaves_list), commons
+	);
+
+	return GTK_SELECTION_MODEL(sel_model);
+	// Does not need to be unref'd if used with a new().
+	// Needs to be unref'd if used with a set().
+}
+static void
+create_and_set_active_atui_model(
+		yaabegtk_commons* const commons
+		) {
+// create and set the main branch model
+	GtkSelectionModel* const branches_model = create_root_model(commons);
+	gtk_column_view_set_model(commons->branches_view, branches_model);
+	g_object_unref(branches_model);
+
+	// TODO divorce into notify::model signal/callback in create_branches_pane?
+	atui_branch* const root = commons->atomtree_root->atui_root;
+	assert(NULL == root->leaves_model);
+	branchleaves_to_treemodel(root);
+	gtk_column_view_set_model(commons->leaves_view, root->leaves_model);
+
+	// TODO move the call of set_editor_titlebar in here?
+}
+
+
+
+static void
+generic_label_column_spawner(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item
+		) {
+//TODO use https://docs.gtk.org/gtk4/class.Inscription.html
+	GtkWidget* const label = gtk_label_new(NULL);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_has_tooltip(label, true);
+	gtk_list_item_set_child(list_item, label);
+}
+
 static gboolean
 leaves_label_tooltip(
 		const GtkWidget* const label,
@@ -112,18 +388,7 @@ leaves_label_tooltip(
 	}
 }
 static void
-generic_label_column_spawner(
-		const GtkListItemFactory* const factory,
-		GtkListItem* const list_item
-		) {
-//TODO use https://docs.gtk.org/gtk4/class.Inscription.html
-	GtkWidget* const label = gtk_label_new(NULL);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_widget_set_has_tooltip(label, true);
-	gtk_list_item_set_child(list_item, label);
-}
-static void
-leaves_label_column_spawner(
+leaves_name_column_spawner(
 		const GtkListItemFactory* const factory,
 		GtkListItem* const list_item
 		) {
@@ -176,38 +441,6 @@ leaves_name_column_cleaner(
 	);
 }
 
-static void
-leaves_offset_column_recycler(
-		const GtkListItemFactory* const factory,
-		GtkListItem* const list_item,
-		yaabegtk_commons* const commons
-		) {
-// bind data to the UI skeleton
-	GtkWidget* const label = gtk_list_item_get_child(list_item);
-
-	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
-	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
-	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
-	g_object_unref(gobj_leaf);
-
-	char8_t buffer[18];
-	if (leaf->type & _ATUI_BITCHILD) {
-		sprintf(buffer, "[%u:%u]",
-			leaf->bitfield_hi, leaf->bitfield_lo
-		);
-	} else if (leaf->num_bytes) {
-		const uint32_t start = leaf->val - commons->atomtree_root->bios;
-		const uint32_t end = (start + leaf->num_bytes -1);
-		sprintf(buffer, "[%05X - %05X]", start, end);
-	} else {
-		buffer[0] = '\0';
-	}
-	gtk_label_set_text(GTK_LABEL(label), buffer);
-}
-
-
-
-
 inline static void
 leaf_sets_editable(
 		const atui_leaf* const leaf,
@@ -247,7 +480,6 @@ editable_sets_leaf(
 	atui_leaf_from_text(leaf, gtk_editable_get_text(editable));
 	leaf_sets_editable(leaf, editable);
 }
-
 
 static gboolean
 enum_label_tooltip(
@@ -452,8 +684,6 @@ get_enum_menu_listmodel(
 	}
 	return leaf->enum_model;
 }
-
-
 static void
 leaves_val_column_spawner(
 		const GtkListItemFactory* const factory,
@@ -477,7 +707,6 @@ leaves_val_column_spawner(
 	GtkWidget* const enumdropdown = construct_enum_dropdown();
 	gtk_stack_add_named(widget_bag, enumdropdown, "enum");
 }
-
 static void
 leaves_val_column_recycler(
 		const GtkListItemFactory* const factory,
@@ -574,159 +803,34 @@ leaves_val_column_cleaner(
 		g_object_unref(focus_sense);
 	}
 }
-
-
 static void
-atui_leaves_pullin_gliststore(
-		atui_leaf* const leaves,
-		GListStore* const list,
-		const uint16_t num_leaves
-		) {
-// If the parent leaf has children that aren't adjacent, but the parent is
-// labeled with ATUI_SUBONLY, pull them in.
-
-	GObject* gobj_child;
-	atui_leaf* leaf;
-
-	for(uint16_t i=0; i < num_leaves; i++) {
-		leaf = &(leaves[i]);
-		if (leaf->type & ATUI_NODISPLAY) {
-			// ignore the leaf
-		} else if (leaf->type & ATUI_SUBONLY) {
-			assert(leaf->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY));
-			if (leaf->type & ATUI_INLINE) {
-				atui_branch* const branch = *(leaf->inline_branch);
-				atui_leaves_pullin_gliststore(
-					branch->leaves, list, branch->leaf_count
-				);
-			//} else if (leaf->type & (ATUI_BITFIELD|ATUI_DYNARRAY)) {
-			} else {
-				atui_leaves_pullin_gliststore(
-					leaf->child_leaves, list, leaf->num_child_leaves
-				);
-			}
-		} else {
-			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-			g_object_set_data(gobj_child, "leaf", leaf);
-			g_list_store_append(list, gobj_child);
-			g_object_unref(gobj_child);
-		}
-	}
-}
-inline static GListModel*
-atui_leaves_to_glistmodel(
-		atui_leaf* const children,
-		const uint16_t num_children
-		) {
-// Creates a rudimentary model from an array of atui_leaf's
-	GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
-	atui_leaves_pullin_gliststore(children, child_list, num_children);
-	return G_LIST_MODEL(child_list);
-}
-
-static GListModel*
-leaves_treelist_generate_children(
-		gpointer const parent_ptr,
-		const gpointer const d // unused
-		) {
-// GtkTreeListModelCreateModelFunc for leaves
-// Creates the children models for the collapsable tree, of the leaves pane.
-
-	GListModel* children_model = NULL;
-
-	GObject* const gobj_parent = parent_ptr;
-	atui_leaf* const parent = g_object_get_data(gobj_parent, "leaf");
-
-	if (parent->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)
-			&& (-1 < parent->num_gobj)
-			) {
-		if (NULL == parent->child_gobj_cache) {
-			atui_leaf* leaves;
-			uint16_t num_leaves;
-			if (parent->type & ATUI_INLINE) {
-				atui_branch* const branch = *(parent->inline_branch);
-				leaves = branch->leaves;
-				num_leaves = branch->leaf_count;
-			} else {
-			//} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
-				leaves = parent->child_leaves;
-				num_leaves = parent->num_child_leaves;
-			}
-			if (num_leaves) {
-				children_model = atui_leaves_to_glistmodel(leaves, num_leaves);
-				parent->num_gobj = g_list_model_get_n_items(children_model);
-				parent->child_gobj_cache = malloc(
-					parent->num_gobj * sizeof(GObject*)
-				);
-				uint16_t i;
-				for (i=0; i < parent->num_gobj; i++) {
-					// g_list_model_get_item refs the gobject for us
-					parent->child_gobj_cache[i] = g_list_model_get_item(
-						children_model, i
-					);
-				}
-				assert(i < INT16_MAX); // 32k leaves?!
-			} else {
-				parent->num_gobj = -1; // flag for dead-ends
-			}
-		} else {
-			GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
-			g_list_store_splice(children,0,  0,
-				(void**)parent->child_gobj_cache, parent->num_gobj
-			);
-			children_model = G_LIST_MODEL(children);
-		}
-	}
-	return children_model;
-}
-
-
-inline static void
-branchleaves_to_treemodel(
-		atui_branch* const branch
-		) {
-// Turns the 'level 0' leaves of a branch into a model for the leaves pane.
-// Also generates its cache.
-
-	GListModel* const leavesmodel = atui_leaves_to_glistmodel(
-		branch->leaves, branch->leaf_count
-	);
-
-	GtkTreeListModel* const treemodel = gtk_tree_list_model_new(
-		leavesmodel, false, true, leaves_treelist_generate_children, NULL,NULL
-	);
-	GtkSelectionModel* const sel_model = GTK_SELECTION_MODEL(
-		gtk_no_selection_new(G_LIST_MODEL(treemodel))
-	);
-	// no_selection takes ownership of treemodel.
-
-	branch->leaves_model = sel_model;
-	g_object_ref(sel_model); // to cache
-}
-static void
-set_active_leaves_list(
-		GtkSelectionModel* const model,
-		const guint position,
-		const guint n_items,
+leaves_offset_column_recycler(
+		const GtkListItemFactory* const factory,
+		GtkListItem* const list_item,
 		yaabegtk_commons* const commons
 		) {
-// Signal callback
-// Change the leaves pane's model based on the what is selected in brances
-	GtkTreeListRow* const tree_list_item =
-		gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
-	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
-	atui_branch* const branch = g_object_get_data(gobj_branch, "branch");
-	g_object_unref(gobj_branch);
+// bind data to the UI skeleton
+	GtkWidget* const label = gtk_list_item_get_child(list_item);
 
-	if (NULL == branch->leaves_model) { // if not cached, generate.
-		branchleaves_to_treemodel(branch);
+	GtkTreeListRow* const tree_list_item = gtk_list_item_get_item(list_item);
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_list_item);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
+	g_object_unref(gobj_leaf);
+
+	char8_t buffer[18];
+	if (leaf->type & _ATUI_BITCHILD) {
+		sprintf(buffer, "[%u:%u]",
+			leaf->bitfield_hi, leaf->bitfield_lo
+		);
+	} else if (leaf->num_bytes) {
+		const uint32_t start = leaf->val - commons->atomtree_root->bios;
+		const uint32_t end = (start + leaf->num_bytes -1);
+		sprintf(buffer, "[%05X - %05X]", start, end);
+	} else {
+		buffer[0] = '\0';
 	}
-
-	gtk_column_view_set_model(commons->leaves_view,
-		branch->leaves_model
-	);
+	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
-
 inline static GtkWidget*
 create_leaves_pane(
 		yaabegtk_commons* const commons
@@ -747,7 +851,7 @@ create_leaves_pane(
 
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory,
-		"setup", G_CALLBACK(leaves_label_column_spawner), NULL
+		"setup", G_CALLBACK(leaves_name_column_spawner), NULL
 	);
 	g_signal_connect(factory,
 		"bind", G_CALLBACK(leaves_name_column_recycler), NULL
@@ -800,108 +904,6 @@ create_leaves_pane(
 
 	return frame;
 }
-
-
-static void
-atui_branches_pullin_gliststore(
-		const atui_branch* const parent,
-		GListStore* const list
-		) {
-	GObject* gobj_child;
-	atui_branch* child;
-	uint8_t i;
-	for (i=0; i < parent->num_inline_branches; i++) {
-		atui_branches_pullin_gliststore(parent->inline_branches[i], list);
-	}
-	for (i=0; i < parent->num_branches; i++) {
-		gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-		g_object_set_data(gobj_child, "branch", parent->child_branches[i]);
-		g_list_store_append(list, gobj_child);
-		g_object_unref(gobj_child);
-	}
-}
-static GListModel*
-branches_treelist_generate_children(
-		gpointer const parent_ptr,
-		const gpointer const data
-		) {
-// GtkTreeListModelCreateModelFunc for branches
-// Creates the children models for the collapsable tree, of the branches pane.
-	GObject* const gobj_parent = parent_ptr;
-	atui_branch* const parent = g_object_get_data(gobj_parent, "branch");
-
-	GListModel* children_model = NULL;
-
-	if (parent->max_all_branch_count && (-1 < parent->num_gobj)) {
-		GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
-		if (NULL == parent->child_gobj_cache) {
-			atui_branches_pullin_gliststore(parent, children);
-			children_model = G_LIST_MODEL(children);
-			
-			parent->num_gobj = g_list_model_get_n_items(children_model);
-			if (parent->num_gobj) {
-				parent->child_gobj_cache = malloc(
-					parent->num_gobj * sizeof(GObject*)
-				);
-				uint16_t i;
-				for (i=0; i < parent->num_gobj; i++) {
-					// g_list_model_get_item refs the gobject for us
-					parent->child_gobj_cache[i] = g_list_model_get_item(
-						children_model, i
-					);
-				}
-				assert(i < INT16_MAX); // 32k branches?!
-			} else {
-				g_object_unref(children_model);
-				children_model = NULL;
-				parent->num_gobj = -1; // flag for dead-ends
-			}
-		} else {
-			g_list_store_splice(children,0,  0,
-				(void**)parent->child_gobj_cache, parent->num_gobj
-			);
-			children_model = G_LIST_MODEL(children);
-		}
-	}
-	return children_model;
-}
-
-
-inline static GtkSelectionModel*
-create_root_model(
-		yaabegtk_commons* const commons
-		) {
-// Generate the very first model, of the tippy top of the tree, for the
-// branches pane
-	atui_branch* const atui_root = commons->atomtree_root->atui_root;
-
-	GObject* const gbranch = g_object_new(G_TYPE_OBJECT, NULL);
-	g_object_set_data(gbranch, "branch", atui_root);
-	GListStore* const ls_model = g_list_store_new(G_TYPE_OBJECT);
-	g_list_store_append(ls_model, gbranch);
-	g_object_unref(gbranch);
-
-	// TreeList, along with branches_treelist_generate_children, creates our
-	// collapsable model.
-	GtkTreeListModel* const tlist_atui = gtk_tree_list_model_new(
-		G_LIST_MODEL(ls_model), false, true,
-		branches_treelist_generate_children, NULL,NULL
-	);
-
-	GtkSingleSelection* const sel_model = gtk_single_selection_new(
-		G_LIST_MODEL(tlist_atui)
-	);
-
-	// Change the leaves pane's model based on the what is selected in branches
-	g_signal_connect(sel_model,
-		"selection-changed", G_CALLBACK(set_active_leaves_list), commons
-	);
-
-	return GTK_SELECTION_MODEL(sel_model);
-	// Does not need to be unref'd if used with a new().
-	// Needs to be unref'd if used with a set().
-}
-
 
 
 static gboolean
@@ -992,12 +994,11 @@ branch_type_column_recycler(
 }
 inline static GtkWidget*
 create_branches_pane(
-		yaabegtk_commons* const commons,
-		GtkSelectionModel* const atui_model
+		yaabegtk_commons* const commons
 		) {
 	// Columnview abstract
 	GtkColumnView* const branches_list = GTK_COLUMN_VIEW(
-		gtk_column_view_new(atui_model)
+		gtk_column_view_new(NULL)
 	);
 	gtk_column_view_set_reorderable(branches_list, true);
 	//gtk_column_view_set_show_row_separators(branches_list, true);
@@ -1007,7 +1008,6 @@ create_branches_pane(
 	// Create and attach columns
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
-
 
 	factory = gtk_signal_list_item_factory_new();
 	g_signal_connect(factory,
@@ -1044,17 +1044,11 @@ create_branches_pane(
 
 	return frame;
 }
-
 inline static GtkWidget*
 construct_tree_panes(
 		yaabegtk_commons* const commons
 		) {
-	GtkSelectionModel* atui_model = NULL;
-	if (commons->atomtree_root) {
-		atui_model = create_root_model(commons);
-	}
-
-	GtkWidget* const branches_pane = create_branches_pane(commons, atui_model);
+	GtkWidget* const branches_pane = create_branches_pane(commons);
 	GtkWidget* const leaves_pane = create_leaves_pane(commons);
 	GtkWidget* const tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_widget_set_vexpand(tree_divider, true);
@@ -1067,11 +1061,6 @@ construct_tree_panes(
 	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
-	if (commons->atomtree_root) {
-		set_active_leaves_list(atui_model, 0,1, commons);
-	} else {
-		//gtk_widget_set_visible(tree_divider, false);
-	}
 	return tree_divider;
 } 
 
@@ -1275,14 +1264,9 @@ yaabegtk_load_bios(
 
 	if (atree) {
 		struct atom_tree* const oldtree = commons->atomtree_root;
-
 		commons->atomtree_root = atree;
-		GtkSelectionModel* const newmodel = create_root_model(commons);
-		gtk_column_view_set_model(commons->branches_view, newmodel);
-		set_active_leaves_list(newmodel, 0,1, commons);
-
+		create_and_set_active_atui_model(commons);
 		destroy_atomtree_with_gtk(oldtree, true);
-		g_object_unref(newmodel);
 
 		if (gtk_widget_get_sensitive(commons->save_buttons) == false) {
 			gtk_widget_set_sensitive(commons->save_buttons, true);
@@ -1371,12 +1355,7 @@ reload_button_reload_bios(
 	new_tree->biosfile = old_tree->biosfile;
 	new_tree->biosfile_size = old_tree->biosfile_size;
 	commons->atomtree_root = new_tree;
-
-	GtkSelectionModel* const newmodel = create_root_model(commons);
-	gtk_column_view_set_model(commons->branches_view, newmodel);
-	set_active_leaves_list(newmodel, 0,1, commons);
-
-	g_object_unref(newmodel);
+	create_and_set_active_atui_model(commons);
 	destroy_atomtree_with_gtk(old_tree, false);
 }
 static void
@@ -1561,9 +1540,14 @@ yaabe_app_activate(
 		GTK_WIDGET(window), GTK_EVENT_CONTROLLER(dropfile)
 	);
 
-	set_editor_titlebar(commons);
 	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, GTK_WIDGET(main_box));
+
+	if (commons->atomtree_root) {
+		create_and_set_active_atui_model(commons);
+	}
+
+	set_editor_titlebar(commons);
 	gtk_window_present(window);
 }
 int8_t
