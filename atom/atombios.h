@@ -6981,10 +6981,10 @@ struct atom_init_reg_block {  // like atom_umc_init_reg_block
 
 
 
-#define END_OF_REG_INDEX_BLOCK  0xffff
+//#define END_OF_REG_INDEX_BLOCK  0xFFFF
 #define END_OF_REG_DATA_BLOCK   0x00000000
 #define ATOM_INIT_REG_MASK_FLAG 0x80 // Not used in BIOS
-#define CLOCK_RANGE_HIGHEST     0x00ffffff
+#define CLOCK_RANGE_HIGHEST     0x00FFFFFF
 
 // PreRegDataLength stuff:
 // the first nibble, if =4 is data from array; =0 inherits value from previous.

@@ -55,18 +55,19 @@ static_assert(sizeof(struct _ninebytes) == 9);
 static_assert(sizeof(struct _tenbytes) == 10);
 
 #include "qnotation.h"
-
-#include "ddrmoderegisters.h"
 #include "gmc.h"
+#include "ddrmoderegisters.h"
+#include "bitfield_overrides.h"
+#include "asic_reg_indices.h"
+#include "asic_reg_data_tables.h"
 #include "atomfirmware.h"
-#include "umctimings.h"
 #include "powerplay.h"
 #include "atombios.h"
 
 enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;
 #include "atomtree_data_tables.h"
-#include "asic_reg_indices.h"
+#include "asic_reg_tools.h"
 
 
 

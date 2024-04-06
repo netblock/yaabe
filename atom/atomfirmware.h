@@ -3432,23 +3432,6 @@ union atom_umc_register_addr_info_access {
 	};
 };
 
-/*
-struct atom_umc_reg_setting_id_config {
-	uint32_t memclockrange:24;
-	uint32_t mem_blk_id:8;
-};
-union atom_mc_register_setting_id_old {
-	struct atom_umc_reg_setting_id_config  umc_id_access;
-	uint32_t u32umc_id_access;
-};
-*/
-union atom_mc_register_setting_id {
-	uint32_t id_access;
-	struct { uint32_t
-		mem_clock_range :23-0 +1,
-		mem_block_id    :31-24 +1;
-	};
-};
 struct atom_umc_reg_setting_data_block {
 	union atom_mc_register_setting_id  block_id;
 	uint32_t umc_reg_data[1]; // umc_reg_num wide as well
