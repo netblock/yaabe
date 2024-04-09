@@ -6,7 +6,8 @@ atui_branches = files(
 	'atui_ddrmoderegisters.json5',
 	'atui_atombios.json5',
 	'atui_powerplay.json5',
-	'atui_umctimings.json5',
+	'atui_asic_reg_data_tables.json5',
+	'atui_bitfield_overrides.json5',
 )
 
 internal_depends += declare_dependency( # header generaton
