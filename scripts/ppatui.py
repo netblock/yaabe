@@ -141,6 +141,8 @@ static const struct atui_enum ATUI_ENUM(%s) = {
 
 class atui_leaf:
 	default_type:str  # for defaults; meta
+	parent_is_leaf:bool # parent type; meta
+
 	access:str # var
 	access_meta:str # for c preprocessor stuff
 	name:str
@@ -154,13 +156,17 @@ class atui_leaf:
 	def copy(self):
 		return copy.copy(self)
 
-	def __init__(self, leaf:dict):
+	def __init__(self,
+			leaf:dict
+			):
+		self.parent_is_leaf = False
 		leafkeys = set(leaf)
 
 		if "default_type" in leafkeys:
 			self.default_type = leaf["default_type"]
 		else:
 			self.default_type = None
+
 		if "access" in leafkeys:
 			self.access = leaf["access"]
 			self.access_meta = leaf["access"]
@@ -198,6 +204,9 @@ class atui_leaf:
 
 
 class atui_branch:
+	#parent_is_leaf:bool # would only exist for inline, but that needs to be
+	# runtime
+
 	c_prefix:str
 	c_type:str
 	atomtree:str
@@ -212,7 +221,6 @@ class atui_branch:
 			branch:dict
 			):
 		branchkeys = set(branch)
-
 		if "c_prefix" in branchkeys:
 			self.c_prefix = branch["c_prefix"]
 		else:
@@ -284,6 +292,8 @@ def infer_leaf_data(
 	for leaf in leaves:
 		assert (not (leaf.name is None))
 
+		leaf.parent_is_leaf = leaf_default.parent_is_leaf
+
 		if leaf.access is None:
 			leaf.access = leaf_default.access
 		if leaf.access_meta is None:
@@ -318,6 +328,7 @@ def infer_leaf_data(
 			#new_default.access = leaf.access # unnecessary
 			new_default.access_meta = leaf.access_meta # c preprocessor stuff
 			new_default.fancy = _ATUI_BITCHILD
+			new_default.parent_is_leaf = True
 			infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
 
 			leaf_defaults["bitchild"] = old_default
@@ -340,6 +351,7 @@ def infer_leaf_data(
 			new_default = old_default.copy()
 			leaf_defaults["dynpattern"] = new_default
 			new_default.access_meta = access_meta
+			new_default.parent_is_leaf = True
 			infer_leaf_data(defaults, "dynpattern", pattern)
 
 			leaf_defaults["dynpattern"] = old_default
@@ -551,7 +563,8 @@ indent + "{\n"
 			assert 0, leaf.fancy
 
 		leaf_text_extra += description_to_text(leaf.description, child_indent)
-
+		if leaf.parent_is_leaf:
+			leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
 		leaf.name = leaf.name.replace("\"","\\\"")
 
 		leaves_text += leaf_template % (

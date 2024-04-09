@@ -27,6 +27,7 @@ C preprocessor side of ATUI table generation
 #define ATUI_ADD_BRANCH(parent, child)\
 	assert(parent->num_branches < parent->max_num_branches);\
 	parent->child_branches[parent->num_branches] = child;\
+	child->parent_branch = parent;\
 	parent->num_branches++;
 
 // ATUI function access

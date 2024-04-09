@@ -148,7 +148,15 @@ struct _atui_leaf {
 		float64_t* f64;
 	};
 
+	bool parent_is_leaf;
+	union {
+		void* parent;
+		atui_leaf* parent_leaf;
+		atui_branch* parent_branch;
+	};
+
 	GObject** child_gobj_cache; // GObject cache of child leaves for GTK
+	GObject* self_gobj;
 };
 struct _atui_branch {
 	char8_t name[64];
@@ -170,12 +178,17 @@ struct _atui_branch {
 	uint16_t max_leaves;
 	atui_leaf* leaves;
 
-	void* atomleaves;
+	union {
+		void* parent;
+		atui_leaf* parent_leaf;
+		atui_branch* parent_branch;
+	};
+	bool parent_is_leaf;
 
 	int16_t num_gobj;
-
 	GObject** child_gobj_cache; // GObject cache of child branches for GTK
 	GtkSelectionModel* leaves_model; // composited leaves cache for GTK
+	GObject* self_gobj;
 };
 
 

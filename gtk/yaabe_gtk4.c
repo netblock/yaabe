@@ -3,9 +3,13 @@
 #include "yaabe_gtk4.h"
 
 static const char8_t yaabe_name[] = "YAABE BIOS Editor";
+#define PATHBAR_BUFFER_SIZE 256
+
 typedef struct yaabegtk_commons {
 	struct atom_tree* atomtree_root;
 	GtkApplication* yaabe_gtk;
+
+	GtkEditable* pathbar;
 
 	GtkColumnView* leaves_view; // So branches can set leaves
 	GtkColumnView* branches_view; // So we can set the bios during GTK
@@ -14,6 +18,7 @@ typedef struct yaabegtk_commons {
 	GtkWidget* save_buttons;
 	GtkWidget* reload_button;
 
+	char8_t pathbar_string[PATHBAR_BUFFER_SIZE];
 } yaabegtk_commons;
 
 static void
@@ -39,6 +44,9 @@ _atui_destroy_leaves_with_gtk(
 		if (leaf->enum_model) {
 			g_object_unref(leaf->enum_model);
 		}
+		if (leaf->self_gobj) {
+			g_object_unref(leaf->self_gobj);
+		}
 	}
 }
 void
@@ -56,6 +64,9 @@ atui_destroy_tree_with_gtk(
 	}
 	if (tree->leaves_model) {
 		g_object_unref(tree->leaves_model);
+	}
+	if (tree->self_gobj) {
+		g_object_unref(tree->self_gobj);
 	}
 
 	_atui_destroy_leaves_with_gtk(tree->leaves, tree->leaf_count);
@@ -94,6 +105,125 @@ destroy_atomtree_with_gtk(
 
 
 
+static void
+pathbar_update_path(
+		GtkSelectionModel* const model,
+		const guint position,
+		const guint n_items,
+		yaabegtk_commons* const commons
+		) {
+// callback; sets path based on branches selection
+	const atui_branch* branchstack[16];
+
+	GtkTreeListRow* const tree_list_item =
+		gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(model));
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_list_item);
+	branchstack[0] = g_object_get_data(gobj_branch, "branch");
+	g_object_unref(gobj_branch);
+
+	const atui_branch* const root = commons->atomtree_root->atui_root;
+	uint8_t stack_i;
+	for (stack_i = 0; branchstack[stack_i] != root; stack_i++) {
+		branchstack[stack_i+1] = branchstack[stack_i]->parent_branch;
+		assert(stack_i < (sizeof(branchstack)/sizeof(atui_branch*)));
+	}
+
+	char8_t* pathstring = commons->pathbar_string;
+	pathstring[0] = '/';
+	char8_t* pathstring_pos = pathstring+1; // +1 is the first /
+	while (stack_i--) {
+		pathstring_pos = memccpy(
+			pathstring_pos, branchstack[stack_i]->name,
+			'\0', sizeof(branchstack[0]->name)
+		);
+		*(pathstring_pos-1) = '/'; // -1 eats the \0
+	}
+	*pathstring_pos = '\0';
+	assert(PATHBAR_BUFFER_SIZE > (pathstring_pos - commons->pathbar_string));
+
+	gtk_editable_set_text(commons->pathbar, pathstring);
+}
+static gboolean
+pathbar_editable_reset(
+		GtkWidget* const pathbar,
+		GVariant* const shortcut_args,
+		gpointer const commons_ptr
+		) {
+// callback; resets pathbar if focus is lost
+	yaabegtk_commons* const commons = commons_ptr;
+	gtk_editable_set_text(GTK_EDITABLE(pathbar), commons->pathbar_string);
+}
+static void
+pathbar_sets_branch_selection(
+		yaabegtk_commons* const commons
+		) {
+// callback; go to branch based on path string
+	const char8_t* const editable_text = (
+		(const char8_t* const) gtk_editable_get_text(commons->pathbar)
+	);
+
+	char8_t* const token_buffer = malloc(1 + strlen(editable_text));
+	strcpy(token_buffer, gtk_editable_get_text(commons->pathbar));
+	char* token_save;
+
+	const char8_t* name = strtok_r(token_buffer, u8"/", &token_save);
+	const atui_branch* dir = commons->atomtree_root->atui_root;
+	uint16_t i;
+	while (name) { // find technical existence of path
+		i = dir->num_branches;
+		do {
+			if (0 == i) {
+				goto branch_not_found;
+			}
+			i--;
+		} while(strcmp(name, dir->child_branches[i]->name)); // 0 means ==
+		dir = dir->child_branches[i];
+		name = strtok_r(NULL, u8"/", &token_save);
+	}
+
+	const GObject* const target_branch = dir->self_gobj;
+	GListModel* active_model = G_LIST_MODEL(gtk_column_view_get_model(
+		commons->branches_view
+	));
+	GObject* nth_gobj;
+	const uint16_t n_items = g_list_model_get_n_items(active_model);
+	for (i=0; i < n_items; i++) { // find index in branches model
+		GtkTreeListRow* const tree_item = GTK_TREE_LIST_ROW(
+			g_list_model_get_object(active_model, i)
+		);
+		nth_gobj = gtk_tree_list_row_get_item(tree_item);
+		g_object_unref(tree_item);
+		g_object_unref(nth_gobj); // we don't actually need a 2nd reference
+		if (target_branch == nth_gobj) {
+			break;
+		}
+	}
+	assert(i < n_items);
+	
+	gtk_column_view_scroll_to(commons->branches_view, i, NULL,
+		(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
+		NULL
+	);
+
+	free(token_buffer);
+	return;
+
+	branch_not_found:
+	GtkWindow* const editor_window = gtk_application_get_active_window(
+		commons->yaabe_gtk
+	);
+	GtkAlertDialog* const alert = gtk_alert_dialog_new(
+		"\n%s\n not found in:\n %s\n",
+		name, dir->name
+	);
+	gtk_alert_dialog_set_detail(alert, editable_text);
+	gtk_alert_dialog_show(alert, editor_window);
+
+	g_object_unref(alert);
+	free(token_buffer);
+	return;
+}
+
 
 static void
 atui_leaves_pullin_gliststore(
@@ -127,7 +257,8 @@ atui_leaves_pullin_gliststore(
 			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 			g_object_set_data(gobj_child, "leaf", leaf);
 			g_list_store_append(list, gobj_child);
-			g_object_unref(gobj_child);
+			leaf->self_gobj = gobj_child;
+			//g_object_unref(gobj_child); // keep ref for self
 		}
 	}
 }
@@ -254,7 +385,8 @@ atui_branches_pullin_gliststore(
 		gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 		g_object_set_data(gobj_child, "branch", parent->child_branches[i]);
 		g_list_store_append(list, gobj_child);
-		g_object_unref(gobj_child);
+		parent->child_branches[i]->self_gobj = gobj_child;
+		//g_object_unref(gobj_child); // keep ref for self
 	}
 }
 static GListModel*
@@ -314,7 +446,8 @@ create_root_model(
 	g_object_set_data(gbranch, "branch", atui_root);
 	GListStore* const ls_model = g_list_store_new(G_TYPE_OBJECT);
 	g_list_store_append(ls_model, gbranch);
-	g_object_unref(gbranch);
+	atui_root->self_gobj = gbranch;
+	//g_object_unref(gbranch); // keep ref for self
 
 	// TreeList, along with branches_treelist_generate_children, creates our
 	// collapsable model.
@@ -331,6 +464,10 @@ create_root_model(
 	g_signal_connect(sel_model,
 		"selection-changed",
 		G_CALLBACK(branch_selection_sets_leaves_list), commons
+	);
+	g_signal_connect(sel_model,
+		"selection-changed",
+		G_CALLBACK(pathbar_update_path), commons
 	);
 
 	return GTK_SELECTION_MODEL(sel_model);
@@ -352,10 +489,45 @@ create_and_set_active_atui_model(
 	branchleaves_to_treemodel(root);
 	gtk_column_view_set_model(commons->leaves_view, root->leaves_model);
 
+	commons->pathbar_string[0] = '/';
+	commons->pathbar_string[1] = '/';
+	gtk_editable_set_text(commons->pathbar, u8"/");
+
 	// TODO move the call of set_editor_titlebar in here?
 }
 
 
+
+inline static GtkWidget*
+construct_path_bar(
+		yaabegtk_commons* const commons
+		) {
+	GtkWidget* const path_bar = gtk_entry_new();
+	commons->pathbar = GTK_EDITABLE(path_bar);
+
+	g_signal_connect_swapped(path_bar,
+		"activate", G_CALLBACK(pathbar_sets_branch_selection), commons
+	);
+
+	/*
+	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
+	gtk_widget_add_controller(path_bar, focus_sense);
+	g_signal_connect_swapped(focus_sense,
+		"leave", G_CALLBACK(pathbar_editable_reset), commons
+	);
+	*/
+	GtkEventController* const escape_reset = gtk_shortcut_controller_new();
+	gtk_shortcut_controller_add_shortcut(
+		GTK_SHORTCUT_CONTROLLER(escape_reset),
+		gtk_shortcut_new(
+			gtk_shortcut_trigger_parse_string("Escape"),
+			gtk_callback_action_new(pathbar_editable_reset, commons, NULL)
+		)
+	);
+	gtk_widget_add_controller(path_bar, escape_reset);
+
+	return path_bar;
+}
 
 static void
 generic_label_column_spawner(
@@ -1521,10 +1693,12 @@ yaabe_app_activate(
 		GtkApplication* const gtkapp,
 		yaabegtk_commons* const commons
 		) {
+	GtkWidget* const path_bar = construct_path_bar(commons);
 	GtkWidget* const tree_divider = construct_tree_panes(commons);
 	GtkWidget* const button_box = construct_loadsave_buttons_box(commons);
 
 	GtkBox* const main_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
+	gtk_box_append(main_box, path_bar);
 	gtk_box_append(main_box, tree_divider);
 	gtk_box_append(main_box, button_box);
 
@@ -1542,6 +1716,8 @@ yaabe_app_activate(
 
 	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, GTK_WIDGET(main_box));
+	gtk_widget_grab_focus(tree_divider);
+	gtk_widget_grab_focus(GTK_WIDGET(commons->branches_view));
 
 	if (commons->atomtree_root) {
 		create_and_set_active_atui_model(commons);

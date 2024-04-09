@@ -48,6 +48,7 @@ struct level_data {
 	struct dynarray_position dynpos;
 	const void* suggestbios;
 	const struct atui_enum* nametag;
+	void* parent;
 	uint8_t name_num;
 	bool rename;
 };
@@ -97,7 +98,7 @@ atui_leaves_printer(
 					);
 				}
 			}
-
+			// handle branch->parent later
 			branches->pos++;
 			active->pos++;
 			continue;
@@ -105,6 +106,7 @@ atui_leaves_printer(
 
 		assert(leaves->pos < leaves->end);
 		*(leaves->pos) = *(active->pos);
+		leaves->pos->parent = level->parent;
 		if (level->suggestbios) {
 			leaves->pos->val = level->suggestbios;
 		}
@@ -125,11 +127,14 @@ atui_leaves_printer(
 				) {
 			// nothing more
 		} else if (active->pos->type & ATUI_BITFIELD) {
+			// have bitfield to use struct subleaf_meta ?
 			//sub_meta = active->pos->template_leaves;
 			num_leaves = active->pos->template_leaves->numleaves;
+
 			sub_leaves = (struct level_data){0};
-	
+			sub_leaves.parent = leaves->pos; // ppatui.py sets parent_is_leaf
 			sub_leaves.suggestbios = leaves->pos->val;
+
 			sub_leaves.feed.pos = active->pos->template_leaves->sub_leaves;
 			sub_leaves.feed.end = sub_leaves.feed.pos;
 			sub_leaves.feed.end += num_leaves; // automatic pointer math
@@ -139,15 +144,20 @@ atui_leaves_printer(
 
 			leaves->pos->child_leaves = sub_leaves.target.pos;
 			assert(leaves->pos->num_child_leaves == num_leaves);
-			//leaves->pos->num_child_leaves = num_leaves;
+			//leaves->pos->num_child_leaves = num_leaves; // ppatui.py sets
 
 			atui_leaves_printer(global, &sub_leaves);
 		} else if (active->pos->type & ATUI_INLINE) {
 			assert(inliners->pos < inliners->end);
+
 			global->branch_args.rename = leaves->pos->name;
 			global->branch_args.suggestbios = leaves->pos->val;
-			*(inliners->pos) = active->pos->branch_bud(&(global->branch_args));
+			(*inliners->pos) = active->pos->branch_bud(&(global->branch_args));
+
 			leaves->pos->inline_branch = inliners->pos;
+			(*inliners->pos)->parent_leaf = leaves->pos;
+			(*inliners->pos)->parent_is_leaf = true;
+
 			inliners->pos++;
 		} else if (active->pos->type & ATUI_DYNARRAY) {
 			sub_meta = active->pos->template_leaves;
@@ -156,6 +166,7 @@ atui_leaves_printer(
 			dynpos.end.ptr = active->pos->val;
 
 			//sub_leaves = (struct level_data){0};
+			sub_leaves.parent = leaves->pos; // ppatui.py sets parent_is_leaf
 			sub_leaves.name_num = 0;
 			sub_leaves.rename = true;
 			sub_leaves.nametag = sub_meta->enum_taglist;
@@ -243,7 +254,9 @@ atui_branch_allocator(
 	uint8_t max_num_branches = (
 		embryo->computed_num_petiole + args->num_import_branches
 	);
-	uint8_t num_all_branches = max_num_branches + embryo->computed_num_inline;
+	const uint8_t num_all_branches = (
+		max_num_branches + embryo->computed_num_inline
+	);
 
 	atui_branch* table;
 	void* mallocvoid; // temporary malloc partitioning pointer
@@ -290,6 +303,7 @@ atui_branch_allocator(
 
 		tracker.branch_args.atomtree = args->atomtree;
 		struct level_data first_leaves = {0};
+		first_leaves.parent = table; // calloc sets parent_is_leaf.
 
 		first_leaves.feed.pos = embryo->leaves_init;
 		first_leaves.feed.end = embryo->leaves_init;
@@ -320,6 +334,9 @@ atui_branch_allocator(
 		}
 	}
 	table->num_branches = tracker.branches.pos - table->child_branches;
+	for (uint8_t i=0; i < table->num_branches; i++) {
+		table->child_branches[i]->parent_branch = table;
+	}
 
 
 	table->origname = embryo->origname;
