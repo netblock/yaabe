@@ -423,7 +423,7 @@ global_default: {
 					name: "tREFI",
 					hi: 15, lo: 0,
 					description: [
-						{language: "english", text: "tREF; the microseconds not milliseconds one",},
+						{language: "english", text: "tREFI is milliseconds; tREF is microseconds",},
 					],
 				}, {
 					name: "rsvd0",

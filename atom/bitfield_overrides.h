@@ -211,7 +211,7 @@ union DRAMTiming11_DDR4 {
 union DRAMTiming12 {
 	uint32_t DRAMTiming12;
 	struct { uint32_t
-		tREFI :15-0 +1, //tREF; the microseconds not milliseconds one
+		tREFI :15-0 +1, // tREFI is milliseconds; tREF is microseconds
 		rsvd0 :31-16 +1;
 	};
 };
