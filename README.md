@@ -18,7 +18,9 @@ bunch of smaller things to figure out, which can be be found through
 
 ## Compiling
 
-YAABE is compiled with the Meson build system, and uses the (upcoming) C standard C23/C2x, GTK 4.10 UI toolkit, and json5 for python.
+YAABE is compiled with the Meson build system, and uses the (upcoming)
+C standard ISO/IEC 9899:2024 (c2x) with GNU extensions (gnu23),
+GTK 4.10 UI toolkit, and json5 for python.
 
 ### Linux
 

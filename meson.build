@@ -2,7 +2,7 @@ project('yaabe', 'c',
 	version: '0.4.0',
 	meson_version: '>= 1.2.3',
 	default_options: [
-  		'c_std=c2x',
+  		'c_std=gnu23',
   		'buildtype=debug',
 		'b_ndebug=if-release',
 		'warning_level=0'
@@ -10,16 +10,21 @@ project('yaabe', 'c',
 )
 
 cc = meson.get_compiler('c')
+add_project_arguments(
+	'-D_POSIX_C_SOURCE=200809L', # for stpcpy
+	language: 'c',
+)
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
 		'-fstack-protector-strong',
+		'-march=native',
 		language: 'c',
 	)
 endif
 
 external_depends = [
 	cc.find_library('m', required: true),
-	dependency('gtk4', version: '>= 4.10.0', required: true),
+	dependency('gtk4', version: '>= 4.12.0', required: true),
 ]
 
 # source/header generators

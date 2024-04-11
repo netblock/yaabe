@@ -133,11 +133,9 @@ pathbar_update_path(
 	pathstring[0] = '/';
 	char8_t* pathstring_pos = pathstring+1; // +1 is the first /
 	while (stack_i--) {
-		pathstring_pos = memccpy(
-			pathstring_pos, branchstack[stack_i]->name,
-			'\0', sizeof(branchstack[0]->name)
-		);
-		*(pathstring_pos-1) = '/'; // -1 eats the \0
+		pathstring_pos = stpcpy(pathstring_pos, branchstack[stack_i]->name);
+		*pathstring_pos = '/'; // eats the previous \0
+		pathstring_pos++;
 	}
 	*pathstring_pos = '\0';
 	assert(PATHBAR_BUFFER_SIZE > (pathstring_pos - commons->pathbar_string));

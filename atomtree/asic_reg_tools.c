@@ -202,14 +202,12 @@ register_set_print_tables(
 		for (; (0 < tokens_i) && is_number(tokens[tokens_i]); tokens_i--);
 		num_tokens = tokens_i + 1; //tokens_i++;
 		for (tokens_i=0; tokens_i < num_tokens; tokens_i++) { // join the str
-			name_ptr = memccpy(
-				name_ptr, tokens[tokens_i], '\0', sizeof(name_buffer)
-			);
-			*(name_ptr-1) = '_';
+			name_ptr = stpcpy(name_ptr, tokens[tokens_i]);
+			*name_ptr = '_';
+			assert(name_ptr > name_buffer);
 		}
-		assert(name_ptr > name_buffer);
+		*name_ptr = '\0';
 		assert(strlen(name_buffer) < sizeof(name_buffer));
-		*(name_ptr-1) = '\0';
 
 
 		printf(struct_entry, union_name, name_buffer);

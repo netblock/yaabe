@@ -279,11 +279,10 @@ atui_leaf_to_text(
 				sprintf(format_2, " : %s", format);
 				assert(strlen(format_2) < sizeof(format_2));
 
-				char8_t* walked = memccpy(
-					buffer, leaf->enum_options->enum_array[index].name,
-					'\0', ATUI_LEAVES_STR_BUFFER
+				char8_t* walked = stpcpy(
+					buffer, leaf->enum_options->enum_array[index].name
 				); // walk the buffer
-				sprintf(walked-1, format_2, val); // -1 eats previous \0
+				sprintf(walked, format_2, val); // eats previous \0
 				assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
 			} else {
 				sprintf(buffer, format, val);
@@ -585,11 +584,8 @@ atui_enum_entry_to_text(
 	sprintf(format_2, " : %s", format_1);
 	assert(strlen(format_2) < sizeof(format_2));
 
-	char8_t* walked = memccpy(
-		buffer, enum_entry->name,
-		'\0', ATUI_LEAVES_STR_BUFFER
-	); // walk the buffer
-	sprintf(walked-1, format_2, enum_entry->val);  // -1 eats previous \0
+	char8_t* walked = stpcpy(buffer, enum_entry->name); // walk the buffer
+	sprintf(walked, format_2, enum_entry->val);  // eats previous \0
 	assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
 }
 
