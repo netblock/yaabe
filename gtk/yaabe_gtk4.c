@@ -5,14 +5,18 @@
 static const char8_t yaabe_name[] = "YAABE BIOS Editor";
 #define PATHBAR_BUFFER_SIZE 256
 
-typedef struct yaabegtk_commons {
+struct pane_context {
+	GtkColumnView* view; // so branches can set leaves, and loading bios
+	GtkPopover* rightclick;
+};
+typedef struct yaabegtk_commons { // global state tracker
 	struct atom_tree* atomtree_root;
 	GtkApplication* yaabe_gtk;
 
 	GtkEditable* pathbar;
 
-	GtkColumnView* leaves_view; // So branches can set leaves
-	GtkColumnView* branches_view; // So we can set the bios during GTK
+	struct pane_context branches;
+	struct pane_context leaves;
 
 	// For gtk_widget_set_sensitive() -- don't allow when no bios is loaded
 	GtkWidget* save_buttons;
@@ -20,6 +24,11 @@ typedef struct yaabegtk_commons {
 
 	char8_t pathbar_string[PATHBAR_BUFFER_SIZE];
 } yaabegtk_commons;
+
+struct rightclick_pack { // see columnview_row_bind_attach_gesture
+	const struct pane_context* context;
+	GtkColumnViewRow* row;
+};
 
 static void
 _atui_destroy_leaves_with_gtk(
@@ -180,7 +189,7 @@ pathbar_sets_branch_selection(
 
 	const GObject* const target_branch = dir->self_gobj;
 	GListModel* active_model = G_LIST_MODEL(gtk_column_view_get_model(
-		commons->branches_view
+		commons->branches.view
 	));
 	GObject* nth_gobj;
 	const uint16_t n_items = g_list_model_get_n_items(active_model);
@@ -197,7 +206,7 @@ pathbar_sets_branch_selection(
 	}
 	assert(i < n_items);
 	
-	gtk_column_view_scroll_to(commons->branches_view, i, NULL,
+	gtk_column_view_scroll_to(commons->branches.view, i, NULL,
 		(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
 		NULL
 	);
@@ -337,6 +346,7 @@ branchleaves_to_treemodel(
 		))
 	); // the later models take ownership of the earlier
 
+
 	g_object_ref(branch->leaves_model); // to cache
 }
 static void
@@ -359,7 +369,7 @@ branch_selection_sets_leaves_list(
 		branchleaves_to_treemodel(branch);
 	}
 
-	gtk_column_view_set_model(commons->leaves_view, branch->leaves_model);
+	gtk_column_view_set_model(commons->leaves.view, branch->leaves_model);
 }
 static void
 atui_branches_pullin_gliststore(
@@ -466,14 +476,14 @@ create_and_set_active_atui_model(
 		) {
 // create and set the main branch model
 	GtkSelectionModel* const branches_model = create_root_model(commons);
-	gtk_column_view_set_model(commons->branches_view, branches_model);
+	gtk_column_view_set_model(commons->branches.view, branches_model);
 	g_object_unref(branches_model);
 
 	// TODO divorce into notify::model signal/callback in create_branches_pane?
 	atui_branch* const root = commons->atomtree_root->atui_root;
 	assert(NULL == root->leaves_model);
 	branchleaves_to_treemodel(root);
-	gtk_column_view_set_model(commons->leaves_view, root->leaves_model);
+	gtk_column_view_set_model(commons->leaves.view, root->leaves_model);
 
 	commons->pathbar_string[0] = '/';
 	commons->pathbar_string[1] = '/';
@@ -481,6 +491,141 @@ create_and_set_active_atui_model(
 
 	// TODO move the call of set_editor_titlebar in here?
 }
+
+
+
+
+inline static void
+branches_leaves_rightclick_popup(
+		GtkGesture* const click_sense,
+		const gdouble x,
+		const gdouble y,
+		const struct rightclick_pack* const pack,
+		const char* const group_name,
+		const GActionEntry* const actions,
+		const uint8_t num_actions
+		) {
+	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
+
+	// gtk_column_view_row_get_item is broken
+	// get our ATUI branch or leaf
+	GtkTreeListRow* const tree_row = GTK_TREE_LIST_ROW(g_list_model_get_item(
+		G_LIST_MODEL(gtk_column_view_get_model(pack->context->view)),
+		gtk_column_view_row_get_position(pack->row)
+	));
+	GObject* const gobj_atui = gtk_tree_list_row_get_item(tree_row);
+	g_object_unref(tree_row);
+	g_object_unref(gobj_atui); // we don't need a ref
+
+	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
+	g_action_map_add_action_entries(action_set,
+		actions, num_actions,
+		gobj_atui
+	);
+	gtk_widget_insert_action_group(GTK_WIDGET(pack->context->view),
+		group_name, G_ACTION_GROUP(action_set)
+	);
+	// we cannot disconnect action group on popdown because it kills the
+	// actions. Simply replacing them seems to be fine.
+	g_object_unref(action_set);
+
+
+	// x,y is relative to the widget.
+	// x,y is from row widget, translate it to the view widget.
+	graphene_point_t view_coords;
+	bool computed = gtk_widget_compute_point(
+		gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(click_sense)),
+		GTK_WIDGET(pack->context->view),
+		& (const graphene_point_t) {.x=x, .y=y},
+		&view_coords
+	);
+	assert(computed);
+
+	gtk_popover_set_pointing_to(pack->context->rightclick, 
+		& (const GdkRectangle) {
+			.x=view_coords.x, .y=view_coords.y, .width=1, .height=1
+		}
+	);
+	gtk_popover_popup(pack->context->rightclick);
+}
+inline static void
+columnview_create_rightclick_popup(
+		GMenuModel* const menu_model,
+		struct pane_context* const context
+		) {
+	GtkPopover* const popup_menu = GTK_POPOVER(
+		gtk_popover_menu_new_from_model(menu_model)
+	);
+	gtk_popover_set_has_arrow(popup_menu, false);
+	gtk_widget_set_halign(GTK_WIDGET(popup_menu), GTK_ALIGN_START);
+
+	gtk_widget_set_parent(GTK_WIDGET(popup_menu), GTK_WIDGET(context->view));
+	g_signal_connect_swapped(context->view, // reference janitorial
+		"destroy", G_CALLBACK(gtk_widget_unparent), popup_menu
+	);
+	context->rightclick = popup_menu;
+}
+static void
+free_closure(
+		gpointer data,
+		GClosure* closure
+		) {
+	free(data);
+}
+inline static void
+columnview_row_bind_attach_gesture(
+		const struct pane_context* const context,
+		GtkColumnViewRow* const view_row,
+		void (*gesture_cb)( // function pointer
+			GtkGesture*, gint,gdouble,gdouble,
+			const struct rightclick_pack*
+			)
+		) {
+	// struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
+	// desperate times call for desperate measures
+	struct _GtkColumnViewRow_hack {
+		GObject parent_instance;
+		GtkWidget *owner; /* has a reference */
+		// unnecessary bits truncated; we're only after owner
+	};
+
+	// since row_setup doesn't have the row widget created yet, we need to
+	// handle the setup in bind
+	if (0 == g_object_get_data(G_OBJECT(view_row), "atui")) {
+		GtkWidget* const row_widget = ( // ColumnViewRowWidget
+			((struct _GtkColumnViewRow_hack*) view_row)->owner
+		);
+
+		GtkGestureSingle* const click_sense = GTK_GESTURE_SINGLE(
+			gtk_gesture_click_new()
+		);
+		gtk_widget_add_controller(row_widget,
+			GTK_EVENT_CONTROLLER(click_sense)
+		);
+		gtk_gesture_single_set_exclusive(click_sense, true);
+		gtk_gesture_single_set_button(click_sense, 3); // 3 is rightclick
+
+		// the gesture call creates and binds the actions of the right click
+		// menu to the view (view has the popup).
+		// in order to that, the gesture call needs to pass view, row and popup
+		// we can get row widget from controller.
+		struct rightclick_pack* const pack = malloc(
+			sizeof(struct rightclick_pack)
+		);
+		pack->context = context;
+		pack->row = view_row;
+
+		g_signal_connect_data(click_sense,
+			"pressed", G_CALLBACK(gesture_cb), pack,
+			free_closure,
+			G_CONNECT_DEFAULT
+		);
+
+		g_object_set_data(G_OBJECT(view_row), "atui", click_sense);
+	}
+}
+
+
 
 
 
@@ -873,6 +1018,59 @@ leaves_offset_column_bind(
 	}
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
+
+static void
+leaf_right_click_func(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const gobj_leaf_ptr
+		) {
+	atui_leaf* leaf = g_object_get_data(gobj_leaf_ptr, "leaf");
+	printf("right-click leaf: %s\n", leaf->name);
+}
+static void
+leaves_rightclick_popup(
+		GtkGesture* const click_sense,
+		const gint num_presses,
+		const gdouble x,
+		const gdouble y,
+		const struct rightclick_pack* const pack
+		) {
+	if (num_presses != 1) {
+		return;
+	}
+	const GActionEntry actions[] = {
+		{"test", leaf_right_click_func},
+	}; // see also create_leaves_rightclick_menu
+	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
+
+	branches_leaves_rightclick_popup(
+		click_sense,   x, y, pack,
+		"leaves", actions, num_actions
+	);
+}
+inline static void
+create_leaves_rightclick_menu(
+		yaabegtk_commons* const commons
+		) {
+	GMenu* const menu_model = g_menu_new();
+	g_menu_append(menu_model, "test", "leaves.test");
+	// see also leaves_rightclick_popup
+
+	columnview_create_rightclick_popup(
+		G_MENU_MODEL(menu_model), &commons->leaves
+	);
+}
+static void
+leaves_row_bind(
+		const struct pane_context* const context,
+		GtkColumnViewRow* const view_row
+		) {
+	columnview_row_bind_attach_gesture(
+		context, view_row, leaves_rightclick_popup
+	);
+}
+
 inline static GtkWidget*
 create_leaves_pane(
 		yaabegtk_commons* const commons
@@ -883,11 +1081,17 @@ create_leaves_pane(
 	);
 	gtk_column_view_set_reorderable(leaves_view, true);
 	gtk_column_view_set_show_row_separators(leaves_view, true);
-	commons->leaves_view = leaves_view;
+	commons->leaves.view = leaves_view;
 
 	// Create and attach columns
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
+
+	factory = g_object_connect(gtk_signal_list_item_factory_new(),
+		"swapped-signal::bind", G_CALLBACK(leaves_row_bind), &(commons->leaves),
+		NULL
+	);
+	gtk_column_view_set_row_factory(leaves_view, factory);
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(tree_label_column_setup), NULL,
@@ -930,6 +1134,8 @@ create_leaves_pane(
 	GtkWidget* const frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
+	create_leaves_rightclick_menu(commons);
+
 	return frame;
 }
 
@@ -970,6 +1176,59 @@ branch_type_column_bind(
 
 	gtk_label_set_text(GTK_LABEL(label), branch->origname);
 }
+
+static void
+branch_right_click_func(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const gobj_branch_ptr
+		) {
+	atui_branch* branch = g_object_get_data(gobj_branch_ptr, "branch");
+	printf("right-click branch: %s\n", branch->name);
+}
+static void
+branches_rightclick_popup(
+		GtkGesture* const click_sense,
+		const gint num_presses,
+		const gdouble x,
+		const gdouble y,
+		const struct rightclick_pack* const pack
+		) {
+	if (num_presses != 1) {
+		return;
+	}
+	const GActionEntry actions[] = {
+		{"test", branch_right_click_func},
+	}; // see also create_branches_rightclick_menu
+	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
+
+	branches_leaves_rightclick_popup(
+		click_sense,   x, y, pack,
+		"branches", actions, num_actions
+	);
+}
+inline static void
+create_branches_rightclick_menu(
+		yaabegtk_commons* const commons
+		) {
+	GMenu* const menu_model = g_menu_new();
+	g_menu_append(menu_model, "test", "branches.test");
+	// see also branches_rightclick_popup
+
+	columnview_create_rightclick_popup(
+		G_MENU_MODEL(menu_model), &commons->branches
+	);
+}
+static void
+branches_row_bind(
+		const struct pane_context* const context,
+		GtkColumnViewRow* const view_row
+		) {
+	columnview_row_bind_attach_gesture(
+		context, view_row, branches_rightclick_popup
+	);
+}
+
 inline static GtkWidget*
 create_branches_pane(
 		yaabegtk_commons* const commons
@@ -981,11 +1240,18 @@ create_branches_pane(
 	gtk_column_view_set_reorderable(branches_view, true);
 	//gtk_column_view_set_show_row_separators(branches_view, true);
 	gtk_column_view_set_show_column_separators(branches_view, true);
-	commons->branches_view = branches_view;
+	commons->branches.view = branches_view;
 
 	// Create and attach columns
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
+
+	factory = g_object_connect(gtk_signal_list_item_factory_new(),
+		"swapped-signal::bind", G_CALLBACK(branches_row_bind),
+			&(commons->branches),
+		NULL
+	);
+	gtk_column_view_set_row_factory(branches_view, factory);
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(tree_label_column_setup), NULL,
@@ -1015,6 +1281,8 @@ create_branches_pane(
 	);
 	GtkWidget* const frame = gtk_frame_new(NULL);
 	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
+
+	create_branches_rightclick_menu(commons);
 
 	return frame;
 }
@@ -1515,7 +1783,7 @@ yaabe_app_activate(
 	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, GTK_WIDGET(main_box));
 	gtk_widget_grab_focus(tree_divider);
-	gtk_widget_grab_focus(GTK_WIDGET(commons->branches_view));
+	gtk_widget_grab_focus(GTK_WIDGET(commons->branches.view));
 
 	if (commons->atomtree_root) {
 		create_and_set_active_atui_model(commons);
