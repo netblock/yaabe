@@ -19,13 +19,15 @@ bunch of smaller things to figure out, which can be be found through
 ## Compiling
 
 YAABE is compiled with the Meson build system, and uses the (upcoming)
-C standard ISO/IEC 9899:2024 (c2x) with GNU extensions (gnu23),
-GTK 4.10 UI toolkit, and json5 for python.
+C standard ISO/IEC 9899:2024 (c2x) with GNU extensions (gnu2x),
+GTK 4.12 UI toolkit, and json5 for python.
 
 ### Linux
 
 Make sure you have the GTK 4 suite and meson installed. For Debian and kin,
-`# apt-get install libgtk-4-dev python3-json5 meson`
+```shell
+apt-get install libgtk-4-dev python3-json5 meson
+```
 
 then,
 
@@ -54,7 +56,7 @@ Install mingw toolchain and the gtk4 libraries,
 
 ```shell
 pacman -Syuu # update if it's an old install
-pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-meson mingw-w64-x86_64-gtk4 mingw-w64-python-json5 mingw-w64-x86_64-nsis
+pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-meson mingw-w64-x86_64-gtk4 mingw-w64-x86_64-python-json5 mingw-w64-x86_64-nsis
 ```
 
 The msys2 shell root `/` is the msys2 install location. Your current working

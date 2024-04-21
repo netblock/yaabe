@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # asic_reg.py is a script to process asic_reg's sh_mask.h and offset.h to output
 # something that is a little more readable.
 

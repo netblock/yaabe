@@ -2,8 +2,8 @@ project('yaabe', 'c',
 	version: '0.4.0',
 	meson_version: '>= 1.2.3',
 	default_options: [
-  		'c_std=gnu23',
-  		'buildtype=debug',
+		'c_std=gnu2x',
+		'buildtype=debug',
 		'b_ndebug=if-release',
 		'warning_level=0'
 	]
