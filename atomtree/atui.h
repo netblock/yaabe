@@ -239,6 +239,18 @@ atui_leaf_get_val_fraction(
 		);
 
 
+char8_t*
+atui_branch_get_path( // get a full /directory/like/path/of/the/branches/
+		const atui_branch* tip,
+		char8_t* buffer
+		);
+char8_t*
+atui_leaf_get_path( // get a full /directory/like/path/of/the/branches/and/leaf
+		const atui_leaf* tip,
+		char8_t* buffer
+		);
+
+
 void
 atui_enum_entry_to_text(
 		char8_t* buffer,

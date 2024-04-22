@@ -122,34 +122,16 @@ pathbar_update_path(
 		yaabegtk_commons* const commons
 		) {
 // callback; sets path based on branches selection
-	const atui_branch* branchstack[16];
-
-	GtkTreeListRow* const tree_row = gtk_single_selection_get_selected_item(
-		model
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
+		gtk_single_selection_get_selected_item(model)
+	));
+	char8_t* eos = atui_branch_get_path(
+		g_object_get_data(gobj_branch, "branch"),
+		commons->pathbar_string
 	);
-	GObject* const gobj_branch = gtk_tree_list_row_get_item(tree_row);
-	branchstack[0] = g_object_get_data(gobj_branch, "branch");
+	assert(eos < (commons->pathbar_string + PATHBAR_BUFFER_SIZE));
 	g_object_unref(gobj_branch);
-
-	const atui_branch* const root = commons->atomtree_root->atui_root;
-	uint8_t stack_i;
-	for (stack_i = 0; branchstack[stack_i] != root; stack_i++) {
-		branchstack[stack_i+1] = branchstack[stack_i]->parent_branch;
-		assert(stack_i < (sizeof(branchstack)/sizeof(atui_branch*)));
-	}
-
-	char8_t* pathstring = commons->pathbar_string;
-	pathstring[0] = '/';
-	char8_t* pathstring_pos = pathstring+1; // +1 is the first /
-	while (stack_i--) {
-		pathstring_pos = stpcpy(pathstring_pos, branchstack[stack_i]->name);
-		*pathstring_pos = '/'; // eats the previous \0
-		pathstring_pos++;
-	}
-	*pathstring_pos = '\0';
-	assert(PATHBAR_BUFFER_SIZE > (pathstring_pos - commons->pathbar_string));
-
-	gtk_editable_set_text(commons->pathbar, pathstring);
+	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 }
 static gboolean
 pathbar_editable_reset(
@@ -485,9 +467,10 @@ create_and_set_active_atui_model(
 	branchleaves_to_treemodel(root);
 	gtk_column_view_set_model(commons->leaves.view, root->leaves_model);
 
-	commons->pathbar_string[0] = '/';
-	commons->pathbar_string[1] = '/';
-	gtk_editable_set_text(commons->pathbar, u8"/");
+	char8_t* eos = atui_branch_get_path(root, commons->pathbar_string);
+	assert(eos < (commons->pathbar_string + PATHBAR_BUFFER_SIZE));
+
+	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
 	// TODO move the call of set_editor_titlebar in here?
 }
@@ -1020,13 +1003,23 @@ leaves_offset_column_bind(
 }
 
 static void
-leaf_right_click_func(
+leaf_right_click_copy_path(
 		GSimpleAction* const action,
 		GVariant* const parameter,
 		gpointer const gobj_leaf_ptr
 		) {
-	atui_leaf* leaf = g_object_get_data(gobj_leaf_ptr, "leaf");
-	printf("right-click leaf: %s\n", leaf->name);
+	atui_leaf* const leaf = g_object_get_data(gobj_leaf_ptr, "leaf");
+
+	char8_t pathstring[PATHBAR_BUFFER_SIZE];
+	char8_t* eos = atui_leaf_get_path(leaf, pathstring);
+	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
+
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		pathstring
+	);
 }
 static void
 leaves_rightclick_popup(
@@ -1040,7 +1033,7 @@ leaves_rightclick_popup(
 		return;
 	}
 	const GActionEntry actions[] = {
-		{"test", leaf_right_click_func},
+		{"path", leaf_right_click_copy_path},
 	}; // see also create_leaves_rightclick_menu
 	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
 
@@ -1054,7 +1047,7 @@ create_leaves_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
-	g_menu_append(menu_model, "test", "leaves.test");
+	g_menu_append(menu_model, "Copy Path", "leaves.path");
 	// see also leaves_rightclick_popup
 
 	columnview_create_rightclick_popup(
@@ -1178,13 +1171,23 @@ branch_type_column_bind(
 }
 
 static void
-branch_right_click_func(
+branch_right_click_copy_path(
 		GSimpleAction* const action,
 		GVariant* const parameter,
 		gpointer const gobj_branch_ptr
 		) {
-	atui_branch* branch = g_object_get_data(gobj_branch_ptr, "branch");
-	printf("right-click branch: %s\n", branch->name);
+	atui_branch* const branch = g_object_get_data(gobj_branch_ptr, "branch");
+
+	char8_t pathstring[PATHBAR_BUFFER_SIZE];
+	char8_t* eos = atui_branch_get_path(branch, pathstring);
+	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
+
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		pathstring
+	);
 }
 static void
 branches_rightclick_popup(
@@ -1198,7 +1201,7 @@ branches_rightclick_popup(
 		return;
 	}
 	const GActionEntry actions[] = {
-		{"test", branch_right_click_func},
+		{"path", branch_right_click_copy_path},
 	}; // see also create_branches_rightclick_menu
 	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
 
@@ -1212,7 +1215,7 @@ create_branches_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
-	g_menu_append(menu_model, "test", "branches.test");
+	g_menu_append(menu_model, "Copy Path", "branches.path");
 	// see also branches_rightclick_popup
 
 	columnview_create_rightclick_popup(

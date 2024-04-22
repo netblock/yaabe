@@ -567,7 +567,90 @@ atui_leaf_get_val_fraction(
 	assert(0);
 }
 
+char8_t*
+atui_branch_get_path(
+		const atui_branch* const tip,
+		char8_t* const pathstring
+		) {
+	assert(tip);
 
+	const atui_branch* branchstack[16];
+	branchstack[0] = tip;
+	uint8_t i = 0;
+	uint16_t string_length = 1+1; // 1 for the initial / and 1 is for str \0
+	do {
+		string_length += 1 + strlen(branchstack[i]->name);
+		assert(i < (sizeof(branchstack)/sizeof(atui_branch*)));
+		branchstack[i+1] = branchstack[i]->parent_branch;
+		i++;
+	} while (branchstack[i]);
+
+	pathstring[string_length-1] = '\0';
+	pathstring[0] = '/';
+	char8_t* path_walk = pathstring+1; // +1 is the first /
+	while (i) {
+		i--;
+		path_walk = stpcpy(path_walk, branchstack[i]->name);
+		*path_walk = '/'; // eats the previous \0
+		path_walk++;
+	}
+	assert(path_walk == (pathstring+string_length-1));
+
+	return (pathstring + string_length);
+}
+char8_t*
+atui_leaf_get_path(
+		const atui_leaf* const tip,
+		char8_t* const pathstring
+		) {
+	union { // due to ATUI_INLINE, the leaf's parent may be a branch
+		const void* atui;
+		const atui_leaf* leaf;
+		const atui_branch* branch;
+	} leanch_stack[16];
+	bool is_leaf[16];
+
+	leanch_stack[0].leaf = tip;
+	is_leaf[0] = true;
+	uint8_t i = 0;
+	uint16_t string_length = 0;
+	do {
+		assert(i < (sizeof(leanch_stack)/sizeof(atui_branch*)));
+		if (is_leaf[i]) {
+			leanch_stack[i+1].atui = leanch_stack[i].leaf->parent;
+			is_leaf[i+1] = leanch_stack[i].leaf->parent_is_leaf;
+			string_length += strlen(leanch_stack[i].leaf->name);
+		} else {
+			leanch_stack[i+1].atui = leanch_stack[i].branch->parent;
+			is_leaf[i+1] = leanch_stack[i].branch->parent_is_leaf;
+			string_length += strlen(leanch_stack[i].branch->name);
+		}
+		string_length += 1;
+		i++;
+	} while (leanch_stack[i].atui);
+
+	char8_t* path_walk = pathstring;
+	const char8_t* name;
+	while (i) {
+		i--;
+		if (is_leaf[i]) {
+			if (leanch_stack[i].leaf->type & ATUI_SUBONLY) {
+				continue; // leaf's children only
+			}
+			name = leanch_stack[i].leaf->name;
+		} else {
+			if (leanch_stack[i].branch->parent_is_leaf) {
+				continue; // skip the branch of ATUI_INLINE
+			}
+			name = leanch_stack[i].branch->name;
+		}
+		*path_walk = '/'; // eats the previous \0
+		path_walk = stpcpy(path_walk+1, name);
+	}
+	assert(path_walk <= (pathstring+string_length));
+
+	return path_walk;
+}
 
 void
 atui_enum_entry_to_text(
