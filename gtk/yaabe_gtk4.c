@@ -125,7 +125,7 @@ pathbar_update_path(
 	GObject* const gobj_branch = gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
 		gtk_single_selection_get_selected_item(model)
 	));
-	char8_t* eos = atui_branch_get_path(
+	char8_t* eos = atui_branch_to_path(
 		g_object_get_data(gobj_branch, "branch"),
 		commons->pathbar_string
 	);
@@ -143,6 +143,8 @@ pathbar_editable_reset(
 	yaabegtk_commons* const commons = commons_ptr;
 	gtk_editable_set_text(GTK_EDITABLE(pathbar), commons->pathbar_string);
 }
+
+
 static void
 pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
@@ -151,65 +153,58 @@ pathbar_sets_branch_selection(
 	const char8_t* const editable_text = (
 		(const char8_t* const) gtk_editable_get_text(commons->pathbar)
 	);
-	char8_t* const token_buffer = strdup(editable_text);
-	char* token_save;
 
-	const char8_t* name = strtok_r(token_buffer, u8"/", &token_save);
-	const atui_branch* dir = commons->atomtree_root->atui_root;
-	uint16_t i;
-	while (name) { // find technical existence of path
-		i = dir->num_branches;
-		do {
-			if (0 == i) {
-				goto branch_not_found;
+	const atui_branch* dir;
+	const atui_leaf* file;
+
+	char8_t* const not_found = path_to_atui(
+		editable_text,
+		commons->atomtree_root->atui_root,
+		&dir, &file
+	);
+
+	if (NULL == not_found) { // if directory is found
+		const GObject* const target_branch = dir->self_gobj;
+		GListModel* active_model = G_LIST_MODEL(gtk_column_view_get_model(
+			commons->branches.view
+		));
+		GObject* nth_gobj;
+		const uint16_t n_items = g_list_model_get_n_items(active_model);
+		uint16_t i = 0;
+		for (; i < n_items; i++) { // find index in branches model
+			GtkTreeListRow* const tree_item = GTK_TREE_LIST_ROW(
+				g_list_model_get_object(active_model, i)
+			);
+			nth_gobj = gtk_tree_list_row_get_item(tree_item);
+			g_object_unref(tree_item);
+			g_object_unref(nth_gobj); // we don't actually need a 2nd reference
+			if (target_branch == nth_gobj) {
+				break;
 			}
-			i--;
-		} while(strcmp(name, dir->child_branches[i]->name)); // 0 means ==
-		dir = dir->child_branches[i];
-		name = strtok_r(NULL, u8"/", &token_save);
-	}
-
-	const GObject* const target_branch = dir->self_gobj;
-	GListModel* active_model = G_LIST_MODEL(gtk_column_view_get_model(
-		commons->branches.view
-	));
-	GObject* nth_gobj;
-	const uint16_t n_items = g_list_model_get_n_items(active_model);
-	for (i=0; i < n_items; i++) { // find index in branches model
-		GtkTreeListRow* const tree_item = GTK_TREE_LIST_ROW(
-			g_list_model_get_object(active_model, i)
-		);
-		nth_gobj = gtk_tree_list_row_get_item(tree_item);
-		g_object_unref(tree_item);
-		g_object_unref(nth_gobj); // we don't actually need a 2nd reference
-		if (target_branch == nth_gobj) {
-			break;
 		}
+		assert(i < n_items);
+		
+		gtk_column_view_scroll_to(commons->branches.view, i, NULL,
+			(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
+			NULL
+		);
+
+		if (file) { // if a leaf
+		}
+	} else {
+		GtkWindow* const editor_window = gtk_application_get_active_window(
+			commons->yaabe_gtk
+		);
+		GtkAlertDialog* const alert = gtk_alert_dialog_new(
+			"\n%s\n not found in:\n %s\n",
+			not_found, dir->name
+		);
+		gtk_alert_dialog_set_detail(alert, editable_text);
+		gtk_alert_dialog_show(alert, editor_window);
+
+		g_object_unref(alert);
+		free(not_found);
 	}
-	assert(i < n_items);
-	
-	gtk_column_view_scroll_to(commons->branches.view, i, NULL,
-		(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
-		NULL
-	);
-
-	free(token_buffer);
-	return;
-
-	branch_not_found:
-	GtkWindow* const editor_window = gtk_application_get_active_window(
-		commons->yaabe_gtk
-	);
-	GtkAlertDialog* const alert = gtk_alert_dialog_new(
-		"\n%s\n not found in:\n %s\n",
-		name, dir->name
-	);
-	gtk_alert_dialog_set_detail(alert, editable_text);
-	gtk_alert_dialog_show(alert, editor_window);
-
-	g_object_unref(alert);
-	free(token_buffer);
-	return;
 }
 
 
@@ -467,7 +462,7 @@ create_and_set_active_atui_model(
 	branchleaves_to_treemodel(root);
 	gtk_column_view_set_model(commons->leaves.view, root->leaves_model);
 
-	char8_t* eos = atui_branch_get_path(root, commons->pathbar_string);
+	char8_t* eos = atui_branch_to_path(root, commons->pathbar_string);
 	assert(eos < (commons->pathbar_string + PATHBAR_BUFFER_SIZE));
 
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
@@ -1011,7 +1006,7 @@ leaf_right_click_copy_path(
 	atui_leaf* const leaf = g_object_get_data(gobj_leaf_ptr, "leaf");
 
 	char8_t pathstring[PATHBAR_BUFFER_SIZE];
-	char8_t* eos = atui_leaf_get_path(leaf, pathstring);
+	char8_t* eos = atui_leaf_to_path(leaf, pathstring);
 	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
 
 	gdk_clipboard_set_text(
@@ -1179,7 +1174,7 @@ branch_right_click_copy_path(
 	atui_branch* const branch = g_object_get_data(gobj_branch_ptr, "branch");
 
 	char8_t pathstring[PATHBAR_BUFFER_SIZE];
-	char8_t* eos = atui_branch_get_path(branch, pathstring);
+	char8_t* eos = atui_branch_to_path(branch, pathstring);
 	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
 
 	gdk_clipboard_set_text(

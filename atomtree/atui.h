@@ -240,14 +240,22 @@ atui_leaf_get_val_fraction(
 
 
 char8_t*
-atui_branch_get_path( // get a full /directory/like/path/of/the/branches/
+atui_branch_to_path( // get a full /directory/like/path/of/the/branches/
 		const atui_branch* tip,
 		char8_t* buffer
 		);
 char8_t*
-atui_leaf_get_path( // get a full /directory/like/path/of/the/branches/and/leaf
+atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
 		const atui_leaf* tip,
 		char8_t* buffer
+		);
+
+char8_t* // non-NULL if error; name of the not-found branch/leaf. must be freed.
+path_to_atui( // crawls path and sets appropriate target branch and leaf
+		const char8_t* const path,
+		const atui_branch* const root,
+		const atui_branch** const target_branch, // sets to last element found
+		const atui_leaf** const target_leaf // NULL if not found
 		);
 
 

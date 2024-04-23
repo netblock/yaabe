@@ -568,7 +568,7 @@ atui_leaf_get_val_fraction(
 }
 
 char8_t*
-atui_branch_get_path(
+atui_branch_to_path(
 		const atui_branch* const tip,
 		char8_t* const pathstring
 		) {
@@ -599,7 +599,7 @@ atui_branch_get_path(
 	return (pathstring + string_length);
 }
 char8_t*
-atui_leaf_get_path(
+atui_leaf_to_path(
 		const atui_leaf* const tip,
 		char8_t* const pathstring
 		) {
@@ -651,6 +651,109 @@ atui_leaf_get_path(
 
 	return path_walk;
 }
+
+static const atui_leaf*
+_path_to_atui_has_leaf(
+		const atui_leaf* leaves,
+		const uint8_t num_leaves,
+		//const atui_leaf** const target_leaf,
+		const char8_t** const path_token,
+		char** const token_save
+		) {
+	const atui_leaf* child_leaves;
+	uint8_t num_child_leaves;
+
+	for (uint8_t i = 0; i < num_leaves; i++) {
+		if (leaves[i].type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
+			// has child leaves
+			if (0 == (leaves[i].type & ATUI_SUBONLY)) {
+				// ATUI_SUBONLY pseudo-orphans their children
+				if (strcmp(*path_token, leaves[i].name)) { // 0 is equal
+					continue;
+				}
+				*path_token = strtok_r(NULL, u8"/", token_save);
+				if (NULL == *path_token) {
+					return &(leaves[i]);
+				}
+			}
+			if (leaves[i].type & ATUI_INLINE) {
+				// always ignore branch for ATUI_INLINE
+				const atui_branch* const inl = *(leaves[i].inline_branch);
+				child_leaves = inl->leaves;
+				num_child_leaves = inl->leaf_count;
+			} else {
+				child_leaves = leaves[i].child_leaves;
+				num_child_leaves = leaves[i].num_child_leaves;
+			}
+			const atui_leaf* leaf = _path_to_atui_has_leaf(
+				child_leaves, num_child_leaves,
+				path_token, token_save
+			);
+			if (leaf) {
+				return leaf;
+			}
+		} else if (0 == strcmp(*path_token, leaves[i].name)){
+			*path_token = strtok_r(NULL, u8"/", token_save);
+			return &(leaves[i]);
+		}
+	}
+	return NULL;
+}
+char8_t*
+path_to_atui(
+		const char8_t* const path,
+		const atui_branch* const root,
+		const atui_branch** const target_branch,
+		const atui_leaf** const target_leaf
+		) {
+	char8_t* const token_buffer = strdup(path);
+	char* token_save;
+	const char8_t* path_token = strtok_r(token_buffer, u8"/", &token_save);
+
+	const atui_leaf* file = NULL;
+
+	const atui_branch* dir = NULL;
+	const atui_branch* const* child_dirs = (const atui_branch* const*) &root;
+	// this method of latching allows us to enter the loop with a named root
+	// while also saving the last-known-good dir
+
+	uint16_t i = 1;
+	while (path_token) { // go through branches and verify path
+		do {
+			if (0 == i) {
+				goto find_leaves; // no dir found; could be a leaf?
+			}
+			i--;
+		} while(strcmp(path_token, child_dirs[i]->name)); // 0 means ==
+		dir = child_dirs[i];
+		child_dirs = (const atui_branch* const*) dir->child_branches;
+		i = dir->num_branches;
+		path_token = strtok_r(NULL, u8"/", &token_save);
+	}
+	if (path_token) {
+		find_leaves:
+		file = _path_to_atui_has_leaf(
+			dir->leaves, dir->leaf_count,
+			&path_token, &token_save
+		);
+	}
+	*target_branch = dir;
+	*target_leaf = file;
+
+	char8_t* token_copy;
+	if (path_token) {
+		token_copy = strdup(path_token);
+	} else {
+		token_copy = NULL;
+	}
+	free(token_buffer);
+
+	return token_copy;
+}
+
+
+
+
 
 void
 atui_enum_entry_to_text(
