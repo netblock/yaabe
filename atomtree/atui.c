@@ -656,21 +656,24 @@ static const atui_leaf*
 _path_to_atui_has_leaf(
 		const atui_leaf* leaves,
 		const uint8_t num_leaves,
-		//const atui_leaf** const target_leaf,
 		const char8_t** const path_token,
-		char** const token_save
+		char** const token_save,
+		uint8_t* const leaf_depth
 		) {
 	const atui_leaf* child_leaves;
 	uint8_t num_child_leaves;
 
 	for (uint8_t i = 0; i < num_leaves; i++) {
-		if (leaves[i].type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
+		if (leaves[i].type & ATUI_NODISPLAY) {
+			continue;
+		} else if (leaves[i].type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
 			// has child leaves
 			if (0 == (leaves[i].type & ATUI_SUBONLY)) {
 				// ATUI_SUBONLY pseudo-orphans their children
 				if (strcmp(*path_token, leaves[i].name)) { // 0 is equal
 					continue;
 				}
+				(*leaf_depth)++;
 				*path_token = strtok_r(NULL, u8"/", token_save);
 				if (NULL == *path_token) {
 					return &(leaves[i]);
@@ -678,7 +681,7 @@ _path_to_atui_has_leaf(
 			}
 			if (leaves[i].type & ATUI_INLINE) {
 				// always ignore branch for ATUI_INLINE
-				const atui_branch* const inl = *(leaves[i].inline_branch);
+				const atui_branch* inl = *(leaves[i].inline_branch);
 				child_leaves = inl->leaves;
 				num_child_leaves = inl->leaf_count;
 			} else {
@@ -687,68 +690,118 @@ _path_to_atui_has_leaf(
 			}
 			const atui_leaf* leaf = _path_to_atui_has_leaf(
 				child_leaves, num_child_leaves,
-				path_token, token_save
+				path_token, token_save,
+				leaf_depth
 			);
-			if (leaf) {
+			if (leaf) { // can be NULL if no match against a child/grand-child
 				return leaf;
 			}
-		} else if (0 == strcmp(*path_token, leaves[i].name)){
+		} else if (0 == strcmp(*path_token, leaves[i].name)) {
+			(*leaf_depth)++;
 			*path_token = strtok_r(NULL, u8"/", token_save);
 			return &(leaves[i]);
 		}
 	}
 	return NULL;
 }
-char8_t*
+struct atui_path_map*
 path_to_atui(
 		const char8_t* const path,
-		const atui_branch* const root,
-		const atui_branch** const target_branch,
-		const atui_leaf** const target_leaf
+		const atui_branch* const root
 		) {
 	char8_t* const token_buffer = strdup(path);
 	char* token_save;
 	const char8_t* path_token = strtok_r(token_buffer, u8"/", &token_save);
+	size_t not_found_arraylen = 0; // for an error message
 
 	const atui_leaf* file = NULL;
-
 	const atui_branch* dir = NULL;
-	const atui_branch* const* child_dirs = (const atui_branch* const*) &root;
+	uint8_t leaf_depth = 0;
+	uint8_t branch_depth = 0;
+
+	const atui_branch* const* child_dirs = &root;
+	uint16_t i = 1;
 	// this method of latching allows us to enter the loop with a named root
 	// while also saving the last-known-good dir
 
-	uint16_t i = 1;
 	while (path_token) { // go through branches and verify path
 		do {
 			if (0 == i) {
 				goto find_leaves; // no dir found; could be a leaf?
 			}
 			i--;
-		} while(strcmp(path_token, child_dirs[i]->name)); // 0 means ==
+		} while (strcmp(path_token, child_dirs[i]->name)); // 0 means ==
 		dir = child_dirs[i];
 		child_dirs = (const atui_branch* const*) dir->child_branches;
 		i = dir->num_branches;
+		branch_depth++; // the previously poped token is a branch
 		path_token = strtok_r(NULL, u8"/", &token_save);
 	}
 	if (path_token) {
 		find_leaves:
-		file = _path_to_atui_has_leaf(
-			dir->leaves, dir->leaf_count,
-			&path_token, &token_save
-		);
+		if (dir) {
+			file = _path_to_atui_has_leaf(
+				dir->leaves, dir->leaf_count,
+				&path_token, &token_save,
+				&leaf_depth
+			);
+			if (NULL == file) {
+				leaf_depth = 0;
+			}
+		}
 	}
-	*target_branch = dir;
-	*target_leaf = file;
-
-	char8_t* token_copy;
 	if (path_token) {
-		token_copy = strdup(path_token);
-	} else {
-		token_copy = NULL;
+		not_found_arraylen = 1 + strlen(path_token);
 	}
-	free(token_buffer);
 
-	return token_copy;
+	void* partition = malloc(
+		sizeof(struct atui_path_map)
+		+ (branch_depth * sizeof(atui_branch*))
+		+ (leaf_depth * sizeof(atui_leaf*))
+		+ not_found_arraylen
+	);
+	struct atui_path_map* const map = partition;
+	partition += sizeof(struct atui_path_map);
+	if (branch_depth) {
+		map->branch_path = partition;
+		partition += (branch_depth * sizeof(atui_branch*));
+	} else {
+		map->branch_path = NULL;
+	}
+	if (leaf_depth) {
+		map->leaf_path = partition;
+		partition += (leaf_depth * sizeof(atui_leaf*));
+	} else {
+		map->leaf_path = NULL;
+	}
+	if (not_found_arraylen) {
+		map->not_found = partition;
+	} else {
+		map->not_found = NULL;
+	}
+	partition = NULL; // we're done partitioning
+
+	map->branch_depth = branch_depth;
+	map->leaf_depth = leaf_depth;
+	while (branch_depth) {
+		branch_depth--;
+		map->branch_path[branch_depth] = (atui_branch*) dir;
+		dir = dir->parent_branch;
+	}
+	while (leaf_depth) {
+		leaf_depth--;
+		map->leaf_path[leaf_depth] = (atui_leaf*) file;
+		if (file->parent_is_leaf) {
+			file = file->parent_leaf;
+		} else { // ATUI_INLINE; skip over branch
+			file = file->parent_branch->parent_leaf;
+		}
+	}
+	if (not_found_arraylen) {
+		strcpy(map->not_found, path_token);
+	}
+
+	return map;
 }
 
 

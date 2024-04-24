@@ -144,7 +144,6 @@ pathbar_editable_reset(
 	gtk_editable_set_text(GTK_EDITABLE(pathbar), commons->pathbar_string);
 }
 
-
 static void
 pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
@@ -153,58 +152,106 @@ pathbar_sets_branch_selection(
 	const char8_t* const editable_text = (
 		(const char8_t* const) gtk_editable_get_text(commons->pathbar)
 	);
-
-	const atui_branch* dir;
-	const atui_leaf* file;
-
-	char8_t* const not_found = path_to_atui(
+	struct atui_path_map* const map = path_to_atui(
 		editable_text,
-		commons->atomtree_root->atui_root,
-		&dir, &file
+		commons->atomtree_root->atui_root
 	);
 
-	if (NULL == not_found) { // if directory is found
-		const GObject* const target_branch = dir->self_gobj;
-		GListModel* active_model = G_LIST_MODEL(gtk_column_view_get_model(
+	if (NULL == map->not_found && map->branch_depth) { // if directory is found
+		const GObject* target;
+		GObject* nth_gobj;
+		GtkTreeListRow* tree_item;
+		uint16_t model_i = -1;
+		uint8_t depth_i = 0;
+
+		GListModel* const branch_model = G_LIST_MODEL(gtk_column_view_get_model(
 			commons->branches.view
 		));
-		GObject* nth_gobj;
-		const uint16_t n_items = g_list_model_get_n_items(active_model);
-		uint16_t i = 0;
-		for (; i < n_items; i++) { // find index in branches model
-			GtkTreeListRow* const tree_item = GTK_TREE_LIST_ROW(
-				g_list_model_get_object(active_model, i)
-			);
-			nth_gobj = gtk_tree_list_row_get_item(tree_item);
+		// map has an objective form of the path string.
+		// Even though branch_model will have the final destination, it might
+		// not yet due to it being under a GtkTreeListModel collapsable.
+		do {
+			target = map->branch_path[depth_i]->self_gobj;
+			while (true) {
+				model_i++;
+				tree_item = GTK_TREE_LIST_ROW(
+					g_list_model_get_object(branch_model, model_i)
+				);
+				nth_gobj = gtk_tree_list_row_get_item(tree_item);
+				g_object_unref(nth_gobj); // we don't need a 2nd reference
+				if (target == nth_gobj) {
+					break;
+				}
+				g_object_unref(tree_item);
+			};
+			gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
 			g_object_unref(tree_item);
-			g_object_unref(nth_gobj); // we don't actually need a 2nd reference
-			if (target_branch == nth_gobj) {
-				break;
-			}
-		}
-		assert(i < n_items);
-		
-		gtk_column_view_scroll_to(commons->branches.view, i, NULL,
+			depth_i++;
+		} while (depth_i < map->branch_depth);
+
+		gtk_column_view_scroll_to(commons->branches.view,
+			model_i, NULL,
 			(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
 			NULL
 		);
+		// Calling pathbar_update_path might be necessary if target branch is
+		// already selected. Selection is not worth testing for because we
+		// should go through the loop anyway to set focus.
+		pathbar_update_path(GTK_SINGLE_SELECTION(branch_model), 0,0, commons);
 
-		if (file) { // if a leaf
+		if (map->leaf_depth) { // if a leaf
+			// the exact same idea as what happened with the branhes
+			model_i = -1;
+			depth_i = 0;
+			GListModel* const leaf_model = G_LIST_MODEL(
+				gtk_column_view_get_model(commons->leaves.view)
+			);
+			do {
+				target = map->leaf_path[depth_i]->self_gobj;
+				while (true) {
+					model_i++;
+					tree_item = GTK_TREE_LIST_ROW(
+						g_list_model_get_object(leaf_model, model_i)
+					);
+					nth_gobj = gtk_tree_list_row_get_item(tree_item);
+					g_object_unref(nth_gobj); // we don't need a 2nd reference
+					if (target == nth_gobj) {
+						break;
+					}
+					g_object_unref(tree_item);
+				};
+				// may be collapsed
+				gtk_tree_list_row_set_expanded(tree_item, true);
+				g_object_unref(tree_item);
+				depth_i++;
+			} while (depth_i < map->leaf_depth);
+
+			gtk_column_view_scroll_to(commons->leaves.view,
+				model_i, NULL,
+				GTK_LIST_SCROLL_FOCUS,
+				NULL
+			);
 		}
 	} else {
 		GtkWindow* const editor_window = gtk_application_get_active_window(
 			commons->yaabe_gtk
 		);
-		GtkAlertDialog* const alert = gtk_alert_dialog_new(
-			"\n%s\n not found in:\n %s\n",
-			not_found, dir->name
-		);
+		GtkAlertDialog* alert;
+		if (map->branch_depth) {
+			alert = gtk_alert_dialog_new(
+				"\n%s\n not found in:\n %s\n",
+				map->not_found,
+				map->branch_path[map->branch_depth-1]->name
+			);
+		} else {
+			alert = gtk_alert_dialog_new("bad root");
+		}
 		gtk_alert_dialog_set_detail(alert, editable_text);
 		gtk_alert_dialog_show(alert, editor_window);
 
 		g_object_unref(alert);
-		free(not_found);
 	}
+	free(map);
 }
 
 

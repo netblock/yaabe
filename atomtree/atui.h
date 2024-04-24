@@ -250,14 +250,18 @@ atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
 		char8_t* buffer
 		);
 
-char8_t* // non-NULL if error; name of the not-found branch/leaf. must be freed.
-path_to_atui( // crawls path and sets appropriate target branch and leaf
-		const char8_t* const path,
-		const atui_branch* const root,
-		const atui_branch** const target_branch, // sets to last element found
-		const atui_leaf** const target_leaf // NULL if not found
+struct atui_path_map { // the trail of objects for a map
+	char8_t* not_found; // non-NULL if error; name of the not-found branch/leaf
+	atui_branch** branch_path;
+	atui_leaf** leaf_path;
+	uint8_t branch_depth;
+	uint8_t leaf_depth;
+};
+struct atui_path_map* // needs to be freed
+path_to_atui( // crawls path and makes a map of that path
+		const char8_t* path,
+		const atui_branch* root
 		);
-
 
 void
 atui_enum_entry_to_text(
