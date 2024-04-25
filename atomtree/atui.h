@@ -107,7 +107,7 @@ struct _atui_leaf {
 	uint8_t bitfield_hi; // bitfield range end
 	uint8_t bitfield_lo; // bitfield range start
 
-	uint8_t num_child_leaves;
+	uint16_t num_child_leaves;
 
 	int16_t num_gobj; // for child_gobj_cache
 
@@ -290,7 +290,7 @@ atui_destroy_tree(
 void
 _atui_destroy_leaves( 
 		atui_leaf* leaves,
-		uint8_t num_leaves
+		uint16_t num_leaves
 		);
 
 
@@ -347,10 +347,10 @@ struct atui_branch_data {
 	// leaves straightforward:
 	const atui_leaf* const leaves_init;
 
-	const uint8_t num_leaves_init; // sizeof(); does not include kids
-	const uint16_t computed_num_leaves;
-	const uint16_t computed_num_inline;
-	const uint16_t computed_num_petiole;
+	const uint32_t num_leaves_init; // sizeof(); does not include kids
+	const uint32_t computed_num_leaves;
+	const uint32_t computed_num_inline;
+	const uint32_t computed_num_petiole;
 };
 
 atui_branch*

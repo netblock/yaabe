@@ -75,7 +75,7 @@ atui_leaves_printer(
 	struct level_data sub_leaves;
 	const struct subleaf_meta* sub_meta;
 	struct dynarray_position dynpos;
-	uint8_t num_leaves;
+	uint16_t num_leaves;
 
 	while (active->pos < active->end) {
 		if (active->pos->type & ATUI_PETIOLE) {

@@ -656,7 +656,7 @@ atui_leaf_to_path(
 static uint8_t
 _path_to_atui_has_leaf(
 		const atui_leaf* const leaves,
-		const uint8_t num_leaves,
+		const uint16_t num_leaves,
 		const char8_t** const path_token,
 		char** const token_save,
 		const atui_leaf** const target
@@ -664,7 +664,7 @@ _path_to_atui_has_leaf(
 	const atui_leaf* child_leaves;
 	uint16_t num_child_leaves;
 
-	for (uint8_t i = 0; i < num_leaves; i++) {
+	for (uint16_t i = 0; i < num_leaves; i++) {
 		if (leaves[i].type & ATUI_NODISPLAY) {
 			continue;
 		} else if (leaves[i].type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
@@ -877,7 +877,7 @@ atui_enum_lsearch(
 void
 _atui_destroy_leaves(
 		atui_leaf* const leaves,
-		const uint8_t num_leaves
+		const uint16_t num_leaves
 		) {
 	for (uint16_t i = 0; i < num_leaves; i++) {
 		if (leaves[i].num_child_leaves) {

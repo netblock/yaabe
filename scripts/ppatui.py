@@ -85,7 +85,7 @@ def enum_to_h(
 static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
 """
 	enum_template = """\
-static_assert(%u <= 255); // uint8_t limits
+static_assert(%u <= UINT8_MAX);
 static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
 static const struct atui_enum ATUI_ENUM(%s) = {
 	.name_length = sizeof(u8"%s") - 1,
@@ -665,10 +665,12 @@ PPATUI_HEADERIFY(%s) {
 		.computed_num_petiole = %s,
 	};
 
-	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
+	assert(branch_embryo.num_leaves_init < UINT16_MAX);
+	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
+	assert(branch_embryo.computed_num_inline < UINT8_MAX);
+	assert(branch_embryo.computed_num_petiole < UINT8_MAX);
 
-	/* some things are kept in uint8_t */
-	static_assert((sizeof(leaves_init)/sizeof(atui_leaf)) < 255);
+	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
 
 	return atui_branch_allocator(&branch_embryo, args);
 }

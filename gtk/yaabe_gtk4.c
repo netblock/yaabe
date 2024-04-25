@@ -33,7 +33,7 @@ struct rightclick_pack { // see columnview_row_bind_attach_gesture
 static void
 _atui_destroy_leaves_with_gtk(
 		atui_leaf* const leaves,
-		const uint8_t num_leaves
+		const uint16_t num_leaves
 		) {
 	atui_leaf* leaf = leaves;
 	atui_leaf* leaf_end = leaves + num_leaves;
@@ -420,7 +420,7 @@ atui_branches_pullin_gliststore(
 		) {
 	GObject* gobj_child;
 	atui_branch* child;
-	uint8_t i;
+	uint16_t i;
 	for (i=0; i < parent->num_inline_branches; i++) {
 		atui_branches_pullin_gliststore(parent->inline_branches[i], list);
 	}
