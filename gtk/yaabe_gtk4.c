@@ -157,55 +157,73 @@ pathbar_sets_branch_selection(
 		commons->atomtree_root->atui_root
 	);
 
-	if (NULL == map->not_found && map->branch_depth) { // if directory is found
+	if (NULL == map->not_found) { // if directory is found
 		const GObject* target;
-		GObject* nth_gobj;
+		GObject* questioned;
 		GtkTreeListRow* tree_item;
-		uint16_t model_i = -1;
-		uint8_t depth_i = 0;
+		uint16_t model_i;
+		uint8_t depth_i;
 
 		GListModel* const branch_model = G_LIST_MODEL(gtk_column_view_get_model(
 			commons->branches.view
 		));
-		// map has an objective form of the path string.
-		// Even though branch_model will have the final destination, it might
-		// not yet due to it being under a GtkTreeListModel collapsable.
-		do {
-			target = map->branch_path[depth_i]->self_gobj;
-			while (true) {
-				model_i++;
-				tree_item = GTK_TREE_LIST_ROW(
-					g_list_model_get_object(branch_model, model_i)
-				);
-				nth_gobj = gtk_tree_list_row_get_item(tree_item);
-				g_object_unref(nth_gobj); // we don't need a 2nd reference
-				if (target == nth_gobj) {
-					break;
-				}
+
+		// test to see if our target is already selected
+		target = map->branch_path[map->branch_depth - 1]->self_gobj;
+		questioned = gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
+			gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(
+				branch_model
+			))
+		));
+		g_object_unref(questioned); // we don't need a 2nd reference
+		if (target == questioned) {
+			model_i = gtk_single_selection_get_selected(GTK_SINGLE_SELECTION(
+				branch_model
+			));
+			pathbar_update_path(
+				GTK_SINGLE_SELECTION(branch_model), 0,0, commons
+			);
+		} else {
+			// map has an objective form of the path string.
+			// Even though branch_model will have the final destination, it
+			// might not yet due to it being under a GtkTreeListModel
+			// collapsable.
+			model_i = -1;
+			depth_i = 0;
+			do {
+				target = map->branch_path[depth_i]->self_gobj;
+				while (true) {
+					model_i++;
+					tree_item = GTK_TREE_LIST_ROW(
+						g_list_model_get_object(branch_model, model_i)
+					);
+					questioned = gtk_tree_list_row_get_item(tree_item);
+					g_object_unref(questioned); // we don't need a 2nd reference
+					if (target == questioned) {
+						break;
+					}
+					g_object_unref(tree_item);
+				};
+				gtk_tree_list_row_set_expanded(tree_item, true);
+				// may be collapsed
 				g_object_unref(tree_item);
-			};
-			gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
-			g_object_unref(tree_item);
-			depth_i++;
-		} while (depth_i < map->branch_depth);
+				depth_i++;
+			} while (depth_i < map->branch_depth);
+		}
 
 		gtk_column_view_scroll_to(commons->branches.view,
 			model_i, NULL,
 			(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
 			NULL
 		);
-		// Calling pathbar_update_path might be necessary if target branch is
-		// already selected. Selection is not worth testing for because we
-		// should go through the loop anyway to set focus.
-		pathbar_update_path(GTK_SINGLE_SELECTION(branch_model), 0,0, commons);
 
 		if (map->leaf_depth) { // if a leaf
 			// the exact same idea as what happened with the branhes
-			model_i = -1;
-			depth_i = 0;
 			GListModel* const leaf_model = G_LIST_MODEL(
 				gtk_column_view_get_model(commons->leaves.view)
 			);
+			model_i = -1;
+			depth_i = 0;
 			do {
 				target = map->leaf_path[depth_i]->self_gobj;
 				while (true) {
@@ -213,9 +231,9 @@ pathbar_sets_branch_selection(
 					tree_item = GTK_TREE_LIST_ROW(
 						g_list_model_get_object(leaf_model, model_i)
 					);
-					nth_gobj = gtk_tree_list_row_get_item(tree_item);
-					g_object_unref(nth_gobj); // we don't need a 2nd reference
-					if (target == nth_gobj) {
+					questioned = gtk_tree_list_row_get_item(tree_item);
+					g_object_unref(questioned); // we don't need a 2nd reference
+					if (target == questioned) {
 						break;
 					}
 					g_object_unref(tree_item);

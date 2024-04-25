@@ -652,16 +652,17 @@ atui_leaf_to_path(
 	return path_walk;
 }
 
-static const atui_leaf*
+//static const atui_leaf*
+static uint8_t
 _path_to_atui_has_leaf(
-		const atui_leaf* leaves,
+		const atui_leaf* const leaves,
 		const uint8_t num_leaves,
 		const char8_t** const path_token,
 		char** const token_save,
-		uint8_t* const leaf_depth
+		const atui_leaf** const target
 		) {
 	const atui_leaf* child_leaves;
-	uint8_t num_child_leaves;
+	uint16_t num_child_leaves;
 
 	for (uint8_t i = 0; i < num_leaves; i++) {
 		if (leaves[i].type & ATUI_NODISPLAY) {
@@ -673,10 +674,10 @@ _path_to_atui_has_leaf(
 				if (strcmp(*path_token, leaves[i].name)) { // 0 is equal
 					continue;
 				}
-				(*leaf_depth)++;
 				*path_token = strtok_r(NULL, u8"/", token_save);
 				if (NULL == *path_token) {
-					return &(leaves[i]);
+					*target = &(leaves[i]);
+					return 1;
 				}
 			}
 			if (leaves[i].type & ATUI_INLINE) {
@@ -688,21 +689,22 @@ _path_to_atui_has_leaf(
 				child_leaves = leaves[i].child_leaves;
 				num_child_leaves = leaves[i].num_child_leaves;
 			}
-			const atui_leaf* leaf = _path_to_atui_has_leaf(
+			uint8_t depth = _path_to_atui_has_leaf(
 				child_leaves, num_child_leaves,
 				path_token, token_save,
-				leaf_depth
+				target
 			);
-			if (leaf) { // can be NULL if no match against a child/grand-child
-				return leaf;
+			if (depth) { // can be NULL if no match against a child/grand-child
+				return depth + (0 == (leaves[i].type & ATUI_SUBONLY));
 			}
 		} else if (0 == strcmp(*path_token, leaves[i].name)) {
-			(*leaf_depth)++;
 			*path_token = strtok_r(NULL, u8"/", token_save);
-			return &(leaves[i]);
+			*target = &(leaves[i]);
+			return 1;
 		}
 	}
-	return NULL;
+
+	return 0;
 }
 struct atui_path_map*
 path_to_atui(
@@ -740,18 +742,18 @@ path_to_atui(
 	if (path_token) {
 		find_leaves:
 		if (dir) {
-			file = _path_to_atui_has_leaf(
+			leaf_depth = _path_to_atui_has_leaf(
 				dir->leaves, dir->leaf_count,
 				&path_token, &token_save,
-				&leaf_depth
+				&file
 			);
-			if (NULL == file) {
-				leaf_depth = 0;
-			}
 		}
 	}
 	if (path_token) {
 		not_found_arraylen = 1 + strlen(path_token);
+	} else if (NULL == dir) { // if there's no path to parse, error
+		not_found_arraylen = 1;
+		path_token = "";
 	}
 
 	void* partition = malloc(
@@ -801,6 +803,7 @@ path_to_atui(
 		strcpy(map->not_found, path_token);
 	}
 
+	free(token_buffer);
 	return map;
 }
 
