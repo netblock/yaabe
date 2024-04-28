@@ -279,7 +279,7 @@ atui_leaf_to_text(
 				sprintf(format_2, " : %s", format);
 				assert(strlen(format_2) < sizeof(format_2));
 
-				char8_t* walked = stpcpy(
+				char8_t* walked = stopcopy(
 					buffer, leaf->enum_options->enum_array[index].name
 				); // walk the buffer
 				sprintf(walked, format_2, val); // eats previous \0
@@ -590,7 +590,7 @@ atui_branch_to_path(
 	char8_t* path_walk = pathstring+1; // +1 is the first /
 	while (i) {
 		i--;
-		path_walk = stpcpy(path_walk, branchstack[i]->name);
+		path_walk = stopcopy(path_walk, branchstack[i]->name);
 		*path_walk = '/'; // eats the previous \0
 		path_walk++;
 	}
@@ -645,7 +645,7 @@ atui_leaf_to_path(
 			name = leanch_stack[i].branch->name;
 		}
 		*path_walk = '/'; // eats the previous \0
-		path_walk = stpcpy(path_walk+1, name);
+		path_walk = stopcopy(path_walk+1, name);
 	}
 	assert(path_walk <= (pathstring+string_length));
 
@@ -826,7 +826,7 @@ atui_enum_entry_to_text(
 	sprintf(format_2, " : %s", format_1);
 	assert(strlen(format_2) < sizeof(format_2));
 
-	char8_t* walked = stpcpy(buffer, enum_entry->name); // walk the buffer
+	char8_t* walked = stopcopy(buffer, enum_entry->name); // walk the buffer
 	sprintf(walked, format_2, enum_entry->val);  // eats previous \0
 	assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
 }
@@ -899,29 +899,4 @@ atui_destroy_tree(
 	free(tree);
 }
 
-
-int64_t
-strtoll_2(
-		const char8_t* str
-		) {
-	// TODO it seems the C2X's changes for the strto* hasn't landed yet
-	uint8_t base = 0; // 0 = auto
-	if ((str[0] == '0') && (str[1] == 'b')) {
-		base = 2;
-		str += 2;
-	}
-	return strtoll(str, NULL, base);
-}
-uint64_t
-strtoull_2(
-		const char8_t* str
-		) {
-	// TODO it seems the C2X's changes for the strto* hasn't landed yet
-	uint8_t base = 0; // 0 = auto
-	if ((str[0] == '0') && (str[1] == 'b')) {
-		base = 2;
-		str += 2;
-	}
-	return strtoull(str, NULL, base);
-}
 

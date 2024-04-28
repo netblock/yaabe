@@ -1,5 +1,4 @@
 #include "atomtree.h"
-#include <ctype.h>
 
 uint8_t
 regcmp(
@@ -81,22 +80,6 @@ regset_bsearch_right(
 	}
 }
 
-static inline bool
-is_number(
-		const char8_t* str
-		) {
-	if (str) {
-		do {
-			if (0 == isdigit(*str)) {
-				return false;
-			}
-			str++;
-		} while (*str);
-		return true;
-	} else {
-		return false;
-	}
-}
 
 void
 register_set_print_tables(
@@ -202,7 +185,7 @@ register_set_print_tables(
 		for (; (0 < tokens_i) && is_number(tokens[tokens_i]); tokens_i--);
 		num_tokens = tokens_i + 1; //tokens_i++;
 		for (tokens_i=0; tokens_i < num_tokens; tokens_i++) { // join the str
-			name_ptr = stpcpy(name_ptr, tokens[tokens_i]);
+			name_ptr = stopcopy(name_ptr, tokens[tokens_i]);
 			*name_ptr = '_';
 			assert(name_ptr > name_buffer);
 		}

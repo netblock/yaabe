@@ -6,53 +6,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #ifndef ATOMTREE_H
 #define ATOMTREE_H
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <gtk/gtk.h>
-#include <assert.h>
-
-#ifdef C2X_COMPAT
-typedef uint8_t char8_t;
-#else
-#include <uchar.h>
-#endif
-
-// weird bugs with sprintf when using _Floatn, but as long as we can assert
-// float/double will be fine.
-typedef _Float16 float16_t;
-//typedef _Float32 float32_t;
-//typedef _Float64 float64_t;
-typedef float float32_t;
-typedef double float64_t;
-//typedef _Float128 float128_t; // currently unnecessary
-// AVX-512 does partial native 128-bit?
-
-// we're dealing with a byte-packed little-endian ABI.
-static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
-static_assert(CHAR_BIT == 8);
-static_assert(sizeof(uint8_t) == 1);
-static_assert(sizeof(uint16_t) == 2);
-static_assert(sizeof(uint32_t) == 4);
-static_assert(sizeof(uint64_t) == 8);
-static_assert(sizeof(int8_t) == 1);
-static_assert(sizeof(int16_t) == 2);
-static_assert(sizeof(int32_t) == 4);
-static_assert(sizeof(int64_t) == 8);
-static_assert(sizeof(char8_t) == 1);
-static_assert(sizeof(float16_t) == 2);
-static_assert(sizeof(float32_t) == 4);
-static_assert(sizeof(float64_t) == 8);
-//static_assert(sizeof(float128_t) == 16);
-#pragma pack(push, 1)
-struct _ninebytes { uint32_t a; uint8_t b; float32_t c; };
-struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
-#pragma pack(pop)
-static_assert(sizeof(struct _ninebytes) == 9);
-static_assert(sizeof(struct _tenbytes) == 10);
+#include "standard.h"
 
 #include "qnotation.h"
 #include "gmc.h"
@@ -69,6 +23,9 @@ typedef struct _atui_branch atui_branch;
 #include "atomtree_data_tables.h"
 #include "asic_reg_tools.h"
 
+// make sure we're not on 1-byte packing after all the including
+struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
+static_assert(sizeof(struct _twentyfourbytes) > 17);
 
 
 struct atomtree_rom_header {
@@ -173,9 +130,5 @@ atombios_parse(
 		uint32_t alloc_size,
 		bool generate_atui
 		);
-
-// make sure we're not on 1-byte packing after all the including
-struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
-static_assert(sizeof(struct _twentyfourbytes) > 17);
 
 #endif

@@ -40,8 +40,6 @@ struct atui_nullstruct;
 struct atui_funcify_args; // internal use; see below
 
 
-
-
 enum i18n_languages:int8_t {
 	LANG_NOLANG = -1,
 
@@ -291,17 +289,6 @@ void
 _atui_destroy_leaves( 
 		atui_leaf* leaves,
 		uint16_t num_leaves
-		);
-
-
-// TODO stroll that considers 0b prefix?
-int64_t
-strtoll_2(
-		const char8_t* str
-		);
-uint64_t
-strtoull_2(
-		const char8_t* str
 		);
 
 

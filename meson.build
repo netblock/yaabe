@@ -10,10 +10,6 @@ project('yaabe', 'c',
 )
 
 cc = meson.get_compiler('c')
-add_project_arguments(
-	'-D_POSIX_C_SOURCE=200809L', # for stpcpy
-	language: 'c',
-)
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
 		'-fstack-protector-strong',
@@ -43,8 +39,12 @@ include_dirs = []
 yaabe_src = []
 subdir('atomtree')
 subdir('gtk')
-yaabe_src += files('main.c')
+yaabe_src += files(
+	'standard.c',
+	'main.c'
+)
 include_dirs += include_directories('atom')
+include_dirs += include_directories('.')
 
 
 if 'windows' == target_machine.system()
