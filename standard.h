@@ -76,10 +76,4 @@ stopcopy( // stpcpy; copy string, returns pointer to \0
 		const char8_t* restrict src
 		);
 
-char8_t*
-string_separate( // strsep; string tokenizer; destructive
-		char8_t** restrict running,
-		const char8_t* restrict delimiters
-		);
-
 #endif

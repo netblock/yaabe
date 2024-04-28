@@ -57,27 +57,3 @@ stopcopy(
 	*dest = '\0';
 	return dest;
 }
-
-char8_t*
-string_separate(
-		char8_t** const restrict running,
-		const char8_t* const restrict delimiters
-		) {
-	// custom strsep-like string tokenizer
-	char8_t* const token = *running;
-	if (**running) {
-		do {
-			for (size_t i = 0; delimiters[i]; i++) {
-				if (delimiters[i] == **running) {
-					**running = '\0';
-					(*running)++;
-					return token;
-				}
-			}
-			(*running)++;
-		} while (**running);
-		return token;
-	} else {
-		return NULL;
-	}
-}
