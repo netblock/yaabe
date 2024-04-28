@@ -16,8 +16,8 @@ struct leaf_array {
 	atui_leaf* end;
 };
 struct leaf_array_const {
-	const atui_leaf* pos;
-	const atui_leaf* end;
+	atui_leaf const* pos;
+	atui_leaf const* end;
 };
 struct branch_array {
 	atui_branch** pos;
@@ -30,14 +30,14 @@ struct global_tracker {
 };
 struct dynarray_position {
 	union {
-		const void* ptr; // union writes
-		const void* direct;
-		const void* const* deffer;
+		void const* ptr; // union writes
+		void const* direct;
+		void const* const* deffer;
 	} pos;
 	union {
-		const void* ptr; // union writes
-		const void* direct;
-		const void* const* deffer;
+		void const* ptr; // union writes
+		void const* direct;
+		void const* const* deffer;
 	} end;
 };
 
@@ -46,8 +46,8 @@ struct level_data {
 	struct leaf_array_const feed;
 
 	struct dynarray_position dynpos;
-	const void* suggestbios;
-	const struct atui_enum* nametag;
+	void const* suggestbios;
+	struct atui_enum const* nametag;
 	void* parent;
 	uint8_t name_num;
 	bool rename;
@@ -65,7 +65,7 @@ atui_leaves_printer(
 	struct leaf_array_const* const active = &(level->feed);
 
 	
-	const char8_t* nametag;
+	char8_t const* nametag;
 	if (level->nametag) {
 		nametag = level->nametag->enum_array[level->name_num].name;
 	} else {
@@ -73,7 +73,7 @@ atui_leaves_printer(
 	}
 
 	struct level_data sub_leaves;
-	const struct subleaf_meta* sub_meta;
+	struct subleaf_meta const* sub_meta;
 	struct dynarray_position dynpos;
 	uint16_t num_leaves;
 
@@ -161,7 +161,7 @@ atui_leaves_printer(
 			inliners->pos++;
 		} else if (active->pos->type & ATUI_DYNARRAY) {
 			sub_meta = active->pos->template_leaves;
-			const atui_leaf* const feed_start = sub_meta->sub_leaves;
+			atui_leaf const* const feed_start = sub_meta->sub_leaves;
 			dynpos.pos.ptr = active->pos->val;
 			dynpos.end.ptr = active->pos->val;
 
@@ -209,8 +209,8 @@ atui_leaves_printer(
 			);
 			if (sub_meta->deferred_start_array) { // num_bytes
 				if (leaves->pos->num_child_leaves) {
-					leaves->pos->val = *(const void* const*)(leaves->pos->val);
-					const atui_leaf* const last_child = &(
+					leaves->pos->val = *(void const* const*)(leaves->pos->val);
+					atui_leaf const* const last_child = &(
 						leaves->pos->child_leaves[
 							leaves->pos->num_child_leaves - 1
 						]
@@ -245,8 +245,8 @@ atui_leaves_printer(
 
 atui_branch*
 atui_branch_allocator(
-		const struct atui_branch_data* const embryo,
-		const struct atui_funcify_args* const args
+		struct atui_branch_data const* const embryo,
+		struct atui_funcify_args const* const args
 		) {
 
 	struct global_tracker tracker = {0};
@@ -254,7 +254,7 @@ atui_branch_allocator(
 	uint8_t max_num_branches = (
 		embryo->computed_num_petiole + args->num_import_branches
 	);
-	const uint8_t num_all_branches = (
+	uint8_t const num_all_branches = (
 		max_num_branches + embryo->computed_num_inline
 	);
 

@@ -111,7 +111,7 @@ enum atomtree_common_version:uint16_t {
 
 enum atomtree_common_version
 get_ver(
-		const struct atom_common_table_header* header
+		struct atom_common_table_header const* header
 		);
 void
 set_ver(

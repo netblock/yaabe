@@ -2,8 +2,8 @@
 
 uint8_t
 regcmp(
-		const struct atom_init_reg_index_format* const index,
-		const uint16_t* const expectation
+		struct atom_init_reg_index_format const* const index,
+		uint16_t const* const expectation
 		) {
 	for (uint8_t i=0; expectation[i] != END_OF_REG_INDEX_BLOCK; i++) {
 		assert(index[i].RegIndex != END_OF_REG_INDEX_BLOCK);
@@ -17,8 +17,8 @@ regcmp(
 }
 int16_t
 regset_bsearch_left(
-		const struct register_set* const reg_set,
-		const uint16_t address
+		struct register_set const* const reg_set,
+		uint16_t const address
 		) {
 	// binary search for register_set
 	// as a result, it assumes the array is sorted.
@@ -26,7 +26,7 @@ regset_bsearch_left(
 
 	// reserve leftmost bit as flag
 
-	const struct register_set_entry* const set_array = reg_set->entries;
+	struct register_set_entry const* const set_array = reg_set->entries;
 	uint16_t left = 0;
 	uint16_t mid;
 	uint16_t right = reg_set->num_reg_set_addresses;
@@ -48,8 +48,8 @@ regset_bsearch_left(
 
 int16_t
 regset_bsearch_right(
-		const struct register_set* const reg_set,
-		const uint16_t address
+		struct register_set const* const reg_set,
+		uint16_t const address
 		) {
 	// binary search for register_set
 	// as a result, it assumes the array is sorted.
@@ -57,7 +57,7 @@ regset_bsearch_right(
 
 	// reserve leftmost bit as flag
 
-	const struct register_set_entry* const set_array = reg_set->entries;
+	struct register_set_entry const* const set_array = reg_set->entries;
 	uint16_t left = 0;
 	uint16_t mid;
 	uint16_t right = reg_set->num_reg_set_addresses;
@@ -83,12 +83,12 @@ regset_bsearch_right(
 
 void
 register_set_print_tables(
-		const struct atomtree_init_reg_block* const at_regblock,
-		const struct register_set* const reg_set,
-		const bool newest
+		struct atomtree_init_reg_block const* const at_regblock,
+		struct register_set const* const reg_set,
+		bool const newest
 		) {
 	int16_t (* regset_bsearch)(
-			const struct register_set* reg_set,
+			struct register_set const* reg_set,
 			uint16_t address
 			); // function pointer
 	if (newest) {
@@ -97,13 +97,13 @@ register_set_print_tables(
 		regset_bsearch = regset_bsearch_left;
 	}
 
-	const struct atom_init_reg_index_format* const register_index =
+	struct atom_init_reg_index_format const* const register_index =
 		at_regblock->register_index;
-	const char8_t* const struct_entry = u8"\tunion %s  %s;\n";
+	char8_t const* const struct_entry = u8"\tunion %s  %s;\n";
 
-	const char8_t* reg_name;
+	char8_t const* reg_name;
 	char* token_save;
-	const char8_t* token;
+	char8_t const* token;
 	char8_t tokens[16][16];
 	uint8_t num_tokens;
 	uint8_t tokens_i;

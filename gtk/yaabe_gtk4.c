@@ -2,7 +2,7 @@
 #include "atui.h"
 #include "yaabe_gtk4.h"
 
-static const char8_t yaabe_name[] = "YAABE BIOS Editor";
+static char8_t const yaabe_name[] = "YAABE BIOS Editor";
 #define PATHBAR_BUFFER_SIZE 256
 
 struct pane_context {
@@ -26,14 +26,14 @@ typedef struct yaabegtk_commons { // global state tracker
 } yaabegtk_commons;
 
 struct rightclick_pack { // see columnview_row_bind_attach_gesture
-	const struct pane_context* context;
+	struct pane_context const* context;
 	GtkColumnViewRow* row;
 };
 
 static void
 _atui_destroy_leaves_with_gtk(
 		atui_leaf* const leaves,
-		const uint16_t num_leaves
+		uint16_t const num_leaves
 		) {
 	atui_leaf* leaf = leaves;
 	atui_leaf* leaf_end = leaves + num_leaves;
@@ -95,7 +95,7 @@ atui_destroy_tree_with_gtk(
 void
 destroy_atomtree_with_gtk(
 		struct atom_tree* const atree,
-		const bool free_bios
+		bool const free_bios
 		) {
 // Free and unref
 	if (atree) {
@@ -117,8 +117,8 @@ destroy_atomtree_with_gtk(
 static void
 pathbar_update_path(
 		GtkSingleSelection* const model,
-		const guint position,
-		const guint n_items,
+		guint const position,
+		guint const n_items,
 		yaabegtk_commons* const commons
 		) {
 // callback; sets path based on branches selection
@@ -149,8 +149,8 @@ pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
 		) {
 // callback; go to branch based on path string
-	const char8_t* const editable_text = (
-		(const char8_t* const) gtk_editable_get_text(commons->pathbar)
+	char8_t const* const editable_text = (
+		(char8_t const* const) gtk_editable_get_text(commons->pathbar)
 	);
 	struct atui_path_map* const map = path_to_atui(
 		editable_text,
@@ -158,7 +158,7 @@ pathbar_sets_branch_selection(
 	);
 
 	if (NULL == map->not_found) { // if directory is found
-		const GObject* target;
+		GObject const* target;
 		GObject* questioned;
 		GtkTreeListRow* tree_item;
 		uint16_t model_i;
@@ -277,7 +277,7 @@ static void
 atui_leaves_pullin_gliststore(
 		atui_leaf* const leaves,
 		GListStore* const list,
-		const uint16_t num_leaves
+		uint16_t const num_leaves
 		) {
 // If the parent leaf has children that aren't adjacent, but the parent is
 // labeled with ATUI_SUBONLY, pull them in.
@@ -312,7 +312,7 @@ atui_leaves_pullin_gliststore(
 inline static GListModel*
 atui_leaves_to_glistmodel(
 		atui_leaf* const children,
-		const uint16_t num_children
+		uint16_t const num_children
 		) {
 // Creates a rudimentary model from an array of atui_leaf's
 	GListStore* const child_list = g_list_store_new(G_TYPE_OBJECT);
@@ -322,7 +322,7 @@ atui_leaves_to_glistmodel(
 static GListModel*
 leaves_treelist_generate_children(
 		gpointer const parent_ptr,
-		const gpointer const d // unused
+		gpointer const const d // unused
 		) {
 // GtkTreeListModelCreateModelFunc for leaves
 // Creates the children models for the collapsable tree, of the leaves pane.
@@ -394,8 +394,8 @@ branchleaves_to_treemodel(
 static void
 branch_selection_sets_leaves_list(
 		GtkSingleSelection* const model,
-		const guint position,
-		const guint n_items,
+		guint const position,
+		guint const n_items,
 		yaabegtk_commons* const commons
 		) {
 // Signal callback
@@ -415,7 +415,7 @@ branch_selection_sets_leaves_list(
 }
 static void
 atui_branches_pullin_gliststore(
-		const atui_branch* const parent,
+		atui_branch const* const parent,
 		GListStore* const list
 		) {
 	GObject* gobj_child;
@@ -435,7 +435,7 @@ atui_branches_pullin_gliststore(
 static GListModel*
 branches_treelist_generate_children(
 		gpointer const parent_ptr,
-		const gpointer const data
+		gpointer const const data
 		) {
 // GtkTreeListModelCreateModelFunc for branches
 // Creates the children models for the collapsable tree, of the branches pane.
@@ -541,12 +541,12 @@ create_and_set_active_atui_model(
 inline static void
 branches_leaves_rightclick_popup(
 		GtkGesture* const click_sense,
-		const gdouble x,
-		const gdouble y,
-		const struct rightclick_pack* const pack,
-		const char* const group_name,
-		const GActionEntry* const actions,
-		const uint8_t num_actions
+		gdouble const x,
+		gdouble const y,
+		struct rightclick_pack const* const pack,
+		char const* const group_name,
+		GActionEntry const* const actions,
+		uint8_t const num_actions
 		) {
 	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
 
@@ -579,13 +579,13 @@ branches_leaves_rightclick_popup(
 	bool computed = gtk_widget_compute_point(
 		gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(click_sense)),
 		GTK_WIDGET(pack->context->view),
-		& (const graphene_point_t) {.x=x, .y=y},
+		& (graphene_point_t const) {.x=x, .y=y},
 		&view_coords
 	);
 	assert(computed);
 
 	gtk_popover_set_pointing_to(pack->context->rightclick, 
-		& (const GdkRectangle) {
+		& (GdkRectangle const) {
 			.x=view_coords.x, .y=view_coords.y, .width=1, .height=1
 		}
 	);
@@ -617,11 +617,11 @@ free_closure(
 }
 inline static void
 columnview_row_bind_attach_gesture(
-		const struct pane_context* const context,
+		struct pane_context const* const context,
 		GtkColumnViewRow* const view_row,
 		void (*gesture_cb)( // function pointer
 			GtkGesture*, gint,gdouble,gdouble,
-			const struct rightclick_pack*
+			struct rightclick_pack const*
 			)
 		) {
 	// struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
@@ -698,7 +698,7 @@ construct_path_bar(
 
 static void
 label_column_setup(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
@@ -708,7 +708,7 @@ label_column_setup(
 }
 static void
 tree_label_column_setup(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // setup to spawn a UI skeleton
@@ -723,7 +723,7 @@ tree_label_column_setup(
 
 static void
 leaves_name_column_bind(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -739,18 +739,18 @@ leaves_name_column_bind(
 
 	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 	gtk_label_set_text(GTK_LABEL(label), leaf->name);
-	const uint8_t current_lang = LANG_ENGLISH;
+	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(label, leaf->description[current_lang]);
 }
 inline static void
 leaf_sets_editable(
-		const atui_leaf* const leaf,
+		atui_leaf const* const leaf,
 		GtkEditable* const editable
 		) {
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	char8_t* buff = stack_buff;
-	const uint16_t has_mallocd = atui_leaf_to_text(leaf, &buff);
+	uint16_t const has_mallocd = atui_leaf_to_text(leaf, &buff);
 	gtk_editable_set_text(editable, buff);
 	if (has_mallocd) {
 		free(buff);
@@ -764,7 +764,7 @@ leaves_editable_stray_reset(
 // data when keyboard leaves the textbox
 	GtkTreeListRow* const tree_row = gtk_list_item_get_item(column_cell);
 	GObject* const gobj_leaf = gtk_tree_list_row_get_item(tree_row);
-	const atui_leaf* const leaf = g_object_get_data(gobj_leaf, "leaf");
+	atui_leaf const* const leaf = g_object_get_data(gobj_leaf, "leaf");
 	g_object_unref(gobj_leaf);
 
 	GtkEditable* const editable = GTK_EDITABLE(
@@ -792,22 +792,22 @@ editable_sets_leaf(
 
 static void
 enum_label_column_bind(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // bind
 	GtkLabel* const label = GTK_LABEL(gtk_list_item_get_child(column_cell));
 
 	GObject* const enum_gobj = gtk_list_item_get_item(column_cell);
-	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		enum_gobj, "enum"
 	);
-	const atui_leaf* const leaf = g_object_get_data(enum_gobj, "leaf");
+	atui_leaf const* const leaf = g_object_get_data(enum_gobj, "leaf");
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
 	gtk_label_set_text(label, stack_buff);
-	const uint8_t current_lang = LANG_ENGLISH;
+	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(
 		GTK_WIDGET(label), enum_entry->description[current_lang]
 	);
@@ -817,16 +817,16 @@ enum_label_column_bind(
 static void
 enum_list_sets_editable(
 		GtkListView* const enum_list,
-		const guint position,
+		guint const position,
 		GtkEditable* const editable
 		) {
 	GObject* const enum_gobj = gtk_single_selection_get_selected_item(
 		GTK_SINGLE_SELECTION(gtk_list_view_get_model(enum_list))
 	);
-	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		enum_gobj, "enum"
 	);
-	const atui_leaf* const leaf = g_object_get_data(enum_gobj, "leaf");
+	atui_leaf const* const leaf = g_object_get_data(enum_gobj, "leaf");
 	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
 	stack_buff[0] = '\0';
 	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
@@ -840,7 +840,7 @@ enum_list_sets_leaf(
 	GObject* const enum_gobj = gtk_single_selection_get_selected_item(
 		GTK_SINGLE_SELECTION(gtk_list_view_get_model(enum_list))
 	);
-	const struct atui_enum_entry* const enum_entry = g_object_get_data(
+	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		enum_gobj, "enum"
 	);
 	atui_leaf* const leaf = g_object_get_data(
@@ -937,7 +937,7 @@ get_enum_menu_listmodel(
 		) {
 	if (NULL == leaf->enum_model) {
 		GListStore* list = g_list_store_new(G_TYPE_OBJECT);
-		const struct atui_enum* const atuienum = leaf->enum_options;
+		struct atui_enum const* const atuienum = leaf->enum_options;
 		GObject* gobj_child;
 
 		for (uint8_t i=0; i < atuienum->num_entries; i++) {
@@ -961,7 +961,7 @@ get_enum_menu_listmodel(
 }
 static void
 leaves_val_column_setup(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // setup
@@ -997,7 +997,7 @@ leaves_val_column_setup(
 }
 static void
 leaves_val_column_bind(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // bind
@@ -1053,8 +1053,8 @@ leaves_offset_column_bind(
 			leaf->bitfield_hi, leaf->bitfield_lo
 		);
 	} else if (leaf->num_bytes) {
-		const uint32_t start = leaf->val - commons->atomtree_root->bios;
-		const uint32_t end = (start + leaf->num_bytes -1);
+		uint32_t const start = leaf->val - commons->atomtree_root->bios;
+		uint32_t const end = (start + leaf->num_bytes -1);
 		sprintf(buffer, "[%05X - %05X]", start, end);
 	} else {
 		buffer[0] = '\0';
@@ -1084,18 +1084,18 @@ leaf_right_click_copy_path(
 static void
 leaves_rightclick_popup(
 		GtkGesture* const click_sense,
-		const gint num_presses,
-		const gdouble x,
-		const gdouble y,
-		const struct rightclick_pack* const pack
+		gint const num_presses,
+		gdouble const x,
+		gdouble const y,
+		struct rightclick_pack const* const pack
 		) {
 	if (num_presses != 1) {
 		return;
 	}
-	const GActionEntry actions[] = {
+	GActionEntry const actions[] = {
 		{"path", leaf_right_click_copy_path},
 	}; // see also create_leaves_rightclick_menu
-	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
+	uint8_t const num_actions = sizeof(actions)/sizeof(GActionEntry);
 
 	branches_leaves_rightclick_popup(
 		click_sense,   x, y, pack,
@@ -1116,7 +1116,7 @@ create_leaves_rightclick_menu(
 }
 static void
 leaves_row_bind(
-		const struct pane_context* const context,
+		struct pane_context const* const context,
 		GtkColumnViewRow* const view_row
 		) {
 	columnview_row_bind_attach_gesture(
@@ -1195,7 +1195,7 @@ create_leaves_pane(
 
 static void
 branch_name_column_bind(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -1211,12 +1211,12 @@ branch_name_column_bind(
 
 	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 	gtk_label_set_text(GTK_LABEL(label), branch->name);
-	const uint8_t current_lang = LANG_ENGLISH;
+	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(label, branch->description[current_lang]);
 }
 static void
 branch_type_column_bind(
-		const void* const _null, // swapped-signal:: with factory
+		void const* const _null, // swapped-signal:: with factory
 		GtkListItem* const column_cell
 		) {
 // bind
@@ -1252,18 +1252,18 @@ branch_right_click_copy_path(
 static void
 branches_rightclick_popup(
 		GtkGesture* const click_sense,
-		const gint num_presses,
-		const gdouble x,
-		const gdouble y,
-		const struct rightclick_pack* const pack
+		gint const num_presses,
+		gdouble const x,
+		gdouble const y,
+		struct rightclick_pack const* const pack
 		) {
 	if (num_presses != 1) {
 		return;
 	}
-	const GActionEntry actions[] = {
+	GActionEntry const actions[] = {
 		{"path", branch_right_click_copy_path},
 	}; // see also create_branches_rightclick_menu
-	const uint8_t num_actions = sizeof(actions)/sizeof(GActionEntry);
+	uint8_t const num_actions = sizeof(actions)/sizeof(GActionEntry);
 
 	branches_leaves_rightclick_popup(
 		click_sense,   x, y, pack,
@@ -1284,7 +1284,7 @@ create_branches_rightclick_menu(
 }
 static void
 branches_row_bind(
-		const struct pane_context* const context,
+		struct pane_context const* const context,
 		GtkColumnViewRow* const view_row
 		) {
 	columnview_row_bind_attach_gesture(
@@ -1394,7 +1394,7 @@ atomtree_load_from_gfile(
 		goto exit2;
 	}
 
-	const int64_t filesize = g_file_info_get_size(fi_size);
+	int64_t const filesize = g_file_info_get_size(fi_size);
 	g_object_unref(fi_size);
 	// TODO possible warning if the file size is too big? too small?
 
@@ -1494,12 +1494,12 @@ set_editor_titlebar(
 		yaabegtk_commons* const commons
 		) {
 // Set the window name to the name of the currently-open bios.
-	const char8_t print_format_file[] = "%s (%s)";
-	const char8_t print_format_nofile[] = "%s";
+	char8_t const print_format_file[] = "%s (%s)";
+	char8_t const print_format_nofile[] = "%s";
 
 	char8_t* filename;
 	uint16_t filename_length;
-	const char8_t* formatstr;
+	char8_t const* formatstr;
 	if (commons->atomtree_root) {
 		filename = g_file_get_basename(commons->atomtree_root->biosfile);
 		filename_length = strlen(filename);
@@ -1530,7 +1530,7 @@ set_editor_titlebar(
 inline static void
 filer_error_window(
 		GError* const ferror,
-		const char8_t* const title
+		char8_t const* const title
 		) {
 // Simple error popup
 	GtkEventController* const escapeclose = gtk_shortcut_controller_new();
@@ -1795,9 +1795,9 @@ construct_loadsave_buttons_box(
 static gboolean
 dropped_file_open_bios(
 		GtkDropTarget* const dropctrl,
-		const GValue* const value,
-		const gdouble x,
-		const gdouble y,
+		GValue const* const value,
+		gdouble const x,
+		gdouble const y,
 		yaabegtk_commons* const commons
 		) {
 // Load a bios from a drag-n'-drop
@@ -1866,7 +1866,7 @@ yaabe_gtk(
 	g_signal_connect(commons.yaabe_gtk,
 		"activate", G_CALLBACK(yaabe_app_activate), &commons
 	);
-	const int8_t status = g_application_run(
+	int8_t const status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL
 	);
 

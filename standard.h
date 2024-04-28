@@ -58,22 +58,22 @@ static_assert(sizeof(struct _tenbytes) == 10);
 // TODO stroll that considers 0b prefix?
 int64_t
 strtoll_2(
-		const char8_t* str
+		char8_t const* str
 		);
 uint64_t
 strtoull_2(
-		const char8_t* str
+		char8_t const* str
 		);
 
 bool
 is_number( // test string if it's a decimal integer
-		const char8_t* str
+		char8_t const* str
 		);
 
 char8_t*
 stopcopy( // stpcpy; copy string, returns pointer to \0
 		char8_t* restrict dest,
-		const char8_t* restrict src
+		char8_t const* restrict src
 		);
 
 #endif

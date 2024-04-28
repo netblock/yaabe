@@ -15,12 +15,12 @@ register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set);
 
 struct register_set_entry { // register set entry
 	uint16_t address; // mm,ix,reg prefixed defines
-	const char8_t* name;
+	char8_t const* name;
 };
 struct register_set {
 	uint16_t num_reg_set_addresses;
-	const char8_t* set_name;
-	const struct register_set_entry* entries;
+	char8_t const* set_name;
+	struct register_set_entry const* entries;
 };
 #define RSE(reg_name)\
 	{\
@@ -30,18 +30,18 @@ struct register_set {
 
 int16_t
 regset_bsearch_left(
-		const struct register_set* reg_set,
+		struct register_set const* reg_set,
 		uint16_t address
 		);
 int16_t
 regset_bsearch_right(
-		const struct register_set* reg_set,
+		struct register_set const* reg_set,
 		uint16_t address
 		);
 void
 register_set_print_tables( // entirely a developer's tool
-		const struct atomtree_init_reg_block* at_regblock,
-		const struct register_set* reg_set,
+		struct atomtree_init_reg_block const* at_regblock,
+		struct register_set const* reg_set,
 		bool newest // suggest oldest or newest if there's multiple versions
 		);
 
@@ -49,8 +49,8 @@ register_set_print_tables( // entirely a developer's tool
 // compare register index sequences. expectation asserts END_OF_REG_INDEX_BLOCK
 uint8_t
 regcmp(
-		const struct atom_init_reg_index_format* index,
-		const uint16_t* expectation
+		struct atom_init_reg_index_format const* index,
+		uint16_t const* expectation
 		);
 
 #include "gmc_searchfield.h"

@@ -4,8 +4,8 @@
 
 int
 main(
-		const int argc,
-		const char* const* const argv
+		int const argc,
+		char const* const* const argv
 		) {
 	struct atom_tree* atree = NULL;
 

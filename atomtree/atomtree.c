@@ -7,8 +7,8 @@ inline static atui_branch*
 atomtree_dt_populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_smc_dpm_info = NULL;
 	atui_branch* atui_smudpm_i2c = NULL;
@@ -93,8 +93,8 @@ inline static atui_branch*
 atomtree_dt_populate_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_firmwareinfo = NULL;
 
@@ -185,8 +185,8 @@ inline static atui_branch*
 atomtree_dt_populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_lcd_info = NULL;
 	atui_branch* atui_lcd_timing = NULL;
@@ -224,8 +224,8 @@ inline static atui_branch*
 atomtree_dt_populate_smu_info(
 		struct atomtree_smu_info* const smu_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_smu_info = NULL;
 
@@ -338,8 +338,8 @@ inline static atui_branch*
 atomtree_dt_populate_vram_usagebyfirmware(
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui) {
+		uint16_t const bios_offset,
+		bool const generate_atui) {
 
 	atui_branch* atui_fw_vram = NULL;
 
@@ -379,8 +379,8 @@ inline static atui_branch*
 atomtree_dt_populate_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_gpio_pin_lut = NULL;
 	atui_branch* atui_gpio_pin = NULL;
@@ -427,8 +427,8 @@ inline static atui_branch*
 atomtree_dt_populate_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_gfx_info = NULL;
 
@@ -530,8 +530,8 @@ inline static atui_branch*
 atomtree_dt_populate_ppt(
 		struct atomtree_powerplaytable* const ppt,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_ppt = NULL;
 	atui_branch* atui_smc_pptable = NULL;
@@ -605,8 +605,8 @@ atomtree_dt_populate_ppt(
 static atui_branch*
 atomtree_populate_init_reg_block(
 		struct atomtree_init_reg_block* const at_regblock,
-		const bool generate_atui,
-		const uint8_t num_extra_atuibranches
+		bool const generate_atui,
+		uint8_t const num_extra_atuibranches
 		) {
 	// MC inititialisation registers, for vram_info 2.2 and older
 	// regblock->leaves must be already populated.
@@ -658,8 +658,8 @@ atomtree_populate_init_reg_block(
 
 static void
 get_memory_vendor_part_strs(
-		const struct atomtree_vram_module* const vram_module,
-		const char8_t** const vendor_part_output
+		struct atomtree_vram_module const* const vram_module,
+		char8_t const** const vendor_part_output
 		) {
 	union memory_vendor_id vendor_rev_id;
 	vendor_part_output[1] = NULL;
@@ -708,14 +708,14 @@ get_memory_vendor_part_strs(
 			 break;
 		default: assert(0);
 	}
-	const struct atui_enum* const vendors = &ATUI_ENUM(GDDR_MEM_VENDOR_e);
+	struct atui_enum const* const vendors = &ATUI_ENUM(GDDR_MEM_VENDOR_e);
 	assert(vendor_rev_id.vendor_code < vendors->num_entries);
 	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
 }
 
 static enum atom_dgpu_vram_type
 get_vram_type(
-		const struct atomtree_vram_module* const vram_module
+		struct atomtree_vram_module const* const vram_module
 		) {
 	switch (vram_module->vram_module_ver) {
 		case v1_1:  return vram_module->v1_1->MemoryType;
@@ -737,28 +737,28 @@ get_vram_type(
 static atui_branch*
 atomtree_populate_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
-		const bool generate_atui,
-		const struct atomtree_vram_module* const vram_modules
+		bool const generate_atui,
+		struct atomtree_vram_module const* const vram_modules
 		) {
 	atui_branch* const atui_mem_adjust = atomtree_populate_init_reg_block(
 		mem_adjust_table, generate_atui, 1
 	);
 	mem_adjust_table->reg_type = reg_block_mem_adjust;
 
-	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
 	);
-	const enum atomtree_common_version vram_module_ver =
+	enum atomtree_common_version const vram_module_ver =
 		vram_modules[0].vram_module_ver;
-	const struct atom_init_reg_index_format* const index =
+	struct atom_init_reg_index_format const* const index =
 		mem_adjust_table->register_index;
-	const struct atom_reg_setting_data_block* const* const data_blocks =
-	(const struct atom_reg_setting_data_block* const* const)
+	struct atom_reg_setting_data_block const* const* const data_blocks =
+	(struct atom_reg_setting_data_block const* const* const)
 		mem_adjust_table->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
 		if (regcmp(index, mem_adjust_set_gcn3_hbm1_addresses)) {
 			mem_adjust_table->reg_set = mem_adjust_set_gcn3_hbm1;
@@ -846,8 +846,8 @@ atomtree_populate_mem_adjust_table(
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
-			const char8_t* vendor_part[2];
-			const bool atom_vram_module_v8_hack = (
+			char8_t const* vendor_part[2];
+			bool const atom_vram_module_v8_hack = (
 				// uniquely, atom_vram_module_v8 uses McTunningSetId to ID
 				// mem_adjust table. It seems to exist as a way to exlude the
 				// 'generic' vram_module.
@@ -908,28 +908,28 @@ atomtree_populate_mem_adjust_table(
 static atui_branch*
 atomtree_populate_mem_clk_patch(
 		struct atomtree_init_reg_block* const mem_clk_patch,
-		const bool generate_atui,
-		const struct atomtree_vram_module* const vram_modules
+		bool const generate_atui,
+		struct atomtree_vram_module const* const vram_modules
 		) {
 	atui_branch* const atui_memclkpatch = atomtree_populate_init_reg_block(
 		mem_clk_patch, generate_atui, 1
 	);
 	mem_clk_patch->reg_type = reg_block_mem_clk_patch;
 
-	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
 	);
-	const enum atomtree_common_version vram_module_ver =
+	enum atomtree_common_version const vram_module_ver =
 		vram_modules[0].vram_module_ver;
-	const struct atom_init_reg_index_format* const index =
+	struct atom_init_reg_index_format const* const index =
 		mem_clk_patch->register_index;
-	const struct atom_reg_setting_data_block* const* const data_blocks =
-	(const struct atom_reg_setting_data_block* const* const)
+	struct atom_reg_setting_data_block const* const* const data_blocks =
+	(struct atom_reg_setting_data_block const* const* const)
 		mem_clk_patch->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
 		if (regcmp(index, timings_set_polaris_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
@@ -973,7 +973,7 @@ atomtree_populate_mem_clk_patch(
 
 			atui_branch* atui_strap;
 			struct atui_funcify_args func_args = {0};
-			const char8_t* vendor_part[2];
+			char8_t const* vendor_part[2];
 			for (uint8_t i = 0; i < mem_clk_patch->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				atui_strap = atui_strap_func(&func_args);
@@ -1010,28 +1010,28 @@ atomtree_populate_mem_clk_patch(
 static atui_branch*
 atomtree_populate_mc_tile_adjust(
 		struct atomtree_init_reg_block* const mc_tile_adjust,
-		const bool generate_atui,
-		const struct atomtree_vram_module* const vram_modules
+		bool const generate_atui,
+		struct atomtree_vram_module const* const vram_modules
 		) {
 	atui_branch* const atui_mc_tile_adjust = atomtree_populate_init_reg_block(
 		mc_tile_adjust, generate_atui, 1
 	);
 	mc_tile_adjust->reg_type = reg_block_mc_tile_adjust;
 
-	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
 	);
-	const enum atomtree_common_version vram_module_ver =
+	enum atomtree_common_version const vram_module_ver =
 		vram_modules[0].vram_module_ver;
-	const struct atom_init_reg_index_format* const index =
+	struct atom_init_reg_index_format const* const index =
 		mc_tile_adjust->register_index;
-	const struct atom_reg_setting_data_block* const* const data_blocks =
-	(const struct atom_reg_setting_data_block* const* const)
+	struct atom_reg_setting_data_block const* const* const data_blocks =
+	(struct atom_reg_setting_data_block const* const* const)
 		mc_tile_adjust->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (2 == mc_tile_adjust->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_tile_adjust_set_gcn4_gddr5_addresses)) {
 			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn4_gddr5;
@@ -1092,28 +1092,28 @@ atomtree_populate_mc_tile_adjust(
 static atui_branch*
 atomtree_populate_init_mc_phy_init(
 		struct atomtree_init_reg_block* const mc_phy_init,
-		const bool generate_atui,
-		const struct atomtree_vram_module* const vram_modules
+		bool const generate_atui,
+		struct atomtree_vram_module const* const vram_modules
 		) {
 	atui_branch* const atui_phy_init = atomtree_populate_init_reg_block(
 		mc_phy_init, generate_atui, 1
 	);
 	mc_phy_init->reg_type = reg_block_mc_phy_init;
 
-	const enum atom_dgpu_vram_type vram_type = get_vram_type(
+	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
 	);
-	const enum atomtree_common_version vram_module_ver =
+	enum atomtree_common_version const vram_module_ver =
 		vram_modules[0].vram_module_ver;
-	const struct atom_init_reg_index_format* const index =
+	struct atom_init_reg_index_format const* const index =
 		mc_phy_init->register_index;
-	const struct atom_reg_setting_data_block* const* const data_blocks =
-	(const struct atom_reg_setting_data_block* const* const)
+	struct atom_reg_setting_data_block const* const* const data_blocks =
+	(struct atom_reg_setting_data_block const* const* const)
 		mc_phy_init->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (14 == mc_phy_init->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_phy_init_set_gcn3_hbm1_addresses)) {
 			mc_phy_init->reg_set = mc_phy_init_set_gcn3_hbm1;
@@ -1185,8 +1185,8 @@ atomtree_populate_init_mc_phy_init(
 static atui_branch*
 atomtree_populate_umc_init_reg_block(
 		struct atomtree_umc_init_reg_block* const at_regblock,
-		const bool generate_atui,
-		const uint8_t num_extra_atuibranches
+		bool const generate_atui,
+		uint8_t const num_extra_atuibranches
 		) {
 	// UMC inititialisation registers, for vram_info 2.3 and newer
 	// regblock->leaves must be already populated.
@@ -1254,20 +1254,20 @@ atomtree_populate_umc_init_reg_block(
 inline static atui_branch*
 atomtree_populate_atom_memory_timing_format(
 		struct atomtree_vram_module* const vram_module,
-		const enum atom_dgpu_vram_type memory_type,
-		const union atom_memory_timing_format* const timing_format_start,
-		const uint16_t straps_total_size,
-		const bool generate_atui
+		enum atom_dgpu_vram_type const memory_type,
+		union atom_memory_timing_format const* const timing_format_start,
+		uint16_t const straps_total_size,
+		bool const generate_atui
 		) {
 	union {
-		const void* raw;
-		const struct atom_memory_timing_format_v0* v0;
-		const struct atom_memory_timing_format_v1* v1;
-		const struct atom_memory_timing_format_v2* v2;
+		void const* raw;
+		struct atom_memory_timing_format_v0 const* v0;
+		struct atom_memory_timing_format_v1 const* v1;
+		struct atom_memory_timing_format_v2 const* v2;
 	} strap;
 	strap.raw = timing_format_start;
 
-	atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	uint8_t table_size;
 	if (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5) {
 		if (0xFF == strap.v1->Terminator) {
@@ -1285,7 +1285,7 @@ atomtree_populate_atom_memory_timing_format(
 		table_size = sizeof(struct atom_memory_timing_format_v0);
 		atui_strap_func = ATUI_FUNC(atom_memory_timing_format_v0);
 	}
-	const uint8_t count = straps_total_size / table_size;
+	uint8_t const count = straps_total_size / table_size;
 	vram_module->num_memory_timing_format = count;
 
 	atui_branch* atui_straps = NULL;
@@ -1390,7 +1390,7 @@ atomtree_populate_atom_memory_timing_format(
 inline static atui_branch*
 atomtree_populate_vram_module(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	enum atomtree_common_version vram_module_ver;
 	struct atomtree_vram_module* vram_modules;
@@ -1466,7 +1466,7 @@ atomtree_populate_vram_module(
 
 	atui_branch* atui_module_entry;
 	atui_branch* atui_children[3] = {NULL};
-	const uint8_t num_atui_children = (
+	uint8_t const num_atui_children = (
 		sizeof(atui_children) / sizeof(atui_branch*)
 	);
 	atui_branch* atui_vrammodules = NULL;
@@ -1950,7 +1950,7 @@ atomtree_populate_vram_module(
 inline static atui_branch*
 atomtree_populate_vram_info_v1_2(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
 	vi12->leaves = vram_info->leaves;
@@ -1976,7 +1976,7 @@ atomtree_populate_vram_info_v1_2(
 inline static atui_branch*
 atomtree_populate_vram_info_v1_3(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_v1_3* const vi13 = &(vram_info->v1_3);
 	vi13->leaves = vram_info->leaves;
@@ -2041,7 +2041,7 @@ atomtree_populate_vram_info_v1_3(
 inline static atui_branch*
 atomtree_populate_vram_info_v1_4(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_v1_4* const vi14 = &(vram_info->v1_4);
 	vi14->leaves = vram_info->leaves;
@@ -2101,7 +2101,7 @@ atomtree_populate_vram_info_v1_4(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_1(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_1* const vi21 = &(vram_info->v2_1);
 	vi21->leaves = vram_info->leaves;
@@ -2175,7 +2175,7 @@ atomtree_populate_vram_info_v2_1(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_2(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_2* const vi22 = &(vram_info->v2_2);
 	vi22->leaves = vram_info->leaves;
@@ -2274,7 +2274,7 @@ atomtree_populate_vram_info_v2_2(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_3(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
 	vi23->leaves = vram_info->leaves;
@@ -2326,10 +2326,10 @@ atomtree_populate_vram_info_v2_3(
 		}
 
 		if (generate_atui) {
-			const struct atomtree_umc_init_reg_block* const mem_clk_patch =
+			struct atomtree_umc_init_reg_block const* const mem_clk_patch =
 				&(vi23->mem_clk_patch);
-			const struct atom_reg_setting_data_block* const* const data_blocks =
-				(const struct atom_reg_setting_data_block* const* const)
+			struct atom_reg_setting_data_block const* const* const data_blocks =
+				(struct atom_reg_setting_data_block const* const* const)
 				vi23->mem_clk_patch.data_blocks;
 
 			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
@@ -2339,14 +2339,14 @@ atomtree_populate_vram_info_v2_3(
 			);
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 
-			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+			atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 			struct atui_funcify_args func_args = {0};
 			if (vi23->uses_vega21_timings) {
 				atui_strap_func = ATUI_FUNC(timings_set_vega21);
 			} else {
 				atui_strap_func = ATUI_FUNC(timings_set_vega10);
 			}
-			const char8_t* vendor_part[2];
+			char8_t const* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				tmp_branch = atui_strap_func(&func_args);
@@ -2461,7 +2461,7 @@ atomtree_populate_vram_info_v2_3(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_4(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
 	vi24->leaves = vram_info->leaves;
@@ -2506,10 +2506,10 @@ atomtree_populate_vram_info_v2_4(
 			(struct timings_set_navi1*)vi24->mem_clk_patch.data_blocks[0];
 
 		if (generate_atui) {
-			const struct atomtree_umc_init_reg_block* const mem_clk_patch =
+			struct atomtree_umc_init_reg_block const* const mem_clk_patch =
 				&(vi24->mem_clk_patch);
-			const struct atom_reg_setting_data_block* const* const data_blocks =
-				(const struct atom_reg_setting_data_block* const* const)
+			struct atom_reg_setting_data_block const* const* const data_blocks =
+				(struct atom_reg_setting_data_block const* const* const)
 				vi24->mem_clk_patch.data_blocks;
 
 			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
@@ -2520,10 +2520,10 @@ atomtree_populate_vram_info_v2_4(
 			ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 
 			// to have similar topology like the rest
-			atui_branch* (* atui_strap_func)(const struct atui_funcify_args*);
+			atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 			atui_strap_func = ATUI_FUNC(timings_set_navi1);
 			struct atui_funcify_args func_args = {0};
-			const char8_t* vendor_part[2];
+			char8_t const* vendor_part[2];
 			for (i=0; i < mem_clk_patch->num_data_blocks; i++) {
 				func_args.suggestbios = data_blocks[i];
 				tmp_branch = atui_strap_func(&func_args);
@@ -2626,7 +2626,7 @@ atomtree_populate_vram_info_v2_4(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_5(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
 	vi25->leaves = vram_info->leaves;
@@ -2669,9 +2669,9 @@ atomtree_populate_vram_info_v2_5(
 				u8"atom_gddr6_ac_timing_v2_5",
 				NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 			);
-			const struct atom_gddr6_ac_timing_v2_5* const timings =
+			struct atom_gddr6_ac_timing_v2_5 const* const timings =
 				vi25->gddr6_ac_timings;
-			const char8_t* vendor_part[2];
+			char8_t const* vendor_part[2];
 			for (i=0; i < vi25->gddr6_acstrap_count; i++) {
 				tmp_branch = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,
 					NULL,  NULL,&(timings[i]),  0,NULL
@@ -2782,7 +2782,7 @@ atomtree_populate_vram_info_v2_5(
 inline static atui_branch*
 atomtree_populate_vram_info_v2_6(
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
 	vi26->leaves = vram_info->leaves;
@@ -2914,7 +2914,7 @@ atomtree_populate_vram_info_v2_6(
 inline static atui_branch*
 atomtree_populate_vram_info_v3_0( // TODO finish this
 		struct atomtree_vram_info* const vram_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
 	vi30->leaves = vram_info->leaves;
@@ -3028,8 +3028,8 @@ inline static atui_branch*
 atomtree_dt_populate_vram_info(
 		struct atomtree_vram_info* const vram_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_vi = NULL;
 
@@ -3107,7 +3107,7 @@ atomtree_dt_populate_vram_info(
 inline static atui_branch*
 atomtree_dt_populate_voltageobject_info_v4_1(
 		struct atomtree_voltageobject_info* const vo_info,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	atui_branch* atui_vo_info = NULL;
 	atui_branch* tmp_branch = NULL;
@@ -3120,7 +3120,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 	// through the array based on what each element reports their size as.
 	union atom_voltage_object_v4* vobj;
 	uint16_t offset = 0;
-	const uint16_t vo41_array_size = (
+	uint16_t const vo41_array_size = (
 		vo41->leaves->table_header.structuresize
 		- offsetof(struct atom_voltage_objects_info_v4_1, voltage_object[0])
 	);
@@ -3238,8 +3238,8 @@ inline static atui_branch*
 atomtree_dt_populate_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	atui_branch* atui_vo_info = NULL;
 
@@ -3281,7 +3281,7 @@ inline static atui_branch*
 atomtree_populate_master_datatable_v1_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	void* const bios = atree->bios;
 	struct atomtree_master_datatable_v1_1* const dt11 = &(data_table->v1_1);
@@ -3531,7 +3531,7 @@ inline static atui_branch*
 atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1* const data_table,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	// TODO have a table with a bunch of ATUI_INLINEs pointing at headers
 
@@ -3629,7 +3629,7 @@ inline static atui_branch*
 atomtree_populate_master_datatable_v2_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	void* const bios = atree->bios;
 	struct atomtree_master_datatable_v2_1* const dt21 = &(data_table->v2_1);
@@ -3727,8 +3727,8 @@ inline static atui_branch*
 atomtree_populate_datatables(
 		//struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree,
-		const uint16_t bios_offset,
-		const bool generate_atui
+		uint16_t const bios_offset,
+		bool const generate_atui
 		) {
 	struct atomtree_master_datatable* const data_table = &(atree->data_table);
 	atui_branch* atui_dt = NULL;
@@ -3770,7 +3770,7 @@ inline static atui_branch*
 atomtree_populate_atom_rom_header_v1_1(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atom_rom_header_v1_1* const leaves = rom_header->v1_1;
 	void* const bios = atree->bios;
@@ -3828,7 +3828,7 @@ inline static atui_branch*
 atomtree_populate_atom_rom_header_v2_1(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atom_rom_header_v2_1* const leaves = rom_header->v2_1;
 	void* const bios = atree->bios;
@@ -3889,7 +3889,7 @@ inline static atui_branch*
 atomtree_populate_atom_rom_header_v2_2(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 	struct atom_rom_header_v2_2* const leaves = rom_header->v2_2;
 	void* const bios = atree->bios;
@@ -3986,7 +3986,7 @@ atomtree_populate_atom_rom_header(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
 		uint16_t offset,
-		const bool generate_atui
+		bool const generate_atui
 		) {
 		atui_branch* atui_rom_header = NULL;
 
@@ -4040,15 +4040,15 @@ atomtree_populate_atom_rom_header(
 
 inline static void*
 bios_fastforward(
-		const void* const biosfile,
-		const uint32_t size
+		void const* const biosfile,
+		uint32_t const size
 		) {
 	union {
-		const void* bios;
-		const struct atombios_image* image;
+		void const* bios;
+		struct atombios_image const* image;
 	} bi;
 	bi.bios = biosfile;
-	const void* const end = biosfile + size;
+	void const* const end = biosfile + size;
 	while (bi.bios < end) {
 		if ((bi.image->atombios_magic == ATOM_BIOS_MAGIC)
 			&& (0 == strcmp(ATOM_ATI_MAGIC, bi.image->atomati_magic))
@@ -4064,8 +4064,8 @@ bios_fastforward(
 struct atom_tree*
 atombios_parse(
 		void* const alloced_bios,
-		const uint32_t allocsize,
-		const bool generate_atui
+		uint32_t const allocsize,
+		bool const generate_atui
 		) {
 	void* const bios = bios_fastforward(alloced_bios, allocsize);
 	if (bios == NULL) {
@@ -4114,13 +4114,13 @@ atombios_parse(
 
 inline enum atomtree_common_version
 get_ver(
-		const struct atom_common_table_header* const header
+		struct atom_common_table_header const* const header
 		) {
 	return (header->format_revision * 100) + header->content_revision;
 }
 inline void
 set_ver(
-		const enum atomtree_common_version ver,
+		enum atomtree_common_version const ver,
 		struct atom_common_table_header* const header
 		) {
 	header->format_revision = ver / 100;
@@ -4132,8 +4132,8 @@ void
 atomtree_bios_checksum(
 		struct atom_tree* const atree
 		) {
-	const uint8_t* const bios = atree->bios;
-	const uint32_t bios_size = atree->bios_image_size;
+	uint8_t const* const bios = atree->bios;
+	uint32_t const bios_size = atree->bios_image_size;
 	uint8_t offset = 0;
 
 	for (uint32_t i=0; i < bios_size; i++) {

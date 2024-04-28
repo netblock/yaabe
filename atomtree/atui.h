@@ -49,17 +49,17 @@ enum i18n_languages:int8_t {
 };
 
 struct atui_enum_entry {
-	const char8_t* const name;
-	const char8_t* const description[LANG_TOTALLANGS];
-	const int64_t val;
-	const uint16_t name_length;
+	char8_t const* const name;
+	char8_t const* const description[LANG_TOTALLANGS];
+	int64_t const val;
+	uint16_t const name_length;
 };
 struct atui_enum {
-	const char8_t* const name;
-	const char8_t* const description[LANG_TOTALLANGS];
-	const struct atui_enum_entry* const enum_array;
-	const uint8_t num_entries;
-	const uint16_t name_length;
+	char8_t const* const name;
+	char8_t const* const description[LANG_TOTALLANGS];
+	struct atui_enum_entry const* const enum_array;
+	uint8_t const num_entries;
+	uint16_t const name_length;
 };
 
 
@@ -93,8 +93,8 @@ typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
 	char8_t name[72];
-	const char8_t* origname;
-	const char8_t* description[LANG_TOTALLANGS];
+	char8_t const* origname;
+	char8_t const* description[LANG_TOTALLANGS];
 
 	uint32_t num_bytes;  // number of bytes for quick leaf size
 	enum atui_type type; // how to display text, and other config data
@@ -109,7 +109,7 @@ struct _atui_leaf {
 
 	int16_t num_gobj; // for child_gobj_cache
 
-	const struct atui_enum* enum_options; // if it has an associated enum
+	struct atui_enum const* enum_options; // if it has an associated enum
 	GtkSelectionModel* enum_model; // composited enum cache for GTK
 
 	union {
@@ -117,12 +117,12 @@ struct _atui_leaf {
 		atui_leaf* child_leaves;
 
 		// allocator-funcify use only:
-		atui_branch* (* branch_bud)(const struct atui_funcify_args*);
-		const struct subleaf_meta* template_leaves;
+		atui_branch* (* branch_bud)(struct atui_funcify_args const*);
+		struct subleaf_meta const* template_leaves;
 	};
 
 	union {
-		const void* val;
+		void const* val;
 
 		uint8_t*  u8;
 		uint16_t* u16;
@@ -158,9 +158,9 @@ struct _atui_leaf {
 };
 struct _atui_branch {
 	char8_t name[64];
-	const char8_t* origname;
+	char8_t const* origname;
 
-	const char8_t* description[LANG_TOTALLANGS];
+	char8_t const* description[LANG_TOTALLANGS];
 
 	atui_branch** child_branches;  // petiole + import
 	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
@@ -197,11 +197,11 @@ struct _atui_branch {
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit
 		atui_leaf* leaf,
-		const char8_t* buffer
+		char8_t const* buffer
 		);
 uint16_t // returns malloc size
 atui_leaf_to_text(
-		const atui_leaf* leaf,
+		atui_leaf const* leaf,
 		char8_t** buffer_ptr
 		);
 
@@ -213,7 +213,7 @@ atui_leaf_set_val_unsigned(
 		);
 uint64_t
 atui_leaf_get_val_unsigned(
-		const atui_leaf* leaf
+		atui_leaf const* leaf
 		);
 
 void
@@ -223,7 +223,7 @@ atui_leaf_set_val_signed(
 		);
 int64_t
 atui_leaf_get_val_signed(
-		const atui_leaf* leaf
+		atui_leaf const* leaf
 		);
 
 void
@@ -233,18 +233,18 @@ atui_leaf_set_val_fraction(
 		);
 float64_t
 atui_leaf_get_val_fraction(
-		const atui_leaf* leaf
+		atui_leaf const* leaf
 		);
 
 
 char8_t*
 atui_branch_to_path( // get a full /directory/like/path/of/the/branches/
-		const atui_branch* tip,
+		atui_branch const* tip,
 		char8_t* buffer
 		);
 char8_t*
 atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
-		const atui_leaf* tip,
+		atui_leaf const* tip,
 		char8_t* buffer
 		);
 
@@ -257,25 +257,25 @@ struct atui_path_map { // the trail of objects for a map
 };
 struct atui_path_map* // needs to be freed
 path_to_atui( // crawls path and makes a map of that path
-		const char8_t* path,
-		const atui_branch* root
+		char8_t const* path,
+		atui_branch const* root
 		);
 
 void
 atui_enum_entry_to_text(
 		char8_t* buffer,
-		const atui_leaf* leaf,
-		const struct atui_enum_entry* enum_entry
+		atui_leaf const* leaf,
+		struct atui_enum_entry const* enum_entry
 		);
 
 int16_t
 atui_enum_bsearch( // binary; left
-		const struct atui_enum* enum_array,
+		struct atui_enum const* enum_array,
 		int64_t val
 		);
 int16_t
 atui_enum_lsearch( // linear; left
-		const struct atui_enum* enum_array,
+		struct atui_enum const* enum_array,
 		int64_t val
 		);
 
@@ -295,7 +295,7 @@ _atui_destroy_leaves(
 // funcify internal structs:
 
 struct atui_funcify_args {
-	const char8_t* rename;
+	char8_t const* rename;
 	// optionally rename the branch.
 
 	void* atomtree;
@@ -303,7 +303,7 @@ struct atui_funcify_args {
 	// but is necessary if atomtree-computer data needs to be pulled in. Can be
 	// optional depending on defined atui branch; use suggestbios instead.
 
-	const void* suggestbios;
+	void const* suggestbios;
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 
@@ -316,34 +316,34 @@ struct atui_funcify_args {
 };
 
 struct subleaf_meta {
-	const uint32_t element_size;   // Size of bios element. For pointer math.
-	const uint8_t dynarray_length; // The number of elements in the bios array
-	const bool deferred_start_array;
+	uint32_t const element_size;   // Size of bios element. For pointer math.
+	uint8_t const dynarray_length; // The number of elements in the bios array
+	bool const deferred_start_array;
 
-	const uint8_t numleaves; // number of leaves within the pattern.
-	const atui_leaf* sub_leaves;
+	uint8_t const numleaves; // number of leaves within the pattern.
+	atui_leaf const* sub_leaves;
 
 	// optional enum for name sprintf'ing
-	const struct atui_enum* const enum_taglist;
+	struct atui_enum const* const enum_taglist;
 };
 
 struct atui_branch_data {
-	const char8_t* const origname;
-	const char8_t* const description[LANG_TOTALLANGS];
+	char8_t const* const origname;
+	char8_t const* const description[LANG_TOTALLANGS];
 
 	// leaves straightforward:
-	const atui_leaf* const leaves_init;
+	atui_leaf const* const leaves_init;
 
-	const uint32_t num_leaves_init; // sizeof(); does not include kids
-	const uint32_t computed_num_leaves;
-	const uint32_t computed_num_inline;
-	const uint32_t computed_num_petiole;
+	uint32_t const num_leaves_init; // sizeof(); does not include kids
+	uint32_t const computed_num_leaves;
+	uint32_t const computed_num_inline;
+	uint32_t const computed_num_petiole;
 };
 
 atui_branch*
 atui_branch_allocator(
-	const struct atui_branch_data* const embryo,
-	const struct atui_funcify_args* const args
+	struct atui_branch_data const* const embryo,
+	struct atui_funcify_args const* const args
 	);
 
 

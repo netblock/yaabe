@@ -611,13 +611,13 @@ Considers %s versions: %s
 #ifndef %s_SEARCHFIELD_H
 #define %s_SEARCHFIELD_H
 
-static const struct register_set_entry _%s_reg_set_entries[] = {
+static struct register_set_entry const _%s_reg_set_entries[] = {
 """
 	preprossor_str = "\tRSE(%s)\n"
 	header_ender = """\
 };
 
-static const struct register_set %s_reg_set = {
+static struct register_set const %s_reg_set = {
 	.num_reg_set_addresses = ( // %u
 		sizeof(_%s_reg_set_entries) / sizeof(struct register_set_entry)
 	),

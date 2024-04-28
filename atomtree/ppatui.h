@@ -14,7 +14,7 @@ C preprocessor side of ATUI table generation
 		num_branches, branch_import_pointer)\
 \
 	_##atom_struct_name##_atui(\
-		&(const struct atui_funcify_args) {\
+		&(struct atui_funcify_args const) {\
 			.rename = new_name,\
 			.atomtree = atomtree_pointer,\
 			.suggestbios = bios_pointer,\
@@ -44,7 +44,7 @@ C preprocessor side of ATUI table generation
 // To define the header entries for the aformentioned allocator functions.
 #define PPATUI_HEADERIFY(atom_struct)\
 	atui_branch* ATUI_FUNC(atom_struct)(\
-		const struct atui_funcify_args* const args\
+		struct atui_funcify_args const* const args\
 	)
 
 #define _PPATUI_NULLPTR(var) _Generic((var),\

@@ -187,7 +187,7 @@ smu_load_microcode,
 
 
 pptable is obtained via driver, via amdgpu_sriov_vf(adev)
-hdr = (const struct smc_firmware_header_v1_0 *) adev->pm.fw->data
+hdr = (struct smc_firmware_header_v1_0 const *) adev->pm.fw->data
 smu->smu_table.boot_values.pp_table_id
 
 amdgpu_smu.h:481 defines struct smu_context

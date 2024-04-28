@@ -95,12 +95,12 @@ static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
 	enum_template = """\
 static_assert(%u <= UINT8_MAX);
 static_assert(strlen("%s") < ATUI_LEAVES_STR_BUFFER);
-static const struct atui_enum ATUI_ENUM(%s) = {
+static struct atui_enum const ATUI_ENUM(%s) = {
 	.name_length = sizeof(u8"%s") - 1,
 	.name = u8"%s",
 	.num_entries = %u,
 %s\
-	.enum_array = (const struct atui_enum_entry[]) {
+	.enum_array = (struct atui_enum_entry const[]) {
 %s\
 	},
 };
@@ -401,7 +401,7 @@ def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
 + child_indent + ".dynarray_length = %s,\n"
 + child_indent + ".numleaves = %u,\n"
 + child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
-+ child_indent + ".pattern = (const atui_leaf[]) {\n"
++ child_indent + ".pattern = (atui_leaf const[]) {\n"
 + "%s"
 + child_indent + "},\n"
 + indent + "},\n"
@@ -433,7 +433,7 @@ def leaf_to_subleaf(
 + child_indent + ".deferred_start_array = %s,\n"
 + child_indent + ".numleaves = %u,\n"
 + child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
-+ child_indent + ".sub_leaves = (const atui_leaf[]) {\n"
++ child_indent + ".sub_leaves = (atui_leaf const[]) {\n"
 + "%s"
 + child_indent + "},\n"
 + indent + "},"
@@ -526,7 +526,7 @@ indent + "{\n"
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
 				+ child_indent +
-					".template_leaves = & (const struct subleaf_meta) %s\n"
+					".template_leaves = & (struct subleaf_meta const) %s\n"
 			)
 			leaf_text_extra %= (
 				len(leaf.fancy_data),
@@ -555,7 +555,7 @@ indent + "{\n"
 				var_meta = leaf.fancy_data["deferred"] + "[0]"
 			leaf_text_extra = (
 				child_indent +
-					".template_leaves = & (const struct subleaf_meta) %s\n"
+					".template_leaves = & (struct subleaf_meta const) %s\n"
 			)
 			leaf_text_extra %= (leaf_to_subleaf(leaf, child_indent),)
 		else:
@@ -648,13 +648,13 @@ def branches_to_c(
 # everywhere. trying to globalise the vars gets annoying real fast.
 	branch_template = """
 PPATUI_HEADERIFY(%s) {
-	const %s %s* const bios = args->suggestbios;
-	const struct %s* const atomtree = args->atomtree;
+	%s %s const* const bios = args->suggestbios;
+	struct %s const* const atomtree = args->atomtree;
 
-	const atui_leaf leaves_init[] = {
+	atui_leaf const leaves_init[] = {
 %s\
 	};
-	const struct atui_branch_data branch_embryo = {
+	struct atui_branch_data const branch_embryo = {
 		.origname = u8"%s",
 %s\
 		.leaves_init = leaves_init,
