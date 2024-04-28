@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# a preprocessor that consumes json5 files to produce c source files for
-# atomtree atui.
-# ppatui.py input.json5 output.c
+# A metaprogramming script that consumes json5 files to produce c source files
+# and c header files for atomtree ATUI.
+# see atomtree/atui_tables/atui_documentation.md for more info on ATUI.
+
+# To generate C source files branches:
+# ppatui.py -s -o output.c -i input.json5
+# Produce header files of the generated functions:
+# ppatui.py -d -o output.h -i input.json5
+
+# To generate header files for the enums:
+# ppatui.py -d -o output.h -i input.json5
 
 import sys
 import copy
@@ -383,15 +391,6 @@ def infer_branch_data(
 	if infer_leaves and branch.leaves:
 		infer_leaf_data(defaults, "generic", branch.leaves)
 
-def num_dynpattern_leaves(pattern:list):
-	num_leaves = len(pattern)
-	for leaf in pattern:
-		if leaf.fancy == ATUI_BITFIELD:
-			num_leaves += len(leaf.fancy_data)
-		elif leaf.fancy == ATUI_DYNARRAY:
-			num_leaves += num_dynpattern_leaves(leaf.fancy_data["pattern"])
-	return num_leaves
-
 def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
 	# ATUI_DYNARRAY boundaries
 	child_indent = indent + "\t"
@@ -611,14 +610,14 @@ def deep_count_leaves(
 			deep_count_leaves(
 				sub_counters, leaf.fancy_data["pattern"],  counters_template
 			)
-			counters[1] += nest_dynarray % (dynlength, 
-				sub_counters[0], sub_counters[1]
+			counters[1] += nest_dynarray % (
+				dynlength, sub_counters[0], sub_counters[1]
 			)
-			counters[3] += nest_dynarray % (dynlength, 
-				sub_counters[2], sub_counters[3]
+			counters[3] += nest_dynarray % (
+				dynlength, sub_counters[2], sub_counters[3]
 			)
-			counters[5] += nest_dynarray % (dynlength, 
-				sub_counters[4], sub_counters[5]
+			counters[5] += nest_dynarray % (
+				dynlength, sub_counters[4], sub_counters[5]
 			)
 
 
@@ -701,7 +700,6 @@ PPATUI_HEADERIFY(%s) {
 			"(%u + %s)" % (counters[4], counters[5]),
 			branch.name, # assert
 		)
-
 	return out_text
 
 
@@ -709,7 +707,7 @@ def branches_to_h(
 		atui_data:dict,
 		fname:str
 		):
-	# c header text from atui branches
+	# c header defines from atui branches
 	assert(atui_data["class"] == "branch")
 	assert(type(atui_data["branches"]) is list)
 
@@ -720,8 +718,8 @@ def branches_to_h(
 #define %s_H
 
 """
-	header_ender = "\n#endif\n"
 	header_entry = "PPATUI_HEADERIFY(%s);\n"
+	header_ender = "\n#endif\n"
 
 	out_text = header_header % (fname.upper(), fname.upper())
 	branch = None
@@ -744,7 +742,6 @@ def parse_args(
 	modes.add_argument("-s", "--source", action="store_true")
 	modes.add_argument("-d", "--header", action="store_true")
 	return parser.parse_args(argv)
-
 def intend_source(
 		atui_data:dict
 		):
@@ -760,7 +757,7 @@ def intend_header(
 		case "branch": return branches_to_h
 		case "enum": return enum_to_h
 		case _: assert 0
-def get_intent(
+def get_intent( # cli argument handling
 		intent:argparse.Namespace
 		):
 	if intent.source:
