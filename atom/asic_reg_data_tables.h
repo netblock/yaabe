@@ -1,6 +1,6 @@
 /*
 Register data block playback of common asic register tables
-See also asic_reg_indicies.h
+See also asic_reg_indicies.json5
 */
 
 #ifndef _ASIC_REG_DATA_TABLES_H_

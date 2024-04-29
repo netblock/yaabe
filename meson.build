@@ -37,13 +37,14 @@ json5_to_h = generator(ppatui,
 internal_depends = []
 include_dirs = []
 yaabe_src = []
+# for YAABE, subdir order doesn't technically matter, but atomtree is slowest
 subdir('atomtree')
+subdir('atom')
 subdir('gtk')
 yaabe_src += files(
 	'standard.c',
 	'main.c'
 )
-include_dirs += include_directories('atom')
 include_dirs += include_directories('.')
 
 
