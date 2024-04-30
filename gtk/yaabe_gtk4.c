@@ -862,7 +862,7 @@ enummenu_sets_selection(
 		GtkSingleSelection* const enum_model = GTK_SINGLE_SELECTION(
 			gtk_list_view_get_model(enum_list)
 		);
-		gtk_single_selection_set_selected(enum_model, 0);
+		//gtk_single_selection_set_selected(enum_model, 0);
 		GObject* const enum_gobj = gtk_single_selection_get_selected_item(
 			enum_model
 		);
@@ -880,7 +880,10 @@ enummenu_sets_selection(
 		if (-1 < index) {
 			gtk_single_selection_set_selected(enum_model, index);
 		} else {
-			gtk_selection_model_unselect_all(GTK_SELECTION_MODEL(enum_model));
+			gtk_single_selection_set_selected(
+				enum_model, GTK_INVALID_LIST_POSITION
+			);
+			//gtk_selection_model_unselect_all(GTK_SELECTION_MODEL(enum_model));
 		}
 	}
 }
@@ -1529,29 +1532,19 @@ set_editor_titlebar(
 }
 inline static void
 filer_error_window(
+		yaabegtk_commons const* const commons,
 		GError* const ferror,
 		char8_t const* const title
 		) {
 // Simple error popup
-	GtkEventController* const escapeclose = gtk_shortcut_controller_new();
-	gtk_shortcut_controller_add_shortcut(
-		GTK_SHORTCUT_CONTROLLER(escapeclose),
-		gtk_shortcut_new(
-			gtk_shortcut_trigger_parse_string("Escape"),
-			gtk_named_action_new("window.close")
-		)
+	GtkAlertDialog* const alert = gtk_alert_dialog_new(title);
+	gtk_alert_dialog_set_detail(alert, ferror->message);
+	gtk_alert_dialog_show(
+		alert, 
+		gtk_application_get_active_window(commons->yaabe_gtk)
 	);
 
-	GtkWindow* const notify_window = GTK_WINDOW(gtk_window_new());
-
-	gtk_widget_add_controller(GTK_WIDGET(notify_window), escapeclose);
-	gtk_window_set_title(notify_window, title);
-	gtk_window_set_default_size(notify_window, 100,100);
-	gtk_window_set_child(notify_window,
-		gtk_label_new(ferror->message)
-	);
-
-	gtk_window_present(notify_window);
+	g_object_unref(alert);
 }
 inline static void
 yaabegtk_load_bios(
@@ -1616,7 +1609,7 @@ filedialog_load_and_set_bios(
 	return;
 
 	ferr_msg:
-	filer_error_window(ferror, "YAABE Load BIOS");
+	filer_error_window(commons, ferror, "Load BIOS error");
 	ferr_nomsg:
 	g_error_free(ferror);
 	return;
@@ -1676,7 +1669,7 @@ save_button_same_file(
 	return;
 
 	ferr:
-	filer_error_window(ferror, "YAABE Save BIOS");
+	filer_error_window(commons, ferror, "Save BIOS error");
 	g_error_free(ferror);
 	return;
 }
@@ -1713,7 +1706,7 @@ filedialog_saveas_bios(
 	return;
 
 	ferr_msg:
-	filer_error_window(ferror, "YAABE Save BIOS As");
+	filer_error_window(commons, ferror, "Save BIOS As error");
 	ferr_nomsg:
 	g_error_free(ferror);
 	return;
@@ -1730,7 +1723,7 @@ saveas_button_name_bios(
 	GFile* const working_dir = g_file_get_parent(
 		commons->atomtree_root->biosfile
 	);
-	gtk_file_dialog_set_initial_folder(filer, working_dir);
+	gtk_file_dialog_set_initial_file(filer, commons->atomtree_root->biosfile);
 	g_object_unref(working_dir);
 
 	gtk_file_dialog_save(filer,
@@ -1808,7 +1801,7 @@ dropped_file_open_bios(
 		GFile* biosfile = g_value_get_object(value);
 		yaabegtk_load_bios(commons, biosfile, &ferror);
 		if (ferror) {
-			filer_error_window(ferror, "YAABE Load dropped BIOS");
+			filer_error_window(commons, ferror, "Load dropped BIOS error");
 			g_error_free(ferror);
 			return false;
 		}
