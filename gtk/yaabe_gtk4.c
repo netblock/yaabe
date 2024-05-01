@@ -25,9 +25,20 @@ typedef struct yaabegtk_commons { // global state tracker
 	char8_t pathbar_string[PATHBAR_BUFFER_SIZE];
 } yaabegtk_commons;
 
+// struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
+// desperate times call for desperate measures
+struct _GtkColumnViewRow_hack {
+	GObject parent_instance;
+	GtkWidget *owner; /* has a reference */
+	// unnecessary bits truncated; we're only after owner
+};
 struct rightclick_pack { // see columnview_row_bind_attach_gesture
-	struct pane_context const* context;
-	GtkColumnViewRow* row;
+	struct yaabegtk_commons const* commons;
+	union {
+		GtkColumnViewRow* row;
+		struct _GtkColumnViewRow_hack* row_hack;
+	};
+	GObject* gobj_atui; // obtainable from row anyway; for convenience
 };
 
 static void
@@ -539,57 +550,30 @@ create_and_set_active_atui_model(
 
 
 inline static void
-branches_leaves_rightclick_popup(
+calculate_rightclick_popup_location(
 		GtkGesture* const click_sense,
 		gdouble const x,
 		gdouble const y,
-		struct rightclick_pack const* const pack,
-		char const* const group_name,
-		GActionEntry const* const actions,
-		uint8_t const num_actions
+		struct pane_context const* const context,
+		GtkWidget* const row_widget
 		) {
-	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
-
-	// gtk_column_view_row_get_item is broken
-	// get our ATUI branch or leaf
-	GtkTreeListRow* const tree_row = GTK_TREE_LIST_ROW(g_list_model_get_item(
-		G_LIST_MODEL(gtk_column_view_get_model(pack->context->view)),
-		gtk_column_view_row_get_position(pack->row)
-	));
-	GObject* const gobj_atui = gtk_tree_list_row_get_item(tree_row);
-	g_object_unref(tree_row);
-	g_object_unref(gobj_atui); // we don't need a ref
-
-	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
-	g_action_map_add_action_entries(action_set,
-		actions, num_actions,
-		gobj_atui
-	);
-	gtk_widget_insert_action_group(GTK_WIDGET(pack->context->view),
-		group_name, G_ACTION_GROUP(action_set)
-	);
-	// we cannot disconnect action group on popdown because it kills the
-	// actions. Simply replacing them seems to be fine.
-	g_object_unref(action_set);
-
-
 	// x,y is relative to the widget.
 	// x,y is from row widget, translate it to the view widget.
 	graphene_point_t view_coords;
 	bool computed = gtk_widget_compute_point(
-		gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(click_sense)),
-		GTK_WIDGET(pack->context->view),
+		row_widget,
+		GTK_WIDGET(context->view),
 		& (graphene_point_t const) {.x=x, .y=y},
 		&view_coords
 	);
 	assert(computed);
 
-	gtk_popover_set_pointing_to(pack->context->rightclick, 
+	gtk_popover_set_pointing_to(context->rightclick, 
 		& (GdkRectangle const) {
 			.x=view_coords.x, .y=view_coords.y, .width=1, .height=1
 		}
 	);
-	gtk_popover_popup(pack->context->rightclick);
+	gtk_popover_popup(context->rightclick);
 }
 inline static void
 columnview_create_rightclick_popup(
@@ -617,21 +601,13 @@ free_closure(
 }
 inline static void
 columnview_row_bind_attach_gesture(
-		struct pane_context const* const context,
+		yaabegtk_commons const* const commons,
 		GtkColumnViewRow* const view_row,
 		void (*gesture_cb)( // function pointer
 			GtkGesture*, gint,gdouble,gdouble,
-			struct rightclick_pack const*
+			struct rightclick_pack*
 			)
 		) {
-	// struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
-	// desperate times call for desperate measures
-	struct _GtkColumnViewRow_hack {
-		GObject parent_instance;
-		GtkWidget *owner; /* has a reference */
-		// unnecessary bits truncated; we're only after owner
-	};
-
 	// since row_setup doesn't have the row widget created yet, we need to
 	// handle the setup in bind
 	if (0 == g_object_get_data(G_OBJECT(view_row), "atui")) {
@@ -651,11 +627,10 @@ columnview_row_bind_attach_gesture(
 		// the gesture call creates and binds the actions of the right click
 		// menu to the view (view has the popup).
 		// in order to that, the gesture call needs to pass view, row and popup
-		// we can get row widget from controller.
 		struct rightclick_pack* const pack = malloc(
 			sizeof(struct rightclick_pack)
 		);
-		pack->context = context;
+		pack->commons = commons;
 		pack->row = view_row;
 
 		g_signal_connect_data(click_sense,
@@ -1065,13 +1040,16 @@ leaves_offset_column_bind(
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 }
 
+
+
 static void
 leaf_right_click_copy_path(
 		GSimpleAction* const action,
 		GVariant* const parameter,
-		gpointer const gobj_leaf_ptr
+		gpointer const pack_ptr
 		) {
-	atui_leaf* const leaf = g_object_get_data(gobj_leaf_ptr, "leaf");
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_leaf const* const leaf = g_object_get_data(pack->gobj_atui, "leaf");
 
 	char8_t pathstring[PATHBAR_BUFFER_SIZE];
 	char8_t* eos = atui_leaf_to_path(leaf, pathstring);
@@ -1084,25 +1062,182 @@ leaf_right_click_copy_path(
 		pathstring
 	);
 }
+
+inline static void
+generic_error_popup(
+		char8_t const* const primary,
+		char8_t const* const secondary,
+		GtkApplication* const parent_app
+		) {
+	GtkAlertDialog* const alert = gtk_alert_dialog_new(primary);
+	gtk_alert_dialog_set_detail(alert, secondary);
+	gtk_alert_dialog_show(
+		alert,
+		gtk_application_get_active_window(parent_app)
+	);
+
+	g_object_unref(alert);
+}
+static void
+leaf_right_click_copy_data(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_leaf const* const leaf = g_object_get_data(pack->gobj_atui, "leaf");
+	assert(leaf->num_bytes || leaf->type & _ATUI_BITCHILD);
+
+	gchar* b64_text;
+	if (leaf->type & _ATUI_BITCHILD) {
+		uint64_t const val = atui_leaf_get_val_unsigned(leaf);
+		b64_text = g_base64_encode((void const*)&val, sizeof(val));
+	} else {
+		assert(leaf->val);
+		b64_text = g_base64_encode(leaf->val, leaf->num_bytes);
+	}
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		b64_text
+	);
+	g_free(b64_text);
+}
+static void
+leaf_right_click_paste_data_set_data(
+		GObject* const clipboard,
+		GAsyncResult* const async_data,
+		gpointer const pack_ptr
+		) {
+// AsyncReadyCallback
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_leaf* const leaf = g_object_get_data(pack->gobj_atui, "leaf");
+	assert(leaf->num_bytes || leaf->type & _ATUI_BITCHILD);
+
+	GError* err = NULL;
+	char8_t* const b64_text = gdk_clipboard_read_text_finish(
+		GDK_CLIPBOARD(clipboard), async_data, &err
+	);
+	if (err) {
+		generic_error_popup(
+			"clipboard error", err->message, pack->commons->yaabe_gtk
+		);
+		g_error_free(err);
+		return;
+	}
+
+	GtkAlertDialog* error_popup = NULL;
+	size_t num_bytes = 0;
+	void* const raw_data = g_base64_decode(b64_text, &num_bytes);
+	if (num_bytes) {
+		if (leaf->type & _ATUI_BITCHILD) {
+			uint64_t const* const val = raw_data;
+			uint64_t const oldval = atui_leaf_get_val_unsigned(leaf);
+			atui_leaf_set_val_unsigned(leaf, *val);
+
+			if (*val != atui_leaf_get_val_unsigned(leaf)) {
+				atui_leaf_set_val_unsigned(leaf, oldval);
+				error_popup = gtk_alert_dialog_new(
+					"Wrong size: "
+					"pasted raw value 0x%X has too many bits for %s",
+					*val, leaf->name
+				);
+			}
+		} else {
+			assert(leaf->val);
+			if (num_bytes == leaf->num_bytes) {
+				memcpy(leaf->u8, raw_data, num_bytes);
+			} else {
+				error_popup = gtk_alert_dialog_new(
+					"Wrong size: pasted base64 data decodes to %u bytes, "
+					"but %s is %u bytes.",
+					num_bytes, leaf->name, leaf->num_bytes
+				);
+			}
+		}
+	} else {
+		error_popup = gtk_alert_dialog_new("Base64 decode error!");
+	}
+
+	if (error_popup) {
+		gtk_alert_dialog_set_detail(error_popup, b64_text);
+		gtk_alert_dialog_show(
+			error_popup,
+			gtk_application_get_active_window(pack->commons->yaabe_gtk)
+		);
+		g_object_unref(error_popup);
+	}
+	g_free(raw_data);
+	g_free(b64_text);
+}
+static void
+leaf_right_click_paste_data(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	gdk_clipboard_read_text_async(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		NULL,
+		leaf_right_click_paste_data_set_data,
+		pack_ptr
+	);
+}
 static void
 leaves_rightclick_popup(
 		GtkGesture* const click_sense,
 		gint const num_presses,
 		gdouble const x,
 		gdouble const y,
-		struct rightclick_pack const* const pack
+		struct rightclick_pack* const pack
 		) {
 	if (num_presses != 1) {
 		return;
 	}
-	GActionEntry const actions[] = {
-		{"path", leaf_right_click_copy_path},
-	}; // see also create_leaves_rightclick_menu
-	uint8_t const num_actions = sizeof(actions)/sizeof(GActionEntry);
+	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
 
-	branches_leaves_rightclick_popup(
-		click_sense,   x, y, pack,
-		"leaves", actions, num_actions
+	struct pane_context const* const leaves_context = &(pack->commons->leaves);
+
+	GObject* const gobj_leaf = gtk_tree_list_row_get_item(
+		gtk_column_view_row_get_item(pack->row)
+	);
+	g_object_unref(gobj_leaf); // we don't need a second reference
+	pack->gobj_atui = gobj_leaf;
+	atui_leaf const* const leaf = g_object_get_data(pack->gobj_atui, "leaf");
+
+
+	// see also create_leaves_rightclick_menu
+	GActionEntry actions[3] = {0};
+	actions[0] = (GActionEntry) {"path", leaf_right_click_copy_path};
+	uint8_t num_actions = 1;
+	if (leaf->num_bytes || leaf->type & _ATUI_BITCHILD) {
+		actions[num_actions].name = "copy_data";
+		actions[num_actions].activate = leaf_right_click_copy_data;
+		num_actions++;
+		actions[num_actions].name = "paste_data";
+		actions[num_actions].activate = leaf_right_click_paste_data;
+		num_actions++;
+	}
+
+	assert(num_actions <= sizeof(actions)/sizeof(GActionEntry));
+	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
+	g_action_map_add_action_entries(action_set,
+		actions, num_actions,
+		pack
+	);
+
+	gtk_widget_insert_action_group(GTK_WIDGET(leaves_context->view),
+		"leaves", G_ACTION_GROUP(action_set)
+	);
+	// we cannot disconnect action group on popdown because it kills the
+	// actions. Simply replacing them seems to be fine.
+	g_object_unref(action_set);
+
+	calculate_rightclick_popup_location(
+		click_sense, x,y, leaves_context, pack->row_hack->owner
 	);
 }
 inline static void
@@ -1111,6 +1246,8 @@ create_leaves_rightclick_menu(
 		) {
 	GMenu* const menu_model = g_menu_new();
 	g_menu_append(menu_model, "Copy Path", "leaves.path");
+	g_menu_append(menu_model, "Copy Data As Base64", "leaves.copy_data");
+	g_menu_append(menu_model, "Paste Data From Base64", "leaves.paste_data");
 	// see also leaves_rightclick_popup
 
 	columnview_create_rightclick_popup(
@@ -1119,11 +1256,11 @@ create_leaves_rightclick_menu(
 }
 static void
 leaves_row_bind(
-		struct pane_context const* const context,
+		yaabegtk_commons const* const commons,
 		GtkColumnViewRow* const view_row
 		) {
 	columnview_row_bind_attach_gesture(
-		context, view_row, leaves_rightclick_popup
+		commons, view_row, leaves_rightclick_popup
 	);
 }
 
@@ -1144,7 +1281,7 @@ create_leaves_pane(
 	GtkColumnViewColumn* column;
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
-		"swapped-signal::bind", G_CALLBACK(leaves_row_bind), &(commons->leaves),
+		"swapped-signal::bind", G_CALLBACK(leaves_row_bind), commons,
 		NULL
 	);
 	gtk_column_view_set_row_factory(leaves_view, factory);
@@ -1237,9 +1374,12 @@ static void
 branch_right_click_copy_path(
 		GSimpleAction* const action,
 		GVariant* const parameter,
-		gpointer const gobj_branch_ptr
+		gpointer const pack_ptr
 		) {
-	atui_branch* const branch = g_object_get_data(gobj_branch_ptr, "branch");
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_branch const* const branch = g_object_get_data(
+		pack->gobj_atui, "branch"
+	);
 
 	char8_t pathstring[PATHBAR_BUFFER_SIZE];
 	char8_t* eos = atui_branch_to_path(branch, pathstring);
@@ -1258,19 +1398,40 @@ branches_rightclick_popup(
 		gint const num_presses,
 		gdouble const x,
 		gdouble const y,
-		struct rightclick_pack const* const pack
+		struct rightclick_pack* const pack
 		) {
 	if (num_presses != 1) {
 		return;
 	}
-	GActionEntry const actions[] = {
-		{"path", branch_right_click_copy_path},
-	}; // see also create_branches_rightclick_menu
-	uint8_t const num_actions = sizeof(actions)/sizeof(GActionEntry);
+	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
+	struct pane_context const* const branches_context = &(
+		pack->commons->branches
+	);
 
-	branches_leaves_rightclick_popup(
-		click_sense,   x, y, pack,
-		"branches", actions, num_actions
+	GObject* const gobj_branch = gtk_tree_list_row_get_item(
+		gtk_column_view_row_get_item(pack->row)
+	);
+	g_object_unref(gobj_branch); // we don't need a second reference.
+	pack->gobj_atui = gobj_branch;
+
+	// see also create_branches_rightclick_menu
+	GActionEntry actions[1] = {0};
+	actions[0] = (GActionEntry) {"path", branch_right_click_copy_path};
+	uint8_t num_actions = 1;
+	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
+	g_action_map_add_action_entries(action_set,
+		actions, num_actions,
+		pack
+	);
+	gtk_widget_insert_action_group(GTK_WIDGET(branches_context->view),
+		"branches", G_ACTION_GROUP(action_set)
+	);
+	// we cannot disconnect action group on popdown because it kills the
+	// actions. Simply replacing them seems to be fine.
+	g_object_unref(action_set);
+
+	calculate_rightclick_popup_location(
+		click_sense, x,y, branches_context, pack->row_hack->owner
 	);
 }
 inline static void
@@ -1287,11 +1448,11 @@ create_branches_rightclick_menu(
 }
 static void
 branches_row_bind(
-		struct pane_context const* const context,
+		yaabegtk_commons const* const commons,
 		GtkColumnViewRow* const view_row
 		) {
 	columnview_row_bind_attach_gesture(
-		context, view_row, branches_rightclick_popup
+		commons, view_row, branches_rightclick_popup
 	);
 }
 
@@ -1313,8 +1474,7 @@ create_branches_pane(
 	GtkColumnViewColumn* column;
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
-		"swapped-signal::bind", G_CALLBACK(branches_row_bind),
-			&(commons->branches),
+		"swapped-signal::bind", G_CALLBACK(branches_row_bind), commons,
 		NULL
 	);
 	gtk_column_view_set_row_factory(branches_view, factory);
@@ -1530,6 +1690,7 @@ set_editor_titlebar(
 		g_free(filename);
 	}
 }
+
 inline static void
 filer_error_window(
 		yaabegtk_commons const* const commons,
