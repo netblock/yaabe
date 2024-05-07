@@ -105,21 +105,12 @@ struct _atui_leaf {
 	uint8_t bitfield_hi; // bitfield range end
 	uint8_t bitfield_lo; // bitfield range start
 
+	bool parent_is_leaf;
 	uint16_t num_child_leaves;
-
 	int16_t num_gobj; // for child_gobj_cache
 
 	struct atui_enum const* enum_options; // if it has an associated enum
 	GtkSelectionModel* enum_model; // composited enum cache for GTK
-
-	union {
-		atui_branch** inline_branch;
-		atui_leaf* child_leaves;
-
-		// allocator-funcify use only:
-		atui_branch* (* branch_bud)(struct atui_funcify_args const*);
-		struct subleaf_meta const* template_leaves;
-	};
 
 	union {
 		void const* val;
@@ -146,11 +137,17 @@ struct _atui_leaf {
 		float64_t* f64;
 	};
 
-	bool parent_is_leaf;
+	atui_leaf* child_leaves;
 	union {
 		void* parent;
 		atui_leaf* parent_leaf;
 		atui_branch* parent_branch;
+	};
+
+	// allocator-funcify use only:
+	union {
+		atui_branch* (* branch_bud)(struct atui_funcify_args const*);
+		struct subleaf_meta const* template_leaves;
 	};
 
 	GObject** child_gobj_cache; // GObject cache of child leaves for GTK
@@ -162,26 +159,15 @@ struct _atui_branch {
 
 	char8_t const* description[LANG_TOTALLANGS];
 
+	atui_branch* parent_branch;
 	atui_branch** child_branches;  // petiole + import
-	atui_branch** inline_branches; // ATUI_INLINE; to present branches as leaves
-	atui_branch** all_branches;    // child + inline
+	atui_leaf* leaves;
 
-	uint8_t num_branches;     // child branches
-	uint8_t max_num_branches; // import alloc'd but may not use
-	uint8_t num_inline_branches;
-	uint8_t max_all_branch_count; // child+inline, import alloc'd may not use
-
+	uint16_t num_branches;     // child branches
+	uint16_t max_num_branches; // import alloc'd but may not use
 
 	uint16_t leaf_count;
 	uint16_t max_leaves;
-	atui_leaf* leaves;
-
-	union {
-		void* parent;
-		atui_leaf* parent_leaf;
-		atui_branch* parent_branch;
-	};
-	bool parent_is_leaf;
 
 	int16_t num_gobj;
 	GObject** child_gobj_cache; // GObject cache of child branches for GTK

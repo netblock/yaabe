@@ -91,15 +91,11 @@ atui_destroy_tree_with_gtk(
 
 	_atui_destroy_leaves_with_gtk(tree->leaves, tree->leaf_count);
 
-	atui_branch* child_branch;
-	while (tree->max_all_branch_count) {
-		(tree->max_all_branch_count)--;
-		child_branch = tree->all_branches[tree->max_all_branch_count];
-		if (child_branch) {
-			atui_destroy_tree_with_gtk(child_branch);
-		}
+	while (tree->num_branches) {
+		tree->num_branches--;
+		atui_destroy_tree_with_gtk(tree->child_branches[tree->num_branches]);
 	}
-
+	free(tree->child_branches);
 	free(tree);
 
 }
@@ -300,17 +296,9 @@ atui_leaves_pullin_gliststore(
 			// ignore the leaf
 		} else if (leaf->type & ATUI_SUBONLY) {
 			assert(leaf->type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY));
-			if (leaf->type & ATUI_INLINE) {
-				atui_branch* const branch = *(leaf->inline_branch);
-				atui_leaves_pullin_gliststore(
-					branch->leaves, list, branch->leaf_count
-				);
-			//} else if (leaf->type & (ATUI_BITFIELD|ATUI_DYNARRAY)) {
-			} else {
-				atui_leaves_pullin_gliststore(
-					leaf->child_leaves, list, leaf->num_child_leaves
-				);
-			}
+			atui_leaves_pullin_gliststore(
+				leaf->child_leaves, list, leaf->num_child_leaves
+			);
 		} else {
 			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 			g_object_set_data(gobj_child, "leaf", leaf);
@@ -346,19 +334,10 @@ leaves_treelist_generate_children(
 			&& (-1 < parent->num_gobj)
 			) {
 		if (NULL == parent->child_gobj_cache) {
-			atui_leaf* leaves;
-			uint16_t num_leaves;
-			if (parent->type & ATUI_INLINE) {
-				atui_branch* const branch = *(parent->inline_branch);
-				leaves = branch->leaves;
-				num_leaves = branch->leaf_count;
-			} else {
-			//} else if (parent->type & (ATUI_BITFIELD | ATUI_DYNARRAY)) {
-				leaves = parent->child_leaves;
-				num_leaves = parent->num_child_leaves;
-			}
-			if (num_leaves) {
-				children_model = atui_leaves_to_glistmodel(leaves, num_leaves);
+			if (parent->num_child_leaves) {
+				children_model = atui_leaves_to_glistmodel(
+					parent->child_leaves, parent->num_child_leaves
+				);
 				parent->num_gobj = g_list_model_get_n_items(children_model);
 				parent->child_gobj_cache = malloc(
 					parent->num_gobj * sizeof(GObject*)
@@ -424,7 +403,7 @@ branch_selection_sets_leaves_list(
 
 	gtk_column_view_set_model(commons->leaves.view, branch->leaves_model);
 }
-static void
+inline static void
 atui_branches_pullin_gliststore(
 		atui_branch const* const parent,
 		GListStore* const list
@@ -432,9 +411,6 @@ atui_branches_pullin_gliststore(
 	GObject* gobj_child;
 	atui_branch* child;
 	uint16_t i;
-	for (i=0; i < parent->num_inline_branches; i++) {
-		atui_branches_pullin_gliststore(parent->inline_branches[i], list);
-	}
 	for (i=0; i < parent->num_branches; i++) {
 		gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
 		g_object_set_data(gobj_child, "branch", parent->child_branches[i]);
@@ -455,7 +431,7 @@ branches_treelist_generate_children(
 
 	GListModel* children_model = NULL;
 
-	if (parent->max_all_branch_count && (-1 < parent->num_gobj)) {
+	if (parent->num_branches && (-1 < parent->num_gobj)) {
 		GListStore* const children = g_list_store_new(G_TYPE_OBJECT);
 		if (NULL == parent->child_gobj_cache) {
 			atui_branches_pullin_gliststore(parent, children);

@@ -154,10 +154,15 @@ atui_leaves_printer(
 			global->branch_args.suggestbios = leaves->pos->val;
 			(*inliners->pos) = active->pos->branch_bud(&(global->branch_args));
 
-			leaves->pos->inline_branch = inliners->pos;
-			(*inliners->pos)->parent_leaf = leaves->pos;
-			(*inliners->pos)->parent_is_leaf = true;
+			uint16_t const num_child_leaves = (*inliners->pos)->leaf_count;
+			atui_leaf* const child_leaves = (*inliners->pos)->leaves;
+			for (uint16_t i = 0; i < num_child_leaves; i++) {
+				child_leaves[i].parent_leaf = leaves->pos;
+				child_leaves[i].parent_is_leaf = true;
+			}
 
+			leaves->pos->child_leaves = child_leaves;
+			leaves->pos->num_child_leaves = num_child_leaves;
 			inliners->pos++;
 		} else if (active->pos->type & ATUI_DYNARRAY) {
 			sub_meta = active->pos->template_leaves;
@@ -248,58 +253,29 @@ atui_branch_allocator(
 		struct atui_branch_data const* const embryo,
 		struct atui_funcify_args const* const args
 		) {
-
 	struct global_tracker tracker = {0};
 
-	uint8_t max_num_branches = (
+	atui_branch* const table = calloc(1, sizeof(atui_branch));
+
+	atui_branch** branches = NULL;
+	atui_branch** inliners = NULL;
+	uint8_t const num_direct_branches = (
 		embryo->computed_num_petiole + args->num_import_branches
 	);
-	uint8_t const num_all_branches = (
-		max_num_branches + embryo->computed_num_inline
-	);
-
-	atui_branch* table;
-	void* mallocvoid; // temporary malloc partitioning pointer
-	/* topology:
-	main table
-	all branches:
-		child
-		inline
-	leaves
-	*/
-	mallocvoid = calloc(1,
-		sizeof(atui_branch)
-		+ (num_all_branches * sizeof(atui_branch*))
-		+ (embryo->num_leaves_init * sizeof(atui_leaf))
-		//+ (embryo->computed_num_leaves * sizeof(atui_leaf)) //TODO fake malloc
-	);
-	table = mallocvoid;
-	mallocvoid += sizeof(atui_branch);
-	if (num_all_branches) {
-		table->all_branches = mallocvoid;
-		table->max_num_branches = max_num_branches;
-		table->max_all_branch_count = num_all_branches;
-		if (max_num_branches) {
-			// handle table->max_num_branches at the end, for import
-			table->child_branches = mallocvoid;
-			tracker.branches.pos = mallocvoid;
-			tracker.branches.end = mallocvoid;
-			tracker.branches.end += embryo->computed_num_petiole;
-			mallocvoid += (max_num_branches * sizeof(atui_branch*));
-		}
-		if (embryo->computed_num_inline) {
-			table->num_inline_branches = embryo->computed_num_inline;
-			table->inline_branches = mallocvoid;
-			tracker.inliners.pos = mallocvoid;
-			tracker.inliners.end = mallocvoid;
-			tracker.inliners.end += embryo->computed_num_inline;
-			mallocvoid += (embryo->computed_num_inline * sizeof(atui_branch*));
-		}
+	uint8_t max_num_branches = num_direct_branches;
+	if (num_direct_branches) {
+		branches = malloc(num_direct_branches * sizeof(atui_branch*));
+		tracker.branches.pos = branches;
+		tracker.branches.end = branches + embryo->computed_num_petiole;
+	}
+	if (embryo->computed_num_inline) {
+		inliners = malloc(embryo->computed_num_inline * sizeof(atui_branch*));
+		tracker.inliners.pos = inliners;
+		tracker.inliners.end = inliners + embryo->computed_num_inline;
 	}
 
 	if (embryo->computed_num_leaves) {
-		table->leaves = mallocvoid;
-		mallocvoid = NULL; // we are done partitioning
+		table->leaves = calloc(embryo->computed_num_leaves, sizeof(atui_leaf));
 
 		tracker.branch_args.atomtree = args->atomtree;
 		struct level_data first_leaves = {0};
@@ -323,6 +299,46 @@ atui_branch_allocator(
 	assert(tracker.branches.pos == tracker.branches.end);
 	assert(tracker.inliners.pos == tracker.inliners.end);
 
+	if (embryo->computed_num_inline) {
+		// pull in branches from all the inline branches, and free the trunks
+		uint16_t num_indirect_branches = 0;
+		for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
+			num_indirect_branches += inliners[i]->num_branches;
+		}
+		if (num_indirect_branches) {
+			max_num_branches += num_indirect_branches;
+			branches = realloc(branches, max_num_branches*sizeof(atui_branch*));
+
+			tracker.branches.pos = branches + embryo->computed_num_petiole;
+			tracker.branches.end = tracker.branches.pos + num_indirect_branches;
+			for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
+				uint16_t const num_child_branches = inliners[i]->num_branches;
+				if (num_child_branches) {
+					atui_branch** const child_branches = (
+						inliners[i]->child_branches
+					);
+					uint16_t child_i = 0;
+					do {
+						assert(tracker.branches.pos < tracker.branches.end);
+						*(tracker.branches.pos) = child_branches[child_i];
+						tracker.branches.pos++;
+						child_i++;
+					} while (child_i < num_child_branches);
+					free(child_branches);
+				}
+				// don't free leaves
+				free(inliners[i]); // free the trunk
+			}
+			assert(tracker.branches.pos == tracker.branches.end);
+		} else {
+			for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
+				// don't free leaves; there's no branches to free
+				free(inliners[i]); // free the trunk
+			}
+		}
+		free(inliners);
+	}
+
 	if (args->import_branches) {
 		tracker.branches.end += args->num_import_branches;
 		for (uint8_t i=0; i < args->num_import_branches; i++) {
@@ -333,9 +349,11 @@ atui_branch_allocator(
 			}
 		}
 	}
-	table->num_branches = tracker.branches.pos - table->child_branches;
+	table->child_branches = branches;
+	table->max_num_branches = max_num_branches;
+	table->num_branches = tracker.branches.pos - branches;
 	for (uint8_t i=0; i < table->num_branches; i++) {
-		table->child_branches[i]->parent_branch = table;
+		branches[i]->parent_branch = table;
 	}
 
 

@@ -577,15 +577,14 @@ atui_branch_to_path(
 	atui_branch const* branchstack[16];
 	branchstack[0] = tip;
 	uint8_t i = 0;
-	uint16_t string_length = 1+1; // 1 for the initial / and 1 is for str \0
+	uint16_t string_length = 1; // 1 for the initial /
 	do {
-		string_length += 1 + strlen(branchstack[i]->name);
+		string_length += strlen(branchstack[i]->name) + 1; // +1 for /
 		assert(i < (sizeof(branchstack)/sizeof(atui_branch*)));
 		branchstack[i+1] = branchstack[i]->parent_branch;
 		i++;
 	} while (branchstack[i]);
 
-	pathstring[string_length-1] = '\0';
 	pathstring[0] = '/';
 	char8_t* path_walk = pathstring+1; // +1 is the first /
 	while (i) {
@@ -594,7 +593,9 @@ atui_branch_to_path(
 		*path_walk = '/'; // eats the previous \0
 		path_walk++;
 	}
-	assert(path_walk == (pathstring+string_length-1));
+	pathstring[string_length] = '\0';
+	assert(path_walk == (pathstring+string_length));
+	assert(strlen(pathstring) == string_length);
 
 	return (pathstring + string_length);
 }
@@ -603,51 +604,34 @@ atui_leaf_to_path(
 		atui_leaf const* const tip,
 		char8_t* const pathstring
 		) {
-	union { // due to ATUI_INLINE, the leaf's parent may be a branch
-		void const* atui;
-		atui_leaf const* leaf;
-		atui_branch const* branch;
-	} leanch_stack[16];
-	bool is_leaf[16];
+	assert(tip);
 
-	leanch_stack[0].leaf = tip;
-	is_leaf[0] = true;
+	atui_leaf const* leafstack[16];
+	leafstack[0] = tip;
 	uint8_t i = 0;
-	uint16_t string_length = 0;
-	do {
-		assert(i < (sizeof(leanch_stack)/sizeof(atui_branch*)));
-		if (is_leaf[i]) {
-			leanch_stack[i+1].atui = leanch_stack[i].leaf->parent;
-			is_leaf[i+1] = leanch_stack[i].leaf->parent_is_leaf;
-			string_length += strlen(leanch_stack[i].leaf->name);
-		} else {
-			leanch_stack[i+1].atui = leanch_stack[i].branch->parent;
-			is_leaf[i+1] = leanch_stack[i].branch->parent_is_leaf;
-			string_length += strlen(leanch_stack[i].branch->name);
-		}
-		string_length += 1;
+	uint16_t string_length = strlen(leafstack[i]->name);
+	while (leafstack[i]->parent_is_leaf) {
+		assert(i < (sizeof(leafstack)/sizeof(atui_leaf*)));
+		leafstack[i+1] = leafstack[i]->parent_leaf;
 		i++;
-	} while (leanch_stack[i].atui);
+		string_length += 1 + strlen(leafstack[i]->name); // +1 is /
+	}
 
-	char8_t* path_walk = pathstring;
-	char8_t const* name;
-	while (i) {
+	char8_t* path_walk = atui_branch_to_path(
+		leafstack[i]->parent_branch, pathstring
+	);
+	path_walk--; // roll back to consume the /
+	goto path_print_entry;
+	do {
 		i--;
-		if (is_leaf[i]) {
-			if (leanch_stack[i].leaf->type & ATUI_SUBONLY) {
-				continue; // leaf's children only
-			}
-			name = leanch_stack[i].leaf->name;
-		} else {
-			if (leanch_stack[i].branch->parent_is_leaf) {
-				continue; // skip the branch of ATUI_INLINE
-			}
-			name = leanch_stack[i].branch->name;
+		path_print_entry:
+		if (leafstack[i]->type & ATUI_SUBONLY) {
+			continue;
 		}
 		*path_walk = '/'; // eats the previous \0
-		path_walk = stopcopy(path_walk+1, name);
-	}
-	assert(path_walk <= (pathstring+string_length));
+		path_walk++;
+		path_walk = stopcopy(path_walk, leafstack[i]->name);
+	} while (i);
 
 	return path_walk;
 }
@@ -661,9 +645,6 @@ _path_to_atui_has_leaf(
 		char** const token_save,
 		atui_leaf const** const target
 		) {
-	atui_leaf const* child_leaves;
-	uint16_t num_child_leaves;
-
 	for (uint16_t i = 0; i < num_leaves; i++) {
 		if (leaves[i].type & ATUI_NODISPLAY) {
 			continue;
@@ -680,17 +661,8 @@ _path_to_atui_has_leaf(
 					return 1;
 				}
 			}
-			if (leaves[i].type & ATUI_INLINE) {
-				// always ignore branch for ATUI_INLINE
-				atui_branch const* inl = *(leaves[i].inline_branch);
-				child_leaves = inl->leaves;
-				num_child_leaves = inl->leaf_count;
-			} else {
-				child_leaves = leaves[i].child_leaves;
-				num_child_leaves = leaves[i].num_child_leaves;
-			}
 			uint8_t depth = _path_to_atui_has_leaf(
-				child_leaves, num_child_leaves,
+				leaves[i].child_leaves, leaves[i].num_child_leaves,
 				path_token, token_save,
 				target
 			);
@@ -793,11 +765,7 @@ path_to_atui(
 	while (leaf_depth) {
 		leaf_depth--;
 		map->leaf_path[leaf_depth] = (atui_leaf*) file;
-		if (file->parent_is_leaf) {
-			file = file->parent_leaf;
-		} else { // ATUI_INLINE; skip over branch
-			file = file->parent_branch->parent_leaf;
-		}
+		file = file->parent_leaf;
 	}
 	if (not_found_arraylen) {
 		strcpy(map->not_found, path_token);
@@ -892,10 +860,12 @@ void
 atui_destroy_tree(
 		atui_branch* const tree
 		) { // a reference implementation
-	while(tree->max_all_branch_count--) {
-		atui_destroy_tree(tree->all_branches[tree->max_all_branch_count]);
-	}
 	_atui_destroy_leaves(tree->leaves, tree->leaf_count);
+	while (tree->num_branches) {
+		tree->num_branches--;
+		atui_destroy_tree(tree->child_branches[tree->num_branches]);
+	}
+	free(tree->child_branches);
 	free(tree);
 }
 
