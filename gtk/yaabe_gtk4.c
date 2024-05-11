@@ -698,13 +698,10 @@ leaf_sets_editable(
 		atui_leaf const* const leaf,
 		GtkEditable* const editable
 		) {
-	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
-	stack_buff[0] = '\0';
-	char8_t* buff = stack_buff;
-	uint16_t const has_mallocd = atui_leaf_to_text(leaf, &buff);
-	gtk_editable_set_text(editable, buff);
-	if (has_mallocd) {
-		free(buff);
+	char8_t* const text = atui_leaf_to_text(leaf);
+	if (text) {
+		gtk_editable_set_text(editable, text);
+		free(text);
 	}
 }
 static void
@@ -754,10 +751,9 @@ enum_label_column_bind(
 		enum_gobj, "enum"
 	);
 	atui_leaf const* const leaf = g_object_get_data(enum_gobj, "leaf");
-	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
-	stack_buff[0] = '\0';
-	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
-	gtk_label_set_text(label, stack_buff);
+	char8_t* const text = atui_enum_entry_to_text(leaf, enum_entry);
+	gtk_label_set_text(label, text);
+	free(text);
 	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(
 		GTK_WIDGET(label), enum_entry->description[current_lang]
@@ -778,10 +774,9 @@ enum_list_sets_editable(
 		enum_gobj, "enum"
 	);
 	atui_leaf const* const leaf = g_object_get_data(enum_gobj, "leaf");
-	char8_t stack_buff[ATUI_LEAVES_STR_BUFFER];
-	stack_buff[0] = '\0';
-	atui_enum_entry_to_text(stack_buff, leaf, enum_entry);
-	gtk_editable_set_text(editable, stack_buff);
+	char8_t* const text = atui_enum_entry_to_text(leaf, enum_entry);
+	gtk_editable_set_text(editable, text);
+	free(text);
 	// g_object_unref(enum_gobj); // no need to unref from single..get_selected
 }
 static void
@@ -928,10 +923,7 @@ leaves_val_column_setup(
 	gtk_widget_add_controller(GTK_WIDGET(widget_bag), focus_sense);
 	// widget takes ownership of the controller, no need to unref.
 
-
-	GtkEntryBuffer* const entry_buffer = gtk_entry_buffer_new(
-		NULL, ATUI_LEAVES_STR_BUFFER
-	);
+	GtkEntryBuffer* const entry_buffer = gtk_entry_buffer_new(NULL,0);
 
 	// numbers, strings
 	//sub_widget = gtk_text_new();

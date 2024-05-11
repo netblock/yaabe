@@ -130,7 +130,7 @@ atui_leaf_from_text(
 	}
 }
 
-inline static uint16_t
+inline static uint8_t
 _get_sprintf_format_from_leaf(
 		char8_t* const format,
 		atui_leaf const* const leaf
@@ -150,33 +150,29 @@ _get_sprintf_format_from_leaf(
 
 
 	uint8_t const radix = leaf->type & ATUI_ANY;
-	uint8_t num_digits;
 
-#ifdef C2X_COMPAT
-	if ((radix==ATUI_HEX) || (radix==ATUI_BIN)) {
-		num_digits = leaf->total_bits/4;
-	} else {
-		num_digits = 0;
+	uint8_t num_digits = 0;
+
+	if (radix) {
+		if (leaf->type & ATUI_FRAC) {
+			num_digits = 32; // we're using %G anyway
+		} else {
+			uint64_t max_val;
+			uint8_t const num_bits = leaf->total_bits;
+			if (num_bits == (sizeof(max_val) * CHAR_BIT)) { // (1ULL<<64) == 1
+				max_val = ~0ULL;
+			} else {
+				max_val = (1ULL << num_bits) - 1;
+			}
+			num_digits = ceil( // round up because it's gonna be like x.9999
+				log(max_val) / log(bases[radix])
+			);
+		}
 	}
-#else
-	if (radix == ATUI_HEX) {
-		num_digits = leaf->total_bits/4;
-	} else if (radix == ATUI_BIN) {
-		num_digits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	} else {
-		num_digits = 0;
-	}
-#endif
 
 	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
 		assert(!(leaf->type & ATUI_FRAC));
 		// too hard cause floats can have many base-10 digits
-
-		num_digits = ceil( // round up because it's gonna be like x.9999
-			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
-			/ log(bases[radix])
-		);
-
 		sprintf(format, "%s%u%s ", "%0", num_digits, suffixes_unsigned[radix]);
 		num_digits += 1; // 1 for the space in between segments.
 	} else if (radix) {
@@ -186,6 +182,11 @@ _get_sprintf_format_from_leaf(
 		} else if (leaf->type & ATUI_SIGNED) {
 			sprintf(format, metaformat,
 				prefixes[radix], num_digits, suffixes_signed[radix]
+			);
+		} else if (radix == ATUI_DEC) {
+			// leading 0s for base 10 feels a little weird
+			sprintf(format, metaformat,
+				prefixes[radix], 0, suffixes_unsigned[radix]
 			);
 		} else {
 			sprintf(format, metaformat,
@@ -197,18 +198,17 @@ _get_sprintf_format_from_leaf(
 	return num_digits;
 }
 
-uint16_t
+char8_t*
 atui_leaf_to_text(
-		atui_leaf const* const leaf,
-		char8_t** buffer_ptr
+		atui_leaf const* const leaf
 		) {
 	// Convert the value of a leaf to text. Currently only support for numbers,
 	// and strings.
 
 	assert(leaf->val);
 
-	uint16_t malloc_size = 0;
-	char8_t* buffer = *buffer_ptr;
+	size_t buffer_size;
+	char8_t* buffer = NULL;
 
 	char8_t format[10];
 	uint8_t const radix = leaf->type & ATUI_ANY;
@@ -216,14 +216,11 @@ atui_leaf_to_text(
 
 	if ((leaf->type & ATUI_ARRAY) && (radix != ATUI_NAN)) {
 		assert(!(leaf->type & ATUI_FRAC));
-		malloc_size = (num_digits * leaf->array_size) + 1;
-		if (malloc_size > ATUI_LEAVES_STR_BUFFER) {
-			buffer = malloc(malloc_size);
-			buffer[0] = '\0';
-			*buffer_ptr = buffer;
-		} else {
-			malloc_size = 0;
-		}
+
+		buffer_size = (num_digits * leaf->array_size) + 1;
+		buffer = malloc(buffer_size);
+		buffer[0] = '\0';
+
 		uint16_t i=0,j=0;
 		switch (leaf->total_bits) {
 			case 8:
@@ -252,20 +249,19 @@ atui_leaf_to_text(
 				break;
 			default:
 				assert(0); // why are we here? perhaps _PPATUI_LEAF_BITNESS()?
-				return malloc_size;
+				return NULL;
 		}
 		buffer[j-1] = '\0'; // eat the final space
 
 	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		if (leaf->array_size > ATUI_LEAVES_STR_BUFFER) {
-			malloc_size = leaf->array_size + 1;
-			buffer = malloc(malloc_size);
-			*buffer_ptr = buffer;
-		}
+		buffer_size = leaf->array_size + 1;
+		buffer = malloc(buffer_size);
 		memcpy(buffer, leaf->u8, leaf->array_size);
 		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
+		assert(num_digits);
+		buffer_size = num_digits +2+1; // +2 is 0x +1 is \0
 		if (leaf->type & ATUI_ENUM) {
 			int64_t val;
 			if (leaf->type & ATUI_SIGNED) {
@@ -273,31 +269,44 @@ atui_leaf_to_text(
 			} else {
 				val = atui_leaf_get_val_unsigned(leaf);
 			}
+
 			int16_t index = atui_enum_lsearch(leaf->enum_options, val);
 			if (-1 < index) {
+				struct atui_enum_entry const* const entry = &(
+					leaf->enum_options->enum_array[index]
+				);
+				buffer_size += entry->name_length + sizeof(u8" : ");
+				buffer = malloc(buffer_size);
+
 				char8_t format_2[15]; // stage 2
 				sprintf(format_2, " : %s", format);
 				assert(strlen(format_2) < sizeof(format_2));
 
-				char8_t* walked = stopcopy(
-					buffer, leaf->enum_options->enum_array[index].name
-				); // walk the buffer
+				char8_t* walked = stopcopy(buffer, entry->name);
 				sprintf(walked, format_2, val); // eats previous \0
-				assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
 			} else {
+				buffer = malloc(buffer_size);
 				sprintf(buffer, format, val);
 			}
-		} else if (leaf->type & ATUI_FRAC) {
-			// %G format can have agressive rounding: Q14.2 16383.75 -> 16383.8
-			sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
-		} else if (leaf->type & ATUI_SIGNED) {
-			sprintf(buffer, format, atui_leaf_get_val_signed(leaf));
 		} else {
-			sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
+			buffer = malloc(buffer_size);
+			if (leaf->type & ATUI_FRAC) {
+				// %G format can have agressive rounding: 
+				// Q14.2 16383.75 -> 16383.8
+				sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
+			} else if (leaf->type & ATUI_SIGNED) {
+				sprintf(buffer, format, atui_leaf_get_val_signed(leaf));
+			} else {
+				sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
+			}
 		}
 	}
 	assert(strlen(format) < sizeof(format));
-	return malloc_size;
+	assert(buffer);
+	if (buffer) {
+		assert(strlen(buffer) < buffer_size);
+	}
+	return buffer;
 }
 
 
@@ -311,18 +320,18 @@ atui_leaf_set_val_unsigned(
 	assert(leaf->val);
 
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	uint64_t maxval;
-	if (num_bits == (sizeof(maxval) * CHAR_BIT)) { // (1ULL<<64) == 1
-		maxval = ~0ULL;
+	uint64_t max_val;
+	if (num_bits == (sizeof(max_val) * CHAR_BIT)) { // (1ULL<<64) == 1
+		max_val = ~0ULL;
 	} else {
-		maxval = (1ULL << num_bits) - 1;
+		max_val = (1ULL << num_bits) - 1;
 	}
-	if (val > maxval) {
-		val = maxval;
+	if (val > max_val) {
+		val = max_val;
 	}
 
 	// ...11111 000.. 1111...
-	uint64_t const tokeep_mask = ~(maxval << leaf->bitfield_lo);
+	uint64_t const tokeep_mask = ~(max_val << leaf->bitfield_lo);
 	val <<= leaf->bitfield_lo;
 
 	switch (leaf->total_bits) {
@@ -392,11 +401,11 @@ atui_leaf_set_val_signed(
 	uint64_t raw_val; // some bit math preserves the sign
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t const mask = (1ULL << num_bits) - 1;
-	int64_t const maxval = mask>>1; // max positive val 0111...
-	if (val > maxval) {
-		raw_val = maxval;
-	} else if (val < -maxval) {
-		raw_val = maxval+1; // Two's overflow. 1000.. is negative-most.
+	int64_t const max_val = mask>>1; // max positive val 0111...
+	if (val > max_val) {
+		raw_val = max_val;
+	} else if (val < -max_val) {
+		raw_val = max_val+1; // Two's overflow. 1000.. is negative-most.
 	} else {
 		raw_val = val & mask; // Two's sign repeats to the right
 	}
@@ -779,9 +788,8 @@ path_to_atui(
 
 
 
-void
+char8_t*
 atui_enum_entry_to_text(
-		char8_t* const buffer,
 		atui_leaf const* const leaf,
 		struct atui_enum_entry const* const enum_entry
 		) {
@@ -789,14 +797,20 @@ atui_enum_entry_to_text(
 
 	char8_t format_1[10]; // stage 1
 	char8_t format_2[15]; // stage 2
-	_get_sprintf_format_from_leaf(format_1, leaf);
+	uint8_t const num_digits = _get_sprintf_format_from_leaf(format_1, leaf);
 	assert(strlen(format_1) < sizeof(format_1));
 	sprintf(format_2, " : %s", format_1);
 	assert(strlen(format_2) < sizeof(format_2));
 
+	size_t const buffer_size = (
+		enum_entry->name_length + sizeof(" : 0x") + num_digits
+	);
+	char8_t* const buffer = malloc(buffer_size);
+
 	char8_t* walked = stopcopy(buffer, enum_entry->name); // walk the buffer
 	sprintf(walked, format_2, enum_entry->val);  // eats previous \0
-	assert(strlen(buffer) < ATUI_LEAVES_STR_BUFFER);
+	assert(strlen(buffer) < buffer_size);
+	return buffer;
 }
 
 int16_t

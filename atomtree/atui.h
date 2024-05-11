@@ -176,19 +176,14 @@ struct _atui_branch {
 };
 
 
-
-// reccomended buffer size for the upcomming text functions
-#define ATUI_LEAVES_STR_BUFFER 128
-
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit
 		atui_leaf* leaf,
 		char8_t const* buffer
 		);
-uint16_t // returns malloc size
+char8_t* // returns an alloc
 atui_leaf_to_text(
-		atui_leaf const* leaf,
-		char8_t** buffer_ptr
+		atui_leaf const* leaf
 		);
 
 // set or get the number value from the leaf
@@ -247,9 +242,8 @@ path_to_atui( // crawls path and makes a map of that path
 		atui_branch const* root
 		);
 
-void
+char8_t* // needs to be freed
 atui_enum_entry_to_text(
-		char8_t* buffer,
 		atui_leaf const* leaf,
 		struct atui_enum_entry const* enum_entry
 		);

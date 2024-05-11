@@ -213,11 +213,9 @@ def enum_to_c(
 
 """
 	enum_entry_assert_template = """\
-static_assert(sizeof(u8"%s") < ATUI_LEAVES_STR_BUFFER);
 """
 	enum_template = """\
 static_assert(%u <= UINT8_MAX);
-static_assert(sizeof(u8"%s") < ATUI_LEAVES_STR_BUFFER);
 struct atui_enum const ATUI_ENUM(%s) = {
 	.name_length = sizeof(u8"%s") - 1,
 	.name = u8"%s",
@@ -248,7 +246,7 @@ struct atui_enum const ATUI_ENUM(%s) = {
 		enum_entries_asserts = ""
 		for entry in enum["constants"]:
 			entry_name = entry["name"]
-			out_text += enum_entry_assert_template % entry_name
+			#out_text += enum_entry_assert_template % entry_name
 			if "description" in entry:
 				descr_text = description_to_text(entry["description"], "\t\t\t")
 			else:
@@ -262,7 +260,7 @@ struct atui_enum const ATUI_ENUM(%s) = {
 		else:
 			descr_text = ""
 		out_text += enum_template % (
-			len(enum["constants"]), enum["name"], # assert
+			len(enum["constants"]), # assert
 			enum["name"], enum["name"], enum["name"], len(enum["constants"]),
 			descr_text, enum_entries
 		)
