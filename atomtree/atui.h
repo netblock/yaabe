@@ -27,9 +27,9 @@ atui.h is about the core atui interface
 
 // see bottom for more includes
 
-// GTK4 stuff; header simplification because we're dealing with only pointers.
-typedef struct _GObject GObject;
-typedef struct _GtkSelectionModel GtkSelectionModel;
+// GObject/GTK stuff.
+typedef struct _GATUILeaf GATUILeaf;
+typedef struct _GATUIBranch GATUIBranch;
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
@@ -107,10 +107,8 @@ struct _atui_leaf {
 
 	bool parent_is_leaf;
 	uint16_t num_child_leaves;
-	int16_t num_gobj; // for child_gobj_cache
 
 	struct atui_enum const* enum_options; // if it has an associated enum
-	GtkSelectionModel* enum_model; // composited enum cache for GTK
 
 	union {
 		void const* val;
@@ -143,15 +141,13 @@ struct _atui_leaf {
 		atui_leaf* parent_leaf;
 		atui_branch* parent_branch;
 	};
+	GATUILeaf* self; // weak reference
 
 	// allocator-funcify use only:
 	union {
 		atui_branch* (* branch_bud)(struct atui_funcify_args const*);
 		struct subleaf_meta const* template_leaves;
 	};
-
-	GObject** child_gobj_cache; // GObject cache of child leaves for GTK
-	GObject* self_gobj;
 };
 struct _atui_branch {
 	char8_t name[64];
@@ -160,25 +156,22 @@ struct _atui_branch {
 	char8_t const* description[LANG_TOTALLANGS];
 
 	atui_branch* parent_branch;
-	atui_branch** child_branches;  // petiole + import
+	atui_branch** child_branches; // petiole + import
 	atui_leaf* leaves;
+
+	GATUIBranch* self; // weak reference
 
 	uint16_t num_branches;     // child branches
 	uint16_t max_num_branches; // import alloc'd but may not use
 
 	uint16_t leaf_count;
 	uint16_t max_leaves;
-
-	int16_t num_gobj;
-	GObject** child_gobj_cache; // GObject cache of child branches for GTK
-	GtkSelectionModel* leaves_model; // composited leaves cache for GTK
-	GObject* self_gobj;
 };
 
 
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit
-		atui_leaf* leaf,
+		atui_leaf const* leaf,
 		char8_t const* buffer
 		);
 char8_t* // returns an alloc
@@ -189,7 +182,7 @@ atui_leaf_to_text(
 // set or get the number value from the leaf
 void
 atui_leaf_set_val_unsigned(
-		atui_leaf* leaf,
+		atui_leaf const* leaf,
 		uint64_t val
 		);
 uint64_t
@@ -199,7 +192,7 @@ atui_leaf_get_val_unsigned(
 
 void
 atui_leaf_set_val_signed(
-		atui_leaf* leaf,
+		atui_leaf const* leaf,
 		int64_t val
 		);
 int64_t
@@ -209,7 +202,7 @@ atui_leaf_get_val_signed(
 
 void
 atui_leaf_set_val_fraction(
-		atui_leaf* leaf,
+		atui_leaf const* leaf,
 		float64_t val
 		);
 float64_t
@@ -265,12 +258,6 @@ void
 atui_destroy_tree(
 		atui_branch* tree
 		);
-void
-_atui_destroy_leaves( 
-		atui_leaf* leaves,
-		uint16_t num_leaves
-		);
-
 
 // funcify internal structs:
 

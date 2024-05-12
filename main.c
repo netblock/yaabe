@@ -24,7 +24,6 @@ main(
 		}
 		g_object_unref(biosfile);
 	}
-
 	yaabe_gtk(&atree);
 	destroy_atomtree_with_gtk(atree, true);
 

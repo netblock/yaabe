@@ -10,7 +10,7 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 
 void
 atui_leaf_from_text(
-		atui_leaf* const leaf,
+		atui_leaf const* const leaf,
 		char8_t const* const text
 		) {
 	// set the value of the leaf based on input text. Currently only support for
@@ -313,7 +313,7 @@ atui_leaf_to_text(
 
 void
 atui_leaf_set_val_unsigned(
-		atui_leaf* const leaf,
+		atui_leaf const* const leaf,
 		uint64_t val
 		) {
 	assert(leaf->type & ATUI_ANY);
@@ -391,7 +391,7 @@ atui_leaf_get_val_unsigned(
 
 void
 atui_leaf_set_val_signed(
-		atui_leaf* const leaf,
+		atui_leaf const* const leaf,
 		int64_t const val
 		) {
 	assert(leaf->type & ATUI_ANY);
@@ -471,7 +471,7 @@ atui_leaf_get_val_signed(
 
 void
 atui_leaf_set_val_fraction(
-		atui_leaf* const leaf,
+		atui_leaf const* const leaf,
 		float64_t const val) {
 	assert(leaf->type & ATUI_FRAC);
 	assert(leaf->val);
@@ -856,7 +856,7 @@ atui_enum_lsearch(
 }
 
 
-void
+static void
 _atui_destroy_leaves(
 		atui_leaf* const leaves,
 		uint16_t const num_leaves

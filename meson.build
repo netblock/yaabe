@@ -40,6 +40,7 @@ yaabe_src = []
 # for YAABE, subdir order doesn't technically matter, but atomtree is slowest
 subdir('atomtree')
 subdir('atom')
+subdir('gatui')
 subdir('gtk')
 yaabe_src += files(
 	'standard.c',

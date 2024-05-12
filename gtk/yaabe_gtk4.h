@@ -17,10 +17,6 @@ destroy_atomtree_with_gtk(
 		struct atom_tree* atree,
 		bool free_bios
 		);
-void
-atui_destroy_tree_with_gtk(
-		atui_branch* tree
-		);
 
 int8_t
 yaabe_gtk(
