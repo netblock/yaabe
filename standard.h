@@ -75,5 +75,10 @@ stopcopy( // stpcpy; copy string, returns pointer to \0
 		char8_t* restrict dest,
 		char8_t const* restrict src
 		);
+bool
+char_in_string( // test if character ch appears anywhere in string
+		char8_t ch,
+		char8_t const* str
+		);
 
 #endif

@@ -57,3 +57,17 @@ stopcopy(
 	*dest = '\0';
 	return dest;
 }
+
+bool
+char_in_string(
+		char8_t const ch,
+		char8_t const* str
+		) {
+	while (*str) {
+		if (ch == *str) {
+			return true;
+		}
+		str++;
+	}
+	return false;
+}
