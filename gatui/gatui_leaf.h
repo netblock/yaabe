@@ -30,20 +30,48 @@ gatui_leaf_num_bytes(
 		GATUILeaf* self
 		);
 
+
+
+GVariantType const*
+gatui_leaf_get_gvariant_type(
+		GATUILeaf* const self
+		);
 GVariant*
 gatui_leaf_get_value(
 		GATUILeaf* self
 		);
-void
+bool
 gatui_leaf_set_value(
 		GATUILeaf* self,
-		GVariant const* value
+		GVariant* value
 		);
+
+void
+gatui_leaf_set_value_from_text(
+		GATUILeaf* self,
+		char8_t const* text
+		);
+char8_t*
+gatui_leaf_value_to_text(
+		GATUILeaf* self
+		);
+
 
 GtkSelectionModel*
 gatui_leaf_get_enum_menu_selection_model( // for ATUI_ENUM
 		GATUILeaf* self
 		);
+char8_t*
+gatui_leaf_enum_entry_to_text(
+		GATUILeaf* self,
+		struct atui_enum_entry const* enum_entry
+		);
+bool
+gatui_leaf_enum_entry_sets_value(
+		GATUILeaf* self,
+		struct atui_enum_entry const* enum_entry
+		);
+
 
 atui_leaf*
 gatui_leaf_get_atui(

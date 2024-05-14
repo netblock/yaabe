@@ -236,7 +236,7 @@ path_to_atui( // crawls path and makes a map of that path
 		);
 
 char8_t* // needs to be freed
-atui_enum_entry_to_text(
+atui_enum_entry_to_text( // "enum_entry_name : val"
 		atui_leaf const* leaf,
 		struct atui_enum_entry const* enum_entry
 		);
