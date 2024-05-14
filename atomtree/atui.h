@@ -211,15 +211,13 @@ atui_leaf_get_val_fraction(
 		);
 
 
-char8_t*
+char8_t* // needs to be freed
 atui_branch_to_path( // get a full /directory/like/path/of/the/branches/
-		atui_branch const* tip,
-		char8_t* buffer
+		atui_branch const* tip
 		);
-char8_t*
+char8_t* // needs to be freed
 atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
-		atui_leaf const* tip,
-		char8_t* buffer
+		atui_leaf const* tip
 		);
 
 struct atui_path_map { // the trail of objects for a map

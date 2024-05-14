@@ -4,7 +4,6 @@
 #include "yaabe_gtk4.h"
 
 static char8_t const yaabe_name[] = "YAABE BIOS Editor";
-#define PATHBAR_BUFFER_SIZE 256
 
 struct pane_context {
 	GtkColumnView* view; // so branches can set leaves, and loading bios
@@ -23,7 +22,7 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* save_buttons;
 	GtkWidget* reload_button;
 
-	char8_t pathbar_string[PATHBAR_BUFFER_SIZE];
+	char8_t* pathbar_string;
 } yaabegtk_commons;
 
 // struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
@@ -82,11 +81,11 @@ pathbar_update_path(
 			gtk_single_selection_get_selected_item(model)
 		))
 	);
-	char8_t* eos = atui_branch_to_path(
-		gatui_branch_get_atui(g_branch),
-		commons->pathbar_string
+	assert(commons->pathbar_string);
+	free(commons->pathbar_string);
+	commons->pathbar_string = atui_branch_to_path(
+		gatui_branch_get_atui(g_branch)
 	);
-	assert(eos < (commons->pathbar_string + PATHBAR_BUFFER_SIZE));
 	g_object_unref(g_branch);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 }
@@ -308,9 +307,10 @@ create_and_set_active_atui_model(
 		gatui_branch_get_leaves_model(root->self)
 	);
 
-	char8_t* eos = atui_branch_to_path(root, commons->pathbar_string);
-	assert(eos < (commons->pathbar_string + PATHBAR_BUFFER_SIZE));
-
+	if (commons->pathbar_string) {
+		free(commons->pathbar_string);
+	}
+	commons->pathbar_string = atui_branch_to_path(root);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
 	// TODO move the call of set_editor_titlebar in here?
@@ -785,11 +785,10 @@ leaf_right_click_copy_path(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
 
-	char8_t pathstring[PATHBAR_BUFFER_SIZE];
-	char8_t* eos = atui_leaf_to_path(a_leaf, pathstring);
-	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
+	char8_t* const pathstring = atui_leaf_to_path(
+		gatui_leaf_get_atui(pack->leaf)
+	);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -797,6 +796,8 @@ leaf_right_click_copy_path(
 		),
 		pathstring
 	);
+
+	free(pathstring);
 }
 
 inline static void
@@ -1114,11 +1115,10 @@ branch_right_click_copy_path(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
 
-	char8_t pathstring[PATHBAR_BUFFER_SIZE];
-	char8_t* eos = atui_branch_to_path(a_branch, pathstring);
-	assert(eos < (pathstring + PATHBAR_BUFFER_SIZE));
+	char8_t* const pathstring = atui_branch_to_path(
+		gatui_branch_get_atui(pack->branch)
+	);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -1126,6 +1126,7 @@ branch_right_click_copy_path(
 		),
 		pathstring
 	);
+	free(pathstring);
 }
 static void
 branches_rightclick_popup(

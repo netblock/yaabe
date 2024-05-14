@@ -576,73 +576,130 @@ atui_leaf_get_val_fraction(
 	assert(0);
 }
 
+struct path_meta {
+	size_t path_len;
+	union {
+		void const* node;
+		atui_branch const* branch;
+		atui_leaf const* leaf;
+	} stack[16];
+	uint8_t n_leaves;
+	uint8_t n_branches;
+};
+
+
+inline static void
+atui_path_populate_branch_stack(
+		atui_branch const** const branchstack,
+		uint8_t* const i,
+		uint16_t* const string_length
+		) {
+	do {
+		(*string_length) += strlen(branchstack[*i]->name) + 1; // +1 for /
+		branchstack[(*i)+1] = branchstack[*i]->parent_branch;
+		(*i)++;
+	} while (branchstack[*i]);
+}
+inline static char8_t*
+_print_branch_path(
+		atui_branch const** const branchstack,
+		uint8_t* const i,
+		char8_t* path_walk
+		) {
+	path_walk[0] = '/';
+	path_walk++;
+	while (*i) {
+		(*i)--;
+		path_walk = stopcopy(path_walk, branchstack[*i]->name);
+		*path_walk = '/'; // eats the previous \0
+		path_walk++;
+	}
+	return path_walk; 
+}
 char8_t*
 atui_branch_to_path(
-		atui_branch const* const tip,
-		char8_t* const pathstring
+		atui_branch const* const tip
 		) {
 	assert(tip);
 
 	atui_branch const* branchstack[16];
 	branchstack[0] = tip;
 	uint8_t i = 0;
-	uint16_t string_length = 1; // 1 for the initial /
-	do {
-		string_length += strlen(branchstack[i]->name) + 1; // +1 for /
-		assert(i < (sizeof(branchstack)/sizeof(atui_branch*)));
-		branchstack[i+1] = branchstack[i]->parent_branch;
-		i++;
-	} while (branchstack[i]);
+	uint16_t string_length = 1+1; // +1 for the initial / and +1 for \0
+	atui_path_populate_branch_stack(branchstack, &i, &string_length);
+	char8_t* const pathstring = malloc(string_length);
+	pathstring[string_length-1] = '\0';
+	char8_t* path_walk = _print_branch_path(branchstack, &i, pathstring);
 
-	pathstring[0] = '/';
-	char8_t* path_walk = pathstring+1; // +1 is the first /
-	while (i) {
-		i--;
-		path_walk = stopcopy(path_walk, branchstack[i]->name);
-		*path_walk = '/'; // eats the previous \0
-		path_walk++;
-	}
-	pathstring[string_length] = '\0';
-	assert(path_walk == (pathstring+string_length));
-	assert(strlen(pathstring) == string_length);
+	assert(path_walk == (pathstring+string_length-1));
+	assert(strlen(pathstring) == (string_length-1));
 
-	return (pathstring + string_length);
+	return pathstring;
 }
-char8_t*
-atui_leaf_to_path(
-		atui_leaf const* const tip,
-		char8_t* const pathstring
+inline static void
+atui_path_populate_leaf_stack(
+		atui_leaf const** const leafstack,
+		uint8_t* const i,
+		uint16_t* const string_length
 		) {
-	assert(tip);
-
-	atui_leaf const* leafstack[16];
-	leafstack[0] = tip;
-	uint8_t i = 0;
-	uint16_t string_length = strlen(leafstack[i]->name);
-	while (leafstack[i]->parent_is_leaf) {
-		assert(i < (sizeof(leafstack)/sizeof(atui_leaf*)));
-		leafstack[i+1] = leafstack[i]->parent_leaf;
-		i++;
-		string_length += 1 + strlen(leafstack[i]->name); // +1 is /
-	}
-
-	char8_t* path_walk = atui_branch_to_path(
-		leafstack[i]->parent_branch, pathstring
-	);
-	path_walk--; // roll back to consume the /
-	goto path_print_entry;
+	bool parent_is_leaf;
 	do {
-		i--;
-		path_print_entry:
-		if (leafstack[i]->type & ATUI_SUBONLY) {
+		(*string_length) += 1 + strlen(leafstack[*i]->name); // +1 is /
+		parent_is_leaf = leafstack[*i]->parent_is_leaf;
+		leafstack[(*i)+1] = leafstack[*i]->parent_leaf;
+		(*i)++;
+	} while (parent_is_leaf);
+}
+inline static char8_t*
+_print_leaf_path(
+		atui_leaf const** const leafstack,
+		uint8_t* const i,
+		char8_t* path_walk
+		) {
+	do {
+		(*i)--;
+		if (leafstack[*i]->type & ATUI_SUBONLY) {
 			continue;
 		}
 		*path_walk = '/'; // eats the previous \0
 		path_walk++;
-		path_walk = stopcopy(path_walk, leafstack[i]->name);
-	} while (i);
-
+		path_walk = stopcopy(path_walk, leafstack[*i]->name);
+	} while (*i);
 	return path_walk;
+}
+char8_t*
+atui_leaf_to_path(
+		atui_leaf const* const tip
+		) {
+	assert(tip);
+
+	uint16_t string_length = 1; // +1 for \0; no final /
+
+	atui_leaf const* leafstack[16];
+	atui_branch const* branchstack[16];
+	uint8_t leaves_i = 0;
+	uint8_t branches_i = 0;
+
+	leafstack[0] = tip;
+	atui_path_populate_leaf_stack(leafstack, &leaves_i, &string_length);
+	assert(leaves_i < sizeof(leafstack)/sizeof(atui_leaf const*));
+
+	branchstack[0] = (const void*) leafstack[leaves_i];
+	atui_path_populate_branch_stack(branchstack, &branches_i, &string_length);
+	assert(branches_i < sizeof(branchstack)/sizeof(atui_branch const*));
+
+	char8_t* const pathstring = malloc(string_length);
+	// pathstring[string_length-1] = '\0'; // print_leaf_path does the \0
+
+	char8_t* path_walk = pathstring;
+
+	path_walk = _print_branch_path(branchstack, &branches_i, path_walk);
+	path_walk = _print_leaf_path(leafstack, &leaves_i, path_walk-1);
+
+	assert(path_walk <= (pathstring+string_length-1));
+	assert(strlen(pathstring) <= (string_length-1));
+
+	return pathstring;
 }
 
 //static const atui_leaf*
