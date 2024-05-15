@@ -6,6 +6,7 @@
 #include "atomtree.h"
 #include "atui.h"
 #include "gatui.h"
+#include "yaabe_gtk4.h"
 
 void
 atui_leaves_to_gliststore( // for GATUILeaves generation

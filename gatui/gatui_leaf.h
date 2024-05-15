@@ -40,7 +40,7 @@ GVariant*
 gatui_leaf_get_value(
 		GATUILeaf* self
 		);
-bool
+bool // true if successful
 gatui_leaf_set_value(
 		GATUILeaf* self,
 		GVariant* value
@@ -51,7 +51,7 @@ gatui_leaf_set_value_from_text(
 		GATUILeaf* self,
 		char8_t const* text
 		);
-char8_t*
+char8_t* // must be freed
 gatui_leaf_value_to_text(
 		GATUILeaf* self
 		);
@@ -61,15 +61,19 @@ GtkSelectionModel*
 gatui_leaf_get_enum_menu_selection_model( // for ATUI_ENUM
 		GATUILeaf* self
 		);
-char8_t*
+char8_t* // must be freed
 gatui_leaf_enum_entry_to_text(
 		GATUILeaf* self,
 		struct atui_enum_entry const* enum_entry
 		);
-bool
-gatui_leaf_enum_entry_sets_value(
+bool // true if successful
+gatui_leaf_enum_entry_sets_value( // emtry must be associated
 		GATUILeaf* self,
 		struct atui_enum_entry const* enum_entry
+		);
+int16_t // -1 if error, otherwise index
+gatui_leaf_enum_entry_get_possible_index(
+		GATUILeaf* self
 		);
 
 

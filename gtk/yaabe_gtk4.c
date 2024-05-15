@@ -362,13 +362,21 @@ columnview_create_rightclick_popup(
 	);
 	context->rightclick = popup_menu;
 }
-static void
+
+void
 free_closure(
 		gpointer data,
 		GClosure* closure
 		) {
 	free(data);
 }
+void
+free_notify(
+		gpointer data
+		) {
+	free(data);
+}
+
 inline static void
 columnview_row_bind_attach_gesture(
 		yaabegtk_commons const* const commons,
@@ -595,15 +603,7 @@ enummenu_sets_selection(
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_list_item_get_item(leaves_column_cell)
 	);
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
-
-	int64_t val;
-	if (a_leaf->type & ATUI_SIGNED) {
-		val = atui_leaf_get_val_signed(a_leaf);
-	} else {
-		val = atui_leaf_get_val_unsigned(a_leaf);
-	}
-	int16_t index = atui_enum_lsearch(a_leaf->enum_options, val);
+	int16_t index = gatui_leaf_enum_entry_get_possible_index(g_leaf);
 	if (-1 < index) {
 		gtk_single_selection_set_selected(enum_model, index);
 	} else {
@@ -611,6 +611,7 @@ enummenu_sets_selection(
 			enum_model, GTK_INVALID_LIST_POSITION
 		);
 	}
+	g_object_unref(g_leaf);
 }
 inline static GtkWidget*
 construct_enum_dropdown(
@@ -822,17 +823,15 @@ leaf_right_click_copy_data(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
-	assert(a_leaf->num_bytes || a_leaf->type & _ATUI_BITCHILD);
+	GVariant* const val = gatui_leaf_get_value(pack->leaf);
+	assert(val);
+	assert(g_variant_get_data(val));
+	assert(g_variant_get_size(val));
 
-	gchar* b64_text;
-	if (a_leaf->type & _ATUI_BITCHILD) {
-		uint64_t const val = atui_leaf_get_val_unsigned(a_leaf);
-		b64_text = g_base64_encode((void const*)&val, sizeof(val));
-	} else {
-		assert(a_leaf->val);
-		b64_text = g_base64_encode(a_leaf->val, a_leaf->num_bytes);
-	}
+	gchar* const b64_text = g_base64_encode(
+		g_variant_get_data(val),
+		g_variant_get_size(val)
+	);
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
 			gdk_display_get_default()
@@ -840,6 +839,7 @@ leaf_right_click_copy_data(
 		b64_text
 	);
 	g_free(b64_text);
+	g_variant_unref(val);
 }
 static void
 leaf_right_click_paste_data_set_data(
@@ -850,7 +850,6 @@ leaf_right_click_paste_data_set_data(
 // AsyncReadyCallback
 	struct rightclick_pack const* const pack = pack_ptr;
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
-	assert(a_leaf->num_bytes || a_leaf->type & _ATUI_BITCHILD);
 
 	GError* err = NULL;
 	char8_t* const b64_text = gdk_clipboard_read_text_finish(
@@ -865,33 +864,33 @@ leaf_right_click_paste_data_set_data(
 	}
 
 	GtkAlertDialog* error_popup = NULL;
-	size_t num_bytes = 0;
-	void* const raw_data = g_base64_decode(b64_text, &num_bytes);
-	if (num_bytes) {
-		if (a_leaf->type & _ATUI_BITCHILD) {
-			uint64_t const* const val = raw_data;
-			uint64_t const oldval = atui_leaf_get_val_unsigned(a_leaf);
-			atui_leaf_set_val_unsigned(a_leaf, *val);
-
-			if (*val != atui_leaf_get_val_unsigned(a_leaf)) {
-				atui_leaf_set_val_unsigned(a_leaf, oldval);
+	size_t b64_num_bytes = 0;
+	void* const raw_data = g_base64_decode(b64_text, &b64_num_bytes);
+	if (b64_num_bytes) {
+		uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
+		if (b64_num_bytes == leaf_num_bytes) {
+			GVariantType* const raw_type = g_variant_type_new("ay");
+			GVariant* const new_val = g_variant_new_from_data(
+				raw_type,
+				raw_data, b64_num_bytes,
+				false,
+				free_notify, raw_data
+			);
+			g_free(raw_type);
+			bool const success = gatui_leaf_set_value(pack->leaf, new_val);
+			g_variant_unref(new_val);
+			if (false == success) {
 				error_popup = gtk_alert_dialog_new(
-					"Wrong size: "
-					"pasted raw value 0x%X has too many bits for %s",
-					*val, a_leaf->name
+					"Generic error pasting base64 data for leaf %s.",
+					a_leaf->name
 				);
 			}
 		} else {
-			assert(a_leaf->val);
-			if (num_bytes == a_leaf->num_bytes) {
-				memcpy(a_leaf->u8, raw_data, num_bytes);
-			} else {
-				error_popup = gtk_alert_dialog_new(
-					"Wrong size: pasted base64 data decodes to %u bytes, "
-					"but %s is %u bytes.",
-					num_bytes, a_leaf->name, a_leaf->num_bytes
-				);
-			}
+			error_popup = gtk_alert_dialog_new(
+				"Wrong size: pasted base64 data decodes to %u bytes, "
+				"but %s is %u bytes.",
+				b64_num_bytes, a_leaf->name, leaf_num_bytes
+			);
 		}
 	} else {
 		error_popup = gtk_alert_dialog_new("Base64 decode error!");
@@ -904,8 +903,10 @@ leaf_right_click_paste_data_set_data(
 			gtk_application_get_active_window(pack->commons->yaabe_gtk)
 		);
 		g_object_unref(error_popup);
+		if (raw_data) {
+			g_free(raw_data); // g_variant_new_from_data takes ownership
+		}
 	}
-	g_free(raw_data);
 	g_free(b64_text);
 }
 static void
