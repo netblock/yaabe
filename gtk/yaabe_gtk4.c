@@ -700,12 +700,12 @@ leaves_val_column_bind(
 		gtk_list_item_get_child(column_cell)
 	);
 
-	enum atui_type const type = gatui_leaf_get_atui_type(g_leaf);
-	if (type & (ATUI_ANY|ATUI_STRING|ATUI_ARRAY)) {
+	union atui_type const type = gatui_leaf_get_atui_type(g_leaf);
+	if (type.radix || type.fancy == ATUI_STRING || type.fancy == ATUI_ARRAY) {
 
 		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
 		GtkWidget* editable;
-		if (type & ATUI_ENUM) {
+		if (type.fancy == ATUI_ENUM) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
 			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
 			GtkListView* const enum_list = GTK_LIST_VIEW(gtk_popover_get_child(
@@ -761,7 +761,7 @@ leaves_offset_column_bind(
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
 	char8_t buffer[18];
-	if (a_leaf->type & _ATUI_BITCHILD) {
+	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
 		sprintf(buffer, "[%u:%u]",
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
 		);
@@ -951,7 +951,7 @@ leaves_rightclick_popup(
 	GActionEntry actions[3] = {0};
 	actions[0] = (GActionEntry) {"path", leaf_right_click_copy_path};
 	uint8_t num_actions = 1;
-	if (a_leaf->num_bytes || a_leaf->type & _ATUI_BITCHILD) {
+	if (a_leaf->num_bytes || a_leaf->type.fancy == _ATUI_BITCHILD) {
 		actions[num_actions].name = "copy_data";
 		actions[num_actions].activate = leaf_right_click_copy_data;
 		num_actions++;

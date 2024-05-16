@@ -62,33 +62,42 @@ struct atui_enum {
 	uint16_t const name_length;
 };
 
-
-// TODO move to bitfield?
-enum atui_type:uint32_t {
-	ATUI_NAN  = 0x0, // Don't display a value
+union atui_type {
+	struct { uint16_t
+		radix      :1-0 +1, // enum atui_type_radix
+		signed_num :2-2 +1, // Usually internally-set. If it has a signing bit.
+		fraction   :3-3 +1, // Internally-set. Both Q and float.
+		fancy      :7-4 +1, // enum atui_type_fancy
+		disable    :9-8 +1, // enum atui_type_disable
+		reserved  :15-10 +1;
+	};
+	uint16_t type;
+};
+enum atui_type_radix:uint8_t {
+	ATUI_NAN  = 0x0, // Not a number
 	ATUI_DEC  = 0x1,
 	ATUI_HEX  = 0x2,
-	ATUI_OCT  = 0x3, // TODO not implemented
-	ATUI_BIN  = 0x4,
-	ATUI_ANY  = 0x7, // Mask
-
-	ATUI_SUBONLY   = 1<<4, // show only the children
-	ATUI_NODISPLAY = 1<<5, // Don't display this leaf itself
-
-	ATUI_NOFANCY   = 1<<8, // Nothing fancy to the leaf
-	ATUI_BITFIELD  = 1<<9, // Is a bitfield parent
-	ATUI_ENUM     = 1<<10, // See also PPATUI_FUNCIFY()
-	ATUI_STRING   = 1<<11, // Meant for human-readable text
-	ATUI_ARRAY    = 1<<12, // No technical difference from string
-	ATUI_GRAFT    = 1<<13, // Pull in leaves from other tables
-	ATUI_SHOOT    = 1<<14, // hard-attach a child branch
-	ATUI_DYNARRAY = 1<<15, // For runtime array lengths
-
-
-	_ATUI_BITCHILD = 1<<17, // Internally set. If it's a bitfield child.
-	ATUI_SIGNED    = 1<<18, // Internally-set. If it has a signing bit.
-	ATUI_FRAC      = 1<<19, // Internally-set. Both Q and float.
+	ATUI_BIN  = 0x3,
+	ATUI_ANY  = 0x3, // Mask
 };
+enum atui_type_fancy:uint8_t {
+	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
+	ATUI_BITFIELD = 1, // Is a bitfield parent
+	ATUI_ENUM     = 2, // See also PPATUI_FUNCIFY()
+	ATUI_STRING   = 3, // Variable-length srings ending in \0
+	ATUI_ARRAY    = 4, // staticall-sized array and strings
+	ATUI_GRAFT    = 5, // Pull in leaves from other tables
+	ATUI_SHOOT    = 6, // hard-attach a child branch
+	ATUI_DYNARRAY = 7, // For runtime array lengths
+
+	_ATUI_BITCHILD = 8, // Internally set. If it's a bitfield child.
+};
+enum atui_type_disable:uint8_t {
+	ATUI_DISPLAY   = 0, // show everything
+	ATUI_SUBONLY   = 1, // show only the children
+	ATUI_NODISPLAY = 2, // Don't display this leaf or its children
+};
+
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
@@ -97,7 +106,7 @@ struct _atui_leaf {
 	char8_t const* description[LANG_TOTALLANGS];
 
 	uint32_t num_bytes;  // number of bytes for quick leaf size
-	enum atui_type type; // how to display text, and other config data
+	union atui_type type; // how to display text, and other config data
 	uint8_t array_size;
 
 	uint8_t fractional_bits; // if fixed-point

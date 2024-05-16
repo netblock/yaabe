@@ -127,7 +127,8 @@ get_capsule_type(
 		atui_leaf const* const leaf
 		) {
 	gchar typestr[4] = {0};
-	if ((leaf->type & ATUI_ARRAY) && (leaf->type & ATUI_ANY)) {
+	union atui_type const a_type = leaf->type;
+	if ((a_type.fancy == ATUI_ARRAY) && (a_type.radix)) {
 		typestr[0] = 'a';
 		switch (leaf->total_bits) {
 			case 8:typestr[1] = 'y'; break;
@@ -136,12 +137,12 @@ get_capsule_type(
 			case 64: typestr[1] = 't'; break;
 			default: assert(0); break;
 		}
-	} else if (leaf->type & (ATUI_STRING|ATUI_ARRAY)) {
+	} else if ((a_type.fancy==ATUI_STRING) || (a_type.fancy==ATUI_ARRAY)) {
 		typestr[0] = 's';
-	} else if (leaf->type & ATUI_ANY) {
-		if (leaf->type & ATUI_FRAC) {
+	} else if (a_type.radix) {
+		if (a_type.fraction) {
 			typestr[0] = 'd';
-		} else if (leaf->type & ATUI_SIGNED) {
+		} else if (a_type.signed_num) {
 			switch (leaf->total_bits) {
 				case 8:  typestr[0] = 'y'; break;
 				case 16: typestr[0] = 'n'; break;
@@ -230,11 +231,11 @@ gatui_leaf_generate_children_model(
 	return NULL;
 }
 
-enum atui_type
+union atui_type
 gatui_leaf_get_atui_type(
 		GATUILeaf* const self
 		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	g_return_val_if_fail(GATUI_IS_LEAF(self), (union atui_type){0});
 	return self->atui->type;
 }
 uint32_t
@@ -259,6 +260,7 @@ gatui_leaf_get_value(
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 
+
 	if (self->capsule_type) {
 		atui_leaf const* const leaf = self->atui;
 
@@ -267,9 +269,9 @@ gatui_leaf_get_value(
 			int64_t  s64;
 		} bfval;
 		const void* valptr;
-		if (leaf->type & _ATUI_BITCHILD) {
+		if (leaf->type.fancy == _ATUI_BITCHILD) {
 			valptr = &bfval;
-			if (leaf->type & ATUI_SIGNED) {
+			if (leaf->type.signed_num) {
 				bfval.s64 = atui_leaf_get_val_signed(leaf);
 			} else {
 				bfval.u64 = atui_leaf_get_val_unsigned(leaf);
@@ -305,9 +307,9 @@ gatui_leaf_set_value(
 
 	atui_leaf const* const leaf = self->atui;
 	if (g_variant_is_of_type(value, self->capsule_type)
-			&& !(leaf->type & _ATUI_BITCHILD)
+			&& (leaf->type.fancy != _ATUI_BITCHILD)
 			) {
-		if (leaf->type & ATUI_STRING) {
+		if (leaf->type.fancy == ATUI_STRING) {
 			size_t n;
 			char8_t const* const input_str = g_variant_get_string(value, &n);
 			char8_t* const buffer = malloc(n + 1);
@@ -353,7 +355,7 @@ gatui_leaf_set_value(
 				case 't': val.u64 = g_variant_get_uint64(value); break;
 				default: assert(0); goto fail_exit;
 			}
-			if (leaf->type & ATUI_SIGNED) {
+			if (leaf->type.signed_num) {
 				atui_leaf_set_val_signed(leaf, val.s64);
 			} else {
 				atui_leaf_set_val_unsigned(leaf, val.u64);
@@ -440,7 +442,7 @@ gatui_leaf_enum_entry_sets_value(
 	struct atui_enum_entry const* const end = start + enum_set->num_entries;
 
 	if ((start <= enum_entry) && (enum_entry < end)) {
-		if (self->atui->type & ATUI_SIGNED) {
+		if (self->atui->type.signed_num) {
 			atui_leaf_set_val_signed(self->atui, enum_entry->val);
 		} else {
 			atui_leaf_set_val_unsigned(self->atui, enum_entry->val);
@@ -456,7 +458,7 @@ gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* const self
 		) {
 	int64_t val;
-	if (self->atui->type & ATUI_SIGNED) {
+	if (self->atui->type.signed_num) {
 		val = atui_leaf_get_val_signed(self->atui);
 	} else {
 		val = atui_leaf_get_val_unsigned(self->atui);

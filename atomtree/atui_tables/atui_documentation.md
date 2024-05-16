@@ -162,7 +162,7 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 		}, {
 			name: "bitfield entry name 1",
 			hi: 31, lo: 8,
-			display: "(ATUI_DEC | ATUI_SIGNED)",
+			display: ["ATUI_DEC", "ATUI_SIGNED"],
 		},
 	],
 },
@@ -171,8 +171,8 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 The child leaves will be marked with `_ATUI_BITCHILD` in its type to aid UI
 layout.
 
-If a child is should be signed with Two's Complement, set `ATUI_SIGNED` in its
-radix alongside its main radix.
+If a child is should be signed with Two's Complement, set the leaf's display to
+be a list that includes `ATUI_SIGNED` and its main radix.
 
 
 ### ATUI\_ENUM

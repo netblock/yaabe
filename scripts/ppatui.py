@@ -24,8 +24,8 @@ ATUI_BITFIELD  = 1
 ATUI_ENUM      = 2
 ATUI_STRING    = 3
 ATUI_ARRAY     = 4
-ATUI_GRAFT    = 5
-ATUI_SHOOT   = 6
+ATUI_GRAFT     = 5
+ATUI_SHOOT     = 6
 ATUI_DYNARRAY  = 7
 _ATUI_BITCHILD = 8
 
@@ -584,6 +584,36 @@ def leaf_to_subleaf(
 
 	return bounds_template % bounds_vals
 
+def leaf_type_to_text(
+		leaftype:list,
+		leaf:atui_leaf,
+		var_meta:str
+		):
+	# leaftype : [radix, signed_num, fraction, fancy, disable]
+	leaftype[0] = ""
+	leaftype[1] = "_PPATUI_LEAF_SIGNED(%s)" % var_meta
+	leaftype[2] = "_PPATUI_LEAF_FRACTION(%s)" % var_meta
+	leaftype[3] = ATUI_FANCY_TYPES[leaf.fancy]
+	leaftype[4] = "ATUI_DISPLAY"
+
+	if type(leaf.display) is str:
+		if leaf.display in ("ATUI_SUBONLY", "ATUI_NODISPLAY"):
+			leaftype[0] = "ATUI_NAN"
+			leaftype[4] = leaf.display
+		else:
+			leaftype[0] = leaf.display
+	elif type(leaf.display) is list:
+		if "ATUI_SIGNED" in leaf.display:
+			leaftype[1] = "true"
+		for radix in ("ATUI_NAN", "ATUI_DEC", "ATUI_HEX", "ATUI_BIN"):
+			if radix in leaf.display:
+				leaftype[0] = radix
+				break
+		for disable in ("ATUI_DISPLAY", "ATUI_SUBONLY", "ATUI_NODISPLAY"):
+			if disable in leaf.display:
+				leaftype[4] = disable
+				break
+
 def leaves_to_text(
 		leaves:list,
 		indent:str
@@ -594,17 +624,20 @@ def leaves_to_text(
 indent + "{\n"
 + child_indent + ".name = u8\"%s\",\n"
 + child_indent + ".origname = u8\"%s\",\n"
-+ child_indent + ".type = (\n"
-+ child_indent + "\t%s | %s\n"
-+ child_indent + "\t| _PPATUI_LEAF_SIGNED(%s)\n"
-+ child_indent + "\t| _PPATUI_LEAF_FRACTION(%s)\n"
-+ child_indent + "),\n"
+
++ child_indent + ".type.radix = %s,\n"
++ child_indent + ".type.signed_num = %s,\n"
++ child_indent + ".type.fraction = %s,\n"
++ child_indent + ".type.fancy = %s,\n"
++ child_indent + ".type.disable = %s,\n"
+
 + child_indent + ".num_bytes = _PPATUI_NULLPTR_SIZE(%s),\n"
 + child_indent + ".array_size = 1,\n"
 + child_indent + ".fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
 + child_indent + ".total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
 + child_indent + ".bitfield_hi = _PPATUI_LEAF_BITNESS(%s) - 1,\n"
 + child_indent + ".val = %s,\n"
+
 + "%s"
 + indent + "},\n"
 )
@@ -612,6 +645,8 @@ indent + "{\n"
 	leaf_text_extra = "" # if there is any extra leaf elements
 	var_meta = ""
 	leaves_text = ""
+
+	leaftype = ["radix","signed_num","fraction","fancy","disable"]
 
 	for leaf in leaves:
 		if leaf.access:
@@ -687,9 +722,11 @@ indent + "{\n"
 			leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
 		leaf.name = leaf.name.replace("\"","\\\"")
 
+		leaf_type_to_text(leaftype, leaf, var_meta)
+
 		leaves_text += leaf_template % (
 			leaf.name, leaf.name,
-			leaf.display, ATUI_FANCY_TYPES[leaf.fancy], var_meta, var_meta,
+			leaftype[0], leaftype[1], leaftype[2], leaftype[3], leaftype[4],
 			var_meta, var_meta, var_meta, var_meta,  var_access,
 			leaf_text_extra
 		)

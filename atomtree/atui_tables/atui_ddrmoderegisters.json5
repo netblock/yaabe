@@ -934,14 +934,14 @@ global_default: {
 			fancy_data: [
 				{
 					name: "OCD_down_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 2, lo: 0,
 					description: [
 						{language: "english", text: "Two's Compl. Driver/term pulldown offset",},
 					],
 				}, {
 					name: "OCD_up_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 5, lo: 3,
 					description: [
 						{language: "english", text: "Two's Compl. Driver/terminator pullup offset",},
@@ -1142,28 +1142,28 @@ global_default: {
 			fancy_data: [
 				{
 					name: "drive_pulldown_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 2, lo: 0,
 					description: [
 						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "drive_pullup_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 5, lo: 3,
 					description: [
 						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "data_wck_term_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 8, lo: 6,
 					description: [
 						{language: "english", text: "Two's Compl. vendor specific",},
 					],
 				}, {
 					name: "AddrCmd_term_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 11, lo: 9,
 					description: [
 						{language: "english", text: "Two's Compl. vendor specific",},
@@ -1364,14 +1364,14 @@ global_default: {
 					],
 				}, {
 					name: "VREFD_offset_MU",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 7, lo: 4,
 					description: [
 						{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
 					],
 				}, {
 					name: "VREFD_offset_AF",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 11, lo: 8,
 					description: [
 						{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
@@ -1864,14 +1864,14 @@ global_default: {
 			fancy_data: [
 				{
 					name: "OCD_up",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 2, lo: 0,
 					description: [
 						{language: "english", text: "output driver pullup offset. 0=0, Two's Compl.",},
 					],
 				}, {
 					name: "OCD_down",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 5, lo: 3,
 					description: [
 						{language: "english", text: "pulldown. See JES250D Figure 33.",},
@@ -1925,14 +1925,14 @@ global_default: {
 			fancy_data: [
 				{
 					name: "dataWCK_term_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 2, lo: 0,
 					description: [
 						{language: "english", text: "DQ, DBI & WCK termination offset. Two's",},
 					],
 				}, {
 					name: "CA_term_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 5, lo: 3,
 					description: [
 						{language: "english", text: "command address. See MR2.",},
@@ -2286,7 +2286,7 @@ global_default: {
 			fancy_data: [
 				{
 					name: "VREFC_offset",
-					display: "(ATUI_DEC|ATUI_SIGNED)",
+					display: ["ATUI_DEC", "ATUI_SIGNED"],
 					hi: 3, lo: 0,
 					description: [
 						{language: "english", text: "CA bus. semi Two's Complement: -8=0",},

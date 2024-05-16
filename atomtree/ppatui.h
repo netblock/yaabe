@@ -95,38 +95,38 @@ C preprocessor side of ATUI table generation
 )
 
 #define _PPATUI_LEAF_SIGNED(var) _Generic((var),\
-	int8_t:ATUI_SIGNED, int8_t*:ATUI_SIGNED, int8_t const*:ATUI_SIGNED,\
-	int16_t:ATUI_SIGNED, int16_t*:ATUI_SIGNED, int16_t const*:ATUI_SIGNED,\
-	int32_t:ATUI_SIGNED, int32_t*:ATUI_SIGNED, int32_t const*:ATUI_SIGNED,\
-	int64_t:ATUI_SIGNED, int64_t*:ATUI_SIGNED, int64_t const*:ATUI_SIGNED,\
+	int8_t:true, int8_t*:true, int8_t const*:true,\
+	int16_t:true, int16_t*:true, int16_t const*:true,\
+	int32_t:true, int32_t*:true, int32_t const*:true,\
+	int64_t:true, int64_t*:true, int64_t const*:true,\
 \
 /*
-	float16_t:ATUI_SIGNED, float16_t*:ATUI_SIGNED,\
-	float16_t const*:ATUI_SIGNED,\
-	float32_t:ATUI_SIGNED, float32_t*:ATUI_SIGNED,\
-	float32_t const*:ATUI_SIGNED,\
-	float64_t:ATUI_SIGNED, float64_t*:ATUI_SIGNED,\
-	float64_t const*:ATUI_SIGNED,\
+	float16_t:true, float16_t*:true,\
+	float16_t const*:true,\
+	float32_t:true, float32_t*:true,\
+	float32_t const*:true,\
+	float64_t:true, float64_t*:true,\
+	float64_t const*:true,\
 */\
 \
-	default:0\
+	default:false\
 )
 
 #define _PPATUI_LEAF_FRACTION(var) _Generic((var),\
-	float16_t:ATUI_FRAC, float16_t*:ATUI_FRAC, float16_t const*:ATUI_FRAC,\
-	float32_t:ATUI_FRAC, float32_t*:ATUI_FRAC, float32_t const*:ATUI_FRAC,\
-	float64_t:ATUI_FRAC, float64_t*:ATUI_FRAC, float64_t const*:ATUI_FRAC,\
+	float16_t:true, float16_t*:true, float16_t const*:true,\
+	float32_t:true, float32_t*:true, float32_t const*:true,\
+	float64_t:true, float64_t*:true, float64_t const*:true,\
 \
-	uq6_2_t:ATUI_FRAC, uq6_2_t*:ATUI_FRAC, uq6_2_t const*:ATUI_FRAC,\
-	uq4_4_t:ATUI_FRAC, uq4_4_t*:ATUI_FRAC, uq4_4_t const*:ATUI_FRAC,\
+	uq6_2_t:true, uq6_2_t*:true, uq6_2_t const*:true,\
+	uq4_4_t:true, uq4_4_t*:true, uq4_4_t const*:true,\
 \
-	uq14_2_t:ATUI_FRAC, uq14_2_t*:ATUI_FRAC, uq14_2_t const*:ATUI_FRAC,\
-	uq8_8_t:ATUI_FRAC, uq8_8_t*:ATUI_FRAC, uq8_8_t const*:ATUI_FRAC,\
+	uq14_2_t:true, uq14_2_t*:true, uq14_2_t const*:true,\
+	uq8_8_t:true, uq8_8_t*:true, uq8_8_t const*:true,\
 \
-	uq30_2_t:ATUI_FRAC, uq30_2_t*:ATUI_FRAC, uq30_2_t const*:ATUI_FRAC,\
-	uq16_16_t:ATUI_FRAC, uq16_16_t*:ATUI_FRAC, uq16_16_t const*:ATUI_FRAC,\
+	uq30_2_t:true, uq30_2_t*:true, uq30_2_t const*:true,\
+	uq16_16_t:true, uq16_16_t*:true, uq16_16_t const*:true,\
 \
-	default:0\
+	default:false\
 )
 
 #endif
