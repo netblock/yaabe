@@ -30,7 +30,7 @@ global_default: {
 			access: "bios->header",
 			name: "atom_common_table_header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->table_revision",
 			name: "table_revision",

@@ -24,8 +24,8 @@ ATUI_BITFIELD  = 1
 ATUI_ENUM      = 2
 ATUI_STRING    = 3
 ATUI_ARRAY     = 4
-ATUI_INLINE    = 5
-ATUI_PETIOLE   = 6
+ATUI_GRAFT    = 5
+ATUI_SHOOT   = 6
 ATUI_DYNARRAY  = 7
 _ATUI_BITCHILD = 8
 
@@ -35,8 +35,8 @@ ATUI_FANCY_TYPES = (
 	"ATUI_ENUM",
 	"ATUI_STRING",
 	"ATUI_ARRAY",
-	"ATUI_INLINE",
-	"ATUI_PETIOLE",
+	"ATUI_GRAFT",
+	"ATUI_SHOOT",
 	"ATUI_DYNARRAY",
 	"_ATUI_BITCHILD",
 )
@@ -659,7 +659,7 @@ indent + "{\n"
 				+ child_indent + ".bitfield_lo = %u,\n"
 			)
 			leaf_text_extra %= (leaf.hi, leaf.lo)
-		elif leaf.fancy in (ATUI_PETIOLE, ATUI_INLINE):
+		elif leaf.fancy in (ATUI_SHOOT, ATUI_GRAFT):
 			leaf_text_extra = (
 				child_indent + ".branch_bud = ATUI_FUNC(%s),\n"
 			)
@@ -717,9 +717,9 @@ def deep_count_leaves(
 	dynlength = ""
 	counters[0] += len(leaves)
 	for leaf in leaves:
-		if leaf.fancy == ATUI_INLINE:
+		if leaf.fancy == ATUI_GRAFT:
 			counters[2] += 1
-		elif leaf.fancy == ATUI_PETIOLE:
+		elif leaf.fancy == ATUI_SHOOT:
 			counters[4] += 1
 		#elif leaf.fancy == ATUI_BITFIELD:
 		#	counters[0] += len(leaf.fancy_data)

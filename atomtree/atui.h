@@ -80,8 +80,8 @@ enum atui_type:uint32_t {
 	ATUI_ENUM     = 1<<10, // See also PPATUI_FUNCIFY()
 	ATUI_STRING   = 1<<11, // Meant for human-readable text
 	ATUI_ARRAY    = 1<<12, // No technical difference from string
-	ATUI_INLINE   = 1<<13, // Pull in leaves from other tables
-	ATUI_PETIOLE  = 1<<14, // hard-attach a child branch
+	ATUI_GRAFT    = 1<<13, // Pull in leaves from other tables
+	ATUI_SHOOT    = 1<<14, // hard-attach a child branch
 	ATUI_DYNARRAY = 1<<15, // For runtime array lengths
 
 

@@ -78,7 +78,7 @@ declaration pseudo example:
 			access: "bios->bios_subtable",
 			name: "subtable",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "bios_subtable_v1",
+			fancy: "ATUI_GRAFT", fancy_data: "bios_subtable_v1",
 			description: [
 				{language: "english", text "..."},
 			],
@@ -189,6 +189,7 @@ First populate the atui enum in `atui_enums.json5`:
 ```
 
 And then for the atui leaf,
+
 ``` json5
 {
 	access: "bios->bios_element",
@@ -201,10 +202,10 @@ And then for the atui leaf,
 },
 ```
 
-### ATUI\_INLINE
+### ATUI\_GRAFT
 
-If the element should reference a table, a `atui_branch` to inline as a
-collection of leaves,
+If the element should referenace a table, a `atui_branch` to graft their leaves,
+
 ``` json5
 {
 	access: "bios->bios_element",
@@ -213,7 +214,7 @@ collection of leaves,
 	description: [
 		{language: "english", text "..."},
 	],
-	fancy: "ATUI_INLINE", fancy_data: "table_to_inline"
+	fancy: "ATUI_GRAFT", fancy_data: "table_to_inline"
 },
 ```
 
@@ -225,7 +226,7 @@ display name of the leaf.
 
 Also make sure the table is defined elsewhere in ATUI.
 
-### ATUI\_PETIOLE
+### ATUI\_SHOOT
 
 If the element should reference a table, a atui\_branch to integrate as a child
 branch,
@@ -238,7 +239,7 @@ branch,
 	description: [
 		{language: "english", text "..."},
 	],
-	fancy: "ATUI_PETIOLE", fancy_data: "table_to_inline"
+	fancy: "ATUI_SHOOT", fancy_data: "table_to_inline"
 },
 ```
 

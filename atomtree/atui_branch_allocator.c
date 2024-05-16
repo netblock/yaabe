@@ -78,7 +78,7 @@ atui_leaves_printer(
 	uint16_t num_leaves;
 
 	while (active->pos < active->end) {
-		if (active->pos->type & ATUI_PETIOLE) {
+		if (active->pos->type & ATUI_SHOOT) {
 			if (level->suggestbios) {
 				global->branch_args.suggestbios = level->suggestbios;
 			} else {
@@ -147,7 +147,7 @@ atui_leaves_printer(
 			//leaves->pos->num_child_leaves = num_leaves; // ppatui.py sets
 
 			atui_leaves_printer(global, &sub_leaves);
-		} else if (active->pos->type & ATUI_INLINE) {
+		} else if (active->pos->type & ATUI_GRAFT) {
 			assert(inliners->pos < inliners->end);
 
 			global->branch_args.rename = leaves->pos->name;

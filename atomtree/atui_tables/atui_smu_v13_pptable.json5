@@ -179,7 +179,7 @@ global_default: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 			description: [
 				{language: "english", text: "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0",},
 			],
@@ -221,7 +221,7 @@ global_default: {
 			access: "bios->platform_caps",
 			name: "platform_caps",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_INLINE", fancy_data: "powerplay_platform_caps",
+			fancy: "ATUI_GRAFT", fancy_data: "powerplay_platform_caps",
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
@@ -252,7 +252,7 @@ global_default: {
 			access: "bios->overdrive_table",
 			name: "overdrive_table",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "smu_13_0_7_overdrive_table",
+			fancy: "ATUI_SHOOT", fancy_data: "smu_13_0_7_overdrive_table",
 		}, {
 			access: "bios->padding1",
 			name: "padding1",
@@ -723,7 +723,7 @@ global_default: {
 			access: "bios->ConversionToAvfsClk",
 			name: "ConversionToAvfsClk",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "linear_f32",
+			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 			description: [
 				{language: "english", text: "Transfer function to AVFS Clock (GHz->GHz)",},
 			],
@@ -1111,7 +1111,7 @@ global_default: {
 			access: "bios->DcBtcGbScalar",
 			name: "DcBtcGbScalar",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "linear_f32",
+			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 		},
 	],
 }, {
@@ -1159,7 +1159,7 @@ global_default: {
 					{
 						name: "qVft (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 					},
 				],
 			},
@@ -1167,12 +1167,12 @@ global_default: {
 			access: "bios->qAvfsGb",
 			name: "qAvfsGb",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		}, {
 			access: "bios->qAvfsGb2",
 			name: "qAvfsGb2",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		},
 	],
 }, {
@@ -1305,7 +1305,7 @@ global_default: {
 			access: "bios->features",
 			name: "features",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "powerplay_feature_control_smu13",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu13",
 		}, {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
@@ -1485,12 +1485,12 @@ global_default: {
 			access: "bios->ThrottlerControlMask",
 			name: "ThrottlerControlMask",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_INLINE", fancy_data: "throttler_control_smu13_0x35",
+			fancy: "ATUI_GRAFT", fancy_data: "throttler_control_smu13_0x35",
 		}, {
 			access: "bios->FwDStateMask",
 			name: "FwDStateMask",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "fw_dstate_features_smu13_0x35",
+			fancy: "ATUI_GRAFT", fancy_data: "fw_dstate_features_smu13_0x35",
 		}, {
 			access: "bios->UlvVoltageOffset",
 			name: "UlvVoltageOffset",
@@ -1875,7 +1875,7 @@ global_default: {
 			access: "bios->Vmin_droop",
 			name: "Vmin_droop",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		}, {
 			access: "bios->SpareVmin",
 			name: "SpareVmin",
@@ -1893,7 +1893,7 @@ global_default: {
 					{
 						name: "DpmDescriptor (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_PETIOLE", fancy_data: "DpmDescriptor_t",
+						fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
 					},
 				],
 			},
@@ -2829,7 +2829,7 @@ global_default: {
 			access: "bios->DcBtcGfxParams",
 			name: "DcBtcGfxParams",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "AvfsDcBtcParams_smu13",
+			fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
 		}, {
 			access: "bios->GfxAvfsSpare",
 			name: "GfxAvfsSpare",
@@ -2858,7 +2858,7 @@ global_default: {
 					{
 						name: "SocAvfsFuseOverride (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_PETIOLE", fancy_data: "AvfsFuseOverride_smu13",
+						fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
 					},
 				],
 			},
@@ -2877,7 +2877,7 @@ global_default: {
 					{
 						name: "dBtcGbSoc (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "droop_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 					},
 				],
 			},
@@ -2896,7 +2896,7 @@ global_default: {
 					{
 						name: "qAgingGb (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "linear_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 					},
 				],
 			},
@@ -2915,7 +2915,7 @@ global_default: {
 					{
 						name: "qStaticVoltageOffset (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 					},
 				],
 			},
@@ -2931,7 +2931,7 @@ global_default: {
 					{
 						name: "DcBtcSocParams (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "AvfsDcBtcParams_smu13",
+						fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
 					},
 				],
 			},
@@ -2944,37 +2944,37 @@ global_default: {
 			access: "bios->BootValues",
 			name: "BootValues",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "BootValues_t",
+			fancy: "ATUI_SHOOT", fancy_data: "BootValues_t",
 		}, {
 			access: "bios->DriverReportedClocks",
 			name: "DriverReportedClocks",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "DriverReportedClocks_t",
+			fancy: "ATUI_SHOOT", fancy_data: "DriverReportedClocks_t",
 		}, {
 			access: "bios->MsgLimits",
 			name: "MsgLimits",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "MsgLimits_t",
+			fancy: "ATUI_SHOOT", fancy_data: "MsgLimits_t",
 		}, {
 			access: "bios->OverDriveLimitsMin",
 			name: "OverDriveLimitsMin",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "overdrivelimits_smu13",
+			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->OverDriveLimitsBasicMax",
 			name: "OverDriveLimitsBasicMax",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "overdrivelimits_smu13",
+			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->OverDriveLimitsAdvancedMax",
 			name: "OverDriveLimitsAdvancedMax",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "overdrivelimits_smu13",
+			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "dpm_debug_override_smu13",
+			fancy: "ATUI_GRAFT", fancy_data: "dpm_debug_override_smu13",
 		}, {
 			access: "bios->TotalBoardPowerSupport",
 			name: "TotalBoardPowerSupport",
@@ -3007,7 +3007,7 @@ global_default: {
 					{
 						name: "qFeffCoeffGameClock (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 					},
 				],
 			},
@@ -3023,7 +3023,7 @@ global_default: {
 					{
 						name: "qFeffCoeffBaseClock (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 					},
 				],
 			},
@@ -3039,7 +3039,7 @@ global_default: {
 					{
 						name: "qFeffCoeffBoostClock (%s)",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "quadratic_f32",
+						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 					},
 				],
 			},
@@ -3077,7 +3077,7 @@ global_default: {
 					{
 						name: "%s",
 						display: "ATUI_NAN",
-						fancy: "ATUI_PETIOLE", fancy_data: "i2ccontrollerconfig_u8",
+						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 					},
 				],
 			},
@@ -3109,7 +3109,7 @@ global_default: {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -3117,7 +3117,7 @@ global_default: {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -3125,7 +3125,7 @@ global_default: {
 			access: "bios->VmempUlvPhaseSheddingMask",
 			name: "VmempUlvPhaseSheddingMask",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -3133,7 +3133,7 @@ global_default: {
 			access: "bios->VddioUlvPhaseSheddingMask",
 			name: "VddioUlvPhaseSheddingMask",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -3208,7 +3208,7 @@ global_default: {
 					{
 						name: "%s",
 						display: "ATUI_NAN",
-						fancy: "ATUI_INLINE", fancy_data: "SviTelemetryScale_t",
+						fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
 					},
 				],
 			},
@@ -3310,7 +3310,7 @@ global_default: {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_INLINE", fancy_data: "led_display_control",
+			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",
 			name: "LedPcie",
@@ -3431,12 +3431,12 @@ global_default: {
 			access: "bios->SkuTable",
 			name: "SkuTable",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "smu13_skutable_v39",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_skutable_v39",
 		}, {
 			access: "bios->BoardTable",
 			name: "BoardTable",
 			display: "ATUI_NAN",
-			fancy: "ATUI_PETIOLE", fancy_data: "smu13_boardtable_v39",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39",
 		},
 	],
 }, {
@@ -3446,12 +3446,12 @@ global_default: {
 			access: "bios->table_header",
 			name: "table_header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_INLINE", fancy_data: "atom_common_table_header",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->BoardTable",
 			name: "BoardTable",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_PETIOLE", fancy_data: "smu13_boardtable_v39",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39",
 		},
 	],
 },

@@ -83,13 +83,13 @@ def struct_to_atui(
 		text
 	)
 
-	# ATUI_INLINE
+	# ATUI_GRAFT
 	inline = """\
 \g<1>	{
 \g<1>		access: "bios->\g<4>",
 \g<1>		name: "\g<4>",
 \g<1>		display: "ATUI_NAN",
-\g<1>		fancy: "ATUI_INLINE", fancy_data: "\g<3>",
+\g<1>		fancy: "ATUI_GRAFT", fancy_data: "\g<3>",
 \g<1>		__ATUIDESCR\g<7>
 \g<1>	},\
 """

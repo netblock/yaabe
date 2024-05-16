@@ -714,7 +714,7 @@ _path_to_atui_has_leaf(
 	for (uint16_t i = 0; i < num_leaves; i++) {
 		if (leaves[i].type & ATUI_NODISPLAY) {
 			continue;
-		} else if (leaves[i].type & (ATUI_BITFIELD|ATUI_INLINE|ATUI_DYNARRAY)) {
+		} else if (leaves[i].type & (ATUI_BITFIELD|ATUI_GRAFT|ATUI_DYNARRAY)) {
 			// has child leaves
 			if (0 == (leaves[i].type & ATUI_SUBONLY)) {
 				// ATUI_SUBONLY pseudo-orphans their children

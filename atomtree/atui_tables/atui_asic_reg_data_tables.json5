@@ -9,7 +9,7 @@ global_default: {
 	leaf_defaults: {
 		generic: {
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_INLINE",
+			fancy: "ATUI_GRAFT",
 		},
 		bitchild: {
 			display: "ATUI_DEC",
