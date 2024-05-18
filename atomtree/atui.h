@@ -175,6 +175,9 @@ struct _atui_branch {
 
 	uint16_t leaf_count;
 	uint16_t max_leaves;
+
+	void* table_start; // position and size of the struct the branch represents
+	size_t table_size;
 };
 
 
@@ -305,6 +308,10 @@ struct atui_branch_data {
 	char8_t const* const origname;
 	char8_t const* const description[LANG_TOTALLANGS];
 
+	// position and size of the struct the branch represents
+	void* const table_start;
+	size_t const table_size;
+
 	// leaves straightforward:
 	atui_leaf const* const leaves_init;
 
@@ -316,8 +323,8 @@ struct atui_branch_data {
 
 atui_branch*
 atui_branch_allocator(
-	struct atui_branch_data const* const embryo,
-	struct atui_funcify_args const* const args
+	struct atui_branch_data const* embryo,
+	struct atui_funcify_args const* args
 	);
 
 

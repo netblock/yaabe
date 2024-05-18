@@ -370,6 +370,14 @@ class atui_branch:
 			self.description = branch["description"]
 		else:
 			self.description = None
+		if "table_start" in branchkeys:
+			self.table_start = branch["table_start"]
+		else:
+			self.table_start = None
+		if "table_size" in branchkeys:
+			self.table_size = branch["table_size"]
+		else:
+			self.table_size = None
 
 		if "leaves" in branchkeys:
 			self.leaves = []
@@ -504,6 +512,10 @@ def infer_branch_data(
 		branch.atomtree = branch_defaults.atomtree
 	if branch.description is None:
 		branch.description = branch_defaults.description
+	if branch.table_start is None:
+		branch.table_start = branch_defaults.table_start
+	if branch.table_size is None:
+		branch.table_size = branch_defaults.table_size
 
 	assert (not (branch.c_type is None))
 	if branch.name is None:
@@ -815,6 +827,8 @@ PPATUI_HEADERIFY(%s) {
 	struct atui_branch_data const branch_embryo = {
 		.origname = u8"%s",
 %s\
+		.table_start = (void*) (%s),
+		.table_size = (%s),
 		.leaves_init = leaves_init,
 		.num_leaves_init = sizeof(leaves_init)/sizeof(atui_leaf),
 		.computed_num_leaves = %s,
@@ -853,6 +867,7 @@ PPATUI_HEADERIFY(%s) {
 			leaves_to_text(branch.leaves, "\t\t"),
 			branch.name, # embryo
 			description_to_text(branch.description, "\t\t"),
+			branch.table_start, branch.table_size,
 			"(%u + %s)" % (counters[0], counters[1]),
 			"(%u + %s)" % (counters[2], counters[3]),
 			"(%u + %s)" % (counters[4], counters[5]),

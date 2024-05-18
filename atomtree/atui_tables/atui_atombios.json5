@@ -5,6 +5,8 @@ global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "bios->table_header.structuresize",
 	},
 	leaf_defaults: {
 		generic: {
@@ -449,6 +451,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "atombios_firmware_capability_v1",
 	atomtree: "atomtree_firmware_info",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->FirmwareCapability",
@@ -1473,6 +1476,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "product_branding_v2",
 	atomtree: "atomtree_firmware_info",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ProductBranding",
@@ -1730,6 +1734,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_init_reg_index_format",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->RegIndex",
@@ -1750,6 +1755,7 @@ global_default: {
 }, {
 	c_type: "atom_reg_setting_data_block",
 	atomtree: "atomtree_init_reg_block",
+	table_size: "atomtree->data_block_element_size",
 	leaves: [
 		{
 			access: "bios->block_id",
@@ -1776,6 +1782,8 @@ global_default: {
 }, {
 	c_type: "reg_index_dummy",
 	atomtree: "atomtree_init_reg_block",
+	table_start: "atomtree->register_index",
+	table_size: "atomtree->index_table_size",
 	leaves: [
 		{
 			access: "atomtree->register_index",
@@ -1798,6 +1806,8 @@ global_default: {
 }, {
 	c_type: "reg_settings_dummy",
 	atomtree: "atomtree_init_reg_block",
+	table_start: "atomtree->data_blocks[0]",
+	table_size: "atomtree->data_block_table_size",
 	leaves: [
 		{
 			name: "reg_setting_list",
@@ -1819,6 +1829,7 @@ global_default: {
 }, {
 	c_type: "atom_init_reg_block",
 	atomtree: "atomtree_init_reg_block",
+	table_start: "bios", table_size: "atomtree->total_size",
 	leaves: [
 		{
 			access: "bios->RegIndexTblSize",
@@ -1839,6 +1850,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "vram_module_channel_config",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ChannelConfig",
@@ -1861,6 +1873,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "npl_rtdelay",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->NPL_RT",
@@ -1890,6 +1903,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "mem_preamble",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->Preamble",
@@ -1909,6 +1923,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "vrammodule_misc",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->Misc",
@@ -1943,6 +1958,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "cdr_bandwidth",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->CDR_Bandwidth",
@@ -1966,6 +1982,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "bank_col_counts",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->BankCol",
@@ -1993,6 +2010,7 @@ global_default: {
 	],
 }, {
 	c_type: "mc_atom_dram_data_remap",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ByteRemapCh0",
@@ -2049,6 +2067,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v1",
 	atomtree: "atomtree_vram_module",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->Reserved",
@@ -2144,6 +2163,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v2",
 	atomtree: "atomtree_vram_module",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->Reserved",
@@ -2274,6 +2294,7 @@ global_default: {
 }, {
 	c_type: "atom_memory_timing_format_v0",
 	atomtree: "atomtree_vram_module",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ClkRange",
@@ -2343,6 +2364,7 @@ global_default: {
 }, {
 	c_type: "atom_memory_timing_format_v1",
 	atomtree: "atomtree_vram_module",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ClkRange",
@@ -2445,6 +2467,7 @@ global_default: {
 }, {
 	c_type: "atom_memory_timing_format_v2",
 	atomtree: "atomtree_vram_module",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->ClkRange",
@@ -2555,6 +2578,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v3",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ChannelMapCfg",
@@ -2700,6 +2724,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v4",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ChannelMapCfg",
@@ -2823,6 +2848,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v5",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ChannelMapCfg",
@@ -2952,6 +2978,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v6",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ChannelMapCfg",
@@ -3081,6 +3108,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v7",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ModuleSize",
@@ -3220,6 +3248,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v8",
 	atomtree: "atomtree_vram_module",
+	table_size: "bios->ModuleSize",
 	leaves: [
 		{
 			access: "bios->ChannelMapCfg",

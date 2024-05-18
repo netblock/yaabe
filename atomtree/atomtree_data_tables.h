@@ -258,13 +258,18 @@ enum common_register_sequence:uint8_t {
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block* leaves; // nonzero if populated
 
-	uint8_t num_index;
-	struct atom_init_reg_index_format* register_index;
+	// total sizes:
+	uint16_t data_block_element_size; // size of the block itself
+	uint16_t index_table_size; // RegIndexTblSize
+	uint16_t data_block_table_size; // all of RegDataBuf
+	uint16_t total_size; // size of the practical atom_init_reg_block
 
+	struct atom_init_reg_index_format* register_index;
+	struct atom_reg_setting_data_block* data_blocks[ATOMTREE_MC_REG_MAX];
+	uint8_t num_index; // num of register_index
 	uint8_t num_data_blocks; // atom_init_reg_block's RegDataBuf
 	uint8_t num_data_entries; // atom_reg_setting_data_block's reg_data
-	uint16_t data_block_element_size;
-	struct atom_reg_setting_data_block* data_blocks[ATOMTREE_MC_REG_MAX];
+
 
 	// init_reg_block is a generalised structure format. The meaning of the data
 	// depends on the register_index against an definition lookup table.
@@ -315,13 +320,17 @@ struct atomtree_init_reg_block {
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
-	union atom_umc_register_addr_info_access* register_info;
-	uint8_t num_info;
+	// total sizes:
+	uint16_t data_block_element_size; // size of the block itself
+	uint16_t info_table_size; // all of umc_reg_list
+	uint16_t data_block_table_size; // all of umc_reg_setting_list
+	uint16_t total_size; // size of the practical atom_umc_init_reg_block
 
+	union atom_umc_register_addr_info_access* register_info;
+	struct atom_umc_reg_setting_data_block* data_blocks[ATOMTREE_UMC_REG_MAX];
+	uint8_t num_info;
 	uint8_t num_data_blocks; // atom_umc_init_reg_block's umc_reg_setting_list
 	uint8_t num_data_entries; // atom_umc_reg_setting_data_block's umc_reg_data
-	uint16_t data_block_element_size;
-	struct atom_umc_reg_setting_data_block* data_blocks[ATOMTREE_UMC_REG_MAX];
 };
 
 /*

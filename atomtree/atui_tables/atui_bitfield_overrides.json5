@@ -5,6 +5,8 @@ global_default: {
 	branch_defaults: {
 		c_prefix: "union",
 		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
 	},
 	leaf_defaults: {
 		generic: {

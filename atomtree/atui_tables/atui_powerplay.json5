@@ -5,6 +5,8 @@ global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
 	},
 	leaf_defaults: {
 		generic: {
@@ -25,6 +27,7 @@ global_default: {
 	c_prefix: "struct",
 	c_type: "smu_powerplay_table_header",
 	atomtree: "atomtree_powerplaytable",
+	table_size: "bios->header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",

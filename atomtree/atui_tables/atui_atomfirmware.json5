@@ -5,6 +5,8 @@ global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "bios->table_header.structuresize",
 	},
 	leaf_defaults: {
 		generic: {
@@ -22,12 +24,13 @@ global_default: {
 	},
 }, branches: [
 {// basic empty branch mainly to have collapsables
-	c_type: "atui_nullstruct", leaves: [],
+	c_type: "atui_nullstruct", table_size: "0", leaves: [],
 },
 
 {
 	c_type: "atombios_image",
 	atomtree: "atom_tree",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->atombios_magic",
@@ -155,6 +158,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_common_table_header",
+	table_size: "bios->structuresize", // for stubs
 	leaves: [
 		{
 			access: "bios->structuresize",
@@ -454,6 +458,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "psi_sel_mask",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->sel_mask",
@@ -908,6 +913,7 @@ global_default: {
 	],
 }, {
 	c_type: "i2ccontrollerconfig_u32",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -939,6 +945,7 @@ global_default: {
 	],
 }, {
 	c_type: "i2ccontrollerconfig_u8",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -973,6 +980,7 @@ global_default: {
 	],
 }, {
 	c_type: "i2ccontrollerconfig_u8_mixed",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -2767,6 +2775,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "atombios_firmware_capability_v3",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->firmware_capability",
@@ -3299,6 +3308,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "atom_dtd_format_modemiscinfo",
 	atomtree: "atomtree_lcd_info",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->miscinfo",
@@ -3351,6 +3361,7 @@ global_default: {
 }, {
 	c_type: "atom_dtd_format",
 	atomtree: "atomtree_lcd_info",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->pixclk",
@@ -4583,6 +4594,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "atom_i2c_id_config",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->i2c_id",
@@ -4615,6 +4627,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "atom_gpioi2c_pin_id",
 	atomtree: "atomtree_gpio_pin_lut",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->gpio_id",
@@ -4652,6 +4665,7 @@ global_default: {
 }, {
 	c_type: "atom_gpio_pin_assignment_v2_1",
 	atomtree: "atomtree_gpio_pin_lut",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->data_a_reg_index",
@@ -5346,6 +5360,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "dphy_bitremap0",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->raw_data",
@@ -5383,6 +5398,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "dphy_byteremap0",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->raw_data",
@@ -5419,6 +5435,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_gddr6_bit_byte_remap",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->dphy_byteremap",
@@ -5461,6 +5478,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_gddr6_dram_data_remap",
+	table_size: "bios->table_size",
 	leaves: [
 		{
 			access: "bios->table_size",
@@ -5495,6 +5513,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "memory_vendor_id",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->memory_vendor_id",
@@ -5520,6 +5539,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "atom_umc_register_addr_info_access",
 	atomtree: "atomtree_umc_init_reg_block",
+	table_size: "atomtree->info_table_size",
 	leaves: [
 		{
 			// the uint32_t* typecast is about stripping the 'union'
@@ -5558,6 +5578,7 @@ global_default: {
 }, {
 	c_prefix: "union",
 	c_type: "atom_mc_register_setting_id",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->id_access",
@@ -5577,6 +5598,7 @@ global_default: {
 }, {
 	c_type: "atom_umc_reg_setting_data_block",
 	atomtree: "atomtree_umc_init_reg_block",
+	table_size: "atomtree->data_block_element_size",
 	leaves: [
 		{
 			access: "bios->block_id",
@@ -5603,6 +5625,7 @@ global_default: {
 }, {
 	c_type: "umc_reg_settings_dummy",
 	atomtree: "atomtree_umc_init_reg_block",
+	table_size: "atomtree->data_block_table_size",
 	leaves: [
 		{
 			name: "umc_reg_setting_list",
@@ -5624,6 +5647,7 @@ global_default: {
 }, {
 	c_type: "atom_umc_init_reg_block",
 	atomtree: "atomtree_umc_init_reg_block",
+	table_size: "atomtree->total_size",
 	leaves: [
 		{
 			access: "bios->umc_reg_num",
@@ -5643,6 +5667,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vram_module_v9",
+	table_size: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -5836,6 +5861,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v10",
 	atomtree: "atomtree_vram_info_header_v2_4",
+	table_size: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -6048,6 +6074,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v11",
 	atomtree: "atomtree_vram_info_header_v2_5",
+	table_size: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -6192,6 +6219,7 @@ global_default: {
 }, {
 	c_type: "atom_gddr6_ac_timing_v2_5",
 	atomtree: "atomtree_vram_info_header_v2_5",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->block_id",
@@ -6489,6 +6517,7 @@ global_default: {
 }, {
 	c_type: "atom_vram_module_v3_0",
 	atomtree: "atomtree_vram_info_header_v3_0",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->density",
@@ -6626,6 +6655,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_voltage_object_header_v4",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->voltage_type",
@@ -6643,6 +6673,7 @@ global_default: {
 }, {
 	c_type: "atom_voltage_gpio_map_lut",
 	atomtree: "atomtree_voltage_object_v4",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->voltage_gpio_reg_val",
@@ -6661,6 +6692,7 @@ global_default: {
 }, {
 	c_type: "atom_gpio_voltage_object_v4",
 	atomtree: "atomtree_voltage_object_v4",
+	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
@@ -6705,6 +6737,7 @@ global_default: {
 }, {
 	c_type: "atom_i2c_data_entry",
 	atomtree: "atomtree_voltage_object_v4",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->i2c_reg_index",
@@ -6725,6 +6758,7 @@ global_default: {
 }, {
 	c_type: "atom_i2c_voltage_object_v4",
 	atomtree: "atomtree_voltage_object_v4",
+	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
@@ -6788,6 +6822,7 @@ global_default: {
 }, {
 	c_type: "atom_svid2_voltage_object_v4",
 	atomtree: "atomtree_voltage_object_v4",
+	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
@@ -6840,6 +6875,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_merged_voltage_object_v4",
+	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",

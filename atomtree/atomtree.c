@@ -628,12 +628,12 @@ atomtree_populate_init_reg_block(
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
 	at_regblock->register_index = leaves->RegIndexBuf;
 
+	at_regblock->data_block_element_size = leaves->RegDataBlkSize;
 	at_regblock->num_data_entries = (
-		(leaves->RegDataBlkSize
+		(at_regblock->data_block_element_size
 			- sizeof(((struct atom_reg_setting_data_block*)0)->block_id)
 		) / sizeof(((struct atom_reg_setting_data_block*)0)->reg_data[0])
 	);
-	at_regblock->data_block_element_size = leaves->RegDataBlkSize;
 	struct atom_reg_setting_data_block* block = (  // starting point
 		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
 	);
@@ -645,6 +645,16 @@ atomtree_populate_init_reg_block(
 		block = (void*)block + at_regblock->data_block_element_size;
 	}
 	at_regblock->num_data_blocks = i;
+
+	at_regblock->index_table_size = leaves->RegIndexTblSize;
+	at_regblock->data_block_table_size = (
+	 	at_regblock->data_block_element_size * at_regblock->num_data_blocks
+	);
+	at_regblock->total_size = (
+		offsetof(struct atom_init_reg_block, RegIndexBuf) // 4 bytes
+		+ at_regblock->index_table_size
+		+ at_regblock->data_block_table_size
+	);
 
 	atui_branch* atui_regblock = NULL;
 	if (generate_atui) {
@@ -1239,6 +1249,18 @@ atomtree_populate_umc_init_reg_block(
 		block = (void*)block + at_regblock->data_block_element_size;
 	}
 	at_regblock->num_data_blocks = i;
+
+	at_regblock->info_table_size = (
+		at_regblock->num_info * sizeof(union atom_umc_register_addr_info_access)
+	);
+	at_regblock->data_block_table_size = (
+	 	at_regblock->data_block_element_size * at_regblock->num_data_blocks
+	);
+	at_regblock->total_size = (
+		offsetof(struct atom_umc_init_reg_block, umc_reg_list) // 4 bytes
+		+ at_regblock->info_table_size
+		+ at_regblock->data_block_table_size
+	);
 
 	atui_branch* atui_regblock = NULL;
 	if (generate_atui) {

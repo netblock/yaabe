@@ -364,5 +364,8 @@ atui_branch_allocator(
 
 	memcpy(table->description, embryo->description, sizeof(table->description));
 
+	table->table_start = embryo->table_start;
+	table->table_size = embryo->table_size;
+
 	return table;
 }
