@@ -742,8 +742,10 @@ leaves_val_column_unbind(
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_list_item_get_item(column_cell)
 	);
-	g_signal_handlers_disconnect_by_func(
-		g_leaf, G_CALLBACK(leaf_sets_editable), NULL
+	g_signal_handlers_disconnect_matched(
+		g_leaf,  G_SIGNAL_MATCH_FUNC,
+		0,0, NULL,   G_CALLBACK(leaf_sets_editable),   NULL
+
 	);
 	g_object_unref(g_leaf);
 }

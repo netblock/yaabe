@@ -5539,6 +5539,7 @@ global_default: {
 	c_prefix: "union",
 	c_type: "atom_umc_register_addr_info_access",
 	atomtree: "atomtree_umc_init_reg_block",
+	table_start: "atomtree->register_info",
 	table_size: "atomtree->info_table_size",
 	leaves: [
 		{
@@ -5626,6 +5627,7 @@ global_default: {
 	c_type: "umc_reg_settings_dummy",
 	atomtree: "atomtree_umc_init_reg_block",
 	table_size: "atomtree->data_block_table_size",
+	table_start: "atomtree->data_blocks[0]",
 	leaves: [
 		{
 			name: "umc_reg_setting_list",

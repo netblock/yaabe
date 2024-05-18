@@ -64,21 +64,22 @@ struct atui_enum {
 
 union atui_type {
 	struct { uint16_t
-		radix      :1-0 +1, // enum atui_type_radix
-		signed_num :2-2 +1, // Usually internally-set. If it has a signing bit.
-		fraction   :3-3 +1, // Internally-set. Both Q and float.
-		fancy      :7-4 +1, // enum atui_type_fancy
-		disable    :9-8 +1, // enum atui_type_disable
-		reserved  :15-10 +1;
+		radix      :2-0 +1, // enum atui_type_radix
+		signed_num :3-3 +1, // Usually internally-set. If it has a signing bit.
+		fraction   :4-4 +1, // Internally-set. Both Q and float.
+		fancy      :8-5 +1, // enum atui_type_fancy
+		disable   :10-9 +1, // enum atui_type_disable
+		reserved  :15-11 +1;
 	};
 	uint16_t type;
 };
 enum atui_type_radix:uint8_t {
-	ATUI_NAN  = 0x0, // Not a number
-	ATUI_DEC  = 0x1,
-	ATUI_HEX  = 0x2,
-	ATUI_BIN  = 0x3,
-	ATUI_ANY  = 0x3, // Mask
+	ATUI_NAN = 0x0, // Not a number
+	ATUI_DEC = 0x1,
+	ATUI_HEX = 0x2,
+	ATUI_OCT = 0x3,
+	ATUI_BIN = 0x4,
+	ATUI_ANY = 0x7, // Mask
 };
 enum atui_type_fancy:uint8_t {
 	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
