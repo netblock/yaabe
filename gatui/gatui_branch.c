@@ -1,11 +1,19 @@
 #include "gatui_private.h"
 
+enum {
+	VALUE_CHANGED,
+	LAST_SIGNAL
+};
+static guint gatui_signals[LAST_SIGNAL] = {0};
+
 struct _GATUIBranch {
 	GObject parent_instance;
 
 	atui_branch* atui;
 	GATUIBranch** child_branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
+
+	GVariantType* capsule_type;
 };
 G_DEFINE_TYPE(GATUIBranch, gatui_branch, G_TYPE_OBJECT)
 
@@ -31,6 +39,11 @@ gatui_branch_dispose(
 	}
 	self->atui->self = NULL; // weak reference
 
+	if (self->capsule_type) {
+		g_free(self->capsule_type);
+		self->capsule_type = NULL;
+	}
+
 	G_OBJECT_CLASS(gatui_branch_parent_class)->dispose(object);
 }
 
@@ -41,6 +54,16 @@ gatui_branch_class_init(
 	GObjectClass* const object_class = G_OBJECT_CLASS(branch_class);
 
 	object_class->dispose = gatui_branch_dispose;
+
+	gatui_signals[VALUE_CHANGED] = g_signal_new(
+		"value-changed",
+		G_TYPE_FROM_CLASS(branch_class),
+		(G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE),
+		0,
+		NULL, NULL,
+		NULL,
+		G_TYPE_NONE, 0
+	);
 }
 static void
 gatui_branch_init(
@@ -85,15 +108,28 @@ gatui_branch_new_tree(
 		atui_leaves_to_gliststore(
 			leaf_list, branch->leaves, branch->leaf_count
 		);
+		GListModel* const leaf_list_model = G_LIST_MODEL(leaf_list);
+
+		uint16_t const num_leaves = g_list_model_get_n_items(leaf_list_model);
+		for (uint16_t i=0; i < num_leaves; i++) {
+			GATUILeaf* leaf = g_list_model_get_item(leaf_list_model, i);
+			g_signal_connect_swapped(self,
+				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), leaf
+			);
+			g_object_unref(leaf);
+		}
+
 		self->leaves_model = GTK_SELECTION_MODEL(
 			gtk_no_selection_new(G_LIST_MODEL(
 				gtk_tree_list_model_new(
-					G_LIST_MODEL(leaf_list),
+					leaf_list_model,
 					false, true, leaves_treelist_generate_children, NULL,NULL
 				)
 			))
 		); // the later models take ownership of the earlier
 	}
+
+	self->capsule_type = g_variant_type_new("ay");
 
 	return self;
 }
@@ -122,6 +158,45 @@ gatui_branch_get_leaves_model(
 	return self->leaves_model;
 }
 
+
+GVariant*
+gatui_branch_get_contiguous_memory(
+		GATUIBranch* self
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	atui_branch const* const branch = self->atui;
+	if (branch->table_size) {
+		void* const valcopy = malloc(branch->table_size);
+		memcpy(valcopy, branch->table_start, branch->table_size);
+		return g_variant_new_from_data(
+			self->capsule_type,
+			valcopy, branch->table_size,
+			false,
+			free_notify, valcopy
+		);
+	}
+	return NULL;
+}
+bool
+gatui_branch_set_contiguous_memory(
+		GATUIBranch* self,
+		GVariant* value
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail((NULL != value), false);
+	atui_branch const* const branch = self->atui;
+
+	size_t const num_bytes = g_variant_get_size(value);
+	void const* const input_data = g_variant_get_data(value);
+	assert(input_data);
+	assert(branch->table_size == num_bytes);
+	if ((branch->table_size == num_bytes) && input_data) {
+		memcpy(branch->table_start, input_data, num_bytes);
+		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
+		return true;
+	}
+	return false;
+}
 
 atui_branch*
 gatui_branch_get_atui(

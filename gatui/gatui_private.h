@@ -15,4 +15,9 @@ atui_leaves_to_gliststore( // for GATUILeaves generation
 		uint16_t num_leaves
 		);
 
+void
+gatui_leaf_emit_val_changed( // single-signal multi-user alert network
+		GATUILeaf* const self
+		);
+
 #endif

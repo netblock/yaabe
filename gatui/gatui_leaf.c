@@ -62,32 +62,6 @@ gatui_leaf_dispose(
 	G_OBJECT_CLASS(gatui_leaf_parent_class)->dispose(object);
 }
 
-static void
-emit_val_changed(
-		GATUILeaf* const self
-		) {
-	// make sure everyone in the family tree understands there exists a change,
-	// but don't allow the parent or child to tell self that a family member
-	// (which happens to be self) made a change.
-
-	// opt out of everyone's mailing lists
-	if (self->parent_leaf) {
-		g_signal_handler_block(self->parent_leaf, self->parent_number);
-	}
-	for (uint16_t i=0; i < self->num_child_leaves; i++) {
-		g_signal_handler_block(self->child_leaves[i], self->phone_book[i]);
-	}
-
-	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0); // spread a rumour
-
-	// opt back in
-	if (self->parent_leaf) {
-		g_signal_handler_unblock(self->parent_leaf, self->parent_number);
-	}
-	for (uint16_t i=0; i < self->num_child_leaves; i++) {
-		g_signal_handler_unblock(self->child_leaves[i], self->phone_book[i]);
-	}
-}
 
 static void
 gatui_leaf_class_init(
@@ -168,6 +142,33 @@ get_capsule_type(
 	return g_variant_type_new(typestr);
 }
 
+void
+gatui_leaf_emit_val_changed(
+		GATUILeaf* const self
+		) {
+	// make sure everyone in the family tree understands there exists a change,
+	// but don't allow the parent or child to tell self that a family member
+	// (which happens to be self) made a change.
+
+	// opt out of everyone's mailing lists
+	if (self->parent_leaf) {
+		g_signal_handler_block(self->parent_leaf, self->parent_number);
+	}
+	for (uint16_t i=0; i < self->num_child_leaves; i++) {
+		g_signal_handler_block(self->child_leaves[i], self->phone_book[i]);
+	}
+
+	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0); // spread a rumour
+
+	// opt back in
+	if (self->parent_leaf) {
+		g_signal_handler_unblock(self->parent_leaf, self->parent_number);
+	}
+	for (uint16_t i=0; i < self->num_child_leaves; i++) {
+		g_signal_handler_unblock(self->child_leaves[i], self->phone_book[i]);
+	}
+}
+
 GATUILeaf*
 gatui_leaf_new(
 		atui_leaf* const leaf
@@ -196,13 +197,13 @@ gatui_leaf_new(
 			self->child_leaves[i] = child;
 
 			self->phone_book[i] = g_signal_connect_data(child,
-				"value-changed", G_CALLBACK(emit_val_changed), self,
+				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), self,
 				NULL, G_CONNECT_SWAPPED
 			);
 
 			child->parent_leaf = self;
 			child->parent_number = g_signal_connect_data(self,
-				"value-changed", G_CALLBACK(emit_val_changed), child,
+				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), child,
 				NULL, G_CONNECT_SWAPPED
 			);
 		}
@@ -303,44 +304,42 @@ gatui_leaf_set_value(
 	// object instance
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
 	g_return_val_if_fail(NULL != value, false);
-
-
 	atui_leaf const* const leaf = self->atui;
+
+	size_t const num_bytes = g_variant_get_size(value);
 	if (g_variant_is_of_type(value, self->capsule_type)
 			&& (leaf->type.fancy != _ATUI_BITCHILD)
 			) {
 		if (leaf->type.fancy == ATUI_STRING) {
-			size_t n;
-			char8_t const* const input_str = g_variant_get_string(value, &n);
-			char8_t* const buffer = malloc(n + 1);
-			buffer[n] = '\0';
-			memcpy(buffer, input_str, n);
-			atui_leaf_from_text(leaf, buffer); // has special bounds checks
-			free(buffer);
+			atui_leaf_from_text( // has special bounds checks
+				leaf, g_variant_get_string(value, NULL)
+			);
 			goto success_exit;
 		} else {
 			void const* const input_data = g_variant_get_data(value);
 			assert(input_data);
+			assert(leaf->num_bytes == num_bytes);
 
-			if (input_data) {
+			if (input_data && (leaf->num_bytes == num_bytes)) {
 				// won't work on big-endian, but I'm not supporting BE.
-				memcpy(self->atui->u8, input_data, self->atui->num_bytes);
+				memcpy(leaf->u8, input_data, num_bytes);
 				goto success_exit;
 			}
 		}
 	} else { // loose compliance
 		char8_t const* const typestr = g_variant_get_type_string(value);
-		if ('a' == typestr[0]) {
-			if (char_in_string(typestr[1], "ynqiuxt")) {
+		size_t const typestr_len = strlen(typestr);
+		if ((leaf->num_bytes == num_bytes) && (typestr_len == 2)) {
+			if (('a' == typestr[0]) && char_in_string(typestr[1], "ynqiuxt")) {
 				// un/signed 8-bit~64-bit
 				void const* const input_data = g_variant_get_data(value);
 				assert(input_data);
 				if (input_data) {
-					memcpy(self->atui->u8, input_data, self->atui->num_bytes);
+					memcpy(leaf->u8, input_data, num_bytes);
 					goto success_exit;
 				}
 			}
-		} else {
+		} else if (typestr_len == 1) {
 			union {
 				uint64_t u64;
 				int64_t  s64;
@@ -368,7 +367,7 @@ gatui_leaf_set_value(
 	return false;
 
 	success_exit:
-	emit_val_changed(self);
+	gatui_leaf_emit_val_changed(self);
 	return true;
 }
 
@@ -379,7 +378,7 @@ gatui_leaf_set_value_from_text(
 		) {
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	atui_leaf_from_text(self->atui, text);
-	emit_val_changed(self);
+	gatui_leaf_emit_val_changed(self);
 }
 char8_t*
 gatui_leaf_value_to_text(
@@ -447,7 +446,7 @@ gatui_leaf_enum_entry_sets_value(
 		} else {
 			atui_leaf_set_val_unsigned(self->atui, enum_entry->val);
 		}
-		emit_val_changed(self);
+		gatui_leaf_emit_val_changed(self);
 		return true;
 	}
 	return false;

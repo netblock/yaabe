@@ -870,13 +870,22 @@ leaf_right_click_paste_data_set_data(
 	void* const raw_data = g_base64_decode(b64_text, &b64_num_bytes);
 	if (b64_num_bytes) {
 		uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
-		if (b64_num_bytes == leaf_num_bytes) {
+		if (a_leaf->type.fancy == ATUI_STRING) {
+			if (strnlen(raw_data, b64_num_bytes) < b64_num_bytes) {
+				gatui_leaf_set_value_from_text(pack->leaf, raw_data);
+			} else {
+				error_popup = gtk_alert_dialog_new(
+					"%s takes a string, but the base64 data does not decode to"
+					" a proper string."
+				);
+			}
+		} else if (b64_num_bytes == leaf_num_bytes) {
 			GVariantType* const raw_type = g_variant_type_new("ay");
 			GVariant* const new_val = g_variant_new_from_data(
 				raw_type,
 				raw_data, b64_num_bytes,
 				false,
-				free_notify, raw_data
+				free_notify, raw_data // g_variant_new_from_data takes ownership
 			);
 			g_free(raw_type);
 			bool const success = gatui_leaf_set_value(pack->leaf, new_val);
@@ -970,7 +979,7 @@ leaves_rightclick_popup(
 	);
 
 	gtk_widget_insert_action_group(GTK_WIDGET(leaves_context->view),
-		"leaves", G_ACTION_GROUP(action_set)
+		"leaf", G_ACTION_GROUP(action_set)
 	);
 	// we cannot disconnect action group on popdown because it kills the
 	// actions. Simply replacing them seems to be fine.
@@ -985,9 +994,9 @@ create_leaves_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
-	g_menu_append(menu_model, "Copy Path", "leaves.path");
-	g_menu_append(menu_model, "Copy Data As Base64", "leaves.copy_data");
-	g_menu_append(menu_model, "Paste Data From Base64", "leaves.paste_data");
+	g_menu_append(menu_model, "Copy Path", "leaf.path");
+	g_menu_append(menu_model, "Copy Data", "leaf.copy_data");
+	g_menu_append(menu_model, "Paste Data", "leaf.paste_data");
 	// see also leaves_rightclick_popup
 
 	columnview_create_rightclick_popup(
@@ -1132,6 +1141,111 @@ branch_right_click_copy_path(
 	free(pathstring);
 }
 static void
+branch_right_click_copy_contiguous(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	GVariant* const val = gatui_branch_get_contiguous_memory(pack->branch);
+	assert(val);
+	assert(g_variant_get_data(val));
+	assert(g_variant_get_size(val));
+
+	gchar* const b64_text = g_base64_encode(
+		g_variant_get_data(val),
+		g_variant_get_size(val)
+	);
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		b64_text
+	);
+	g_free(b64_text);
+	g_variant_unref(val);
+}
+static void
+branch_right_click_paste_data_set_data(
+		GObject* const clipboard,
+		GAsyncResult* const async_data,
+		gpointer const pack_ptr
+		) {
+// AsyncReadyCallback
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+
+	GError* err = NULL;
+	char8_t* const b64_text = gdk_clipboard_read_text_finish(
+		GDK_CLIPBOARD(clipboard), async_data, &err
+	);
+	if (err) {
+		generic_error_popup(
+			"clipboard error", err->message, pack->commons->yaabe_gtk
+		);
+		g_error_free(err);
+		return;
+	}
+
+	GtkAlertDialog* error_popup = NULL;
+	size_t b64_num_bytes = 0;
+	void* const raw_data = g_base64_decode(b64_text, &b64_num_bytes);
+	if (b64_num_bytes == a_branch->table_size) {
+		GVariantType* const raw_type = g_variant_type_new("ay");
+		GVariant* const new_val = g_variant_new_from_data(
+			raw_type,
+			raw_data, b64_num_bytes,
+			false,
+			free_notify, raw_data // g_variant_new_from_data takes ownership
+		);
+		g_free(raw_type);
+		bool const success = gatui_branch_set_contiguous_memory(
+			pack->branch, new_val
+		);
+		g_variant_unref(new_val);
+		if (false == success) {
+			error_popup = gtk_alert_dialog_new(
+				"Generic error pasting contiguous data for branch %s.",
+				a_branch->name
+			);
+		}
+	} else if (b64_num_bytes) {
+		error_popup = gtk_alert_dialog_new(
+			"%s has %u contiguous bytes, but pasted data is %u bytes.",
+			a_branch->name, a_branch->table_size, b64_num_bytes
+		);
+	} else {
+		error_popup = gtk_alert_dialog_new("Base64 decode error!");
+	}
+	if (error_popup) {
+		gtk_alert_dialog_set_detail(error_popup, b64_text);
+		gtk_alert_dialog_show(
+			error_popup,
+			gtk_application_get_active_window(pack->commons->yaabe_gtk)
+		);
+		g_object_unref(error_popup);
+		if (raw_data) {
+			g_free(raw_data); // g_variant_new_from_data takes ownership
+		}
+	}
+	g_free(b64_text);
+}
+static void
+branch_right_click_paste_data(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	gdk_clipboard_read_text_async(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		NULL,
+		branch_right_click_paste_data_set_data,
+		pack_ptr
+	);
+}
+static void
 branches_rightclick_popup(
 		GtkGesture* const click_sense,
 		gint const num_presses,
@@ -1153,17 +1267,26 @@ branches_rightclick_popup(
 	g_object_unref(g_branch); // we don't need a second reference.
 	pack->branch = g_branch;
 
+	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
-	GActionEntry actions[1] = {0};
+	GActionEntry actions[3] = {0};
 	actions[0] = (GActionEntry) {"path", branch_right_click_copy_path};
 	uint8_t num_actions = 1;
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
+	if (branch->table_size) {
+		actions[num_actions].name = "copy_contiguous";
+		actions[num_actions].activate = branch_right_click_copy_contiguous;
+		num_actions++;
+		actions[num_actions].name = "paste_data";
+		actions[num_actions].activate = branch_right_click_paste_data;
+		num_actions++;
+	};
 	g_action_map_add_action_entries(action_set,
 		actions, num_actions,
 		pack
 	);
 	gtk_widget_insert_action_group(GTK_WIDGET(branches_context->view),
-		"branches", G_ACTION_GROUP(action_set)
+		"branch", G_ACTION_GROUP(action_set)
 	);
 	// we cannot disconnect action group on popdown because it kills the
 	// actions. Simply replacing them seems to be fine.
@@ -1178,7 +1301,9 @@ create_branches_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
-	g_menu_append(menu_model, "Copy Path", "branches.path");
+	g_menu_append(menu_model, "Copy Path", "branch.path");
+	g_menu_append(menu_model, "Copy Contiguous Data", "branch.copy_contiguous");
+	g_menu_append(menu_model, "Paste Data", "branch.paste_data");
 	// see also branches_rightclick_popup
 
 	columnview_create_rightclick_popup(

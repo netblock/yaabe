@@ -26,12 +26,20 @@ gatui_branch_get_leaves_model(
 		GATUIBranch* self
 		);
 
+GVariant*
+gatui_branch_get_contiguous_memory(
+		GATUIBranch* self
+		);
+bool
+gatui_branch_set_contiguous_memory(
+		GATUIBranch* self,
+		GVariant* data
+		);
+
 atui_branch*
 gatui_branch_get_atui(
 		GATUIBranch* self
 		);
-
-
 
 G_END_DECLS
 #endif
