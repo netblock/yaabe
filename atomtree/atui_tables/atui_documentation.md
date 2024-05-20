@@ -13,11 +13,24 @@ global_default: {
 ], }
 ```
 
+The `branch` class type is for describing C structs and their elemments as
+branch-leaf complexes. For colloquialisms, 'branch' is a struct, and 'leaf' is
+an element of that struct.
+
+The `enum` class type is for building a read-only structure of value-string
+pairs regarding a named constant and its name.
+
+The `array` class type works much the same way, but for a basic read-only array.
+
+The `searchfield` is for `asic_reg_tools.h`, and is about  building an
+enum-esque val-name pair array of register IDs and their names.
+
+<br>
 
 # global\_default
 
-`global_default` holds branch and leaf data that will be used to infer missing
-fields in all branches and leaves.
+`global_default` is currently only for the `branch` class. It holds branch and
+leaf data that will be used to infer missing fields.
 
 For `leaf_defaults`, the `generic` is for all leaves, except for bitfield
 children and dynarray patterns, which are what `bitchild` and `dynpattern` are
@@ -27,7 +40,9 @@ for respectively.
 global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
-		atomtree: "atui_nullstruct",
+		atomtree: "atui_nullstruct", // nullstruct is an empty struct
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
 	},
 	leaf_defaults: {
 		generic: {
@@ -46,11 +61,15 @@ global_default: {
 },
 ```
 
+<br>
 
 # Basic Usage and Namespaces
 
 There are two namespaces available, `bios` and `atomtree`.
-`bios` is the struct that the branch represents, straightforward,
+
+`bios` is the struct that the branch represents, straightforward; for example
+the structs defined in the headers in the `atom/` directory.
+
 `atomtree` is an optional atomtree association that could be useful to pull in
 computed data; or even represent atomtree-computed data as leaves.
 
@@ -59,19 +78,24 @@ declaration pseudo example:
 ``` json5
 {
 	c_prefix: "struct", // union or struct
-	c_type: "bios_struct",
-	name: "alternative_name", // affects display name and call name
+	c_type: "bios_struct", // if name is unset, name will be this
 	atomtree: "relevant_atomtree_struct",
+	name: "alternative_name", // optional; affects display name and call name
+
+	// pointer and the size of the contiguous memory the branch represents
+	table_start: "bios",
+	table_size: "sizeof(*bios)",
+
 	description: [
 		{language: "english", text "..."},
 	],
 	leaves: [
 		{
-			access: "bios->bios_element",
-			name: "bios element",
-			display: "ATUI_HEX", // radix
+			access: "bios->bios_element", // will automatically reference
+			name: "bios element", // can have spaces
+			display: "ATUI_HEX",  // radix
 			fancy: "ATUI_NOFANCY",
-			description: [
+			description: [ // optional
 				{language: "english", text "..."},
 			],
 		}, {
@@ -96,32 +120,33 @@ atui_branch* foba = ATUI_MAKE_BRANCH(alternative_name,
 	number_of_child_branches, child_branches_array
 )
 ```
+`child_branches_array` can be `NULL`; but if it is not, it must be
+`number_of_child_branches` long. 
 
-After instantiation, to add a branch as a child to another branch,
+To add a branch as a child to another branch,
 
 ``` C
 ATUI_ADD_BRANCH(parent_branch, child_branch);
 ```
 
+<br>
 
 
 # Display / Fancy
 
 The display and fancy will appropriately set `atui_type` within the leaf.
 
-`ATUI_FRAC` and `ATUI_SIGNED` are automatically detected and set based on the C
-data type.
-
-`ATUI_FRAC` can signify if it should be viewed as a decimal fraction number.
-
-`ATUI_SIGNED` can signify if it's a signed number. It can be useful manually
-setting this if an element within a bitfield is signed.
-
+`union atui_type.signed_num` and `union atui_type.fraction` are usually set
+automatically based on the C data type.
 
 ## Display / Radix
 
 If the table element should be viewed as a number, set the `display` to a radix:
 `ATUI_DEC`, `ATUI_HEX`, `ATUI_OCT`, `ATUI_BIN`.
+
+If a leaf should be signed with Two's Complement despite the underlying
+C data type, set the leaf's `display` property to be a list that includes
+`ATUI_SIGNED` and its main radix.
 
 If the leaf should exist as a visual entry but shouldn't display a value, set
 the `display` to `ATUI_NAN`.
@@ -129,17 +154,26 @@ the `display` to `ATUI_NAN`.
 If the leaf should be omitted from UI display entirely, set the `display` to
 `ATUI_NODISPLAY`. Note that this will prevent display its children if it has
 any. If the leaf's children should be viewed anyway, set the `display` to
-`ATUI_SUBONLY`.
+`ATUI_SUBONLY`. All other cases imply `ATUI_DISPLAY`.
 
-
-
+<br>
 
 ## Fancy Types
 
 Fancy types allow a leaf to present extra information beyond a value from the
 bios straightforward.
 
+<br>
+
 ### ATUI\_BITFIELD
+
+Classic bitfield representation. 
+
+The child leaves will assume missing fields from the `bitchild` section in
+`global_defaults`. 
+
+The children will be automatically marked with `_ATUI_BITCHILD` as its
+fancy type; as a result, the children can't have a fancy type.
 
 If the leaf should be viewed in base 2, but also has bitfields for children:
 
@@ -168,12 +202,7 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 },
 ```
 
-The child leaves will be marked with `_ATUI_BITCHILD` in its type to aid UI
-layout.
-
-If a child is should be signed with Two's Complement, set the leaf's display to
-be a list that includes `ATUI_SIGNED` and its main radix.
-
+<br>
 
 ### ATUI\_ENUM
 
@@ -202,9 +231,11 @@ And then for the atui leaf,
 },
 ```
 
+<br>
+
 ### ATUI\_GRAFT
 
-If the element should referenace a table, a `atui_branch` to graft their leaves,
+If the element should embed a `atui_branch` to take/graft their leaves,
 
 ``` json5
 {
@@ -221,21 +252,20 @@ If the element should referenace a table, a `atui_branch` to graft their leaves,
 If you want to import just the leaves of the table, as if it was the leaves of
 the branch you're constructing, set the `display` to `ATUI_SUBONLY`.
 
-While not practically useful, the name of the branch object will copy the UI
-display name of the leaf.
+Also make sure the branch/table is defined elsewhere in ATUI.
 
-Also make sure the table is defined elsewhere in ATUI.
+<br>
 
 ### ATUI\_SHOOT
 
-If the element should reference a table, a atui\_branch to integrate as a child
-branch,
+Working much the same way as `ATUI_GRAFT`, if the element should reference a
+`atui_branch` to automatically integrate as a child branch,
 
 ``` json5
 {
 	access: "bios->bios_element",
 	name: "bios element",
-	display: "ATUI_HEX", // radix
+	display: "ATUI_HEX",
 	description: [
 		{language: "english", text "..."},
 	],
@@ -243,14 +273,16 @@ branch,
 },
 ```
 
-Since it isn't a leaf but a reference to another branch, `display` is ignored.
+Since it isn't a leaf but a reference to another branch, `display` is ignored,
+and the leaf won't exist in the instantiation.
+
 The name of the branch object will copy the UI display name of the leaf.
 
-Also make sure the table is populated with an ATUI\_FUNCIFY().
+<br>
 
 ### ATUI\_STRING / ATUI\_ARRAY
 
-If the element is a dynamically-sized 0-terminated string, set the `fancy` to
+If the element is a dynamically-sized NUL-terminated string, set the `fancy` to
 `ATUI_STRING`. 
 
 If it's an array, data will be represented in the radix of your choosing, with
@@ -270,13 +302,15 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 {
 	access: "bios->bios_element2",
 	name: "bios element2",
-	display: "ATUI_HEX", // radix
+	display: "ATUI_HEX",
 	description: [
 		{language: "english", text "..."},
 	],
 	fancy: "ATUI_ARRAY"
 },
 ```
+
+<br>
 
 ### ATUI\_DYNARRAY
 ``` json5
@@ -305,28 +339,40 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 },
 ```
 
-If there is an array or number of leaves that is dynamically sized, especially
-if it has a dynamic allocation, `ATUI_DYNARRY` can pull in the boundaries from
-atomtree.
+`ATUI_DYNARRAY` is essentially a loop type. If there is an array of structs,
+or number of elements needs a runtime computation, `ATUI_DYNARRY` can pull in
+the boundaries.
 
-The leaf pattern follows regular syntax, and can be a bitfield.
+The leaf pattern follows regular syntax and takes assumptions from the 
+`dynpattern` section in `global_defaults`. Nested `ATUI_DYNARRAY` should be
+possible but is untested.
+
+<br>
 
 `dynarray_start_pointer` is a direct pointer that is treated as the beginning of
-the array, such that access would be effectively, `datatype* dataptr = &(source->array_start_pointer[i]);`
+the array, such that access would be effectively, 
+
+``` C
+datatype* dataptr = &(source->array_start_pointer[i]);
+```
 
 `deferred_pointers` is an array of pointers, each of which points an element,
-such that access would be effectively, `datatype* dataptr = source->deferred_pointers[i];`
+such that access would be effectively,
+``` C
+datatype* dataptr = source->deferred_pointers[i];
+```
 
-`dynarray_start_pointer` is for contiguous isometric arrays; `deferred_pointers`is for arrays whose elements are not necessarily contiguous, and/or not
-necessarily equally-sized (eg strings, for `ATUI_STRING`).
-`array_start_pointer` takes precedence over deferred pointers; to use
+`array_start_pointer` takes precedence over `deferred pointers`; to use
 `deferred_pointers`, `array_start_pointer` must be `NULL`.
 
-`dynarray_number_of_elements` counts how long the array goes on for.
+`dynarray_number_of_elements` counts how long the array goes on for. The element
+size will be automatically determined based on the C type.
+
+<br>
 
 If an enum should tag along for UI/naming purposes, state an enum; otherwise
 state the enum name as `ATUI_NULL` . The enum will be walked through
 sequentially in the order as it is defined with `PPATUI_ENUMER()`.
 Furthermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
 
-Leaf top UI name won't get displayed if `ATUI_SUBONLY` is set for the display,
+The dynarray leaf can follow `ATUI_SUBONLY` and `ATUI_NODISPLAY`.
