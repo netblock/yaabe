@@ -448,8 +448,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atombios_firmware_capability_v1",
+	c_prefix: "union", c_type: "atombios_firmware_capability_v1",
 	atomtree: "atomtree_firmware_info",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -1473,8 +1472,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "product_branding_v2",
+	c_prefix: "union", c_type: "product_branding_v2",
 	atomtree: "atomtree_firmware_info",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -1848,8 +1846,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "vram_module_channel_config",
+	c_prefix: "union", c_type: "vram_module_channel_config",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -1871,8 +1868,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "npl_rtdelay",
+	c_prefix: "union", c_type: "npl_rtdelay",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -1901,8 +1897,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "mem_preamble",
+	c_prefix: "union", c_type: "mem_preamble",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -1921,8 +1916,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "vrammodule_misc",
+	c_prefix: "union", c_type: "vrammodule_misc",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -1956,8 +1950,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "cdr_bandwidth",
+	c_prefix: "union", c_type: "cdr_bandwidth",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -1980,8 +1973,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "bank_col_counts",
+	c_prefix: "union", c_type: "bank_col_counts",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{

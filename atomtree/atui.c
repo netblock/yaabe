@@ -37,43 +37,48 @@ atui_leaf_from_text(
 		);
 		i = 0; j = 0;
 		buffer[num_digits] = '\0';
-		while(text[j] == ' ') // cut off leading spaces
+		while (text[j] == ' ') { // cut off leading spaces
 			j++;
+		}
 		switch (leaf->total_bits) {
 			case 8:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
 					leaf->u8[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
-					if (text[j] == ' ')
+					if (text[j] == ' ') {
 						j++;
+					}
 				}
 				break;
 			case 16:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
 					leaf->u16[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
-					if (text[j] == ' ')
+					if (text[j] == ' ') {
 						j++;
+					}
 				}
 				break;
 			case 32:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
 					leaf->u32[i] = strtoul(buffer, NULL, base);
 					j += num_digits;
-					if (text[j] == ' ')
+					if (text[j] == ' ') {
 						j++;
+					}
 				}
 				break;
 			case 64:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					memcpy(buffer, text+j, num_digits);
 					leaf->u64[i] = strtoull(buffer, NULL, base);
 					j += num_digits;
-					if (text[j] == ' ')
+					if (text[j] == ' ') {
 						j++;
+					}
 				}
 				break;
 			default:
@@ -226,25 +231,25 @@ atui_leaf_to_text(
 		uint16_t i=0,j=0;
 		switch (leaf->total_bits) {
 			case 8:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					sprintf(buffer+j, format,  leaf->u8[i]);
 					j += num_digits;
 				}
 				break;
 			case 16:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					sprintf(buffer+j, format,  leaf->u16[i]);
 					j += num_digits;
 				}
 				break;
 			case 32:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					sprintf(buffer+j, format,  leaf->u32[i]);
 					j += num_digits;
 				}
 				break;
 			case 64:
-				for(; i < leaf->array_size; i++) {
+				for (; i < leaf->array_size; i++) {
 					sprintf(buffer+j, format,  leaf->u64[i]);
 					j += num_digits;
 				}
@@ -884,7 +889,7 @@ atui_enum_bsearch(
 	uint8_t left = 0;
 	uint8_t mid;
 	uint8_t right = enum_set->num_entries;
-	while(left != right) {
+	while (left != right) {
 		mid = (left + right) >> 1;  // bitshift div-by-2
 		if (val <= enum_array[mid].val) {
 			right = mid;

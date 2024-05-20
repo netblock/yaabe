@@ -263,8 +263,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "powerplay_feature_control_smu13",
+	c_prefix: "union", c_type: "powerplay_feature_control_smu13",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -469,8 +468,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dpm_debug_override_smu13",
+	c_prefix: "union", c_type: "dpm_debug_override_smu13",
 	leaves: [
 		{
 			access: "bios->DebugOverrides",
@@ -524,8 +522,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "throttler_control_smu13_0x35",
+	c_prefix: "union", c_type: "throttler_control_smu13_0x35",
 	leaves: [
 		{
 			access: "bios->ThrottlerControlMask",
@@ -606,8 +603,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "fw_dstate_features_smu13_0x35",
+	c_prefix: "union", c_type: "fw_dstate_features_smu13_0x35",
 	leaves: [
 		{
 			access: "bios->FwDStateMask",

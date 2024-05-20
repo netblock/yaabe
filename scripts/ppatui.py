@@ -524,34 +524,6 @@ def infer_branch_data(
 	if infer_leaves and branch.leaves:
 		infer_leaf_data(defaults, "generic", branch.leaves)
 
-def leaf_to_dynbounds(leaf:atui_leaf, indent:str):
-	# ATUI_DYNARRAY boundaries
-	child_indent = indent + "\t"
-	bounds_template = (
-"{\n"
-+ child_indent + ".deferred_start_array = %s,\n"
-+ child_indent + ".element_size = sizeof(%s[0]),\n"
-+ child_indent + ".dynarray_length = %s,\n"
-+ child_indent + ".numleaves = %u,\n"
-+ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
-+ child_indent + ".pattern = (atui_leaf const[]) {\n"
-+ "%s"
-+ child_indent + "},\n"
-+ indent + "},\n"
-)
-	access = ""
-	if leaf.access:
-		access = leaf.access # direct array
-	else:
-		access = leaf.fancy_data["deferred"] + "[0]" # array of pointers
-	return bounds_template % (
-		str(not leaf.access).lower(),
-		access,
-		leaf.fancy_data["count"],
-		len(leaf.fancy_data["pattern"]),
-		leaf.fancy_data["enum"],
-		leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
-	)
 
 def leaf_to_subleaf(
 		leaf:atui_leaf,

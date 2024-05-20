@@ -46,8 +46,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "powerplay_platform_caps",
+	c_prefix: "union", c_type: "powerplay_platform_caps",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -144,8 +143,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "led_display_control",
+	c_prefix: "union", c_type: "led_display_control",
 	atomtree: "atui_nullstruct",
 	leaves: [
 		{

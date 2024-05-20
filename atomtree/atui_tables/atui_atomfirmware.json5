@@ -456,8 +456,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "psi_sel_mask",
+	c_prefix: "union", c_type: "psi_sel_mask",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -2773,8 +2772,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atombios_firmware_capability_v3",
+	c_prefix: "union", c_type: "atombios_firmware_capability_v3",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -3305,8 +3303,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atom_dtd_format_modemiscinfo",
+	c_prefix: "union", c_type: "atom_dtd_format_modemiscinfo",
 	atomtree: "atomtree_lcd_info",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -4592,8 +4589,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atom_i2c_id_config",
+	c_prefix: "union", c_type: "atom_i2c_id_config",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -4624,8 +4620,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atom_gpioi2c_pin_id",
+	c_prefix: "union", c_type: "atom_gpioi2c_pin_id",
 	atomtree: "atomtree_gpio_pin_lut",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -5358,8 +5353,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dphy_bitremap0",
+	c_prefix: "union", c_type: "dphy_bitremap0",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -5396,8 +5390,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dphy_byteremap0",
+	c_prefix: "union", c_type: "dphy_byteremap0",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -5511,8 +5504,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "memory_vendor_id",
+	c_prefix: "union", c_type: "memory_vendor_id",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -5536,8 +5528,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atom_umc_register_addr_info_access",
+	c_prefix: "union", c_type: "atom_umc_register_addr_info_access",
 	atomtree: "atomtree_umc_init_reg_block",
 	table_start: "atomtree->register_info",
 	table_size: "atomtree->info_table_size",
@@ -5577,8 +5568,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "atom_mc_register_setting_id",
+	c_prefix: "union", c_type: "atom_mc_register_setting_id",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{

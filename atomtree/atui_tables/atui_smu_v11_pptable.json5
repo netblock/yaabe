@@ -488,8 +488,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "powerplay_feature_control_smu11_0x13",
+	c_prefix: "union", c_type: "powerplay_feature_control_smu11_0x13",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -694,8 +693,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "powerplay_feature_control_smu11_0x33",
+	c_prefix: "union", c_type: "powerplay_feature_control_smu11_0x33",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -900,8 +898,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "powerplay_feature_control_smu11_0x40",
+	c_prefix: "union", c_type: "powerplay_feature_control_smu11_0x40",
 	leaves: [
 		{
 			access: "bios->feature_control",
@@ -1105,8 +1102,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dpm_debug_override_smu11_0x13",
+	c_prefix: "union", c_type: "dpm_debug_override_smu11_0x13",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -1176,8 +1172,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dpm_debug_override_smu11_0x33",
+	c_prefix: "union", c_type: "dpm_debug_override_smu11_0x33",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
@@ -1226,8 +1221,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "dpm_debug_override_smu11_0x40",
+	c_prefix: "union", c_type: "dpm_debug_override_smu11_0x40",
 	leaves: [
 		{
 			access: "bios->DebugOverrides",
@@ -1290,8 +1284,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "throttler_control_smu11_0x13",
+	c_prefix: "union", c_type: "throttler_control_smu11_0x13",
 	leaves: [
 		{
 			access: "bios->ThrottlerControlMask",
@@ -1354,8 +1347,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "throttler_control_smu11_0x33",
+	c_prefix: "union", c_type: "throttler_control_smu11_0x33",
 	leaves: [
 		{
 			access: "bios->ThrottlerControlMask",
@@ -1433,8 +1425,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "throttler_control_smu11_0x40",
+	c_prefix: "union", c_type: "throttler_control_smu11_0x40",
 	leaves: [
 		{
 			access: "bios->ThrottlerControlMask",
@@ -1509,8 +1500,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "fw_dstate_features_smu11_0x33",
+	c_prefix: "union", c_type: "fw_dstate_features_smu11_0x33",
 	leaves: [
 		{
 			access: "bios->FwDStateMask",
@@ -1552,8 +1542,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "fw_dstate_features_smu11_0x40",
+	c_prefix: "union", c_type: "fw_dstate_features_smu11_0x40",
 	leaves: [
 		{
 			access: "bios->FwDStateMask",
@@ -1610,8 +1599,7 @@ global_default: {
 		},
 	],
 }, {
-	c_prefix: "union",
-	c_type: "gfx_gpo_features",
+	c_prefix: "union", c_type: "gfx_gpo_features",
 	leaves: [
 		{
 			access: "bios->GfxGpoSubFeatureMask",
