@@ -815,10 +815,6 @@ PPATUI_HEADERIFY(%s) {
 
 	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
 
-	assert( ! 
-		((NULL==branch_embryo.table_start) ^ (0==branch_embryo.table_size))
-	);
-
 	return atui_branch_allocator(&branch_embryo, args);
 }
 """

@@ -3,8 +3,6 @@ Register index playback of common asic register tables
 See also asic_reg_data_tables.h
 */
 
-//#define END_OF_REG_INDEX_BLOCK  0xFFFF
-
 {class:"array", arrays: [
 
 /******************************************************************************/

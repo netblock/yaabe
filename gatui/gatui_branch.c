@@ -87,6 +87,7 @@ GATUIBranch*
 gatui_branch_new_tree(
 		atui_branch* const branch
 		) {
+	assert(NULL == branch->self);
 	g_return_val_if_fail(branch->self == NULL, NULL);
 	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH, NULL);
 	self->atui = branch;
@@ -97,9 +98,11 @@ gatui_branch_new_tree(
 		self->child_branches = malloc(num_branches * sizeof(GATUIBranch*));
 
 		for (uint8_t i = 0; i < num_branches; i++) {
+			assert(branch->child_branches[i]);
 			self->child_branches[i] = gatui_branch_new_tree(
 				branch->child_branches[i]
 			);
+			assert(self->child_branches[i]);
 		}
 	}
 

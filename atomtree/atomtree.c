@@ -1291,7 +1291,9 @@ atomtree_populate_atom_memory_timing_format(
 
 	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	uint8_t table_size;
-	if (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5) {
+	if ((memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5)
+			|| (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5_2)
+			) {
 		if (0xFF == strap.v1->Terminator) {
 			vram_module->memory_timing_format_ver = v1_1;
 			table_size = sizeof(struct atom_memory_timing_format_v1);
@@ -1366,6 +1368,7 @@ atomtree_populate_atom_memory_timing_format(
 						NULL,  NULL,&(strap.v0->MR2),  0,NULL
 					);
 					break;
+				case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 				case ATOM_DGPU_VRAM_TYPE_GDDR5:
 					if (vram_module->memory_timing_format_ver == v1_1) {
 						atui_mrs[0] = ATUI_MAKE_BRANCH(gddr5_mr0,
@@ -1547,6 +1550,7 @@ atomtree_populate_vram_module(
 								NULL,  NULL,&(vmod->v1_3->MR3),  0,NULL
 							);
 							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
 							atui_children[0] = ATUI_MAKE_BRANCH(gddr5_mr2,
 								NULL,  NULL,&(vmod->v1_3->MR2),  0,NULL
@@ -1628,6 +1632,7 @@ atomtree_populate_vram_module(
 								NULL,  NULL,&(vmod->v1_4->MR3),  0,NULL
 							);
 							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
 							atui_children[0] = ATUI_MAKE_BRANCH(gddr5_mr2,
 								NULL,  NULL,&(vmod->v1_4->MR2),  0,NULL
@@ -1705,6 +1710,7 @@ atomtree_populate_vram_module(
 								NULL,&(vmod->v1_7->MR3),  0,NULL
 							);
 							break;
+						case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
 							atui_children[1] = ATUI_MAKE_BRANCH(gddr5_mr2, NULL,
 								NULL,&(vmod->v1_7->MR2),  0,NULL
@@ -1722,8 +1728,8 @@ atomtree_populate_vram_module(
 							);
 							break;
 						default:
-							atui_children[0] = NULL;
 							atui_children[1] = NULL;
+							atui_children[2] = NULL;
 							break;
 					};
 
@@ -1763,6 +1769,7 @@ atomtree_populate_vram_module(
 					vmod = &(vram_modules[i]);
 					switch (vmod->v1_8->MemoryType) {
 						// mode registers directly in module
+						case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 						case ATOM_DGPU_VRAM_TYPE_GDDR5:
 							atui_children[0] = ATUI_MAKE_BRANCH(gddr5_mr2, NULL,
 								NULL,&(vmod->v1_8->MR2),  0,NULL

@@ -122,7 +122,7 @@ register_set_print_tables(
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
-		printf(u8"\t%s,\n", reg_set->entries[set_loc].name);
+		printf(u8"\t\t\"%s\",\n", reg_set->entries[set_loc].name);
 	}
 
 	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
@@ -187,8 +187,10 @@ register_set_print_tables(
 		for (tokens_i=0; tokens_i < num_tokens; tokens_i++) { // join the str
 			name_ptr = stopcopy(name_ptr, tokens[tokens_i]);
 			*name_ptr = '_';
+			name_ptr++;
 			assert(name_ptr > name_buffer);
 		}
+		name_ptr--;
 		*name_ptr = '\0';
 		assert(strlen(name_buffer) < sizeof(name_buffer));
 
