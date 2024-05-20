@@ -917,6 +917,22 @@ struct mc_phy_init_set_gcn4_gddr5_type2 { // 72 bytes
 	union mc_io_dphy_str_cntl_d0_7_1  mc_io_dphy_str_cntl_d0;
 };
 
+struct mc_phy_init_set_gcn4_gddr5_type3 { // 52 bytes
+	union atom_mc_register_setting_id  block_id;
+	union mc_seq_misc7_6_0        mc_seq_misc7;
+	union mc_io_pad_cntl_d0_6_0   mc_io_pad_cntl_d0;
+	union mc_io_pad_cntl_d1_6_0   mc_io_pad_cntl_d1;
+	union mc_tsm_debug_gcnt_6_0   mc_tsm_debug_gcnt;
+	union mc_tsm_debug_misc_6_0   mc_tsm_debug_misc;
+	union mc_tsm_debug_bcnt1_6_0  mc_tsm_debug_bcnt1;
+	union mc_tsm_debug_bcnt2_6_0  mc_tsm_debug_bcnt2;
+	union mc_tsm_debug_bcnt6_6_0  mc_tsm_debug_bcnt6;
+	union mc_tsm_debug_bcnt7_6_0  mc_tsm_debug_bcnt7;
+	union mc_tsm_debug_bcnt8_6_0  mc_tsm_debug_bcnt8;
+	union mc_tsm_debug_bcnt9_6_0  mc_tsm_debug_bcnt9;
+	union mc_tsm_debug_bcnt10_6_0 mc_tsm_debug_bcnt10;
+};
+
 #pragma pack(pop) // restore old packing
 
 #endif

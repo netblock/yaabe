@@ -251,6 +251,7 @@ enum common_register_sequence:uint8_t {
 	mc_phy_init_set_gcn3_gddr5, // Tonga
 	mc_phy_init_set_gcn4_gddr5_type1, // all other Polaris
 	mc_phy_init_set_gcn4_gddr5_type2, // polaris20
+	mc_phy_init_set_gcn4_gddr5_type3, // polaris20
 };
 
 #define ATOMTREE_MC_REG_MAX  24 // keep score.
@@ -314,6 +315,8 @@ struct atomtree_init_reg_block {
 			mc_phy_init_set_gcn4_gddr5_type1;
 		struct mc_phy_init_set_gcn4_gddr5_type2*
 			mc_phy_init_set_gcn4_gddr5_type2;
+		struct mc_phy_init_set_gcn4_gddr5_type3*
+			mc_phy_init_set_gcn4_gddr5_type3;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23

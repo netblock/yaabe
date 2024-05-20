@@ -3442,6 +3442,63 @@ global_default: {
 			fancy_data: "mc_io_dphy_str_cntl_d0_7_1",
 		},
 	],
+}, {
+	c_type: "mc_phy_init_set_gcn4_gddr5_type3",
+	leaves: [
+		{
+			access: "bios->block_id",
+			name: "block_id",
+			fancy_data: "atom_mc_register_setting_id",
+		}, {
+			access: "bios->mc_seq_misc7",
+			name: "mc_seq_misc7",
+			fancy_data: "mc_seq_misc7_6_0",
+		}, {
+			access: "bios->mc_io_pad_cntl_d0",
+			name: "mc_io_pad_cntl_d0",
+			fancy_data: "mc_io_pad_cntl_d0_6_0",
+		}, {
+			access: "bios->mc_io_pad_cntl_d1",
+			name: "mc_io_pad_cntl_d1",
+			fancy_data: "mc_io_pad_cntl_d1_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_gcnt",
+			name: "mc_tsm_debug_gcnt",
+			fancy_data: "mc_tsm_debug_gcnt_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_misc",
+			name: "mc_tsm_debug_misc",
+			fancy_data: "mc_tsm_debug_misc_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt1",
+			name: "mc_tsm_debug_bcnt1",
+			fancy_data: "mc_tsm_debug_bcnt1_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt2",
+			name: "mc_tsm_debug_bcnt2",
+			fancy_data: "mc_tsm_debug_bcnt2_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt6",
+			name: "mc_tsm_debug_bcnt6",
+			fancy_data: "mc_tsm_debug_bcnt6_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt7",
+			name: "mc_tsm_debug_bcnt7",
+			fancy_data: "mc_tsm_debug_bcnt7_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt8",
+			name: "mc_tsm_debug_bcnt8",
+			fancy_data: "mc_tsm_debug_bcnt8_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt9",
+			name: "mc_tsm_debug_bcnt9",
+			fancy_data: "mc_tsm_debug_bcnt9_6_0",
+		}, {
+			access: "bios->mc_tsm_debug_bcnt10",
+			name: "mc_tsm_debug_bcnt10",
+			fancy_data: "mc_tsm_debug_bcnt10_6_0",
+		},
+	],
 },
 
 ], }

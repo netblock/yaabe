@@ -1319,5 +1319,22 @@ See also asic_reg_data_tables.h
 		"END_OF_REG_INDEX_BLOCK",
 ]},
 
+{type: "uint16_t", name: "mc_phy_init_set_gcn4_gddr5_type3_addresses", // 12+1
+	constants: [
+		"mmMC_SEQ_MISC7_6_0",
+		"mmMC_IO_PAD_CNTL_D0_6_0",
+		"mmMC_IO_PAD_CNTL_D1_6_0",
+		"ixMC_TSM_DEBUG_GCNT_6_0",
+		"ixMC_TSM_DEBUG_MISC_6_0",
+		"ixMC_TSM_DEBUG_BCNT1_6_0",
+		"ixMC_TSM_DEBUG_BCNT2_6_0",
+		"ixMC_TSM_DEBUG_BCNT6_6_0",
+		"ixMC_TSM_DEBUG_BCNT7_6_0",
+		"ixMC_TSM_DEBUG_BCNT8_6_0",
+		"ixMC_TSM_DEBUG_BCNT9_6_0",
+		"ixMC_TSM_DEBUG_BCNT10_6_0",
+		"END_OF_REG_INDEX_BLOCK",
+]},
+
 /******************************************************************************/
 ]}
