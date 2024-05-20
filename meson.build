@@ -21,6 +21,7 @@ endif
 external_depends = [
 	cc.find_library('m', required: true),
 	dependency('gtk4', version: '>= 4.12.0', required: true),
+	dependency('zlib', required: true),
 ]
 
 # source/header generators

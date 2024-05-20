@@ -1,3 +1,5 @@
+#include <zlib.h>
+
 #include "atomtree.h"
 #include "atui.h"
 #include "gatui.h"
@@ -43,6 +45,27 @@ struct rightclick_pack { // see columnview_row_bind_attach_gesture
 		GATUILeaf* leaf;
 	};
 };
+
+
+
+#pragma pack(push, 1)
+enum b64_header_target:uint8_t {
+	B64_BRANCH_CONTIGUOUS,
+	B64_BRANCH_LEAVES,
+	B64_LEAF
+};
+struct b64_header { // paste header
+	uint32_t crc; // everything not crc, including rest of header.
+	struct { uint32_t
+		header_ver    :1-0 +1,
+		target        :4-2 +1, // enum b64_header_target
+		num_segments :15-5 +1, // 2048 leaves
+		num_bytes    :31-16 +1; // 64 KiBytes
+	};
+	// segments? uint32_t n_bytes[]; bytes[]
+};
+#pragma pack(pop)
+
 
 void
 destroy_atomtree_with_gtk(
@@ -818,6 +841,77 @@ generic_error_popup(
 
 	g_object_unref(alert);
 }
+
+static gchar*
+b64_packet_encode(
+		void const* const payload,
+		size_t const payload_size,
+		enum b64_header_target const target,
+		uint8_t const num_segments
+		) {
+	size_t const packet_size = sizeof(struct b64_header) + payload_size;
+	void* const data_packet = malloc(packet_size);
+	struct b64_header* const header = data_packet;
+	void* const payload_area = data_packet + sizeof(struct b64_header);
+
+	header->header_ver = 0;
+	header->target = target;
+	header->num_segments = num_segments;
+	header->num_bytes = payload_size;
+	memcpy(payload_area, payload, payload_size);
+	header->crc = crc32(
+		0,
+		(data_packet + sizeof(uint32_t)), // exclude crc
+		(packet_size - sizeof(uint32_t))
+	);
+
+	gchar* const b64_text = g_base64_encode(data_packet, packet_size);
+	free(data_packet);
+	return b64_text;
+}
+
+static bool // decode error
+b64_packet_decode(
+		char8_t const* const b64_text,
+		struct b64_header** const header_out,
+		void** const payload
+		) {
+	size_t b64_num_bytes = 0;
+	struct b64_header* const header = (
+		(void*) g_base64_decode(b64_text, &b64_num_bytes)
+	);
+
+	if (0 == b64_num_bytes) {
+		return true;
+	}
+	*header_out = header;
+	if (b64_num_bytes < sizeof(struct b64_header)) {
+		return true;
+	}
+	if (b64_num_bytes < header->num_bytes + sizeof(struct b64_header)) {
+		return true;
+	}
+	uint32_t const crc = crc32(
+		0,
+		((void*)header + sizeof(uint32_t)),
+		(header->num_bytes + sizeof(struct b64_header) - sizeof(uint32_t))
+	);
+	if (crc != header->crc) {
+		return true;
+	}
+
+	// strict compliance
+	if ((header->target==B64_BRANCH_CONTIGUOUS) && (header->num_segments!=1)) {
+		return true;
+	}
+	if ((header->target==B64_LEAF) && (header->num_segments!=1)) {
+		return true;
+	}
+
+	*payload = (void*) header + sizeof(header);
+	return false;
+}
+
 static void
 leaf_right_click_copy_data(
 		GSimpleAction* const action,
@@ -826,14 +920,15 @@ leaf_right_click_copy_data(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 	GVariant* const val = gatui_leaf_get_value(pack->leaf);
-	assert(val);
-	assert(g_variant_get_data(val));
-	assert(g_variant_get_size(val));
+	void const* const payload = g_variant_get_data(val);
+	size_t const payload_size = g_variant_get_size(val);
+	assert(payload);
+	assert(payload_size);
 
-	gchar* const b64_text = g_base64_encode(
-		g_variant_get_data(val),
-		g_variant_get_size(val)
+	gchar* const b64_text = b64_packet_encode(
+		payload, payload_size, B64_LEAF, 1
 	);
+
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
 			gdk_display_get_default()
@@ -849,7 +944,6 @@ leaf_right_click_paste_data_set_data(
 		GAsyncResult* const async_data,
 		gpointer const pack_ptr
 		) {
-// AsyncReadyCallback
 	struct rightclick_pack const* const pack = pack_ptr;
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
 
@@ -865,59 +959,78 @@ leaf_right_click_paste_data_set_data(
 		return;
 	}
 
-	GtkAlertDialog* error_popup = NULL;
-	size_t b64_num_bytes = 0;
-	void* const raw_data = g_base64_decode(b64_text, &b64_num_bytes);
-	if (b64_num_bytes) {
-		uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
-		if (a_leaf->type.fancy == ATUI_STRING) {
-			if (strnlen(raw_data, b64_num_bytes) < b64_num_bytes) {
-				gatui_leaf_set_value_from_text(pack->leaf, raw_data);
-			} else {
-				error_popup = gtk_alert_dialog_new(
-					"%s takes a string, but the base64 data does not decode to"
-					" a proper string."
-				);
-			}
-		} else if (b64_num_bytes == leaf_num_bytes) {
-			GVariantType* const raw_type = g_variant_type_new("ay");
-			GVariant* const new_val = g_variant_new_from_data(
-				raw_type,
-				raw_data, b64_num_bytes,
-				false,
-				free_notify, raw_data // g_variant_new_from_data takes ownership
-			);
-			g_free(raw_type);
-			bool const success = gatui_leaf_set_value(pack->leaf, new_val);
-			g_variant_unref(new_val);
-			if (false == success) {
-				error_popup = gtk_alert_dialog_new(
-					"Generic error pasting base64 data for leaf %s.",
-					a_leaf->name
-				);
-			}
-		} else {
-			error_popup = gtk_alert_dialog_new(
-				"Wrong size: pasted base64 data decodes to %u bytes, "
-				"but %s is %u bytes.",
-				b64_num_bytes, a_leaf->name, leaf_num_bytes
-			);
-		}
-	} else {
-		error_popup = gtk_alert_dialog_new("Base64 decode error!");
+	GtkAlertDialog* error_popup;
+	struct b64_header* header = NULL;
+	void* payload = NULL;
+	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	if (decode_error) {
+		error_popup = gtk_alert_dialog_new("Data decode error");
+		goto error_exit;
+	}
+	if (header->target != B64_LEAF) {
+		error_popup = gtk_alert_dialog_new(
+			"Incompatible data for leaf %s.",
+			a_leaf->name
+		);
+		goto error_exit;
 	}
 
-	if (error_popup) {
-		gtk_alert_dialog_set_detail(error_popup, b64_text);
-		gtk_alert_dialog_show(
-			error_popup,
-			gtk_application_get_active_window(pack->commons->yaabe_gtk)
-		);
-		g_object_unref(error_popup);
-		if (raw_data) {
-			g_free(raw_data); // g_variant_new_from_data takes ownership
+	uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
+	if (a_leaf->type.fancy == ATUI_STRING) {
+		if (strnlen(payload, header->num_bytes) < header->num_bytes) {
+			gatui_leaf_set_value_from_text(pack->leaf, payload);
+			goto success_exit;
+		} else {
+			error_popup = gtk_alert_dialog_new(
+				"%s takes a string, but the base64 data does not decode to"
+				" a proper string."
+			);
+			goto error_exit;
 		}
+	} else if (header->num_bytes == leaf_num_bytes) {
+		GVariantType* const raw_type = g_variant_type_new("ay");
+		GVariant* const new_val = g_variant_new_from_data(
+			raw_type,
+			payload, header->num_bytes,
+			false,
+			free_notify, header
+		);
+		header = NULL; // g_variant_new_from_data takes ownership
+		g_free(raw_type);
+		bool const set_success = gatui_leaf_set_value(pack->leaf, new_val);
+		g_variant_unref(new_val);
+		if (set_success) {
+			goto success_exit;
+		} else {
+			error_popup = gtk_alert_dialog_new(
+				"Generic error pasting base64 data for leaf %s.",
+				a_leaf->name
+			);
+			goto error_exit;
+		}
+	} else {
+		error_popup = gtk_alert_dialog_new(
+			"Wrong size: pasted base64 data decodes to %u bytes, "
+			"but %s is %u bytes.",
+			header->num_bytes, a_leaf->name, leaf_num_bytes
+		);
+		goto error_exit;
 	}
+
+
+	error_exit:
+	gtk_alert_dialog_set_detail(error_popup, b64_text);
+	gtk_alert_dialog_show(
+		error_popup,
+		gtk_application_get_active_window(pack->commons->yaabe_gtk)
+	);
+	g_object_unref(error_popup);
+
+	if (header) {
+		g_free(header); // g_variant_new_from_data takes ownership
+	}
+
+	success_exit:
 	g_free(b64_text);
 }
 static void
@@ -1148,13 +1261,13 @@ branch_right_click_copy_contiguous(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 	GVariant* const val = gatui_branch_get_contiguous_memory(pack->branch);
-	assert(val);
-	assert(g_variant_get_data(val));
-	assert(g_variant_get_size(val));
+	void const* const payload = g_variant_get_data(val);
+	size_t const payload_size = g_variant_get_size(val);
+	assert(payload);
+	assert(payload_size);
 
-	gchar* const b64_text = g_base64_encode(
-		g_variant_get_data(val),
-		g_variant_get_size(val)
+	gchar* const b64_text = b64_packet_encode(
+		payload, payload_size, B64_BRANCH_CONTIGUOUS, 1
 	);
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -1165,6 +1278,7 @@ branch_right_click_copy_contiguous(
 	g_free(b64_text);
 	g_variant_unref(val);
 }
+
 static void
 branch_right_click_paste_data_set_data(
 		GObject* const clipboard,
@@ -1187,47 +1301,71 @@ branch_right_click_paste_data_set_data(
 		return;
 	}
 
-	GtkAlertDialog* error_popup = NULL;
-	size_t b64_num_bytes = 0;
-	void* const raw_data = g_base64_decode(b64_text, &b64_num_bytes);
-	if (b64_num_bytes == a_branch->table_size) {
+	GtkAlertDialog* error_popup;
+	struct b64_header* header = NULL;
+	void* payload = NULL;
+	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	if (decode_error) {
+		error_popup = gtk_alert_dialog_new("Data decode error");
+		goto error_exit;
+	}
+	if (header->target == B64_BRANCH_CONTIGUOUS) {
+		if (header->num_bytes != a_branch->table_size) {
+			error_popup = gtk_alert_dialog_new(
+				"%s has %u contiguous bytes, but pasted data is %u bytes.",
+				a_branch->name, a_branch->table_size, header->num_bytes
+			);
+			goto error_exit;
+		}
 		GVariantType* const raw_type = g_variant_type_new("ay");
 		GVariant* const new_val = g_variant_new_from_data(
 			raw_type,
-			raw_data, b64_num_bytes,
+			payload, header->num_bytes,
 			false,
-			free_notify, raw_data // g_variant_new_from_data takes ownership
+			free_notify, header
 		);
+		header = NULL; // g_variant_new_from_data takes ownership
 		g_free(raw_type);
-		bool const success = gatui_branch_set_contiguous_memory(
+		bool const set_success = gatui_branch_set_contiguous_memory(
 			pack->branch, new_val
 		);
 		g_variant_unref(new_val);
-		if (false == success) {
+		if (set_success) {
+			goto success_exit;
+		} else {
 			error_popup = gtk_alert_dialog_new(
 				"Generic error pasting contiguous data for branch %s.",
 				a_branch->name
 			);
+			goto error_exit;
 		}
-	} else if (b64_num_bytes) {
+	} else if (header->target == B64_BRANCH_LEAVES) {
 		error_popup = gtk_alert_dialog_new(
-			"%s has %u contiguous bytes, but pasted data is %u bytes.",
-			a_branch->name, a_branch->table_size, b64_num_bytes
+			"not implemented"
 		);
+		goto error_exit;
 	} else {
-		error_popup = gtk_alert_dialog_new("Base64 decode error!");
-	}
-	if (error_popup) {
-		gtk_alert_dialog_set_detail(error_popup, b64_text);
-		gtk_alert_dialog_show(
-			error_popup,
-			gtk_application_get_active_window(pack->commons->yaabe_gtk)
+		error_popup = gtk_alert_dialog_new(
+			"Incompatible data for branch %s.",
+			a_branch->name
 		);
-		g_object_unref(error_popup);
-		if (raw_data) {
-			g_free(raw_data); // g_variant_new_from_data takes ownership
-		}
+		goto error_exit;
 	}
+
+
+	error_exit:
+	gtk_alert_dialog_set_detail(error_popup, b64_text);
+	gtk_alert_dialog_show(
+		error_popup,
+		gtk_application_get_active_window(pack->commons->yaabe_gtk)
+	);
+	g_object_unref(error_popup);
+
+	if (header) {
+		g_free(header); // g_variant_new_from_data takes ownership
+	}
+
+	success_exit:
 	g_free(b64_text);
 }
 static void
