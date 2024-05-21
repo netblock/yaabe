@@ -40,6 +40,7 @@ def gather_assets(
 	)
 	shutil.copy(exe_file, stage_dir)
 	shutil.copy(os.path.join(source_dir, "LICENSE"), stage_dir)
+	shutil.copy(os.path.join(source_dir, "THIRD_PARTY_LICENSE"), stage_dir)
 
 	# cygpath translates / into an absolute path drive letter and all
 	root = subprocess.check_output(("cygpath", "-m", "/"), text=True)

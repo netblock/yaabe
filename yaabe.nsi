@@ -28,6 +28,7 @@ ShowInstDetails show
 
 #!insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "${nsis_stage_dir}\LICENSE"
+!insertmacro MUI_PAGE_LICENSE "${nsis_stage_dir}\THIRD_PARTY_LICENSE"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 
@@ -68,6 +69,7 @@ Section "Uninstall"
 	Delete "$instDIR\*.dll"
 	Delete "$INSTDIR\yaabe.exe"
 	Delete "$INSTDIR\LICENSE"
+	Delete "$INSTDIR\THIRD_PARTY_LICENSE"
 	Delete "$INSTDIR\uninstall.exe"
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\share"

@@ -1,5 +1,15 @@
-Many files were ripped from the linux kernel:
+All DLLs packaged with YAABE are scraped from the MSYS2 enviornment.
+
+https://www.msys2.org/license
+
+/******************************************************************************/
+
+Many .h header files are heavily modified versions of what exists in the linux
+kernel.
+
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd?h=HEAD
+
+AMD uses the MIT license:
 
 /*
  * Copyright 2022 Advanced Micro Devices, Inc.
