@@ -177,6 +177,8 @@ struct _atui_branch {
 	uint16_t leaf_count;
 	uint16_t max_leaves;
 
+	uint16_t num_copyable_leaves; // num_leaves that maps the bios
+
 	void* table_start; // position and size of the struct the branch represents
 	size_t table_size;
 };

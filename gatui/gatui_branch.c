@@ -164,7 +164,7 @@ gatui_branch_get_leaves_model(
 
 GVariant*
 gatui_branch_get_contiguous_memory(
-		GATUIBranch* self
+		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
 	atui_branch const* const branch = self->atui;
@@ -182,8 +182,8 @@ gatui_branch_get_contiguous_memory(
 }
 bool
 gatui_branch_set_contiguous_memory(
-		GATUIBranch* self,
-		GVariant* value
+		GATUIBranch* const self,
+		GVariant* const value
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
 	g_return_val_if_fail((NULL != value), false);
@@ -200,6 +200,85 @@ gatui_branch_set_contiguous_memory(
 	}
 	return false;
 }
+bool
+gatui_branch_get_leaves_memory_package(
+		GATUIBranch* const self,
+		GVariant** const value,
+		uint16_t* num_copyable_leaves
+		) {
+// copy the data of all direct child leaves that maps data into the bios,
+// and pack it a contiguous byte array.
+
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail((NULL != value), false);
+	g_return_val_if_fail((NULL != num_copyable_leaves), false);
+
+	g_return_val_if_fail((0 < self->atui->num_copyable_leaves), false);
+	*num_copyable_leaves = self->atui->num_copyable_leaves;
+	atui_leaf const* const leaves = self->atui->leaves;
+	uint16_t const leaf_count = self->atui->leaf_count;
+
+	size_t num_bytes = 0;
+	for (uint16_t i=0; i < leaf_count; i++) {
+		num_bytes += leaves[i].num_bytes;
+	}
+	void* const bytepack = malloc(num_bytes);
+	void* walker = bytepack;
+	for (uint16_t i=0; i < leaf_count; i++) {
+		if (leaves[i].num_bytes) {
+			walker = mempcpy(walker, leaves[i].val, leaves[i].num_bytes);
+		}
+	}
+	assert(num_bytes == (walker - bytepack));
+
+	*value = g_variant_new_from_data(
+		self->capsule_type,
+		bytepack, num_bytes,
+		false,
+		free_notify, bytepack
+	);
+	return true;
+}
+bool
+gatui_branch_set_leaves_memory_package(
+		GATUIBranch* const self,
+		GVariant* const value,
+		uint16_t num_copyable_leaves
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail((NULL != value), false);
+
+	if (num_copyable_leaves != self->atui->num_copyable_leaves) {
+		return false;
+	}
+
+	atui_leaf const* const leaves = self->atui->leaves;
+	uint16_t const leaf_count = self->atui->leaf_count;
+	size_t num_bytes = 0;
+
+	for (uint16_t i=0; i < leaf_count; i++) {
+		num_bytes += leaves[i].num_bytes;
+	}
+	if (num_bytes != g_variant_get_size(value)) {
+		return false;
+	}
+
+	void const* const input_data = g_variant_get_data(value);
+	void const* walker = input_data;
+	assert(input_data);
+	if (input_data) {
+		for (uint16_t i=0; i < leaf_count; i++) {
+			if (leaves[i].num_bytes) {
+				memcpy(leaves[i].u8, walker, leaves[i].num_bytes);
+			}
+			walker += leaves[i].num_bytes;
+		}
+		assert(num_bytes == (walker - input_data));
+		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
+		return true;
+	}
+	return false;
+};
 
 atui_branch*
 gatui_branch_get_atui(

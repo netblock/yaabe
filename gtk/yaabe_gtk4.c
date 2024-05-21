@@ -1276,6 +1276,38 @@ branch_right_click_copy_contiguous(
 	g_free(b64_text);
 	g_variant_unref(val);
 }
+static void
+branch_right_click_copy_leaves(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	GVariant* val = NULL;
+	uint16_t num_copyable_leaves;
+	bool const success = gatui_branch_get_leaves_memory_package(
+		pack->branch,
+		&val,
+		&num_copyable_leaves
+	);
+	assert(val);
+	void const* const payload = g_variant_get_data(val);
+	size_t const payload_size = g_variant_get_size(val);
+	assert(payload);
+	assert(payload_size);
+
+	gchar* const b64_text = b64_packet_encode(
+		payload, payload_size, B64_BRANCH_LEAVES, num_copyable_leaves
+	);
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		b64_text
+	);
+	g_free(b64_text);
+	g_variant_unref(val);
+}
 
 static void
 branch_right_click_paste_data_set_data(
@@ -1307,41 +1339,53 @@ branch_right_click_paste_data_set_data(
 		error_popup = gtk_alert_dialog_new("Data decode error");
 		goto error_exit;
 	}
-	if (header->target == B64_BRANCH_CONTIGUOUS) {
-		if (header->num_bytes != a_branch->table_size) {
-			error_popup = gtk_alert_dialog_new(
-				"%s has %u contiguous bytes, but pasted data is %u bytes.",
-				a_branch->name, a_branch->table_size, header->num_bytes
-			);
-			goto error_exit;
-		}
+
+	GVariant* new_val = NULL;
+	if ((header->target == B64_BRANCH_CONTIGUOUS)
+			|| (header->target == B64_BRANCH_LEAVES)
+			) {
 		GVariantType* const raw_type = g_variant_type_new("ay");
-		GVariant* const new_val = g_variant_new_from_data(
+		new_val = g_variant_new_from_data(
 			raw_type,
 			payload, header->num_bytes,
 			false,
 			free_notify, header
 		);
-		header = NULL; // g_variant_new_from_data takes ownership
 		g_free(raw_type);
-		bool const set_success = gatui_branch_set_contiguous_memory(
-			pack->branch, new_val
-		);
-		g_variant_unref(new_val);
-		if (set_success) {
-			goto success_exit;
-		} else {
-			error_popup = gtk_alert_dialog_new(
-				"Generic error pasting contiguous data for branch %s.",
-				a_branch->name
+		if (header->target == B64_BRANCH_CONTIGUOUS) {
+			if (header->num_bytes != a_branch->table_size) {
+				error_popup = gtk_alert_dialog_new(
+					"%s has %u contiguous bytes, but pasted data is %u bytes.",
+					a_branch->name, a_branch->table_size, header->num_bytes
+				);
+				goto error_exit;
+			}
+			bool const set_success = gatui_branch_set_contiguous_memory(
+				pack->branch, new_val
 			);
-			goto error_exit;
+			if (set_success) {
+				goto success_exit;
+			} else {
+				error_popup = gtk_alert_dialog_new(
+					"Generic error pasting contiguous data for branch %s.",
+					a_branch->name
+				);
+				goto error_exit;
+			}
+		} else {
+			bool const set_success = gatui_branch_set_leaves_memory_package(
+				pack->branch, new_val, header->num_segments
+			);
+			if (set_success) {
+				goto success_exit;
+			} else {
+				error_popup = gtk_alert_dialog_new(
+					"Incompatible data for branch %s.",
+					a_branch->name
+				);
+				goto error_exit;
+			}
 		}
-	} else if (header->target == B64_BRANCH_LEAVES) {
-		error_popup = gtk_alert_dialog_new(
-			"not implemented"
-		);
-		goto error_exit;
 	} else {
 		error_popup = gtk_alert_dialog_new(
 			"Incompatible data for branch %s.",
@@ -1359,11 +1403,13 @@ branch_right_click_paste_data_set_data(
 	);
 	g_object_unref(error_popup);
 
-	if (header) {
+	success_exit:
+	if (new_val) {
+		g_variant_unref(new_val);
+	} else if (header) {
 		g_free(header); // g_variant_new_from_data takes ownership
 	}
 
-	success_exit:
 	g_free(b64_text);
 }
 static void
@@ -1402,21 +1448,29 @@ branches_rightclick_popup(
 	);
 	g_object_unref(g_branch); // we don't need a second reference.
 	pack->branch = g_branch;
-
+	
 	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
-	GActionEntry actions[3] = {0};
+	GActionEntry actions[4] = {0};
 	actions[0] = (GActionEntry) {"path", branch_right_click_copy_path};
 	uint8_t num_actions = 1;
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
-	if (branch->table_size) {
-		actions[num_actions].name = "copy_contiguous";
-		actions[num_actions].activate = branch_right_click_copy_contiguous;
-		num_actions++;
+	if (branch->num_copyable_leaves || branch->table_size) {
+		if (branch->num_copyable_leaves) {
+			actions[num_actions].name = "copy_leaves";
+			actions[num_actions].activate = branch_right_click_copy_leaves;
+			num_actions++;
+		}
+		if (branch->table_size) {
+			actions[num_actions].name = "copy_contiguous";
+			actions[num_actions].activate = branch_right_click_copy_contiguous;
+			num_actions++;
+		}
 		actions[num_actions].name = "paste_data";
 		actions[num_actions].activate = branch_right_click_paste_data;
 		num_actions++;
 	};
+
 	g_action_map_add_action_entries(action_set,
 		actions, num_actions,
 		pack
@@ -1438,6 +1492,7 @@ create_branches_rightclick_menu(
 		) {
 	GMenu* const menu_model = g_menu_new();
 	g_menu_append(menu_model, "Copy Path", "branch.path");
+	g_menu_append(menu_model, "Copy Leaves", "branch.copy_leaves");
 	g_menu_append(menu_model, "Copy Contiguous Data", "branch.copy_contiguous");
 	g_menu_append(menu_model, "Paste Data", "branch.paste_data");
 	// see also branches_rightclick_popup

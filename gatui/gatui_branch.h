@@ -30,10 +30,22 @@ GVariant*
 gatui_branch_get_contiguous_memory(
 		GATUIBranch* self
 		);
-bool
+bool // success
 gatui_branch_set_contiguous_memory(
 		GATUIBranch* self,
 		GVariant* data
+		);
+bool // success
+gatui_branch_get_leaves_memory_package(
+		GATUIBranch* self,
+		GVariant** value,
+		uint16_t* num_copyable_leaves
+		);
+bool // success
+gatui_branch_set_leaves_memory_package(
+		GATUIBranch* self,
+		GVariant* value,
+		uint16_t num_copyable_leaves
 		);
 
 atui_branch*

@@ -292,6 +292,12 @@ atui_branch_allocator(
 		table->max_leaves = embryo->num_leaves_init;
 		// petiole doesn't get counted
 		table->leaf_count = first_leaves.target.pos - table->leaves;
+	
+		for (uint16_t i=0; i < table->leaf_count; i++) {
+			if (table->leaves[i].num_bytes) { // if it maps the bios
+				table->num_copyable_leaves++;
+			}
+		}
 	}
 	assert(tracker.branches.pos == tracker.branches.end);
 	assert(tracker.inliners.pos == tracker.inliners.end);
