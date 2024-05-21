@@ -256,7 +256,7 @@ pathbar_sets_branch_selection(
 }
 
 static void
-branch_selection_sets_leaves_list(
+select_changes_leaves(
 		GtkSingleSelection* const model,
 		guint const position,
 		guint const n_items,
@@ -304,8 +304,7 @@ create_root_model(
 	)); // the later models take ownership of the earlier
 
 	g_object_connect(sel_model,
-		"signal::selection-changed",
-			G_CALLBACK(branch_selection_sets_leaves_list), commons,
+		"signal::selection-changed", G_CALLBACK(select_changes_leaves), commons,
 		"signal::selection-changed", G_CALLBACK(pathbar_update_path), commons,
 		NULL
 	);
@@ -380,8 +379,9 @@ columnview_create_rightclick_popup(
 	gtk_widget_set_halign(GTK_WIDGET(popup_menu), GTK_ALIGN_START);
 
 	gtk_widget_set_parent(GTK_WIDGET(popup_menu), GTK_WIDGET(context->view));
-	g_signal_connect_swapped(context->view, // reference janitorial
-		"destroy", G_CALLBACK(gtk_widget_unparent), popup_menu
+	g_signal_connect_swapped(context->view, "destroy",
+		// reference janito l
+		G_CALLBACK(gtk_widget_unparent), popup_menu
 	);
 	context->rightclick = popup_menu;
 }
@@ -434,10 +434,9 @@ columnview_row_bind_attach_gesture(
 		pack->commons = commons;
 		pack->row = view_row;
 
-		g_signal_connect_data(click_sense,
-			"pressed", G_CALLBACK(gesture_cb), pack,
-			free_closure,
-			G_CONNECT_DEFAULT
+		g_signal_connect_data(click_sense, "pressed",
+			G_CALLBACK(gesture_cb), pack,
+			free_closure, G_CONNECT_DEFAULT
 		);
 
 		g_object_set_data(G_OBJECT(view_row), "atui", click_sense);
@@ -455,8 +454,8 @@ construct_path_bar(
 	GtkWidget* const path_bar = gtk_entry_new();
 	commons->pathbar = GTK_EDITABLE(path_bar);
 
-	g_signal_connect_swapped(path_bar,
-		"activate", G_CALLBACK(pathbar_sets_branch_selection), commons
+	g_signal_connect_swapped(path_bar, "activate",
+		G_CALLBACK(pathbar_sets_branch_selection), commons
 	);
 
 	GtkEventController* const escape_reset = gtk_shortcut_controller_new();
@@ -644,8 +643,8 @@ construct_enum_dropdown(
 	GtkEditable* const enumentry = GTK_EDITABLE(gtk_entry_new_with_buffer(
 		entry_buffer
 	));
-	g_signal_connect(enumentry,
-		"activate", G_CALLBACK(editable_sets_leaf), column_cell
+	g_signal_connect(enumentry, "activate",
+		G_CALLBACK(editable_sets_leaf), column_cell
 	);
 	gtk_widget_set_hexpand(GTK_WIDGET(enumentry), true);
 
@@ -686,8 +685,8 @@ leaves_val_column_setup(
 	GtkStack* const widget_bag = GTK_STACK(gtk_stack_new());
 	gtk_list_item_set_child(column_cell, GTK_WIDGET(widget_bag));
 	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
-	g_signal_connect_swapped(focus_sense,
-		"leave", G_CALLBACK(leaves_editable_stray_reset), column_cell
+	g_signal_connect_swapped(focus_sense, "leave",
+		G_CALLBACK(leaves_editable_stray_reset), column_cell
 	);
 	gtk_widget_add_controller(GTK_WIDGET(widget_bag), focus_sense);
 	// widget takes ownership of the controller, no need to unref.
@@ -698,8 +697,8 @@ leaves_val_column_setup(
 	//sub_widget = gtk_text_new();
 	GtkWidget* const regular = gtk_entry_new_with_buffer(entry_buffer);
 	gtk_stack_add_named(widget_bag, regular, "text");
-	g_signal_connect(GTK_EDITABLE(regular),
-		"activate", G_CALLBACK(editable_sets_leaf), column_cell
+	g_signal_connect(GTK_EDITABLE(regular), "activate",
+		G_CALLBACK(editable_sets_leaf), column_cell
 	);
 
 	// enums
@@ -748,9 +747,8 @@ leaves_val_column_bind(
 		}
 
 		leaf_sets_editable(g_leaf, GTK_EDITABLE(editable));
-		g_signal_connect(g_leaf,
-			"value-changed", G_CALLBACK(leaf_sets_editable),
-			GTK_EDITABLE(editable)
+		g_signal_connect(g_leaf, "value-changed",
+			G_CALLBACK(leaf_sets_editable), GTK_EDITABLE(editable)
 		);
 	} else {
 		gtk_widget_set_visible(GTK_WIDGET(widget_bag), false);
@@ -1899,12 +1897,12 @@ construct_loadsave_buttons_box(
 		yaabegtk_commons* const commons
 		) {
 	GtkWidget* const load_button = gtk_button_new_with_label("Load");
-	g_signal_connect_swapped(load_button,
-		"clicked", G_CALLBACK(load_button_open_bios), commons
+	g_signal_connect_swapped(load_button, "clicked",
+		G_CALLBACK(load_button_open_bios), commons
 	);
 	GtkWidget* const reload_button = gtk_button_new_with_label("Reload");
-	g_signal_connect_swapped(reload_button,
-		"clicked", G_CALLBACK(reload_button_reload_bios), commons
+	g_signal_connect_swapped(reload_button, "clicked",
+		G_CALLBACK(reload_button_reload_bios), commons
 	);
 	GtkWidget* const load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(load_buttons), load_button);
@@ -1912,12 +1910,12 @@ construct_loadsave_buttons_box(
 
 
 	GtkWidget* const save_button = gtk_button_new_with_label("Save");
-	g_signal_connect_swapped(save_button,
-		"clicked", G_CALLBACK(save_button_same_file), commons
+	g_signal_connect_swapped(save_button, "clicked",
+		G_CALLBACK(save_button_same_file), commons
 	);
 	GtkWidget* const saveas_button = gtk_button_new_with_label("Save As");
-	g_signal_connect_swapped(saveas_button,
-		"clicked", G_CALLBACK(saveas_button_name_bios), commons
+	g_signal_connect_swapped(saveas_button, "clicked",
+		G_CALLBACK(saveas_button_name_bios), commons
 	);
 	GtkWidget* const save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
@@ -1990,8 +1988,8 @@ yaabe_app_activate(
 	GtkDropTarget* const dropfile = gtk_drop_target_new(
 		G_TYPE_FILE, GDK_ACTION_COPY
 	);
-	g_signal_connect(dropfile,
-		"drop", G_CALLBACK(dropped_file_open_bios), commons
+	g_signal_connect(dropfile, "drop",
+		G_CALLBACK(dropped_file_open_bios), commons
 	);
 
 	GtkWindow* const window = GTK_WINDOW(gtk_application_window_new(gtkapp));
@@ -2019,8 +2017,8 @@ yaabe_gtk(
 	commons.atomtree_root = *atree;
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
-	g_signal_connect(commons.yaabe_gtk,
-		"activate", G_CALLBACK(yaabe_app_activate), &commons
+	g_signal_connect(commons.yaabe_gtk, "activate",
+		G_CALLBACK(yaabe_app_activate), &commons
 	);
 	int8_t const status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL

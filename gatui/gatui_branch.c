@@ -116,8 +116,8 @@ gatui_branch_new_tree(
 		uint16_t const num_leaves = g_list_model_get_n_items(leaf_list_model);
 		for (uint16_t i=0; i < num_leaves; i++) {
 			GATUILeaf* leaf = g_list_model_get_item(leaf_list_model, i);
-			g_signal_connect_swapped(self,
-				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), leaf
+			g_signal_connect_swapped(self, "value-changed",
+				G_CALLBACK(gatui_leaf_emit_val_changed), leaf
 			);
 			g_object_unref(leaf);
 		}

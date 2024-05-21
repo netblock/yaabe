@@ -196,14 +196,14 @@ gatui_leaf_new(
 			child = g_list_model_get_item(child_model, i); // refs for us
 			self->child_leaves[i] = child;
 
-			self->phone_book[i] = g_signal_connect_data(child,
-				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), self,
+			self->phone_book[i] = g_signal_connect_data(child, "value-changed",
+				G_CALLBACK(gatui_leaf_emit_val_changed), self,
 				NULL, G_CONNECT_SWAPPED
 			);
 
 			child->parent_leaf = self;
-			child->parent_number = g_signal_connect_data(self,
-				"value-changed", G_CALLBACK(gatui_leaf_emit_val_changed), child,
+			child->parent_number = g_signal_connect_data(self, "value-changed",
+				G_CALLBACK(gatui_leaf_emit_val_changed), child,
 				NULL, G_CONNECT_SWAPPED
 			);
 		}
