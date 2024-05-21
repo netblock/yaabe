@@ -8,7 +8,6 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 
 #include "standard.h"
 
-#include "qnotation.h"
 #include "gmc.h"
 #include "ddrmoderegisters.h"
 #include "bitfield_overrides.h"

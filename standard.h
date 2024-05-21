@@ -29,7 +29,6 @@ typedef _Float16 float16_t;
 typedef float float32_t;
 typedef double float64_t;
 //typedef _Float128 float128_t; // currently unnecessary
-// AVX-512 does partial native 128-bit?
 
 // we're dealing with a byte-packed little-endian ABI.
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
@@ -53,6 +52,12 @@ struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
 #pragma pack(pop)
 static_assert(sizeof(struct _ninebytes) == 9);
 static_assert(sizeof(struct _tenbytes) == 10);
+
+
+
+#include "qnotation.h"
+
+/******************************************************************************/
 
 
 // TODO stroll that considers 0b prefix?
