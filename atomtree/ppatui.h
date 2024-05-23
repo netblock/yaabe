@@ -53,6 +53,7 @@ C preprocessor side of ATUI table generation
 )
 #define _PPATUI_NULLPTR_SIZE(var) _Generic((var),\
 	nullptr_t: 0,\
+	atui_nullstruct: 0,\
 	default: sizeof(var)\
 )
 

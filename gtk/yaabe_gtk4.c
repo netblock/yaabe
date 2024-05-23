@@ -1548,7 +1548,7 @@ branches_rightclick_popup(
 	uint8_t num_actions = 3;
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	if (branch->num_copyable_leaves || branch->table_size) {
-		if (branch->num_copyable_leaves) {
+		if (branch->num_copyable_leaves && ! branch->prefer_contiguous) {
 			actions[num_actions].name = "copy_leaves";
 			actions[num_actions].activate = branch_right_click_copy_leaves;
 			num_actions++;

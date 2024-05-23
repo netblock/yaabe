@@ -372,6 +372,7 @@ atui_branch_allocator(
 
 	table->table_start = embryo->table_start;
 	table->table_size = embryo->table_size;
+	table->prefer_contiguous = (embryo->sizeofbios >= embryo->table_size);
 
 	return table;
 }

@@ -35,7 +35,7 @@ typedef struct _GATUIBranch GATUIBranch;
 static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 // purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
 // relevant for that branch:
-struct atui_nullstruct;
+typedef struct atui_nullstruct {} atui_nullstruct;
 
 struct atui_funcify_args; // internal use; see below
 
@@ -179,8 +179,13 @@ struct _atui_branch {
 
 	uint16_t num_copyable_leaves; // num_leaves that maps the bios
 
+	// C struct may be larger than table_size; if this is the case, a simple
+	// copy/paste of the leaves themselves might be atom out-of-bounds.
+	bool prefer_contiguous;
 	void* table_start; // position and size of the struct the branch represents
 	size_t table_size;
+	// table_size may follow atom metadata, like
+	// atom_common_table_header.structuresize
 };
 
 
@@ -314,6 +319,7 @@ struct atui_branch_data {
 	// position and size of the struct the branch represents
 	void* const table_start;
 	size_t const table_size;
+	size_t const sizeofbios;
 
 	// leaves straightforward:
 	atui_leaf const* const leaves_init;
