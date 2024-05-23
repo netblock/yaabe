@@ -380,7 +380,7 @@ columnview_create_rightclick_popup(
 
 	gtk_widget_set_parent(GTK_WIDGET(popup_menu), GTK_WIDGET(context->view));
 	g_signal_connect_swapped(context->view, "destroy",
-		// reference janito l
+		// reference janitorial
 		G_CALLBACK(gtk_widget_unparent), popup_menu
 	);
 	context->rightclick = popup_menu;
@@ -801,7 +801,21 @@ leaves_offset_column_bind(
 }
 
 
-
+static void
+leaf_right_click_copy_name(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		a_leaf->name
+	);
+}
 static void
 leaf_right_click_copy_path(
 		GSimpleAction* const action,
@@ -961,6 +975,7 @@ leaf_right_click_paste_data_set_data(
 	struct b64_header* header = NULL;
 	void* payload = NULL;
 	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	g_free(b64_text);
 	if (decode_error) {
 		error_popup = gtk_alert_dialog_new("Data decode error");
 		goto error_exit;
@@ -1017,7 +1032,6 @@ leaf_right_click_paste_data_set_data(
 
 
 	error_exit:
-	gtk_alert_dialog_set_detail(error_popup, b64_text);
 	gtk_alert_dialog_show(
 		error_popup,
 		gtk_application_get_active_window(pack->commons->yaabe_gtk)
@@ -1029,7 +1043,7 @@ leaf_right_click_paste_data_set_data(
 	}
 
 	success_exit:
-	g_free(b64_text);
+	return;
 }
 static void
 leaf_right_click_paste_data(
@@ -1046,6 +1060,24 @@ leaf_right_click_paste_data(
 		pack_ptr
 	);
 }
+
+static void
+leaves_rightclick_selection_sterilise(
+		GtkPopover* const rightclick,
+		GtkColumnView* const view
+		) {
+	// TODO hack: gtk_column_view_row_set_selectable is broken.
+	// See `leaves_row_setup`
+	GtkSelectionModel* const leaves_model = gtk_column_view_get_model(view);
+	gtk_single_selection_set_selected(
+		GTK_SINGLE_SELECTION(leaves_model),
+		GTK_INVALID_LIST_POSITION
+	);
+	g_signal_connect(leaves_model, "selection-changed",
+		G_CALLBACK(gtk_selection_model_unselect_item), NULL
+	);
+}
+
 static void
 leaves_rightclick_popup(
 		GtkGesture* const click_sense,
@@ -1061,6 +1093,7 @@ leaves_rightclick_popup(
 
 	struct pane_context const* const leaves_context = &(pack->commons->leaves);
 
+
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_row_get_item(pack->row)
 	);
@@ -1070,9 +1103,10 @@ leaves_rightclick_popup(
 
 
 	// see also create_leaves_rightclick_menu
-	GActionEntry actions[3] = {0};
-	actions[0] = (GActionEntry) {"path", leaf_right_click_copy_path};
-	uint8_t num_actions = 1;
+	GActionEntry actions[4] = {0};
+	actions[0] = (GActionEntry) {"name", leaf_right_click_copy_name};
+	actions[1] = (GActionEntry) {"path", leaf_right_click_copy_path};
+	uint8_t num_actions = 2;
 	if (a_leaf->num_bytes || a_leaf->type.fancy == _ATUI_BITCHILD) {
 		actions[num_actions].name = "copy_data";
 		actions[num_actions].activate = leaf_right_click_copy_data;
@@ -1081,14 +1115,12 @@ leaves_rightclick_popup(
 		actions[num_actions].activate = leaf_right_click_paste_data;
 		num_actions++;
 	}
-
 	assert(num_actions <= sizeof(actions)/sizeof(GActionEntry));
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	g_action_map_add_action_entries(action_set,
 		actions, num_actions,
 		pack
 	);
-
 	gtk_widget_insert_action_group(GTK_WIDGET(leaves_context->view),
 		"leaf", G_ACTION_GROUP(action_set)
 	);
@@ -1096,6 +1128,20 @@ leaves_rightclick_popup(
 	// actions. Simply replacing them seems to be fine.
 	g_object_unref(action_set);
 
+	// disconnect the selection blocker, and then select 
+	g_signal_handlers_disconnect_matched(
+		gtk_column_view_get_model(pack->commons->leaves.view), // SelectionModel
+		G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL,
+		gtk_selection_model_unselect_item,
+		NULL
+	);
+	gtk_column_view_scroll_to(pack->commons->leaves.view,
+		gtk_column_view_row_get_position(pack->row),
+		NULL,
+		GTK_LIST_SCROLL_SELECT,
+		NULL
+	);
 	calculate_rightclick_popup_location(
 		click_sense, x,y, leaves_context, pack->row_hack->owner
 	);
@@ -1105,6 +1151,7 @@ create_leaves_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
+	g_menu_append(menu_model, "Copy Name", "leaf.name");
 	g_menu_append(menu_model, "Copy Path", "leaf.path");
 	g_menu_append(menu_model, "Copy Data", "leaf.copy_data");
 	g_menu_append(menu_model, "Paste Data", "leaf.paste_data");
@@ -1112,6 +1159,9 @@ create_leaves_rightclick_menu(
 
 	columnview_create_rightclick_popup(
 		G_MENU_MODEL(menu_model), &commons->leaves
+	);
+	g_signal_connect(commons->leaves.rightclick, "closed",
+		G_CALLBACK(leaves_rightclick_selection_sterilise), commons->leaves.view
 	);
 }
 static void
@@ -1123,7 +1173,16 @@ leaves_row_bind(
 		commons, view_row, leaves_rightclick_popup
 	);
 }
-
+static void
+leaves_row_setup(
+		void const* const _null, // swapped-signal:: with factory
+		GtkColumnViewRow* const view_row
+		) {
+	gtk_column_view_row_set_selectable(view_row, false);
+	// TODO gtk_column_view_row_set_selectable is broken, even in bind.
+	// For a workaround see where `gtk_selection_model_unselect_item` and
+	// `leaves_rightclick_selection_sterilise` are used.
+}
 inline static GtkWidget*
 create_leaves_pane(
 		yaabegtk_commons* const commons
@@ -1141,6 +1200,7 @@ create_leaves_pane(
 	GtkColumnViewColumn* column;
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
+		//"swapped-signal::setup", G_CALLBACK(leaves_row_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(leaves_row_bind), commons,
 		NULL
 	);
@@ -1231,6 +1291,36 @@ branch_type_column_bind(
 	gtk_label_set_text(GTK_LABEL(label), a_branch->origname);
 }
 
+static void
+branch_right_click_copy_name(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		a_branch->name
+	);
+}
+static void
+branch_right_click_copy_struct_name(
+		GSimpleAction* const action,
+		GVariant* const parameter,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+	gdk_clipboard_set_text(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		a_branch->origname
+	);
+}
 static void
 branch_right_click_copy_path(
 		GSimpleAction* const action,
@@ -1335,6 +1425,7 @@ branch_right_click_paste_data_set_data(
 	struct b64_header* header = NULL;
 	void* payload = NULL;
 	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	g_free(b64_text);
 	if (decode_error) {
 		error_popup = gtk_alert_dialog_new("Data decode error");
 		goto error_exit;
@@ -1396,7 +1487,6 @@ branch_right_click_paste_data_set_data(
 
 
 	error_exit:
-	gtk_alert_dialog_set_detail(error_popup, b64_text);
 	gtk_alert_dialog_show(
 		error_popup,
 		gtk_application_get_active_window(pack->commons->yaabe_gtk)
@@ -1409,8 +1499,6 @@ branch_right_click_paste_data_set_data(
 	} else if (header) {
 		g_free(header); // g_variant_new_from_data takes ownership
 	}
-
-	g_free(b64_text);
 }
 static void
 branch_right_click_paste_data(
@@ -1443,6 +1531,8 @@ branches_rightclick_popup(
 		pack->commons->branches
 	);
 
+
+	// connect  actions
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(
 		gtk_column_view_row_get_item(pack->row)
 	);
@@ -1451,9 +1541,11 @@ branches_rightclick_popup(
 	
 	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
-	GActionEntry actions[4] = {0};
-	actions[0] = (GActionEntry) {"path", branch_right_click_copy_path};
-	uint8_t num_actions = 1;
+	GActionEntry actions[6] = {0};
+	actions[0] = (GActionEntry) {"name", branch_right_click_copy_name};
+	actions[1] = (GActionEntry) {"struct", branch_right_click_copy_struct_name};
+	actions[2] = (GActionEntry) {"path", branch_right_click_copy_path};
+	uint8_t num_actions = 3;
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	if (branch->num_copyable_leaves || branch->table_size) {
 		if (branch->num_copyable_leaves) {
@@ -1470,7 +1562,6 @@ branches_rightclick_popup(
 		actions[num_actions].activate = branch_right_click_paste_data;
 		num_actions++;
 	};
-
 	g_action_map_add_action_entries(action_set,
 		actions, num_actions,
 		pack
@@ -1482,6 +1573,13 @@ branches_rightclick_popup(
 	// actions. Simply replacing them seems to be fine.
 	g_object_unref(action_set);
 
+	// select column and pop up
+	gtk_column_view_scroll_to(pack->commons->branches.view,
+		gtk_column_view_row_get_position(pack->row),
+		NULL,
+		GTK_LIST_SCROLL_SELECT,
+		NULL
+	);
 	calculate_rightclick_popup_location(
 		click_sense, x,y, branches_context, pack->row_hack->owner
 	);
@@ -1491,6 +1589,8 @@ create_branches_rightclick_menu(
 		yaabegtk_commons* const commons
 		) {
 	GMenu* const menu_model = g_menu_new();
+	g_menu_append(menu_model, "Copy Name", "branch.name");
+	g_menu_append(menu_model, "Copy Struct Name", "branch.struct");
 	g_menu_append(menu_model, "Copy Path", "branch.path");
 	g_menu_append(menu_model, "Copy Leaves", "branch.copy_leaves");
 	g_menu_append(menu_model, "Copy Contiguous Data", "branch.copy_contiguous");

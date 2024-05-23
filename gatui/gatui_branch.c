@@ -122,14 +122,21 @@ gatui_branch_new_tree(
 			g_object_unref(leaf);
 		}
 
-		self->leaves_model = GTK_SELECTION_MODEL(
-			gtk_no_selection_new(G_LIST_MODEL(
-				gtk_tree_list_model_new(
-					leaf_list_model,
-					false, true, leaves_treelist_generate_children, NULL,NULL
-				)
+		GtkSingleSelection* const single_model = gtk_single_selection_new(
+			G_LIST_MODEL(gtk_tree_list_model_new(
+				leaf_list_model,
+				false, true, leaves_treelist_generate_children, NULL,NULL
 			))
 		); // the later models take ownership of the earlier
+		gtk_single_selection_set_can_unselect(single_model, true);
+		gtk_single_selection_set_autoselect(single_model, false);
+		gtk_single_selection_set_selected(
+			single_model, GTK_INVALID_LIST_POSITION
+		);
+		g_signal_connect(GTK_SELECTION_MODEL(single_model), "selection-changed",
+			G_CALLBACK(gtk_selection_model_unselect_item), NULL
+		);
+		self->leaves_model = GTK_SELECTION_MODEL(single_model);
 	}
 
 	self->capsule_type = g_variant_type_new("ay");
