@@ -158,6 +158,7 @@ _get_sprintf_format_from_leaf(
 	uint8_t const radix = leaf->type.radix;
 
 	uint8_t num_digits = 0;
+	uint8_t num_print_digits;
 
 	if (radix) {
 		if (leaf->type.fraction) {
@@ -174,11 +175,18 @@ _get_sprintf_format_from_leaf(
 				log(max_val) / log(bases[radix])
 			);
 		}
+		if (radix == ATUI_DEC) {
+			// leading 0s for base 10 feels a little weird
+			num_print_digits = 0;
+		} else {
+			num_print_digits = num_digits;
+		}
 	}
 
 	if ((leaf->type.fancy == ATUI_ARRAY) && radix) {
-		assert(!(leaf->type.fraction));
-		// too hard cause floats can have many base-10 digits
+		assert(!(leaf->type.fraction)); // TODO %G ?
+		// num_digits instead of num_print_digits for lockstepping.
+		// TODO could be reworked.
 		sprintf(format, "%s%u%s ", "%0", num_digits, suffixes_unsigned[radix]);
 		num_digits += 1; // 1 for the space in between segments.
 	} else if (radix) {
@@ -187,16 +195,11 @@ _get_sprintf_format_from_leaf(
 			strcpy(format, "%G");
 		} else if (leaf->type.signed_num) {
 			sprintf(format, metaformat,
-				prefixes[radix], num_digits, suffixes_signed[radix]
-			);
-		} else if (radix == ATUI_DEC) {
-			// leading 0s for base 10 feels a little weird
-			sprintf(format, metaformat,
-				prefixes[radix], 0, suffixes_unsigned[radix]
+				prefixes[radix], num_print_digits, suffixes_signed[radix]
 			);
 		} else {
 			sprintf(format, metaformat,
-				prefixes[radix], num_digits, suffixes_unsigned[radix]
+				prefixes[radix], num_print_digits, suffixes_unsigned[radix]
 			);
 		}
 	}
