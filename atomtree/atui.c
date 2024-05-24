@@ -18,73 +18,40 @@ atui_leaf_from_text(
 	assert(leaf->val);
 
 	uint8_t const bases[] = {0, 10, 16, 8, 2};
-
-	uint8_t err = 0;
-	uint16_t i,j;
-	char8_t buffer[65];
-
 	uint8_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
 
-
 	if ((fancy == ATUI_ARRAY) && radix) {
 		uint8_t const base = bases[radix];
-		uint8_t const num_digits = ceil(
-			// round up because it's gonna be like x.9999
-			log( (1ULL << leaf->total_bits) - 1 ) // expand num of bits to size
-			/ log(base)
-		);
-		i = 0; j = 0;
-		buffer[num_digits] = '\0';
-		while (text[j] == ' ') { // cut off leading spaces
-			j++;
-		}
+		// strto* doesn't guarantee const in endptr
+		char* const token_buffer = strdup(text);
+		char* walker = token_buffer;
 		switch (leaf->total_bits) {
 			case 8:
-				for (; i < leaf->array_size; i++) {
-					memcpy(buffer, text+j, num_digits);
-					leaf->u8[i] = strtoul(buffer, NULL, base);
-					j += num_digits;
-					if (text[j] == ' ') {
-						j++;
-					}
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					leaf->u8[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 16:
-				for (; i < leaf->array_size; i++) {
-					memcpy(buffer, text+j, num_digits);
-					leaf->u16[i] = strtoul(buffer, NULL, base);
-					j += num_digits;
-					if (text[j] == ' ') {
-						j++;
-					}
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					leaf->u16[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 32:
-				for (; i < leaf->array_size; i++) {
-					memcpy(buffer, text+j, num_digits);
-					leaf->u32[i] = strtoul(buffer, NULL, base);
-					j += num_digits;
-					if (text[j] == ' ') {
-						j++;
-					}
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					leaf->u32[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 64:
-				for (; i < leaf->array_size; i++) {
-					memcpy(buffer, text+j, num_digits);
-					leaf->u64[i] = strtoull(buffer, NULL, base);
-					j += num_digits;
-					if (text[j] == ' ') {
-						j++;
-					}
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					leaf->u64[i] = strtoull(walker, &walker, base);
 				}
 				break;
 			default:
 				assert(0);
-				return;
 		}
+		free(token_buffer);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		char8_t* const null_exit = memccpy(leaf->u8, text, '\0', array_size);
@@ -107,7 +74,7 @@ atui_leaf_from_text(
 			struct atui_enum const* const enum_set = leaf->enum_options;
 			struct atui_enum_entry const* entry;
 			int16_t str_diff;
-			for (i=0; i < enum_set->num_entries; i++) {
+			for (uint16_t i=0; i < enum_set->num_entries; i++) {
 				entry = &(enum_set->enum_array[i]);
 				str_diff = strncmp(entry->name, text, entry->name_length);
 				if (0 == str_diff) {
@@ -185,9 +152,9 @@ _get_sprintf_format_from_leaf(
 
 	if ((leaf->type.fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->type.fraction)); // TODO %G ?
-		// num_digits instead of num_print_digits for lockstepping.
-		// TODO could be reworked.
-		sprintf(format, "%s%u%s ", "%0", num_digits, suffixes_unsigned[radix]);
+		sprintf(format, "%s%u%s ",
+			"%0", num_print_digits, suffixes_unsigned[radix]
+		);
 		num_digits += 1; // 1 for the space in between segments.
 	} else if (radix) {
 		if (leaf->type.fraction) {
@@ -226,43 +193,42 @@ atui_leaf_to_text(
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->type.fraction));
+		if (leaf->total_bits == -1) {
+			return NULL;
+			assert(0);
+		}
 
 		buffer_size = (num_digits * leaf->array_size) + 1;
 		buffer = malloc(buffer_size);
-		buffer[0] = '\0';
+		char8_t* buffer_walk = buffer;
 
-		uint16_t i=0,j=0;
 		switch (leaf->total_bits) {
 			case 8:
-				for (; i < leaf->array_size; i++) {
-					sprintf(buffer+j, format,  leaf->u8[i]);
-					j += num_digits;
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, leaf->u8[i]);
 				}
 				break;
 			case 16:
-				for (; i < leaf->array_size; i++) {
-					sprintf(buffer+j, format,  leaf->u16[i]);
-					j += num_digits;
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, leaf->u16[i]);
 				}
 				break;
 			case 32:
-				for (; i < leaf->array_size; i++) {
-					sprintf(buffer+j, format,  leaf->u32[i]);
-					j += num_digits;
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, leaf->u32[i]);
 				}
 				break;
 			case 64:
-				for (; i < leaf->array_size; i++) {
-					sprintf(buffer+j, format,  leaf->u64[i]);
-					j += num_digits;
+				for (uint8_t i=0; i < leaf->array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, leaf->u64[i]);
 				}
 				break;
 			default:
 				assert(0); // why are we here? perhaps _PPATUI_LEAF_BITNESS()?
+				free(buffer);
 				return NULL;
 		}
-		buffer[j-1] = '\0'; // eat the final space
-
+		*buffer_walk = '\0'; // eat the final space
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		buffer_size = leaf->array_size + 1;

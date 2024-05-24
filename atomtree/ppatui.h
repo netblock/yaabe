@@ -79,7 +79,7 @@ C preprocessor side of ATUI table generation
 	float32_t:32, float32_t*:32, float32_t const*:32,\
 	float64_t:64, float64_t*:64, float64_t const*:64,\
 \
-	default:0\
+	default:-1\
 )
 
 #define _PPATUI_LEAF_FIXED_FRACTION_BITS(var) _Generic((var),\
