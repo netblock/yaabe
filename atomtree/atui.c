@@ -8,6 +8,19 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include "atui.h"
 #include <math.h>
 
+#ifdef C2X_COMPAT
+static char8_t const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
+static char8_t const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llX"};
+static char8_t const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llX"};
+static uint8_t const bases[] = {0, 10, 16, 8, 16};
+#else
+static char8_t const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+static char8_t const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llb"};
+static char8_t const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llb"};
+static uint8_t const bases[] = {0, 10, 16, 8, 2};
+#endif
+
+
 void
 atui_leaf_from_text(
 		atui_leaf const* const leaf,
@@ -17,7 +30,6 @@ atui_leaf_from_text(
 	// numbers (including bitfields) and strings.
 	assert(leaf->val);
 
-	uint8_t const bases[] = {0, 10, 16, 8, 2};
 	uint8_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
@@ -29,22 +41,22 @@ atui_leaf_from_text(
 		char* walker = token_buffer;
 		switch (leaf->total_bits) {
 			case 8:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					leaf->u8[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 16:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					leaf->u16[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 32:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					leaf->u32[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 64:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					leaf->u64[i] = strtoull(walker, &walker, base);
 				}
 				break;
@@ -108,17 +120,6 @@ _get_sprintf_format_from_leaf(
 		char8_t* const format,
 		atui_leaf const* const leaf
 		) {
-#ifdef C2X_COMPAT
-	char8_t const* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
-	char8_t const* const suffixes_unsigned[] = {"", "llu", "llX", "llo", "llX"};
-	char8_t const* const suffixes_signed[]   = {"", "lli", "llX", "llo", "llX"};
-	uint8_t const bases[] = {0, 10, 16, 8, 16};
-#else
-	char8_t const* const prefixes[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
-	char8_t const* const suffixes_unsigned[] = {"", "llu", "llX", "llo", "llb"};
-	char8_t const* const suffixes_signed[]   = {"", "lli", "llX", "llo", "llb"};
-	uint8_t const bases[] = {0, 10, 16, 8, 2};
-#endif
 	char8_t const* const metaformat = "%s%u%s"; // amogus
 
 
@@ -153,7 +154,7 @@ _get_sprintf_format_from_leaf(
 	if ((leaf->type.fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->type.fraction)); // TODO %G ?
 		sprintf(format, "%s%u%s ",
-			"%0", num_print_digits, suffixes_unsigned[radix]
+			"%0", num_print_digits, suffixes_uint[radix]
 		);
 		num_digits += 1; // 1 for the space in between segments.
 	} else if (radix) {
@@ -162,11 +163,11 @@ _get_sprintf_format_from_leaf(
 			strcpy(format, "%G");
 		} else if (leaf->type.signed_num) {
 			sprintf(format, metaformat,
-				prefixes[radix], num_print_digits, suffixes_signed[radix]
+				prefixes_int[radix], num_print_digits, suffixes_int[radix]
 			);
 		} else {
 			sprintf(format, metaformat,
-				prefixes[radix], num_print_digits, suffixes_unsigned[radix]
+				prefixes_int[radix], num_print_digits, suffixes_uint[radix]
 			);
 		}
 	}
@@ -187,6 +188,7 @@ atui_leaf_to_text(
 	char8_t* buffer = NULL;
 
 	char8_t format[10];
+	uint8_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
 	uint8_t const num_digits = _get_sprintf_format_from_leaf(format, leaf);
@@ -198,28 +200,27 @@ atui_leaf_to_text(
 			assert(0);
 		}
 
-		buffer_size = (num_digits * leaf->array_size) + 1;
+		buffer_size = (num_digits * array_size) + 1;
 		buffer = malloc(buffer_size);
 		char8_t* buffer_walk = buffer;
-
 		switch (leaf->total_bits) {
 			case 8:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u8[i]);
 				}
 				break;
 			case 16:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u16[i]);
 				}
 				break;
 			case 32:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u32[i]);
 				}
 				break;
 			case 64:
-				for (uint8_t i=0; i < leaf->array_size; i++) {
+				for (uint8_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u64[i]);
 				}
 				break;
@@ -228,13 +229,13 @@ atui_leaf_to_text(
 				free(buffer);
 				return NULL;
 		}
-		*buffer_walk = '\0'; // eat the final space
+		*(buffer_walk-1) = '\0'; // eat the final space
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		buffer_size = leaf->array_size + 1;
+		buffer_size = array_size + 1;
 		buffer = malloc(buffer_size);
-		memcpy(buffer, leaf->u8, leaf->array_size);
-		buffer[leaf->array_size] = '\0'; // if array is not null-terminated
+		memcpy(buffer, leaf->u8, array_size);
+		buffer[array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		assert(num_digits);
 		buffer_size = num_digits +2+1; // +2 is 0x +1 is \0
@@ -279,9 +280,7 @@ atui_leaf_to_text(
 	}
 	assert(strlen(format) < sizeof(format));
 	assert(buffer);
-	if (buffer) {
-		assert(strlen(buffer) < buffer_size);
-	}
+	assert(strlen(buffer) < buffer_size);
 	return buffer;
 }
 
@@ -311,21 +310,11 @@ atui_leaf_set_val_unsigned(
 	val <<= leaf->bitfield_lo;
 
 	switch (leaf->total_bits) {
-		case 8:
-			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | val;
-			break;
-		case 16:
-			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val;
-			break;
-		case 32:
-			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val;
-			break;
-		case 64:
-			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val;
-			break;
-		default:
-			assert(0);
-			break;
+		case 8:   *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | val; break;
+		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val; break;
+		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val; break;
+		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val; break;
+		default: assert(0); break;
 	}
 }
 uint64_t
@@ -337,21 +326,11 @@ atui_leaf_get_val_unsigned(
 
 	uint64_t val;
 	switch (leaf->total_bits) {
-		case 8:
-			val = *(leaf->u8);
-			break;
-		case 16:
-			val = *(leaf->u16);
-			break;
-		case 32:
-			val = *(leaf->u32);
-			break;
-		case 64:
-			val = *(leaf->u64);
-			break;
-		default:
-			assert(0);
-			break;
+		case 8:  val =  *(leaf->u8); break;
+		case 16: val = *(leaf->u16); break;
+		case 32: val = *(leaf->u32); break;
+		case 64: val = *(leaf->u64); break;
+		default: assert(0); break;
 	}
 
 	uint8_t const num_unused_bits_hi = (
@@ -391,21 +370,11 @@ atui_leaf_set_val_signed(
 	raw_val <<= leaf->bitfield_lo;
 
 	switch (leaf->total_bits) {
-		case 8:
-			*(leaf->u8) = (*(leaf->u8) & tokeep_mask) | raw_val;
-			break;
-		case 16:
-			*(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;
-			break;
-		case 32:
-			*(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;
-			break;
-		case 64:
-			*(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;
-			break;
-		default:
-			assert(0);
-			break;
+		case 8:   *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | raw_val; break;
+		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val; break;
+		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val; break;
+		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val; break;
+		default: assert(0); break;
 	}
 }
 int64_t
@@ -417,21 +386,11 @@ atui_leaf_get_val_signed(
 
 	int64_t val;
 	switch (leaf->total_bits) {
-		case 8:
-			val = *(leaf->s8);
-			break;
-		case 16:
-			val = *(leaf->s16);
-			break;
-		case 32:
-			val = *(leaf->s32);
-			break;
-		case 64:
-			val = *(leaf->s64);
-			break;
-		default:
-			assert(0);
-			break;
+		case 8:  val =  *(leaf->s8); break;
+		case 16: val = *(leaf->s16); break;
+		case 32: val = *(leaf->s32); break;
+		case 64: val = *(leaf->s64); break;
+		default: assert(0); break;
 	}
 
 	uint8_t const num_unused_bits_hi = (
@@ -469,37 +428,19 @@ atui_leaf_set_val_fraction(
 			fixed_val += frac;
 		}
 		switch(leaf->total_bits) {
-			case 8:
-				*(leaf->u8) = fixed_val;
-				return;
-			case 16:
-				*(leaf->u16) = fixed_val;
-				return;
-			case 32:
-				*(leaf->u32) = fixed_val;
-				return;
-			case 64:
-				*(leaf->u64) = fixed_val;
-				return;
-			default:
-				assert(0);
-				break;
+			case 8:   *(leaf->u8) = fixed_val; return;
+			case 16: *(leaf->u16) = fixed_val; return;
+			case 32: *(leaf->u32) = fixed_val; return;
+			case 64: *(leaf->u64) = fixed_val; return;
+			default: assert(0); break;
 		}
 	}
 
 	switch(leaf->total_bits) { // else float
-		case 16:
-			*(leaf->f16) = val;
-			return;
-		case 32:
-			*(leaf->f32) = val;
-			return;
-		case 64:
-			*(leaf->f64) = val;
-			return;
-		default:
-			assert(0);
-			break;
+		case 16: *(leaf->f16) = val; return;
+		case 32: *(leaf->f32) = val; return;
+		case 64: *(leaf->f64) = val; return;
+		default: assert(0); break;
 	}
 
 	assert(0);
@@ -516,21 +457,11 @@ atui_leaf_get_val_fraction(
 		assert((leaf->total_bits - leaf->fractional_bits) < 53);
 		float64_t val;
 		switch(leaf->total_bits) {
-			case 8:
-				val = *(leaf->u8);
-				break;
-			case 16:
-				val = *(leaf->u16);
-				break;
-			case 32:
-				val = *(leaf->u32);
-				break;
-			case 64:
-				val = *(leaf->u64);
-				break;
-			default:
-				assert(0);
-				break;
+			case 8:  val =  *(leaf->u8); break;
+			case 16: val = *(leaf->u16); break;
+			case 32: val = *(leaf->u32); break;
+			case 64: val = *(leaf->u64); break;
+			default: assert(0); break;
 		};
 		val /= (1 << leaf->fractional_bits);
 		return val;
@@ -538,15 +469,10 @@ atui_leaf_get_val_fraction(
 
 	// else native float
 	switch(leaf->total_bits) {
-		case 16:
-			return *(leaf->f16);
-		case 32:
-			return *(leaf->f32);
-		case 64:
-			return *(leaf->f64);
-		default:
-			assert(0);
-			break;
+		case 16: return *(leaf->f16);
+		case 32: return *(leaf->f32);
+		case 64: return *(leaf->f64);
+		default: assert(0); break;
 	}
 
 	assert(0);
