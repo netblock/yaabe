@@ -28,7 +28,6 @@ ShowInstDetails show
 
 #!insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "${nsis_stage_dir}\LICENSE"
-!insertmacro MUI_PAGE_LICENSE "${nsis_stage_dir}\THIRD_PARTY_LICENSE"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 
