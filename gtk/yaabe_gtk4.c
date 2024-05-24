@@ -563,7 +563,7 @@ editable_sets_leaf(
 }
 
 static void
-enum_label_column_bind(
+enum_name_column_bind(
 		GtkListItem* const leaves_column_cell,
 		GtkListItem* const enum_column_cell
 		) {
@@ -571,7 +571,26 @@ enum_label_column_bind(
 	GtkLabel* const label = GTK_LABEL(gtk_list_item_get_child(
 		enum_column_cell
 	));
+	struct atui_enum_entry const* const enum_entry = g_object_get_data(
+		gtk_list_item_get_item(enum_column_cell),
+		"enum"
+	); // no need to unref from list_item_get_item
 
+	gtk_label_set_text(label, enum_entry->name);
+	uint8_t const current_lang = LANG_ENGLISH;
+	gtk_widget_set_tooltip_text(
+		GTK_WIDGET(label), enum_entry->description[current_lang]
+	);
+}
+static void
+enum_val_column_bind(
+		GtkListItem* const leaves_column_cell,
+		GtkListItem* const enum_column_cell
+		) {
+// bind
+	GtkLabel* const label = GTK_LABEL(gtk_list_item_get_child(
+		enum_column_cell
+	));
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		gtk_list_item_get_item(enum_column_cell),
 		"enum"
@@ -581,9 +600,9 @@ enum_label_column_bind(
 		gtk_list_item_get_item(leaves_column_cell)
 	);
 
-	char8_t* const text = gatui_leaf_enum_entry_to_text(g_leaf, enum_entry);
+	char8_t text[60];
+	sprintf(text, "%i", enum_entry->val);
 	gtk_label_set_text(label, text);
-	free(text);
 	g_object_unref(g_leaf);
 
 	uint8_t const current_lang = LANG_ENGLISH;
@@ -593,13 +612,13 @@ enum_label_column_bind(
 }
 static void
 enum_list_sets_leaf(
-		GtkListView* const enum_list,
+		GtkColumnView* const enum_list,
 		guint const paosition,
 		GtkListItem* const leaves_column_cell
 		) {
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		gtk_single_selection_get_selected_item(
-			GTK_SINGLE_SELECTION(gtk_list_view_get_model(enum_list))
+			GTK_SINGLE_SELECTION(gtk_column_view_get_model(enum_list))
 		), // no need to unref from gtk_single_selection_get_selected_item
 		"enum"
 	);
@@ -619,7 +638,7 @@ enummenu_sets_selection(
 		GtkListItem* const leaves_column_cell
 		) {
 	GtkSingleSelection* const enum_model = GTK_SINGLE_SELECTION(
-		gtk_list_view_get_model(GTK_LIST_VIEW(enum_list))
+		gtk_column_view_get_model(GTK_COLUMN_VIEW(enum_list))
 	);
 
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
@@ -636,33 +655,58 @@ enummenu_sets_selection(
 	g_object_unref(g_leaf);
 }
 inline static GtkWidget*
+construct_enum_columnview(
+		GtkListItem* const leaves_column_cell
+		) {
+	GtkColumnView* const enum_list = GTK_COLUMN_VIEW(gtk_column_view_new(NULL));
+	GtkListItemFactory* factory;
+	GtkColumnViewColumn* column;
+
+	factory = g_object_connect(gtk_signal_list_item_factory_new(),
+		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
+		"swapped-signal::bind", G_CALLBACK(enum_name_column_bind),
+			leaves_column_cell,
+		NULL
+	);
+	column = gtk_column_view_column_new("name", factory);
+	gtk_column_view_append_column(enum_list, column);
+	g_object_unref(column);
+
+	factory = g_object_connect(gtk_signal_list_item_factory_new(),
+		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
+		"swapped-signal::bind", G_CALLBACK(enum_val_column_bind),
+			leaves_column_cell,
+		NULL
+	);
+	column = gtk_column_view_column_new("value", factory);
+	gtk_column_view_append_column(enum_list, column);
+	g_object_unref(column);
+
+	return GTK_WIDGET(enum_list);
+}
+inline static GtkWidget*
 construct_enum_dropdown(
 		GtkEntryBuffer* const entry_buffer,
-		GtkListItem* const column_cell
+		GtkListItem* const leaves_column_cell
 		) {
 	GtkEditable* const enumentry = GTK_EDITABLE(gtk_entry_new_with_buffer(
 		entry_buffer
 	));
 	g_signal_connect(enumentry, "activate",
-		G_CALLBACK(editable_sets_leaf), column_cell
+		G_CALLBACK(editable_sets_leaf), leaves_column_cell
 	);
 	gtk_widget_set_hexpand(GTK_WIDGET(enumentry), true);
 
-	GtkListItemFactory* const list_factory = gtk_signal_list_item_factory_new();
-	g_object_connect(list_factory,
-		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(enum_label_column_bind), column_cell,
-		NULL
-	);
-	GtkWidget* const enum_list = gtk_list_view_new(NULL, list_factory);
+	GtkWidget* const enum_list = construct_enum_columnview(leaves_column_cell);
 
 	GtkPopover* const popover = GTK_POPOVER(gtk_popover_new());
 	gtk_popover_set_has_arrow(popover, false);
 	gtk_popover_set_child(popover, enum_list);
 
 	g_object_connect(enum_list,
-		"signal::realize", G_CALLBACK(enummenu_sets_selection), column_cell,
-		"signal::activate", G_CALLBACK(enum_list_sets_leaf), column_cell,
+		"signal::realize", G_CALLBACK(enummenu_sets_selection),
+			leaves_column_cell,
+		"signal::activate", G_CALLBACK(enum_list_sets_leaf), leaves_column_cell,
 		"swapped-signal::activate", G_CALLBACK(gtk_popover_popdown), popover,
 		NULL
 	);
@@ -730,16 +774,18 @@ leaves_val_column_bind(
 		if (type.fancy == ATUI_ENUM) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
 			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
-			GtkListView* const enum_list = GTK_LIST_VIEW(gtk_popover_get_child(
-				gtk_menu_button_get_popover(
-					GTK_MENU_BUTTON(gtk_widget_get_first_child(enumbox))
+			GtkColumnView* const enum_list = GTK_COLUMN_VIEW(
+				gtk_popover_get_child(
+					gtk_menu_button_get_popover(GTK_MENU_BUTTON(
+						gtk_widget_get_first_child(enumbox)
+					))
 				)
-			));
+			);
 			GtkSelectionModel* const enum_model = (
 				gatui_leaf_get_enum_menu_selection_model(g_leaf)
 			);
 
-			gtk_list_view_set_model(enum_list, enum_model);
+			gtk_column_view_set_model(enum_list, enum_model);
 			editable = gtk_widget_get_last_child(enumbox);
 		} else {
 			gtk_stack_set_visible_child_name(widget_bag, "text");
