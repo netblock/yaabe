@@ -253,6 +253,14 @@ path_to_atui( // crawls path and makes a map of that path
 		atui_branch const* root
 		);
 
+
+#define LEAF_SPRINTF_FORMAT_SIZE 10
+uint8_t // num bytes
+get_sprintf_format_from_leaf(
+		char8_t* format,
+		atui_leaf const* leaf
+		);
+
 char8_t* // needs to be freed
 atui_enum_entry_to_text( // "enum_entry_name : val"
 		atui_leaf const* leaf,

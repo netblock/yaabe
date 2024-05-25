@@ -600,9 +600,9 @@ enum_val_column_bind(
 		gtk_list_item_get_item(leaves_column_cell)
 	);
 
-	char8_t text[60];
-	sprintf(text, "%i", enum_entry->val);
+	char8_t* const text = gatui_leaf_enum_val_to_text(g_leaf, enum_entry);
 	gtk_label_set_text(label, text);
+	free(text);
 	g_object_unref(g_leaf);
 
 	uint8_t const current_lang = LANG_ENGLISH;

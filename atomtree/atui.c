@@ -26,8 +26,8 @@ atui_leaf_from_text(
 		atui_leaf const* const leaf,
 		char8_t const* const text
 		) {
-	// set the value of the leaf based on input text. Currently only support for
-	// numbers (including bitfields) and strings.
+// set the value of the leaf based on input text. Currently only support for
+// numbers (including bitfields) and strings.
 	assert(leaf->val);
 
 	uint8_t const array_size = leaf->array_size;
@@ -115,20 +115,22 @@ atui_leaf_from_text(
 	}
 }
 
-inline static uint8_t
-_get_sprintf_format_from_leaf(
+uint8_t
+get_sprintf_format_from_leaf(
 		char8_t* const format,
 		atui_leaf const* const leaf
 		) {
-	char8_t const* const metaformat = "%s%u%s"; // amogus
-
-
+// get reccomended sprintf format based on radix and other factors
+	uint8_t print_alloc_width; // caller handles the counting of \0
 	uint8_t const radix = leaf->type.radix;
-
-	uint8_t num_digits = 0;
-	uint8_t num_print_digits;
+	uint8_t const fancy = leaf->type.fancy;
 
 	if (radix) {
+		char8_t const* const metaformat = "%s%u%s"; // amogus
+
+		uint8_t num_print_digits = 0;
+		uint8_t num_digits;
+
 		if (leaf->type.fraction) {
 			num_digits = 32; // we're using %G anyway
 		} else {
@@ -143,23 +145,27 @@ _get_sprintf_format_from_leaf(
 				log(max_val) / log(bases[radix])
 			);
 		}
+
+		print_alloc_width = num_digits;
+
 		if (radix == ATUI_DEC) {
 			// leading 0s for base 10 feels a little weird
 			num_print_digits = 0;
 		} else {
 			num_print_digits = num_digits;
+			print_alloc_width += 2; // 0x / 0b
 		}
-	}
 
-	if ((leaf->type.fancy == ATUI_ARRAY) && radix) {
-		assert(!(leaf->type.fraction)); // TODO %G ?
-		sprintf(format, "%s%u%s ",
-			"%0", num_print_digits, suffixes_uint[radix]
-		);
-		num_digits += 1; // 1 for the space in between segments.
-	} else if (radix) {
-		if (leaf->type.fraction) {
-			// %G format can have agressive rounding: Q14.2 16383.75 -> 16383.8
+		if (leaf->type.fancy == ATUI_ARRAY) {
+			assert(!(leaf->type.fraction)); // TODO %G ?
+			sprintf(format, "%s%u%s ",
+				"%0", num_print_digits, suffixes_uint[radix]
+			);
+			print_alloc_width += 1-2;
+			// 1 for the space in between segments ; -2 to undo 0x/0b
+		} else if (leaf->type.fraction) {
+			// %G format can have agressive rounding:
+			// Q14.2 16383.75 -> 16383.8
 			strcpy(format, "%G");
 		} else if (leaf->type.signed_num) {
 			sprintf(format, metaformat,
@@ -170,28 +176,35 @@ _get_sprintf_format_from_leaf(
 				prefixes_int[radix], num_print_digits, suffixes_uint[radix]
 			);
 		}
+	} else if ((fancy==ATUI_ARRAY) || (fancy==ATUI_STRING)) {
+		strcpy(format, "%s");
+		print_alloc_width = leaf->array_size;
+	} else {
+		format[0] = '\0';
+		print_alloc_width = 0;
 	}
 
-	return num_digits;
+	assert(strlen(format) < LEAF_SPRINTF_FORMAT_SIZE);
+	return print_alloc_width;
 }
 
 char8_t*
 atui_leaf_to_text(
 		atui_leaf const* const leaf
 		) {
-	// Convert the value of a leaf to text. Currently only support for numbers,
-	// and strings.
+// Convert the value of a leaf to text. Currently only support for numbers,
+// and strings.
 
 	assert(leaf->val);
 
 	size_t buffer_size;
 	char8_t* buffer = NULL;
 
-	char8_t format[10];
+	char8_t format[LEAF_SPRINTF_FORMAT_SIZE];
 	uint8_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
-	uint8_t const num_digits = _get_sprintf_format_from_leaf(format, leaf);
+	uint8_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->type.fraction));
@@ -238,7 +251,7 @@ atui_leaf_to_text(
 		buffer[array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		assert(num_digits);
-		buffer_size = num_digits +2+1; // +2 is 0x +1 is \0
+		buffer_size = num_digits+1; // +1 is \0
 		if (fancy == ATUI_ENUM) {
 			int64_t val;
 			if (leaf->type.signed_num) {
@@ -255,7 +268,7 @@ atui_leaf_to_text(
 				buffer_size += entry->name_length + sizeof(u8" : ");
 				buffer = malloc(buffer_size);
 
-				char8_t format_2[15]; // stage 2
+				char8_t format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
 				sprintf(format_2, " : %s", format);
 				assert(strlen(format_2) < sizeof(format_2));
 
@@ -754,9 +767,9 @@ atui_enum_entry_to_text(
 		) {
 	assert(leaf->type.fancy == ATUI_ENUM && leaf->type.radix);
 
-	char8_t format_1[10]; // stage 1
-	char8_t format_2[15]; // stage 2
-	uint8_t const num_digits = _get_sprintf_format_from_leaf(format_1, leaf);
+	char8_t format_1[LEAF_SPRINTF_FORMAT_SIZE]; // stage 1
+	char8_t format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
+	uint8_t const num_digits = get_sprintf_format_from_leaf(format_1, leaf);
 	assert(strlen(format_1) < sizeof(format_1));
 	sprintf(format_2, " : %s", format_1);
 	assert(strlen(format_2) < sizeof(format_2));

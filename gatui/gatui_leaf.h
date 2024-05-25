@@ -66,6 +66,11 @@ gatui_leaf_enum_entry_to_text(
 		GATUILeaf* self,
 		struct atui_enum_entry const* enum_entry
 		);
+char8_t* // must be freed
+gatui_leaf_enum_val_to_text(
+		GATUILeaf* self,
+		struct atui_enum_entry const* enum_entry
+		);
 bool // true if successful
 gatui_leaf_enum_entry_sets_value( // emtry must be associated
 		GATUILeaf* self,

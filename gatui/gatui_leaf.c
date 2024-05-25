@@ -428,6 +428,19 @@ gatui_leaf_enum_entry_to_text(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	return atui_enum_entry_to_text(self->atui, enum_entry);
 }
+char8_t*
+gatui_leaf_enum_val_to_text(
+		GATUILeaf* const self,
+		struct atui_enum_entry const* const enum_entry
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+
+	char8_t format[LEAF_SPRINTF_FORMAT_SIZE];
+	uint8_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
+	char8_t* const valstr = malloc(alloc_size + 1);
+	sprintf(valstr, format, enum_entry->val);
+	return valstr;
+}
 bool
 gatui_leaf_enum_entry_sets_value(
 		GATUILeaf* const self,
