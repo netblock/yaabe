@@ -1291,12 +1291,10 @@ create_leaves_pane(
 	gtk_scrolled_window_set_child(
 		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(leaves_view)
 	);
-	GtkWidget* const frame = gtk_frame_new(NULL);
-	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
 	create_leaves_rightclick_menu(commons);
 
-	return frame;
+	return scrolledlist;
 }
 
 
@@ -1706,12 +1704,10 @@ create_branches_pane(
 	gtk_scrolled_window_set_child(
 		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(branches_view)
 	);
-	GtkWidget* const frame = gtk_frame_new(NULL);
-	gtk_frame_set_child(GTK_FRAME(frame), scrolledlist);
 
 	create_branches_rightclick_menu(commons);
 
-	return frame;
+	return scrolledlist;
 }
 inline static GtkWidget*
 construct_tree_panes(
