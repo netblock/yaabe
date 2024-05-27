@@ -54,7 +54,7 @@ def gather_assets(
 		):
 	share_dir = os.path.join(stage_dir, "share")
 	glib_dir = os.path.join(share_dir, "glib-2.0")
-	themes_dir = os.path.join(stage_dir, "themes")
+	themes_dir = os.path.join(share_dir, "themes")
 	shutil.copytree(
 		os.path.join(source_dir, "gtk-assets"),
 		stage_dir,
