@@ -25,6 +25,28 @@ def enlist_shared_objs(
 			objs.add(lib)
 			enlist_shared_objs(lib, objs)
 
+def copy_skeuos(
+		source_dir:str,
+		themes_dir:str
+		):
+	skeuos_themes = os.path.join(source_dir, "skeuos-gtk", "themes")
+	blue_light = "Skeuos-Blue-Light"
+	blue_light_src = os.path.join(skeuos_themes, blue_light)
+	if os.path.isdir(blue_light_src):
+		shutil.copytree(
+			blue_light_src,
+			os.path.join(themes_dir, blue_light),
+			dirs_exist_ok=True
+		)
+	blue_dark = "Skeuos-Blue-Dark"
+	blue_dark_src = os.path.join(skeuos_themes, blue_dark)
+	if os.path.isdir(blue_dark_src):
+		shutil.copytree(
+			blue_dark_src,
+			os.path.join(themes_dir, blue_dark),
+			dirs_exist_ok=True
+		)
+
 def gather_assets(
 		source_dir:str,
 		exe_file:str,
@@ -41,6 +63,8 @@ def gather_assets(
 	shutil.copy(exe_file, stage_dir)
 	shutil.copy(os.path.join(source_dir, "LICENSE"), stage_dir)
 	shutil.copy(os.path.join(source_dir, "THIRD_PARTY_LICENSE"), stage_dir)
+
+	copy_skeuos(source_dir, themes_dir)
 
 	# cygpath translates / into an absolute path drive letter and all
 	root = subprocess.check_output(("cygpath", "-m", "/"), text=True)

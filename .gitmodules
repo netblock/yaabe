@@ -1,3 +1,3 @@
-[submodule "third-party/Windows-10"]
-	path = gtk-assets/share/themes/Windows-10
-	url = https://github.com/B00merang-Project/Windows-10
+[submodule "gtk-assets/share/themes/skeuos-gtk"]
+	path = skeuos-gtk
+	url = https://github.com/daniruiz/skeuos-gtk

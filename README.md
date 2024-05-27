@@ -70,9 +70,8 @@ cd build && meson compile
 
 Optionally, it is possible to create an installer wizard through NSIS.
 To package a theme, place the theme in `gtk-assets/share/themes/` and edit
-`gtk-assets/etc/gtk-4.0/settings.ini` accordingly. That said, I recommend
-[B00MERANG Project's Windows 10 theme for GTK](https://github.com/B00merang-Project/Windows-10),
-which is linked as a submodule and can be pulled in via
+`gtk-assets/etc/gtk-4.0/settings.ini` accordingly. That said I do reccomend a
+theme, which is linked as a submodule and can be pulled in via
 `git submodule init; git submodule update`. Finally,
 
 ```shell
