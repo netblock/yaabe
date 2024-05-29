@@ -28,6 +28,15 @@ typedef struct _atui_branch atui_branch;
 struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
 static_assert(sizeof(struct _twentyfourbytes) > 17);
 
+#define NUM_PCIR_IMAGES_MAX 8
+struct pci_struct_pair {
+	struct pci_rom_header* header;
+	struct pcir_data_structure* pcir;
+};
+struct atomtree_pci_tables {
+	uint8_t num_images;
+	struct pci_struct_pair pci_tables[NUM_PCIR_IMAGES_MAX];
+};
 
 struct atomtree_rom_header {
 	enum atomtree_common_version ver;
@@ -53,12 +62,13 @@ struct atom_tree {
 	// start of image; eg 0xAA55
 	union {
 		void* bios;
-		struct atombios_image* image;
+		struct vbios_rom_header* image;
 	};
 	uint32_t bios_image_size;
 	uint8_t num_of_crawled_strings;
 	char8_t* atombios_strings[NUM_ATOMBIOS_STRINGS];
 
+	struct atomtree_pci_tables pcir_tables;
 	struct atomtree_rom_header rom_header;
 	struct atomtree_master_datatable data_table;
 	//struct atom_master_cmdtable_v2_1 cmd_table; // atom_master_list_of_command_functions_v2_1 TODO

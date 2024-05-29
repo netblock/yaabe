@@ -4071,6 +4071,57 @@ atomtree_populate_atom_rom_header(
 	return atui_rom_header;
 }
 
+inline static atui_branch*
+atomtree_populate_pci_tables(
+		struct atomtree_pci_tables* const atree_pci,
+		struct pci_rom_header* const start,
+		bool const generate_atui
+		) {
+	union {
+		void* raw;
+		struct pci_rom_header* header;
+	} header;
+	union {
+		void* raw;
+		uint32_t* signature;
+		struct pcir_data_structure* pcir;
+	} pcir;
+
+	header.header = start;
+	uint8_t i = 0;
+	
+	do {
+		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
+			break;
+		}
+		pcir.raw = header.raw + header.header->pcir_structure_offset;
+		if (*pcir.signature != PCIR_SIGNATURE) {
+			break;
+		}
+		atree_pci->pci_tables[i].header = header.header;
+		atree_pci->pci_tables[i].pcir = pcir.pcir;
+		i++;
+		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
+	} while (!pcir.pcir->last.last_image);
+	atree_pci->num_images = i;
+
+	atui_branch* atui_pci_tables = NULL;
+	if (generate_atui) {
+		atui_pci_tables = ATUI_MAKE_BRANCH(atui_nullstruct, "PCI Tables",
+			NULL,NULL,  atree_pci->num_images, NULL
+		);
+
+		for (i=0; i < atree_pci->num_images; i++) {
+			atui_branch* atui_pci = ATUI_MAKE_BRANCH(pci_struct_pair,
+				NULL,   &(atree_pci->pci_tables[i]),NULL,   0,NULL
+			);
+			sprintf(atui_pci->name, "pci_struct_pair [%u]", i);
+			ATUI_ADD_BRANCH(atui_pci_tables, atui_pci);
+		}
+	}
+
+	return atui_pci_tables;
+}
 
 inline static void*
 bios_fastforward(
@@ -4079,12 +4130,12 @@ bios_fastforward(
 		) {
 	union {
 		void const* bios;
-		struct atombios_image const* image;
+		struct vbios_rom_header const* image;
 	} bi;
 	bi.bios = biosfile;
 	void const* const end = biosfile + size;
 	while (bi.bios < end) {
-		if ((bi.image->atombios_magic == ATOM_BIOS_MAGIC)
+		if ((bi.image->pci_header.pci_rom_signature == ATOM_BIOS_MAGIC)
 			&& (0 == strcmp(ATOM_ATI_MAGIC, bi.image->atomati_magic))
 			) {
 			return (void*)bi.bios;
@@ -4105,7 +4156,7 @@ atombios_parse(
 	if (bios == NULL) {
 		return NULL;
 	}
-	struct atombios_image* const image = bios;
+	struct vbios_rom_header* const image = bios;
 	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
 
 	atree->biosfile = NULL;
@@ -4113,11 +4164,13 @@ atombios_parse(
 	atree->alloced_bios = alloced_bios;
 
 	atree->bios = bios; //PIC code; going to be used as the '0' in places.
-	atree->bios_image_size = image->image_size * BIOS_IMAGE_SIZE_UNIT;
+	atree->bios_image_size = (
+		image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
+	);
 
 	uint8_t num_of_crawled_strings = 0;
-	if (image->atombios_strings_offset) {
-		uint8_t* strs = atree->bios + image->atombios_strings_offset;
+	if (image->atom_bios_message_offset) {
+		uint8_t* strs = atree->bios + image->atom_bios_message_offset;
 		while (*strs) { // the last string ends with 00 00
 			assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
 			atree->atombios_strings[num_of_crawled_strings] = strs;
@@ -4127,17 +4180,26 @@ atombios_parse(
 	}
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 
-	atui_branch* const atui_rom_header = atomtree_populate_atom_rom_header(
-		&(atree->rom_header), atree, image->bios_header, generate_atui
+	atui_branch* const atui_atom_rom_header = atomtree_populate_atom_rom_header(
+		&(atree->rom_header), atree, image->rom_header_info_table_offset,
+		generate_atui
+	);
+	atui_branch* const atui_pci_tables = atomtree_populate_pci_tables(
+		&(atree->pcir_tables), &(image->pci_header), generate_atui
 	);
 
 	// atomtree_populate_commandtables(atree); // TODO
 
 	if (generate_atui) {
-		atui_branch* const atui_atom_image = ATUI_MAKE_BRANCH(atombios_image,
-			 NULL,  atree, atree->image,  1,&atui_rom_header
+		atui_branch* const child_branches[] = {
+			atui_pci_tables, atui_atom_rom_header
+		};
+		atui_branch* const atui_vbios_rom_header = ATUI_MAKE_BRANCH(
+			vbios_rom_header, NULL,
+			atree, atree->image,
+			sizeof(child_branches)/sizeof(atui_branch*), child_branches
 		);
-		atree->atui_root = atui_atom_image;
+		atree->atui_root = atui_vbios_rom_header;
 	} else {
 		atree->atui_root = NULL;
 	}

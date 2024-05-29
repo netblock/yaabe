@@ -23,122 +23,162 @@ global_default: {
 		},
 	},
 }, branches: [
-{// basic empty branch mainly to have collapsables
+{ // basic empty branch mainly to have collapsables
 	c_type: "atui_nullstruct", table_size: "0", leaves: [],
 },
 
+
 {
-	c_type: "atombios_image",
+	c_type: "pci_rom_header",
+	atomtree: "atom_tree",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "standard PCIe ROM header",},
+	],
+	leaves: [
+		{
+			access: "bios->pci_rom_signature",
+			name: "pci_rom_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.",},
+			],
+		}, {
+			access: "bios->pci_rom_size_in_512",
+			name: "pci_rom_size_in_512",
+			description: [
+				{language: "english", text: "in 512 Bytes",},
+			],
+		}, {
+			access: "bios->jump_core_main_init_bios",
+			name: "jump_core_main_init_bios",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "x86 init code",},
+			],
+		}, {
+			access: "bios->label_core_main_init_bios",
+			name: "label_core_main_init_bios",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pci_reserved",
+			name: "pci_reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "reserved for user",},
+			],
+		}, {
+			access: "bios->pcir_structure_offset",
+			name: "pcir_structure_offset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "vbios_rom_header",
 	atomtree: "atom_tree",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->atombios_magic",
-			name: "atombios_magic",
-			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "little endian: 0xAA55",},
-			],
+			access: "bios->pci_header",
+			name: "pci_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
 		}, {
-			access: "bios->image_size",
-			name: "image_size",
-			description: [
-				{language: "english", text: "0x02",},
-			],
-		}, {
-			access: "bios->reserved0",
-			name: "reserved0",
+			access: "bios->rsvd_1d_1a",
+			name: "rsvd_1d_1a",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->IBM",
+			name: "IBM",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "IBM",},
+			],
 		}, {
 			access: "bios->checksum",
 			name: "checksum",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "0x21",},
-			],
 		}, {
-			access: "bios->reserved1",
-			name: "reserved1",
+			access: "bios->unsure",
+			name: "unsure",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->number_of_strings",
-			name: "number_of_strings",
 			description: [
-				{language: "english", text: "0x2F",},
+				{language: "english", text: "could be more checksums?",},
 			],
+		}, {
+			access: "bios->bios_msg_number",
+			name: "bios_msg_number",
 		}, {
 			access: "bios->atomati_magic",
 			name: "atomati_magic",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "0x30; \" 761295520\" There is a space.",},
+				{language: "english", text: "\" 761295520\"",},
 			],
+		},{
+			access: "bios->label_corev_post_no_mode",
+			name: "label_corev_post_no_mode",
+			display: "ATUI_HEX",
 		}, {
-			access: "bios->reserved2",
-			name: "reserved2",
+			access: "bios->special_post_offset",
+			name: "special_post_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->special_post_image_size_in_512",
+			name: "special_post_image_size_in_512",
+		}, {
+			access: "bios->rsvd_47_45",
+			name: "rsvd_47_45",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->bios_header",
-			name: "bios_header",
+			access: "bios->rom_header_info_table_offset",
+			name: "rom_header_info_table_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "0x48",},
-			],
 		}, {
-			access: "bios->reserved3",
-			name: "reserved3",
+			access: "bios->rsvd_4f_4a",
+			name: "rsvd_4f_4a",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->bios_date",
-			name: "bios_date",
+			access: "bios->build_timestamp",
+			name: "build_timestamp",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "0x50",},
-			],
 		}, {
-			access: "bios->reserved4",
-			name: "reserved4",
+			access: "bios->jump_corex_func_far_handler",
+			name: "jump_corex_func_far_handler",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->corex_func_far_handler_offset",
+			name: "corex_func_far_handler_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->rsvd_67",
+			name: "rsvd_67",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->jump_corev_func_far_handler",
+			name: "jump_corev_func_far_handler",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->corev_func_far_handler_offset",
+			name: "corev_func_far_handler_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->rsvd_6d_6b",
+			name: "rsvd_6d_6b",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->atombios_strings_offset",
-			name: "atombios_strings_offset",
+			access: "bios->atom_bios_message_offset",
+			name: "atom_bios_message_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "0x6E",},
-			],
-		}, {
-			access: "bios->reserved5",
-			name: "reserved5",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->vbios_part_number",
-			name: "vbios_part_number",
-			display: "ATUI_NAN",
-			fancy: "ATUI_STRING",
-			description: [
-				{language: "english", text: "0x80 ; only use if number_of_strings == 0",},
-			],
-		}, {
-			access: "bios->reserved6",
-			name: "reserved6",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->asic_bus_mem_type",
-			name: "asic_bus_mem_type",
-			display: "ATUI_NAN",
-			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "0x94;  ATI days; AMD uses atombios_strings_offset.",},
-			],
 		}, {
 			name: "atombios strings",
 			display: "ATUI_NAN",
@@ -157,6 +197,104 @@ global_default: {
 		},
 	],
 }, {
+	c_prefix: "union", c_type: "pcir_indicator_byte",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->indicator",
+			name: "indicator",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "indicator_reserved",
+					hi: 6, lo: 0,
+				}, {
+					name: "last_image",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "pcir_data_structure",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pcir_signature",
+			name: "pcir_signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "\"PCIR\"",},
+			],
+		}, {
+			access: "bios->vendor_id",
+			name: "vendor_id",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->device_id",
+			name: "device_id",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->vpd_reserved",
+			name: "vpd_reserved",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "was PCI Vital Product Data (VPD)",},
+			],
+		}, {
+			access: "bios->structure_length",
+			name: "structure_length",
+		}, {
+			access: "bios->structure_revision",
+			name: "structure_revision",
+		}, {
+			access: "bios->class_code",
+			name: "class_code",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->image_length_in_512",
+			name: "image_length_in_512",
+		}, {
+			access: "bios->code_revision",
+			name: "code_revision",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->code_type",
+			name: "code_type",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->last",
+			name: "last",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_indicator_byte",
+		}, {
+			access: "bios->end_reserved",
+			name: "end_reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atui_nullstruct", name: "pci_struct_pair",
+	atomtree: "pci_struct_pair",
+	table_size: "0",
+	leaves: [
+		{
+			access: "*(atomtree->header)",
+			name: "pci_rom_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
+		}, {
+			access: "*(atomtree->pcir)",
+			name: "pcir_data_structure",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
+		},
+	],
+},
+
+{
 	c_type: "atom_common_table_header",
 	table_size: "bios->structuresize", // for stubs
 	leaves: [

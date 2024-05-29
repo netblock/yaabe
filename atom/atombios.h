@@ -8128,34 +8128,6 @@ struct gfx_havesting_parameters {
 #define GFX_HARVESTING_PRIM_ID 2
 
 
-struct vbios_rom_header {
-	uint8_t  PciRomSignature[2];
-	uint8_t  PciRomSizeIn512bytes;
-	uint8_t  JumpCoreMainInitBIOS;
-	uint16_t LabelCoreMainInitBIOS;
-	uint8_t  PciReservedSpace[18];
-	uint16_t PciDataStructureOffset;
-	uint8_t  Rsvd1d_1a[4];
-	char8_t  strIbm[3];
-	uint8_t  CheckSum[14];
-	uint8_t  BiosMsgNumber;
-	char8_t  str761295520[16];
-	uint16_t LabelCoreVPOSTNoMode;
-	uint16_t SpecialPostOffset;
-	uint8_t  SpeicalPostImageSizeIn512Bytes;
-	uint8_t  Rsved47_45[3];
-	uint16_t ROM_HeaderInformationTableOffset;
-	uint8_t  Rsved4f_4a[6];
-	char8_t  strBuildTimeStamp[20];
-	uint8_t  JumpCoreXFuncFarHandler;
-	uint16_t CoreXFuncFarHandlerOffset;
-	uint8_t  Rsved67;
-	uint8_t  JumpCoreVFuncFarHandler;
-	uint16_t CoreVFuncFarHandlerOffset;
-	uint8_t  Rsved6d_6b[3];
-	uint16_t ATOM_BIOS_MESSAGE_Offset;
-};
-
 /******************************************************************************/
 // Portion VI: Definitinos for vbios MC scratch registers that driver used
 /******************************************************************************/

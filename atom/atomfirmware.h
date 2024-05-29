@@ -100,29 +100,69 @@ enum atombios_image_offset {
 	OFFSET_TO_VBIOS_DATE                  = 0x50,
 };
 */
-#define ATOM_BIOS_MAGIC 0xAA55
-#define ATOM_ATI_MAGIC  " 761295520"
+
+
+// https://uefi.org/specs/UEFI/2.10/14_Protocols_PCI_Bus_Support.html#recommended-pci-device-driver-layout
+#define PCI_HEADER_MAGIC 0xAA55
 #define BIOS_IMAGE_SIZE_UNIT 512
-struct atombios_image {
-	uint16_t atombios_magic; // little endian: 0xAA55
-	uint8_t  image_size;     // 0x02
-	uint8_t  reserved0[30];
-	uint8_t  checksum;       // 0x21
-	uint8_t  reserved1[13];
-	uint8_t  number_of_strings; // 0x2F
-	uint8_t  atomati_magic[11]; // 0x30; " 761295520" There is a space.
-	uint8_t  reserved2[13];
-	uint16_t bios_header;    // 0x48
-	uint8_t  reserved3[6];
-	uint8_t  bios_date[15];  // 0x50
-	uint8_t  reserved4[15];
-	uint16_t atombios_strings_offset; // 0x6E
-	uint8_t  reserved5[16];
-	uint8_t  vbios_part_number[1]; // 0x80 ; only use if number_of_strings == 0
-	uint8_t  reserved6[19];
-	uint8_t  asic_bus_mem_type[20];  // 0x94.
-	// asic_bus_mem_type is ATI; AMD uses atombios_strings_offset.
-	// any more?
+struct pci_rom_header { // standard PCIe ROM header
+	uint16_t pci_rom_signature; // 0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.
+	uint8_t  pci_rom_size_in_512; // in 512 Bytes
+	uint8_t  jump_core_main_init_bios; // x86 init code
+	uint16_t label_core_main_init_bios;
+	uint8_t  pci_reserved[18]; // reserved for user
+	uint16_t pcir_structure_offset;
+};
+union pcir_indicator_byte {
+	uint8_t indicator;
+	struct { uint8_t
+		indicator_reserved :6-0 +1,
+		last_image         :7-7 +1;
+	};
+};
+
+//         little-endian: 3 2 1 0
+//                        R I C P
+#define PCIR_SIGNATURE 0x52494350
+struct pcir_data_structure { // PCI Rom
+	char8_t  pcir_signature[4]; // "PCIR"
+	uint16_t vendor_id;
+	uint16_t device_id;
+	uint16_t  vpd_reserved; // was PCI Vital Product Data (VPD)
+	uint16_t structure_length;
+	uint8_t structure_revision;
+	uint8_t  class_code[3];
+	uint16_t image_length_in_512;
+	uint16_t code_revision;
+	uint8_t  code_type;
+	union pcir_indicator_byte last;
+	uint16_t end_reserved;
+};
+
+#define ATOM_BIOS_MAGIC PCI_HEADER_MAGIC
+#define ATOM_ATI_MAGIC  " 761295520"
+struct vbios_rom_header {
+	struct pci_rom_header pci_header;
+	uint8_t  rsvd_1d_1a[4];
+	char8_t  IBM[3]; // IBM
+	uint8_t  checksum;
+	uint8_t  unsure[13]; // could be more checksums?
+	uint8_t  bios_msg_number;
+	char8_t  atomati_magic[16]; // " 761295520"
+	uint16_t label_corev_post_no_mode;
+	uint16_t special_post_offset;
+	uint8_t  special_post_image_size_in_512;
+	uint8_t  rsvd_47_45[3];
+	uint16_t rom_header_info_table_offset;
+	uint8_t  rsvd_4f_4a[6];
+	char8_t  build_timestamp[20];
+	uint8_t  jump_corex_func_far_handler;
+	uint16_t corex_func_far_handler_offset;
+	uint8_t  rsvd_67;
+	uint8_t  jump_corev_func_far_handler;
+	uint16_t corev_func_far_handler_offset;
+	uint8_t  rsvd_6d_6b[3];
+	uint16_t atom_bios_message_offset;
 };
 
 /******************************************************************************/
