@@ -13,17 +13,18 @@ global_default: {
 ], }
 ```
 
-The `branch` class type is for describing C structs and their elemments as
-branch-leaf complexes. For colloquialisms, 'branch' is a struct, and 'leaf' is
-an element of that struct.
+The `branch` class type is for describing C structs and their elements as
+branch-leaf complexes; 'branch' is a struct, and 'leaf' is an element of that
+struct.
 
 The `enum` class type is for building a read-only structure of value-string
-pairs regarding a named constant and its name.
+pairs regarding a named constant.
 
-The `array` class type works much the same way, but for a basic read-only array.
+The `array` class type works much the same way, but for a simple read-only
+array[].
 
 The `searchfield` is for `asic_reg_tools.h`, and is about  building an
-enum-esque val-name pair array of register IDs and their names.
+`enum`-esque val-name pair array of register IDs and their names.
 
 <br>
 
@@ -181,7 +182,7 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 {
 	access: "bios->bios_element",
 	name: "bios element",
-	display: "ATUI_HEX", // radix
+	display: "ATUI_HEX",
 	description: [
 		{language: "english", text "..."},
 	],
@@ -196,7 +197,7 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 		}, {
 			name: "bitfield entry name 1",
 			hi: 31, lo: 8,
-			display: ["ATUI_DEC", "ATUI_SIGNED"],
+			display: ["ATUI_DEC", "ATUI_SIGNED"], // order doesn't matter
 		},
 	],
 },
@@ -206,8 +207,8 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 
 ### ATUI\_ENUM
 
-If the element should have a list of text-val pairs, an enum,
-First populate the atui enum in `atui_enums.json5`:
+If the element should have a list of text-val pairs, an enum, assocated with it,
+first populate the atui enum in `atui_enums.json5`:
 
 ``` json5
 {name: "enum_struct_name"
