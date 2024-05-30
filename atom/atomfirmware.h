@@ -121,6 +121,7 @@ union pcir_indicator_byte {
 	};
 };
 
+
 //         little-endian: 3 2 1 0
 //                        R I C P
 #define PCIR_SIGNATURE 0x52494350
@@ -128,9 +129,9 @@ struct pcir_data_structure { // PCI Rom
 	char8_t  pcir_signature[4]; // "PCIR"
 	uint16_t vendor_id;
 	uint16_t device_id;
-	uint16_t  vpd_reserved; // was PCI Vital Product Data (VPD)
+	uint16_t vpd_reserved; // was PCI Vital Product Data (VPD)
 	uint16_t structure_length;
-	uint8_t structure_revision;
+	uint8_t  structure_revision;
 	uint8_t  class_code[3];
 	uint16_t image_length_in_512;
 	uint16_t code_revision;
@@ -138,6 +139,36 @@ struct pcir_data_structure { // PCI Rom
 	union pcir_indicator_byte last;
 	uint16_t end_reserved;
 };
+
+enum efi_pci_driver_subsystem_value:uint16_t {
+	// values other than these are from PE/COFF header
+	EFI_PCI_DRIVER_SUBSYSTEM_BOOT_SERVICE = 0x0B,
+	EFI_PCI_DRIVER_SUBSYSTEM_RUNTIME      = 0x0C,
+};
+enum efi_pci_driver_machine_type:uint16_t {
+	// values other than these are from PE/COFF header
+	EFI_PCI_DRIVER_MACHINE_TYPE_IA32    = 0x014C,
+	EFI_PCI_DRIVER_MACHINE_TYPE_ITANIUM = 0x0200,
+	EFI_PCI_DRIVER_MACHINE_TYPE_EBC     = 0x0EBC, // EFI byte code
+	EFI_PCI_DRIVER_MACHINE_TYPE_X64     = 0x8664,
+	EFI_PCI_DRIVER_MACHINE_TYPE_ARM32   = 0x01c2,
+	EFI_PCI_DRIVER_MACHINE_TYPE_ARM64   = 0xAA64,
+};
+#define EFI_SIGNATURE 0xEF1
+struct efi_pci_device_driver_image {
+	uint16_t pci_rom_signature; // 0xAA55
+	uint16_t pci_rom_size_in_512; // in 512 Bytes
+	uint32_t efi_signature; // 0xEF1
+	enum efi_pci_driver_subsystem_value subsystem_value;
+	enum efi_pci_driver_machine_type machine_type; 
+	uint16_t compression_type; // 1 = Compressed following the UEFI algo
+	uint64_t reserved;
+	uint16_t efi_image_offset;
+	uint16_t pcir_structure_offset;
+	uint16_t pcir_padding;
+	struct pcir_data_structure  pcir;
+};
+
 
 #define ATOM_BIOS_MAGIC PCI_HEADER_MAGIC
 #define ATOM_ATI_MAGIC  " 761295520"
@@ -193,7 +224,7 @@ struct atom_rom_header_v2_2 {
 	uint16_t iobaseaddress;
 	uint16_t subsystem_vendor_id;
 	uint16_t subsystem_id;
-	uint16_t pci_info_offset;
+	uint16_t pci_info_offset; // first PCIR table
 	uint16_t masterhwfunction_offset; // Offest for SW to get all command function offsets, Don't change the position
 	uint16_t masterdatatable_offset;  // Offest for SW to get all data table offsets, Don't change the position
 	uint16_t reserved;

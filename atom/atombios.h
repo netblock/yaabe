@@ -190,7 +190,7 @@ struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 	uint16_t IoBaseAddress;
 	uint16_t SubsystemVendorID;
 	uint16_t SubsystemID;
-	uint16_t PCI_InfoOffset;
+	uint16_t PCI_InfoOffset; // first PCIR table
 	uint16_t MasterCommandTableOffset; // Offest for SW to get all command table offsets, Don't change the position
 	uint16_t MasterDataTableOffset;    // Offest for SW to get all data table offsets, Don't change the position
 	uint8_t  ExtendedFunctionCode;
@@ -211,7 +211,7 @@ struct atom_rom_header_v2_1 {
 	uint16_t IoBaseAddress;
 	uint16_t SubsystemVendorID;
 	uint16_t SubsystemID;
-	uint16_t PCI_InfoOffset;
+	uint16_t PCI_InfoOffset; // first PCIR table
 	uint16_t MasterCommandTableOffset; // Offest for SW to get all command table offsets, Don't change the position
 	uint16_t MasterDataTableOffset;    // Offest for SW to get all data table offsets, Don't change the position
 	uint8_t  ExtendedFunctionCode;

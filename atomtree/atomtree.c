@@ -4078,6 +4078,8 @@ atomtree_populate_pci_tables(
 	union {
 		void* raw;
 		struct pci_rom_header* header;
+		struct efi_pci_device_driver_image* efi;
+
 	} header;
 	union {
 		void* raw;
@@ -4087,6 +4089,7 @@ atomtree_populate_pci_tables(
 
 	header.header = start;
 	uint8_t i = 0;
+	struct pci_rom_tables* const tables = atree_pci->pci_tables;
 	
 	do {
 		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
@@ -4096,8 +4099,9 @@ atomtree_populate_pci_tables(
 		if (*pcir.signature != PCIR_SIGNATURE) {
 			break;
 		}
-		atree_pci->pci_tables[i].header = header.header;
-		atree_pci->pci_tables[i].pcir = pcir.pcir;
+		tables[i].header = header.header;
+		tables[i].pcir = pcir.pcir;
+		tables[i].is_efi = (header.efi->efi_signature == EFI_SIGNATURE);
 		i++;
 		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
 	} while (!pcir.pcir->last.last_image);
@@ -4109,11 +4113,21 @@ atomtree_populate_pci_tables(
 			NULL,NULL,  atree_pci->num_images, NULL
 		);
 
+		struct atui_funcify_args atui_args = {0};
+		atui_branch*
+		(* const atui_pci_func[]) (
+				struct atui_funcify_args const*
+				) = { // jump table
+			ATUI_FUNC(pci_rom_tables),
+			ATUI_FUNC(efi_pci_device_driver_image),
+		};
+
+		atui_branch* atui_pci;
 		for (i=0; i < atree_pci->num_images; i++) {
-			atui_branch* atui_pci = ATUI_MAKE_BRANCH(pci_struct_pair,
-				NULL,   &(atree_pci->pci_tables[i]),NULL,   0,NULL
-			);
-			sprintf(atui_pci->name, "pci_struct_pair [%u]", i);
+			atui_args.suggestbios = tables[i].header;
+			atui_args.atomtree = &(tables[i]);
+			atui_pci = atui_pci_func[tables[i].is_efi](&atui_args);
+			sprintf(atui_pci->name, "%s [%u]", atui_pci->origname, i);
 			ATUI_ADD_BRANCH(atui_pci_tables, atui_pci);
 		}
 	}

@@ -29,13 +29,17 @@ struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
 static_assert(sizeof(struct _twentyfourbytes) > 17);
 
 #define NUM_PCIR_IMAGES_MAX 8
-struct pci_struct_pair {
-	struct pci_rom_header* header;
+struct pci_rom_tables {
+	bool is_efi;
+	union {
+		struct efi_pci_device_driver_image* efi;
+		struct pci_rom_header* header;
+	};
 	struct pcir_data_structure* pcir;
 };
 struct atomtree_pci_tables {
 	uint8_t num_images;
-	struct pci_struct_pair pci_tables[NUM_PCIR_IMAGES_MAX];
+	struct pci_rom_tables pci_tables[NUM_PCIR_IMAGES_MAX];
 };
 
 struct atomtree_rom_header {

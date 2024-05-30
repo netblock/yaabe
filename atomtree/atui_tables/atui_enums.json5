@@ -7,6 +7,32 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // atomfirmware.h
 
+
+{name: "efi_pci_driver_subsystem_value",
+	description: [
+		{language: "english", text: "values other than these are from PE/COFF header",},
+	],
+	constants: [
+		{name: "EFI_PCI_DRIVER_SUBSYSTEM_BOOT_SERVICE",},
+		{name: "EFI_PCI_DRIVER_SUBSYSTEM_RUNTIME",},
+]},
+{name: "efi_pci_driver_machine_type",
+	description: [
+		{language: "english", text: "values other than these are from PE/COFF header",},
+	],
+	constants: [
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_IA32",},
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_ITANIUM",},
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_EBC",
+			description: [
+				{language: "english", text: "EFI byte code",},
+			],
+		},
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_X64",},
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_ARM32",},
+		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_ARM64",},
+]},
+
 {name: "I2cControllerPort_e",
 	constants: [
 		{name: "I2C_CONTROLLER_PORT_0",},

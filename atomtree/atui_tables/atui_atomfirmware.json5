@@ -276,8 +276,72 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atui_nullstruct", name: "pci_struct_pair",
-	atomtree: "pci_struct_pair",
+	c_type: "efi_pci_device_driver_image",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pci_rom_signature",
+			name: "pci_rom_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xAA55",},
+			],
+		}, {
+			access: "bios->pci_rom_size_in_512",
+			name: "pci_rom_size_in_512",
+			description: [
+				{language: "english", text: "in 512 Bytes",},
+			],
+		}, {
+			access: "bios->efi_signature",
+			name: "efi_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xEF1",},
+			],
+		}, {
+			access: "bios->subsystem_value",
+			name: "subsystem_value",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ENUM", fancy_data: "efi_pci_driver_subsystem_value",
+		}, {
+			access: "bios->machine_type",
+			name: "machine_type",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ENUM", fancy_data: "efi_pci_driver_machine_type",
+		}, {
+			access: "bios->compression_type",
+			name: "compression_type",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "1 = Compressed following the UEFI algo",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->efi_image_offset",
+			name: "efi_image_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir_structure_offset",
+			name: "pcir_structure_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir_padding",
+			name: "pcir_padding",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir",
+			name: "pcir",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
+		},
+	],
+}, {
+	c_type: "atui_nullstruct", name: "pci_rom_tables",
+	atomtree: "pci_rom_tables",
 	table_size: "0",
 	leaves: [
 		{
