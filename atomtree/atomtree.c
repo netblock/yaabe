@@ -1327,7 +1327,7 @@ atomtree_populate_atom_memory_timing_format(
 		struct atui_funcify_args func_args = {0};
 		atui_branch* atui_mrs[4] = {NULL};
 		func_args.import_branches = atui_mrs;
-		func_args.num_import_branches = (sizeof(atui_mrs)/sizeof(atui_branch*));
+		func_args.num_import_branches = lengthof(atui_mrs);
 
 		for (uint8_t i=0; i < count; i++) {
 			switch (memory_type) { // mrs in straps
@@ -1496,9 +1496,7 @@ atomtree_populate_vram_module(
 
 	atui_branch* atui_module_entry;
 	atui_branch* atui_children[3] = {NULL};
-	uint8_t const num_atui_children = (
-		sizeof(atui_children) / sizeof(atui_branch*)
-	);
+	uint8_t const num_atui_children = lengthof(atui_children);
 	atui_branch* atui_vrammodules = NULL;
 	if (generate_atui) {
 		atui_vrammodules = ATUI_MAKE_BRANCH(atui_nullstruct,
@@ -2065,7 +2063,7 @@ atomtree_populate_vram_info_v1_3(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_3,
 			NULL,  vi13,vi13->leaves,
-			(sizeof(vi13_children)/sizeof(atui_branch*)), vi13_children
+			lengthof(vi13_children), vi13_children
 		);
 	}
 
@@ -2125,7 +2123,7 @@ atomtree_populate_vram_info_v1_4(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_v1_4,
 			NULL,  vi14,vi14->leaves,
-			(sizeof(vi14_children)/sizeof(atui_branch*)), vi14_children
+			lengthof(vi14_children), vi14_children
 		);
 	}
 
@@ -2199,7 +2197,7 @@ atomtree_populate_vram_info_v2_1(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_1,
 			NULL,  vi21,vi21->leaves,
-			(sizeof(vi21_children)/sizeof(atui_branch*)), vi21_children
+			lengthof(vi21_children), vi21_children
 		);
 	}
 
@@ -2298,7 +2296,7 @@ atomtree_populate_vram_info_v2_2(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_2,
 			NULL,  vi22,vi22->leaves,
-			(sizeof(vi22_children)/sizeof(atui_branch*)), vi22_children
+			lengthof(vi22_children), vi22_children
 		);
 	}
 
@@ -2486,7 +2484,7 @@ atomtree_populate_vram_info_v2_3(
 
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_3,
 			NULL,  vi23,vi23->leaves,
-			(sizeof(vi23_children)/sizeof(atui_branch*)), vi23_children
+			lengthof(vi23_children), vi23_children
 		);
 	}
 	return atui_vi;
@@ -2651,7 +2649,7 @@ atomtree_populate_vram_info_v2_4(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_4,
 			NULL,  vi24,vi24->leaves,
-			(sizeof(vi24_children)/sizeof(atui_branch*)), vi24_children
+			lengthof(vi24_children), vi24_children
 		);
 	}
 	return atui_vi;
@@ -2807,7 +2805,7 @@ atomtree_populate_vram_info_v2_5(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_5,
 			NULL,  vi25,vi25->leaves,
-			(sizeof(vi25_children)/sizeof(atui_branch*)), vi25_children
+			lengthof(vi25_children), vi25_children
 		);
 	}
 	return atui_vi;
@@ -2939,7 +2937,7 @@ atomtree_populate_vram_info_v2_6(
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v2_5,
 			NULL,  vi26,vi26->leaves,
-			(sizeof(vi26_children)/sizeof(atui_branch*)), vi26_children
+			lengthof(vi26_children), vi26_children
 		);
 	}
 	return atui_vi;
@@ -3052,7 +3050,7 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 		};
 		atui_vi = ATUI_MAKE_BRANCH(atom_vram_info_header_v3_0,
 			NULL,  vi30,vi30->leaves,
-			(sizeof(vi30_children)/sizeof(atui_branch*)), vi30_children
+			lengthof(vi30_children), vi30_children
 		);
 	}
 	return atui_vi;
@@ -3555,7 +3553,7 @@ atomtree_populate_master_datatable_v1_1(
 		};
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v1_1,
 			NULL,  dt11,dt11->leaves,
-			(sizeof(child_branches)/sizeof(atui_branch*)), child_branches
+			lengthof(child_branches), child_branches
 		);
 	}
 	return atui_dt;
@@ -3751,7 +3749,7 @@ atomtree_populate_master_datatable_v2_1(
 		};
 		atui_dt = ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,
 			NULL,  dt21,dt21->leaves,
-			(sizeof(child_branches)/sizeof(atui_branch*)), child_branches
+			lengthof(child_branches), child_branches
 		);
 	}
 	return atui_dt;
@@ -4197,7 +4195,7 @@ atombios_parse(
 		atui_branch* const atui_vbios_rom_header = ATUI_MAKE_BRANCH(
 			vbios_rom_header, NULL,
 			atree, atree->image,
-			sizeof(child_branches)/sizeof(atui_branch*), child_branches
+			lengthof(child_branches), child_branches
 		);
 		atree->atui_root = atui_vbios_rom_header;
 	} else {

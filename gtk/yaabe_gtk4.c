@@ -1161,7 +1161,7 @@ leaves_rightclick_popup(
 		actions[num_actions].activate = leaf_right_click_paste_data;
 		num_actions++;
 	}
-	assert(num_actions <= sizeof(actions)/sizeof(GActionEntry));
+	assert(num_actions <= lengthof(actions));
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	g_action_map_add_action_entries(action_set,
 		actions, num_actions,

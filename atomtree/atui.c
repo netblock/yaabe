@@ -597,11 +597,11 @@ atui_leaf_to_path(
 
 	leafstack[0] = tip;
 	atui_path_populate_leaf_stack(leafstack, &leaves_i, &string_length);
-	assert(leaves_i < sizeof(leafstack)/sizeof(atui_leaf const*));
+	assert(leaves_i < lengthof(leafstack));
 
 	branchstack[0] = (const void*) leafstack[leaves_i];
 	atui_path_populate_branch_stack(branchstack, &branches_i, &string_length);
-	assert(branches_i < sizeof(branchstack)/sizeof(atui_branch const*));
+	assert(branches_i < lengthof(branchstack));
 
 	char8_t* const pathstring = malloc(string_length);
 	// pathstring[string_length-1] = '\0'; // print_leaf_path does the \0

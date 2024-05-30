@@ -59,6 +59,7 @@ static_assert(sizeof(struct _tenbytes) == 10);
 
 /******************************************************************************/
 
+#define lengthof(array) (sizeof(array)/sizeof(array[0]))
 
 // TODO stroll that considers 0b prefix?
 int64_t

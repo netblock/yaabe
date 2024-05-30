@@ -803,7 +803,7 @@ PPATUI_HEADERIFY(%s) {
 		.table_size = (%s),
 		.sizeofbios = _PPATUI_NULLPTR_SIZE(*bios),
 		.leaves_init = leaves_init,
-		.num_leaves_init = sizeof(leaves_init)/sizeof(atui_leaf),
+		.num_leaves_init = lengthof(leaves_init),
 		.computed_num_leaves = %s,
 		.computed_num_inline = %s,
 		.computed_num_petiole = %s,
