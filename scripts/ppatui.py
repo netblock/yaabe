@@ -256,7 +256,7 @@ struct atui_enum const ATUI_ENUM(%s) = {
 			)
 
 		if "description" in enum:
-			descr_text = description_to_text(entry["description"], "\t")
+			descr_text = description_to_text(enum["description"], "\t")
 		else:
 			descr_text = ""
 		out_text += enum_template % (
