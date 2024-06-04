@@ -518,6 +518,451 @@ global_default: {
 		},
 	],
 }, {
+	c_type: "ddr4_mr0",
+	leaves: [
+		{
+			access: "bios->ddr4_mr0",
+			name: "ddr4_mr0",
+			fancy_data: [
+				{
+					name: "BL",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "0=BL8; 1=OTF BC4/BC8; 2=BC4",},
+					],
+				}, {
+					name: "tCL_lo",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "MR0[12,6:4,2] -> tCL[5:0]",},
+					],
+				}, {
+					name: "burst_type",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "0=nibble sequential; 1=interleave",},
+					],
+				}, {
+					name: "tCL_mid",
+					hi: 6, lo: 4,
+					description: [
+						{language: "english", text: "0..7=9+n; 8=18 9=20 10=22 11=24 12=23 13=17 14=19 15=21 16=25 17=26 19=28 20=29 21=30 22=31 23=32",},
+					],
+				}, {
+					name: "test_mode",
+					hi: 7, lo: 7,
+				}, {
+					name: "DLL_reset",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "1=reset",},
+					],
+				}, {
+					name: "tWRtRTP_lo",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "auto-pre; MR0[13,11:9] -> tWRtRTP[3:0]",},
+					],
+				}, {
+					name: "tCL_hi",
+					hi: 12, lo: 12,
+				}, {
+					name: "tWRtRTP_hi",
+					hi: 13, lo: 13,
+					description: [
+						{language: "english", text: "tWR is 2x; tRTP: 0..5=5+n; 6=12 7=11 8=13 9=14",},
+					],
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr1",
+	leaves: [
+		{
+			access: "bios->ddr4_mr1",
+			name: "ddr4_mr1",
+			fancy_data: [
+				{
+					name: "DLL",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "1=enabled",},
+					],
+				}, {
+					name: "ODI",
+					hi: 2, lo: 1,
+					description: [
+						{language: "english", text: "drive strength; 0=RZQ/7; 1=/5; (2: micron: /6)",},
+					],
+				}, {
+					name: "AL",
+					hi: 4, lo: 3,
+					description: [
+						{language: "english", text: "additive latency; 0=0;  1=CL-1; 2=CL-2",},
+					],
+				}, {
+					name: "RXCTLE_lo",
+					hi: 6, lo: 5,
+					description: [
+						{language: "english", text: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",},
+					],
+				}, {
+					name: "WL",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "write leveling; 0=disabled; 1=enabled",},
+					],
+				}, {
+					name: "RTT_NOM",
+					hi: 10, lo: 8,
+					description: [
+						{language: "english", text: "0=off; 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",},
+					],
+				}, {
+					name: "TDQS",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "DQS termination (x8 only); 0=disabled; 1=enabled",},
+					],
+				}, {
+					name: "Qoff",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "output buffer disabled; 0=normal; 1=ODI/RTT off",},
+					],
+				}, {
+					name: "RXCTLE_hi",
+					hi: 13, lo: 13,
+					description: [
+						{language: "english", text: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",},
+					],
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr2",
+	leaves: [
+		{
+			access: "bios->ddr4_mr2",
+			name: "ddr4_mr2",
+			fancy_data: [
+				{
+					name: "RFU_2_0",
+					hi: 2, lo: 0,
+				}, {
+					name: "tCWL",
+					hi: 5, lo: 3,
+					description: [
+						{language: "english", text: "1t preamble: 0=9 1=10 2=11 3=12 4=14 5=16 6=18 7=20; 2t pramble: 14..20",},
+					],
+				}, {
+					name: "LPASR",
+					hi: 7, lo: 6,
+					description: [
+						{language: "english", text: "auto refresh; 0=normal 1=reduced 1=extended 3=auto",},
+					],
+				}, {
+					name: "RFU_8",
+					hi: 8, lo: 8,
+				}, {
+					name: "RTT_WR",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "0=disabled 1=RZQ/2 2=/1 3=HiZ 4=/3",},
+					],
+				}, {
+					name: "WRCRC",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "write CRC; 0=disabled",},
+					],
+				}, {
+					name: "RFU_13",
+					hi: 13, lo: 13,
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr3",
+	leaves: [
+		{
+			access: "bios->ddr4_mr3",
+			name: "ddr4_mr3",
+			fancy_data: [
+				{
+					name: "MPR_page",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "multi-purpose register; 0=0..3=3",},
+					],
+				}, {
+					name: "MPR_access",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "0=normal; 1=data from MPR",},
+					],
+				}, {
+					name: "GDM",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "0=normal; 1=geared",},
+					],
+				}, {
+					name: "PDA",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "per-dram addressability; 0=normal; 1=enable",},
+					],
+				}, {
+					name: "temp_sensor",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "0=disabled",},
+					],
+				}, {
+					name: "FGR",
+					hi: 8, lo: 6,
+					description: [
+						{language: "english", text: "0=1x 1=2x 3=4x; 5=OTF 1x/2x; 6=OTF 1x/4x",},
+					],
+				}, {
+					name: "tWCL",
+					hi: 10, lo: 9,
+					description: [
+						{language: "english", text: "when CRC, DM are both enabled; 0..2=4+n",},
+					],
+				}, {
+					name: "MPR_format",
+					hi: 12, lo: 11,
+					description: [
+						{language: "english", text: "read format; 0=serial 1=parallell 2=staggered",},
+					],
+				}, {
+					name: "RFU_13",
+					hi: 13, lo: 13,
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr4",
+	leaves: [
+		{
+			access: "bios->ddr4_mr4",
+			name: "ddr4_mr4",
+			fancy_data: [
+				{
+					name: "MBIST_PPR",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "self-contained PPR; 0=disabled",},
+					],
+				}, {
+					name: "max_power_savings",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "lossy powersave; 0=normal; 1=enabled",},
+					],
+				}, {
+					name: "TCR_range",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "0=normal; 1=extended",},
+					],
+				}, {
+					name: "TCR",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "temp controlled refresh; 0=disabled",},
+					],
+				}, {
+					name: "internal_vref",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "for Vrefdq training; 0=disabled",},
+					],
+				}, {
+					name: "soft_PPR",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "soft post-package-repair; 0=disabled",},
+					],
+				}, {
+					name: "command_address_lat",
+					hi: 8, lo: 6,
+					description: [
+						{language: "english", text: "power savings;  0=0 1=3 2=4 3=5 4=6 5=8",},
+					],
+				}, {
+					name: "refresh_abort_mode",
+					hi: 9, lo: 9,
+					description: [
+						{language: "english", text: "0=disabled",},
+					],
+				}, {
+					name: "read_preamble_train",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "o=disabled",},
+					],
+				}, {
+					name: "read_preamble",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "0=1tCK 1=2tCK",},
+					],
+				}, {
+					name: "write_preamble",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "0=1tCK; 1=2tCK, tCWL must be >9",},
+					],
+				}, {
+					name: "hard_PPR",
+					hi: 13, lo: 13,
+					description: [
+						{language: "english", text: "hard post-package-repair; 0=disabled",},
+					],
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr5",
+	leaves: [
+		{
+			access: "bios->ddr4_mr5",
+			name: "ddr4_mr5",
+			fancy_data: [
+				{
+					name: "CA_parity",
+					hi: 2, lo: 0,
+					description: [
+						{language: "english", text: "0=off; n-clocks: 1=4 2=5 3=6",},
+					],
+				}, {
+					name: "CRC_error",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "0=clear; 1=error",},
+					],
+				}, {
+					name: "CA_parity_error",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "0=clear; 1=error",},
+					],
+				}, {
+					name: "ODT_powerdown",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "0=buffer enabled; 1=disabled",},
+					],
+				}, {
+					name: "RTT_Park",
+					hi: 8, lo: 6,
+					description: [
+						{language: "english", text: "0=disabled 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",},
+					],
+				}, {
+					name: "CA_parity_stop",
+					hi: 9, lo: 9,
+					description: [
+						{language: "english", text: "CA parity stops on error; 0=stop 1=continue",},
+					],
+				}, {
+					name: "data_maask",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "write data mask (x8/x16 only); 0=disabled",},
+					],
+				}, {
+					name: "read_DBI",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "data bus inversion; 0=disabled",},
+					],
+				}, {
+					name: "write_DBI",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "data bus inversion; 0=disabled",},
+					],
+				}, {
+					name: "RFU_13",
+					hi: 13, lo: 13,
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ddr4_mr6",
+	leaves: [
+		{
+			access: "bios->ddr4_mr6",
+			name: "ddr4_mr6",
+			fancy_data: [
+				{
+					name: "vref_cal_val",
+					hi: 5, lo: 0,
+					description: [
+						{language: "english", text: "0..50 = (n/154 + range) x Vddq",},
+					],
+				}, {
+					name: "vref_cal_range",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "0=0.6 (range 1); 1=0.45 (range 2)",},
+					],
+				}, {
+					name: "vref_cal",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "internal Vrefdq gen; 0=disable; 1=enable",},
+					],
+				}, {
+					name: "RFU_9_8",
+					hi: 9, lo: 8,
+				}, {
+					name: "data_rate",
+					hi: 12, lo: 10,
+					description: [
+						{language: "english", text: "0:<=1333; 1:<=1866; 2:<=2400; 3:<=2666; 4:<=3200",},
+					],
+				}, {
+					name: "RFU_13",
+					hi: 13, lo: 13,
+				}, {
+					name: "mr_zero",
+					hi: 16, lo: 14,
+				},
+			],
+		},
+	],
+},
+
+{
 	c_type: "gddr2_mr0",
 	leaves: [
 		{
@@ -2587,6 +3032,1249 @@ global_default: {
 		},
 	],
 }, {
+	c_type: "gddr7_mr0",
+	leaves: [
+		{
+			access: "bios->gddr7_mr0",
+			name: "gddr7_mr0",
+			fancy_data: [
+				{
+					name: "CABI",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "CA bus inversion; 0=enable",},
+					],
+				}, {
+					name: "rsvd_2_1",
+					hi: 2, lo: 1,
+				}, {
+					name: "RDCRC",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "Read CRC; 0=disable",},
+					],
+				}, {
+					name: "WRCRC",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "Write CRC; 0=disable",},
+					],
+				}, {
+					name: "SLX2CAT",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "auto CA training after sleepmode exit; 0=enable",},
+					],
+				}, {
+					name: "SRSLX2CAT",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "same idea but for self-refresh sleepmode",},
+					],
+				}, {
+					name: "testmode",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "Test mode; behavior is vendor specific",},
+					],
+				}, {
+					name: "PAM3",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "PAM3 for DQ/DQE; 0=NRZ 1=PAM3",},
+					],
+				}, {
+					name: "severity",
+					hi: 9, lo: 9,
+					description: [
+						{language: "english", text: "ECC reporting; 0=disable",},
+					],
+				}, {
+					name: "poison",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "ECC poisoning; 0=disable",},
+					],
+				}, {
+					name: "FD_flag",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "postpone MR10~15 until sleep-mode entry; 0=enable",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 0. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr1",
+	leaves: [
+		{
+			access: "bios->gddr7_mr1",
+			name: "gddr7_mr1",
+			fancy_data: [
+				{
+					name: "RL",
+					hi: 5, lo: 0,
+					description: [
+						{language: "english", text: "tCL; 10=10..47=47",},
+					],
+				}, {
+					name: "RFU_7_6",
+					hi: 7, lo: 6,
+				}, {
+					name: "DQERL",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "additionl latency; 0=0..12=12",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 1. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr2",
+	leaves: [
+		{
+			access: "bios->gddr7_mr2",
+			name: "gddr7_mr2",
+			fancy_data: [
+				{
+					name: "WL",
+					hi: 4, lo: 0,
+					description: [
+						{language: "english", text: "tCWL; 6=6..31=31",},
+					],
+				}, {
+					name: "RFU_6_5",
+					hi: 6, lo: 5,
+				}, {
+					name: "WRCRC2ERR",
+					hi: 11, lo: 7,
+					description: [
+						{language: "english", text: "write error latency; 10=10..31=31",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 2. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr3",
+	leaves: [
+		{
+			access: "bios->gddr7_mr3",
+			name: "gddr7_mr3",
+			fancy_data: [
+				{
+					name: "tRAS",
+					hi: 6, lo: 0,
+					description: [
+						{language: "english", text: "4=4..80=80",},
+					],
+				}, {
+					name: "RFU_11_7",
+					hi: 11, lo: 7,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 3. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr4",
+	leaves: [
+		{
+			access: "bios->gddr7_mr4",
+			name: "gddr7_mr4",
+			fancy_data: [
+				{
+					name: "WR",
+					hi: 6, lo: 0,
+					description: [
+						{language: "english", text: "write recovery for autopre; 4=4..80=80",},
+					],
+				}, {
+					name: "RFU_7",
+					hi: 7, lo: 7,
+				}, {
+					name: "RTPSB",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "tRTP for autopre; 4=4..15=15",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 4. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr5",
+	leaves: [
+		{
+			access: "bios->gddr7_mr5",
+			name: "gddr7_mr5",
+			fancy_data: [
+				{
+					name: "DQ_drvstr",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "DQ/E/RCK; 0=40,1=80; 2,3=vendor",},
+					],
+				}, {
+					name: "DQ_term",
+					hi: 3, lo: 2,
+					description: [
+						{language: "english", text: "DQ/E; 0=off; 1=40,2=48,3=80",},
+					],
+				}, {
+					name: "RFU_4",
+					hi: 4, lo: 4,
+				}, {
+					name: "ERR_drvstr",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "ERR pin; 0=40,1=80",},
+					],
+				}, {
+					name: "RFU_6",
+					hi: 6, lo: 6,
+				}, {
+					name: "CAL_UPD",
+					hi: 8, lo: 7,
+					description: [
+						{language: "english", text: "0=all; 1=dis for WCK; 2=rsvd; 3=disable all",},
+					],
+				}, {
+					name: "SEV2ERR",
+					hi: 9, lo: 9,
+					description: [
+						{language: "english", text: "error signaling; 0=disable",},
+					],
+				}, {
+					name: "DQE_HZ",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "DQE in high-Z; 0=disable",},
+					],
+				}, {
+					name: "RFU_11",
+					hi: 11, lo: 11,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 5. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr6",
+	leaves: [
+		{
+			access: "bios->gddr7_mr6",
+			name: "gddr7_mr6",
+			fancy_data: [
+				{
+					name: "DQ_pulldown_leg1_offset",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "DQ/E/RCK; Two's Complement",},
+					],
+				}, {
+					name: "DQ_pulldown_leg2_offset",
+					hi: 7, lo: 4,
+					description: [
+						{language: "english", text: "DQ/E/RCK; Two's Complement",},
+					],
+				}, {
+					name: "RFU_11_8",
+					hi: 11, lo: 8,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 6. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr7",
+	leaves: [
+		{
+			access: "bios->gddr7_mr7",
+			name: "gddr7_mr7",
+			fancy_data: [
+				{
+					name: "DQ_pullup_leg1_offset",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "DQ/E/RCK; Two's Complement",},
+					],
+				}, {
+					name: "DQ_pullup_leg2_offset",
+					hi: 7, lo: 4,
+					description: [
+						{language: "english", text: "DQ/E/RCK; Two's Complement",},
+					],
+				}, {
+					name: "DQ_termination_offset",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "DQ/E; Two's Complement",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 7. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr8",
+	leaves: [
+		{
+			access: "bios->gddr7_mr8",
+			name: "gddr7_mr8",
+			fancy_data: [
+				{
+					name: "ARFM",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "management level; 0=default; 1=A,2=B,3=C",},
+					],
+				}, {
+					name: "DRFM",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "directed management; 0=disable",},
+					],
+				}, {
+					name: "BRC",
+					hi: 4, lo: 3,
+					description: [
+						{language: "english", text: "bounded config; 0=1,2; 1=12,3; 2=123,4; 3=rsvd",},
+					],
+				}, {
+					name: "DCC",
+					hi: 6, lo: 5,
+					description: [
+						{language: "english", text: "duty cycle; 0=disable;1=start;2=rsvd;3=hold",},
+					],
+				}, {
+					name: "self_refresh",
+					hi: 10, lo: 9,
+					description: [
+						{language: "english", text: "0=fixed; 1,2=vendor; 3=temp-controlled",},
+					],
+				}, {
+					name: "hibernate",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "hibernate refresh sleep; 0=disable",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 8. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr9",
+	leaves: [
+		{
+			access: "bios->gddr7_mr9",
+			name: "gddr7_mr9",
+			fancy_data: [
+				{
+					name: "RCKMODE",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "0=disable; 1=with read; 2=with RCKSTRT; 3=always on",},
+					],
+				}, {
+					name: "RCK_LS",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "pramble; 0=0,1=2 half-freq RCK cycles",},
+					],
+				}, {
+					name: "RCKEN",
+					hi: 7, lo: 3,
+					description: [
+						{language: "english", text: "enable latency; n+6; 0=6..31=37",},
+					],
+				}, {
+					name: "RFU_8",
+					hi: 8, lo: 8,
+				}, {
+					name: "RCKSTOP",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "stop latency; n*2+10; 0=10,1=12..7=24",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 9. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr10",
+	leaves: [
+		{
+			access: "bios->gddr7_mr10",
+			name: "gddr7_mr10",
+			fancy_data: [
+				{
+					name: "RFU_11_0",
+					hi: 11, lo: 0,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 10. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr11",
+	leaves: [
+		{
+			access: "bios->gddr7_mr11",
+			name: "gddr7_mr11",
+			fancy_data: [
+				{
+					name: "RFU_11_0",
+					hi: 11, lo: 0,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 11. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr12",
+	leaves: [
+		{
+			access: "bios->gddr7_mr12",
+			name: "gddr7_mr12",
+			fancy_data: [
+				{
+					name: "VDD_range",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "progressively lowers, 0>1>2>3",},
+					],
+				}, {
+					name: "VDDQ_range",
+					hi: 3, lo: 2,
+					description: [
+						{language: "english", text: "progressively lowers, 0>1>2>3",},
+					],
+				}, {
+					name: "WCK_range",
+					hi: 8, lo: 4,
+					description: [
+						{language: "english", text: "0:(Fwck<=Fwcknrz); 1..24: (n-1)/2 <=f< n/2 GHz",},
+					],
+				}, {
+					name: "RFU_9",
+					hi: 9, lo: 9,
+				}, {
+					name: "RCKTYPE",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "0=single (RCK_c is HiZ), 1=differential",},
+					],
+				}, {
+					name: "RCKLEVEL",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "PAM3 level; 0=full swing (+-1); 1=half (+1/0)",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 12. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr13",
+	leaves: [
+		{
+			access: "bios->gddr7_mr13",
+			name: "gddr7_mr13",
+			fancy_data: [
+				{
+					name: "CA_termination",
+					hi: 2, lo: 0,
+					description: [
+						{language: "english", text: "0=CA1 latch; 1=48; 2=60, 3=96, 5=80, 7=off",},
+					],
+				}, {
+					name: "CA_term_offset",
+					hi: 5, lo: 3,
+					description: [
+						{language: "english", text: "Two's Complement",},
+					],
+				}, {
+					name: "WCK_termination",
+					hi: 8, lo: 6,
+					description: [
+						{language: "english", text: "0=CA2 latch; 1=48; 2=60, 3=96, 5=80, 7=off",},
+					],
+				}, {
+					name: "WCK_term_offset",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "Two's Complement",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 13. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr14",
+	leaves: [
+		{
+			access: "bios->gddr7_mr14",
+			name: "gddr7_mr14",
+			fancy_data: [
+				{
+					name: "VREFCA",
+					hi: 6, lo: 0,
+					description: [
+						{language: "english", text: "0..95: (98+n)/200 x VDDQ; default=47=.725",},
+					],
+				}, {
+					name: "DFE_CA",
+					hi: 10, lo: 7,
+					description: [
+						{language: "english", text: "DFE; 0=+-0..15=+-15 VREFCA steps",},
+					],
+				}, {
+					name: "half_VREFCA",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "0=programmed; 1=0.5",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 14. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr15",
+	leaves: [
+		{
+			access: "bios->gddr7_mr15",
+			name: "gddr7_mr15",
+			fancy_data: [
+				{
+					name: "CAPAR",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "CA parity; 0=disable",},
+					],
+				}, {
+					name: "CAPARBLK",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "parity blocking; 0=dis; must be 0 if CAPAR==0",},
+					],
+				}, {
+					name: "CSP_FB",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "CSP command feedback; 0=default",},
+					],
+				}, {
+					name: "CAPARBLK_LAT",
+					hi: 5, lo: 3,
+					description: [
+						{language: "english", text: "parity error latency; 0=0..4=4",},
+					],
+				}, {
+					name: "CAPARBLK_ctrl",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "0=implicit CAPARBLK_LAT",},
+					],
+				}, {
+					name: "RFU_7",
+					hi: 7, lo: 7,
+				}, {
+					name: "CAPAR2ERR",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "parity error latency; 0=variable; 1=1..15=15",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 15. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr16",
+	leaves: [
+		{
+			access: "bios->gddr7_mr16",
+			name: "gddr7_mr16",
+			fancy_data: [
+				{
+					name: "VREFD_L_2",
+					hi: 6, lo: 0,
+					description: [
+						{language: "english", text: "PAM3 low; NRZ ref; (158+n)/360 * VDDQ; default=67",},
+					],
+				}, {
+					name: "RFU_7",
+					hi: 7, lo: 7,
+				}, {
+					name: "L_2_addr",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ,10=DQE (PAM3); 12=DQ[7:0]/E (NRZ); 14=offset all; 15=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 16. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr17",
+	leaves: [
+		{
+			access: "bios->gddr7_mr17",
+			name: "gddr7_mr17",
+			fancy_data: [
+				{
+					name: "VREFD_H",
+					hi: 6, lo: 0,
+					description: [
+						{language: "english", text: "PAM3 low; (230+n)/360 * VDDQ; default=85",},
+					],
+				}, {
+					name: "RFU_7",
+					hi: 7, lo: 7,
+				}, {
+					name: "H_addr",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ,10=DQE (PAM3); 14=offset all; 15=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 17. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr18",
+	leaves: [
+		{
+			access: "bios->gddr7_mr18",
+			name: "gddr7_mr18",
+			fancy_data: [
+				{
+					name: "DQ_DQE_CTLE",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "0=off; 1=1..15=15 or max",},
+					],
+				}, {
+					name: "RFU_5_4",
+					hi: 5, lo: 4,
+				}, {
+					name: "CTLE_RX_addr",
+					hi: 7, lo: 6,
+					description: [
+						{language: "english", text: "0=both; 1=upper; 2=lower",},
+					],
+				}, {
+					name: "CTLE_IO_addr",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 18. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr19",
+	leaves: [
+		{
+			access: "bios->gddr7_mr19",
+			name: "gddr7_mr19",
+			fancy_data: [
+				{
+					name: "DQ_DQE_DFE",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "0=off; 1=1..15=15 or max (1-tap)",},
+					],
+				}, {
+					name: "RFU_5_4",
+					hi: 5, lo: 4,
+				}, {
+					name: "DFE_RX_addr",
+					hi: 7, lo: 6,
+					description: [
+						{language: "english", text: "0=both; 1=upper; 2=lower",},
+					],
+				}, {
+					name: "DFE_IO_addr",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 19. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr20",
+	leaves: [
+		{
+			access: "bios->gddr7_mr20",
+			name: "gddr7_mr20",
+			fancy_data: [
+				{
+					name: "scramble_code",
+					hi: 7, lo: 0,
+					description: [
+						{language: "english", text: "8-bit or 32-bit; 32UI x 8",},
+					],
+				}, {
+					name: "RFU_8",
+					hi: 8, lo: 8,
+				}, {
+					name: "byte_address",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "0..3=byte; 7=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 20. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr21",
+	leaves: [
+		{
+			access: "bios->gddr7_mr21",
+			name: "gddr7_mr21",
+			fancy_data: [
+				{
+					name: "DQ_DQE_TX_EQ",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "0=off; 1=1..15=15 or max",},
+					],
+				}, {
+					name: "RFU_5_4",
+					hi: 7, lo: 4,
+				}, {
+					name: "TX_EQ_addr",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 21. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr22",
+	leaves: [
+		{
+			access: "bios->gddr7_mr22",
+			name: "gddr7_mr22",
+			fancy_data: [
+				{
+					name: "RFU_7_0",
+					hi: 7, lo: 0,
+				}, {
+					name: "ECS_LOG_RULES",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "0=maintain; 1=overwrite",},
+					],
+				}, {
+					name: "ECS_FLAG_RESET",
+					hi: 9, lo: 9,
+					description: [
+						{language: "english", text: "0=disable; 1=reset (self-clear)",},
+					],
+				}, {
+					name: "ECS_RESET",
+					hi: 10, lo: 10,
+					description: [
+						{language: "english", text: "0=disable; 1=reset (self-clear)",},
+					],
+				}, {
+					name: "ECS_ON",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "0=disable",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 22. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr23",
+	leaves: [
+		{
+			access: "bios->gddr7_mr23",
+			name: "gddr7_mr23",
+			fancy_data: [
+				{
+					name: "DT_LFSR",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "data training mode; 0=read fifo; 1=LFSR",},
+					],
+				}, {
+					name: "LFSR_TYPE",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "polynomial selection; 0=PRBS15; 1=PRBS11",},
+					],
+				}, {
+					name: "LFSTR_CNT_RESET",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "per-lane error counter; 1=reset",},
+					],
+				}, {
+					name: "LFSTR_RST_MODE",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "0=auto after RDWTEC; 1=manual",},
+					],
+				}, {
+					name: "DT_EYE_MASK",
+					hi: 5, lo: 4,
+					description: [
+						{language: "english", text: "0=no masking; 1=upper; 2=lower",},
+					],
+				}, {
+					name: "CAOSC",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "CA bus oscillator; 0=disaable",},
+					],
+				}, {
+					name: "LFSR_CNT_MODE",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "0=12-bit combined; 1=two 6-bit",},
+					],
+				}, {
+					name: "FIFO_PTR_RST",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "1=reset",},
+					],
+				}, {
+					name: "DT_ERR_PATTERN",
+					hi: 11, lo: 9,
+					description: [
+						{language: "english", text: "0=normal 1=HiZ 2=1 3=0 4=-1 5=CK4 6=half CK4",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 23. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr24",
+	leaves: [
+		{
+			access: "bios->gddr7_mr24",
+			name: "gddr7_mr24",
+			fancy_data: [
+				{
+					name: "LFSR_seed_lo",
+					hi: 9, lo: 0,
+					description: [
+						{language: "english", text: "lower 10 of 15-bit start value; see MR25[4:0]",},
+					],
+				}, {
+					name: "LFSR_address",
+					hi: 11, lo: 10,
+					description: [
+						{language: "english", text: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 24. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr25",
+	leaves: [
+		{
+			access: "bios->gddr7_mr25",
+			name: "gddr7_mr25",
+			fancy_data: [
+				{
+					name: "LFSR_seed_hi",
+					hi: 4, lo: 0,
+					description: [
+						{language: "english", text: "lower 10 of 15-bit start value; see MR24[9:0]",},
+					],
+				}, {
+					name: "RFU_9_5",
+					hi: 9, lo: 5,
+				}, {
+					name: "LFSR_address",
+					hi: 11, lo: 10,
+					description: [
+						{language: "english", text: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 25. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr26",
+	leaves: [
+		{
+			access: "bios->gddr7_mr26",
+			name: "gddr7_mr26",
+			fancy_data: [
+				{
+					name: "LFSR_SHIFT_SEL",
+					hi: 1, lo: 0,
+					description: [
+						{language: "english", text: "symbol offset; n*4 symbols",},
+					],
+				}, {
+					name: "LFSR_INV",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "symbol inversion; 0=not inverted",},
+					],
+				}, {
+					name: "DT_LANE_MASK",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "0 no masking",},
+					],
+				}, {
+					name: "RFU_7_4",
+					hi: 7, lo: 4,
+				}, {
+					name: "IO_ADDRESS",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "0..9=DQ; 10=DQE",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 26. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr27",
+	leaves: [
+		{
+			access: "bios->gddr7_mr27",
+			name: "gddr7_mr27",
+			fancy_data: [
+				{
+					name: "err_pulldown_offset",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "Two's Complement",},
+					],
+				}, {
+					name: "err_pullup_offset",
+					hi: 7, lo: 4,
+					description: [
+						{language: "english", text: "Two's Complement",},
+					],
+				}, {
+					name: "RFU_11_8",
+					hi: 11, lo: 8,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 27. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr28",
+	leaves: [
+		{
+			access: "bios->gddr7_mr28",
+			name: "gddr7_mr28",
+			fancy_data: [
+				{
+					name: "RFU_11_0",
+					hi: 11, lo: 0,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 28. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr29",
+	leaves: [
+		{
+			access: "bios->gddr7_mr29",
+			name: "gddr7_mr29",
+			fancy_data: [
+				{
+					name: "DQ_map_mode",
+					hi: 4, lo: 0,
+					description: [
+						{language: "english", text: "logical-to-physical; 0=disabled 16..25=DQ",},
+					],
+				}, {
+					name: "RFU_11_5",
+					hi: 11, lo: 5,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 29. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr30",
+	leaves: [
+		{
+			access: "bios->gddr7_mr30",
+			name: "gddr7_mr30",
+			fancy_data: [
+				{
+					name: "ECC_TM",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "ECC test mode; 0=disable",},
+					],
+				}, {
+					name: "ECC_VEC",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "ecc test vector; 0=codeword 0; 1=codeword 1",},
+					],
+				}, {
+					name: "ECC_PAR_SEL",
+					hi: 5, lo: 2,
+					description: [
+						{language: "english", text: "inject on parity bit 0=0..15=15",},
+					],
+				}, {
+					name: "ECC_PAR_EN",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "0=error injection disable",},
+					],
+				}, {
+					name: "ECC_PAR_RSVD",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "ECC_PAR_SEL is technically[7:2]",},
+					],
+				}, {
+					name: "ECC_2CH",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "ECC in 2ch mode; 0=first pass; 1=second",},
+					],
+				}, {
+					name: "RFU_11_9",
+					hi: 11, lo: 9,
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 30. low bits",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "gddr7_mr31",
+	leaves: [
+		{
+			access: "bios->gddr7_mr31",
+			name: "gddr7_mr31",
+			fancy_data: [
+				{
+					name: "PPR_guard_key",
+					hi: 7, lo: 0,
+					description: [
+						{language: "english", text: "Post Package Repair; 0xCF; 0x73; 0xBB; 0x3B",},
+					],
+				}, {
+					name: "RFU_10_8",
+					hi: 10, lo: 8,
+				}, {
+					name: "hPPR",
+					hi: 11, lo: 11,
+					description: [
+						{language: "english", text: "hard PPR; 0=disable",},
+					],
+				}, {
+					name: "ID_lo",
+					hi: 15, lo: 12,
+					description: [
+						{language: "english", text: "MR 31. low bits",},
+					],
+				},
+			],
+		},
+	],
+},
+
+
+{
 	c_type: "hbm_mr0",
 	leaves: [
 		{

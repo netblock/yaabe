@@ -2,12 +2,16 @@
 DDR1:
 Please refer to JESD 79 F.
 
-
 DDR2:
 Please refer to JESD 79-2 F.
 
-DDR3
+DDR3:
 Please refer to JESD 79-3 F.
+
+DDR4:
+Please refer to JESD 79-4 D. If unavailable consider Micron 16gb_ddr4_sdram.pdf
+For a pin map see union ddr4_mr_map
+
 
 
 GDDR2:
@@ -26,6 +30,9 @@ Please refer to JESD 212 C.01.
 GDDR6:
 Please refer to JESD 250 D. If unavailable consider,
 2204251615_Samsung-K4Z80325BC-HC14_C2920181.pdf
+
+GDDR7:
+Please refer to JESD 239.
 
 
 
@@ -168,6 +175,149 @@ union ddr3_mr3 {
 };
 
 
+
+union ddr4_mr_map {
+	uint32_t ddr4_mr_map;
+	struct { uint32_t
+		A0     :0-0 +1,
+		A1     :1-1 +1,
+		A2     :2-2 +1,
+		A3     :3-3 +1,
+		A4     :4-4 +1,
+		A5     :5-5 +1,
+		A6     :6-6 +1,
+		A7     :7-7 +1,
+		A8     :8-8 +1,
+		A9     :9-9 +1,
+		A10   :10-10 +1,
+		A11   :11-11 +1,
+		A12   :12-12 +1,
+		A13   :13-13 +1,
+		WE_n  :14-14 +1, // WE_n, CAS_n, RAS_n must be 0
+		CAS_n :15-15 +1, // WE_n, CAS_n, RAS_n must be 0
+		RAS_n :16-16 +1, // WE_n, CAS_n, RAS_n must be 0
+		A17   :17-17 +1, // 4Gbit, 8Gbit doesn't have A17, so 0 on 16Gbit.
+		BA0   :18-18 +1,
+		BA1   :19-19 +1,
+		BG0   :20-20 +1,
+		BG1   :21-21 +1, 
+		_pad  :31-22 +1; // 32-bit pad
+	};
+	struct { uint32_t
+		MR_data   :13-0 +1, // usable data bits
+		MR_zero_0 :17-14 +1, 
+		MR_select :20-18 +1,
+		MR_zero_1 :21-21 +1, // RFU, but all MR has it 0.
+		_pad2     :31-22 +1; // 32-bit pad
+	};
+};
+union ddr4_mr0 {
+	uint16_t ddr4_mr0;
+	struct { uint16_t
+		BL          :1-0 +1, // 0=BL8; 1=OTF BC4/BC8; 2=BC4
+		tCL_lo      :2-2 +1, // MR0[12,6:4,2] -> tCL[5:0]
+		burst_type  :3-3 +1, // 0=nibble sequential; 1=interleave
+		tCL_mid     :6-4 +1, // 0..7=9+n; 8=18 9=20 10=22 11=24 12=23 13=17 14=19 15=21 16=25 17=26 19=28 20=29 21=30 22=31 23=32
+		test_mode   :7-7 +1,
+		DLL_reset   :8-8 +1, // 1=reset
+		tWRtRTP_lo :11-9 +1, // auto-pre; MR0[13,11:9] -> tWRtRTP[3:0]
+		tCL_hi     :12-12 +1,
+		tWRtRTP_hi :13-13 +1, // tWR is 2x; tRTP: 0..5=5+n; 6=12 7=11 8=13 9=14
+		mr_zero    :16-14 +1;
+	};
+};
+union ddr4_mr1 {
+	uint16_t ddr4_mr1;
+	struct { uint16_t
+		DLL        :0-0 +1, // 1=enabled
+		ODI        :2-1 +1, // drive strength; 0=RZQ/7; 1=/5; (2: micron: /6)
+		AL         :4-3 +1, // additive latency; 0=0;  1=CL-1; 2=CL-2
+		RXCTLE_lo  :6-5 +1, // MR1[13,6:5] -> RX_CTLE_CTRL[2:0]
+		WL         :7-7 +1, // write leveling; 0=disabled; 1=enabled
+		RTT_NOM   :10-8 +1, // 0=off; 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7
+		TDQS      :11-11 +1, // DQS termination (x8 only); 0=disabled; 1=enabled
+		Qoff      :12-12 +1, // output buffer disabled; 0=normal; 1=ODI/RTT off
+		RXCTLE_hi :13-13 +1, // MR1[13,6:5] -> RX_CTLE_CTRL[2:0]
+		mr_zero   :16-14 +1;
+	};
+};
+union ddr4_mr2 {
+	uint16_t ddr4_mr2;
+	struct { uint16_t
+		RFU_2_0  :2-0 +1,
+		tCWL     :5-3 +1, // 1t preamble: 0=9 1=10 2=11 3=12 4=14 5=16 6=18 7=20; 2t pramble: 14..20
+		LPASR    :7-6 +1, // auto refresh; 0=normal 1=reduced 1=extended 3=auto
+		RFU_8    :8-8 +1,
+		RTT_WR  :11-9 +1, // 0=disabled 1=RZQ/2 2=/1 3=HiZ 4=/3
+		WRCRC   :12-12 +1, // write CRC; 0=disabled
+		RFU_13  :13-13 +1,
+		mr_zero :16-14 +1;
+	};
+};
+union ddr4_mr3 {
+	uint16_t ddr4_mr3;
+	struct { uint16_t
+		MPR_page    :1-0 +1, // multi-purpose register; 0=0..3=3
+		MPR_access  :2-2 +1, // 0=normal; 1=data from MPR
+		GDM         :3-3 +1, // 0=normal; 1=geared
+		PDA         :4-4 +1, // per-dram addressability; 0=normal; 1=enable
+		temp_sensor :5-5 +1, // 0=disabled
+		FGR         :8-6 +1, // 0=1x 1=2x 3=4x; 5=OTF 1x/2x; 6=OTF 1x/4x
+		tWCL       :10-9 +1, // when CRC, DM are both enabled; 0..2=4+n
+		MPR_format :12-11 +1, // read format; 0=serial 1=parallell 2=staggered
+		RFU_13     :13-13 +1,
+		mr_zero    :16-14 +1;
+	};
+};
+union ddr4_mr4 {
+	uint16_t ddr4_mr4;
+	struct { uint16_t
+		MBIST_PPR            :0-0 +1, // self-contained PPR; 0=disabled
+		max_power_savings    :1-1 +1, // lossy powersave; 0=normal; 1=enabled
+		TCR_range            :2-2 +1, // 0=normal; 1=extended
+		TCR                  :3-3 +1, // temp controlled refresh; 0=disabled
+		internal_vref        :4-4 +1, // for Vrefdq training; 0=disabled
+		soft_PPR             :5-5 +1, // soft post-package-repair; 0=disabled
+		command_address_lat  :8-6 +1, // power savings;  0=0 1=3 2=4 3=5 4=6 5=8
+		refresh_abort_mode   :9-9 +1, // 0=disabled
+		read_preamble_train :10-10 +1, // o=disabled
+		read_preamble       :11-11 +1, // 0=1tCK 1=2tCK
+		write_preamble      :12-12 +1, // 0=1tCK; 1=2tCK, tCWL must be >9
+		hard_PPR            :13-13 +1, // hard post-package-repair; 0=disabled
+		mr_zero             :16-14 +1;
+	};
+};
+union ddr4_mr5 {
+	uint16_t ddr4_mr5;
+	struct { uint16_t
+		CA_parity       :2-0 +1, // 0=off; n-clocks: 1=4 2=5 3=6
+		CRC_error       :3-3 +1, // 0=clear; 1=error
+		CA_parity_error :4-4 +1, // 0=clear; 1=error
+		ODT_powerdown   :5-5 +1, // 0=buffer enabled; 1=disabled
+		RTT_Park        :8-6 +1, // 0=disabled 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7
+		CA_parity_stop  :9-9 +1, // CA parity stops on error; 0=stop 1=continue
+		data_maask     :10-10 +1, // write data mask (x8/x16 only); 0=disabled 
+		read_DBI       :11-11 +1, // data bus inversion; 0=disabled
+		write_DBI      :12-12 +1, // data bus inversion; 0=disabled
+		RFU_13         :13-13 +1,
+		mr_zero        :16-14 +1;
+	};
+};
+union ddr4_mr6 {
+	uint16_t ddr4_mr6;
+	struct { uint16_t
+		vref_cal_val   :5-0 +1, // 0..50 = (n/154 + range) x Vddq
+		vref_cal_range :6-6 +1, // 0=0.6 (range 1); 1=0.45 (range 2)
+		vref_cal       :7-7 +1, // internal Vrefdq gen; 0=disable; 1=enable
+		RFU_9_8        :9-8 +1,
+		data_rate     :12-10 +1, // 0:<=1333; 1:<=1866; 2:<=2400; 3:<=2666; 4:<=3200
+		RFU_13        :13-13 +1,
+		mr_zero       :16-14 +1;
+	};
+};
+
+
+
 union gddr2_mr0 {
 	uint16_t gddr2_mr0;
 	struct { uint16_t
@@ -208,7 +358,6 @@ union gddr2_emr2 {
 		rsvd_15_12      :15-12 +1;
 	};
 };
-
 union gddr3_mr0 {
 	uint16_t gddr3_mr0;
 	struct { uint16_t
@@ -289,7 +438,6 @@ union gddr4_emr3 {
 		ID           :15-13 +1; // EMR 3
 	};
 };
-
 
 
 union gddr5_mr0 {
@@ -664,9 +812,341 @@ union gddr6_mr15 {
 		MRS_to_chan_A :0-0 +1, // MRS to the two channels for individual config
 		MRS_to_chan_B :1-1 +1, // 0=unblocked 1=blocked
 		CA_training   :3-2 +1, // 0=off 1=rising of CK, 2=falling, 3=CABI_n,CA10
-		unused        :11-4 +1, // defined to be absent
-		ID            :15-12 +1; // MR 15
+		unused       :11-4 +1, // defined to be absent
+		ID           :15-12 +1; // MR 15
 	};
+};
+
+
+
+union gddr7_mr0 {
+	uint16_t gddr7_mr0; // raw data
+	struct { uint16_t
+		CABI      :0-0 +1, // CA bus inversion; 0=enable
+		rsvd_2_1  :2-1 +1,
+		RDCRC     :3-3 +1, // Read CRC; 0=disable
+		WRCRC     :4-4 +1, // Write CRC; 0=disable
+		SLX2CAT   :5-5 +1, // auto CA training after sleepmode exit; 0=enable
+		SRSLX2CAT :6-6 +1, // same idea but for self-refresh sleepmode
+		testmode  :7-7 +1, // Test mode; behavior is vendor specific
+		PAM3      :8-8 +1, // PAM3 for DQ/DQE; 0=NRZ 1=PAM3
+		severity  :9-9 +1, // ECC reporting; 0=disable
+		poison   :10-10 +1, // ECC poisoning; 0=disable
+		FD_flag  :11-11 +1, // postpone MR10~15 until sleep-mode entry; 0=enable
+		ID_lo    :15-12 +1; // MR 0. low bits
+    };
+};
+union gddr7_mr1 {
+    uint16_t gddr7_mr1; // raw data
+    struct { uint16_t
+		RL      :5-0 +1, // tCL; 10=10..47=47
+		RFU_7_6 :7-6 +1,
+		DQERL  :11-8 +1, // additionl latency; 0=0..12=12
+        ID_lo  :15-12 +1; // MR 1. low bits
+    };
+};
+union gddr7_mr2 {
+    uint16_t gddr7_mr2; // raw data
+    struct { uint16_t
+		WL         :4-0 +1, // tCWL; 6=6..31=31
+		RFU_6_5    :6-5 +1,
+		WRCRC2ERR :11-7 +1, // write error latency; 10=10..31=31
+        ID_lo    :15-12 +1; // MR 2. low bits
+    };
+};
+union gddr7_mr3 {
+    uint16_t gddr7_mr3; // raw data
+    struct { uint16_t
+		tRAS      :6-0 +1, // 4=4..80=80
+		RFU_11_7 :11-7 +1,
+        ID_lo    :15-12 +1; // MR 3. low bits
+    };
+};
+union gddr7_mr4 {
+    uint16_t gddr7_mr4; // raw data
+    struct { uint16_t
+		WR     :6-0 +1, // write recovery for autopre; 4=4..80=80
+		RFU_7  :7-7 +1,
+		RTPSB :11-8 +1, // tRTP for autopre; 4=4..15=15
+        ID_lo :15-12 +1; // MR 4. low bits
+    };
+};
+union gddr7_mr5 {
+    uint16_t gddr7_mr5; // raw data
+    struct { uint16_t
+		DQ_drvstr  :1-0 +1, // DQ/E/RCK; 0=40,1=80; 2,3=vendor
+		DQ_term    :3-2 +1, // DQ/E; 0=off; 1=40,2=48,3=80
+		RFU_4      :4-4 +1,
+		ERR_drvstr :5-5 +1, // ERR pin; 0=40,1=80
+		RFU_6      :6-6 +1,
+		CAL_UPD    :8-7 +1, // 0=all; 1=dis for WCK; 2=rsvd; 3=disable all
+		SEV2ERR    :9-9 +1, // error signaling; 0=disable
+		DQE_HZ    :10-10 +1, // DQE in high-Z; 0=disable
+		RFU_11    :11-11 +1,
+        ID_lo     :15-12 +1; // MR 5. low bits
+    };
+};
+union gddr7_mr6 {
+    uint16_t gddr7_mr6; // raw data
+    struct { uint16_t
+		DQ_pulldown_leg1_offset :3-0 +1, // DQ/E/RCK; Two's Complement
+		DQ_pulldown_leg2_offset :7-4 +1, // DQ/E/RCK; Two's Complement
+		RFU_11_8               :11-8 +1,
+        ID_lo                  :15-12 +1; // MR 6. low bits
+    };
+};
+union gddr7_mr7 {
+    uint16_t gddr7_mr7; // raw data
+    struct { uint16_t
+		DQ_pullup_leg1_offset  :3-0 +1, // DQ/E/RCK; Two's Complement
+		DQ_pullup_leg2_offset  :7-4 +1, // DQ/E/RCK; Two's Complement
+		DQ_termination_offset :11-8 +1, // DQ/E; Two's Complement
+        ID_lo                 :15-12 +1; // MR 7. low bits
+    };
+};
+union gddr7_mr8 {
+    uint16_t gddr7_mr8; // raw data
+    struct { uint16_t
+		ARFM          :1-0 +1, // management level; 0=default; 1=A,2=B,3=C
+		DRFM          :2-2 +1, // directed management; 0=disable
+		BRC           :4-3 +1, // bounded config; 0=1,2; 1=12,3; 2=123,4; 3=rsvd
+		DCC           :6-5 +1, // duty cycle; 0=disable;1=start;2=rsvd;3=hold
+		self_refresh :10-9 +1, // 0=fixed; 1,2=vendor; 3=temp-controlled 
+		hibernate    :11-11 +1, // hibernate refresh sleep; 0=disable
+        ID_lo        :15-12 +1; // MR 8. low bits
+    };
+};
+union gddr7_mr9 {
+    uint16_t gddr7_mr9; // raw data
+    struct { uint16_t
+		RCKMODE  :1-0 +1, // 0=disable; 1=with read; 2=with RCKSTRT; 3=always on
+		RCK_LS   :2-2 +1, // pramble; 0=0,1=2 half-freq RCK cycles
+		RCKEN    :7-3 +1, // enable latency; n+6; 0=6..31=37
+		RFU_8    :8-8 +1,
+		RCKSTOP :11-9 +1, // stop latency; n*2+10; 0=10,1=12..7=24
+        ID_lo   :15-12 +1; // MR 9. low bits
+    };
+};
+union gddr7_mr10 {
+    uint16_t gddr7_mr10; // raw data
+    struct { uint16_t
+		RFU_11_0 :11-0 +1,
+        ID_lo    :15-12 +1; // MR 10. low bits
+    };
+};
+union gddr7_mr11 {
+    uint16_t gddr7_mr11; // raw data
+    struct { uint16_t
+		RFU_11_0 :11-0 +1,
+        ID_lo    :15-12 +1; // MR 11. low bits
+    };
+};
+union gddr7_mr12 {
+    uint16_t gddr7_mr12; // raw data
+    struct { uint16_t
+		VDD_range  :1-0 +1, // progressively lowers, 0>1>2>3
+		VDDQ_range :3-2 +1, // progressively lowers, 0>1>2>3
+		WCK_range  :8-4 +1, // 0:(Fwck<=Fwcknrz); 1..24: (n-1)/2 <=f< n/2 GHz
+		RFU_9      :9-9 +1,
+		RCKTYPE   :10-10 +1, // 0=single (RCK_c is HiZ), 1=differential
+		RCKLEVEL  :11-11 +1, // PAM3 level; 0=full swing (+-1); 1=half (+1/0)
+        ID_lo     :15-12 +1; // MR 12. low bits
+    };
+};
+union gddr7_mr13 {
+    uint16_t gddr7_mr13; // raw data
+    struct { uint16_t
+		CA_termination   :2-0 +1, // 0=CA1 latch; 1=48; 2=60, 3=96, 5=80, 7=off
+		CA_term_offset   :5-3 +1, // Two's Complement
+		WCK_termination  :8-6 +1, // 0=CA2 latch; 1=48; 2=60, 3=96, 5=80, 7=off
+		WCK_term_offset :11-9 +1, // Two's Complement
+        ID_lo           :15-12 +1; // MR 13. low bits
+    };
+};
+union gddr7_mr14 {
+    uint16_t gddr7_mr14; // raw data
+    struct { uint16_t
+		VREFCA       :6-0 +1, // 0..95: (98+n)/200 x VDDQ; default=47=.725
+		DFE_CA      :10-7 +1, // DFE; 0=+-0..15=+-15 VREFCA steps
+		half_VREFCA :11-11 +1, // 0=programmed; 1=0.5
+        ID_lo       :15-12 +1; // MR 14. low bits
+    };
+};
+union gddr7_mr15 {
+    uint16_t gddr7_mr15; // raw data
+    struct { uint16_t
+		CAPAR         :0-0 +1, // CA parity; 0=disable
+		CAPARBLK      :1-1 +1, // parity blocking; 0=dis; must be 0 if CAPAR==0
+		CSP_FB        :2-2 +1, // CSP command feedback; 0=default
+		CAPARBLK_LAT  :5-3 +1, // parity error latency; 0=0..4=4
+		CAPARBLK_ctrl :6-6 +1, // 0=implicit CAPARBLK_LAT
+		RFU_7         :7-7 +1,
+		CAPAR2ERR    :11-8 +1, // parity error latency; 0=variable; 1=1..15=15
+        ID_lo        :15-12 +1; // MR 15. low bits
+    };
+};
+union gddr7_mr16 {
+    uint16_t gddr7_mr16; // raw data
+    struct { uint16_t
+		VREFD_L_2 :6-0 +1, // PAM3 low; NRZ ref; (158+n)/360 * VDDQ; default=67
+		RFU_7     :7-7 +1,
+		L_2_addr :11-8 +1, // 0..9=DQ,10=DQE (PAM3); 12=DQ[7:0]/E (NRZ); 14=offset all; 15=all
+        ID_lo    :15-12 +1; // MR 16. low bits
+    };
+};
+union gddr7_mr17 {
+    uint16_t gddr7_mr17; // raw data
+    struct { uint16_t
+		VREFD_H :6-0 +1, // PAM3 low; (230+n)/360 * VDDQ; default=85
+		RFU_7   :7-7 +1,
+		H_addr :11-8 +1, // 0..9=DQ,10=DQE (PAM3); 14=offset all; 15=all
+        ID_lo  :15-12 +1; // MR 17. low bits
+    };
+};
+union gddr7_mr18 {
+    uint16_t gddr7_mr18; // raw data
+    struct { uint16_t
+		DQ_DQE_CTLE   :3-0 +1, // 0=off; 1=1..15=15 or max
+		RFU_5_4       :5-4 +1,
+		CTLE_RX_addr  :7-6 +1, // 0=both; 1=upper; 2=lower
+		CTLE_IO_addr :11-8 +1, // 0..9=DQ; 10=DQE; 15=all
+        ID_lo        :15-12 +1; // MR 18. low bits
+    };
+};
+union gddr7_mr19 {
+    uint16_t gddr7_mr19; // raw data
+    struct { uint16_t
+		DQ_DQE_DFE   :3-0 +1, // 0=off; 1=1..15=15 or max (1-tap)
+		RFU_5_4      :5-4 +1,
+		DFE_RX_addr  :7-6 +1, // 0=both; 1=upper; 2=lower
+		DFE_IO_addr :11-8 +1, // 0..9=DQ; 10=DQE; 15=all
+        ID_lo       :15-12 +1; // MR 19. low bits
+    };
+};
+union gddr7_mr20 {
+    uint16_t gddr7_mr20; // raw data
+    struct { uint16_t
+		scramble_code :7-0 +1, // 8-bit or 32-bit; 32UI x 8
+		RFU_8         :8-8 +1,
+		byte_address :11-9 +1, // 0..3=byte; 7=all 
+        ID_lo        :15-12 +1; // MR 20. low bits
+    };
+};
+union gddr7_mr21 {
+    uint16_t gddr7_mr21; // raw data
+    struct { uint16_t
+		DQ_DQE_TX_EQ :3-0 +1, // 0=off; 1=1..15=15 or max
+		RFU_5_4      :7-4 +1,
+		TX_EQ_addr  :11-8 +1, // 0..9=DQ; 10=DQE; 15=all
+        ID_lo       :15-12 +1; // MR 21. low bits
+    };
+};
+union gddr7_mr22 {
+    uint16_t gddr7_mr22; // raw data
+    struct { uint16_t
+		RFU_7_0        :7-0 +1,
+		ECS_LOG_RULES  :8-8 +1, // 0=maintain; 1=overwrite
+		ECS_FLAG_RESET :9-9 +1, // 0=disable; 1=reset (self-clear)
+		ECS_RESET     :10-10 +1, // 0=disable; 1=reset (self-clear)
+		ECS_ON        :11-11 +1, // 0=disable
+        ID_lo         :15-12 +1; // MR 22. low bits
+    };
+};
+union gddr7_mr23 {
+    uint16_t gddr7_mr23; // raw data
+    struct { uint16_t
+		DT_LFSR         :0-0 +1, // data training mode; 0=read fifo; 1=LFSR
+		LFSR_TYPE       :1-1 +1, // polynomial selection; 0=PRBS15; 1=PRBS11
+		LFSTR_CNT_RESET :2-2 +1, // per-lane error counter; 1=reset
+		LFSTR_RST_MODE  :3-3 +1, // 0=auto after RDWTEC; 1=manual
+		DT_EYE_MASK     :5-4 +1, // 0=no masking; 1=upper; 2=lower
+		CAOSC           :6-6 +1, // CA bus oscillator; 0=disaable
+		LFSR_CNT_MODE   :7-7 +1, // 0=12-bit combined; 1=two 6-bit
+		FIFO_PTR_RST    :8-8 +1, // 1=reset
+		DT_ERR_PATTERN :11-9 +1, // 0=normal 1=HiZ 2=1 3=0 4=-1 5=CK4 6=half CK4
+        ID_lo          :15-12 +1; // MR 23. low bits
+    };
+};
+union gddr7_mr24 {
+    uint16_t gddr7_mr24; // raw data
+    struct { uint16_t
+		LFSR_seed_lo  :9-0 +1, // lower 10 of 15-bit start value; see MR25[4:0]
+		LFSR_address :11-10 +1, // 0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E
+        ID_lo        :15-12 +1; // MR 24. low bits
+    };
+};
+union gddr7_mr25 {
+    uint16_t gddr7_mr25; // raw data
+    struct { uint16_t
+		LFSR_seed_hi  :4-0 +1, // lower 10 of 15-bit start value; see MR24[9:0]
+		RFU_9_5       :9-5 +1,
+		LFSR_address :11-10 +1, // 0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E
+        ID_lo        :15-12 +1; // MR 25. low bits
+    };
+};
+union gddr7_mr26 {
+    uint16_t gddr7_mr26; // raw data
+    struct { uint16_t
+		LFSR_SHIFT_SEL :1-0 +1, // symbol offset; n*4 symbols
+		LFSR_INV       :2-2 +1, // symbol inversion; 0=not inverted
+		DT_LANE_MASK   :3-3 +1, // 0 no masking
+		RFU_7_4        :7-4 +1,
+		IO_ADDRESS    :11-8 +1, // 0..9=DQ; 10=DQE
+        ID_lo         :15-12 +1; // MR 26. low bits
+    };
+};
+union gddr7_mr27 {
+    uint16_t gddr7_mr27; // raw data
+    struct { uint16_t
+		err_pulldown_offset :3-0 +1, // Two's Complement
+		err_pullup_offset   :7-4 +1, // Two's Complement
+		RFU_11_8           :11-8 +1,
+        ID_lo              :15-12 +1; // MR 27. low bits
+    };
+};
+union gddr7_mr28 {
+    uint16_t gddr7_mr28; // raw data
+    struct { uint16_t
+		RFU_11_0 :11-0 +1,
+        ID_lo    :15-12 +1; // MR 28. low bits
+    };
+};
+union gddr7_mr29 {
+    uint16_t gddr7_mr29; // raw data
+    struct { uint16_t
+		DQ_map_mode :4-0 +1, //logical-to-physical; 0=disabled 16..25=DQ
+		RFU_11_5   :11-5 +1,
+        ID_lo      :15-12 +1; // MR 29. low bits
+    };
+};
+union gddr7_mr30 {
+    uint16_t gddr7_mr30; // raw data
+    struct { uint16_t
+		ECC_TM       :0-0 +1, // ECC test mode; 0=disable
+		ECC_VEC      :1-1 +1, // ecc test vector; 0=codeword 0; 1=codeword 1
+		ECC_PAR_SEL  :5-2 +1, // inject on parity bit 0=0..15=15
+		ECC_PAR_EN   :6-6 +1, // 0=error injection disable
+		ECC_PAR_RSVD :7-7 +1, // ECC_PAR_SEL is technically[7:2]
+		ECC_2CH      :8-8 +1, // ECC in 2ch mode; 0=first pass; 1=second
+		RFU_11_9    :11-9 +1,
+        ID_lo       :15-12 +1; // MR 30. low bits
+    };
+};
+union gddr7_mr31 {
+    uint16_t gddr7_mr31; // raw data
+    struct { uint16_t
+		PPR_guard_key :7-0 +1, // Post Package Repair; 0xCF; 0x73; 0xBB; 0x3B
+		RFU_10_8     :10-8 +1,
+		hPPR        :11-11 +1, // hard PPR; 0=disable
+        ID_lo       :15-12 +1; // MR 31. low bits
+    };
+};
+union gddr7_mr32 {
+    uint16_t gddr7_mr32; // raw data
+    struct { uint16_t
+		RFU   :11-0 +1, // MR32~47 is RFU. MR48~63 is vendor-specific
+        ID_lo :15-12 +1; // MR 32~63. low bits
+    };
 };
 
 
@@ -797,6 +1277,7 @@ union hbm_mr15 {
 // HBM2 uses HBM1
 
 
+
 union hbm3_mr0 {
 	uint8_t hbm3_mr0;
 	struct { uint8_t
@@ -925,6 +1406,8 @@ union hbm3_mr15 {
 		reserved_7_7 :7-7 +1; // reserved
 	};
 };
+
+
 
 #pragma pack(pop) // restore old packing
 
