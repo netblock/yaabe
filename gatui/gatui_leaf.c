@@ -171,18 +171,27 @@ gatui_leaf_emit_val_changed(
 
 GATUILeaf*
 gatui_leaf_new(
-		atui_leaf* const leaf
+		atui_leaf* const leaf,
+		GtkSelectionModel** enum_models_cache
 		) {
 	g_return_val_if_fail(leaf->self == NULL, NULL);
 	GATUILeaf* const self = g_object_new(GATUI_TYPE_LEAF, NULL);
 	self->atui = leaf;
 	leaf->self = self;
 
+	if (leaf->enum_options) {
+		self->enum_model = ( // the index is the same in both arrays
+			enum_models_cache[leaf->enum_options - ATUI_ENUM_ARRAY]
+		);
+		g_object_ref(self->enum_model);
+	}	
+
 	if (leaf->num_child_leaves) {
 		GListStore* const child_list = g_list_store_new(GATUI_TYPE_LEAF);
 		GListModel* const child_model = G_LIST_MODEL(child_list);
 		atui_leaves_to_gliststore( // handles ATUI_SUBONLY
-			child_list, leaf->child_leaves, leaf->num_child_leaves
+			child_list, leaf->child_leaves, leaf->num_child_leaves,
+			enum_models_cache
 		);
 
 		uint16_t const num_children = g_list_model_get_n_items(child_model);
@@ -396,27 +405,6 @@ gatui_leaf_get_enum_menu_selection_model(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	atui_leaf* const leaf = self->atui;
 	g_return_val_if_fail(NULL != leaf->enum_options, NULL);
-
-	if (NULL == self->enum_model) {
-		GListStore* list = g_list_store_new(G_TYPE_OBJECT);
-		struct atui_enum const* const atuienum = leaf->enum_options;
-		GObject* gobj_child;
-
-		for (uint8_t i=0; i < atuienum->num_entries; i++) {
-			gobj_child = g_object_new(G_TYPE_OBJECT, NULL);
-			g_object_set_data(gobj_child, "enum",
-				(struct atui_enum_entry*) &(atuienum->enum_array[i]) // de-const
-			);
-			g_list_store_append(list, gobj_child);
-			g_object_unref(gobj_child);
-		}
-		GtkSingleSelection* const enum_model = gtk_single_selection_new(
-			G_LIST_MODEL(list)
-		);
-		gtk_single_selection_set_can_unselect(enum_model, true);
-		gtk_single_selection_set_autoselect(enum_model, false);
-		self->enum_model = GTK_SELECTION_MODEL(enum_model);
-	}
 
 	return self->enum_model;
 }

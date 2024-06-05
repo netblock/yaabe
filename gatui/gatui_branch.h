@@ -13,7 +13,8 @@ G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GObject)
 
 GATUIBranch*
 gatui_branch_new_tree( // including all of its descendants and leaves
-		atui_branch* branch
+		atui_branch* branch,
+		GtkSelectionModel** enum_models_cache
 		);
 
 GListModel* // basic model for GtkTreeListModelCreateModelFunc

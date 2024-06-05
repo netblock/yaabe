@@ -12,12 +12,13 @@ void
 atui_leaves_to_gliststore( // for GATUILeaves generation
 		GListStore* list,
 		atui_leaf* leaves,
-		uint16_t num_leaves
+		uint16_t num_leaves,
+		GtkSelectionModel** enum_models_cache
 		);
 
 void
 gatui_leaf_emit_val_changed( // single-signal multi-user alert network
-		GATUILeaf* const self
+		GATUILeaf* self
 		);
 
 #endif

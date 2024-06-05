@@ -35,7 +35,10 @@ C preprocessor side of ATUI table generation
 	_##atomstruct##_atui
 
 // enum access
-#define ATUI_ENUM(enum_name) _atui_enum_##enum_name
+// ATUI_ENUM_ARRAY_LENGTH is predefined
+#define ATUI_ENUM_ARRAY _atui_enumarray
+#define ATUI_ENUM_INDEX(enum_name) _atui_enum_index_##enum_name
+#define ATUI_ENUM(enum_name) ATUI_ENUM_ARRAY[ATUI_ENUM_INDEX(enum_name)]
 
 /***************************** PREPROCESSOR TOOLS *****************************/
 

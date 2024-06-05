@@ -85,13 +85,23 @@ leaves_treelist_generate_children(
 
 GATUIBranch*
 gatui_branch_new_tree(
-		atui_branch* const branch
+		atui_branch* const branch,
+		GtkSelectionModel** enum_models_cache
 		) {
 	assert(NULL == branch->self);
 	g_return_val_if_fail(branch->self == NULL, NULL);
 	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH, NULL);
 	self->atui = branch;
 	branch->self = self;
+
+	bool has_malloced = false;
+	if (NULL == enum_models_cache) {
+		has_malloced = true;
+		enum_models_cache = malloc(
+			ATUI_ENUM_ARRAY_LENGTH * sizeof(GtkSingleSelection*)
+		);
+		generate_enum_models_cache(enum_models_cache);
+	}
 
 	uint8_t const num_branches = branch->num_branches;
 	if (num_branches) {
@@ -100,7 +110,7 @@ gatui_branch_new_tree(
 		for (uint8_t i = 0; i < num_branches; i++) {
 			assert(branch->child_branches[i]);
 			self->child_branches[i] = gatui_branch_new_tree(
-				branch->child_branches[i]
+				branch->child_branches[i], enum_models_cache
 			);
 			assert(self->child_branches[i]);
 		}
@@ -109,7 +119,7 @@ gatui_branch_new_tree(
 	if (branch->leaf_count) {
 		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
 		atui_leaves_to_gliststore(
-			leaf_list, branch->leaves, branch->leaf_count
+			leaf_list, branch->leaves, branch->leaf_count, enum_models_cache
 		);
 		GListModel* const leaf_list_model = G_LIST_MODEL(leaf_list);
 
@@ -140,6 +150,11 @@ gatui_branch_new_tree(
 	}
 
 	self->capsule_type = g_variant_type_new("ay");
+
+	if (has_malloced) {
+		unref_enum_models_cache(enum_models_cache);
+		free(enum_models_cache);
+	}
 
 	return self;
 }

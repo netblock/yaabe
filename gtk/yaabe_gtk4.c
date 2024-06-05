@@ -25,6 +25,8 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* reload_button;
 
 	char8_t* pathbar_string;
+
+	GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
 } yaabegtk_commons;
 
 // struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
@@ -288,7 +290,8 @@ create_root_model(
 // Generate the very first model, of the tippy top of the tree, for the
 // branches pane
 	GATUIBranch* const root = gatui_branch_new_tree(
-		commons->atomtree_root->atui_root
+		commons->atomtree_root->atui_root,
+		commons->enum_models_cache
 	);
 	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
 	g_list_store_append(base_model, root);
@@ -2212,6 +2215,7 @@ yaabe_gtk(
 		) {
 	yaabegtk_commons commons = {0};
 	commons.atomtree_root = *atree;
+	generate_enum_models_cache(commons.enum_models_cache);
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(commons.yaabe_gtk, "activate",
@@ -2223,6 +2227,7 @@ yaabe_gtk(
 
 	*atree = commons.atomtree_root;
 	g_object_unref(commons.yaabe_gtk);
+	unref_enum_models_cache(commons.enum_models_cache);
 
 	return status;
 }

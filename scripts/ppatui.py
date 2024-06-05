@@ -192,13 +192,34 @@ def enum_to_h(
 #ifndef %s_H
 #define %s_H
 
+extern struct atui_enum const _atui_enumarray[];
+
 """
-	enum_template = "extern struct atui_enum const ATUI_ENUM(%s);\n"
+	enumarray_indicies_set_template = """\
+enum enumarray_indicies_set {
+%s\
+	ATUI_ENUM_ARRAY_LENGTH
+};
+"""
+	enum_index_entry_template = "\tATUI_ENUM_INDEX(%s) = %u,\n"
 	header_end = "\n#endif\n"
-	out_text = header_header % (fname.upper(), fname.upper())
-	for enum in atui_data["enums"]:
-		out_text += enum_template % enum["name"]
-	return out_text + header_end
+
+	enums = atui_data["enums"]
+	num_enums = len(enums)
+
+	i = 0
+	indicies = ""
+	while i < num_enums:
+		enum = enums[i]
+		indicies += enum_index_entry_template % (enum["name"], i)
+		i += 1
+
+	out_text = (
+		header_header % (fname.upper(), fname.upper())
+		+ enumarray_indicies_set_template % indicies
+		+ header_end
+	)
+	return out_text
 
 def enum_to_c(
 		atui_data:dict,
@@ -212,33 +233,40 @@ def enum_to_c(
 #include "atui.h"
 
 """
-	enum_entry_assert_template = """\
-"""
-	enum_template = """\
-static_assert(%u <= UINT8_MAX);
-struct atui_enum const ATUI_ENUM(%s) = {
-	.name_length = sizeof(u8"%s") - 1,
-	.name = u8"%s",
-	.num_entries = %u,
+	enumarray_template = """\
+struct atui_enum const _atui_enumarray[] = {
 %s\
-	.enum_array = (struct atui_enum_entry const[]) {
-%s\
-	},
 };
 
 """
-	enum_entry_template = """\
-		{
-			.name = u8\"%s\",
-			.val = %s,
-			.name_length = sizeof(u8"%s") - 1,
+	enum_template = """\
+	{
+		.name_length = %u,
+		.name = u8"%s",
+		.num_entries = %u,
+%s\
+		.enum_array = (struct atui_enum_entry const[]) {
 %s\
 		},
+	},
+"""
+	enum_entry_template = """\
+			{
+				.name = u8\"%s\",
+				.val = %s,
+				.name_length = %u,
+%s\
+			},
+"""
+	enum_entry_assert_template = """\
+"""
+	enum_assert_template = """\
+static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 """
 
-	out_text = cfile_header
-	enum_entries = ""
-	enum_entries_asserts = ""
+	# main meat
+	enum_sets = "" # _atui_enumarray members
+	enum_entries = "" #  struct atui_enum_entry
 	entry_name = ""
 	descr_text = ""
 	for enum in atui_data["enums"]:
@@ -248,22 +276,35 @@ struct atui_enum const ATUI_ENUM(%s) = {
 			entry_name = entry["name"]
 			#out_text += enum_entry_assert_template % entry_name
 			if "description" in entry:
-				descr_text = description_to_text(entry["description"], "\t\t\t")
+				descr_text = description_to_text(
+					entry["description"], "\t\t\t\t"
+				)
 			else:
 				descr_text = ""
 			enum_entries += enum_entry_template % (
-				entry_name, entry_name, entry_name, descr_text
+				entry_name, entry_name, len(entry_name), descr_text
 			)
 
 		if "description" in enum:
-			descr_text = description_to_text(enum["description"], "\t")
+			descr_text = description_to_text(enum["description"], "\t\t")
 		else:
 			descr_text = ""
-		out_text += enum_template % (
-			len(enum["constants"]), # assert
-			enum["name"], enum["name"], enum["name"], len(enum["constants"]),
+		enum_sets += enum_template % (
+			len(enum["name"]), enum["name"], len(enum["constants"]),
 			descr_text, enum_entries
 		)
+
+	#asserts
+	enum_asserts = ""
+	enum_entries_asserts = ""
+	#for enum in atui_data["enums"]:
+	#	enum_asserts += enum_assert_template % enum["name"]
+
+	out_text = (
+		cfile_header
+		+ (enumarray_template % enum_sets)
+		+ enum_asserts
+	)
 	return out_text
 
 
@@ -537,7 +578,7 @@ def leaf_to_subleaf(
 + child_indent + ".dynarray_length = %s,\n"
 + child_indent + ".deferred_start_array = %s,\n"
 + child_indent + ".numleaves = %u,\n"
-+ child_indent + ".enum_taglist = _PPATUI_NULLPTR(ATUI_ENUM(%s)),\n"
++ child_indent + ".enum_taglist = %s,\n"
 + child_indent + ".sub_leaves = (atui_leaf const[]) {\n"
 + "%s"
 + child_indent + "},\n"
@@ -550,19 +591,23 @@ def leaf_to_subleaf(
 			access_meta = leaf.access_meta # direct array
 		else:
 			access_meta = leaf.fancy_data["deferred"]+"[0]" # array of pointers
+		if leaf.fancy_data["enum"] == "ATUI_NULL":
+			enum_taglist = "NULL"
+		else:
+			enum_taglist = "&(ATUI_ENUM(%s))" % leaf.fancy_data["enum"]
 		bounds_vals = (
 			"sizeof(%s[0])" % access_meta,
 			leaf.fancy_data["count"],
 			str(not leaf.access_meta).lower(),
 			len(leaf.fancy_data["pattern"]),
-			leaf.fancy_data["enum"],
+			enum_taglist,
 			leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
 		)
 	elif leaf.fancy == ATUI_BITFIELD:
 		bounds_vals = (
 			"0", "0", "0",
 			len(leaf.fancy_data),
-			"ATUI_NULL",
+			"NULL",
 			leaves_to_text(leaf.fancy_data, child_indent+"\t"),
 		)
 

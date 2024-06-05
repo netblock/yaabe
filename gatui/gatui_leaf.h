@@ -13,7 +13,8 @@ G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GObject)
 
 GATUILeaf*
 gatui_leaf_new( // including all of is subleaves
-		atui_leaf* leaf
+		atui_leaf* leaf,
+		GtkSelectionModel** enum_models_cache
 		);
 
 GListModel* // for GtkTreeListModelCreateModelFunc
