@@ -76,8 +76,6 @@ destroy_atomtree_with_gtk(
 		) {
 // Free and unref
 	if (atree) {
-		assert(atree->atui_root->self);
-		g_object_unref(atree->atui_root->self);
 		atui_destroy_tree(atree->atui_root);
 
 		if (free_bios) {
@@ -285,17 +283,17 @@ branches_treelist_generate_children(
 }
 inline static GtkSelectionModel*
 create_root_model(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const commons,
+		atui_branch* const atui_root
 		) {
 // Generate the very first model, of the tippy top of the tree, for the
 // branches pane
 	GATUIBranch* const root = gatui_branch_new_tree(
-		commons->atomtree_root->atui_root,
-		commons->enum_models_cache
+		atui_root, commons->enum_models_cache
 	);
 	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
 	g_list_store_append(base_model, root);
-	//g_object_unref(root); // keep ref for atomtree
+	g_object_unref(root);
 
 	// TreeList, along with branches_treelist_generate_children, creates our
 	// collapsable model.
@@ -315,18 +313,31 @@ create_root_model(
 	return GTK_SELECTION_MODEL(sel_model);
 	// Does not need to be unref'd if used with a new().
 	// Needs to be unref'd if used with a set().
+	// can't be unref'd if set() sets first model.
 }
 static void
 create_and_set_active_atui_model(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const commons,
+		struct atom_tree* const new_atree_root
 		) {
 // create and set the main branch model
-	GtkSelectionModel* const branches_model = create_root_model(commons);
-	gtk_column_view_set_model(commons->branches.view, branches_model);
-	g_object_unref(branches_model);
+	GtkSelectionModel* const old_model = gtk_column_view_get_model(
+		commons->branches.view
+	);
+	if (old_model) {
+		g_object_ref(old_model);
+	}
+	// miight be needed:
+	//gtk_column_view_set_model(commons->leaves.view, NULL);
+	//gtk_column_view_set_model(commons->branches.view, NULL);
+
+	commons->atomtree_root = new_atree_root;
+	atui_branch* const root = new_atree_root->atui_root;
+
+	GtkSelectionModel* const new_model = create_root_model(commons, root);
+	gtk_column_view_set_model(commons->branches.view, new_model);
 
 	// TODO divorce into notify::model signal/callback in create_branches_pane?
-	atui_branch* const root = commons->atomtree_root->atui_root;
 	gtk_column_view_set_model(
 		commons->leaves.view,
 		gatui_branch_get_leaves_model(root->self)
@@ -339,6 +350,10 @@ create_and_set_active_atui_model(
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
 	// TODO move the call of set_editor_titlebar in here?
+	if (old_model) {
+		g_object_unref(new_model); // can't be unref'd if set() sets first model
+		g_object_unref(old_model);
+	}
 }
 
 
@@ -1923,8 +1938,7 @@ yaabegtk_load_bios(
 
 	if (atree) {
 		struct atom_tree* const oldtree = commons->atomtree_root;
-		commons->atomtree_root = atree;
-		create_and_set_active_atui_model(commons);
+		create_and_set_active_atui_model(commons, atree);
 		destroy_atomtree_with_gtk(oldtree, true);
 
 		if (gtk_widget_get_sensitive(commons->save_buttons) == false) {
@@ -2011,8 +2025,7 @@ reload_button_reload_bios(
 	);
 	new_tree->biosfile = old_tree->biosfile;
 	new_tree->biosfile_size = old_tree->biosfile_size;
-	commons->atomtree_root = new_tree;
-	create_and_set_active_atui_model(commons);
+	create_and_set_active_atui_model(commons, new_tree);
 	destroy_atomtree_with_gtk(old_tree, false);
 }
 static void
@@ -2203,7 +2216,7 @@ yaabe_app_activate(
 	gtk_widget_grab_focus(GTK_WIDGET(commons->branches.view));
 
 	if (commons->atomtree_root) {
-		create_and_set_active_atui_model(commons);
+		create_and_set_active_atui_model(commons, commons->atomtree_root);
 	}
 
 	set_editor_titlebar(commons);
