@@ -1,18 +1,15 @@
 #ifndef GATUI_H
 #define GATUI_H
 
+#include "atomtree.h"
+#include "atui.h"
+
+typedef struct _GATUILeaf GATUILeaf;
+typedef struct _GATUIBranch GATUIBranch;
+typedef struct _GATUITree GATUITree;
+
 #include "gatui_branch.h"
 #include "gatui_leaf.h"
+#include "gatui_tree.h"
 
-// a cache of selection-model'd simple-gobect of all atui_enum's and their
-// entries.
-// The purpose of this is to share and deduplicate enum generation
-void
-generate_enum_models_cache(
-		GtkSelectionModel** enum_models_cache
-		);
-void
-unref_enum_models_cache(
-		GtkSelectionModel** enum_models_cache
-		);
 #endif

@@ -1,11 +1,6 @@
 #ifndef GATUI_LEAF_H
 #define GATUI_LEAF_H
 
-#include <glib-object.h>
-
-#include "atomtree.h"
-#include "atui.h"
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_LEAF gatui_leaf_get_type()
@@ -14,7 +9,7 @@ G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GObject)
 GATUILeaf*
 gatui_leaf_new( // including all of is subleaves
 		atui_leaf* leaf,
-		GtkSelectionModel** enum_models_cache
+		GATUITree* root
 		);
 
 GListModel* // for GtkTreeListModelCreateModelFunc
@@ -79,6 +74,11 @@ gatui_leaf_enum_entry_sets_value( // emtry must be associated
 		);
 int16_t // -1 if error, otherwise index
 gatui_leaf_enum_entry_get_possible_index(
+		GATUILeaf* self
+		);
+
+char8_t* // needs to be freed
+gatui_leaf_to_path(
 		GATUILeaf* self
 		);
 

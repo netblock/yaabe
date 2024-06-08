@@ -9,6 +9,8 @@ static guint gatui_signals[LAST_SIGNAL] = {0};
 struct _GATUILeaf {
 	GObject parent_instance;
 
+	GATUITree* root;
+
 	atui_leaf* atui;
 	GATUILeaf* parent_leaf;
 
@@ -31,6 +33,7 @@ gatui_leaf_dispose(
 		GObject* const object
 		) {
 	GATUILeaf* const self = GATUI_LEAF(object);
+
 
 	// no need to kill the val-changed connection with parent leaf because
 	// parent holds ref; we wouldn't be here if parent is alive.
@@ -58,6 +61,11 @@ gatui_leaf_dispose(
 	}
 
 	self->atui->self = NULL; // weak reference
+
+	if (self->root) {
+		g_object_unref(self->root);
+		self->root = NULL;
+	}
 
 	G_OBJECT_CLASS(gatui_leaf_parent_class)->dispose(object);
 }
@@ -172,14 +180,19 @@ gatui_leaf_emit_val_changed(
 GATUILeaf*
 gatui_leaf_new(
 		atui_leaf* const leaf,
-		GtkSelectionModel** enum_models_cache
+		GATUITree* const root
 		) {
 	g_return_val_if_fail(leaf->self == NULL, NULL);
 	GATUILeaf* const self = g_object_new(GATUI_TYPE_LEAF, NULL);
 	self->atui = leaf;
 	leaf->self = self;
 
+	g_object_ref(root);
+	self->root = root;
+
 	if (leaf->enum_options) {
+		GtkSelectionModel* const* const enum_models_cache =
+			gatui_tree_get_enum_models_cache(root);
 		self->enum_model = ( // the index is the same in both arrays
 			enum_models_cache[leaf->enum_options - ATUI_ENUM_ARRAY]
 		);
@@ -191,7 +204,7 @@ gatui_leaf_new(
 		GListModel* const child_model = G_LIST_MODEL(child_list);
 		atui_leaves_to_gliststore( // handles ATUI_SUBONLY
 			child_list, leaf->child_leaves, leaf->num_child_leaves,
-			enum_models_cache
+			root
 		);
 
 		uint16_t const num_children = g_list_model_get_n_items(child_model);
@@ -230,6 +243,7 @@ gatui_leaf_generate_children_model(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 
 	if (self->num_child_leaves) {
 		GListStore* const children = g_list_store_new(GATUI_TYPE_LEAF);
@@ -246,6 +260,7 @@ gatui_leaf_get_atui_type(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), (union atui_type){0});
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), (union atui_type){0});
 	return self->atui->type;
 }
 uint32_t
@@ -253,6 +268,7 @@ gatui_leaf_num_bytes(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), 0);
 	return self->atui->num_bytes;
 }
 
@@ -261,6 +277,7 @@ gatui_leaf_get_gvariant_type(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->capsule_type;
 }
 
@@ -269,6 +286,7 @@ gatui_leaf_get_value(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 
 
 	if (self->capsule_type) {
@@ -312,6 +330,7 @@ gatui_leaf_set_value(
 	// generalise the g_variant_type_new stuff in get_value to be a part of the
 	// object instance
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail(NULL != value, false);
 	atui_leaf const* const leaf = self->atui;
 
@@ -394,6 +413,7 @@ gatui_leaf_value_to_text(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return atui_leaf_to_text(self->atui);
 }
 
@@ -403,6 +423,7 @@ gatui_leaf_get_enum_menu_selection_model(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	atui_leaf* const leaf = self->atui;
 	g_return_val_if_fail(NULL != leaf->enum_options, NULL);
 
@@ -414,6 +435,7 @@ gatui_leaf_enum_entry_to_text(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return atui_enum_entry_to_text(self->atui, enum_entry);
 }
 char8_t*
@@ -422,6 +444,7 @@ gatui_leaf_enum_val_to_text(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 
 	char8_t format[LEAF_SPRINTF_FORMAT_SIZE];
 	uint8_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
@@ -435,6 +458,7 @@ gatui_leaf_enum_entry_sets_value(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail(NULL != self->atui->enum_options, false);
 
 	struct atui_enum const* const enum_set = self->atui->enum_options;
@@ -457,6 +481,8 @@ int16_t
 gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* const self
 		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), -1);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), -1);
 	int64_t val;
 	if (self->atui->type.signed_num) {
 		val = atui_leaf_get_val_signed(self->atui);
@@ -466,10 +492,20 @@ gatui_leaf_enum_entry_get_possible_index(
 	return atui_enum_lsearch(self->atui->enum_options, val);
 }
 
+char8_t*
+gatui_leaf_to_path(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	return atui_leaf_to_path(self->atui);
+}
+
 atui_leaf*
 gatui_leaf_get_atui(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->atui;
 }

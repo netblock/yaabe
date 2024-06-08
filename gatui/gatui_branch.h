@@ -1,20 +1,15 @@
 #ifndef GATUI_BRANCH_H
 #define GATUI_BRANCH_H
 
-#include <glib-object.h>
-
-#include "atomtree.h"
-#include "atui.h"
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_BRANCH gatui_branch_get_type()
 G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GObject)
 
 GATUIBranch*
-gatui_branch_new_tree( // including all of its descendants and leaves
+gatui_branch_new( // including all of its descendants and leaves
 		atui_branch* branch,
-		GtkSelectionModel** enum_models_cache
+		GATUITree* root
 		);
 
 GListModel* // basic model for GtkTreeListModelCreateModelFunc
@@ -47,6 +42,11 @@ gatui_branch_set_leaves_memory_package(
 		GATUIBranch* self,
 		GVariant* value,
 		uint16_t num_copyable_leaves
+		);
+
+char8_t* // needs to be freed
+gatui_branch_to_path(
+		GATUIBranch* self
 		);
 
 atui_branch*

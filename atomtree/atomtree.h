@@ -59,8 +59,7 @@ struct atomtree_rom_header {
 #define NUM_ATOMBIOS_STRINGS 16
 struct atom_tree {
 	// file handling
-	GFile* biosfile;
-	int64_t biosfile_size;
+	size_t biosfile_size;
 	void* alloced_bios;
 
 	// start of image; eg 0xAA55
@@ -144,6 +143,11 @@ atombios_parse(
 		void* bios,
 		uint32_t alloc_size,
 		bool generate_atui
+		);
+
+void
+atomtree_destroy(
+		struct atom_tree* const atree
 		);
 
 #endif

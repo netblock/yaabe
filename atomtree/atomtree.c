@@ -4171,7 +4171,6 @@ atombios_parse(
 	struct vbios_rom_header* const image = bios;
 	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
 
-	atree->biosfile = NULL;
 	atree->biosfile_size = 0;
 	atree->alloced_bios = alloced_bios;
 
@@ -4249,4 +4248,13 @@ atomtree_bios_checksum(
 	}
 
 	atree->image->checksum -= offset;
+}
+
+void
+atomtree_destroy(
+		struct atom_tree* const atree
+		) {
+	atui_destroy_tree(atree->atui_root);
+	free(atree->alloced_bios);
+	free(atree);
 }

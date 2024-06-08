@@ -9,6 +9,8 @@ static guint gatui_signals[LAST_SIGNAL] = {0};
 struct _GATUIBranch {
 	GObject parent_instance;
 
+	GATUITree* root;
+
 	atui_branch* atui;
 	GATUIBranch** child_branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
@@ -42,6 +44,11 @@ gatui_branch_dispose(
 	if (self->capsule_type) {
 		g_free(self->capsule_type);
 		self->capsule_type = NULL;
+	}
+
+	if (self->root) {
+		g_object_unref(self->root);
+		self->root = NULL;
 	}
 
 	G_OBJECT_CLASS(gatui_branch_parent_class)->dispose(object);
@@ -84,24 +91,19 @@ leaves_treelist_generate_children(
 }
 
 GATUIBranch*
-gatui_branch_new_tree(
+gatui_branch_new(
 		atui_branch* const branch,
-		GtkSelectionModel** enum_models_cache
+		GATUITree* const root
 		) {
 	assert(NULL == branch->self);
 	g_return_val_if_fail(branch->self == NULL, NULL);
+
 	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH, NULL);
 	self->atui = branch;
 	branch->self = self;
 
-	bool has_malloced = false;
-	if (NULL == enum_models_cache) {
-		has_malloced = true;
-		enum_models_cache = malloc(
-			ATUI_ENUM_ARRAY_LENGTH * sizeof(GtkSingleSelection*)
-		);
-		generate_enum_models_cache(enum_models_cache);
-	}
+	g_object_ref(root);
+	self->root = root;
 
 	uint8_t const num_branches = branch->num_branches;
 	if (num_branches) {
@@ -109,8 +111,8 @@ gatui_branch_new_tree(
 
 		for (uint8_t i = 0; i < num_branches; i++) {
 			assert(branch->child_branches[i]);
-			self->child_branches[i] = gatui_branch_new_tree(
-				branch->child_branches[i], enum_models_cache
+			self->child_branches[i] = gatui_branch_new(
+				branch->child_branches[i], root
 			);
 			assert(self->child_branches[i]);
 		}
@@ -119,7 +121,7 @@ gatui_branch_new_tree(
 	if (branch->leaf_count) {
 		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
 		atui_leaves_to_gliststore(
-			leaf_list, branch->leaves, branch->leaf_count, enum_models_cache
+			leaf_list, branch->leaves, branch->leaf_count, root
 		);
 		GListModel* const leaf_list_model = G_LIST_MODEL(leaf_list);
 
@@ -151,11 +153,6 @@ gatui_branch_new_tree(
 
 	self->capsule_type = g_variant_type_new("ay");
 
-	if (has_malloced) {
-		unref_enum_models_cache(enum_models_cache);
-		free(enum_models_cache);
-	}
-
 	return self;
 }
 
@@ -165,6 +162,7 @@ gatui_branch_generate_children_model(
 		) {
 // this is intended to be used in a GtkTreeListModelCreateModelFunc
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	if (self->atui->num_branches) {
 		GListStore* const children = g_list_store_new(GATUI_TYPE_BRANCH);
 		g_list_store_splice(children,0,0,
@@ -180,6 +178,7 @@ gatui_branch_get_leaves_model(
 		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->leaves_model;
 }
 
@@ -189,6 +188,7 @@ gatui_branch_get_contiguous_memory(
 		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	atui_branch const* const branch = self->atui;
 	if (branch->table_size) {
 		void* const valcopy = malloc(branch->table_size);
@@ -208,6 +208,7 @@ gatui_branch_set_contiguous_memory(
 		GVariant* const value
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail((NULL != value), false);
 	atui_branch const* const branch = self->atui;
 
@@ -232,6 +233,7 @@ gatui_branch_get_leaves_memory_package(
 // and pack it a contiguous byte array.
 
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail((NULL != value), false);
 	g_return_val_if_fail((NULL != num_copyable_leaves), false);
 
@@ -268,6 +270,7 @@ gatui_branch_set_leaves_memory_package(
 		uint16_t num_copyable_leaves
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail((NULL != value), false);
 
 	if (num_copyable_leaves != self->atui->num_copyable_leaves) {
@@ -302,10 +305,20 @@ gatui_branch_set_leaves_memory_package(
 	return false;
 };
 
+char8_t*
+gatui_branch_to_path(
+		GATUIBranch* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	return atui_branch_to_path(self->atui);
+}
+
 atui_branch*
 gatui_branch_get_atui(
 		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->atui;
 }

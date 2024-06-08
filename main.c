@@ -1,5 +1,6 @@
 #include "atomtree.h"
 #include "atui.h"
+#include "gatui.h"
 #include "yaabe_gtk4.h"
 
 int
@@ -7,25 +8,20 @@ main(
 		int const argc,
 		char const* const* const argv
 		) {
-	struct atom_tree* atree = NULL;
+	GATUITree* atree = NULL;
 
 	if (argc > 1) {
 		GError* ferror = NULL;
-		GFile* const biosfile = g_file_new_for_path(argv[1]);
-		atree = atomtree_load_from_gfile(biosfile, &ferror);
+		atree = gatui_tree_new_from_path(argv[1], &ferror);
 		if (ferror) {
 			printf("%s\n", ferror->message);
 			g_error_free(ferror);
 			return 1;
 		}
-		if (atree == NULL) {
-			printf("bad atree\n");
-			return 1;
-		}
-		g_object_unref(biosfile);
 	}
+
 	yaabe_gtk(&atree);
-	destroy_atomtree_with_gtk(atree, true);
+	g_object_unref(atree);
 
 	return 0;
 }

@@ -12,7 +12,7 @@ struct pane_context {
 	GtkPopover* rightclick;
 };
 typedef struct yaabegtk_commons { // global state tracker
-	struct atom_tree* atomtree_root;
+	GATUITree* root;
 	GtkApplication* yaabe_gtk;
 
 	GtkEditable* pathbar;
@@ -26,7 +26,6 @@ typedef struct yaabegtk_commons { // global state tracker
 
 	char8_t* pathbar_string;
 
-	GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
 } yaabegtk_commons;
 
 // struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
@@ -69,27 +68,6 @@ struct b64_header { // paste header
 #pragma pack(pop)
 
 
-void
-destroy_atomtree_with_gtk(
-		struct atom_tree* const atree,
-		bool const free_bios
-		) {
-// Free and unref
-	if (atree) {
-		atui_destroy_tree(atree->atui_root);
-
-		if (free_bios) {
-			if (atree->biosfile) {
-				g_object_unref(atree->biosfile);
-			}
-			free(atree->alloced_bios);
-		}
-
-		free(atree);
-	}
-}
-
-
 
 static void
 pathbar_update_path(
@@ -106,9 +84,7 @@ pathbar_update_path(
 	);
 	assert(commons->pathbar_string);
 	free(commons->pathbar_string);
-	commons->pathbar_string = atui_branch_to_path(
-		gatui_branch_get_atui(g_branch)
-	);
+	commons->pathbar_string = gatui_branch_to_path(g_branch);
 	g_object_unref(g_branch);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 }
@@ -131,9 +107,12 @@ pathbar_sets_branch_selection(
 	char8_t const* const editable_text = (
 		(char8_t const* const) gtk_editable_get_text(commons->pathbar)
 	);
+	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
+		commons->root
+	);
 	struct atui_path_map* const map = path_to_atui(
 		editable_text,
-		commons->atomtree_root->atui_root
+		a_root->atui_root
 	);
 
 	if (NULL == map->not_found) { // if directory is found
@@ -282,78 +261,60 @@ branches_treelist_generate_children(
 	return gatui_branch_generate_children_model(parent_ptr);
 }
 inline static GtkSelectionModel*
-create_root_model(
+create_trunk_model(
 		yaabegtk_commons* const commons,
-		atui_branch* const atui_root
+		GATUIBranch* const trunk
 		) {
 // Generate the very first model, of the tippy top of the tree, for the
 // branches pane
-	GATUIBranch* const root = gatui_branch_new_tree(
-		atui_root, commons->enum_models_cache
-	);
 	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
-	g_list_store_append(base_model, root);
-	g_object_unref(root);
+	g_list_store_append(base_model, trunk);
 
 	// TreeList, along with branches_treelist_generate_children, creates our
 	// collapsable model.
-	GtkSingleSelection* const sel_model = gtk_single_selection_new(G_LIST_MODEL(
+	GObject* const trunk_model = G_OBJECT(gtk_single_selection_new(G_LIST_MODEL(
 		gtk_tree_list_model_new(
 			G_LIST_MODEL(base_model),  false, true,
 			branches_treelist_generate_children,  NULL,NULL
 		)
-	)); // the later models take ownership of the earlier
+	))); // the later models take ownership of the earlier
 
-	g_object_connect(sel_model,
+	g_object_connect(trunk_model,
 		"signal::selection-changed", G_CALLBACK(select_changes_leaves), commons,
 		"signal::selection-changed", G_CALLBACK(pathbar_update_path), commons,
 		NULL
 	);
 
-	return GTK_SELECTION_MODEL(sel_model);
-	// Does not need to be unref'd if used with a new().
-	// Needs to be unref'd if used with a set().
-	// can't be unref'd if set() sets first model.
+	return GTK_SELECTION_MODEL(trunk_model);
 }
 static void
 create_and_set_active_atui_model(
 		yaabegtk_commons* const commons,
-		struct atom_tree* const new_atree_root
+		GATUITree* const new_root
 		) {
 // create and set the main branch model
-	GtkSelectionModel* const old_model = gtk_column_view_get_model(
-		commons->branches.view
-	);
-	if (old_model) {
-		g_object_ref(old_model);
-	}
-	// miight be needed:
-	//gtk_column_view_set_model(commons->leaves.view, NULL);
-	//gtk_column_view_set_model(commons->branches.view, NULL);
+	GATUIBranch* const trunk = gatui_tree_get_trunk(new_root);
+	GtkSelectionModel* const new_model = create_trunk_model(commons, trunk);
+	commons->root = new_root;
 
-	commons->atomtree_root = new_atree_root;
-	atui_branch* const root = new_atree_root->atui_root;
-
-	GtkSelectionModel* const new_model = create_root_model(commons, root);
 	gtk_column_view_set_model(commons->branches.view, new_model);
 
 	// TODO divorce into notify::model signal/callback in create_branches_pane?
 	gtk_column_view_set_model(
 		commons->leaves.view,
-		gatui_branch_get_leaves_model(root->self)
+		gatui_branch_get_leaves_model(trunk)
 	);
 
 	if (commons->pathbar_string) {
 		free(commons->pathbar_string);
 	}
-	commons->pathbar_string = atui_branch_to_path(root);
+	commons->pathbar_string = gatui_branch_to_path(trunk);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
+	g_object_unref(trunk);
+	g_object_unref(new_model);
+
 	// TODO move the call of set_editor_titlebar in here?
-	if (old_model) {
-		g_object_unref(new_model); // can't be unref'd if set() sets first model
-		g_object_unref(old_model);
-	}
 }
 
 
@@ -853,7 +814,10 @@ leaves_offset_column_bind(
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
 		);
 	} else if (a_leaf->num_bytes) {
-		uint32_t const start = a_leaf->val - commons->atomtree_root->bios;
+		struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
+			commons->root
+		);
+		uint32_t const start = a_leaf->val - a_root->bios;
 		uint32_t const end = (start + a_leaf->num_bytes -1);
 		sprintf(buffer, "[%05X - %05X]", start, end);
 	} else {
@@ -888,9 +852,7 @@ leaf_right_click_copy_path(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 
-	char8_t* const pathstring = atui_leaf_to_path(
-		gatui_leaf_get_atui(pack->leaf)
-	);
+	char8_t* const pathstring = gatui_leaf_to_path(pack->leaf);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -1391,9 +1353,7 @@ branch_right_click_copy_path(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 
-	char8_t* const pathstring = atui_branch_to_path(
-		gatui_branch_get_atui(pack->branch)
-	);
+	char8_t* const pathstring = gatui_branch_to_path(pack->branch);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -1749,124 +1709,6 @@ construct_tree_panes(
 
 
 
-
-
-struct atom_tree*
-atomtree_load_from_gfile(
-		GFile* const biosfile,
-		GError** const ferror_out
-		) {
-// Geneate the atom_tree and atui from a GIO File
-	GError* ferror = NULL;
-	void* bios = NULL;
-
-	GFileInputStream* const readstream = g_file_read(biosfile, NULL, &ferror);
-	if (ferror) {
-		goto exit1;
-	}
-
-	GFileInfo* const fi_size = g_file_query_info(biosfile,
-		G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &ferror
-	);
-	if (ferror) {
-		goto exit2;
-	}
-
-	int64_t const filesize = g_file_info_get_size(fi_size);
-	g_object_unref(fi_size);
-	// TODO possible warning if the file size is too big? too small?
-
-	bios = malloc(filesize);
-	g_input_stream_read(G_INPUT_STREAM(readstream),
-		bios, filesize, NULL, &ferror
-	);
-	if (ferror) {
-		free(bios);
-		goto exit2;
-	}
-
-	struct atom_tree* const atree = atombios_parse(bios, filesize, true);
-	if (atree == NULL) {
-		free(bios);
-		goto exit2;
-	}
-
-	g_object_ref(biosfile);
-	atree->biosfile = biosfile;
-	atree->biosfile_size = filesize;
-
-	g_input_stream_close(G_INPUT_STREAM(readstream), NULL, &ferror);
-
-	exit2:
-	g_object_unref(readstream);
-	exit1:
-	if (ferror_out) {
-		*ferror_out = ferror;
-	} else if (ferror) {
-		g_error_free(ferror);
-	}
-
-	return atree;
-}
-void
-atomtree_save_to_gfile(
-		struct atom_tree* const atree,
-		GError** const ferror_out
-		) {
-	atomtree_bios_checksum(atree);
-
-	GError* ferror = NULL;
-
-	GFileIOStream* biosfilestream = g_file_create_readwrite(
-		atree->biosfile, G_FILE_CREATE_PRIVATE, NULL, &ferror
-	);
-	if (ferror && (ferror->code == G_IO_ERROR_EXISTS)) {
-		g_error_free(ferror);
-		ferror = NULL;
-		biosfilestream = g_file_open_readwrite(
-			atree->biosfile, NULL, &ferror
-		);
-	}
-	if (ferror) {
-		goto ferr0;
-	}
-
-	GIOStream* const biosstream = G_IO_STREAM(biosfilestream);
-	GOutputStream* const writestream = g_io_stream_get_output_stream(
-		biosstream
-	);
-
-	g_output_stream_write_all(
-		writestream,  atree->alloced_bios,
-		atree->biosfile_size,  NULL,NULL,  &ferror
-	);
-	if (ferror) {
-		goto ferr1;
-	}
-
-	g_output_stream_close(writestream, NULL, &ferror);
-	if (ferror) {
-		goto ferr1;
-	}
-	g_io_stream_close(biosstream, NULL, &ferror);
-	if (ferror) {
-		goto ferr1;
-	}
-
-
-	ferr1:
-	g_object_unref(biosstream);
-	ferr0:
-
-	if (ferror_out) {
-		*ferror_out = ferror;
-	} else {
-		g_error_free(ferror);
-	}
-
-	return;
-}
-
 static void
 set_editor_titlebar(
 		yaabegtk_commons* const commons
@@ -1878,8 +1720,10 @@ set_editor_titlebar(
 	char8_t* filename;
 	uint16_t filename_length;
 	char8_t const* formatstr;
-	if (commons->atomtree_root) {
-		filename = g_file_get_basename(commons->atomtree_root->biosfile);
+	if (commons->root) {
+		filename = g_file_get_basename(
+			gatui_tree_get_bios_file(commons->root)
+		);
 		filename_length = strlen(filename);
 		formatstr = print_format_file;
 	} else {
@@ -1931,15 +1775,16 @@ yaabegtk_load_bios(
 // Processes necessary triggers for loading a bios, except final error handling
 	GError* ferror = NULL;
 
-	struct atom_tree* const atree = atomtree_load_from_gfile(biosfile, &ferror);
+	GATUITree* const new_tree = gatui_tree_new_from_gfile(biosfile, &ferror);
 	if (ferror) {
 		goto ferr;
 	}
 
-	if (atree) {
-		struct atom_tree* const oldtree = commons->atomtree_root;
-		create_and_set_active_atui_model(commons, atree);
-		destroy_atomtree_with_gtk(oldtree, true);
+	if (new_tree) {
+		if (commons->root) {
+			g_object_unref(commons->root);
+		}
+		create_and_set_active_atui_model(commons, new_tree);
 
 		if (gtk_widget_get_sensitive(commons->save_buttons) == false) {
 			gtk_widget_set_sensitive(commons->save_buttons, true);
@@ -2001,8 +1846,10 @@ load_button_open_bios(
 	);
 
 	GFile* working_dir;
-	if (commons->atomtree_root) {
-		working_dir = g_file_get_parent(commons->atomtree_root->biosfile);
+	if (commons->root) {
+		working_dir = g_file_get_parent(
+			gatui_tree_get_bios_file(commons->root)
+		);
 	}else {
 		working_dir = g_file_new_for_path(".");
 	}
@@ -2019,14 +1866,19 @@ reload_button_reload_bios(
 		yaabegtk_commons* const commons
 		) {
 // signal callback
-	struct atom_tree* const old_tree = commons->atomtree_root;
-	struct atom_tree* const new_tree = atombios_parse(
-		old_tree->alloced_bios, old_tree->biosfile_size, true
-	);
-	new_tree->biosfile = old_tree->biosfile;
-	new_tree->biosfile_size = old_tree->biosfile_size;
+	GError* ferror = NULL;
+
+	GATUITree* const old_tree = commons->root;
+	GFile* const biosfile = gatui_tree_get_bios_file(old_tree);
+	GATUITree* const new_tree = gatui_tree_new_from_gfile(biosfile, &ferror);
+	if (ferror) {
+		filer_error_window(commons, ferror, "Reload BIOS error");
+		g_error_free(ferror);
+		return;
+	}
+
 	create_and_set_active_atui_model(commons, new_tree);
-	destroy_atomtree_with_gtk(old_tree, false);
+	g_object_unref(old_tree);
 }
 static void
 save_button_same_file(
@@ -2035,17 +1887,11 @@ save_button_same_file(
 // signal callback
 	GError* ferror = NULL;
 
-	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
+	gatui_tree_save(commons->root, &ferror);
 	if (ferror) {
-		goto ferr;
+		filer_error_window(commons, ferror, "Save BIOS error");
+		g_error_free(ferror);
 	}
-
-	return;
-
-	ferr:
-	filer_error_window(commons, ferror, "Save BIOS error");
-	g_error_free(ferror);
-	return;
 }
 static void
 filedialog_saveas_bios(
@@ -2066,17 +1912,12 @@ filedialog_saveas_bios(
 		goto ferr_nomsg;
 	}
 
-
-	GFile* const old_biosfile = commons->atomtree_root->biosfile;
-	commons->atomtree_root->biosfile = new_biosfile;
-	atomtree_save_to_gfile(commons->atomtree_root, &ferror);
+	gatui_tree_saveas(commons->root, new_biosfile, &ferror);
 	if (ferror) {
-		commons->atomtree_root->biosfile = old_biosfile;
 		g_object_unref(new_biosfile);
 		goto ferr_msg;
 	}
 	set_editor_titlebar(commons);
-	g_object_unref(old_biosfile);
 	return;
 
 	ferr_msg:
@@ -2094,10 +1935,9 @@ saveas_button_name_bios(
 	GtkWindow* const active_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
 	);
-	GFile* const working_dir = g_file_get_parent(
-		commons->atomtree_root->biosfile
-	);
-	gtk_file_dialog_set_initial_file(filer, commons->atomtree_root->biosfile);
+	GFile* const current_biosfile = gatui_tree_get_bios_file(commons->root);
+	GFile* const working_dir = g_file_get_parent(current_biosfile);
+	gtk_file_dialog_set_initial_file(filer, current_biosfile);
 	g_object_unref(working_dir);
 
 	gtk_file_dialog_save(filer,
@@ -2149,7 +1989,7 @@ construct_loadsave_buttons_box(
 
 	commons->reload_button = reload_button;
 	commons->save_buttons = save_buttons;
-	if (commons->atomtree_root == NULL) {
+	if (commons->root == NULL) {
 		gtk_widget_set_sensitive(save_buttons, false);
 		gtk_widget_set_sensitive(reload_button, false);
 	}
@@ -2215,8 +2055,8 @@ yaabe_app_activate(
 	gtk_widget_grab_focus(tree_divider);
 	gtk_widget_grab_focus(GTK_WIDGET(commons->branches.view));
 
-	if (commons->atomtree_root) {
-		create_and_set_active_atui_model(commons, commons->atomtree_root);
+	if (commons->root) {
+		create_and_set_active_atui_model(commons, commons->root);
 	}
 
 	set_editor_titlebar(commons);
@@ -2224,11 +2064,10 @@ yaabe_app_activate(
 }
 int8_t
 yaabe_gtk(
-		struct atom_tree** const atree
+		GATUITree** const root
 		) {
 	yaabegtk_commons commons = {0};
-	commons.atomtree_root = *atree;
-	generate_enum_models_cache(commons.enum_models_cache);
+	commons.root = *root;
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(commons.yaabe_gtk, "activate",
@@ -2238,9 +2077,8 @@ yaabe_gtk(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL
 	);
 
-	*atree = commons.atomtree_root;
+	*root = commons.root;
 	g_object_unref(commons.yaabe_gtk);
-	unref_enum_models_cache(commons.enum_models_cache);
 
 	return status;
 }
