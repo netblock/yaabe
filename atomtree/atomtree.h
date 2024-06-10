@@ -9,6 +9,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 #include "standard.h"
 
 #include "gmc.h"
+#include "gc.h"
 #include "ddrmoderegisters.h"
 #include "bitfield_overrides.h"
 #include "asic_reg_data_tables.h"

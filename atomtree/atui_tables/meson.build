@@ -8,6 +8,7 @@ atui_branches = files(
 	'atui_powerplay.json5',
 	'atui_asic_reg_data_tables.json5',
 	'atui_bitfield_overrides.json5',
+	'atui_gc.json5',
 )
 atui_const_tables = files(
 	'atui_enums.json5',
