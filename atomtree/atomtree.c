@@ -433,12 +433,21 @@ atomtree_dt_populate_gfx_info(
 	atui_branch* atui_gfx_info = NULL;
 
 	gfx_info->gcgolden = NULL;
+	gfx_info->edc_didt_lo = NULL;
+	gfx_info->edc_didt_hi = NULL;
 
 	if (bios_offset) {
 		// leaves is in a union with the structs.
 		gfx_info->leaves = atree->bios + bios_offset;
 		gfx_info->ver = get_ver(gfx_info->table_header);
 		switch(gfx_info->ver) {
+			case v2_1:
+				if (generate_atui) {
+					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_1,
+						NULL,  NULL,gfx_info->v2_1,  0,NULL
+					);
+				}
+				break;
 			case v2_2:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_2,
@@ -447,14 +456,56 @@ atomtree_dt_populate_gfx_info(
 				}
 				break;
 			case v2_3:
-				if (gfx_info->v2_3->gcgoldenoffset) {
-					gfx_info->gcgolden =
-						gfx_info->leaves + gfx_info->v2_3->gcgoldenoffset;
-				}
-				if (generate_atui) {
-					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_3,
-						NULL,  NULL,gfx_info->v2_3,  0,NULL
+				if (gfx_info->table_header->structuresize
+						== sizeof(struct atom_gfx_info_v2_3)
+						) {
+					if (gfx_info->v2_3->EdcDidtLoDpm7TableOffset) {
+						gfx_info->edc_didt_lo = (
+							gfx_info->leaves
+							+ gfx_info->v2_3->EdcDidtLoDpm7TableOffset
+						);
+					}
+					if (gfx_info->v2_3->EdcDidtHiDpm7TableOffset) {
+						gfx_info->edc_didt_hi = (
+							gfx_info->leaves
+							+ gfx_info->v2_3->EdcDidtHiDpm7TableOffset
+						);
+					}
+					if (generate_atui) {
+						atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_3,
+							NULL,  NULL,gfx_info->v2_3,  2,NULL
+						);
+						if (gfx_info->edc_didt_lo) {
+							ATUI_ADD_BRANCH(atui_gfx_info,
+								ATUI_MAKE_BRANCH(dpm7_atomctrl_edc_leakge_table,
+									NULL,  NULL,gfx_info->edc_didt_lo,  0,NULL
+								)
+							)
+						}
+						if (gfx_info->edc_didt_hi) {
+							ATUI_ADD_BRANCH(atui_gfx_info,
+								ATUI_MAKE_BRANCH(dpm7_atomctrl_edc_leakge_table,
+									NULL,  NULL,gfx_info->edc_didt_hi,  0,NULL
+								)
+							)
+						}
+
+					}
+				} else {
+					assert(
+						gfx_info->table_header->structuresize
+						== sizeof(struct atom_gfx_info_v2_3_2)
 					);
+					assert(0); // unsure what uses this
+					if (gfx_info->v2_3_2->gcgoldenoffset) {
+						gfx_info->gcgolden =
+							gfx_info->leaves + gfx_info->v2_3_2->gcgoldenoffset;
+					}
+					if (generate_atui) {
+						atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_3_2,
+							NULL,  NULL,gfx_info->v2_3_2,  0,NULL
+						);
+					}
 				}
 				break;
 			case v2_4:

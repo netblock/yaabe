@@ -948,6 +948,38 @@ struct mc_phy_init_set_gcn4_gddr5_type3 { // 52 bytes
 /******************************************************************************/
 /******************************************************************************/
 
+/******************************************************************************/
+// Di/Dt leakage tables
+/******************************************************************************/
+
+struct dpm7_atomctrl_edc_leakge_table {
+	union didt_sq_edc_stall_pattern_1_2_9_0  didt_sq_edc_stall_pattern_1_2_9_0;
+	union didt_sq_edc_stall_pattern_3_4_9_0  didt_sq_edc_stall_pattern_3_4_9_0;
+	union didt_sq_edc_stall_pattern_5_6_9_0  didt_sq_edc_stall_pattern_5_6_9_0;
+	union didt_sq_edc_stall_pattern_7_9_0    didt_sq_edc_stall_pattern_7_9_0;
+	union didt_sq_edc_threshold_9_0          didt_sq_edc_threshold_9_0;
+	union didt_sq_edc_ctrl_9_0               didt_sq_edc_ctrl_9_0;
+	union didt_td_edc_stall_pattern_1_2_9_0  didt_td_edc_stall_pattern_1_2_9_0;
+	union didt_td_edc_stall_pattern_3_4_9_0  didt_td_edc_stall_pattern_3_4_9_0;
+	union didt_td_edc_stall_pattern_5_6_9_0  didt_td_edc_stall_pattern_5_6_9_0;
+	union didt_td_edc_stall_pattern_7_9_0    didt_td_edc_stall_pattern_7_9_0;
+	union didt_td_edc_threshold_9_0          didt_td_edc_threshold_9_0;
+	union didt_td_edc_ctrl_9_0               didt_td_edc_ctrl_9_0;
+	union didt_tcp_edc_stall_pattern_1_2_9_0 didt_tcp_edc_stall_pattern_1_2_9_0;
+	union didt_tcp_edc_stall_pattern_3_4_9_0 didt_tcp_edc_stall_pattern_3_4_9_0;
+	union didt_tcp_edc_stall_pattern_5_6_9_0 didt_tcp_edc_stall_pattern_5_6_9_0;
+	union didt_tcp_edc_stall_pattern_7_9_0   didt_tcp_edc_stall_pattern_7_9_0;
+	union didt_tcp_edc_threshold_9_0         didt_tcp_edc_threshold_9_0;
+	union didt_tcp_edc_ctrl_9_0              didt_tcp_edc_ctrl_9_0;
+	union didt_db_edc_stall_pattern_1_2_9_0  didt_db_edc_stall_pattern_1_2_9_0;
+	union didt_db_edc_stall_pattern_3_4_9_0  didt_db_edc_stall_pattern_3_4_9_0;
+	union didt_db_edc_stall_pattern_5_6_9_0  didt_db_edc_stall_pattern_5_6_9_0;
+	union didt_db_edc_stall_pattern_7_9_0    didt_db_edc_stall_pattern_7_9_0;
+	union didt_db_edc_threshold_9_0          didt_db_edc_threshold_9_0;
+	union didt_db_edc_ctrl_9_0               didt_db_edc_ctrl_9_0;
+};
+
+
 #pragma pack(pop) // restore old packing
 
 #endif

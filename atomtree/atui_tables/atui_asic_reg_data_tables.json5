@@ -3501,4 +3501,110 @@ global_default: {
 	],
 },
 
+
+
+{
+	c_type: "dpm7_atomctrl_edc_leakge_table",
+	leaves: [
+		{
+			access: "bios->didt_sq_edc_stall_pattern_1_2_9_0",
+			name: "didt_sq_edc_stall_pattern_1_2_9_0",
+			fancy_data: "didt_sq_edc_stall_pattern_1_2_9_0",
+		}, {
+			access: "bios->didt_sq_edc_stall_pattern_3_4_9_0",
+			name: "didt_sq_edc_stall_pattern_3_4_9_0",
+			fancy_data: "didt_sq_edc_stall_pattern_3_4_9_0",
+		}, {
+			access: "bios->didt_sq_edc_stall_pattern_5_6_9_0",
+			name: "didt_sq_edc_stall_pattern_5_6_9_0",
+			fancy_data: "didt_sq_edc_stall_pattern_5_6_9_0",
+		}, {
+			access: "bios->didt_sq_edc_stall_pattern_7_9_0",
+			name: "didt_sq_edc_stall_pattern_7_9_0",
+			fancy_data: "didt_sq_edc_stall_pattern_7_9_0",
+		}, {
+			access: "bios->didt_sq_edc_threshold_9_0",
+			name: "didt_sq_edc_threshold_9_0",
+			fancy_data: "didt_sq_edc_threshold_9_0",
+		}, {
+			access: "bios->didt_sq_edc_ctrl_9_0",
+			name: "didt_sq_edc_ctrl_9_0",
+			fancy_data: "didt_sq_edc_ctrl_9_0",
+		}, {
+			access: "bios->didt_td_edc_stall_pattern_1_2_9_0",
+			name: "didt_td_edc_stall_pattern_1_2_9_0",
+			fancy_data: "didt_td_edc_stall_pattern_1_2_9_0",
+		}, {
+			access: "bios->didt_td_edc_stall_pattern_3_4_9_0",
+			name: "didt_td_edc_stall_pattern_3_4_9_0",
+			fancy_data: "didt_td_edc_stall_pattern_3_4_9_0",
+		}, {
+			access: "bios->didt_td_edc_stall_pattern_5_6_9_0",
+			name: "didt_td_edc_stall_pattern_5_6_9_0",
+			fancy_data: "didt_td_edc_stall_pattern_5_6_9_0",
+		}, {
+			access: "bios->didt_td_edc_stall_pattern_7_9_0",
+			name: "didt_td_edc_stall_pattern_7_9_0",
+			fancy_data: "didt_td_edc_stall_pattern_7_9_0",
+		}, {
+			access: "bios->didt_td_edc_threshold_9_0",
+			name: "didt_td_edc_threshold_9_0",
+			fancy_data: "didt_td_edc_threshold_9_0",
+		}, {
+			access: "bios->didt_td_edc_ctrl_9_0",
+			name: "didt_td_edc_ctrl_9_0",
+			fancy_data: "didt_td_edc_ctrl_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_stall_pattern_1_2_9_0",
+			name: "didt_tcp_edc_stall_pattern_1_2_9_0",
+			fancy_data: "didt_tcp_edc_stall_pattern_1_2_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_stall_pattern_3_4_9_0",
+			name: "didt_tcp_edc_stall_pattern_3_4_9_0",
+			fancy_data: "didt_tcp_edc_stall_pattern_3_4_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_stall_pattern_5_6_9_0",
+			name: "didt_tcp_edc_stall_pattern_5_6_9_0",
+			fancy_data: "didt_tcp_edc_stall_pattern_5_6_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_stall_pattern_7_9_0",
+			name: "didt_tcp_edc_stall_pattern_7_9_0",
+			fancy_data: "didt_tcp_edc_stall_pattern_7_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_threshold_9_0",
+			name: "didt_tcp_edc_threshold_9_0",
+			fancy_data: "didt_tcp_edc_threshold_9_0",
+		}, {
+			access: "bios->didt_tcp_edc_ctrl_9_0",
+			name: "didt_tcp_edc_ctrl_9_0",
+			fancy_data: "didt_tcp_edc_ctrl_9_0",
+		}, {
+			access: "bios->didt_db_edc_stall_pattern_1_2_9_0",
+			name: "didt_db_edc_stall_pattern_1_2_9_0",
+			fancy_data: "didt_db_edc_stall_pattern_1_2_9_0",
+		}, {
+			access: "bios->didt_db_edc_stall_pattern_3_4_9_0",
+			name: "didt_db_edc_stall_pattern_3_4_9_0",
+			fancy_data: "didt_db_edc_stall_pattern_3_4_9_0",
+		}, {
+			access: "bios->didt_db_edc_stall_pattern_5_6_9_0",
+			name: "didt_db_edc_stall_pattern_5_6_9_0",
+			fancy_data: "didt_db_edc_stall_pattern_5_6_9_0",
+		}, {
+			access: "bios->didt_db_edc_stall_pattern_7_9_0",
+			name: "didt_db_edc_stall_pattern_7_9_0",
+			fancy_data: "didt_db_edc_stall_pattern_7_9_0",
+		}, {
+			access: "bios->didt_db_edc_threshold_9_0",
+			name: "didt_db_edc_threshold_9_0",
+			fancy_data: "didt_db_edc_threshold_9_0",
+		}, {
+			access: "bios->didt_db_edc_ctrl_9_0",
+			name: "didt_db_edc_ctrl_9_0",
+			fancy_data: "didt_db_edc_ctrl_9_0",
+		},
+	],
+},
+
+
 ], }

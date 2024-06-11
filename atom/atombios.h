@@ -5200,7 +5200,7 @@ struct atom_gfx_info_v2_1 {
 	uint8_t  max_texture_channel_caches;
 };
 
-/* TODO atomfirmware.h has 2.3, and 2,2. What is this?
+
 struct atom_gfx_info_v2_3 {
 	struct atom_common_table_header  table_header;
 	uint8_t  GfxIpMinVer;
@@ -5216,7 +5216,6 @@ struct atom_gfx_info_v2_3 {
 	uint16_t EdcDidtHiDpm7TableOffset; // offset of DPM7 high leakage table _ATOM_EDC_DIDT_TABLE_V1
 	uint16_t Reserverd[3];
 };
-*/
 
 struct atom_power_source_object {
 	uint8_t  PwrSrcId;           // Power source
@@ -6982,6 +6981,8 @@ struct atom_init_reg_block {  // like atom_umc_init_reg_block
 
 
 #define END_OF_REG_INDEX_BLOCK  0xFFFF
+#define END_OF_REG_INDEX_BLOCK_16  END_OF_REG_INDEX_BLOCK
+#define END_OF_REG_INDEX_BLOCK_32  0xFFFFFFFF
 #define END_OF_REG_DATA_BLOCK   0x00000000
 #define ATOM_INIT_REG_MASK_FLAG 0x80 // Not used in BIOS
 #define CLOCK_RANGE_HIGHEST     0x00FFFFFF

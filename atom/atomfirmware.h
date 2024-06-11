@@ -1787,7 +1787,7 @@ struct atom_gfx_info_v2_2 {
 	uint32_t rlc_gpu_timer_refclk;
 };
 
-struct atom_gfx_info_v2_3 {
+struct atom_gfx_info_v2_3_2 {
 	struct atom_common_table_header  table_header;
 	uint8_t  gfxip_min_ver;
 	uint8_t  gfxip_max_ver;

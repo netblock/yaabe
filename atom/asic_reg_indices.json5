@@ -1348,5 +1348,37 @@ See also asic_reg_data_tables.h
 /******************************************************************************/
 /******************************************************************************/
 
+/******************************************************************************/
+// Di/Dt leakage tables
+/******************************************************************************/
+{type: "uint16_t", name: "dpm7_atomctrl_edc_leakge_table_addresses", // 24+1
+	constants: [
+		"ixDIDT_SQ_EDC_STALL_PATTERN_1_2_9_0",
+		"ixDIDT_SQ_EDC_STALL_PATTERN_3_4_9_0",
+		"ixDIDT_SQ_EDC_STALL_PATTERN_5_6_9_0",
+		"ixDIDT_SQ_EDC_STALL_PATTERN_7_9_0",
+		"ixDIDT_SQ_EDC_THRESHOLD_9_0",
+		"ixDIDT_SQ_EDC_CTRL_9_0",
+		"ixDIDT_TD_EDC_STALL_PATTERN_1_2_9_0",
+		"ixDIDT_TD_EDC_STALL_PATTERN_3_4_9_0",
+		"ixDIDT_TD_EDC_STALL_PATTERN_5_6_9_0",
+		"ixDIDT_TD_EDC_STALL_PATTERN_7_9_0",
+		"ixDIDT_TD_EDC_THRESHOLD_9_0",
+		"ixDIDT_TD_EDC_CTRL_9_0",
+		"ixDIDT_TCP_EDC_STALL_PATTERN_1_2_9_0",
+		"ixDIDT_TCP_EDC_STALL_PATTERN_3_4_9_0",
+		"ixDIDT_TCP_EDC_STALL_PATTERN_5_6_9_0",
+		"ixDIDT_TCP_EDC_STALL_PATTERN_7_9_0",
+		"ixDIDT_TCP_EDC_THRESHOLD_9_0",
+		"ixDIDT_TCP_EDC_CTRL_9_0",
+		"ixDIDT_DB_EDC_STALL_PATTERN_1_2_9_0",
+		"ixDIDT_DB_EDC_STALL_PATTERN_3_4_9_0",
+		"ixDIDT_DB_EDC_STALL_PATTERN_5_6_9_0",
+		"ixDIDT_DB_EDC_STALL_PATTERN_7_9_0",
+		"ixDIDT_DB_EDC_THRESHOLD_9_0",
+		"ixDIDT_DB_EDC_CTRL_9_0",
+		"END_OF_REG_INDEX_BLOCK",
+]},
+
 
 ]}

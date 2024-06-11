@@ -1730,7 +1730,101 @@ global_default: {
 			],
 		},
 	],
+},
+
+{
+	c_type: "atom_gfx_info_v2_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->GfxIpMinVer",
+			name: "GfxIpMinVer",
+		}, {
+			access: "bios->GfxIpMajVer",
+			name: "GfxIpMajVer",
+		}, {
+			access: "bios->max_shader_engines",
+			name: "max_shader_engines",
+		}, {
+			access: "bios->max_tile_pipes",
+			name: "max_tile_pipes",
+		}, {
+			access: "bios->max_cu_per_sh",
+			name: "max_cu_per_sh",
+		}, {
+			access: "bios->max_sh_per_se",
+			name: "max_sh_per_se",
+		}, {
+			access: "bios->max_backends_per_se",
+			name: "max_backends_per_se",
+		}, {
+			access: "bios->max_texture_channel_caches",
+			name: "max_texture_channel_caches",
+		},
+	],
 }, {
+	c_type: "atom_gfx_info_v2_3",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->GfxIpMinVer",
+			name: "GfxIpMinVer",
+		}, {
+			access: "bios->GfxIpMajVer",
+			name: "GfxIpMajVer",
+		}, {
+			access: "bios->max_shader_engines",
+			name: "max_shader_engines",
+		}, {
+			access: "bios->max_tile_pipes",
+			name: "max_tile_pipes",
+		}, {
+			access: "bios->max_cu_per_sh",
+			name: "max_cu_per_sh",
+		}, {
+			access: "bios->max_sh_per_se",
+			name: "max_sh_per_se",
+		}, {
+			access: "bios->max_backends_per_se",
+			name: "max_backends_per_se",
+		}, {
+			access: "bios->max_texture_channel_caches",
+			name: "max_texture_channel_caches",
+		}, {
+			access: "bios->HiLoLeakageThreshold",
+			name: "HiLoLeakageThreshold",
+		}, {
+			access: "bios->EdcDidtLoDpm7TableOffset",
+			name: "EdcDidtLoDpm7TableOffset",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of DPM7 low leakage table _ATOM_EDC_DIDT_TABLE_V1",},
+			],
+		}, {
+			access: "bios->EdcDidtHiDpm7TableOffset",
+			name: "EdcDidtHiDpm7TableOffset",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "offset of DPM7 high leakage table _ATOM_EDC_DIDT_TABLE_V1",},
+			],
+		}, {
+			access: "bios->Reserverd",
+			name: "Reserverd",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
 	c_type: "atom_init_reg_index_format",
 	table_size: "sizeof(*bios)",
 	leaves: [

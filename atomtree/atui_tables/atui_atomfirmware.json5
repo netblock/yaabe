@@ -4978,7 +4978,7 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_gfx_info_v2_3",
+	c_type: "atom_gfx_info_v2_3_2",
 	atomtree: "atomtree_gfx_info",
 	leaves: [
 		{

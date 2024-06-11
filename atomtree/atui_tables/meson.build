@@ -1,3 +1,4 @@
+# when adding a file here, don't forget to add to atomtree/atui_includes.h
 atui_branches = files(
 	'atui_gmc.json5', # extra long
 	'atui_atomfirmware.json5',

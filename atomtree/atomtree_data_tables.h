@@ -124,22 +124,27 @@ struct atomtree_gpio_pin_lut {
 
 
 struct atomtree_gfx_info {
-	// TODO explode the versions into their own atomtree entities?
-	void* gcgolden; // not all gfx_info versions have this
-
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
+		struct atom_gfx_info_v2_1* v2_1;
 		struct atom_gfx_info_v2_2* v2_2;
 		struct atom_gfx_info_v2_3* v2_3;
+		struct atom_gfx_info_v2_3_2* v2_3_2;
 		struct atom_gfx_info_v2_4* v2_4;
 		struct atom_gfx_info_v2_5* v2_5; // derived from 2.7
 		struct atom_gfx_info_v2_5* v2_6; // 2.6 has same byte count as 2.5
 		struct atom_gfx_info_v2_7* v2_7;
 		struct atom_gfx_info_v3_0* v3_0;
 	};
+
+	// TODO explode the versions into their own atomtree entities?
+	// not all gfx_info versions have these:
+	void* gcgolden;
+	struct dpm7_atomctrl_edc_leakge_table* edc_didt_hi;
+	struct dpm7_atomctrl_edc_leakge_table* edc_didt_lo;
 };
 
 
