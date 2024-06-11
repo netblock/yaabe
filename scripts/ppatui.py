@@ -108,7 +108,7 @@ def searchfield_to_c(
 struct register_set const %s_reg_set = {
 	.num_reg_set_addresses = %u,
 	.set_name = u8"%s",
-	.entries = (struct register_set_entry const[]) {
+	.entries = (struct register_set_entry const[%u]) {
 %s\
 	},
 };
@@ -126,7 +126,8 @@ static_assert(%u < INT16_MAX); // reserve sign as flag for register_set_bsearch
 		num_constants = len(field["constants"])
 		out_text += field_template % (
 			field["name"],
-			num_constants, field["name"],  entry_text,
+			num_constants, field["name"], len(field["constants"]),
+			entry_text,
 			num_constants, # assert
 		)
 	return out_text
@@ -145,11 +146,13 @@ def array_to_h(
 #define %s_H
 
 """
-	array_template = "extern %s const %s[];\n"
+	array_template = "extern %s const %s[%u];\n"
 	header_end = "\n#endif\n"
 	out_text = header_header % (fname.upper(), fname.upper())
 	for array in atui_data["arrays"]:
-		out_text += array_template % (array["type"], array["name"])
+		out_text += array_template % (
+			array["type"], array["name"], len(array["constants"])
+		)
 	return out_text + header_end
 def array_to_c(
 		atui_data:dict,
@@ -163,7 +166,7 @@ def array_to_c(
 
 """
 	array_template = """\
-%s const %s[] = {
+%s const %s[%u] = {
 %s\
 };
 
@@ -176,7 +179,8 @@ def array_to_c(
 		for entry in array["constants"]:
 			entry_text += array_entry % entry
 		out_text += array_template % (
-			array["type"], array["name"], entry_text
+			array["type"], array["name"], len(array["constants"]),
+			entry_text
 		)
 	return out_text
 
@@ -192,7 +196,7 @@ def enum_to_h(
 #ifndef %s_H
 #define %s_H
 
-extern struct atui_enum const _atui_enumarray[];
+extern struct atui_enum const _atui_enumarray[%u];
 
 """
 	enumarray_indicies_set_template = """\
@@ -215,7 +219,7 @@ enum enumarray_indicies_set {
 		i += 1
 
 	out_text = (
-		header_header % (fname.upper(), fname.upper())
+		header_header % (fname.upper(), fname.upper(), num_enums)
 		+ enumarray_indicies_set_template % indicies
 		+ header_end
 	)
@@ -234,7 +238,7 @@ def enum_to_c(
 
 """
 	enumarray_template = """\
-struct atui_enum const _atui_enumarray[] = {
+struct atui_enum const _atui_enumarray[%u] = {
 %s\
 };
 
@@ -245,7 +249,7 @@ struct atui_enum const _atui_enumarray[] = {
 		.name = u8"%s",
 		.num_entries = %u,
 %s\
-		.enum_array = (struct atui_enum_entry const[]) {
+		.enum_array = (struct atui_enum_entry const[%u]) {
 %s\
 		},
 	},
@@ -291,7 +295,9 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 			descr_text = ""
 		enum_sets += enum_template % (
 			len(enum["name"]), enum["name"], len(enum["constants"]),
-			descr_text, enum_entries
+			descr_text,
+			len(enum["constants"]),
+			enum_entries
 		)
 
 	#asserts
@@ -302,7 +308,7 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 
 	out_text = (
 		cfile_header
-		+ (enumarray_template % enum_sets)
+		+ enumarray_template % (len(atui_data["enums"]), enum_sets)
 		+ enum_asserts
 	)
 	return out_text
@@ -579,7 +585,7 @@ def leaf_to_subleaf(
 + child_indent + ".deferred_start_array = %s,\n"
 + child_indent + ".numleaves = %u,\n"
 + child_indent + ".enum_taglist = %s,\n"
-+ child_indent + ".sub_leaves = (atui_leaf const[]) {\n"
++ child_indent + ".sub_leaves = (atui_leaf const[%u]) {\n"
 + "%s"
 + child_indent + "},\n"
 + indent + "},"
@@ -601,6 +607,7 @@ def leaf_to_subleaf(
 			str(not leaf.access_meta).lower(),
 			len(leaf.fancy_data["pattern"]),
 			enum_taglist,
+			len(leaf.fancy_data["pattern"]),
 			leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
 		)
 	elif leaf.fancy == ATUI_BITFIELD:
@@ -608,6 +615,7 @@ def leaf_to_subleaf(
 			"0", "0", "0",
 			len(leaf.fancy_data),
 			"NULL",
+			len(leaf.fancy_data),
 			leaves_to_text(leaf.fancy_data, child_indent+"\t"),
 		)
 
@@ -838,7 +846,7 @@ PPATUI_HEADERIFY(%s) {
 	%s %s const* const bios = args->suggestbios;
 	struct %s const* const atomtree = args->atomtree;
 
-	atui_leaf const leaves_init[] = {
+	atui_leaf const leaves_init[%u] = {
 %s\
 	};
 	struct atui_branch_data const branch_embryo = {
@@ -882,7 +890,7 @@ PPATUI_HEADERIFY(%s) {
 
 		out_text += branch_template % (
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
-			leaves_to_text(branch.leaves, "\t\t"),
+			len(branch.leaves), leaves_to_text(branch.leaves, "\t\t"),
 			branch.name, # embryo
 			description_to_text(branch.description, "\t\t"),
 			branch.table_start, branch.table_size,
