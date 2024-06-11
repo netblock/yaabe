@@ -683,8 +683,7 @@ construct_enum_dropdown(
 	gtk_popover_set_child(popover, enum_list);
 
 	g_object_connect(enum_list,
-		"signal::realize", G_CALLBACK(enummenu_sets_selection),
-			leaves_column_cell,
+		"signal::map", G_CALLBACK(enummenu_sets_selection), leaves_column_cell,
 		"signal::activate", G_CALLBACK(enum_list_sets_leaf), leaves_column_cell,
 		"swapped-signal::activate", G_CALLBACK(gtk_popover_popdown), popover,
 		NULL
