@@ -25,7 +25,7 @@ def struct_to_atui(
 	c_enum = "(enum)" + white
 	c_num_types = "((?:u?int|char|float|uq\d+_)\d+_t)" + white
 	c_ints = "((?:u?int|char)[0-9]+_t)" + white
-	name = "([a-zA-Z]\w*)" + white
+	name = "([a-zA-Z_]\w*)" + white
 	array_var = "\["+white +name+ white+"\]" + white
 	array_num = "\["+white +nums+ white+"\]" + white
 	comments = "(?:" + white + "(//\s*(.*)))?"
@@ -196,7 +196,7 @@ def bitfield_to_atui(
 	nums = "(\d+)"
 	c_prefix = "(struct|union)" + white
 	c_ints = "((?:u?int|char)[0-9]+_t)" + white
-	name = "([a-zA-Z]\w*)" + white
+	name = "([a-zA-Z_]\w*)" + white
 	hi_lo = ":" + nums + "-" + nums + " \+1[,;]"
 	comments = "(?:" + white + "(//\s*(.*)))?"
 	flagged_comment = "__ATUIDESCR//\s*(.*)"
@@ -306,7 +306,7 @@ def enum_to_atui(
 	c_enum = "(enum)" + white
 	c_enum_type = ":" + white + c_num_types
 	c_enum_equals = "=" + white + "([^,]+)," + spacetab
-	name = "([a-zA-Z]\w*)" + white
+	name = "([a-zA-Z_]\w*)" + white
 	comments = "(?:" + white + "(//\s*(.*)))?"
 	flagged_comment = "__ATUIDESCR//\s*(.*)"
 

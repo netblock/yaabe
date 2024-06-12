@@ -22,7 +22,7 @@ atomtree.h is mainly about atomtree metadata and initial bios crawling.
 
 enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;
-#include "atomtree_data_tables.h"
+#include "data_tables.h"
 #include "asic_reg_tools.h"
 
 // make sure we're not on 1-byte packing after all the including
