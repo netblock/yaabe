@@ -1,5 +1,7 @@
 # Yet Another AtomBIOS Editor
 
+![yaabe 5700XT](yaabe.png)
+
 YAABE is an AMD/ATI GPU VBIOS editor with a major focus on exposing the full
 data structures of the VBIOS, rather than just the notable tidbits an
 overclocker may want.
