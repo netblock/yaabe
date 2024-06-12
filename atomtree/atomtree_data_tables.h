@@ -259,8 +259,7 @@ enum common_register_sequence:uint8_t {
 	mc_phy_init_set_gcn4_gddr5_type3, // polaris20
 };
 
-#define ATOMTREE_MC_REG_MAX  24 // keep score.
-// Hawaii XT is 20; Sapphire.RX580.8192.170320.rom is 24
+#define ATOMTREE_MC_REG_MAX 32
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block* leaves; // nonzero if populated
 
@@ -324,7 +323,7 @@ struct atomtree_init_reg_block {
 			mc_phy_init_set_gcn4_gddr5_type3;
 	};
 };
-#define ATOMTREE_UMC_REG_MAX 23 // keep score. navi10 has 23
+#define ATOMTREE_UMC_REG_MAX 64
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block* leaves; // nonzero if populated
 
@@ -380,7 +379,7 @@ struct atomtree_vram_module {
 	void* tmrs_seq;
 };
 
-#define ATOMTREE_VRAM_MODULES_MAX (3+1) // keep score.
+#define ATOMTREE_VRAM_MODULES_MAX 8
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves; // nonzero if populated
 
@@ -560,7 +559,7 @@ struct atomtree_voltage_object_v4 {
 	uint16_t lut_entries; // has entries if i2c or gpio
 };
 
-#define ATOMTREE_VOLTAGE_OBJECTS_MAX 8 // keep score. navi10 has 8
+#define ATOMTREE_VOLTAGE_OBJECTS_MAX 16
 struct atomtree_voltageobject_info_v4_1 {
 	struct atom_voltage_objects_info_v4_1* leaves;
 
