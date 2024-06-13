@@ -21,7 +21,7 @@ main(
 	}
 
 	yaabe_gtk(&atree);
-	g_object_unref(atree);
+	g_assert_finalize_object(atree);
 
 	return 0;
 }

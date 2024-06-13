@@ -9,6 +9,8 @@ project('yaabe', 'c',
 	]
 )
 
+fs = import('fs')
+
 cc = meson.get_compiler('c')
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
@@ -45,7 +47,6 @@ subdir('gatui')
 subdir('gtk')
 yaabe_src += files(
 	'standard.c',
-	'main.c'
 )
 include_dirs += include_directories('.')
 
@@ -69,10 +70,21 @@ if 'windows' == target_machine.system()
 	))
 endif
 
-yaabe = executable('yaabe',
+libyaabe = static_library('libyaabe',
 	sources: yaabe_src,
 	include_directories: include_dirs,
 	dependencies: (external_depends + internal_depends),
+	name_prefix: '',
+)
+
+yaabe = executable('yaabe',
+	sources: 'main.c',
+	include_directories: [
+		include_dirs,
+		libyaabe.private_dir_include()
+	],
+	dependencies: external_depends,
+	link_with: libyaabe,
 	install: true,
 	win_subsystem: 'windows',
 )
@@ -87,7 +99,6 @@ if get_option('nsis_installer')
 	nsis_helper = find_program('scripts/nsis_helper.py', required: true)
 
 	msys2_err = 'We pluck assets from MSYS2 for the installer. https://www.msys2.org'
-	fs = import('fs')
 	mingw64_path = run_command(cygpath, '-m', '/mingw64').stdout().strip()
 	assert(fs.is_dir(mingw64_path), msys2_err)
 	assert('windows' == target_machine.system(), msys2_err)
@@ -111,3 +122,39 @@ if get_option('nsis_installer')
 		],
 	)
 endif
+
+yaabe_test = executable('yaabe_test',
+	sources: 'test.c',
+	include_directories: [
+		include_dirs,
+		libyaabe.private_dir_include()
+	],
+	dependencies: external_depends,
+	link_with: libyaabe,
+	install: false,
+	win_subsystem: 'windows',
+	build_by_default: false,
+)
+
+
+# all test_roms/*.rom will become a test
+# If you already built but want to change the roms, 
+# meson --reconfigure
+test_roms_dir = 'test_roms'
+romfiles = files()
+if fs.is_dir(test_roms_dir)
+	lsroms = run_command('ls', test_roms_dir, check:false)
+	if 0 == lsroms.returncode()
+		foreach name : lsroms.stdout().strip().split('\n')
+			if name.endswith('.rom')
+				romfiles += files(join_paths(test_roms_dir, name))
+			endif
+		endforeach
+	endif
+endif
+foreach bios : romfiles
+	test(fs.name(bios),
+		yaabe_test, args: [bios],
+		env: ['G_DEBUG=fatal_warnings',],
+	)
+endforeach
