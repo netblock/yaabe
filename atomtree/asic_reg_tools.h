@@ -1,5 +1,5 @@
 /*
-Some tools to help write register definition tables; chiefly the ones involving 
+Some tools to help write register definition tables; chiefly the ones involving
 struct register_set.
 The intended purpose of register_set_print_tables is to have it adjacent to
 atomtree_populate_init_reg_block.

@@ -122,7 +122,7 @@ atui_branch* foba = ATUI_MAKE_BRANCH(alternative_name,
 )
 ```
 `child_branches_array` can be `NULL`; but if it is not, it must be
-`number_of_child_branches` long. 
+`number_of_child_branches` long.
 
 To add a branch as a child to another branch,
 
@@ -168,10 +168,10 @@ bios straightforward.
 
 ### ATUI\_BITFIELD
 
-Classic bitfield representation. 
+Classic bitfield representation.
 
 The child leaves will assume missing fields from the `bitchild` section in
-`global_defaults`. 
+`global_defaults`.
 
 The children will be automatically marked with `_ATUI_BITCHILD` as its
 fancy type; as a result, the children can't have a fancy type.
@@ -284,7 +284,7 @@ The name of the branch object will copy the UI display name of the leaf.
 ### ATUI\_STRING / ATUI\_ARRAY
 
 If the element is a dynamically-sized NUL-terminated string, set the `fancy` to
-`ATUI_STRING`. 
+`ATUI_STRING`.
 
 If it's an array, data will be represented in the radix of your choosing, with
 the exception of fractions. If the array is text but has a static size, set the
@@ -344,14 +344,14 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 or number of elements needs a runtime computation, `ATUI_DYNARRY` can pull in
 the boundaries.
 
-The leaf pattern follows regular syntax and takes assumptions from the 
+The leaf pattern follows regular syntax and takes assumptions from the
 `dynpattern` section in `global_defaults`. Nested `ATUI_DYNARRAY` should be
 possible but is untested.
 
 <br>
 
 `dynarray_start_pointer` is a direct pointer that is treated as the beginning of
-the array, such that access would be effectively, 
+the array, such that access would be effectively,
 
 ``` C
 datatype* dataptr = &(source->array_start_pointer[i]);

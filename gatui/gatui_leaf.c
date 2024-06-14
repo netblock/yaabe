@@ -15,7 +15,7 @@ struct _GATUILeaf {
 	GATUILeaf* parent_leaf;
 
 	// for inter-family signal propagation
-	gulong parent_number; 
+	gulong parent_number;
 	gulong* phone_book;
 
 	uint16_t num_child_leaves;
@@ -92,7 +92,7 @@ static void
 gatui_leaf_init(
 		GATUILeaf* const self
 		) {
-	self->parent_leaf = NULL;	
+	self->parent_leaf = NULL;
 
 	self->parent_number = 0;
 	self->phone_book = NULL;
@@ -197,7 +197,7 @@ gatui_leaf_new(
 			enum_models_cache[leaf->enum_options - ATUI_ENUM_ARRAY]
 		);
 		g_object_ref(self->enum_model);
-	}	
+	}
 
 	if (leaf->num_child_leaves) {
 		GListStore* const child_list = g_list_store_new(GATUI_TYPE_LEAF);
@@ -210,7 +210,7 @@ gatui_leaf_new(
 		uint16_t const num_children = g_list_model_get_n_items(child_model);
 		self->num_child_leaves = num_children;
 		self->child_leaves = malloc(num_children * sizeof(GATUILeaf*));
-	
+
 		self->phone_book = malloc(num_children * sizeof(gulong));
 
 		GATUILeaf* child;

@@ -46,7 +46,7 @@ gatui_branch_test(
 			g_object_unref(child);
 		}
 	}
-	
+
 
 	GListModel* const branches = gatui_branch_generate_children_model(branch);
 	if (branches) {

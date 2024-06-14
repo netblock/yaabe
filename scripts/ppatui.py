@@ -690,7 +690,7 @@ indent + "{\n"
 			var_access = "&(%s)" % leaf.access
 		else:
 			var_access = "NULL"
-		if leaf.access_meta: 
+		if leaf.access_meta:
 			var_meta = leaf.access_meta
 		else:
 			var_meta = "NULL"
@@ -768,7 +768,7 @@ indent + "{\n"
 			leaf_text_extra
 		)
 	return leaves_text
-		
+
 
 def deep_count_leaves(
 		counters: list,

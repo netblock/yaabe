@@ -160,7 +160,7 @@ struct efi_pci_device_driver_image {
 	uint16_t pci_rom_size_in_512; // in 512 Bytes
 	uint32_t efi_signature; // 0xEF1
 	enum efi_pci_driver_subsystem_value subsystem_value;
-	enum efi_pci_driver_machine_type machine_type; 
+	enum efi_pci_driver_machine_type machine_type;
 	uint16_t compression_type; // 1 = Compressed following the UEFI algo
 	uint64_t reserved;
 	uint16_t efi_image_offset;

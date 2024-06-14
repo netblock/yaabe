@@ -64,7 +64,7 @@ atui_leaves_printer(
 	struct leaf_array* const leaves = &(level->target);
 	struct leaf_array_const* const active = &(level->feed);
 
-	
+
 	char8_t const* nametag;
 	if (level->nametag) {
 		nametag = level->nametag->enum_array[level->name_num].name;
@@ -292,7 +292,7 @@ atui_branch_allocator(
 		table->max_leaves = embryo->num_leaves_init;
 		// petiole doesn't get counted
 		table->leaf_count = first_leaves.target.pos - table->leaves;
-	
+
 		for (uint16_t i=0; i < table->leaf_count; i++) {
 			if (table->leaves[i].num_bytes) { // if it maps the bios
 				table->num_copyable_leaves++;

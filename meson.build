@@ -112,7 +112,7 @@ if get_option('nsis_installer')
 		],
 		output: 'yaabe-installer-' + meson.project_version() + '.exe',
 		command: [
-			nsis_helper,		
+			nsis_helper,
 			'@INPUT0@', # .nsi
 			'@CURRENT_SOURCE_DIR@', # gtk-assets, others
 			'@INPUT1@', # yaabe.exe
@@ -138,7 +138,7 @@ yaabe_test = executable('yaabe_test',
 
 
 # all test_roms/*.rom will become a test
-# If you already built but want to change the roms, 
+# If you already built but want to change the roms,
 # meson --reconfigure
 test_roms_dir = 'test_roms'
 romfiles = files()

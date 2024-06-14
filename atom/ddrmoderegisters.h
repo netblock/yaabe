@@ -200,12 +200,12 @@ union ddr4_mr_map {
 		BA0   :18-18 +1,
 		BA1   :19-19 +1,
 		BG0   :20-20 +1,
-		BG1   :21-21 +1, 
+		BG1   :21-21 +1,
 		_pad  :31-22 +1; // 32-bit pad
 	};
 	struct { uint32_t
 		MR_data   :13-0 +1, // usable data bits
-		MR_zero_0 :17-14 +1, 
+		MR_zero_0 :17-14 +1,
 		MR_select :20-18 +1,
 		MR_zero_1 :21-21 +1, // RFU, but all MR has it 0.
 		_pad2     :31-22 +1; // 32-bit pad
@@ -296,7 +296,7 @@ union ddr4_mr5 {
 		ODT_powerdown   :5-5 +1, // 0=buffer enabled; 1=disabled
 		RTT_Park        :8-6 +1, // 0=disabled 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7
 		CA_parity_stop  :9-9 +1, // CA parity stops on error; 0=stop 1=continue
-		data_maask     :10-10 +1, // write data mask (x8/x16 only); 0=disabled 
+		data_maask     :10-10 +1, // write data mask (x8/x16 only); 0=disabled
 		read_DBI       :11-11 +1, // data bus inversion; 0=disabled
 		write_DBI      :12-12 +1, // data bus inversion; 0=disabled
 		RFU_13         :13-13 +1,
@@ -911,7 +911,7 @@ union gddr7_mr8 {
 		DRFM          :2-2 +1, // directed management; 0=disable
 		BRC           :4-3 +1, // bounded config; 0=1,2; 1=12,3; 2=123,4; 3=rsvd
 		DCC           :6-5 +1, // duty cycle; 0=disable;1=start;2=rsvd;3=hold
-		self_refresh :10-9 +1, // 0=fixed; 1,2=vendor; 3=temp-controlled 
+		self_refresh :10-9 +1, // 0=fixed; 1,2=vendor; 3=temp-controlled
 		hibernate    :11-11 +1, // hibernate refresh sleep; 0=disable
         ID_lo        :15-12 +1; // MR 8. low bits
     };
@@ -1028,7 +1028,7 @@ union gddr7_mr20 {
     struct { uint16_t
 		scramble_code :7-0 +1, // 8-bit or 32-bit; 32UI x 8
 		RFU_8         :8-8 +1,
-		byte_address :11-9 +1, // 0..3=byte; 7=all 
+		byte_address :11-9 +1, // 0..3=byte; 7=all
         ID_lo        :15-12 +1; // MR 20. low bits
     };
 };

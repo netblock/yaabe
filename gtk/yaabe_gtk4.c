@@ -339,7 +339,7 @@ calculate_rightclick_popup_location(
 	);
 	assert(computed);
 
-	gtk_popover_set_pointing_to(context->rightclick, 
+	gtk_popover_set_pointing_to(context->rightclick,
 		& (GdkRectangle const) {
 			.x=view_coords.x, .y=view_coords.y, .width=1, .height=1
 		}
@@ -535,7 +535,7 @@ editable_sets_leaf(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	gatui_leaf_set_value_from_text(
-		g_leaf, 
+		g_leaf,
 		gtk_editable_get_text(editable)
 	);
 	g_object_unref(g_leaf);
@@ -1153,7 +1153,7 @@ leaves_rightclick_popup(
 	// actions. Simply replacing them seems to be fine.
 	g_object_unref(action_set);
 
-	// disconnect the selection blocker, and then select 
+	// disconnect the selection blocker, and then select
 	g_signal_handlers_disconnect_matched(
 		gtk_column_view_get_model(pack->commons->leaves.view), // SelectionModel
 		G_SIGNAL_MATCH_FUNC,
@@ -1559,7 +1559,7 @@ branches_rightclick_popup(
 	);
 	g_object_unref(g_branch); // we don't need a second reference.
 	pack->branch = g_branch;
-	
+
 	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
 	GActionEntry actions[6] = {0};
@@ -1704,7 +1704,7 @@ construct_tree_panes(
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
 	return tree_divider;
-} 
+}
 
 
 
@@ -1759,7 +1759,7 @@ filer_error_window(
 	GtkAlertDialog* const alert = gtk_alert_dialog_new(title);
 	gtk_alert_dialog_set_detail(alert, ferror->message);
 	gtk_alert_dialog_show(
-		alert, 
+		alert,
 		gtk_application_get_active_window(commons->yaabe_gtk)
 	);
 

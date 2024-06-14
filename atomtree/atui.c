@@ -281,7 +281,7 @@ atui_leaf_to_text(
 		} else {
 			buffer = malloc(buffer_size);
 			if (leaf->type.fraction) {
-				// %G format can have agressive rounding: 
+				// %G format can have agressive rounding:
 				// Q14.2 16383.75 -> 16383.8
 				sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
 			} else if (leaf->type.signed_num) {
@@ -529,7 +529,7 @@ _print_branch_path(
 		*path_walk = '/'; // eats the previous \0
 		path_walk++;
 	}
-	return path_walk; 
+	return path_walk;
 }
 char8_t*
 atui_branch_to_path(

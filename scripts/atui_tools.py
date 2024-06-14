@@ -241,7 +241,7 @@ def bitfield_to_atui(
 		bitfield_leaf,
 		text
 	)
-	
+
 	# eat struct { uint
 	text = re.sub("\tstruct { uint[0-9]+_t\n", "", text)
 
@@ -255,7 +255,7 @@ def bitfield_to_atui(
 	if explicit_attributes:
 		bit_child += "\g<1>\t\t\tdisplay: \"ATUI_DEC\",\n"
 	bit_child += "\g<1>\t\t},"
-	text = re.sub(	
+	text = re.sub(
 		tabs + name + space + hi_lo + comments,
 		bit_child,
 		text

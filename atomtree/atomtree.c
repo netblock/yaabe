@@ -4141,7 +4141,7 @@ atomtree_populate_pci_tables(
 	header.header = start;
 	uint8_t i = 0;
 	struct pci_rom_tables* const tables = atree_pci->pci_tables;
-	
+
 	do {
 		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
 			break;

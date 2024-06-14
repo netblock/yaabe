@@ -38,7 +38,7 @@ gatui_tree_finalize(
 		GObject* const object
 		) {
 	GATUITree* const self = GATUI_TREE(object);
-	atomtree_destroy(self->atomtree);	
+	atomtree_destroy(self->atomtree);
 }
 static void
 gatui_tree_class_init(

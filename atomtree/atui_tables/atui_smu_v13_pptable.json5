@@ -76,7 +76,7 @@ global_default: {
 				count: "(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 16 
+					{ // if COUNT changes, please change this 16
 						name: "OD feature [16 + %02u]",
 					},
 				],

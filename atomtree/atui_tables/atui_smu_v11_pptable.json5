@@ -480,7 +480,7 @@ global_default: {
 				count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 13 
+					{ // if COUNT changes, please change this 13
 						name: "min: [13 + %02u]",
 					},
 				],
