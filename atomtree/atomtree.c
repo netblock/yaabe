@@ -191,20 +191,37 @@ atomtree_dt_populate_lcd_info(
 	atui_branch* atui_lcd_info = NULL;
 	atui_branch* atui_lcd_timing = NULL;
 
+
 	if (bios_offset) {
 		lcd_info->leaves = atree->bios + bios_offset;
 		lcd_info->ver = get_ver(lcd_info->table_header);
 		if (generate_atui) {
 			switch (lcd_info->ver) {
-				/*case v1_3: TODO from atombios.h */
+				case v1_1:
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lvds_info_v1_1,
+						NULL,  NULL,lcd_info->leaves,  0,NULL
+					);
+					// TODO atom_lvds_info_v1_1's ModePatchTableOffset;
+					// see amdgpu_atombios_encoder_get_lcd_info
+					assert(0);
+					break;
+				case v1_2:
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lvds_info_v1_2,
+						NULL,  NULL,lcd_info->leaves,  0,NULL
+					);
+					break;
+				case v1_3:
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lcd_info_v1_3,
+						NULL,  NULL,lcd_info->leaves,  0,NULL
+					);
+					break;
 				case v2_1:
 					atui_lcd_info = ATUI_MAKE_BRANCH(atom_lcd_info_v2_1,
 						NULL,  NULL,lcd_info->leaves,  0,NULL
 					);
 					break;
 				default:
-					atui_lcd_info = ATUI_MAKE_BRANCH(
-						atom_common_table_header,
+					atui_lcd_info = ATUI_MAKE_BRANCH(atom_common_table_header,
 						u8"lcd_info (header only stub)",
 						NULL,lcd_info->table_header,  0,NULL
 					);

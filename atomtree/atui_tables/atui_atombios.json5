@@ -1766,7 +1766,480 @@ global_default: {
 			name: "max_texture_channel_caches",
 		},
 	],
+},
+
+{
+	c_prefix: "union", c_type: "supported_refresh_rate",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "Refer to panel info table in ATOMBIOS extension Spec.",},
+	],
+	leaves: [
+		{
+			access: "bios->supported_refresh_rate",
+			name: "supported_refresh_rate",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "rsvd_1",
+					hi: 1, lo: 1,
+				}, {
+					name: "rsvd_2",
+					hi: 1, lo: 1,
+				}, {
+					name: "_30Hz",
+					hi: 2, lo: 2,
+				}, {
+					name: "_40Hz",
+					hi: 3, lo: 3,
+				}, {
+					name: "_50Hz",
+					hi: 4, lo: 4,
+				}, {
+					name: "_60Hz",
+					hi: 5, lo: 5,
+				}, {
+					name: "_48Hz",
+					hi: 6, lo: 6,
+				}, {
+					name: "rsvd_7",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
 }, {
+	c_type: "atom_lvds_refresh_rate_support",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->supported_refresh_rate",
+			name: "supported_refresh_rate",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "supported_refresh_rate",
+			description: [
+				{language: "english", text: "Refer to panel info table in ATOMBIOS extension Spec.",},
+			],
+		}, {
+			access: "bios->supported_reserved",
+			name: "supported_reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "lvds_misc",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->lvds_misc",
+			name: "lvds_misc",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "dual_link",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "0 = single; 1 = dual",},
+					],
+				}, {
+					name: "RGB888",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "0 = 666; 1 = 888",},
+					],
+				}, {
+					name: "grey_level",
+					hi: 3, lo: 2,
+				}, {
+					name: "FPDI",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "for RGB888; 0 = LDI; 1 = FPDI",},
+					],
+				}, {
+					name: "spatial_dither",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "0=disabled",},
+					],
+				}, {
+					name: "temporal_dither",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "0=disabled",},
+					],
+				}, {
+					name: "rsvd_7",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_lvds_info_v1_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->LCDTiming",
+			name: "LCDTiming",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+		}, {
+			access: "bios->ModePatchTableOffset",
+			name: "ModePatchTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SupportedRefreshRate",
+			name: "SupportedRefreshRate",
+		}, {
+			access: "bios->supported_refresh_rate",
+			name: "supported_refresh_rate",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_lvds_refresh_rate_support",
+		}, {
+			access: "bios->OffDelayInMs",
+			name: "OffDelayInMs",
+		}, {
+			access: "bios->PowerSequenceDigOntoDEin10Ms",
+			name: "PowerSequenceDigOntoDEin10Ms",
+		}, {
+			access: "bios->PowerSequenceDEtoBLOnin10Ms",
+			name: "PowerSequenceDEtoBLOnin10Ms",
+		}, {
+			access: "bios->lvds_misc",
+			name: "lvds_misc",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "lvds_misc",
+		}, {
+			access: "bios->PanelDefaultRefreshRate",
+			name: "PanelDefaultRefreshRate",
+		}, {
+			access: "bios->PanelIdentification",
+			name: "PanelIdentification",
+		}, {
+			access: "bios->SS_Id",
+			name: "SS_Id",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "lcd_panel_special_handling_cap",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->lcd_panel_special_handling_cap",
+			name: "lcd_panel_special_handling_cap",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "read_edid",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "1=DAL reads EDID instead of atom_dtd_format",},
+					],
+				}, {
+					name: "drr_supported",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "1=dynamic refresh rate",},
+					],
+				}, {
+					name: "is_edp",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "0=LVDS 1=eDP",},
+					],
+				}, {
+					name: "color_depth",
+					hi: 6, lo: 4,
+					description: [
+						{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
+					],
+				}, {
+					name: "random_dither",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "0=disabled",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_lvds_info_v1_2",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->LCDTiming",
+			name: "LCDTiming",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+		}, {
+			access: "bios->ExtInfoTableOffset",
+			name: "ExtInfoTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->supported_refresh_rate",
+			name: "supported_refresh_rate",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_lvds_refresh_rate_support",
+		}, {
+			access: "bios->OffDelayInMs",
+			name: "OffDelayInMs",
+		}, {
+			access: "bios->PowerSequenceDigOntoDEin10Ms",
+			name: "PowerSequenceDigOntoDEin10Ms",
+		}, {
+			access: "bios->PowerSequenceDEtoBLOnin10Ms",
+			name: "PowerSequenceDEtoBLOnin10Ms",
+		}, {
+			access: "bios->lvds_misc",
+			name: "lvds_misc",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "lvds_misc",
+		}, {
+			access: "bios->PanelDefaultRefreshRate",
+			name: "PanelDefaultRefreshRate",
+		}, {
+			access: "bios->PanelIdentification",
+			name: "PanelIdentification",
+		}, {
+			access: "bios->SS_Id",
+			name: "SS_Id",
+		}, {
+			access: "bios->LCDVenderID",
+			name: "LCDVenderID",
+		}, {
+			access: "bios->LCDProductID",
+			name: "LCDProductID",
+		}, {
+			access: "bios->special_handling",
+			name: "special_handling",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "lcd_panel_special_handling_cap",
+		}, {
+			access: "bios->PanelInfoSize",
+			name: "PanelInfoSize",
+			description: [
+				{language: "english", text: "start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_lcd_refresh_rate_support",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->supported_refresh_rate",
+			name: "supported_refresh_rate",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "supported_refresh_rate",
+		}, {
+			access: "bios->MinRefreshRateForDRR",
+			name: "MinRefreshRateForDRR",
+		},
+	],
+},
+{
+	c_prefix: "union", c_type: "lcd_misc",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->lcd_misc",
+			name: "lcd_misc",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "dual_link",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "0 = single; 1 = dual",},
+					],
+				}, {
+					name: "FPDI",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "0 = LDI; 1 = FPDI",},
+					],
+				}, {
+					name: "grey_level",
+					hi: 3, lo: 2,
+				}, {
+					name: "color_depth",
+					hi: 6, lo: 4,
+					description: [
+						{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
+					],
+				}, {
+					name: "rsvd_7",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_lcd_info_v1_3",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->lcd_timing",
+			name: "lcd_timing",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+		}, {
+			access: "bios->ExtInfoTableOffset",
+			name: "ExtInfoTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->RefreshRateSupport",
+			name: "RefreshRateSupport",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_lcd_refresh_rate_support",
+		}, {
+			access: "bios->Reserved0",
+			name: "Reserved0",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->lcd_misc",
+			name: "lcd_misc",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "lcd_misc",
+		}, {
+			access: "bios->PanelDefaultRefreshRate",
+			name: "PanelDefaultRefreshRate",
+		}, {
+			access: "bios->PanelIdentification",
+			name: "PanelIdentification",
+		}, {
+			access: "bios->SS_Id",
+			name: "SS_Id",
+		}, {
+			access: "bios->LCDVenderID",
+			name: "LCDVenderID",
+		}, {
+			access: "bios->LCDProductID",
+			name: "LCDProductID",
+		}, {
+			access: "bios->special_handling",
+			name: "special_handling",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "lcd_panel_special_handling_cap",
+		}, {
+			access: "bios->PanelInfoSize",
+			name: "PanelInfoSize",
+			description: [
+				{language: "english", text: "start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable",},
+			],
+		}, {
+			access: "bios->BacklightPWM",
+			name: "BacklightPWM",
+			description: [
+				{language: "english", text: "Backlight PWM in Hz. New in _V13",},
+			],
+		},
+
+		{
+			access: "bios->PowerSequenceDIGONtoDE_in4Ms",
+			name: "PowerSequenceDIGONtoDE_in4Ms",
+		}, {
+			access: "bios->PowerSequenceDEtoVARY_BL_in4Ms",
+			name: "PowerSequenceDEtoVARY_BL_in4Ms",
+		}, {
+			access: "bios->PowerSequenceVARY_BLtoDE_in4Ms",
+			name: "PowerSequenceVARY_BLtoDE_in4Ms",
+		}, {
+			access: "bios->PowerSequenceDEtoDIGON_in4Ms",
+			name: "PowerSequenceDEtoDIGON_in4Ms",
+		},
+
+		{
+			access: "bios->OffDelay_in4Ms",
+			name: "OffDelay_in4Ms",
+		}, {
+			access: "bios->PowerSequenceVARY_BLtoBLON_in4Ms",
+			name: "PowerSequenceVARY_BLtoBLON_in4Ms",
+		}, {
+			access: "bios->PowerSequenceBLONtoVARY_BL_in4Ms",
+			name: "PowerSequenceBLONtoVARY_BL_in4Ms",
+		}, {
+			access: "bios->Reserved1",
+			name: "Reserved1",
+			display: "ATUI_HEX",
+		},
+
+		{
+			access: "bios->DPCD_eDP_CONFIGURATION_CAP",
+			name: "DPCD_eDP_CONFIGURATION_CAP",
+			description: [
+				{language: "english", text: "dpcd 0dh",},
+			],
+		}, {
+			access: "bios->DPCD_MAX_LINK_RATE",
+			name: "DPCD_MAX_LINK_RATE",
+			description: [
+				{language: "english", text: "dpcd 01h",},
+			],
+		}, {
+			access: "bios->DPCD_MAX_LANE_COUNT",
+			name: "DPCD_MAX_LANE_COUNT",
+			description: [
+				{language: "english", text: "dpcd 02h",},
+			],
+		}, {
+			access: "bios->DPCD_MAX_DOWNSPREAD",
+			name: "DPCD_MAX_DOWNSPREAD",
+			description: [
+				{language: "english", text: "dpcd 03h",},
+			],
+		},
+
+		{
+			access: "bios->MaxPclkFreqInSingleLink",
+			name: "MaxPclkFreqInSingleLink",
+			description: [
+				{language: "english", text: "Max PixelClock frequency in single link mode.",},
+			],
+		}, {
+			access: "bios->eDPToLVDSRxId",
+			name: "eDPToLVDSRxId",
+			fancy: "ATUI_ENUM", fancy_data: "atom_lcd_info_dptolvds_rx_id",
+		}, {
+			access: "bios->LcdReservd",
+			name: "LcdReservd",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+
+{
 	c_type: "atom_gfx_info_v2_3",
 	leaves: [
 		{

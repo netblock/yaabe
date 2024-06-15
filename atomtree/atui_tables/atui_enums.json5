@@ -253,6 +253,18 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // atombios.h
 
+{name: "lcd_record_type",
+	constants: [
+		{name: "LCD_MODE_PATCH_RECORD_MODE_TYPE",},
+		{name: "LCD_RTS_RECORD_TYPE",},
+		{name: "LCD_CAP_RECORD_TYPE",},
+		{name: "LCD_FAKE_EDID_PATCH_RECORD_TYPE",},
+		{name: "LCD_PANEL_RESOLUTION_RECORD_TYPE",},
+		{name: "LCD_EDID_OFFSET_PATCH_RECORD_TYPE",},
+		{name: "LCD_RECORD_END_TYPE",},
+]},
+
+
 /******************************************************************************/
 // powerplay.h
 

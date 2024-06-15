@@ -114,6 +114,7 @@
 #define ATOM_PM_SUSPEND 2
 #define ATOM_PM_OFF     3
 
+/*
 // For ATOM_LVDS_INFO_V12
 // Bit0:{=0:single, =1:dual},
 // Bit1 {=0:666RGB, =1:888RGB},
@@ -127,6 +128,7 @@
 #define ATOM_PANEL_MISC_SPATIAL          0x00000020
 #define ATOM_PANEL_MISC_TEMPORAL         0x00000040
 #define ATOM_PANEL_MISC_API_ENABLED      0x00000080
+*/
 
 #define MEMTYPE_DDR1 "DDR1"
 #define MEMTYPE_DDR2 "DDR2"
@@ -3546,26 +3548,68 @@ struct atom_dtd_format {
 // Structure used in LVDS_InfoTable
 // * Need a document to describe this table
 /******************************************************************************/
+/*
 #define SUPPORTED_LCD_REFRESHRATE_30Hz 0x0004
 #define SUPPORTED_LCD_REFRESHRATE_40Hz 0x0008
 #define SUPPORTED_LCD_REFRESHRATE_50Hz 0x0010
 #define SUPPORTED_LCD_REFRESHRATE_60Hz 0x0020
 #define SUPPORTED_LCD_REFRESHRATE_48Hz 0x0040
+*/
+
+union supported_refresh_rate { // Refer to panel info table in ATOMBIOS extension Spec.
+	uint8_t supported_refresh_rate;
+	struct { uint8_t
+		rsvd_1 :1-1 +1,
+		rsvd_2 :1-1 +1,
+		_30Hz  :2-2 +1,
+		_40Hz  :3-3 +1,
+		_50Hz  :4-4 +1,
+		_60Hz  :5-5 +1,
+		_48Hz  :6-6 +1,
+		rsvd_7 :7-7 +1;
+	};
+};
+struct atom_lvds_refresh_rate_support {
+	union supported_refresh_rate  supported_refresh_rate; // Refer to panel info table in ATOMBIOS extension Spec.
+	uint8_t  supported_reserved;
+};
+
+union lvds_misc {
+	uint8_t lvds_misc;
+	struct { uint8_t
+		dual_link       :0-0 +1, // 0 = single; 1 = dual
+		RGB888          :1-1 +1, // 0 = 666; 1 = 888
+		grey_level      :3-2 +1,
+		FPDI            :4-4 +1, // for RGB888; 0 = LDI; 1 = FPDI
+		spatial_dither  :5-5 +1, // 0=disabled
+		temporal_dither :5-5 +1, // 0=disabled
+		rsvd_7          :7-7 +1; // ATOM_PANEL_MISC_API_ENABLED
+	};
+};
+
+union lcd_panel_special_handling_cap {
+	uint8_t lcd_panel_special_handling_cap;
+	struct { uint8_t
+		read_edid     :0-0 +1, // 1=DAL reads EDID instead of atom_dtd_format
+		drr_supported :1-1 +1, // 1=dynamic refresh rate
+		is_edp        :2-2 +1, // 0=LVDS 1=eDP
+		color_depth   :6-4 +1, // EDID V1.4 bits per color; 1=6,2=8..6=16 bpc
+		random_dither :7-7 +1; // 0=disabled
+	};
+};
 
 // ucTableFormatRevision=1
 // ucTableContentRevision=1
-struct atom_lvds_info {
+struct atom_lvds_info_v1_1 {
 	struct atom_common_table_header  table_header;
 	struct atom_dtd_format  LCDTiming;
 	uint16_t ModePatchTableOffset;
-	uint16_t SupportedRefreshRate; // Refer to panel info table in ATOMBIOS extension Spec.
+	uint16_t SupportedRefreshRate;
+	struct atom_lvds_refresh_rate_support supported_refresh_rate;
 	uint16_t OffDelayInMs;
 	uint8_t  PowerSequenceDigOntoDEin10Ms;
 	uint8_t  PowerSequenceDEtoBLOnin10Ms;
-	uint8_t  LVDS_Misc; // Bit0:{=0:single, =1:dual},Bit1 {=0:666RGB, =1:888RGB},Bit2:3:{Grey level}
-                        // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
-                        // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
-                        // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
+	union lvds_misc  lvds_misc;
 	uint8_t  PanelDefaultRefreshRate;
 	uint8_t  PanelIdentification;
 	uint8_t  SS_Id;
@@ -3573,28 +3617,26 @@ struct atom_lvds_info {
 
 // ucTableFormatRevision=1
 // ucTableContentRevision=2
-struct atom_lvds_info_v12 {
+struct atom_lvds_info_v1_2 {
 	struct atom_common_table_header  table_header;
 	struct atom_dtd_format  LCDTiming;
 	uint16_t ExtInfoTableOffset;
-	uint16_t SupportedRefreshRate;     // Refer to panel info table in ATOMBIOS extension Spec.
+	struct atom_lvds_refresh_rate_support supported_refresh_rate;
 	uint16_t OffDelayInMs;
 	uint8_t  PowerSequenceDigOntoDEin10Ms;
 	uint8_t  PowerSequenceDEtoBLOnin10Ms;
-	uint8_t  LVDS_Misc; // Bit0:{=0:single, =1:dual},Bit1 {=0:666RGB, =1:888RGB},Bit2:3:{Grey level}
-                        // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
-                        // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
-                        // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
+	union lvds_misc  lvds_misc;
 	uint8_t  PanelDefaultRefreshRate;
 	uint8_t  PanelIdentification;
 	uint8_t  SS_Id;
 	uint16_t LCDVenderID;
 	uint16_t LCDProductID;
-	uint8_t  LCDPanel_SpecialHandlingCap;
+	union lcd_panel_special_handling_cap  special_handling;
 	uint8_t  PanelInfoSize; // start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable
 	uint8_t  Reserved[2];
 };
 
+/*
 // Definitions for ucLCDPanel_SpecialHandlingCap:
 
 // Once DAL sees this CAP is set, it will read EDID from LCD on its own instead of using sLCDTiming in ATOM_LVDS_INFO_V12.
@@ -3609,7 +3651,6 @@ struct atom_lvds_info_v12 {
 // Use this cap bit for a quick reference whether an embadded panel (LCD1 ) is LVDS or eDP.
 #define LCDPANEL_CAP_eDP           0x4
 
-/*
 Color Bit Depth definition in EDID V1.4 @BYTE 14h
 Bit 6  5  4
     0  0  0 -  Color bit depth is undefined
@@ -3620,7 +3661,6 @@ Bit 6  5  4
     1  0  1 - 14 Bits per Primary Color
     1  1  0 - 16 Bits per Primary Color
     1  1  1 - Reserved
-*/
 #define PANEL_COLOR_BIT_DEPTH_MASK 0x70
 
 // Bit7:{=0:Random Dithering disabled;1 Random Dithering enabled}
@@ -3628,45 +3668,56 @@ Bit 6  5  4
 #define PANEL_RANDOM_DITHER_MASK 0x80
 
 #define ATOM_LVDS_INFO_LAST  ATOM_LVDS_INFO_V12   // no need to change this
+*/
 
 
 struct atom_lcd_refresh_rate_support {
-	uint8_t  SupportedRefreshRate;
+	union supported_refresh_rate  supported_refresh_rate;
 	uint8_t  MinRefreshRateForDRR;
 };
 
 /******************************************************************************/
-// Structures used by LCD_InfoTable V1.3    Note: previous version was called ATOM_LVDS_INFO_V12
+// Structures used by LCD_InfoTable V1.3
+// Note: previous version was called ATOM_LVDS_INFO_V12
 // ASIC Families:  NI
 // ucTableFormatRevision=1
 // ucTableContentRevision=3
 /******************************************************************************/
-struct atom_lcd_info_v13 {
-	struct atom_common_table_header  table_header;
-	struct atom_dtd_format  LCDTiming;
-	uint16_t ExtInfoTableOffset;
-	union {
-		uint16_t SupportedRefreshRate;
-		struct atom_lcd_refresh_rate_support  RefreshRateSupport;
+
+union lcd_misc {
+	uint8_t lcd_misc;
+	struct { uint8_t
+		dual_link   :0-0 +1, // 0 = single; 1 = dual
+		FPDI        :1-1 +1, // 0 = LDI; 1 = FPDI
+		grey_level  :3-2 +1,
+		color_depth :6-4 +1, // EDID V1.4 bits per color; 1=6,2=8..6=16 bpc
+		rsvd_7      :7-7 +1; // ATOM_PANEL_MISC_API_ENABLED
 	};
+};
+
+
+/*
+enum eDP_TO_LVDS:uint8_t {
+	eDP_TO_LVDS_RX_DISABLE  = 0x00, // no eDP->LVDS translator chip
+	eDP_TO_LVDS_COMMON_ID   = 0x01, // common eDP->LVDS translator chip without AMD SW init
+	eDP_TO_LVDS_RT_ID       = 0x02, // RT tansaltor which require AMD SW init
+};
+*/
+
+struct atom_lcd_info_v1_3 {
+	struct atom_common_table_header  table_header;
+	struct atom_dtd_format  lcd_timing;
+	uint16_t ExtInfoTableOffset;
+	struct atom_lcd_refresh_rate_support  RefreshRateSupport;
 	uint32_t Reserved0;
-	uint8_t  LCD_Misc; // Reorganized in V13
-                       // Bit0: {=0:single, =1:dual},
-                       // Bit1: {=0:LDI format for RGB888, =1 FPDI format for RGB888}  // was {=0:666RGB, =1:888RGB},
-                       // Bit3:2: {Grey level}
-                       // Bit6:4 Color Bit Depth definition (see below definition in EDID V1.4 @BYTE 14h)
-                       // Bit7   Reserved.  was for ATOM_PANEL_MISC_API_ENABLED, still need it?
+	union lcd_misc  lcd_misc;
 	uint8_t  PanelDefaultRefreshRate;
 	uint8_t  PanelIdentification;
 	uint8_t  SS_Id;
 	uint16_t LCDVenderID;
 	uint16_t LCDProductID;
-	uint8_t  LCDPanel_SpecialHandlingCap; // Reorganized in V13
-                                          // Bit0: Once DAL sees this CAP is set, it will read EDID from LCD on its own
-                                          // Bit1: See LCDPANEL_CAP_DRR_SUPPORTED
-                                          // Bit2: a quick reference whether an embadded panel (LCD1 ) is LVDS (0) or eDP (1)
-                                          // Bit7-3: Reserved
-	uint8_t  PanelInfoSize;               // start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable
+	union lcd_panel_special_handling_cap  special_handling;
+	uint8_t  PanelInfoSize; // start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable
 	uint16_t BacklightPWM; // Backlight PWM in Hz. New in _V13
 
 	uint8_t  PowerSequenceDIGONtoDE_in4Ms;
@@ -3685,14 +3736,15 @@ struct atom_lcd_info_v13 {
 	uint8_t  DPCD_MAX_DOWNSPREAD;        // dpcd 03h
 
 	uint16_t MaxPclkFreqInSingleLink; // Max PixelClock frequency in single link mode.
-	uint8_t  eDPToLVDSRxId;
+	enum atom_lcd_info_dptolvds_rx_id eDPToLVDSRxId;
 	uint8_t  LcdReservd;
 	uint32_t Reserved[2];
 };
 
-#define ATOM_LCD_INFO_LAST  ATOM_LCD_INFO_V13
+//#define ATOM_LCD_INFO_LAST  ATOM_LCD_INFO_V13
 
 // Definitions for ucLCD_Misc
+/*
 #define ATOM_PANEL_MISC_V13_DUAL                   0x00000001
 #define ATOM_PANEL_MISC_V13_FPDI                   0x00000002
 #define ATOM_PANEL_MISC_V13_GREY_LEVEL             0x0000000C
@@ -3701,51 +3753,53 @@ struct atom_lcd_info_v13 {
 #define ATOM_PANEL_MISC_V13_6BIT_PER_COLOR         0x10
 #define ATOM_PANEL_MISC_V13_8BIT_PER_COLOR         0x20
 
-// Color Bit Depth definition in EDID V1.4 @BYTE 14h
-// Bit 6  5  4
-//     0  0  0 -  Color bit depth is undefined
-//     0  0  1 -  6 Bits per Primary Color
-//     0  1  0 -  8 Bits per Primary Color
-//     0  1  1 - 10 Bits per Primary Color
-//     1  0  0 - 12 Bits per Primary Color
-//     1  0  1 - 14 Bits per Primary Color
-//     1  1  0 - 16 Bits per Primary Color
-//     1  1  1 - Reserved
-
 // Definitions for ucLCDPanel_SpecialHandlingCap:
 
-// Once DAL sees this CAP is set, it will read EDID from LCD on its own instead of using sLCDTiming in ATOM_LVDS_INFO_V12.
+// Once DAL sees this CAP is set, it will read EDID from LCD on its own instead
+// of using sLCDTiming in ATOM_LVDS_INFO_V12.
 // Other entries in ATOM_LVDS_INFO_V12 are still valid/useful to DAL
-#define LCDPANEL_CAP_V13_READ_EDID     0x1 // = LCDPANEL_CAP_READ_EDID no change comparing to previous version
+// 1 = LCDPANEL_CAP_READ_EDID no change comparing to previous version
+#define LCDPANEL_CAP_V13_READ_EDID     0x1
 
-// If a design supports DRR (dynamic refresh rate) on internal panels (LVDS or EDP), this cap is set in ucLCDPanel_SpecialHandlingCap together
-// with multiple supported refresh rates@usSupportedRefreshRate. This cap should not be set when only slow refresh rate is supported (static
-// refresh rate switch by SW. This is only valid from ATOM_LVDS_INFO_V12
-#define LCDPANEL_CAP_V13_DRR_SUPPORTED 0x2 // = LCDPANEL_CAP_DRR_SUPPORTED no change comparing to previous version
+// If a design supports DRR (dynamic refresh rate) on internal panels
+// (LVDS or EDP), this cap is set in ucLCDPanel_SpecialHandlingCap together
+// with multiple supported refresh rates@usSupportedRefreshRate. This cap
+// should not be set when only slow refresh rate is supported (static refresh
+// rate switch by SW. This is only valid from ATOM_LVDS_INFO_V12
+// = LCDPANEL_CAP_DRR_SUPPORTED no change comparing to previous version
+#define LCDPANEL_CAP_V13_DRR_SUPPORTED 0x2
 
-// Use this cap bit for a quick reference whether an embadded panel (LCD1 ) is LVDS or eDP.
-#define LCDPANEL_CAP_V13_eDP           0x4 // = LCDPANEL_CAP_eDP no change comparing to previous version
+// Use this cap bit for a quick reference whether an embadded panel (LCD1) is
+// LVDS or eDP.
+// 1 = = LCDPANEL_CAP_eDP no change comparing to previous version
+#define LCDPANEL_CAP_V13_eDP           0x4
 
-// uceDPToLVDSRxId
-#define eDP_TO_LVDS_RX_DISABLE 0x00 // no eDP->LVDS translator chip
-#define eDP_TO_LVDS_COMMON_ID  0x01 // common eDP->LVDS translator chip without AMD SW init
-#define eDP_TO_LVDS_RT_ID      0x02 // RT tansaltor which require AMD SW init
+*/
+
+enum lcd_record_type:uint8_t { // see amdgpu_atombios_encoder_get_lcd_info
+	LCD_MODE_PATCH_RECORD_MODE_TYPE   = 1,
+	LCD_RTS_RECORD_TYPE               = 2,
+	LCD_CAP_RECORD_TYPE               = 3,
+	LCD_FAKE_EDID_PATCH_RECORD_TYPE   = 4,
+	LCD_PANEL_RESOLUTION_RECORD_TYPE  = 5,
+	LCD_EDID_OFFSET_PATCH_RECORD_TYPE = 6,
+	LCD_RECORD_END_TYPE            = 0xFF,
+};
 
 struct atom_patch_record_mode {
-	uint8_t  RecordType;
+	enum lcd_record_type RecordType;
 	uint16_t HDisp;
 	uint16_t VDisp;
 };
-
 struct atom_lcd_rts_record {
-	uint8_t  RecordType;
+	enum lcd_record_type RecordType;
 	uint8_t  RTSValue;
 };
 
 // !! If the record below exits, it shoud always be the first record for easy use in command table!!!
 // The record below is only used when LVDS_Info is present. From ATOM_LVDS_INFO_V12, use ucLCDPanel_SpecialHandlingCap instead.
 struct atom_lcd_mode_control_cap {
-	uint8_t  RecordType;
+	enum lcd_record_type RecordType;
 	uint16_t LCDCap;
 };
 
@@ -3753,26 +3807,26 @@ struct atom_lcd_mode_control_cap {
 #define LCD_MODE_CAP_CRTC_OFF  2
 #define LCD_MODE_CAP_PANEL_OFF 4
 
-
 struct atom_fake_edid_patch_record {
-	uint8_t  RecordType;
+	enum lcd_record_type RecordType;
 	uint8_t  FakeEDIDLength;   // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
 	uint8_t  FakeEDIDString[]; // This actually has ucFakeEdidLength elements.
 };
 
 struct atom_panel_resolution_patch_record {
-	uint8_t  RecordType;
+	enum lcd_record_type RecordType;
 	uint16_t HSize;
 	uint16_t VSize;
 };
 
-#define LCD_MODE_PATCH_RECORD_MODE_TYPE   1
-#define LCD_RTS_RECORD_TYPE               2
-#define LCD_CAP_RECORD_TYPE               3
-#define LCD_FAKE_EDID_PATCH_RECORD_TYPE   4
-#define LCD_PANEL_RESOLUTION_RECORD_TYPE  5
-#define LCD_EDID_OFFSET_PATCH_RECORD_TYPE 6
-#define ATOM_RECORD_END_TYPE              0xFF
+union lcd_record {
+	struct atom_lcd_mode_control_cap    lcd_mode_control_cap;
+	struct atom_patch_record_mode       patch_record;
+	struct atom_lcd_rts_record          lcd_rts_record;
+	struct atom_fake_edid_patch_record  fake_edid_patch_record;
+	struct atom_panel_resolution_patch_record  panel_resolution_patch_record;
+};
+
 
 /******************************************************************************/
 // Spread Spectrum Info Table Definitions
