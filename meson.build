@@ -12,6 +12,17 @@ project('yaabe', 'c',
 fs = import('fs')
 
 cc = meson.get_compiler('c')
+mold = find_program('mold', required: false)
+if mold.found()
+	add_project_arguments(
+		'-fuse-ld=mold',
+		language: 'c',
+	)
+	add_project_link_arguments(
+		'-fuse-ld=mold',
+		language: 'c',
+	)
+endif
 if 'debug' == get_option('buildtype')
 	add_project_arguments(
 		'-fstack-protector-strong',
