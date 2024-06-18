@@ -26,8 +26,9 @@ def struct_to_atui(
 	c_num_types = "((?:u?int|char|float|uq\d+_)\d+_t)" + white
 	c_ints = "((?:u?int|char)[0-9]+_t)" + white
 	name = "([a-zA-Z_]\w*)" + white
+	array_alnum = "\["+white +"(\w*)"+ white+"\]" + white
 	array_var = "\["+white +name+ white+"\]" + white
-	array_num = "\["+white +nums+ white+"\]" + white
+	array_num = "\["+white +"(\d*)"+ white+"\]" + white
 	comments = "(?:" + white + "(//\s*(.*)))?"
 	flagged_comment = "__ATUIDESCR//\s*(.*)"
 	no_comment = tabs + "__ATUIDESCR\n"
@@ -73,7 +74,7 @@ def struct_to_atui(
 		},\
 """
 	text = re.sub(
-		"\s*" + c_prefix + name + name + array_var + ";" + comments,
+		"\s*" + c_prefix + name + name + array_alnum + ";" + comments,
 		dynarray,
 		text
 	)
