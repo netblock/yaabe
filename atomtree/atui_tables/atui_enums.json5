@@ -129,12 +129,6 @@ Enums for ATUI_ENUM
 	constants: [
 		{name: "ATOM_PANEL_MISC_FPDI",},
 ]},
-{name: "atom_lcd_info_dptolvds_rx_id",
-	constants: [
-		{name: "eDP_TO_LVDS_RX_DISABLE",},
-		{name: "eDP_TO_LVDS_COMMON_ID",},
-		{name: "eDP_TO_LVDS_REALTEK_ID",},
-]},
 
 
 {name: "atom_spread_spectrum_mode",
@@ -146,6 +140,11 @@ Enums for ATUI_ENUM
 		{name: "ATOM_INTERNAL_SS_MASK",},
 		{name: "ATOM_EXTERNAL_SS_MASK",},
 ]},
+
+
+
+/******************************************************************************/
+// atombios.h
 
 {name: "DRAM_DENSITY_e",
 	description: [
@@ -216,6 +215,23 @@ Enums for ATUI_ENUM
 ]},
 
 
+{name: "atom_lcd_info_dptolvds_rx_id",
+	constants: [
+		{name: "eDP_TO_LVDS_RX_DISABLE",},
+		{name: "eDP_TO_LVDS_COMMON_ID",},
+		{name: "eDP_TO_LVDS_REALTEK_ID",},
+]},
+{name: "lcd_record_type",
+	constants: [
+		{name: "LCD_MODE_PATCH_RECORD_MODE_TYPE",},
+		{name: "LCD_RTS_RECORD_TYPE",},
+		{name: "LCD_CAP_RECORD_TYPE",},
+		{name: "LCD_FAKE_EDID_PATCH_RECORD_TYPE",},
+		{name: "LCD_PANEL_RESOLUTION_RECORD_TYPE",},
+		{name: "LCD_EDID_OFFSET_PATCH_RECORD_TYPE",},
+		{name: "LCD_RECORD_END_TYPE",},
+]},
+
 {name: "atom_voltage_type",
 	constants: [
 		{name: "VOLTAGE_TYPE_VDDC",},
@@ -248,20 +264,6 @@ Enums for ATUI_ENUM
 		{name: "VOLTAGE_OBJ_SVID2",},
 		{name: "VOLTAGE_OBJ_EVV",},
 		{name: "VOLTAGE_OBJ_MERGED_POWER",},
-]},
-
-/******************************************************************************/
-// atombios.h
-
-{name: "lcd_record_type",
-	constants: [
-		{name: "LCD_MODE_PATCH_RECORD_MODE_TYPE",},
-		{name: "LCD_RTS_RECORD_TYPE",},
-		{name: "LCD_CAP_RECORD_TYPE",},
-		{name: "LCD_FAKE_EDID_PATCH_RECORD_TYPE",},
-		{name: "LCD_PANEL_RESOLUTION_RECORD_TYPE",},
-		{name: "LCD_EDID_OFFSET_PATCH_RECORD_TYPE",},
-		{name: "LCD_RECORD_END_TYPE",},
 ]},
 
 

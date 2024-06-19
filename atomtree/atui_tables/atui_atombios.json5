@@ -23,6 +23,362 @@ global_default: {
 		},
 	},
 }, branches: [
+
+{
+	c_type: "pci_rom_header",
+	atomtree: "atom_tree",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "standard PCIe ROM header",},
+	],
+	leaves: [
+		{
+			access: "bios->pci_rom_signature",
+			name: "pci_rom_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.",},
+			],
+		}, {
+			access: "bios->pci_rom_size_in_512",
+			name: "pci_rom_size_in_512",
+			description: [
+				{language: "english", text: "in 512 Bytes",},
+			],
+		}, {
+			access: "bios->jump_core_main_init_bios",
+			name: "jump_core_main_init_bios",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "x86 init code",},
+			],
+		}, {
+			access: "bios->label_core_main_init_bios",
+			name: "label_core_main_init_bios",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pci_reserved",
+			name: "pci_reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "reserved for user",},
+			],
+		}, {
+			access: "bios->pcir_structure_offset",
+			name: "pcir_structure_offset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "vbios_rom_header",
+	atomtree: "atom_tree",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pci_header",
+			name: "pci_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
+		}, {
+			access: "bios->rsvd_1d_1a",
+			name: "rsvd_1d_1a",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->IBM",
+			name: "IBM",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "IBM",},
+			],
+		}, {
+			access: "bios->checksum",
+			name: "checksum",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->unsure",
+			name: "unsure",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "could be more checksums?",},
+			],
+		}, {
+			access: "bios->bios_msg_number",
+			name: "bios_msg_number",
+		}, {
+			access: "bios->atomati_magic",
+			name: "atomati_magic",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "\" 761295520\"",},
+			],
+		},{
+			access: "bios->label_corev_post_no_mode",
+			name: "label_corev_post_no_mode",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->special_post_offset",
+			name: "special_post_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->special_post_image_size_in_512",
+			name: "special_post_image_size_in_512",
+		}, {
+			access: "bios->rsvd_47_45",
+			name: "rsvd_47_45",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->rom_header_info_table_offset",
+			name: "rom_header_info_table_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->rsvd_4f_4a",
+			name: "rsvd_4f_4a",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->build_timestamp",
+			name: "build_timestamp",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->jump_corex_func_far_handler",
+			name: "jump_corex_func_far_handler",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->corex_func_far_handler_offset",
+			name: "corex_func_far_handler_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->rsvd_67",
+			name: "rsvd_67",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->jump_corev_func_far_handler",
+			name: "jump_corev_func_far_handler",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->corev_func_far_handler_offset",
+			name: "corev_func_far_handler_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->rsvd_6d_6b",
+			name: "rsvd_6d_6b",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->atom_bios_message_offset",
+			name: "atom_bios_message_offset",
+			display: "ATUI_HEX",
+		}, {
+			name: "atombios strings",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "atomtree->atombios_strings",
+				count: "atomtree->num_of_crawled_strings",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "string [%02u]",
+						display: "ATUI_NAN",
+						fancy: "ATUI_STRING",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "pcir_indicator_byte",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->indicator",
+			name: "indicator",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "indicator_reserved",
+					hi: 6, lo: 0,
+				}, {
+					name: "last_image",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "pcir_data_structure",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pcir_signature",
+			name: "pcir_signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "\"PCIR\"",},
+			],
+		}, {
+			access: "bios->vendor_id",
+			name: "vendor_id",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->device_id",
+			name: "device_id",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->vpd_reserved",
+			name: "vpd_reserved",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "was PCI Vital Product Data (VPD)",},
+			],
+		}, {
+			access: "bios->structure_length",
+			name: "structure_length",
+		}, {
+			access: "bios->structure_revision",
+			name: "structure_revision",
+		}, {
+			access: "bios->class_code",
+			name: "class_code",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->image_length_in_512",
+			name: "image_length_in_512",
+		}, {
+			access: "bios->code_revision",
+			name: "code_revision",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->code_type",
+			name: "code_type",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->last",
+			name: "last",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_indicator_byte",
+		}, {
+			access: "bios->end_reserved",
+			name: "end_reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "efi_pci_device_driver_image",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pci_rom_signature",
+			name: "pci_rom_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xAA55",},
+			],
+		}, {
+			access: "bios->pci_rom_size_in_512",
+			name: "pci_rom_size_in_512",
+			description: [
+				{language: "english", text: "in 512 Bytes",},
+			],
+		}, {
+			access: "bios->efi_signature",
+			name: "efi_signature",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "0xEF1",},
+			],
+		}, {
+			access: "bios->subsystem_value",
+			name: "subsystem_value",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ENUM", fancy_data: "efi_pci_driver_subsystem_value",
+		}, {
+			access: "bios->machine_type",
+			name: "machine_type",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ENUM", fancy_data: "efi_pci_driver_machine_type",
+		}, {
+			access: "bios->compression_type",
+			name: "compression_type",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "1 = Compressed following the UEFI algo",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->efi_image_offset",
+			name: "efi_image_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir_structure_offset",
+			name: "pcir_structure_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir_padding",
+			name: "pcir_padding",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->pcir",
+			name: "pcir",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
+		},
+	],
+}, {
+	c_type: "atui_nullstruct", name: "pci_rom_tables",
+	atomtree: "pci_rom_tables",
+	table_size: "0",
+	leaves: [
+		{
+			access: "*(atomtree->header)",
+			name: "pci_rom_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
+		}, {
+			access: "*(atomtree->pcir)",
+			name: "pcir_data_structure",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
+		},
+	],
+},
+
+{
+	c_type: "atom_common_table_header",
+	table_size: "bios->structuresize", // for stubs
+	leaves: [
+		{
+			access: "bios->structuresize",
+			name: "structuresize",
+		}, {
+			access: "bios->format_revision",
+			name: "format_revision",
+			description: [
+				{language: "english", text: "mainly used for a hw function, when the parser is not backward compatible",},
+			],
+		}, {
+			access: "bios->content_revision",
+			name: "content_revision",
+			description: [
+				{language: "english", text: "change it when a data table has a structure change, or a hw function has a input/output parameter change",},
+			],
+		},
+	],
+},
+
+
+
 {
 	c_type: "atom_rom_header_v1_1",
 	leaves: [
@@ -1733,42 +2089,141 @@ global_default: {
 },
 
 {
-	c_type: "atom_gfx_info_v2_1",
+	c_prefix: "union", c_type: "memory_vendor_id",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->table_header",
-			name: "table_header",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
-		}, {
-			access: "bios->GfxIpMinVer",
-			name: "GfxIpMinVer",
-		}, {
-			access: "bios->GfxIpMajVer",
-			name: "GfxIpMajVer",
-		}, {
-			access: "bios->max_shader_engines",
-			name: "max_shader_engines",
-		}, {
-			access: "bios->max_tile_pipes",
-			name: "max_tile_pipes",
-		}, {
-			access: "bios->max_cu_per_sh",
-			name: "max_cu_per_sh",
-		}, {
-			access: "bios->max_sh_per_se",
-			name: "max_sh_per_se",
-		}, {
-			access: "bios->max_backends_per_se",
-			name: "max_backends_per_se",
-		}, {
-			access: "bios->max_texture_channel_caches",
-			name: "max_texture_channel_caches",
+			access: "bios->memory_vendor_id",
+			name: "memory_vendor_id",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "vendor_code",
+					display: "ATUI_HEX",
+					hi: 3, lo: 0,
+					description: [
+						{language: "english", text: "GDDR vendor ID",},
+					],
+				}, {
+					name: "revision",
+					display: "ATUI_HEX",
+					hi: 7, lo: 4,
+				},
+			],
 		},
 	],
 },
 
+
 {
+	c_prefix: "union", c_type: "atom_dtd_format_modemiscinfo",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->miscinfo",
+			name: "miscinfo",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "HORIZONTAL_CUTOFF",
+					hi: 0, lo: 0,
+				}, {
+					name: "HSYNC_POLARITY",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "0=Active High, 1=Active Low",},
+					],
+				}, {
+					name: "VSYNC_POLARITY",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "0=Active High, 1=Active Low",},
+					],
+				}, {
+					name: "VERTICAL_CUTOFF",
+					hi: 3, lo: 3,
+				}, {
+					name: "H_REPLICATIONBY2",
+					hi: 4, lo: 4,
+				}, {
+					name: "V_REPLICATIONBY2",
+					hi: 5, lo: 5,
+				}, {
+					name: "COMPOSITESYNC",
+					hi: 6, lo: 6,
+				}, {
+					name: "INTERLACE",
+					hi: 7, lo: 7,
+				}, {
+					name: "DOUBLECLOCK",
+					hi: 8, lo: 8,
+				}, {
+					name: "RGB888",
+					hi: 9, lo: 9,
+				}, {
+					name: "reserved",
+					hi: 15, lo: 10,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_dtd_format",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->pixclk",
+			name: "pixclk",
+		}, {
+			access: "bios->h_active",
+			name: "h_active",
+		}, {
+			access: "bios->h_blanking_time",
+			name: "h_blanking_time",
+		}, {
+			access: "bios->v_active",
+			name: "v_active",
+		}, {
+			access: "bios->v_blanking_time",
+			name: "v_blanking_time",
+		}, {
+			access: "bios->h_sync_offset",
+			name: "h_sync_offset",
+		}, {
+			access: "bios->h_sync_width",
+			name: "h_sync_width",
+		}, {
+			access: "bios->v_sync_offset",
+			name: "v_sync_offset",
+		}, {
+			access: "bios->v_syncwidth",
+			name: "v_syncwidth",
+		}, {
+			access: "bios->image_h_size",
+			name: "image_h_size",
+		}, {
+			access: "bios->image_v_size",
+			name: "image_v_size",
+		}, {
+			access: "bios->h_border",
+			name: "h_border",
+		}, {
+			access: "bios->v_border",
+			name: "v_border",
+		}, {
+			access: "bios->miscinfo",
+			name: "miscinfo",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format_modemiscinfo",
+		}, {
+			access: "bios->atom_mode_id",
+			name: "atom_mode_id",
+		}, {
+			access: "bios->refreshrate",
+			name: "refreshrate",
+		},
+	],
+}, {
 	c_prefix: "union", c_type: "supported_refresh_rate",
 	table_size: "sizeof(*bios)",
 	description: [
@@ -2230,43 +2685,59 @@ global_default: {
 },
 
 {
-	c_type: "atom_evv_dpm_info",
-	atomtree: "atomtree_voltage_object_v3",
+	c_type: "atom_voltage_object_header",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->DPMSclk",
-			name: "DPMSclk",
-			description: [
-				{language: "english", text: "DPM state SCLK",},
-			],
+			access: "bios->voltage_type",
+			name: "voltage_type",
+			fancy: "ATUI_ENUM", fancy_data: "atom_voltage_type",
 		}, {
-			access: "bios->VAdjOffset",
-			name: "VAdjOffset",
-			description: [
-				{language: "english", text: "Adjust Voltage offset in unit of mv",},
-			],
+			access: "bios->voltage_mode",
+			name: "voltage_mode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_voltage_object_mode",
 		}, {
-			access: "bios->DPMTblVIndex",
-			name: "DPMTblVIndex",
-			description: [
-				{language: "english", text: "Voltage Index in SMC_DPM_Table structure VddcTable/VddGfxTable",},
-			],
-		}, {
-			access: "bios->DPMState",
-			name: "DPMState",
-			description: [
-				{language: "english", text: "DPMState0~7",},
-			],
+			access: "bios->object_size",
+			name: "object_size",
 		},
 	],
 },
 
-
-
-
-
 {
+	c_type: "atom_gfx_info_v2_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->GfxIpMinVer",
+			name: "GfxIpMinVer",
+		}, {
+			access: "bios->GfxIpMajVer",
+			name: "GfxIpMajVer",
+		}, {
+			access: "bios->max_shader_engines",
+			name: "max_shader_engines",
+		}, {
+			access: "bios->max_tile_pipes",
+			name: "max_tile_pipes",
+		}, {
+			access: "bios->max_cu_per_sh",
+			name: "max_cu_per_sh",
+		}, {
+			access: "bios->max_sh_per_se",
+			name: "max_sh_per_se",
+		}, {
+			access: "bios->max_backends_per_se",
+			name: "max_backends_per_se",
+		}, {
+			access: "bios->max_texture_channel_caches",
+			name: "max_texture_channel_caches",
+		},
+	],
+}, {
 	c_type: "atom_gfx_info_v2_3",
 	leaves: [
 		{
@@ -2323,6 +2794,9 @@ global_default: {
 		},
 	],
 },
+
+
+
 
 {
 	c_type: "atom_init_reg_index_format",

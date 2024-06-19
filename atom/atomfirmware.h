@@ -78,136 +78,6 @@ enum atom_operation_def {
 };
 
 
-
-#define BIOS_ATOM_PREFIX "ATOMBIOS"
-#define BIOS_VERSION_PREFIX "ATOMBIOSBK-AMD"
-#define BIOS_STRING_LENGTH 43
-
-/*
-enum atom_string_def {
-asic_bus_type_pcie_string = "PCI_EXPRESS",
-atom_fire_gl_string       = "FGL",
-atom_bios_string          = "ATOM"
-};
-enum atombios_image_offset {
-	OFFSET_TO_ATOM_ROM_HEADER_POINTER     = 0x00000048,
-	OFFSET_TO_ATOM_ROM_IMAGE_SIZE         = 0x00000002,
-	OFFSET_TO_ATOMBIOS_ASIC_BUS_MEM_TYPE  = 0x94,
-	MAXSIZE_OF_ATOMBIOS_ASIC_BUS_MEM_TYPE = 20, // including the terminator 0x0
-	OFFSET_TO_GET_ATOMBIOS_NUMBER_OF_STRINGS = 0x2f,
-	OFFSET_TO_GET_ATOMBIOS_STRING_START   = 0x6e,
-	OFFSET_TO_VBIOS_PART_NUMBER           = 0x80,
-	OFFSET_TO_VBIOS_DATE                  = 0x50,
-};
-*/
-
-
-// https://uefi.org/specs/UEFI/2.10/14_Protocols_PCI_Bus_Support.html#recommended-pci-device-driver-layout
-#define PCI_HEADER_MAGIC 0xAA55
-#define BIOS_IMAGE_SIZE_UNIT 512
-struct pci_rom_header { // standard PCIe ROM header
-	uint16_t pci_rom_signature; // 0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.
-	uint8_t  pci_rom_size_in_512; // in 512 Bytes
-	uint8_t  jump_core_main_init_bios; // x86 init code
-	uint16_t label_core_main_init_bios;
-	uint8_t  pci_reserved[18]; // reserved for user
-	uint16_t pcir_structure_offset;
-};
-union pcir_indicator_byte {
-	uint8_t indicator;
-	struct { uint8_t
-		indicator_reserved :6-0 +1,
-		last_image         :7-7 +1;
-	};
-};
-
-
-//         little-endian: 3 2 1 0
-//                        R I C P
-#define PCIR_SIGNATURE 0x52494350
-struct pcir_data_structure { // PCI Rom
-	char8_t  pcir_signature[4]; // "PCIR"
-	uint16_t vendor_id;
-	uint16_t device_id;
-	uint16_t vpd_reserved; // was PCI Vital Product Data (VPD)
-	uint16_t structure_length;
-	uint8_t  structure_revision;
-	uint8_t  class_code[3];
-	uint16_t image_length_in_512;
-	uint16_t code_revision;
-	uint8_t  code_type;
-	union pcir_indicator_byte last;
-	uint16_t end_reserved;
-};
-
-enum efi_pci_driver_subsystem_value:uint16_t {
-	// values other than these are from PE/COFF header
-	EFI_PCI_DRIVER_SUBSYSTEM_BOOT_SERVICE = 0x0B,
-	EFI_PCI_DRIVER_SUBSYSTEM_RUNTIME      = 0x0C,
-};
-enum efi_pci_driver_machine_type:uint16_t {
-	// values other than these are from PE/COFF header
-	EFI_PCI_DRIVER_MACHINE_TYPE_IA32    = 0x014C,
-	EFI_PCI_DRIVER_MACHINE_TYPE_ITANIUM = 0x0200,
-	EFI_PCI_DRIVER_MACHINE_TYPE_EBC     = 0x0EBC, // EFI byte code
-	EFI_PCI_DRIVER_MACHINE_TYPE_X64     = 0x8664,
-	EFI_PCI_DRIVER_MACHINE_TYPE_ARM32   = 0x01c2,
-	EFI_PCI_DRIVER_MACHINE_TYPE_ARM64   = 0xAA64,
-};
-#define EFI_SIGNATURE 0xEF1
-struct efi_pci_device_driver_image {
-	uint16_t pci_rom_signature; // 0xAA55
-	uint16_t pci_rom_size_in_512; // in 512 Bytes
-	uint32_t efi_signature; // 0xEF1
-	enum efi_pci_driver_subsystem_value subsystem_value;
-	enum efi_pci_driver_machine_type machine_type;
-	uint16_t compression_type; // 1 = Compressed following the UEFI algo
-	uint64_t reserved;
-	uint16_t efi_image_offset;
-	uint16_t pcir_structure_offset;
-	uint16_t pcir_padding;
-	struct pcir_data_structure  pcir;
-};
-
-
-#define ATOM_BIOS_MAGIC PCI_HEADER_MAGIC
-#define ATOM_ATI_MAGIC  " 761295520"
-struct vbios_rom_header {
-	struct pci_rom_header pci_header;
-	uint8_t  rsvd_1d_1a[4];
-	char8_t  IBM[3]; // IBM
-	uint8_t  checksum;
-	uint8_t  unsure[13]; // could be more checksums?
-	uint8_t  bios_msg_number;
-	char8_t  atomati_magic[16]; // " 761295520"
-	uint16_t label_corev_post_no_mode;
-	uint16_t special_post_offset;
-	uint8_t  special_post_image_size_in_512;
-	uint8_t  rsvd_47_45[3];
-	uint16_t rom_header_info_table_offset;
-	uint8_t  rsvd_4f_4a[6];
-	char8_t  build_timestamp[20];
-	uint8_t  jump_corex_func_far_handler;
-	uint16_t corex_func_far_handler_offset;
-	uint8_t  rsvd_67;
-	uint8_t  jump_corev_func_far_handler;
-	uint16_t corev_func_far_handler_offset;
-	uint8_t  rsvd_6d_6b[3];
-	uint16_t atom_bios_message_offset;
-};
-
-/******************************************************************************/
-// Common header for all tables (Data table, Command function).
-// Every table pointed in _ATOM_MASTER_DATA_TABLE has this common header.
-// And the pointer actually points to this header.
-/******************************************************************************/
-
-struct atom_common_table_header {
-	uint16_t structuresize;
-	uint8_t  format_revision;  // mainly used for a hw function, when the parser is not backward compatible
-	uint8_t  content_revision; // change it when a data table has a structure change, or a hw function has a input/output parameter change
-};
-
 /******************************************************************************/
 // Structure stores the ROM header.
 /******************************************************************************/
@@ -408,52 +278,6 @@ struct atom_master_data_table_v2_1 {
 	uint16_t sw_datatable34;
 };
 
-/* atom_dtd_format.modemiscinfo defintion */
-enum atom_dtd_format_modemiscinfo_old {
-	ATOM_HSYNC_POLARITY    = 0x0002,
-	ATOM_VSYNC_POLARITY    = 0x0004,
-	ATOM_H_REPLICATIONBY2  = 0x0010,
-	ATOM_V_REPLICATIONBY2  = 0x0020,
-	ATOM_INTERLACE         = 0x0080,
-	ATOM_COMPOSITESYNC     = 0x0040,
-};
-union atom_dtd_format_modemiscinfo {
-	uint16_t miscinfo;
-	struct { uint16_t
-		HORIZONTAL_CUTOFF :0-0 +1,
-		HSYNC_POLARITY    :1-1 +1, // 0=Active High, 1=Active Low
-		VSYNC_POLARITY    :2-2 +1, // 0=Active High, 1=Active Low
-		VERTICAL_CUTOFF   :3-3 +1,
-		H_REPLICATIONBY2  :4-4 +1,
-		V_REPLICATIONBY2  :5-5 +1,
-		COMPOSITESYNC     :6-6 +1,
-		INTERLACE         :7-7 +1,
-		DOUBLECLOCK       :8-8 +1,
-		RGB888            :9-9 +1,
-		reserved         :15-10 +1;
-	};
-};
-
-struct atom_dtd_format {
-	uint16_t pixclk;
-	uint16_t h_active;
-	uint16_t h_blanking_time;
-	uint16_t v_active;
-	uint16_t v_blanking_time;
-	uint16_t h_sync_offset;
-	uint16_t h_sync_width;
-	uint16_t v_sync_offset;
-	uint16_t v_syncwidth;
-	uint16_t image_h_size;
-	uint16_t image_v_size;
-	uint8_t  h_border;
-	uint8_t  v_border;
-	union atom_dtd_format_modemiscinfo  miscinfo;
-	uint8_t  atom_mode_id;
-	uint8_t  refreshrate;
-};
-
-
 
 /******************************************************************************/
 // Data Table firmwareinfo  structure
@@ -615,6 +439,19 @@ struct atom_firmware_info_v3_4 {
 // Data Table lcd_info  structure
 /******************************************************************************/
 
+/* atom_dtd_format.modemiscinfo defintion */
+/*
+enum atom_dtd_format_modemiscinfo_old {
+	ATOM_HSYNC_POLARITY    = 0x0002,
+	ATOM_VSYNC_POLARITY    = 0x0004,
+	ATOM_H_REPLICATIONBY2  = 0x0010,
+	ATOM_V_REPLICATIONBY2  = 0x0020,
+	ATOM_INTERLACE         = 0x0080,
+	ATOM_COMPOSITESYNC     = 0x0040,
+};
+*/
+
+
 /* lcd_info_v2_1.panel_misc defintion */
 enum atom_lcd_info_panel_misc:uint16_t {
 	ATOM_PANEL_MISC_FPDI = 0x0002,
@@ -655,14 +492,6 @@ struct atom_lcd_info_v2_1 {
 // Data Table gpio_pin_lut  structure
 /******************************************************************************/
 
-union atom_i2c_id_config {
-	uint8_t  i2c_id;
-	struct { uint8_t
-		i2c_line_mux :3-0 +1, // A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C
-		hw_engine_id :6-4 +1, // =1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines
-		hw_capable   :7-7 +1; // =0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)
-	};
-};
 
 union atom_gpioi2c_pin_id {
 	uint8_t  gpio_id;
@@ -782,27 +611,6 @@ struct vram_usagebyfirmware_v2_2 {
 // Data Table displayobjectinfo  structure
 /******************************************************************************/
 
-enum atom_object_record_type_id:uint8_t {
-	ATOM_I2C_RECORD_TYPE              = 1,
-	ATOM_HPD_INT_RECORD_TYPE          = 2,
-	ATOM_CONNECTOR_CAP_RECORD_TYPE    = 3,
-	ATOM_CONNECTOR_SPEED_UPTO         = 4,
-	ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE = 9,
-	ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE = 16,
-	ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE = 17,
-	ATOM_ENCODER_CAP_RECORD_TYPE          = 20,
-	ATOM_BRACKET_LAYOUT_RECORD_TYPE       = 21,
-	ATOM_CONNECTOR_FORCED_TMDS_CAP_RECORD_TYPE = 22,
-	ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE  = 23,
-	ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE    = 25,
-	ATOM_RECORD_END_TYPE = 0xFF,
-};
-
-struct atom_common_record_header {
-	enum  atom_object_record_type_id  record_type;
-	uint8_t  record_size; // The size of the whole record in byte
-};
-
 struct atom_i2c_record {
 	struct atom_common_record_header  record_header; // record_type = ATOM_I2C_RECORD_TYPE
 	union atom_i2c_id_config  i2c_id;
@@ -869,32 +677,6 @@ enum atom_connector_caps_def {
 struct atom_disp_connector_caps_record {
 	struct atom_common_record_header  record_header;
 	uint32_t connectcaps;
-};
-
-
-// Definitions for GPIO pin state
-enum atom_gpio_pin_control_pinstate_def:uint8_t {
-	GPIO_PIN_TYPE_INPUT      = 0x00,
-	GPIO_PIN_TYPE_OUTPUT     = 0x10,
-	GPIO_PIN_TYPE_HW_CONTROL = 0x20,
-
-// For GPIO_PIN_TYPE_OUTPUT the following is defined
-	GPIO_PIN_OUTPUT_STATE_MASK  = 0x01,
-	GPIO_PIN_OUTPUT_STATE_SHIFT = 0,
-	GPIO_PIN_STATE_ACTIVE_LOW   = 0x0,
-	GPIO_PIN_STATE_ACTIVE_HIGH  = 0x1,
-};
-// The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
-struct atom_gpio_pin_control_pair {
-	uint8_t  gpio_id; // GPIO_ID, find the corresponding ID in GPIO_LUT table
-	enum  atom_gpio_pin_control_pinstate_def  gpio_pinstate; // Pin state showing how to set-up the pin
-};
-
-struct atom_object_gpio_cntl_record {
-	struct atom_common_record_header  record_header;
-	uint8_t  flag;           // Future expnadibility
-	uint8_t  number_of_pins; // Number of GPIO pins used to control the object
-	struct atom_gpio_pin_control_pair  gpio[1]; // the real gpio pin pair determined by number of pins ucNumberOfPins
 };
 
 
@@ -1293,18 +1075,6 @@ struct atom_display_controller_info_v4_5 {
 /******************************************************************************/
 // Data Table ATOM_EXTERNAL_DISPLAY_CONNECTION_INFO  structure
 /******************************************************************************/
-struct atom_ext_display_path {
-	uint16_t device_tag;        // A bit vector to show what devices are supported
-	uint16_t device_acpi_enum   ;  // 16bit device ACPI id.
-	uint16_t connectorobjid;    // A physical connector for displays to plug in, using object connector definitions
-	uint8_t  auxddclut_index;   // An index into external AUX/DDC channel LUT
-	uint8_t  hpdlut_index;      // An index into external HPD pin LUT
-	uint16_t ext_encoder_objid; // external encoder object id
-	uint8_t  channelmapping;    // if ucChannelMapping=0, using default one to one mapping
-	uint8_t  chpninvert;        // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
-	uint16_t caps;
-	uint16_t reserved;
-};
 
 // usCaps
 enum ext_display_path_cap_def {
@@ -1316,24 +1086,6 @@ enum ext_display_path_cap_def {
 	EXT_DISPLAY_PATH_CAPS__HDMI20_PARADE_PS175    = (0x03 << 2)  // Parade DP->HDMI recoverter chip
 };
 
-// uceDPToLVDSRxId
-enum atom_lcd_info_dptolvds_rx_id:uint8_t {
-	eDP_TO_LVDS_RX_DISABLE = 0x00, // no eDP->LVDS translator chip
-	eDP_TO_LVDS_COMMON_ID  = 0x01, // common eDP->LVDS translator chip without AMD SW init
-	eDP_TO_LVDS_REALTEK_ID = 0x02, // Realtek tansaltor which require AMD SW init
-};
-
-struct atom_external_display_connection_info {
-	struct atom_common_table_header  table_header;
-	uint8_t  guid[16];    // a GUID is a 16 byte long string
-	struct atom_ext_display_path  path[7]; // total of fixed 7 entries.
-	uint8_t  checksum;    // a simple Checksum of the sum of whole structure equal to 0x0.
-	uint8_t  stereopinid; // use for eDP panel
-	uint8_t  remotedisplayconfig;
-	enum  atom_lcd_info_dptolvds_rx_id  edptolvdsrxid;
-	uint8_t  fixdpvoltageswing; // usCaps[1]=1, this indicate DP_LANE_SET value
-	uint8_t  reserved[3];       // for potential expansion
-};
 
 /******************************************************************************/
 // Data Table integratedsysteminfo  structure
@@ -1464,11 +1216,6 @@ struct atom_DCN_dpphy_dp_tuningset {
 	uint16_t table_size; // size of atom_14nm_dpphy_dp_setting
 	uint16_t reserved;
 	struct atom_DCN_dpphy_dp_setting  dptunings[10];
-};
-
-struct atom_i2c_reg_info {
-	uint8_t  ucI2cRegIndex;
-	uint8_t  ucI2cRegVal;
 };
 
 struct atom_hdmi_retimer_redriver_set {
@@ -3244,121 +2991,6 @@ struct atom_multimedia_info_v2_1 {
 // Data Table umc_info  structure
 /******************************************************************************/
 
-// wordcount x wordwidth in bits.
-// A 8Gbit GDDR6 has two 16-bit channels; 16 bit words and 4Gbits per channel.
-// 4Gbit/16 = 256Mwords; _256Mx16.
-enum DRAM_DENSITY_e:uint8_t {
-	// _4Mx4 = 0x00,
-	_4_MEGAWORD_x16   = 0x02,
-	_4_MEGAWORD_x32   = 0x03,
-	_8_MEGAWORD_x16   = 0x12,
-	_8_MEGAWORD_x32   = 0x13,
-	_8_MEGAWORD_x128  = 0x15,
-	_16_MEGAWORD_x16  = 0x22,
-	_16_MEGAWORD_x32  = 0x23,
-	_16_MEGAWORD_x128 = 0x25,
-	_32_MEGAWORD_x16  = 0x32,
-	_32_MEGAWORD_x32  = 0x33,
-	_32_MEGAWORD_x128 = 0x35,
-	_64_MEGAWORD_x8   = 0x41,
-	_64_MEGAWORD_x16  = 0x42,
-	_64_MEGAWORD_x32  = 0x43,
-	_64_MEGAWORD_x128 = 0x45,
-	_128_MEGAWORD_x8  = 0x51,
-	_128_MEGAWORD_x16 = 0x52,
-	_128_MEGAWORD_x32 = 0x53,
-	_256_MEGAWORD_x8  = 0x61,
-	_256_MEGAWORD_x16 = 0x62,
-	_256_MEGAWORD_x32 = 0x63,
-	_512_MEGAWORD_x8  = 0x71,
-	_512_MEGAWORD_x16 = 0x72,
-	_1_GIGAWORD_x8    = 0x81,
-	_1_GIGAWORD_x16   = 0x82,
-/* GDDR7 does 24Gbit 32-bit-wide packages with 8-bit-wide channels; 768M x8
-GDDR7 does 16Gb, 24, 32, 48, 64
-	_2_GIGAWORD_x8    = 0x91,
-	_2_GIGAWORD_x16   = 0x92,
-*/
-};
-/* Is this better, or stick with enum?
-union dram_density {
-	uint8_t  Density;
-	enum  DRAM_DENSITY_e  density_names;
-	struct { uint8_t
-		word_width :3-0 +1, // 2**(n+2)
-		word_count :7-4 +1; // 2**(n+2)
-	};
-};
-*/
-
-union memory_vendor_id {
-	uint8_t  memory_vendor_id; // Predefined,never change across designs or memory type/vender
-	struct { uint8_t
-		vendor_code :3-0 +1, // GDDR vendor ID
-		revision    :7-4 +1; // possibly DDR gen? see enum atom_dgpu_vram_type?
-	};
-};
-/*
-// see MEM_VENDOR_e in smu13.0.7 It's similar but different enough
-#define ATOM_VRAM_MODULE_MEMORY_VENDOR_ID_MASK 0xF
-#define SAMSUNG  0x1
-#define INFINEON 0x2
-#define ELPIDA   0x3
-#define ETRON    0x4
-#define NANYA    0x5
-#define HYNIX    0x6
-#define MOSEL    0x7
-#define WINBOND  0x8
-#define ESMT     0x9
-#define MICRON   0xF
-
-#define QIMONDA  INFINEON
-#define PROMOS   MOSEL
-#define KRETON   INFINEON
-#define ELIXIR   NANYA
-#define MEZZA    ELPIDA
-*/
-enum GDDR_MEM_VENDOR_e {
-	// Vendor codes as seen in GDDR specs. AMD usually uses some form of this.
-	// There are two vendor ID specs from JEDEC: JEP 106, and the 4-bit GDDR
-	// spec. Unfortunately, they're not compatible with each other.
-	GENERIC      = 0x0,
-	SAMSUNG      = 0x1,
-	INFINEON_QIMONDA_KRETON = 0x2,
-	ELPIDA_MEZZA = 0x3,
-	ETRON        = 0x4,
-	NANYA_ELIXIR = 0x5,
-	HYNIX        = 0x6,
-	MOSEL_PROMOS = 0x7,
-	WINBOND      = 0x8,
-	ESMT         = 0x9,
-	RESERVED_10  = 0xA, // GDDR5 is the last one with a sized list. GDDR6
-	RESERVED_11  = 0xB, // made most irrelevant.
-	RESERVED_12  = 0xC,
-	RESERVED_13  = 0xD,
-	RESERVED_14  = 0xE,
-	MICRON       = 0xF,
-};
-
-// MC_MISC0__MEMORY_TYPE_*   ??
-// uint8_t  MemoryType;   ??
-// MC_SEQ_MISC0. see radeon cikd.h et al.
-enum atom_dgpu_vram_type:uint8_t {
-	ATOM_DGPU_VRAM_TYPE_GDDR1 = 0x10,
-	ATOM_DGPU_VRAM_TYPE_DDR1  = 0x10,
-	ATOM_DGPU_VRAM_TYPE_DDR2  = 0x20,
-	ATOM_DGPU_VRAM_TYPE_GDDR3 = 0x30,
-	ATOM_DGPU_VRAM_TYPE_DDR4  = 0x40,
-	ATOM_DGPU_VRAM_TYPE_GDDR4 = 0x40,
-	ATOM_DGPU_VRAM_TYPE_GDDR5 = 0x50,
-	ATOM_DGPU_VRAM_TYPE_GDDR5_2 = 0x58, // AMD.R9270.2048.140724.rom uses this
-	ATOM_DGPU_VRAM_TYPE_HBM   = 0x60,
-	ATOM_DGPU_VRAM_TYPE_HBM2  = 0x60,
-	ATOM_DGPU_VRAM_TYPE_HBM2E = 0x61,
-	ATOM_DGPU_VRAM_TYPE_GDDR6 = 0x70,
-	ATOM_DGPU_VRAM_TYPE_HBM3  = 0x80,
-	ATOM_DGPU_VRAM_TYPE_DDR3  = 0xB0, // HIS.HD4350.512.091115.rom uses this
-};
 
 
 
@@ -3824,86 +3456,6 @@ struct atom_vram_info_header_v3_0 {
 /******************************************************************************/
 // Data Table voltageobject_info  structure
 /******************************************************************************/
-// ucVoltageType
-enum atom_voltage_type:uint8_t {
-	VOLTAGE_TYPE_VDDC      = 1,
-	VOLTAGE_TYPE_MVDDC     = 2,
-	VOLTAGE_TYPE_MVDDQ     = 3,
-	VOLTAGE_TYPE_VDDCI     = 4,
-	VOLTAGE_TYPE_VDDGFX    = 5,
-	VOLTAGE_TYPE_PCC       = 6,
-	VOLTAGE_TYPE_MVPP      = 7,
-	VOLTAGE_TYPE_LEDDPM    = 8,
-	VOLTAGE_TYPE_PCC_MVDD  = 9,
-	VOLTAGE_TYPE_PCIE_VDDC = 10,
-	VOLTAGE_TYPE_PCIE_VDDR = 11,
-	VOLTAGE_TYPE_GENERIC_I2C_1  = 0x11,
-	VOLTAGE_TYPE_GENERIC_I2C_2  = 0x12,
-	VOLTAGE_TYPE_GENERIC_I2C_3  = 0x13,
-	VOLTAGE_TYPE_GENERIC_I2C_4  = 0x14,
-	VOLTAGE_TYPE_GENERIC_I2C_5  = 0x15,
-	VOLTAGE_TYPE_GENERIC_I2C_6  = 0x16,
-	VOLTAGE_TYPE_GENERIC_I2C_7  = 0x17,
-	VOLTAGE_TYPE_GENERIC_I2C_8  = 0x18,
-	VOLTAGE_TYPE_GENERIC_I2C_9  = 0x19,
-	VOLTAGE_TYPE_GENERIC_I2C_10 = 0x1A,
-};
-// atom_voltage_object_header.voltage_mode
-enum atom_voltage_object_mode:uint8_t {
-	VOLTAGE_OBJ_GPIO_LUT        = 0, // VOLTAGE and GPIO Lookup table
-	VOLTAGE_OBJ_VR_I2C_INIT_SEQ = 3, // VOLTAGE REGULATOR INIT sequece through I2C
-	VOLTAGE_OBJ_PHASE_LUT       = 4, // Set Vregulator Phase lookup table
-	VOLTAGE_OBJ_SVID2           = 7, // Indicate voltage control by SVID2
-	VOLTAGE_OBJ_EVV             = 8,
-	VOLTAGE_OBJ_MERGED_POWER    = 9,
-	VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT    = 16, // Powerboost Voltage and LeakageId lookup table
-	VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT  = 17, // High voltage state Voltage and LeakageId lookup table
-	VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT = 18, // High1 voltage state Voltage and LeakageId lookup table
-};
-
-struct atom_voltage_object_header {
-	enum  atom_voltage_type  voltage_type;
-	enum  atom_voltage_object_mode  voltage_mode;
-	uint16_t object_size; // Size of Object
-};
-
-
-struct atom_voltage_gpio_map_lut {
-	uint32_t voltage_gpio_reg_val; // The Voltage ID which is used to program GPIO register
-	uint16_t voltage_level_mv;     // The corresponding Voltage Value, in mV
-};
-struct atom_gpio_voltage_object_v1 {
-	struct atom_voltage_object_header  header; // voltage mode = VOLTAGE_OBJ_GPIO_LUT or VOLTAGE_OBJ_PHASE_LUT
-	uint8_t  gpio_control_id; // default is 0 which indicate control through CG VID mode
-	uint8_t  gpio_entry_num;  // indiate the entry numbers of Votlage/Gpio value Look up table
-	uint8_t  phase_delay_us;  // phase delay in unit of micro second
-	uint8_t  reserved;
-	uint32_t gpio_mask_val;   // GPIO Mask value
-	struct atom_voltage_gpio_map_lut  voltage_gpio_lut[1];
-};
-
-struct  atom_i2c_data_entry { // aka voltage_lut_entry
-	uint16_t i2c_reg_index; // i2c register address, can be up to 16bit
-	uint16_t i2c_reg_data;  // i2c register data, can be up to 16bit
-};
-struct atom_i2c_voltage_object_v1 {
-	struct atom_voltage_object_header  header; // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
-	uint8_t  regulator_id; // Indicate Voltage Regulator Id
-	union atom_i2c_id_config  i2c_id;
-	uint8_t  i2c_slave_addr;
-	uint8_t  i2c_control_offset;
-	uint8_t  i2c_flag;  // Bit0: 0 - One byte data; 1 - Two byte data
-	uint8_t  i2c_speed; // =0, use default i2c speed, otherwise use it in unit of kHz.
-	uint8_t  reserved[2];
-	struct atom_i2c_data_entry  i2cdatalut[1]; // end with 0xff
-};
-// ATOM_I2C_VOLTAGE_OBJECT_V3.ucVoltageControlFlag
-enum atom_i2c_voltage_control_flag {
-	VOLTAGE_DATA_ONE_BYTE = 0,
-	VOLTAGE_DATA_TWO_BYTE = 1,
-};
-
-
 union loadline_psi1 {
 	uint8_t  loadline_psi1;
 	struct { uint8_t
@@ -3924,12 +3476,6 @@ struct atom_svid2_voltage_object_v2 {
 	uint16_t reserved1;
 };
 
-struct atom_merged_voltage_object_v1 {
-	struct atom_voltage_object_header  header; // voltage mode = VOLTAGE_OBJ_MERGED_POWER
-	enum  atom_voltage_type  merged_powerrail_type;
-	uint8_t  reserved[3];
-};
-
 union atom_voltage_object_v4 {
 	struct atom_voltage_object_header    header;
 	struct atom_gpio_voltage_object_v1   gpio_voltage_obj_v1;
@@ -3937,7 +3483,6 @@ union atom_voltage_object_v4 {
 	struct atom_svid2_voltage_object_v2  svid2_voltage_obj_v2;
 	struct atom_merged_voltage_object_v1 merged_voltage_ob_v1j;
 };
-
 struct atom_voltage_objects_info_v4_1 {
 	struct atom_common_table_header table_header;
 	union atom_voltage_object_v4    voltage_object[1]; // Info for Voltage control
@@ -3948,11 +3493,11 @@ union atom_voltage_object_all {
 	struct atom_voltage_object_header     header;
 	struct atom_gpio_voltage_object_v1    gpio_voltage_obj_v1;
 	struct atom_i2c_voltage_object_v1     i2c_voltage_obj_v1;
-	//struct atom_svid2_voltage_object_v1   svid2_voltage_obj_v1;
+	struct atom_svid2_voltage_object_v1   svid2_voltage_obj_v1;
 	struct atom_svid2_voltage_object_v2   svid2_voltage_obj_v2;
 	struct atom_merged_voltage_object_v1  merged_voltage_obj_v1;
-	//struct atom_evv_voltage_object_v1     evv_voltage_obj_v1;
-	//struct atom_leakage_voltage_object_v1 leakage_voltage_obj_v1;
+	struct atom_evv_voltage_object_v1     evv_voltage_obj_v1;
+	struct atom_leakage_voltage_object_v1 leakage_voltage_obj_v1;
 };
 /******************************************************************************/
 // All Command Function structure definition
@@ -4332,30 +3877,6 @@ struct memory_training_parameters_v2_1 {
 // Structures used by setpixelclock
 /******************************************************************************/
 
-// ucMiscInfo
-enum atom_set_pixel_clock_v1_7_misc_info:uint8_t {
-	PIXEL_CLOCK_V7_MISC_FORCE_PROG_PPLL    = 0x01,
-	PIXEL_CLOCK_V7_MISC_PROG_PHYPLL        = 0x02,
-	PIXEL_CLOCK_V7_MISC_YUV420_MODE        = 0x04,
-	PIXEL_CLOCK_V7_MISC_DVI_DUALLINK_EN    = 0x08,
-	PIXEL_CLOCK_V7_MISC_REF_DIV_SRC        = 0x30,
-	PIXEL_CLOCK_V7_MISC_REF_DIV_SRC_XTALIN = 0x00,
-	PIXEL_CLOCK_V7_MISC_REF_DIV_SRC_PCIE   = 0x10,
-	PIXEL_CLOCK_V7_MISC_REF_DIV_SRC_GENLK  = 0x20,
-	PIXEL_CLOCK_V7_MISC_REF_DIV_SRC_REFPAD = 0x30,
-	PIXEL_CLOCK_V7_MISC_ATOMIC_UPDATE      = 0x40,
-	PIXEL_CLOCK_V7_MISC_FORCE_SS_DIS       = 0x80,
-};
-enum atom_crtc_def:uint8_t {
-	ATOM_CRTC1 = 0,
-	ATOM_CRTC2 = 1,
-	ATOM_CRTC3 = 2,
-	ATOM_CRTC4 = 3,
-	ATOM_CRTC5 = 4,
-	ATOM_CRTC6 = 5,
-	ATOM_CRTC_INVALID = 0xff,
-};
-
 /* deep_color_ratio */
 enum atom_set_pixel_clock_v1_7_deepcolor_ratio:uint8_t {
 	PIXEL_CLOCK_V7_DEEPCOLOR_RATIO_DIS = 0x00, // 00 - DCCG_DEEP_COLOR_DTO_DISABLE: Disable Deep Color DTO
@@ -4442,33 +3963,6 @@ struct set_dce_clock_ps_allocation_v2_1 {
 
 
 /******************************************************************************/
-// StruCTUREs used by BlankCRTC
-/******************************************************************************/
-enum atom_blank_crtc_command:uint8_t {
-	ATOM_BLANKING     = 1,
-	ATOM_BLANKING_OFF = 0,
-};
-
-struct blank_crtc_parameters {
-    enum atom_crtc_def  crtc_id;
-	enum  atom_blank_crtc_command  blanking;
-	uint16_t BlackColorRCr;
-    uint16_t BlackColorGY;
-    uint16_t BlackColorBCb;
-};
-
-
-/******************************************************************************/
-// Structures used by enablecrtc
-/******************************************************************************/
-struct enable_crtc_parameters {
-    enum atom_crtc_def  crtc_id;
-	uint8_t  enable; // ATOM_ENABLE or ATOM_DISABLE
-	uint8_t  padding[2];
-};
-
-
-/******************************************************************************/
 // Structure used by EnableDispPowerGating
 /******************************************************************************/
 struct enable_disp_power_gating_parameters_v2_1 {
@@ -4503,35 +3997,6 @@ struct set_crtc_using_dtd_timing_parameters {
 };
 
 
-/******************************************************************************/
-// Structures used by processi2cchanneltransaction
-/******************************************************************************/
-struct process_i2c_channel_transaction_parameters {
-	uint8_t  i2cspeed_khz;
-	union {
-		uint8_t  regindex;
-		uint8_t  status; // enum atom_process_i2c_flag
-	} regind_status;
-	uint16_t i2c_data_out;
-	uint8_t  flag; // enum atom_process_i2c_status
-	uint8_t  trans_bytes;
-	uint8_t  slave_addr;
-	union atom_i2c_id_config  i2c_id;
-};
-
-// ucFlag
-enum atom_process_i2c_flag {
-	HW_I2C_READ          = 0,
-	HW_I2C_WRITE         = 1,
-	I2C_2BYTE_ADDR       = 0x02,
-	HW_I2C_SMBUS_BYTE_WR = 0x04,
-};
-
-// status
-enum atom_process_i2c_status {
-	HW_ASSISTED_I2C_STATUS_FAILURE = 2,
-	HW_ASSISTED_I2C_STATUS_SUCCESS = 1,
-};
 
 
 /******************************************************************************/
