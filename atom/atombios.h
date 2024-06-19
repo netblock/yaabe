@@ -4629,11 +4629,51 @@ struct atom_voltage_info_header {
 	uint8_t  VoltageControlAddress;
 	uint8_t  VoltageControlOffset;
 };
-
 struct atom_voltage_info {
 	struct atom_common_table_header  table_header;
 	struct atom_voltage_info_header  viHeader;
 	uint8_t  VoltageEntries[64]; // 64 is for allocation, the actual number of entry is present at ucNumOfVoltageEntries*ucBytesPerVoltageEntry
+};
+
+
+
+
+
+enum voltage_control_id:uint8_t {
+	VOLTAGE_CONTROLLED_BY_HW         = 0x00,
+	VOLTAGE_CONTROLLED_BY_I2C_MASK   = 0x7F,
+	VOLTAGE_CONTROLLED_BY_GPIO       = 0x80,
+	VOLTAGE_CONTROL_ID_LM64          = 0x01, // I2C control, used for R5xx Core Voltage
+	VOLTAGE_CONTROL_ID_DAC           = 0x02, // I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI
+	VOLTAGE_CONTROL_ID_VT116xM       = 0x03, // I2C control, used for R6xx Core Voltage
+	VOLTAGE_CONTROL_ID_DS4402        = 0x04,
+	VOLTAGE_CONTROL_ID_UP6266        = 0x05,
+	VOLTAGE_CONTROL_ID_SCORPIO       = 0x06,
+	VOLTAGE_CONTROL_ID_VT1556M       = 0x07,
+	VOLTAGE_CONTROL_ID_CHL822x       = 0x08,
+	VOLTAGE_CONTROL_ID_VT1586M       = 0x09,
+	VOLTAGE_CONTROL_ID_UP1637        = 0x0A,
+	VOLTAGE_CONTROL_ID_CHL8214       = 0x0B,
+	VOLTAGE_CONTROL_ID_UP1801        = 0x0C,
+	VOLTAGE_CONTROL_ID_ST6788A       = 0x0D,
+	VOLTAGE_CONTROL_ID_CHLIR3564SVI2 = 0x0E,
+	VOLTAGE_CONTROL_ID_AD527x        = 0x0F,
+	VOLTAGE_CONTROL_ID_NCP81022      = 0x10,
+	VOLTAGE_CONTROL_ID_LTC2635       = 0x11,
+	VOLTAGE_CONTROL_ID_NCP4208       = 0x12,
+	VOLTAGE_CONTROL_ID_IR35xx        = 0x13,
+	VOLTAGE_CONTROL_ID_RT9403        = 0x14,
+
+	VOLTAGE_CONTROL_ID_GENERIC_I2C   = 0x40,
+};
+struct atom_voltage_control {
+	enum voltage_control_id VoltageControlId; // Indicate it is controlled by I2C or GPIO or HW state machine
+	uint8_t  VoltageControlI2cLine;
+	uint8_t  VoltageControlAddress;
+	uint8_t  VoltageControlOffset;
+	uint16_t GpioPin_AIndex;     // GPIO_PAD register index
+	uint8_t  GpioPinBitShift[9]; // at most 8 pin support 255 VIDs, termintate with 0xff
+	uint8_t  Reserved;
 };
 
 
@@ -4646,115 +4686,65 @@ struct atom_voltage_formula {
 	uint8_t  Reserved;
 	uint8_t  VIDAdjustEntries[32]; // 32 is for allocation, the actual number of entry is present at ucNumOfVoltageEntries
 };
-
-struct voltage_lut_entry {
-	uint16_t VoltageCode;  // The Voltage ID, either GPIO or I2C code
-	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
-};
-
-struct atom_voltage_formula_v2 {
-	uint8_t  NumOfVoltageEntries; // Number of Voltage Entry, which indicate max Voltage
-	uint8_t  Reserved[3];
-	struct voltage_lut_entry  VIDAdjustEntries[32]; // 32 is for allocation, the actual number of entries is in ucNumOfVoltageEntries
-};
-
-struct atom_voltage_control {
-	uint8_t  VoltageControlId; // Indicate it is controlled by I2C or GPIO or HW state machine
-	uint8_t  VoltageControlI2cLine;
-	uint8_t  VoltageControlAddress;
-	uint8_t  VoltageControlOffset;
-	uint16_t GpioPin_AIndex;     // GPIO_PAD register index
-	uint8_t  GpioPinBitShift[9]; // at most 8 pin support 255 VIDs, termintate with 0xff
-	uint8_t  Reserved;
-};
-
-// Define ucVoltageControlId
-#define VOLTAGE_CONTROLLED_BY_HW         0x00
-#define VOLTAGE_CONTROLLED_BY_I2C_MASK   0x7F
-#define VOLTAGE_CONTROLLED_BY_GPIO       0x80
-#define VOLTAGE_CONTROL_ID_LM64          0x01 // I2C control, used for R5xx Core Voltage
-#define VOLTAGE_CONTROL_ID_DAC           0x02 // I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI
-#define VOLTAGE_CONTROL_ID_VT116xM       0x03 // I2C control, used for R6xx Core Voltage
-#define VOLTAGE_CONTROL_ID_DS4402        0x04
-#define VOLTAGE_CONTROL_ID_UP6266        0x05
-#define VOLTAGE_CONTROL_ID_SCORPIO       0x06
-#define VOLTAGE_CONTROL_ID_VT1556M       0x07
-#define VOLTAGE_CONTROL_ID_CHL822x       0x08
-#define VOLTAGE_CONTROL_ID_VT1586M       0x09
-#define VOLTAGE_CONTROL_ID_UP1637        0x0A
-#define VOLTAGE_CONTROL_ID_CHL8214       0x0B
-#define VOLTAGE_CONTROL_ID_UP1801        0x0C
-#define VOLTAGE_CONTROL_ID_ST6788A       0x0D
-#define VOLTAGE_CONTROL_ID_CHLIR3564SVI2 0x0E
-#define VOLTAGE_CONTROL_ID_AD527x        0x0F
-#define VOLTAGE_CONTROL_ID_NCP81022      0x10
-#define VOLTAGE_CONTROL_ID_LTC2635       0x11
-#define VOLTAGE_CONTROL_ID_NCP4208       0x12
-#define VOLTAGE_CONTROL_ID_IR35xx        0x13
-#define VOLTAGE_CONTROL_ID_RT9403        0x14
-
-#define VOLTAGE_CONTROL_ID_GENERIC_I2C   0x40
-
 struct atom_voltage_object {
 	uint8_t  VoltageType; // Indicate Voltage Source: VDDC, MVDDC, MVDDQ or MVDDCI
 	uint8_t  Size;        // Size of Object
 	struct atom_voltage_control  Control; // describ how to control
 	struct atom_voltage_formula  Formula; // Indicate How to convert real Voltage to VID
 };
+struct atom_voltage_object_info {
+	struct atom_common_table_header table_header;
+	struct atom_voltage_object      VoltageObj[3]; // Info for Voltage control
+};
 
+
+struct voltage_lut_entry { // aka atom_i2c_data_entry
+	uint16_t VoltageCode;  // The Voltage ID, either GPIO or I2C code
+	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
+};
+
+
+struct atom_voltage_formula_v2 {
+	uint8_t  NumOfVoltageEntries; // Number of Voltage Entry, which indicate max Voltage
+	uint8_t  Reserved[3];
+	struct voltage_lut_entry  VIDAdjustEntries[32]; // 32 is for allocation, the actual number of entries is in ucNumOfVoltageEntries
+};
 struct atom_voltage_object_v2 {
 	uint8_t  VoltageType; // Indicate Voltage Source: VDDC, MVDDC, MVDDQ or MVDDCI
 	uint8_t  Size;        // Size of Object
-	struct atom_voltage_control  Control;    // describ how to control
-	struct atom_voltage_formula_v2  Formula; // Indicate How to convert real Voltage to VID
+	struct atom_voltage_control    Control;    // describ how to control
+	struct atom_voltage_formula_v2 Formula; // Indicate How to convert real Voltage to VID
 };
-
-struct atom_voltage_object_info {
-	struct atom_common_table_header  table_header;
-	struct atom_voltage_object  VoltageObj[3]; // Info for Voltage control
-};
-
 struct atom_voltage_object_info_v2 {
-	struct atom_common_table_header  table_header;
-	struct atom_voltage_object_v2  VoltageObj[3]; // Info for Voltage control
+	struct atom_common_table_header table_header;
+	struct atom_voltage_object_v2   VoltageObj[3]; // Info for Voltage control
 };
 
-struct atom_leakid_voltage {
-	uint8_t  LeakageId;
-	uint8_t  Reserved;
-	uint16_t Voltage;
-};
 
-struct atom_voltage_object_header_v3 {
+/*
+struct atom_voltage_object_header {
 	uint8_t  VoltageType; // Indicate Voltage Source: VDDC, MVDDC, MVDDQ or MVDDCI
 	uint8_t  VoltageMode; // Indicate voltage control mode: Init/Set/Leakage/Set phase
 	uint16_t Size;        // Size of Object
 };
-
-// ATOM_VOLTAGE_OBJECT_HEADER_V3.ucVoltageMode
+// atom_voltage_object_header.ucVoltageMode
 #define VOLTAGE_OBJ_GPIO_LUT                0 // VOLTAGE and GPIO Lookup table ->ATOM_GPIO_VOLTAGE_OBJECT_V3
 #define VOLTAGE_OBJ_VR_I2C_INIT_SEQ         3 // VOLTAGE REGULATOR INIT sequece through I2C -> ATOM_I2C_VOLTAGE_OBJECT_V3
 #define VOLTAGE_OBJ_PHASE_LUT               4 // Set Vregulator Phase lookup table ->ATOM_GPIO_VOLTAGE_OBJECT_V3
-#define VOLTAGE_OBJ_SVID2                   7 // Indicate voltage control by SVID2 ->ATOM_SVID2_VOLTAGE_OBJECT_V3
+#define VOLTAGE_OBJ_SVID2                   7 // Indicate voltage control by SVID2 ->atom_svid2_voltage_object_v1
 #define VOLTAGE_OBJ_EVV                     8
-#define VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT    0x10 // Powerboost Voltage and LeakageId lookup table->ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
-#define VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT  0x11 // High voltage state Voltage and LeakageId lookup table->ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
-#define VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT 0x12 // High1 voltage state Voltage and LeakageId lookup table->ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
-
-struct voltage_lut_entry_v2 {
-	uint32_t VoltageId;    // The Voltage ID which is used to program GPIO register
-	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
-};
-
-struct leakage_voltage_lut_entry_v2 {
-	uint16_t VoltageLevel; // The Voltage ID which is used to program GPIO register
-	uint16_t VoltageId;
-	uint16_t LeakageId;    // The corresponding Voltage Value, in mV
-};
+#define VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT    0x10 // Powerboost Voltage and LeakageId lookup table->atom_leakage_voltage_object_v1
+#define VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT  0x11 // High voltage state Voltage and LeakageId lookup table->atom_leakage_voltage_object_v1
+#define VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT 0x12 // High1 voltage state Voltage and LeakageId lookup table->atom_leakage_voltage_object_v1
+*/
 
 
+/* same as atom_i2c_voltage_object_v4
+// ATOM_I2C_VOLTAGE_OBJECT_V3.ucVoltageControlFlag
+#define VOLTAGE_DATA_ONE_BYTE 0
+#define VOLTAGE_DATA_TWO_BYTE 1
 struct atom_i2c_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
+	struct atom_voltage_object_header  Header; // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
 	uint8_t  VoltageRegulatorId; // Indicate Voltage Regulator Id
 	uint8_t  VoltageControlI2cLine;
 	uint8_t  VoltageControlAddress;
@@ -4763,13 +4753,15 @@ struct atom_i2c_voltage_object_v3 {
 	uint8_t  ulReserved[3];
 	struct voltage_lut_entry  VolI2cLut[]; // end with 0xff
 };
+*/
 
-// ATOM_I2C_VOLTAGE_OBJECT_V3.ucVoltageControlFlag
-#define VOLTAGE_DATA_ONE_BYTE 0
-#define VOLTAGE_DATA_TWO_BYTE 1
-
+/* same as atom_gpio_voltage_object_v4
+struct voltage_lut_entry_v2 {
+	uint32_t VoltageId;    // The Voltage ID which is used to program GPIO register
+	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
+};
 struct atom_gpio_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = VOLTAGE_OBJ_GPIO_LUT or VOLTAGE_OBJ_PHASE_LUT
+	struct atom_voltage_object_header  Header; // voltage mode = VOLTAGE_OBJ_GPIO_LUT or VOLTAGE_OBJ_PHASE_LUT
 	uint8_t  VoltageGpioCntlId; // default is 0 which indicate control through CG VID mode
 	uint8_t  GpioEntryNum;      // indiate the entry numbers of Votlage/Gpio value Look up table
 	uint8_t  PhaseDelay;        // phase delay in unit of micro second
@@ -4777,72 +4769,90 @@ struct atom_gpio_voltage_object_v3 {
 	uint32_t GpioMaskVal;       // GPIO Mask value
 	struct voltage_lut_entry_v2  VolGpioLut[];
 };
+*/
 
-struct atom_leakage_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = 0x10/0x11/0x12
-	uint8_t  LeakageCntlId;   // default is 0
-	uint8_t  LeakageEntryNum; // indicate the entry number of LeakageId/Voltage Lut table
-	uint8_t  Reserved[2];
-	uint32_t MaxVoltageLevel;
-	struct leakage_voltage_lut_entry_v2  LeakageIdLut[];
+
+union loadline_psi0 {
+	uint16_t  loadline_psi0;
+	struct { uint8_t
+		offset_trim    :1-0 +1,
+		loadline_slope :4-2 +1,
+		PSI1           :5-5 +1,
+		PSI0_enable    :6-6 +1,
+		PSI0_VID      :14-7 +1,
+		reserved      :15-15 +1;
+	};
 };
 
-
-struct atom_svid2_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = VOLTAGE_OBJ_SVID2
-// 14:7 - PSI0_VID
-// 6 - PSI0_EN
-// 5 - PSI1
-// 4:2 - load line slope trim.
-// 1:0 - offset trim,
-	uint16_t LoadLine_PSI;
-// GPU GPIO pin Id to SVID2 regulator VRHot pin. possible value 0~31. 0 means GPIO0, 31 means GPIO31
-	uint8_t  SVDGpioId; // 0~31 indicate GPIO0~31
-	uint8_t  SVCGpioId; // 0~31 indicate GPIO0~31
+struct atom_svid2_voltage_object_v1 {
+	struct atom_voltage_object_header  Header; // voltage mode = VOLTAGE_OBJ_SVID2
+	union loadline_psi0 LoadLine_PSI;
+	uint8_t  SVDGpioId; // GPU GPIO pin Id to SVID2 regulator VRHot pin. 0~31 indicate GPIO0~31
+	uint8_t  SVCGpioId; // GPU GPIO pin Id to SVID2 regulator VRHot pin. 0~31 indicate GPIO0~31
 	uint32_t Reserved;
 };
 
 
-
 struct atom_merged_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = VOLTAGE_OBJ_MERGED_POWER
-	uint8_t  MergedVType; // VDDC/VDCCI/....
+	struct atom_voltage_object_header  Header; // voltage mode = VOLTAGE_OBJ_MERGED_POWER
+	enum atom_voltage_type MergedVType;
 	uint8_t  Reserved[3];
 };
 
 
-/* duplicate
 struct atom_evv_dpm_info {
 	uint32_t DPMSclk;      // DPM state SCLK
 	uint16_t VAdjOffset;   // Adjust Voltage offset in unit of mv
 	uint8_t  DPMTblVIndex; // Voltage Index in SMC_DPM_Table structure VddcTable/VddGfxTable
 	uint8_t  DPMState;     // DPMState0~7
 };
-
-// ucVoltageMode = VOLTAGE_OBJ_EVV
-struct atom_evv_voltage_object_v3 {
-	struct atom_voltage_object_header_v3  Header; // voltage mode = VOLTAGE_OBJ_SVID2
+struct atom_evv_voltage_object_v1 {
+	struct atom_voltage_object_header  Header; // voltage mode = VOLTAGE_OBJ_EVV
 	struct atom_evv_dpm_info  EvvDpmList[8];
 };
-*/
 
-
-union atom_voltage_object_v3{
-	struct atom_gpio_voltage_object_v3  GpioVoltageObj;
-	struct atom_i2c_voltage_object_v3  I2cVoltageObj;
-	struct atom_leakage_voltage_object_v3  LeakageObj;
-	struct atom_svid2_voltage_object_v3  SVID2Obj;
-	struct atom_evv_voltage_object_v3  EvvObj;
+struct leakage_voltage_lut_entry_v2 {
+	uint16_t VoltageLevel; // The Voltage ID which is used to program GPIO register
+	uint16_t VoltageId;
+	uint16_t LeakageId;    // The corresponding Voltage Value, in mV
+};
+struct atom_leakage_voltage_object_v1 {
+	struct atom_voltage_object_header  Header; // voltage mode = 0x10/0x11/0x12
+	uint8_t  LeakageCntlId;   // default is 0
+	uint8_t  LeakageEntryNum; // indicate the entry number of LeakageId/Voltage Lut table
+	uint8_t  Reserved[2];
+	uint32_t MaxVoltageLevel;
+	struct leakage_voltage_lut_entry_v2  LeakageIdLut[1];
 };
 
-struct atom_voltage_object_info_v3_1 {
+union atom_voltage_object_v3 {
+	struct atom_voltage_object_header     header;
+	struct atom_gpio_voltage_object_v1    gpio_voltage_obj_v1;
+	struct atom_i2c_voltage_object_v1     i2c_voltage_obj_v1;
+	struct atom_svid2_voltage_object_v2   svid2_voltage_obj_v1;
+	struct atom_merged_voltage_object_v1  merged_voltage_obj_v1;
+	struct atom_evv_voltage_object_v1     evv_voltage_obj_v1;
+	struct atom_leakage_voltage_object_v1 leakage_voltage_obj_v1;
+};
+
+struct atom_voltage_objects_info_v3_1 {
 	struct atom_common_table_header table_header;
-	union atom_voltage_object_v3    VoltageObj[3]; // Info for Voltage control
+	union atom_voltage_object_v3    voltage_object[1]; // Info for Voltage control
 };
 
 
+enum asic_profile_id:uint8_t {
+	ATOM_ASIC_PROFILE_ID_EFUSE_VOLTAGE             = 1,
+	ATOM_ASIC_PROFILE_ID_EFUSE_PERFORMANCE_VOLTAGE = 1,
+	ATOM_ASIC_PROFILE_ID_EFUSE_THERMAL_VOLTAGE     = 2,
+};
+struct atom_leakid_voltage {
+	uint8_t  LeakageId;
+	uint8_t  Reserved;
+	uint16_t Voltage;
+};
 struct atom_asic_profile_voltage {
-	uint8_t  ProfileId;
+	enum asic_profile_id ProfileId;
 	uint8_t  Reserved;
 	uint16_t Size;
 	uint16_t EfuseSpareStartAddr;
@@ -4850,14 +4860,10 @@ struct atom_asic_profile_voltage {
 	struct atom_leakid_voltage  LeakVol[2]; // Leakid and relatd voltage
 };
 
-// ucProfileId
-#define ATOM_ASIC_PROFILE_ID_EFUSE_VOLTAGE             1
-#define ATOM_ASIC_PROFILE_ID_EFUSE_PERFORMANCE_VOLTAGE 1
-#define ATOM_ASIC_PROFILE_ID_EFUSE_THERMAL_VOLTAGE     2
 
 struct atom_asic_profiling_info {
 	struct atom_common_table_header  table_header;
-	struct atom_asic_profile_voltage  Voltage;
+	struct atom_asic_profile_voltage Voltage;
 };
 
 struct atom_asic_profiling_info_v2_1 {

@@ -6848,7 +6848,7 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_voltage_object_header_v4",
+	c_type: "atom_voltage_object_header",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -6866,7 +6866,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_voltage_gpio_map_lut",
-	atomtree: "atomtree_voltage_object_v4",
+	atomtree: "atomtree_voltage_object",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -6884,15 +6884,15 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_gpio_voltage_object_v4",
-	atomtree: "atomtree_voltage_object_v4",
+	c_type: "atom_gpio_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
 	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header_v4",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->gpio_control_id",
 			name: "gpio_control_id",
@@ -6930,7 +6930,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_i2c_data_entry",
-	atomtree: "atomtree_voltage_object_v4",
+	atomtree: "atomtree_voltage_object",
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
@@ -6950,15 +6950,15 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_i2c_voltage_object_v4",
-	atomtree: "atomtree_voltage_object_v4",
+	c_type: "atom_i2c_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
 	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header_v4",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->regulator_id",
 			name: "regulator_id",
@@ -7014,15 +7014,15 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_svid2_voltage_object_v4",
-	atomtree: "atomtree_voltage_object_v4",
+	c_type: "atom_svid2_voltage_object_v2",
+	atomtree: "atomtree_voltage_object",
 	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header_v4",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->loadline_psi1.loadline_psi1",
 			name: "loadline_psi1",
@@ -7068,14 +7068,14 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_merged_voltage_object_v4",
+	c_type: "atom_merged_voltage_object_v1",
 	table_size: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header_v4",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->merged_powerrail_type",
 			name: "merged_powerrail_type",

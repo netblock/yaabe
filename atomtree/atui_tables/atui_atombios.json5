@@ -2158,9 +2158,7 @@ global_default: {
 			description: [
 				{language: "english", text: "Backlight PWM in Hz. New in _V13",},
 			],
-		},
-
-		{
+		}, {
 			access: "bios->PowerSequenceDIGONtoDE_in4Ms",
 			name: "PowerSequenceDIGONtoDE_in4Ms",
 		}, {
@@ -2172,9 +2170,7 @@ global_default: {
 		}, {
 			access: "bios->PowerSequenceDEtoDIGON_in4Ms",
 			name: "PowerSequenceDEtoDIGON_in4Ms",
-		},
-
-		{
+		}, {
 			access: "bios->OffDelay_in4Ms",
 			name: "OffDelay_in4Ms",
 		}, {
@@ -2187,9 +2183,7 @@ global_default: {
 			access: "bios->Reserved1",
 			name: "Reserved1",
 			display: "ATUI_HEX",
-		},
-
-		{
+		}, {
 			access: "bios->DPCD_eDP_CONFIGURATION_CAP",
 			name: "DPCD_eDP_CONFIGURATION_CAP",
 			description: [
@@ -2213,9 +2207,7 @@ global_default: {
 			description: [
 				{language: "english", text: "dpcd 03h",},
 			],
-		},
-
-		{
+		}, {
 			access: "bios->MaxPclkFreqInSingleLink",
 			name: "MaxPclkFreqInSingleLink",
 			description: [
@@ -2236,6 +2228,41 @@ global_default: {
 		},
 	],
 },
+
+{
+	c_type: "atom_evv_dpm_info",
+	atomtree: "atomtree_voltage_object_v3",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->DPMSclk",
+			name: "DPMSclk",
+			description: [
+				{language: "english", text: "DPM state SCLK",},
+			],
+		}, {
+			access: "bios->VAdjOffset",
+			name: "VAdjOffset",
+			description: [
+				{language: "english", text: "Adjust Voltage offset in unit of mv",},
+			],
+		}, {
+			access: "bios->DPMTblVIndex",
+			name: "DPMTblVIndex",
+			description: [
+				{language: "english", text: "Voltage Index in SMC_DPM_Table structure VddcTable/VddGfxTable",},
+			],
+		}, {
+			access: "bios->DPMState",
+			name: "DPMState",
+			description: [
+				{language: "english", text: "DPMState0~7",},
+			],
+		},
+	],
+},
+
+
 
 
 

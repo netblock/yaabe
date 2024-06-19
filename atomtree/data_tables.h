@@ -554,32 +554,26 @@ struct atomtree_vram_info {
 	};
 };
 
-struct atomtree_voltage_object_v4 {
-	union atom_voltage_object_v4* voltage_object;
-	uint16_t lut_entries; // has entries if i2c or gpio
-};
 
 #define ATOMTREE_VOLTAGE_OBJECTS_MAX 16
-struct atomtree_voltageobject_info_v4_1 {
-	struct atom_voltage_objects_info_v4_1* leaves;
-
-	uint16_t num_voltage_objects;
-	struct atomtree_voltage_object_v4 voltage_objects[
-		ATOMTREE_VOLTAGE_OBJECTS_MAX
-	];
+struct atomtree_voltage_object {
+	enum atomtree_common_version ver;
+	uint16_t lut_entries; // has entries if i2c or gpio
+	union atom_voltage_object_all* obj;
 };
-
-
 struct atomtree_voltageobject_info {
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
+		struct atom_voltage_objects_info_v3_1* v3_1;
+		struct atom_voltage_objects_info_v4_1* v4_1;
 	};
 
 	enum atomtree_common_version ver;
-	union {
-		struct atomtree_voltageobject_info_v4_1 v4_1;
-	};
+	uint16_t num_voltage_objects;
+	struct atomtree_voltage_object voltage_objects[
+		ATOMTREE_VOLTAGE_OBJECTS_MAX
+	];
 };
 
 struct atomtree_sw_datatable {
