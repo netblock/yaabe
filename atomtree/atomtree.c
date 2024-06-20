@@ -3203,6 +3203,284 @@ atomtree_dt_populate_vram_info(
 	return atui_vi;
 }
 
+inline static atui_branch*
+atomtree_dt_populate_voltageobject_info_v1_1(
+		struct atomtree_voltageobject_info* const vo_info,
+		bool const generate_atui
+		) {
+	struct atomtree_voltage_object* const voltage_objects = (
+		vo_info->voltage_objects
+	);
+	uint16_t i = 0;
+
+	// get the size ofthe dynamically-sized voltage object array, and walk
+	// through the array based on what each element reports their size as.
+	union {
+		void* raw;
+		union atom_voltage_object_all* vobj;
+	} vobj;
+	vobj.raw = vo_info->v1_1->VoltageObj;
+	void const* const end = (
+		vo_info->leaves
+		+ vo_info->table_header->structuresize
+	);
+	while (vobj.raw < end) {
+		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		voltage_objects[i].obj = vobj.vobj;
+		voltage_objects[i].ver = v1_0;
+		// NumOfVoltageEntries lies and can be 255.
+		voltage_objects[i].lut_entries = (
+			(
+				vobj.vobj->volt_obj_v1.Size
+				- offsetof(
+					struct atom_voltage_object_v1,
+					Formula.VIDAdjustEntries[0]
+				)
+			) / sizeof(uint8_t)
+		);
+		vobj.raw += vobj.vobj->volt_obj_v1.Size;
+		i++;
+	}
+	assert(vobj.raw == end);
+	vo_info->num_voltage_objects = i;
+
+	atui_branch* atui_vo_info = NULL;
+	if (generate_atui) {
+		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+			u8"atom_voltage_objects_info_v1_1",
+			NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
+		);
+		atui_branch* atui_volt_object;
+		for (i=0; i < vo_info->num_voltage_objects; i++) {
+			atui_volt_object = ATUI_MAKE_BRANCH(atom_voltage_object_v1, NULL,
+				&(voltage_objects[i]),voltage_objects[i].obj,  0,NULL
+			);
+			sprintf(atui_volt_object->name, "atom_voltage_object_v1 [%02u]", i);
+			ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
+		};
+	}
+	return atui_vo_info;
+}
+
+inline static atui_branch*
+atomtree_dt_populate_voltageobject_info_v1_2(
+		struct atomtree_voltageobject_info* const vo_info,
+		bool const generate_atui
+		) {
+	struct atomtree_voltage_object* const voltage_objects = (
+		vo_info->voltage_objects
+	);
+	uint16_t i = 0;
+
+	// get the size ofthe dynamically-sized voltage object array, and walk
+	// through the array based on what each element reports their size as.
+	union {
+		void* raw;
+		union atom_voltage_object_all* vobj;
+	} vobj;
+	vobj.raw = vo_info->v1_2->VoltageObj;
+	void const* const end = (
+		vo_info->leaves
+		+ vo_info->table_header->structuresize
+	);
+	while (vobj.raw < end) {
+		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		voltage_objects[i].obj = vobj.vobj;
+		voltage_objects[i].ver = v2_0;
+		// NumOfVoltageEntries lies and can be 255.
+		voltage_objects[i].lut_entries = (
+			(
+				vobj.vobj->volt_obj_v2.Size
+				- offsetof(
+					struct atom_voltage_object_v2,
+					Formula.VIDAdjustEntries[0]
+				)
+			) / sizeof(struct voltage_lut_entry)
+		);
+		vobj.raw += vobj.vobj->volt_obj_v2.Size;
+		i++;
+	}
+	assert(vobj.raw == end);
+	vo_info->num_voltage_objects = i;
+
+	atui_branch* atui_vo_info = NULL;
+	if (generate_atui) {
+		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+			u8"atom_voltage_objects_info_v1_2",
+			NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
+		);
+		atui_branch* atui_volt_object;
+		for (i=0; i < vo_info->num_voltage_objects; i++) {
+			atui_volt_object = ATUI_MAKE_BRANCH(atom_voltage_object_v2, NULL,
+				&(voltage_objects[i]),voltage_objects[i].obj,  0,NULL
+			);
+			sprintf(atui_volt_object->name, "atom_voltage_object_v2 [%02u]", i);
+			ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
+		};
+	}
+	return atui_vo_info;
+}
+
+inline static atui_branch*
+atomtree_dt_populate_voltageobject_info_v3_1(
+		struct atomtree_voltageobject_info* const vo_info,
+		bool const generate_atui
+		) {
+	struct atomtree_voltage_object* const voltage_objects = (
+		vo_info->voltage_objects
+	);
+	uint16_t i = 0;
+
+	// get the size ofthe dynamically-sized voltage object array, and walk
+	// through the array based on what each element reports their size as.
+	union {
+		void* raw;
+		union atom_voltage_object_all* vobj;
+	} vobj;
+	vobj.raw = vo_info->v3_1->voltage_object;
+	void const* const end = (
+		vo_info->leaves
+		+ vo_info->table_header->structuresize
+	);
+	while (vobj.raw < end) {
+		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		voltage_objects[i].obj = vobj.vobj;
+		voltage_objects[i].ver = v1_0;
+		switch(vobj.vobj->header.voltage_mode) {
+			// some voltage objects have a dynamically-sized lookup table.
+			case VOLTAGE_OBJ_GPIO_LUT:
+			case VOLTAGE_OBJ_PHASE_LUT:
+				voltage_objects[i].lut_entries = (
+					vobj.vobj->gpio_voltage_obj_v1.gpio_entry_num
+				);
+				assert(voltage_objects[i].lut_entries == (
+					(
+						vobj.vobj->header.object_size
+						- offsetof(
+							struct atom_gpio_voltage_object_v1,
+							voltage_gpio_lut[0]
+						)
+					) / sizeof(struct atom_voltage_gpio_map_lut)
+				));
+				break;
+			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+				voltage_objects[i].lut_entries = (
+					(
+						vobj.vobj->header.object_size
+						- offsetof(
+							struct atom_i2c_voltage_object_v1,
+							i2cdatalut[0]
+						)
+					) / sizeof(struct atom_i2c_data_entry)
+				);
+				break;
+			case VOLTAGE_OBJ_EVV:
+				voltage_objects[i].lut_entries = (
+						(
+							vobj.vobj->header.object_size
+							- offsetof(
+								struct atom_evv_voltage_object_v1,
+								EvvDpmList[0]
+							)
+						) / sizeof(struct atom_evv_dpm_info)
+					);
+				assert(
+					vobj.vobj->header.object_size
+					== sizeof(struct atom_evv_voltage_object_v1)
+				);
+				break;
+			case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
+			case VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT:
+			case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
+				voltage_objects[i].lut_entries = (
+					vobj.vobj->leakage_voltage_obj_v1.LeakageEntryNum
+				);
+				assert(voltage_objects[i].lut_entries == (
+					(
+						vobj.vobj->header.object_size
+						- offsetof(
+							struct atom_leakage_voltage_object_v1,
+							LeakageIdLut[0]
+						)
+					) / sizeof(struct leakage_voltage_lut_entry_v2)
+				));
+				break;
+			default:
+				voltage_objects[i].lut_entries = 0;
+				break;
+		}
+
+		vobj.raw += vobj.vobj->header.object_size;
+		i++;
+	}
+	assert(vobj.raw == end);
+	vo_info->num_voltage_objects = i;
+
+	atui_branch* atui_vo_info = NULL;
+	if (generate_atui) {
+		atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
+			u8"atom_voltage_objects_info_v3_1",
+			NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
+		);
+
+		atui_branch* atui_volt_object;
+		struct atui_funcify_args atui_args = {0};
+		atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
+		for (i=0; i < vo_info->num_voltage_objects; i++) {
+			switch(voltage_objects[i].obj->header.voltage_mode) {
+				case VOLTAGE_OBJ_GPIO_LUT:
+				case VOLTAGE_OBJ_PHASE_LUT:
+					atui_vobj_func = ATUI_FUNC(atom_gpio_voltage_object_v1);
+					break;
+				case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+					atui_vobj_func = ATUI_FUNC(atom_i2c_voltage_object_v1);
+					break;
+				case VOLTAGE_OBJ_SVID2:
+					atui_vobj_func = ATUI_FUNC(atom_svid2_voltage_object_v1);
+					break;
+				case VOLTAGE_OBJ_MERGED_POWER:
+					atui_vobj_func = ATUI_FUNC(atom_merged_voltage_object_v1);
+					break;
+				case VOLTAGE_OBJ_EVV:
+					atui_vobj_func = ATUI_FUNC(atom_evv_voltage_object_v1);
+					break;
+				case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
+				case VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT:
+				case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
+					atui_vobj_func = ATUI_FUNC(atom_leakage_voltage_object_v1);
+					break;
+				default:
+					atui_vobj_func = ATUI_FUNC(atom_voltage_object_header);
+					assert(0);
+					break;
+			}
+			atui_args.atomtree = &(voltage_objects[i]);
+			atui_args.suggestbios = voltage_objects[i].obj;
+			atui_volt_object = atui_vobj_func(&atui_args);
+			int16_t naming_enum_i = atui_enum_bsearch(
+				&(ATUI_ENUM(atom_voltage_type)),
+				voltage_objects[i].obj->header.voltage_type
+			);
+			if (0 <= naming_enum_i) {
+				sprintf(atui_volt_object->name, u8"%s (%s)",
+					atui_volt_object->origname,
+					ATUI_ENUM(atom_voltage_type).enum_array[naming_enum_i].name
+				);
+			} else {
+				sprintf(atui_volt_object->name, u8"%s (type %x)",
+					atui_volt_object->origname,
+					voltage_objects[i].obj->header.voltage_type
+				);
+			}
+			assert(
+				strlen(atui_volt_object->name) < sizeof(atui_volt_object->name)
+			);
+			ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
+		}
+	}
+	return atui_vo_info;
+}
+
 
 inline static atui_branch*
 atomtree_dt_populate_voltageobject_info_v4_1(
@@ -3228,6 +3506,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 	while (vobj.raw < end) {
 		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
 		voltage_objects[i].obj = vobj.vobj;
+		voltage_objects[i].ver = v1_0;
 		switch(vobj.vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.
 			case VOLTAGE_OBJ_GPIO_LUT:
@@ -3253,6 +3532,8 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 					) / sizeof(struct atom_i2c_data_entry)
 				);
 				break;
+			case VOLTAGE_OBJ_SVID2:
+				voltage_objects[i].ver = v2_0;
 			default:
 				voltage_objects[i].lut_entries = 0;
 				break;
@@ -3261,6 +3542,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 		vobj.raw += vobj.vobj->header.object_size;
 		i++;
 	}
+	assert(vobj.raw == end);
 	vo_info->num_voltage_objects = i;
 
 	atui_branch* atui_vo_info = NULL;
@@ -3274,9 +3556,6 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 		struct atui_funcify_args atui_args = {0};
 		atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
 		for (i=0; i < vo_info->num_voltage_objects; i++) {
-			struct atomtree_voltage_object* at_vobj = &(
-				voltage_objects[i]
-			);
 			switch(voltage_objects[i].obj->header.voltage_mode) {
 				case VOLTAGE_OBJ_GPIO_LUT:
 				case VOLTAGE_OBJ_PHASE_LUT:
@@ -3342,13 +3621,21 @@ atomtree_dt_populate_voltageobject_info(
 		vo_info->leaves = atree->bios + bios_offset;
 		vo_info->ver = get_ver(vo_info->table_header);
 		switch (vo_info->ver) {
-			/*
+			case v1_1:
+				atui_vo_info = atomtree_dt_populate_voltageobject_info_v1_1(
+					vo_info, generate_atui
+				);
+				break;
+			case v1_2:
+				atui_vo_info = atomtree_dt_populate_voltageobject_info_v1_2(
+					vo_info, generate_atui
+				);
+				break;
 			case v3_1:
 				atui_vo_info = atomtree_dt_populate_voltageobject_info_v3_1(
 					vo_info, generate_atui
 				);
 				break;
-			*/
 			case v4_1:
 				atui_vo_info = atomtree_dt_populate_voltageobject_info_v4_1(
 					vo_info, generate_atui
@@ -3362,6 +3649,8 @@ atomtree_dt_populate_voltageobject_info(
 					u8"atom_voltage_objects_info_v4_1 (forced)"
 				);
 				break;
+			case v1_0:
+				assert(0);
 			default:
 				if (generate_atui) {
 					atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,

@@ -2684,7 +2684,241 @@ global_default: {
 	],
 },
 
+
 {
+	c_type: "atom_voltage_control",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->VoltageControlId",
+			name: "VoltageControlId",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ENUM", fancy_data: "voltage_control_id",
+			description: [
+				{language: "english", text: "Indicate it is controlled by I2C or GPIO or HW state machine",},
+			],
+		}, {
+			access: "bios->VoltageControlI2cLine",
+			name: "VoltageControlI2cLine",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VoltageControlAddress",
+			name: "VoltageControlAddress",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VoltageControlOffset",
+			name: "VoltageControlOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->GpioPin_AIndex",
+			name: "GpioPin_AIndex",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "GPIO_PAD register index",},
+			],
+		}, {
+			access: "bios->GpioPinBitShift",
+			name: "GpioPinBitShift",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "at most 8 pin support 255 VIDs, termintate with 0xff",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_voltage_formula_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "offsetof(struct atom_voltage_formula_v1, VIDAdjustEntries[0]) + (atomtree->lut_entries * sizeof(bios->VIDAdjustEntries[0]))",
+	leaves: [
+		{
+			access: "bios->VoltageBaseLevel",
+			name: "VoltageBaseLevel",
+			description: [
+				{language: "english", text: "In number of 1mv unit",},
+			],
+		}, {
+			access: "bios->VoltageStep",
+			name: "VoltageStep",
+			description: [
+				{language: "english", text: "Indicating in how many mv increament is one step, 1mv unit",},
+			],
+		}, {
+			access: "bios->NumOfVoltageEntries",
+			name: "NumOfVoltageEntries",
+			description: [
+				{language: "english", text: "Number of Voltage Entry, which indicate max Voltage",},
+			],
+		}, {
+			access: "bios->Flag",
+			name: "Flag",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "bit0=0 :step is 1mv =1 0.5mv",},
+			],
+		}, {
+			access: "bios->BaseVID",
+			name: "BaseVID",
+			description: [
+				{language: "english", text: "if there is no lookup table, VID= BaseVID + ( Vol - BaseLevle ) /VoltageStep",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VIDAdjustEntries",
+			name: "VIDAdjustEntries",
+			description: [
+				{language: "english", text: "the actual number of entries is in ucNumOfVoltageEntries",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						access: "bios->VIDAdjustEntries",
+						name: "VIDAdjustEntries [%02u]",
+						display: "ATUI_HEX",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->Size",
+	leaves: [
+		{
+			access: "bios->VoltageType",
+			name: "VoltageType",
+			fancy: "ATUI_ENUM", fancy_data: "atom_voltage_type",
+		}, {
+			access: "bios->Size",
+			name: "Size",
+			description: [
+				{language: "english", text: "Size of Object",},
+			],
+		}, {
+			access: "bios->Control",
+			name: "Control",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_control",
+			description: [
+				{language: "english", text: "describ how to control",},
+			],
+		}, {
+			access: "bios->Formula",
+			name: "Formula",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_voltage_formula_v1",
+			description: [
+				{language: "english", text: "Indicate How to convert real Voltage to VID",},
+			],
+		},
+	],
+}, {
+	c_type: "voltage_lut_entry",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "aka atom_i2c_data_entry",},
+	],
+	leaves: [
+		{
+			access: "bios->VoltageCode",
+			name: "VoltageCode",
+			description: [
+				{language: "english", text: "The Voltage ID, either GPIO or I2C code",},
+			],
+		}, {
+			access: "bios->VoltageValue",
+			name: "VoltageValue",
+			description: [
+				{language: "english", text: "The corresponding Voltage Value, in mV",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_voltage_formula_v2",
+	atomtree: "atomtree_voltage_object",
+	table_size: "offsetof(struct atom_voltage_formula_v2, VIDAdjustEntries[0]) + (atomtree->lut_entries * sizeof(bios->VIDAdjustEntries[0]))",
+	leaves: [
+		{
+			access: "bios->NumOfVoltageEntries",
+			name: "NumOfVoltageEntries",
+			description: [
+				{language: "english", text: "Number of Voltage Entry, which indicate max Voltage",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->VIDAdjustEntries",
+			name: "VIDAdjustEntries",
+			description: [
+				{language: "english", text: "the actual number of entries is in ucNumOfVoltageEntries",},
+			],
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						access: "bios->VIDAdjustEntries",
+						name: "VIDAdjustEntries [%02u]",
+						display: "ATUI_NAN",
+						fancy: "ATUI_GRAFT", fancy_data: "voltage_lut_entry",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_voltage_object_v2",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->Size",
+	leaves: [
+		{
+			access: "bios->VoltageType",
+			name: "VoltageType",
+			fancy: "ATUI_ENUM", fancy_data: "atom_voltage_type",
+		}, {
+			access: "bios->Size",
+			name: "Size",
+			description: [
+				{language: "english", text: "Size of Object",},
+			],
+		}, {
+			access: "bios->Control",
+			name: "Control",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_control",
+			description: [
+				{language: "english", text: "describ how to control",},
+			],
+		}, {
+			access: "bios->Formula",
+			name: "Formula",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_voltage_formula_v2",
+			description: [
+				{language: "english", text: "Indicate How to convert real Voltage to VID",},
+			],
+		},
+	],
+}, {
 	c_type: "atom_voltage_object_header",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -2704,6 +2938,409 @@ global_default: {
 },
 
 {
+	c_type: "atom_voltage_gpio_map_lut",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->voltage_gpio_reg_val",
+			name: "voltage_gpio_reg_val",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "The Voltage ID which is used to program GPIO register",},
+			],
+		}, {
+			access: "bios->voltage_level_mv",
+			name: "voltage_level_mv",
+			description: [
+				{language: "english", text: "The corresponding Voltage Value, in mV",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_gpio_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->header.object_size",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+		}, {
+			access: "bios->gpio_control_id",
+			name: "gpio_control_id",
+			description: [
+				{language: "english", text: "default is 0 which indicate control through CG VID mode",},
+			],
+		}, {
+			access: "bios->gpio_entry_num",
+			name: "gpio_entry_num",
+			description: [
+				{language: "english", text: "indiate the entry numbers of Votlage/Gpio value Look up table",},
+			],
+		}, {
+			access: "bios->phase_delay_us",
+			name: "phase_delay_us",
+			description: [
+				{language: "english", text: "phase delay in unit of micro second",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->gpio_mask_val",
+			name: "gpio_mask_val",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "GPIO Mask value",},
+			],
+		}, {
+			access: "bios->voltage_gpio_lut",
+			name: "voltage_gpio_lut",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						access: "bios->voltage_gpio_lut",
+						name: "voltage_gpio_lut [%02u]",
+						display: "ATUI_NAN",
+						fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_gpio_map_lut",
+					},
+				],
+			},
+		},
+
+	],
+}, {
+	c_type: "atom_i2c_data_entry",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->i2c_reg_index",
+			name: "i2c_reg_index",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "i2c register address, can be up to 16bit",},
+			],
+		}, {
+			access: "bios->i2c_reg_data",
+			name: "i2c_reg_data",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "i2c register data, can be up to 16bit",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_i2c_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->header.object_size",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+		}, {
+			access: "bios->regulator_id",
+			name: "regulator_id",
+			description: [
+				{language: "english", text: "Indicate Voltage Regulator Id",},
+			],
+		}, {
+			access: "bios->i2c_id",
+			name: "i2c_id",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_id_config",
+		}, {
+			access: "bios->i2c_slave_addr",
+			name: "i2c_slave_addr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->i2c_control_offset",
+			name: "i2c_control_offset",
+		}, {
+			access: "bios->i2c_flag",
+			name: "i2c_flag",
+			display: "ATUI_BIN",
+			description: [
+				{language: "english", text: "Bit0: 0 - One byte data; 1 - Two byte data",},
+			],
+		}, {
+			access: "bios->i2c_speed",
+			name: "i2c_speed",
+			description: [
+				{language: "english", text: "=0, use default i2c speed, otherwise use it in unit of kHz.",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->i2cdatalut",
+			name: "i2cdatalut",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "i2cdatalut [%u]",
+						display: "ATUI_NAN",
+						fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_data_entry",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "loadline_psi0",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->loadline_psi0",
+			name: "loadline_psi0",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "offset_trim",
+					hi: 1, lo: 0,
+				}, {
+					name: "loadline_slope",
+					hi: 4, lo: 2,
+				}, {
+					name: "PSI1",
+					hi: 5, lo: 5,
+				}, {
+					name: "PSI0_enable",
+					hi: 6, lo: 6,
+				}, {
+					name: "PSI0_VID",
+					hi: 14, lo: 7,
+				}, {
+					name: "reserved",
+					hi: 15, lo: 15,
+				},
+			],
+		},
+	],
+},
+
+
+{
+	c_type: "atom_svid2_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->Header.object_size",
+	leaves: [
+		{
+			access: "bios->Header",
+			name: "Header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+			description: [
+				{language: "english", text: "voltage mode = VOLTAGE_OBJ_SVID2",},
+			],
+		}, {
+			access: "bios->LoadLine_PSI",
+			name: "LoadLine_PSI",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "loadline_psi0",
+		}, {
+			access: "bios->SVDGpioId",
+			name: "SVDGpioId",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "GPU GPIO pin Id to SVID2 regulator VRHot pin. 0~31 indicate GPIO0~31",},
+			],
+		}, {
+			access: "bios->SVCGpioId",
+			name: "SVCGpioId",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "GPU GPIO pin Id to SVID2 regulator VRHot pin. 0~31 indicate GPIO0~31",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_merged_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->header.object_size",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+		}, {
+			access: "bios->merged_powerrail_type",
+			name: "merged_powerrail_type",
+			fancy: "ATUI_ENUM", fancy_data: "atom_voltage_type",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_evv_dpm_info",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->DPMSclk",
+			name: "DPMSclk",
+			description: [
+				{language: "english", text: "DPM state SCLK",},
+			],
+		}, {
+			access: "bios->VAdjOffset",
+			name: "VAdjOffset",
+			description: [
+				{language: "english", text: "Adjust Voltage offset in unit of mv",},
+			],
+		}, {
+			access: "bios->DPMTblVIndex",
+			name: "DPMTblVIndex",
+			description: [
+				{language: "english", text: "Voltage Index in SMC_DPM_Table structure VddcTable/VddGfxTable",},
+			],
+		}, {
+			access: "bios->DPMState",
+			name: "DPMState",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "DPMState0~7",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_evv_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->Header.object_size",
+	leaves: [
+		{
+			access: "bios->Header",
+			name: "Header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+			description: [
+				{language: "english", text: "voltage mode = VOLTAGE_OBJ_EVV",},
+			],
+
+		}, {
+			access: "bios->EvvDpmList",
+			name: "EvvDpmList",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						access: "bios->EvvDpmList",
+						name: "EvvDpmList",
+						display: "ATUI_NAN",
+						fancy: "ATUI_GRAFT", fancy_data: "atom_evv_dpm_info",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "leakage_voltage_lut_entry_v2",
+	atomtree: "atomtree_voltage_object",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->VoltageLevel",
+			name: "VoltageLevel",
+			description: [
+				{language: "english", text: "The Voltage ID which is used to program GPIO register",},
+			],
+		}, {
+			access: "bios->VoltageId",
+			name: "VoltageId",
+		}, {
+			access: "bios->LeakageId",
+			name: "LeakageId",
+			description: [
+				{language: "english", text: "The corresponding Voltage Value, in mV",},
+			],
+		},
+	],
+},
+{
+	c_type: "atom_leakage_voltage_object_v1",
+	atomtree: "atomtree_voltage_object",
+	table_size: "bios->Header.object_size",
+	leaves: [
+		{
+			access: "bios->Header",
+			name: "Header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
+			description: [
+				{language: "english", text: "voltage mode = 0x10/0x11/0x12",},
+			],
+		}, {
+			access: "bios->LeakageCntlId",
+			name: "LeakageCntlId",
+			description: [
+				{language: "english", text: "default is 0",},
+			],
+		}, {
+			access: "bios->LeakageEntryNum",
+			name: "LeakageEntryNum",
+			description: [
+				{language: "english", text: "indicate the entry number of LeakageId/Voltage Lut table",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->MaxVoltageLevel",
+			name: "MaxVoltageLevel",
+		},	{
+			access: "bios->LeakageIdLut",
+			name: "LeakageIdLut",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->lut_entries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						access: "bios->LeakageIdLut",
+						name: "LeakageIdLut [%02u]",
+						display: "ATUI_NAN",
+						fancy: "ATUI_GRAFT",
+						fancy_data: "leakage_voltage_lut_entry_v2",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
 	c_type: "atom_gfx_info_v2_1",
 	leaves: [
 		{
@@ -2714,7 +3351,7 @@ global_default: {
 		}, {
 			access: "bios->GfxIpMinVer",
 			name: "GfxIpMinVer",
-		}, {
+	}, {
 			access: "bios->GfxIpMajVer",
 			name: "GfxIpMajVer",
 		}, {

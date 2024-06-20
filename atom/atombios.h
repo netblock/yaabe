@@ -5026,6 +5026,8 @@ struct atom_bracket_layout_record {
 /******************************************************************************/
 // Structure used in XXXX
 /******************************************************************************/
+
+#define MAX_VOLTAGE_ENTRIES 32
 struct atom_voltage_info_header {
 	uint16_t VDDCBaseLevel; // In number of 50mv unit
 	uint16_t Reserved;      // For possible extension table offset
@@ -5043,90 +5045,6 @@ struct atom_voltage_info {
 	uint8_t  VoltageEntries[64]; // 64 is for allocation, the actual number of entry is present at ucNumOfVoltageEntries*ucBytesPerVoltageEntry
 };
 
-
-
-
-
-enum voltage_control_id:uint8_t {
-	VOLTAGE_CONTROLLED_BY_HW         = 0x00,
-	VOLTAGE_CONTROLLED_BY_I2C_MASK   = 0x7F,
-	VOLTAGE_CONTROLLED_BY_GPIO       = 0x80,
-	VOLTAGE_CONTROL_ID_LM64          = 0x01, // I2C control, used for R5xx Core Voltage
-	VOLTAGE_CONTROL_ID_DAC           = 0x02, // I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI
-	VOLTAGE_CONTROL_ID_VT116xM       = 0x03, // I2C control, used for R6xx Core Voltage
-	VOLTAGE_CONTROL_ID_DS4402        = 0x04,
-	VOLTAGE_CONTROL_ID_UP6266        = 0x05,
-	VOLTAGE_CONTROL_ID_SCORPIO       = 0x06,
-	VOLTAGE_CONTROL_ID_VT1556M       = 0x07,
-	VOLTAGE_CONTROL_ID_CHL822x       = 0x08,
-	VOLTAGE_CONTROL_ID_VT1586M       = 0x09,
-	VOLTAGE_CONTROL_ID_UP1637        = 0x0A,
-	VOLTAGE_CONTROL_ID_CHL8214       = 0x0B,
-	VOLTAGE_CONTROL_ID_UP1801        = 0x0C,
-	VOLTAGE_CONTROL_ID_ST6788A       = 0x0D,
-	VOLTAGE_CONTROL_ID_CHLIR3564SVI2 = 0x0E,
-	VOLTAGE_CONTROL_ID_AD527x        = 0x0F,
-	VOLTAGE_CONTROL_ID_NCP81022      = 0x10,
-	VOLTAGE_CONTROL_ID_LTC2635       = 0x11,
-	VOLTAGE_CONTROL_ID_NCP4208       = 0x12,
-	VOLTAGE_CONTROL_ID_IR35xx        = 0x13,
-	VOLTAGE_CONTROL_ID_RT9403        = 0x14,
-
-	VOLTAGE_CONTROL_ID_GENERIC_I2C   = 0x40,
-};
-struct atom_voltage_control {
-	enum voltage_control_id VoltageControlId; // Indicate it is controlled by I2C or GPIO or HW state machine
-	uint8_t  VoltageControlI2cLine;
-	uint8_t  VoltageControlAddress;
-	uint8_t  VoltageControlOffset;
-	uint16_t GpioPin_AIndex;     // GPIO_PAD register index
-	uint8_t  GpioPinBitShift[9]; // at most 8 pin support 255 VIDs, termintate with 0xff
-	uint8_t  Reserved;
-};
-
-
-struct atom_voltage_formula {
-	uint16_t VoltageBaseLevel;     // In number of 1mv unit
-	uint16_t VoltageStep;          // Indicating in how many mv increament is one step, 1mv unit
-	uint8_t  NumOfVoltageEntries;  // Number of Voltage Entry, which indicate max Voltage
-	uint8_t  Flag;                 // bit0=0 :step is 1mv =1 0.5mv
-	uint8_t  BaseVID;              // if there is no lookup table, VID= BaseVID + ( Vol - BaseLevle ) /VoltageStep
-	uint8_t  Reserved;
-	uint8_t  VIDAdjustEntries[32]; // 32 is for allocation, the actual number of entry is present at ucNumOfVoltageEntries
-};
-struct atom_voltage_object {
-	uint8_t  VoltageType; // Indicate Voltage Source: VDDC, MVDDC, MVDDQ or MVDDCI
-	uint8_t  Size;        // Size of Object
-	struct atom_voltage_control  Control; // describ how to control
-	struct atom_voltage_formula  Formula; // Indicate How to convert real Voltage to VID
-};
-struct atom_voltage_object_info {
-	struct atom_common_table_header table_header;
-	struct atom_voltage_object      VoltageObj[3]; // Info for Voltage control
-};
-
-
-struct voltage_lut_entry { // aka atom_i2c_data_entry
-	uint16_t VoltageCode;  // The Voltage ID, either GPIO or I2C code
-	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
-};
-
-
-struct atom_voltage_formula_v2 {
-	uint8_t  NumOfVoltageEntries; // Number of Voltage Entry, which indicate max Voltage
-	uint8_t  Reserved[3];
-	struct voltage_lut_entry  VIDAdjustEntries[32]; // 32 is for allocation, the actual number of entries is in ucNumOfVoltageEntries
-};
-struct atom_voltage_object_v2 {
-	uint8_t  VoltageType; // Indicate Voltage Source: VDDC, MVDDC, MVDDQ or MVDDCI
-	uint8_t  Size;        // Size of Object
-	struct atom_voltage_control    Control;    // describ how to control
-	struct atom_voltage_formula_v2 Formula; // Indicate How to convert real Voltage to VID
-};
-struct atom_voltage_object_info_v2 {
-	struct atom_common_table_header table_header;
-	struct atom_voltage_object_v2   VoltageObj[3]; // Info for Voltage control
-};
 
 
 // ucVoltageType
@@ -5165,6 +5083,93 @@ enum atom_voltage_object_mode:uint8_t {
 	VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT  = 17, // High voltage state Voltage and LeakageId lookup table
 	VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT = 18, // High1 voltage state Voltage and LeakageId lookup table
 };
+
+
+enum voltage_control_id:uint8_t {
+	VOLTAGE_CONTROLLED_BY_HW         = 0x00,
+	VOLTAGE_CONTROL_ID_LM64          = 0x01, // I2C control, used for R5xx Core Voltage
+	VOLTAGE_CONTROL_ID_DAC           = 0x02, // I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI
+	VOLTAGE_CONTROL_ID_VT116xM       = 0x03, // I2C control, used for R6xx Core Voltage
+	VOLTAGE_CONTROL_ID_DS4402        = 0x04,
+	VOLTAGE_CONTROL_ID_UP6266        = 0x05,
+	VOLTAGE_CONTROL_ID_SCORPIO       = 0x06,
+	VOLTAGE_CONTROL_ID_VT1556M       = 0x07,
+	VOLTAGE_CONTROL_ID_CHL822x       = 0x08,
+	VOLTAGE_CONTROL_ID_VT1586M       = 0x09,
+	VOLTAGE_CONTROL_ID_UP1637        = 0x0A,
+	VOLTAGE_CONTROL_ID_CHL8214       = 0x0B,
+	VOLTAGE_CONTROL_ID_UP1801        = 0x0C,
+	VOLTAGE_CONTROL_ID_ST6788A       = 0x0D,
+	VOLTAGE_CONTROL_ID_CHLIR3564SVI2 = 0x0E,
+	VOLTAGE_CONTROL_ID_AD527x        = 0x0F,
+	VOLTAGE_CONTROL_ID_NCP81022      = 0x10,
+	VOLTAGE_CONTROL_ID_LTC2635       = 0x11,
+	VOLTAGE_CONTROL_ID_NCP4208       = 0x12,
+	VOLTAGE_CONTROL_ID_IR35xx        = 0x13,
+	VOLTAGE_CONTROL_ID_RT9403        = 0x14,
+
+	VOLTAGE_CONTROL_ID_GENERIC_I2C   = 0x40,
+	VOLTAGE_CONTROLLED_BY_I2C_MASK   = 0x7F,
+
+	VOLTAGE_CONTROLLED_BY_GPIO       = 0x80,
+};
+struct atom_voltage_control {
+	enum voltage_control_id VoltageControlId; // Indicate it is controlled by I2C or GPIO or HW state machine
+	uint8_t  VoltageControlI2cLine;
+	uint8_t  VoltageControlAddress;
+	uint8_t  VoltageControlOffset;
+	uint16_t GpioPin_AIndex;     // GPIO_PAD register index
+	uint8_t  GpioPinBitShift[9]; // at most 8 pin support 255 VIDs, termintate with 0xff
+	uint8_t  Reserved;
+};
+
+
+struct atom_voltage_formula_v1 {
+	uint16_t VoltageBaseLevel;     // In number of 1mv unit
+	uint16_t VoltageStep;          // Indicating in how many mv increament is one step, 1mv unit
+	uint8_t  NumOfVoltageEntries;  // Number of Voltage Entry, which indicate max Voltage
+	uint8_t  Flag;                 // bit0=0 :step is 1mv =1 0.5mv
+	uint8_t  BaseVID;              // if there is no lookup table, VID= BaseVID + ( Vol - BaseLevle ) /VoltageStep
+	uint8_t  Reserved;
+	uint8_t  VIDAdjustEntries[1]; // the actual number of entry is present at ucNumOfVoltageEntries
+};
+struct atom_voltage_object_v1 {
+	enum  atom_voltage_type  VoltageType;
+	uint8_t  Size;        // Size of Object
+	struct atom_voltage_control  Control; // describ how to control
+	struct atom_voltage_formula_v1  Formula; // Indicate How to convert real Voltage to VID
+};
+struct atom_voltage_object_info_v1_1 {
+	struct atom_common_table_header table_header;
+	struct atom_voltage_object_v1   VoltageObj[1]; // Info for Voltage control
+};
+
+
+struct voltage_lut_entry { // aka atom_i2c_data_entry
+	uint16_t VoltageCode;  // The Voltage ID, either GPIO or I2C code
+	uint16_t VoltageValue; // The corresponding Voltage Value, in mV
+};
+
+
+struct atom_voltage_formula_v2 {
+	uint8_t  NumOfVoltageEntries; // Number of Voltage Entry, which indicate max Voltage
+	uint8_t  Reserved[3];
+	struct voltage_lut_entry  VIDAdjustEntries[1]; // the actual number of entries is in ucNumOfVoltageEntries
+};
+struct atom_voltage_object_v2 {
+	enum  atom_voltage_type  VoltageType;
+	uint8_t  Size;        // Size of Object
+	struct atom_voltage_control    Control;    // describ how to control
+	struct atom_voltage_formula_v2 Formula; // Indicate How to convert real Voltage to VID
+};
+struct atom_voltage_object_info_v1_2 {
+	struct atom_common_table_header table_header;
+	struct atom_voltage_object_v2   VoltageObj[1]; // Info for Voltage control
+};
+
+
+
+
 struct atom_voltage_object_header {
 	enum  atom_voltage_type  voltage_type;
 	enum  atom_voltage_object_mode  voltage_mode;

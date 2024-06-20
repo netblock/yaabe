@@ -3481,7 +3481,7 @@ union atom_voltage_object_v4 {
 	struct atom_gpio_voltage_object_v1   gpio_voltage_obj_v1;
 	struct atom_i2c_voltage_object_v1    i2c_voltage_obj_v1;
 	struct atom_svid2_voltage_object_v2  svid2_voltage_obj_v2;
-	struct atom_merged_voltage_object_v1 merged_voltage_ob_v1j;
+	struct atom_merged_voltage_object_v1 merged_voltage_ob_v1;
 };
 struct atom_voltage_objects_info_v4_1 {
 	struct atom_common_table_header table_header;
@@ -3491,6 +3491,8 @@ struct atom_voltage_objects_info_v4_1 {
 
 union atom_voltage_object_all {
 	struct atom_voltage_object_header     header;
+	struct atom_voltage_object_v1         volt_obj_v1;
+	struct atom_voltage_object_v2         volt_obj_v2;
 	struct atom_gpio_voltage_object_v1    gpio_voltage_obj_v1;
 	struct atom_i2c_voltage_object_v1     i2c_voltage_obj_v1;
 	struct atom_svid2_voltage_object_v1   svid2_voltage_obj_v1;

@@ -565,6 +565,8 @@ struct atomtree_voltageobject_info {
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
+		struct atom_voltage_object_info_v1_1*  v1_1;
+		struct atom_voltage_object_info_v1_2*  v1_2;
 		struct atom_voltage_objects_info_v3_1* v3_1;
 		struct atom_voltage_objects_info_v4_1* v4_1;
 	};

@@ -256,14 +256,88 @@ Enums for ATUI_ENUM
 		{name: "VOLTAGE_TYPE_GENERIC_I2C_9",},
 		{name: "VOLTAGE_TYPE_GENERIC_I2C_10",},
 ]},
+
 {name: "atom_voltage_object_mode",
 	constants: [
-		{name: "VOLTAGE_OBJ_GPIO_LUT",},
-		{name: "VOLTAGE_OBJ_VR_I2C_INIT_SEQ",},
-		{name: "VOLTAGE_OBJ_PHASE_LUT",},
-		{name: "VOLTAGE_OBJ_SVID2",},
+		{name: "VOLTAGE_OBJ_GPIO_LUT",
+			description: [
+				{language: "english", text: "VOLTAGE and GPIO Lookup table",},
+			],
+		},
+		{name: "VOLTAGE_OBJ_VR_I2C_INIT_SEQ",
+			description: [
+				{language: "english", text: "VOLTAGE REGULATOR INIT sequece through I2C",},
+			],
+		},
+		{name: "VOLTAGE_OBJ_PHASE_LUT",
+			description: [
+				{language: "english", text: "Set Vregulator Phase lookup table",},
+			],
+		},
+		{name: "VOLTAGE_OBJ_SVID2",
+			description: [
+				{language: "english", text: "Indicate voltage control by SVID2",},
+			],
+		},
 		{name: "VOLTAGE_OBJ_EVV",},
 		{name: "VOLTAGE_OBJ_MERGED_POWER",},
+		{name: "VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT",
+			description: [
+				{language: "english", text: "Powerboost Voltage and LeakageId lookup table",},
+			],
+		},
+		{name: "VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT",
+			description: [
+				{language: "english", text: "High voltage state Voltage and LeakageId lookup table",},
+			],
+		},
+		{name: "VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT",
+			description: [
+				{language: "english", text: "High1 voltage state Voltage and LeakageId lookup table",},
+			],
+		},
+]},
+
+{name: "voltage_control_id",
+	constants: [
+		{name: "VOLTAGE_CONTROLLED_BY_HW",},
+		{name: "VOLTAGE_CONTROL_ID_LM64",
+			description: [
+				{language: "english", text: "I2C control, used for R5xx Core Voltage",},
+			],
+		},
+		{name: "VOLTAGE_CONTROL_ID_DAC",
+			description: [
+				{language: "english", text: "I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI",},
+			],
+		},
+		{name: "VOLTAGE_CONTROL_ID_VT116xM",
+			description: [
+				{language: "english", text: "I2C control, used for R6xx Core Voltage",},
+			],
+		},
+		{name: "VOLTAGE_CONTROL_ID_DS4402",},
+		{name: "VOLTAGE_CONTROL_ID_UP6266",},
+		{name: "VOLTAGE_CONTROL_ID_SCORPIO",},
+		{name: "VOLTAGE_CONTROL_ID_VT1556M",},
+		{name: "VOLTAGE_CONTROL_ID_CHL822x",},
+		{name: "VOLTAGE_CONTROL_ID_VT1586M",},
+		{name: "VOLTAGE_CONTROL_ID_UP1637",},
+		{name: "VOLTAGE_CONTROL_ID_CHL8214",},
+		{name: "VOLTAGE_CONTROL_ID_UP1801",},
+		{name: "VOLTAGE_CONTROL_ID_ST6788A",},
+		{name: "VOLTAGE_CONTROL_ID_CHLIR3564SVI2",},
+		{name: "VOLTAGE_CONTROL_ID_AD527x",},
+		{name: "VOLTAGE_CONTROL_ID_NCP81022",},
+		{name: "VOLTAGE_CONTROL_ID_LTC2635",},
+		{name: "VOLTAGE_CONTROL_ID_NCP4208",},
+		{name: "VOLTAGE_CONTROL_ID_IR35xx",},
+		{name: "VOLTAGE_CONTROL_ID_RT9403",},
+
+		{name: "VOLTAGE_CONTROL_ID_GENERIC_I2C",},
+		{name: "VOLTAGE_CONTROLLED_BY_I2C_MASK",},
+
+		{name: "VOLTAGE_CONTROLLED_BY_GPIO",},
 ]},
 
 
