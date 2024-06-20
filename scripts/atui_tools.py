@@ -57,7 +57,7 @@ def struct_to_atui(
 	text = re.sub("};","\t],\n},", text)
 
 	# ATUI_DYNARRAY
-	dynarray = """\
+	dynarray = """
 		{
 			access: "bios->\g<3>",
 			name: "\g<3>",
@@ -171,8 +171,6 @@ def struct_to_atui(
 		"\g<1>}, {\n",
 		text
 	)
-	# dynarrays part 2: "(ATUI_NULL" for leaf; and  "%02u" for pattern name
-	#s = re.sub("(\(ATUI_NAN, ATUI_DYNARRAY, \(\n\t+\()[^,]+, ([^,]+)\"","\g<1>ATUI_NULL, \g<2> [%02u]\"",s)
 
 	if print_text:
 		print(text)
