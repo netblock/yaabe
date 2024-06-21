@@ -4,7 +4,7 @@ struct register_set.
 The intended purpose of register_set_print_tables is to have it adjacent to
 atomtree_populate_init_reg_block.
 
-register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set);
+register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set, NULL);
 */
 
 #ifndef ASIC_REG_TOOLS_H
@@ -42,7 +42,8 @@ void
 register_set_print_tables( // entirely a developer's tool
 		struct atomtree_init_reg_block const* at_regblock,
 		struct register_set const* reg_set,
-		bool newest // suggest oldest or newest if there's multiple versions
+		bool newest, // suggest oldest or newest if there's multiple versions
+		char8_t const* name
 		);
 
 

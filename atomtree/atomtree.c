@@ -905,9 +905,12 @@ atomtree_populate_mem_adjust_table(
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
 	#ifndef NDEBUG
-	if (1 < mem_adjust_table->num_index
-		&& common_set_unknown == mem_adjust_table->reg_set) {
-		register_set_print_tables(mem_adjust_table, &GMC_reg_set, true);
+	if ((1 < mem_adjust_table->num_index)
+			&& (common_set_unknown == mem_adjust_table->reg_set)
+			) {
+		register_set_print_tables(
+			mem_adjust_table, &GMC_reg_set, true, "mem_adjust_set"
+		);
 		assert(mem_adjust_table->reg_set); // unknown adjust sequence
 	}
 	#endif
@@ -1032,9 +1035,12 @@ atomtree_populate_mem_clk_patch(
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
 	#ifndef NDEBUG
-	if (1 < mem_clk_patch->num_index
-		&& common_set_unknown == mem_clk_patch->reg_set) {
-		register_set_print_tables(mem_clk_patch, &GMC_reg_set, true);
+	if ((1 < mem_clk_patch->num_index)
+			&& (common_set_unknown == mem_clk_patch->reg_set)
+			) {
+		register_set_print_tables(
+			mem_clk_patch, &GMC_reg_set, true, "timings_set"
+		);
 		assert(mem_clk_patch->reg_set); // unknown timings sequence
 	}
 	#endif
@@ -1124,9 +1130,12 @@ atomtree_populate_mc_tile_adjust(
 
 	mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
 	#ifndef NDEBUG
-	if (1 < mc_tile_adjust->num_index
-		&& common_set_unknown == mc_tile_adjust->reg_set) {
-		register_set_print_tables(mc_tile_adjust, &GMC_reg_set, true);
+	if ((1 < mc_tile_adjust->num_index)
+			&& (common_set_unknown == mc_tile_adjust->reg_set)
+			) {
+		register_set_print_tables(
+			mc_tile_adjust, &GMC_reg_set, true, "mc_tile_adjust_set"
+		);
 		assert(mc_tile_adjust->reg_set); // unknown adjust sequence
 	}
 	#endif
@@ -1221,9 +1230,12 @@ atomtree_populate_init_mc_phy_init(
 
 	mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
 	#ifndef NDEBUG
-	if (1 < mc_phy_init->num_index
-		&& common_set_unknown == mc_phy_init->reg_set) {
-		register_set_print_tables(mc_phy_init, &GMC_reg_set, true);
+	if ((1 < mc_phy_init->num_index)
+			&& (common_set_unknown == mc_phy_init->reg_set)
+			) {
+		register_set_print_tables(
+			mc_phy_init, &GMC_reg_set, true, "mc_phy_init_set"
+		);
 		assert(mc_phy_init->reg_set); // unknown phy init sequence
 	}
 	#endif

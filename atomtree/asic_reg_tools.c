@@ -85,7 +85,8 @@ void
 register_set_print_tables(
 		struct atomtree_init_reg_block const* const at_regblock,
 		struct register_set const* const reg_set,
-		bool const newest
+		bool const newest,
+		char8_t const* name
 		) {
 	int16_t (* regset_bsearch)(
 			struct register_set const* reg_set,
@@ -95,6 +96,10 @@ register_set_print_tables(
 		regset_bsearch = regset_bsearch_right;
 	} else {
 		regset_bsearch = regset_bsearch_left;
+	}
+
+	if (NULL == name) {
+		name = u8"";
 	}
 
 	struct atom_init_reg_index_format const* const register_index =
@@ -116,8 +121,13 @@ register_set_print_tables(
 	int16_t set_loc;
 	uint16_t rii;
 
-	printf(u8"\nSTART\n\n");
 	// print assert-reg-index body
+	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++);
+	printf(
+		u8"{type: \"uint16_t\", name: \"%s\", // %u+1\n"
+		u8"\tconstants: [\n",
+		name, rii
+	);
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
@@ -125,9 +135,16 @@ register_set_print_tables(
 		printf(u8"\t\t\"%s\",\n", reg_set->entries[set_loc].name);
 	}
 
-	printf(u8"\nEND: %u+1 regs\nSTART\n\n", rii); // +1 is end
-	// print bitfield struct body
+	printf(
+		u8"\t\t\"END_OF_REG_INDEX_BLOCK\",\n"
+		u8"]},\n"
+		u8"\n"
+		u8"struct %s {\n"
+		u8"\tunion atom_mc_register_setting_id  block_id;\n",
+		name
+	);
 
+	// print bitfield struct body
 	uint16_t unions = 0;
 	bool access_range = 0;
 	uint8_t pre_reg_data_lo;
@@ -198,5 +215,12 @@ register_set_print_tables(
 		printf(struct_entry, union_name, name_buffer);
 		unions++;
 	}
-	printf(u8"\nEND: %u+1 unions\n\n",unions); // is block_id
+	printf(
+		u8"};\n"
+		u8"// %u bytes\n"
+		u8"// %u+1 unions\n"
+		u8"\n",
+		(unions+1)*4,
+		unions
+	);
 }
