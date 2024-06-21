@@ -517,7 +517,7 @@ atui_path_populate_branch_stack(
 }
 inline static char8_t*
 _print_branch_path(
-		atui_branch const** const branchstack,
+		atui_branch const* const* const branchstack,
 		uint8_t* const i,
 		char8_t* path_walk
 		) {
@@ -567,13 +567,13 @@ atui_path_populate_leaf_stack(
 }
 inline static char8_t*
 _print_leaf_path(
-		atui_leaf const** const leafstack,
+		atui_leaf const* const* const leafstack,
 		uint8_t* const i,
 		char8_t* path_walk
 		) {
 	do {
 		(*i)--;
-		if (leafstack[*i]->type.fancy == ATUI_SUBONLY) {
+		if (leafstack[*i]->type.disable == ATUI_SUBONLY) {
 			continue;
 		}
 		*path_walk = '/'; // eats the previous \0
