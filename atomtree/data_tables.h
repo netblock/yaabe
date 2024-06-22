@@ -231,12 +231,18 @@ enum common_register_sequence:uint8_t {
 	mem_adjust_set_gcn1_gddr5_type1, // Oland, Cape Verde
 	mem_adjust_set_gcn1_gddr5_type2, // Pitcairn
 	mem_adjust_set_gcn1_gddr5_type3, // Tahiti
-	mem_adjust_set_gcn1_gddr5_type4, // Exo
+	mem_adjust_set_gcn1_gddr5_type4, // Tahiti
+	mem_adjust_set_gcn1_gddr5_type5, // Exo
 	mem_adjust_set_gcn2_gddr5, // Bonaire, Hawaii, Grenada
-	mem_adjust_set_gcn3_gddr5, // Tonga
+	mem_adjust_set_gcn3_gddr5_type1, // Tonga
+	mem_adjust_set_gcn3_gddr5_type2, // Tonga pro
+	mem_adjust_set_gcn3_gddr5_type3, // Tonga pro
 	mem_adjust_set_gcn3_hbm1,  // Fiji
 	mem_adjust_set_gcn4_gddr5_type1, // Polaris
 	mem_adjust_set_gcn4_gddr5_type2, // Polaris
+	mem_adjust_set_gcn4_gddr5_type3, // Polaris
+	mem_adjust_set_gcn4_gddr5_type4, // Polaris
+	mem_adjust_set_gcn4_gddr5_type5, // Polaris
 
 	// reg_block_mem_clk_patch:
 	timings_set_islands_ddr3,
@@ -253,13 +259,18 @@ enum common_register_sequence:uint8_t {
 
 	// reg_block_mc_phy_init:
 	mc_phy_init_set_gcn3_hbm1,  // Fiji
-	mc_phy_init_set_gcn3_gddr5, // Tonga
+	mc_phy_init_set_gcn3_gddr5_type1, // Tonga
+	mc_phy_init_set_gcn3_gddr5_type2, // Tonga pro
+	mc_phy_init_set_gcn3_gddr5_type3, // Tonga pro
 	mc_phy_init_set_gcn4_gddr5_type1, // all other Polaris
 	mc_phy_init_set_gcn4_gddr5_type2, // polaris20
 	mc_phy_init_set_gcn4_gddr5_type3, // polaris20
+	mc_phy_init_set_gcn4_gddr5_type4, // polaris20
+	mc_phy_init_set_gcn4_gddr5_type5, // polaris20
+	mc_phy_init_set_gcn4_gddr5_type6, // polaris20
 };
 
-#define ATOMTREE_MC_REG_MAX 32
+#define ATOMTREE_MC_REG_MAX 48
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block* leaves; // nonzero if populated
 
@@ -296,11 +307,17 @@ struct atomtree_init_reg_block {
 		struct mem_adjust_set_gcn1_gddr5_type2* mem_adjust_set_gcn1_gddr5_type2;
 		struct mem_adjust_set_gcn1_gddr5_type3* mem_adjust_set_gcn1_gddr5_type3;
 		struct mem_adjust_set_gcn1_gddr5_type4* mem_adjust_set_gcn1_gddr5_type4;
+		struct mem_adjust_set_gcn1_gddr5_type5* mem_adjust_set_gcn1_gddr5_type5;
 		struct mem_adjust_set_gcn2_gddr5* mem_adjust_set_gcn2_gddr5;
-		struct mem_adjust_set_gcn3_gddr5* mem_adjust_set_gcn3_gddr5;
+		struct mem_adjust_set_gcn3_gddr5_type1* mem_adjust_set_gcn3_gddr5_type1;
+		struct mem_adjust_set_gcn3_gddr5_type2* mem_adjust_set_gcn3_gddr5_type2;
+		struct mem_adjust_set_gcn3_gddr5_type3* mem_adjust_set_gcn3_gddr5_type3;
 		struct mem_adjust_set_gcn3_hbm1*  mem_adjust_set_gcn3_hbm1;
 		struct mem_adjust_set_gcn4_gddr5_type1* mem_adjust_set_gcn4_gddr5_type1;
 		struct mem_adjust_set_gcn4_gddr5_type2* mem_adjust_set_gcn4_gddr5_type2;
+		struct mem_adjust_set_gcn4_gddr5_type3* mem_adjust_set_gcn4_gddr5_type3;
+		struct mem_adjust_set_gcn4_gddr5_type4* mem_adjust_set_gcn4_gddr5_type4;
+		struct mem_adjust_set_gcn4_gddr5_type5* mem_adjust_set_gcn4_gddr5_type5;
 
 		// reg_block_mem_clk_patch:
 		struct timings_set_islands_ddr3*  timings_set_islands_ddr3;
@@ -314,13 +331,24 @@ struct atomtree_init_reg_block {
 
 		// reg_block_mc_phy_init:
 		struct mc_phy_init_set_gcn3_hbm1* mc_phy_init_set_gcn3_hbm1;
-		struct mc_phy_init_set_gcn3_gddr5* mc_phy_init_set_gcn3_gddr5;
+		struct mc_phy_init_set_gcn3_gddr5_type1*
+			mc_phy_init_set_gcn3_gddr5_type1;
+		struct mc_phy_init_set_gcn3_gddr5_type2*
+			mc_phy_init_set_gcn3_gddr5_type2;
+		struct mc_phy_init_set_gcn3_gddr5_type3*
+			mc_phy_init_set_gcn3_gddr5_type3;
 		struct mc_phy_init_set_gcn4_gddr5_type1*
 			mc_phy_init_set_gcn4_gddr5_type1;
 		struct mc_phy_init_set_gcn4_gddr5_type2*
 			mc_phy_init_set_gcn4_gddr5_type2;
 		struct mc_phy_init_set_gcn4_gddr5_type3*
 			mc_phy_init_set_gcn4_gddr5_type3;
+		struct mc_phy_init_set_gcn4_gddr5_type4*
+			mc_phy_init_set_gcn4_gddr5_type4;
+		struct mc_phy_init_set_gcn4_gddr5_type5*
+			mc_phy_init_set_gcn4_gddr5_type5;
+		struct mc_phy_init_set_gcn4_gddr5_type6*
+			mc_phy_init_set_gcn4_gddr5_type6;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 64
