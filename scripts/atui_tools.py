@@ -316,11 +316,11 @@ def enum_to_atui(
 	# main enum body
 	enum_text = """\
 {name: "\g<2>",
-	__ATUIDESCR\g<4>
+	__ATUIDESCR\g<5>
 	constants: [\
 """
 	text = re.sub(
-		c_enum + name + c_enum_type + "{" + comments,
+		c_enum + name + "("+c_enum_type+")?"+ "{" + comments,
 		enum_text,
 		text
 	)
