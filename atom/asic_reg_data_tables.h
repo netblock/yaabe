@@ -128,7 +128,7 @@ struct timings_set_vega10 { // 92 bytes. Uncertain.
 	union DRAMTiming22_HBM2 DRAMTiming22;
 };
 
-struct timings_set_vega21 { // 96 bytes. Uncertain.
+struct timings_set_vega20 { // 96 bytes. Uncertain.
 	union atom_mc_register_setting_id block_id;
 	union DRAMTiming1 DRAMTiming1;
 	union DRAMTiming2 DRAMTiming2;

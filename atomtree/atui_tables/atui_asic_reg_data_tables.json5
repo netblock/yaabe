@@ -394,7 +394,7 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "timings_set_vega21",
+	c_type: "timings_set_vega20",
 	atomtree: "atomtree_vram_info_header_v2_3",
 	leaves: [
 		{

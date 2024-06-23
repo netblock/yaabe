@@ -2480,10 +2480,10 @@ atomtree_populate_vram_info_v2_3(
 		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
 		if (vi23->mem_clk_patch.data_block_element_size
 			== sizeof(struct timings_set_vega10)) {
-			vi23->uses_vega21_timings = false;
+			vi23->uses_vega20_timings = false;
 		} else if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct timings_set_vega21)) {
-			vi23->uses_vega21_timings = true;
+			== sizeof(struct timings_set_vega20)) {
+			vi23->uses_vega20_timings = true;
 		} else {
 			assert(0);
 		}
@@ -2504,8 +2504,8 @@ atomtree_populate_vram_info_v2_3(
 
 			atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 			struct atui_funcify_args func_args = {0};
-			if (vi23->uses_vega21_timings) {
-				atui_strap_func = ATUI_FUNC(timings_set_vega21);
+			if (vi23->uses_vega20_timings) {
+				atui_strap_func = ATUI_FUNC(timings_set_vega20);
 			} else {
 				atui_strap_func = ATUI_FUNC(timings_set_vega10);
 			}
