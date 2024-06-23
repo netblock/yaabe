@@ -54,33 +54,52 @@ struct timings_set_islands_gddr5 { // 52 bytes
 };
 
 struct timings_set_fiji { // 40 bytes
-	union atom_mc_register_setting_id  block_id;
-	union mc_seq_cas_timing_6_0_o    mc_seq_cas_timing;
-	union mc_seq_misc_timing2_6_0_o  mc_seq_misc_timing2;
-	union mc_seq_rd_ctl_d0_6_0       mc_seq_rd_ctl_d0;
-	union mc_seq_wr_ctl_d0_6_0       mc_seq_wr_ctl_d0;
-	union mc_seq_cmd_6_0_o           mc_seq_cmd;
-	union mc_seq_rxframing_edc_d1_6_0  mc_seq_rxframing_edc_d1;
-	union mc_arb_dram_timing_6_0     mc_arb_dram_timing;
-	union mc_arb_dram_timing2_6_0    mc_arb_dram_timing2;
-	union mc_arb_burst_time_8_1      mc_arb_burst_time;
+	union atom_mc_register_setting_id block_id;
+	union mc_seq_cas_timing_6_0_o     mc_seq_cas_timing;
+	union mc_seq_misc_timing2_6_0_o   mc_seq_misc_timing2;
+	union mc_seq_rd_ctl_d0_6_0        mc_seq_rd_ctl_d0;
+	union mc_seq_wr_ctl_d0_6_0        mc_seq_wr_ctl_d0;
+	union mc_seq_cmd_6_0_o            mc_seq_cmd;
+	union mc_seq_rxframing_edc_d1_6_0 mc_seq_rxframing_edc_d1;
+	union mc_arb_dram_timing_6_0      mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0     mc_arb_dram_timing2;
+	union mc_arb_burst_time_8_1       mc_arb_burst_time;
 };
 
 struct timings_set_polaris { // 52 bytes.
-	union atom_mc_register_setting_id  block_id;
-	union mc_seq_wr_ctl_d0_6_0     mc_seq_wr_ctl_d0;
-	union mc_seq_wr_ctl_2_6_0      mc_seq_wr_ctl_2;
-	union mc_seq_pmg_timing_6_0    mc_seq_pmg_timing;
-	union mc_seq_ras_timing_6_0    mc_seq_ras_timing;
-	union mc_seq_cas_timing_6_0    mc_seq_cas_timing;
-	union mc_seq_misc_timing_6_0_o mc_seq_misc_timing;
-	union mc_seq_misc_timing2_6_0  mc_seq_misc_timing2;
-	struct mc_seq_misc1_gddr5      mc_seq_misc1;
-	struct mc_seq_misc3_gddr5      mc_seq_misc3;
-	struct mc_seq_misc8_gddr5      mc_seq_misc8;
-	union mc_arb_dram_timing_6_0   mc_arb_dram_timing;
-	union mc_arb_dram_timing2_6_0  mc_arb_dram_timing2;
+	union atom_mc_register_setting_id block_id;
+	union mc_seq_wr_ctl_d0_6_0        mc_seq_wr_ctl_d0;
+	union mc_seq_wr_ctl_2_6_0         mc_seq_wr_ctl_2;
+	union mc_seq_pmg_timing_6_0       mc_seq_pmg_timing;
+	union mc_seq_ras_timing_6_0       mc_seq_ras_timing;
+	union mc_seq_cas_timing_6_0       mc_seq_cas_timing;
+	union mc_seq_misc_timing_6_0_o    mc_seq_misc_timing;
+	union mc_seq_misc_timing2_6_0     mc_seq_misc_timing2;
+	struct mc_seq_misc1_gddr5         mc_seq_misc1;
+	struct mc_seq_misc3_gddr5         mc_seq_misc3;
+	struct mc_seq_misc8_gddr5         mc_seq_misc8;
+	union mc_arb_dram_timing_6_0      mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0     mc_arb_dram_timing2;
 };
+
+/*
+struct timings_set_vegam { // 56 bytes
+	union atom_mc_register_setting_id block_id;
+	union mc_seq_cas_timing_6_0_o     mc_seq_cas_timing; // incorrect
+	union mc_seq_misc_timing2_6_0_o   mc_seq_misc_timing2;
+	union mc_seq_rd_ctl_d0_6_0        mc_seq_rd_ctl_d0;
+	union mc_seq_wr_ctl_d0_6_0        mc_seq_wr_ctl_d0;
+	union mc_seq_cmd_6_0_o            mc_seq_cmd;
+	union mc_seq_rxframing_edc_d1_6_0 mc_seq_rxframing_edc_d1;
+	union mc_io_pad_cntl_6_0          mc_io_pad_cntl;
+	union dll_cntl_6_0                dll_cntl;
+	union mc_arb_dram_timing_6_0      mc_arb_dram_timing;
+	union mc_arb_dram_timing2_6_0     mc_arb_dram_timing2;
+	union mc_arb_misc3_8_1            mc_arb_misc3; // MR?
+	union mc_arb_rfsh_rate_6_0_o      mc_arb_rfsh_rate;
+	union mc_arb_burst_time_8_1       mc_arb_burst_time;
+};
+*/
 
 struct timings_set_vega10 { // 92 bytes. Uncertain.
 	union atom_mc_register_setting_id  block_id;

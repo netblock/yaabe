@@ -1038,6 +1038,11 @@ atomtree_populate_mem_clk_patch(
 		if (regcmp(index, timings_set_polaris_addresses)) {
 			mem_clk_patch->reg_set = timings_set_polaris;
 			atui_strap_func = ATUI_FUNC(timings_set_polaris);
+		/*
+		} else if (regcmp(index, timings_set_vegam_addresses)) {
+			mem_clk_patch->reg_set = timings_set_vegam;
+			atui_strap_func = ATUI_FUNC(timings_set_vegam);
+		*/
 		} else if (regcmp(index, timings_set_islands_type1_addresses)
 				|| regcmp(index, timings_set_islands_type2_addresses)
 				) {

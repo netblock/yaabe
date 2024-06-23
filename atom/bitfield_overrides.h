@@ -580,6 +580,16 @@ union mc_seq_rxframing_dbi_d1_6_0_o {
 	};
 };
 
+union mc_arb_rfsh_rate_6_0_o {
+	uint32_t raw_data;
+	struct { uint32_t
+		_rsvd0 :13-0 +1,
+		tRFC   :21-14 +1, // unsure which is tRFC and tRFCSB
+		tRFCSB :29-22 +1, // unsure which is tRFC and tRFCSB
+		_rsvd1 :31-30 +1;
+	};
+};
+
 union mc_seq_misc0 {
 	uint32_t mc_seq_misc0;
 	struct { uint32_t

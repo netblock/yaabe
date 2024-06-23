@@ -249,6 +249,7 @@ enum common_register_sequence:uint8_t {
 	timings_set_islands_gddr5,
 	timings_set_fiji,
 	timings_set_polaris,
+	//timings_set_vegam,
 	timings_set_vega10,
 	timings_set_vega21,
 	timings_set_navi1,
@@ -324,6 +325,7 @@ struct atomtree_init_reg_block {
 		struct timings_set_islands_gddr5* timings_set_islands_gddr5;
 		struct timings_set_fiji*    timings_set_fiji;
 		struct timings_set_polaris* timings_set_polaris;
+		//struct timings_set_vegam* timings_set_vegam;
 
 		// reg_block_mc_tile_adjust:
 		struct mc_tile_adjust_set_gcn3_gddr5* mc_tile_adjust_set_gcn3_gddr5;

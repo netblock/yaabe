@@ -129,6 +129,26 @@ See also asic_reg_data_tables.h
 		"END_OF_REG_INDEX_BLOCK",
 ]},
 
+/*
+{type: "uint16_t", name: "timings_set_vegam_addresses", // 13+1
+	constants: [
+		"mmMC_SEQ_CAS_TIMING_6_0",
+		"mmMC_SEQ_MISC_TIMING2_6_0",
+		"mmMC_SEQ_RD_CTL_D0_6_0",
+		"mmMC_SEQ_WR_CTL_D0_6_0",
+		"mmMC_SEQ_CMD_6_0",
+		"mmMC_SEQ_RXFRAMING_EDC_D1_6_0",
+		"mmMC_IO_PAD_CNTL_6_0",
+		"mmDLL_CNTL_6_0",
+		"mmMC_ARB_DRAM_TIMING_6_0",
+		"mmMC_ARB_DRAM_TIMING2_6_0",
+		"mmMC_ARB_MISC3_8_1",
+		"mmMC_ARB_RFSH_RATE_6_0",
+		"mmMC_ARB_BURST_TIME_8_1",
+		"END_OF_REG_INDEX_BLOCK",
+]},
+*/
+
 /******************************************************************************/
 // mem_adjust table
 // uncertain the accuracy of all of these tables.
