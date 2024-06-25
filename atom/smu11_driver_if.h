@@ -1085,8 +1085,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
 	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
 
-	uint8_t  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
+	union psi_sel_mask  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	uint8_t  ExternalSensorPresent;   // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 

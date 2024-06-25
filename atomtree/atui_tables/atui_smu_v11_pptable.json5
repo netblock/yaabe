@@ -4,7 +4,7 @@
 global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
-		atomtree: "atui_nullstruct",
+		atomtree: "atomtree_powerplaytable",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
 	},
@@ -25,7 +25,6 @@ global_default: {
 }, branches: [
 {
 	c_type: "smu_11_0_overdrive_table",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->revision",
@@ -140,6 +139,122 @@ global_default: {
 				pattern: [
 					{
 						name: "min: [19 + %02u]",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_vega20_overdrive8_record",
+	leaves: [
+		{
+			access: "bios->ODTableRevision",
+			name: "ODTableRevision",
+		}, {
+			access: "bios->ODFeatureCount",
+			name: "ODFeatureCount",
+		}, {
+			access: "bios->ODFeatureCapabilities",
+			name: "ODFeatureCapabilities",
+			description: [
+				{language: "english", text: "OD feature support flags",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "ATOM_VEGA20_ODFEATURE_COUNT",
+				enum: "ATOM_VEGA20_ODFEATURE_ID",
+				pattern: [
+					{
+						name: "%s",
+					},
+				],
+			},
+		}, {
+			access: "bios->ODSettingCount",
+			name: "ODSettingCount",
+		}, {
+			access: "bios->ODSettingsMax",
+			name: "ODSettingsMax",
+			description: [
+				{language: "english", text: "Upper Limit for each OD Setting",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "ATOM_VEGA20_ODSETTING_COUNT",
+				enum: "ATOM_VEGA20_ODSETTING_ID",
+				pattern: [
+					{
+						name: "max: %s",
+					},
+				],
+			},
+		}, {
+			access: "bios->ODSettingsMin",
+			name: "ODSettingsMin",
+			description: [
+				{language: "english", text: "Lower Limit for each OD Setting",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "ATOM_VEGA20_ODSETTING_COUNT",
+				enum: "ATOM_VEGA20_ODSETTING_ID",
+				pattern: [
+					{
+						name: "min: %s",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->ODFeatureCapabilities[ATOM_VEGA20_ODFEATURE_COUNT]))",
+			name: "Undefined OD feature support flags",
+			description: [
+				{language: "english", text: "OD feature support flags",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(ATOM_VEGA20_ODFEATURE_MAX_COUNT - ATOM_VEGA20_ODFEATURE_COUNT)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{ // 10 is ATOM_VEGA20_ODFEATURE_COUNT
+						name: "OD feature [10 + %02u]",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->ODSettingsMax[ATOM_VEGA20_ODSETTING_COUNT]))",
+			name: "Undefined Overdrive settings (max)",
+			description: [
+				{language: "english", text: "Upper Limit for each OD Setting",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
+						name: "max: [14 + %02u]",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->ODSettingsMin[ATOM_VEGA20_ODSETTING_COUNT]))",
+			name: "Undefined Overdrive settings (min)",
+			description: [
+				{language: "english", text: "Lower Limit for each OD Setting",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
+						name: "min: [14 + %02u]",
 					},
 				],
 			},
@@ -314,7 +429,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu_11_0_power_saving_clock_table",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->revision",
@@ -389,6 +503,88 @@ global_default: {
 				pattern: [
 					{ // if COUNT changes, please change this 10
 						name: "min: [10 + %02u]",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_vega20_power_saving_clock_record",
+	leaves: [
+		{
+			access: "bios->TableRevision",
+			name: "TableRevision",
+		}, {
+			access: "bios->PowerSavingClockCount",
+			name: "PowerSavingClockCount",
+			description: [
+				{language: "english", text: "Count of PowerSavingClock Mode",},
+			],
+		}, {
+			access: "bios->PowerSavingClockMax",
+			name: "PowerSavingClockMax",
+			description: [
+				{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "ATOM_VEGA20_PPCLOCK_COUNT",
+				enum: "ATOM_VEGA20_PPCLOCK_ID",
+				pattern: [
+					{
+						name: "max: %s",
+					},
+				],
+			},
+		}, {
+			access: "bios->PowerSavingClockMin",
+			name: "PowerSavingClockMin",
+			description: [
+				{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "ATOM_VEGA20_PPCLOCK_COUNT",
+				enum: "ATOM_VEGA20_PPCLOCK_ID",
+				pattern: [
+					{
+						name: "min: %s",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->PowerSavingClockMax[ATOM_VEGA20_PPCLOCK_COUNT]))",
+			name: "Undefined PowerSavingClock Modes (max)",
+			description: [
+				{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(ATOM_VEGA20_PPCLOCK_MAX_COUNT - ATOM_VEGA20_PPCLOCK_COUNT)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "max: [11 + %02u]",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->PowerSavingClockMin[ATOM_VEGA20_PPCLOCK_COUNT]))",
+			name: "Undefined PowerSavingClock Modes (min)",
+			description: [
+				{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
+			],
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(ATOM_VEGA20_PPCLOCK_MAX_COUNT - ATOM_VEGA20_PPCLOCK_COUNT)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "min: [11 + %02u]",
 					},
 				],
 			},
@@ -489,7 +685,6 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "powerplay_feature_control_smu11_0x13",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->feature_control",
@@ -694,7 +889,6 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "powerplay_feature_control_smu11_0x33",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->feature_control",
@@ -1103,7 +1297,6 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "dpm_debug_override_smu11_0x13",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->DebugOverrides",
@@ -1173,7 +1366,6 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "dpm_debug_override_smu11_0x33",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->DebugOverrides",
@@ -1660,7 +1852,6 @@ global_default: {
 	],
 }, {
 	c_type: "dpm_descriptor_smu11",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->VoltageMode",
@@ -1762,7 +1953,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v3_i2c_control",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->I2cControllers",
@@ -1785,7 +1975,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v8_i2c_control",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->I2cControllers",
@@ -1808,7 +1997,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v3",
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->Version",
@@ -2749,12 +2937,16 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -2993,7 +3185,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v8", // Navi10
-	atomtree: "atomtree_powerplaytable",
 	leaves: [
 		{
 			access: "bios->Version",
@@ -4043,12 +4234,16 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
 			],
@@ -6131,7 +6326,6 @@ global_default: {
 	],
 }, {
 	c_type: "smu_11_0_powerplay_table",
-	atomtree: "atomtree_powerplaytable",
 	table_size: "bios->header.header.structuresize",
 	leaves: [
 		{
@@ -6201,6 +6395,73 @@ global_default: {
 			name: "overdrive_table",
 			display: "ATUI_NAN",
 			fancy: "ATUI_SHOOT", fancy_data: "smu_11_0_overdrive_table",
+		},
+	],
+}, {
+	c_type: "atom_vega20_powerplaytable",
+	table_size: "bios->header.header.structuresize",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
+		}, {
+			access: "bios->GoldenPPID",
+			name: "GoldenPPID",
+		}, {
+			access: "bios->GoldenRevision",
+			name: "GoldenRevision",
+		}, {
+			access: "bios->FormatID",
+			name: "FormatID",
+		}, {
+			access: "bios->platform_caps",
+			name: "platform_caps",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalControllerType",
+			name: "ThermalControllerType",
+		}, {
+			access: "bios->SmallPowerLimit1",
+			name: "SmallPowerLimit1",
+		}, {
+			access: "bios->SmallPowerLimit2",
+			name: "SmallPowerLimit2",
+		}, {
+			access: "bios->BoostPowerLimit",
+			name: "BoostPowerLimit",
+		}, {
+			access: "bios->ODTurboPowerLimit",
+			name: "ODTurboPowerLimit",
+		}, {
+			access: "bios->ODPowerSavePowerLimit",
+			name: "ODPowerSavePowerLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->PowerSavingClockTable",
+			name: "PowerSavingClockTable",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_vega20_power_saving_clock_record",
+			description: [
+				{language: "english", text: "PowerSavingClock Mode Clock Min/Max array",},
+			],
+		}, {
+			access: "bios->OverDrive8Table",
+			name: "OverDrive8Table",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_vega20_overdrive8_record",
+			description: [
+				{language: "english", text: "OverDrive8 Feature capabilities and Settings Range (Max and Min)",},
+			],
+		}, {
+			access: "bios->Reserve",
+			name: "Reserve",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 		},
 	],
 }, {

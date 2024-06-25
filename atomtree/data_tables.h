@@ -151,65 +151,23 @@ struct atomtree_gfx_info {
 struct atomtree_powerplaytable {
 	// What the fuck, AMD.
 
-	//struct PPTable_t* smc_pptable;
 	uint8_t* powerplay_table_ver; // as seen next to atom_common_table_header
-	//uint8_t* overdrive_table_ver; // hopefully unnecessary
-	//uint8_t* powersaving_table_ver;
-	uint32_t* smc_pptable_ver; // as seen in driver_if*.h
+	enum atomtree_common_version smc_pptable_ver;
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
-		struct smu_11_0_powerplay_table* v12_0;
+		struct atom_vega20_powerplaytable* v11_0;
+		struct smu_11_0_powerplay_table*   v12_0;
 		struct smu_11_0_7_powerplay_table* v15_0;
+
 		// struct smu_13_0_7_powerplay_table* v15_0; // navi3?
-
-	};
-		/*
-		struct smu_13_0_0_powerplay_table* navi3;
-
-		// what's the difference between 13.0.7 and 13.0.0?
-		//struct smu_13_0_7_powerplay_table* plum_bonito; //navi31
-
-
 		// 13_0 is different from 13_0_0, and 13_0 is only used in aldebaran
 		// 13_0 has more stuff than 13_0_0; I wonder if they can be spliced
 		//struct smu_13_0_powerplay_table* aldebaran;
-
-		struct ATOM_Vega10_POWERPLAYTABLE* vega10;
-		*/
-/*
-consider include/pptable.h
-
-firmware headers: amdgpu/amdgpu_ucode.h
-	we can probably get the smu version from this stuff
---
-pp_dpm_load_fw
-smu_load_microcode,
---
-
-
-pptable is obtained via driver, via amdgpu_sriov_vf(adev)
-hdr = (struct smc_firmware_header_v1_0 const *) adev->pm.fw->data
-smu->smu_table.boot_values.pp_table_id
-
-amdgpu_smu.h:481 defines struct smu_context
-what the fuck is struct firmware?
-
-smu_v11_0.c:362:
-	smu->smu_table.power_play_table = table;
-	smu->smu_table.power_play_table_size = size;
-  but power_play_table is void*
-
-smu_v11_0_setup_pptable
-navi10_setup_pptable
-ppt_funcs.setup_pptable (instance is navi10_ppt_funcs)
-smu_setup_pptable
-
-struct smu_11_0_powerplay_table defined in smu_v11_0_pptable.h
-*/
+	};
 };
 
 enum register_block_type:uint8_t {

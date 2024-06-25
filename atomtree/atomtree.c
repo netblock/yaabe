@@ -593,7 +593,35 @@ atomtree_dt_populate_gfx_info(
 	return atui_gfx_info;
 }
 
+inline static enum atomtree_common_version
+get_smc_pptable_ver(
+		uint32_t const* const pp_ver
+		) {
+	assert(*pp_ver < (UINT16_MAX/100));
+	enum atomtree_common_version ver = *pp_ver;
+	return ver * 100;
+}
+inline static atui_branch*
+atomtree_populate_smc_pptable(
+		struct atomtree_powerplaytable* const ppt,
+		void const* const smc_pptable,
+		bool const generate_atui
+		) {
+	ppt->smc_pptable_ver = get_smc_pptable_ver(smc_pptable);
 
+	if (generate_atui) {
+		struct atui_funcify_args const func_args = {
+			.atomtree = ppt,
+			.suggestbios = smc_pptable,
+		};
+		switch(ppt->smc_pptable_ver) {
+			case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&func_args);
+			case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&func_args);
+			case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&func_args);
+		}
+	}
+	return NULL;
+}
 inline static atui_branch*
 atomtree_dt_populate_ppt(
 		struct atomtree_powerplaytable* const ppt,
@@ -602,65 +630,50 @@ atomtree_dt_populate_ppt(
 		bool const generate_atui
 		) {
 	atui_branch* atui_ppt = NULL;
-	atui_branch* atui_smc_pptable = NULL;
 
 	if (bios_offset) {
 		ppt->leaves = atree->bios + bios_offset;
 		ppt->powerplay_table_ver = &(ppt->pphead->table_revision);
 		// leaves is in a union with the structs.
 		ppt->ver = get_ver(ppt->table_header);
+
+		atui_branch* atui_smctable = NULL;
+		struct atui_funcify_args func_args = {
+			.atomtree = ppt,
+			.suggestbios = ppt->leaves,
+			.import_branches = &atui_smctable,
+			.num_import_branches = 1,
+		};
+		atui_branch* (* atui_powerplay_func)(struct atui_funcify_args const*);
 		switch(ppt->ver) {
+			case v11_0:
+				atui_smctable = atomtree_populate_smc_pptable(
+					ppt, &(ppt->v11_0->smc_pptable), generate_atui
+				);
+				atui_powerplay_func = ATUI_FUNC(atom_vega20_powerplaytable);
+				break;
 			case v14_0:
 			case v12_0:
-				ppt->smc_pptable_ver = &(
-					ppt->v12_0->smc_pptable.smc_pptable_ver
+				atui_smctable = atomtree_populate_smc_pptable(
+					ppt, &(ppt->v12_0->smc_pptable), generate_atui
 				);
-
-				if (generate_atui) {
-					switch(*(ppt->smc_pptable_ver)) {
-						case 3:
-							atui_smc_pptable = ATUI_MAKE_BRANCH(
-								smu11_smcpptable_v3,
-								NULL,  NULL,&(ppt->v12_0->smc_pptable),  0,NULL
-							);
-							break;
-						default:
-						case 8:
-							atui_smc_pptable = ATUI_MAKE_BRANCH(
-								smu11_smcpptable_v8,
-								NULL,  NULL,&(ppt->v12_0->smc_pptable),  0,NULL
-							);
-							break;
-					}
-					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_powerplay_table,
-						NULL,  NULL,ppt->v12_0,  1,&atui_smc_pptable
-					);
-				}
+				atui_powerplay_func = ATUI_FUNC(smu_11_0_powerplay_table);
 				break;
-
 			case v18_0: // navi2 xx50
 			case v16_0: // 6700XT
 			case v15_0:
-				ppt->smc_pptable_ver = &(
-					ppt->v15_0->smc_pptable.smc_pptable_ver
+				atui_smctable = atomtree_populate_smc_pptable(
+					ppt, &(ppt->v15_0->smc_pptable), generate_atui
 				);
-				if (generate_atui) {
-					atui_smc_pptable = ATUI_MAKE_BRANCH(smu11_smcpptable_v7,
-						NULL,  NULL,&(ppt->v15_0->smc_pptable),  0,NULL
-					);
-					atui_ppt = ATUI_MAKE_BRANCH(smu_11_0_7_powerplay_table,
-						NULL,  NULL,ppt->v15_0,  1,&atui_smc_pptable
-					);
-				};
+				atui_powerplay_func = ATUI_FUNC(smu_11_0_7_powerplay_table);
 				break;
 			default:
-				if (generate_atui) {
-					atui_ppt = ATUI_MAKE_BRANCH(smu_powerplay_table_header,
-						u8"smu_powerplay_table_header (header only stub)",
-						NULL,ppt->leaves,  0,NULL
-					);
-				}
+				atui_powerplay_func = ATUI_FUNC(smu_powerplay_table_header);
+				func_args.rename = u8"smu_powerplay_table_header (header only stub)";
 				break;
+		}
+		if (generate_atui) {
+			atui_ppt = atui_powerplay_func(&func_args);
 		}
 
 	} else {

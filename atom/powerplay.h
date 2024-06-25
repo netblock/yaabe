@@ -16,13 +16,13 @@ struct smu_powerplay_table_header {
 union powerplay_platform_caps {
 	uint32_t platform_caps;
 	struct { uint32_t
-		powerplay     :0-0 +1, // whether CCC needs to show Powerplay page.
+		powerplay         :0-0 +1, // whether CCC needs to show Powerplay page.
 		sbios_powersource :1-1 +1, // whether power source notificaiton is done by SBIOS instead of OS.
-		hardware_dc   :2-2 +1, // whether DC mode notificaiton is done by GPIO pin directly.
-		BACO          :3-3 +1, // whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.
-		MACO          :4-4 +1, // whether board supports the MACO circuitry.
-		shadow_pstate :5-5 +1, // whether board supports the Shadow Pstate.
-		reserved     :31-6 +1;
+		hardware_dc       :2-2 +1, // whether DC mode notificaiton is done by GPIO pin directly.
+		BACO              :3-3 +1, // whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.
+		MACO              :4-4 +1, // whether board supports the MACO circuitry.
+		shadow_pstate     :5-5 +1, // whether board supports the Shadow Pstate.
+		reserved         :31-6 +1;
 	};
 };
 

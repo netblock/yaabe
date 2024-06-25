@@ -3,12 +3,14 @@
 
 #pragma pack(push, 1) // bios data must use byte alignment
 
-#define SMU_11_0_TABLE_FORMAT_REVISION   12
-#define SMU_11_0_7_TABLE_FORMAT_REVISION 15
+#define ATOM_VEGA20_TABLE_REVISION_VEGA20 11
+#define SMU_11_0_TABLE_FORMAT_REVISION    12
+#define SMU_11_0_7_TABLE_FORMAT_REVISION  15
 
 
 // SMU_11_0_PP_THERMALCONTROLLER - Thermal Controller Type
 #define SMU_11_0_PP_THERMALCONTROLLER_NONE  0
+#define ATOM_VEGA20_PP_THERMALCONTROLLER_VEGA20 26
 #define SMU_11_0_7_PP_THERMALCONTROLLER_SIENNA_CICHLID 28
 
 #define SMU_11_F12_POWERSAVINGCLOCK_VERSION    0x01
@@ -36,17 +38,32 @@ enum SMU_11_0_ODFEATURE_CAP {
 };
 #define SMU_11_0_MAX_ODFEATURE 32 // Maximum Number of OD Features
 
+enum ATOM_VEGA20_ODFEATURE_ID {
+	ATOM_VEGA20_ODFEATURE_GFXCLK_LIMITS        = 0,
+	ATOM_VEGA20_ODFEATURE_GFXCLK_CURVE         = 1,
+	ATOM_VEGA20_ODFEATURE_UCLK_MAX             = 2,
+	ATOM_VEGA20_ODFEATURE_POWER_LIMIT          = 3,
+	ATOM_VEGA20_ODFEATURE_FAN_ACOUSTIC_LIMIT   = 4,
+	ATOM_VEGA20_ODFEATURE_FAN_SPEED_MIN        = 5,
+	ATOM_VEGA20_ODFEATURE_TEMPERATURE_FAN      = 6,
+	ATOM_VEGA20_ODFEATURE_TEMPERATURE_SYSTEM   = 7,
+	ATOM_VEGA20_ODFEATURE_MEMORY_TIMING_TUNE   = 8,
+	ATOM_VEGA20_ODFEATURE_FAN_ZERO_RPM_CONTROL = 9,
+	ATOM_VEGA20_ODFEATURE_COUNT               = 10,
+};
+#define ATOM_VEGA20_ODFEATURE_MAX_COUNT 32
+
 enum SMU_11_0_7_ODFEATURE_CAP {
-	SMU_11_0_7_ODCAP_GFXCLK_LIMITS         = 0,
-	SMU_11_0_7_ODCAP_GFXCLK_CURVE          = 1,
-	SMU_11_0_7_ODCAP_UCLK_LIMITS           = 2,
-	SMU_11_0_7_ODCAP_POWER_LIMIT           = 3,
-	SMU_11_0_7_ODCAP_FAN_ACOUSTIC_LIMIT    = 4,
-	SMU_11_0_7_ODCAP_FAN_SPEED_MIN         = 5,
-	SMU_11_0_7_ODCAP_TEMPERATURE_FAN       = 6,
-	SMU_11_0_7_ODCAP_TEMPERATURE_SYSTEM    = 7,
-	SMU_11_0_7_ODCAP_MEMORY_TIMING_TUNE    = 8,
-	SMU_11_0_7_ODCAP_FAN_ZERO_RPM_CONTROL  = 9,
+	SMU_11_0_7_ODCAP_GFXCLK_LIMITS          = 0,
+	SMU_11_0_7_ODCAP_GFXCLK_CURVE           = 1,
+	SMU_11_0_7_ODCAP_UCLK_LIMITS            = 2,
+	SMU_11_0_7_ODCAP_POWER_LIMIT            = 3,
+	SMU_11_0_7_ODCAP_FAN_ACOUSTIC_LIMIT     = 4,
+	SMU_11_0_7_ODCAP_FAN_SPEED_MIN          = 5,
+	SMU_11_0_7_ODCAP_TEMPERATURE_FAN        = 6,
+	SMU_11_0_7_ODCAP_TEMPERATURE_SYSTEM     = 7,
+	SMU_11_0_7_ODCAP_MEMORY_TIMING_TUNE     = 8,
+	SMU_11_0_7_ODCAP_FAN_ZERO_RPM_CONTROL   = 9,
 	SMU_11_0_7_ODCAP_AUTO_UV_ENGINE        = 10,
 	SMU_11_0_7_ODCAP_AUTO_OC_ENGINE        = 11,
 	SMU_11_0_7_ODCAP_AUTO_OC_MEMORY        = 12,
@@ -56,6 +73,7 @@ enum SMU_11_0_7_ODFEATURE_CAP {
 	SMU_11_0_7_ODCAP_COUNT                 = 16,
 };
 #define SMU_11_0_7_MAX_ODFEATURE 32 // Maximum Number of OD Features
+
 
 
 enum SMU_11_0_ODSETTING_ID { // index into array
@@ -82,17 +100,36 @@ enum SMU_11_0_ODSETTING_ID { // index into array
 };
 #define SMU_11_0_MAX_ODSETTING 32 // Maximum Number of ODSettings
 
+enum ATOM_VEGA20_ODSETTING_ID {
+	ATOM_VEGA20_ODSETTING_GFXCLKFMAX                  = 0,
+	ATOM_VEGA20_ODSETTING_GFXCLKFMIN                  = 1,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEFREQ_P1          = 2,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEVOLTAGEOFFSET_P1 = 3,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEFREQ_P2          = 4,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEVOLTAGEOFFSET_P2 = 5,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEFREQ_P3          = 6,
+	ATOM_VEGA20_ODSETTING_VDDGFXCURVEVOLTAGEOFFSET_P3 = 7,
+	ATOM_VEGA20_ODSETTING_UCLKFMAX                    = 8,
+	ATOM_VEGA20_ODSETTING_POWERPERCENTAGE             = 9,
+	ATOM_VEGA20_ODSETTING_FANRPMMIN                  = 10,
+	ATOM_VEGA20_ODSETTING_FANRPMACOUSTICLIMIT        = 11,
+	ATOM_VEGA20_ODSETTING_FANTARGETTEMPERATURE       = 12,
+	ATOM_VEGA20_ODSETTING_OPERATINGTEMPMAX           = 13,
+	ATOM_VEGA20_ODSETTING_COUNT                      = 14,
+};
+#define ATOM_VEGA20_ODSETTING_MAX_COUNT 32
+
 enum SMU_11_0_7_ODSETTING_ID {
-	SMU_11_0_7_ODSETTING_GFXCLKFMAX              = 0,
-	SMU_11_0_7_ODSETTING_GFXCLKFMIN              = 1,
-	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_A   = 2,
-	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_B   = 3,
-	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_C   = 4,
-	SMU_11_0_7_ODSETTING_CUSTOM_CURVE_VFT_FMIN   = 5,
-	SMU_11_0_7_ODSETTING_UCLKFMIN                = 6,
-	SMU_11_0_7_ODSETTING_UCLKFMAX                = 7,
-	SMU_11_0_7_ODSETTING_POWERPERCENTAGE         = 8,
-	SMU_11_0_7_ODSETTING_FANRPMMIN               = 9,
+	SMU_11_0_7_ODSETTING_GFXCLKFMAX               = 0,
+	SMU_11_0_7_ODSETTING_GFXCLKFMIN               = 1,
+	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_A    = 2,
+	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_B    = 3,
+	SMU_11_0_7_ODSETTING_CUSTOM_GFX_VF_CURVE_C    = 4,
+	SMU_11_0_7_ODSETTING_CUSTOM_CURVE_VFT_FMIN    = 5,
+	SMU_11_0_7_ODSETTING_UCLKFMIN                 = 6,
+	SMU_11_0_7_ODSETTING_UCLKFMAX                 = 7,
+	SMU_11_0_7_ODSETTING_POWERPERCENTAGE          = 8,
+	SMU_11_0_7_ODSETTING_FANRPMMIN                = 9,
 	SMU_11_0_7_ODSETTING_FANRPMACOUSTICLIMIT     = 10,
 	SMU_11_0_7_ODSETTING_FANTARGETTEMPERATURE    = 11,
 	SMU_11_0_7_ODSETTING_OPERATINGTEMPMAX        = 12,
@@ -118,16 +155,16 @@ enum SMU_11_0_7_ODSETTING_ID {
 #define SMU_11_0_7_MAX_ODSETTING 64 // Maximum Number of ODSettings
 
 enum SMU_11_0_7_PWRMODE_SETTING {
-	SMU_11_0_7_PMSETTING_POWER_LIMIT_QUIET           = 0,
-	SMU_11_0_7_PMSETTING_POWER_LIMIT_BALANCE         = 1,
-	SMU_11_0_7_PMSETTING_POWER_LIMIT_TURBO           = 2,
-	SMU_11_0_7_PMSETTING_POWER_LIMIT_RAGE            = 3,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_QUIET         = 4,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_BALANCE       = 5,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_TURBO         = 6,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_RAGE          = 7,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_QUIET   = 8,
-	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_BALANCE = 9,
+	SMU_11_0_7_PMSETTING_POWER_LIMIT_QUIET            = 0,
+	SMU_11_0_7_PMSETTING_POWER_LIMIT_BALANCE          = 1,
+	SMU_11_0_7_PMSETTING_POWER_LIMIT_TURBO            = 2,
+	SMU_11_0_7_PMSETTING_POWER_LIMIT_RAGE             = 3,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_QUIET          = 4,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_BALANCE        = 5,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_TURBO          = 6,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TEMP_RAGE           = 7,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_QUIET    = 8,
+	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_BALANCE  = 9,
 	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_TURBO   = 10,
 	SMU_11_0_7_PMSETTING_ACOUSTIC_TARGET_RPM_RAGE    = 11,
 	SMU_11_0_7_PMSETTING_ACOUSTIC_LIMIT_RPM_QUIET    = 12,
@@ -146,6 +183,14 @@ struct smu_11_0_overdrive_table {
 	uint8_t  cap[SMU_11_0_MAX_ODFEATURE]; // OD feature support flags
 	uint32_t max[SMU_11_0_MAX_ODSETTING]; // default maximum settings
 	uint32_t min[SMU_11_0_MAX_ODSETTING]; // default minimum settings
+};
+struct atom_vega20_overdrive8_record {
+	uint8_t  ODTableRevision;
+	uint32_t ODFeatureCount;
+	uint8_t  ODFeatureCapabilities[ATOM_VEGA20_ODFEATURE_MAX_COUNT]; // OD feature support flags
+	uint32_t ODSettingCount;
+	uint32_t ODSettingsMax[ATOM_VEGA20_ODSETTING_MAX_COUNT]; // Upper Limit for each OD Setting
+	uint32_t ODSettingsMin[ATOM_VEGA20_ODSETTING_MAX_COUNT]; // Lower Limit for each OD Setting
 };
 struct smu_11_0_7_overdrive_table {
 	uint8_t  revision;      // Revision = SMU_11_0_7_PP_OVERDRIVE_VERSION
@@ -172,6 +217,21 @@ enum SMU_11_0_PPCLOCK_ID {
 	SMU_11_0_PPCLOCK_COUNT  = 10,
 };
 #define SMU_11_0_MAX_PPCLOCK 16 // Maximum Number of PP Clocks
+enum ATOM_VEGA20_PPCLOCK_ID {
+	ATOM_VEGA20_PPCLOCK_GFXCLK  = 0,
+	ATOM_VEGA20_PPCLOCK_VCLK    = 1,
+	ATOM_VEGA20_PPCLOCK_DCLK    = 2,
+	ATOM_VEGA20_PPCLOCK_ECLK    = 3,
+	ATOM_VEGA20_PPCLOCK_SOCCLK  = 4,
+	ATOM_VEGA20_PPCLOCK_UCLK    = 5,
+	ATOM_VEGA20_PPCLOCK_FCLK    = 6,
+	ATOM_VEGA20_PPCLOCK_DCEFCLK = 7,
+	ATOM_VEGA20_PPCLOCK_DISPCLK = 8,
+	ATOM_VEGA20_PPCLOCK_PIXCLK  = 9,
+	ATOM_VEGA20_PPCLOCK_PHYCLK = 10,
+	ATOM_VEGA20_PPCLOCK_COUNT  = 11,
+};
+#define ATOM_VEGA20_PPCLOCK_MAX_COUNT 16
 enum SMU_11_0_7_PPCLOCK_ID {
 	SMU_11_0_7_PPCLOCK_GFXCLK  = 0,
 	SMU_11_0_7_PPCLOCK_SOCCLK  = 1,
@@ -183,10 +243,10 @@ enum SMU_11_0_7_PPCLOCK_ID {
 	SMU_11_0_7_PPCLOCK_VCLK_1  = 7,
 	SMU_11_0_7_PPCLOCK_DCEFCLK = 8,
 	SMU_11_0_7_PPCLOCK_DISPCLK = 9,
-	SMU_11_0_7_PPCLOCK_PIXCLK  = 10,
-	SMU_11_0_7_PPCLOCK_PHYCLK  = 11,
-	SMU_11_0_7_PPCLOCK_DTBCLK  = 12,
-	SMU_11_0_7_PPCLOCK_COUNT   = 13,
+	SMU_11_0_7_PPCLOCK_PIXCLK = 10,
+	SMU_11_0_7_PPCLOCK_PHYCLK = 11,
+	SMU_11_0_7_PPCLOCK_DTBCLK = 12,
+	SMU_11_0_7_PPCLOCK_COUNT  = 13,
 };
 #define SMU_11_0_7_MAX_PPCLOCK 16 // Maximum Number of PP Clocks
 
@@ -197,6 +257,12 @@ struct smu_11_0_power_saving_clock_table {
 	uint32_t count;      // power_saving_clock_count = SMU_11_0_PPCLOCK_COUNT
 	uint32_t max[SMU_11_0_MAX_PPCLOCK]; // PowerSavingClock Mode Clock Maximum array In MHz
 	uint32_t min[SMU_11_0_MAX_PPCLOCK]; // PowerSavingClock Mode Clock Minimum array In MHz
+};
+struct atom_vega20_power_saving_clock_record {
+	uint8_t TableRevision;
+	uint32_t PowerSavingClockCount; // Count of PowerSavingClock Mode
+	uint32_t PowerSavingClockMax[ATOM_VEGA20_PPCLOCK_MAX_COUNT]; // PowerSavingClock Mode Clock Maximum array In MHz
+	uint32_t PowerSavingClockMin[ATOM_VEGA20_PPCLOCK_MAX_COUNT]; // PowerSavingClock Mode Clock Minimum array In MHz
 };
 struct smu_11_0_7_power_saving_clock_table {
 	uint8_t  revision;   // Revision = SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION
@@ -235,6 +301,32 @@ struct smu_11_0_powerplay_table {
 
 	struct smu_11_0_power_saving_clock_table  power_saving_clock;
 	struct smu_11_0_overdrive_table  overdrive_table;
+
+	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
+};
+
+struct atom_vega20_powerplaytable {
+	struct smu_powerplay_table_header header;
+	uint32_t GoldenPPID;
+	uint32_t GoldenRevision;
+	uint16_t FormatID;
+
+	union powerplay_platform_caps  platform_caps;
+
+	uint8_t  ThermalControllerType;
+
+	uint16_t SmallPowerLimit1;
+	uint16_t SmallPowerLimit2;
+	uint16_t BoostPowerLimit;
+	uint16_t ODTurboPowerLimit;
+	uint16_t ODPowerSavePowerLimit;
+	uint16_t SoftwareShutdownTemp;
+
+	struct atom_vega20_power_saving_clock_record PowerSavingClockTable; //PowerSavingClock Mode Clock Min/Max array
+
+	struct atom_vega20_overdrive8_record OverDrive8Table; // OverDrive8 Feature capabilities and Settings Range (Max and Min)
+
+	uint16_t Reserve[5];
 
 	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
 };
