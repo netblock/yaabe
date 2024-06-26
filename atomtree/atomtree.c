@@ -2409,7 +2409,7 @@ atomtree_populate_vram_info_v2_2(
 	if (vi22->leaves->McPhyInitTableOffset) {
 		vi22->mc_phy_init.leaves =
 			(void*)vi22->leaves + vi22->leaves->McPhyInitTableOffset;
-		atui_mc_tile_adjust = atomtree_populate_init_mc_phy_init(
+		atui_phyinit = atomtree_populate_init_mc_phy_init(
 			&(vi22->mc_phy_init),
 			generate_atui,
 			vi22->vram_modules

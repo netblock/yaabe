@@ -846,7 +846,10 @@ void
 atui_destroy_tree(
 		atui_branch* const tree
 		) { // a reference implementation
-	_atui_destroy_leaves(tree->leaves, tree->leaf_count);
+	if (tree->leaf_count) {
+		_atui_destroy_leaves(tree->leaves, tree->leaf_count);
+		free(tree->leaves);
+	}
 	while (tree->num_branches) {
 		tree->num_branches--;
 		atui_destroy_tree(tree->child_branches[tree->num_branches]);
@@ -854,5 +857,3 @@ atui_destroy_tree(
 	free(tree->child_branches);
 	free(tree);
 }
-
-
