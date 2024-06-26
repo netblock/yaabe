@@ -79,6 +79,8 @@ enum atui_type_radix:uint8_t {
 	ATUI_HEX = 0x2,
 	ATUI_OCT = 0x3,
 	ATUI_BIN = 0x4,
+
+	ATUI_NUM_RADIX,
 	ATUI_ANY = 0x7, // Mask
 };
 enum atui_type_fancy:uint8_t {
@@ -92,11 +94,15 @@ enum atui_type_fancy:uint8_t {
 	ATUI_DYNARRAY = 7, // For runtime array lengths
 
 	_ATUI_BITCHILD = 8, // Internally set. If it's a bitfield child.
+
+	ATUI_NUM_FANCY
 };
 enum atui_type_disable:uint8_t {
 	ATUI_DISPLAY   = 0, // show everything
 	ATUI_SUBONLY   = 1, // show only the children
 	ATUI_NODISPLAY = 2, // Don't display this leaf or its children
+
+	ATUI_NUM_DISPLAY
 };
 
 typedef struct _atui_branch atui_branch;
