@@ -22,8 +22,8 @@ struct branch_array {
 	atui_branch** end;
 };
 struct global_tracker {
-	struct branch_array inliners;
-	struct branch_array branches; // initially petiole-only
+	struct branch_array grafters;
+	struct branch_array branches; // initially shoot-only
 	void* atomtree;
 };
 union dynarray_position_ptr {
@@ -151,13 +151,13 @@ print_atui_graft_leaf(
 		struct level_data* const level
 		) {
 	assert(level->target.pos < level->target.end);
-	assert(global->inliners.pos < global->inliners.end);
+	assert(global->grafters.pos < global->grafters.end);
 
 	atui_leaf const* const leaf_src = level->feed.pos;
 	atui_leaf* const leaf = level->target.pos;
 	level->target.pos++;
-	atui_branch** const inliner = global->inliners.pos;
-	global->inliners.pos++;
+	atui_branch** const grafter = global->grafters.pos;
+	global->grafters.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
@@ -176,10 +176,10 @@ print_atui_graft_leaf(
 		.rename = leaf->name,
 		.suggestbios = leaf->val,
 	};
-	*inliner = leaf->branch_bud(&branch_args);
+	*grafter = leaf->branch_bud(&branch_args);
 
-	uint16_t const num_child_leaves = (*inliner)->leaf_count;
-	atui_leaf* const child_leaves = (*inliner)->leaves;
+	uint16_t const num_child_leaves = (*grafter)->leaf_count;
+	atui_leaf* const child_leaves = (*grafter)->leaves;
 	for (uint16_t i = 0; i < num_child_leaves; i++) {
 		child_leaves[i].parent_leaf = leaf;
 		child_leaves[i].parent_is_leaf = true;
@@ -297,7 +297,7 @@ print_atui_dynarray_leaf(
 			}
 		}
 
-		// petiole doesn't get counted
+		// shoot doesn't get counted
 		leaf->num_child_leaves = sub_leaves.target.pos - leaf->child_leaves;
 		if (0 == leaf->num_child_leaves) {
 			free(leaf->child_leaves);
@@ -373,20 +373,20 @@ atui_branch_allocator(
 	atui_branch* const table = calloc(1, sizeof(atui_branch));
 
 	atui_branch** branches = NULL;
-	atui_branch** inliners = NULL;
+	atui_branch** grafters = NULL;
 	uint8_t const num_direct_branches = (
-		embryo->computed_num_petiole + args->num_import_branches
+		embryo->computed_num_shoot + args->num_import_branches
 	);
 	uint8_t max_num_branches = num_direct_branches;
 	if (num_direct_branches) {
 		branches = malloc(num_direct_branches * sizeof(atui_branch*));
 		tracker.branches.pos = branches;
-		tracker.branches.end = branches + embryo->computed_num_petiole;
+		tracker.branches.end = branches + embryo->computed_num_shoot;
 	}
-	if (embryo->computed_num_inline) {
-		inliners = malloc(embryo->computed_num_inline * sizeof(atui_branch*));
-		tracker.inliners.pos = inliners;
-		tracker.inliners.end = inliners + embryo->computed_num_inline;
+	if (embryo->computed_num_graft) {
+		grafters = malloc(embryo->computed_num_graft * sizeof(atui_branch*));
+		tracker.grafters.pos = grafters;
+		tracker.grafters.end = grafters + embryo->computed_num_graft;
 	}
 
 	if (embryo->computed_num_leaves) {
@@ -403,7 +403,7 @@ atui_branch_allocator(
 		atui_leaves_printer(&tracker, &first_leaves);
 
 		table->max_leaves = embryo->num_leaves_init;
-		// petiole doesn't get counted
+		// shoot doesn't get counted
 		table->leaf_count = first_leaves.target.pos - table->leaves;
 
 		for (uint16_t i=0; i < table->leaf_count; i++) {
@@ -413,25 +413,25 @@ atui_branch_allocator(
 		}
 	}
 	assert(tracker.branches.pos == tracker.branches.end);
-	assert(tracker.inliners.pos == tracker.inliners.end);
+	assert(tracker.grafters.pos == tracker.grafters.end);
 
-	if (embryo->computed_num_inline) {
-		// pull in branches from all the inline branches, and free the trunks
+	if (embryo->computed_num_graft) {
+		// pull in branches from all the graft branches, and free the trunks
 		uint16_t num_indirect_branches = 0;
-		for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
-			num_indirect_branches += inliners[i]->num_branches;
+		for (uint8_t i=0; i < embryo->computed_num_graft; i++) {
+			num_indirect_branches += grafters[i]->num_branches;
 		}
 		if (num_indirect_branches) {
 			max_num_branches += num_indirect_branches;
 			branches = realloc(branches, max_num_branches*sizeof(atui_branch*));
 
-			tracker.branches.pos = branches + embryo->computed_num_petiole;
+			tracker.branches.pos = branches + embryo->computed_num_shoot;
 			tracker.branches.end = tracker.branches.pos + num_indirect_branches;
-			for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
-				uint16_t const num_child_branches = inliners[i]->num_branches;
+			for (uint8_t i=0; i < embryo->computed_num_graft; i++) {
+				uint16_t const num_child_branches = grafters[i]->num_branches;
 				if (num_child_branches) {
 					atui_branch** const child_branches = (
-						inliners[i]->child_branches
+						grafters[i]->child_branches
 					);
 					uint16_t child_i = 0;
 					do {
@@ -443,16 +443,16 @@ atui_branch_allocator(
 					free(child_branches);
 				}
 				// don't free leaves
-				free(inliners[i]); // free the trunk
+				free(grafters[i]); // free the trunk
 			}
 			assert(tracker.branches.pos == tracker.branches.end);
 		} else { // no branches to pull in
-			for (uint8_t i=0; i < embryo->computed_num_inline; i++) {
+			for (uint8_t i=0; i < embryo->computed_num_graft; i++) {
 				// don't free leaves; there's no branches to free
-				free(inliners[i]); // free the trunk
+				free(grafters[i]); // free the trunk
 			}
 		}
-		free(inliners);
+		free(grafters);
 	}
 
 	if (args->import_branches) {

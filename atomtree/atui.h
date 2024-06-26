@@ -172,7 +172,7 @@ struct _atui_branch {
 	char8_t const* description[LANG_TOTALLANGS];
 
 	atui_branch* parent_branch;
-	atui_branch** child_branches; // petiole + import
+	atui_branch** child_branches; // shoot + import
 	atui_leaf* leaves;
 
 	GATUIBranch* self; // weak reference
@@ -340,8 +340,8 @@ struct atui_branch_data {
 
 	uint32_t const num_leaves_init; // sizeof(); does not include kids
 	uint32_t const computed_num_leaves;
-	uint32_t const computed_num_inline;
-	uint32_t const computed_num_petiole;
+	uint32_t const computed_num_graft;
+	uint32_t const computed_num_shoot;
 };
 
 atui_branch*

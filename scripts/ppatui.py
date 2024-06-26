@@ -380,7 +380,7 @@ class atui_leaf:
 
 
 class atui_branch:
-	#parent_is_leaf:bool # would only exist for inline, but that needs to be
+	#parent_is_leaf:bool # would only exist for graft, but that needs to be
 	# runtime
 
 	c_prefix:str
@@ -782,10 +782,10 @@ def deep_count_leaves(
 
 	# 0: non-dynarray-pattern leaves
 	# 1: dynarray leaves
-	# 2: inline
-	# 3: dynarray inline
-	# 4: petiole
-	# 5: dynarray petiole
+	# 2: graft
+	# 3: dynarray graft
+	# 4: shoot
+	# 5: dynarray shoot
 	nest_dynarray = "+ (%s * (%u + %s))"
 	sub_counters = []
 	dynlength = ""
@@ -858,14 +858,14 @@ PPATUI_HEADERIFY(%s) {
 		.leaves_init = leaves_init,
 		.num_leaves_init = lengthof(leaves_init),
 		.computed_num_leaves = %s,
-		.computed_num_inline = %s,
-		.computed_num_petiole = %s,
+		.computed_num_graft = %s,
+		.computed_num_shoot = %s,
 	};
 
 	assert(branch_embryo.num_leaves_init < UINT16_MAX);
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
-	assert(branch_embryo.computed_num_inline < UINT8_MAX);
-	assert(branch_embryo.computed_num_petiole < UINT8_MAX);
+	assert(branch_embryo.computed_num_graft < UINT8_MAX);
+	assert(branch_embryo.computed_num_shoot < UINT8_MAX);
 
 	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
 
@@ -875,8 +875,8 @@ PPATUI_HEADERIFY(%s) {
 
 	dynarray_patterns_text = ""
 	dynarray_bounds_text = ""
-	num_inline = 0
-	num_petiole = 0
+	num_graft = 0
+	num_shoot = 0
 
 	# for deep count
 	counters_template = [0 for i in range(6)]
