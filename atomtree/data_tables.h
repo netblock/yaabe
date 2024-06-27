@@ -171,62 +171,62 @@ struct atomtree_powerplaytable {
 };
 
 enum register_block_type:uint8_t {
-	reg_block_unknown,
-	reg_block_mem_adjust,
-	reg_block_mem_clk_patch,
-	reg_block_mc_tile_adjust,
-	reg_block_mc_phy_init,
-	reg_block_last,
+	REG_BLOCK_UNKNOWN,
+	REG_BLOCK_MEM_ADJUST,
+	REG_BLOCK_MEM_CLK_PATCH,
+	REG_BLOCK_MC_TILE_ADJUST,
+	REG_BLOCK_MC_PHY_INIT,
+	REG_BLOCK_LAST,
 };
 enum common_register_sequence:uint8_t {
-	common_set_unknown,
+	COMMON_SET_UNKNOWN,
 
 	// reg_block_mem_adjust:
-	mem_adjust_set_terascale2_ddr3,  // Caicos, Turks
-	mem_adjust_set_terascale2_gddr5_type3, // Turks
-	mem_adjust_set_terascale2_gddr5_type4, // Barts
-	mem_adjust_set_terascale3_gddr5, // Cayman
-	mem_adjust_set_gcn1_gddr5_type1, // Oland, Cape Verde
-	mem_adjust_set_gcn1_gddr5_type2, // Pitcairn
-	mem_adjust_set_gcn1_gddr5_type3, // Tahiti
-	mem_adjust_set_gcn1_gddr5_type4, // Tahiti
-	mem_adjust_set_gcn1_gddr5_type5, // Exo
-	mem_adjust_set_gcn2_gddr5, // Bonaire, Hawaii, Grenada
-	mem_adjust_set_gcn3_gddr5_type1, // Tonga
-	mem_adjust_set_gcn3_gddr5_type2, // Tonga pro
-	mem_adjust_set_gcn3_gddr5_type3, // Tonga pro
-	mem_adjust_set_gcn3_hbm1,  // Fiji
-	mem_adjust_set_gcn4_gddr5_type1, // Polaris
-	mem_adjust_set_gcn4_gddr5_type2, // Polaris
-	mem_adjust_set_gcn4_gddr5_type3, // Polaris
-	mem_adjust_set_gcn4_gddr5_type4, // Polaris
-	mem_adjust_set_gcn4_gddr5_type5, // Polaris
+	MEM_ADJUST_SET_TERASCALE2_DDR3,  // Caicos, Turks
+	MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE3, // Turks
+	MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE4, // Barts
+	MEM_ADJUST_SET_TERASCALE3_GDDR5, // Cayman
+	MEM_ADJUST_SET_GCN1_GDDR5_TYPE1, // Oland, Cape Verde
+	MEM_ADJUST_SET_GCN1_GDDR5_TYPE2, // Pitcairn
+	MEM_ADJUST_SET_GCN1_GDDR5_TYPE3, // Tahiti
+	MEM_ADJUST_SET_GCN1_GDDR5_TYPE4, // Tahiti
+	MEM_ADJUST_SET_GCN1_GDDR5_TYPE5, // Exo
+	MEM_ADJUST_SET_GCN2_GDDR5, // Bonaire, Hawaii, Grenada
+	MEM_ADJUST_SET_GCN3_GDDR5_TYPE1, // Tonga
+	MEM_ADJUST_SET_GCN3_GDDR5_TYPE2, // Tonga pro
+	MEM_ADJUST_SET_GCN3_GDDR5_TYPE3, // Tonga pro
+	MEM_ADJUST_SET_GCN3_HBM1,  // Fiji
+	MEM_ADJUST_SET_GCN4_GDDR5_TYPE1, // Polaris
+	MEM_ADJUST_SET_GCN4_GDDR5_TYPE2, // Polaris
+	MEM_ADJUST_SET_GCN4_GDDR5_TYPE3, // Polaris
+	MEM_ADJUST_SET_GCN4_GDDR5_TYPE4, // Polaris
+	MEM_ADJUST_SET_GCN4_GDDR5_TYPE5, // Polaris
 
 	// reg_block_mem_clk_patch:
-	timings_set_islands_ddr3,
-	timings_set_islands_gddr5,
-	timings_set_fiji,
-	timings_set_polaris,
+	TIMINGS_SET_ISLANDS_DDR3,
+	TIMINGS_SET_ISLANDS_GDDR5,
+	TIMINGS_SET_FIJI,
+	TIMINGS_SET_POLARIS,
 	//timings_set_vegam,
-	timings_set_vega10,
-	timings_set_vega20,
-	timings_set_navi1,
+	TIMINGS_SET_VEGA10,
+	TIMINGS_SET_VEGA20,
+	TIMINGS_SET_NAVI1,
 
 	// reg_block_mc_tile_adjust:
-	mc_tile_adjust_set_gcn3_gddr5,
-	mc_tile_adjust_set_gcn4_gddr5,
+	MC_TILE_ADJUST_SET_GCN3_GDDR5,
+	MC_TILE_ADJUST_SET_GCN4_GDDR5,
 
 	// reg_block_mc_phy_init:
-	mc_phy_init_set_gcn3_hbm1,  // Fiji
-	mc_phy_init_set_gcn3_gddr5_type1, // Tonga
-	mc_phy_init_set_gcn3_gddr5_type2, // Tonga pro
-	mc_phy_init_set_gcn3_gddr5_type3, // Tonga pro
-	mc_phy_init_set_gcn4_gddr5_type1, // all other Polaris
-	mc_phy_init_set_gcn4_gddr5_type2, // polaris20
-	mc_phy_init_set_gcn4_gddr5_type3, // polaris20
-	mc_phy_init_set_gcn4_gddr5_type4, // polaris20
-	mc_phy_init_set_gcn4_gddr5_type5, // polaris20
-	mc_phy_init_set_gcn4_gddr5_type6, // polaris20
+	MC_PHY_INIT_SET_GCN3_HBM1,  // Fiji
+	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE1, // Tonga
+	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE2, // Tonga pro
+	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE3, // Tonga pro
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE1, // all other Polaris
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE2, // polaris20
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE3, // polaris20
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4, // polaris20
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE5, // polaris20
+	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE6, // polaris20
 };
 
 #define ATOMTREE_MC_REG_MAX 48

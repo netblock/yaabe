@@ -365,7 +365,7 @@ atomtree_dt_populate_vram_usagebyfirmware(
 		fw_vram->leaves = atree->bios + bios_offset;
 		fw_vram->ver = get_ver(fw_vram->table_header);
 		if (generate_atui) {
-			switch(fw_vram->ver) {
+			switch (fw_vram->ver) {
 				case v2_1:
 					atui_fw_vram = ATUI_MAKE_BRANCH(vram_usagebyfirmware_v2_1,
 						NULL,  NULL,fw_vram->v2_1,  0,NULL
@@ -406,7 +406,7 @@ atomtree_dt_populate_gpio_pin_lut(
 	if (bios_offset) {
 		gpio_pin_lut->leaves = atree->bios + bios_offset;
 		gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
-		switch(gpio_pin_lut->ver) {
+		switch (gpio_pin_lut->ver) {
 			case v2_1:
 				gpio_pin_lut->num_gpio_pins = (
 					//dynamic array length of nothing but pins after the header
@@ -457,7 +457,7 @@ atomtree_dt_populate_gfx_info(
 		// leaves is in a union with the structs.
 		gfx_info->leaves = atree->bios + bios_offset;
 		gfx_info->ver = get_ver(gfx_info->table_header);
-		switch(gfx_info->ver) {
+		switch (gfx_info->ver) {
 			case v2_1:
 				if (generate_atui) {
 					atui_gfx_info = ATUI_MAKE_BRANCH(atom_gfx_info_v2_1,
@@ -614,7 +614,7 @@ atomtree_populate_smc_pptable(
 			.atomtree = ppt,
 			.suggestbios = smc_pptable,
 		};
-		switch(ppt->smc_pptable_ver) {
+		switch (ppt->smc_pptable_ver) {
 			case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&func_args);
 			case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&func_args);
 			case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&func_args);
@@ -645,7 +645,7 @@ atomtree_dt_populate_ppt(
 			.num_import_branches = 1,
 		};
 		atui_branch* (* atui_powerplay_func)(struct atui_funcify_args const*);
-		switch(ppt->ver) {
+		switch (ppt->ver) {
 			case v11_0:
 				atui_smctable = atomtree_populate_smc_pptable(
 					ppt, &(ppt->v11_0->smc_pptable), generate_atui
@@ -700,8 +700,8 @@ atomtree_populate_init_reg_block(
 	RegDataBlkSize.
 	*/
 
-	at_regblock->reg_type = reg_block_unknown;
-	at_regblock->reg_set = common_set_unknown;
+	at_regblock->reg_type = REG_BLOCK_UNKNOWN;
+	at_regblock->reg_set = COMMON_SET_UNKNOWN;
 	at_regblock->data_sets = NULL;
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
 
@@ -834,7 +834,7 @@ atomtree_populate_mem_adjust_table(
 	atui_branch* const atui_mem_adjust = atomtree_populate_init_reg_block(
 		mem_adjust_table, generate_atui, 1
 	);
-	mem_adjust_table->reg_type = reg_block_mem_adjust;
+	mem_adjust_table->reg_type = REG_BLOCK_MEM_ADJUST;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -852,97 +852,97 @@ atomtree_populate_mem_adjust_table(
 	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
 		if (regcmp(index, mem_adjust_set_gcn3_hbm1_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn3_hbm1;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_HBM1;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_hbm1);
 		} else if (regcmp(index, mem_adjust_set_gcn3_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn3_gddr5_type2;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE2;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type2);
 		}
 	} else if (7 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type1;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE1;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type1);
 		}
 	} else if (13 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type2;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE2;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type2);
 		} else if (regcmp(index, mem_adjust_set_gcn4_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type4;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE4;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type4);
 		}
 	} else if (14 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type5_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type5;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE5;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type5);
 		}
 	} else if (15 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn4_gddr5_type3;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type3);
 		}
 	} else if (43 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn3_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn3_gddr5_type3;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type3);
 		}
 	} else if (46 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn3_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn3_gddr5_type1;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE1;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type1);
 		}
 	} else if (54 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_terascale2_ddr3_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_terascale2_ddr3;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_DDR3;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_ddr3);
 		}
 	} else if (64 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_terascale2_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type3;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type3);
 
 		} else if (regcmp(index, mem_adjust_set_gcn1_gddr5_type5_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type5;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE5;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type5);
 		}
 	} else if (70 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_terascale2_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_terascale2_gddr5_type4;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE4;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type4);
 		} else if (regcmp(index, mem_adjust_set_terascale3_gddr5_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_terascale3_gddr5;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE3_GDDR5;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale3_gddr5);
 		}
 	} else if (98 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type1;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE1;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type1);
 		}
 	} else if (124 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type2;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE2;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type2);
 		}
 	} else if (126 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type4;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE4;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type4);
 		}
 	} else if (127 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn2_gddr5_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn2_gddr5;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN2_GDDR5;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn2_gddr5);
 		}
 	} else if (134 == mem_adjust_table->num_index) {
 		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = mem_adjust_set_gcn1_gddr5_type3;
+			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type3);
 		}
 	}
 	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
 	#ifndef NDEBUG
 	if ((1 < mem_adjust_table->num_index)
-			&& (common_set_unknown == mem_adjust_table->reg_set)
+			&& (COMMON_SET_UNKNOWN == mem_adjust_table->reg_set)
 			) {
 		register_set_print_tables(
 			mem_adjust_table, &GMC_reg_set, true, "mem_adjust_set"
@@ -1031,7 +1031,7 @@ atomtree_populate_mem_clk_patch(
 	atui_branch* const atui_memclkpatch = atomtree_populate_init_reg_block(
 		mem_clk_patch, generate_atui, 1
 	);
-	mem_clk_patch->reg_type = reg_block_mem_clk_patch;
+	mem_clk_patch->reg_type = REG_BLOCK_MEM_CLK_PATCH;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -1049,11 +1049,11 @@ atomtree_populate_mem_clk_patch(
 	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
 		if (regcmp(index, timings_set_polaris_addresses)) {
-			mem_clk_patch->reg_set = timings_set_polaris;
+			mem_clk_patch->reg_set = TIMINGS_SET_POLARIS;
 			atui_strap_func = ATUI_FUNC(timings_set_polaris);
 		/*
 		} else if (regcmp(index, timings_set_vegam_addresses)) {
-			mem_clk_patch->reg_set = timings_set_vegam;
+			mem_clk_patch->reg_set = TIMINGS_SET_VEGAM;
 			atui_strap_func = ATUI_FUNC(timings_set_vegam);
 		*/
 		} else if (regcmp(index, timings_set_islands_type1_addresses)
@@ -1061,23 +1061,23 @@ atomtree_populate_mem_clk_patch(
 				) {
 			// Northern, Southern, Sea, Volcanic Islands
 			if (vram_type == ATOM_DGPU_VRAM_TYPE_DDR3) {
-				mem_clk_patch->reg_set = timings_set_islands_ddr3;
+				mem_clk_patch->reg_set = TIMINGS_SET_ISLANDS_DDR3;
 				atui_strap_func = ATUI_FUNC(timings_set_islands_ddr3);
 			} else {
-				mem_clk_patch->reg_set = timings_set_islands_gddr5;
+				mem_clk_patch->reg_set = TIMINGS_SET_ISLANDS_GDDR5;
 				atui_strap_func = ATUI_FUNC(timings_set_islands_gddr5);
 			}
 		}
 	} else if (10 == mem_clk_patch->num_index) {
 		if (regcmp(index, timings_set_fiji_addresses)) {
-			mem_clk_patch->reg_set = timings_set_fiji;
+			mem_clk_patch->reg_set = TIMINGS_SET_FIJI;
 			atui_strap_func = ATUI_FUNC(timings_set_fiji);
 		}
 	}
 	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
 	#ifndef NDEBUG
 	if ((1 < mem_clk_patch->num_index)
-			&& (common_set_unknown == mem_clk_patch->reg_set)
+			&& (COMMON_SET_UNKNOWN == mem_clk_patch->reg_set)
 			) {
 		register_set_print_tables(
 			mem_clk_patch, &GMC_reg_set, true, "timings_set"
@@ -1141,7 +1141,7 @@ atomtree_populate_mc_tile_adjust(
 	atui_branch* const atui_mc_tile_adjust = atomtree_populate_init_reg_block(
 		mc_tile_adjust, generate_atui, 1
 	);
-	mc_tile_adjust->reg_type = reg_block_mc_tile_adjust;
+	mc_tile_adjust->reg_type = REG_BLOCK_MC_TILE_ADJUST;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -1159,12 +1159,12 @@ atomtree_populate_mc_tile_adjust(
 	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (2 == mc_tile_adjust->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_tile_adjust_set_gcn4_gddr5_addresses)) {
-			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn4_gddr5;
+			mc_tile_adjust->reg_set = MC_TILE_ADJUST_SET_GCN4_GDDR5;
 			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn4_gddr5);
 		}
 	} else if (3 == mc_tile_adjust->num_index) {
 		if (regcmp(index, mc_tile_adjust_set_gcn3_gddr5_addresses)) {
-			mc_tile_adjust->reg_set = mc_tile_adjust_set_gcn3_gddr5;
+			mc_tile_adjust->reg_set = MC_TILE_ADJUST_SET_GCN3_GDDR5;
 			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn3_gddr5);
 		}
 	}
@@ -1172,7 +1172,7 @@ atomtree_populate_mc_tile_adjust(
 	mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
 	#ifndef NDEBUG
 	if ((1 < mc_tile_adjust->num_index)
-			&& (common_set_unknown == mc_tile_adjust->reg_set)
+			&& (COMMON_SET_UNKNOWN == mc_tile_adjust->reg_set)
 			) {
 		register_set_print_tables(
 			mc_tile_adjust, &GMC_reg_set, true, "mc_tile_adjust_set"
@@ -1226,7 +1226,7 @@ atomtree_populate_init_mc_phy_init(
 	atui_branch* const atui_phy_init = atomtree_populate_init_reg_block(
 		mc_phy_init, generate_atui, 1
 	);
-	mc_phy_init->reg_type = reg_block_mc_phy_init;
+	mc_phy_init->reg_type = REG_BLOCK_MC_PHY_INIT;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(
 		&(vram_modules[0])
@@ -1236,7 +1236,7 @@ atomtree_populate_init_mc_phy_init(
 	struct atom_init_reg_index_format const* const index =
 		mc_phy_init->register_index;
 	struct atom_reg_setting_data_block const* const* const data_blocks =
-	(struct atom_reg_setting_data_block const* const* const)
+		(struct atom_reg_setting_data_block const* const* const)
 		mc_phy_init->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
@@ -1244,50 +1244,50 @@ atomtree_populate_init_mc_phy_init(
 	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 	if (11 == mc_phy_init->num_index) { // optimisation heuristic
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type4_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type4;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type4);
 		}
 	} else if (12 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type6_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type6;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE6;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type6);
 		}
 	} else if (13 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type3_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type3;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type3);
 		} else if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type5_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type5;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE5;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type5);
 		}
 	} else if (14 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn3_hbm1_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn3_hbm1;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_HBM1;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_hbm1);
 		}
 	} else if (19 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type2_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type2;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE2;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type2);
 		}
 	} else if (25 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type1_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn4_gddr5_type1;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE1;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type1);
 		}
 	} else if (165 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type1_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn3_gddr5_type1;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE1;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type1);
 		}
 	} else if (168 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type3_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn3_gddr5_type3;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE3;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type3);
 		}
 	} else if (191 == mc_phy_init->num_index) {
 		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type2_addresses)) {
-			mc_phy_init->reg_set = mc_phy_init_set_gcn3_gddr5_type2;
+			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE2;
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type2);
 		}
 	}
@@ -1295,7 +1295,7 @@ atomtree_populate_init_mc_phy_init(
 	mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
 	#ifndef NDEBUG
 	if ((1 < mc_phy_init->num_index)
-			&& (common_set_unknown == mc_phy_init->reg_set)
+			&& (COMMON_SET_UNKNOWN == mc_phy_init->reg_set)
 			) {
 		register_set_print_tables(
 			mc_phy_init, &GMC_reg_set, true, "mc_phy_init_set"
@@ -1648,7 +1648,7 @@ atomtree_populate_vram_module(
 		);
 	}
 
-	switch(vram_module_ver) {
+	switch (vram_module_ver) {
 		case v1_3: // atom_vram_module_v3. Will look very similar to v4
 			for (i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
@@ -3422,7 +3422,7 @@ atomtree_dt_populate_voltageobject_info_v3_1(
 		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
-		switch(vobj.vobj->header.voltage_mode) {
+		switch (vobj.vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.
 			case VOLTAGE_OBJ_GPIO_LUT:
 			case VOLTAGE_OBJ_PHASE_LUT:
@@ -3503,7 +3503,7 @@ atomtree_dt_populate_voltageobject_info_v3_1(
 		struct atui_funcify_args atui_args = {0};
 		atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
 		for (i=0; i < vo_info->num_voltage_objects; i++) {
-			switch(voltage_objects[i].obj->header.voltage_mode) {
+			switch (voltage_objects[i].obj->header.voltage_mode) {
 				case VOLTAGE_OBJ_GPIO_LUT:
 				case VOLTAGE_OBJ_PHASE_LUT:
 					atui_vobj_func = ATUI_FUNC(atom_gpio_voltage_object_v1);
@@ -3583,7 +3583,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
-		switch(vobj.vobj->header.voltage_mode) {
+		switch (vobj.vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.
 			case VOLTAGE_OBJ_GPIO_LUT:
 			case VOLTAGE_OBJ_PHASE_LUT:
@@ -3632,7 +3632,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 		struct atui_funcify_args atui_args = {0};
 		atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
 		for (i=0; i < vo_info->num_voltage_objects; i++) {
-			switch(voltage_objects[i].obj->header.voltage_mode) {
+			switch (voltage_objects[i].obj->header.voltage_mode) {
 				case VOLTAGE_OBJ_GPIO_LUT:
 				case VOLTAGE_OBJ_PHASE_LUT:
 					atui_vobj_func = ATUI_FUNC(atom_gpio_voltage_object_v1);

@@ -440,7 +440,7 @@ atui_leaf_set_val_fraction(
 			fixed_val <<= leaf->fractional_bits;
 			fixed_val += frac;
 		}
-		switch(leaf->total_bits) {
+		switch (leaf->total_bits) {
 			case 8:   *(leaf->u8) = fixed_val; return;
 			case 16: *(leaf->u16) = fixed_val; return;
 			case 32: *(leaf->u32) = fixed_val; return;
@@ -449,7 +449,7 @@ atui_leaf_set_val_fraction(
 		}
 	}
 
-	switch(leaf->total_bits) { // else float
+	switch (leaf->total_bits) { // else float
 		case 16: *(leaf->f16) = val; return;
 		case 32: *(leaf->f32) = val; return;
 		case 64: *(leaf->f64) = val; return;
@@ -469,7 +469,7 @@ atui_leaf_get_val_fraction(
 		// f64 can represent represent ints up to 2**53 without rounding.
 		assert((leaf->total_bits - leaf->fractional_bits) < 53);
 		float64_t val;
-		switch(leaf->total_bits) {
+		switch (leaf->total_bits) {
 			case 8:  val =  *(leaf->u8); break;
 			case 16: val = *(leaf->u16); break;
 			case 32: val = *(leaf->u32); break;
@@ -481,7 +481,7 @@ atui_leaf_get_val_fraction(
 	};
 
 	// else native float
-	switch(leaf->total_bits) {
+	switch (leaf->total_bits) {
 		case 16: return *(leaf->f16);
 		case 32: return *(leaf->f32);
 		case 64: return *(leaf->f64);
