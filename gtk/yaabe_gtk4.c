@@ -2078,7 +2078,10 @@ yaabe_gtk(
 
 	*root = commons.root;
 	g_object_unref(commons.yaabe_gtk);
-	free(commons.pathbar_string);
+
+	if (commons.pathbar_string) {
+		free(commons.pathbar_string);
+	}
 
 	return status;
 }

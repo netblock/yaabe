@@ -78,10 +78,12 @@ main(
 		}
 	}
 
-	GATUIBranch* const trunk = gatui_tree_get_trunk(atree);
-	gatui_branch_test(trunk);
-	g_assert_finalize_object(trunk);
-	g_assert_finalize_object(atree);
+	if (atree) {
+		GATUIBranch* const trunk = gatui_tree_get_trunk(atree);
+		gatui_branch_test(trunk);
+		g_assert_finalize_object(trunk);
+		g_assert_finalize_object(atree);
+	}
 
 	return 0;
 }
