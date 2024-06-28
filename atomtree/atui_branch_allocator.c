@@ -265,7 +265,9 @@ print_atui_dynarray_leaf(
 		};
 
 		struct atui_enum_entry const* enum_array = NULL;
+		struct atui_enum const* taglist = NULL;
 		if (sub_meta->enum_taglist) {
+			taglist = sub_meta->enum_taglist;
 			enum_array = sub_meta->enum_taglist->enum_array;
 		};
 
@@ -287,6 +289,7 @@ print_atui_dynarray_leaf(
 			);
 			while (dynpos.pos.direct < dynpos.end.direct) {
 				if (enum_array) {
+					assert(sub_leaves.name_num < taglist->num_entries);
 					sub_leaves.nametag = enum_array[sub_leaves.name_num].name;
 				}
 				sub_leaves.suggestbios = dynpos.pos.direct;

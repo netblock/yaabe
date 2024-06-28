@@ -61,28 +61,11 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_ODCAP_COUNT",
-				enum: "SMU_11_0_ODFEATURE_CAP",
+				count: "bios->feature_count",
+				enum: "SMU_11_0_7_ODFEATURE_CAP",
 				pattern: [
 					{
 						name: "%s",
-					},
-				],
-			},
-		}, {
-			access: "(&(bios->cap[SMU_11_0_ODCAP_COUNT]))",
-			name: "Undefined OD feature support flags",
-			display: "ATUI_NAN",
-			description: [
-				{language: "english", text: "support flag",},
-			],
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT)",
-				enum: "ATUI_NULL",
-				pattern: [
-					{ // if COUNT changes, please change this 14
-						name: "OD feature [14 + %02u]",
 					},
 				],
 			},
@@ -92,8 +75,8 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_ODSETTING_COUNT",
-				enum: "SMU_11_0_ODSETTING_ID",
+				count: "bios->setting_count",
+				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
 						name: "max: %s",
@@ -106,8 +89,8 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_ODSETTING_COUNT",
-				enum: "SMU_11_0_ODSETTING_ID",
+				count: "bios->setting_count",
+				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
 						name: "min: %s",
@@ -115,30 +98,47 @@ global_default: {
 				],
 			},
 		}, {
-			access: "(&(bios->max[SMU_11_0_ODSETTING_COUNT]))",
-			name: "Undefined OD settings (max)",
+			access: "(&(bios->cap[bios->feature_count]))",
+			name: "Undefined OD feature support flags",
 			display: "ATUI_NAN",
+			description: [
+				{language: "english", text: "support flag",},
+			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT)",
+				count: "(SMU_11_0_MAX_ODFEATURE - bios->feature_count)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 19
-						name: "max: [19 + %02u]",
+					{
+						name: "OD feature [feature_count + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->min[SMU_11_0_ODSETTING_COUNT]))",
+			access: "(&(bios->max[bios->setting_count]))",
+			name: "Undefined OD settings (max)",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "(SMU_11_0_MAX_ODSETTING - bios->setting_count)",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "max: [setting_count + %02u]",
+					},
+				],
+			},
+		}, {
+			access: "(&(bios->min[bios->setting_count]))",
 			name: "Undefined OD settings (min)",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT)",
+				count: "(SMU_11_0_MAX_ODSETTING - bios->setting_count)",
 				enum: "ATUI_NULL",
 				pattern: [
 					{
-						name: "min: [19 + %02u]",
+						name: "min: [setting_count + %02u]",
 					},
 				],
 			},
@@ -162,8 +162,8 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "ATOM_VEGA20_ODFEATURE_COUNT",
-				enum: "ATOM_VEGA20_ODFEATURE_ID",
+				count: "bios->ODFeatureCount",
+				enum: "SMU_11_0_7_ODFEATURE_CAP",
 				pattern: [
 					{
 						name: "%s",
@@ -182,8 +182,8 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "ATOM_VEGA20_ODSETTING_COUNT",
-				enum: "ATOM_VEGA20_ODSETTING_ID",
+				count: "bios->ODSettingCount",
+				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
 						name: "max: %s",
@@ -199,8 +199,8 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "ATOM_VEGA20_ODSETTING_COUNT",
-				enum: "ATOM_VEGA20_ODSETTING_ID",
+				count: "bios->ODSettingCount",
+				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
 						name: "min: %s",
@@ -208,7 +208,7 @@ global_default: {
 				],
 			},
 		}, {
-			access: "(&(bios->ODFeatureCapabilities[ATOM_VEGA20_ODFEATURE_COUNT]))",
+			access: "(&(bios->ODFeatureCapabilities[bios->ODFeatureCount]))",
 			name: "Undefined OD feature support flags",
 			description: [
 				{language: "english", text: "OD feature support flags",},
@@ -216,16 +216,16 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(ATOM_VEGA20_ODFEATURE_MAX_COUNT - ATOM_VEGA20_ODFEATURE_COUNT)",
+				count: "(ATOM_VEGA20_ODFEATURE_MAX_COUNT - bios->ODFeatureCount)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // 10 is ATOM_VEGA20_ODFEATURE_COUNT
-						name: "OD feature [10 + %02u]",
+					{
+						name: "OD feature [ODFeatureCount + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->ODSettingsMax[ATOM_VEGA20_ODSETTING_COUNT]))",
+			access: "(&(bios->ODSettingsMax[bios->ODSettingCount]))",
 			name: "Undefined Overdrive settings (max)",
 			description: [
 				{language: "english", text: "Upper Limit for each OD Setting",},
@@ -233,16 +233,16 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
+				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - bios->ODSettingCount)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
-						name: "max: [14 + %02u]",
+					{
+						name: "max: [ODSettingCount + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->ODSettingsMin[ATOM_VEGA20_ODSETTING_COUNT]))",
+			access: "(&(bios->ODSettingsMin[bios->ODSettingCount]))",
 			name: "Undefined Overdrive settings (min)",
 			description: [
 				{language: "english", text: "Lower Limit for each OD Setting",},
@@ -250,11 +250,11 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
+				count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - bios->ODSettingCount)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
-						name: "min: [14 + %02u]",
+					{
+						name: "min: [ODSettingCount + %02u]",
 					},
 				],
 			},
@@ -298,7 +298,7 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_7_ODCAP_COUNT",
+				count: "bios->feature_count",
 				enum: "SMU_11_0_7_ODFEATURE_CAP",
 				pattern: [
 					{
@@ -315,7 +315,7 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_7_ODSETTING_COUNT",
+				count: "bios->setting_count",
 				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
@@ -332,7 +332,7 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "SMU_11_0_7_ODSETTING_COUNT",
+				count: "bios->setting_count",
 				enum: "SMU_11_0_7_ODSETTING_ID",
 				pattern: [
 					{
@@ -358,7 +358,7 @@ global_default: {
 				],
 			},
 		}, {
-			access: "(&(bios->cap[SMU_11_0_7_ODCAP_COUNT]))",
+			access: "(&(bios->cap[bios->feature_count]))",
 			name: "Undefined OD feature support flags",
 			display: "ATUI_NAN",
 			description: [
@@ -366,16 +366,16 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_11_0_7_MAX_ODFEATURE - SMU_11_0_7_ODCAP_COUNT)",
+				count: "(SMU_11_0_7_MAX_ODFEATURE - bios->feature_count)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 16
-						name: "OD feature [16 + %02u]",
+					{
+						name: "OD feature [feature_count + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->max[SMU_11_0_7_ODSETTING_COUNT]))",
+			access: "(&(bios->max[bios->setting_count]))",
 			name: "Undefined Overdrive settings (max)",
 			display: "ATUI_NAN",
 			description: [
@@ -383,16 +383,16 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
+				count: "(SMU_11_0_7_MAX_ODSETTING - bios->setting_count)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 30
-						name: "max: [30 + %02u]",
+					{
+						name: "max: [setting_count + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->min[SMU_11_0_7_ODSETTING_COUNT]))",
+			access: "(&(bios->min[bios->setting_count]))",
 			name: "Undefined Overdrive settings (min)",
 			display: "ATUI_NAN",
 			description: [
@@ -400,11 +400,11 @@ global_default: {
 			],
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
+				count: "(SMU_11_0_7_MAX_ODSETTING - bios->setting_count)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{ // if COUNT changes, please change this 30
-						name: "min: [30 + %02u]",
+					{
+						name: "min: [setting_count + %02u]",
 					},
 				],
 			},
