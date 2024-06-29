@@ -80,9 +80,6 @@ atomtree_dt_populate_smc_dpm_info(
 					break;
 			}
 		}
-	} else {
-		smc_dpm_info->leaves = NULL;
-		smc_dpm_info->ver = nover;
 	}
 
 	return atui_smc_dpm_info;
@@ -173,9 +170,6 @@ atomtree_dt_populate_firmwareinfo(
 					break;
 			}
 		}
-	} else {
-		firmwareinfo->leaves = NULL;
-		firmwareinfo->ver = nover;
 	}
 	return atui_firmwareinfo;
 }
@@ -228,9 +222,6 @@ atomtree_dt_populate_lcd_info(
 					break;
 			}
 		}
-	} else {
-		lcd_info->leaves = NULL;
-		lcd_info->ver = nover;
 	}
 
 	return atui_lcd_info;
@@ -245,9 +236,6 @@ atomtree_dt_populate_smu_info(
 		bool const generate_atui
 		) {
 	atui_branch* atui_smu_info = NULL;
-
-	smu_info->smugolden = NULL;
-	smu_info->smuinit = NULL;
 
 	// leaves is in a union with the structs.
 	if (bios_offset) {
@@ -343,9 +331,6 @@ atomtree_dt_populate_smu_info(
 				}
 				break;
 		}
-	} else {
-		smu_info->leaves = NULL;
-		 smu_info->ver = nover;
 	}
 	return atui_smu_info;
 }
@@ -384,9 +369,6 @@ atomtree_dt_populate_vram_usagebyfirmware(
 					break;
 			}
 		}
-	} else {
-		fw_vram->leaves = NULL;
-		fw_vram->ver = nover;
 	}
 	return atui_fw_vram;
 }
@@ -421,7 +403,6 @@ atomtree_dt_populate_gpio_pin_lut(
 				}
 				break;
 			default:
-				gpio_pin_lut->num_gpio_pins = 0;
 				if (generate_atui) {
 					atui_gpio_pin_lut = ATUI_MAKE_BRANCH(
 						atom_common_table_header,
@@ -431,10 +412,6 @@ atomtree_dt_populate_gpio_pin_lut(
 				}
 				break;
 		}
-	} else {
-		gpio_pin_lut->leaves = NULL;
-		gpio_pin_lut->num_gpio_pins = 0;
-		gpio_pin_lut->ver = nover;
 	}
 	return atui_gpio_pin_lut;
 }
@@ -448,10 +425,6 @@ atomtree_dt_populate_gfx_info(
 		bool const generate_atui
 		) {
 	atui_branch* atui_gfx_info = NULL;
-
-	gfx_info->gcgolden = NULL;
-	gfx_info->edc_didt_lo = NULL;
-	gfx_info->edc_didt_hi = NULL;
 
 	if (bios_offset) {
 		// leaves is in a union with the structs.
@@ -586,9 +559,6 @@ atomtree_dt_populate_gfx_info(
 				}
 				break;
 		}
-	} else {
-		gfx_info->leaves = NULL;
-		gfx_info->ver = nover;
 	}
 	return atui_gfx_info;
 }
@@ -703,10 +673,6 @@ atomtree_dt_populate_ppt(
 					break;
 			}
 		}
-
-	} else {
-		ppt->leaves = NULL;
-		ppt->ver = nover;
 	}
 	return atui_ppt;
 }
@@ -728,9 +694,6 @@ atomtree_populate_init_reg_block(
 	RegDataBlkSize.
 	*/
 
-	at_regblock->reg_type = REG_BLOCK_UNKNOWN;
-	at_regblock->reg_set = COMMON_SET_UNKNOWN;
-	at_regblock->data_sets = NULL;
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
 
 	at_regblock->num_index = // will include final 0xFFFF
@@ -1683,9 +1646,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_3;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_3->ModuleSize;
 
 				atui_children[2] = atomtree_populate_atom_memory_timing_format(
@@ -1765,9 +1725,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_4;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_4->ModuleSize;
 
 				atui_children[2] = atomtree_populate_atom_memory_timing_format(
@@ -1853,11 +1810,6 @@ atomtree_populate_vram_module(
 				} else {
 					vmod->gmc_bitfields_ver = v6_0;
 				}
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_7->ModuleSize;
 			}
 			if (generate_atui) {
@@ -1932,11 +1884,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_8;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_8->ModuleSize;
 			}
 			if (generate_atui) {
@@ -1992,11 +1939,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_9;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_9->vram_module_size;
 			}
 			if (generate_atui) {
@@ -2027,11 +1969,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_10;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
-				vmod->dram_info = NULL;
-				vmod->mem_tuning = NULL;
-				vmod->tmrs_seq = NULL;
 				vram_module_offset += vmod->v1_10->vram_module_size;
 			}
 			if (generate_atui) {
@@ -2062,8 +1999,6 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_11;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
 				vram_module_offset += vmod->v1_11->vram_module_size;
 			}
 			if (generate_atui) {
@@ -2094,26 +2029,21 @@ atomtree_populate_vram_module(
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v3_0;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vmod->memory_timing_format_ver = nover;
-				vmod->num_memory_timing_format = 0;
 				//vram_module_offset += vmod->v3_0->vram_module_size;
 				vram_module_offset += sizeof(struct atom_vram_module_v3_0);
 
-				vmod->dram_info = NULL;
 				if (vmod->v3_0->dram_info_offset) {
 					vmod->dram_info = (
 						vmod->leaves
 						+ vmod->v3_0->dram_info_offset
 					);
 				}
-				vmod->mem_tuning = NULL;
 				if (vmod->v3_0->mem_tuning_offset) {
 					vmod->mem_tuning = (
 						vmod->leaves
 						+ vmod->v3_0->mem_tuning_offset
 					);
 				}
-				vmod->tmrs_seq = NULL;
 				if (vmod->v3_0->tmrs_seq_offset) {
 					vmod->tmrs_seq = (
 						vmod->leaves
@@ -2207,8 +2137,6 @@ atomtree_populate_vram_info_v1_3(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi13->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2223,8 +2151,6 @@ atomtree_populate_vram_info_v1_3(
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
-	} else {
-		vi13->mem_clk_patch.leaves = NULL;
 	}
 
 
@@ -2269,8 +2195,6 @@ atomtree_populate_vram_info_v1_4(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi14->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2284,8 +2208,6 @@ atomtree_populate_vram_info_v1_4(
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
-	} else {
-		vi14->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_vi = NULL;
@@ -2328,8 +2250,6 @@ atomtree_populate_vram_info_v2_1(
 			generate_atui,
 			vi21->vram_modules
 		);
-	} else {
-		vi21->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2341,8 +2261,6 @@ atomtree_populate_vram_info_v2_1(
 			generate_atui,
 			vi21->vram_modules
 		);
-	} else {
-		vi21->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_perbytepreset = NULL;
@@ -2356,8 +2274,6 @@ atomtree_populate_vram_info_v2_1(
 		if (generate_atui) {
 			strcpy(atui_perbytepreset->name, u8"per_byte_preset_table");
 		}
-	} else {
-		vi21->per_byte_preset.leaves = NULL;
 	}
 
 
@@ -2402,8 +2318,6 @@ atomtree_populate_vram_info_v2_2(
 			generate_atui,
 			vi22->vram_modules
 		);
-	} else {
-		vi22->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2415,8 +2329,6 @@ atomtree_populate_vram_info_v2_2(
 			generate_atui,
 			vi22->vram_modules
 		);
-	} else {
-		vi22->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -2429,8 +2341,6 @@ atomtree_populate_vram_info_v2_2(
 			generate_atui,
 			vi22->vram_modules
 		);
-	} else {
-		vi22->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -2442,8 +2352,6 @@ atomtree_populate_vram_info_v2_2(
 			generate_atui,
 			vi22->vram_modules
 		);
-	} else {
-		vi22->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2455,8 +2363,6 @@ atomtree_populate_vram_info_v2_2(
 				NULL, NULL, vi22->dram_data_remap, 0,NULL
 			);
 		}
-	} else {
-		vi22->dram_data_remap = NULL;
 	}
 
 
@@ -2505,8 +2411,6 @@ atomtree_populate_vram_info_v2_3(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi23->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2573,10 +2477,6 @@ atomtree_populate_vram_info_v2_3(
 				strcpy(atui_mem_timings->name, tmp_branch->origname);
 			}
 		}
-	} else {
-		vi23->mem_clk_patch.leaves = NULL;
-		vi23->mem_timings = NULL;
-		vi23->num_timing_straps = NULL;
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -2590,8 +2490,6 @@ atomtree_populate_vram_info_v2_3(
 		if (generate_atui) {
 			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
-	} else {
-		vi23->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -2604,8 +2502,6 @@ atomtree_populate_vram_info_v2_3(
 		if (generate_atui) {
 			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
-	} else {
-		vi23->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2617,8 +2513,6 @@ atomtree_populate_vram_info_v2_3(
 
 		if (generate_atui) {
 		}
-	} else {
-		vi23->dram_data_remap = NULL;
 	}
 
 	atui_branch* atui_hbm_tmrs = NULL;
@@ -2627,8 +2521,6 @@ atomtree_populate_vram_info_v2_3(
 		vi23->hbm_tmrs = (void*)vi23->leaves + vi23->leaves->tmrs_seq_offset;
 		if (generate_atui) {
 		}
-	} else {
-		vi23->hbm_tmrs = NULL;
 	}
 
 	atui_branch* atui_postucode_init = NULL;
@@ -2641,8 +2533,6 @@ atomtree_populate_vram_info_v2_3(
 		if (generate_atui) {
 			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
-	} else {
-		vi23->post_ucode_init.leaves = NULL;
 	}
 
 
@@ -2693,8 +2583,6 @@ atomtree_populate_vram_info_v2_4(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi24->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2750,10 +2638,6 @@ atomtree_populate_vram_info_v2_4(
 				strcpy(atui_mem_timings->name, tmp_branch->origname);
 			}
 		}
-	} else {
-		vi24->mem_clk_patch.leaves = NULL;
-		vi24->navi1_gddr6_timings = NULL;
-		vi24->num_timing_straps = NULL;
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -2767,8 +2651,6 @@ atomtree_populate_vram_info_v2_4(
 		if (generate_atui) {
 			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
-	} else {
-		vi24->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -2781,8 +2663,6 @@ atomtree_populate_vram_info_v2_4(
 		if (generate_atui) {
 			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
-	} else {
-		vi24->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2792,8 +2672,6 @@ atomtree_populate_vram_info_v2_4(
 			(void*)vi24->leaves + vi24->leaves->dram_data_remap_tbloffset;
 		if (generate_atui) {
 		}
-	} else {
-		vi24->dram_data_remap = NULL;
 	}
 
 	atui_branch* atui_postucode_init = NULL;
@@ -2806,8 +2684,6 @@ atomtree_populate_vram_info_v2_4(
 		if (generate_atui) {
 			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
-	} else {
-		vi24->post_ucode_init.leaves = NULL;
 	}
 
 
@@ -2857,8 +2733,6 @@ atomtree_populate_vram_info_v2_5(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi25->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_gddr6_ac_timings = NULL;
@@ -2894,9 +2768,6 @@ atomtree_populate_vram_info_v2_5(
 				assert(strlen(tmp_branch->name) < sizeof(tmp_branch->name));
 			}
 		}
-	} else {
-		vi25->gddr6_ac_timings = NULL;
-		vi25->gddr6_acstrap_count = 0;
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -2910,8 +2781,6 @@ atomtree_populate_vram_info_v2_5(
 		if (generate_atui) {
 			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
-	} else {
-		vi25->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -2924,8 +2793,6 @@ atomtree_populate_vram_info_v2_5(
 		if (generate_atui) {
 			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
-	} else {
-		vi25->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2938,8 +2805,6 @@ atomtree_populate_vram_info_v2_5(
 				NULL,  NULL,vi25->dram_data_remap,  0,NULL
 			);
 		}
-	} else {
-		vi25->dram_data_remap = NULL;
 	}
 
 	atui_branch* atui_postucode_init = NULL;
@@ -2952,8 +2817,6 @@ atomtree_populate_vram_info_v2_5(
 		if (generate_atui) {
 			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
-	} else {
-		vi25->post_ucode_init.leaves = NULL;
 	}
 
 	atui_branch* atui_strobe_mode_patch = NULL;
@@ -2963,8 +2826,6 @@ atomtree_populate_vram_info_v2_5(
 		atui_strobe_mode_patch = atomtree_populate_umc_init_reg_block(
 			&(vi25->strobe_mode_patch), generate_atui, 0
 		);
-	} else {
-		vi25->strobe_mode_patch.leaves = NULL;
 	}
 
 
@@ -3013,8 +2874,6 @@ atomtree_populate_vram_info_v2_6(
 		if (generate_atui) {
 			strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
 		}
-	} else {
-		vi26->mem_adjust_table.leaves = NULL;
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -3028,8 +2887,6 @@ atomtree_populate_vram_info_v2_6(
 		if (generate_atui) {
 			strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
 		}
-	} else {
-		vi26->mem_clk_patch.leaves = NULL;
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -3043,8 +2900,6 @@ atomtree_populate_vram_info_v2_6(
 		if (generate_atui) {
 			strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
 		}
-	} else {
-		vi26->mc_tile_adjust.leaves = NULL;
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -3057,8 +2912,6 @@ atomtree_populate_vram_info_v2_6(
 		if (generate_atui) {
 			strcpy(atui_phyinit->name, u8"mc_phy_init_table");
 		}
-	} else {
-		vi26->mc_phy_init.leaves = NULL;
 	}
 
 	atui_branch* atui_tmrs_seq = NULL;
@@ -3067,8 +2920,6 @@ atomtree_populate_vram_info_v2_6(
 		vi26->tmrs_seq = (void*)vi26->leaves + vi26->leaves->tmrs_seq_offset;
 		if (generate_atui) {
 		}
-	} else {
-		vi26->tmrs_seq = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -3081,8 +2932,6 @@ atomtree_populate_vram_info_v2_6(
 				NULL,  NULL,vi26->dram_data_remap,  0,NULL
 			);
 		}
-	} else {
-		vi26->dram_data_remap = NULL;
 	}
 
 	atui_branch* atui_postucode_init = NULL;
@@ -3095,8 +2944,6 @@ atomtree_populate_vram_info_v2_6(
 		if (generate_atui) {
 			strcpy(atui_postucode_init->name, u8"post_ucode_init");
 		}
-	} else {
-		vi26->post_ucode_init.leaves = NULL;
 	}
 
 
@@ -3139,23 +2986,17 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 	if (vi30->leaves->mem_tuning_table_offset) {
 		vi30->mem_tuning =
 			(void*)vi30->leaves + vi30->leaves->mem_tuning_table_offset;
-	} else {
-		vi30->mem_tuning = NULL;
 	}
 
 	atui_branch* atui_dram_info = NULL;
 	if (vi30->leaves->dram_info_table_offset) {
 		vi30->dram_info =
 			(void*)vi30->leaves + vi30->leaves->dram_info_table_offset;
-	} else {
-		vi30->dram_info = NULL;
 	}
 
 	atui_branch* atui_tmrs_seq = NULL;
 	if (vi30->leaves->tmrs_table_offset) {
 		vi30->tmrs_seq = (void*)vi30->leaves + vi30->leaves->tmrs_table_offset;
-	} else {
-		vi30->tmrs_seq = NULL;
 	}
 
 	atui_branch* atui_mc_init = NULL;
@@ -3168,8 +3009,6 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 		if (generate_atui) {
 			strcpy(atui_mc_init->name, u8"mc_init_table");
 		}
-	} else {
-		vi30->mc_init.leaves = NULL;
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -3182,8 +3021,6 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 				NULL,  NULL,vi30->dram_data_remap,  0,NULL
 			);
 		}
-	} else {
-		vi30->dram_data_remap = NULL;
 	}
 
 	atui_branch* atui_umc_emuinit = NULL;
@@ -3196,21 +3033,15 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 		if (generate_atui) {
 			strcpy(atui_umc_emuinit->name, u8"umc_emuinit_table");
 		}
-	} else {
-		vi30->umc_emuinit.leaves = NULL;
 	}
 
 	if (vi30->leaves->reserved_sub_table_offset[0]) {
 		vi30->rsvd_tables[0] =
 			(void*)vi30->leaves + vi30->leaves->reserved_sub_table_offset[0];
-	} else {
-		vi30->rsvd_tables[0] = NULL;
 	}
 	if (vi30->leaves->reserved_sub_table_offset[1]) {
 		vi30->rsvd_tables[1] =
 			(void*)vi30->leaves + vi30->leaves->reserved_sub_table_offset[1];
-	} else {
-		vi30->rsvd_tables[1] = NULL;
 	}
 
 
@@ -3300,9 +3131,6 @@ atomtree_dt_populate_vram_info(
 				}
 				break;
 		}
-	} else {
-		vram_info->leaves = NULL;
-		vram_info->ver = nover;
 	}
 	return atui_vi;
 }
@@ -3510,7 +3338,6 @@ atomtree_dt_populate_voltageobject_info_v3_1(
 				));
 				break;
 			default:
-				voltage_objects[i].lut_entries = 0;
 				break;
 		}
 
@@ -3639,7 +3466,6 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 			case VOLTAGE_OBJ_SVID2:
 				voltage_objects[i].ver = v2_0;
 			default:
-				voltage_objects[i].lut_entries = 0;
 				break;
 		}
 
@@ -3764,9 +3590,6 @@ atomtree_dt_populate_voltageobject_info(
 				}
 				break;
 		}
-	} else {
-		vo_info->ver = nover;
-		vo_info->leaves = NULL;
 	}
 	return atui_vo_info;
 }
@@ -3786,30 +3609,22 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_utilitypipeline = NULL;
 	if (leaves->UtilityPipeLine) {
 		dt11->utilitypipeline = bios + leaves->UtilityPipeLine;
-	} else {
-		dt11->utilitypipeline = NULL;
 	}
 
 	atui_branch* const atui_multimedia_capability_info = NULL; // TODO
 	if (leaves->MultimediaCapabilityInfo) {
 		dt11->multimedia_capability_info =
 			bios + leaves->MultimediaCapabilityInfo;
-	} else {
-		dt11->multimedia_capability_info = NULL;
 	}
 	atui_branch* const atui_multimedia_config_info = NULL;
 	if (leaves->MultimediaConfigInfo) {
 		dt11->multimedia_config_info =
 			bios + leaves->MultimediaConfigInfo;
-	} else {
-		dt11->multimedia_config_info = NULL;
 	}
 
 	atui_branch* const atui_vesa_timing = NULL;
 	if (leaves->StandardVESA_Timing) {
 		dt11->vesa_timing = bios + leaves->StandardVESA_Timing;
-	} else {
-		dt11->vesa_timing = NULL;
 	}
 
 	atui_branch* const atui_firmwareinfo = atomtree_dt_populate_firmwareinfo(
@@ -3819,8 +3634,6 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_palette_data = NULL;
 	if (leaves->PaletteData) {
 		dt11->palette_data = bios + leaves->PaletteData;
-	} else {
-		dt11->palette_data = NULL;
 	}
 
 	atui_branch* const atui_lcd_info = atomtree_dt_populate_lcd_info(
@@ -3830,8 +3643,6 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_dig_transmitter_info = NULL;
 	if (leaves->DIGTransmitterInfo) {
 		dt11->dig_transmitter_info = bios + leaves->DIGTransmitterInfo;
-	} else {
-		dt11->dig_transmitter_info = NULL;
 	}
 
 	atui_branch* const atui_smu_info = atomtree_dt_populate_smu_info(
@@ -3841,15 +3652,11 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_supported_devices_info = NULL;
 	if (leaves->SupportedDevicesInfo) {
 		dt11->supported_devices_info = bios + leaves->SupportedDevicesInfo;
-	} else {
-		dt11->supported_devices_info = NULL;
 	}
 
 	atui_branch* const atui_gpio_i2c_info = NULL;
 	if (leaves->GPIO_I2C_Info) {
 		dt11->gpio_i2c_info = bios + leaves->GPIO_I2C_Info;
-	} else {
-		dt11->gpio_i2c_info = NULL;
 	}
 
 	atui_branch* const atui_fw_vram = atomtree_dt_populate_vram_usagebyfirmware(
@@ -3864,8 +3671,6 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_vesa_to_internal_mode = NULL;
 	if (leaves->VESA_ToInternalModeLUT) {
 		dt11->vesa_to_internal_mode = bios + leaves->VESA_ToInternalModeLUT;
-	} else {
-		dt11->vesa_to_internal_mode = NULL;
 	}
 
 	atui_branch* const atui_gfx_info = atomtree_dt_populate_gfx_info(
@@ -3880,85 +3685,61 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_gpu_virtualization_info = NULL;
 	if (leaves->GPUVirtualizationInfo) {
 		dt11->gpu_virtualization_info = bios + leaves->GPUVirtualizationInfo;
-	} else {
-		dt11->gpu_virtualization_info = NULL;
 	}
 
 	atui_branch* const atui_save_restore_info = NULL;
 	if (leaves->SaveRestoreInfo) {
 		dt11->save_restore_info = bios + leaves->SaveRestoreInfo;
-	} else {
-		dt11->save_restore_info = NULL;
 	}
 
 	atui_branch* const atui_ppll_ss_info = NULL;
 	if (leaves->PPLL_SS_Info) {
 		dt11->ppll_ss_info = bios + leaves->PPLL_SS_Info;
-	} else {
-		dt11->ppll_ss_info = NULL;
 	}
 
 	atui_branch* const atui_oem_info = NULL;
 	if (leaves->OemInfo) {
 		dt11->oem_info = bios + leaves->OemInfo;
-	} else {
-		dt11->oem_info = NULL;
 	}
 
 	atui_branch* const atui_xtmds_info = NULL;
 	if (leaves->XTMDS_Info) {
 		dt11->xtmds_info = bios + leaves->XTMDS_Info;
-	} else {
-		dt11->xtmds_info = NULL;
 	}
 
 	atui_branch* const atui_mclk_ss_info = NULL;
 	if (leaves->MclkSS_Info) {
 		dt11->mclk_ss_info = bios + leaves->MclkSS_Info;
-	} else {
-		dt11->mclk_ss_info = NULL;
 	}
 
 	atui_branch* const atui_object_header = NULL;
 	if (leaves->Object_Header) {
 		dt11->object_header = bios + leaves->Object_Header;
-	} else {
-		dt11->object_header = NULL;
 	}
 
 	atui_branch* const atui_indirect_io_access = NULL;
 	if (leaves->IndirectIOAccess) {
 		dt11->indirect_io_access = bios + leaves->IndirectIOAccess;
-	} else {
-		dt11->indirect_io_access = NULL;
 	}
 
 	atui_branch* const atui_mc_init_parameter = NULL;
 	if (leaves->MC_InitParameter) {
 		dt11->mc_init_parameter = bios + leaves->MC_InitParameter;
-	} else {
-		dt11->mc_init_parameter = NULL;
 	}
 
 	atui_branch* const atui_asic_vddc_info = NULL;
 	if (leaves->ASIC_VDDC_Info) {
 		dt11->asic_vddc_info = bios + leaves->ASIC_VDDC_Info;
-	} else {
-		dt11->asic_vddc_info = NULL;
 	}
 
 	atui_branch* const atui_asic_internal_ss_info = NULL;
 	if (leaves->ASIC_InternalSS_Info) {
 		dt11->asic_internal_ss_info = bios + leaves->ASIC_InternalSS_Info;
-	} else {
-		dt11->asic_internal_ss_info = NULL;
 	}
 
 	atui_branch* const atui_tv_video_mode = NULL;
 	if (leaves->TV_VideoMode) {
 		dt11->tv_video_mode = bios + leaves->TV_VideoMode;
-	} else {
-		dt11->tv_video_mode = NULL;
 	}
 
 	atui_branch* const atui_vram_info = atomtree_dt_populate_vram_info(
@@ -3968,22 +3749,16 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_memory_training_info = NULL;
 	if (leaves->MemoryTrainingInfo) {
 		dt11->memory_training_info = bios + leaves->MemoryTrainingInfo;
-	} else {
-		dt11->memory_training_info = NULL;
 	}
 
 	atui_branch* const atui_integrated_system_info = NULL;
 	if (leaves->IntegratedSystemInfo) {
 		dt11->integrated_system_info = bios + leaves->IntegratedSystemInfo;
-	} else {
-		dt11->integrated_system_info = NULL;
 	}
 
 	atui_branch* const atui_asic_profiling_info = NULL;
 	if (leaves->ASIC_ProfilingInfo) {
 		dt11->asic_profiling_info = bios + leaves->ASIC_ProfilingInfo;
-	} else {
-		dt11->asic_profiling_info = NULL;
 	}
 
 	atui_branch* const atui_voltageobject_info =
@@ -3995,15 +3770,11 @@ atomtree_populate_master_datatable_v1_1(
 	atui_branch* const atui_power_source_info = NULL;
 	if (leaves->PowerSourceInfo) {
 		dt11->power_source_info = bios + leaves->PowerSourceInfo;
-	} else {
-		dt11->power_source_info = NULL;
 	}
 
 	atui_branch* const atui_service_info = NULL;
 	if (leaves->ServiceInfo) {
 		dt11->service_info = bios + leaves->ServiceInfo;
-	} else {
-		dt11->service_info = NULL;
 	}
 
 	atui_branch* atui_dt = NULL;
@@ -4033,87 +3804,70 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
 	void* const bios = atree->bios;
 
-	data_table->sw_datatable3.leaves = NULL;
 	if (leaves->sw_datatable3) {
 		data_table->sw_datatable3.leaves = bios + leaves->sw_datatable3;
 	}
 
-	data_table->sw_datatable5.leaves = NULL;
 	if (leaves->sw_datatable5) {
 		data_table->sw_datatable5.leaves = bios + leaves->sw_datatable5;
 	}
 
-	data_table->sw_datatable7.leaves = NULL;
 	if (leaves->sw_datatable7) {
 		data_table->sw_datatable7.leaves = bios + leaves->sw_datatable7;
 	}
 
-	data_table->sw_datatable9.leaves = NULL;
 	if (leaves->sw_datatable9) {
 		data_table->sw_datatable9.leaves = bios + leaves->sw_datatable9;
 	}
 
-	data_table->sw_datatable10.leaves = NULL;
 	if (leaves->sw_datatable10) {
 		data_table->sw_datatable10.leaves = bios + leaves->sw_datatable10;
 	}
 
-	data_table->sw_datatable13.leaves = NULL;
 	if (leaves->sw_datatable13) {
 		data_table->sw_datatable13.leaves = bios + leaves->sw_datatable13;
 	}
 
-	data_table->sw_datatable16.leaves = NULL;
 	if (leaves->sw_datatable16) {
 		data_table->sw_datatable16.leaves = bios + leaves->sw_datatable16;
 	}
 
-	data_table->sw_datatable17.leaves = NULL;
 	if (leaves->sw_datatable17) {
 		data_table->sw_datatable17.leaves = bios + leaves->sw_datatable17;
 	}
 
-	data_table->sw_datatable18.leaves = NULL;
 	if (leaves->sw_datatable18) {
 		data_table->sw_datatable18.leaves = bios + leaves->sw_datatable18;
 	}
 
-	data_table->sw_datatable19.leaves = NULL;
 	if (leaves->sw_datatable19) {
 		data_table->sw_datatable19.leaves = bios + leaves->sw_datatable19;
 	}
 
-	data_table->sw_datatable20.leaves = NULL;
 	if (leaves->sw_datatable20) {
 		data_table->sw_datatable20.leaves = bios + leaves->sw_datatable20;
 	}
 
-	data_table->sw_datatable21.leaves = NULL;
 	if (leaves->sw_datatable21) {
 		data_table->sw_datatable21.leaves = bios + leaves->sw_datatable21;
 	}
 
-	data_table->sw_datatable25.leaves = NULL;
 	if (leaves->sw_datatable25) {
 		data_table->sw_datatable25.leaves = bios + leaves->sw_datatable25;
 	}
 
-	data_table->sw_datatable26.leaves = NULL;
 	if (leaves->sw_datatable26) {
 		data_table->sw_datatable26.leaves = bios + leaves->sw_datatable26;
 	}
 
-	data_table->sw_datatable29.leaves = NULL;
 	if (leaves->sw_datatable29) {
 		data_table->sw_datatable29.leaves = bios + leaves->sw_datatable29;
 	}
 
-	data_table->sw_datatable33.leaves = NULL;
 	if (leaves->sw_datatable33) {
 		data_table->sw_datatable33.leaves = bios + leaves->sw_datatable33;
 	}
 
-	data_table->sw_datatable34.leaves = NULL;
 	if (leaves->sw_datatable34) {
 		data_table->sw_datatable34.leaves = bios + leaves->sw_datatable34;
 	}
@@ -4134,15 +3888,11 @@ atomtree_populate_master_datatable_v2_1(
 	atui_branch* const atui_utilitypipeline = NULL;
 	if (leaves->utilitypipeline) {
 		dt21->utilitypipeline = bios + leaves->utilitypipeline;
-	} else {
-		dt21->utilitypipeline = NULL;
 	}
 
 	atui_branch* const atui_multimedia_info = NULL;
 	if (leaves->multimedia_info) {
 		dt21->multimedia_info = bios + leaves->multimedia_info;
-	} else {
-		dt21->multimedia_info = NULL;
 	}
 
 	atui_branch* const atui_smc_dpm_info = atomtree_dt_populate_smc_dpm_info(
@@ -4252,9 +4002,6 @@ atomtree_populate_datatables(
 				}
 				break;
 		}
-	} else {
-		data_table->leaves = NULL;
-		data_table->ver = nover;
 	}
 
 	return atui_dt;
@@ -4272,36 +4019,22 @@ atomtree_populate_atom_rom_header_v1_1(
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
-	} else {
-		atree->protected_mode = NULL;
 	}
 	if (leaves->ConfigFilenameOffset) {
 		atree->config_filename = bios + leaves->ConfigFilenameOffset;
-	} else {
-		atree->config_filename = NULL;
 	}
 	if (leaves->CRC_BlockOffset) {
 		atree->crc_block = bios + leaves->CRC_BlockOffset;
-	} else {
-		atree->crc_block = NULL;
 	}
 	if (leaves->BIOS_BootupMessageOffset) {
 		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
-	} else {
-		atree->bootup_mesage = NULL;
 	}
 	if (leaves->Int10Offset) {
 		atree->int10 = bios + leaves->Int10Offset;
-	} else {
-		atree->int10 = NULL;
 	}
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
-	} else {
-		atree->pci_info = NULL;
 	}
-
-	atree->psp_dir_table = NULL;
 
 
 	//rom_header->data_table = &(atree->data_table);
@@ -4330,38 +4063,24 @@ atomtree_populate_atom_rom_header_v2_1(
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
-	} else {
-		atree->protected_mode = NULL;
 	}
 	if (leaves->ConfigFilenameOffset) {
 		atree->config_filename = bios + leaves->ConfigFilenameOffset;
-	} else {
-		atree->config_filename = NULL;
 	}
 	if (leaves->CRC_BlockOffset) {
 		atree->crc_block = bios + leaves->CRC_BlockOffset;
-	} else {
-		atree->crc_block = NULL;
 	}
 	if (leaves->BIOS_BootupMessageOffset) {
 		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
-	} else {
-		atree->bootup_mesage = NULL;
 	}
 	if (leaves->Int10Offset) {
 		atree->int10 = bios + leaves->Int10Offset;
-	} else {
-		atree->int10 = NULL;
 	}
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
-	} else {
-		atree->pci_info = NULL;
 	}
 	if (leaves->PSPDirTableOffset) {
 		atree->psp_dir_table = bios + leaves->PSPDirTableOffset;
-	} else {
-		atree->psp_dir_table = NULL;
 	}
 
 
@@ -4391,38 +4110,24 @@ atomtree_populate_atom_rom_header_v2_2(
 
 	if (leaves->protectedmodeoffset) {
 		atree->protected_mode = bios + leaves->protectedmodeoffset;
-	} else {
-		atree->protected_mode = NULL;
 	}
 	if (leaves->configfilenameoffset) {
 		atree->config_filename = bios + leaves->configfilenameoffset;
-	} else {
-		atree->config_filename = NULL;
 	}
 	if (leaves->crc_block_offset) {
 		atree->crc_block = bios + leaves->crc_block_offset;
-	} else {
-		atree->crc_block = NULL;
 	}
 	if (leaves->vbios_bootupmessageoffset) {
 		atree->bootup_mesage = bios + leaves->vbios_bootupmessageoffset;
-	} else {
-		atree->bootup_mesage = NULL;
 	}
 	if (leaves->int10_offset) {
 		atree->int10 = bios + leaves->int10_offset;
-	} else {
-		atree->int10 = NULL;
 	}
 	if (leaves->pci_info_offset) {
 		atree->pci_info = bios + leaves->pci_info_offset;
-	} else {
-		atree->pci_info = NULL;
 	}
 	if (leaves->pspdirtableoffset) {
 		atree->psp_dir_table = bios + leaves->pspdirtableoffset;
-	} else {
-		atree->psp_dir_table = NULL;
 	}
 
 
@@ -4524,9 +4229,6 @@ atomtree_populate_atom_rom_header(
 					}
 					break;
 			}
-		} else {
-			rom_header->leaves = NULL;
-			rom_header->ver = nover;
 		}
 
 	return atui_rom_header;
@@ -4632,9 +4334,10 @@ atombios_parse(
 		return NULL;
 	}
 	struct vbios_rom_header* const image = bios;
-	struct atom_tree* const atree = malloc(sizeof(struct atom_tree));
+	struct atom_tree* const atree = calloc(1,sizeof(struct atom_tree));
+	// atomtree is highly conditional, so zeroing with calloc will make
+	// population easier.
 
-	atree->biosfile_size = 0;
 	atree->alloced_bios = alloced_bios;
 
 	atree->bios = bios; //PIC code; going to be used as the '0' in places.
@@ -4674,8 +4377,6 @@ atombios_parse(
 			lengthof(child_branches), child_branches
 		);
 		atree->atui_root = atui_vbios_rom_header;
-	} else {
-		atree->atui_root = NULL;
 	}
 
 	return atree;
