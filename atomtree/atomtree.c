@@ -610,14 +610,16 @@ atomtree_populate_smc_pptable(
 	ppt->smc_pptable_ver = get_smc_pptable_ver(smc_pptable);
 
 	if (generate_atui) {
-		struct atui_funcify_args const func_args = {
+		struct atui_funcify_args func_args = {
 			.atomtree = ppt,
 			.suggestbios = smc_pptable,
 		};
 		switch (ppt->smc_pptable_ver) {
 			case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&func_args);
+			case v6_0: func_args.rename = "smu11_smcpptable_v7 (forced)";
 			case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&func_args);
 			case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&func_args);
+			default: assert(0);
 		}
 	}
 	return NULL;
