@@ -631,6 +631,7 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t ThotspotLimit; // Celcius
 	uint16_t ThbmLimit;     // Celcius
 	uint16_t Tvr_gfxLimit;  // Celcius
+	uint16_t Tvr_memLimit;  // Celcius
 	uint16_t Tliquid1Limit; // Celcius
 	uint16_t Tliquid2Limit; // Celcius
 	uint16_t TplxLimit;     // Celcius

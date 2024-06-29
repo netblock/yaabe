@@ -275,7 +275,7 @@ struct smu_11_0_7_power_saving_clock_table {
 
 
 union smu11_smc_pptables {
-	uint32_t smc_pptable_ver;
+	uint32_t ver;
 	struct smu11_smcpptable_v3  v3;
 	struct smu11_smcpptable_v8  v8;
 	struct smu11_smcpptable_v7  v7;
@@ -305,7 +305,7 @@ struct smu_11_0_powerplay_table {
 	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
 };
 
-struct atom_vega20_powerplaytable {
+struct atom_vega20_powerplay_table {
 	struct smu_powerplay_table_header header;
 	uint32_t GoldenPPID;
 	uint32_t GoldenRevision;

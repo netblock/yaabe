@@ -4,7 +4,7 @@
 global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
-		atomtree: "atomtree_powerplaytable",
+		atomtree: "atomtree_powerplay_table",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
 	},
@@ -2081,6 +2081,12 @@ global_default: {
 		}, {
 			access: "bios->Tvr_gfxLimit",
 			name: "Tvr_gfxLimit",
+			description: [
+				{language: "english", text: "Celcius",},
+			],
+		}, {
+			access: "bios->Tvr_memLimit",
+			name: "Tvr_memLimit",
 			description: [
 				{language: "english", text: "Celcius",},
 			],
@@ -6398,7 +6404,7 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_vega20_powerplaytable",
+	c_type: "atom_vega20_powerplay_table",
 	table_size: "bios->header.header.structuresize",
 	leaves: [
 		{

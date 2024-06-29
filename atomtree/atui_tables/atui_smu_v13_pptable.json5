@@ -25,7 +25,7 @@ global_default: {
 }, branches: [
 {
 	c_type: "smu_13_0_7_overdrive_table",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->revision",
@@ -175,7 +175,7 @@ global_default: {
 	],
 }, {
 	c_type: "smu_13_0_7_powerplay_table",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	table_size: "bios->header.structuresize",
 	leaves: [
 		{
@@ -264,7 +264,7 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "powerplay_feature_control_smu13",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->feature_control",
@@ -694,7 +694,7 @@ global_default: {
 	],
 }, {
 	c_type: "DpmDescriptor_t",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Padding",
@@ -753,7 +753,7 @@ global_default: {
 	],
 }, {
 	c_type: "BootValues_t",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->InitGfxclk_bypass",
@@ -940,7 +940,7 @@ global_default: {
 	// TODO unroll? dynarray inline?
 	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
 
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Tdc",
@@ -1043,7 +1043,7 @@ global_default: {
 	],
 }, {
 	c_type: "DriverReportedClocks_t",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->BaseClockAc",
@@ -1072,7 +1072,7 @@ global_default: {
 	],
 }, {
 	c_type: "AvfsDcBtcParams_smu13",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->DcBtcEnabled",
@@ -1115,7 +1115,7 @@ global_default: {
 	],
 }, {
 	c_type: "AvfsFuseOverride_smu13",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->AvfsTemp",
@@ -1176,7 +1176,7 @@ global_default: {
 	],
 }, {
 	c_type: "SviTelemetryScale_t",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Offset",
@@ -1198,7 +1198,7 @@ global_default: {
 	],
 }, {
 	c_type: "overdrivelimits_smu13",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->FeatureCtrlMask",
@@ -1292,7 +1292,7 @@ global_default: {
 	],
 }, {
 	c_type: "smu13_skutable_v39",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Version",
@@ -3056,7 +3056,7 @@ global_default: {
 	],
 }, {
 	c_type: "smu13_boardtable_v39",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Version",
@@ -3424,7 +3424,7 @@ global_default: {
 	],
 }, {
 	c_type: "smu13_smcpptable_v39",
-	atomtree: "atomtree_powerplaytable",
+	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->SkuTable",

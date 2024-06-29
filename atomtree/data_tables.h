@@ -148,20 +148,29 @@ struct atomtree_gfx_info {
 };
 
 
-struct atomtree_powerplaytable {
-	// What the fuck, AMD.
-
-	uint8_t* powerplay_table_ver; // as seen next to atom_common_table_header
+struct atomtree_powerplay_table_v11_0 {
+	struct atom_vega20_powerplay_table* leaves;
 	enum atomtree_common_version smc_pptable_ver;
+};
+struct atomtree_powerplay_table_v12_0 {
+	struct smu_11_0_powerplay_table* leaves; // v12 ~ v14
+	enum atomtree_common_version smc_pptable_ver;
+};
+struct atomtree_powerplay_table_v15_0 {
+	struct smu_11_0_7_powerplay_table* leaves; // v15 ~ v18
+	enum atomtree_common_version smc_pptable_ver;
+};
+
+struct atomtree_powerplay_table {
 	enum atomtree_common_version ver;
 	union {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
-		struct atom_vega20_powerplaytable* v11_0;
-		struct smu_11_0_powerplay_table*   v12_0;
-		struct smu_11_0_7_powerplay_table* v15_0;
+		struct atomtree_powerplay_table_v11_0 v11_0;
+		struct atomtree_powerplay_table_v12_0 v12_0;
+		struct atomtree_powerplay_table_v15_0 v15_0;
 
 		// struct smu_13_0_7_powerplay_table* v15_0; // navi3?
 		// 13_0 is different from 13_0_0, and 13_0 is only used in aldebaran
@@ -609,7 +618,7 @@ struct atomtree_master_datatable_v1_1 {
 	void* vesa_to_internal_mode; // atom_vesa_to_internal_mode_lut ?
 
 	struct atomtree_gfx_info gfx_info;
-	struct atomtree_powerplaytable powerplayinfo;
+	struct atomtree_powerplay_table powerplayinfo;
 
 	// atom_gpu_virtualization_info_v2_1  compassionate_data ?
 	void* gpu_virtualization_info;
@@ -656,7 +665,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_gpio_pin_lut gpio_pin_lut;
 	struct atomtree_gfx_info gfx_info;
 
-	struct atomtree_powerplaytable powerplayinfo;
+	struct atomtree_powerplay_table powerplayinfo;
 
 	uint16_t displayobjectinfo;
 	uint16_t indirectioaccess;
