@@ -1341,16 +1341,7 @@ atomtree_populate_umc_init_reg_block(
 	// UMC inititialisation registers, for vram_info 2.3 and newer
 	// regblock->leaves must be already populated.
 	/*
-	AMD, what the fuck? fuckin please be consistent. Use your common table
-	structure, and use your pointers. And why aren't your pointers starting
-	off from 0? So clunky. iT cOsTs TwO eXtRa ByTeS your bioses are like half
-	empty. Is this clunk from the ATI days? Even so, change the API; there is
-	room for grace.
-	hell, I'd make the pointers 64-bit so you could just plop down a struct
-	tree onto the void* bios, assume -fPIC and be done with it.
-
-
-	Take a look at struct atom_umc_init_reg_block of atomfirmware.h.
+	Take a look at struct atom_umc_init_reg_block of atomfirmware.h
 	This struct has 3 notable lists:
 	umc_reg_list, umc_reg_setting_list, and
 	atom_umc_reg_setting_data_block's umc_reg_data.
