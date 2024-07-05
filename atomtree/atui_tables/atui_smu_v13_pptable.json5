@@ -59,7 +59,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->feature_count",
+				count: "SMU_13_0_7_ODCAP_COUNT",
 				enum: "SMU_11_0_ODFEATURE_CAP",
 				pattern: [
 					{
@@ -68,16 +68,16 @@ global_default: {
 				],
 			},
 		}, {
-			access: "(&(bios->cap[bios->feature_count]))",
+			access: "(&(bios->cap[SMU_13_0_7_ODCAP_COUNT]))",
 			name: "Undefined OD feature support flags",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_13_0_7_MAX_ODFEATURE - bios->feature_count)",
+				count: "(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
-						name: "OD feature [feature_count + %02u]",
+					{ // if COUNT changes, please change this 16
+						name: "OD feature [16 + %02u]",
 					},
 				],
 			},
@@ -87,7 +87,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->setting_count",
+				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
 				pattern: [
 					{
@@ -101,7 +101,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->setting_count",
+				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
 				pattern: [
 					{
@@ -110,30 +110,30 @@ global_default: {
 				],
 			},
 		}, {
-			access: "(&(bios->max[bios->setting_count]))",
+			access: "(&(bios->max[SMU_13_0_7_ODSETTING_COUNT]))",
 			name: "Undefined OD settings (max)",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_13_0_7_MAX_ODSETTING - bios->setting_count)",
+				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
-						name: "max: [setting_count + %02u]",
+					{ // if COUNT changes, please change this 32
+						name: "max: [32 + %02u]",
 					},
 				],
 			},
 		}, {
-			access: "(&(bios->min[bios->setting_count]))",
+			access: "(&(bios->min[SMU_13_0_7_ODSETTING_COUNT]))",
 			name: "Undefined OD settings (min)",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "(SMU_13_0_7_MAX_ODSETTING - bios->setting_count)",
+				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
 				pattern: [
-					{
-						name: "min: [setting_count + %02u]",
+					{ // if COUNT changes, please change this 32
+						name: "min: [32 + %02u]",
 					},
 				],
 			},
