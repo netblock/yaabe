@@ -1,438 +1,450 @@
-/*
- * Copyright 2016 Advanced Micro Devices, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- */
+// consider linux/drivers/gpu/drm/amd/include/pptable.h
+
 #ifndef _VEGA10_PPTABLE_H_
 #define _VEGA10_PPTABLE_H_
 
 #pragma pack(push, 1)
+#define ATOM_Vega10_TABLE_REVISION_VEGA10 8
 
-#define ATOM_VEGA10_PP_FANPARAMETERS_TACHOMETER_PULSES_PER_REVOLUTION_MASK 0x0f
-#define ATOM_VEGA10_PP_FANPARAMETERS_NOFAN                                 0x80
+#define ATOM_VEGA10_PP_THERMALCONTROLLER_NONE    0
+#define ATOM_VEGA10_PP_THERMALCONTROLLER_LM96163 17
+#define ATOM_VEGA10_PP_THERMALCONTROLLER_VEGA10  24
+#define ATOM_VEGA10_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89
+#define ATOM_VEGA10_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D
 
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_NONE      0
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_LM96163   17
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_VEGA10    24
+union atom_pp_fanparameters {
+	uint8_t  FanParameters;
+	struct { uint8_t
+		tachometer_pulses_per_revolution :3-0 +1,
+		rsvd                             :6-4 +1,
+		no_fan                           :7-7 +1;
+	};
+};
 
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL   0x89
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL   0x8D
+union vega10_powerplay_platform_caps {
+	uint32_t platform_caps;
+	struct { uint32_t
+		powerplay                       :0-0 +1, // whether CCC needs to show Powerplay page.
+		sbios_powersource               :1-1 +1, // whether power source notificaiton is done by SBIOS instead of OS.
+		hardware_dc                     :2-2 +1, // whether DC mode notificaiton is done by GPIO pin directly.
+		BACO                            :3-3 +1, // whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.
+		combine_pcc_with_thermal_signal :4-4 +1,
+		reserved                       :31-5 +1;
+	};
+};
 
-#define ATOM_VEGA10_PP_PLATFORM_CAP_POWERPLAY                   0x1
-#define ATOM_VEGA10_PP_PLATFORM_CAP_SBIOSPOWERSOURCE            0x2
-#define ATOM_VEGA10_PP_PLATFORM_CAP_HARDWAREDC                  0x4
-#define ATOM_VEGA10_PP_PLATFORM_CAP_BACO                        0x8
-#define ATOM_VEGA10_PP_PLATFORM_COMBINE_PCC_WITH_THERMAL_SIGNAL 0x10
+enum atom_pplib_classification_ui:uint16_t {
+	ATOM_PPLIB_CLASSIFICATION_UI_NONE         = 0,
+	ATOM_PPLIB_CLASSIFICATION_UI_BATTERY      = 1,
+	ATOM_PPLIB_CLASSIFICATION_UI_BALANCED     = 3,
+	ATOM_PPLIB_CLASSIFICATION_UI_PERFORMANCE  = 5,
+};
+union atom_pplib_classification {
+	uint16_t Classification;
+	struct { uint16_t
+		ui_label           :2-0 +1, // enum atom_pplib_classification_ui
+		boot               :3-3 +1,
+		thermal            :4-4 +1,
+		limited_power      :5-5 +1,
+		reset              :6-6 +1,
+		forced             :7-7 +1,
+		performance_3D     :8-8 +1,
+		overdrive_template :9-9 +1,
+		uvd_state         :10-10 +1,
+		low_3D            :11-11 +1,
+		acpi              :12-12 +1,
+		hd2_state         :13-13 +1,
+		hd_state          :14-14 +1,
+		sd_state          :15-15 +1;
+	};
+};
+
+union atom_pplib_classification {
+	uint16_t Classification;
+	struct { uint16_t
+		limitedpowersource_2 :0-0 +1
+		ULV                  :1-1 +1,
+		multi_view_codec     :2-2 +1, // BD-3D
+		rsvd0               :15-3 +1;
+	};
+};
+
+union atom_pplib_caps_and_settings {
+	uint32_t CapsAndSettings;
+	struct { uint32_t
+		single_display_only     :0-0 +1,
+		supports_video_playback :1-1 +1,
+		pcie_link_speed         :2-2 +1, // 0=PCIe1, 1=PCIe2
+		pcie_link_width         :7-3 +1,
+		limited_refreshrate    :11-8 +1, // 1=50Hz, all else = TBD
+		disable_loadbalancing  :12-12 +1, // software side
+		enable_timestamp_sleep :13-13 +1,
+		disallow_on_dc         :14-14 +1,
+		enable_varibright      :15-15 +1,
+		swstate_memory_dll_off :16-16 +1,
+		m3_arb                 :18-17 +1,
+		enable_drr             :19-19 +1,
+		rsvd0                  :31-20 +1;
+	};
+};
+
+enum atom_vega10_voltagemode:uint8_t {
+	ATOM_VEGA10_VOLTAGEMODE_AVFS_INTERPOLATE = 0,
+	ATOM_VEGA10_VOLTAGEMODE_AVFS_WORSTCASE   = 1,
+	ATOM_VEGA10_VOLTAGEMODE_STATIC           = 2,
+}
+
+struct atom_vega10_powerplaytable {
+	struct atom_common_table_header header;
+	uint8_t  TableRevision;
+	uint16_t TableSize;        // the size of header structure 
+	uint32_t GoldenPPID;       // PPGen use only 
+	uint32_t GoldenRevision;   // PPGen use only 
+	uint16_t FormatID;         // PPGen use only 
+	union vega10_powerplay_platform_caps PlatformCaps;
+	uint32_t MaxODEngineClock; // For Overdrive. 
+	uint32_t MaxODMemoryClock; // For Overdrive. 
+	uint16_t PowerControlLimit;
+	uint16_t UlvVoltageOffset; // in mv units 
+	uint16_t UlvSmnclkDid;
+	uint16_t UlvMp1clkDid;
+	uint16_t UlvGfxclkBypass;
+	uint16_t GfxclkSlewRate;
+	enum atom_vega10_voltagemode  GfxVoltageMode;
+	enum atom_vega10_voltagemode  SocVoltageMode;
+	enum atom_vega10_voltagemode  UclkVoltageMode;
+	enum atom_vega10_voltagemode  UvdVoltageMode;
+	enum atom_vega10_voltagemode  VceVoltageMode;
+	enum atom_vega10_voltagemode  Mp0VoltageMode;
+	enum atom_vega10_voltagemode  DcefVoltageMode;
+	uint16_t StateArrayOffset;
+	uint16_t FanTableOffset;
+	uint16_t ThermalControllerOffset;
+	uint16_t SocclkDependencyTableOffset;
+	uint16_t MclkDependencyTableOffset;
+	uint16_t GfxclkDependencyTableOffset;
+	uint16_t DcefclkDependencyTableOffset;
+	uint16_t VddcLookupTableOffset;
+	uint16_t VddmemLookupTableOffset;
+	uint16_t MMDependencyTableOffset;
+	uint16_t VCEStateTableOffset;
+	uint16_t Reserve; // No PPM Support for Vega10 
+	uint16_t PowerTuneTableOffset;
+	uint16_t HardLimitTableOffset;
+	uint16_t VddciLookupTableOffset;
+	uint16_t PCIETableOffset;
+	uint16_t PixclkDependencyTableOffset;
+	uint16_t DispClkDependencyTableOffset;
+	uint16_t PhyClkDependencyTableOffset;
+};
+
+struct atom_vega10_state {
+	uint8_t  SocClockIndexHigh;
+	uint8_t  SocClockIndexLow;
+	uint8_t  GfxClockIndexHigh;
+	uint8_t  GfxClockIndexLow;
+	uint8_t  MemClockIndexHigh;
+	uint8_t  MemClockIndexLow;
+	union atom_pplib_classification    Classification;
+	union atom_pplib_caps_and_settings CapsAndSettings;
+	union atom_pplib_classification2   Classification2;
+};
+
+struct atom_vega10_state_array {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_state  states[1];
+};
+
+struct atom_vega10_clk_dependency_record {
+	uint32_t Clk;    // Frequency of Clock 
+	uint8_t  VddInd; // Base voltage ; SOC_VDD index
+};
 
 
-/* ATOM_PPLIB_NONCLOCK_INFO::usClassification */
-#define ATOM_PPLIB_CLASSIFICATION_UI_MASK               0x0007
-#define ATOM_PPLIB_CLASSIFICATION_UI_SHIFT              0
-#define ATOM_PPLIB_CLASSIFICATION_UI_NONE               0
-#define ATOM_PPLIB_CLASSIFICATION_UI_BATTERY            1
-#define ATOM_PPLIB_CLASSIFICATION_UI_BALANCED           3
-#define ATOM_PPLIB_CLASSIFICATION_UI_PERFORMANCE        5
-/* 2, 4, 6, 7 are reserved */
+union clock_stretch_config {
+	uint16_t CKSVOffsetandDisable;
+	struct { uint16_t
+		cks_voltage_offset :14-0 +1,
+		disable            :15-15 +1;
+	};
+};
+struct atom_vega10_gfxclk_dependency_record {
+	struct atom_vega10_clk_dependency_record  base;
+	union clock_stretch_config  CKSVOffsetandDisable;
+	uint16_t AVFSOffset; // AVFS Voltage offset 
+};
+struct atom_vega10_gfxclk_dependency_record_v2 {
+	struct atom_vega10_clk_dependency_record  base;
+	union clock_stretch_config  CKSVOffsetandDisable;
+	uint16_t AVFSOffset;
+	uint8_t  ACGEnable;
+	uint8_t  Reserved[3];
+};
+struct atom_vega10_gfxclk_dependency_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_gfxclk_dependency_record  entries[1];
+};
 
-#define ATOM_PPLIB_CLASSIFICATION_BOOT                  0x0008
-#define ATOM_PPLIB_CLASSIFICATION_THERMAL               0x0010
-#define ATOM_PPLIB_CLASSIFICATION_LIMITEDPOWERSOURCE    0x0020
-#define ATOM_PPLIB_CLASSIFICATION_REST                  0x0040
-#define ATOM_PPLIB_CLASSIFICATION_FORCED                0x0080
-#define ATOM_PPLIB_CLASSIFICATION_ACPI                  0x1000
+struct atom_vega10_mclk_dependency_record {
+	struct atom_vega10_clk_dependency_record  base;
+	uint8_t  VddMemInd; // MEM_VDD - only non zero for MCLK record 
+	uint8_t  VddciInd;  // VDDCI   = only non zero for MCLK record 
+};
+struct atom_vega10_mclk_dependency_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_mclk_dependency_record  entries[1];
+};
 
-/* ATOM_PPLIB_NONCLOCK_INFO::usClassification2 */
-#define ATOM_PPLIB_CLASSIFICATION2_LIMITEDPOWERSOURCE_2 0x0001
 
-#define ATOM_Vega10_DISALLOW_ON_DC                   0x00004000
-#define ATOM_Vega10_ENABLE_VARIBRIGHT                0x00008000
 
-#define ATOM_Vega10_TABLE_REVISION_VEGA10         8
+struct atom_vega10_clk_dependency_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_clk_dependency_record  entries[1];
+};
 
-#define ATOM_Vega10_VoltageMode_AVFS_Interpolate     0
-#define ATOM_Vega10_VoltageMode_AVFS_WorstCase       1
-#define ATOM_Vega10_VoltageMode_Static               2
+struct atom_vega10_mm_dependency_record {
+	uint8_t  VddcInd; // SOC_VDD voltage 
+	uint32_t DClk;    // UVD D-clock 
+	uint32_t VClk;    // UVD V-clock 
+	uint32_t EClk;    // VCE clock 
+	uint32_t PSPClk;  // PSP clock 
+};
 
-typedef struct _ATOM_Vega10_POWERPLAYTABLE {
-	struct atom_common_table_header sHeader;
-	UCHAR  ucTableRevision;
-	USHORT usTableSize;                        /* the size of header structure */
-	ULONG  ulGoldenPPID;                       /* PPGen use only */
-	ULONG  ulGoldenRevision;                   /* PPGen use only */
-	USHORT usFormatID;                         /* PPGen use only */
-	ULONG  ulPlatformCaps;                     /* See ATOM_Vega10_CAPS_* */
-	ULONG  ulMaxODEngineClock;                 /* For Overdrive. */
-	ULONG  ulMaxODMemoryClock;                 /* For Overdrive. */
-	USHORT usPowerControlLimit;
-	USHORT usUlvVoltageOffset;                 /* in mv units */
-	USHORT usUlvSmnclkDid;
-	USHORT usUlvMp1clkDid;
-	USHORT usUlvGfxclkBypass;
-	USHORT usGfxclkSlewRate;
-	UCHAR  ucGfxVoltageMode;
-	UCHAR  ucSocVoltageMode;
-	UCHAR  ucUclkVoltageMode;
-	UCHAR  ucUvdVoltageMode;
-	UCHAR  ucVceVoltageMode;
-	UCHAR  ucMp0VoltageMode;
-	UCHAR  ucDcefVoltageMode;
-	USHORT usStateArrayOffset;                 /* points to ATOM_Vega10_State_Array */
-	USHORT usFanTableOffset;                   /* points to ATOM_Vega10_Fan_Table */
-	USHORT usThermalControllerOffset;          /* points to ATOM_Vega10_Thermal_Controller */
-	USHORT usSocclkDependencyTableOffset;      /* points to ATOM_Vega10_SOCCLK_Dependency_Table */
-	USHORT usMclkDependencyTableOffset;        /* points to ATOM_Vega10_MCLK_Dependency_Table */
-	USHORT usGfxclkDependencyTableOffset;      /* points to ATOM_Vega10_GFXCLK_Dependency_Table */
-	USHORT usDcefclkDependencyTableOffset;     /* points to ATOM_Vega10_DCEFCLK_Dependency_Table */
-	USHORT usVddcLookupTableOffset;            /* points to ATOM_Vega10_Voltage_Lookup_Table */
-	USHORT usVddmemLookupTableOffset;          /* points to ATOM_Vega10_Voltage_Lookup_Table */
-	USHORT usMMDependencyTableOffset;          /* points to ATOM_Vega10_MM_Dependency_Table */
-	USHORT usVCEStateTableOffset;              /* points to ATOM_Vega10_VCE_State_Table */
-	USHORT usReserve;                          /* No PPM Support for Vega10 */
-	USHORT usPowerTuneTableOffset;             /* points to ATOM_Vega10_PowerTune_Table */
-	USHORT usHardLimitTableOffset;             /* points to ATOM_Vega10_Hard_Limit_Table */
-	USHORT usVddciLookupTableOffset;           /* points to ATOM_Vega10_Voltage_Lookup_Table */
-	USHORT usPCIETableOffset;                  /* points to ATOM_Vega10_PCIE_Table */
-	USHORT usPixclkDependencyTableOffset;      /* points to ATOM_Vega10_PIXCLK_Dependency_Table */
-	USHORT usDispClkDependencyTableOffset;     /* points to ATOM_Vega10_DISPCLK_Dependency_Table */
-	USHORT usPhyClkDependencyTableOffset;      /* points to ATOM_Vega10_PHYCLK_Dependency_Table */
-} ATOM_Vega10_POWERPLAYTABLE;
+struct atom_vega10_mm_dependency_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_mm_dependency_record  entries[1];
+};
 
-typedef struct _ATOM_Vega10_State {
-	UCHAR  ucSocClockIndexHigh;
-	UCHAR  ucSocClockIndexLow;
-	UCHAR  ucGfxClockIndexHigh;
-	UCHAR  ucGfxClockIndexLow;
-	UCHAR  ucMemClockIndexHigh;
-	UCHAR  ucMemClockIndexLow;
-	USHORT usClassification;
-	ULONG  ulCapsAndSettings;
-	USHORT usClassification2;
-} ATOM_Vega10_State;
+struct atom_vega10_pcie_record {
+	uint32_t LCLK;          // LClock 
+	uint8_t  PCIEGenSpeed;  // PCIE Speed 
+	uint8_t  PCIELaneWidth; // PCIE Lane Width 
+};
 
-typedef struct _ATOM_Vega10_State_Array {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                         /* Number of entries. */
-	ATOM_Vega10_State states[];                             /* Dynamically allocate entries. */
-} ATOM_Vega10_State_Array;
+struct atom_vega10_pcie_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_pcie_record  entries[1];
+};
 
-typedef struct _ATOM_Vega10_CLK_Dependency_Record {
-	ULONG  ulClk;                                               /* Frequency of Clock */
-	UCHAR  ucVddInd;                                            /* Base voltage */
-} ATOM_Vega10_CLK_Dependency_Record;
+struct atom_vega10_voltage_lookup_record {
+	uint16_t Vdd; // Base voltage 
+};
 
-typedef struct _ATOM_Vega10_GFXCLK_Dependency_Record {
-	ULONG  ulClk;                                               /* Clock Frequency */
-	UCHAR  ucVddInd;                                            /* SOC_VDD index */
-	USHORT usCKSVOffsetandDisable;                              /* Bits 0~30: Voltage offset for CKS, Bit 31: Disable/enable for the GFXCLK level. */
-	USHORT usAVFSOffset;                                        /* AVFS Voltage offset */
-} ATOM_Vega10_GFXCLK_Dependency_Record;
+struct atom_vega10_voltage_lookup_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_voltage_lookup_record  entries[1];
+};
 
-typedef struct _ATOM_Vega10_GFXCLK_Dependency_Record_V2 {
-	ULONG  ulClk;
-	UCHAR  ucVddInd;
-	USHORT usCKSVOffsetandDisable;
-	USHORT usAVFSOffset;
-	UCHAR  ucACGEnable;
-	UCHAR  ucReserved[3];
-} ATOM_Vega10_GFXCLK_Dependency_Record_V2;
+union atom_vega10_fan_table_tables {
+	uint8_t  RevId;
+	struct atom_vega10_fan_table_table_v1 v1;
+	struct atom_vega10_fan_table_table_v2 v2;
+	struct atom_vega10_fan_table_table_v3 v3;
+};
+struct atom_vega10_fan_table_v1 {
+	uint8_t  RevId;                // Change this if the table format changes or version changes so that the other fields are not the same. 
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
+	uint16_t FanRPMMax;            // The default value in RPM. 
+	uint16_t ThrottlingRPM;
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
+	uint16_t FanGainEdge;
+	uint16_t FanGainHotspot;
+	uint16_t FanGainLiquid;
+	uint16_t FanGainVrVddc;
+	uint16_t FanGainVrMvdd;
+	uint16_t FanGainPlx;
+	uint16_t FanGainHbm;
+	uint8_t  EnableZeroRPM;
+	uint16_t FanStopTemperature;
+	uint16_t FanStartTemperature;
+};
+struct atom_vega10_fan_table_v2 {
+	uint8_t  RevId;
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
+	uint16_t ThrottlingRPM;
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
 
-typedef struct _ATOM_Vega10_MCLK_Dependency_Record {
-	ULONG  ulMemClk;                                            /* Clock Frequency */
-	UCHAR  ucVddInd;                                            /* SOC_VDD index */
-	UCHAR  ucVddMemInd;                                         /* MEM_VDD - only non zero for MCLK record */
-	UCHAR  ucVddciInd;                                          /* VDDCI   = only non zero for MCLK record */
-} ATOM_Vega10_MCLK_Dependency_Record;
+	uint16_t FanGainEdge;
+	uint16_t FanGainHotspot;
+	uint16_t FanGainLiquid;
+	uint16_t FanGainVrVddc;
+	uint16_t FanGainVrMvdd;
+	uint16_t FanGainPlx;
+	uint16_t FanGainHbm;
+	uint8_t  EnableZeroRPM;
+	uint16_t FanStopTemperature;
+	uint16_t FanStartTemperature;
+	union atom_pp_fanparameters  FanParameters;
+	uint8_t  FanMinRPM;
+	uint8_t  FanMaxRPM;
+};
+struct atom_vega10_fan_table_v3 {
+	uint8_t  RevId;
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
+	uint16_t ThrottlingRPM;
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
+	uint16_t FanGainEdge;
+	uint16_t FanGainHotspot;
+	uint16_t FanGainLiquid;
+	uint16_t FanGainVrVddc;
+	uint16_t FanGainVrMvdd;
+	uint16_t FanGainPlx;
+	uint16_t FanGainHbm;
+	uint8_t  EnableZeroRPM;
+	uint16_t FanStopTemperature;
+	uint16_t FanStartTemperature;
+	union atom_pp_fanparameters  FanParameters;
+	uint8_t  FanMinRPM;
+	uint8_t  FanMaxRPM;
+	uint16_t MGpuThrottlingRPM;
+};
 
-typedef struct _ATOM_Vega10_GFXCLK_Dependency_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;					/* Number of entries. */
-	ATOM_Vega10_GFXCLK_Dependency_Record entries[];		/* Dynamically allocate entries. */
-} ATOM_Vega10_GFXCLK_Dependency_Table;
+struct atom_vega10_thermal_controller {
+	uint8_t  RevId;
+	uint8_t  Type;    // one of 
+	uint8_t  I2cLine; // as interpreted by DAL I2C 
+	uint8_t  I2cAddress;
+	union atom_pp_fanparameters  FanParameters;
+	uint8_t  FanMinRPM; // Fan Minimum RPM (hundreds) -- for display purposes only.
+	uint8_t  FanMaxRPM; // Fan Maximum RPM (hundreds) -- for display purposes only.
+	uint8_t  Flags;     // to be defined 
+};
 
-typedef struct _ATOM_Vega10_MCLK_Dependency_Table {
-    UCHAR ucRevId;
-    UCHAR ucNumEntries;                                         /* Number of entries. */
-    ATOM_Vega10_MCLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_MCLK_Dependency_Table;
+struct atom_vega10_vce_state_record {
+	uint8_t  VCEClockIndex; // index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type 
+	uint8_t  Flag;          // 2 bits indicates memory p-states 
+	uint8_t  SCLKIndex;     // index into ATOM_Vega10_SCLK_Dependency_Table 
+	uint8_t  MCLKIndex;     // index into ATOM_Vega10_MCLK_Dependency_Table 
+};
+struct atom_vega10_vce_state_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_vce_state_record  entries[1];
+};
 
-typedef struct _ATOM_Vega10_SOCCLK_Dependency_Table {
-    UCHAR ucRevId;
-    UCHAR ucNumEntries;                                         /* Number of entries. */
-    ATOM_Vega10_CLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_SOCCLK_Dependency_Table;
+union atom_vega10_powertune_tables {
+	uint8_t  RevId;
+	struct atom_vega10_powertune_table_v1 v1;
+	struct atom_vega10_powertune_table_v2 v2;
+	struct atom_vega10_powertune_table_v3 v3;
 
-typedef struct _ATOM_Vega10_DCEFCLK_Dependency_Table {
-    UCHAR ucRevId;
-    UCHAR ucNumEntries;                                         /* Number of entries. */
-    ATOM_Vega10_CLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_DCEFCLK_Dependency_Table;
+struct atom_vega10_powertune_table_v1 {
+	uint8_t  RevId;
+	uint16_t SocketPowerLimit;
+	uint16_t BatteryPowerLimit;
+	uint16_t SmallPowerLimit;
+	uint16_t TdcLimit;
+	uint16_t EdcLimit;
+	uint16_t SoftwareShutdownTemp;
+	uint16_t TemperatureLimitHotSpot;
+	uint16_t TemperatureLimitLiquid1;
+	uint16_t TemperatureLimitLiquid2;
+	uint16_t TemperatureLimitHBM;
+	uint16_t TemperatureLimitVrSoc;
+	uint16_t TemperatureLimitVrMem;
+	uint16_t TemperatureLimitPlx;
+	uint16_t LoadLineResistance;
+	uint8_t  Liquid1_I2C_address;
+	uint8_t  Liquid2_I2C_address;
+	uint8_t  Vr_I2C_address;
+	uint8_t  Plx_I2C_address;
+	uint8_t  Liquid_I2C_LineSCL;
+	uint8_t  Liquid_I2C_LineSDA;
+	uint8_t  Vr_I2C_LineSCL;
+	uint8_t  Vr_I2C_LineSDA;
+	uint8_t  Plx_I2C_LineSCL;
+	uint8_t  Plx_I2C_LineSDA;
+	uint16_t TemperatureLimitTedge;
+};
+struct atom_vega10_powertune_table_v2 {
+	uint8_t  RevId;
+	uint16_t SocketPowerLimit;
+	uint16_t BatteryPowerLimit;
+	uint16_t SmallPowerLimit;
+	uint16_t TdcLimit;
+	uint16_t EdcLimit;
+	uint16_t SoftwareShutdownTemp;
+	uint16_t TemperatureLimitHotSpot;
+	uint16_t TemperatureLimitLiquid1;
+	uint16_t TemperatureLimitLiquid2;
+	uint16_t TemperatureLimitHBM;
+	uint16_t TemperatureLimitVrSoc;
+	uint16_t TemperatureLimitVrMem;
+	uint16_t TemperatureLimitPlx;
+	uint16_t LoadLineResistance;
+	uint8_t  Liquid1_I2C_address;
+	uint8_t  Liquid2_I2C_address;
+	uint8_t  Liquid_I2C_Line;
+	uint8_t  Vr_I2C_address;
+	uint8_t  Vr_I2C_Line;
+	uint8_t  Plx_I2C_address;
+	uint8_t  Plx_I2C_Line;
+	uint16_t TemperatureLimitTedge;
+};
+struct atom_vega10_powertune_table_v3 {
+	uint8_t  RevId;
+	uint16_t SocketPowerLimit;
+	uint16_t BatteryPowerLimit;
+	uint16_t SmallPowerLimit;
+	uint16_t TdcLimit;
+	uint16_t EdcLimit;
+	uint16_t SoftwareShutdownTemp;
+	uint16_t TemperatureLimitHotSpot;
+	uint16_t TemperatureLimitLiquid1;
+	uint16_t TemperatureLimitLiquid2;
+	uint16_t TemperatureLimitHBM;
+	uint16_t TemperatureLimitVrSoc;
+	uint16_t TemperatureLimitVrMem;
+	uint16_t TemperatureLimitPlx;
+	uint16_t LoadLineResistance;
+	uint8_t  Liquid1_I2C_address;
+	uint8_t  Liquid2_I2C_address;
+	uint8_t  Liquid_I2C_Line;
+	uint8_t  Vr_I2C_address;
+	uint8_t  Vr_I2C_Line;
+	uint8_t  Plx_I2C_address;
+	uint8_t  Plx_I2C_Line;
+	uint16_t TemperatureLimitTedge;
+	uint16_t BoostStartTemperature;
+	uint16_t BoostStopTemperature;
+	uint32_t BoostClock;
+	uint32_t Reserved[2];
+};
 
-typedef struct _ATOM_Vega10_PIXCLK_Dependency_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                         /* Number of entries. */
-	ATOM_Vega10_CLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_PIXCLK_Dependency_Table;
+struct atom_vega10_hard_limit_record {
+	uint32_t SOCCLKLimit;
+	uint32_t GFXCLKLimit;
+	uint32_t MCLKLimit;
+	uint16_t VddcLimit;
+	uint16_t VddciLimit;
+	uint16_t VddMemLimit;
+};
 
-typedef struct _ATOM_Vega10_DISPCLK_Dependency_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                         /* Number of entries.*/
-	ATOM_Vega10_CLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_DISPCLK_Dependency_Table;
+struct atom_vega10_hard_limit_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_hard_limit_record  entries[1];
+};
 
-typedef struct _ATOM_Vega10_PHYCLK_Dependency_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                         /* Number of entries. */
-	ATOM_Vega10_CLK_Dependency_Record entries[];            /* Dynamically allocate entries. */
-} ATOM_Vega10_PHYCLK_Dependency_Table;
-
-typedef struct _ATOM_Vega10_MM_Dependency_Record {
-    UCHAR  ucVddcInd;                                           /* SOC_VDD voltage */
-    ULONG  ulDClk;                                              /* UVD D-clock */
-    ULONG  ulVClk;                                              /* UVD V-clock */
-    ULONG  ulEClk;                                              /* VCE clock */
-    ULONG  ulPSPClk;                                            /* PSP clock */
-} ATOM_Vega10_MM_Dependency_Record;
-
-typedef struct _ATOM_Vega10_MM_Dependency_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                         /* Number of entries */
-	ATOM_Vega10_MM_Dependency_Record entries[];             /* Dynamically allocate entries */
-} ATOM_Vega10_MM_Dependency_Table;
-
-typedef struct _ATOM_Vega10_PCIE_Record {
-	ULONG ulLCLK;                                               /* LClock */
-	UCHAR ucPCIEGenSpeed;                                       /* PCIE Speed */
-	UCHAR ucPCIELaneWidth;                                      /* PCIE Lane Width */
-} ATOM_Vega10_PCIE_Record;
-
-typedef struct _ATOM_Vega10_PCIE_Table {
-	UCHAR  ucRevId;
-	UCHAR  ucNumEntries;                                        /* Number of entries */
-	ATOM_Vega10_PCIE_Record entries[];                      /* Dynamically allocate entries. */
-} ATOM_Vega10_PCIE_Table;
-
-typedef struct _ATOM_Vega10_Voltage_Lookup_Record {
-	USHORT usVdd;                                               /* Base voltage */
-} ATOM_Vega10_Voltage_Lookup_Record;
-
-typedef struct _ATOM_Vega10_Voltage_Lookup_Table {
-	UCHAR ucRevId;
-	UCHAR ucNumEntries;                                          /* Number of entries */
-	ATOM_Vega10_Voltage_Lookup_Record entries[];             /* Dynamically allocate entries */
-} ATOM_Vega10_Voltage_Lookup_Table;
-
-typedef struct _ATOM_Vega10_Fan_Table {
-	UCHAR   ucRevId;                         /* Change this if the table format changes or version changes so that the other fields are not the same. */
-	USHORT  usFanOutputSensitivity;          /* Sensitivity of fan reaction to temepature changes. */
-	USHORT  usFanRPMMax;                     /* The default value in RPM. */
-	USHORT  usThrottlingRPM;
-	USHORT  usFanAcousticLimit;              /* Minimum Fan Controller Frequency Acoustic Limit. */
-	USHORT  usTargetTemperature;             /* The default ideal temperature in Celcius. */
-	USHORT  usMinimumPWMLimit;               /* The minimum PWM that the advanced fan controller can set. */
-	USHORT  usTargetGfxClk;                   /* The ideal Fan Controller GFXCLK Frequency Acoustic Limit. */
-	USHORT  usFanGainEdge;
-	USHORT  usFanGainHotspot;
-	USHORT  usFanGainLiquid;
-	USHORT  usFanGainVrVddc;
-	USHORT  usFanGainVrMvdd;
-	USHORT  usFanGainPlx;
-	USHORT  usFanGainHbm;
-	UCHAR   ucEnableZeroRPM;
-	USHORT  usFanStopTemperature;
-	USHORT  usFanStartTemperature;
-} ATOM_Vega10_Fan_Table;
-
-typedef struct _ATOM_Vega10_Fan_Table_V2 {
-	UCHAR   ucRevId;
-	USHORT  usFanOutputSensitivity;
-	USHORT  usFanAcousticLimitRpm;
-	USHORT  usThrottlingRPM;
-	USHORT  usTargetTemperature;
-	USHORT  usMinimumPWMLimit;
-	USHORT  usTargetGfxClk;
-	USHORT  usFanGainEdge;
-	USHORT  usFanGainHotspot;
-	USHORT  usFanGainLiquid;
-	USHORT  usFanGainVrVddc;
-	USHORT  usFanGainVrMvdd;
-	USHORT  usFanGainPlx;
-	USHORT  usFanGainHbm;
-	UCHAR   ucEnableZeroRPM;
-	USHORT  usFanStopTemperature;
-	USHORT  usFanStartTemperature;
-	UCHAR   ucFanParameters;
-	UCHAR   ucFanMinRPM;
-	UCHAR   ucFanMaxRPM;
-} ATOM_Vega10_Fan_Table_V2;
-
-typedef struct _ATOM_Vega10_Fan_Table_V3 {
-	UCHAR   ucRevId;
-	USHORT  usFanOutputSensitivity;
-	USHORT  usFanAcousticLimitRpm;
-	USHORT  usThrottlingRPM;
-	USHORT  usTargetTemperature;
-	USHORT  usMinimumPWMLimit;
-	USHORT  usTargetGfxClk;
-	USHORT  usFanGainEdge;
-	USHORT  usFanGainHotspot;
-	USHORT  usFanGainLiquid;
-	USHORT  usFanGainVrVddc;
-	USHORT  usFanGainVrMvdd;
-	USHORT  usFanGainPlx;
-	USHORT  usFanGainHbm;
-	UCHAR   ucEnableZeroRPM;
-	USHORT  usFanStopTemperature;
-	USHORT  usFanStartTemperature;
-	UCHAR   ucFanParameters;
-	UCHAR   ucFanMinRPM;
-	UCHAR   ucFanMaxRPM;
-	USHORT  usMGpuThrottlingRPM;
-} ATOM_Vega10_Fan_Table_V3;
-
-typedef struct _ATOM_Vega10_Thermal_Controller {
-	UCHAR ucRevId;
-	UCHAR ucType;           /* one of ATOM_VEGA10_PP_THERMALCONTROLLER_*/
-	UCHAR ucI2cLine;        /* as interpreted by DAL I2C */
-	UCHAR ucI2cAddress;
-	UCHAR ucFanParameters;  /* Fan Control Parameters. */
-	UCHAR ucFanMinRPM;      /* Fan Minimum RPM (hundreds) -- for display purposes only.*/
-	UCHAR ucFanMaxRPM;      /* Fan Maximum RPM (hundreds) -- for display purposes only.*/
-    UCHAR ucFlags;          /* to be defined */
-} ATOM_Vega10_Thermal_Controller;
-
-typedef struct _ATOM_Vega10_VCE_State_Record {
-    UCHAR  ucVCEClockIndex;         /*index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type */
-    UCHAR  ucFlag;                  /* 2 bits indicates memory p-states */
-    UCHAR  ucSCLKIndex;             /* index into ATOM_Vega10_SCLK_Dependency_Table */
-    UCHAR  ucMCLKIndex;             /* index into ATOM_Vega10_MCLK_Dependency_Table */
-} ATOM_Vega10_VCE_State_Record;
-
-typedef struct _ATOM_Vega10_VCE_State_Table {
-    UCHAR ucRevId;
-    UCHAR ucNumEntries;
-    ATOM_Vega10_VCE_State_Record entries[];
-} ATOM_Vega10_VCE_State_Table;
-
-typedef struct _ATOM_Vega10_PowerTune_Table {
-	UCHAR  ucRevId;
-	USHORT usSocketPowerLimit;
-	USHORT usBatteryPowerLimit;
-	USHORT usSmallPowerLimit;
-	USHORT usTdcLimit;
-	USHORT usEdcLimit;
-	USHORT usSoftwareShutdownTemp;
-	USHORT usTemperatureLimitHotSpot;
-	USHORT usTemperatureLimitLiquid1;
-	USHORT usTemperatureLimitLiquid2;
-	USHORT usTemperatureLimitHBM;
-	USHORT usTemperatureLimitVrSoc;
-	USHORT usTemperatureLimitVrMem;
-	USHORT usTemperatureLimitPlx;
-	USHORT usLoadLineResistance;
-	UCHAR  ucLiquid1_I2C_address;
-	UCHAR  ucLiquid2_I2C_address;
-	UCHAR  ucVr_I2C_address;
-	UCHAR  ucPlx_I2C_address;
-	UCHAR  ucLiquid_I2C_LineSCL;
-	UCHAR  ucLiquid_I2C_LineSDA;
-	UCHAR  ucVr_I2C_LineSCL;
-	UCHAR  ucVr_I2C_LineSDA;
-	UCHAR  ucPlx_I2C_LineSCL;
-	UCHAR  ucPlx_I2C_LineSDA;
-	USHORT usTemperatureLimitTedge;
-} ATOM_Vega10_PowerTune_Table;
-
-typedef struct _ATOM_Vega10_PowerTune_Table_V2 {
-	UCHAR  ucRevId;
-	USHORT usSocketPowerLimit;
-	USHORT usBatteryPowerLimit;
-	USHORT usSmallPowerLimit;
-	USHORT usTdcLimit;
-	USHORT usEdcLimit;
-	USHORT usSoftwareShutdownTemp;
-	USHORT usTemperatureLimitHotSpot;
-	USHORT usTemperatureLimitLiquid1;
-	USHORT usTemperatureLimitLiquid2;
-	USHORT usTemperatureLimitHBM;
-	USHORT usTemperatureLimitVrSoc;
-	USHORT usTemperatureLimitVrMem;
-	USHORT usTemperatureLimitPlx;
-	USHORT usLoadLineResistance;
-	UCHAR ucLiquid1_I2C_address;
-	UCHAR ucLiquid2_I2C_address;
-	UCHAR ucLiquid_I2C_Line;
-	UCHAR ucVr_I2C_address;
-	UCHAR ucVr_I2C_Line;
-	UCHAR ucPlx_I2C_address;
-	UCHAR ucPlx_I2C_Line;
-	USHORT usTemperatureLimitTedge;
-} ATOM_Vega10_PowerTune_Table_V2;
-
-typedef struct _ATOM_Vega10_PowerTune_Table_V3 {
-	UCHAR  ucRevId;
-	USHORT usSocketPowerLimit;
-	USHORT usBatteryPowerLimit;
-	USHORT usSmallPowerLimit;
-	USHORT usTdcLimit;
-	USHORT usEdcLimit;
-	USHORT usSoftwareShutdownTemp;
-	USHORT usTemperatureLimitHotSpot;
-	USHORT usTemperatureLimitLiquid1;
-	USHORT usTemperatureLimitLiquid2;
-	USHORT usTemperatureLimitHBM;
-	USHORT usTemperatureLimitVrSoc;
-	USHORT usTemperatureLimitVrMem;
-	USHORT usTemperatureLimitPlx;
-	USHORT usLoadLineResistance;
-	UCHAR  ucLiquid1_I2C_address;
-	UCHAR  ucLiquid2_I2C_address;
-	UCHAR  ucLiquid_I2C_Line;
-	UCHAR  ucVr_I2C_address;
-	UCHAR  ucVr_I2C_Line;
-	UCHAR  ucPlx_I2C_address;
-	UCHAR  ucPlx_I2C_Line;
-	USHORT usTemperatureLimitTedge;
-	USHORT usBoostStartTemperature;
-	USHORT usBoostStopTemperature;
-	ULONG  ulBoostClock;
-	ULONG  Reserved[2];
-} ATOM_Vega10_PowerTune_Table_V3;
-
-typedef struct _ATOM_Vega10_Hard_Limit_Record {
-    ULONG  ulSOCCLKLimit;
-    ULONG  ulGFXCLKLimit;
-    ULONG  ulMCLKLimit;
-    USHORT usVddcLimit;
-    USHORT usVddciLimit;
-    USHORT usVddMemLimit;
-} ATOM_Vega10_Hard_Limit_Record;
-
-typedef struct _ATOM_Vega10_Hard_Limit_Table {
-    UCHAR ucRevId;
-    UCHAR ucNumEntries;
-    ATOM_Vega10_Hard_Limit_Record entries[];
-} ATOM_Vega10_Hard_Limit_Table;
-
-typedef struct _Vega10_PPTable_Generic_SubTable_Header {
-    UCHAR  ucRevId;
-} Vega10_PPTable_Generic_SubTable_Header;
+struct vega10_pptable_generic_subtable_header {
+	uint8_t  RevId;
+};
 
 #pragma pack(pop)
 
