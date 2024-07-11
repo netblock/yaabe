@@ -156,10 +156,11 @@ atomtree_load_from_gfile(
 		goto exit3;
 	}
 
-	atree = atombios_parse(bios, filesize, true);
+	atree = atombios_parse(bios, filesize);
 	if (atree == NULL) {
 		goto exit3;
 	}
+	generate_atui(atree);
 
 	atree->biosfile_size = filesize;
 	g_input_stream_close(readstream, NULL, &ferror);

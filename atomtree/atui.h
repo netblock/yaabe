@@ -194,6 +194,11 @@ struct _atui_branch {
 	// atom_common_table_header.structuresize
 };
 
+void
+generate_atui(
+		struct atom_tree* atree
+		);
+
 
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit

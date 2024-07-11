@@ -142,8 +142,7 @@ atomtree_bios_checksum(
 struct atom_tree*
 atombios_parse(
 		void* bios,
-		uint32_t alloc_size,
-		bool generate_atui
+		uint32_t alloc_size
 		);
 
 void

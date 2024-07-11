@@ -7790,9 +7790,9 @@ struct atom_memory_timing_format_v2 {
 union atom_memory_timing_format {
 	// move to v1 if v0.MR2 is non-0 and not DDR2/DDR3.
 	// move to v2 if v1.Terminator is not 0xFF.
-	struct atom_memory_timing_format_v0  v0;
-	struct atom_memory_timing_format_v1  v1;
-	struct atom_memory_timing_format_v2  v2;
+	struct atom_memory_timing_format_v0  v1_0;
+	struct atom_memory_timing_format_v1  v1_1;
+	struct atom_memory_timing_format_v2  v1_2;
 };
 
 
