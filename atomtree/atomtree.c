@@ -4,7 +4,7 @@
 #include "atui.h"
 
 inline static void
-atomtree_dt_populate_smc_dpm_info(
+populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -18,7 +18,7 @@ atomtree_dt_populate_smc_dpm_info(
 
 
 inline static void
-atomtree_dt_populate_firmwareinfo(
+populate_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -32,7 +32,7 @@ atomtree_dt_populate_firmwareinfo(
 
 
 inline static void
-atomtree_dt_populate_lcd_info(
+populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -45,7 +45,7 @@ atomtree_dt_populate_lcd_info(
 
 
 inline static void
-atomtree_dt_populate_smu_info(
+populate_smu_info(
 		struct atomtree_smu_info* const smu_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -106,7 +106,7 @@ atomtree_dt_populate_smu_info(
 
 
 inline static void
-atomtree_dt_populate_vram_usagebyfirmware(
+populate_vram_usagebyfirmware(
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset) {
@@ -119,7 +119,7 @@ atomtree_dt_populate_vram_usagebyfirmware(
 
 
 inline static void
-atomtree_dt_populate_gpio_pin_lut(
+populate_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -144,7 +144,7 @@ atomtree_dt_populate_gpio_pin_lut(
 
 
 inline static void
-atomtree_dt_populate_gfx_info(
+populate_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -218,12 +218,12 @@ inline static enum atomtree_common_version
 get_smc_pptable_ver(
 		uint32_t const pp_ver
 		) {
-	assert(pp_ver < (UINT16_MAX/100));
+	assert(pp_ver < (UINT16_MAX/100)); // enum atomtree_common_version
 	enum atomtree_common_version ver = pp_ver;
 	return ver * 100;
 }
 inline static void
-atomtree_dt_populate_ppt(
+populate_ppt(
 		struct atomtree_powerplay_table* const ppt,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -259,7 +259,7 @@ atomtree_dt_populate_ppt(
 }
 
 static void
-atomtree_populate_init_reg_block(
+populate_init_reg_block(
 		struct atomtree_init_reg_block* const at_regblock
 		) {
 	// MC inititialisation registers, for vram_info 2.2 and older
@@ -329,11 +329,11 @@ get_vram_type(
 }
 
 static void
-atomtree_populate_mem_adjust_table(
+populate_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
 		struct atomtree_vram_module const* const vram_modules
 		) {
-	atomtree_populate_init_reg_block(mem_adjust_table);
+	populate_init_reg_block(mem_adjust_table);
 	mem_adjust_table->reg_type = REG_BLOCK_MEM_ADJUST;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
@@ -432,11 +432,11 @@ atomtree_populate_mem_adjust_table(
 }
 
 static void
-atomtree_populate_mem_clk_patch(
+populate_mem_clk_patch(
 		struct atomtree_init_reg_block* const mem_clk_patch,
 		struct atomtree_vram_module const* const vram_modules
 		) {
-	atomtree_populate_init_reg_block(mem_clk_patch);
+	populate_init_reg_block(mem_clk_patch);
 	mem_clk_patch->reg_type = REG_BLOCK_MEM_CLK_PATCH;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
@@ -487,11 +487,11 @@ atomtree_populate_mem_clk_patch(
 }
 
 static void
-atomtree_populate_mc_tile_adjust(
+populate_mc_tile_adjust(
 		struct atomtree_init_reg_block* const mc_tile_adjust,
 		struct atomtree_vram_module const* const vram_modules
 		) {
-	atomtree_populate_init_reg_block(mc_tile_adjust);
+	populate_init_reg_block(mc_tile_adjust);
 	mc_tile_adjust->reg_type = REG_BLOCK_MC_TILE_ADJUST;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
@@ -529,11 +529,11 @@ atomtree_populate_mc_tile_adjust(
 }
 
 static void
-atomtree_populate_init_mc_phy_init(
+populate_init_mc_phy_init(
 		struct atomtree_init_reg_block* const mc_phy_init,
 		struct atomtree_vram_module const* const vram_modules
 		) {
-	atomtree_populate_init_reg_block(mc_phy_init);
+	populate_init_reg_block(mc_phy_init);
 	mc_phy_init->reg_type = REG_BLOCK_MC_PHY_INIT;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
@@ -601,7 +601,7 @@ atomtree_populate_init_mc_phy_init(
 
 
 static void
-atomtree_populate_umc_init_reg_block(
+populate_umc_init_reg_block(
 		struct atomtree_umc_init_reg_block* const at_regblock
 		) {
 	// UMC inititialisation registers, for vram_info 2.3 and newer
@@ -662,117 +662,43 @@ atomtree_populate_umc_init_reg_block(
 
 
 inline static void
-atomtree_populate_atom_memory_timing_format(
+populate_atom_memory_timing_format(
 		struct atomtree_vram_module* const vram_module,
 		enum atom_dgpu_vram_type const memory_type,
-		union atom_memory_timing_format const* const timing_format_start,
+		union atom_memory_timing_format const* const timings,
 		uint16_t const straps_total_size
 		) {
-	union {
-		void const* raw;
-		struct atom_memory_timing_format_v0 const* v1_0;
-		struct atom_memory_timing_format_v1 const* v1_1;
-		struct atom_memory_timing_format_v2 const* v1_2;
-	} strap;
-	strap.raw = timing_format_start;
-
 	uint8_t table_size;
 	if ((memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5)
 			|| (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5_2)
 			) {
-		if (0xFF == strap.v1_1->Terminator) {
+		if (0xFF == timings->v1_1.Terminator) {
 			vram_module->memory_timing_format_ver = v1_1;
-			table_size = sizeof(*strap.v1_1);
+			table_size = sizeof(timings->v1_1);
 		} else {
-			assert(0xFF == strap.v1_2->Terminator);
+			assert(0xFF == timings->v1_2.Terminator);
 			vram_module->memory_timing_format_ver = v1_2;
-			table_size = sizeof(*strap.v1_2);
+			table_size = sizeof(timings->v1_2);
 		}
 	} else {
 		vram_module->memory_timing_format_ver = v1_0;
-		table_size = sizeof(*strap.v1_0);
+		table_size = sizeof(timings->v1_0);
 	}
 	vram_module->num_memory_timing_format = straps_total_size / table_size;
 }
 
 
 inline static void
-atomtree_populate_vram_module(
-		struct atomtree_vram_info* const vram_info
+populate_vram_module(
+		void* vram_module_offset,
+		struct atomtree_vram_module* const vram_modules,
+		enum atomtree_common_version const vram_modules_ver,
+		uint8_t const count
 		) {
-	enum atomtree_common_version vram_module_ver;
-	struct atomtree_vram_module* vram_modules;
-	struct atomtree_vram_module* vmod; // single
-	uint8_t count;
-	void* vram_module_offset;
-
-	switch (vram_info->ver) {
-		case v1_2:
-			vram_module_ver = vram_info->v1_2.vram_module_ver;
-			vram_modules = vram_info->v1_2.vram_modules;
-			count = vram_info->v1_2.leaves->NumOfVRAMModule;
-			vram_module_offset = vram_info->v1_2.leaves->vram_module;
-			break;
-		case v1_3:
-			vram_module_ver = vram_info->v1_3.vram_module_ver;
-			vram_modules = vram_info->v1_3.vram_modules;
-			count = vram_info->v1_3.leaves->NumOfVRAMModule;
-			vram_module_offset = vram_info->v1_3.leaves->vram_module;
-			break;
-		case v1_4:
-			vram_module_ver = vram_info->v1_4.vram_module_ver;
-			vram_modules = vram_info->v1_4.vram_modules;
-			count = vram_info->v1_4.leaves->NumOfVRAMModule;
-			vram_module_offset = vram_info->v1_4.leaves->vram_module;
-			break;
-		case v2_1:
-			vram_module_ver = vram_info->v2_1.vram_module_ver;
-			vram_modules = vram_info->v2_1.vram_modules;
-			count = vram_info->v2_1.leaves->NumOfVRAMModule;
-			vram_module_offset = vram_info->v2_1.leaves->vram_module;
-			break;
-		case v2_2:
-			vram_module_ver = vram_info->v2_2.vram_module_ver;
-			vram_modules = vram_info->v2_2.vram_modules;
-			count = vram_info->v2_2.leaves->NumOfVRAMModule;
-			vram_module_offset = vram_info->v2_2.leaves->vram_module;
-			break;
-		case v2_3:
-			vram_module_ver = vram_info->v2_3.vram_module_ver;
-			vram_modules = vram_info->v2_3.vram_modules;
-			count = vram_info->v2_3.leaves->vram_module_num;
-			vram_module_offset = vram_info->v2_3.leaves->vram_module;
-			break;
-		case v2_4:
-			vram_module_ver = vram_info->v2_4.vram_module_ver;
-			vram_modules = vram_info->v2_4.vram_modules;
-			count = vram_info->v2_4.leaves->vram_module_num;
-			vram_module_offset = vram_info->v2_4.leaves->vram_module;
-			break;
-		case v2_5:
-			vram_module_ver = vram_info->v2_5.vram_module_ver;
-			vram_modules = vram_info->v2_5.vram_modules;
-			count = vram_info->v2_5.leaves->vram_module_num;
-			vram_module_offset = vram_info->v2_5.leaves->vram_module;
-			break;
-		case v2_6:
-			vram_module_ver = vram_info->v2_6.vram_module_ver;
-			vram_modules = vram_info->v2_6.vram_modules;
-			count = vram_info->v2_6.leaves->vram_module_num;
-			vram_module_offset = vram_info->v2_6.leaves->vram_module;
-			break;
-		case v3_0:
-			vram_module_ver = vram_info->v3_0.vram_module_ver;
-			vram_modules = vram_info->v3_0.vram_modules;
-			count = vram_info->v3_0.leaves->vram_module_num;
-			vram_module_offset = vram_info->v3_0.leaves->vram_module;
-			break;
-	};
 	assert(count <= ATOMTREE_VRAM_MODULES_MAX);
-
-	uint8_t i=0;
-
-	switch (vram_module_ver) {
+	uint8_t i;
+	struct atomtree_vram_module* vmod;
+	switch (vram_modules_ver) {
 		case v1_3: // atom_vram_module_v3. Will look very similar to v4
 			for (i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
@@ -781,10 +707,8 @@ atomtree_populate_vram_module(
 				vmod->gmc_bitfields_ver = nover; // TODO
 				vram_module_offset += vmod->v1_3->ModuleSize;
 
-				atomtree_populate_atom_memory_timing_format(
-					vmod,
-					vmod->v1_3->MemoryType,
-					vmod->v1_3->MemTiming,
+				populate_atom_memory_timing_format(
+					vmod, vmod->v1_3->MemoryType, vmod->v1_3->MemTiming,
 					(vmod->v1_3->ModuleSize
 						- offsetof(typeof(*vmod->v1_3), MemTiming)
 					)
@@ -800,10 +724,8 @@ atomtree_populate_vram_module(
 				vmod->gmc_bitfields_ver = nover; // TODO
 				vram_module_offset += vmod->v1_4->ModuleSize;
 
-				atomtree_populate_atom_memory_timing_format(
-					vmod,
-					vmod->v1_4->MemoryType,
-					vmod->v1_4->MemTiming,
+				populate_atom_memory_timing_format(
+					vmod, vmod->v1_4->MemoryType, vmod->v1_4->MemTiming,
 					(vmod->v1_4->ModuleSize
 						- offsetof(typeof(*vmod->v1_4), MemTiming)
 					)
@@ -874,12 +796,11 @@ atomtree_populate_vram_module(
 				vmod->vram_module_ver = v3_0;
 				vmod->gmc_bitfields_ver = nover; // TODO
 				//vram_module_offset += vmod->v3_0->vram_module_size;
-				vram_module_offset += sizeof(struct atom_vram_module_v3_0);
+				vram_module_offset += sizeof(*vmod->v3_0);
 
 				if (vmod->v3_0->dram_info_offset) {
 					vmod->dram_info = (
-						vmod->leaves
-						+ vmod->v3_0->dram_info_offset
+						vmod->leaves + vmod->v3_0->dram_info_offset
 					);
 				}
 				if (vmod->v3_0->mem_tuning_offset) {
@@ -890,8 +811,7 @@ atomtree_populate_vram_module(
 				}
 				if (vmod->v3_0->tmrs_seq_offset) {
 					vmod->tmrs_seq = (
-						vmod->leaves
-						+ vmod->v3_0->tmrs_seq_offset
+						vmod->leaves + vmod->v3_0->tmrs_seq_offset
 					);
 				}
 			}
@@ -903,34 +823,44 @@ atomtree_populate_vram_module(
 }
 
 inline static void
-atomtree_populate_vram_info_v1_2(
+populate_vram_info_v1_2(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
 	vi12->leaves = vram_info->leaves;
 
-	vi12->vram_module_ver = v1_3;
 	if (vi12->leaves->NumOfVRAMModule) {
-		atomtree_populate_vram_module(vram_info);
+		vi12->vram_module_ver = v1_3;
+		populate_vram_module(
+			vi12->leaves->vram_module,
+			vi12->vram_modules,
+			vi12->vram_module_ver,
+			vi12->leaves->NumOfVRAMModule
+		);
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v1_3(
+populate_vram_info_v1_3(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_3* const vi13 = &(vram_info->v1_3);
 	vi13->leaves = vram_info->leaves;
 
-	vi13->vram_module_ver = v1_3;
 	if (vi13->leaves->NumOfVRAMModule) {
-		atomtree_populate_vram_module(vram_info);
+		vi13->vram_module_ver = v1_3;
+		populate_vram_module(
+			vi13->leaves->vram_module,
+			vi13->vram_modules,
+			vi13->vram_module_ver,
+			vi13->leaves->NumOfVRAMModule
+		);
 	}
 
 	if (vi13->leaves->MemAdjustTblOffset) {
 		vi13->mem_adjust_table.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemAdjustTblOffset;
-		atomtree_populate_init_reg_block(&(vi13->mem_adjust_table));
+		populate_init_reg_block(&(vi13->mem_adjust_table));
 	}
 
 	if (vi13->leaves->MemClkPatchTblOffset) {
@@ -938,52 +868,62 @@ atomtree_populate_vram_info_v1_3(
 		// doesn't decode them right.
 		vi13->mem_clk_patch.leaves =
 			(void*)vi13->leaves + vi13->leaves->MemClkPatchTblOffset;
-		atomtree_populate_init_reg_block(&(vi13->mem_clk_patch));
+		populate_init_reg_block(&(vi13->mem_clk_patch));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v1_4(
+populate_vram_info_v1_4(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_4* const vi14 = &(vram_info->v1_4);
 	vi14->leaves = vram_info->leaves;
 
-	vi14->vram_module_ver = v1_4;
 	if (vi14->leaves->NumOfVRAMModule) {
-		atomtree_populate_vram_module(vram_info);
+		vi14->vram_module_ver = v1_4;
+		populate_vram_module(
+			vi14->leaves->vram_module,
+			vi14->vram_modules,
+			vi14->vram_module_ver,
+			vi14->leaves->NumOfVRAMModule
+		);
 	}
 
 	if (vi14->leaves->MemAdjustTblOffset) {
 		vi14->mem_adjust_table.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemAdjustTblOffset;
-		atomtree_populate_init_reg_block(&(vi14->mem_adjust_table));
+		populate_init_reg_block(&(vi14->mem_adjust_table));
 	}
 
 	if (vi14->leaves->MemClkPatchTblOffset) {
-		// TODO See atomtree_populate_vram_info_v1_3
+		// TODO See populate_vram_info_v1_3
 		vi14->mem_clk_patch.leaves =
 			(void*)vi14->leaves + vi14->leaves->MemClkPatchTblOffset;
-		atomtree_populate_init_reg_block(&(vi14->mem_clk_patch));
+		populate_init_reg_block(&(vi14->mem_clk_patch));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v2_1(
+populate_vram_info_v2_1(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_1* const vi21 = &(vram_info->v2_1);
 	vi21->leaves = vram_info->leaves;
 
-	vi21->vram_module_ver = v1_7;
 	if (vi21->leaves->NumOfVRAMModule) {
-		atomtree_populate_vram_module(vram_info);
+		vi21->vram_module_ver = v1_7;
+		populate_vram_module(
+			vi21->leaves->vram_module,
+			vi21->vram_modules,
+			vi21->vram_module_ver,
+			vi21->leaves->NumOfVRAMModule
+		);
 	}
 
 	if (vi21->leaves->MemAdjustTblOffset) {
 		vi21->mem_adjust_table.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemAdjustTblOffset;
-		atomtree_populate_mem_adjust_table(
+		populate_mem_adjust_table(
 			&(vi21->mem_adjust_table), vi21->vram_modules
 		);
 	}
@@ -991,63 +931,59 @@ atomtree_populate_vram_info_v2_1(
 	if (vi21->leaves->MemClkPatchTblOffset) {
 		vi21->mem_clk_patch.leaves =
 			(void*)vi21->leaves + vi21->leaves->MemClkPatchTblOffset;
-		atomtree_populate_mem_clk_patch(
-			&(vi21->mem_clk_patch), vi21->vram_modules
-		);
+		populate_mem_clk_patch(&(vi21->mem_clk_patch), vi21->vram_modules);
 	}
 
 	if (vi21->leaves->PerBytePresetOffset) {
 		// TODO unsure what lies beyond; never seen this true.
 		vi21->per_byte_preset.leaves =
 			(void*)vi21->leaves + vi21->leaves->PerBytePresetOffset;
-		atomtree_populate_init_reg_block(&(vi21->per_byte_preset));
+		populate_init_reg_block(&(vi21->per_byte_preset));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v2_2(
+populate_vram_info_v2_2(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_2* const vi22 = &(vram_info->v2_2);
 	vi22->leaves = vram_info->leaves;
 
-	vi22->vram_module_ver = v1_8;
 	if (vi22->leaves->NumOfVRAMModule) {
-		atomtree_populate_vram_module(vram_info);
+		vi22->vram_module_ver = v1_8;
+		populate_vram_module(
+			vi22->leaves->vram_module,
+			vi22->vram_modules,
+			vi22->vram_module_ver,
+			vi22->leaves->NumOfVRAMModule
+		);
 	}
 
 	if (vi22->leaves->MemAdjustTblOffset) {
 		vi22->mem_adjust_table.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemAdjustTblOffset;
-		atomtree_populate_mem_adjust_table(
-			&(vi22->mem_adjust_table),
-			vi22->vram_modules
+		populate_mem_adjust_table(
+			&(vi22->mem_adjust_table), vi22->vram_modules
 		);
 	}
 
 	if (vi22->leaves->MemClkPatchTblOffset) {
 		vi22->mem_clk_patch.leaves =
 			(void*)vi22->leaves + vi22->leaves->MemClkPatchTblOffset;
-		atomtree_populate_mem_clk_patch(
-			&(vi22->mem_clk_patch), vi22->vram_modules
-		);
+		populate_mem_clk_patch(&(vi22->mem_clk_patch), vi22->vram_modules);
 	}
 
 	if (vi22->leaves->McAdjustPerTileTblOffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi22->mc_tile_adjust.leaves =
 			(void*)vi22->leaves + vi22->leaves->McAdjustPerTileTblOffset;
-		atomtree_populate_mc_tile_adjust(
-			&(vi22->mc_tile_adjust), vi22->vram_modules
-		);
+		populate_mc_tile_adjust(&(vi22->mc_tile_adjust), vi22->vram_modules);
 	}
 
 	if (vi22->leaves->McPhyInitTableOffset) {
 		vi22->mc_phy_init.leaves =
 			(void*)vi22->leaves + vi22->leaves->McPhyInitTableOffset;
-		atomtree_populate_init_mc_phy_init(
-			&(vi22->mc_phy_init), vi22->vram_modules
-		);
+		populate_init_mc_phy_init(&(vi22->mc_phy_init), vi22->vram_modules);
 	}
 
 	if (vi22->leaves->DramDataRemapTblOffset) {
@@ -1057,27 +993,32 @@ atomtree_populate_vram_info_v2_2(
 }
 
 inline static void
-atomtree_populate_vram_info_v2_3(
+populate_vram_info_v2_3(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
 	vi23->leaves = vram_info->leaves;
 
-	vi23->vram_module_ver = v1_9;
 	if (vi23->leaves->vram_module_num) {
-		atomtree_populate_vram_module(vram_info);
+		vi23->vram_module_ver = v1_9;
+		populate_vram_module(
+			vi23->leaves->vram_module,
+			vi23->vram_modules,
+			vi23->vram_module_ver,
+			vi23->leaves->vram_module_num
+		);
 	}
 
 	if (vi23->leaves->mem_adjust_tbloffset) {
 		vi23->mem_adjust_table.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_adjust_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi23->mem_adjust_table));
+		populate_umc_init_reg_block(&(vi23->mem_adjust_table));
 	}
 
 	if (vi23->leaves->mem_clk_patch_tbloffset) {
 		vi23->mem_clk_patch.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi23->mem_clk_patch));
+		populate_umc_init_reg_block(&(vi23->mem_clk_patch));
 
 		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
 		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
@@ -1096,13 +1037,13 @@ atomtree_populate_vram_info_v2_3(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi23->mc_tile_adjust.leaves =
 			(void*)vi23->leaves + vi23->leaves->mc_adjust_pertile_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi23->mc_tile_adjust));
+		populate_umc_init_reg_block(&(vi23->mc_tile_adjust));
 	}
 
 	if (vi23->leaves->mc_phyinit_tbloffset) {
 		vi23->mc_phy_init.leaves =
 			(void*)vi23->leaves + vi23->leaves->mc_phyinit_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi23->mc_phy_init));
+		populate_umc_init_reg_block(&(vi23->mc_phy_init));
 	}
 
 	if (vi23->leaves->dram_data_remap_tbloffset) {
@@ -1119,33 +1060,38 @@ atomtree_populate_vram_info_v2_3(
 	if (vi23->leaves->post_ucode_init_offset) {
 		vi23->post_ucode_init.leaves =
 			(void*)vi23->leaves + vi23->leaves->post_ucode_init_offset;
-		atomtree_populate_umc_init_reg_block(&(vi23->post_ucode_init));
+		populate_umc_init_reg_block(&(vi23->post_ucode_init));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v2_4(
+populate_vram_info_v2_4(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
 	vi24->leaves = vram_info->leaves;
 	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
 
-	vi24->vram_module_ver = v1_10;
 	if (vi24->leaves->vram_module_num) {
-		atomtree_populate_vram_module(vram_info);
+		vi24->vram_module_ver = v1_10;
+		populate_vram_module(
+			vi24->leaves->vram_module,
+			vi24->vram_modules,
+			vi24->vram_module_ver,
+			vi24->leaves->vram_module_num
+		);
 	}
 
 	if (vi24->leaves->mem_adjust_tbloffset) {
 		vi24->mem_adjust_table.leaves =
 			(void*)vi24->leaves + vi24->leaves->mem_adjust_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi24->mem_adjust_table));
+		populate_umc_init_reg_block(&(vi24->mem_adjust_table));
 	}
 
 	if (vi24->leaves->mem_clk_patch_tbloffset) {
 		vi24->mem_clk_patch.leaves =
 			(void*)vi24->leaves + vi24->leaves->mem_clk_patch_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi24->mem_clk_patch));
+		populate_umc_init_reg_block(&(vi24->mem_clk_patch));
 
 		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
 		vi24->navi1_gddr6_timings =
@@ -1156,13 +1102,13 @@ atomtree_populate_vram_info_v2_4(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi24->mc_tile_adjust.leaves =
 			(void*)vi24->leaves + vi24->leaves->mc_adjust_pertile_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi24->mc_tile_adjust));
+		populate_umc_init_reg_block(&(vi24->mc_tile_adjust));
 	}
 
 	if (vi24->leaves->mc_phyinit_tbloffset) {
 		vi24->mc_phy_init.leaves =
 			(void*)vi24->leaves + vi24->leaves->mc_phyinit_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi24->mc_phy_init));
+		populate_umc_init_reg_block(&(vi24->mc_phy_init));
 	}
 
 	if (vi24->leaves->dram_data_remap_tbloffset) {
@@ -1174,26 +1120,31 @@ atomtree_populate_vram_info_v2_4(
 	if (vi24->leaves->post_ucode_init_offset) {
 		vi24->post_ucode_init.leaves =
 			(void*)vi24->leaves + vi24->leaves->post_ucode_init_offset;
-		atomtree_populate_umc_init_reg_block(&(vi24->post_ucode_init));
+		populate_umc_init_reg_block(&(vi24->post_ucode_init));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v2_5(
+populate_vram_info_v2_5(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
 	vi25->leaves = vram_info->leaves;
 
-	vi25->vram_module_ver = v1_11;
 	if (vi25->leaves->vram_module_num) {
-		atomtree_populate_vram_module(vram_info);
+		vi25->vram_module_ver = v1_11;
+		populate_vram_module(
+			vi25->leaves->vram_module,
+			vi25->vram_modules,
+			vi25->vram_module_ver,
+			vi25->leaves->vram_module_num
+		);
 	}
 
 	if (vi25->leaves->mem_adjust_tbloffset) {
 		vi25->mem_adjust_table.leaves =
 			(void*)vi25->leaves + vi25->leaves->mem_adjust_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi25->mem_adjust_table));
+		populate_umc_init_reg_block(&(vi25->mem_adjust_table));
 	}
 
 	if (vi25->leaves->gddr6_ac_timing_offset) {
@@ -1208,13 +1159,13 @@ atomtree_populate_vram_info_v2_5(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi25->mc_tile_adjust.leaves =
 			(void*)vi25->leaves + vi25->leaves->mc_adjust_pertile_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi25->mc_tile_adjust));
+		populate_umc_init_reg_block(&(vi25->mc_tile_adjust));
 	}
 
 	if (vi25->leaves->mc_phyinit_tbloffset) {
 		vi25->mc_phy_init.leaves =
 			(void*)vi25->leaves + vi25->leaves->mc_phyinit_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi25->mc_phy_init));
+		populate_umc_init_reg_block(&(vi25->mc_phy_init));
 	}
 
 	if (vi25->leaves->dram_data_remap_tbloffset) {
@@ -1226,52 +1177,57 @@ atomtree_populate_vram_info_v2_5(
 	if (vi25->leaves->post_ucode_init_offset) {
 		vi25->post_ucode_init.leaves =
 			(void*)vi25->leaves + vi25->leaves->post_ucode_init_offset;
-		atomtree_populate_umc_init_reg_block(&(vi25->post_ucode_init));
+		populate_umc_init_reg_block(&(vi25->post_ucode_init));
 	}
 
 	if (vi25->leaves->strobe_mode_patch_tbloffset) {
 		vi25->strobe_mode_patch.leaves =
 			(void*)vi25->leaves + vi25->leaves->strobe_mode_patch_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi25->strobe_mode_patch));
+		populate_umc_init_reg_block(&(vi25->strobe_mode_patch));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v2_6(
+populate_vram_info_v2_6(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
 	vi26->leaves = vram_info->leaves;
 
 
-	vi26->vram_module_ver = v1_9;
 	if (vi26->leaves->vram_module_num) {
-		atomtree_populate_vram_module(vram_info);
+		vi26->vram_module_ver = v1_9;
+		populate_vram_module(
+			vi26->leaves->vram_module,
+			vi26->vram_modules,
+			vi26->vram_module_ver,
+			vi26->leaves->vram_module_num
+		);
 	}
 
 	if (vi26->leaves->mem_adjust_tbloffset) {
 		vi26->mem_adjust_table.leaves =
 			(void*)vi26->leaves + vi26->leaves->mem_adjust_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi26->mem_adjust_table));
+		populate_umc_init_reg_block(&(vi26->mem_adjust_table));
 	}
 
 	if (vi26->leaves->mem_clk_patch_tbloffset) {
 		vi26->mem_clk_patch.leaves =
 			(void*)vi26->leaves + vi26->leaves->mem_clk_patch_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi26->mem_clk_patch));
+		populate_umc_init_reg_block(&(vi26->mem_clk_patch));
 	}
 
 	if (vi26->leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi26->mc_tile_adjust.leaves =
 			(void*)vi26->leaves + vi26->leaves->mc_adjust_pertile_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi26->mc_tile_adjust));
+		populate_umc_init_reg_block(&(vi26->mc_tile_adjust));
 	}
 
 	if (vi26->leaves->mc_phyinit_tbloffset) {
 		vi26->mc_phy_init.leaves =
 			(void*)vi26->leaves + vi26->leaves->mc_phyinit_tbloffset;
-		atomtree_populate_umc_init_reg_block(&(vi26->mc_phy_init));
+		populate_umc_init_reg_block(&(vi26->mc_phy_init));
 	}
 
 	if (vi26->leaves->tmrs_seq_offset) {
@@ -1288,20 +1244,25 @@ atomtree_populate_vram_info_v2_6(
 	if (vi26->leaves->post_ucode_init_offset) {
 		vi26->post_ucode_init.leaves =
 			(void*)vi26->leaves + vi26->leaves->post_ucode_init_offset;
-		atomtree_populate_umc_init_reg_block(&(vi26->post_ucode_init));
+		populate_umc_init_reg_block(&(vi26->post_ucode_init));
 	}
 }
 
 inline static void
-atomtree_populate_vram_info_v3_0( // TODO finish this
+populate_vram_info_v3_0( // TODO finish this
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
 	vi30->leaves = vram_info->leaves;
 
-	vi30->vram_module_ver = v3_0;
 	if (vi30->leaves->vram_module_num) {
-		atomtree_populate_vram_module(vram_info);
+		vi30->vram_module_ver = v3_0;
+		populate_vram_module(
+			vi30->leaves->vram_module,
+			vi30->vram_modules,
+			vi30->vram_module_ver,
+			vi30->leaves->vram_module_num
+		);
 	}
 
 	if (vi30->leaves->mem_tuning_table_offset) {
@@ -1321,7 +1282,7 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 	if (vi30->leaves->mc_init_table_offset) {
 		vi30->mc_init.leaves =
 			(void*)vi30->leaves + vi30->leaves->mc_init_table_offset;
-		atomtree_populate_umc_init_reg_block(&(vi30->mc_init));
+		populate_umc_init_reg_block(&(vi30->mc_init));
 	}
 
 	if (vi30->leaves->dram_data_remap_table_offset) {
@@ -1333,7 +1294,7 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 	if (vi30->leaves->umc_emuinit_table_offset) {
 		vi30->umc_emuinit.leaves =
 			(void*)vi30->leaves + vi30->leaves->umc_emuinit_table_offset;
-		atomtree_populate_umc_init_reg_block(&(vi30->umc_emuinit));
+		populate_umc_init_reg_block(&(vi30->umc_emuinit));
 	}
 
 	if (vi30->leaves->reserved_sub_table_offset[0]) {
@@ -1347,7 +1308,7 @@ atomtree_populate_vram_info_v3_0( // TODO finish this
 }
 
 inline static void
-atomtree_dt_populate_vram_info(
+populate_vram_info(
 		struct atomtree_vram_info* const vram_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -1356,23 +1317,23 @@ atomtree_dt_populate_vram_info(
 		vram_info->leaves = atree->bios + bios_offset;
 		vram_info->ver = get_ver(vram_info->table_header);
 		switch (vram_info->ver) { // TODO: earlier tables than 2.3?
-			case v1_2: atomtree_populate_vram_info_v1_2(vram_info); break;
-			case v1_3: atomtree_populate_vram_info_v1_3(vram_info); break;
-			case v1_4: atomtree_populate_vram_info_v1_4(vram_info); break;
-			case v2_1: atomtree_populate_vram_info_v2_1(vram_info); break;
-			case v2_2: atomtree_populate_vram_info_v2_2(vram_info); break;
-			case v2_3: atomtree_populate_vram_info_v2_3(vram_info); break;
-			case v2_4: atomtree_populate_vram_info_v2_4(vram_info); break;
-			case v2_5: atomtree_populate_vram_info_v2_5(vram_info); break;
-			case v2_6: atomtree_populate_vram_info_v2_6(vram_info); break;
-			case v3_0: atomtree_populate_vram_info_v3_0(vram_info); break;
+			case v1_2: populate_vram_info_v1_2(vram_info); break;
+			case v1_3: populate_vram_info_v1_3(vram_info); break;
+			case v1_4: populate_vram_info_v1_4(vram_info); break;
+			case v2_1: populate_vram_info_v2_1(vram_info); break;
+			case v2_2: populate_vram_info_v2_2(vram_info); break;
+			case v2_3: populate_vram_info_v2_3(vram_info); break;
+			case v2_4: populate_vram_info_v2_4(vram_info); break;
+			case v2_5: populate_vram_info_v2_5(vram_info); break;
+			case v2_6: populate_vram_info_v2_6(vram_info); break;
+			case v3_0: populate_vram_info_v3_0(vram_info); break;
 			default: break;
 		}
 	}
 }
 
 inline static void
-atomtree_dt_populate_voltageobject_info_v1_1(
+populate_voltageobject_info_v1_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
 	struct atomtree_voltage_object* const voltage_objects = (
@@ -1413,7 +1374,7 @@ atomtree_dt_populate_voltageobject_info_v1_1(
 }
 
 inline static void
-atomtree_dt_populate_voltageobject_info_v1_2(
+populate_voltageobject_info_v1_2(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
 	struct atomtree_voltage_object* const voltage_objects = (
@@ -1454,7 +1415,7 @@ atomtree_dt_populate_voltageobject_info_v1_2(
 }
 
 inline static void
-atomtree_dt_populate_voltageobject_info_v3_1(
+populate_voltageobject_info_v3_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
 	struct atomtree_voltage_object* const voltage_objects = (
@@ -1549,7 +1510,7 @@ atomtree_dt_populate_voltageobject_info_v3_1(
 
 
 inline static void
-atomtree_dt_populate_voltageobject_info_v4_1(
+populate_voltageobject_info_v4_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
 	struct atomtree_voltage_object* const voltage_objects = (
@@ -1612,7 +1573,7 @@ atomtree_dt_populate_voltageobject_info_v4_1(
 
 
 inline static void
-atomtree_dt_populate_voltageobject_info(
+populate_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -1621,32 +1582,20 @@ atomtree_dt_populate_voltageobject_info(
 		vo_info->leaves = atree->bios + bios_offset;
 		vo_info->ver = get_ver(vo_info->table_header);
 		switch (vo_info->ver) {
-			case v1_1:
-				atomtree_dt_populate_voltageobject_info_v1_1(vo_info);
-				break;
-			case v1_2:
-				atomtree_dt_populate_voltageobject_info_v1_2(vo_info);
-				break;
-			case v3_1:
-				atomtree_dt_populate_voltageobject_info_v3_1(vo_info);
-				break;
-			case v4_1:
-				atomtree_dt_populate_voltageobject_info_v4_1(vo_info);
-				break;
+			case v1_1: populate_voltageobject_info_v1_1(vo_info); break;
+			case v1_2: populate_voltageobject_info_v1_2(vo_info); break;
+			case v3_1: populate_voltageobject_info_v3_1(vo_info); break;
 			case v4_2: // hopefully v4_2 is the same
-				atomtree_dt_populate_voltageobject_info_v4_1(vo_info);
-				break;
-			case v1_0:
-				assert(0);
-			default:
-				break;
+			case v4_1: populate_voltageobject_info_v4_1(vo_info); break;
+			case v1_0: assert(0);
+			default: break;
 		}
 	}
 }
 
 
 inline static void
-atomtree_populate_master_datatable_v1_1(
+populate_master_datatable_v1_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree
 		) {
@@ -1672,21 +1621,19 @@ atomtree_populate_master_datatable_v1_1(
 		dt11->vesa_timing = bios + leaves->StandardVESA_Timing;
 	}
 
-	atomtree_dt_populate_firmwareinfo(
-		&(dt11->firmwareinfo), atree, leaves->FirmwareInfo
-	);
+	populate_firmwareinfo(&(dt11->firmwareinfo), atree, leaves->FirmwareInfo);
 
 	if (leaves->PaletteData) {
 		dt11->palette_data = bios + leaves->PaletteData;
 	}
 
-	atomtree_dt_populate_lcd_info(&(dt11->lcd_info), atree, leaves->LCD_Info);
+	populate_lcd_info(&(dt11->lcd_info), atree, leaves->LCD_Info);
 
 	if (leaves->DIGTransmitterInfo) {
 		dt11->dig_transmitter_info = bios + leaves->DIGTransmitterInfo;
 	}
 
-	atomtree_dt_populate_smu_info(&(dt11->smu_info), atree, leaves->SMU_Info);
+	populate_smu_info(&(dt11->smu_info), atree, leaves->SMU_Info);
 
 	if (leaves->SupportedDevicesInfo) {
 		dt11->supported_devices_info = bios + leaves->SupportedDevicesInfo;
@@ -1696,23 +1643,19 @@ atomtree_populate_master_datatable_v1_1(
 		dt11->gpio_i2c_info = bios + leaves->GPIO_I2C_Info;
 	}
 
-	atomtree_dt_populate_vram_usagebyfirmware(
+	populate_vram_usagebyfirmware(
 		&(dt11->vram_usagebyfirmware), atree, leaves->VRAM_UsageByFirmware
 	);
 
-	atomtree_dt_populate_gpio_pin_lut(
-		&(dt11->gpio_pin_lut), atree, leaves->GPIO_Pin_LUT
-	);
+	populate_gpio_pin_lut(&(dt11->gpio_pin_lut), atree, leaves->GPIO_Pin_LUT);
 
 	if (leaves->VESA_ToInternalModeLUT) {
 		dt11->vesa_to_internal_mode = bios + leaves->VESA_ToInternalModeLUT;
 	}
 
-	atomtree_dt_populate_gfx_info(&(dt11->gfx_info), atree, leaves->GFX_Info);
+	populate_gfx_info(&(dt11->gfx_info), atree, leaves->GFX_Info);
 
-	atomtree_dt_populate_ppt(
-		&(dt11->powerplayinfo), atree, leaves->PowerPlayInfo
-	);
+	populate_ppt(&(dt11->powerplayinfo), atree, leaves->PowerPlayInfo);
 
 	if (leaves->GPUVirtualizationInfo) {
 		dt11->gpu_virtualization_info = bios + leaves->GPUVirtualizationInfo;
@@ -1762,7 +1705,7 @@ atomtree_populate_master_datatable_v1_1(
 		dt11->tv_video_mode = bios + leaves->TV_VideoMode;
 	}
 
-	atomtree_dt_populate_vram_info(&(dt11->vram_info), atree, leaves->VRAM_Info);
+	populate_vram_info(&(dt11->vram_info), atree, leaves->VRAM_Info);
 
 	if (leaves->MemoryTrainingInfo) {
 		dt11->memory_training_info = bios + leaves->MemoryTrainingInfo;
@@ -1776,7 +1719,7 @@ atomtree_populate_master_datatable_v1_1(
 		dt11->asic_profiling_info = bios + leaves->ASIC_ProfilingInfo;
 	}
 
-	atomtree_dt_populate_voltageobject_info(
+	populate_voltageobject_info(
 		&(dt11->voltageobject_info), atree, leaves->VoltageObjectInfo
 	);
 
@@ -1866,7 +1809,7 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 	}
 }
 inline static void
-atomtree_populate_master_datatable_v2_1(
+populate_master_datatable_v2_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree
 		) {
@@ -1883,45 +1826,35 @@ atomtree_populate_master_datatable_v2_1(
 		dt21->multimedia_info = bios + leaves->multimedia_info;
 	}
 
-	atomtree_dt_populate_smc_dpm_info(
-		&(dt21->smc_dpm_info), atree, leaves->smc_dpm_info
-	);
+	populate_smc_dpm_info(&(dt21->smc_dpm_info), atree, leaves->smc_dpm_info);
 
-	atomtree_dt_populate_firmwareinfo(
-		&(dt21->firmwareinfo), atree, leaves->firmwareinfo
-	);
+	populate_firmwareinfo(&(dt21->firmwareinfo), atree, leaves->firmwareinfo);
 
-	atomtree_dt_populate_lcd_info(&(dt21->lcd_info), atree, leaves->lcd_info);
+	populate_lcd_info(&(dt21->lcd_info), atree, leaves->lcd_info);
 
-	atomtree_dt_populate_smu_info(&(dt21->smu_info), atree, leaves->smu_info);
+	populate_smu_info(&(dt21->smu_info), atree, leaves->smu_info);
 
-	atomtree_dt_populate_vram_usagebyfirmware(
+	populate_vram_usagebyfirmware(
 		&(dt21->vram_usagebyfirmware), atree, leaves->vram_usagebyfirmware
 	);
 
-	atomtree_dt_populate_gpio_pin_lut(
-		&(dt21->gpio_pin_lut), atree, leaves->gpio_pin_lut
-	);
+	populate_gpio_pin_lut(&(dt21->gpio_pin_lut), atree, leaves->gpio_pin_lut);
 
-	atomtree_dt_populate_gfx_info(&(dt21->gfx_info), atree, leaves->gfx_info);
+	populate_gfx_info(&(dt21->gfx_info), atree, leaves->gfx_info);
 
-	atomtree_dt_populate_ppt(
-		&(dt21->powerplayinfo), atree, leaves->powerplayinfo
-	);
+	populate_ppt(&(dt21->powerplayinfo), atree, leaves->powerplayinfo);
 
 	//displayobjectinfo
 	//indirectioaccess
 	//umc_info
 	//dce_info
 
-	atomtree_dt_populate_vram_info(
-		&(dt21->vram_info), atree, leaves->vram_info
-	);
+	populate_vram_info(&(dt21->vram_info), atree, leaves->vram_info);
 
 	//integratedsysteminfo
 	//asic_profiling_info
 
-	atomtree_dt_populate_voltageobject_info(
+	populate_voltageobject_info(
 		&(dt21->voltageobject_info), atree, leaves->voltageobject_info
 	);
 
@@ -1929,7 +1862,7 @@ atomtree_populate_master_datatable_v2_1(
 }
 
 inline static void
-atomtree_populate_datatables(
+populate_datatables(
 		//struct atomtree_master_datatable* const data_table,
 		struct atom_tree* const atree,
 		uint16_t const bios_offset
@@ -1940,21 +1873,16 @@ atomtree_populate_datatables(
 		data_table->leaves = atree->bios + bios_offset;
 		data_table->ver = get_ver(data_table->table_header);
 		switch (data_table->ver) {
-			case v1_1:
-				atomtree_populate_master_datatable_v1_1(data_table, atree);
-				break;
-			case v2_1:
-				atomtree_populate_master_datatable_v2_1(data_table, atree);
-				break;
-			default:
-				break;
+			case v1_1: populate_master_datatable_v1_1(data_table, atree); break;
+			case v2_1: populate_master_datatable_v2_1(data_table, atree); break;
+			default: assert(0); break;
 		}
 	}
 }
 
 
 inline static void
-atomtree_populate_atom_rom_header_v1_1(
+populate_atom_rom_header_v1_1(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree
 		) {
@@ -1981,11 +1909,11 @@ atomtree_populate_atom_rom_header_v1_1(
 	}
 
 	//rom_header->data_table = &(atree->data_table);
-	atomtree_populate_datatables(atree, leaves->MasterDataTableOffset);
+	populate_datatables(atree, leaves->MasterDataTableOffset);
 }
 
 inline static void
-atomtree_populate_atom_rom_header_v2_1(
+populate_atom_rom_header_v2_1(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree
 		) {
@@ -2015,11 +1943,11 @@ atomtree_populate_atom_rom_header_v2_1(
 	}
 
 	//rom_header->data_table = &(atree->data_table);
-	atomtree_populate_datatables(atree, leaves->MasterDataTableOffset);
+	populate_datatables(atree, leaves->MasterDataTableOffset);
 }
 
 inline static void
-atomtree_populate_atom_rom_header_v2_2(
+populate_atom_rom_header_v2_2(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree
 		) {
@@ -2049,7 +1977,7 @@ atomtree_populate_atom_rom_header_v2_2(
 	}
 
 	//rom_header->data_table = &(atree->data_table);
-	atomtree_populate_datatables(atree, leaves->masterdatatable_offset);
+	populate_datatables(atree, leaves->masterdatatable_offset);
 
 	/*
 	//atree->crc_block = bios + atree->leaves->crc_block_offset;
@@ -2089,36 +2017,26 @@ atomtree_populate_atom_rom_header_v2_2(
 }
 
 inline static void
-atomtree_populate_atom_rom_header(
+populate_atom_rom_header(
 		struct atomtree_rom_header* const rom_header,
 		struct atom_tree* const atree,
 		uint16_t offset
 		) {
-	
-		if (offset) {
-			rom_header->leaves = atree->bios + offset;
-			rom_header->ver = get_ver(rom_header->table_header);
-			switch (rom_header->ver) {
-				case v1_1:
-					atomtree_populate_atom_rom_header_v1_1(rom_header, atree);
-					break;
-				case v2_1:
-					atomtree_populate_atom_rom_header_v2_1(rom_header, atree);
-					break;
-				case v2_2:
-					atomtree_populate_atom_rom_header_v2_2(rom_header, atree);
-					break;
-				case v2_3: // forced
-					atomtree_populate_atom_rom_header_v2_2(rom_header, atree);
-					break;
-				default:
-					break;
-			}
+	if (offset) {
+		rom_header->leaves = atree->bios + offset;
+		rom_header->ver = get_ver(rom_header->table_header);
+		switch (rom_header->ver) {
+			case v1_1: populate_atom_rom_header_v1_1(rom_header, atree); break;
+			case v2_1: populate_atom_rom_header_v2_1(rom_header, atree); break;
+			case v2_3: // forced
+			case v2_2: populate_atom_rom_header_v2_2(rom_header, atree); break;
+			default: break;
 		}
+	}
 }
 
 inline static void
-atomtree_populate_pci_tables(
+populate_pci_tables(
 		struct atomtree_pci_tables* const atree_pci,
 		struct pci_rom_header* const start
 		) {
@@ -2211,12 +2129,12 @@ atombios_parse(
 	}
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 
-	atomtree_populate_atom_rom_header(
+	populate_atom_rom_header(
 		&(atree->rom_header), atree, image->rom_header_info_table_offset
 	);
-	atomtree_populate_pci_tables(&(atree->pcir_tables), &(image->pci_header));
+	populate_pci_tables(&(atree->pcir_tables), &(image->pci_header));
 
-	// atomtree_populate_commandtables(atree); // TODO
+	// populate_commandtables(atree); // TODO
 	return atree;
 }
 

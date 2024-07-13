@@ -72,8 +72,10 @@ struct atomtree_lcd_info {
 		void* leaves; // nonzero if populated
 		struct atom_common_table_header* table_header;
 
-		//struct atom_lcd_info_v1_3* v1_3; // atombios.h
-		struct atom_lcd_info_v2_1* v2_1;
+		struct atom_lvds_info_v1_1* v1_1;
+		struct atom_lvds_info_v1_2* v1_2;
+		struct atom_lcd_info_v1_3*  v1_3;
+		struct atom_lcd_info_v2_1*  v2_1;
 	};
 };
 
