@@ -12,6 +12,10 @@ project('yaabe', 'c',
 fs = import('fs')
 
 cc = meson.get_compiler('c')
+add_project_arguments(
+	'-fwrapv',
+	language: 'c',
+)
 mold = find_program('mold', required: false)
 if mold.found()
 	add_project_arguments(

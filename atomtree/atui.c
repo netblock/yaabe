@@ -310,7 +310,7 @@ atui_leaf_set_val_unsigned(
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t max_val;
 	if (num_bits == (sizeof(max_val) * CHAR_BIT)) { // (1ULL<<64) == 1
-		max_val = ~0ULL;
+		max_val = UINT64_MAX;
 	} else {
 		max_val = (1ULL << num_bits) - 1;
 	}
@@ -368,12 +368,18 @@ atui_leaf_set_val_signed(
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
-	uint64_t const mask = (1ULL << num_bits) - 1;
+	uint64_t mask;
+	if (num_bits == (sizeof(mask) * CHAR_BIT)) { // (1ULL<<64) == 1
+		mask = UINT64_MAX;
+	} else {
+		mask = (1ULL << num_bits) - 1;
+	}
 	int64_t const max_val = mask>>1; // max positive val 0111...
 	if (val > max_val) {
 		raw_val = max_val;
 	} else if (val < -max_val) {
 		raw_val = max_val+1; // Two's overflow. 1000.. is negative-most.
+		// GCC's -fwrapv can play
 	} else {
 		raw_val = val & mask; // Two's sign repeats to the right
 	}
