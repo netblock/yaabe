@@ -350,7 +350,7 @@ def enum_to_atui(
 		text
 	)
 	text = re.sub(no_comment, "", text)
-	text = re.sub("(?<!\],)\n" +tabs+ "},\n", "},\n", text)
+	text = re.sub("(?<!\],)\n" +tabs+ "},\n", "]},\n", text)
 
 	if print_text:
 		pass

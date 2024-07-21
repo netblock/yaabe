@@ -474,10 +474,10 @@ def infer_leaf_data(
 	leaf_default = leaf_defaults[leaf_select]
 
 	for leaf in leaves:
-		assert (not (leaf.name is None))
-
 		leaf.parent_is_leaf = leaf_default.parent_is_leaf
 
+		if leaf.name is None:
+			leaf.name = leaf_default.name
 		if leaf.access is None:
 			leaf.access = leaf_default.access
 		if leaf.access_meta is None:
