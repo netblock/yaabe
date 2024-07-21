@@ -13,6 +13,7 @@ fs = import('fs')
 
 cc = meson.get_compiler('c')
 add_project_arguments(
+	'-D_GNU_SOURCE', # implies posix 2008, isoc2x
 	'-fwrapv',
 	language: 'c',
 )
