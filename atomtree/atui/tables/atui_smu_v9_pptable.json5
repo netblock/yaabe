@@ -80,24 +80,6 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
 		}, {
-			access: "bios->GoldenPPID",
-			name: "GoldenPPID",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
-		}, {
-			access: "bios->GoldenRevision",
-			name: "GoldenRevision",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
-		}, {
-			access: "bios->FormatID",
-			name: "FormatID",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
-		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
 			display: "ATUI_SUBONLY",

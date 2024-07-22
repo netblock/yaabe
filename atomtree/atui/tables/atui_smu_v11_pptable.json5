@@ -6341,15 +6341,6 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
 		}, {
-			access: "bios->golden_pp_id",
-			name: "golden_pp_id",
-		}, {
-			access: "bios->golden_revision",
-			name: "golden_revision",
-		}, {
-			access: "bios->format_id",
-			name: "format_id",
-		}, {
 			access: "bios->platform_caps.platform_caps",
 			name: "platform_caps",
 			display: "ATUI_SUBONLY",
@@ -6414,15 +6405,6 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
 		}, {
-			access: "bios->GoldenPPID",
-			name: "GoldenPPID",
-		}, {
-			access: "bios->GoldenRevision",
-			name: "GoldenRevision",
-		}, {
-			access: "bios->FormatID",
-			name: "FormatID",
-		}, {
 			access: "bios->platform_caps",
 			name: "platform_caps",
 			display: "ATUI_NAN",
@@ -6480,24 +6462,6 @@ global_default: {
 			name: "header",
 			display: "ATUI_NAN",
 			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
-		}, {
-			access: "bios->golden_pp_id",
-			name: "golden_pp_id",
-			description: [
-				{language: "english", text: "PPGen use only: PP Table ID on the Golden Data Base",},
-			],
-		}, {
-			access: "bios->golden_revision",
-			name: "golden_revision",
-			description: [
-				{language: "english", text: "PPGen use only: PP Table Revision on the Golden Data Base",},
-			],
-		}, {
-			access: "bios->format_id",
-			name: "format_id",
-			description: [
-				{language: "english", text: "PPGen use only: PPTable for different ASICs. For sienna_cichlid this should be 0x80",},
-			],
 		}, {
 			access: "bios->platform_caps",
 			name: "platform_caps",

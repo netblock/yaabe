@@ -96,9 +96,6 @@ enum atom_vega10_voltagemode:uint8_t {
 
 struct atom_vega10_powerplaytable {
 	struct smu_powerplay_table_header header;
-	uint32_t GoldenPPID;       // PPGen use only
-	uint32_t GoldenRevision;   // PPGen use only
-	uint16_t FormatID;         // PPGen use only
 	union vega10_powerplay_platform_caps PlatformCaps;
 	uint32_t MaxODEngineClock; // For Overdrive.
 	uint32_t MaxODMemoryClock; // For Overdrive.

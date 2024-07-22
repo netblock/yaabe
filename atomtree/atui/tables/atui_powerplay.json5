@@ -31,8 +31,8 @@ global_default: {
 	leaves: [
 		{
 			access: "bios->header",
-			name: "atom_common_table_header",
-			display: "ATUI_NAN",
+			name: "header",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->table_revision",
@@ -42,6 +42,24 @@ global_default: {
 			name: "table_size",
 			description: [
 				{language: "english", text: "Driver portion table size. The offset to smc_pptable including header size",},
+			],
+		}, {
+			access: "bios->golden_pp_id",
+			name: "golden_pp_id",
+			description: [
+				{language: "english", text: "PPGen use only: PP Table ID on the Golden Data Base",},
+			],
+		}, {
+			access: "bios->golden_revision",
+			name: "golden_revision",
+			description: [
+				{language: "english", text: "PPGen use only: PP Table Revision on the Golden Data Base",},
+			],
+		}, {
+			access: "bios->format_id",
+			name: "format_id",
+			description: [
+				{language: "english", text: "PPGen use only: PPTable for different ASICs.",},
 			],
 		},
 	],

@@ -283,9 +283,6 @@ union smu11_smc_pptables {
 
 struct smu_11_0_powerplay_table {
 	struct smu_powerplay_table_header  header;
-	uint32_t golden_pp_id;
-	uint32_t golden_revision;
-	uint16_t format_id;
 	union powerplay_platform_caps  platform_caps;
 
 	uint8_t  thermal_controller_type; // one of SMU_11_0_PP_THERMALCONTROLLER
@@ -307,9 +304,6 @@ struct smu_11_0_powerplay_table {
 
 struct atom_vega20_powerplay_table {
 	struct smu_powerplay_table_header header;
-	uint32_t GoldenPPID;
-	uint32_t GoldenRevision;
-	uint16_t FormatID;
 
 	union powerplay_platform_caps  platform_caps;
 
@@ -333,9 +327,6 @@ struct atom_vega20_powerplay_table {
 
 struct smu_11_0_7_powerplay_table {
 	struct smu_powerplay_table_header  header;
-	uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
-	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
-	uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For sienna_cichlid this should be 0x80
 	union powerplay_platform_caps  platform_caps; // POWERPLAYABLE::ulPlatformCaps
 	uint8_t  thermal_controller_type; // one of SMU_11_0_7_PP_THERMALCONTROLLER
 

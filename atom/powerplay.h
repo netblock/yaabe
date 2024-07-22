@@ -10,6 +10,9 @@ struct smu_powerplay_table_header {
 	struct atom_common_table_header  header;
 	uint8_t  table_revision;
 	uint16_t table_size; // Driver portion table size. The offset to smc_pptable including header size
+	uint32_t golden_pp_id;    // PPGen use only: PP Table ID on the Golden Data Base
+	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
+	uint16_t format_id;       // PPGen use only: PPTable for different ASICs.
 };
 
 // SMU 11, 13
