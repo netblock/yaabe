@@ -214,13 +214,76 @@ populate_gfx_info(
 	}
 }
 
+inline static void
+populate_vega10_ppt(
+		struct atomtree_powerplay_table_v8_1* const ppt81
+		) {
+	union {
+		void* raw;
+		struct atom_vega10_powerplaytable* ppt;
+	} b;
+	b.raw = ppt81->leaves;
+	if (b.ppt->StateArrayOffset) {
+		ppt81->state_array = b.raw + b.ppt->StateArrayOffset;
+	}
+	if (b.ppt->FanTableOffset) {
+		ppt81->fan_table = b.raw + b.ppt->FanTableOffset;
+	}
+	if (b.ppt->ThermalControllerOffset) {
+		ppt81->thermal_controller = b.raw + b.ppt->ThermalControllerOffset;
+	}
+	if (b.ppt->SocclkDependencyTableOffset) {
+		ppt81->socclk_dependency = b.raw + b.ppt->SocclkDependencyTableOffset;
+	}
+	if (b.ppt->MclkDependencyTableOffset) {
+		ppt81->mclk_dependency = b.raw + b.ppt->MclkDependencyTableOffset;
+	}
+	if (b.ppt->GfxclkDependencyTableOffset) {
+		ppt81->gfxclk_dependency = b.raw + b.ppt->GfxclkDependencyTableOffset;
+	}
+	if (b.ppt->DcefclkDependencyTableOffset) {
+		ppt81->dcefclk_dependency = b.raw + b.ppt->DcefclkDependencyTableOffset;
+	}
+	if (b.ppt->VddcLookupTableOffset) {
+		ppt81->vddc_lut = b.raw + b.ppt->VddcLookupTableOffset;
+	}
+	if (b.ppt->VddmemLookupTableOffset) {
+		ppt81->vdd_mem_lut = b.raw + b.ppt->VddmemLookupTableOffset;
+	}
+	if (b.ppt->MMDependencyTableOffset) {
+		ppt81->mm_dependency = b.raw + b.ppt->MMDependencyTableOffset;
+	}
+	if (b.ppt->VCEStateTableOffset) {
+		ppt81->vce_state = b.raw + b.ppt->VCEStateTableOffset;
+	}
+	if (b.ppt->PowerTuneTableOffset) {
+		ppt81->powertune = b.raw + b.ppt->PowerTuneTableOffset;
+	}
+	if (b.ppt->HardLimitTableOffset) {
+		ppt81->hard_limit = b.raw + b.ppt->HardLimitTableOffset;
+	}
+	if (b.ppt->VddciLookupTableOffset) {
+		ppt81->vddci_lut = b.raw + b.ppt->VddciLookupTableOffset;
+	}
+	if (b.ppt->PCIETableOffset) {
+		ppt81->pcie_table = b.raw + b.ppt->PCIETableOffset;
+	}
+	if (b.ppt->PixclkDependencyTableOffset) {
+		ppt81->pixclk_dependency = b.raw + b.ppt->PixclkDependencyTableOffset;
+	}
+	if (b.ppt->DispClkDependencyTableOffset) {
+		ppt81->dispclk_dependency = b.raw + b.ppt->DispClkDependencyTableOffset;
+	}
+	if (b.ppt->PhyClkDependencyTableOffset) {
+		ppt81->phyclk_dependency = b.raw + b.ppt->PhyClkDependencyTableOffset;
+	}
+}
 inline static enum atomtree_common_version
 get_smc_pptable_ver(
 		uint32_t const pp_ver
 		) {
 	assert(pp_ver < (UINT16_MAX/100)); // enum atomtree_common_version
-	enum atomtree_common_version ver = pp_ver;
-	return ver * 100;
+	return pp_ver * 100;
 }
 inline static void
 populate_ppt(
@@ -234,6 +297,9 @@ populate_ppt(
 		ppt->ver = get_ver(ppt->table_header);
 
 		switch (ppt->ver) {
+			case v8_1:
+				populate_vega10_ppt(&(ppt->v8_1));
+				break;
 			case v11_0:
 				ppt->v11_0.smc_pptable_ver = get_smc_pptable_ver(
 					ppt->v11_0.leaves->smc_pptable.ver

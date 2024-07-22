@@ -59,10 +59,10 @@ union atom_pplib_classification {
 	};
 };
 
-union atom_pplib_classification {
-	uint16_t Classification;
+union atom_pplib_classification2 {
+	uint16_t Classification2;
 	struct { uint16_t
-		limitedpowersource_2 :0-0 +1
+		limitedpowersource_2 :0-0 +1,
 		ULV                  :1-1 +1,
 		multi_view_codec     :2-2 +1, // BD-3D
 		rsvd0               :15-3 +1;
@@ -92,20 +92,18 @@ enum atom_vega10_voltagemode:uint8_t {
 	ATOM_VEGA10_VOLTAGEMODE_AVFS_INTERPOLATE = 0,
 	ATOM_VEGA10_VOLTAGEMODE_AVFS_WORSTCASE   = 1,
 	ATOM_VEGA10_VOLTAGEMODE_STATIC           = 2,
-}
+};
 
 struct atom_vega10_powerplaytable {
-	struct atom_common_table_header header;
-	uint8_t  TableRevision;
-	uint16_t TableSize;        // the size of header structure 
-	uint32_t GoldenPPID;       // PPGen use only 
-	uint32_t GoldenRevision;   // PPGen use only 
-	uint16_t FormatID;         // PPGen use only 
+	struct smu_powerplay_table_header header;
+	uint32_t GoldenPPID;       // PPGen use only
+	uint32_t GoldenRevision;   // PPGen use only
+	uint16_t FormatID;         // PPGen use only
 	union vega10_powerplay_platform_caps PlatformCaps;
-	uint32_t MaxODEngineClock; // For Overdrive. 
-	uint32_t MaxODMemoryClock; // For Overdrive. 
+	uint32_t MaxODEngineClock; // For Overdrive.
+	uint32_t MaxODMemoryClock; // For Overdrive.
 	uint16_t PowerControlLimit;
-	uint16_t UlvVoltageOffset; // in mv units 
+	uint16_t UlvVoltageOffset; // in mv units
 	uint16_t UlvSmnclkDid;
 	uint16_t UlvMp1clkDid;
 	uint16_t UlvGfxclkBypass;
@@ -128,7 +126,7 @@ struct atom_vega10_powerplaytable {
 	uint16_t VddmemLookupTableOffset;
 	uint16_t MMDependencyTableOffset;
 	uint16_t VCEStateTableOffset;
-	uint16_t Reserve; // No PPM Support for Vega10 
+	uint16_t Reserve; // No PPM Support for Vega10
 	uint16_t PowerTuneTableOffset;
 	uint16_t HardLimitTableOffset;
 	uint16_t VddciLookupTableOffset;
@@ -157,13 +155,18 @@ struct atom_vega10_state_array {
 };
 
 struct atom_vega10_clk_dependency_record {
-	uint32_t Clk;    // Frequency of Clock 
+	uint32_t Clk;    // Frequency of Clock
 	uint8_t  VddInd; // Base voltage ; SOC_VDD index
+};
+struct atom_vega10_clk_dependency_table {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_clk_dependency_record  entries[1];
 };
 
 
 union clock_stretch_config {
-	uint16_t CKSVOffsetandDisable;
+	uint16_t CKSVOffsetandDisable; // clock stretch
 	struct { uint16_t
 		cks_voltage_offset :14-0 +1,
 		disable            :15-15 +1;
@@ -172,25 +175,35 @@ union clock_stretch_config {
 struct atom_vega10_gfxclk_dependency_record {
 	struct atom_vega10_clk_dependency_record  base;
 	union clock_stretch_config  CKSVOffsetandDisable;
-	uint16_t AVFSOffset; // AVFS Voltage offset 
+	uint16_t AVFSOffset; // AVFS Voltage offset
 };
-struct atom_vega10_gfxclk_dependency_record_v2 {
-	struct atom_vega10_clk_dependency_record  base;
-	union clock_stretch_config  CKSVOffsetandDisable;
-	uint16_t AVFSOffset;
-	uint8_t  ACGEnable;
-	uint8_t  Reserved[3];
-};
-struct atom_vega10_gfxclk_dependency_table {
+struct atom_vega10_gfxclk_dependency_table_v1 {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
 	struct atom_vega10_gfxclk_dependency_record  entries[1];
 };
+struct atom_vega10_gfxclk_dependency_record_v2 {
+	struct atom_vega10_clk_dependency_record  base;
+	union clock_stretch_config  CKSVOffsetandDisable;
+	uint16_t AVFSOffset; // AVFS Voltage offset
+	uint8_t  ACGEnable;
+	uint8_t  Reserved[3];
+};
+struct atom_vega10_gfxclk_dependency_table_v2 {
+	uint8_t  RevId;
+	uint8_t  NumEntries;
+	struct atom_vega10_gfxclk_dependency_record_v2  entries[1];
+};
+union atom_vega10_gfxclk_dependency_tables {
+	uint8_t  RevId;
+	struct atom_vega10_gfxclk_dependency_table_v1 v1;
+	struct atom_vega10_gfxclk_dependency_table_v2 v2;
+};
 
 struct atom_vega10_mclk_dependency_record {
 	struct atom_vega10_clk_dependency_record  base;
-	uint8_t  VddMemInd; // MEM_VDD - only non zero for MCLK record 
-	uint8_t  VddciInd;  // VDDCI   = only non zero for MCLK record 
+	uint8_t  VddMemInd; // MEM_VDD - only non zero for MCLK record
+	uint8_t  VddciInd;  // VDDCI   = only non zero for MCLK record
 };
 struct atom_vega10_mclk_dependency_table {
 	uint8_t  RevId;
@@ -200,18 +213,13 @@ struct atom_vega10_mclk_dependency_table {
 
 
 
-struct atom_vega10_clk_dependency_table {
-	uint8_t  RevId;
-	uint8_t  NumEntries;
-	struct atom_vega10_clk_dependency_record  entries[1];
-};
 
 struct atom_vega10_mm_dependency_record {
-	uint8_t  VddcInd; // SOC_VDD voltage 
-	uint32_t DClk;    // UVD D-clock 
-	uint32_t VClk;    // UVD V-clock 
-	uint32_t EClk;    // VCE clock 
-	uint32_t PSPClk;  // PSP clock 
+	uint8_t  VddcInd; // SOC_VDD voltage
+	uint32_t DClk;    // UVD D-clock
+	uint32_t VClk;    // UVD V-clock
+	uint32_t EClk;    // VCE clock
+	uint32_t PSPClk;  // PSP clock
 };
 
 struct atom_vega10_mm_dependency_table {
@@ -221,9 +229,9 @@ struct atom_vega10_mm_dependency_table {
 };
 
 struct atom_vega10_pcie_record {
-	uint32_t LCLK;          // LClock 
-	uint8_t  PCIEGenSpeed;  // PCIE Speed 
-	uint8_t  PCIELaneWidth; // PCIE Lane Width 
+	uint32_t LCLK;          // LClock
+	uint8_t  PCIEGenSpeed;  // PCIE Speed
+	uint8_t  PCIELaneWidth; // PCIE Lane Width
 };
 
 struct atom_vega10_pcie_table {
@@ -232,31 +240,24 @@ struct atom_vega10_pcie_table {
 	struct atom_vega10_pcie_record  entries[1];
 };
 
-struct atom_vega10_voltage_lookup_record {
-	uint16_t Vdd; // Base voltage 
-};
-
+/*struct atom_vega10_voltage_lookup_record {
+	uint16_t Vdd; // Base voltage
+};*/
 struct atom_vega10_voltage_lookup_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_voltage_lookup_record  entries[1];
+	uint16_t vdd_entries[1];
 };
 
-union atom_vega10_fan_table_tables {
-	uint8_t  RevId;
-	struct atom_vega10_fan_table_table_v1 v1;
-	struct atom_vega10_fan_table_table_v2 v2;
-	struct atom_vega10_fan_table_table_v3 v3;
-};
 struct atom_vega10_fan_table_v1 {
-	uint8_t  RevId;                // Change this if the table format changes or version changes so that the other fields are not the same. 
-	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
-	uint16_t FanRPMMax;            // The default value in RPM. 
+	uint8_t  RevId;
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes.
+	uint16_t FanRPMMax;            // The default value in RPM.
 	uint16_t ThrottlingRPM;
-	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
-	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
-	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
-	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit.
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius.
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set.
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit.
 	uint16_t FanGainEdge;
 	uint16_t FanGainHotspot;
 	uint16_t FanGainLiquid;
@@ -270,12 +271,12 @@ struct atom_vega10_fan_table_v1 {
 };
 struct atom_vega10_fan_table_v2 {
 	uint8_t  RevId;
-	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
-	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes.
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit.
 	uint16_t ThrottlingRPM;
-	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
-	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
-	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius.
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set.
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit.
 
 	uint16_t FanGainEdge;
 	uint16_t FanGainHotspot;
@@ -293,12 +294,12 @@ struct atom_vega10_fan_table_v2 {
 };
 struct atom_vega10_fan_table_v3 {
 	uint8_t  RevId;
-	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes. 
-	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit. 
+	uint16_t FanOutputSensitivity; // Sensitivity of fan reaction to temepature changes.
+	uint16_t FanAcousticLimit;     // Minimum Fan Controller Frequency Acoustic Limit.
 	uint16_t ThrottlingRPM;
-	uint16_t TargetTemperature;    // The default ideal temperature in Celcius. 
-	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set. 
-	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit. 
+	uint16_t TargetTemperature;    // The default ideal temperature in Celcius.
+	uint16_t MinimumPWMLimit;      // The minimum PWM that the advanced fan controller can set.
+	uint16_t TargetGfxClk;         // The ideal Fan Controller GFXCLK Frequency Acoustic Limit.
 	uint16_t FanGainEdge;
 	uint16_t FanGainHotspot;
 	uint16_t FanGainLiquid;
@@ -314,35 +315,35 @@ struct atom_vega10_fan_table_v3 {
 	uint8_t  FanMaxRPM;
 	uint16_t MGpuThrottlingRPM;
 };
+union atom_vega10_fan_tables {
+	uint8_t  RevId;
+	struct atom_vega10_fan_table_v1 v1;
+	struct atom_vega10_fan_table_v2 v2;
+	struct atom_vega10_fan_table_v3 v3;
+};
 
 struct atom_vega10_thermal_controller {
 	uint8_t  RevId;
-	uint8_t  Type;    // one of 
-	uint8_t  I2cLine; // as interpreted by DAL I2C 
+	uint8_t  Type;    // one of
+	uint8_t  I2cLine; // as interpreted by DAL I2C
 	uint8_t  I2cAddress;
 	union atom_pp_fanparameters  FanParameters;
 	uint8_t  FanMinRPM; // Fan Minimum RPM (hundreds) -- for display purposes only.
 	uint8_t  FanMaxRPM; // Fan Maximum RPM (hundreds) -- for display purposes only.
-	uint8_t  Flags;     // to be defined 
+	uint8_t  Flags;     // to be defined
 };
 
 struct atom_vega10_vce_state_record {
-	uint8_t  VCEClockIndex; // index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type 
-	uint8_t  Flag;          // 2 bits indicates memory p-states 
-	uint8_t  SCLKIndex;     // index into ATOM_Vega10_SCLK_Dependency_Table 
-	uint8_t  MCLKIndex;     // index into ATOM_Vega10_MCLK_Dependency_Table 
+	uint8_t  VCEClockIndex; // index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type
+	uint8_t  Flag;          // 2 bits indicates memory p-states
+	uint8_t  SCLKIndex;     // index into ATOM_Vega10_SCLK_Dependency_Table
+	uint8_t  MCLKIndex;     // index into ATOM_Vega10_MCLK_Dependency_Table
 };
 struct atom_vega10_vce_state_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
 	struct atom_vega10_vce_state_record  entries[1];
 };
-
-union atom_vega10_powertune_tables {
-	uint8_t  RevId;
-	struct atom_vega10_powertune_table_v1 v1;
-	struct atom_vega10_powertune_table_v2 v2;
-	struct atom_vega10_powertune_table_v3 v3;
 
 struct atom_vega10_powertune_table_v1 {
 	uint8_t  RevId;
@@ -426,6 +427,12 @@ struct atom_vega10_powertune_table_v3 {
 	uint32_t BoostClock;
 	uint32_t Reserved[2];
 };
+union atom_vega10_powertune_tables {
+	uint8_t  RevId;
+	struct atom_vega10_powertune_table_v1 v1;
+	struct atom_vega10_powertune_table_v2 v2;
+	struct atom_vega10_powertune_table_v3 v3;
+};
 
 struct atom_vega10_hard_limit_record {
 	uint32_t SOCCLKLimit;
@@ -442,10 +449,11 @@ struct atom_vega10_hard_limit_table {
 	struct atom_vega10_hard_limit_record  entries[1];
 };
 
-struct vega10_pptable_generic_subtable_header {
+struct vega10_subtable_header {
 	uint8_t  RevId;
 };
 
 #pragma pack(pop)
 
 #endif
+

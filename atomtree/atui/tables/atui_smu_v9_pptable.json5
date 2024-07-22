@@ -1,0 +1,1496 @@
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atomtree_powerplay_table",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT",
+			name: "entries [%02u]",
+		},
+	},
+}, branches: [
+
+{
+	c_type: "vega10_subtable_header",
+	leaves: [{access: "bios->RevId", name: "RevId",},],
+},
+
+{
+	c_prefix:"union", c_type: "vega10_powerplay_platform_caps",
+	leaves: [
+		{
+			access: "bios->platform_caps",
+			name: "platform_caps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "powerplay",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "whether CCC needs to show Powerplay page.",},
+					],
+				}, {
+					name: "sbios_powersource",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
+					],
+				}, {
+					name: "hardware_dc",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
+					],
+				}, {
+					name: "BACO",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
+					],
+				}, {
+					name: "combine_pcc_with_thermal_signal",
+					hi: 4, lo: 4,
+				}, {
+					name: "reserved",
+					hi: 31, lo: 5,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_powerplaytable",
+	table_size: "bios->header.header.structuresize",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
+		}, {
+			access: "bios->GoldenPPID",
+			name: "GoldenPPID",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->GoldenRevision",
+			name: "GoldenRevision",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->FormatID",
+			name: "FormatID",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "vega10_powerplay_platform_caps",
+		}, {
+			access: "bios->MaxODEngineClock",
+			name: "MaxODEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxODMemoryClock",
+			name: "MaxODMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->PowerControlLimit",
+			name: "PowerControlLimit",
+		}, {
+			access: "bios->UlvVoltageOffset",
+			name: "UlvVoltageOffset",
+			description: [
+				{language: "english", text: "in mv units",},
+			],
+		}, {
+			access: "bios->UlvSmnclkDid",
+			name: "UlvSmnclkDid",
+		}, {
+			access: "bios->UlvMp1clkDid",
+			name: "UlvMp1clkDid",
+		}, {
+			access: "bios->UlvGfxclkBypass",
+			name: "UlvGfxclkBypass",
+		}, {
+			access: "bios->GfxclkSlewRate",
+			name: "GfxclkSlewRate",
+		}, {
+			access: "bios->GfxVoltageMode",
+			name: "GfxVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->SocVoltageMode",
+			name: "SocVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->UclkVoltageMode",
+			name: "UclkVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->UvdVoltageMode",
+			name: "UvdVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->VceVoltageMode",
+			name: "VceVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->Mp0VoltageMode",
+			name: "Mp0VoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->DcefVoltageMode",
+			name: "DcefVoltageMode",
+			fancy: "ATUI_ENUM", fancy_data: "atom_vega10_voltagemode",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->FanTableOffset",
+			name: "FanTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ThermalControllerOffset",
+			name: "ThermalControllerOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SocclkDependencyTableOffset",
+			name: "SocclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MclkDependencyTableOffset",
+			name: "MclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->GfxclkDependencyTableOffset",
+			name: "GfxclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->DcefclkDependencyTableOffset",
+			name: "DcefclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcLookupTableOffset",
+			name: "VddcLookupTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddmemLookupTableOffset",
+			name: "VddmemLookupTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MMDependencyTableOffset",
+			name: "MMDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VCEStateTableOffset",
+			name: "VCEStateTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->Reserve",
+			name: "Reserve",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "No PPM Support for Vega10",},
+			],
+		}, {
+			access: "bios->PowerTuneTableOffset",
+			name: "PowerTuneTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->HardLimitTableOffset",
+			name: "HardLimitTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddciLookupTableOffset",
+			name: "VddciLookupTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PCIETableOffset",
+			name: "PCIETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PixclkDependencyTableOffset",
+			name: "PixclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->DispClkDependencyTableOffset",
+			name: "DispClkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PhyClkDependencyTableOffset",
+			name: "PhyClkDependencyTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+},
+
+{
+	c_prefix: "union", c_type: "atom_pplib_classification",
+	leaves: [
+		{
+			access: "bios->Classification",
+			name: "Classification",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "ui_label",
+					hi: 2, lo: 0,
+					description: [
+						{language: "english", text: "enum atom_pplib_classification_ui",},
+					],
+				}, {
+					name: "boot",
+					hi: 3, lo: 3,
+				}, {
+					name: "thermal",
+					hi: 4, lo: 4,
+				}, {
+					name: "limited_power",
+					hi: 5, lo: 5,
+				}, {
+					name: "reset",
+					hi: 6, lo: 6,
+				}, {
+					name: "forced",
+					hi: 7, lo: 7,
+				}, {
+					name: "performance_3D",
+					hi: 8, lo: 8,
+				}, {
+					name: "overdrive_template",
+					hi: 9, lo: 9,
+				}, {
+					name: "uvd_state",
+					hi: 10, lo: 10,
+				}, {
+					name: "low_3D",
+					hi: 11, lo: 11,
+				}, {
+					name: "acpi",
+					hi: 12, lo: 12,
+				}, {
+					name: "hd2_state",
+					hi: 13, lo: 13,
+				}, {
+					name: "hd_state",
+					hi: 14, lo: 14,
+				}, {
+					name: "sd_state",
+					hi: 15, lo: 15,
+				},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "atom_pplib_classification2",
+	leaves: [
+		{
+			access: "bios->Classification2",
+			name: "Classification2",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "limitedpowersource_2",
+					hi: 0, lo: 0,
+				}, {
+					name: "ULV",
+					hi: 1, lo: 1,
+				}, {
+					name: "multi_view_codec",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "BD-3D",},
+					],
+				}, {
+					name: "rsvd0",
+					hi: 15, lo: 3,
+				},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "atom_pplib_caps_and_settings",
+	leaves: [
+		{
+			access: "bios->CapsAndSettings",
+			name: "CapsAndSettings",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "single_display_only",
+					hi: 0, lo: 0,
+				}, {
+					name: "supports_video_playback",
+					hi: 1, lo: 1,
+				}, {
+					name: "pcie_link_speed",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "0=PCIe1, 1=PCIe2",},
+					],
+				}, {
+					name: "pcie_link_width",
+					hi: 7, lo: 3,
+				}, {
+					name: "limited_refreshrate",
+					hi: 11, lo: 8,
+					description: [
+						{language: "english", text: "1=50Hz, all else = TBD",},
+					],
+				}, {
+					name: "disable_loadbalancing",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "software side",},
+					],
+				}, {
+					name: "enable_timestamp_sleep",
+					hi: 13, lo: 13,
+				}, {
+					name: "disallow_on_dc",
+					hi: 14, lo: 14,
+				}, {
+					name: "enable_varibright",
+					hi: 15, lo: 15,
+				}, {
+					name: "swstate_memory_dll_off",
+					hi: 16, lo: 16,
+				}, {
+					name: "m3_arb",
+					hi: 18, lo: 17,
+				}, {
+					name: "enable_drr",
+					hi: 19, lo: 19,
+				}, {
+					name: "rsvd0",
+					hi: 31, lo: 20,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_state",
+	leaves: [
+		{
+			access: "bios->SocClockIndexHigh",
+			name: "SocClockIndexHigh",
+		}, {
+			access: "bios->SocClockIndexLow",
+			name: "SocClockIndexLow",
+		}, {
+			access: "bios->GfxClockIndexHigh",
+			name: "GfxClockIndexHigh",
+		}, {
+			access: "bios->GfxClockIndexLow",
+			name: "GfxClockIndexLow",
+		}, {
+			access: "bios->MemClockIndexHigh",
+			name: "MemClockIndexHigh",
+		}, {
+			access: "bios->MemClockIndexLow",
+			name: "MemClockIndexLow",
+		}, {
+			access: "bios->Classification",
+			name: "Classification",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification",
+		}, {
+			access: "bios->CapsAndSettings",
+			name: "CapsAndSettings",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_caps_and_settings",
+		}, {
+			access: "bios->Classification2",
+			name: "Classification2",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification2",
+		},
+	],
+}, {
+	c_type: "atom_vega10_state_array",
+	table_size: "offsetof(typeof(*bios), states) + bios->NumEntries*sizeof(typeof(bios->states[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->states",
+			name: "states",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "states [%02u]",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_vega10_state",
+					},
+				],
+			},
+		},
+	],
+},
+{
+	c_prefix: "union", c_type: "atom_pp_fanparameters",
+	leaves: [
+		{
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "tachometer_pulses_per_revolution",
+					hi: 3, lo: 0,
+				}, {
+					name: "rsvd",
+					hi: 6, lo: 4,
+				}, {
+					name: "no_fan",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_fan_table_v1",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
+			],
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+			description: [
+				{language: "english", text: "The default value in RPM.",},
+			],
+		}, {
+			access: "bios->ThrottlingRPM",
+			name: "ThrottlingRPM",
+		}, {
+			access: "bios->FanAcousticLimit",
+			name: "FanAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "The default ideal temperature in Celcius.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
+			],
+		}, {
+			access: "bios->TargetGfxClk",
+			name: "TargetGfxClk",
+			description: [
+				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->FanGainEdge",
+			name: "FanGainEdge",
+		}, {
+			access: "bios->FanGainHotspot",
+			name: "FanGainHotspot",
+		}, {
+			access: "bios->FanGainLiquid",
+			name: "FanGainLiquid",
+		}, {
+			access: "bios->FanGainVrVddc",
+			name: "FanGainVrVddc",
+		}, {
+			access: "bios->FanGainVrMvdd",
+			name: "FanGainVrMvdd",
+		}, {
+			access: "bios->FanGainPlx",
+			name: "FanGainPlx",
+		}, {
+			access: "bios->FanGainHbm",
+			name: "FanGainHbm",
+		}, {
+			access: "bios->EnableZeroRPM",
+			name: "EnableZeroRPM",
+		}, {
+			access: "bios->FanStopTemperature",
+			name: "FanStopTemperature",
+		}, {
+			access: "bios->FanStartTemperature",
+			name: "FanStartTemperature",
+		},
+	],
+}, {
+	c_type: "atom_vega10_fan_table_v2",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
+			],
+		}, {
+			access: "bios->FanAcousticLimit",
+			name: "FanAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->ThrottlingRPM",
+			name: "ThrottlingRPM",
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "The default ideal temperature in Celcius.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
+			],
+		}, {
+			access: "bios->TargetGfxClk",
+			name: "TargetGfxClk",
+			description: [
+				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->FanGainEdge",
+			name: "FanGainEdge",
+		}, {
+			access: "bios->FanGainHotspot",
+			name: "FanGainHotspot",
+		}, {
+			access: "bios->FanGainLiquid",
+			name: "FanGainLiquid",
+		}, {
+			access: "bios->FanGainVrVddc",
+			name: "FanGainVrVddc",
+		}, {
+			access: "bios->FanGainVrMvdd",
+			name: "FanGainVrMvdd",
+		}, {
+			access: "bios->FanGainPlx",
+			name: "FanGainPlx",
+		}, {
+			access: "bios->FanGainHbm",
+			name: "FanGainHbm",
+		}, {
+			access: "bios->EnableZeroRPM",
+			name: "EnableZeroRPM",
+		}, {
+			access: "bios->FanStopTemperature",
+			name: "FanStopTemperature",
+		}, {
+			access: "bios->FanStartTemperature",
+			name: "FanStartTemperature",
+		}, {
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pp_fanparameters",
+		}, {
+			access: "bios->FanMinRPM",
+			name: "FanMinRPM",
+		}, {
+			access: "bios->FanMaxRPM",
+			name: "FanMaxRPM",
+		},
+	],
+}, {
+	c_type: "atom_vega10_fan_table_v3",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
+			],
+		}, {
+			access: "bios->FanAcousticLimit",
+			name: "FanAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->ThrottlingRPM",
+			name: "ThrottlingRPM",
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "The default ideal temperature in Celcius.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
+			],
+		}, {
+			access: "bios->TargetGfxClk",
+			name: "TargetGfxClk",
+			description: [
+				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->FanGainEdge",
+			name: "FanGainEdge",
+		}, {
+			access: "bios->FanGainHotspot",
+			name: "FanGainHotspot",
+		}, {
+			access: "bios->FanGainLiquid",
+			name: "FanGainLiquid",
+		}, {
+			access: "bios->FanGainVrVddc",
+			name: "FanGainVrVddc",
+		}, {
+			access: "bios->FanGainVrMvdd",
+			name: "FanGainVrMvdd",
+		}, {
+			access: "bios->FanGainPlx",
+			name: "FanGainPlx",
+		}, {
+			access: "bios->FanGainHbm",
+			name: "FanGainHbm",
+		}, {
+			access: "bios->EnableZeroRPM",
+			name: "EnableZeroRPM",
+		}, {
+			access: "bios->FanStopTemperature",
+			name: "FanStopTemperature",
+		}, {
+			access: "bios->FanStartTemperature",
+			name: "FanStartTemperature",
+		}, {
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pp_fanparameters",
+		}, {
+			access: "bios->FanMinRPM",
+			name: "FanMinRPM",
+		}, {
+			access: "bios->FanMaxRPM",
+			name: "FanMaxRPM",
+		}, {
+			access: "bios->MGpuThrottlingRPM",
+			name: "MGpuThrottlingRPM",
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_thermal_controller",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->Type",
+			name: "Type",
+			description: [
+				{language: "english", text: "one of",},
+			],
+		}, {
+			access: "bios->I2cLine",
+			name: "I2cLine",
+			description: [
+				{language: "english", text: "as interpreted by DAL I2C",},
+			],
+		}, {
+			access: "bios->I2cAddress",
+			name: "I2cAddress",
+		}, {
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pp_fanparameters",
+		}, {
+			access: "bios->FanMinRPM",
+			name: "FanMinRPM",
+			description: [
+				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->FanMaxRPM",
+			name: "FanMaxRPM",
+			description: [
+				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+			description: [
+				{language: "english", text: "to be defined",},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_clk_dependency_record",
+	leaves: [
+		{
+			access: "bios->Clk",
+			name: "Clk",
+			description: [
+				{language: "english", text: "Frequency of Clock",},
+			],
+		}, {
+			access: "bios->VddInd",
+			name: "VddInd",
+			description: [
+				{language: "english", text: "Base voltage ; SOC_VDD index",},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_clk_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_clk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_mclk_dependency_record",
+	leaves: [
+		{
+			access: "bios->base",
+			name: "base",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_vega10_clk_dependency_record",
+		}, {
+			access: "bios->VddMemInd",
+			name: "VddMemInd",
+			description: [
+				{language: "english", text: "MEM_VDD - only non zero for MCLK record",},
+			],
+		}, {
+			access: "bios->VddciInd",
+			name: "VddciInd",
+			description: [
+				{language: "english", text: "VDDCI   = only non zero for MCLK record",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_mclk_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_mclk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_prefix: "union", c_type: "clock_stretch_config",
+	leaves: [
+		{
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_BIN",
+			description: [
+				{language: "english", text: "clock stretch",},
+			],
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "cks_voltage_offset",
+					hi: 14, lo: 0,
+				}, {
+					name: "disable",
+					hi: 15, lo: 15,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_gfxclk_dependency_record",
+	leaves: [
+		{
+			access: "bios->base",
+			name: "base",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_vega10_clk_dependency_record",
+		}, {
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config",
+		}, {
+			access: "bios->AVFSOffset",
+			name: "AVFSOffset",
+			description: [
+				{language: "english", text: "AVFS Voltage offset",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_gfxclk_dependency_table_v1",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_gfxclk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_vega10_gfxclk_dependency_record_v2",
+	leaves: [
+		{
+			access: "bios->base",
+			name: "base",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_vega10_clk_dependency_record",
+		}, {
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config",
+		}, {
+			access: "bios->AVFSOffset",
+			name: "AVFSOffset",
+			description: [
+				{language: "english", text: "AVFS Voltage offset",},
+			],
+		}, {
+			access: "bios->ACGEnable",
+			name: "ACGEnable",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_vega10_gfxclk_dependency_table_v2",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_gfxclk_dependency_record_v2",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_voltage_lookup_table",
+	table_size: "offsetof(typeof(*bios), vdd_entries) + bios->NumEntries*sizeof(typeof(bios->vdd_entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->vdd_entries",
+			name: "vdd_entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "vdd_entries [%02u]",
+						display: "ATUI_DEC",
+						fancy: "ATUI_NOFANCY",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_mm_dependency_record",
+	leaves: [
+		{
+			access: "bios->VddcInd",
+			name: "VddcInd",
+			description: [
+				{language: "english", text: "SOC_VDD voltage",},
+			],
+		}, {
+			access: "bios->DClk",
+			name: "DClk",
+			description: [
+				{language: "english", text: "UVD D-clock",},
+			],
+		}, {
+			access: "bios->VClk",
+			name: "VClk",
+			description: [
+				{language: "english", text: "UVD V-clock",},
+			],
+		}, {
+			access: "bios->EClk",
+			name: "EClk",
+			description: [
+				{language: "english", text: "VCE clock",},
+			],
+		}, {
+			access: "bios->PSPClk",
+			name: "PSPClk",
+			description: [
+				{language: "english", text: "PSP clock",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_mm_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_mm_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_vce_state_record",
+	leaves: [
+		{
+			access: "bios->VCEClockIndex",
+			name: "VCEClockIndex",
+			description: [
+				{language: "english", text: "index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type",},
+			],
+		}, {
+			access: "bios->Flag",
+			name: "Flag",
+			description: [
+				{language: "english", text: "2 bits indicates memory p-states",},
+			],
+		}, {
+			access: "bios->SCLKIndex",
+			name: "SCLKIndex",
+			description: [
+				{language: "english", text: "index into ATOM_Vega10_SCLK_Dependency_Table",},
+			],
+		}, {
+			access: "bios->MCLKIndex",
+			name: "MCLKIndex",
+			description: [
+				{language: "english", text: "index into ATOM_Vega10_MCLK_Dependency_Table",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_vce_state_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_vce_state_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_powertune_table_v1",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->SocketPowerLimit",
+			name: "SocketPowerLimit",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->TdcLimit",
+			name: "TdcLimit",
+		}, {
+			access: "bios->EdcLimit",
+			name: "EdcLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->TemperatureLimitHotSpot",
+			name: "TemperatureLimitHotSpot",
+		}, {
+			access: "bios->TemperatureLimitLiquid1",
+			name: "TemperatureLimitLiquid1",
+		}, {
+			access: "bios->TemperatureLimitLiquid2",
+			name: "TemperatureLimitLiquid2",
+		}, {
+			access: "bios->TemperatureLimitHBM",
+			name: "TemperatureLimitHBM",
+		}, {
+			access: "bios->TemperatureLimitVrSoc",
+			name: "TemperatureLimitVrSoc",
+		}, {
+			access: "bios->TemperatureLimitVrMem",
+			name: "TemperatureLimitVrMem",
+		}, {
+			access: "bios->TemperatureLimitPlx",
+			name: "TemperatureLimitPlx",
+		}, {
+			access: "bios->LoadLineResistance",
+			name: "LoadLineResistance",
+		}, {
+			access: "bios->Liquid1_I2C_address",
+			name: "Liquid1_I2C_address",
+		}, {
+			access: "bios->Liquid2_I2C_address",
+			name: "Liquid2_I2C_address",
+		}, {
+			access: "bios->Vr_I2C_address",
+			name: "Vr_I2C_address",
+		}, {
+			access: "bios->Plx_I2C_address",
+			name: "Plx_I2C_address",
+		}, {
+			access: "bios->Liquid_I2C_LineSCL",
+			name: "Liquid_I2C_LineSCL",
+		}, {
+			access: "bios->Liquid_I2C_LineSDA",
+			name: "Liquid_I2C_LineSDA",
+		}, {
+			access: "bios->Vr_I2C_LineSCL",
+			name: "Vr_I2C_LineSCL",
+		}, {
+			access: "bios->Vr_I2C_LineSDA",
+			name: "Vr_I2C_LineSDA",
+		}, {
+			access: "bios->Plx_I2C_LineSCL",
+			name: "Plx_I2C_LineSCL",
+		}, {
+			access: "bios->Plx_I2C_LineSDA",
+			name: "Plx_I2C_LineSDA",
+		}, {
+			access: "bios->TemperatureLimitTedge",
+			name: "TemperatureLimitTedge",
+		},
+	],
+},
+{
+	c_type: "atom_vega10_powertune_table_v2",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->SocketPowerLimit",
+			name: "SocketPowerLimit",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->TdcLimit",
+			name: "TdcLimit",
+		}, {
+			access: "bios->EdcLimit",
+			name: "EdcLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->TemperatureLimitHotSpot",
+			name: "TemperatureLimitHotSpot",
+		}, {
+			access: "bios->TemperatureLimitLiquid1",
+			name: "TemperatureLimitLiquid1",
+		}, {
+			access: "bios->TemperatureLimitLiquid2",
+			name: "TemperatureLimitLiquid2",
+		}, {
+			access: "bios->TemperatureLimitHBM",
+			name: "TemperatureLimitHBM",
+		}, {
+			access: "bios->TemperatureLimitVrSoc",
+			name: "TemperatureLimitVrSoc",
+		}, {
+			access: "bios->TemperatureLimitVrMem",
+			name: "TemperatureLimitVrMem",
+		}, {
+			access: "bios->TemperatureLimitPlx",
+			name: "TemperatureLimitPlx",
+		}, {
+			access: "bios->LoadLineResistance",
+			name: "LoadLineResistance",
+		}, {
+			access: "bios->Liquid1_I2C_address",
+			name: "Liquid1_I2C_address",
+		}, {
+			access: "bios->Liquid2_I2C_address",
+			name: "Liquid2_I2C_address",
+		}, {
+			access: "bios->Liquid_I2C_Line",
+			name: "Liquid_I2C_Line",
+		}, {
+			access: "bios->Vr_I2C_address",
+			name: "Vr_I2C_address",
+		}, {
+			access: "bios->Vr_I2C_Line",
+			name: "Vr_I2C_Line",
+		}, {
+			access: "bios->Plx_I2C_address",
+			name: "Plx_I2C_address",
+		}, {
+			access: "bios->Plx_I2C_Line",
+			name: "Plx_I2C_Line",
+		}, {
+			access: "bios->TemperatureLimitTedge",
+			name: "TemperatureLimitTedge",
+		},
+	],
+}, {
+	c_type: "atom_vega10_powertune_table_v3",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->SocketPowerLimit",
+			name: "SocketPowerLimit",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->TdcLimit",
+			name: "TdcLimit",
+		}, {
+			access: "bios->EdcLimit",
+			name: "EdcLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->TemperatureLimitHotSpot",
+			name: "TemperatureLimitHotSpot",
+		}, {
+			access: "bios->TemperatureLimitLiquid1",
+			name: "TemperatureLimitLiquid1",
+		}, {
+			access: "bios->TemperatureLimitLiquid2",
+			name: "TemperatureLimitLiquid2",
+		}, {
+			access: "bios->TemperatureLimitHBM",
+			name: "TemperatureLimitHBM",
+		}, {
+			access: "bios->TemperatureLimitVrSoc",
+			name: "TemperatureLimitVrSoc",
+		}, {
+			access: "bios->TemperatureLimitVrMem",
+			name: "TemperatureLimitVrMem",
+		}, {
+			access: "bios->TemperatureLimitPlx",
+			name: "TemperatureLimitPlx",
+		}, {
+			access: "bios->LoadLineResistance",
+			name: "LoadLineResistance",
+		}, {
+			access: "bios->Liquid1_I2C_address",
+			name: "Liquid1_I2C_address",
+		}, {
+			access: "bios->Liquid2_I2C_address",
+			name: "Liquid2_I2C_address",
+		}, {
+			access: "bios->Liquid_I2C_Line",
+			name: "Liquid_I2C_Line",
+		}, {
+			access: "bios->Vr_I2C_address",
+			name: "Vr_I2C_address",
+		}, {
+			access: "bios->Vr_I2C_Line",
+			name: "Vr_I2C_Line",
+		}, {
+			access: "bios->Plx_I2C_address",
+			name: "Plx_I2C_address",
+		}, {
+			access: "bios->Plx_I2C_Line",
+			name: "Plx_I2C_Line",
+		}, {
+			access: "bios->TemperatureLimitTedge",
+			name: "TemperatureLimitTedge",
+		}, {
+			access: "bios->BoostStartTemperature",
+			name: "BoostStartTemperature",
+		}, {
+			access: "bios->BoostStopTemperature",
+			name: "BoostStopTemperature",
+		}, {
+			access: "bios->BoostClock",
+			name: "BoostClock",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_hard_limit_record",
+	leaves: [
+		{
+			access: "bios->SOCCLKLimit",
+			name: "SOCCLKLimit",
+		}, {
+			access: "bios->GFXCLKLimit",
+			name: "GFXCLKLimit",
+		}, {
+			access: "bios->MCLKLimit",
+			name: "MCLKLimit",
+		}, {
+			access: "bios->VddcLimit",
+			name: "VddcLimit",
+		}, {
+			access: "bios->VddciLimit",
+			name: "VddciLimit",
+		}, {
+			access: "bios->VddMemLimit",
+			name: "VddMemLimit",
+		},
+	],
+}, {
+	c_type: "atom_vega10_hard_limit_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_hard_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_vega10_pcie_record",
+	leaves: [
+		{
+			access: "bios->LCLK",
+			name: "LCLK",
+			description: [
+				{language: "english", text: "LClock",},
+			],
+		}, {
+			access: "bios->PCIEGenSpeed",
+			name: "PCIEGenSpeed",
+			description: [
+				{language: "english", text: "PCIE Speed",},
+			],
+		}, {
+			access: "bios->PCIELaneWidth",
+			name: "PCIELaneWidth",
+			description: [
+				{language: "english", text: "PCIE Lane Width",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_vega10_pcie_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_vega10_pcie_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+]}

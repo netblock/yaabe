@@ -439,6 +439,15 @@ Enums for ATUI_ENUM
 		{name: "GFXCLK_SOURCE_DFLL",},
 ]},
 
+/******************************************************************************/
+// vega10_pptable.h
+
+{name: "atom_vega10_voltagemode",
+	constants: [
+		{name: "ATOM_VEGA10_VOLTAGEMODE_AVFS_INTERPOLATE",},
+		{name: "ATOM_VEGA10_VOLTAGEMODE_AVFS_WORSTCASE",},
+		{name: "ATOM_VEGA10_VOLTAGEMODE_STATIC",},
+]},
 
 /******************************************************************************/
 // smu_v11_0_pptable.h / smu11_driver_if.h

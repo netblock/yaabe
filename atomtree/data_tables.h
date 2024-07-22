@@ -150,6 +150,30 @@ struct atomtree_gfx_info {
 };
 
 
+struct atomtree_powerplay_table_v8_1 {
+	struct atom_vega10_powerplaytable* leaves;
+
+	struct atom_vega10_state_array*             state_array;
+	// fan table: 10 is v1, 11 is v2; >11 is v3
+	union atom_vega10_fan_tables*               fan_table;
+	struct atom_vega10_thermal_controller*      thermal_controller;
+	struct atom_vega10_clk_dependency_table*    socclk_dependency;
+	struct atom_vega10_mclk_dependency_table*   mclk_dependency;
+	union atom_vega10_gfxclk_dependency_tables* gfxclk_dependency;
+	struct atom_vega10_clk_dependency_table*    dcefclk_dependency;
+	struct atom_vega10_voltage_lookup_table*    vddc_lut;
+	struct atom_vega10_voltage_lookup_table*    vdd_mem_lut;
+	struct atom_vega10_mm_dependency_table*     mm_dependency;
+	struct atom_vega10_vce_state_table*         vce_state;
+	// 5 is v1; 6 is v2; all else is v3
+	union atom_vega10_powertune_tables*         powertune;
+	struct atom_vega10_hard_limit_table*        hard_limit;
+	struct atom_vega10_voltage_lookup_table*    vddci_lut;
+	struct atom_vega10_pcie_table*              pcie_table;
+	struct atom_vega10_clk_dependency_table*    pixclk_dependency;
+	struct atom_vega10_clk_dependency_table*    dispclk_dependency;
+	struct atom_vega10_clk_dependency_table*    phyclk_dependency;
+};
 struct atomtree_powerplay_table_v11_0 {
 	struct atom_vega20_powerplay_table* leaves;
 	enum atomtree_common_version smc_pptable_ver;
@@ -170,6 +194,7 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
+		struct atomtree_powerplay_table_v8_1  v8_1;
 		struct atomtree_powerplay_table_v11_0 v11_0;
 		struct atomtree_powerplay_table_v12_0 v12_0;
 		struct atomtree_powerplay_table_v15_0 v15_0;

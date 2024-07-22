@@ -238,6 +238,202 @@ grow_gfx_info(
 	return atui_func(&atui_args);
 }
 
+
+inline static atui_branch*
+atui_generate_vega10_ppt(
+		struct atomtree_powerplay_table_v8_1* const ppt81
+		) {
+	atui_branch* state_array = NULL;
+	if (ppt81->state_array) {
+		state_array = ATUI_MAKE_BRANCH(atom_vega10_state_array, NULL,
+			ppt81,ppt81->state_array,  0,NULL
+		);
+	}
+
+	atui_branch* fan_table = NULL;
+	if (ppt81->fan_table) {
+		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		struct atui_funcify_args atui_args = {
+			.atomtree = ppt81,
+		};
+		switch (ppt81->fan_table->RevId) {
+			case 10: atui_func = ATUI_FUNC(atom_vega10_fan_table_v1); break;
+			case 11: atui_func = ATUI_FUNC(atom_vega10_fan_table_v2); break;
+			default: 
+				if (ppt81->fan_table->RevId > 11) {
+					atui_func = ATUI_FUNC(atom_vega10_fan_table_v3);
+				} else {
+					atui_args.rename = "fan_table (header only stub)";
+					atui_func = ATUI_FUNC(vega10_subtable_header);
+				}
+				break;
+		};
+		atui_args.suggestbios = ppt81->fan_table;
+		fan_table = atui_func(&atui_args);
+		atui_args.rename = NULL;
+	}
+
+	atui_branch* thermal_controller = NULL;
+	if (ppt81->thermal_controller) {
+		thermal_controller = ATUI_MAKE_BRANCH(atom_vega10_thermal_controller,
+			NULL,  ppt81,ppt81->thermal_controller,  0,NULL
+		);
+	}
+
+	atui_branch* socclk_dependency = NULL;
+	if (ppt81->socclk_dependency) {
+		socclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
+			u8"socclk_dependency",
+			ppt81,ppt81->socclk_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* mclk_dependency = NULL;
+	if (ppt81->mclk_dependency) {
+		mclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_mclk_dependency_table,
+			NULL,  ppt81,ppt81->mclk_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* gfxclk_dependency = NULL;
+	if (ppt81->gfxclk_dependency) {
+		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		struct atui_funcify_args atui_args = {
+			.atomtree = ppt81,
+		};
+		switch (ppt81->gfxclk_dependency->RevId) {
+			case 0:
+				atui_func = ATUI_FUNC(atom_vega10_gfxclk_dependency_table_v1);
+				break;
+			case 1:
+				atui_func = ATUI_FUNC(atom_vega10_gfxclk_dependency_table_v2);
+				break;
+			default:
+				atui_args.rename = "gfxclk_dependency (header only stub)";
+				atui_func = ATUI_FUNC(vega10_subtable_header);
+				break;
+		}
+		atui_args.suggestbios = ppt81->gfxclk_dependency;
+		gfxclk_dependency = atui_func(&atui_args);
+	}
+
+	atui_branch* dcefclk_dependency = NULL;
+	if (ppt81->dcefclk_dependency) {
+		dcefclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
+			u8"dcefclk_dependency",
+			ppt81,ppt81->dcefclk_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* vddc_lut = NULL;
+	if (ppt81->vddc_lut) {
+		vddc_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
+			u8"vddc_lut",
+			ppt81,ppt81->vddc_lut,  0,NULL
+		);
+	}
+
+	atui_branch* vdd_mem_lut = NULL;
+	if (ppt81->vdd_mem_lut) {
+		vdd_mem_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
+			u8"vdd_mem_lut",
+			ppt81,ppt81->vdd_mem_lut,  0,NULL
+		);
+	}
+
+	atui_branch* mm_dependency = NULL;
+	if (ppt81->mm_dependency) {
+		mm_dependency = ATUI_MAKE_BRANCH(atom_vega10_mm_dependency_table, NULL,
+			ppt81,ppt81->mm_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* vce_state = NULL;
+	if (ppt81->vce_state) {
+		vce_state = ATUI_MAKE_BRANCH(atom_vega10_vce_state_table, NULL,
+			ppt81,ppt81->vce_state,  0,NULL
+		);
+	}
+
+	atui_branch* powertune = NULL;
+	if (ppt81->powertune) {
+		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		struct atui_funcify_args atui_args = {
+			.atomtree = ppt81,
+		};
+		switch (ppt81->powertune->RevId) {
+			case 5: atui_func = ATUI_FUNC(atom_vega10_powertune_table_v1);break;
+			case 6: atui_func = ATUI_FUNC(atom_vega10_powertune_table_v2);break;
+			default:atui_func = ATUI_FUNC(atom_vega10_powertune_table_v3);break;
+			/*
+			default:
+				atui_args.rename = "powertune (header only stub)";
+				atui_func = ATUI_FUNC(vega10_subtable_header);
+				break;
+			*/
+		};
+		atui_args.suggestbios = ppt81->powertune;
+		powertune = atui_func(&atui_args);
+		atui_args.rename = NULL;
+	}
+
+	atui_branch* hard_limit = NULL;
+	if (ppt81->hard_limit) {
+		hard_limit = ATUI_MAKE_BRANCH(atom_vega10_hard_limit_table, NULL,
+			ppt81,ppt81->hard_limit,  0,NULL
+		);
+	}
+
+	atui_branch* vddci_lut = NULL;
+	if (ppt81->vddci_lut) {
+		vddci_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
+			u8"vddci_lut",
+			ppt81,ppt81->vddci_lut,  0,NULL
+		);
+	}
+
+	atui_branch* pcie_table = NULL;
+	if (ppt81->pcie_table) {
+		pcie_table = ATUI_MAKE_BRANCH(atom_vega10_pcie_table, NULL,
+			ppt81,ppt81->pcie_table,  0,NULL
+		);
+	}
+
+	atui_branch* pixclk_dependency = NULL;
+	if (ppt81->pixclk_dependency) {
+		pixclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
+			u8"pixclk_dependency",
+			ppt81,ppt81->pixclk_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* dispclk_dependency = NULL;
+	if (ppt81->dispclk_dependency) {
+		dispclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
+			u8"dispclk_dependency",
+			ppt81,ppt81->dispclk_dependency,  0,NULL
+		);
+	}
+
+	atui_branch* phyclk_dependency = NULL;
+	if (ppt81->phyclk_dependency) {
+		phyclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
+			u8"phyclk_dependency",
+			ppt81,ppt81->phyclk_dependency,  0,NULL
+		);
+	}
+	atui_branch* const ppt81_children[] = {
+		state_array, fan_table, thermal_controller, socclk_dependency,
+		mclk_dependency, gfxclk_dependency, dcefclk_dependency, vddc_lut,
+		vdd_mem_lut, mm_dependency, vce_state, powertune, hard_limit,
+		vddci_lut, pcie_table, pixclk_dependency, dispclk_dependency,
+		phyclk_dependency, 
+	};
+	return ATUI_MAKE_BRANCH(atom_vega10_powerplaytable,  NULL,
+		ppt81,ppt81->leaves,  lengthof(ppt81_children),ppt81_children
+	);
+}
+
 inline static atui_branch*
 atui_generate_smc_pptable(
 		enum atomtree_common_version ver,
@@ -266,6 +462,7 @@ grow_ppt(
 		return NULL;
 	}
 
+	atui_branch* atui_ppt;
 	atui_branch* atui_smctable = NULL;
 	atui_branch* (* atui_func)(struct atui_funcify_args const*);
 	struct atui_funcify_args atui_args = {
@@ -275,12 +472,15 @@ grow_ppt(
 		.num_import_branches = 1,
 	};
 	switch (ppt->ver) {
+		case v8_1:
+			atui_ppt = atui_generate_vega10_ppt(&(ppt->v8_1));
+			break;
 		case v11_0:
 			atui_smctable = atui_generate_smc_pptable(
 				ppt->v11_0.smc_pptable_ver,
 				ppt, &(ppt->v11_0.leaves->smc_pptable)
 			);
-			atui_func = ATUI_FUNC(atom_vega20_powerplay_table);
+			atui_ppt = ATUI_FUNC(atom_vega20_powerplay_table)(&atui_args);
 			break;
 		case v14_0:
 		case v12_0:
@@ -288,7 +488,7 @@ grow_ppt(
 				ppt->v12_0.smc_pptable_ver,
 				ppt, &(ppt->v12_0.leaves->smc_pptable)
 			);
-			atui_func = ATUI_FUNC(smu_11_0_powerplay_table);
+			atui_ppt = ATUI_FUNC(smu_11_0_powerplay_table)(&atui_args);
 			break;
 		case v18_0: // navi2 xx50
 		case v16_0: // 6700XT
@@ -297,16 +497,16 @@ grow_ppt(
 				ppt->v15_0.smc_pptable_ver,
 				ppt, &(ppt->v15_0.leaves->smc_pptable)
 			);
-			atui_func = ATUI_FUNC(smu_11_0_7_powerplay_table);
+			atui_ppt = ATUI_FUNC(smu_11_0_7_powerplay_table)(&atui_args);
 			break;
 		default:
 			atui_args.rename = (
 				u8"smu_powerplay_table_header (header only stub)"
 			);
-			atui_func = ATUI_FUNC(smu_powerplay_table_header);
+			atui_ppt = ATUI_FUNC(smu_powerplay_table_header)(&atui_args);
 			break;
 	}
-	return atui_func(&atui_args);
+	return atui_ppt;
 }
 
 static atui_branch*

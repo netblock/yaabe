@@ -23,6 +23,7 @@ global_default: {
 		},
 	},
 }, branches: [
+
 {
 	c_type: "smu_11_0_overdrive_table",
 	leaves: [
