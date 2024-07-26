@@ -194,7 +194,7 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
-		struct atomtree_powerplay_table_v8_1  v8_1;
+		struct atomtree_powerplay_table_v8_1   v8_1;
 		struct atomtree_powerplay_table_v11_0 v11_0;
 		struct atomtree_powerplay_table_v12_0 v12_0;
 		struct atomtree_powerplay_table_v15_0 v15_0;

@@ -264,7 +264,7 @@ atui_generate_vega10_ppt(
 					atui_func = ATUI_FUNC(atom_vega10_fan_table_v3);
 				} else {
 					atui_args.rename = "fan_table (header only stub)";
-					atui_func = ATUI_FUNC(vega10_subtable_header);
+					atui_func = ATUI_FUNC(pptable_subtable_header);
 				}
 				break;
 		};
@@ -310,7 +310,7 @@ atui_generate_vega10_ppt(
 				break;
 			default:
 				atui_args.rename = "gfxclk_dependency (header only stub)";
-				atui_func = ATUI_FUNC(vega10_subtable_header);
+				atui_func = ATUI_FUNC(pptable_subtable_header);
 				break;
 		}
 		atui_args.suggestbios = ppt81->gfxclk_dependency;
@@ -368,7 +368,7 @@ atui_generate_vega10_ppt(
 			/*
 			default:
 				atui_args.rename = "powertune (header only stub)";
-				atui_func = ATUI_FUNC(vega10_subtable_header);
+				atui_func = ATUI_FUNC(pptable_subtable_header);
 				break;
 			*/
 		};

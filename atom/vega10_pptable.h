@@ -12,14 +12,6 @@
 #define ATOM_VEGA10_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89
 #define ATOM_VEGA10_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D
 
-union atom_pp_fanparameters {
-	uint8_t  FanParameters;
-	struct { uint8_t
-		tachometer_pulses_per_revolution :3-0 +1,
-		rsvd                             :6-4 +1,
-		no_fan                           :7-7 +1;
-	};
-};
 
 union vega10_powerplay_platform_caps {
 	uint32_t platform_caps;
@@ -33,60 +25,6 @@ union vega10_powerplay_platform_caps {
 	};
 };
 
-enum atom_pplib_classification_ui:uint16_t {
-	ATOM_PPLIB_CLASSIFICATION_UI_NONE         = 0,
-	ATOM_PPLIB_CLASSIFICATION_UI_BATTERY      = 1,
-	ATOM_PPLIB_CLASSIFICATION_UI_BALANCED     = 3,
-	ATOM_PPLIB_CLASSIFICATION_UI_PERFORMANCE  = 5,
-};
-union atom_pplib_classification {
-	uint16_t Classification;
-	struct { uint16_t
-		ui_label           :2-0 +1, // enum atom_pplib_classification_ui
-		boot               :3-3 +1,
-		thermal            :4-4 +1,
-		limited_power      :5-5 +1,
-		reset              :6-6 +1,
-		forced             :7-7 +1,
-		performance_3D     :8-8 +1,
-		overdrive_template :9-9 +1,
-		uvd_state         :10-10 +1,
-		low_3D            :11-11 +1,
-		acpi              :12-12 +1,
-		hd2_state         :13-13 +1,
-		hd_state          :14-14 +1,
-		sd_state          :15-15 +1;
-	};
-};
-
-union atom_pplib_classification2 {
-	uint16_t Classification2;
-	struct { uint16_t
-		limitedpowersource_2 :0-0 +1,
-		ULV                  :1-1 +1,
-		multi_view_codec     :2-2 +1, // BD-3D
-		rsvd0               :15-3 +1;
-	};
-};
-
-union atom_pplib_caps_and_settings {
-	uint32_t CapsAndSettings;
-	struct { uint32_t
-		single_display_only     :0-0 +1,
-		supports_video_playback :1-1 +1,
-		pcie_link_speed         :2-2 +1, // 0=PCIe1, 1=PCIe2
-		pcie_link_width         :7-3 +1,
-		limited_refreshrate    :11-8 +1, // 1=50Hz, all else = TBD
-		disable_loadbalancing  :12-12 +1, // software side
-		enable_timestamp_sleep :13-13 +1,
-		disallow_on_dc         :14-14 +1,
-		enable_varibright      :15-15 +1,
-		swstate_memory_dll_off :16-16 +1,
-		m3_arb                 :18-17 +1,
-		enable_drr             :19-19 +1,
-		rsvd0                  :31-20 +1;
-	};
-};
 
 enum atom_vega10_voltagemode:uint8_t {
 	ATOM_VEGA10_VOLTAGEMODE_AVFS_INTERPOLATE = 0,
@@ -162,16 +100,16 @@ struct atom_vega10_clk_dependency_table {
 };
 
 
-union clock_stretch_config {
+union clock_stretch_config_u16 {
 	uint16_t CKSVOffsetandDisable; // clock stretch
 	struct { uint16_t
 		cks_voltage_offset :14-0 +1,
-		disable            :15-15 +1;
+		disable_stretch    :15-15 +1;
 	};
 };
 struct atom_vega10_gfxclk_dependency_record {
 	struct atom_vega10_clk_dependency_record  base;
-	union clock_stretch_config  CKSVOffsetandDisable;
+	union clock_stretch_config_u16  CKSVOffsetandDisable;
 	uint16_t AVFSOffset; // AVFS Voltage offset
 };
 struct atom_vega10_gfxclk_dependency_table_v1 {
@@ -181,7 +119,7 @@ struct atom_vega10_gfxclk_dependency_table_v1 {
 };
 struct atom_vega10_gfxclk_dependency_record_v2 {
 	struct atom_vega10_clk_dependency_record  base;
-	union clock_stretch_config  CKSVOffsetandDisable;
+	union clock_stretch_config_u16  CKSVOffsetandDisable;
 	uint16_t AVFSOffset; // AVFS Voltage offset
 	uint8_t  ACGEnable;
 	uint8_t  Reserved[3];
@@ -446,9 +384,6 @@ struct atom_vega10_hard_limit_table {
 	struct atom_vega10_hard_limit_record  entries[1];
 };
 
-struct vega10_subtable_header {
-	uint8_t  RevId;
-};
 
 #pragma pack(pop)
 

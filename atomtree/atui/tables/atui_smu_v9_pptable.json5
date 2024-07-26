@@ -24,11 +24,6 @@ global_default: {
 }, branches: [
 
 {
-	c_type: "vega10_subtable_header",
-	leaves: [{access: "bios->RevId", name: "RevId",},],
-},
-
-{
 	c_prefix:"union", c_type: "vega10_powerplay_platform_caps",
 	leaves: [
 		{
@@ -229,150 +224,6 @@ global_default: {
 },
 
 {
-	c_prefix: "union", c_type: "atom_pplib_classification",
-	leaves: [
-		{
-			access: "bios->Classification",
-			name: "Classification",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "ui_label",
-					hi: 2, lo: 0,
-					description: [
-						{language: "english", text: "enum atom_pplib_classification_ui",},
-					],
-				}, {
-					name: "boot",
-					hi: 3, lo: 3,
-				}, {
-					name: "thermal",
-					hi: 4, lo: 4,
-				}, {
-					name: "limited_power",
-					hi: 5, lo: 5,
-				}, {
-					name: "reset",
-					hi: 6, lo: 6,
-				}, {
-					name: "forced",
-					hi: 7, lo: 7,
-				}, {
-					name: "performance_3D",
-					hi: 8, lo: 8,
-				}, {
-					name: "overdrive_template",
-					hi: 9, lo: 9,
-				}, {
-					name: "uvd_state",
-					hi: 10, lo: 10,
-				}, {
-					name: "low_3D",
-					hi: 11, lo: 11,
-				}, {
-					name: "acpi",
-					hi: 12, lo: 12,
-				}, {
-					name: "hd2_state",
-					hi: 13, lo: 13,
-				}, {
-					name: "hd_state",
-					hi: 14, lo: 14,
-				}, {
-					name: "sd_state",
-					hi: 15, lo: 15,
-				},
-			],
-		},
-	],
-}, {
-	c_prefix: "union", c_type: "atom_pplib_classification2",
-	leaves: [
-		{
-			access: "bios->Classification2",
-			name: "Classification2",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "limitedpowersource_2",
-					hi: 0, lo: 0,
-				}, {
-					name: "ULV",
-					hi: 1, lo: 1,
-				}, {
-					name: "multi_view_codec",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "BD-3D",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 3,
-				},
-			],
-		},
-	],
-}, {
-	c_prefix: "union", c_type: "atom_pplib_caps_and_settings",
-	leaves: [
-		{
-			access: "bios->CapsAndSettings",
-			name: "CapsAndSettings",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "single_display_only",
-					hi: 0, lo: 0,
-				}, {
-					name: "supports_video_playback",
-					hi: 1, lo: 1,
-				}, {
-					name: "pcie_link_speed",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "0=PCIe1, 1=PCIe2",},
-					],
-				}, {
-					name: "pcie_link_width",
-					hi: 7, lo: 3,
-				}, {
-					name: "limited_refreshrate",
-					hi: 11, lo: 8,
-					description: [
-						{language: "english", text: "1=50Hz, all else = TBD",},
-					],
-				}, {
-					name: "disable_loadbalancing",
-					hi: 12, lo: 12,
-					description: [
-						{language: "english", text: "software side",},
-					],
-				}, {
-					name: "enable_timestamp_sleep",
-					hi: 13, lo: 13,
-				}, {
-					name: "disallow_on_dc",
-					hi: 14, lo: 14,
-				}, {
-					name: "enable_varibright",
-					hi: 15, lo: 15,
-				}, {
-					name: "swstate_memory_dll_off",
-					hi: 16, lo: 16,
-				}, {
-					name: "m3_arb",
-					hi: 18, lo: 17,
-				}, {
-					name: "enable_drr",
-					hi: 19, lo: 19,
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 20,
-				},
-			],
-		},
-	],
-}, {
 	c_type: "atom_vega10_state",
 	leaves: [
 		{
@@ -438,28 +289,8 @@ global_default: {
 		},
 	],
 },
+
 {
-	c_prefix: "union", c_type: "atom_pp_fanparameters",
-	leaves: [
-		{
-			access: "bios->FanParameters",
-			name: "FanParameters",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "tachometer_pulses_per_revolution",
-					hi: 3, lo: 0,
-				}, {
-					name: "rsvd",
-					hi: 6, lo: 4,
-				}, {
-					name: "no_fan",
-					hi: 7, lo: 7,
-				},
-			],
-		},
-	],
-}, {
 	c_type: "atom_vega10_fan_table_v1",
 	leaves: [
 		{
@@ -851,7 +682,7 @@ global_default: {
 },
 
 {
-	c_prefix: "union", c_type: "clock_stretch_config",
+	c_prefix: "union", c_type: "clock_stretch_config_u16",
 	leaves: [
 		{
 			access: "bios->CKSVOffsetandDisable",
@@ -865,7 +696,7 @@ global_default: {
 					name: "cks_voltage_offset",
 					hi: 14, lo: 0,
 				}, {
-					name: "disable",
+					name: "disable_stretch",
 					hi: 15, lo: 15,
 				},
 			],
@@ -883,7 +714,7 @@ global_default: {
 			access: "bios->CKSVOffsetandDisable",
 			name: "CKSVOffsetandDisable",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config_u16",
 		}, {
 			access: "bios->AVFSOffset",
 			name: "AVFSOffset",
@@ -930,7 +761,7 @@ global_default: {
 			access: "bios->CKSVOffsetandDisable",
 			name: "CKSVOffsetandDisable",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config_u16",
 		}, {
 			access: "bios->AVFSOffset",
 			name: "AVFSOffset",
