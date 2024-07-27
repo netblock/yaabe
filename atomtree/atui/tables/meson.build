@@ -2,6 +2,7 @@
 atui_branches = files(
 	'atui_gmc.json5', # extra long
 	'atui_atomfirmware.json5',
+	'atui_pptable_v1_0.json5',
 	'atui_smu_v9_pptable.json5',
 	'atui_smu_v13_pptable.json5',
 	'atui_smu_v11_pptable.json5',

@@ -215,6 +215,56 @@ populate_gfx_info(
 }
 
 inline static void
+populate_pptablev1_ppt(
+		struct atomtree_powerplay_table_v7_1* const ppt71
+		) {
+	union {
+		void* raw;
+		struct atom_pptable_powerplaytable_v1* ppt;
+	} b;
+	b.raw = ppt71->leaves;
+	if (b.ppt->StateArrayOffset) {
+		ppt71->state_array = b.raw + b.ppt->StateArrayOffset;
+	}
+	if (b.ppt->FanTableOffset) {
+		ppt71->fan_table = b.raw + b.ppt->FanTableOffset;
+	}
+	if (b.ppt->ThermalControllerOffset) {
+		ppt71->thermal_controller = b.raw + b.ppt->ThermalControllerOffset;
+	}
+	if (b.ppt->MclkDependencyTableOffset) {
+		ppt71->mclk_dependency = b.raw + b.ppt->MclkDependencyTableOffset;
+	}
+	if (b.ppt->SclkDependencyTableOffset) {
+		ppt71->sclk_dependency = b.raw + b.ppt->SclkDependencyTableOffset;
+	}
+	if (b.ppt->VddcLookupTableOffset) {
+		ppt71->vddc_lut = b.raw + b.ppt->VddcLookupTableOffset;
+	}
+	if (b.ppt->VddgfxLookupTableOffset) {
+		ppt71->vddgfx_lut = b.raw + b.ppt->VddgfxLookupTableOffset;
+	}
+	if (b.ppt->MMDependencyTableOffset) {
+		ppt71->mm_dependency = b.raw + b.ppt->MMDependencyTableOffset;
+	}
+	if (b.ppt->VCEStateTableOffset) {
+		ppt71->vce_state = b.raw + b.ppt->VCEStateTableOffset;
+	}
+	if (b.ppt->PowerTuneTableOffset) {
+		ppt71->powertune = b.raw + b.ppt->PowerTuneTableOffset;
+	}
+	if (b.ppt->HardLimitTableOffset) {
+		ppt71->hard_limit = b.raw + b.ppt->HardLimitTableOffset;
+	}
+	if (b.ppt->PCIETableOffset) {
+		ppt71->pcie_table = b.raw + b.ppt->PCIETableOffset;
+	}
+	if (b.ppt->GPIOTableOffset) {
+		ppt71->gpio_table = b.raw + b.ppt->GPIOTableOffset;
+	}
+}
+
+inline static void
 populate_vega10_ppt(
 		struct atomtree_powerplay_table_v8_1* const ppt81
 		) {
@@ -297,6 +347,9 @@ populate_ppt(
 		ppt->ver = get_ver(ppt->table_header);
 
 		switch (ppt->ver) {
+			case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
+				populate_pptablev1_ppt(&(ppt->v7_1));
+				break;
 			case v8_1:
 				populate_vega10_ppt(&(ppt->v8_1));
 				break;

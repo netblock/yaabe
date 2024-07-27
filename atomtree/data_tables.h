@@ -149,6 +149,24 @@ struct atomtree_gfx_info {
 	struct dpm7_atomctrl_edc_leakge_table* edc_didt_lo;
 };
 
+struct atomtree_powerplay_table_v7_1 {
+	struct atom_pptable_powerplaytable* leaves;
+
+	struct atom_pptable_state_array*             state_array;
+	union atom_pptable_fan_tables*               fan_table;
+	struct atom_pptable_thermal_controller*      thermal_controller;
+	struct atom_pptable_mclk_dependency_table*   mclk_dependency;
+	union atom_pptable_sclk_dependency_tables*   sclk_dependency;
+	struct atom_pptable_voltage_lookup_table*    vddc_lut;
+	struct atom_pptable_voltage_lookup_table*    vddgfx_lut;
+	struct atom_pptable_mm_dependency_table*     mm_dependency;
+	struct atom_pptable_vce_state_table*         vce_state;
+	struct atom_pptable_ppm_table*               ppm_table;
+	union atom_pptable_powertune_tables*         powertune;
+	struct atom_pptable_hard_limit_table*        hard_limit;
+	union atom_pptable_pcie_tables*              pcie_table;
+	struct atom_pptable_gpio_table*              gpio_table;
+};
 
 struct atomtree_powerplay_table_v8_1 {
 	struct atom_vega10_powerplaytable* leaves;
@@ -159,13 +177,14 @@ struct atomtree_powerplay_table_v8_1 {
 	struct atom_vega10_thermal_controller*      thermal_controller;
 	struct atom_vega10_clk_dependency_table*    socclk_dependency;
 	struct atom_vega10_mclk_dependency_table*   mclk_dependency;
+	// gfx: 0 is v1; 1 is v2
 	union atom_vega10_gfxclk_dependency_tables* gfxclk_dependency;
 	struct atom_vega10_clk_dependency_table*    dcefclk_dependency;
 	struct atom_vega10_voltage_lookup_table*    vddc_lut;
 	struct atom_vega10_voltage_lookup_table*    vdd_mem_lut;
 	struct atom_vega10_mm_dependency_table*     mm_dependency;
 	struct atom_vega10_vce_state_table*         vce_state;
-	// 5 is v1; 6 is v2; all else is v3
+	// powertune: 5 is v1; 6 is v2; all else is v3
 	union atom_vega10_powertune_tables*         powertune;
 	struct atom_vega10_hard_limit_table*        hard_limit;
 	struct atom_vega10_voltage_lookup_table*    vddci_lut;
@@ -194,6 +213,7 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
+		struct atomtree_powerplay_table_v7_1   v7_1;
 		struct atomtree_powerplay_table_v8_1   v8_1;
 		struct atomtree_powerplay_table_v11_0 v11_0;
 		struct atomtree_powerplay_table_v12_0 v12_0;

@@ -1,33 +1,33 @@
-#ifndef TONGA_PPTABLE_H
-#define TONGA_PPTABLE_H
+/*
+pptable v1_0
 
-/** \file
- * This is a PowerPlay table header file
- */
+vega10_pptable.h has an extremely similar structure. TODO merge files?
+*/
+
+#ifndef PPTABLE_H
+#define PPTABLE_H
+
 #pragma pack(push, 1)
 
 // #include "hwmgr.h" // this included in a packed state!
 
-#define ATOM_TONGA_PP_FANPARAMETERS_TACHOMETER_PULSES_PER_REVOLUTION_MASK 0x0f
-#define ATOM_TONGA_PP_FANPARAMETERS_NOFAN                                 0x80  /* No fan is connected to this controller. */
-
-#define ATOM_TONGA_PP_THERMALCONTROLLER_NONE    0
-#define ATOM_TONGA_PP_THERMALCONTROLLER_LM96163 17
-#define ATOM_TONGA_PP_THERMALCONTROLLER_TONGA   21
-#define ATOM_TONGA_PP_THERMALCONTROLLER_FIJI    22
+#define ATOM_pptable_PP_THERMALCONTROLLER_NONE    0
+#define ATOM_pptable_PP_THERMALCONTROLLER_LM96163 17
+#define ATOM_pptable_PP_THERMALCONTROLLER_pptable 21
+#define ATOM_pptable_PP_THERMALCONTROLLER_FIJI    22
 /*
  * Thermal controller 'combo type' to use an external controller for Fan control and an internal controller for thermal.
  * We probably should reserve the bit 0x80 for this use.
  * To keep the number of these types low we should also use the same code for all ASICs (i.e. do not distinguish RV6xx and RV7xx Internal here).
  * The driver can pick the correct internal controller based on the ASIC.
  */
-#define ATOM_TONGA_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL   0x89    // ADT7473 Fan Control + Internal Thermal Controller
-#define ATOM_TONGA_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL   0x8D    // EMC2103 Fan Control + Internal Thermal Controller
+#define ATOM_pptable_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89 // ADT7473 Fan Control + Internal Thermal Controller
+#define ATOM_pptable_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D // EMC2103 Fan Control + Internal Thermal Controller
 
-#define ATOM_Tonga_TABLE_REVISION_TONGA 7
+#define ATOM_pptable_TABLE_REVISION_pptable 7
 
 
-union tonga_powerplay_platform_caps {
+union pptable_powerplay_platform_caps_v1 {
 	uint32_t platform_caps;
 	struct { uint32_t
 		VDDGFX_control           :0-0 +1, // if vddgfx will be a separated power rail.
@@ -52,45 +52,33 @@ union tonga_powerplay_platform_caps {
 };
 
 
-struct atom_tonga_powerplaytable {
+struct atom_pptable_powerplaytable_v1 {
 	struct smu_powerplay_table_header header;
-
 	uint16_t VoltageTime;  // in microseconds
-	union tonga_powerplay_platform_caps PlatformCaps;
-
+	union pptable_powerplay_platform_caps_v1 PlatformCaps;
 	uint32_t MaxODEngineClock; // For Overdrive.
 	uint32_t MaxODMemoryClock; // For Overdrive.
-
 	uint16_t PowerControlLimit;
 	uint16_t UlvVoltageOffset; // in mv units
-
-	uint16_t StateArrayOffset; // points to ATOM_Tonga_State_Array
-	uint16_t FanTableOffset;   // points to ATOM_Tonga_Fan_Table
-	uint16_t ThermalControllerOffset; // points to ATOM_Tonga_Thermal_Controller
-	uint16_t Reserved0;    // CustomThermalPolicy removed for Tonga. Keep this filed as reserved.
-
-	uint16_t MclkDependencyTableOffset; // points to ATOM_Tonga_MCLK_Dependency_Table
-	uint16_t SclkDependencyTableOffset; // points to ATOM_Tonga_SCLK_Dependency_Table
-	uint16_t VddcLookupTableOffset;     // points to ATOM_Tonga_Voltage_Lookup_Table
-	uint16_t VddgfxLookupTableOffset;   // points to ATOM_Tonga_Voltage_Lookup_Table
-
-	uint16_t MMDependencyTableOffset;    // points to ATOM_Tonga_MM_Dependency_Table
-
-	uint16_t VCEStateTableOffset;       // points to ATOM_Tonga_VCE_State_Table;
-
-	uint16_t PPMTableOffset;    // points to ATOM_Tonga_PPM_Table
-	uint16_t PowerTuneTableOffset;    // points to ATOM_PowerTune_Table
-
-	uint16_t HardLimitTableOffset;    // points to ATOM_Tonga_Hard_Limit_Table
-
-	uint16_t PCIETableOffset;    // points to ATOM_Tonga_PCIE_Table
-
-	uint16_t GPIOTableOffset;    // points to ATOM_Tonga_GPIO_Table
-
-	uint16_t Reserved1[6]; // TODO: modify reserved size to fit structure aligning
+	uint16_t StateArrayOffset;
+	uint16_t FanTableOffset;
+	uint16_t ThermalControllerOffset;
+	uint16_t Reserved0; // CustomThermalPolicy removed for Tonga. Keep this filed as reserved.
+	uint16_t MclkDependencyTableOffset;
+	uint16_t SclkDependencyTableOffset;
+	uint16_t VddcLookupTableOffset;
+	uint16_t VddgfxLookupTableOffset;
+	uint16_t MMDependencyTableOffset;
+	uint16_t VCEStateTableOffset;
+	uint16_t PPMTableOffset;
+	uint16_t PowerTuneTableOffset;
+	uint16_t HardLimitTableOffset;
+	uint16_t PCIETableOffset;
+	uint16_t GPIOTableOffset;
+	uint16_t Reserved1[6];
 };
 
-struct atom_tonga_state {
+struct atom_pptable_state {
 	uint8_t  EngineClockIndexHigh;
 	uint8_t  EngineClockIndexLow;
 
@@ -110,25 +98,24 @@ struct atom_tonga_state {
 	uint8_t  Unused[4];
 };
 
-struct atom_tonga_state_array {
+struct atom_pptable_state_array {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_state  entries[];
+	struct atom_pptable_state  entries[];
 };
 
-struct atom_tonga_mclk_dependency_record {
+struct atom_pptable_mclk_dependency_record {
 	uint8_t  VddcInd; // Base voltage ; SOC_VDD index
-	uint16_t Vddci;
-	uint16_t VddgfxOffset; // Offset relative to Vddc voltage
+	int16_t Vddci;
+	int16_t VddgfxOffset; // Offset relative to Vddc voltage
 	uint16_t Mvdd;
 	uint32_t Mclk;
 	uint16_t Reserved;
 };
-
-struct atom_tonga_mclk_dependency_table {
+struct atom_pptable_mclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_mclk_dependency_record  entries[];
+	struct atom_pptable_mclk_dependency_record  entries[];
 };
 
 union clock_stretch_config_u8 {
@@ -139,94 +126,97 @@ union clock_stretch_config_u8 {
 	};
 };
 
-struct atom_tonga_sclk_dependency_record {
+struct atom_pptable_sclk_dependency_record {
 	uint8_t  VddInd; // Base voltage ; SOC_VDD index
-	uint16_t VddcOffset; // Offset relative to base voltage
+	int16_t VddcOffset; // Offset relative to base voltage
 	uint32_t Sclk;
 	uint16_t EdcCurrent;
 	uint8_t  ReliabilityTemperature;
 	union clock_stretch_config_u8  CKSVOffsetandDisable;
-
 };
-
-struct atom_tonga_sclk_dependency_table {
+struct atom_pptable_sclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries; 
-	struct atom_tonga_sclk_dependency_record  entries[];
+	struct atom_pptable_sclk_dependency_record  entries[];
 };
 
 struct atom_polaris_sclk_dependency_record {
 	uint8_t  VddInd; // Base voltage ; SOC_VDD index
-	uint16_t VddcOffset;
+	int16_t VddcOffset;
 	uint32_t Sclk;
 	uint16_t EdcCurrent;
 	uint8_t  ReliabilityTemperature;
 	union clock_stretch_config_u8  CKSVOffsetandDisable;
 	uint32_t SclkOffset;
 };
-
 struct atom_polaris_sclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
 	struct atom_polaris_sclk_dependency_record  entries[];
 };
+union atom_pptable_sclk_dependency_tables {
+	uint8_t  RevId;
+	struct atom_pptable_sclk_dependency_table  v0;
+	struct atom_polaris_sclk_dependency_table  v1;
+};
 
-struct atom_tonga_pcie_record {
+struct atom_pptable_pcie_record {
 	uint8_t  PCIEGenSpeed;
 	uint8_t  PCIELaneWidth;
 	uint8_t  Reserved[2];
 };
-
-struct atom_tonga_pcie_table {
+struct atom_pptable_pcie_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_pcie_record  entries[];
+	struct atom_pptable_pcie_record  entries[];
 };
 
-struct atom_polaris10_pcie_record {
+struct atom_polaris_pcie_record {
 	uint8_t  PCIEGenSpeed;
 	uint8_t  PCIELaneWidth;
 	uint8_t  Reserved[2];
 	uint32_t PCIE_Sclk;
 };
-
-struct atom_polaris10_pcie_table {
+struct atom_polaris_pcie_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_polaris10_pcie_record  entries[];
+	struct atom_polaris_pcie_record  entries[];
+};
+union atom_pptable_pcie_tables {
+	uint8_t  RevId;
+	struct atom_pptable_pcie_table v0;
+	struct atom_polaris_pcie_table v1;
 };
 
 
-struct atom_tonga_mm_dependency_record {
+struct atom_pptable_mm_dependency_record {
 	uint8_t  VddcInd; // Base voltage ; SOC_VDD index
-	uint16_t VddgfxOffset; // Offset relative to VDDC voltage
+	int16_t VddgfxOffset; // Offset relative to VDDC voltage
 	uint32_t DClk;    // UVD D-clock
 	uint32_t VClk;    // UVD V-clock
 	uint32_t EClk;    // VCE clock
 	uint32_t AClk;    // ACP clock
 	uint32_t SAMUClk; // SAMU clock
 };
-
-struct atom_tonga_mm_dependency_table {
+struct atom_pptable_mm_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_mm_dependency_record  entries[];
+	struct atom_pptable_mm_dependency_record  entries[];
 };
 
-struct atom_tonga_voltage_lookup_record {
-	uint16_t Vdd;    // Base voltage
+struct atom_pptable_voltage_lookup_record {
+	int16_t Vdd; // Base voltage
 	uint16_t CACLow;
 	uint16_t CACMid;
 	uint16_t CACHigh;
 };
-
-struct atom_tonga_voltage_lookup_table {
+struct atom_pptable_voltage_lookup_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_voltage_lookup_record  entries[];
+	struct atom_pptable_voltage_lookup_record  entries[];
 };
 
-struct atom_tonga_fan_table {
+struct atom_pptable_fan_table {
 	uint8_t  RevId;                   // Change this if the table format changes or version changes so that the other fields are not the same.
 	uint8_t  THyst;                   // Temperature hysteresis. Integer.
 	uint16_t TMin;                    // The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.
@@ -302,10 +292,17 @@ struct atom_polaris_fan_table {
 	uint8_t  FanStartTemperature;
 	uint16_t Reserved;
 };
-
-struct atom_tonga_thermal_controller {
+union atom_pptable_fan_tables {
 	uint8_t  RevId;
-	uint8_t  Type;          // one of ATOM_TONGA_PP_THERMALCONTROLLER_*
+	struct atom_pptable_fan_table  v0;
+	struct atom_fiji_fan_table     v8;
+	struct atom_polaris_fan_table  v9;
+};
+
+
+struct atom_pptable_thermal_controller {
+	uint8_t  RevId;
+	uint8_t  Type;          // one of ATOM_pptable_PP_THERMALCONTROLLER_*
 	uint8_t  I2cLine;       // as interpreted by DAL I2C
 	uint8_t  I2cAddress;
 	union atom_pp_fanparameters FanParameters;
@@ -315,20 +312,19 @@ struct atom_tonga_thermal_controller {
 	uint8_t  Flags;         // to be defined
 };
 
-struct atom_tonga_vce_state_record {
-	uint8_t  VCEClockIndex; // index into usVCEDependencyTableOffset of 'ATOM_Tonga_MM_Dependency_Table' type
+struct atom_pptable_vce_state_record {
+	uint8_t  VCEClockIndex; // index into usVCEDependencyTableOffset of 'ATOM_pptable_MM_Dependency_Table' type
 	uint8_t  Flag;          // 2 bits indicates memory p-states
-	uint8_t  SCLKIndex;     // index into ATOM_Tonga_SCLK_Dependency_Table
-	uint8_t  MCLKIndex;     // index into ATOM_Tonga_MCLK_Dependency_Table
+	uint8_t  SCLKIndex;     // index into ATOM_pptable_SCLK_Dependency_Table
+	uint8_t  MCLKIndex;     // index into ATOM_pptable_MCLK_Dependency_Table
 };
-
-struct atom_tonga_vce_state_table {
+struct atom_pptable_vce_state_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_vce_state_record  entries[];
+	struct atom_pptable_vce_state_record  entries[];
 };
 
-struct atom_tonga_powertune_table {
+struct atom_pptable_powertune_table {
 	uint8_t  RevId;
 	uint16_t TDP;
 	uint16_t ConfigurableTDP;
@@ -392,7 +388,7 @@ struct atom_polaris_powertune_table {
 	uint16_t EDCLimit;
 	uint16_t SoftwareShutdownTemp;
 	uint16_t ClockStretchAmount;
-	uint16_t TemperatureLimitHotspot; // The following are added for Fiji
+	uint16_t TemperatureLimitHotspot;
 	uint16_t TemperatureLimitLiquid1;
 	uint16_t TemperatureLimitLiquid2;
 	uint16_t TemperatureLimitVrVddc;
@@ -411,12 +407,18 @@ struct atom_polaris_powertune_table {
 	uint8_t  Reserved0;
 	uint16_t Reserved1;
 };
+union atom_pptable_powertune_tables {
+	uint8_t  RevId;
+	struct atom_pptable_powertune_table  v0;
+	struct atom_fiji_powertune_table     v3;
+	struct atom_polaris_powertune_table  v4;
+};
 
 enum atom_ppm:uint8_t {
 	ATOM_PPM_A_A = 1,
 	ATOM_PPM_A_I = 2,
 };
-struct atom_tonga_ppm_table {
+struct atom_pptable_ppm_table {
 	uint8_t  RevId;
 	enum atom_ppm PpmDesign;
 	uint16_t CpuCoreNumber;
@@ -430,23 +432,23 @@ struct atom_tonga_ppm_table {
 	uint32_t Tjmax;
 };
 
-struct atom_tonga_hard_limit_record {
+struct atom_pptable_hard_limit_record {
 	uint32_t SCLKLimit;
 	uint32_t MCLKLimit;
 	uint16_t VddcLimit;
 	uint16_t VddciLimit;
 	uint16_t VddgfxLimit;
 };
-struct atom_tonga_hard_limit_table {
+struct atom_pptable_hard_limit_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_tonga_hard_limit_record  entries[];
+	struct atom_pptable_hard_limit_record  entries[];
 };
 
-struct atom_tonga_gpio_table {
+struct atom_pptable_gpio_table {
 	uint8_t  RevId;
 	uint8_t  VRHotTriggeredSclkDpmIndex; // If VRHot signal is triggered SCLK will be limited to this DPM level
-	uint8_t  Reserve[5];
+	uint8_t  Reserved[5];
 };
 
 #pragma pack(pop)

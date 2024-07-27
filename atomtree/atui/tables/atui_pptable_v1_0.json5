@@ -1,0 +1,1594 @@
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atomtree_powerplay_table",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT",
+			name: "entries [%02u]",
+		},
+	},
+}, branches: [
+
+{
+	c_prefix:"union", c_type: "pptable_powerplay_platform_caps_v1",
+	leaves: [
+		{
+			access: "bios->platform_caps",
+			name: "platform_caps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "VDDGFX_control",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "if vddgfx will be a separated power rail.",},
+					],
+				}, {
+					name: "powerplay",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "if this is a mobile part and CCC need to show Powerplay page.",},
+					],
+				}, {
+					name: "SBIOS_powersource",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
+					],
+				}, {
+					name: "disable_voltage_island",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "option to overwrite voltage island feature, regardless of VddGfx power rail support.",},
+					],
+				}, {
+					name: "reserved_4",
+					hi: 4, lo: 4,
+				}, {
+					name: "hardware_DC",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
+					],
+				}, {
+					name: "reserved_11_6",
+					hi: 11, lo: 6,
+				}, {
+					name: "MVDD_control",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
+					],
+				}, {
+					name: "reserved_14_13",
+					hi: 14, lo: 13,
+				}, {
+					name: "VDDCI_control",
+					hi: 15, lo: 15,
+					description: [
+						{language: "english", text: "if dynamic VDDCI is required. Uncheck to disable it.",},
+					],
+				}, {
+					name: "reserved_16",
+					hi: 16, lo: 16,
+				}, {
+					name: "BACO",
+					hi: 17, lo: 17,
+					description: [
+						{language: "english", text: "Enable to indicate the driver supports BACO state.",},
+					],
+				}, {
+					name: "reserved_19_18",
+					hi: 19, lo: 18,
+				}, {
+					name: "output_thermal2GPIO17",
+					hi: 20, lo: 20,
+					description: [
+						{language: "english", text: "Enable to indicate the driver supports thermal2GPIO17.",},
+					],
+				}, {
+					name: "reserved_23_21",
+					hi: 23, lo: 21,
+				}, {
+					name: "PCC_shares_thermal_GPIO",
+					hi: 24, lo: 24,
+					description: [
+						{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
+					],
+				}, {
+					name: "load_post_production_FW",
+					hi: 25, lo: 25,
+				}, {
+					name: "reserved_31_26",
+					hi: 31, lo: 26,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pptable_powerplaytable_v1",
+	table_size: "bios->header.header.structuresize",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pptable_powerplay_platform_caps_v1",
+		}, {
+			access: "bios->MaxODEngineClock",
+			name: "MaxODEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxODMemoryClock",
+			name: "MaxODMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->PowerControlLimit",
+			name: "PowerControlLimit",
+		}, {
+			access: "bios->UlvVoltageOffset",
+			name: "UlvVoltageOffset",
+			description: [
+				{language: "english", text: "in mv units",},
+			],
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->FanTableOffset",
+			name: "FanTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ThermalControllerOffset",
+			name: "ThermalControllerOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->Reserved0",
+			name: "Reserved0",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "CustomThermalPolicy removed for Tonga. Keep this filed as reserved.",},
+			],
+		}, {
+			access: "bios->MclkDependencyTableOffset",
+			name: "MclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SclkDependencyTableOffset",
+			name: "SclkDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcLookupTableOffset",
+			name: "VddcLookupTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddgfxLookupTableOffset",
+			name: "VddgfxLookupTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MMDependencyTableOffset",
+			name: "MMDependencyTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VCEStateTableOffset",
+			name: "VCEStateTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PowerTuneTableOffset",
+			name: "PowerTuneTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->HardLimitTableOffset",
+			name: "HardLimitTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PCIETableOffset",
+			name: "PCIETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->GPIOTableOffset",
+			name: "GPIOTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->Reserved1",
+			name: "Reserved1",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_state",
+	leaves: [
+		{
+			access: "bios->EngineClockIndexHigh",
+			name: "EngineClockIndexHigh",
+		}, {
+			access: "bios->EngineClockIndexLow",
+			name: "EngineClockIndexLow",
+		},
+
+		{
+			access: "bios->MemoryClockIndexHigh",
+			name: "MemoryClockIndexHigh",
+		}, {
+			access: "bios->MemoryClockIndexLow",
+			name: "MemoryClockIndexLow",
+		},
+
+		{
+			access: "bios->PCIEGenLow",
+			name: "PCIEGenLow",
+		}, {
+			access: "bios->PCIEGenHigh",
+			name: "PCIEGenHigh",
+		},
+
+		{
+			access: "bios->PCIELaneLow",
+			name: "PCIELaneLow",
+		}, {
+			access: "bios->PCIELaneHigh",
+			name: "PCIELaneHigh",
+		},
+
+		{
+			access: "bios->Classification",
+			name: "Classification",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification",
+		}, {
+			access: "bios->CapsAndSettings",
+			name: "CapsAndSettings",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_caps_and_settings",
+		}, {
+			access: "bios->Classification2",
+			name: "Classification2",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification2",
+		},
+
+		{
+			access: "bios->Unused",
+			name: "Unused",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_state_array",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pptable_state",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_fan_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->THyst",
+			name: "THyst",
+			description: [
+				{language: "english", text: "Temperature hysteresis. Integer.",},
+			],
+		}, {
+			access: "bios->TMin",
+			name: "TMin",
+			description: [
+				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
+			],
+		}, {
+			access: "bios->TMed",
+			name: "TMed",
+			description: [
+				{language: "english", text: "The middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->THigh",
+			name: "THigh",
+			description: [
+				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->PWMMin",
+			name: "PWMMin",
+			description: [
+				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->PWMMed",
+			name: "PWMMed",
+			description: [
+				{language: "english", text: "The PWM value (in percent) at TMed.",},
+			],
+		}, {
+			access: "bios->PWMHigh",
+			name: "PWMHigh",
+			description: [
+				{language: "english", text: "The PWM value at THigh.",},
+			],
+		}, {
+			access: "bios->TMax",
+			name: "TMax",
+			description: [
+				{language: "english", text: "The max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+			description: [
+				{language: "english", text: "Legacy or Fuzzy Fan mode",},
+			],
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+			description: [
+				{language: "english", text: "Maximum allowed fan power in percent",},
+			],
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
+			],
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+			description: [
+				{language: "english", text: "The default value in RPM",},
+			],
+		}, {
+			access: "bios->MinFanSCLKAcousticLimit",
+			name: "MinFanSCLKAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "Advanced fan controller target temperature.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_fiji_fan_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->THyst",
+			name: "THyst",
+			description: [
+				{language: "english", text: "Temperature hysteresis. Integer.",},
+			],
+		}, {
+			access: "bios->TMin",
+			name: "TMin",
+			description: [
+				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
+			],
+		}, {
+			access: "bios->TMed",
+			name: "TMed",
+			description: [
+				{language: "english", text: "The middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->THigh",
+			name: "THigh",
+			description: [
+				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->PWMMin",
+			name: "PWMMin",
+			description: [
+				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->PWMMed",
+			name: "PWMMed",
+			description: [
+				{language: "english", text: "The PWM value (in percent) at TMed.",},
+			],
+		}, {
+			access: "bios->PWMHigh",
+			name: "PWMHigh",
+			description: [
+				{language: "english", text: "The PWM value at THigh.",},
+			],
+		}, {
+			access: "bios->TMax",
+			name: "TMax",
+			description: [
+				{language: "english", text: "The max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+			description: [
+				{language: "english", text: "Legacy or Fuzzy Fan mode",},
+			],
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+			description: [
+				{language: "english", text: "Maximum allowed fan power in percent",},
+			],
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
+			],
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+			description: [
+				{language: "english", text: "The default value in RPM",},
+			],
+		}, {
+			access: "bios->MinFanSCLKAcousticLimit",
+			name: "MinFanSCLKAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "Advanced fan controller target temperature.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
+			],
+		}, {
+			access: "bios->FanGainEdge",
+			name: "FanGainEdge",
+		}, {
+			access: "bios->FanGainHotspot",
+			name: "FanGainHotspot",
+		}, {
+			access: "bios->FanGainLiquid",
+			name: "FanGainLiquid",
+		}, {
+			access: "bios->FanGainVrVddc",
+			name: "FanGainVrVddc",
+		}, {
+			access: "bios->FanGainVrMvdd",
+			name: "FanGainVrMvdd",
+		}, {
+			access: "bios->FanGainPlx",
+			name: "FanGainPlx",
+		}, {
+			access: "bios->FanGainHbm",
+			name: "FanGainHbm",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_polaris_fan_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->THyst",
+			name: "THyst",
+			description: [
+				{language: "english", text: "Temperature hysteresis. Integer.",},
+			],
+		}, {
+			access: "bios->TMin",
+			name: "TMin",
+			description: [
+				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
+			],
+		}, {
+			access: "bios->TMed",
+			name: "TMed",
+			description: [
+				{language: "english", text: "The middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->THigh",
+			name: "THigh",
+			description: [
+				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->PWMMin",
+			name: "PWMMin",
+			description: [
+				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->PWMMed",
+			name: "PWMMed",
+			description: [
+				{language: "english", text: "The PWM value (in percent) at TMed.",},
+			],
+		}, {
+			access: "bios->PWMHigh",
+			name: "PWMHigh",
+			description: [
+				{language: "english", text: "The PWM value at THigh.",},
+			],
+		}, {
+			access: "bios->TMax",
+			name: "TMax",
+			description: [
+				{language: "english", text: "The max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+			description: [
+				{language: "english", text: "Legacy or Fuzzy Fan mode",},
+			],
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+			description: [
+				{language: "english", text: "Maximum allowed fan power in percent",},
+			],
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+			description: [
+				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
+			],
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+			description: [
+				{language: "english", text: "The default value in RPM",},
+			],
+		}, {
+			access: "bios->MinFanSCLKAcousticLimit",
+			name: "MinFanSCLKAcousticLimit",
+			description: [
+				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
+			],
+		}, {
+			access: "bios->TargetTemperature",
+			name: "TargetTemperature",
+			description: [
+				{language: "english", text: "Advanced fan controller target temperature.",},
+			],
+		}, {
+			access: "bios->MinimumPWMLimit",
+			name: "MinimumPWMLimit",
+			description: [
+				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
+			],
+		}, {
+			access: "bios->FanGainEdge",
+			name: "FanGainEdge",
+		}, {
+			access: "bios->FanGainHotspot",
+			name: "FanGainHotspot",
+		}, {
+			access: "bios->FanGainLiquid",
+			name: "FanGainLiquid",
+		}, {
+			access: "bios->FanGainVrVddc",
+			name: "FanGainVrVddc",
+		}, {
+			access: "bios->FanGainVrMvdd",
+			name: "FanGainVrMvdd",
+		}, {
+			access: "bios->FanGainPlx",
+			name: "FanGainPlx",
+		}, {
+			access: "bios->FanGainHbm",
+			name: "FanGainHbm",
+		}, {
+			access: "bios->EnableZeroRPM",
+			name: "EnableZeroRPM",
+		}, {
+			access: "bios->FanStopTemperature",
+			name: "FanStopTemperature",
+		}, {
+			access: "bios->FanStartTemperature",
+			name: "FanStartTemperature",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_thermal_controller",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->Type",
+			name: "Type",
+			description: [
+				{language: "english", text: "one of ATOM_pptable_PP_THERMALCONTROLLER_*",},
+			],
+		}, {
+			access: "bios->I2cLine",
+			name: "I2cLine",
+			description: [
+				{language: "english", text: "as interpreted by DAL I2C",},
+			],
+		}, {
+			access: "bios->I2cAddress",
+			name: "I2cAddress",
+		}, {
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pp_fanparameters",
+		}, {
+			access: "bios->FanMinRPM",
+			name: "FanMinRPM",
+			description: [
+				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->FanMaxRPM",
+			name: "FanMaxRPM",
+			description: [
+				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+			description: [
+				{language: "english", text: "to be defined",},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_mclk_dependency_record",
+	leaves: [
+		{
+			access: "bios->VddcInd",
+			name: "VddcInd",
+			description: [
+				{language: "english", text: "Base voltage ; SOC_VDD index",},
+			],
+		}, {
+			access: "bios->Vddci",
+			name: "Vddci",
+		}, {
+			access: "bios->VddgfxOffset",
+			name: "VddgfxOffset",
+			description: [
+				{language: "english", text: "Offset relative to Vddc voltage",},
+			],
+		}, {
+			access: "bios->Mvdd",
+			name: "Mvdd",
+		}, {
+			access: "bios->Mclk",
+			name: "Mclk",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pptable_mclk_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_mclk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_prefix:"union", c_type: "clock_stretch_config_u8",
+	leaves: [
+		{
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_BIN",
+			description: [
+				{language: "english", text: "clock stretch",},
+			],
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "cks_voltage_offset",
+					hi: 6, lo: 0,
+				}, {
+					name: "disable_stretch",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pptable_sclk_dependency_record",
+	leaves: [
+		{
+			access: "bios->VddInd",
+			name: "VddInd",
+			description: [
+				{language: "english", text: "Base voltage ; SOC_VDD index",},
+			],
+		}, {
+			access: "bios->VddcOffset",
+			name: "VddcOffset",
+			description: [
+				{language: "english", text: "Offset relative to base voltage",},
+			],
+		}, {
+			access: "bios->Sclk",
+			name: "Sclk",
+		}, {
+			access: "bios->EdcCurrent",
+			name: "EdcCurrent",
+		}, {
+			access: "bios->ReliabilityTemperature",
+			name: "ReliabilityTemperature",
+		}, {
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config_u8",
+		},
+	],
+}, {
+	c_type: "atom_pptable_sclk_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_sclk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_polaris_sclk_dependency_record",
+	leaves: [
+		{
+			access: "bios->VddInd",
+			name: "VddInd",
+			description: [
+				{language: "english", text: "Base voltage ; SOC_VDD index",},
+			],
+		}, {
+			access: "bios->VddcOffset",
+			name: "VddcOffset",
+		}, {
+			access: "bios->Sclk",
+			name: "Sclk",
+		}, {
+			access: "bios->EdcCurrent",
+			name: "EdcCurrent",
+		}, {
+			access: "bios->ReliabilityTemperature",
+			name: "ReliabilityTemperature",
+		}, {
+			access: "bios->CKSVOffsetandDisable",
+			name: "CKSVOffsetandDisable",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "clock_stretch_config_u8",
+		}, {
+			access: "bios->SclkOffset",
+			name: "SclkOffset",
+		},
+	],
+}, {
+	c_type: "atom_polaris_sclk_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_polaris_sclk_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_voltage_lookup_record",
+	leaves: [
+		{
+			access: "bios->Vdd",
+			name: "Vdd",
+			description: [
+				{language: "english", text: "Base voltage",},
+			],
+		}, {
+			access: "bios->CACLow",
+			name: "CACLow",
+		}, {
+			access: "bios->CACMid",
+			name: "CACMid",
+		}, {
+			access: "bios->CACHigh",
+			name: "CACHigh",
+		},
+	],
+}, {
+	c_type: "atom_pptable_voltage_lookup_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_voltage_lookup_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_mm_dependency_record",
+	leaves: [
+		{
+			access: "bios->VddcInd",
+			name: "VddcInd",
+			description: [
+				{language: "english", text: "Base voltage ; SOC_VDD index",},
+			],
+		}, {
+			access: "bios->VddgfxOffset",
+			name: "VddgfxOffset",
+			description: [
+				{language: "english", text: "Offset relative to VDDC voltage",},
+			],
+		}, {
+			access: "bios->DClk",
+			name: "DClk",
+			description: [
+				{language: "english", text: "UVD D-clock",},
+			],
+		}, {
+			access: "bios->VClk",
+			name: "VClk",
+			description: [
+				{language: "english", text: "UVD V-clock",},
+			],
+		}, {
+			access: "bios->EClk",
+			name: "EClk",
+			description: [
+				{language: "english", text: "VCE clock",},
+			],
+		}, {
+			access: "bios->AClk",
+			name: "AClk",
+			description: [
+				{language: "english", text: "ACP clock",},
+			],
+		}, {
+			access: "bios->SAMUClk",
+			name: "SAMUClk",
+			description: [
+				{language: "english", text: "SAMU clock",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pptable_mm_dependency_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_mm_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_vce_state_record",
+	leaves: [
+		{
+			access: "bios->VCEClockIndex",
+			name: "VCEClockIndex",
+			description: [
+				{language: "english", text: "index into usVCEDependencyTableOffset of 'ATOM_pptable_MM_Dependency_Table' type",},
+			],
+		}, {
+			access: "bios->Flag",
+			name: "Flag",
+			description: [
+				{language: "english", text: "2 bits indicates memory p-states",},
+			],
+		}, {
+			access: "bios->SCLKIndex",
+			name: "SCLKIndex",
+			description: [
+				{language: "english", text: "index into ATOM_pptable_SCLK_Dependency_Table",},
+			],
+		}, {
+			access: "bios->MCLKIndex",
+			name: "MCLKIndex",
+			description: [
+				{language: "english", text: "index into ATOM_pptable_MCLK_Dependency_Table",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pptable_vce_state_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_vce_state_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_ppm_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->PpmDesign",
+			name: "PpmDesign",
+			fancy: "ATUI_ENUM", fancy_data: "atom_ppm",
+		}, {
+			access: "bios->CpuCoreNumber",
+			name: "CpuCoreNumber",
+		}, {
+			access: "bios->PlatformTDP",
+			name: "PlatformTDP",
+		}, {
+			access: "bios->SmallACPlatformTDP",
+			name: "SmallACPlatformTDP",
+		}, {
+			access: "bios->PlatformTDC",
+			name: "PlatformTDC",
+		}, {
+			access: "bios->SmallACPlatformTDC",
+			name: "SmallACPlatformTDC",
+		}, {
+			access: "bios->ApuTDP",
+			name: "ApuTDP",
+		}, {
+			access: "bios->DGpuTDP",
+			name: "DGpuTDP",
+		}, {
+			access: "bios->DGpuUlvPower",
+			name: "DGpuUlvPower",
+		}, {
+			access: "bios->Tjmax",
+			name: "Tjmax",
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_powertune_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->TDP",
+			name: "TDP",
+		}, {
+			access: "bios->ConfigurableTDP",
+			name: "ConfigurableTDP",
+		}, {
+			access: "bios->TDC",
+			name: "TDC",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->LowCACLeakage",
+			name: "LowCACLeakage",
+		}, {
+			access: "bios->HighCACLeakage",
+			name: "HighCACLeakage",
+		}, {
+			access: "bios->MaximumPowerDeliveryLimit",
+			name: "MaximumPowerDeliveryLimit",
+		}, {
+			access: "bios->TjMax",
+			name: "TjMax",
+		}, {
+			access: "bios->PowerTuneDataSetID",
+			name: "PowerTuneDataSetID",
+		}, {
+			access: "bios->EDCLimit",
+			name: "EDCLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->ClockStretchAmount",
+			name: "ClockStretchAmount",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_fiji_powertune_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->TDP",
+			name: "TDP",
+		}, {
+			access: "bios->ConfigurableTDP",
+			name: "ConfigurableTDP",
+		}, {
+			access: "bios->TDC",
+			name: "TDC",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->LowCACLeakage",
+			name: "LowCACLeakage",
+		}, {
+			access: "bios->HighCACLeakage",
+			name: "HighCACLeakage",
+		}, {
+			access: "bios->MaximumPowerDeliveryLimit",
+			name: "MaximumPowerDeliveryLimit",
+		}, {
+			access: "bios->TjMax",
+			name: "TjMax",
+			description: [
+				{language: "english", text: "For Fiji, this is also usTemperatureLimitEdge;",},
+			],
+		}, {
+			access: "bios->PowerTuneDataSetID",
+			name: "PowerTuneDataSetID",
+		}, {
+			access: "bios->EDCLimit",
+			name: "EDCLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->ClockStretchAmount",
+			name: "ClockStretchAmount",
+		}, {
+			access: "bios->TemperatureLimitHotspot",
+			name: "TemperatureLimitHotspot",
+			description: [
+				{language: "english", text: "The following are added for Fiji",},
+			],
+		}, {
+			access: "bios->TemperatureLimitLiquid1",
+			name: "TemperatureLimitLiquid1",
+		}, {
+			access: "bios->TemperatureLimitLiquid2",
+			name: "TemperatureLimitLiquid2",
+		}, {
+			access: "bios->TemperatureLimitVrVddc",
+			name: "TemperatureLimitVrVddc",
+		}, {
+			access: "bios->TemperatureLimitVrMvdd",
+			name: "TemperatureLimitVrMvdd",
+		}, {
+			access: "bios->TemperatureLimitPlx",
+			name: "TemperatureLimitPlx",
+		}, {
+			access: "bios->Liquid1_I2C_address",
+			name: "Liquid1_I2C_address",
+			description: [
+				{language: "english", text: "Liquid",},
+			],
+		}, {
+			access: "bios->Liquid2_I2C_address",
+			name: "Liquid2_I2C_address",
+		}, {
+			access: "bios->Liquid_I2C_Line",
+			name: "Liquid_I2C_Line",
+		}, {
+			access: "bios->Vr_I2C_address",
+			name: "Vr_I2C_address",
+			description: [
+				{language: "english", text: "VR",},
+			],
+		}, {
+			access: "bios->Vr_I2C_Line",
+			name: "Vr_I2C_Line",
+		}, {
+			access: "bios->Plx_I2C_address",
+			name: "Plx_I2C_address",
+			description: [
+				{language: "english", text: "PLX",},
+			],
+		}, {
+			access: "bios->Plx_I2C_Line",
+			name: "Plx_I2C_Line",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_polaris_powertune_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->TDP",
+			name: "TDP",
+		}, {
+			access: "bios->ConfigurableTDP",
+			name: "ConfigurableTDP",
+		}, {
+			access: "bios->TDC",
+			name: "TDC",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->LowCACLeakage",
+			name: "LowCACLeakage",
+		}, {
+			access: "bios->HighCACLeakage",
+			name: "HighCACLeakage",
+		}, {
+			access: "bios->MaximumPowerDeliveryLimit",
+			name: "MaximumPowerDeliveryLimit",
+		}, {
+			access: "bios->TjMax",
+			name: "TjMax",
+			description: [
+				{language: "english", text: "For Fiji, this is also usTemperatureLimitEdge;",},
+			],
+		}, {
+			access: "bios->PowerTuneDataSetID",
+			name: "PowerTuneDataSetID",
+		}, {
+			access: "bios->EDCLimit",
+			name: "EDCLimit",
+		}, {
+			access: "bios->SoftwareShutdownTemp",
+			name: "SoftwareShutdownTemp",
+		}, {
+			access: "bios->ClockStretchAmount",
+			name: "ClockStretchAmount",
+		}, {
+			access: "bios->TemperatureLimitHotspot",
+			name: "TemperatureLimitHotspot",
+		}, {
+			access: "bios->TemperatureLimitLiquid1",
+			name: "TemperatureLimitLiquid1",
+		}, {
+			access: "bios->TemperatureLimitLiquid2",
+			name: "TemperatureLimitLiquid2",
+		}, {
+			access: "bios->TemperatureLimitVrVddc",
+			name: "TemperatureLimitVrVddc",
+		}, {
+			access: "bios->TemperatureLimitVrMvdd",
+			name: "TemperatureLimitVrMvdd",
+		}, {
+			access: "bios->TemperatureLimitPlx",
+			name: "TemperatureLimitPlx",
+		}, {
+			access: "bios->Liquid1_I2C_address",
+			name: "Liquid1_I2C_address",
+			description: [
+				{language: "english", text: "Liquid",},
+			],
+		}, {
+			access: "bios->Liquid2_I2C_address",
+			name: "Liquid2_I2C_address",
+		}, {
+			access: "bios->Liquid_I2C_Line",
+			name: "Liquid_I2C_Line",
+		}, {
+			access: "bios->Vr_I2C_address",
+			name: "Vr_I2C_address",
+			description: [
+				{language: "english", text: "VR",},
+			],
+		}, {
+			access: "bios->Vr_I2C_Line",
+			name: "Vr_I2C_Line",
+		}, {
+			access: "bios->Plx_I2C_address",
+			name: "Plx_I2C_address",
+			description: [
+				{language: "english", text: "PLX",},
+			],
+		}, {
+			access: "bios->Plx_I2C_Line",
+			name: "Plx_I2C_Line",
+		}, {
+			access: "bios->BoostPowerLimit",
+			name: "BoostPowerLimit",
+		}, {
+			access: "bios->CKS_LDO_REFSEL",
+			name: "CKS_LDO_REFSEL",
+		}, {
+			access: "bios->HotSpotOnly",
+			name: "HotSpotOnly",
+		}, {
+			access: "bios->Reserved0",
+			name: "Reserved0",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->Reserved1",
+			name: "Reserved1",
+			display: "ATUI_HEX",
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_hard_limit_record",
+	leaves: [
+		{
+			access: "bios->SCLKLimit",
+			name: "SCLKLimit",
+		}, {
+			access: "bios->MCLKLimit",
+			name: "MCLKLimit",
+		}, {
+			access: "bios->VddcLimit",
+			name: "VddcLimit",
+		}, {
+			access: "bios->VddciLimit",
+			name: "VddciLimit",
+		}, {
+			access: "bios->VddgfxLimit",
+			name: "VddgfxLimit",
+		},
+	],
+}, {
+	c_type: "atom_pptable_hard_limit_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_hard_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_pcie_record",
+	leaves: [
+		{
+			access: "bios->PCIEGenSpeed",
+			name: "PCIEGenSpeed",
+		}, {
+			access: "bios->PCIELaneWidth",
+			name: "PCIELaneWidth",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_pptable_pcie_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pptable_pcie_record",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_polaris_pcie_record",
+	leaves: [
+		{
+			access: "bios->PCIEGenSpeed",
+			name: "PCIEGenSpeed",
+		}, {
+			access: "bios->PCIELaneWidth",
+			name: "PCIELaneWidth",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->PCIE_Sclk",
+			name: "PCIE_Sclk",
+		},
+	],
+}, {
+	c_type: "atom_polaris_pcie_table",
+	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_polaris_pcie_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pptable_gpio_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->VRHotTriggeredSclkDpmIndex",
+			name: "VRHotTriggeredSclkDpmIndex",
+			description: [
+				{language: "english", text: "If VRHot signal is triggered SCLK will be limited to this DPM level",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+]}
