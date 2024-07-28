@@ -18,7 +18,6 @@ add_project_arguments(
 
 	'-Wformat-security',
 	'-Wno-switch',
-	'-Wno-implicit-fallthrough',
 
 	language: 'c',
 )

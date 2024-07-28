@@ -120,7 +120,7 @@ grow_smu_info(
 		case v3_1: atui_func = ATUI_FUNC(atom_smu_info_v3_1); break;
 		case v3_2: atui_func = ATUI_FUNC(atom_smu_info_v3_2); break;
 		case v3_3: atui_func = ATUI_FUNC(atom_smu_info_v3_3); break;
-		case v3_4: atui_args.rename = "atom_smu_info_v3_5 (forced)"; 
+		case v3_4: atui_args.rename = "atom_smu_info_v3_5 (forced)"; fall;
 		case v3_5: atui_func = ATUI_FUNC(atom_smu_info_v3_5); break;
 		case v3_6: atui_func = ATUI_FUNC(atom_smu_info_v3_6); break;
 		case v4_0: atui_func = ATUI_FUNC(atom_smu_info_v4_0); break;
@@ -227,7 +227,7 @@ grow_gfx_info(
 			}
 			break;
 		case v2_4: atui_func = ATUI_FUNC(atom_gfx_info_v2_4); break;
-		case v2_6: atui_args.rename = "atom_gfx_info_v2_5 (forced)";
+		case v2_6: atui_args.rename = "atom_gfx_info_v2_5 (forced)"; fall;
 		case v2_5: atui_func = ATUI_FUNC(atom_gfx_info_v2_5); break;
 		case v2_7: atui_func = ATUI_FUNC(atom_gfx_info_v2_7); break;
 		case v3_0: atui_func = ATUI_FUNC(atom_gfx_info_v3_0); break;
@@ -617,7 +617,7 @@ atui_generate_smc_pptable(
 	};
 	switch (ver) {
 		case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&atui_args);
-		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)";
+		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
 		case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&atui_args);
 		case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&atui_args);
 		default: assert(0);
@@ -2659,7 +2659,7 @@ grow_atom_rom_header(
 	switch (rom_header->ver) {
 		case v1_1: atui_func = ATUI_FUNC(atom_rom_header_v1_1); break;
 		case v2_1: atui_func = ATUI_FUNC(atom_rom_header_v2_1); break;
-		case v2_3: atui_args.rename = "atom_rom_header_v2_2 (forced)";
+		case v2_3: atui_args.rename = "atom_rom_header_v2_2 (forced)"; fall;
 		case v2_2: atui_func = ATUI_FUNC(atom_rom_header_v2_2); break;
 		default:
 			atui_args.rename = "atom_rom_header (header only stub)";
