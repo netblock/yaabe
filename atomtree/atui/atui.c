@@ -9,14 +9,14 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include <math.h>
 
 #ifdef C2X_COMPAT
-static char8_t const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
-static char8_t const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llX"};
-static char8_t const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llX"};
+static char const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
+static char const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llX"};
+static char const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llX"};
 static uint8_t const bases[] = {0, 10, 16, 8, 16};
 #else
-static char8_t const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
-static char8_t const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llb"};
-static char8_t const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llb"};
+static char const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+static char const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llb"};
+static char const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llb"};
 static uint8_t const bases[] = {0, 10, 16, 8, 2};
 #endif
 
@@ -24,7 +24,7 @@ static uint8_t const bases[] = {0, 10, 16, 8, 2};
 void
 atui_leaf_from_text(
 		atui_leaf const* const leaf,
-		char8_t const* const text
+		char const* const text
 		) {
 // set the value of the leaf based on input text. Currently only support for
 // numbers (including bitfields) and strings.
@@ -66,7 +66,7 @@ atui_leaf_from_text(
 		free(token_buffer);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		char8_t* const null_exit = memccpy(leaf->u8, text, '\0', array_size);
+		char* const null_exit = memccpy(leaf->c8, text, '\0', array_size);
 
 		if (fancy == ATUI_STRING) {
 			/* ATUI_STRING's length is implicitly defined by the null
@@ -76,10 +76,10 @@ atui_leaf_from_text(
 			original position.
 			*/
 			if (null_exit) {
-				uint16_t const bytes_left = leaf->u8 + array_size - null_exit;
+				uint16_t const bytes_left = leaf->c8 + array_size - null_exit;
 				memset(null_exit-1, ' ', bytes_left); // -1 eats memccpy's 0.
 			}
-			leaf->u8[array_size-1] = '\0';
+			leaf->c8[array_size-1] = '\0';
 		}
 	} else if (radix) {
 		if (fancy == ATUI_ENUM) {
@@ -117,7 +117,7 @@ atui_leaf_from_text(
 
 uint8_t
 get_sprintf_format_from_leaf(
-		char8_t* const format,
+		char* const format,
 		atui_leaf const* const leaf
 		) {
 // get reccomended sprintf format based on radix and other factors
@@ -126,7 +126,7 @@ get_sprintf_format_from_leaf(
 	uint8_t const fancy = leaf->type.fancy;
 
 	if (radix) {
-		char8_t const* const metaformat = "%s%u%s"; // amogus
+		char const* const metaformat = "%s%u%s"; // amogus
 
 		uint8_t num_print_digits = 0;
 		uint8_t num_digits;
@@ -188,7 +188,7 @@ get_sprintf_format_from_leaf(
 	return print_alloc_width;
 }
 
-char8_t*
+char*
 atui_leaf_to_text(
 		atui_leaf const* const leaf
 		) {
@@ -198,9 +198,9 @@ atui_leaf_to_text(
 	assert(leaf->val);
 
 	size_t buffer_size;
-	char8_t* buffer = NULL;
+	char* buffer = NULL;
 
-	char8_t format[LEAF_SPRINTF_FORMAT_SIZE];
+	char format[LEAF_SPRINTF_FORMAT_SIZE];
 	uint8_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
@@ -215,7 +215,7 @@ atui_leaf_to_text(
 
 		buffer_size = (num_digits * array_size) + 1;
 		buffer = malloc(buffer_size);
-		char8_t* buffer_walk = buffer;
+		char* buffer_walk = buffer;
 		switch (leaf->total_bits) {
 			case 8:
 				for (uint8_t i=0; i < array_size; i++) {
@@ -247,7 +247,7 @@ atui_leaf_to_text(
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		buffer_size = array_size + 1;
 		buffer = malloc(buffer_size);
-		memcpy(buffer, leaf->u8, array_size);
+		memcpy(buffer, leaf->c8, array_size);
 		buffer[array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		assert(num_digits);
@@ -265,14 +265,14 @@ atui_leaf_to_text(
 				struct atui_enum_entry const* const entry = &(
 					leaf->enum_options->enum_array[index]
 				);
-				buffer_size += entry->name_length + sizeof(u8" : ");
+				buffer_size += entry->name_length + sizeof(" : ");
 				buffer = malloc(buffer_size);
 
-				char8_t format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
+				char format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
 				sprintf(format_2, " : %s", format);
 				assert(strlen(format_2) < sizeof(format_2));
 
-				char8_t* walked = stopcopy(buffer, entry->name);
+				char* walked = stopcopy(buffer, entry->name);
 				sprintf(walked, format_2, val); // eats previous \0
 			} else {
 				buffer = malloc(buffer_size);
@@ -521,11 +521,11 @@ atui_path_populate_branch_stack(
 		(*i)++;
 	} while (branchstack[*i]);
 }
-inline static char8_t*
+inline static char*
 _print_branch_path(
 		atui_branch const* const* const branchstack,
 		uint8_t* const i,
-		char8_t* path_walk
+		char* path_walk
 		) {
 	path_walk[0] = '/';
 	path_walk++;
@@ -537,7 +537,7 @@ _print_branch_path(
 	}
 	return path_walk;
 }
-char8_t*
+char*
 atui_branch_to_path(
 		atui_branch const* const tip
 		) {
@@ -548,9 +548,9 @@ atui_branch_to_path(
 	uint8_t i = 0;
 	uint16_t string_length = 1+1; // +1 for the initial / and +1 for \0
 	atui_path_populate_branch_stack(branchstack, &i, &string_length);
-	char8_t* const pathstring = malloc(string_length);
+	char* const pathstring = malloc(string_length);
 	pathstring[string_length-1] = '\0';
-	char8_t* path_walk = _print_branch_path(branchstack, &i, pathstring);
+	char* path_walk = _print_branch_path(branchstack, &i, pathstring);
 
 	assert(path_walk == (pathstring+string_length-1));
 	assert(strlen(pathstring) == (string_length-1));
@@ -571,11 +571,11 @@ atui_path_populate_leaf_stack(
 		(*i)++;
 	} while (parent_is_leaf);
 }
-inline static char8_t*
+inline static char*
 _print_leaf_path(
 		atui_leaf const* const* const leafstack,
 		uint8_t* const i,
-		char8_t* path_walk
+		char* path_walk
 		) {
 	do {
 		(*i)--;
@@ -588,7 +588,7 @@ _print_leaf_path(
 	} while (*i);
 	return path_walk;
 }
-char8_t*
+char*
 atui_leaf_to_path(
 		atui_leaf const* const tip
 		) {
@@ -609,10 +609,10 @@ atui_leaf_to_path(
 	atui_path_populate_branch_stack(branchstack, &branches_i, &string_length);
 	assert(branches_i < lengthof(branchstack));
 
-	char8_t* const pathstring = malloc(string_length);
+	char* const pathstring = malloc(string_length);
 	// pathstring[string_length-1] = '\0'; // print_leaf_path does the \0
 
-	char8_t* path_walk = pathstring;
+	char* path_walk = pathstring;
 
 	path_walk = _print_branch_path(branchstack, &branches_i, path_walk);
 	path_walk = _print_leaf_path(leafstack, &leaves_i, path_walk-1);
@@ -628,7 +628,7 @@ static uint8_t
 _path_to_atui_has_leaf(
 		atui_leaf const* const leaves,
 		uint16_t const num_leaves,
-		char8_t const** const path_token,
+		char const** const path_token,
 		char** const token_save,
 		atui_leaf const** const target
 		) {
@@ -642,7 +642,7 @@ _path_to_atui_has_leaf(
 				if (strcmp(*path_token, leaves[i].name)) { // 0 is equal
 					continue;
 				}
-				*path_token = strtok_r(NULL, u8"/", token_save);
+				*path_token = strtok_r(NULL, "/", token_save);
 				if (NULL == *path_token) {
 					*target = &(leaves[i]);
 					return 1;
@@ -657,7 +657,7 @@ _path_to_atui_has_leaf(
 				return depth + (leaves[i].type.disable == ATUI_DISPLAY);
 			}
 		} else if (0 == strcmp(*path_token, leaves[i].name)) {
-			*path_token = strtok_r(NULL, u8"/", token_save);
+			*path_token = strtok_r(NULL, "/", token_save);
 			*target = &(leaves[i]);
 			return 1;
 		}
@@ -667,12 +667,12 @@ _path_to_atui_has_leaf(
 }
 struct atui_path_map*
 path_to_atui(
-		char8_t const* const path,
+		char const* const path,
 		atui_branch const* const root
 		) {
-	char8_t* const token_buffer = strdup(path);
+	char* const token_buffer = strdup(path);
 	char* token_save;
-	char8_t const* path_token = strtok_r(token_buffer, u8"/", &token_save);
+	char const* path_token = strtok_r(token_buffer, "/", &token_save);
 	size_t not_found_arraylen = 0; // for an error message
 
 	atui_leaf const* file = NULL;
@@ -696,7 +696,7 @@ path_to_atui(
 		child_dirs = (atui_branch const* const*) dir->child_branches;
 		i = dir->num_branches;
 		branch_depth++; // the previously poped token is a branch
-		path_token = strtok_r(NULL, u8"/", &token_save);
+		path_token = strtok_r(NULL, "/", &token_save);
 	}
 	if (path_token) {
 		find_leaves:
@@ -766,15 +766,15 @@ path_to_atui(
 
 
 
-char8_t*
+char*
 atui_enum_entry_to_text(
 		atui_leaf const* const leaf,
 		struct atui_enum_entry const* const enum_entry
 		) {
 	assert(leaf->type.fancy == ATUI_ENUM && leaf->type.radix);
 
-	char8_t format_1[LEAF_SPRINTF_FORMAT_SIZE]; // stage 1
-	char8_t format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
+	char format_1[LEAF_SPRINTF_FORMAT_SIZE]; // stage 1
+	char format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
 	uint8_t const num_digits = get_sprintf_format_from_leaf(format_1, leaf);
 	assert(strlen(format_1) < sizeof(format_1));
 	sprintf(format_2, " : %s", format_1);
@@ -783,9 +783,9 @@ atui_enum_entry_to_text(
 	size_t const buffer_size = (
 		enum_entry->name_length + sizeof(" : 0x") + num_digits
 	);
-	char8_t* const buffer = malloc(buffer_size);
+	char* const buffer = malloc(buffer_size);
 
-	char8_t* walked = stopcopy(buffer, enum_entry->name); // walk the buffer
+	char* walked = stopcopy(buffer, enum_entry->name); // walk the buffer
 	sprintf(walked, format_2, enum_entry->val);  // eats previous \0
 	assert(strlen(buffer) < buffer_size);
 	return buffer;

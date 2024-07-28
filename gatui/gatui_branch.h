@@ -44,7 +44,7 @@ gatui_branch_set_leaves_memory_package(
 		uint16_t num_copyable_leaves
 		);
 
-char8_t* // needs to be freed
+char* // needs to be freed
 gatui_branch_to_path(
 		GATUIBranch* self
 		);

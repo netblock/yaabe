@@ -70,7 +70,7 @@ struct atom_tree {
 	};
 	uint32_t bios_image_size;
 	uint8_t num_of_crawled_strings;
-	char8_t* atombios_strings[NUM_ATOMBIOS_STRINGS];
+	char* atombios_strings[NUM_ATOMBIOS_STRINGS];
 
 	struct atomtree_pci_tables pcir_tables;
 	struct atomtree_rom_header rom_header;
@@ -82,9 +82,9 @@ struct atom_tree {
 	//https://docs.kernel.org/gpu/amdgpu/display/index.html
 
 	void* protected_mode;
-	char8_t* config_filename;
+	char* config_filename;
 	uint32_t* crc_block;
-	char8_t* bootup_mesage;
+	char* bootup_mesage;
 	void* int10;
 	void* pci_info;
 	void* psp_dir_table;

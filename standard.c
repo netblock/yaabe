@@ -2,7 +2,7 @@
 
 int64_t
 strtoll_2(
-		char8_t const* str
+		char const* str
 		) {
 	// TODO it seems the C2X's changes for the strto* hasn't landed yet
 	uint8_t base = 0; // 0 = auto
@@ -14,7 +14,7 @@ strtoll_2(
 }
 uint64_t
 strtoull_2(
-		char8_t const* str
+		char const* str
 		) {
 	// TODO it seems the C2X's changes for the strto* hasn't landed yet
 	uint8_t base = 0; // 0 = auto
@@ -27,7 +27,7 @@ strtoull_2(
 
 bool
 is_number(
-		char8_t const* str
+		char const* str
 		) {
 	// test string if it's a decimal integer
 	if (str) {
@@ -43,10 +43,10 @@ is_number(
 	}
 }
 
-char8_t*
+char*
 stopcopy(
-		char8_t* restrict dest,
-		char8_t const* restrict src
+		char* restrict dest,
+		char const* restrict src
 		) {
 	// custom stpcpy
 	while(*src) {
@@ -60,8 +60,8 @@ stopcopy(
 
 bool
 char_in_string(
-		char8_t const ch,
-		char8_t const* str
+		char const ch,
+		char const* str
 		) {
 	while (*str) {
 		if (ch == *str) {

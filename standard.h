@@ -33,6 +33,8 @@ typedef double float64_t;
 // we're dealing with a byte-packed little-endian ABI.
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
 static_assert(CHAR_BIT == 8);
+static_assert(sizeof(char) == 1);
+static_assert(sizeof(char8_t) == 1);
 static_assert(sizeof(uint8_t) == 1);
 static_assert(sizeof(uint16_t) == 2);
 static_assert(sizeof(uint32_t) == 4);
@@ -41,7 +43,6 @@ static_assert(sizeof(int8_t) == 1);
 static_assert(sizeof(int16_t) == 2);
 static_assert(sizeof(int32_t) == 4);
 static_assert(sizeof(int64_t) == 8);
-static_assert(sizeof(char8_t) == 1);
 static_assert(sizeof(float16_t) == 2);
 static_assert(sizeof(float32_t) == 4);
 static_assert(sizeof(float64_t) == 8);
@@ -64,27 +65,27 @@ static_assert(sizeof(struct _tenbytes) == 10);
 // TODO stroll that considers 0b prefix?
 int64_t
 strtoll_2(
-		char8_t const* str
+		char const* str
 		);
 uint64_t
 strtoull_2(
-		char8_t const* str
+		char const* str
 		);
 
 bool
 is_number( // test string if it's a decimal integer
-		char8_t const* str
+		char const* str
 		);
 
-char8_t*
+char*
 stopcopy( // stpcpy; copy string, returns pointer to \0
-		char8_t* restrict dest,
-		char8_t const* restrict src
+		char* restrict dest,
+		char const* restrict src
 		);
 bool
 char_in_string( // test if character ch appears anywhere in string
-		char8_t ch,
-		char8_t const* str
+		char ch,
+		char const* str
 		);
 
 #endif

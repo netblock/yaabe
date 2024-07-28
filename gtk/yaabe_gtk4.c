@@ -5,7 +5,7 @@
 #include "gatui.h"
 #include "yaabe_gtk4.h"
 
-static char8_t const yaabe_name[] = "YAABE BIOS Editor";
+static char const yaabe_name[] = "YAABE BIOS Editor";
 
 struct pane_context {
 	GtkColumnView* view; // so branches can set leaves, and loading bios
@@ -24,7 +24,7 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* save_buttons;
 	GtkWidget* reload_button;
 
-	char8_t* pathbar_string;
+	char* pathbar_string;
 
 } yaabegtk_commons;
 
@@ -97,6 +97,7 @@ pathbar_editable_reset(
 // callback; resets pathbar if focus is lost
 	yaabegtk_commons* const commons = commons_ptr;
 	gtk_editable_set_text(GTK_EDITABLE(pathbar), commons->pathbar_string);
+	return true;
 }
 
 static void
@@ -104,8 +105,8 @@ pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
 		) {
 // callback; go to branch based on path string
-	char8_t const* const editable_text = (
-		(char8_t const* const) gtk_editable_get_text(commons->pathbar)
+	char const* const editable_text = (
+		(char const* const) gtk_editable_get_text(commons->pathbar)
 	);
 	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
 		commons->root
@@ -501,7 +502,7 @@ leaf_sets_editable(
 	GATUILeaf* const g_leaf,
 	GtkEditable* const editable
 	) {
-	char8_t* const text = gatui_leaf_value_to_text(g_leaf);
+	char* const text = gatui_leaf_value_to_text(g_leaf);
 	if (text) {
 		gtk_editable_set_text(editable, text);
 		free(text);
@@ -579,7 +580,7 @@ enum_val_column_bind(
 		gtk_column_view_cell_get_item(leaves_column_cell)
 	);
 
-	char8_t* const text = gatui_leaf_enum_val_to_text(g_leaf, enum_entry);
+	char* const text = gatui_leaf_enum_val_to_text(g_leaf, enum_entry);
 	gtk_label_set_text(label, text);
 	free(text);
 	g_object_unref(g_leaf);
@@ -807,7 +808,7 @@ leaves_offset_column_bind(
 	);
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
-	char8_t buffer[18];
+	char buffer[18];
 	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
 		sprintf(buffer, "[%u:%u]",
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
@@ -851,7 +852,7 @@ leaf_right_click_copy_path(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 
-	char8_t* const pathstring = gatui_leaf_to_path(pack->leaf);
+	char* const pathstring = gatui_leaf_to_path(pack->leaf);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -865,8 +866,8 @@ leaf_right_click_copy_path(
 
 inline static void
 generic_error_popup(
-		char8_t const* const primary,
-		char8_t const* const secondary,
+		char const* const primary,
+		char const* const secondary,
 		GtkApplication* const parent_app
 		) {
 	GtkAlertDialog* const alert = gtk_alert_dialog_new(primary);
@@ -909,7 +910,7 @@ b64_packet_encode(
 
 static bool // decode error
 b64_packet_decode(
-		char8_t const* const b64_text,
+		char const* const b64_text,
 		struct b64_header** const header_out,
 		void** const payload
 		) {
@@ -985,7 +986,7 @@ leaf_right_click_paste_data_set_data(
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
 
 	GError* err = NULL;
-	char8_t* const b64_text = gdk_clipboard_read_text_finish(
+	char* const b64_text = gdk_clipboard_read_text_finish(
 		GDK_CLIPBOARD(clipboard), async_data, &err
 	);
 	if (err) {
@@ -1021,7 +1022,8 @@ leaf_right_click_paste_data_set_data(
 		} else {
 			error_popup = gtk_alert_dialog_new(
 				"%s takes a string, but the base64 data does not decode to"
-				" a proper string."
+				" a proper string.",
+				 a_leaf->name
 			);
 			goto error_exit;
 		}
@@ -1198,6 +1200,7 @@ leaves_row_bind(
 		commons, view_row, leaves_rightclick_popup
 	);
 }
+/*
 static void
 leaves_row_setup(
 		void const* const _null, // swapped-signal:: with factory
@@ -1208,6 +1211,7 @@ leaves_row_setup(
 	// For a workaround see where `gtk_selection_model_unselect_item` and
 	// `leaves_rightclick_selection_sterilise` are used.
 }
+*/
 inline static GtkWidget*
 create_leaves_pane(
 		yaabegtk_commons* const commons
@@ -1352,7 +1356,7 @@ branch_right_click_copy_path(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 
-	char8_t* const pathstring = gatui_branch_to_path(pack->branch);
+	char* const pathstring = gatui_branch_to_path(pack->branch);
 
 	gdk_clipboard_set_text(
 		gdk_display_get_clipboard(
@@ -1431,7 +1435,7 @@ branch_right_click_paste_data_set_data(
 	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
 
 	GError* err = NULL;
-	char8_t* const b64_text = gdk_clipboard_read_text_finish(
+	char* const b64_text = gdk_clipboard_read_text_finish(
 		GDK_CLIPBOARD(clipboard), async_data, &err
 	);
 	if (err) {
@@ -1467,7 +1471,7 @@ branch_right_click_paste_data_set_data(
 		if (header->target == B64_BRANCH_CONTIGUOUS) {
 			if (header->num_bytes != a_branch->table_size) {
 				error_popup = gtk_alert_dialog_new(
-					"%s has %u contiguous bytes, but pasted data is %u bytes.",
+					"%s has %lu contiguous bytes, but pasted data is %u bytes.",
 					a_branch->name, a_branch->table_size, header->num_bytes
 				);
 				goto error_exit;
@@ -1713,12 +1717,12 @@ set_editor_titlebar(
 		yaabegtk_commons* const commons
 		) {
 // Set the window name to the name of the currently-open bios.
-	char8_t const print_format_file[] = "%s (%s)";
-	char8_t const print_format_nofile[] = "%s";
+	char const print_format_file[] = "%s (%s)";
+	char const print_format_nofile[] = "%s";
 
-	char8_t* filename;
+	char* filename;
 	uint16_t filename_length;
-	char8_t const* formatstr;
+	char const* formatstr;
 	if (commons->root) {
 		filename = g_file_get_basename(
 			gatui_tree_get_bios_file(commons->root)
@@ -1731,7 +1735,7 @@ set_editor_titlebar(
 		formatstr = print_format_nofile;
 	}
 
-	char8_t* const window_title = malloc(
+	char* const window_title = malloc(
 		sizeof(yaabe_name)
 		+ filename_length
 		+ sizeof(print_format_file) // largest
@@ -1753,7 +1757,7 @@ inline static void
 filer_error_window(
 		yaabegtk_commons const* const commons,
 		GError* const ferror,
-		char8_t const* const title
+		char const* const title
 		) {
 // Simple error popup
 	GtkAlertDialog* const alert = gtk_alert_dialog_new(title);

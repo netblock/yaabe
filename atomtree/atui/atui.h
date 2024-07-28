@@ -49,14 +49,14 @@ enum i18n_languages:int8_t {
 };
 
 struct atui_enum_entry {
-	char8_t const* const name;
-	char8_t const* const description[LANG_TOTALLANGS];
+	char const* const name;
+	char const* const description[LANG_TOTALLANGS];
 	int64_t const val;
 	uint16_t const name_length;
 };
 struct atui_enum {
-	char8_t const* const name;
-	char8_t const* const description[LANG_TOTALLANGS];
+	char const* const name;
+	char const* const description[LANG_TOTALLANGS];
 	struct atui_enum_entry const* const enum_array;
 	uint8_t const num_entries;
 	uint16_t const name_length;
@@ -108,9 +108,9 @@ enum atui_type_disable:uint8_t {
 typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
-	char8_t name[72];
-	char8_t const* origname;
-	char8_t const* description[LANG_TOTALLANGS];
+	char name[72];
+	char const* origname;
+	char const* description[LANG_TOTALLANGS];
 
 	uint32_t num_bytes;  // number of bytes for quick leaf size
 	union atui_type type; // how to display text, and other config data
@@ -128,6 +128,7 @@ struct _atui_leaf {
 
 	union {
 		void const* val;
+		char* c8;
 
 		uint8_t*  u8;
 		uint16_t* u16;
@@ -166,10 +167,10 @@ struct _atui_leaf {
 	};
 };
 struct _atui_branch {
-	char8_t name[64];
-	char8_t const* origname;
+	char name[64];
+	char const* origname;
 
-	char8_t const* description[LANG_TOTALLANGS];
+	char const* description[LANG_TOTALLANGS];
 
 	atui_branch* parent_branch;
 	atui_branch** child_branches; // shoot + import
@@ -203,9 +204,9 @@ generate_atui(
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit
 		atui_leaf const* leaf,
-		char8_t const* buffer
+		char const* buffer
 		);
-char8_t* // returns an alloc
+char* // returns an alloc
 atui_leaf_to_text(
 		atui_leaf const* leaf
 		);
@@ -242,17 +243,17 @@ atui_leaf_get_val_fraction(
 		);
 
 
-char8_t* // needs to be freed
+char* // needs to be freed
 atui_branch_to_path( // get a full /directory/like/path/of/the/branches/
 		atui_branch const* tip
 		);
-char8_t* // needs to be freed
+char* // needs to be freed
 atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
 		atui_leaf const* tip
 		);
 
 struct atui_path_map { // the trail of objects for a map
-	char8_t* not_found; // non-NULL if error; name of the not-found branch/leaf
+	char* not_found; // non-NULL if error; name of the not-found branch/leaf
 	atui_branch** branch_path;
 	atui_leaf** leaf_path;
 	uint8_t branch_depth;
@@ -260,7 +261,7 @@ struct atui_path_map { // the trail of objects for a map
 };
 struct atui_path_map* // needs to be freed
 path_to_atui( // crawls path and makes a map of that path
-		char8_t const* path,
+		char const* path,
 		atui_branch const* root
 		);
 
@@ -268,11 +269,11 @@ path_to_atui( // crawls path and makes a map of that path
 #define LEAF_SPRINTF_FORMAT_SIZE 10
 uint8_t // num bytes
 get_sprintf_format_from_leaf(
-		char8_t* format,
+		char* format,
 		atui_leaf const* leaf
 		);
 
-char8_t* // needs to be freed
+char* // needs to be freed
 atui_enum_entry_to_text( // "enum_entry_name : val"
 		atui_leaf const* leaf,
 		struct atui_enum_entry const* enum_entry
@@ -299,7 +300,7 @@ atui_destroy_tree(
 // funcify internal structs:
 
 struct atui_funcify_args {
-	char8_t const* rename;
+	char const* rename;
 	// optionally rename the branch.
 
 	void* atomtree;
@@ -332,8 +333,8 @@ struct subleaf_meta {
 };
 
 struct atui_branch_data {
-	char8_t const* const origname;
-	char8_t const* const description[LANG_TOTALLANGS];
+	char const* const origname;
+	char const* const description[LANG_TOTALLANGS];
 
 	// position and size of the struct the branch represents
 	void* const table_start;

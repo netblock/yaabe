@@ -212,7 +212,7 @@ union pcir_indicator_byte {
 //                        R I C P
 #define PCIR_SIGNATURE 0x52494350
 struct pcir_data_structure { // PCI Rom
-	char8_t  pcir_signature[4]; // "PCIR"
+	char  pcir_signature[4]; // "PCIR"
 	uint16_t vendor_id;
 	uint16_t device_id;
 	uint16_t vpd_reserved; // was PCI Vital Product Data (VPD)
@@ -261,18 +261,18 @@ struct efi_pci_device_driver_image {
 struct vbios_rom_header {
 	struct pci_rom_header pci_header;
 	uint8_t  rsvd_1d_1a[4];
-	char8_t  IBM[3]; // IBM
+	char  IBM[3]; // IBM
 	uint8_t  checksum;
 	uint8_t  unsure[13]; // could be more checksums?
 	uint8_t  bios_msg_number;
-	char8_t  atomati_magic[16]; // " 761295520"
+	char  atomati_magic[16]; // " 761295520"
 	uint16_t label_corev_post_no_mode;
 	uint16_t special_post_offset;
 	uint8_t  special_post_image_size_in_512;
 	uint8_t  rsvd_47_45[3];
 	uint16_t rom_header_info_table_offset;
 	uint8_t  rsvd_4f_4a[6];
-	char8_t  build_timestamp[20];
+	char  build_timestamp[20];
 	uint8_t  jump_corex_func_far_handler;
 	uint16_t corex_func_far_handler_offset;
 	uint8_t  rsvd_67;
@@ -7559,7 +7559,7 @@ struct atom_mc_init_param_table_v2_1 {
 // uCode block header for reference
 struct mcucodeheader {
 	//uint32_t Signature;
-	char8_t  Signature[4]; // CuCM ?
+	char  Signature[4]; // CuCM ?
 	uint8_t  Revision;
 	uint8_t  Checksum;
 	uint8_t  Reserved1;
@@ -7948,7 +7948,7 @@ struct atom_vram_module_v7 {
 	uint8_t  RefreshRateFactor;  // [1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)
 	uint8_t  FIFODepth;          // FIFO depth can be detected during vendor detection, here is hardcoded per memory
 	union cdr_bandwidth  CDR_Bandwidth;
-	char8_t  strMemPNString[20]; // part number end with '0'.
+	char  strMemPNString[20]; // part number end with '0'.
 };
 
 struct atom_vram_module_v8 {
@@ -7980,7 +7980,7 @@ struct atom_vram_module_v8 {
 	union mc_shared_chremap2_7_1  ChannelMapCfg1; // channel mapping for channel8~15
 	uint32_t BankMapCfg;
 	uint32_t Reserved2;
-	char8_t  strMemPNString[20]; // part number end with '0'.
+	char  strMemPNString[20]; // part number end with '0'.
 };
 
 

@@ -355,7 +355,7 @@ gatui_leaf_set_value(
 			}
 		}
 	} else { // loose compliance
-		char8_t const* const typestr = g_variant_get_type_string(value);
+		char const* const typestr = g_variant_get_type_string(value);
 		size_t const typestr_len = strlen(typestr);
 		if ((leaf->num_bytes == num_bytes) && (typestr_len == 2)) {
 			if (('a' == typestr[0]) && char_in_string(typestr[1], "ynqiuxt")) {
@@ -402,13 +402,13 @@ gatui_leaf_set_value(
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* self,
-		char8_t const* text
+		char const* text
 		) {
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	atui_leaf_from_text(self->atui, text);
 	gatui_leaf_emit_val_changed(self);
 }
-char8_t*
+char*
 gatui_leaf_value_to_text(
 		GATUILeaf* const self
 		) {
@@ -429,7 +429,7 @@ gatui_leaf_get_enum_menu_selection_model(
 
 	return self->enum_model;
 }
-char8_t*
+char*
 gatui_leaf_enum_entry_to_text(
 		GATUILeaf* const self,
 		struct atui_enum_entry const* const enum_entry
@@ -438,7 +438,7 @@ gatui_leaf_enum_entry_to_text(
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return atui_enum_entry_to_text(self->atui, enum_entry);
 }
-char8_t*
+char*
 gatui_leaf_enum_val_to_text(
 		GATUILeaf* const self,
 		struct atui_enum_entry const* const enum_entry
@@ -446,9 +446,9 @@ gatui_leaf_enum_val_to_text(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 
-	char8_t format[LEAF_SPRINTF_FORMAT_SIZE];
+	char format[LEAF_SPRINTF_FORMAT_SIZE];
 	uint8_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
-	char8_t* const valstr = malloc(alloc_size + 1);
+	char* const valstr = malloc(alloc_size + 1);
 	sprintf(valstr, format, enum_entry->val);
 	return valstr;
 }
@@ -492,7 +492,7 @@ gatui_leaf_enum_entry_get_possible_index(
 	return atui_enum_lsearch(self->atui->enum_options, val);
 }
 
-char8_t*
+char*
 gatui_leaf_to_path(
 		GATUILeaf* const self
 		) {

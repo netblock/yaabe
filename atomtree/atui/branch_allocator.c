@@ -42,7 +42,7 @@ struct level_data {
 
 	struct dynarray_position dynpos;
 	void const* suggestbios;
-	char8_t const* nametag;
+	char const* nametag;
 	void* parent;
 	uint16_t name_num;
 };
@@ -141,7 +141,7 @@ print_atui_string_leaf(
 		sprintf(leaf->name, leaf->origname, level->name_num);
 	}
 
-	leaf->array_size = 1 + strlen(leaf->u8); // +1 is NULL
+	leaf->array_size = 1 + strlen(leaf->c8); // +1 is NULL
 	leaf->num_bytes = leaf->array_size;
 }
 
@@ -251,8 +251,8 @@ print_atui_dynarray_leaf(
 		leaf->child_leaves = malloc(num_leaves * sizeof(atui_leaf));
 
 		struct dynarray_position dynpos = { // direct/diferred positioner
-			dynpos.pos.ptr = leaf_src->val,
-			dynpos.end.ptr = leaf_src->val,
+			.pos.ptr = leaf_src->val,
+			.end.ptr = leaf_src->val,
 		};
 
 		struct level_data sub_leaves = {

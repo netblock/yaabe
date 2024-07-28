@@ -63,7 +63,7 @@ indent + ".description = {\n"
 + indent + "},\n"
 	)
 
-	des_entry_template = child_indent + "u8\"%s\",\n"
+	des_entry_template = child_indent + "\"%s\",\n"
 	des_null_entry_template = child_indent + "NULL,\n"
 
 	descr_texts = ""
@@ -107,7 +107,7 @@ def searchfield_to_c(
 	field_template = """\
 struct register_set const %s_reg_set = {
 	.num_reg_set_addresses = %u,
-	.set_name = u8"%s",
+	.set_name = "%s",
 	.entries = (struct register_set_entry const[%u]) {
 %s\
 	},
@@ -115,7 +115,7 @@ struct register_set const %s_reg_set = {
 static_assert(%u < INT16_MAX); // reserve sign as flag for register_set_bsearch
 
 """
-	field_entry = """\t\t{.address=%s, .name=u8"%s"},\n"""
+	field_entry = """\t\t{.address=%s, .name="%s"},\n"""
 	out_text = cfile_header
 	entry_text = ""
 	num_constants = 0
@@ -246,7 +246,7 @@ struct atui_enum const _atui_enumarray[%u] = {
 	enum_template = """\
 	{
 		.name_length = %u,
-		.name = u8"%s",
+		.name = "%s",
 		.num_entries = %u,
 %s\
 		.enum_array = (struct atui_enum_entry const[%u]) {
@@ -256,7 +256,7 @@ struct atui_enum const _atui_enumarray[%u] = {
 """
 	enum_entry_template = """\
 			{
-				.name = u8\"%s\",
+				.name = \"%s\",
 				.val = %s,
 				.name_length = %u,
 %s\
@@ -659,8 +659,8 @@ def leaves_to_text(
 	child_indent = indent + "\t"
 	leaf_template = (
 indent + "{\n"
-+ child_indent + ".name = u8\"%s\",\n"
-+ child_indent + ".origname = u8\"%s\",\n"
++ child_indent + ".name = \"%s\",\n"
++ child_indent + ".origname = \"%s\",\n"
 
 + child_indent + ".type.radix = %s,\n"
 + child_indent + ".type.signed_num = %s,\n"
@@ -850,7 +850,7 @@ PPATUI_HEADERIFY(%s) {
 %s\
 	};
 	struct atui_branch_data const branch_embryo = {
-		.origname = u8"%s",
+		.origname = "%s",
 %s\
 		.table_start = (void*) (%s),
 		.table_size = (%s),
@@ -867,7 +867,7 @@ PPATUI_HEADERIFY(%s) {
 	assert(branch_embryo.computed_num_graft < UINT8_MAX);
 	assert(branch_embryo.computed_num_shoot < UINT8_MAX);
 
-	static_assert(sizeof(u8"%s") <= sizeof(((atui_branch*)0)->name));
+	static_assert(sizeof("%s") <= sizeof(((atui_branch*)0)->name));
 
 	return atui_branch_allocator(&branch_embryo, args);
 }

@@ -28,7 +28,7 @@ grow_smc_dpm_info(
 		case v4_10: atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_10); break;
 		case v5_0:  atui_func = ATUI_FUNC(atom_smc_dpm_info_table_13_0_7);break;
 		default:
-			atui_args.rename = u8"smc_dpm_info (header only stub)";
+			atui_args.rename = "smc_dpm_info (header only stub)";
 			atui_func = ATUI_FUNC(atom_common_table_header);
 			break;
 	}
@@ -62,7 +62,7 @@ grow_firmwareinfo(
 		case v3_3: atui_func = ATUI_FUNC(atom_firmware_info_v3_3); break;
 		case v3_4: atui_func = ATUI_FUNC(atom_firmware_info_v3_4); break;
 		default:
-			atui_args.rename = u8"firmwareinfo (header only stub)";
+			atui_args.rename = "firmwareinfo (header only stub)";
 			atui_func = ATUI_FUNC(atom_common_table_header);
 			break;
 	}
@@ -94,7 +94,7 @@ grow_lcd_info(
 		case v1_3: atui_func = ATUI_FUNC(atom_lcd_info_v1_3);  break;
 		case v2_1: atui_func = ATUI_FUNC(atom_lcd_info_v2_1);  break;
 		default:
-			atui_args.rename = u8"lcd_info (header only stub)";
+			atui_args.rename = "lcd_info (header only stub)";
 			atui_func = ATUI_FUNC(atom_common_table_header);
 			break;
 	}
@@ -120,13 +120,13 @@ grow_smu_info(
 		case v3_1: atui_func = ATUI_FUNC(atom_smu_info_v3_1); break;
 		case v3_2: atui_func = ATUI_FUNC(atom_smu_info_v3_2); break;
 		case v3_3: atui_func = ATUI_FUNC(atom_smu_info_v3_3); break;
-		case v3_4: atui_args.rename = u8"atom_smu_info_v3_5 (forced)"; 
+		case v3_4: atui_args.rename = "atom_smu_info_v3_5 (forced)"; 
 		case v3_5: atui_func = ATUI_FUNC(atom_smu_info_v3_5); break;
 		case v3_6: atui_func = ATUI_FUNC(atom_smu_info_v3_6); break;
 		case v4_0: atui_func = ATUI_FUNC(atom_smu_info_v4_0); break;
 		default:
 			atui_func = ATUI_FUNC(atom_common_table_header);
-			atui_args.rename = u8"smu_info (header only stub)";
+			atui_args.rename = "smu_info (header only stub)";
 			break;
 	}
 	return atui_func(&atui_args);
@@ -151,7 +151,7 @@ grow_vram_usagebyfirmware(
 		case v2_2: atui_func = ATUI_FUNC(vram_usagebyfirmware_v2_2); break;
 		default:
 			atui_func = ATUI_FUNC(atom_common_table_header);
-			atui_args.rename = u8"vram_usagebyfirmware (header only stub)";
+			atui_args.rename = "vram_usagebyfirmware (header only stub)";
 			break;
 	}
 	return atui_func(&atui_args);
@@ -176,7 +176,7 @@ grow_gpio_pin_lut(
 		case v2_1: atui_func = ATUI_FUNC(atom_gpio_pin_lut_v2_1); break;
 		default:
 			atui_func = ATUI_FUNC(atom_common_table_header);
-			atui_args.rename = u8"gpio_pin_lut (header only stub)";
+			atui_args.rename = "gpio_pin_lut (header only stub)";
 			break;
 	}
 	return atui_func(&atui_args);
@@ -226,13 +226,13 @@ grow_gfx_info(
 			}
 			break;
 		case v2_4: atui_func = ATUI_FUNC(atom_gfx_info_v2_4); break;
-		case v2_6: atui_args.rename = u8"atom_gfx_info_v2_5 (forced)";
+		case v2_6: atui_args.rename = "atom_gfx_info_v2_5 (forced)";
 		case v2_5: atui_func = ATUI_FUNC(atom_gfx_info_v2_5); break;
 		case v2_7: atui_func = ATUI_FUNC(atom_gfx_info_v2_7); break;
 		case v3_0: atui_func = ATUI_FUNC(atom_gfx_info_v3_0); break;
 		default:
 			atui_func = ATUI_FUNC(atom_common_table_header);
-			atui_args.rename = u8"gfx_info (header only stub)";
+			atui_args.rename = "gfx_info (header only stub)";
 			break;
 	}
 	return atui_func(&atui_args);
@@ -313,7 +313,7 @@ atui_generate_pptablev1_ppt(
 	atui_branch* vddc_lut = NULL;
 	if (ppt71->vddc_lut) {
 		vddc_lut = ATUI_MAKE_BRANCH(atom_pptable_voltage_lookup_table,
-			u8"vddc_lut",
+			"vddc_lut",
 			ppt71,ppt71->vddc_lut,  0,NULL
 		);
 	}
@@ -321,7 +321,7 @@ atui_generate_pptablev1_ppt(
 	atui_branch* vddgfx_lut = NULL;
 	if (ppt71->vddgfx_lut) {
 		vddgfx_lut = ATUI_MAKE_BRANCH(atom_pptable_voltage_lookup_table,
-			u8"vddgfx_lut",
+			"vddgfx_lut",
 			ppt71,ppt71->vddgfx_lut,  0,NULL
 		);
 	}
@@ -453,7 +453,7 @@ atui_generate_vega10_ppt(
 	atui_branch* socclk_dependency = NULL;
 	if (ppt81->socclk_dependency) {
 		socclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
-			u8"socclk_dependency",
+			"socclk_dependency",
 			ppt81,ppt81->socclk_dependency,  0,NULL
 		);
 	}
@@ -491,7 +491,7 @@ atui_generate_vega10_ppt(
 	atui_branch* dcefclk_dependency = NULL;
 	if (ppt81->dcefclk_dependency) {
 		dcefclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
-			u8"dcefclk_dependency",
+			"dcefclk_dependency",
 			ppt81,ppt81->dcefclk_dependency,  0,NULL
 		);
 	}
@@ -499,7 +499,7 @@ atui_generate_vega10_ppt(
 	atui_branch* vddc_lut = NULL;
 	if (ppt81->vddc_lut) {
 		vddc_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
-			u8"vddc_lut",
+			"vddc_lut",
 			ppt81,ppt81->vddc_lut,  0,NULL
 		);
 	}
@@ -507,7 +507,7 @@ atui_generate_vega10_ppt(
 	atui_branch* vdd_mem_lut = NULL;
 	if (ppt81->vdd_mem_lut) {
 		vdd_mem_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
-			u8"vdd_mem_lut",
+			"vdd_mem_lut",
 			ppt81,ppt81->vdd_mem_lut,  0,NULL
 		);
 	}
@@ -557,7 +557,7 @@ atui_generate_vega10_ppt(
 	atui_branch* vddci_lut = NULL;
 	if (ppt81->vddci_lut) {
 		vddci_lut = ATUI_MAKE_BRANCH(atom_vega10_voltage_lookup_table,
-			u8"vddci_lut",
+			"vddci_lut",
 			ppt81,ppt81->vddci_lut,  0,NULL
 		);
 	}
@@ -572,7 +572,7 @@ atui_generate_vega10_ppt(
 	atui_branch* pixclk_dependency = NULL;
 	if (ppt81->pixclk_dependency) {
 		pixclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
-			u8"pixclk_dependency",
+			"pixclk_dependency",
 			ppt81,ppt81->pixclk_dependency,  0,NULL
 		);
 	}
@@ -580,7 +580,7 @@ atui_generate_vega10_ppt(
 	atui_branch* dispclk_dependency = NULL;
 	if (ppt81->dispclk_dependency) {
 		dispclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
-			u8"dispclk_dependency",
+			"dispclk_dependency",
 			ppt81,ppt81->dispclk_dependency,  0,NULL
 		);
 	}
@@ -588,7 +588,7 @@ atui_generate_vega10_ppt(
 	atui_branch* phyclk_dependency = NULL;
 	if (ppt81->phyclk_dependency) {
 		phyclk_dependency = ATUI_MAKE_BRANCH(atom_vega10_clk_dependency_table,
-			u8"phyclk_dependency",
+			"phyclk_dependency",
 			ppt81,ppt81->phyclk_dependency,  0,NULL
 		);
 	}
@@ -616,7 +616,7 @@ atui_generate_smc_pptable(
 	};
 	switch (ver) {
 		case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&atui_args);
-		case v6_0: atui_args.rename = u8"smu11_smcpptable_v7 (forced)";
+		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)";
 		case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&atui_args);
 		case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&atui_args);
 		default: assert(0);
@@ -674,7 +674,7 @@ grow_ppt(
 			break;
 		default:
 			atui_args.rename = (
-				u8"smu_powerplay_table_header (header only stub)"
+				"smu_powerplay_table_header (header only stub)"
 			);
 			atui_ppt = ATUI_FUNC(smu_powerplay_table_header)(&atui_args);
 			break;
@@ -695,7 +695,7 @@ grow_init_reg_block(
 static void
 get_memory_vendor_part_strs(
 		struct atomtree_vram_module const* const vram_module,
-		char8_t const** const vendor_part_output
+		char const** const vendor_part_output
 		) {
 	union memory_vendor_id vendor_rev_id;
 	vendor_part_output[1] = NULL;
@@ -749,27 +749,6 @@ get_memory_vendor_part_strs(
 	vendor_part_output[0] = vendors->enum_array[vendor_rev_id.vendor_code].name;
 }
 
-static enum atom_dgpu_vram_type
-get_vram_type(
-		struct atomtree_vram_module const* const vram_module
-		) {
-	switch (vram_module->vram_module_ver) {
-		case v1_1:  return vram_module->v1_1->MemoryType;
-		case v1_2:  return vram_module->v1_2->MemoryType;
-		case v1_3:  return vram_module->v1_3->MemoryType;
-		case v1_4:  return vram_module->v1_4->MemoryType;
-		case v1_5:  return vram_module->v1_5->MemoryType;
-		case v1_6:  return vram_module->v1_6->MemoryType;
-		case v1_7:  return vram_module->v1_7->MemoryType;
-		case v1_8:  return vram_module->v1_8->MemoryType;
-		case v1_9:  return vram_module->v1_9->memory_type;
-		case v1_10: return vram_module->v1_10->memory_type;
-		case v1_11: return vram_module->v1_11->memory_type;
-		case v3_0:
-		default: assert(0);
-	}
-}
-
 static atui_branch*
 grow_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
@@ -778,7 +757,7 @@ grow_mem_adjust_table(
 	atui_branch* const atui_mem_adjust = grow_init_reg_block(
 		mem_adjust_table, 1
 	);
-	strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+	strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	if (COMMON_SET_UNKNOWN == mem_adjust_table->reg_set) {
 		return atui_mem_adjust;
 	}
@@ -856,7 +835,7 @@ grow_mem_adjust_table(
 
 	atui_branch* atui_strap;
 	struct atui_funcify_args atui_args = {0};
-	char8_t const* vendor_part[2];
+	char const* vendor_part[2];
 	bool const atom_vram_module_v8_hack = (
 		// uniquely, atom_vram_module_v8 uses McTunningSetId to ID
 		// mem_adjust table. It seems to exist as a way to exlude the
@@ -888,12 +867,12 @@ grow_mem_adjust_table(
 		}
 		#endif
 		if (v1_7 <= vram_module_ver) {
-			sprintf(atui_strap->name, u8"vendor adjust %s (%s)",
+			sprintf(atui_strap->name, "vendor adjust %s (%s)",
 				vendor_part[1], vendor_part[0]
 			);
 		} else {
 			// atom_vram_module_v6 and older don't have part strings
-			sprintf(atui_strap->name, u8"vendor adjust %s",
+			sprintf(atui_strap->name, "vendor adjust %s",
 				vendor_part[0]
 			);
 		}
@@ -917,7 +896,7 @@ grow_mem_clk_patch(
 	atui_branch* const atui_memclkpatch = grow_init_reg_block(
 		mem_clk_patch, 1
 	);
-	strcpy(atui_memclkpatch->name, u8"mem_clk_patch");
+	strcpy(atui_memclkpatch->name, "mem_clk_patch");
 	if (COMMON_SET_UNKNOWN == mem_clk_patch->reg_set) {
 		return atui_memclkpatch;
 	}
@@ -956,7 +935,7 @@ grow_mem_clk_patch(
 
 	atui_branch* atui_strap;
 	struct atui_funcify_args atui_args = {0};
-	char8_t const* vendor_part[2];
+	char const* vendor_part[2];
 	for (uint8_t i = 0; i < mem_clk_patch->num_data_blocks; i++) {
 		atui_args.suggestbios = data_blocks[i];
 		atui_strap = atui_strap_func(&atui_args);
@@ -967,13 +946,13 @@ grow_mem_clk_patch(
 			vendor_part
 		);
 		if (v1_7 <= vram_module_ver) {
-			sprintf(atui_strap->name, u8"Timings %s (%s): %u MHz",
+			sprintf(atui_strap->name, "Timings %s (%s): %u MHz",
 				vendor_part[1], vendor_part[0],
 				(data_blocks[i]->block_id.mem_clock_range / 100)
 			);
 		} else {
 			// atom_vram_module_v6 and older don't have part strings
-			sprintf(atui_strap->name, u8"Timings %s %u MHz",
+			sprintf(atui_strap->name, "Timings %s %u MHz",
 				vendor_part[0],
 				(data_blocks[i]->block_id.mem_clock_range / 100)
 			);
@@ -995,7 +974,7 @@ grow_mc_tile_adjust(
 	atui_branch* const atui_mc_tile_adjust = grow_init_reg_block(
 		mc_tile_adjust, 1
 	);
-	strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust");
+	strcpy(atui_mc_tile_adjust->name, "mc_tile_adjust");
 	if (COMMON_SET_UNKNOWN == mc_tile_adjust->reg_set) {
 		return atui_mc_tile_adjust;
 	}
@@ -1027,7 +1006,7 @@ grow_mc_tile_adjust(
 		atui_args.suggestbios = data_blocks[i];
 		atui_strap = atui_strap_func(&atui_args);
 		ATUI_ADD_BRANCH(atui_adjust_set, atui_strap);
-		sprintf(atui_strap->name, u8"%s [%u]",
+		sprintf(atui_strap->name, "%s [%u]",
 			atui_strap->origname,   i
 		);
 		assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
@@ -1051,7 +1030,7 @@ grow_init_mc_phy_init(
 	atui_branch* const atui_phy_init = grow_init_reg_block(
 		mc_phy_init, 1
 	);
-	strcpy(atui_phy_init->name, u8"mc_phy_init");
+	strcpy(atui_phy_init->name, "mc_phy_init");
 	if (COMMON_SET_UNKNOWN == mc_phy_init->reg_set) {
 		return atui_phy_init;
 	}
@@ -1109,7 +1088,7 @@ grow_init_mc_phy_init(
 		atui_args.suggestbios = data_blocks[i];
 		atui_strap = atui_strap_func(&atui_args);
 		ATUI_ADD_BRANCH(atui_phy_init_set, atui_strap);
-		sprintf(atui_strap->name, u8"%s [%u]",
+		sprintf(atui_strap->name, "%s [%u]",
 			atui_strap->origname,   i
 		);
 		assert(strlen(atui_strap->name) < sizeof(atui_strap->name));
@@ -1226,7 +1205,7 @@ grow_atom_memory_timing_format(
 				atui_timings = ATUI_FUNC(atom_memory_timing_format_v0)(
 					&atui_args
 				);
-				sprintf(atui_timings->name, u8"MemTiming (%u MHz)",
+				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_0->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
@@ -1245,7 +1224,7 @@ grow_atom_memory_timing_format(
 				atui_timings = ATUI_FUNC(atom_memory_timing_format_v1)(
 					&atui_args
 				);
-				sprintf(atui_timings->name, u8"MemTiming (%u MHz)",
+				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_1->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
@@ -1266,7 +1245,7 @@ grow_atom_memory_timing_format(
 				atui_timings = ATUI_FUNC(atom_memory_timing_format_v2)(
 					&atui_args
 				);
-				sprintf(atui_timings->name, u8"MemTiming (%u MHz)",
+				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_2->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
@@ -1339,7 +1318,7 @@ rename_vram_module_with_vendor(
 	enum GDDR_MEM_VENDOR_e const code = vendor_id.vendor_code;
 	assert(code <= gddr_vendors->num_entries);
 	if (code <= gddr_vendors->num_entries) {
-		sprintf(atui_vmod->name, u8"%s (%s)",
+		sprintf(atui_vmod->name, "%s (%s)",
 			atui_vmod->origname,
 			gddr_vendors->enum_array[code].name
 		);
@@ -1424,7 +1403,7 @@ grow_vram_module_v1_7(
 	);
 
 	struct atui_funcify_args atui_map_args = {
-		.rename = u8"ChannelMapCfg"
+		.rename = "ChannelMapCfg"
 	};
 	atui_branch* atui_vmod;
 	atui_branch* atui_children[3] = {NULL}; // both mrs and timings
@@ -1629,13 +1608,13 @@ grow_vram_info_v1_3(
 	atui_branch* atui_mem_adjust = NULL;
 	if (vi13->mem_adjust_table.leaves) {
 		atui_mem_adjust = grow_init_reg_block(&(vi13->mem_adjust_table), 0);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
 	if (vi13->mem_clk_patch.leaves) {
 		atui_memclkpatch = grow_init_reg_block(&(vi13->mem_clk_patch), 0);
-		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+		strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -1664,14 +1643,14 @@ grow_vram_info_v1_4(
 	atui_branch* atui_mem_adjust = NULL;
 	if (vi14->mem_adjust_table.leaves) {
 		atui_mem_adjust = grow_init_reg_block(&(vi14->mem_adjust_table), 0);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
 	if (vi14->mem_clk_patch.leaves) {
 		// TODO See grow_vram_info_v1_3
 		atui_memclkpatch = grow_init_reg_block(&(vi14->mem_clk_patch), 0);
-		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+		strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -1715,7 +1694,7 @@ atui_branch* atui_mem_adjust = NULL;
 	if (vi21->per_byte_preset.leaves) {
 		// TODO unsure what lies beyond; never seen this true.
 		atui_perbytepreset = grow_init_reg_block(&(vi21->per_byte_preset), 0);
-		strcpy(atui_perbytepreset->name, u8"per_byte_preset_table");
+		strcpy(atui_perbytepreset->name, "per_byte_preset_table");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -1805,7 +1784,7 @@ grow_vram_info_v2_3(
 	atui_branch* atui_mem_adjust = NULL;
 	if (vi23->mem_adjust_table.leaves) {
 		atui_mem_adjust = grow_umc_init_reg_block(&(vi23->mem_adjust_table), 0);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -1816,7 +1795,7 @@ grow_vram_info_v2_3(
 			(void*) vi23->mem_clk_patch.data_blocks;
 		atui_memclkpatch = grow_umc_init_reg_block(&(vi23->mem_clk_patch), 1);
 
-		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+		strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
 			atui_nullstruct, NULL,
 			NULL,NULL,  mem_clk_patch->num_data_blocks,NULL
@@ -1831,7 +1810,7 @@ grow_vram_info_v2_3(
 		} else {
 			atui_strap_func = ATUI_FUNC(timings_set_vega10);
 		}
-		char8_t const* vendor_part[2];
+		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
 			atui_args.suggestbios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
@@ -1843,7 +1822,7 @@ grow_vram_info_v2_3(
 				]),
 				vendor_part
 			);
-			sprintf(atui_strap->name, u8"Timings %s (%s) %u MHz",
+			sprintf(atui_strap->name, "Timings %s (%s) %u MHz",
 				vendor_part[1],
 				vendor_part[0],
 				(data_blocks[i]->block_id.mem_clock_range / 100)
@@ -1861,13 +1840,13 @@ grow_vram_info_v2_3(
 		atui_mc_tile_adjust = grow_umc_init_reg_block(
 			&(vi23->mc_tile_adjust), 0
 		);
-		strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
+		strcpy(atui_mc_tile_adjust->name, "mc_tile_adjust_table");
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi23->mc_phy_init.leaves) {
 		atui_phyinit = grow_umc_init_reg_block(&(vi23->mc_phy_init), 0);
-		strcpy(atui_phyinit->name, u8"mc_phy_init_table");
+		strcpy(atui_phyinit->name, "mc_phy_init_table");
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -1883,7 +1862,7 @@ grow_vram_info_v2_3(
 		atui_postucode_init = grow_umc_init_reg_block(
 			&(vi23->post_ucode_init), 0
 		);
-		strcpy(atui_postucode_init->name, u8"post_ucode_init");
+		strcpy(atui_postucode_init->name, "post_ucode_init");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -1916,7 +1895,7 @@ grow_vram_info_v2_4(
 	atui_branch* atui_mem_adjust = NULL;
 	if (vi24->mem_adjust_table.leaves) {
 		atui_mem_adjust = grow_umc_init_reg_block(&(vi24->mem_adjust_table), 0);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -1928,7 +1907,7 @@ grow_vram_info_v2_4(
 		struct atom_reg_setting_data_block const* const* const data_blocks =
 			(void*) vi24->mem_clk_patch.data_blocks;
 
-		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+		strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 		atui_branch* const atui_mem_timings = ATUI_MAKE_BRANCH(
 			atui_nullstruct, NULL,
 			NULL,NULL, mem_clk_patch->num_data_blocks,NULL
@@ -1940,7 +1919,7 @@ grow_vram_info_v2_4(
 		atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
 		atui_strap_func = ATUI_FUNC(timings_set_navi1);
 		struct atui_funcify_args atui_args = {0};
-		char8_t const* vendor_part[2];
+		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
 			atui_args.suggestbios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
@@ -1952,7 +1931,7 @@ grow_vram_info_v2_4(
 				]),
 				vendor_part
 			);
-			sprintf(atui_strap->name, u8"Timings %s (%s) %u MHz",
+			sprintf(atui_strap->name, "Timings %s (%s) %u MHz",
 				vendor_part[1],
 				vendor_part[0],
 				(data_blocks[i]->block_id.mem_clock_range / 100)
@@ -1969,13 +1948,13 @@ grow_vram_info_v2_4(
 		atui_mc_tile_adjust = grow_umc_init_reg_block(
 			&(vi24->mc_tile_adjust), 0
 		);
-		strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
+		strcpy(atui_mc_tile_adjust->name, "mc_tile_adjust_table");
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi24->mc_phy_init.leaves) {
 		atui_phyinit = grow_umc_init_reg_block(&(vi24->mc_phy_init), 0);
-		strcpy(atui_phyinit->name, u8"mc_phy_init_table");
+		strcpy(atui_phyinit->name, "mc_phy_init_table");
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -1987,7 +1966,7 @@ grow_vram_info_v2_4(
 		atui_postucode_init = grow_umc_init_reg_block(
 			&(vi24->post_ucode_init), 0
 		);
-		strcpy(atui_postucode_init->name, u8"post_ucode_init");
+		strcpy(atui_postucode_init->name, "post_ucode_init");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -2018,19 +1997,19 @@ grow_vram_info_v2_5(
 	atui_branch* atui_mem_adjust = NULL;
 	if (vi25->mem_adjust_table.leaves) {
 		atui_mem_adjust = grow_umc_init_reg_block(&(vi25->mem_adjust_table), 0);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_gddr6_ac_timings = NULL;
 	if (vi25->gddr6_ac_timings) {
 		atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-			u8"atom_gddr6_ac_timing_v2_5",
+			"atom_gddr6_ac_timing_v2_5",
 			NULL,NULL,  vi25->gddr6_acstrap_count,NULL
 		);
 		struct atom_gddr6_ac_timing_v2_5 const* const timings =
 			vi25->gddr6_ac_timings;
 		atui_branch* atui_strap;
-		char8_t const* vendor_part[2];
+		char const* vendor_part[2];
 		for (uint16_t i=0; i < vi25->gddr6_acstrap_count; i++) {
 			atui_strap = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,  NULL,
 				NULL,&(timings[i]),  0,NULL
@@ -2041,7 +2020,7 @@ grow_vram_info_v2_5(
 				&(vi25->vram_modules[timings[i].block_id.mem_block_id]),
 				vendor_part
 			);
-			sprintf(atui_strap->name, u8"Timings %s (%s) %u MHz",
+			sprintf(atui_strap->name, "Timings %s (%s) %u MHz",
 				vendor_part[1],
 				vendor_part[0],
 				(timings[i].block_id.mem_clock_range / 100)
@@ -2055,13 +2034,13 @@ grow_vram_info_v2_5(
 		atui_mc_tile_adjust = grow_umc_init_reg_block(
 			&(vi25->mc_tile_adjust), 0
 		);
-		strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
+		strcpy(atui_mc_tile_adjust->name, "mc_tile_adjust_table");
 	}
 
 	atui_branch* atui_phyinit = NULL;
 	if (vi25->mc_phy_init.leaves) {
 		atui_phyinit = grow_umc_init_reg_block(&(vi25->mc_phy_init), 0);
-		strcpy(atui_phyinit->name, u8"mc_phy_init_table");
+		strcpy(atui_phyinit->name, "mc_phy_init_table");
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2076,7 +2055,7 @@ grow_vram_info_v2_5(
 		atui_postucode_init = grow_umc_init_reg_block(
 			&(vi25->post_ucode_init), 0
 		);
-		strcpy(atui_postucode_init->name, u8"post_ucode_init");
+		strcpy(atui_postucode_init->name, "post_ucode_init");
 	}
 
 	atui_branch* atui_strobe_mode_patch = NULL;
@@ -2116,7 +2095,7 @@ grow_vram_info_v2_6(
 		atui_mem_adjust = grow_umc_init_reg_block(
 			&(vi26->mem_adjust_table), 0
 		);
-		strcpy(atui_mem_adjust->name, u8"mem_adjust_table");
+		strcpy(atui_mem_adjust->name, "mem_adjust_table");
 	}
 
 	atui_branch* atui_memclkpatch = NULL;
@@ -2124,7 +2103,7 @@ grow_vram_info_v2_6(
 		atui_memclkpatch = grow_umc_init_reg_block(
 			&(vi26->mem_clk_patch), 0
 		);
-		strcpy(atui_memclkpatch->name, u8"mem_clk_patch_table");
+		strcpy(atui_memclkpatch->name, "mem_clk_patch_table");
 	}
 
 	atui_branch* atui_mc_tile_adjust = NULL;
@@ -2132,7 +2111,7 @@ grow_vram_info_v2_6(
 		atui_mc_tile_adjust = grow_umc_init_reg_block(
 			&(vi26->mc_tile_adjust), 0
 		);
-		strcpy(atui_mc_tile_adjust->name, u8"mc_tile_adjust_table");
+		strcpy(atui_mc_tile_adjust->name, "mc_tile_adjust_table");
 	}
 
 	atui_branch* atui_phyinit = NULL;
@@ -2140,7 +2119,7 @@ grow_vram_info_v2_6(
 		atui_phyinit = grow_umc_init_reg_block(
 			&(vi26->mc_phy_init), 0
 		);
-		strcpy(atui_phyinit->name, u8"mc_phy_init_table");
+		strcpy(atui_phyinit->name, "mc_phy_init_table");
 	}
 
 	atui_branch* atui_tmrs_seq = NULL;
@@ -2159,7 +2138,7 @@ grow_vram_info_v2_6(
 		atui_postucode_init = grow_umc_init_reg_block(
 			&(vi26->post_ucode_init), 0
 		);
-		strcpy(atui_postucode_init->name, u8"post_ucode_init");
+		strcpy(atui_postucode_init->name, "post_ucode_init");
 	}
 
 	atui_branch* atui_vrammodules = NULL;
@@ -2204,7 +2183,7 @@ grow_vram_info_v3_0( // TODO finish this
 		atui_mc_init = grow_umc_init_reg_block(
 			&(vi30->mc_init), 0
 		);
-		strcpy(atui_mc_init->name, u8"mc_init_table");
+		strcpy(atui_mc_init->name, "mc_init_table");
 	}
 
 	atui_branch* atui_dram_remap = NULL;
@@ -2219,7 +2198,7 @@ grow_vram_info_v3_0( // TODO finish this
 		atui_umc_emuinit = grow_umc_init_reg_block(
 			&(vi30->umc_emuinit), 0
 		);
-		strcpy(atui_umc_emuinit->name, u8"umc_emuinit_table");
+		strcpy(atui_umc_emuinit->name, "umc_emuinit_table");
 	}
 
 	if (vi30->rsvd_tables[0]) {
@@ -2268,7 +2247,7 @@ grow_vram_info(
 		case v3_0: atui_vi = grow_vram_info_v3_0(vram_info); break;
 		default:
 			atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
-				u8"vram_info (header only stub)",
+				"vram_info (header only stub)",
 				NULL,vram_info->table_header,  0,NULL
 			);
 			break;
@@ -2284,12 +2263,12 @@ rename_volt_object_with_type(
 	struct atui_enum const* const volt_types = & ATUI_ENUM(atom_voltage_type);
 	int16_t const naming_enum_i = atui_enum_bsearch(volt_types, type);
 	if (0 <= naming_enum_i) {
-		sprintf(atui_volt_object->name, u8"%s (%s)",
+		sprintf(atui_volt_object->name, "%s (%s)",
 			atui_volt_object->origname,
 			volt_types->enum_array[naming_enum_i].name
 		);
 	} else {
-		sprintf(atui_volt_object->name, u8"%s (type %x)",
+		sprintf(atui_volt_object->name, "%s (type %x)",
 			atui_volt_object->origname,  type
 		);
 	}
@@ -2305,7 +2284,7 @@ grow_voltageobject_info_v1_1(
 	);
 
 	atui_branch* const atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-		u8"atom_voltage_objects_info_v1_1",
+		"atom_voltage_objects_info_v1_1",
 		NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
 	);
 	atui_branch* atui_volt_object;
@@ -2330,7 +2309,7 @@ grow_voltageobject_info_v1_2(
 	);
 
 	atui_branch* const atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-		u8"atom_voltage_objects_info_v1_2",
+		"atom_voltage_objects_info_v1_2",
 		NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
 	);
 	atui_branch* atui_volt_object;
@@ -2355,7 +2334,7 @@ grow_voltageobject_info_v3_1(
 	);
 
 	atui_branch* const atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-		u8"atom_voltage_objects_info_v3_1",
+		"atom_voltage_objects_info_v3_1",
 		NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
 	);
 
@@ -2411,7 +2390,7 @@ grow_voltageobject_info_v4_1(
 	);
 	atui_branch* atui_vo_info = NULL;
 	atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-		u8"atom_voltage_objects_info_v4_1",
+		"atom_voltage_objects_info_v4_1",
 		NULL,vo_info->leaves,  vo_info->num_voltage_objects,NULL
 	);
 
@@ -2473,12 +2452,12 @@ grow_voltageobject_info(
 		case v4_2: // hopefully v4_2 is the same
 			atui_vo_info = grow_voltageobject_info_v4_1(vo_info);
 			strcpy(atui_vo_info->name,
-				u8"atom_voltage_objects_info_v4_1 (forced)"
+				"atom_voltage_objects_info_v4_1 (forced)"
 			);
 			break;
 		default:
 			atui_vo_info = ATUI_MAKE_BRANCH(atom_common_table_header,
-				u8"voltageobject_info (header only stub)",
+				"voltageobject_info (header only stub)",
 				NULL,vo_info->table_header,  0,NULL
 			);
 			break;
@@ -2659,7 +2638,7 @@ grow_datatables(
 		case v2_1: return grow_master_datatable_v2_1(data_table, atree);
 		default:
 			return ATUI_MAKE_BRANCH(atom_common_table_header,
-				u8"atom_master_data_table (header only stub)",
+				"atom_master_data_table (header only stub)",
 				NULL, data_table->table_header,  0,NULL
 			);
 	}
@@ -2686,10 +2665,10 @@ grow_atom_rom_header(
 	switch (rom_header->ver) {
 		case v1_1: atui_func = ATUI_FUNC(atom_rom_header_v1_1); break;
 		case v2_1: atui_func = ATUI_FUNC(atom_rom_header_v2_1); break;
-		case v2_3: atui_args.rename = u8"atom_rom_header_v2_2 (forced)";
+		case v2_3: atui_args.rename = "atom_rom_header_v2_2 (forced)";
 		case v2_2: atui_func = ATUI_FUNC(atom_rom_header_v2_2); break;
 		default:
-			atui_args.rename = u8"atom_rom_header (header only stub)";
+			atui_args.rename = "atom_rom_header (header only stub)";
 			atui_func = ATUI_FUNC(atom_common_table_header);
 			break;
 	}

@@ -5,7 +5,7 @@ project('yaabe', 'c',
 		'c_std=gnu2x',
 		'buildtype=debug',
 		'b_ndebug=if-release',
-		'warning_level=0'
+		'warning_level=1',
 	]
 )
 
@@ -15,6 +15,9 @@ cc = meson.get_compiler('c')
 add_project_arguments(
 	'-D_GNU_SOURCE', # implies posix 2008, isoc2x
 	'-fwrapv',
+
+	'-Wno-switch',
+
 	language: 'c',
 )
 mold = find_program('mold', required: false)

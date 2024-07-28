@@ -86,7 +86,7 @@ register_set_print_tables(
 		struct atomtree_init_reg_block const* const at_regblock,
 		struct register_set const* const reg_set,
 		bool const newest,
-		char8_t const* name
+		char const* name
 		) {
 	int16_t (* regset_bsearch)(
 			struct register_set const* reg_set,
@@ -99,23 +99,23 @@ register_set_print_tables(
 	}
 
 	if (NULL == name) {
-		name = u8"";
+		name = "";
 	}
 
 	struct atom_init_reg_index_format const* const register_index =
 		at_regblock->register_index;
-	char8_t const* const struct_entry = u8"\tunion %s  %s;\n";
+	char const* const struct_entry = "\tunion %s  %s;\n";
 
-	char8_t const* reg_name;
+	char const* reg_name;
 	char* token_save;
-	char8_t const* token;
-	char8_t tokens[16][16];
+	char const* token;
+	char tokens[16][16];
 	uint8_t num_tokens;
 	uint8_t tokens_i;
-	char8_t temp_buffer[64];
-	char8_t name_buffer[64];
-	char8_t* name_ptr;
-	char8_t union_name[64];
+	char temp_buffer[64];
+	char name_buffer[64];
+	char* name_ptr;
+	char union_name[64];
 	uint8_t str_i;
 
 	int16_t set_loc;
@@ -124,23 +124,23 @@ register_set_print_tables(
 	// print assert-reg-index body
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++);
 	printf(
-		u8"{type: \"uint16_t\", name: \"%s\", // %u+1\n"
-		u8"\tconstants: [\n",
+		"{type: \"uint16_t\", name: \"%s\", // %u+1\n"
+		"\tconstants: [\n",
 		name, rii
 	);
 	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
-		printf(u8"\t\t\"%s\",\n", reg_set->entries[set_loc].name);
+		printf("\t\t\"%s\",\n", reg_set->entries[set_loc].name);
 	}
 
 	printf(
-		u8"\t\t\"END_OF_REG_INDEX_BLOCK\",\n"
-		u8"]},\n"
-		u8"\n"
-		u8"struct %s {\n"
-		u8"\tunion atom_mc_register_setting_id  block_id;\n",
+		"\t\t\"END_OF_REG_INDEX_BLOCK\",\n"
+		"]},\n"
+		"\n"
+		"struct %s {\n"
+		"\tunion atom_mc_register_setting_id  block_id;\n",
 		name
 	);
 
@@ -167,9 +167,9 @@ register_set_print_tables(
 
 		// lop off prefix
 		reg_name = reg_set->entries[set_loc].name;
-		if (strncmp(reg_name, u8"mm",2) || strncmp(reg_name, u8"ix",2)) {
+		if (strncmp(reg_name, "mm",2) || strncmp(reg_name, "ix",2)) {
 			reg_name += 2;
-		} else if (strncmp(reg_name, u8"reg",3)) {
+		} else if (strncmp(reg_name, "reg",3)) {
 			reg_name += 3;
 		} else {
 			reg_name += 0;
@@ -189,12 +189,12 @@ register_set_print_tables(
 		tokens_i = 0;
 		token_save = NULL;
 		name_ptr = name_buffer;
-		token = strtok_r(temp_buffer, u8"_", &token_save);
+		token = strtok_r(temp_buffer, "_", &token_save);
 		while (token) { // tokenise the string
 			assert(strlen(token) < sizeof(tokens[0]));
 			strcpy(tokens[tokens_i], token);
 			tokens_i++;
-			token = strtok_r(NULL, u8"_", &token_save);
+			token = strtok_r(NULL, "_", &token_save);
 		}
 		assert(tokens_i);
 		// lop off trailing tokens that are numbers
@@ -216,10 +216,10 @@ register_set_print_tables(
 		unions++;
 	}
 	printf(
-		u8"};\n"
-		u8"// %u bytes\n"
-		u8"// %u+1 unions\n"
-		u8"\n",
+		"};\n"
+		"// %u bytes\n"
+		"// %u+1 unions\n"
+		"\n",
 		(unions+1)*4,
 		unions
 	);

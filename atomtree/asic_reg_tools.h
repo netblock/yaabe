@@ -15,11 +15,11 @@ register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set, NULL);
 
 struct register_set_entry { // register set entry
 	uint16_t address; // mm,ix,reg prefixed defines
-	char8_t const* name;
+	char const* name;
 };
 struct register_set {
 	uint16_t num_reg_set_addresses;
-	char8_t const* set_name;
+	char const* set_name;
 	struct register_set_entry const* entries;
 };
 #define RSE(reg_name)\
@@ -43,7 +43,7 @@ register_set_print_tables( // entirely a developer's tool
 		struct atomtree_init_reg_block const* at_regblock,
 		struct register_set const* reg_set,
 		bool newest, // suggest oldest or newest if there's multiple versions
-		char8_t const* name
+		char const* name
 		);
 
 

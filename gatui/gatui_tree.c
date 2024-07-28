@@ -217,7 +217,7 @@ gatui_tree_new_from_gfile(
 }
 GATUITree*
 gatui_tree_new_from_path(
-		char8_t const* const path,
+		char const* const path,
 		GError** const ferror_out
 		) {
 	GFile* const biosfile = g_file_new_for_path(path);

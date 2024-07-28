@@ -9,7 +9,7 @@ G_DECLARE_FINAL_TYPE(GATUITree, gatui_tree, GATUI, TREE, GObject)
 
 GATUITree*
 gatui_tree_new_from_path(
-		char8_t const* path,
+		char const* path,
 		GError** ferror_out
 		);
 GATUITree*

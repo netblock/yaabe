@@ -305,7 +305,7 @@ gatui_branch_set_leaves_memory_package(
 	return false;
 };
 
-char8_t*
+char*
 gatui_branch_to_path(
 		GATUIBranch* const self
 		) {
