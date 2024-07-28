@@ -6,7 +6,7 @@
 inline static atui_branch*
 grow_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == smc_dpm_info->leaves) {
 		return NULL;
@@ -39,7 +39,7 @@ grow_smc_dpm_info(
 inline static atui_branch*
 grow_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == firmwareinfo->leaves) {
 		return NULL;
@@ -73,7 +73,7 @@ grow_firmwareinfo(
 inline static atui_branch*
 grow_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == lcd_info->leaves) {
 		return NULL;
@@ -105,7 +105,7 @@ grow_lcd_info(
 inline static atui_branch*
 grow_smu_info(
 		struct atomtree_smu_info* const smu_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == smu_info->leaves) {
 		return NULL;
@@ -136,7 +136,8 @@ grow_smu_info(
 inline static atui_branch*
 grow_vram_usagebyfirmware(
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
-		struct atom_tree* const atree) {
+		struct atom_tree* const atree __unused
+		) {
 	if (NULL == fw_vram->leaves) {
 		return NULL;
 	}
@@ -161,7 +162,7 @@ grow_vram_usagebyfirmware(
 inline static atui_branch*
 grow_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == gpio_pin_lut->leaves) {
 		return NULL;
@@ -186,7 +187,7 @@ grow_gpio_pin_lut(
 inline static atui_branch*
 grow_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == gfx_info->leaves) {
 		return NULL;
@@ -626,7 +627,7 @@ atui_generate_smc_pptable(
 inline static atui_branch*
 grow_ppt(
 		struct atomtree_powerplay_table* const ppt,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == ppt->leaves) {
 		return NULL;
@@ -1122,8 +1123,7 @@ inline static atui_branch*
 grow_atom_memory_timing_format(
 		struct atomtree_vram_module* const vram_module,
 		enum atom_dgpu_vram_type const memory_type,
-		union atom_memory_timing_format const* const timing_format_start,
-		uint16_t const straps_total_size
+		union atom_memory_timing_format const* const timing_format_start
 		) {
 	enum atomtree_common_version const timing_ver = (
 		vram_module->memory_timing_format_ver
@@ -1344,10 +1344,7 @@ grow_vram_module_v1_3(
 			&(vmod->v1_3->MR2), &(vmod->v1_3->MR3)
 		);
 		atui_children[2] = grow_atom_memory_timing_format(
-			vmod, vmod->v1_3->MemoryType, vmod->v1_3->MemTiming,
-			(vmod->v1_3->ModuleSize
-				- offsetof(typeof(*vmod->v1_3), MemTiming)
-			)
+			vmod, vmod->v1_3->MemoryType, vmod->v1_3->MemTiming
 		);
 
 		atui_vmod = ATUI_MAKE_BRANCH(atom_vram_module_v3,  NULL,
@@ -1378,10 +1375,7 @@ grow_vram_module_v1_4(
 			&(vmod->v1_4->MR2), &(vmod->v1_4->MR3)
 		);
 		atui_children[2] = grow_atom_memory_timing_format(
-			vmod, vmod->v1_4->MemoryType, vmod->v1_4->MemTiming,
-			(vmod->v1_4->ModuleSize
-				- offsetof(typeof(*vmod->v1_4), MemTiming)
-			)
+			vmod, vmod->v1_4->MemoryType, vmod->v1_4->MemTiming
 		);
 
 		atui_vmod = ATUI_MAKE_BRANCH(atom_vram_module_v4,  NULL,
@@ -2227,7 +2221,7 @@ grow_vram_info_v3_0( // TODO finish this
 inline static atui_branch*
 grow_vram_info(
 		struct atomtree_vram_info* const vram_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == vram_info->leaves) {
 		return NULL;
@@ -2437,7 +2431,7 @@ grow_voltageobject_info_v4_1(
 inline static atui_branch*
 grow_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == vo_info->leaves) {
 		return NULL;
@@ -2469,7 +2463,7 @@ grow_voltageobject_info(
 inline static atui_branch*
 grow_master_datatable_v1_1(
 		struct atomtree_master_datatable* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	struct atomtree_master_datatable_v1_1* const dt11 = &(data_table->v1_1);
 
@@ -2552,7 +2546,7 @@ grow_master_datatable_v1_1(
 inline static atui_branch*
 atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	// TODO have a table with a bunch of ATUI_INLINEs pointing at headers
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
@@ -2561,7 +2555,7 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 inline static atui_branch*
 grow_master_datatable_v2_1(
 		struct atomtree_master_datatable* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	struct atomtree_master_datatable_v2_1* const dt21 = &(data_table->v2_1);
 
@@ -2627,7 +2621,7 @@ grow_master_datatable_v2_1(
 inline static atui_branch*
 grow_datatables(
 		//struct atomtree_master_datatable* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	struct atomtree_master_datatable* const data_table = &(atree->data_table);
 	if (NULL == data_table->leaves) {
@@ -2648,7 +2642,7 @@ grow_datatables(
 inline static atui_branch*
 grow_atom_rom_header(
 		struct atomtree_rom_header* const rom_header,
-		struct atom_tree* const atree
+		struct atom_tree* const atree __unused
 		) {
 	if (NULL == rom_header->leaves) {
 		return NULL;

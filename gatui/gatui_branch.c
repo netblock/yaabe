@@ -84,7 +84,7 @@ gatui_branch_init(
 static GListModel*
 leaves_treelist_generate_children(
 		gpointer const parent_leaf,
-		gpointer const unused
+		gpointer const user_data __unused
 		) {
 // GtkTreeListModelCreateModelFunc for leaves
 	return gatui_leaf_generate_children_model(parent_leaf);
@@ -253,7 +253,7 @@ gatui_branch_get_leaves_memory_package(
 			walker = mempcpy(walker, leaves[i].val, leaves[i].num_bytes);
 		}
 	}
-	assert(num_bytes == (walker - bytepack));
+	assert(num_bytes == (size_t)(walker - bytepack));
 
 	*value = g_variant_new_from_data(
 		self->capsule_type,
@@ -298,7 +298,7 @@ gatui_branch_set_leaves_memory_package(
 			}
 			walker += leaves[i].num_bytes;
 		}
-		assert(num_bytes == (walker - input_data));
+		assert(num_bytes == (size_t)(walker - input_data));
 		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
 		return true;
 	}

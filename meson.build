@@ -5,7 +5,7 @@ project('yaabe', 'c',
 		'c_std=gnu2x',
 		'buildtype=debug',
 		'b_ndebug=if-release',
-		'warning_level=1',
+		'warning_level=2',
 	]
 )
 
@@ -17,6 +17,7 @@ add_project_arguments(
 	'-fwrapv',
 
 	'-Wno-switch',
+	'-Wno-implicit-fallthrough',
 
 	language: 'c',
 )

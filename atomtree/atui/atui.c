@@ -30,7 +30,7 @@ atui_leaf_from_text(
 // numbers (including bitfields) and strings.
 	assert(leaf->val);
 
-	uint8_t const array_size = leaf->array_size;
+	size_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
 
@@ -41,22 +41,22 @@ atui_leaf_from_text(
 		char* walker = token_buffer;
 		switch (leaf->total_bits) {
 			case 8:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					leaf->u8[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 16:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					leaf->u16[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 32:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					leaf->u32[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 64:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					leaf->u64[i] = strtoull(walker, &walker, base);
 				}
 				break;
@@ -115,13 +115,13 @@ atui_leaf_from_text(
 	}
 }
 
-uint8_t
+size_t
 get_sprintf_format_from_leaf(
 		char* const format,
 		atui_leaf const* const leaf
 		) {
 // get reccomended sprintf format based on radix and other factors
-	uint8_t print_alloc_width; // caller handles the counting of \0
+	size_t print_alloc_width; // caller handles the counting of \0
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
 
@@ -201,10 +201,10 @@ atui_leaf_to_text(
 	char* buffer = NULL;
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
-	uint8_t const array_size = leaf->array_size;
+	size_t const array_size = leaf->array_size;
 	uint8_t const radix = leaf->type.radix;
 	uint8_t const fancy = leaf->type.fancy;
-	uint8_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
+	size_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->type.fraction));
@@ -218,22 +218,22 @@ atui_leaf_to_text(
 		char* buffer_walk = buffer;
 		switch (leaf->total_bits) {
 			case 8:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u8[i]);
 				}
 				break;
 			case 16:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u16[i]);
 				}
 				break;
 			case 32:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u32[i]);
 				}
 				break;
 			case 64:
-				for (uint8_t i=0; i < array_size; i++) {
+				for (size_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u64[i]);
 				}
 				break;
@@ -513,7 +513,7 @@ inline static void
 atui_path_populate_branch_stack(
 		atui_branch const** const branchstack,
 		uint8_t* const i,
-		uint16_t* const string_length
+		size_t* const string_length
 		) {
 	do {
 		(*string_length) += strlen(branchstack[*i]->name) + 1; // +1 for /
@@ -546,7 +546,7 @@ atui_branch_to_path(
 	atui_branch const* branchstack[16];
 	branchstack[0] = tip;
 	uint8_t i = 0;
-	uint16_t string_length = 1+1; // +1 for the initial / and +1 for \0
+	size_t string_length = 1+1; // +1 for the initial / and +1 for \0
 	atui_path_populate_branch_stack(branchstack, &i, &string_length);
 	char* const pathstring = malloc(string_length);
 	pathstring[string_length-1] = '\0';
@@ -561,7 +561,7 @@ inline static void
 atui_path_populate_leaf_stack(
 		atui_leaf const** const leafstack,
 		uint8_t* const i,
-		uint16_t* const string_length
+		size_t* const string_length
 		) {
 	bool parent_is_leaf;
 	do {
@@ -594,7 +594,7 @@ atui_leaf_to_path(
 		) {
 	assert(tip);
 
-	uint16_t string_length = 1; // +1 for \0; no final /
+	size_t string_length = 1; // +1 for \0; no final /
 
 	atui_leaf const* leafstack[16];
 	atui_branch const* branchstack[16];

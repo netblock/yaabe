@@ -112,12 +112,12 @@ struct _atui_leaf {
 	char const* origname;
 	char const* description[LANG_TOTALLANGS];
 
-	uint32_t num_bytes;  // number of bytes for quick leaf size
+	size_t num_bytes;  // number of bytes for quick leaf size
+	size_t array_size;
 	union atui_type type; // how to display text, and other config data
-	uint8_t array_size;
 
 	uint8_t fractional_bits; // if fixed-point
-	uint8_t total_bits;  // number of bits for the leaf
+	int8_t total_bits;   // number of bits for the leaf
 	uint8_t bitfield_hi; // bitfield range end
 	uint8_t bitfield_lo; // bitfield range start
 
@@ -267,7 +267,7 @@ path_to_atui( // crawls path and makes a map of that path
 
 
 #define LEAF_SPRINTF_FORMAT_SIZE 10
-uint8_t // num bytes
+size_t // num bytes
 get_sprintf_format_from_leaf(
 		char* format,
 		atui_leaf const* leaf

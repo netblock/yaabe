@@ -56,7 +56,7 @@ atui_leaves_printer(
 
 inline static void
 print_atui_nofancy_leaf(
-		struct global_tracker* const global,
+		struct global_tracker* const global __unused,
 		struct level_data* const level
 		) {
 	assert(level->target.pos < level->target.end);
@@ -121,7 +121,7 @@ print_atui_bitfield_leaf(
 
 inline static void
 print_atui_string_leaf(
-		struct global_tracker* const global,
+		struct global_tracker* const global __unused,
 		struct level_data* const level
 		) {
 	assert(level->target.pos < level->target.end);

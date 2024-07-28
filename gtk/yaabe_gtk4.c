@@ -72,8 +72,8 @@ struct b64_header { // paste header
 static void
 pathbar_update_path(
 		GtkSingleSelection* const model,
-		guint const position,
-		guint const n_items,
+		guint const position __unused,
+		guint const n_items __unused,
 		yaabegtk_commons* const commons
 		) {
 // callback; sets path based on branches selection
@@ -91,7 +91,7 @@ pathbar_update_path(
 static gboolean
 pathbar_editable_reset(
 		GtkWidget* const pathbar,
-		GVariant* const shortcut_args,
+		GVariant* const shortcut_args __unused,
 		gpointer const commons_ptr
 		) {
 // callback; resets pathbar if focus is lost
@@ -238,8 +238,8 @@ pathbar_sets_branch_selection(
 static void
 select_changes_leaves(
 		GtkSingleSelection* const model,
-		guint const position,
-		guint const n_items,
+		guint const position __unused,
+		guint const n_items __unused,
 		yaabegtk_commons* const commons
 		) {
 // Signal callback
@@ -255,7 +255,7 @@ select_changes_leaves(
 static GListModel*
 branches_treelist_generate_children(
 		gpointer const parent_ptr,
-		gpointer const data
+		gpointer const data __unused
 		) {
 // GtkTreeListModelCreateModelFunc for branches
 // Creates the children models for the collapsable tree, of the branches pane.
@@ -323,7 +323,7 @@ create_and_set_active_atui_model(
 
 inline static void
 calculate_rightclick_popup_location(
-		GtkGesture* const click_sense,
+		GtkGesture* const click_sense __unused,
 		gdouble const x,
 		gdouble const y,
 		struct pane_context const* const context,
@@ -369,7 +369,7 @@ columnview_create_rightclick_popup(
 void
 free_closure(
 		gpointer data,
-		GClosure* closure
+		GClosure* closure __unused
 		) {
 	free(data);
 }
@@ -453,7 +453,7 @@ construct_path_bar(
 
 static void
 label_column_setup(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
@@ -463,7 +463,7 @@ label_column_setup(
 }
 static void
 tree_label_column_setup(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // setup to spawn a UI skeleton
@@ -478,7 +478,7 @@ tree_label_column_setup(
 
 static void
 leaves_name_column_bind(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -544,7 +544,7 @@ editable_sets_leaf(
 
 static void
 enum_name_column_bind(
-		GtkColumnViewCell* const leaves_column_cell,
+		GtkColumnViewCell* const leaves_column_cell __unused,
 		GtkColumnViewCell* const enum_column_cell
 		) {
 // bind
@@ -593,7 +593,7 @@ enum_val_column_bind(
 static void
 enum_list_sets_leaf(
 		GtkColumnView* const enum_list,
-		guint const paosition,
+		guint const paosition __unused,
 		GtkColumnViewCell* const leaves_column_cell
 		) {
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
@@ -701,7 +701,7 @@ construct_enum_dropdown(
 }
 static void
 leaves_val_column_setup(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // setup
@@ -734,7 +734,7 @@ leaves_val_column_setup(
 }
 static void
 leaves_val_column_bind(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind
@@ -782,7 +782,7 @@ leaves_val_column_bind(
 }
 static void
 leaves_val_column_unbind(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
@@ -831,8 +831,8 @@ leaves_offset_column_bind(
 
 static void
 leaf_right_click_copy_name(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -846,8 +846,8 @@ leaf_right_click_copy_name(
 }
 static void
 leaf_right_click_copy_path(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -952,8 +952,8 @@ b64_packet_decode(
 
 static void
 leaf_right_click_copy_data(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1074,8 +1074,8 @@ leaf_right_click_paste_data_set_data(
 }
 static void
 leaf_right_click_paste_data(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	gdk_clipboard_read_text_async(
@@ -1090,7 +1090,7 @@ leaf_right_click_paste_data(
 
 static void
 leaves_rightclick_selection_sterilise(
-		GtkPopover* const rightclick,
+		GtkPopover* const rightclick __unused,
 		GtkColumnView* const view
 		) {
 	// TODO hack: gtk_column_view_row_set_selectable is broken.
@@ -1131,9 +1131,12 @@ leaves_rightclick_popup(
 
 	// see also create_leaves_rightclick_menu
 	GActionEntry actions[4] = {0};
-	actions[0] = (GActionEntry) {"name", leaf_right_click_copy_name};
-	actions[1] = (GActionEntry) {"path", leaf_right_click_copy_path};
+	actions[0].name = "name";
+	actions[0].activate = leaf_right_click_copy_name;
+	actions[1].name = "path";
+	actions[1].activate = leaf_right_click_copy_path;
 	uint8_t num_actions = 2;
+
 	if (a_leaf->num_bytes || a_leaf->type.fancy == _ATUI_BITCHILD) {
 		actions[num_actions].name = "copy_data";
 		actions[num_actions].activate = leaf_right_click_copy_data;
@@ -1203,7 +1206,7 @@ leaves_row_bind(
 /*
 static void
 leaves_row_setup(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewRow* const view_row
 		) {
 	gtk_column_view_row_set_selectable(view_row, false);
@@ -1283,7 +1286,7 @@ create_leaves_pane(
 
 static void
 branch_name_column_bind(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -1304,7 +1307,7 @@ branch_name_column_bind(
 }
 static void
 branch_type_column_bind(
-		void const* const _null, // swapped-signal:: with factory
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind
@@ -1320,8 +1323,8 @@ branch_type_column_bind(
 
 static void
 branch_right_click_copy_name(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1335,8 +1338,8 @@ branch_right_click_copy_name(
 }
 static void
 branch_right_click_copy_struct_name(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1350,8 +1353,8 @@ branch_right_click_copy_struct_name(
 }
 static void
 branch_right_click_copy_path(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1368,8 +1371,8 @@ branch_right_click_copy_path(
 }
 static void
 branch_right_click_copy_contiguous(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1393,8 +1396,8 @@ branch_right_click_copy_contiguous(
 }
 static void
 branch_right_click_copy_leaves(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
@@ -1527,8 +1530,8 @@ branch_right_click_paste_data_set_data(
 }
 static void
 branch_right_click_paste_data(
-		GSimpleAction* const action,
-		GVariant* const parameter,
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	gdk_clipboard_read_text_async(
@@ -1556,7 +1559,6 @@ branches_rightclick_popup(
 		pack->commons->branches
 	);
 
-
 	// connect  actions
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(
 		gtk_column_view_row_get_item(pack->row)
@@ -1567,10 +1569,14 @@ branches_rightclick_popup(
 	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
 	GActionEntry actions[6] = {0};
-	actions[0] = (GActionEntry) {"name", branch_right_click_copy_name};
-	actions[1] = (GActionEntry) {"struct", branch_right_click_copy_struct_name};
-	actions[2] = (GActionEntry) {"path", branch_right_click_copy_path};
+	actions[0].name = "name";
+	actions[0].activate = branch_right_click_copy_name;
+	actions[1].name = "struct";
+	actions[1].activate = branch_right_click_copy_struct_name;
+	actions[2].name = "path";
+	actions[2].activate = branch_right_click_copy_path;
 	uint8_t num_actions = 3;
+
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	if (branch->num_copyable_leaves || branch->table_size) {
 		if (branch->num_copyable_leaves && ! branch->prefer_contiguous) {
@@ -2004,10 +2010,10 @@ construct_loadsave_buttons_box(
 
 static gboolean
 dropped_file_open_bios(
-		GtkDropTarget* const dropctrl,
+		GtkDropTarget* const dropctrl __unused,
 		GValue const* const value,
-		gdouble const x,
-		gdouble const y,
+		gdouble const x __unused,
+		gdouble const y __unused,
 		yaabegtk_commons* const commons
 		) {
 // Load a bios from a drag-n'-drop

@@ -62,6 +62,8 @@ static_assert(sizeof(struct _tenbytes) == 10);
 
 #define lengthof(array) (sizeof(array)/sizeof(array[0]))
 
+#define __unused __attribute__((unused))
+
 // TODO stroll that considers 0b prefix?
 int64_t
 strtoll_2(

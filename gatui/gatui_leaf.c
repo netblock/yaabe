@@ -447,7 +447,7 @@ gatui_leaf_enum_val_to_text(
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
-	uint8_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
+	size_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
 	char* const valstr = malloc(alloc_size + 1);
 	sprintf(valstr, format, enum_entry->val);
 	return valstr;
