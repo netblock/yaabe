@@ -8,7 +8,7 @@ gatui_leaf_test(
 		GATUILeaf* const leaf
 		) {
 	// TODO actually test stuff
-	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
+	atui_leaf const* const atui __unused = gatui_leaf_get_atui(leaf);
 
 	GListModel* const leaves = gatui_leaf_generate_children_model(leaf);
 	if (leaves) {
@@ -29,7 +29,7 @@ gatui_branch_test(
 		GATUIBranch* const branch
 		) {
 	// TODO actually test stuff
-	atui_branch const* const atui = gatui_branch_get_atui(branch);
+	atui_branch const* const atui __unused = gatui_branch_get_atui(branch);
 
 	GObject* child = NULL;
 	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);

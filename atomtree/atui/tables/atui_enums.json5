@@ -198,6 +198,7 @@ Enums for ATUI_ENUM
 ]},
 {name: "atom_dgpu_vram_type",
 	constants: [
+		{name: "ATOM_DGPU_VRAM_TYPE_NONE",},
 		{name: "ATOM_DGPU_VRAM_TYPE_GDDR1",},
 		{name: "ATOM_DGPU_VRAM_TYPE_DDR1",},
 		{name: "ATOM_DGPU_VRAM_TYPE_DDR2",},

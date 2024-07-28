@@ -16,6 +16,7 @@ add_project_arguments(
 	'-D_GNU_SOURCE', # implies posix 2008, isoc2x
 	'-fwrapv',
 
+	'-Wformat-security',
 	'-Wno-switch',
 	'-Wno-implicit-fallthrough',
 

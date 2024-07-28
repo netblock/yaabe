@@ -870,7 +870,7 @@ generic_error_popup(
 		char const* const secondary,
 		GtkApplication* const parent_app
 		) {
-	GtkAlertDialog* const alert = gtk_alert_dialog_new(primary);
+	GtkAlertDialog* const alert = gtk_alert_dialog_new("%s", primary);
 	gtk_alert_dialog_set_detail(alert, secondary);
 	gtk_alert_dialog_show(
 		alert,
@@ -1766,7 +1766,7 @@ filer_error_window(
 		char const* const title
 		) {
 // Simple error popup
-	GtkAlertDialog* const alert = gtk_alert_dialog_new(title);
+	GtkAlertDialog* const alert = gtk_alert_dialog_new("%s", title);
 	gtk_alert_dialog_set_detail(alert, ferror->message);
 	gtk_alert_dialog_show(
 		alert,

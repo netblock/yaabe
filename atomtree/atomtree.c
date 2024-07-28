@@ -445,6 +445,7 @@ get_vram_type(
 		case v3_0:
 		default: assert(0);
 	}
+	return ATOM_DGPU_VRAM_TYPE_NONE;
 }
 
 static void

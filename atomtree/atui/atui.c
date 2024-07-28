@@ -495,6 +495,7 @@ atui_leaf_get_val_fraction(
 	}
 
 	assert(0);
+	return NAN;
 }
 
 struct path_meta {
