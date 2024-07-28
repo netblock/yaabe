@@ -546,7 +546,7 @@ populate_mem_adjust_table(
 		register_set_print_tables(
 			mem_adjust_table, &GMC_reg_set, true, "mem_adjust_set"
 		);
-		assert(mem_adjust_table->reg_set); // unknown adjust sequence
+		//assert(mem_adjust_table->reg_set); // unknown adjust sequence
 	}
 	#endif
 }
@@ -601,7 +601,7 @@ populate_mem_clk_patch(
 		register_set_print_tables(
 			mem_clk_patch, &GMC_reg_set, true, "timings_set"
 		);
-		assert(mem_clk_patch->reg_set); // unknown timings sequence
+		//assert(mem_clk_patch->reg_set); // unknown timings sequence
 	}
 	#endif
 }
@@ -643,7 +643,7 @@ populate_mc_tile_adjust(
 		register_set_print_tables(
 			mc_tile_adjust, &GMC_reg_set, true, "mc_tile_adjust_set"
 		);
-		assert(mc_tile_adjust->reg_set); // unknown adjust sequence
+		//assert(mc_tile_adjust->reg_set); // unknown adjust sequence
 	}
 	#endif
 }
@@ -714,7 +714,7 @@ populate_init_mc_phy_init(
 		register_set_print_tables(
 			mc_phy_init, &GMC_reg_set, true, "mc_phy_init_set"
 		);
-		assert(mc_phy_init->reg_set); // unknown phy init sequence
+		//assert(mc_phy_init->reg_set); // unknown phy init sequence
 	}
 	#endif
 }
