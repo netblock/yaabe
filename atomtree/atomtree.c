@@ -2240,12 +2240,12 @@ atombios_parse(
 	uint8_t num_of_crawled_strings = 0;
 	if (image->atom_bios_message_offset) {
 		char* strs = atree->bios + image->atom_bios_message_offset;
-		while (*strs) { // the last string ends with 00 00
+		do {
 			assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
 			atree->atombios_strings[num_of_crawled_strings] = strs;
 			num_of_crawled_strings++;
 			strs += (strlen(strs) + 1);
-		}
+		} while (*strs); // the last string ends with 00 00
 	}
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 

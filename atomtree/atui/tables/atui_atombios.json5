@@ -176,6 +176,7 @@ global_default: {
 			name: "atom_bios_message_offset",
 			display: "ATUI_HEX",
 		}, {
+			access: "NULL",
 			name: "atombios strings",
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {

@@ -306,33 +306,31 @@ print_atui_dynarray_leaf(
 			free(leaf->child_leaves);
 			leaf->child_leaves = NULL;
 		}
+	}
 
-		// calculate num_bytes 
-		if (sub_meta->deferred_start_array) { // num_bytes
-			if (leaf->num_child_leaves) {
-				leaf->val = *(void const* const*)(leaf->val);
-				atui_leaf const* const last_child = &(
-					leaf->child_leaves[leaf->num_child_leaves - 1]
-				);
-				if (last_child->num_bytes) {
-					assert(last_child->val >= leaf->val);
-					leaf->num_bytes = (
-						last_child->val + last_child->num_bytes
-						- leaf->val
-					);
-				} else {
-					goto dynarray_deferred_num_bytes_failure;
-				}
-			} else { // TODO consider shoot only?
-				dynarray_deferred_num_bytes_failure:
-				leaf->val = NULL;
-				leaf->num_bytes = 0;
-			}
-		} else {
-			leaf->num_bytes = (
-				sub_meta->element_size * sub_meta->dynarray_length
+	// calculate num_bytes 
+	if (sub_meta->deferred_start_array) { // num_bytes
+		if (leaf->num_child_leaves) {
+			leaf->val = *(void const* const*)(leaf->val);
+			atui_leaf const* const last_child = &(
+				leaf->child_leaves[leaf->num_child_leaves - 1]
 			);
+			if (last_child->num_bytes) {
+				assert(last_child->val >= leaf->val);
+				leaf->num_bytes = (
+					last_child->val + last_child->num_bytes
+					- leaf->val
+				);
+			} else {
+				goto dynarray_deferred_num_bytes_failure;
+			}
+		} else { // TODO consider shoot only?
+			dynarray_deferred_num_bytes_failure:
+			leaf->val = NULL;
+			leaf->num_bytes = 0;
 		}
+	} else {
+		leaf->num_bytes = sub_meta->element_size * sub_meta->dynarray_length;
 	}
 }
 

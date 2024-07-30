@@ -525,9 +525,12 @@ def infer_leaf_data(
 
 			if not ("enum" in leaf.fancy_data):
 				leaf.fancy_data["enum"] = "NULL"
-			if leaf.access:
+
+			if leaf.access and (leaf.access != "NULL"):
 				access_meta = leaf.access_meta # direct array
 			else:
+				leaf.access_meta = fancy_data["deferred"] + "[0]"
+				leaf.access = None
 				access_meta = fancy_data["deferred"] # array of pointers
 			access_meta += "[0]" # c preprocessor stuff
 
@@ -592,19 +595,14 @@ def leaf_to_subleaf(
 )
 	bounds_vals = ()
 	if leaf.fancy == ATUI_DYNARRAY:
-		access_meta = ""
-		if leaf.access_meta:
-			access_meta = leaf.access_meta # direct array
-		else:
-			access_meta = leaf.fancy_data["deferred"]+"[0]" # array of pointers
 		if leaf.fancy_data["enum"] == "ATUI_NULL":
 			enum_taglist = "NULL"
 		else:
 			enum_taglist = "&(ATUI_ENUM(%s))" % leaf.fancy_data["enum"]
 		bounds_vals = (
-			"sizeof(%s[0])" % access_meta,
+			"sizeof(%s[0])" % leaf.access_meta,
 			leaf.fancy_data["count"],
-			str(not leaf.access_meta).lower(),
+			str(not leaf.access).lower(),
 			len(leaf.fancy_data["pattern"]),
 			enum_taglist,
 			len(leaf.fancy_data["pattern"]),
@@ -738,14 +736,10 @@ indent + "{\n"
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == ATUI_DYNARRAY:
 			if leaf.access:
+				var_meta += "[0]"
 				var_access = leaf.access
-				var_meta = leaf.access_meta + "[0]"
 			else:
 				var_access = leaf.fancy_data["deferred"]
-			if leaf.access_meta:
-				var_meta = leaf.access_meta + "[0]"
-			else:
-				var_meta = leaf.fancy_data["deferred"] + "[0]"
 			leaf_text_extra = (
 				child_indent +
 					".template_leaves = & (struct subleaf_meta const) %s\n"
