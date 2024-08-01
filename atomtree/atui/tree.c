@@ -617,6 +617,7 @@ atui_generate_smc_pptable(
 	};
 	switch (ver) {
 		case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&atui_args);
+		case v5_0: return ATUI_FUNC(smu11_smcpptable_v5)(&atui_args);
 		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
 		case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&atui_args);
 		case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&atui_args);
@@ -664,6 +665,7 @@ grow_ppt(
 			);
 			atui_ppt = ATUI_FUNC(smu_11_0_powerplay_table)(&atui_args);
 			break;
+		case v19_0: // 6400
 		case v18_0: // navi2 xx50
 		case v16_0: // 6700XT
 		case v15_0:

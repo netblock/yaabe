@@ -6332,6 +6332,768 @@ global_default: {
 		},
 	],
 }, {
+	c_type: "smu11_smcpptable_v5",
+	leaves: [
+		{
+			access: "bios->Version",
+			name: "Version",
+		}, {
+			access: "bios->features",
+			name: "features",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu11_0x40",
+		}, {
+			access: "bios->infrastructure_limits",
+			name: "infrastructure_limits",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_infrastructure_limits",
+		}, {
+			access: "bios->TotalPowerConfig",
+			name: "TotalPowerConfig",
+			fancy: "ATUI_ENUM", fancy_data: "PwrConfig_e",
+			description: [
+				{language: "english", text: "Determines how PMFW calculates the power.",},
+			],
+		}, {
+			access: "bios->TotalPowerPadding",
+			name: "TotalPowerPadding",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->ApccPlusResidencyLimit",
+			name: "ApccPlusResidencyLimit",
+		}, {
+			access: "bios->SmnclkDpmFreq",
+			name: "SmnclkDpmFreq",
+			display: "ATUI_NAN",
+			description: [
+				{language: "english", text: "in MHz",},
+			],
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "SmnclkDpmFreq [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->SmnclkDpmVoltage",
+			name: "SmnclkDpmVoltage",
+			display: "ATUI_NAN",
+			description: [
+				{language: "english", text: "mV(Q2)",},
+			],
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "SmnclkDpmVoltage [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->PaddingAPCC",
+			name: "PaddingAPCC",
+		}, {
+			access: "bios->PerPartDroopVsetGfxDfll",
+			name: "PerPartDroopVsetGfxDfll",
+			display: "ATUI_NAN",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "PerPartDroopVsetGfxDfll [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->PaddingPerPartDroop",
+			name: "PaddingPerPartDroop",
+		}, {
+			access: "bios->ThrottlerControlMask",
+			name: "ThrottlerControlMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "throttler_control_smu11_0x40",
+		}, {
+			access: "bios->FwDStateMask",
+			name: "FwDStateMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "fw_dstate_features_smu11_0x40",
+		}, {
+			access: "bios->UlvVoltageOffsetSoc",
+			name: "UlvVoltageOffsetSoc",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->UlvVoltageOffsetGfx",
+			name: "UlvVoltageOffsetGfx",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->MinVoltageUlvGfx",
+			name: "MinVoltageUlvGfx",
+			description: [
+				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vminu8\") of VDD_GFX in ULV mode",},
+			],
+		}, {
+			access: "bios->MinVoltageUlvSoc",
+			name: "MinVoltageUlvSoc",
+			description: [
+				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vminu8\") of VDD_SOC in ULV mode",},
+			],
+		}, {
+			access: "bios->SocLIVmin",
+			name: "SocLIVmin",
+			description: [
+				{language: "english", text: "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC",},
+			],
+		}, {
+			access: "bios->PaddingLIVmin",
+			name: "PaddingLIVmin",
+		}, {
+			access: "bios->GceaLinkMgrIdleThreshold",
+			name: "GceaLinkMgrIdleThreshold",
+			description: [
+				{language: "english", text: "Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events",},
+			],
+		}, {
+			access: "bios->paddingRlcUlvParams",
+			name: "paddingRlcUlvParams",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->MinVoltageGfx",
+			name: "MinVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MinVoltageSoc",
+			name: "MinVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
+			],
+		}, {
+			access: "bios->MaxVoltageGfx",
+			name: "MaxVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MaxVoltageSoc",
+			name: "MaxVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceGfx",
+			name: "LoadLineResistanceGfx",
+			description: [
+				{language: "english", text: "In mOhms Q8.8 with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceSoc",
+			name: "LoadLineResistanceSoc",
+			description: [
+				{language: "english", text: "In mOhms with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->VDDGFX_TVmin",
+			name: "VDDGFX_TVmin",
+			description: [
+				{language: "english", text: "Celcius",},
+			],
+		}, {
+			access: "bios->VDDSOC_TVmin",
+			name: "VDDSOC_TVmin",
+			description: [
+				{language: "english", text: "Celcius",},
+			],
+		}, {
+			access: "bios->VDDGFX_Vmin_HiTemp",
+			name: "VDDGFX_Vmin_HiTemp",
+			description: [
+				{language: "english", text: "mV Q2",},
+			],
+		}, {
+			access: "bios->VDDGFX_Vmin_LoTemp",
+			name: "VDDGFX_Vmin_LoTemp",
+			description: [
+				{language: "english", text: "mV Q2",},
+			],
+		}, {
+			access: "bios->VDDSOC_Vmin_HiTemp",
+			name: "VDDSOC_Vmin_HiTemp",
+			description: [
+				{language: "english", text: "mV Q2",},
+			],
+		}, {
+			access: "bios->VDDSOC_Vmin_LoTemp",
+			name: "VDDSOC_Vmin_LoTemp",
+			description: [
+				{language: "english", text: "mV Q2",},
+			],
+		}, {
+			access: "bios->VDDGFX_TVminHystersis",
+			name: "VDDGFX_TVminHystersis",
+			description: [
+				{language: "english", text: "Celcius",},
+			],
+		}, {
+			access: "bios->VDDSOC_TVminHystersis",
+			name: "VDDSOC_TVminHystersis",
+			description: [
+				{language: "english", text: "Celcius",},
+			],
+		}, {
+			access: "bios->dpm_config",
+			name: "dpm_config",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_dpm_config",
+		}, {
+			access: "bios->fan_control",
+			name: "fan_control",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_fan_control",
+		}, {
+			access: "bios->avfs",
+			name: "avfs",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_avfs",
+		}, {
+			access: "bios->XgmiDpmPstates",
+			name: "XgmiDpmPstates",
+			display: "ATUI_NAN",
+			description: [
+				{language: "english", text: "2 DPM states, high and low.",},
+			],
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_XGMI_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "XgmiDpmPstates [%02u]",
+						fancy: "ATUI_ENUM", fancy_data: "DPM_PSTATES_e",
+					},
+				],
+			},
+		}, {
+			access: "bios->XgmiDpmSpare",
+			name: "XgmiDpmSpare",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->DebugOverrides",
+			name: "DebugOverrides",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dpm_debug_override_smu11_0x40",
+		}, {
+			access: "bios->ReservedEquation0",
+			name: "ReservedEquation0",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+		}, {
+			access: "bios->ReservedEquation1",
+			name: "ReservedEquation1",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+		}, {
+			access: "bios->ReservedEquation2",
+			name: "ReservedEquation2",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+		}, {
+			access: "bios->ReservedEquation3",
+			name: "ReservedEquation3",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+		}, {
+			access: "bios->CustomerVariant",
+			name: "CustomerVariant",
+			fancy: "ATUI_ENUM", fancy_data: "CUSTOMER_VARIANT_e",
+		}, {
+			access: "bios->VcBtcEnabled",
+			name: "VcBtcEnabled",
+		}, {
+			access: "bios->VcBtcVminT0",
+			name: "VcBtcVminT0",
+			description: [
+				{language: "english", text: "T0_VMIN",},
+			],
+		}, {
+			access: "bios->VcBtcFixedVminAgingOffset",
+			name: "VcBtcFixedVminAgingOffset",
+			description: [
+				{language: "english", text: "FIXED_VMIN_AGING_OFFSET",},
+			],
+		}, {
+			access: "bios->VcBtcVmin2PsmDegrationGb",
+			name: "VcBtcVmin2PsmDegrationGb",
+			description: [
+				{language: "english", text: "VMIN_TO_PSM_DEGRADATION_GB",},
+			],
+		}, {
+			access: "bios->VcBtcPsmA",
+			name: "VcBtcPsmA",
+			description: [
+				{language: "english", text: "A_PSM",},
+			],
+		}, {
+			access: "bios->VcBtcPsmB",
+			name: "VcBtcPsmB",
+			description: [
+				{language: "english", text: "B_PSM",},
+			],
+		}, {
+			access: "bios->VcBtcVminA",
+			name: "VcBtcVminA",
+			description: [
+				{language: "english", text: "A_VMIN",},
+			],
+		}, {
+			access: "bios->VcBtcVminB",
+			name: "VcBtcVminB",
+			description: [
+				{language: "english", text: "B_VMIN",},
+			],
+		}, {
+			access: "bios->LedGpio",
+			name: "LedGpio",
+			description: [
+				{language: "english", text: "GeneriA GPIO flag used to control the radeon LEDs",},
+			],
+		}, {
+			access: "bios->GfxPowerStagesGpio",
+			name: "GfxPowerStagesGpio",
+			description: [
+				{language: "english", text: "Genlk_vsync GPIO flag used to control gfx power stages",},
+			],
+		}, {
+			access: "bios->SkuReserved",
+			name: "SkuReserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->GamingClk",
+			name: "GamingClk",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->i2c_control",
+			name: "i2c_control",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_i2c_control",
+		}, {
+			access: "bios->VddGfxVrMapping",
+			name: "VddGfxVrMapping",
+			description: [
+				{language: "english", text: "Use VR_MAPPING* bitfields",},
+			],
+		}, {
+			access: "bios->VddSocVrMapping",
+			name: "VddSocVrMapping",
+			description: [
+				{language: "english", text: "Use VR_MAPPING* bitfields",},
+			],
+		}, {
+			access: "bios->VddMem0VrMapping",
+			name: "VddMem0VrMapping",
+			description: [
+				{language: "english", text: "Use VR_MAPPING* bitfields",},
+			],
+		}, {
+			access: "bios->VddMem1VrMapping",
+			name: "VddMem1VrMapping",
+			description: [
+				{language: "english", text: "Use VR_MAPPING* bitfields",},
+			],
+		}, {
+			access: "bios->GfxUlvPhaseSheddingMask",
+			name: "GfxUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			description: [
+				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
+			],
+		}, {
+			access: "bios->SocUlvPhaseSheddingMask",
+			name: "SocUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			description: [
+				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
+			],
+		}, {
+			access: "bios->VddciUlvPhaseSheddingMask",
+			name: "VddciUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			description: [
+				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
+			],
+		}, {
+			access: "bios->MvddUlvPhaseSheddingMask",
+			name: "MvddUlvPhaseSheddingMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			description: [
+				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
+			],
+		}, {
+			access: "bios->GfxMaxCurrent",
+			name: "GfxMaxCurrent",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->GfxOffset",
+			name: "GfxOffset",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Padding_TelemetryGfx",
+			name: "Padding_TelemetryGfx",
+		}, {
+			access: "bios->SocMaxCurrent",
+			name: "SocMaxCurrent",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->SocOffset",
+			name: "SocOffset",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Padding_TelemetrySoc",
+			name: "Padding_TelemetrySoc",
+		}, {
+			access: "bios->Mem0MaxCurrent",
+			name: "Mem0MaxCurrent",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Mem0Offset",
+			name: "Mem0Offset",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Padding_TelemetryMem0",
+			name: "Padding_TelemetryMem0",
+		}, {
+			access: "bios->Mem1MaxCurrent",
+			name: "Mem1MaxCurrent",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Mem1Offset",
+			name: "Mem1Offset",
+			description: [
+				{language: "english", text: "in Amps",},
+			],
+		}, {
+			access: "bios->Padding_TelemetryMem1",
+			name: "Padding_TelemetryMem1",
+		}, {
+			access: "bios->MvddRatio",
+			name: "MvddRatio",
+			description: [
+				{language: "english", text: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",},
+			],
+		}, {
+			access: "bios->AcDcGpio",
+			name: "AcDcGpio",
+			description: [
+				{language: "english", text: "GPIO pin configured for AC/DC switching",},
+			],
+		}, {
+			access: "bios->AcDcPolarity",
+			name: "AcDcPolarity",
+			description: [
+				{language: "english", text: "GPIO polarity for AC/DC switching",},
+			],
+		}, {
+			access: "bios->VR0HotGpio",
+			name: "VR0HotGpio",
+			description: [
+				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
+			],
+		}, {
+			access: "bios->VR0HotPolarity",
+			name: "VR0HotPolarity",
+			description: [
+				{language: "english", text: "GPIO polarity for VR0 HOT event",},
+			],
+		}, {
+			access: "bios->VR1HotGpio",
+			name: "VR1HotGpio",
+			description: [
+				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
+			],
+		}, {
+			access: "bios->VR1HotPolarity",
+			name: "VR1HotPolarity",
+			description: [
+				{language: "english", text: "GPIO polarity for VR1 HOT event",},
+			],
+		}, {
+			access: "bios->GthrGpio",
+			name: "GthrGpio",
+			description: [
+				{language: "english", text: "GPIO pin configured for GTHR Event",},
+			],
+		}, {
+			access: "bios->GthrPolarity",
+			name: "GthrPolarity",
+			description: [
+				{language: "english", text: "replace GPIO polarity for GTHR",},
+			],
+		}, {
+			access: "bios->LedPin0",
+			name: "LedPin0",
+			description: [
+				{language: "english", text: "GPIO number for LedPin[0]",},
+			],
+		}, {
+			access: "bios->LedPin1",
+			name: "LedPin1",
+			description: [
+				{language: "english", text: "GPIO number for LedPin[1]",},
+			],
+		}, {
+			access: "bios->LedPin2",
+			name: "LedPin2",
+			description: [
+				{language: "english", text: "GPIO number for LedPin[2]",},
+			],
+		}, {
+			access: "bios->LedEnableMask",
+			name: "LedEnableMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
+		}, {
+			access: "bios->LedPcie",
+			name: "LedPcie",
+			description: [
+				{language: "english", text: "GPIO number for PCIE results",},
+			],
+		}, {
+			access: "bios->LedError",
+			name: "LedError",
+			description: [
+				{language: "english", text: "GPIO number for Error Cases",},
+			],
+		}, {
+			access: "bios->LedSpare1",
+			name: "LedSpare1",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->PllGfxclkSpreadEnabled",
+			name: "PllGfxclkSpreadEnabled",
+			description: [
+				{language: "english", text: "on or off",},
+			],
+		}, {
+			access: "bios->PllGfxclkSpreadPercent",
+			name: "PllGfxclkSpreadPercent",
+			description: [
+				{language: "english", text: "Q4.4",},
+			],
+		}, {
+			access: "bios->PllGfxclkSpreadFreq",
+			name: "PllGfxclkSpreadFreq",
+			description: [
+				{language: "english", text: "kHz",},
+			],
+		}, {
+			access: "bios->DfllGfxclkSpreadEnabled",
+			name: "DfllGfxclkSpreadEnabled",
+			description: [
+				{language: "english", text: "on or off",},
+			],
+		}, {
+			access: "bios->DfllGfxclkSpreadPercent",
+			name: "DfllGfxclkSpreadPercent",
+			description: [
+				{language: "english", text: "Q4.4",},
+			],
+		}, {
+			access: "bios->DfllGfxclkSpreadFreq",
+			name: "DfllGfxclkSpreadFreq",
+			description: [
+				{language: "english", text: "kHz",},
+			],
+		}, {
+			access: "bios->UclkSpreadPadding",
+			name: "UclkSpreadPadding",
+		}, {
+			access: "bios->UclkSpreadFreq",
+			name: "UclkSpreadFreq",
+			description: [
+				{language: "english", text: "kHz",},
+			],
+		}, {
+			access: "bios->FclkSpreadEnabled",
+			name: "FclkSpreadEnabled",
+			description: [
+				{language: "english", text: "on or off",},
+			],
+		}, {
+			access: "bios->FclkSpreadPercent",
+			name: "FclkSpreadPercent",
+			description: [
+				{language: "english", text: "Q4.4",},
+			],
+		}, {
+			access: "bios->FclkSpreadFreq",
+			name: "FclkSpreadFreq",
+			description: [
+				{language: "english", text: "kHz",},
+			],
+		}, {
+			access: "bios->MemoryChannelEnabled",
+			name: "MemoryChannelEnabled",
+			description: [
+				{language: "english", text: "For DRAM use only, Max 32 channels enabled bit mask.",},
+			],
+		}, {
+			access: "bios->DramBitWidth",
+			name: "DramBitWidth",
+			description: [
+				{language: "english", text: "For DRAM use only.  See Dram Bit width type defines",},
+			],
+		}, {
+			access: "bios->PaddingMem1",
+			name: "PaddingMem1",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->TotalBoardPower",
+			name: "TotalBoardPower",
+			description: [
+				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
+			],
+		}, {
+			access: "bios->BoardPowerPadding",
+			name: "BoardPowerPadding",
+		}, {
+			access: "bios->XgmiLinkSpeed",
+			name: "XgmiLinkSpeed",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "XgmiLinkSpeed [%02u]",
+						fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_RATE_e",
+					},
+				],
+			},
+		}, {
+			access: "bios->XgmiLinkWidth",
+			name: "XgmiLinkWidth",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "XgmiLinkWidth [%02u]",
+						fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_WIDTH_e",
+					},
+				],
+			},
+		}, {
+			access: "bios->XgmiFclkFreq",
+			name: "XgmiFclkFreq",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "XgmiFclkFreq [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->XgmiSocVoltage",
+			name: "XgmiSocVoltage",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "XgmiSocVoltage [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->HsrEnabled",
+			name: "HsrEnabled",
+		}, {
+			access: "bios->VddqOffEnabled",
+			name: "VddqOffEnabled",
+		}, {
+			access: "bios->PaddingUmcFlags",
+			name: "PaddingUmcFlags",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->UclkSpreadPercent",
+			name: "UclkSpreadPercent",
+			display: "ATUI_NAN",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "sizeof(bios->UclkSpreadPercent)/sizeof(bios->UclkSpreadPercent[0])",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "UclkSpreadPercent [%02u]",
+					},
+				],
+			},
+		}, {
+			access: "bios->BoardReserved",
+			name: "BoardReserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->MmHubPadding",
+			name: "MmHubPadding",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "SMU internal use",},
+			],
+		},
+	],
+}, {
 	c_type: "smu_11_0_powerplay_table",
 	table_size: "bios->header.header.structuresize",
 	leaves: [

@@ -121,6 +121,8 @@ enum atomtree_common_version:uint16_t {
 	v17_11,v17_12,
 	v18_0=1800, v18_1,v18_2,v18_3,v18_4,v18_5,v18_6,v18_7,v18_8,v18_9,v18_10,
 	v18_11,v18_12,
+	v19_0=1900, v19_1,v19_2,v19_3,v19_4,v19_5,v19_6,v19_7,v19_8,v19_9,v19_10,
+	v19_11,v19_12,
 	maxver // a test if we're sane or not
 };
 

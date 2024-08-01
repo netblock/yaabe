@@ -364,6 +364,7 @@ populate_ppt(
 					ppt->v12_0.leaves->smc_pptable.ver
 				);
 				break;
+			case v19_0: // 6400
 			case v18_0: // navi2 xx50
 			case v16_0: // 6700XT
 			case v15_0:
