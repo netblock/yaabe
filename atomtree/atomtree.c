@@ -332,8 +332,8 @@ inline static enum atomtree_common_version
 get_smc_pptable_ver(
 		uint32_t const pp_ver
 		) {
-	assert(pp_ver < (UINT16_MAX/100)); // enum atomtree_common_version
-	return pp_ver * 100;
+	assert(pp_ver < (UINT16_MAX/VER_MAJOR_MULTIPLIER));
+	return pp_ver * VER_MAJOR_MULTIPLIER;
 }
 inline static void
 populate_ppt(
@@ -2264,15 +2264,18 @@ inline enum atomtree_common_version
 get_ver(
 		struct atom_common_table_header const* const header
 		) {
-	return (header->format_revision * 100) + header->content_revision;
+	return (
+		(header->format_revision * VER_MAJOR_MULTIPLIER)
+		+ header->content_revision
+	);
 }
 inline void
 set_ver(
 		enum atomtree_common_version const ver,
 		struct atom_common_table_header* const header
 		) {
-	header->format_revision = ver / 100;
-	header->content_revision = ver % 100;
+	header->format_revision = ver / VER_MAJOR_MULTIPLIER;
+	header->content_revision = ver % VER_MAJOR_MULTIPLIER;
 };
 
 

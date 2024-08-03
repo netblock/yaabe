@@ -93,6 +93,7 @@ struct atom_tree {
 };
 
 enum atomtree_common_version:uint16_t {
+	VER_MAJOR_MULTIPLIER = 100,
 	nover=0,
 	v1_0=100, v1_1,v1_2,v1_3,v1_4,v1_5,v1_6,v1_7,v1_8,v1_9,v1_10,v1_11,v1_12,
 	v2_0=200, v2_1,v2_2,v2_3,v2_4,v2_5,v2_6,v2_7,v2_8,v2_9,v2_10,v2_11,v2_12,
