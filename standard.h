@@ -61,9 +61,20 @@ static_assert(sizeof(struct _tenbytes) == 10);
 /******************************************************************************/
 
 #define lengthof(array) (sizeof(array)/sizeof(array[0]))
+#define lengthof_flex(array, count) (sizeof((array)[0]) * (count))
+#define sizeof_flex(struct_p, array, count) (\
+	offsetof(typeof(*(struct_p)), array)\
+	+ lengthof_flex((struct_p)->array, count)\
+)
 
 #define fall __attribute__((fallthrough))
 #define __unused __attribute__((unused))
+
+#if __has_attribute(counted_by)
+# define __counted_by(member) __attribute__((counted_by__(member)))
+#else
+# define __counted_by(member)
+#endif
 
 // TODO stroll that considers 0b prefix?
 int64_t

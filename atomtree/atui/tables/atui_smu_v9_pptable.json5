@@ -263,7 +263,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_state_array",
-	table_size: "offsetof(typeof(*bios), states) + bios->NumEntries*sizeof(typeof(bios->states[0]))",
+	table_size: "sizeof_flex(bios, states, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -605,7 +605,7 @@ global_default: {
 
 {
 	c_type: "atom_vega10_clk_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -655,7 +655,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_mclk_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -725,7 +725,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_gfxclk_dependency_table_v1",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -780,7 +780,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_gfxclk_dependency_table_v2",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -808,7 +808,7 @@ global_default: {
 
 {
 	c_type: "atom_vega10_voltage_lookup_table",
-	table_size: "offsetof(typeof(*bios), vdd_entries) + bios->NumEntries*sizeof(typeof(bios->vdd_entries[0]))",
+	table_size: "sizeof_flex(bios, vdd_entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -873,7 +873,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_mm_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -930,7 +930,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_vce_state_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1229,7 +1229,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_hard_limit_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1280,7 +1280,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_vega10_pcie_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",

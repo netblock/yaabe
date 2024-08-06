@@ -295,7 +295,7 @@ global_default: {
 
 {
 	c_type: "atom_pptable_state_array",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -773,7 +773,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_mclk_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -853,7 +853,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_sclk_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -912,7 +912,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_polaris_sclk_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -960,7 +960,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_voltage_lookup_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1035,7 +1035,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_mm_dependency_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1092,7 +1092,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_vce_state_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1455,7 +1455,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_hard_limit_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1499,7 +1499,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pptable_pcie_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1544,7 +1544,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_polaris_pcie_table",
-	table_size: "offsetof(typeof(*bios), entries) + bios->NumEntries*sizeof(typeof(bios->entries[0]))",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",

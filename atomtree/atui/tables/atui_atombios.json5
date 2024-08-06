@@ -2735,7 +2735,7 @@ global_default: {
 }, {
 	c_type: "atom_voltage_formula_v1",
 	atomtree: "atomtree_voltage_object",
-	table_size: "offsetof(struct atom_voltage_formula_v1, VIDAdjustEntries[0]) + (atomtree->lut_entries * sizeof(bios->VIDAdjustEntries[0]))",
+	table_size: "sizeof_flex(bios, VIDAdjustEntries, atomtree->lut_entries)",
 	leaves: [
 		{
 			access: "bios->VoltageBaseLevel",
@@ -2851,7 +2851,7 @@ global_default: {
 }, {
 	c_type: "atom_voltage_formula_v2",
 	atomtree: "atomtree_voltage_object",
-	table_size: "offsetof(struct atom_voltage_formula_v2, VIDAdjustEntries[0]) + (atomtree->lut_entries * sizeof(bios->VIDAdjustEntries[0]))",
+	table_size: "sizeof_flex(bios, VIDAdjustEntries, atomtree->lut_entries)",
 	leaves: [
 		{
 			access: "bios->NumOfVoltageEntries",
