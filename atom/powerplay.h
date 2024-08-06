@@ -210,7 +210,9 @@ enum GFXCLK_SOURCE_e:uint8_t {
 
 #pragma pack(pop) // restore old packing
 
+
 #include "pptable_v1_0.h"
+#include "pptable.h"
 #include "vega10_pptable.h"
 #include "smu11_driver_if.h"
 #include "smu_v11_0_pptable.h"
