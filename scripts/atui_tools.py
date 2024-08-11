@@ -1,41 +1,78 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
-
 # In the python shell,
 # from scripts.atui_tools import *
+#
+# Regex-based functions to use in a python interactive terminal to transform
+# various C structures seen in atom/ into ATUI JSON5 as seen in
+# atomtree/atui/tables/*.json5
 
-def struct_to_atui(
-		text,
-		explicit_attributes=False,
-		print_text=True
+
+import re
+
+class __regexvar:
+	# https://docs.python.org/3/howto/regex.html
+	# nc is noncapture; it does not have a referencable group num
+
+	white = "\s*"
+	tabs_nc = "(?:\t+)"
+	tabs = "(" + tabs_nc + ")"
+	space = "( +)"
+	spacetab = "[ \t]*"
+	nums = "(\d+)"
+
+	c_prefix_nc = "(?:struct|union)"
+	c_prefix = "(" + c_prefix_nc + ")" + white
+	c_num_types_nc = "(?:(?:u?int|char|float|uq\d+_)\d+_t)"
+	c_num_types = "(" + c_num_types_nc + ")" + white
+	c_ints_nc = "(?:(?:u?int|char)[0-9]+_t)"
+	c_ints = "(" + c_ints_nc + ")" + white
+	name_nc = "(?:[a-zA-Z_]\w*)"
+	name = "(" + name_nc + ")" + white
+
+	#array_alnum =  "\["+white+ "(\w*)"          +white+"\]" +white
+	#array_var =    "\["+white+ name             +white+"\]" +white
+	array_num =     "\["+white+ "(\d*)"          +white+"\]" +white
+	array_vlaflex = "\["+white+ "("+name_nc+")?" +white+"\]" +white
+	#array_countedby_nc = "(?:__counted_by\(\w*\))?" +white
+	array_countedby_var = "(__counted_by\((\w*)\))" +white
+	array_countedby_whole_q = "(__counted_by\(\w*\))?" +white
+
+	struct_or_cnumtype = "("  \
+		+ "(?:" + c_prefix_nc + white + name_nc + ")"  \
+		+ "|(?:" + c_num_types_nc + ")"  \
+	+ ")" + white
+
+	hi_lo = ":" + nums + "-" + nums + " \+1[,;]"
+
+	c_enum = "(enum)" + white
+	c_enum_type = ":" + white + c_num_types
+	c_enum_equals = "=" + white + "([^,]+)," + spacetab
+
+	comments = "(?:" + white + "(//\s*(.*)))?"
+	flagged_comment = "__ATUIDESCR//\s*(.*)"
+	no_comment = tabs + "__ATUIDESCR\n"
+
+def __atui_regex_prepare(
+		text:str
 		):
-
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("(\n\t*)    ","\g<1>\t", text)
 	text = re.sub("[ \t]+\n", "\n", text)
-
-	white = "\s*"
-	tabs = "(\t+)"
-	nums = "(\d+)"
-	c_prefix = "(struct|union)" + white
-	c_enum = "(enum)" + white
-	c_num_types = "((?:u?int|char|float|uq\d+_)\d+_t)" + white
-	c_ints = "((?:u?int|char)[0-9]+_t)" + white
-	name = "([a-zA-Z_]\w*)" + white
-	array_alnum = "\["+white +"(\w*)"+ white+"\]" + white
-	array_var = "\["+white +name+ white+"\]" + white
-	array_num = "\["+white +"(\d*)"+ white+"\]" + white
-	comments = "(?:" + white + "(//\s*(.*)))?"
-	flagged_comment = "__ATUIDESCR//\s*(.*)"
-	no_comment = tabs + "__ATUIDESCR\n"
-
-	atui_dec = "\g<1>\t\tdisplay: \"ATUI_DEC\",\n"
-
 	text = re.sub("\"","\\\"",text) # for comments
+	return text
+
+def struct_to_atui(
+		text:str,
+		explicit_attributes:bool=False,
+		print_text:bool=True
+		):
+	s = __regexvar()
+	text = __atui_regex_prepare(text)
+	atui_dec = "\g<1>\t\tdisplay: \"ATUI_DEC\",\n"
 
 	# self struct:
 	branch_text = """{\n\tc_type: "\g<2>",\n"""
@@ -50,7 +87,7 @@ def struct_to_atui(
 	leaves: [\
 """
 	text = re.sub(
-		c_prefix + name + "{" + comments,
+		s.c_prefix + s.name + "{" + s.comments,
 		branch_text,
 		text
 	)
@@ -59,28 +96,29 @@ def struct_to_atui(
 	# ATUI_DYNARRAY
 	dynarray = """
 		{
-			access: "bios->\g<3>",
-			name: "\g<3>",
+			access: "bios->\g<2>",
+			name: "\g<2>",
 			__ATUIDESCR\g<5>
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "\g<4>",
+				count: "\g<3>\g<4>",
 				enum: "ATUI_NULL",
 				pattern: [
-				\g<1> \g<2> \g<3>;
+				\g<1> \g<2>;
 				],
 			},
 		},\
 """
 	text = re.sub(
-		"\s*" + c_prefix + name + name + array_alnum + ";" + comments,
+		"\s*" + s.struct_or_cnumtype + s.name + s.array_vlaflex
+		+ s.array_countedby_whole_q + ";" + s.comments,
 		dynarray,
 		text
 	)
 	text = re.sub(
-		"\s*" + c_num_types + "()" + name + array_var + ";" + comments,
-		dynarray,
+		"count: \"" + s.array_countedby_var + "\"",
+		"count: \"bios->\g<2>\"",
 		text
 	)
 
@@ -89,13 +127,14 @@ def struct_to_atui(
 \g<1>	{
 \g<1>		access: "bios->\g<4>",
 \g<1>		name: "\g<4>",
-\g<1>		display: "ATUI_NAN",
+\g<1>		display: "ATUI_DISPLAY",
 \g<1>		fancy: "ATUI_GRAFT", fancy_data: "\g<3>",
 \g<1>		__ATUIDESCR\g<7>
 \g<1>	},\
 """
 	text = re.sub(
-		tabs + c_prefix + name + name + "("+array_num+")?;" + comments,
+		s.tabs + s.c_prefix + s.name + s.name + "("+s.array_num+")?;"
+		+ s.comments,
 		inline,
 		text
 	)
@@ -114,7 +153,8 @@ def struct_to_atui(
 \g<1>	},\
 """
 	text = re.sub(
-		tabs + c_enum + name + name + "("+array_num+")?;" + comments,
+		s.tabs + s.c_enum + s.name + s.name + "("+s.array_num+")?;"
+		+ s.comments,
 		enum,
 		text
 	)
@@ -132,7 +172,7 @@ def struct_to_atui(
 \g<1>	},\
 """
 	text = re.sub(
-		tabs + c_num_types + name + ";" + comments,
+		s.tabs + s.c_num_types + s.name + ";" + s.comments,
 		simple_nums,
 		text
 	)
@@ -148,7 +188,7 @@ def struct_to_atui(
 \g<1>	},\
 """
 	text = re.sub(
-		tabs + c_num_types + name + array_num + ";" + comments,
+		s.tabs + s.c_num_types + s.name + s.array_num + ";" + s.comments,
 		num_arrays,
 		text
 	)
@@ -160,14 +200,14 @@ def struct_to_atui(
 \g<1>],\
 """
 	text = re.sub(
-		tabs + flagged_comment,
+		s.tabs + s.flagged_comment,
 		descriptions,
 		text
 	)
-	text = re.sub(no_comment, "", text)
+	text = re.sub(s.no_comment, "", text)
 
 	text = re.sub(
-		tabs + "},\n" + tabs + "{\n",
+		s.tabs + "},\n" + s.tabs + "{\n",
 		"\g<1>}, {\n",
 		text
 	)
@@ -179,29 +219,12 @@ def struct_to_atui(
 
 
 def bitfield_to_atui(
-		text,
-		explicit_attributes=False,
-		print_text=True
+		text:str,
+		explicit_attributes:bool=False,
+		print_text:bool=True
 		):
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("[ \t]+\n", "\n", text)
-
-	white = "\s*"
-	tabs = "(\t+)"
-	space = "( +)"
-	nums = "(\d+)"
-	c_prefix = "(struct|union)" + white
-	c_ints = "((?:u?int|char)[0-9]+_t)" + white
-	name = "([a-zA-Z_]\w*)" + white
-	hi_lo = ":" + nums + "-" + nums + " \+1[,;]"
-	comments = "(?:" + white + "(//\s*(.*)))?"
-	flagged_comment = "__ATUIDESCR//\s*(.*)"
-	no_comment = tabs + "__ATUIDESCR\n"
-
-	text = re.sub("\"","\\\"",text) # for comments
+	s = __regexvar()
+	text = __atui_regex_prepare(text)
 
 	union_text = """{\n\tc_type: "\g<2>",\n"""
 	if explicit_attributes:
@@ -215,7 +238,7 @@ def bitfield_to_atui(
 	leaves: [\
 """
 	text = re.sub(
-		c_prefix + name + "{" + comments,
+		s.c_prefix + s.name + "{" + s.comments,
 		union_text,
 		text
 	)
@@ -236,7 +259,7 @@ def bitfield_to_atui(
 \g<1>		fancy: "ATUI_BITFIELD", fancy_data: [\
 """
 	text = re.sub(
-		tabs + c_ints + name + ";" + comments,
+		s.tabs + s.c_ints + s.name + ";" + s.comments,
 		bitfield_leaf,
 		text
 	)
@@ -255,7 +278,7 @@ def bitfield_to_atui(
 		bit_child += "\g<1>\t\t\tdisplay: \"ATUI_DEC\",\n"
 	bit_child += "\g<1>\t\t},"
 	text = re.sub(
-		tabs + name + space + hi_lo + comments,
+		s.tabs + s.name + s.space + s.hi_lo + s.comments,
 		bit_child,
 		text
 	)
@@ -267,14 +290,14 @@ def bitfield_to_atui(
 \g<1>],\
 """
 	text = re.sub(
-		tabs + flagged_comment,
+		s.tabs + s.flagged_comment,
 		descriptions,
 		text
 	)
-	text = re.sub(no_comment, "", text)
+	text = re.sub(s.no_comment, "", text)
 
 	text = re.sub(
-		tabs + "},\n" + tabs + "{\n",
+		s.tabs + "},\n" + s.tabs + "{\n",
 		"\g<1>}, {\n",
 		text
 	)
@@ -286,32 +309,12 @@ def bitfield_to_atui(
 
 
 def enum_to_atui(
-		text,
-		explicit_attributes=False,
-		print_text=True
+		text:str,
+		explicit_attributes:bool=False,
+		print_text:bool=True
 		):
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("(\n\t*)    ","\g<1>\t", text)
-	text = re.sub("[ \t]+\n", "\n", text)
-
-	white = "\s*"
-	tabs = "(\t+)"
-	space = "( +)"
-	spacetab = "[ \t]*"
-	c_num_types = "((?:u?int|char|float|uq\d+_)\d+_t)" + white
-	c_ints = "((?:u?int|char)[0-9]+_t)" + white
-	c_enum = "(enum)" + white
-	c_enum_type = ":" + white + c_num_types
-	c_enum_equals = "=" + white + "([^,]+)," + spacetab
-	name = "([a-zA-Z_]\w*)" + white
-	comments = "(?:" + white + "(//\s*(.*)))?"
-	flagged_comment = "__ATUIDESCR//\s*(.*)"
-
-	no_comment = tabs + "__ATUIDESCR\n"
-
-	text = re.sub("\"","\\\"",text) # for comments
+	s = __regexvar()
+	text = __atui_regex_prepare(text)
 
 	# main enum body
 	enum_text = """\
@@ -320,7 +323,7 @@ def enum_to_atui(
 	constants: [\
 """
 	text = re.sub(
-		c_enum + name + "("+c_enum_type+")?"+ "{" + comments,
+		s.c_enum + s.name + "("+s.c_enum_type+")?"+ "{" + s.comments,
 		enum_text,
 		text
 	)
@@ -333,7 +336,7 @@ def enum_to_atui(
 		},\
 """
 	text = re.sub(
-		tabs + name + c_enum_equals + comments,
+		s.tabs + s.name + s.c_enum_equals + s.comments,
 		var_text,
 		text
 	)
@@ -345,12 +348,12 @@ def enum_to_atui(
 \g<1>],\
 """
 	text = re.sub(
-		tabs + flagged_comment,
+		s.tabs + s.flagged_comment,
 		descriptions,
 		text
 	)
-	text = re.sub(no_comment, "", text)
-	text = re.sub("(?<!\],)\n" +tabs+ "},\n", "},\n", text)
+	text = re.sub(s.no_comment, "", text)
+	text = re.sub("(?<!\],)\n" +s.tabs+ "},\n", "},\n", text)
 
 	if print_text:
 		pass
