@@ -61,10 +61,10 @@ static_assert(sizeof(struct _tenbytes) == 10);
 /******************************************************************************/
 
 #define lengthof(array) (sizeof(array)/sizeof(array[0]))
-#define lengthof_flex(array, count) (sizeof((array)[0]) * (count))
+#define sizeof_flex_array(array, count) (sizeof((array)[0]) * (count))
 #define sizeof_flex(struct_p, array, count) (\
 	offsetof(typeof(*(struct_p)), array)\
-	+ lengthof_flex((struct_p)->array, count)\
+	+ sizeof_flex_array((struct_p)->array, count)\
 )
 
 #define fall __attribute__((fallthrough))
