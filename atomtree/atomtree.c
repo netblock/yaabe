@@ -214,6 +214,233 @@ populate_gfx_info(
 	}
 }
 
+
+inline static void
+populate_pplib_ppt_state_array(
+		struct atomtree_powerplay_table_v5_1* const ppt51
+		) {
+	struct atom_pplib_powerplaytable_v1 const* const pplibv1 = &(
+		ppt51->leaves->v1
+	);
+	union atom_pplib_state_arrays* const base = ppt51->state_array_base;
+	union {
+		void* raw;
+		struct atom_pplib_state_v1* v1;
+		struct atom_pplib_state_v2* v2;
+		union atom_pplib_states*     states;
+	} walker;
+
+	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
+		ppt51->state_array_ver = v1_0;
+		ppt51->num_state_array_entries = pplibv1->NumStates;
+
+		uint8_t const entry_size = pplibv1->StateEntrySize;
+		uint8_t const num_levels = (
+			(entry_size - sizeof(base->v1))
+			/ sizeof(base->v1.ClockStateIndices[0])
+		);
+		walker.raw = &(base->v1);
+		for (uint8_t i=0; i < pplibv1->NumStates; i++) {
+			ppt51->state_array[i].num_levels = num_levels;
+			ppt51->state_array[i].state = walker.states;
+			ppt51->state_array[i].size = entry_size;
+
+			walker.raw += entry_size;
+			assert(i < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
+		}
+		ppt51->state_array_size = pplibv1->NumStates * pplibv1->StateEntrySize;
+	} else {
+		ppt51->state_array_ver = v2_0;
+		ppt51->num_state_array_entries = base->v2.NumEntries;
+
+		uint8_t entry_size;
+		walker.v2 = base->v2.states;
+		for (uint8_t i=0; i < base->v2.NumEntries; i++) {
+			ppt51->state_array[i].num_levels = walker.v2->NumDPMLevels;
+			ppt51->state_array[i].state = walker.states;
+			entry_size = sizeof_flex(
+				walker.v2, clockInfoIndex, walker.v2->NumDPMLevels
+			);
+			ppt51->state_array[i].size = entry_size;
+			walker.raw += entry_size;
+			assert(i < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
+		}
+		ppt51->state_array_size = walker.raw - (void*)base;
+	}
+}
+
+inline static void
+populate_pplib_ppt_extended_table(
+		struct atomtree_powerplay_table_v5_1* const ppt51
+		) {
+	void* const raw = ppt51->leaves;
+	struct atom_pplib_extendedheader* const ext = ppt51->extended_header;
+
+	if (ext->VCETableOffset) { // 3 flex subtables in the table
+		void* walker = raw + ext->VCETableOffset;
+		ppt51->vce_root = walker;
+		walker += sizeof(*(ppt51->vce_root));
+		ppt51->vce_info = walker;
+		walker += sizeof_flex(
+			ppt51->vce_info, entries, ppt51->vce_info->NumEntries
+		);
+		ppt51->vce_limits = walker;
+		walker += sizeof_flex(
+			ppt51->vce_limits, entries, ppt51->vce_limits->NumEntries
+		);
+		ppt51->vce_states = walker;
+	};
+	if (ext->UVDTableOffset) { // 2 flex subtables in the table
+		void* walker = raw + ext->UVDTableOffset;
+		ppt51->uvd_root = walker;
+		walker += sizeof(*(ppt51->uvd_root));
+		ppt51->uvd_info = walker;
+		walker += sizeof_flex(
+			ppt51->uvd_info, entries, ppt51->uvd_info->NumEntries
+		);
+		ppt51->uvd_limits = walker;
+	};
+
+	if (ext->SAMUTableOffset) {
+		ppt51->samu = raw + ext->SAMUTableOffset;
+	}
+	if (ext->PPMTableOffset) {
+		ppt51->ppm = raw + ext->PPMTableOffset;
+	}
+	if (ext->ACPTableOffset) {
+		ppt51->acpclk = raw + ext->ACPTableOffset;
+	}
+	if (ext->PowerTuneTableOffset) {
+		ppt51->powertune = raw + ext->PowerTuneTableOffset;
+	}
+	if (ext->SclkVddgfxTableOffset) {
+		ppt51->vddgfx_sclk = raw + ext->SclkVddgfxTableOffset;
+	}
+	if (ext->VQBudgetingTableOffset) {
+		ppt51->vq_budgeting = raw + ext->VQBudgetingTableOffset;
+	}
+};
+
+static enum ATOM_PPLIB_CLOCK_INFO
+get_pplib_ppt_clock_info_ver(
+		union atom_pplib_clock_info_arrays const* const ci __unused
+		) {
+	// grade based on PCI ID?
+	/* conflicts
+	switch (ci->header.EntrySize) {
+		case sizeof(ci->r600.clockInfo[0]):  return ATOM_PPLIB_CLOCK_INFO_R600;
+		case sizeof(ci->rs780.clockInfo[0]): return ATOM_PPLIB_CLOCK_INFO_RS780;
+		case sizeof(ci->green.clockInfo[0]): return ATOM_PPLIB_CLOCK_INFO_GREEN;
+		case sizeof(ci->south.clockInfo[0]): return ATOM_PPLIB_CLOCK_INFO_SOUTH;
+		case sizeof(ci->sea.clockInfo[0]):   return ATOM_PPLIB_CLOCK_INFO_SEA;
+		case sizeof(ci->sumo.clockInfo[0]):  return ATOM_PPLIB_CLOCK_INFO_SUMO;
+		case sizeof(ci->kaveri.clockInfo[0]):return ATOM_PPLIB_CLOCK_INFO_KAVERI;
+		case sizeof(ci->carrizo.clockInfo[0]):return ATOM_PPLIB_CLOCK_INFO_CARRIZO;
+		default: return ATOM_PPLIB_CLOCK_INFO_UNKNOWN;
+	}
+	*/
+	return 0;
+}
+inline static void
+populate_pplib_ppt(
+		struct atomtree_powerplay_table_v5_1* const ppt51
+		) {
+	union {
+		void* raw;
+		union atom_pplib_powerplaytables* all;
+		struct atom_pplib_powerplaytable_v5* v5;
+	} b;
+	b.raw = ppt51->leaves;
+	switch (b.v5->TableSize) {
+		case sizeof(b.all->v5): ppt51->pplib_ver = v5_0; break;
+		case sizeof(b.all->v4): ppt51->pplib_ver = v4_0; break;
+		case sizeof(b.all->v3): ppt51->pplib_ver = v3_0; break;
+		case sizeof(b.all->v2): ppt51->pplib_ver = v2_0; break;
+		case sizeof(b.all->v1): ppt51->pplib_ver = v1_0; break;
+		default: assert(0);
+	};
+	switch (ppt51->pplib_ver) {
+		case v5_0:
+			if (b.v5->CACLeakageTableOffset) {
+				ppt51->cac_leakage = b.raw + b.v5->CACLeakageTableOffset;
+			}
+			fall;
+		case v4_0:
+			if (b.v5->VddcDependencyOnSCLKOffset) {
+				ppt51->vddc_sclk = b.raw + b.v5->VddcDependencyOnSCLKOffset;
+			}
+			if (b.v5->VddciDependencyOnMCLKOffset) {
+				ppt51->vddci_mclk = b.raw + b.v5->VddciDependencyOnMCLKOffset;
+			}
+			if (b.v5->VddcDependencyOnMCLKOffset) {
+				ppt51->vddc_mclk = b.raw + b.v5->VddcDependencyOnMCLKOffset;
+			}
+			if (b.v5->MaxClockVoltageOnDCOffset) {
+				ppt51->max_on_dc = b.raw + b.v5->MaxClockVoltageOnDCOffset;
+			}
+			if (b.v5->VddcPhaseShedLimitsTableOffset) {
+				ppt51->phase_shed = (
+					b.raw + b.v5->VddcPhaseShedLimitsTableOffset
+				);
+			}
+			if (b.v5->MvddDependencyOnMCLKOffset) {
+				ppt51->mddc_mclk = b.raw + b.v5->MvddDependencyOnMCLKOffset;
+			}
+			fall;
+		case v3_0:
+			if (b.v5->FanTableOffset) {
+				ppt51->fan_table = b.raw + b.v5->FanTableOffset;
+			}
+			if (b.v5->ExtendedHeaderOffset) {
+				ppt51->extended_header = b.raw + b.v5->ExtendedHeaderOffset;
+				populate_pplib_ppt_extended_table(ppt51);
+			}
+			fall;
+		case v2_0:
+			if (b.v5->CustomThermalPolicyArrayOffset) {
+				ppt51->thermal_policy = (
+					b.raw + b.v5->CustomThermalPolicyArrayOffset
+				);
+			}
+			fall;
+		case v1_0:
+			if (b.v5->StateArrayOffset) {
+				ppt51->state_array_base = b.raw + b.v5->StateArrayOffset;
+				populate_pplib_ppt_state_array(ppt51);
+			}
+			if (b.v5->ClockInfoArrayOffset) {
+				ppt51->clock_info = b.raw + b.v5->ClockInfoArrayOffset;
+				ppt51->clock_info_ver = get_pplib_ppt_clock_info_ver(
+					ppt51->clock_info
+				);
+			}
+			if (b.v5->NonClockInfoArrayOffset) {
+				ppt51->nonclock_info = b.raw + b.v5->NonClockInfoArrayOffset;
+				
+				switch (ppt51->nonclock_info->header.EntrySize) {
+					case sizeof(ppt51->nonclock_info->v1.nonClockInfo[0]):
+						 ppt51->nonclock_info_ver = v1_0;
+						 break;
+					case sizeof(ppt51->nonclock_info->v2.nonClockInfo[0]):
+						 ppt51->nonclock_info_ver = v2_0;
+						 break;
+					case 0: break;
+					default: assert(0); break;
+				}
+			}
+			if (b.v5->BootClockInfoOffset) {
+				ppt51->boot_clock_info = b.raw + b.v5->BootClockInfoOffset;
+			}
+			if (b.v5->BootNonClockInfoOffset) {
+				ppt51->boot_nonclock_info = (
+					b.raw + b.v5->BootNonClockInfoOffset
+				);
+			}
+			break;
+		default: assert(0);
+	}
+}
+
 inline static void
 populate_pptablev1_ppt(
 		struct atomtree_powerplay_table_v7_1* const ppt71
@@ -347,6 +574,10 @@ populate_ppt(
 		ppt->ver = get_ver(ppt->table_header);
 
 		switch (ppt->ver) {
+			case v5_1:
+			case v6_1:
+				populate_pplib_ppt(&(ppt->v5_1));
+				break;
 			case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
 				populate_pptablev1_ppt(&(ppt->v7_1));
 				break;

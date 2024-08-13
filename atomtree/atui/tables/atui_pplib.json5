@@ -1,0 +1,1526 @@
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atomtree_powerplay_table_v5_1",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT",
+			name: "entries [%02u]",
+		},
+	},
+}, branches: [
+{
+	c_type: "atom_pplib_sized_array_header",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_thermalcontroller",
+	leaves: [
+		{
+			access: "bios->Type",
+			name: "Type",
+			description: [
+				{language: "english", text: "one of ATOM_PP_THERMALCONTROLLER_*",},
+			],
+		}, {
+			access: "bios->I2cLine",
+			name: "I2cLine",
+			description: [
+				{language: "english", text: "as interpreted by DAL I2C",},
+			],
+		}, {
+			access: "bios->I2cAddress",
+			name: "I2cAddress",
+		}, {
+			access: "bios->FanParameters",
+			name: "FanParameters",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pp_fanparameters",
+		}, {
+			access: "bios->FanMinRPM",
+			name: "FanMinRPM",
+			description: [
+				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->FanMaxRPM",
+			name: "FanMaxRPM",
+			description: [
+				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+			description: [
+				{language: "english", text: "to be defined",},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "pplib_powerplay_platform_caps",
+	leaves: [
+		{
+			access: "bios->platform_caps",
+			name: "platform_caps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "back_bias",
+					hi: 0, lo: 0,
+				}, {
+					name: "powerplay",
+					hi: 1, lo: 1,
+				}, {
+					name: "sbios_powersource",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
+					],
+				}, {
+					name: "ASPM_L0S",
+					hi: 3, lo: 3,
+				}, {
+					name: "ASPM_L1",
+					hi: 4, lo: 4,
+				}, {
+					name: "hardware_DC",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
+					],
+				}, {
+					name: "gemini_primary",
+					hi: 6, lo: 6,
+				}, {
+					name: "step_VDDC",
+					hi: 7, lo: 7,
+				}, {
+					name: "voltage_control",
+					hi: 8, lo: 8,
+				}, {
+					name: "sideport_control",
+					hi: 9, lo: 9,
+				}, {
+					name: "turn_off_PLL_ASPML1",
+					hi: 10, lo: 10,
+				}, {
+					name: "ht_link_control",
+					hi: 11, lo: 11,
+				}, {
+					name: "MVDD_control",
+					hi: 12, lo: 12,
+					description: [
+						{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
+					],
+				}, {
+					name: "goto_boot_on_alert",
+					hi: 13, lo: 13,
+					description: [
+						{language: "english", text: "Go to boot state on alerts, e.g. on an AC->DC transition.",},
+					],
+				}, {
+					name: "dont_wait_for_vblank",
+					hi: 14, lo: 14,
+					description: [
+						{language: "english", text: "Do NOT wait for VBLANK during an alert (e.g. AC->DC transition).",},
+					],
+				}, {
+					name: "VDDCI_control",
+					hi: 15, lo: 15,
+					description: [
+						{language: "english", text: "Does the driver control VDDCI independently from VDDC.",},
+					],
+				}, {
+					name: "regulator_hot",
+					hi: 16, lo: 16,
+					description: [
+						{language: "english", text: "Enable the 'regulator hot' feature.",},
+					],
+				}, {
+					name: "BACO",
+					hi: 17, lo: 17,
+					description: [
+						{language: "english", text: "Does the driver supports BACO state.",},
+					],
+				}, {
+					name: "new_CAC_voltage",
+					hi: 18, lo: 18,
+					description: [
+						{language: "english", text: "Does the driver supports new CAC voltage table.",},
+					],
+				}, {
+					name: "revert_GPIO5_polarity",
+					hi: 19, lo: 19,
+					description: [
+						{language: "english", text: "Does the driver supports revert GPIO5 polarity.",},
+					],
+				}, {
+					name: "output_thermal2GPIO17",
+					hi: 20, lo: 20,
+					description: [
+						{language: "english", text: "Does the driver supports thermal2GPIO17.",},
+					],
+				}, {
+					name: "vrhot_gpio_configurable",
+					hi: 21, lo: 21,
+					description: [
+						{language: "english", text: "Does the driver supports VR HOT GPIO Configurable.",},
+					],
+				}, {
+					name: "temp_inversion",
+					hi: 22, lo: 22,
+					description: [
+						{language: "english", text: "Does the driver supports Temp Inversion feature.",},
+					],
+				}, {
+					name: "EVV",
+					hi: 23, lo: 23,
+				}, {
+					name: "PCC_shares_thermal_GPIO",
+					hi: 24, lo: 24,
+					description: [
+						{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
+					],
+				}, {
+					name: "load_post_production_FW",
+					hi: 25, lo: 25,
+				}, {
+					name: "no_temp_in_power_calc",
+					hi: 26, lo: 26,
+					description: [
+						{language: "english", text: "disable using actual temperature for power calc",},
+					],
+				}, {
+					name: "VRHOT_polarity_high",
+					hi: 27, lo: 27,
+				}, {
+					name: "reserved",
+					hi: 31, lo: 28,
+				},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_powerplaytable_v1",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->DataRevision",
+			name: "DataRevision",
+		}, {
+			access: "bios->NumStates",
+			name: "NumStates",
+		}, {
+			access: "bios->StateEntrySize",
+			name: "StateEntrySize",
+		}, {
+			access: "bios->ClockInfoSize",
+			name: "ClockInfoSize",
+		}, {
+			access: "bios->NonClockSize",
+			name: "NonClockSize",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ClockInfoArrayOffset",
+			name: "ClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NonClockInfoArrayOffset",
+			name: "NonClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BackbiasTime",
+			name: "BackbiasTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->TableSize",
+			name: "TableSize",
+			description: [
+				{language: "english", text: "the size of this structure, or the extended structure",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalController",
+			name: "ThermalController",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+		}, {
+			access: "bios->BootClockInfoOffset",
+			name: "BootClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BootNonClockInfoOffset",
+			name: "BootNonClockInfoOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_powerplaytable_v2",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->DataRevision",
+			name: "DataRevision",
+		}, {
+			access: "bios->NumStates",
+			name: "NumStates",
+		}, {
+			access: "bios->StateEntrySize",
+			name: "StateEntrySize",
+		}, {
+			access: "bios->ClockInfoSize",
+			name: "ClockInfoSize",
+		}, {
+			access: "bios->NonClockSize",
+			name: "NonClockSize",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ClockInfoArrayOffset",
+			name: "ClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NonClockInfoArrayOffset",
+			name: "NonClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BackbiasTime",
+			name: "BackbiasTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->TableSize",
+			name: "TableSize",
+			description: [
+				{language: "english", text: "the size of this structure, or the extended structure",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalController",
+			name: "ThermalController",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+		}, {
+			access: "bios->BootClockInfoOffset",
+			name: "BootClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BootNonClockInfoOffset",
+			name: "BootNonClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NumCustomThermalPolicy",
+			name: "NumCustomThermalPolicy",
+		}, {
+			access: "bios->CustomThermalPolicyArrayOffset",
+			name: "CustomThermalPolicyArrayOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_powerplaytable_v3",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->DataRevision",
+			name: "DataRevision",
+		}, {
+			access: "bios->NumStates",
+			name: "NumStates",
+		}, {
+			access: "bios->StateEntrySize",
+			name: "StateEntrySize",
+		}, {
+			access: "bios->ClockInfoSize",
+			name: "ClockInfoSize",
+		}, {
+			access: "bios->NonClockSize",
+			name: "NonClockSize",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ClockInfoArrayOffset",
+			name: "ClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NonClockInfoArrayOffset",
+			name: "NonClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BackbiasTime",
+			name: "BackbiasTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->TableSize",
+			name: "TableSize",
+			description: [
+				{language: "english", text: "the size of this structure, or the extended structure",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalController",
+			name: "ThermalController",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+		}, {
+			access: "bios->BootClockInfoOffset",
+			name: "BootClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BootNonClockInfoOffset",
+			name: "BootNonClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NumCustomThermalPolicy",
+			name: "NumCustomThermalPolicy",
+		}, {
+			access: "bios->CustomThermalPolicyArrayOffset",
+			name: "CustomThermalPolicyArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->FormatID",
+			name: "FormatID",
+			description: [
+				{language: "english", text: "To be used ONLY by PPGen.",},
+			],
+		}, {
+			access: "bios->FanTableOffset",
+			name: "FanTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ExtendedHeaderOffset",
+			name: "ExtendedHeaderOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_powerplaytable_v4",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->DataRevision",
+			name: "DataRevision",
+		}, {
+			access: "bios->NumStates",
+			name: "NumStates",
+		}, {
+			access: "bios->StateEntrySize",
+			name: "StateEntrySize",
+		}, {
+			access: "bios->ClockInfoSize",
+			name: "ClockInfoSize",
+		}, {
+			access: "bios->NonClockSize",
+			name: "NonClockSize",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ClockInfoArrayOffset",
+			name: "ClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NonClockInfoArrayOffset",
+			name: "NonClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BackbiasTime",
+			name: "BackbiasTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->TableSize",
+			name: "TableSize",
+			description: [
+				{language: "english", text: "the size of this structure, or the extended structure",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalController",
+			name: "ThermalController",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+		}, {
+			access: "bios->BootClockInfoOffset",
+			name: "BootClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BootNonClockInfoOffset",
+			name: "BootNonClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NumCustomThermalPolicy",
+			name: "NumCustomThermalPolicy",
+		}, {
+			access: "bios->CustomThermalPolicyArrayOffset",
+			name: "CustomThermalPolicyArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->FormatID",
+			name: "FormatID",
+			description: [
+				{language: "english", text: "To be used ONLY by PPGen.",},
+			],
+		}, {
+			access: "bios->FanTableOffset",
+			name: "FanTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ExtendedHeaderOffset",
+			name: "ExtendedHeaderOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->GoldenPPID",
+			name: "GoldenPPID",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->GoldenRevision",
+			name: "GoldenRevision",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->VddcDependencyOnSCLKOffset",
+			name: "VddcDependencyOnSCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddciDependencyOnMCLKOffset",
+			name: "VddciDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcDependencyOnMCLKOffset",
+			name: "VddcDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MaxClockVoltageOnDCOffset",
+			name: "MaxClockVoltageOnDCOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcPhaseShedLimitsTableOffset",
+			name: "VddcPhaseShedLimitsTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MvddDependencyOnMCLKOffset",
+			name: "MvddDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_powerplaytable_v5",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->DataRevision",
+			name: "DataRevision",
+		}, {
+			access: "bios->NumStates",
+			name: "NumStates",
+		}, {
+			access: "bios->StateEntrySize",
+			name: "StateEntrySize",
+		}, {
+			access: "bios->ClockInfoSize",
+			name: "ClockInfoSize",
+		}, {
+			access: "bios->NonClockSize",
+			name: "NonClockSize",
+		}, {
+			access: "bios->StateArrayOffset",
+			name: "StateArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ClockInfoArrayOffset",
+			name: "ClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NonClockInfoArrayOffset",
+			name: "NonClockInfoArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BackbiasTime",
+			name: "BackbiasTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->VoltageTime",
+			name: "VoltageTime",
+			description: [
+				{language: "english", text: "in microseconds",},
+			],
+		}, {
+			access: "bios->TableSize",
+			name: "TableSize",
+			description: [
+				{language: "english", text: "the size of this structure, or the extended structure",},
+			],
+		}, {
+			access: "bios->PlatformCaps",
+			name: "PlatformCaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+		}, {
+			access: "bios->ThermalController",
+			name: "ThermalController",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+		}, {
+			access: "bios->BootClockInfoOffset",
+			name: "BootClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->BootNonClockInfoOffset",
+			name: "BootNonClockInfoOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->NumCustomThermalPolicy",
+			name: "NumCustomThermalPolicy",
+		}, {
+			access: "bios->CustomThermalPolicyArrayOffset",
+			name: "CustomThermalPolicyArrayOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->FormatID",
+			name: "FormatID",
+			description: [
+				{language: "english", text: "To be used ONLY by PPGen.",},
+			],
+		}, {
+			access: "bios->FanTableOffset",
+			name: "FanTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ExtendedHeaderOffset",
+			name: "ExtendedHeaderOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->GoldenPPID",
+			name: "GoldenPPID",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->GoldenRevision",
+			name: "GoldenRevision",
+			description: [
+				{language: "english", text: "PPGen use only",},
+			],
+		}, {
+			access: "bios->VddcDependencyOnSCLKOffset",
+			name: "VddcDependencyOnSCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddciDependencyOnMCLKOffset",
+			name: "VddciDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcDependencyOnMCLKOffset",
+			name: "VddcDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MaxClockVoltageOnDCOffset",
+			name: "MaxClockVoltageOnDCOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VddcPhaseShedLimitsTableOffset",
+			name: "VddcPhaseShedLimitsTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MvddDependencyOnMCLKOffset",
+			name: "MvddDependencyOnMCLKOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->TDPLimit",
+			name: "TDPLimit",
+		}, {
+			access: "bios->NearTDPLimit",
+			name: "NearTDPLimit",
+		}, {
+			access: "bios->SQRampingThreshold",
+			name: "SQRampingThreshold",
+		}, {
+			access: "bios->CACLeakageTableOffset",
+			name: "CACLeakageTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->CACLeakage",
+			name: "CACLeakage",
+			description: [
+				{language: "english", text: "The iLeakage for driver calculated CAC leakage table",},
+			],
+		}, {
+			access: "bios->TDPODLimit",
+			name: "TDPODLimit",
+		}, {
+			access: "bios->LoadLineSlope",
+			name: "LoadLineSlope",
+			description: [
+				{language: "english", text: "in milliOhms * 100",},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_state_v1",
+	atomtree: "atomtree_pplib_state",
+	table_size: "atomtree->size",
+	leaves: [
+		{
+			access: "bios->NonClockStateIndex",
+			name: "NonClockStateIndex",
+		}, {
+			access: "bios->ClockStateIndices",
+			name: "ClockStateIndices",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->num_levels",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "ClockStateIndices [%02u]",
+						display: "ATUI_DEC",
+						fancy: "ATUI_NOFANCY",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atui_nullstruct",
+	name: "atom_pplib_state_v1_array",
+	table_size: "atomtree->state_array_size",
+	leaves: [],
+}, {
+	c_type: "atom_pplib_state_v2",
+	atomtree: "atomtree_pplib_state",
+	table_size: "atomtree->size",
+	leaves: [
+		{
+			access: "bios->NumDPMLevels",
+			name: "NumDPMLevels",
+		}, {
+			access: "bios->nonClockInfoIndex",
+			name: "nonClockInfoIndex",
+		}, {
+			access: "bios->clockInfoIndex",
+			name: "clockInfoIndex",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->num_levels",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfoIndex",
+						display: "ATUI_DEC",
+						fancy: "ATUI_NOFANCY",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_state_array_v2",
+	table_size: "atomtree->state_array_size",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		},
+	],
+},
+
+{
+	c_prefix: "union", c_type: "atom_pplib_r600_flags",
+	leaves: [
+		{
+			access: "bios->Flags",
+			name: "Flags",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "pciegen2",
+					hi: 0, lo: 0,
+				}, {
+					name: "uvdsafe",
+					hi: 1, lo: 1,
+				}, {
+					name: "backbiasenable",
+					hi: 2, lo: 2,
+				}, {
+					name: "memory_odt_off",
+					hi: 3, lo: 3,
+				}, {
+					name: "memory_dll_off",
+					hi: 4, lo: 4,
+				}, {
+					name: "lowpower",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "On the RV770 use 'low power' setting (sequencer S0).",},
+					],
+				}, {
+					name: "reserved",
+					hi: 31, lo: 6,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_r600_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+		}, {
+			access: "bios->MemoryClockLow",
+			name: "MemoryClockLow",
+		}, {
+			access: "bios->MemoryClockHigh",
+			name: "MemoryClockHigh",
+		}, {
+			access: "bios->VDDC",
+			name: "VDDC",
+		}, {
+			access: "bios->Unused1",
+			name: "Unused1",
+		}, {
+			access: "bios->Unused2",
+			name: "Unused2",
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_r600_flags",
+		},
+	],
+}, {
+	c_type: "atom_pplib_r600_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_r600_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_rs780_clock_info",
+	leaves: [
+		{
+			access: "bios->LowEngineClockLow",
+			name: "LowEngineClockLow",
+			description: [
+				{language: "english", text: "Low Engine clock in MHz (the same way as on the R600).",},
+			],
+		}, {
+			access: "bios->LowEngineClockHigh",
+			name: "LowEngineClockHigh",
+		}, {
+			access: "bios->HighEngineClockLow",
+			name: "HighEngineClockLow",
+			description: [
+				{language: "english", text: "High Engine clock in MHz.",},
+			],
+		}, {
+			access: "bios->HighEngineClockHigh",
+			name: "HighEngineClockHigh",
+		}, {
+			access: "bios->MemoryClockLow",
+			name: "MemoryClockLow",
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PPLIB_RS780_SPMCLK",
+		}, {
+			access: "bios->MemoryClockHigh",
+			name: "MemoryClockHigh",
+			description: [
+				{language: "english", text: "Currentyl unused.",},
+			],
+		}, {
+			access: "bios->Padding",
+			name: "Padding",
+			description: [
+				{language: "english", text: "For proper alignment and size.",},
+			],
+		}, {
+			access: "bios->VDDC",
+			name: "VDDC",
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PPLIB_RS780_VOLTAGE",
+		}, {
+			access: "bios->MaxHTLinkWidth",
+			name: "MaxHTLinkWidth",
+			description: [
+				{language: "english", text: "From SBIOS - {2, 4, 8, 16}",},
+			],
+		}, {
+			access: "bios->MinHTLinkWidth",
+			name: "MinHTLinkWidth",
+			description: [
+				{language: "english", text: "From SBIOS - {2, 4, 8, 16}. Effective only if CDLW enabled. Minimum down stream width could",},
+			],
+		}, {
+			access: "bios->HTLinkFreq",
+			name: "HTLinkFreq",
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PPLIB_RS780_HTLINKFREQ",
+			description: [
+				{language: "english", text: "See definition ATOM_PPLIB_RS780_HTLINKFREQ_xxx or in MHz(>=200).",},
+			],
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+		},
+	],
+}, {
+	c_type: "atom_pplib_rs780_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_rs780_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_evergreen_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+		}, {
+			access: "bios->MemoryClockLow",
+			name: "MemoryClockLow",
+		}, {
+			access: "bios->MemoryClockHigh",
+			name: "MemoryClockHigh",
+		}, {
+			access: "bios->VDDC",
+			name: "VDDC",
+		}, {
+			access: "bios->VDDCI",
+			name: "VDDCI",
+		}, {
+			access: "bios->Unused",
+			name: "Unused",
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+		},
+	],
+}, {
+	c_type: "atom_pplib_evergreen_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_evergreen_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_si_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+		}, {
+			access: "bios->MemoryClockLow",
+			name: "MemoryClockLow",
+		}, {
+			access: "bios->MemoryClockHigh",
+			name: "MemoryClockHigh",
+		}, {
+			access: "bios->VDDC",
+			name: "VDDC",
+		}, {
+			access: "bios->VDDCI",
+			name: "VDDCI",
+		}, {
+			access: "bios->PCIEGen",
+			name: "PCIEGen",
+		}, {
+			access: "bios->Unused1",
+			name: "Unused1",
+		}, {
+			access: "bios->Flags",
+			name: "Flags",
+		},
+	],
+}, {
+	c_type: "atom_pplib_si_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_si_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_ci_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+		}, {
+			access: "bios->MemoryClockLow",
+			name: "MemoryClockLow",
+		}, {
+			access: "bios->MemoryClockHigh",
+			name: "MemoryClockHigh",
+		}, {
+			access: "bios->PCIEGen",
+			name: "PCIEGen",
+		}, {
+			access: "bios->PCIELane",
+			name: "PCIELane",
+		},
+	],
+}, {
+	c_type: "atom_pplib_ci_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_ci_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_sumo_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+			description: [
+				{language: "english", text: "clockfrequency & 0xFFFF. The unit is in 10khz",},
+			],
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+			description: [
+				{language: "english", text: "clockfrequency >> 16.",},
+			],
+		}, {
+			access: "bios->vddcIndex",
+			name: "vddcIndex",
+			description: [
+				{language: "english", text: "2-bit vddc index;",},
+			],
+		}, {
+			access: "bios->tdpLimit",
+			name: "tdpLimit",
+		}, {
+			access: "bios->rsv1",
+			name: "rsv1",
+		}, {
+			access: "bios->rsv2",
+			name: "rsv2",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_pplib_sumo_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_sumo_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_kv_clock_info",
+	leaves: [
+		{
+			access: "bios->EngineClockLow",
+			name: "EngineClockLow",
+		}, {
+			access: "bios->EngineClockHigh",
+			name: "EngineClockHigh",
+		}, {
+			access: "bios->vddcIndex",
+			name: "vddcIndex",
+		}, {
+			access: "bios->tdpLimit",
+			name: "tdpLimit",
+		}, {
+			access: "bios->rsv1",
+			name: "rsv1",
+		}, {
+			access: "bios->rsv2",
+			name: "rsv2",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_pplib_kv_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_kv_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_cz_clock_info",
+	leaves: [
+		{
+			access: "bios->index",
+			name: "index",
+		}, {
+			access: "bios->rsv",
+			name: "rsv",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_pplib_cz_clock_info_array",
+	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->clockInfo",
+			name: "clockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "clockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_cz_clock_info",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_nonclock_info_v1",
+	leaves: [
+		{
+			access: "bios->Classification",
+			name: "Classification",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification",
+		}, {
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->CapsAndSettings",
+			name: "CapsAndSettings",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_caps_and_settings",
+		}, {
+			access: "bios->RequiredPower",
+			name: "RequiredPower",
+		}, {
+			access: "bios->Classification2",
+			name: "Classification2",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification2",
+		}, {
+			access: "bios->Unused",
+			display: "ATUI_HEX",
+			name: "Unused",
+		},
+	],
+}, {
+	c_type: "atom_pplib_nonclock_info_array_v1",
+	table_size: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->nonClockInfo",
+			name: "nonClockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "nonClockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v1",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_nonclock_info_v2",
+	leaves: [
+		{
+			access: "bios->Classification",
+			name: "Classification",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification",
+		}, {
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->CapsAndSettings",
+			name: "CapsAndSettings",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_caps_and_settings",
+		}, {
+			access: "bios->RequiredPower",
+			name: "RequiredPower",
+		}, {
+			access: "bios->Classification2",
+			name: "Classification2",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_classification2",
+		}, {
+			access: "bios->VCLK",
+			name: "VCLK",
+		}, {
+			access: "bios->DCLK",
+			name: "DCLK",
+		}, {
+			access: "bios->Unused",
+			name: "Unused",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_pplib_nonclock_info_array_v2",
+	table_size: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->EntrySize",
+			name: "EntrySize",
+		}, {
+			access: "bios->nonClockInfo",
+			name: "nonClockInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "nonClockInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v2",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_thermal_state",
+	leaves: [
+		{
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->ThermalAction",
+			name: "ThermalAction",
+		},
+	],
+}, {
+	c_type: "atui_nullstruct",
+	name: "atom_pplib_custom_thermal_policy_array",
+	table_size: "sizeof_flex_array(atomtree->thermal_policy, atomtree->leaves->v2.NumCustomThermalPolicy)",
+	leaves: [
+		{
+			access: "atomtree->thermal_policy",
+			name: "thermal_state",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->leaves->v2.NumCustomThermalPolicy",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "thermal_state [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy_data: "atom_pplib_thermal_state",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+
+
+]}

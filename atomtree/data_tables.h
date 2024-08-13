@@ -149,6 +149,73 @@ struct atomtree_gfx_info {
 	struct dpm7_atomctrl_edc_leakge_table* edc_didt_lo;
 };
 
+
+struct atomtree_pplib_state {
+	union atom_pplib_states* state;
+	uint8_t size;
+	uint8_t  num_levels; // counting ClockStateIndices or v2's clockInfoIndex
+};
+#define ATOMTREE_PPLIB_STATE_ARRAY_MAX 16
+struct atomtree_powerplay_table_v5_1 {
+	union atom_pplib_powerplaytables* leaves;
+
+	enum atomtree_common_version pplib_ver;
+	enum ATOM_PPLIB_CLOCK_INFO   clock_info_ver;
+	enum atomtree_common_version nonclock_info_ver;
+
+	enum atomtree_common_version state_array_ver;
+	uint8_t num_state_array_entries;
+	size_t state_array_size;
+
+	// v1
+	struct atomtree_pplib_state  state_array[ATOMTREE_PPLIB_STATE_ARRAY_MAX];
+	union atom_pplib_state_arrays*         state_array_base;
+	union atom_pplib_clock_info_arrays*    clock_info;
+	union atom_pplib_nonclock_info_arrays* nonclock_info;
+
+
+	// at least boot_nonclock_info looks incorrect. Redefining
+	// atom_pplib_nonclock_info_array_v2 to not have EntrySize doesn't look
+	// right eithr
+	//union atom_pplib_clock_info_arrays*    boot_clock_info;
+	//union atom_pplib_nonclock_info_arrays* boot_nonclock_info; 
+	void* boot_clock_info;
+	void* boot_nonclock_info;
+
+	// v2
+	struct atom_pplib_thermal_state* thermal_policy; // TODO
+
+	// v3
+	union atom_pplib_fan_tables*      fan_table;
+	struct atom_pplib_extendedheader* extended_header;
+
+	// v4
+	struct atom_pplib_clock_voltage_dependency_table*  vddc_sclk;
+	struct atom_pplib_clock_voltage_dependency_table*  vddci_mclk;
+	struct atom_pplib_clock_voltage_dependency_table*  vddc_mclk;
+	struct atom_pplib_clock_voltage_limit_table*       max_on_dc;
+	struct atom_pplib_phasesheddinglimits_table*       phase_shed;
+	struct atom_pplib_clock_voltage_dependency_table*  mddc_mclk;
+
+	// v5
+	struct atom_pplib_cac_leakage_table* cac_leakage;
+
+	// extended
+	struct atom_pplib_vce_table*                     vce_root;
+	struct atom_pplib_vce_clock_info_array*          vce_info;
+	struct atom_pplib_vce_clock_voltage_limit_table* vce_limits;
+	struct atom_pplib_vce_state_table*               vce_states;
+	struct atom_pplib_uvd_table*                     uvd_root;
+	struct atom_pplib_uvd_clock_info_array*          uvd_info; 
+	struct atom_pplib_uvd_clock_voltage_limit_table* uvd_limits;
+	struct atom_pplib_samu_table*         samu;
+	struct atom_pplib_ppm_table*          ppm;
+	struct atom_pplib_acp_table*          acpclk;
+	union atom_pplib_powertune_tables*    powertune;
+	struct atom_pplib_clock_voltage_dependency_table*  vddgfx_sclk;
+	struct atom_pplib_vq_budgeting_table* vq_budgeting;
+};
+
 struct atomtree_powerplay_table_v7_1 {
 	struct atom_pptable_powerplaytable* leaves;
 
@@ -213,6 +280,7 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
+		struct atomtree_powerplay_table_v5_1   v5_1;
 		struct atomtree_powerplay_table_v7_1   v7_1;
 		struct atomtree_powerplay_table_v8_1   v8_1;
 		struct atomtree_powerplay_table_v11_0 v11_0;

@@ -441,7 +441,31 @@ Enums for ATUI_ENUM
 ]},
 
 /******************************************************************************/
-// vpptable_v1_0.h / ega10_pptable.h
+// pplib.h / pptable_v1_0.h / vega10_pptable.h
+
+{name: "ATOM_PPLIB_RS780_VOLTAGE",
+	constants: [
+		{name: "ATOM_PPLIB_RS780_VOLTAGE_NONE",},
+		{name: "ATOM_PPLIB_RS780_VOLTAGE_LOW",},
+		{name: "ATOM_PPLIB_RS780_VOLTAGE_HIGH",},
+		{name: "ATOM_PPLIB_RS780_VOLTAGE_VARIABLE",},
+]},
+{name: "ATOM_PPLIB_RS780_SPMCLK",
+	constants: [
+		{name: "ATOM_PPLIB_RS780_SPMCLK_NONE",
+			description: [
+				{language: "english", text: "We cannot change the side port memory clock, leave it as it is.",},
+			],
+		},
+		{name: "ATOM_PPLIB_RS780_SPMCLK_LOW",},
+		{name: "ATOM_PPLIB_RS780_SPMCLK_HIGH",},
+]},
+{name: "ATOM_PPLIB_RS780_HTLINKFREQ",
+	constants: [
+		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_NONE",},
+		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_LOW",},
+		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_HIGH",},
+]},
 
 {name: "atom_ppm",
 	constants: [
@@ -455,6 +479,8 @@ Enums for ATUI_ENUM
 		{name: "ATOM_VEGA10_VOLTAGEMODE_AVFS_WORSTCASE",},
 		{name: "ATOM_VEGA10_VOLTAGEMODE_STATIC",},
 ]},
+
+
 
 /******************************************************************************/
 // smu_v11_0_pptable.h / smu11_driver_if.h
