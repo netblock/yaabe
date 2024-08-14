@@ -5,10 +5,22 @@
 
 void
 gatui_leaf_test(
-		GATUILeaf* const leaf
+		GATUILeaf* const leaf,
+		GATUITree* const root
 		) {
 	// TODO actually test stuff
 	atui_leaf const* const atui __unused = gatui_leaf_get_atui(leaf);
+	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
+
+	if (atui->val) {
+		assert(a_root->bios <= atui->val);
+		assert(
+			(atui->val + atui->num_bytes - 1)
+			<= (a_root->bios + a_root->biosfile_size)
+		);
+	}
+
+	assert(strlen(atui->name) < sizeof(atui->name));
 
 	GListModel* const leaves = gatui_leaf_generate_children_model(leaf);
 	if (leaves) {
@@ -17,7 +29,7 @@ gatui_leaf_test(
 		assert(atui->num_child_leaves <= num_leaves);
 		for (uint16_t i=0; i < num_leaves; i++) {
 			child = g_list_model_get_object(leaves, i);
-			gatui_leaf_test(GATUI_LEAF(child));
+			gatui_leaf_test(GATUI_LEAF(child), root);
 			g_object_unref(child);
 		}
 		g_object_unref(leaves);
@@ -26,10 +38,23 @@ gatui_leaf_test(
 
 void
 gatui_branch_test(
-		GATUIBranch* const branch
+		GATUIBranch* const branch,
+		GATUITree* const root
 		) {
 	// TODO actually test stuff
 	atui_branch const* const atui __unused = gatui_branch_get_atui(branch);
+	struct atom_tree* const a_root __unused = gatui_tree_get_atom_tree(root);
+
+	if (atui->table_start) {
+		assert(a_root->bios <= atui->table_start);
+		assert(
+			(atui->table_start + atui->table_size - 1)
+			<= (a_root->bios + a_root->biosfile_size)
+		);
+	}
+
+	assert(strlen(atui->name) < sizeof(atui->name));
+
 
 	GObject* child = NULL;
 	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);
@@ -41,7 +66,7 @@ gatui_branch_test(
 		for (uint16_t i=0; i < num_leaves; i++) {
 			row = GTK_TREE_LIST_ROW(g_list_model_get_object(leaves_model, i));
 			child = gtk_tree_list_row_get_item(row);
-			gatui_leaf_test(GATUI_LEAF(child));
+			gatui_leaf_test(GATUI_LEAF(child), root);
 			g_object_unref(row);
 			g_object_unref(child);
 		}
@@ -54,7 +79,7 @@ gatui_branch_test(
 		assert(atui->num_branches <= num_branches);
 		for (uint16_t i=0; i < num_branches; i++) {
 			child = g_list_model_get_object(branches, i);
-			gatui_branch_test(GATUI_BRANCH(child));
+			gatui_branch_test(GATUI_BRANCH(child), root);
 			g_object_unref(child);
 		}
 		g_object_unref(branches);
@@ -66,11 +91,11 @@ main(
 		int const argc,
 		char const* const* const argv
 		) {
-	GATUITree* atree = NULL;
+	GATUITree* root = NULL;
 
 	if (argc > 1) {
 		GError* ferror = NULL;
-		atree = gatui_tree_new_from_path(argv[1], &ferror);
+		root = gatui_tree_new_from_path(argv[1], &ferror);
 		if (ferror) {
 			printf("%s\n", ferror->message);
 			g_error_free(ferror);
@@ -78,11 +103,14 @@ main(
 		}
 	}
 
-	if (atree) {
-		GATUIBranch* const trunk = gatui_tree_get_trunk(atree);
-		gatui_branch_test(trunk);
+	if (root) {
+		assert(gatui_tree_get_atom_tree(root));
+
+		GATUIBranch* const trunk = gatui_tree_get_trunk(root);
+		gatui_branch_test(trunk, root);
+
 		g_assert_finalize_object(trunk);
-		g_assert_finalize_object(atree);
+		g_assert_finalize_object(root);
 	}
 
 	return 0;
