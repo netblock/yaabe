@@ -162,10 +162,14 @@ struct atomtree_powerplay_table_v5_1 {
 	enum atomtree_common_version pplib_ver;
 	enum ATOM_PPLIB_CLOCK_INFO   clock_info_ver;
 	enum atomtree_common_version nonclock_info_ver;
+	enum atomtree_common_version extended_header_ver;
 
 	enum atomtree_common_version state_array_ver;
 	uint8_t num_state_array_entries;
 	size_t state_array_size;
+
+	size_t vce_table_size;
+	size_t uvd_table_size;
 
 	// v1
 	struct atomtree_pplib_state  state_array[ATOMTREE_PPLIB_STATE_ARRAY_MAX];
@@ -183,11 +187,11 @@ struct atomtree_powerplay_table_v5_1 {
 	void* boot_nonclock_info;
 
 	// v2
-	struct atom_pplib_thermal_state* thermal_policy; // TODO
+	struct atom_pplib_thermal_state* thermal_policy;
 
 	// v3
-	union atom_pplib_fan_tables*      fan_table;
-	struct atom_pplib_extendedheader* extended_header;
+	union atom_pplib_fan_tables*       fan_table;
+	union atom_pplib_extended_headers* extended_header;
 
 	// v4
 	struct atom_pplib_clock_voltage_dependency_table*  vddc_sclk;
@@ -195,10 +199,10 @@ struct atomtree_powerplay_table_v5_1 {
 	struct atom_pplib_clock_voltage_dependency_table*  vddc_mclk;
 	struct atom_pplib_clock_voltage_limit_table*       max_on_dc;
 	struct atom_pplib_phasesheddinglimits_table*       phase_shed;
-	struct atom_pplib_clock_voltage_dependency_table*  mddc_mclk;
+	struct atom_pplib_clock_voltage_dependency_table*  mvdd_mclk;
 
 	// v5
-	struct atom_pplib_cac_leakage_table* cac_leakage;
+	union atom_pplib_cac_leakage_tables* cac_leakage;
 
 	// extended
 	struct atom_pplib_vce_table*                     vce_root;

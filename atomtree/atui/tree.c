@@ -274,7 +274,7 @@ grow_pplib_ppt_state_array(
 		atui_args.suggestbios = ppt51->state_array[i].state;
 		atui_args.atomtree = &(ppt51->state_array[i]);
 		atui_branch* state_entry = atui_state_func(&atui_args);
-		sprintf(state_entry->name, "%s [%u]", state_entry->origname, i);
+		sprintf(state_entry->name, "%s [%02u]", state_entry->origname, i);
 		ATUI_ADD_BRANCH(base, state_entry);
 	}
 
@@ -311,13 +311,108 @@ grow_pplib_ppt_clock_info(
 			return ATUI_FUNC(atom_pplib_sized_array_header)(&atui_args);
 	}
 }
-/*
 inline static atui_branch*
-grow_pplib_ppt_extended_table(
+grow_pplib_ppt_extended_header(
 		struct atomtree_powerplay_table_v5_1* const ppt51
 		) {
+	atui_branch* vce = NULL;
+	if (ppt51->vce_root) {
+		vce = ATUI_MAKE_BRANCH(atom_pplib_vce_table, NULL,
+			ppt51,ppt51->vce_root,  0,NULL
+		);
+	}
+
+	atui_branch* uvd = NULL;
+	if (ppt51->uvd_root) {
+		uvd = ATUI_MAKE_BRANCH(atom_pplib_uvd_table, NULL,
+			ppt51,ppt51->uvd_root,  0,NULL
+		);
+	}
+
+	atui_branch* samu = NULL;
+	if (ppt51->samu) {
+		samu = ATUI_MAKE_BRANCH(atom_pplib_samu_table, NULL,
+			ppt51,ppt51->samu,  0,NULL
+		);
+	}
+
+	atui_branch* ppm = NULL;
+	if (ppt51->ppm) {
+		ppm = ATUI_MAKE_BRANCH(atom_pplib_ppm_table, NULL,
+			ppt51,ppt51->ppm,  0,NULL
+		);
+	}
+
+	atui_branch* acpclk = NULL;
+	if (ppt51->acpclk) {
+		acpclk = ATUI_MAKE_BRANCH(atom_pplib_acp_table, NULL,
+			ppt51,ppt51->acpclk,  0,NULL
+		);
+	}
+
+	atui_branch* powertune = NULL;
+	if (ppt51->powertune) {
+		struct atui_funcify_args atui_args = {
+			.atomtree = ppt51,
+			.suggestbios = ppt51->powertune,
+		};
+		switch (ppt51->powertune->RevId) {
+			case 0:
+				powertune = ATUI_FUNC(atom_pplib_powertune_table_v0)(
+					&atui_args
+				);
+				break;
+			case 1:
+				powertune = ATUI_FUNC(atom_pplib_powertune_table_v1)(
+					&atui_args
+				);
+				break;
+			default:
+				assert(0);
+				atui_args.rename = "powertune (header only stub)";
+				powertune = ATUI_FUNC(pptable_subtable_header)(&atui_args);
+				break;
+		}
+	}
+
+
+	atui_branch* vddgfx_sclk = NULL;
+	if (ppt51->vddgfx_sclk) {
+		vddgfx_sclk = ATUI_MAKE_BRANCH(
+			atom_pplib_clock_voltage_dependency_table, "vddgfx_sclk",
+			ppt51,ppt51->vddgfx_sclk,  0,NULL
+		);
+	}
+
+	atui_branch* vq_budgeting = NULL;
+	if (ppt51->vq_budgeting) {
+		vq_budgeting = ATUI_MAKE_BRANCH(atom_pplib_vq_budgeting_table, NULL,
+			ppt51,ppt51->vq_budgeting,  0,NULL
+		);
+	}
+
+	atui_branch* const extended_children[] = {
+		vce, uvd, samu, ppm, acpclk, powertune, vddgfx_sclk, vq_budgeting,
+	};
+	struct atui_funcify_args const atui_args = {
+		.atomtree = ppt51,
+		.suggestbios = ppt51->extended_header,
+		.import_branches = extended_children,
+		.num_import_branches = lengthof(extended_children),
+	};
+	switch (ppt51->extended_header_ver) {
+		case v1_0: return ATUI_FUNC(atom_pplib_extended_header_v1)(&atui_args);
+		case v2_0: return ATUI_FUNC(atom_pplib_extended_header_v2)(&atui_args);
+		case v3_0: return ATUI_FUNC(atom_pplib_extended_header_v3)(&atui_args);
+		case v4_0: return ATUI_FUNC(atom_pplib_extended_header_v4)(&atui_args);
+		case v5_0: return ATUI_FUNC(atom_pplib_extended_header_v5)(&atui_args);
+		case v6_0: return ATUI_FUNC(atom_pplib_extended_header_v6)(&atui_args);
+		case v7_0: return ATUI_FUNC(atom_pplib_extended_header_v7)(&atui_args);
+		case v8_0: return ATUI_FUNC(atom_pplib_extended_header_v8)(&atui_args);
+		case v9_0: return ATUI_FUNC(atom_pplib_extended_header_v9)(&atui_args);
+		default: assert(0); return NULL; // TODO return size
+	}
 }
-*/
 inline static atui_branch*
 grow_pplib_ppt(
 		struct atomtree_powerplay_table_v5_1* const ppt51
@@ -383,49 +478,101 @@ grow_pplib_ppt(
 	// v3
 	atui_branch* fan_table = NULL;
 	if (ppt51->fan_table) {
+		struct atui_funcify_args atui_args = {
+			.atomtree = ppt51,
+			.suggestbios = ppt51->fan_table,
+		};
+		switch (ppt51->fan_table->RevId) {
+			case 1: fan_table = ATUI_FUNC(atom_pplib_fan_table_v1)(&atui_args);
+				break;
+			case 2: fan_table = ATUI_FUNC(atom_pplib_fan_table_v2)(&atui_args);
+				break;
+			case 5:
+			case 4:
+			case 3: fan_table = ATUI_FUNC(atom_pplib_fan_table_v3)(&atui_args);
+				break;
+			case 6: fan_table = ATUI_FUNC(atom_pplib_fan_table_v6)(&atui_args);
+				break;
+			case 7: fan_table = ATUI_FUNC(atom_pplib_fan_table_v7)(&atui_args);
+				break;
+			default:
+				atui_args.rename = "fan_table (header only stub)";
+				fan_table = ATUI_FUNC(pptable_subtable_header)(&atui_args);
+				break;
+		}
 	}
 
 	atui_branch* extended_header = NULL;
 	if (ppt51->extended_header) {
+		extended_header = grow_pplib_ppt_extended_header(ppt51);
 	}
 
 
 	// v4
 	atui_branch* vddc_sclk = NULL;
 	if (ppt51->vddc_sclk) {
+		vddc_sclk = ATUI_MAKE_BRANCH(atom_pplib_clock_voltage_dependency_table,
+			"vddc_sclk",  ppt51,ppt51->vddc_sclk,  0,NULL
+		);
 	}
 
 	atui_branch* vddci_mclk = NULL;
 	if (ppt51->vddci_mclk) {
+		vddci_mclk = ATUI_MAKE_BRANCH(atom_pplib_clock_voltage_dependency_table,
+			"vddci_mclk",  ppt51,ppt51->vddci_mclk,  0,NULL
+		);
 	}
 
 	atui_branch* vddc_mclk = NULL;
 	if (ppt51->vddc_mclk) {
+		vddc_mclk = ATUI_MAKE_BRANCH(atom_pplib_clock_voltage_dependency_table, 
+			"vddc_mclk",  ppt51,ppt51->vddc_mclk,  0,NULL
+		);
 	}
 
 	atui_branch* max_on_dc = NULL;
 	if (ppt51->max_on_dc) {
+		max_on_dc = ATUI_MAKE_BRANCH(atom_pplib_clock_voltage_limit_table, 
+			NULL,  ppt51,ppt51->max_on_dc,  0,NULL
+		);
 	}
 
 	atui_branch* phase_shed = NULL;
 	if (ppt51->phase_shed) {
+		phase_shed = ATUI_MAKE_BRANCH(atom_pplib_phasesheddinglimits_table, 
+			NULL,  ppt51,ppt51->phase_shed,  0,NULL
+		);
 	}
 
-	atui_branch* mddc_mclk = NULL;
-	if (ppt51->mddc_mclk) {
+	atui_branch* mvdd_mclk = NULL;
+	if (ppt51->mvdd_mclk) {
+		mvdd_mclk = ATUI_MAKE_BRANCH(atom_pplib_clock_voltage_dependency_table,
+			"mvdd_mclk",  ppt51,ppt51->mvdd_mclk,  0,NULL
+		);
 	}
 
 
 	// v5
 	atui_branch* cac_leakage = NULL;
 	if (ppt51->cac_leakage) {
+		struct atui_funcify_args const atui_args = {
+			.atomtree = ppt51,
+			.suggestbios = ppt51->cac_leakage,
+		};
+		if (ppt51->leaves->v1.PlatformCaps.EVV) {
+			cac_leakage = ATUI_FUNC(atom_pplib_cac_leakage_record_evv)(
+				&atui_args
+			);
+		} else {
+			cac_leakage = ATUI_FUNC(atom_pplib_cac_leakage_record)(&atui_args);
+		}
 	}
 
 	atui_branch* const ppt51_children[] = {
 		state_array, clock_info, nonclock_info,
 		//boot_clock_info, boot_nonclock_info,
 		thermal_policy, fan_table, extended_header,
-		vddc_sclk, vddci_mclk, vddc_mclk, max_on_dc, phase_shed, mddc_mclk,
+		vddc_sclk, vddci_mclk, vddc_mclk, max_on_dc, phase_shed, mvdd_mclk,
 		cac_leakage, 
 	};
 	struct atui_funcify_args atui_args = {

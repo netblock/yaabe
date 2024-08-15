@@ -467,6 +467,12 @@ Enums for ATUI_ENUM
 		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_HIGH",},
 ]},
 
+{name: "vq_dispconfig",
+	constants: [
+		{name: "VQ_DisplayConfig_NoneAWD",},
+		{name: "VQ_DisplayConfig_AWD",},
+]},
+
 {name: "atom_ppm",
 	constants: [
 		{name: "ATOM_PPM_A_A",},

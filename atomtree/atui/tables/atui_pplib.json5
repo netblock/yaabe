@@ -16,7 +16,7 @@ global_default: {
 			fancy: "ATUI_NOFANCY",
 		},
 		dynpattern: {
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT",
 			name: "entries [%02u]",
 		},
@@ -1521,6 +1521,1472 @@ global_default: {
 },
 
 
+{
+	c_type: "atom_pplib_fan_table_v1",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->THyst",
+			name: "THyst",
+			description: [
+				{language: "english", text: "Temperature hysteresis. Integer.",},
+			],
+		}, {
+			access: "bios->TMin",
+			name: "TMin",
+			description: [
+				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
+			],
+		}, {
+			access: "bios->TMed",
+			name: "TMed",
+			description: [
+				{language: "english", text: "The middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->THigh",
+			name: "THigh",
+			description: [
+				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->PWMMin",
+			name: "PWMMin",
+			description: [
+				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->PWMMed",
+			name: "PWMMed",
+			description: [
+				{language: "english", text: "The PWM value (in percent) at TMed.",},
+			],
+		}, {
+			access: "bios->PWMHigh",
+			name: "PWMHigh",
+			description: [
+				{language: "english", text: "The PWM value at THigh.",},
+			],
+		},
+	],
+},
 
+{
+	c_type: "atom_pplib_fan_table_v2",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->THyst",
+			name: "THyst",
+			description: [
+				{language: "english", text: "Temperature hysteresis. Integer.",},
+			],
+		}, {
+			access: "bios->TMin",
+			name: "TMin",
+			description: [
+				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
+			],
+		}, {
+			access: "bios->TMed",
+			name: "TMed",
+			description: [
+				{language: "english", text: "The middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->THigh",
+			name: "THigh",
+			description: [
+				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->PWMMin",
+			name: "PWMMin",
+			description: [
+				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->PWMMed",
+			name: "PWMMed",
+			description: [
+				{language: "english", text: "The PWM value (in percent) at TMed.",},
+			],
+		}, {
+			access: "bios->PWMHigh",
+			name: "PWMHigh",
+			description: [
+				{language: "english", text: "The PWM value at THigh.",},
+			],
+		}, {
+			access: "bios->TMax",
+			name: "TMax",
+			description: [
+				{language: "english", text: "The max temperature",},
+			],
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_fan_table_v3",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->thyst",
+			name: "thyst",
+			description: [
+				{language: "english", text: "temperature hysteresis. integer.",},
+			],
+		}, {
+			access: "bios->tmin",
+			name: "tmin",
+			description: [
+				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
+			],
+		}, {
+			access: "bios->tmed",
+			name: "tmed",
+			description: [
+				{language: "english", text: "the middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->thigh",
+			name: "thigh",
+			description: [
+				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->pwmmin",
+			name: "pwmmin",
+			description: [
+				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->pwmmed",
+			name: "pwmmed",
+			description: [
+				{language: "english", text: "the pwm value (in percent) at tmed.",},
+			],
+		}, {
+			access: "bios->pwmhigh",
+			name: "pwmhigh",
+			description: [
+				{language: "english", text: "the pwm value at thigh.",},
+			],
+		}, {
+			access: "bios->tmax",
+			name: "tmax",
+			description: [
+				{language: "english", text: "the max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_fan_table_v6",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->thyst",
+			name: "thyst",
+			description: [
+				{language: "english", text: "temperature hysteresis. integer.",},
+			],
+		}, {
+			access: "bios->tmin",
+			name: "tmin",
+			description: [
+				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
+			],
+		}, {
+			access: "bios->tmed",
+			name: "tmed",
+			description: [
+				{language: "english", text: "the middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->thigh",
+			name: "thigh",
+			description: [
+				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->pwmmin",
+			name: "pwmmin",
+			description: [
+				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->pwmmed",
+			name: "pwmmed",
+			description: [
+				{language: "english", text: "the pwm value (in percent) at tmed.",},
+			],
+		}, {
+			access: "bios->pwmhigh",
+			name: "pwmhigh",
+			description: [
+				{language: "english", text: "the pwm value at thigh.",},
+			],
+		}, {
+			access: "bios->tmax",
+			name: "tmax",
+			description: [
+				{language: "english", text: "the max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+		},
+	],
+},
+
+{
+	c_type: "atom_pplib_fan_table_v7",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+			description: [
+				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
+			],
+		}, {
+			access: "bios->thyst",
+			name: "thyst",
+			description: [
+				{language: "english", text: "temperature hysteresis. integer.",},
+			],
+		}, {
+			access: "bios->tmin",
+			name: "tmin",
+			description: [
+				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
+			],
+		}, {
+			access: "bios->tmed",
+			name: "tmed",
+			description: [
+				{language: "english", text: "the middle temperature where we change slopes.",},
+			],
+		}, {
+			access: "bios->thigh",
+			name: "thigh",
+			description: [
+				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
+			],
+		}, {
+			access: "bios->pwmmin",
+			name: "pwmmin",
+			description: [
+				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
+			],
+		}, {
+			access: "bios->pwmmed",
+			name: "pwmmed",
+			description: [
+				{language: "english", text: "the pwm value (in percent) at tmed.",},
+			],
+		}, {
+			access: "bios->pwmhigh",
+			name: "pwmhigh",
+			description: [
+				{language: "english", text: "the pwm value at thigh.",},
+			],
+		}, {
+			access: "bios->tmax",
+			name: "tmax",
+			description: [
+				{language: "english", text: "the max temperature",},
+			],
+		}, {
+			access: "bios->FanControlMode",
+			name: "FanControlMode",
+		}, {
+			access: "bios->FanPWMMax",
+			name: "FanPWMMax",
+		}, {
+			access: "bios->FanOutputSensitivity",
+			name: "FanOutputSensitivity",
+		}, {
+			access: "bios->FanRPMMax",
+			name: "FanRPMMax",
+		}, {
+			access: "bios->FanCurrentLow",
+			name: "FanCurrentLow",
+		}, {
+			access: "bios->FanCurrentHigh",
+			name: "FanCurrentHigh",
+		}, {
+			access: "bios->FanRPMLow",
+			name: "FanRPMLow",
+		}, {
+			access: "bios->FanRPMHigh",
+			name: "FanRPMHigh",
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_extended_header_v1",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v2",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v3",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v4",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v5",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v6",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ACPTableOffset",
+			name: "ACPTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v7",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ACPTableOffset",
+			name: "ACPTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PowerTuneTableOffset",
+			name: "PowerTuneTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v8",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ACPTableOffset",
+			name: "ACPTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PowerTuneTableOffset",
+			name: "PowerTuneTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SclkVddgfxTableOffset",
+			name: "SclkVddgfxTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_pplib_extended_header_v9",
+	leaves: [
+		{
+			access: "bios->Size",
+			name: "Size",
+		}, {
+			access: "bios->MaxEngineClock",
+			name: "MaxEngineClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->MaxMemoryClock",
+			name: "MaxMemoryClock",
+			description: [
+				{language: "english", text: "For Overdrive.",},
+			],
+		}, {
+			access: "bios->VCETableOffset",
+			name: "VCETableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->UVDTableOffset",
+			name: "UVDTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SAMUTableOffset",
+			name: "SAMUTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PPMTableOffset",
+			name: "PPMTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ACPTableOffset",
+			name: "ACPTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->PowerTuneTableOffset",
+			name: "PowerTuneTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SclkVddgfxTableOffset",
+			name: "SclkVddgfxTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->VQBudgetingTableOffset",
+			name: "VQBudgetingTableOffset",
+			display: "ATUI_HEX",
+		},
+	],
+},
+
+
+
+{
+	c_type: "atom_pplib_vce_clock_info",
+	leaves: [
+		{
+			access: "bios->EVClk_Lo",
+			name: "EVClk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->EVClk_Hi",
+			name: "EVClk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->ECClk_Lo",
+			name: "ECClk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->ECClk_Hi",
+			name: "ECClk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_clock_info_array",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_vce_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_clock_voltage_limit_record",
+	leaves: [
+		{
+			access: "bios->Voltage",
+			name: "Voltage",
+		}, {
+			access: "bios->VCEClockInfoIndex",
+			name: "VCEClockInfoIndex",
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_clock_voltage_limit_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_vce_clock_voltage_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+{
+	c_prefix: "union", c_type: "atom_pplib_vce_clock_info_index",
+	leaves: [
+		{
+			access: "bios->ClockInfoIndex",
+			name: "ClockInfoIndex",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "ClockInfoArrary_index",
+					hi: 5, lo: 0,
+				}, {
+					name: "memory_pstate",
+					hi: 7, lo: 6,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_state_record",
+	leaves: [
+		{
+			access: "bios->VCEClockInfoIndex",
+			name: "VCEClockInfoIndex",
+		}, {
+			access: "bios->ClockInfoIndex",
+			name: "ClockInfoIndex",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_vce_clock_info_index",
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_state_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_vce_state_record",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_vce_table",
+	table_size: "atomtree->vce_table_size",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "*(atomtree->vce_info)",
+			name: "info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_vce_clock_info_array",
+		}, {
+			access: "*(atomtree->vce_limits)",
+			name: "limits",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_vce_clock_voltage_limit_table",
+		}, {
+			access: "*(atomtree->vce_states)",
+			name: "states",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_vce_state_table",
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_uvd_clock_info",
+	leaves: [
+		{
+			access: "bios->VClk_Lo",
+			name: "VClk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->VClk_Hi",
+			name: "VClk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->DClk_Lo",
+			name: "DClk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->DClk_Hi",
+			name: "DClk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_uvd_clock_info_array",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_uvd_clock_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_uvd_clock_voltage_limit_record",
+	leaves: [
+		{
+			access: "bios->Voltage",
+			name: "Voltage",
+		}, {
+			access: "bios->UVDClockInfoIndex",
+			name: "UVDClockInfoIndex",
+		},
+	],
+}, {
+	c_type: "atom_pplib_uvd_clock_voltage_limit_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_uvd_clock_voltage_limit_record",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_uvd_table",
+	table_size: "atomtree->uvd_table_size",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "*(atomtree->uvd_info)",
+			name: "info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_uvd_clock_info_array",
+		}, {
+			access: "*(atomtree->uvd_limits)",
+			name: "limits",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_uvd_clock_voltage_limit_table",
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_samclk_voltage_limit_record",
+	leaves: [
+		{
+			access: "bios->Voltage",
+			name: "Voltage",
+		}, {
+			access: "bios->SAMClock_Lo",
+			name: "SAMClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->SAMClock_Hi",
+			name: "SAMClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_samu_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_samclk_voltage_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_ppm_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->PpmDesign",
+			name: "PpmDesign",
+			fancy: "ATUI_ENUM", fancy_data: "atom_ppm",
+		}, {
+			access: "bios->CpuCoreNumber",
+			name: "CpuCoreNumber",
+		}, {
+			access: "bios->PlatformTDP",
+			name: "PlatformTDP",
+		}, {
+			access: "bios->SmallACPlatformTDP",
+			name: "SmallACPlatformTDP",
+		}, {
+			access: "bios->PlatformTDC",
+			name: "PlatformTDC",
+		}, {
+			access: "bios->SmallACPlatformTDC",
+			name: "SmallACPlatformTDC",
+		}, {
+			access: "bios->ApuTDP",
+			name: "ApuTDP",
+		}, {
+			access: "bios->DGpuTDP",
+			name: "DGpuTDP",
+		}, {
+			access: "bios->DGpuUlvPower",
+			name: "DGpuUlvPower",
+		}, {
+			access: "bios->Tjmax",
+			name: "Tjmax",
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_acpclk_voltage_limit_record",
+	leaves: [
+		{
+			access: "bios->Voltage",
+			name: "Voltage",
+		}, {
+			access: "bios->ACPClock_Lo",
+			name: "ACPClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->ACPClock_Hi",
+			name: "ACPClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_acp_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_acpclk_voltage_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_powertune_table_v0",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->TDP",
+			name: "TDP",
+		}, {
+			access: "bios->ConfigurableTDP",
+			name: "ConfigurableTDP",
+		}, {
+			access: "bios->TDC",
+			name: "TDC",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->LowCACLeakage",
+			name: "LowCACLeakage",
+		}, {
+			access: "bios->HighCACLeakage",
+			name: "HighCACLeakage",
+		},
+	],
+}, {
+	c_type: "atom_pplib_powertune_table_v1",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->TDP",
+			name: "TDP",
+		}, {
+			access: "bios->ConfigurableTDP",
+			name: "ConfigurableTDP",
+		}, {
+			access: "bios->TDC",
+			name: "TDC",
+		}, {
+			access: "bios->BatteryPowerLimit",
+			name: "BatteryPowerLimit",
+		}, {
+			access: "bios->SmallPowerLimit",
+			name: "SmallPowerLimit",
+		}, {
+			access: "bios->LowCACLeakage",
+			name: "LowCACLeakage",
+		}, {
+			access: "bios->HighCACLeakage",
+			name: "HighCACLeakage",
+		}, {
+			access: "bios->MaximumPowerDeliveryLimit",
+			name: "MaximumPowerDeliveryLimit",
+		}, {
+			access: "bios->TjMax",
+			name: "TjMax",
+		}, {
+			access: "bios->Reserve",
+			name: "Reserve",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_clock_voltage_dependency_record",
+	leaves: [
+		{
+			access: "bios->Clock_Lo",
+			name: "Clock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Clock_Hi",
+			name: "Clock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Voltage",
+			name: "Voltage",
+		},
+	],
+}, {
+	c_type: "atom_pplib_clock_voltage_dependency_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_clock_voltage_dependency_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_vq_budgeting_record",
+	leaves: [
+		{
+			access: "bios->DeviceID",
+			name: "DeviceID",
+		}, {
+			access: "bios->SustainableSOCPowerLimitLow",
+			name: "SustainableSOCPowerLimitLow",
+			description: [
+				{language: "english", text: "in mW",},
+			],
+		}, {
+			access: "bios->SustainableSOCPowerLimitHigh",
+			name: "SustainableSOCPowerLimitHigh",
+			description: [
+				{language: "english", text: "in mW",},
+			],
+		}, {
+			access: "bios->DClk",
+			name: "DClk",
+		}, {
+			access: "bios->EClk",
+			name: "EClk",
+		}, {
+			access: "bios->DispSclk",
+			name: "DispSclk",
+		}, {
+			access: "bios->DispConfig",
+			name: "DispConfig",
+			fancy: "ATUI_ENUM", fancy_data: "vq_dispconfig",
+		},
+	],
+}, {
+	c_type: "atom_pplib_vq_budgeting_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_vq_budgeting_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_clock_voltage_limit_record",
+	leaves: [
+		{
+			access: "bios->Sclk_Lo",
+			name: "Sclk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Sclk_Hi",
+			name: "Sclk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Mclk_Lo",
+			name: "Mclk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Mclk_Hi",
+			name: "Mclk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Vddc",
+			name: "Vddc",
+		}, {
+			access: "bios->Vddci",
+			name: "Vddci",
+		},
+	],
+}, {
+	c_type: "atom_pplib_clock_voltage_limit_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_clock_voltage_limit_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_phaseshedding_limits_record",
+	leaves: [
+		{
+			access: "bios->Voltage",
+			name: "Voltage",
+		}, {
+			access: "bios->Sclk_Lo",
+			name: "Sclk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Sclk_Hi",
+			name: "Sclk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Mclk_Lo",
+			name: "Mclk_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		}, {
+			access: "bios->Mclk_Hi",
+			name: "Mclk_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_phasesheddinglimits_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_phaseshedding_limits_record",
+					},
+				],
+			},
+		},
+	],
+},
+
+
+{
+	c_type: "atom_pplib_cac_leakage_record_evv",
+	leaves: [
+		{
+			access: "bios->Vddc1",
+			name: "Vddc1",
+		}, {
+			access: "bios->Vddc2",
+			name: "Vddc2",
+		}, {
+			access: "bios->Vddc3",
+			name: "Vddc3",
+		},
+	],
+}, {
+	c_type: "atom_pplib_cac_leakage_table_evv",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_cac_leakage_record_evv",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_pplib_cac_leakage_record",
+	leaves: [
+		{
+			access: "bios->Vddc",
+			name: "Vddc",
+			description: [
+				{language: "english", text: "We use this field for the \"fake\" standardized VDDC for power calculations; For CI and newer, we use this as the real VDDC value. in CI we read it as StdVoltageHiSidd",},
+			],
+		}, {
+			access: "bios->LeakageValue",
+			name: "LeakageValue",
+			description: [
+				{language: "english", text: "For CI and newer we use this as the \"fake\" standard VDDC value. in CI we read it as StdVoltageLoSidd",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_pplib_cac_leakage_table",
+	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	leaves: [
+		{
+			access: "bios->NumEntries",
+			name: "NumEntries",
+		}, {
+			access: "bios->entries",
+			name: "entries",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						fancy_data: "atom_pplib_cac_leakage_record",
+					},
+				],
+			},
+		},
+	],
+},
 
 ]}

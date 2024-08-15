@@ -542,53 +542,53 @@ struct atom_pplib_thermal_state {
 
 
 struct atom_pplib_fan_table_v1 {
-	uint8_t  FanTableFormat; // Change this if the table format changes or version changes so that the other fields are not the same.
-	uint8_t  THyst;          // Temperature hysteresis. Integer.
-	uint16_t TMin;           // The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.
-	uint16_t TMed;           // The middle temperature where we change slopes.
-	uint16_t THigh;          // The high point above TMed for adjusting the second slope.
-	uint16_t PWMMin;         // The minimum PWM value in percent (0.01% increments).
-	uint16_t PWMMed;         // The PWM value (in percent) at TMed.
-	uint16_t PWMHigh;        // The PWM value at THigh.
+	uint8_t  RevId;   // Change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  THyst;   // Temperature hysteresis. Integer.
+	uint16_t TMin;    // The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.
+	uint16_t TMed;    // The middle temperature where we change slopes.
+	uint16_t THigh;   // The high point above TMed for adjusting the second slope.
+	uint16_t PWMMin;  // The minimum PWM value in percent (0.01% increments).
+	uint16_t PWMMed;  // The PWM value (in percent) at TMed.
+	uint16_t PWMHigh; // The PWM value at THigh.
 };
 
 struct atom_pplib_fan_table_v2 {
-	uint8_t  FanTableFormat; // Change this if the table format changes or version changes so that the other fields are not the same.
-	uint8_t  THyst;          // Temperature hysteresis. Integer.
-	uint16_t TMin;           // The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.
-	uint16_t TMed;           // The middle temperature where we change slopes.
-	uint16_t THigh;          // The high point above TMed for adjusting the second slope.
-	uint16_t PWMMin;         // The minimum PWM value in percent (0.01% increments).
-	uint16_t PWMMed;         // The PWM value (in percent) at TMed.
-	uint16_t PWMHigh;        // The PWM value at THigh.
-	uint16_t TMax; // The max temperature
+	uint8_t  RevId;   // Change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  THyst;   // Temperature hysteresis. Integer.
+	uint16_t TMin;    // The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.
+	uint16_t TMed;    // The middle temperature where we change slopes.
+	uint16_t THigh;   // The high point above TMed for adjusting the second slope.
+	uint16_t PWMMin;  // The minimum PWM value in percent (0.01% increments).
+	uint16_t PWMMed;  // The PWM value (in percent) at TMed.
+	uint16_t PWMHigh; // The PWM value at THigh.
+	uint16_t TMax;    // The max temperature
 };
 
 struct atom_pplib_fan_table_v3 {
-	uint8_t  fantableformat; // change this if the table format changes or version changes so that the other fields are not the same.
-	uint8_t  thyst;          // temperature hysteresis. integer.
-	uint16_t tmin;           // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
-	uint16_t tmed;           // the middle temperature where we change slopes.
-	uint16_t thigh;          // the high point above tmed for adjusting the second slope.
-	uint16_t pwmmin;         // the minimum pwm value in percent (0.01% increments).
-	uint16_t pwmmed;         // the pwm value (in percent) at tmed.
-	uint16_t pwmhigh;        // the pwm value at thigh.
-	uint16_t tmax; // the max temperature
+	uint8_t  RevId;   // Change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  thyst;   // temperature hysteresis. integer.
+	uint16_t tmin;    // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
+	uint16_t tmed;    // the middle temperature where we change slopes.
+	uint16_t thigh;   // the high point above tmed for adjusting the second slope.
+	uint16_t pwmmin;  // the minimum pwm value in percent (0.01% increments).
+	uint16_t pwmmed;  // the pwm value (in percent) at tmed.
+	uint16_t pwmhigh; // the pwm value at thigh.
+	uint16_t tmax;    // the max temperature
 	uint8_t  FanControlMode;
 	uint16_t FanPWMMax;
 	uint16_t FanOutputSensitivity;
 };
 
-struct atom_pplib_fan_table_v4 {
-	uint8_t  fantableformat; // change this if the table format changes or version changes so that the other fields are not the same.
-	uint8_t  thyst;          // temperature hysteresis. integer.
-	uint16_t tmin;           // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
-	uint16_t tmed;           // the middle temperature where we change slopes.
-	uint16_t thigh;          // the high point above tmed for adjusting the second slope.
-	uint16_t pwmmin;         // the minimum pwm value in percent (0.01% increments).
-	uint16_t pwmmed;         // the pwm value (in percent) at tmed.
-	uint16_t pwmhigh;        // the pwm value at thigh.
-	uint16_t tmax; // the max temperature
+struct atom_pplib_fan_table_v6 {
+	uint8_t  RevId;   // Change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  thyst;   // temperature hysteresis. integer.
+	uint16_t tmin;    // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
+	uint16_t tmed;    // the middle temperature where we change slopes.
+	uint16_t thigh;   // the high point above tmed for adjusting the second slope.
+	uint16_t pwmmin;  // the minimum pwm value in percent (0.01% increments).
+	uint16_t pwmmed;  // the pwm value (in percent) at tmed.
+	uint16_t pwmhigh; // the pwm value at thigh.
+	uint16_t tmax;    // the max temperature
 	uint8_t  FanControlMode;
 	uint16_t FanPWMMax;
 	uint16_t FanOutputSensitivity;
@@ -596,15 +596,15 @@ struct atom_pplib_fan_table_v4 {
 };
 
 struct atom_pplib_fan_table_v7 {
-	uint8_t  fantableformat; // change this if the table format changes or version changes so that the other fields are not the same.
-	uint8_t  thyst;          // temperature hysteresis. integer.
-	uint16_t tmin;           // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
-	uint16_t tmed;           // the middle temperature where we change slopes.
-	uint16_t thigh;          // the high point above tmed for adjusting the second slope.
-	uint16_t pwmmin;         // the minimum pwm value in percent (0.01% increments).
-	uint16_t pwmmed;         // the pwm value (in percent) at tmed.
-	uint16_t pwmhigh;        // the pwm value at thigh.
-	uint16_t tmax; // the max temperature
+	uint8_t  RevId;   // Change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  thyst;   // temperature hysteresis. integer.
+	uint16_t tmin;    // the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.
+	uint16_t tmed;    // the middle temperature where we change slopes.
+	uint16_t thigh;   // the high point above tmed for adjusting the second slope.
+	uint16_t pwmmin;  // the minimum pwm value in percent (0.01% increments).
+	uint16_t pwmmed;  // the pwm value (in percent) at tmed.
+	uint16_t pwmhigh; // the pwm value at thigh.
+	uint16_t tmax;    // the max temperature
 	uint8_t  FanControlMode;
 	uint16_t FanPWMMax;
 	uint16_t FanOutputSensitivity;
@@ -616,15 +616,83 @@ struct atom_pplib_fan_table_v7 {
 };
 
 union atom_pplib_fan_tables {
-	uint8_t  fantableformat; // change this if the table format changes or version changes so that the other fields are not the same.
+	uint8_t  RevId; // Change this if the table format changes or version changes so that the other fields are not the same.
 	struct atom_pplib_fan_table_v1  v1;
 	struct atom_pplib_fan_table_v2  v2;
 	struct atom_pplib_fan_table_v3  v3;
-	struct atom_pplib_fan_table_v4  v4;
+	struct atom_pplib_fan_table_v6  v6;
 	struct atom_pplib_fan_table_v7  v7;
 };
 
-struct atom_pplib_extendedheader {
+struct atom_pplib_extended_header_v1 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+};
+struct atom_pplib_extended_header_v2 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+};
+struct atom_pplib_extended_header_v3 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+};
+struct atom_pplib_extended_header_v4 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+	uint16_t SAMUTableOffset;
+};
+struct atom_pplib_extended_header_v5 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+	uint16_t SAMUTableOffset;
+	uint16_t PPMTableOffset;
+};
+struct atom_pplib_extended_header_v6 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+	uint16_t SAMUTableOffset;
+	uint16_t PPMTableOffset;
+	uint16_t ACPTableOffset;
+};
+struct atom_pplib_extended_header_v7 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+	uint16_t SAMUTableOffset;
+	uint16_t PPMTableOffset;
+	uint16_t ACPTableOffset;
+	uint16_t PowerTuneTableOffset;
+};
+struct atom_pplib_extended_header_v8 {
+	uint16_t Size;
+	uint32_t MaxEngineClock; // For Overdrive.
+	uint32_t MaxMemoryClock; // For Overdrive.
+	uint16_t VCETableOffset;
+	uint16_t UVDTableOffset;
+	uint16_t SAMUTableOffset;
+	uint16_t PPMTableOffset;
+	uint16_t ACPTableOffset;
+	uint16_t PowerTuneTableOffset;
+	uint16_t SclkVddgfxTableOffset;
+};
+struct atom_pplib_extended_header_v9 {
 	uint16_t Size;
 	uint32_t MaxEngineClock; // For Overdrive.
 	uint32_t MaxMemoryClock; // For Overdrive.
@@ -638,12 +706,24 @@ struct atom_pplib_extendedheader {
 	uint16_t VQBudgetingTableOffset;
 };
 
+union atom_pplib_extended_headers {
+	uint16_t Size;
+	struct atom_pplib_extended_header_v1 v1;
+	struct atom_pplib_extended_header_v2 v2;
+	struct atom_pplib_extended_header_v3 v3;
+	struct atom_pplib_extended_header_v4 v4;
+	struct atom_pplib_extended_header_v5 v5;
+	struct atom_pplib_extended_header_v6 v6;
+	struct atom_pplib_extended_header_v7 v7;
+	struct atom_pplib_extended_header_v8 v8;
+	struct atom_pplib_extended_header_v9 v9;
+};
 
 
 struct atom_pplib_clock_voltage_dependency_record {
-	uint16_t ClockLow;
-	uint8_t  ClockHigh;
-	uint16_t Voltage;
+	uint16_t Clock_Lo; // 24-bit uint
+	uint8_t  Clock_Hi; // 24-bit uint
+	int16_t  Voltage;
 };
 struct atom_pplib_clock_voltage_dependency_table {
 	uint8_t  NumEntries;
@@ -651,10 +731,10 @@ struct atom_pplib_clock_voltage_dependency_table {
 };
 
 struct atom_pplib_clock_voltage_limit_record {
-	uint16_t SclkLow;
-	uint8_t  SclkHigh;
-	uint16_t MclkLow;
-	uint8_t  MclkHigh;
+	uint16_t Sclk_Lo; // 24-bit uint
+	uint8_t  Sclk_Hi; // 24-bit uint
+	uint16_t Mclk_Lo; // 24-bit uint
+	uint8_t  Mclk_Hi; // 24-bit uint
 	uint16_t Vddc;
 	uint16_t Vddci;
 };
@@ -663,47 +743,58 @@ struct atom_pplib_clock_voltage_limit_table {
 	struct atom_pplib_clock_voltage_limit_record entries[] __counted_by(NumEntries);
 };
 
-union atom_pplib_cac_leakage_record {
-	struct {
-		uint16_t Vddc;         // We use this field for the "fake" standardized VDDC for power calculations; For CI and newer, we use this as the real VDDC value. in CI we read it as StdVoltageHiSidd
-		uint32_t LeakageValue; // For CI and newer we use this as the "fake" standar VDDC value. in CI we read it as StdVoltageLoSidd
-	};
-	struct {
-		uint16_t Vddc1;
-		uint16_t Vddc2;
-		uint16_t Vddc3;
-	};
-};
-struct atom_pplib_cac_leakage_table {
-	uint8_t  NumEntries;
-	union atom_pplib_cac_leakage_record entries[] __counted_by(NumEntries);
-};
+
 
 struct atom_pplib_phaseshedding_limits_record {
-	uint16_t Voltage;
-	uint16_t SclkLow;
-	uint8_t  SclkHigh;
-	uint16_t MclkLow;
-	uint8_t  MclkHigh;
+	int16_t  Voltage;
+	uint16_t Sclk_Lo; // 24-bit uint
+	uint8_t  Sclk_Hi; // 24-bit uint
+	uint16_t Mclk_Lo; // 24-bit uint
+	uint8_t  Mclk_Hi; // 24-bit uint
 };
-
 struct atom_pplib_phasesheddinglimits_table {
 	uint8_t  NumEntries;
 	struct atom_pplib_phaseshedding_limits_record entries[] __counted_by(NumEntries);
 };
 
+
+
+struct atom_pplib_cac_leakage_record_evv {
+	uint16_t Vddc1;
+	uint16_t Vddc2;
+	uint16_t Vddc3;
+};
+struct atom_pplib_cac_leakage_table_evv {
+	uint8_t  NumEntries;
+	struct atom_pplib_cac_leakage_record_evv entries[] __counted_by(NumEntries);
+};
+struct atom_pplib_cac_leakage_record {
+	uint16_t Vddc;         // We use this field for the "fake" standardized VDDC for power calculations; For CI and newer, we use this as the real VDDC value. in CI we read it as StdVoltageHiSidd
+	uint32_t LeakageValue; // For CI and newer we use this as the "fake" standard VDDC value. in CI we read it as StdVoltageLoSidd
+};
+struct atom_pplib_cac_leakage_table {
+	uint8_t  NumEntries;
+	struct atom_pplib_cac_leakage_record entries[] __counted_by(NumEntries);
+};
+
+union atom_pplib_cac_leakage_tables {
+	struct atom_pplib_cac_leakage_table_evv  evv;
+	struct atom_pplib_cac_leakage_table      non_evv;
+};
+
+
 struct atom_pplib_vce_clock_info {
-	uint16_t EVClkLow;
-	uint8_t  EVClkHigh;
-	uint16_t ECClkLow;
-	uint8_t  ECClkHigh;
+	uint16_t EVClk_Lo; // 24-bit uint
+	uint8_t  EVClk_Hi; // 24-bit uint
+	uint16_t ECClk_Lo; // 24-bit uint
+	uint8_t  ECClk_Hi; // 24-bit uint
 };
 struct atom_pplib_vce_clock_info_array {
 	uint8_t  NumEntries;
 	struct atom_pplib_vce_clock_info entries[] __counted_by(NumEntries);
 };
 struct atom_pplib_vce_clock_voltage_limit_record {
-	uint16_t Voltage;
+	int16_t  Voltage;
 	uint8_t  VCEClockInfoIndex;
 };
 struct atom_pplib_vce_clock_voltage_limit_table {
@@ -713,8 +804,8 @@ struct atom_pplib_vce_clock_voltage_limit_table {
 union atom_pplib_vce_clock_info_index {
 	uint8_t  ClockInfoIndex;
 	struct { uint8_t
-		ClockInfoArrary_index :5-0,
-		memory_pstate         :7-6;
+		ClockInfoArrary_index :5-0 +1,
+		memory_pstate         :7-6 +1;
 	};
 };
 struct atom_pplib_vce_state_record {
@@ -727,24 +818,24 @@ struct atom_pplib_vce_state_table {
 };
 struct atom_pplib_vce_table { // 3 flex subtables in the table
 	uint8_t  RevId;
-//	struct atom_pplib_vce_clock_info_array array;
+//	struct atom_pplib_vce_clock_info_array info;
 //	struct atom_pplib_vce_clock_voltage_limit_table limits;
 //	struct atom_pplib_vce_state_table states;
 };
 
 
-struct uvdclockinfo {
-	uint16_t VClkLow;
-	uint8_t  VClkHigh;
-	uint16_t DClkLow;
-	uint8_t  DClkHigh;
+struct atom_pplib_uvd_clock_info {
+	uint16_t VClk_Lo; // 24-bit uint
+	uint8_t  VClk_Hi; // 24-bit uint
+	uint16_t DClk_Lo; // 24-bit uint
+	uint8_t  DClk_Hi; // 24-bit uint
 };
 struct atom_pplib_uvd_clock_info_array {
 	uint8_t  NumEntries;
-	struct uvdclockinfo entries[] __counted_by(NumEntries);
+	struct atom_pplib_uvd_clock_info entries[] __counted_by(NumEntries);
 };
 struct atom_pplib_uvd_clock_voltage_limit_record {
-	uint16_t Voltage;
+	int16_t  Voltage;
 	uint8_t  UVDClockInfoIndex;
 };
 struct atom_pplib_uvd_clock_voltage_limit_table {
@@ -758,9 +849,9 @@ struct atom_pplib_uvd_table { // 2 flex subtables in the table
 };
 
 struct atom_pplib_samclk_voltage_limit_record {
-	uint16_t Voltage;
-	uint16_t SAMClockLow;
-	uint8_t  SAMClockHigh;
+	int16_t  Voltage;
+	uint16_t SAMClock_Lo; // 24-bit uint
+	uint8_t  SAMClock_Hi; // 24-bit uint
 };
 struct atom_pplib_samu_table {
 	uint8_t  RevId;
@@ -768,10 +859,24 @@ struct atom_pplib_samu_table {
 	struct atom_pplib_samclk_voltage_limit_record entries[] __counted_by(NumEntries);
 };
 
+struct atom_pplib_ppm_table {
+	uint8_t  RevId;
+	enum atom_ppm PpmDesign;
+	uint16_t CpuCoreNumber;
+	uint32_t PlatformTDP;
+	uint32_t SmallACPlatformTDP;
+	uint32_t PlatformTDC;
+	uint32_t SmallACPlatformTDC;
+	uint32_t ApuTDP;
+	uint32_t DGpuTDP;  
+	uint32_t DGpuUlvPower;
+	uint32_t Tjmax;
+};
+
 struct atom_pplib_acpclk_voltage_limit_record {
-	uint16_t Voltage;
-	uint16_t ACPClockLow;
-	uint8_t  ACPClockHigh;
+	int16_t  Voltage;
+	uint16_t ACPClock_Lo; // 24-bit uint
+	uint8_t  ACPClock_Hi; // 24-bit uint
 };
 struct atom_pplib_acp_table {
 	uint8_t  RevId;
@@ -809,19 +914,6 @@ union atom_pplib_powertune_tables {
 	struct atom_pplib_powertune_table_v1  v1;
 };
 
-struct atom_pplib_ppm_table {
-	uint8_t  RevId;
-	enum atom_ppm PpmDesign;
-	uint16_t CpuCoreNumber;
-	uint32_t PlatformTDP;
-	uint32_t SmallACPlatformTDP;
-	uint32_t PlatformTDC;
-	uint32_t SmallACPlatformTDC;
-	uint32_t ApuTDP;
-	uint32_t DGpuTDP;  
-	uint32_t DGpuUlvPower;
-	uint32_t Tjmax;
-};
 
 enum vq_dispconfig:uint8_t {
 	VQ_DisplayConfig_NoneAWD = 1,

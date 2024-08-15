@@ -227,7 +227,7 @@ populate_pplib_ppt_state_array(
 		void* raw;
 		struct atom_pplib_state_v1* v1;
 		struct atom_pplib_state_v2* v2;
-		union atom_pplib_states*     states;
+		union atom_pplib_states*    states;
 	} walker;
 
 	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
@@ -253,7 +253,7 @@ populate_pplib_ppt_state_array(
 		ppt51->state_array_ver = v2_0;
 		ppt51->num_state_array_entries = base->v2.NumEntries;
 
-		uint8_t entry_size;
+		uint16_t entry_size;
 		walker.v2 = base->v2.states;
 		for (uint8_t i=0; i < base->v2.NumEntries; i++) {
 			ppt51->state_array[i].num_levels = walker.v2->NumDPMLevels;
@@ -274,50 +274,89 @@ populate_pplib_ppt_extended_table(
 		struct atomtree_powerplay_table_v5_1* const ppt51
 		) {
 	void* const raw = ppt51->leaves;
-	struct atom_pplib_extendedheader* const ext = ppt51->extended_header;
+	union atom_pplib_extended_headers* const ext = ppt51->extended_header;
 
-	if (ext->VCETableOffset) { // 3 flex subtables in the table
-		void* walker = raw + ext->VCETableOffset;
-		ppt51->vce_root = walker;
-		walker += sizeof(*(ppt51->vce_root));
-		ppt51->vce_info = walker;
-		walker += sizeof_flex(
-			ppt51->vce_info, entries, ppt51->vce_info->NumEntries
-		);
-		ppt51->vce_limits = walker;
-		walker += sizeof_flex(
-			ppt51->vce_limits, entries, ppt51->vce_limits->NumEntries
-		);
-		ppt51->vce_states = walker;
-	};
-	if (ext->UVDTableOffset) { // 2 flex subtables in the table
-		void* walker = raw + ext->UVDTableOffset;
-		ppt51->uvd_root = walker;
-		walker += sizeof(*(ppt51->uvd_root));
-		ppt51->uvd_info = walker;
-		walker += sizeof_flex(
-			ppt51->uvd_info, entries, ppt51->uvd_info->NumEntries
-		);
-		ppt51->uvd_limits = walker;
-	};
-
-	if (ext->SAMUTableOffset) {
-		ppt51->samu = raw + ext->SAMUTableOffset;
+	switch (ext->Size) {
+		case sizeof(ext->v9): ppt51->extended_header_ver = v9_0; break;
+		case sizeof(ext->v8): ppt51->extended_header_ver = v8_0; break;
+		case sizeof(ext->v7): ppt51->extended_header_ver = v7_0; break;
+		case sizeof(ext->v6): ppt51->extended_header_ver = v6_0; break;
+		case sizeof(ext->v5): ppt51->extended_header_ver = v5_0; break;
+		case sizeof(ext->v4): ppt51->extended_header_ver = v4_0; break;
+		case sizeof(ext->v3): ppt51->extended_header_ver = v3_0; break;
+		case sizeof(ext->v2): ppt51->extended_header_ver = v2_0; break;
+		case sizeof(ext->v1): ppt51->extended_header_ver = v1_0; break;
+		default: assert(0); break;
 	}
-	if (ext->PPMTableOffset) {
-		ppt51->ppm = raw + ext->PPMTableOffset;
-	}
-	if (ext->ACPTableOffset) {
-		ppt51->acpclk = raw + ext->ACPTableOffset;
-	}
-	if (ext->PowerTuneTableOffset) {
-		ppt51->powertune = raw + ext->PowerTuneTableOffset;
-	}
-	if (ext->SclkVddgfxTableOffset) {
-		ppt51->vddgfx_sclk = raw + ext->SclkVddgfxTableOffset;
-	}
-	if (ext->VQBudgetingTableOffset) {
-		ppt51->vq_budgeting = raw + ext->VQBudgetingTableOffset;
+	switch (ppt51->extended_header_ver) {
+		case v9_0:
+			if (ext->v9.VQBudgetingTableOffset) {
+				ppt51->vq_budgeting = raw + ext->v9.VQBudgetingTableOffset;
+			}
+			fall;
+		case v8_0:
+			if (ext->v9.SclkVddgfxTableOffset) {
+				ppt51->vddgfx_sclk = raw + ext->v9.SclkVddgfxTableOffset;
+			}
+			fall;
+		case v7_0:
+			if (ext->v9.PowerTuneTableOffset) {
+				ppt51->powertune = raw + ext->v9.PowerTuneTableOffset;
+			}
+			fall;
+		case v6_0:
+			if (ext->v9.ACPTableOffset) {
+				ppt51->acpclk = raw + ext->v9.ACPTableOffset;
+			}
+			fall;
+		case v5_0:
+			if (ext->v9.PPMTableOffset) {
+				ppt51->ppm = raw + ext->v9.PPMTableOffset;
+			}
+			fall;
+		case v4_0:
+			if (ext->v9.SAMUTableOffset) {
+				ppt51->samu = raw + ext->v9.SAMUTableOffset;
+			}
+			fall;
+		case v3_0:
+			if (ext->v9.UVDTableOffset) { // 2 flex subtables in the table
+				void* walker = raw + ext->v9.UVDTableOffset;
+				ppt51->uvd_root = walker;
+				walker += sizeof(*(ppt51->uvd_root));
+				ppt51->uvd_info = walker;
+				walker += sizeof_flex(
+					ppt51->uvd_info, entries, ppt51->uvd_info->NumEntries
+				);
+				ppt51->uvd_limits = walker;
+				walker += sizeof_flex(
+					ppt51->uvd_limits, entries, ppt51->uvd_limits->NumEntries
+				);
+				ppt51->uvd_table_size = walker - (void*)(ppt51->uvd_root);
+			};
+			fall;
+		case v2_0:
+			if (ext->v9.VCETableOffset) { // 3 flex subtables in the table
+				void* walker = raw + ext->v9.VCETableOffset;
+				ppt51->vce_root = walker;
+				walker += sizeof(*(ppt51->vce_root));
+				ppt51->vce_info = walker;
+				walker += sizeof_flex(
+					ppt51->vce_info, entries, ppt51->vce_info->NumEntries
+				);
+				ppt51->vce_limits = walker;
+				walker += sizeof_flex(
+					ppt51->vce_limits, entries, ppt51->vce_limits->NumEntries
+				);
+				ppt51->vce_states = walker;
+				walker += sizeof_flex(
+					ppt51->vce_states, entries, ppt51->vce_states->NumEntries
+				);
+				ppt51->vce_table_size = walker - (void*)(ppt51->vce_root);
+			};
+			fall;
+		case v1_0: break;
+		default: assert(0); break;
 	}
 };
 
@@ -325,7 +364,8 @@ static enum ATOM_PPLIB_CLOCK_INFO
 get_pplib_ppt_clock_info_ver(
 		union atom_pplib_clock_info_arrays const* const ci __unused
 		) {
-	// grade based on PCI ID?
+	// TODO grade based on PCI ID?
+	// See struct pci_device_id pciidlist[]  in  amdgpu/amdgpu_drv.c
 	/* conflicts
 	switch (ci->header.EntrySize) {
 		case sizeof(ci->r600.clockInfo[0]):  return ATOM_PPLIB_CLOCK_INFO_R600;
@@ -384,7 +424,7 @@ populate_pplib_ppt(
 				);
 			}
 			if (b.v5->MvddDependencyOnMCLKOffset) {
-				ppt51->mddc_mclk = b.raw + b.v5->MvddDependencyOnMCLKOffset;
+				ppt51->mvdd_mclk = b.raw + b.v5->MvddDependencyOnMCLKOffset;
 			}
 			fall;
 		case v3_0:
