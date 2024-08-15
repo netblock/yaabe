@@ -168,6 +168,7 @@ get_sprintf_format_from_leaf(
 			// Q14.2 16383.75 -> 16383.8
 			strcpy(format, "%G");
 		} else if (leaf->type.signed_num) {
+			print_alloc_width += 1; // sign
 			sprintf(format, metaformat,
 				prefixes_int[radix], num_print_digits, suffixes_int[radix]
 			);
