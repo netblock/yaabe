@@ -16,10 +16,11 @@ struct smu_powerplay_table_header {
 	uint32_t golden_revision; // PPGen use only: PP Table Revision on the Golden Data Base
 	uint16_t format_id;       // PPGen use only: PPTable for different ASICs.
 };
-/******************************************************************************/
-// pptable_v1_0.h / vega10_pptable.h
 
-struct pptable_subtable_header {
+/******************************************************************************/
+// pplib.h / pptable.h / pptable_vega10.h
+
+struct pplib_subtable_header {
 	uint8_t  RevId;
 };
 
@@ -85,6 +86,24 @@ union atom_pplib_caps_and_settings {
 		enable_drr             :19-19 +1,
 		rsvd0                  :31-20 +1;
 	};
+};
+
+enum atom_ppm:uint8_t {
+	ATOM_PPM_A_A = 1,
+	ATOM_PPM_A_I = 2,
+};
+struct atom_pplib_ppm_table {
+	uint8_t  RevId;
+	enum atom_ppm PpmDesign;
+	uint16_t CpuCoreNumber;
+	uint32_t PlatformTDP;
+	uint32_t SmallACPlatformTDP;
+	uint32_t PlatformTDC;
+	uint32_t SmallACPlatformTDC;
+	uint32_t ApuTDP;
+	uint32_t DGpuTDP;  
+	uint32_t DGpuUlvPower;
+	uint32_t Tjmax;
 };
 
 /******************************************************************************/
@@ -210,10 +229,9 @@ enum GFXCLK_SOURCE_e:uint8_t {
 
 #pragma pack(pop) // restore old packing
 
-
-#include "pptable_v1_0.h"
 #include "pplib.h"
-#include "vega10_pptable.h"
+#include "pptable.h"
+#include "pptable_vega10.h"
 #include "smu11_driver_if.h"
 #include "smu_v11_0_pptable.h"
 #include "smu13_driver_if_v13_0_7.h"

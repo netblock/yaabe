@@ -156,17 +156,24 @@ struct atomtree_pplib_state {
 	uint8_t  num_levels; // counting ClockStateIndices or v2's clockInfoIndex
 };
 #define ATOMTREE_PPLIB_STATE_ARRAY_MAX 16
-struct atomtree_powerplay_table_v5_1 {
+struct atomtree_powerplay_table_v4_1 {
 	union atom_pplib_powerplaytables* leaves;
 
 	enum atomtree_common_version pplib_ver;
-	enum ATOM_PPLIB_CLOCK_INFO   clock_info_ver;
-	enum atomtree_common_version nonclock_info_ver;
-	enum atomtree_common_version extended_header_ver;
 
 	enum atomtree_common_version state_array_ver;
 	uint8_t num_state_array_entries;
 	size_t state_array_size;
+
+	enum ATOM_PPLIB_CLOCK_INFO   clock_info_ver;
+	// counts clock_info[] or clock_info->clockInfo
+	uint8_t num_clock_info_entries;
+	size_t clock_info_size;
+
+	enum atomtree_common_version nonclock_info_ver;
+	enum atomtree_common_version extended_header_ver;
+
+
 
 	size_t vce_table_size;
 	size_t uvd_table_size;
@@ -284,7 +291,7 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
-		struct atomtree_powerplay_table_v5_1   v5_1;
+		struct atomtree_powerplay_table_v4_1   v4_1;
 		struct atomtree_powerplay_table_v7_1   v7_1;
 		struct atomtree_powerplay_table_v8_1   v8_1;
 		struct atomtree_powerplay_table_v11_0 v11_0;

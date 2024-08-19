@@ -343,7 +343,7 @@ Enums for ATUI_ENUM
 
 
 /******************************************************************************/
-// powerplay.h
+// powerplay.h / SMU 11,13 stuff
 
 {name: "PPT_THROTTLER_e",
 	constants: [
@@ -443,6 +443,18 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // pplib.h / pptable_v1_0.h / vega10_pptable.h
 
+{name: "atom_ppm",
+	constants: [
+		{name: "ATOM_PPM_A_A",},
+		{name: "ATOM_PPM_A_I",},
+]},
+
+{name: "vq_dispconfig",
+	constants: [
+		{name: "VQ_DisplayConfig_NoneAWD",},
+		{name: "VQ_DisplayConfig_AWD",},
+]},
+
 {name: "ATOM_PPLIB_RS780_VOLTAGE",
 	constants: [
 		{name: "ATOM_PPLIB_RS780_VOLTAGE_NONE",},
@@ -465,18 +477,6 @@ Enums for ATUI_ENUM
 		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_NONE",},
 		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_LOW",},
 		{name: "ATOM_PPLIB_RS780_HTLINKFREQ_HIGH",},
-]},
-
-{name: "vq_dispconfig",
-	constants: [
-		{name: "VQ_DisplayConfig_NoneAWD",},
-		{name: "VQ_DisplayConfig_AWD",},
-]},
-
-{name: "atom_ppm",
-	constants: [
-		{name: "ATOM_PPM_A_A",},
-		{name: "ATOM_PPM_A_I",},
 ]},
 
 {name: "atom_vega10_voltagemode",

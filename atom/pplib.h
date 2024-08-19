@@ -1,7 +1,7 @@
 #ifndef PPLIB_H
 #define PPLIB_H
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 struct atom_pplib_sized_array_header {
 	uint8_t  NumEntries;
@@ -318,22 +318,17 @@ union atom_pplib_r600_flags {
 	};
 };
 struct atom_pplib_r600_clock_info {
-	uint16_t EngineClockLow;
-	uint8_t  EngineClockHigh;
+	uint16_t EngineClock_Lo;
+	uint8_t  EngineClock_Hi;
 
-	uint16_t MemoryClockLow;
-	uint8_t  MemoryClockHigh;
+	uint16_t MemoryClock_Low; // 24-bit uint
+	uint8_t  MemoryClock_Hi;  // 24-bit uint
 
 	uint16_t VDDC;
 	uint16_t Unused1;
 	uint16_t Unused2;
 
 	union atom_pplib_r600_flags Flags;
-};
-struct atom_pplib_r600_clock_info_array {
-	uint8_t  NumEntries;
-	uint8_t  EntrySize;
-	struct atom_pplib_r600_clock_info clockInfo[] __counted_by(NumEntries);
 };
 
 
@@ -354,12 +349,12 @@ enum ATOM_PPLIB_RS780_HTLINKFREQ:uint16_t {
 	ATOM_PPLIB_RS780_HTLINKFREQ_HIGH = 2, 
 };
 struct atom_pplib_rs780_clock_info {
-	uint16_t LowEngineClockLow;  // Low Engine clock in MHz (the same way as on the R600).
-	uint8_t  LowEngineClockHigh;
-	uint16_t HighEngineClockLow; // High Engine clock in MHz.
-	uint8_t  HighEngineClockHigh;
-	enum ATOM_PPLIB_RS780_SPMCLK  MemoryClockLow;
-	uint8_t  MemoryClockHigh;    // Currentyl unused.
+	uint16_t LowEngineClock_Lo;  // Low Engine clock in MHz
+	uint8_t  LowEngineClock_Hi;  // 24-bit uint
+	uint16_t HighEngineClock_Lo; // High Engine clock in MHz.
+	uint8_t  HighEngineClock_Hi; // 24-bit uint
+	enum ATOM_PPLIB_RS780_SPMCLK  MemoryClock_Lo;
+	uint8_t  MemoryClock_Hi;    // Currentyl unused.
 	uint8_t  Padding;            // For proper alignment and size.
 	enum ATOM_PPLIB_RS780_VOLTAGE  VDDC;
 	uint8_t  MaxHTLinkWidth;     // From SBIOS - {2, 4, 8, 16}
@@ -367,18 +362,13 @@ struct atom_pplib_rs780_clock_info {
 	enum ATOM_PPLIB_RS780_HTLINKFREQ  HTLinkFreq; // See definition ATOM_PPLIB_RS780_HTLINKFREQ_xxx or in MHz(>=200).
 	uint32_t Flags; 
 };
-struct atom_pplib_rs780_clock_info_array {
-	uint8_t  NumEntries;
-	uint8_t  EntrySize;
-	struct atom_pplib_rs780_clock_info clockInfo[] __counted_by(NumEntries);
-};
 
 struct atom_pplib_evergreen_clock_info {
-	uint16_t EngineClockLow;
-	uint8_t  EngineClockHigh;
+	uint16_t EngineClock_Lo; // 24-bit uint
+	uint8_t  EngineClock_Hi; // 24-bit uint
 
-	uint16_t MemoryClockLow;
-	uint8_t  MemoryClockHigh;
+	uint16_t MemoryClock_Lo; // 24-bit uint
+	uint8_t  MemoryClock_Hi; // 24-bit uint
 
 	uint16_t VDDC;
 	uint16_t VDDCI;
@@ -386,18 +376,13 @@ struct atom_pplib_evergreen_clock_info {
 
 	uint32_t Flags;
 };
-struct atom_pplib_evergreen_clock_info_array {
-	uint8_t  NumEntries;
-	uint8_t  EntrySize;
-	struct atom_pplib_evergreen_clock_info clockInfo[] __counted_by(NumEntries);
-};
 
 struct atom_pplib_si_clock_info {
-	uint16_t EngineClockLow;
-	uint8_t  EngineClockHigh;
+	uint16_t EngineClock_Lo; // 24-bit uint
+	uint8_t  EngineClock_Hi; // 24-bit uint
 
-	uint16_t MemoryClockLow;
-	uint8_t  MemoryClockHigh;
+	uint16_t MemoryClock_Lo; // 24-bit uint
+	uint8_t  MemoryClock_Hi; // 24-bit uint
 
 	uint16_t VDDC;
 	uint16_t VDDCI;
@@ -413,11 +398,11 @@ struct atom_pplib_si_clock_info_array {
 };
 
 struct atom_pplib_ci_clock_info {
-	uint16_t EngineClockLow;
-	uint8_t  EngineClockHigh;
+	uint16_t EngineClock_Lo; // 24-bit uint
+	uint8_t  EngineClock_Hi; // 24-bit uint
 
-	uint16_t MemoryClockLow;
-	uint8_t  MemoryClockHigh;
+	uint16_t MemoryClock_Lo; // 24-bit uint
+	uint8_t  MemoryClock_Hi; // 24-bit uint
 	
 	uint8_t  PCIEGen;
 	uint16_t PCIELane;
@@ -429,9 +414,9 @@ struct atom_pplib_ci_clock_info_array {
 };
 
 struct atom_pplib_sumo_clock_info {
-	uint16_t EngineClockLow;  //clockfrequency & 0xFFFF. The unit is in 10khz
-	uint8_t  EngineClockHigh; //clockfrequency >> 16. 
-	uint8_t  vddcIndex;       //2-bit vddc index;
+	uint16_t EngineClock_Lo; // 24-bit uint
+	uint8_t  EngineClock_Hi; // 24-bit uint
+	uint8_t  vddcIndex; // 2-bit vddc index
 	uint16_t tdpLimit;
 	uint16_t rsv1;
 	uint32_t rsv2[2];
@@ -443,8 +428,8 @@ struct atom_pplib_sumo_clock_info_array {
 };
 
 struct atom_pplib_kv_clock_info {
-	uint16_t EngineClockLow;
-	uint8_t  EngineClockHigh;
+	uint16_t EngineClock_Lo; // 24-bit uint
+	uint8_t  EngineClock_Hi; // 24-bit uint
 	uint8_t  vddcIndex;
 	uint16_t tdpLimit;
 	uint16_t rsv1;
@@ -468,15 +453,16 @@ struct atom_pplib_cz_clock_info_array {
 
 
 union atom_pplib_clock_info_arrays {
-	struct atom_pplib_sized_array_header         header;
-	struct atom_pplib_r600_clock_info_array      r600;
-	struct atom_pplib_rs780_clock_info_array     rs780;
-	struct atom_pplib_evergreen_clock_info_array green;
-	struct atom_pplib_si_clock_info_array        south;
-	struct atom_pplib_ci_clock_info_array        sea;
-	struct atom_pplib_sumo_clock_info_array      sumo;
-	struct atom_pplib_kv_clock_info_array        kaveri; // and kabini, mullins
-	struct atom_pplib_cz_clock_info_array        carrizo;
+	struct atom_pplib_r600_clock_info       r600[1];
+	struct atom_pplib_rs780_clock_info      rs780[1];
+	struct atom_pplib_evergreen_clock_info  green[1];
+
+	struct atom_pplib_sized_array_header    header;
+	struct atom_pplib_si_clock_info_array   south;
+	struct atom_pplib_ci_clock_info_array   sea;
+	struct atom_pplib_sumo_clock_info_array sumo;
+	struct atom_pplib_kv_clock_info_array   kaveri; // and kabini, mullins
+	struct atom_pplib_cz_clock_info_array   carrizo;
 };
 enum ATOM_PPLIB_CLOCK_INFO:uint8_t {
 	ATOM_PPLIB_CLOCK_INFO_UNKNOWN = 0,
@@ -859,20 +845,6 @@ struct atom_pplib_samu_table {
 	struct atom_pplib_samclk_voltage_limit_record entries[] __counted_by(NumEntries);
 };
 
-struct atom_pplib_ppm_table {
-	uint8_t  RevId;
-	enum atom_ppm PpmDesign;
-	uint16_t CpuCoreNumber;
-	uint32_t PlatformTDP;
-	uint32_t SmallACPlatformTDP;
-	uint32_t PlatformTDC;
-	uint32_t SmallACPlatformTDC;
-	uint32_t ApuTDP;
-	uint32_t DGpuTDP;  
-	uint32_t DGpuUlvPower;
-	uint32_t Tjmax;
-};
-
 struct atom_pplib_acpclk_voltage_limit_record {
 	int16_t  Voltage;
 	uint16_t ACPClock_Lo; // 24-bit uint
@@ -936,6 +908,6 @@ struct atom_pplib_vq_budgeting_table {
 	struct atom_pplib_vq_budgeting_record entries[] __counted_by(NumEntries);
 };
 
-#pragma pack()
+#pragma pack(pop)
 
 #endif

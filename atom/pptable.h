@@ -414,24 +414,6 @@ union atom_pptable_powertune_tables {
 	struct atom_polaris_powertune_table  v4;
 };
 
-enum atom_ppm:uint8_t {
-	ATOM_PPM_A_A = 1,
-	ATOM_PPM_A_I = 2,
-};
-struct atom_pptable_ppm_table {
-	uint8_t  RevId;
-	enum atom_ppm PpmDesign;
-	uint16_t CpuCoreNumber;
-	uint32_t PlatformTDP;
-	uint32_t SmallACPlatformTDP;
-	uint32_t PlatformTDC;
-	uint32_t SmallACPlatformTDC;
-	uint32_t ApuTDP;
-	uint32_t DGpuTDP;
-	uint32_t DGpuUlvPower;
-	uint32_t Tjmax;
-};
-
 struct atom_pptable_hard_limit_record {
 	uint32_t SCLKLimit;
 	uint32_t MCLKLimit;

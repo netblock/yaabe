@@ -2,7 +2,7 @@
 global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
-		atomtree: "atomtree_powerplay_table_v5_1",
+		atomtree: "atomtree_powerplay_table_v4_1",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
 	},
@@ -875,17 +875,25 @@ global_default: {
 	c_type: "atom_pplib_r600_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
+		},
+
+		{
+			access: "bios->MemoryClock_Low",
+			name: "MemoryClock_Low",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->MemoryClockLow",
-			name: "MemoryClockLow",
-		}, {
-			access: "bios->MemoryClockHigh",
-			name: "MemoryClockHigh",
+			access: "bios->MemoryClock_Hi",
+			name: "MemoryClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
 			access: "bios->VDDC",
 			name: "VDDC",
@@ -903,22 +911,17 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_pplib_r600_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	c_type: "atui_nullstruct",
+	name: "atom_pplib_r600_clock_info_array",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
-			access: "bios->NumEntries",
-			name: "NumEntries",
-		}, {
-			access: "bios->EntrySize",
-			name: "EntrySize",
-		}, {
-			access: "bios->clockInfo",
+			access: "atomtree->clock_info->r600",
 			name: "clockInfo",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->NumEntries",
+				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
 				pattern: [
 					{
@@ -934,30 +937,36 @@ global_default: {
 	c_type: "atom_pplib_rs780_clock_info",
 	leaves: [
 		{
-			access: "bios->LowEngineClockLow",
-			name: "LowEngineClockLow",
+			access: "bios->LowEngineClock_Lo",
+			name: "LowEngineClock_Lo",
 			description: [
-				{language: "english", text: "Low Engine clock in MHz (the same way as on the R600).",},
+				{language: "english", text: "Low Engine clock in MHz",},
 			],
 		}, {
-			access: "bios->LowEngineClockHigh",
-			name: "LowEngineClockHigh",
+			access: "bios->LowEngineClock_Hi",
+			name: "LowEngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->HighEngineClockLow",
-			name: "HighEngineClockLow",
+			access: "bios->HighEngineClock_Lo",
+			name: "HighEngineClock_Lo",
 			description: [
 				{language: "english", text: "High Engine clock in MHz.",},
 			],
 		}, {
-			access: "bios->HighEngineClockHigh",
-			name: "HighEngineClockHigh",
+			access: "bios->HighEngineClock_Hi",
+			name: "HighEngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->MemoryClockLow",
-			name: "MemoryClockLow",
+			access: "bios->MemoryClock_Lo",
+			name: "MemoryClock_Lo",
 			fancy: "ATUI_ENUM", fancy_data: "ATOM_PPLIB_RS780_SPMCLK",
 		}, {
-			access: "bios->MemoryClockHigh",
-			name: "MemoryClockHigh",
+			access: "bios->MemoryClock_Hi",
+			name: "MemoryClock_Hi",
 			description: [
 				{language: "english", text: "Currentyl unused.",},
 			],
@@ -996,22 +1005,17 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "atom_pplib_rs780_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	c_type: "atui_nullstruct",
+	name: "atom_pplib_rs780_clock_info_array",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
-			access: "bios->NumEntries",
-			name: "NumEntries",
-		}, {
-			access: "bios->EntrySize",
-			name: "EntrySize",
-		}, {
-			access: "bios->clockInfo",
+			access: "atomtree->clock_info->rs780",
 			name: "clockInfo",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->NumEntries",
+				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
 				pattern: [
 					{
@@ -1027,18 +1031,34 @@ global_default: {
 	c_type: "atom_pplib_evergreen_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
+			access: "bios->MemoryClock_Lo",
+			name: "MemoryClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->MemoryClockLow",
-			name: "MemoryClockLow",
-		}, {
-			access: "bios->MemoryClockHigh",
-			name: "MemoryClockHigh",
-		}, {
+			access: "bios->MemoryClock_Hi",
+			name: "MemoryClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
 			access: "bios->VDDC",
 			name: "VDDC",
 		}, {
@@ -1047,28 +1067,25 @@ global_default: {
 		}, {
 			access: "bios->Unused",
 			name: "Unused",
-		}, {
+		},
+
+		{
 			access: "bios->Flags",
 			name: "Flags",
 		},
 	],
 }, {
-	c_type: "atom_pplib_evergreen_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	c_type: "atui_nullstruct",
+	name: "atom_pplib_evergreen_clock_info_array",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
-			access: "bios->NumEntries",
-			name: "NumEntries",
-		}, {
-			access: "bios->EntrySize",
-			name: "EntrySize",
-		}, {
-			access: "bios->clockInfo",
+			access: "atomtree->clock_info->green",
 			name: "clockInfo",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "bios->NumEntries",
+				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
 				pattern: [
 					{
@@ -1084,18 +1101,34 @@ global_default: {
 	c_type: "atom_pplib_si_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
+			access: "bios->MemoryClock_Lo",
+			name: "MemoryClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->MemoryClockLow",
-			name: "MemoryClockLow",
-		}, {
-			access: "bios->MemoryClockHigh",
-			name: "MemoryClockHigh",
-		}, {
+			access: "bios->MemoryClock_Hi",
+			name: "MemoryClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
 			access: "bios->VDDC",
 			name: "VDDC",
 		}, {
@@ -1107,14 +1140,16 @@ global_default: {
 		}, {
 			access: "bios->Unused1",
 			name: "Unused1",
-		}, {
+		},
+
+		{
 			access: "bios->Flags",
 			name: "Flags",
 		},
 	],
 }, {
 	c_type: "atom_pplib_si_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1140,22 +1175,40 @@ global_default: {
 			},
 		},
 	],
-}, {
+},
+
+{
 	c_type: "atom_pplib_ci_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
+			access: "bios->MemoryClock_Lo",
+			name: "MemoryClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->MemoryClockLow",
-			name: "MemoryClockLow",
-		}, {
-			access: "bios->MemoryClockHigh",
-			name: "MemoryClockHigh",
-		}, {
+			access: "bios->MemoryClock_Hi",
+			name: "MemoryClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
+		},
+
+		{
 			access: "bios->PCIEGen",
 			name: "PCIEGen",
 		}, {
@@ -1165,7 +1218,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pplib_ci_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1191,26 +1244,28 @@ global_default: {
 			},
 		},
 	],
-}, {
+},
+
+{
 	c_type: "atom_pplib_sumo_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
 			description: [
-				{language: "english", text: "clockfrequency & 0xFFFF. The unit is in 10khz",},
+				{language: "english", text: "24-bit uint",},
 			],
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
 			description: [
-				{language: "english", text: "clockfrequency >> 16.",},
+				{language: "english", text: "24-bit uint",},
 			],
 		}, {
 			access: "bios->vddcIndex",
 			name: "vddcIndex",
 			description: [
-				{language: "english", text: "2-bit vddc index;",},
+				{language: "english", text: "2-bit vddc index",},
 			],
 		}, {
 			access: "bios->tdpLimit",
@@ -1227,7 +1282,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pplib_sumo_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1253,15 +1308,23 @@ global_default: {
 			},
 		},
 	],
-}, {
+},
+
+{
 	c_type: "atom_pplib_kv_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClockLow",
-			name: "EngineClockLow",
+			access: "bios->EngineClock_Lo",
+			name: "EngineClock_Lo",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
-			access: "bios->EngineClockHigh",
-			name: "EngineClockHigh",
+			access: "bios->EngineClock_Hi",
+			name: "EngineClock_Hi",
+			description: [
+				{language: "english", text: "24-bit uint",},
+			],
 		}, {
 			access: "bios->vddcIndex",
 			name: "vddcIndex",
@@ -1280,7 +1343,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pplib_kv_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1306,7 +1369,9 @@ global_default: {
 			},
 		},
 	],
-}, {
+},
+
+{
 	c_type: "atom_pplib_cz_clock_info",
 	leaves: [
 		{
@@ -1321,7 +1386,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_pplib_cz_clock_info_array",
-	table_size: "sizeof_flex(bios, clockInfo, bios->NumEntries)",
+	table_size: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1339,7 +1404,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{
-						name: "clockInfo [%02u]",
+						name: "clockInfo",
 						display: "ATUI_DISPLAY",
 						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_cz_clock_info",
 					},
@@ -1348,6 +1413,8 @@ global_default: {
 		},
 	],
 },
+
+
 
 {
 	c_type: "atom_pplib_nonclock_info_v1",
@@ -2515,48 +2582,6 @@ global_default: {
 					},
 				],
 			},
-		},
-	],
-},
-
-
-{
-	c_type: "atom_pplib_ppm_table",
-	leaves: [
-		{
-			access: "bios->RevId",
-			name: "RevId",
-		}, {
-			access: "bios->PpmDesign",
-			name: "PpmDesign",
-			fancy: "ATUI_ENUM", fancy_data: "atom_ppm",
-		}, {
-			access: "bios->CpuCoreNumber",
-			name: "CpuCoreNumber",
-		}, {
-			access: "bios->PlatformTDP",
-			name: "PlatformTDP",
-		}, {
-			access: "bios->SmallACPlatformTDP",
-			name: "SmallACPlatformTDP",
-		}, {
-			access: "bios->PlatformTDC",
-			name: "PlatformTDC",
-		}, {
-			access: "bios->SmallACPlatformTDC",
-			name: "SmallACPlatformTDC",
-		}, {
-			access: "bios->ApuTDP",
-			name: "ApuTDP",
-		}, {
-			access: "bios->DGpuTDP",
-			name: "DGpuTDP",
-		}, {
-			access: "bios->DGpuUlvPower",
-			name: "DGpuUlvPower",
-		}, {
-			access: "bios->Tjmax",
-			name: "Tjmax",
 		},
 	],
 },

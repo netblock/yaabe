@@ -66,7 +66,7 @@ global_default: {
 },
 
 {
-	c_type: "pptable_subtable_header",
+	c_type: "pplib_subtable_header",
 	leaves: [{access: "bios->RevId", name: "RevId",},],
 }, {
 	c_prefix: "union", c_type: "atom_pp_fanparameters",
@@ -233,7 +233,48 @@ global_default: {
 			],
 		},
 	],
+}, {
+	c_type: "atom_pplib_ppm_table",
+	leaves: [
+		{
+			access: "bios->RevId",
+			name: "RevId",
+		}, {
+			access: "bios->PpmDesign",
+			name: "PpmDesign",
+			fancy: "ATUI_ENUM", fancy_data: "atom_ppm",
+		}, {
+			access: "bios->CpuCoreNumber",
+			name: "CpuCoreNumber",
+		}, {
+			access: "bios->PlatformTDP",
+			name: "PlatformTDP",
+		}, {
+			access: "bios->SmallACPlatformTDP",
+			name: "SmallACPlatformTDP",
+		}, {
+			access: "bios->PlatformTDC",
+			name: "PlatformTDC",
+		}, {
+			access: "bios->SmallACPlatformTDC",
+			name: "SmallACPlatformTDC",
+		}, {
+			access: "bios->ApuTDP",
+			name: "ApuTDP",
+		}, {
+			access: "bios->DGpuTDP",
+			name: "DGpuTDP",
+		}, {
+			access: "bios->DGpuUlvPower",
+			name: "DGpuUlvPower",
+		}, {
+			access: "bios->Tjmax",
+			name: "Tjmax",
+		},
+	],
 },
+
+
 
 
 {
