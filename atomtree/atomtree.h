@@ -24,6 +24,7 @@ enum atomtree_common_version:uint16_t;
 typedef struct _atui_branch atui_branch;
 #include "data_tables.h"
 #include "asic_reg_tools.h"
+#include "pci_id_lut.h"
 
 // make sure we're not on 1-byte packing after all the including
 struct _twentyfourbytes {uint64_t a; uint8_t b; uint64_t c;};
@@ -69,10 +70,15 @@ struct atom_tree {
 		struct vbios_rom_header* image;
 	};
 	uint32_t bios_image_size;
+
+	// for PCI ID based HW IP designation, not for new AMD cards
+	// TODO atomtree for HW IP when discovery.h is implemented.
+	enum amd_asic_type chip_type;
+
 	uint8_t num_of_crawled_strings;
 	char* atombios_strings[NUM_ATOMBIOS_STRINGS];
 
-	struct atomtree_pci_tables pcir_tables;
+	struct atomtree_pci_tables pci_tables;
 	struct atomtree_rom_header rom_header;
 	struct atomtree_master_datatable data_table;
 	//struct atom_master_cmdtable_v2_1 cmd_table; // atom_master_list_of_command_functions_v2_1 TODO

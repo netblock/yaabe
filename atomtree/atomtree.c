@@ -2562,7 +2562,7 @@ atombios_parse(
 
 	atree->alloced_bios = alloced_bios;
 
-	atree->bios = bios; //PIC code; going to be used as the '0' in places.
+	atree->bios = bios; // going to be used as the '0' in places.
 	atree->bios_image_size = (
 		image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
 	);
@@ -2579,10 +2579,15 @@ atombios_parse(
 	}
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 
+	populate_pci_tables(&(atree->pci_tables), &(image->pci_header));
+	atree->chip_type = get_amd_chip_from_pci_id(
+		atree->pci_tables.pci_tables[0].pcir->vendor_id,
+		atree->pci_tables.pci_tables[0].pcir->device_id
+	);
+
 	populate_atom_rom_header(
 		&(atree->rom_header), atree, image->rom_header_info_table_offset
 	);
-	populate_pci_tables(&(atree->pcir_tables), &(image->pci_header));
 
 	// populate_commandtables(atree); // TODO
 	return atree;

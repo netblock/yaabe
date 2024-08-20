@@ -3067,7 +3067,7 @@ generate_atui(
 	atui_branch* const atui_atom_rom_header = grow_atom_rom_header(
 		&(atree->rom_header), atree
 	);
-	atui_branch* const atui_pci_tables = grow_pci_tables(&(atree->pcir_tables));
+	atui_branch* const atui_pci_tables = grow_pci_tables(&(atree->pci_tables));
 
 	atui_branch* const child_branches[] = {
 		atui_pci_tables, atui_atom_rom_header

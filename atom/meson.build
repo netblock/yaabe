@@ -2,6 +2,7 @@ include_dirs += include_directories('.')
 
 atom_array_tables = files(
 	'asic_reg_indices.json5',
+	'amd_pci_ids.json5',
 )
 internal_depends += declare_dependency( # header generaton
 	sources: json5_to_h.process(
