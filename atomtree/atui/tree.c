@@ -303,8 +303,6 @@ grow_pplib_ppt_clock_info(
 			return ATUI_FUNC(atom_pplib_ci_clock_info_array)(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_SUMO:
 			return ATUI_FUNC(atom_pplib_sumo_clock_info_array)(&atui_args);
-		case ATOM_PPLIB_CLOCK_INFO_KAVERI:
-			return ATUI_FUNC(atom_pplib_kv_clock_info_array)(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_CARRIZO:
 			return ATUI_FUNC(atom_pplib_cz_clock_info_array)(&atui_args);
 		default:

@@ -392,29 +392,72 @@ get_early_clock_info_length(
 };
 inline static void
 set_pplib_ppt_clock_info(
-		struct atomtree_powerplay_table_v4_1* const ppt41
+		struct atomtree_powerplay_table_v4_1* const ppt41,
+		enum amd_asic_type const chip_type
 		) {
 	union atom_pplib_clock_info_arrays const* const ci = ppt41->clock_info;
-	enum ATOM_PPLIB_CLOCK_INFO ver = ATOM_PPLIB_CLOCK_INFO_UNKNOWN;
 
-	// TODO grade based on PCI ID
-	// See struct pci_device_id pciidlist[]  in  amdgpu/amdgpu_drv.c
-	/*
-	switch (ci->header.EntrySize) {
-		case sizeof(ci->r600[0]):  ver = ATOM_PPLIB_CLOCK_INFO_R600;
-		case sizeof(ci->rs780[0]): ver = ATOM_PPLIB_CLOCK_INFO_RS780;
-		case sizeof(ci->green[0]): ver = ATOM_PPLIB_CLOCK_INFO_GREEN;
-		case sizeof(ci->south.clockInfo[0]): ver = ATOM_PPLIB_CLOCK_INFO_SOUTH;
-		case sizeof(ci->sea.clockInfo[0]):   ver = ATOM_PPLIB_CLOCK_INFO_SEA;
-		case sizeof(ci->sumo.clockInfo[0]):  ver = ATOM_PPLIB_CLOCK_INFO_SUMO;
-		case sizeof(ci->kaveri.clockInfo[0]):ver = ATOM_PPLIB_CLOCK_INFO_KAVERI;
-		case sizeof(ci->carrizo.clockInfo[0]):ver = ATOM_PPLIB_CLOCK_INFO_CARRIZO;
-		default: ver = ATOM_PPLIB_CLOCK_INFO_UNKNOWN; assert(0);
+	// radeon driver's codepaths for r600, r7xxx, evergeeen is a tangled mess
+	switch (chip_type) {
+		case CHIP_R600:
+		case CHIP_RV610:
+		case CHIP_RV630:
+		case CHIP_RV620:
+		case CHIP_RV635:
+		case CHIP_RV670:
+		case CHIP_RV770:
+		case CHIP_RV730:
+		case CHIP_RV710:
+		case CHIP_RV740:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_R600;
+			break;
+		case CHIP_RS780:
+		case CHIP_RS880:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_RS780;
+			break;
+		case CHIP_CEDAR:
+		case CHIP_REDWOOD:
+		case CHIP_JUNIPER:
+		case CHIP_CYPRESS:
+		case CHIP_HEMLOCK:
+		case CHIP_BARTS:
+		case CHIP_TURKS:
+		case CHIP_CAICOS:
+		case CHIP_CAYMAN:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_GREEN;
+			break;
+		case CHIP_TAHITI:
+		case CHIP_PITCAIRN:
+		case CHIP_VERDE:
+		case CHIP_OLAND:
+		case CHIP_HAINAN:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_SOUTH;
+			break;
+		case CHIP_BONAIRE:
+		case CHIP_HAWAII:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_SEA;
+			break;
+		case CHIP_PALM:
+		case CHIP_SUMO:
+		case CHIP_SUMO2:
+		case CHIP_ARUBA:
+		case CHIP_KAVERI:
+		case CHIP_KABINI:
+		case CHIP_MULLINS:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_SUMO;
+			break;
+		case CHIP_TOPAZ:
+		case CHIP_CARRIZO:
+		case CHIP_STONEY:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_CARRIZO;
+			break;
+		default:
+			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_UNKNOWN;
+			assert(0);
+			break;
 	}
-	*/
-	ppt41->clock_info_ver = ver;
 
-	switch (ver) {
+	switch (ppt41->clock_info_ver) {
 		case ATOM_PPLIB_CLOCK_INFO_R600:
 		case ATOM_PPLIB_CLOCK_INFO_RS780:
 		case ATOM_PPLIB_CLOCK_INFO_GREEN:
@@ -426,7 +469,6 @@ set_pplib_ppt_clock_info(
 		case ATOM_PPLIB_CLOCK_INFO_SOUTH:
 		case ATOM_PPLIB_CLOCK_INFO_SEA:
 		case ATOM_PPLIB_CLOCK_INFO_SUMO:
-		case ATOM_PPLIB_CLOCK_INFO_KAVERI:
 		case ATOM_PPLIB_CLOCK_INFO_CARRIZO:
 			// Southern Islands and newer have the count built in.
 			ppt41->num_clock_info_entries = ci->header.NumEntries;
@@ -440,7 +482,8 @@ set_pplib_ppt_clock_info(
 }
 inline static void
 populate_pplib_ppt(
-		struct atomtree_powerplay_table_v4_1* const ppt41
+		struct atomtree_powerplay_table_v4_1* const ppt41,
+		enum amd_asic_type const chip_type
 		) {
 	union {
 		void* raw;
@@ -508,7 +551,7 @@ populate_pplib_ppt(
 			}
 			if (b.v5->ClockInfoArrayOffset) {
 				ppt41->clock_info = b.raw + b.v5->ClockInfoArrayOffset;
-				set_pplib_ppt_clock_info(ppt41);
+				set_pplib_ppt_clock_info(ppt41, chip_type);
 			}
 			if (b.v5->NonClockInfoArrayOffset) {
 				ppt41->nonclock_info = b.raw + b.v5->NonClockInfoArrayOffset;
@@ -673,7 +716,7 @@ populate_ppt(
 			case v6_1:
 			case v5_1:
 			case v4_1:
-				populate_pplib_ppt(&(ppt->v4_1));
+				populate_pplib_ppt(&(ppt->v4_1), atree->chip_type);
 				break;
 			case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
 				populate_pptablev1_ppt(&(ppt->v7_1));
@@ -2580,10 +2623,12 @@ atombios_parse(
 	atree->num_of_crawled_strings = num_of_crawled_strings;
 
 	populate_pci_tables(&(atree->pci_tables), &(image->pci_header));
-	atree->chip_type = get_amd_chip_from_pci_id(
-		atree->pci_tables.pci_tables[0].pcir->vendor_id,
-		atree->pci_tables.pci_tables[0].pcir->device_id
-	);
+	if (atree->pci_tables.num_images) { // if this fails, no PCIR
+		atree->chip_type = get_amd_chip_from_pci_id(
+			atree->pci_tables.pci_tables[0].pcir->vendor_id,
+			atree->pci_tables.pci_tables[0].pcir->device_id
+		);
+	}
 
 	populate_atom_rom_header(
 		&(atree->rom_header), atree, image->rom_header_info_table_offset

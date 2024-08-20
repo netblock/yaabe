@@ -906,7 +906,7 @@ global_default: {
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_r600_flags",
 		},
 	],
@@ -1308,70 +1308,7 @@ global_default: {
 			},
 		},
 	],
-},
-
-{
-	c_type: "atom_pplib_kv_clock_info",
-	leaves: [
-		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->vddcIndex",
-			name: "vddcIndex",
-		}, {
-			access: "bios->tdpLimit",
-			name: "tdpLimit",
-		}, {
-			access: "bios->rsv1",
-			name: "rsv1",
-		}, {
-			access: "bios->rsv2",
-			name: "rsv2",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		},
-	],
 }, {
-	c_type: "atom_pplib_kv_clock_info_array",
-	table_size: "atomtree->clock_info_size",
-	leaves: [
-		{
-			access: "bios->NumEntries",
-			name: "NumEntries",
-		}, {
-			access: "bios->EntrySize",
-			name: "EntrySize",
-		}, {
-			access: "bios->clockInfo",
-			name: "clockInfo",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_kv_clock_info",
-					},
-				],
-			},
-		},
-	],
-},
-
-{
 	c_type: "atom_pplib_cz_clock_info",
 	leaves: [
 		{

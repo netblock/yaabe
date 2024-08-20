@@ -324,7 +324,7 @@ struct atom_pplib_r600_clock_info {
 	uint16_t MemoryClock_Low; // 24-bit uint
 	uint8_t  MemoryClock_Hi;  // 24-bit uint
 
-	uint16_t VDDC;
+	int16_t VDDC;
 	uint16_t Unused1;
 	uint16_t Unused2;
 
@@ -370,8 +370,8 @@ struct atom_pplib_evergreen_clock_info {
 	uint16_t MemoryClock_Lo; // 24-bit uint
 	uint8_t  MemoryClock_Hi; // 24-bit uint
 
-	uint16_t VDDC;
-	uint16_t VDDCI;
+	int16_t VDDC;
+	int16_t VDDCI;
 	uint16_t Unused;
 
 	uint32_t Flags;
@@ -384,8 +384,8 @@ struct atom_pplib_si_clock_info {
 	uint16_t MemoryClock_Lo; // 24-bit uint
 	uint8_t  MemoryClock_Hi; // 24-bit uint
 
-	uint16_t VDDC;
-	uint16_t VDDCI;
+	int16_t VDDC;
+	int16_t VDDCI;
 	uint8_t  PCIEGen;
 	uint8_t  Unused1;
 
@@ -427,20 +427,6 @@ struct atom_pplib_sumo_clock_info_array {
 	struct atom_pplib_sumo_clock_info clockInfo[] __counted_by(NumEntries);
 };
 
-struct atom_pplib_kv_clock_info {
-	uint16_t EngineClock_Lo; // 24-bit uint
-	uint8_t  EngineClock_Hi; // 24-bit uint
-	uint8_t  vddcIndex;
-	uint16_t tdpLimit;
-	uint16_t rsv1;
-	uint32_t rsv2[2];
-};
-struct atom_pplib_kv_clock_info_array {
-	uint8_t  NumEntries;
-	uint8_t  EntrySize;
-	struct atom_pplib_kv_clock_info clockInfo[] __counted_by(NumEntries);
-};
-
 struct atom_pplib_cz_clock_info {
 	uint8_t  index;
 	uint8_t  rsv[3];
@@ -461,7 +447,6 @@ union atom_pplib_clock_info_arrays {
 	struct atom_pplib_si_clock_info_array   south;
 	struct atom_pplib_ci_clock_info_array   sea;
 	struct atom_pplib_sumo_clock_info_array sumo;
-	struct atom_pplib_kv_clock_info_array   kaveri; // and kabini, mullins
 	struct atom_pplib_cz_clock_info_array   carrizo;
 };
 enum ATOM_PPLIB_CLOCK_INFO:uint8_t {
@@ -472,8 +457,7 @@ enum ATOM_PPLIB_CLOCK_INFO:uint8_t {
 	ATOM_PPLIB_CLOCK_INFO_SOUTH   = 4,
 	ATOM_PPLIB_CLOCK_INFO_SEA     = 5,
 	ATOM_PPLIB_CLOCK_INFO_SUMO    = 6,
-	ATOM_PPLIB_CLOCK_INFO_KAVERI  = 7, // and kabini, mullins
-	ATOM_PPLIB_CLOCK_INFO_CARRIZO = 8,
+	ATOM_PPLIB_CLOCK_INFO_CARRIZO = 7,
 };
 
 
