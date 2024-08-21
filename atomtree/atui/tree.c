@@ -995,6 +995,15 @@ grow_ppt(
 		.num_import_branches = 1,
 	};
 	switch (ppt->ver) {
+		case v1_1:
+			atui_ppt = ATUI_FUNC(atom_powerplay_info_v1)(&atui_args);
+			break;
+		case v2_1:
+			atui_ppt = ATUI_FUNC(atom_powerplay_info_v2)(&atui_args);
+			break;
+		case v3_1:
+			atui_ppt = ATUI_FUNC(atom_powerplay_info_v3)(&atui_args);
+			break;
 		case v6_1:
 		case v5_1:
 		case v4_1:

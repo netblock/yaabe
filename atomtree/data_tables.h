@@ -291,6 +291,10 @@ struct atomtree_powerplay_table {
 		struct atom_common_table_header* table_header;
 		struct smu_powerplay_table_header* pphead;
 
+		struct atom_powerplay_info_v1* v1_1;
+		struct atom_powerplay_info_v2* v2_1;
+		struct atom_powerplay_info_v3* v3_1;
+
 		struct atomtree_powerplay_table_v4_1   v4_1;
 		struct atomtree_powerplay_table_v7_1   v7_1;
 		struct atomtree_powerplay_table_v8_1   v8_1;

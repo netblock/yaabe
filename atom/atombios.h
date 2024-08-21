@@ -8872,64 +8872,60 @@ struct dfp_dpms_status_change_parameters {
 // Legacy Power Play Table Definitions
 /******************************************************************************/
 
-// Definitions for ulPowerPlayMiscInfo
-#define ATOM_PM_MISCINFO_SPLIT_CLOCK                     0x00000000L
-#define ATOM_PM_MISCINFO_USING_MCLK_SRC                  0x00000001L
-#define ATOM_PM_MISCINFO_USING_SCLK_SRC                  0x00000002L
+union atom_powerplay_misc_info {
+	uint32_t MiscInfo;
+	struct { uint32_t
+		using_mclk_src                   :0-0 +1,
+		using_sclk_src                   :1-1 +1,
+		voltage_drop_support             :2-2 +1,
+		voltage_drop_active_high         :3-3 +1,
+		load_performance_en              :4-4 +1,
+		engine_clock_contrl_en           :5-5 +1,
+		memory_clock_contrl_en           :6-6 +1,
+		program_voltage                  :7-7 +1, // When this bit set, ucVoltageDropIndex is not an index for GPIO pin, but a voltage ID that SW needs program
+		asic_reduced_speed_sclk_en       :8-8 +1,
+		asic_dynamic_voltage_en          :9-9 +1,
+		asic_sleep_mode_en              :10-10 +1,
+		load_balance_en                 :11-11 +1,
+		default_dc_state_entry_true     :12-12 +1,
+		default_low_dc_state_entry_true :13-13 +1,
+		low_lcd_refresh_rate            :14-14 +1,
+		driver_default_mode             :15-15 +1,
+		over_clock_mode                 :16-16 +1,
+		over_drive_mode                 :17-17 +1,
+		power_saving_mode               :18-18 +1,
+		thermal_diode_mode              :19-19 +1,
+		frame_modulation_mask           :21-20 +1, // 0-FM Disable, 1:2-level FM, 2:4-level FM, 3:Reserved
+		dyn_clk_3d_idle                 :22-22 +1,
+		dynamic_clock_divider_by_2      :23-23 +1,
+		dynamic_clock_divider_by_4      :24-24 +1,
+		dynamic_hdp_block_en            :25-25 +1, // When set, Dynamic
+		dynamic_mc_host_block_en        :26-26 +1, // When set, Dynamic
+		enable_3D_acceleration          :27-27 +1, // When set, This mode is for acceleated 3D mode
+		powerplay_settings_group_mask   :30-28 +1, // 1-Optimal Battery Life Group, 2-High Battery, 3-Balanced, 4-High Performance, 5- Optimal Performance (Default state with Default clocks)
+		enable_back_bias                :31-31 +1;
+	};
+};
 
-#define ATOM_PM_MISCINFO_VOLTAGE_DROP_SUPPORT            0x00000004L
-#define ATOM_PM_MISCINFO_VOLTAGE_DROP_ACTIVE_HIGH        0x00000008L
+union atom_powerplay_misc_info2 {
+	uint32_t MiscInfo2;
+	struct { uint32_t
+		system_ac_lite_mode      :0-0 +1,
+		multi_display_support    :1-1 +1,
+		dynamic_back_bias_en     :2-2 +1,
+		fs3d_overdrive_info      :3-3 +1,
+		forcedlowpwr_mode        :4-4 +1,
+		vddci_dynamic_voltage_en :5-5 +1,
+		video_playback_capable   :6-6 +1, // If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption. If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback
+		not_valid_on_dc          :7-7 +1,
+		stutter_mode_en          :8-8 +1,
+		uvd_support_mode         :9-9 +1,
+		rsvd0                   :31-10 +1;
+	};
+};
 
-#define ATOM_PM_MISCINFO_LOAD_PERFORMANCE_EN             0x00000010L
-
-#define ATOM_PM_MISCINFO_ENGINE_CLOCK_CONTRL_EN          0x00000020L
-#define ATOM_PM_MISCINFO_MEMORY_CLOCK_CONTRL_EN          0x00000040L
-#define ATOM_PM_MISCINFO_PROGRAM_VOLTAGE                 0x00000080L  // When this bit set, ucVoltageDropIndex is not an index for GPIO pin, but a voltage ID that SW needs program
-
-#define ATOM_PM_MISCINFO_ASIC_REDUCED_SPEED_SCLK_EN      0x00000100L
-#define ATOM_PM_MISCINFO_ASIC_DYNAMIC_VOLTAGE_EN         0x00000200L
-#define ATOM_PM_MISCINFO_ASIC_SLEEP_MODE_EN              0x00000400L
-#define ATOM_PM_MISCINFO_LOAD_BALANCE_EN                 0x00000800L
-#define ATOM_PM_MISCINFO_DEFAULT_DC_STATE_ENTRY_TRUE     0x00001000L
-#define ATOM_PM_MISCINFO_DEFAULT_LOW_DC_STATE_ENTRY_TRUE 0x00002000L
-#define ATOM_PM_MISCINFO_LOW_LCD_REFRESH_RATE            0x00004000L
-
-#define ATOM_PM_MISCINFO_DRIVER_DEFAULT_MODE             0x00008000L
-#define ATOM_PM_MISCINFO_OVER_CLOCK_MODE                 0x00010000L
-#define ATOM_PM_MISCINFO_OVER_DRIVE_MODE                 0x00020000L
-#define ATOM_PM_MISCINFO_POWER_SAVING_MODE               0x00040000L
-#define ATOM_PM_MISCINFO_THERMAL_DIODE_MODE              0x00080000L
-
-#define ATOM_PM_MISCINFO_FRAME_MODULATION_MASK           0x00300000L  // 0-FM Disable, 1-2 level FM, 2-4 level FM, 3-Reserved
-#define ATOM_PM_MISCINFO_FRAME_MODULATION_SHIFT          20
-
-#define ATOM_PM_MISCINFO_DYN_CLK_3D_IDLE                 0x00400000L
-#define ATOM_PM_MISCINFO_DYNAMIC_CLOCK_DIVIDER_BY_2      0x00800000L
-#define ATOM_PM_MISCINFO_DYNAMIC_CLOCK_DIVIDER_BY_4      0x01000000L
-#define ATOM_PM_MISCINFO_DYNAMIC_HDP_BLOCK_EN            0x02000000L  // When set, Dynamic
-#define ATOM_PM_MISCINFO_DYNAMIC_MC_HOST_BLOCK_EN        0x04000000L  // When set, Dynamic
-#define ATOM_PM_MISCINFO_3D_ACCELERATION_EN              0x08000000L  // When set, This mode is for acceleated 3D mode
-
-#define ATOM_PM_MISCINFO_POWERPLAY_SETTINGS_GROUP_MASK   0x70000000L  // 1-Optimal Battery Life Group, 2-High Battery, 3-Balanced, 4-High Performance, 5- Optimal Performance (Default state with Default clocks)
-#define ATOM_PM_MISCINFO_POWERPLAY_SETTINGS_GROUP_SHIFT  28
-#define ATOM_PM_MISCINFO_ENABLE_BACK_BIAS                0x80000000L
-
-#define ATOM_PM_MISCINFO2_SYSTEM_AC_LITE_MODE            0x00000001L
-#define ATOM_PM_MISCINFO2_MULTI_DISPLAY_SUPPORT          0x00000002L
-#define ATOM_PM_MISCINFO2_DYNAMIC_BACK_BIAS_EN           0x00000004L
-#define ATOM_PM_MISCINFO2_FS3D_OVERDRIVE_INFO            0x00000008L
-#define ATOM_PM_MISCINFO2_FORCEDLOWPWR_MODE              0x00000010L
-#define ATOM_PM_MISCINFO2_VDDCI_DYNAMIC_VOLTAGE_EN       0x00000020L
-#define ATOM_PM_MISCINFO2_VIDEO_PLAYBACK_CAPABLE         0x00000040L  // If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption.
-                                                                      // If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback
-#define ATOM_PM_MISCINFO2_NOT_VALID_ON_DC                0x00000080L
-#define ATOM_PM_MISCINFO2_STUTTER_MODE_EN                0x00000100L
-#define ATOM_PM_MISCINFO2_UVD_SUPPORT_MODE               0x00000200L
-
-// ucTableFormatRevision=1
-// ucTableContentRevision=1
 struct atom_powermode_info {
-	uint32_t MiscInfo;  // The power level should be arranged in ascending order
+	union atom_powerplay_misc_info MiscInfo;
 	uint32_t Reserved1; // must set to 0
 	uint32_t Reserved2; // must set to 0
 	uint16_t EngineClock;
@@ -8938,35 +8934,31 @@ struct atom_powermode_info {
 	uint8_t  SelectedPanel_RefreshRate; // panel refresh rate
 	uint8_t  MinTemperature;
 	uint8_t  MaxTemperature;
-	uint8_t  NumPciELanes; // number of PCIE lanes
+	uint8_t  NumPciELanes;
 };
 
-// ucTableFormatRevision=2
-// ucTableContentRevision=1
 struct atom_powermode_info_v2 {
-	uint32_t MiscInfo; // The power level should be arranged in ascending order
-	uint32_t MiscInfo2;
+	union atom_powerplay_misc_info MiscInfo;
+	union atom_powerplay_misc_info2 MiscInfo2;
 	uint32_t EngineClock;
 	uint32_t MemoryClock;
 	uint8_t  VoltageDropIndex; // index to GPIO table
 	uint8_t  SelectedPanel_RefreshRate; // panel refresh rate
 	uint8_t  MinTemperature;
 	uint8_t  MaxTemperature;
-	uint8_t  NumPciELanes; // number of PCIE lanes
+	uint8_t  NumPciELanes;
 };
 
-// ucTableFormatRevision=2
-// ucTableContentRevision=2
 struct atom_powermode_info_v3 {
-	uint32_t MiscInfo; // The power level should be arranged in ascending order
-	uint32_t MiscInfo2;
+	union atom_powerplay_misc_info MiscInfo;
+	union atom_powerplay_misc_info2 MiscInfo2;
 	uint32_t EngineClock;
 	uint32_t MemoryClock;
 	uint8_t  VoltageDropIndex; // index to Core (VDDC) votage table
-	uint8_t  SelectedPanel_RefreshRate; // panel refresh rate
+	uint8_t  SelectedPanel_RefreshRate;
 	uint8_t  MinTemperature;
 	uint8_t  MaxTemperature;
-	uint8_t  NumPciELanes; // number of PCIE lanes
+	uint8_t  NumPciELanes;
 	uint8_t  VDDCI_VoltageDropIndex; // index to VDDCI votage table
 };
 
@@ -8985,7 +8977,7 @@ struct atom_powermode_info_v3 {
 #define ATOM_PP_OVERDRIVE_THERMALCONTROLLER_ASC7512 0x07 // Andigilog
 
 
-struct atom_powerplay_info {
+struct atom_powerplay_info_v1 {
 	struct atom_common_table_header  table_header;
 	uint8_t  OverdriveThermalController;
 	uint8_t  OverdriveI2cLine;
@@ -8993,7 +8985,7 @@ struct atom_powerplay_info {
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
-	struct atom_powermode_info  PowerPlayInfo[ATOM_MAX_NUMBEROF_POWER_BLOCK];
+	struct atom_powermode_info  PowerPlayInfo[] __counted_by(NumOfPowerModeEntries);
 };
 
 struct atom_powerplay_info_v2 {
@@ -9004,7 +8996,7 @@ struct atom_powerplay_info_v2 {
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
-	struct atom_powermode_info_v2  PowerPlayInfo[ATOM_MAX_NUMBEROF_POWER_BLOCK];
+	struct atom_powermode_info_v2  PowerPlayInfo[] __counted_by(NumOfPowerModeEntries);
 };
 
 struct atom_powerplay_info_v3 {
@@ -9015,7 +9007,7 @@ struct atom_powerplay_info_v3 {
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
-	struct atom_powermode_info_v3  PowerPlayInfo[ATOM_MAX_NUMBEROF_POWER_BLOCK];
+	struct atom_powermode_info_v3  PowerPlayInfo[] __counted_by(NumOfPowerModeEntries);
 };
 
 

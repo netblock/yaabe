@@ -713,6 +713,10 @@ populate_ppt(
 		ppt->ver = get_ver(ppt->table_header);
 
 		switch (ppt->ver) {
+			case v1_1:
+			case v2_1:
+			case v3_1:
+				break; // absurdly simple powerplay.
 			case v6_1:
 			case v5_1:
 			case v4_1:
@@ -744,7 +748,7 @@ populate_ppt(
 				);
 				break;
 			default:
-				//assert(0);
+				assert(0);
 				break;
 		}
 	}

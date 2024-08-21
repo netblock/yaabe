@@ -5337,4 +5337,450 @@ global_default: {
 	],
 },
 
+{
+	c_prefix: "union", c_type: "atom_powerplay_misc_info",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MiscInfo",
+			name: "MiscInfo",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "using_mclk_src",
+					hi: 0, lo: 0,
+				}, {
+					name: "using_sclk_src",
+					hi: 1, lo: 1,
+				}, {
+					name: "voltage_drop_support",
+					hi: 2, lo: 2,
+				}, {
+					name: "voltage_drop_active_high",
+					hi: 3, lo: 3,
+				}, {
+					name: "load_performance_en",
+					hi: 4, lo: 4,
+				}, {
+					name: "engine_clock_contrl_en",
+					hi: 5, lo: 5,
+				}, {
+					name: "memory_clock_contrl_en",
+					hi: 6, lo: 6,
+				}, {
+					name: "program_voltage",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "When this bit set, ucVoltageDropIndex is not an index for GPIO pin, but a voltage ID that SW needs program",},
+					],
+				}, {
+					name: "asic_reduced_speed_sclk_en",
+					hi: 8, lo: 8,
+				}, {
+					name: "asic_dynamic_voltage_en",
+					hi: 9, lo: 9,
+				}, {
+					name: "asic_sleep_mode_en",
+					hi: 10, lo: 10,
+				}, {
+					name: "load_balance_en",
+					hi: 11, lo: 11,
+				}, {
+					name: "default_dc_state_entry_true",
+					hi: 12, lo: 12,
+				}, {
+					name: "default_low_dc_state_entry_true",
+					hi: 13, lo: 13,
+				}, {
+					name: "low_lcd_refresh_rate",
+					hi: 14, lo: 14,
+				}, {
+					name: "driver_default_mode",
+					hi: 15, lo: 15,
+				}, {
+					name: "over_clock_mode",
+					hi: 16, lo: 16,
+				}, {
+					name: "over_drive_mode",
+					hi: 17, lo: 17,
+				}, {
+					name: "power_saving_mode",
+					hi: 18, lo: 18,
+				}, {
+					name: "thermal_diode_mode",
+					hi: 19, lo: 19,
+				}, {
+					name: "frame_modulation_mask",
+					hi: 21, lo: 20,
+					description: [
+						{language: "english", text: "0-FM Disable, 1:2-level FM, 2:4-level FM, 3:Reserved",},
+					],
+				}, {
+					name: "dyn_clk_3d_idle",
+					hi: 22, lo: 22,
+				}, {
+					name: "dynamic_clock_divider_by_2",
+					hi: 23, lo: 23,
+				}, {
+					name: "dynamic_clock_divider_by_4",
+					hi: 24, lo: 24,
+				}, {
+					name: "dynamic_hdp_block_en",
+					hi: 25, lo: 25,
+					description: [
+						{language: "english", text: "When set, Dynamic",},
+					],
+				}, {
+					name: "dynamic_mc_host_block_en",
+					hi: 26, lo: 26,
+					description: [
+						{language: "english", text: "When set, Dynamic",},
+					],
+				}, {
+					name: "enable_3D_acceleration",
+					hi: 27, lo: 27,
+					description: [
+						{language: "english", text: "When set, This mode is for acceleated 3D mode",},
+					],
+				}, {
+					name: "powerplay_settings_group_mask",
+					hi: 30, lo: 28,
+					description: [
+						{language: "english", text: "1-Optimal Battery Life Group, 2-High Battery, 3-Balanced, 4-High Performance, 5- Optimal Performance (Default state with Default clocks)",},
+					],
+				}, {
+					name: "enable_back_bias",
+					hi: 31, lo: 31,
+				},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "atom_powerplay_misc_info2",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MiscInfo2",
+			name: "MiscInfo2",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "system_ac_lite_mode",
+					hi: 0, lo: 0,
+				}, {
+					name: "multi_display_support",
+					hi: 1, lo: 1,
+				}, {
+					name: "dynamic_back_bias_en",
+					hi: 2, lo: 2,
+				}, {
+					name: "fs3d_overdrive_info",
+					hi: 3, lo: 3,
+				}, {
+					name: "forcedlowpwr_mode",
+					hi: 4, lo: 4,
+				}, {
+					name: "vddci_dynamic_voltage_en",
+					hi: 5, lo: 5,
+				}, {
+					name: "video_playback_capable",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption. If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback",},
+					],
+				}, {
+					name: "not_valid_on_dc",
+					hi: 7, lo: 7,
+				}, {
+					name: "stutter_mode_en",
+					hi: 8, lo: 8,
+				}, {
+					name: "uvd_support_mode",
+					hi: 9, lo: 9,
+				}, {
+					name: "rsvd0",
+					hi: 31, lo: 10,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_powermode_info",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MiscInfo",
+			name: "MiscInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_powerplay_misc_info",
+		}, {
+			access: "bios->Reserved1",
+			name: "Reserved1",
+			description: [
+				{language: "english", text: "must set to 0",},
+			],
+		}, {
+			access: "bios->Reserved2",
+			name: "Reserved2",
+			description: [
+				{language: "english", text: "must set to 0",},
+			],
+		}, {
+			access: "bios->EngineClock",
+			name: "EngineClock",
+		}, {
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
+		}, {
+			access: "bios->VoltageDropIndex",
+			name: "VoltageDropIndex",
+			description: [
+				{language: "english", text: "index to GPIO table",},
+			],
+		}, {
+			access: "bios->SelectedPanel_RefreshRate",
+			name: "SelectedPanel_RefreshRate",
+			description: [
+				{language: "english", text: "panel refresh rate",},
+			],
+		}, {
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->NumPciELanes",
+			name: "NumPciELanes",
+		},
+	],
+}, {
+	c_type: "atom_powermode_info_v2",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MiscInfo",
+			name: "MiscInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_powerplay_misc_info",
+		}, {
+			access: "bios->MiscInfo2",
+			name: "MiscInfo2",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_powerplay_misc_info2",
+		}, {
+			access: "bios->EngineClock",
+			name: "EngineClock",
+		}, {
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
+		}, {
+			access: "bios->VoltageDropIndex",
+			name: "VoltageDropIndex",
+			description: [
+				{language: "english", text: "index to GPIO table",},
+			],
+		}, {
+			access: "bios->SelectedPanel_RefreshRate",
+			name: "SelectedPanel_RefreshRate",
+			description: [
+				{language: "english", text: "panel refresh rate",},
+			],
+		}, {
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->NumPciELanes",
+			name: "NumPciELanes",
+		},
+	],
+}, {
+	c_type: "atom_powermode_info_v3",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MiscInfo",
+			name: "MiscInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_powerplay_misc_info",
+		}, {
+			access: "bios->MiscInfo2",
+			name: "MiscInfo2",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_powerplay_misc_info2",
+		}, {
+			access: "bios->EngineClock",
+			name: "EngineClock",
+		}, {
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
+		}, {
+			access: "bios->VoltageDropIndex",
+			name: "VoltageDropIndex",
+			description: [
+				{language: "english", text: "index to Core (VDDC) votage table",},
+			],
+		}, {
+			access: "bios->SelectedPanel_RefreshRate",
+			name: "SelectedPanel_RefreshRate",
+		}, {
+			access: "bios->MinTemperature",
+			name: "MinTemperature",
+		}, {
+			access: "bios->MaxTemperature",
+			name: "MaxTemperature",
+		}, {
+			access: "bios->NumPciELanes",
+			name: "NumPciELanes",
+		}, {
+			access: "bios->VDDCI_VoltageDropIndex",
+			name: "VDDCI_VoltageDropIndex",
+			description: [
+				{language: "english", text: "index to VDDCI votage table",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_powerplay_info_v1",
+	atomtree: "atomtree_powerplay_table",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->OverdriveThermalController",
+			name: "OverdriveThermalController",
+		}, {
+			access: "bios->OverdriveI2cLine",
+			name: "OverdriveI2cLine",
+		}, {
+			access: "bios->OverdriveIntBitmap",
+			name: "OverdriveIntBitmap",
+		}, {
+			access: "bios->OverdriveControllerAddress",
+			name: "OverdriveControllerAddress",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SizeOfPowerModeEntry",
+			name: "SizeOfPowerModeEntry",
+		}, {
+			access: "bios->NumOfPowerModeEntries",
+			name: "NumOfPowerModeEntries",
+		}, {
+			access: "bios->PowerPlayInfo",
+			name: "PowerPlayInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumOfPowerModeEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "PowerPlayInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_powerplay_info_v2",
+	atomtree: "atomtree_powerplay_table",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->OverdriveThermalController",
+			name: "OverdriveThermalController",
+		}, {
+			access: "bios->OverdriveI2cLine",
+			name: "OverdriveI2cLine",
+		}, {
+			access: "bios->OverdriveIntBitmap",
+			name: "OverdriveIntBitmap",
+		}, {
+			access: "bios->OverdriveControllerAddress",
+			name: "OverdriveControllerAddress",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SizeOfPowerModeEntry",
+			name: "SizeOfPowerModeEntry",
+		}, {
+			access: "bios->NumOfPowerModeEntries",
+			name: "NumOfPowerModeEntries",
+		}, {
+			access: "bios->PowerPlayInfo",
+			name: "PowerPlayInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumOfPowerModeEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "PowerPlayInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v2",
+					},
+				],
+			},
+		},
+	],
+}, {
+	c_type: "atom_powerplay_info_v3",
+	atomtree: "atomtree_powerplay_table",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->OverdriveThermalController",
+			name: "OverdriveThermalController",
+		}, {
+			access: "bios->OverdriveI2cLine",
+			name: "OverdriveI2cLine",
+		}, {
+			access: "bios->OverdriveIntBitmap",
+			name: "OverdriveIntBitmap",
+		}, {
+			access: "bios->OverdriveControllerAddress",
+			name: "OverdriveControllerAddress",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->SizeOfPowerModeEntry",
+			name: "SizeOfPowerModeEntry",
+		}, {
+			access: "bios->NumOfPowerModeEntries",
+			name: "NumOfPowerModeEntries",
+		}, {
+			access: "bios->PowerPlayInfo",
+			name: "PowerPlayInfo",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumOfPowerModeEntries",
+				enum: "ATUI_NULL",
+				pattern: [
+					{
+						name: "PowerPlayInfo [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v3",
+					},
+				],
+			},
+		},
+	],
+},
+
 ], }
