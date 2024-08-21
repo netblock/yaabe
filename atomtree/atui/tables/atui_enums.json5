@@ -345,6 +345,77 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // powerplay.h / SMU 11,13 stuff
 
+{name: "ATOM_PP_THERMALCONTROLLER",
+	constants: [
+		{name: "ATOM_PP_THERMALCONTROLLER_NONE",},
+		{name: "ATOM_PP_THERMALCONTROLLER_LM63",
+			description: [
+				{language: "english", text: "Not used by PPLib",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_ADM1032",
+			description: [
+				{language: "english", text: "Not used by PPLib",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_ADM1030",
+			description: [
+				{language: "english", text: "Not used by PPLib",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_MUA6649",
+			description: [
+				{language: "english", text: "Not used by PPLib",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_LM64",},
+		{name: "ATOM_PP_THERMALCONTROLLER_F75375",
+			description: [
+				{language: "english", text: "Not used by PPLib",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_ASC7512_RV6xx",},
+		{name: "ATOM_PP_THERMALCONTROLLER_RV770",},
+		{name: "ATOM_PP_THERMALCONTROLLER_ADT7473",},
+		{name: "ATOM_PP_THERMALCONTROLLER_KONG",},
+		{name: "ATOM_PP_THERMALCONTROLLER_EXTERNAL_GPIO",},
+		{name: "ATOM_PP_THERMALCONTROLLER_EVERGREEN",},
+		{name: "ATOM_PP_THERMALCONTROLLER_EMC2103",
+			description: [
+				{language: "english", text: "Only fan control will be implemented, do NOT show this in PPGen.",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_SUMO",
+			description: [
+				{language: "english", text: "Sumo type, used internally",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_NISLANDS",},
+		{name: "ATOM_PP_THERMALCONTROLLER_SISLANDS",},
+		{name: "ATOM_PP_THERMALCONTROLLER_LM96163",},
+		{name: "ATOM_PP_THERMALCONTROLLER_CISLANDS",},
+		{name: "ATOM_PP_THERMALCONTROLLER_KAVERI",},
+		{name: "ATOM_PP_THERMALCONTROLLER_ICELAND",},
+		{name: "ATOM_PP_THERMALCONTROLLER_TONGA",},
+		{name: "ATOM_PP_THERMALCONTROLLER_FIJI",},
+		{name: "ATOM_PP_THERMALCONTROLLER_POLARIS10",},
+		{name: "ATOM_PP_THERMALCONTROLLER_VEGA10",},
+		{name: "ATOM_PP_THERMALCONTROLLER_VEGA12",},
+		{name: "ATOM_PP_THERMALCONTROLLER_VEGA20",},
+		{name: "ATOM_PP_THERMALCONTROLLER_NAVI10",},
+		{name: "ATOM_PP_THERMALCONTROLLER_SIENNA_CICHLID",},
+		{name: "ATOM_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL",
+			description: [
+				{language: "english", text: "ADT7473 Fan Control + Internal Thermal Controller",},
+			],
+		},
+		{name: "ATOM_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL",
+			description: [
+				{language: "english", text: "EMC2103 Fan Control + Internal Thermal Controller",},
+			],
+		},
+]},
+
 {name: "PPT_THROTTLER_e",
 	constants: [
 		{name: "PPT_THROTTLER_PPT0",},

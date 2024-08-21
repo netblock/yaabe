@@ -698,9 +698,7 @@ global_default: {
 		}, {
 			access: "bios->Type",
 			name: "Type",
-			description: [
-				{language: "english", text: "one of ATOM_pptable_PP_THERMALCONTROLLER_*",},
-			],
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PP_THERMALCONTROLLER",
 		}, {
 			access: "bios->I2cLine",
 			name: "I2cLine",

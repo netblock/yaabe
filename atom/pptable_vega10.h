@@ -6,12 +6,6 @@
 #pragma pack(push, 1)
 #define ATOM_Vega10_TABLE_REVISION_VEGA10 8
 
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_NONE    0
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_LM96163 17
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_VEGA10  24
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89
-#define ATOM_VEGA10_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D
-
 
 union vega10_powerplay_platform_caps {
 	uint32_t platform_caps;
@@ -259,7 +253,7 @@ union atom_vega10_fan_tables {
 
 struct atom_vega10_thermal_controller {
 	uint8_t  RevId;
-	uint8_t  Type;    // one of
+	enum ATOM_PP_THERMALCONTROLLER  Type;
 	uint8_t  I2cLine; // as interpreted by DAL I2C
 	uint8_t  I2cAddress;
 	union atom_pp_fanparameters  FanParameters;

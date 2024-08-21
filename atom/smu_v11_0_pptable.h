@@ -8,11 +8,6 @@
 #define SMU_11_0_7_TABLE_FORMAT_REVISION  15
 
 
-// SMU_11_0_PP_THERMALCONTROLLER - Thermal Controller Type
-#define SMU_11_0_PP_THERMALCONTROLLER_NONE  0
-#define ATOM_VEGA20_PP_THERMALCONTROLLER_VEGA20 26
-#define SMU_11_0_7_PP_THERMALCONTROLLER_SIENNA_CICHLID 28
-
 #define SMU_11_F12_POWERSAVINGCLOCK_VERSION    0x01
 #define SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION 0x01 // Power Saving Clock Table Version 1.00
 
@@ -285,7 +280,7 @@ struct smu_11_0_powerplay_table {
 	struct smu_powerplay_table_header  header;
 	union powerplay_platform_caps  platform_caps;
 
-	uint8_t  thermal_controller_type; // one of SMU_11_0_PP_THERMALCONTROLLER
+	enum ATOM_PP_THERMALCONTROLLER  thermal_controller_type;
 
 	uint16_t small_power_limit1;
 	uint16_t small_power_limit2;
@@ -307,7 +302,7 @@ struct atom_vega20_powerplay_table {
 
 	union powerplay_platform_caps  platform_caps;
 
-	uint8_t  ThermalControllerType;
+	enum ATOM_PP_THERMALCONTROLLER  ThermalControllerType;
 
 	uint16_t SmallPowerLimit1;
 	uint16_t SmallPowerLimit2;
@@ -328,7 +323,7 @@ struct atom_vega20_powerplay_table {
 struct smu_11_0_7_powerplay_table {
 	struct smu_powerplay_table_header  header;
 	union powerplay_platform_caps  platform_caps; // POWERPLAYABLE::ulPlatformCaps
-	uint8_t  thermal_controller_type; // one of SMU_11_0_7_PP_THERMALCONTROLLER
+	enum ATOM_PP_THERMALCONTROLLER  thermal_controller_type;
 
 	uint16_t small_power_limit1;
 	uint16_t small_power_limit2;

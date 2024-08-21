@@ -11,19 +11,6 @@ vega10_pptable.h has an extremely similar structure. TODO merge files?
 
 // #include "hwmgr.h" // this included in a packed state!
 
-#define ATOM_pptable_PP_THERMALCONTROLLER_NONE    0
-#define ATOM_pptable_PP_THERMALCONTROLLER_LM96163 17
-#define ATOM_pptable_PP_THERMALCONTROLLER_pptable 21
-#define ATOM_pptable_PP_THERMALCONTROLLER_FIJI    22
-/*
- * Thermal controller 'combo type' to use an external controller for Fan control and an internal controller for thermal.
- * We probably should reserve the bit 0x80 for this use.
- * To keep the number of these types low we should also use the same code for all ASICs (i.e. do not distinguish RV6xx and RV7xx Internal here).
- * The driver can pick the correct internal controller based on the ASIC.
- */
-#define ATOM_pptable_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89 // ADT7473 Fan Control + Internal Thermal Controller
-#define ATOM_pptable_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D // EMC2103 Fan Control + Internal Thermal Controller
-
 #define ATOM_pptable_TABLE_REVISION_pptable 7
 
 
@@ -302,7 +289,7 @@ union atom_pptable_fan_tables {
 
 struct atom_pptable_thermal_controller {
 	uint8_t  RevId;
-	uint8_t  Type;          // one of ATOM_pptable_PP_THERMALCONTROLLER_*
+	enum ATOM_PP_THERMALCONTROLLER  Type;
 	uint8_t  I2cLine;       // as interpreted by DAL I2C
 	uint8_t  I2cAddress;
 	union atom_pp_fanparameters FanParameters;

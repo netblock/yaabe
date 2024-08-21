@@ -5,9 +5,6 @@
 
 #define SMU_13_0_7_TABLE_FORMAT_REVISION 15
 
-// SMU_13_0_7_PP_THERMALCONTROLLER - Thermal Controller Type
-#define SMU_13_0_7_PP_THERMALCONTROLLER_NONE 0
-#define SMU_13_0_7_PP_THERMALCONTROLLER_NAVI21 28
 
 #define SMU_13_0_7_PP_OVERDRIVE_VERSION 0x83 // OverDrive 8 Table Version 0.2
 #define SMU_13_0_7_PP_POWERSAVINGCLOCK_VERSION 0x01 // Power Saving Clock Table Version 1.00
@@ -137,7 +134,7 @@ struct smu_13_0_7_powerplay_table {
 	uint16_t format_id;       // PPGen use only: PPTable for different ASICs. For PLUM_BONITO this should be 0x80
 	union powerplay_platform_caps  platform_caps;
 
-	uint8_t  thermal_controller_type; // one of SMU_13_0_7_PP_THERMALCONTROLLER
+	enum ATOM_PP_THERMALCONTROLLER  thermal_controller_type;
 
 	uint16_t small_power_limit1;
 	uint16_t small_power_limit2;

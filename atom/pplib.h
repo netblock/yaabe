@@ -8,41 +8,9 @@ struct atom_pplib_sized_array_header {
 	uint8_t  EntrySize;
 };
 
-#define ATOM_PP_THERMALCONTROLLER_NONE      0
-#define ATOM_PP_THERMALCONTROLLER_LM63      1  // Not used by PPLib
-#define ATOM_PP_THERMALCONTROLLER_ADM1032   2  // Not used by PPLib
-#define ATOM_PP_THERMALCONTROLLER_ADM1030   3  // Not used by PPLib
-#define ATOM_PP_THERMALCONTROLLER_MUA6649   4  // Not used by PPLib
-#define ATOM_PP_THERMALCONTROLLER_LM64      5
-#define ATOM_PP_THERMALCONTROLLER_F75375    6  // Not used by PPLib
-#define ATOM_PP_THERMALCONTROLLER_RV6xx     7
-#define ATOM_PP_THERMALCONTROLLER_RV770     8
-#define ATOM_PP_THERMALCONTROLLER_ADT7473   9
-#define ATOM_PP_THERMALCONTROLLER_KONG      10
-#define ATOM_PP_THERMALCONTROLLER_EXTERNAL_GPIO 11
-#define ATOM_PP_THERMALCONTROLLER_EVERGREEN 12
-#define ATOM_PP_THERMALCONTROLLER_EMC2103   13 // Only fan control will be implemented, do NOT show this in PPGen.
-#define ATOM_PP_THERMALCONTROLLER_SUMO      14 // Sumo type, used internally
-#define ATOM_PP_THERMALCONTROLLER_NISLANDS  15
-#define ATOM_PP_THERMALCONTROLLER_SISLANDS  16
-#define ATOM_PP_THERMALCONTROLLER_LM96163   17
-#define ATOM_PP_THERMALCONTROLLER_CISLANDS  18
-#define ATOM_PP_THERMALCONTROLLER_KAVERI    19
-#define ATOM_PP_THERMALCONTROLLER_ICELAND   20
-#define ATOM_PP_THERMALCONTROLLER_TONGA     21
-#define ATOM_PP_THERMALCONTROLLER_FIJI      22
-#define ATOM_PP_THERMALCONTROLLER_POLARIS10 23
-#define ATOM_PP_THERMALCONTROLLER_VEGA10    24
-
-// Thermal controller 'combo type' to use an external controller for Fan control and an internal controller for thermal.
-// We probably should reserve the bit 0x80 for this use.
-// To keep the number of these types low we should also use the same code for all ASICs (i.e. do not distinguish RV6xx and RV7xx Internal here).
-// The driver can pick the correct internal controller based on the ASIC.
-#define ATOM_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL 0x89 // ADT7473 Fan Control + Internal Thermal Controller
-#define ATOM_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL 0x8D // EMC2103 Fan Control + Internal Thermal Controller
 
 struct atom_pplib_thermalcontroller {
-	uint8_t  Type;          // one of ATOM_PP_THERMALCONTROLLER_*
+	enum ATOM_PP_THERMALCONTROLLER  Type;
 	uint8_t  I2cLine;       // as interpreted by DAL I2C
 	uint8_t  I2cAddress;
 	union atom_pp_fanparameters FanParameters;

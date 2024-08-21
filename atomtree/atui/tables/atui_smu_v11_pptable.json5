@@ -7110,9 +7110,7 @@ global_default: {
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
-			description: [
-				{language: "english", text: "one of SMU_11_0_PP_THERMALCONTROLLER",},
-			],
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PP_THERMALCONTROLLER",
 		}, {
 			access: "bios->small_power_limit1",
 			name: "small_power_limit1",
@@ -7174,6 +7172,7 @@ global_default: {
 		}, {
 			access: "bios->ThermalControllerType",
 			name: "ThermalControllerType",
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PP_THERMALCONTROLLER",
 		}, {
 			access: "bios->SmallPowerLimit1",
 			name: "SmallPowerLimit1",
@@ -7235,9 +7234,7 @@ global_default: {
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
-			description: [
-				{language: "english", text: "one of SMU_11_0_7_PP_THERMALCONTROLLER",},
-			],
+			fancy: "ATUI_ENUM", fancy_data: "ATOM_PP_THERMALCONTROLLER",
 		}, {
 			access: "bios->small_power_limit1",
 			name: "small_power_limit1",
