@@ -10,6 +10,9 @@ on:
 #    tags:
 #      v[0-9]+.[0-9]+.[0-9]+
 
+permissions:
+  contents: write
+
 env:
   #YAABE_INSTALLER: yaabe-installer-${{github.ref_name}}.exe
   YAABE_INSTALLER: yaabe-installer-${{inputs.tag}}.exe
@@ -49,8 +52,6 @@ jobs:
       - name: gh_page_release
         id: gh_page_release
         uses: softprops/action-gh-release@v2
-        permissions:
-          contents: write
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           draft: true
