@@ -63,8 +63,9 @@ jobs:
         id: gh_page_release
         uses: softprops/action-gh-release@v2
         with:
-          repo_token: ${{secrets.GITHUB_TOKEN}}
           draft: true
-          tag: refs/tags/${{inputs.tag}}
+          name: ${{inputs.tag}}
+          tag_name: refs/tags/${{inputs.tag}}
           body: ${{steps.sha_gen.outputs.sha_line}}
-          file: build/$YAABE_INSTALLER
+          files: build/$YAABE_INSTALLER
+          fail_on_unmatched_files: true
