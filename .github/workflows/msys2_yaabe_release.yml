@@ -36,10 +36,11 @@ jobs:
             mingw-w64-x86_64-nsis
       - name: env_setup
         id: env_setup
-        env:
-          # bash replace
-          YAABE_VER_STRIPPED: ${${{inputs.tag}}//v/}
-          YAABE_INSTALLER: yaabe-installer-${YAABE_VER_STRIPPED}.exe
+        run: |
+          TAG=${{inputs.tag}}
+          YAABE_VER_STRIPPED=${TAG//v/}
+          echo "YAABE_VER_STRIPPED=$YAABE_VER_STRIPPED" >> "$GITHUB_OUTPUT"
+          echo "YAABE_INSTALLER=yaabe-installer-${YAABE_VER_STRIPPED}.exe" >> "$GITHUB_OUTPUT"
       - name: yaabe_compile
         id: yaabe_compile
         run: |
@@ -48,6 +49,8 @@ jobs:
           meson compile
       - name: sha_gen
         id: sha_gen
+        env:
+          YAABE_INSTALLER=${{steps.env_setup.outputs.yaabe_installer}}
         run: |
           cd ./build
           sha256sum $YAABE_INSTALLER
