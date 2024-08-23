@@ -56,8 +56,9 @@ jobs:
           YAABE_INSTALLER: ${{steps.env_setup.outputs.yaabe_installer}}
         run: |
           cd ./build
-          sha256sum $YAABE_INSTALLER
-          sha256sum $YAABE_INSTALLER >> "$GITHUB_OUTPUT"
+          SHA_LINE=`sha256sum $YAABE_INSTALLER`
+          echo $SHA_LINE
+          echo "SHA_LINE=$SHA_LINE" >> "$GITHUB_OUTPUT"
       - name: gh_page_release
         id: gh_page_release
         uses: softprops/action-gh-release@v2
@@ -65,5 +66,5 @@ jobs:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           draft: true
           tag: refs/tags/${{inputs.tag}}
-          body: ${{steps.sha_gen.outputs}}
+          body: ${{steps.sha_gen.outputs.sha_line}}
           file: build/$YAABE_INSTALLER
