@@ -160,6 +160,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_13",
 					hi: 15, lo: 13,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -228,6 +229,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_13",
 					hi: 15, lo: 13,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -254,6 +256,7 @@ global_default: {
 				}, {
 					name: "rsvd_6_4",
 					hi: 6, lo: 4,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],
@@ -266,12 +269,14 @@ global_default: {
 				}, {
 					name: "rsvd_12_8",
 					hi: 12, lo: 8,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "rsvd_15_13",
 					hi: 15, lo: 13,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -286,6 +291,7 @@ global_default: {
 				{
 					name: "rsvd_15_0",
 					hi: 15, lo: 0,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "all reserved",},
 					],
@@ -1008,6 +1014,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1070,6 +1077,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1084,6 +1092,7 @@ global_default: {
 				{
 					name: "rsvd_1_0",
 					hi: 1, lo: 0,
+					display: "ATUI_HEX",
 				}, {
 					name: "ODT_at_powerdown",
 					hi: 2, lo: 2,
@@ -1123,9 +1132,11 @@ global_default: {
 				}, {
 					name: "rsvd_11_10",
 					hi: 11, lo: 10,
+					display: "ATUI_HEX",
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1182,6 +1193,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1220,6 +1232,7 @@ global_default: {
 				}, {
 					name: "rsvd_8_8",
 					hi: 8, lo: 8,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],
@@ -1244,6 +1257,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1508,6 +1522,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1576,6 +1591,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1618,6 +1634,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1680,6 +1697,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1730,6 +1748,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1774,6 +1793,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1826,6 +1846,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1900,6 +1921,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1938,12 +1960,14 @@ global_default: {
 				}, {
 					name: "rsvd_11_4",
 					hi: 11, lo: 4,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1964,6 +1988,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -1984,6 +2009,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2070,6 +2096,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				}, {
 					name: "PASR_bank_mask",
 					hi: 7, lo: 0,
@@ -2085,6 +2112,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12__2",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2105,6 +2133,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2125,6 +2154,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2145,6 +2175,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2159,6 +2190,7 @@ global_default: {
 				{
 					name: "rsvd_7_0",
 					hi: 7, lo: 0,
+					display: "ATUI_HEX",
 				}, {
 					name: "MRE_0_disable",
 					hi: 8, lo: 8,
@@ -2186,6 +2218,7 @@ global_default: {
 				}, {
 					name: "rsvd_15_12",
 					hi: 15, lo: 12,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -3047,6 +3080,7 @@ global_default: {
 				}, {
 					name: "rsvd_2_1",
 					hi: 2, lo: 1,
+					display: "ATUI_HEX",
 				}, {
 					name: "RDCRC",
 					hi: 3, lo: 3,
@@ -4302,6 +4336,7 @@ global_default: {
 				}, {
 					name: "rsvd_3_3",
 					hi: 3, lo: 3,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],
@@ -4727,6 +4762,7 @@ global_default: {
 				}, {
 					name: "rsvd_3_3",
 					hi: 3, lo: 3,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "reserved",},
 					],

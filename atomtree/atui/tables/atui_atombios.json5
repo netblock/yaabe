@@ -205,6 +205,7 @@ global_default: {
 				{
 					name: "indicator_reserved",
 					hi: 6, lo: 0,
+					display: "ATUI_HEX",
 				}, {
 					name: "last_image",
 					hi: 7, lo: 7,
@@ -1318,6 +1319,7 @@ global_default: {
 		}, {
 			access: "bios->aulReservedForBIOS",
 			name: "aulReservedForBIOS",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Don't use them",},
 			],
@@ -1660,9 +1662,11 @@ global_default: {
 		}, {
 			access: "bios->Reserved1",
 			name: "Reserved1",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->MaxEngineClockPLL_Output",
 			name: "MaxEngineClockPLL_Output",
@@ -1696,6 +1700,7 @@ global_default: {
 		}, {
 			access: "bios->Reserved3",
 			name: "Reserved3",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Was ucASICMaxTemperature;",},
 			],
@@ -1723,6 +1728,7 @@ global_default: {
 		}, {
 			access: "bios->Reserved4",
 			name: "Reserved4",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Was ulAsicMaximumVoltage",},
 			],
@@ -2239,9 +2245,11 @@ global_default: {
 				{
 					name: "rsvd_1",
 					hi: 1, lo: 1,
+					display: "ATUI_HEX",
 				}, {
 					name: "rsvd_2",
 					hi: 1, lo: 1,
+					display: "ATUI_HEX",
 				}, {
 					name: "_30Hz",
 					hi: 2, lo: 2,
@@ -2260,6 +2268,7 @@ global_default: {
 				}, {
 					name: "rsvd_7",
 					hi: 7, lo: 7,
+					display: "ATUI_HEX",
 				},
 			],
 		},
@@ -2327,6 +2336,7 @@ global_default: {
 				}, {
 					name: "rsvd_7",
 					hi: 7, lo: 7,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
 					],
@@ -2346,7 +2356,7 @@ global_default: {
 			access: "bios->LCDTiming",
 			name: "LCDTiming",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ModePatchTableOffset",
 			name: "ModePatchTableOffset",
@@ -2439,7 +2449,7 @@ global_default: {
 			access: "bios->LCDTiming",
 			name: "LCDTiming",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ExtInfoTableOffset",
 			name: "ExtInfoTableOffset",
@@ -2544,6 +2554,7 @@ global_default: {
 				}, {
 					name: "rsvd_7",
 					hi: 7, lo: 7,
+					display: "ATUI_HEX",
 					description: [
 						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
 					],
@@ -2563,7 +2574,7 @@ global_default: {
 			access: "bios->lcd_timing",
 			name: "lcd_timing",
 			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ExtInfoTableOffset",
 			name: "ExtInfoTableOffset",
@@ -4405,6 +4416,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->Preamble",
@@ -4473,6 +4485,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->Flag",
@@ -4597,6 +4610,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->Flag",
@@ -4727,6 +4741,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->Flag",
@@ -4855,6 +4870,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->Reserve",
@@ -5000,6 +5016,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
+			display: "ATUI_HEX",
 			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
 		}, {
 			access: "bios->BankCol",
@@ -5499,6 +5516,7 @@ global_default: {
 					hi: 9, lo: 9,
 				}, {
 					name: "rsvd0",
+					display: "ATUI_HEX",
 					hi: 31, lo: 10,
 				},
 			],
@@ -5644,6 +5662,28 @@ global_default: {
 		},
 	],
 }, {
+	c_prefix: "union", c_type: "overdrive_intbitmap",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->OverdriveIntBitmap",
+			name: "OverdriveIntBitmap",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "auxwin",
+					hi: 0, lo: 0,
+				}, {
+					name: "overdrive",
+					hi: 1, lo: 1,
+				}, {
+					name: "rsvd_7_2",
+					hi: 7, lo: 2,
+				},
+			],
+		},
+	],
+}, {
 	c_type: "atom_powerplay_info_v1",
 	atomtree: "atomtree_powerplay_table",
 	leaves: [
@@ -5661,6 +5701,8 @@ global_default: {
 		}, {
 			access: "bios->OverdriveIntBitmap",
 			name: "OverdriveIntBitmap",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "overdrive_intbitmap",
 		}, {
 			access: "bios->OverdriveControllerAddress",
 			name: "OverdriveControllerAddress",
@@ -5707,6 +5749,8 @@ global_default: {
 		}, {
 			access: "bios->OverdriveIntBitmap",
 			name: "OverdriveIntBitmap",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "overdrive_intbitmap",
 		}, {
 			access: "bios->OverdriveControllerAddress",
 			name: "OverdriveControllerAddress",
@@ -5753,6 +5797,8 @@ global_default: {
 		}, {
 			access: "bios->OverdriveIntBitmap",
 			name: "OverdriveIntBitmap",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "overdrive_intbitmap",
 		}, {
 			access: "bios->OverdriveControllerAddress",
 			name: "OverdriveControllerAddress",

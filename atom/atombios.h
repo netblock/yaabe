@@ -8965,14 +8965,19 @@ struct atom_powermode_info_v3 {
 
 #define ATOM_MAX_NUMBEROF_POWER_BLOCK 8
 
-#define ATOM_PP_OVERDRIVE_INTBITMAP_AUXWIN          0x01
-#define ATOM_PP_OVERDRIVE_INTBITMAP_OVERDRIVE       0x02
-
+union overdrive_intbitmap {
+	uint8_t OverdriveIntBitmap;
+	struct { uint8_t
+		auxwin    :0-0 +1,
+		overdrive :1-1 +1,
+		rsvd_7_2  :7-2 +1;
+	};
+};
 struct atom_powerplay_info_v1 {
 	struct atom_common_table_header  table_header;
 	uint8_t  OverdriveThermalController;
 	uint8_t  OverdriveI2cLine;
-	uint8_t  OverdriveIntBitmap;
+	union overdrive_intbitmap  OverdriveIntBitmap;
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
@@ -8983,7 +8988,7 @@ struct atom_powerplay_info_v2 {
 	struct atom_common_table_header  table_header;
 	uint8_t  OverdriveThermalController;
 	uint8_t  OverdriveI2cLine;
-	uint8_t  OverdriveIntBitmap;
+	union overdrive_intbitmap  OverdriveIntBitmap;
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
@@ -8994,7 +8999,7 @@ struct atom_powerplay_info_v3 {
 	struct atom_common_table_header  table_header;
 	uint8_t  OverdriveThermalController;
 	uint8_t  OverdriveI2cLine;
-	uint8_t  OverdriveIntBitmap;
+	union overdrive_intbitmap  OverdriveIntBitmap;
 	uint8_t  OverdriveControllerAddress;
 	uint8_t  SizeOfPowerModeEntry;
 	uint8_t  NumOfPowerModeEntries;
