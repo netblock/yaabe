@@ -13,9 +13,6 @@ on:
 permissions:
   contents: write
 
-env:
-  #YAABE_INSTALLER: yaabe-installer-${{github.ref_name}}.exe
-  YAABE_INSTALLER: yaabe-installer-${{inputs.tag}}.exe
 
 
 jobs:
@@ -37,6 +34,12 @@ jobs:
             mingw-w64-x86_64-gtk4
             mingw-w64-x86_64-python-json5
             mingw-w64-x86_64-nsis
+      - name: env_setup
+        id: env_setup
+        env:
+          # bash replace
+          YAABE_VER_STRIPPED: ${${{inputs.tag}}//v/}
+          YAABE_INSTALLER: yaabe-installer-${YAABE_VER_STRIPPED}.exe
       - name: yaabe_compile
         id: yaabe_compile
         run: |
