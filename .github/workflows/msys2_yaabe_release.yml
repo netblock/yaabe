@@ -45,8 +45,8 @@ jobs:
           meson compile
       - name: sha_gen
         id: sha_gen
-        working-directory: ./build
         run: |
+		  cd ./build
           sha256sum $YAABE_INSTALLER
           sha256sum $YAABE_INSTALLER >> "$GITHUB_OUTPUT"
       - name: gh_page_release
