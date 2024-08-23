@@ -23,6 +23,8 @@ jobs:
         shell: msys2 {0}
     steps:
       - uses: actions/checkout@v4
+        submodules: true
+        ref: ${{inputs.tag}} # just the tag name itself, excluding refs/tags/
       - uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
