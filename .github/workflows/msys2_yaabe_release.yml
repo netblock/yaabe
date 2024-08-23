@@ -67,5 +67,5 @@ jobs:
           name: ${{inputs.tag}}
           tag_name: refs/tags/${{inputs.tag}}
           body: ${{steps.sha_gen.outputs.sha_line}}
-          files: build/$YAABE_INSTALLER
+          files: build/${{steps.env_setup.outputs.yaabe_installer}}
           fail_on_unmatched_files: true
