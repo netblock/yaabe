@@ -3,6 +3,11 @@
 #include "atomtree.h"
 #include "atui.h"
 
+// commented out; see message in standard.h
+//landing is in atombios_parse
+//static struct error error = {}; // error handling
+//error_assert(&error, ERROR_WARNING, "hello!", NULL == atree);
+
 inline static void
 populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
@@ -172,11 +177,8 @@ populate_gfx_info(
 							+ gfx_info->v2_3->EdcDidtHiDpm7TableOffset
 						);
 					}
-				} else {
-					assert(
-						gfx_info->table_header->structuresize
-						== sizeof(struct atom_gfx_info_v2_3_2)
-					);
+				} else if (gfx_info->table_header->structuresize
+						== sizeof(struct atom_gfx_info_v2_3_2)) {
 					assert(0); // unsure what uses this
 					if (gfx_info->v2_3_2->gcgoldenoffset) {
 						gfx_info->gcgolden =
@@ -231,6 +233,7 @@ populate_pplib_ppt_state_array(
 	} walker;
 
 	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
+		assert(pplibv1->NumStates < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
 		ppt41->state_array_ver = v1_0;
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
@@ -244,12 +247,11 @@ populate_pplib_ppt_state_array(
 			ppt41->state_array[i].num_levels = num_levels;
 			ppt41->state_array[i].state = walker.states;
 			ppt41->state_array[i].size = entry_size;
-
 			walker.raw += entry_size;
-			assert(i < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
 		}
 		ppt41->state_array_size = pplibv1->NumStates * pplibv1->StateEntrySize;
 	} else {
+		assert(base->v2.NumEntries < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
 		ppt41->state_array_ver = v2_0;
 		ppt41->num_state_array_entries = base->v2.NumEntries;
 
@@ -263,7 +265,6 @@ populate_pplib_ppt_state_array(
 			);
 			ppt41->state_array[i].size = entry_size;
 			walker.raw += entry_size;
-			assert(i < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
 		}
 		ppt41->state_array_size = walker.raw - (void*)base;
 	}
@@ -2606,6 +2607,15 @@ atombios_parse(
 	struct atom_tree* const atree = calloc(1,sizeof(struct atom_tree));
 	// atomtree is highly conditional, so zeroing with calloc will make
 	// population easier.
+
+	/*
+	setjmp(error.env);
+	if (error.severity) {
+		free(atree);
+		return NULL;
+	}
+	*/
+
 
 	atree->alloced_bios = alloced_bios;
 

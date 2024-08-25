@@ -14,6 +14,7 @@ Also generic functions that would be in a standard.
 #include <gtk/gtk.h>
 #include <assert.h>
 #include <ctype.h>
+#include <setjmp.h>
 
 #ifdef C2X_COMPAT
 typedef uint8_t char8_t;
@@ -76,6 +77,7 @@ static_assert(sizeof(struct _tenbytes) == 10);
 # define __counted_by(member)
 #endif
 
+
 // TODO stroll that considers 0b prefix?
 int64_t
 strtoll_2(
@@ -101,5 +103,56 @@ char_in_string( // test if character ch appears anywhere in string
 		char ch,
 		char const* str
 		);
+
+
+enum error_severity:uint8_t {
+	NO_ERROR      = 0,
+	ERROR_WARNING = 1, // print a warning message and return
+	ERROR_ABORT   = 2, // jongjump back to set destination
+	ERROR_CRASH   = 3, // gracefully crash
+};
+struct error { // sorta intended to be a static variable
+	char message[128];
+	enum error_severity severity;
+	int num_history; // practical length of backtrace
+	void* bt_history[10]; // backtrace
+	jmp_buf env;
+};
+void // may not return
+error_emit( // severity and message must be set before calling
+		struct error* err
+		);
+// convienence macro meant to replace assert() ; msg can by dynamic
+#define error_assert(errptr, sev, msg, test) do {\
+	 if (!(test)) {\
+		assert(test);\
+		char* walker = memccpy((errptr)->message, msg,\
+			'\0', lengthof((errptr)->message)\
+		);\
+		assert(NULL != walker);\
+		(errptr)->message[lengthof((errptr)->message)-1] = '\0';\
+		\
+		(errptr)->severity = sev;\
+		error_emit(errptr);\
+	}\
+} while(0)
+/*
+The intent is an error/warning message system that would replace assert(),
+where the usage would have,
+`static struct error error;` in atomtree.c and atui/tree.c and,
+    setjmp(error.env);
+    if (error.severity) {
+        free_stuff(...);
+		if (error_out) {
+			*error_out = error.message;
+		}
+        return NULL;
+    }
+in atombios_parse and generate_atui respectively.
+However at the time of writing, I am uncertain how useful this would actually
+be, or what messages would be worth reading.
+I'm keeping this as food for thought.
+*/
+
 
 #endif

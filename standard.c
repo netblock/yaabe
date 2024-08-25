@@ -1,5 +1,7 @@
 #include "standard.h"
 
+#include <execinfo.h>
+
 int64_t
 strtoll_2(
 		char const* str
@@ -70,4 +72,39 @@ char_in_string(
 		str++;
 	}
 	return false;
+}
+
+void
+error_emit(
+		struct error* const err
+		) {
+	if (strlen(err->message)) {
+		switch (err->severity) {
+			case ERROR_WARNING:
+				fprintf(stderr, "warning: %s\n", err->message);
+				break;
+			case ERROR_ABORT:
+				fprintf(stderr, "error: %s\n", err->message);
+				break;
+			case ERROR_CRASH:
+				fprintf(stderr, "catastrophic error: %s\n", err->message);
+				fprintf(stderr, "backtrace:\n");
+				err->num_history = backtrace(
+					err->bt_history, lengthof(err->bt_history)
+				);
+				backtrace_symbols_fd(
+					err->bt_history, err->num_history,
+					STDERR_FILENO
+				);
+				break;
+			case NO_ERROR:
+				break;
+		};
+	}
+	switch (err->severity) {
+		case ERROR_WARNING: return;
+		case ERROR_ABORT: longjmp(err->env, 0);
+		case ERROR_CRASH: exit(ERROR_CRASH);
+		case NO_ERROR: return;
+	};
 }
