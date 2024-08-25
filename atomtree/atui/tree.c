@@ -252,7 +252,7 @@ grow_pplib_ppt_state_array(
 	atui_branch* base;
 	struct atui_funcify_args atui_args = {
 		.atomtree =  ppt41,
-		.suggestbios = ppt41->leaves,
+		.suggestbios = ppt41->state_array_base,
 		.num_import_branches = ppt41->num_state_array_entries,
 	};
 	atui_branch* (* atui_state_func)(struct atui_funcify_args const*);
