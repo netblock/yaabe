@@ -38,6 +38,8 @@ static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 typedef struct atui_nullstruct {} atui_nullstruct;
 
 struct atui_funcify_args; // internal use; see below
+// function pointer type:
+typedef atui_branch* (* atuifunc)(struct atui_funcify_args const*);
 
 
 enum i18n_languages:int8_t {
@@ -167,7 +169,7 @@ struct _atui_leaf {
 
 	// allocator-funcify use only:
 	union {
-		atui_branch* (* branch_bud)(struct atui_funcify_args const*);
+		atuifunc branch_bud;
 		struct subleaf_meta const* template_leaves;
 	};
 };

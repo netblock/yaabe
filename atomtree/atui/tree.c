@@ -12,7 +12,7 @@ grow_smc_dpm_info(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree = smc_dpm_info,
 		.suggestbios = smc_dpm_info->leaves,
@@ -45,7 +45,7 @@ grow_firmwareinfo(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree = firmwareinfo,
 		.suggestbios = firmwareinfo->leaves,
@@ -79,7 +79,7 @@ grow_lcd_info(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree =  lcd_info,
 		.suggestbios = lcd_info->leaves,
@@ -111,7 +111,7 @@ grow_smu_info(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree =  smu_info,
 		.suggestbios = smu_info->leaves,
@@ -142,7 +142,7 @@ grow_vram_usagebyfirmware(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree =  fw_vram,
 		.suggestbios = fw_vram->leaves,
@@ -168,7 +168,7 @@ grow_gpio_pin_lut(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree =  gpio_pin_lut,
 		.suggestbios = gpio_pin_lut->leaves,
@@ -193,7 +193,7 @@ grow_gfx_info(
 		return NULL;
 	}
 
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	atui_branch* subtables[2] = {NULL};
 	struct atui_funcify_args atui_args = {
 		.atomtree =  gfx_info,
@@ -255,7 +255,7 @@ grow_pplib_ppt_state_array(
 		.suggestbios = ppt41->state_array_base,
 		.num_import_branches = ppt41->num_state_array_entries,
 	};
-	atui_branch* (* atui_state_func)(struct atui_funcify_args const*);
+	atuifunc atui_state_func;
 
 	switch (ppt41->state_array_ver) {
 		case v1_0:
@@ -641,7 +641,7 @@ atui_generate_pptablev1_ppt(
 		sclk_dependency = ATUI_MAKE_BRANCH(atom_pptable_mclk_dependency_table,
 			NULL,  ppt71,ppt71->sclk_dependency,  0,NULL
 		);
-		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		atuifunc atui_func;
 		struct atui_funcify_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->sclk_dependency
@@ -731,7 +731,7 @@ atui_generate_pptablev1_ppt(
 		pcie_table = ATUI_MAKE_BRANCH(atom_pptable_pcie_table, NULL,
 			ppt71,ppt71->pcie_table,  0,NULL
 		);
-		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		atuifunc atui_func;
 		struct atui_funcify_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->pcie_table,
@@ -819,7 +819,7 @@ atui_generate_vega10_ppt(
 
 	atui_branch* gfxclk_dependency = NULL;
 	if (ppt81->gfxclk_dependency) {
-		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		atuifunc atui_func;
 		struct atui_funcify_args atui_args = {
 			.atomtree = ppt81,
 			.suggestbios = ppt81->gfxclk_dependency,
@@ -880,7 +880,7 @@ atui_generate_vega10_ppt(
 
 	atui_branch* powertune = NULL;
 	if (ppt81->powertune) {
-		atui_branch* (* atui_func)(struct atui_funcify_args const*);
+		atuifunc atui_func;
 		struct atui_funcify_args atui_args = {
 			.atomtree = ppt81,
 			.suggestbios = ppt81->powertune
@@ -987,7 +987,7 @@ grow_ppt(
 
 	atui_branch* atui_ppt;
 	atui_branch* atui_smctable = NULL;
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree = ppt,
 		.suggestbios = ppt->leaves,
@@ -1134,7 +1134,7 @@ grow_mem_adjust_table(
 	);
 	ATUI_ADD_BRANCH(atui_mem_adjust, atui_adjust_set);
 
-	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*) = NULL;
+	atuifunc atui_strap_func = NULL;
 	switch (mem_adjust_table->reg_set) {
 		case MEM_ADJUST_SET_GCN3_HBM1:
 			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_hbm1);
@@ -1274,7 +1274,7 @@ grow_mem_clk_patch(
 	);
 	ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 
-	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*) = NULL;
+	atuifunc atui_strap_func = NULL;
 	switch (mem_clk_patch->reg_set) {
 		case TIMINGS_SET_POLARIS:
 			atui_strap_func = ATUI_FUNC(timings_set_polaris);
@@ -1352,7 +1352,7 @@ grow_mc_tile_adjust(
 	);
 	ATUI_ADD_BRANCH(atui_mc_tile_adjust, atui_adjust_set);
 
-	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*) = NULL;
+	atuifunc atui_strap_func = NULL;
 	switch (mc_tile_adjust->reg_set) {
 		case MC_TILE_ADJUST_SET_GCN4_GDDR5:
 			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn4_gddr5);
@@ -1410,7 +1410,7 @@ grow_init_mc_phy_init(
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
-	atui_branch* (* atui_strap_func)(struct atui_funcify_args const*) = NULL;
+	atuifunc atui_strap_func = NULL;
 	switch (mc_phy_init->reg_set) {
 		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4:
 			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type4);
@@ -1510,10 +1510,7 @@ grow_atom_memory_timing_format(
 
 	atui_branch* atui_mrs[4] = {NULL};
 	struct atui_funcify_args atui_mrs_args = {0};
-	atui_branch*
-	(* atui_mrs_funcs[lengthof(atui_mrs)]) (
-			struct atui_funcify_args const*
-			) = {
+	atuifunc atui_mrs_funcs[lengthof(atui_mrs)] = {
 		ATUI_FUNC(atui_nullstruct) // easier than null-testing
 	};
 	switch (memory_type) { // mrs in straps
@@ -2164,7 +2161,7 @@ grow_vram_info_v2_3(
 		ATUI_ADD_BRANCH(atui_memclkpatch, atui_mem_timings);
 
 		atui_branch* atui_strap;
-		atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
+		atuifunc atui_strap_func;
 		struct atui_funcify_args atui_args = {0};
 		if (vi23->uses_vega20_timings) {
 			atui_strap_func = ATUI_FUNC(timings_set_vega20);
@@ -2277,8 +2274,7 @@ grow_vram_info_v2_4(
 
 		// to have similar topology like the rest
 		atui_branch* atui_strap;
-		atui_branch* (* atui_strap_func)(struct atui_funcify_args const*);
-		atui_strap_func = ATUI_FUNC(timings_set_navi1);
+		atuifunc const atui_strap_func = ATUI_FUNC(timings_set_navi1);
 		struct atui_funcify_args atui_args = {0};
 		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -2701,7 +2697,7 @@ grow_voltageobject_info_v3_1(
 
 	atui_branch* atui_volt_object;
 	struct atui_funcify_args atui_args = {0};
-	atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
+	atuifunc atui_vobj_func;
 	for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 		switch (voltage_objects[i].obj->header.voltage_mode) {
 			case VOLTAGE_OBJ_GPIO_LUT:
@@ -2757,7 +2753,7 @@ grow_voltageobject_info_v4_1(
 
 	atui_branch* atui_volt_object;
 	struct atui_funcify_args atui_args = {0};
-	atui_branch* (* atui_vobj_func) (struct atui_funcify_args const*);
+	atuifunc atui_vobj_func;
 	for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 		switch (voltage_objects[i].obj->header.voltage_mode) {
 			case VOLTAGE_OBJ_GPIO_LUT:
@@ -3016,7 +3012,7 @@ grow_atom_rom_header(
 	}
 	atui_branch* const atui_dt = grow_datatables(atree);
 	atui_branch* atui_rom_header;
-	atui_branch* (* atui_func)(struct atui_funcify_args const*);
+	atuifunc atui_func;
 	struct atui_funcify_args atui_args = {
 		.atomtree = rom_header,
 		.suggestbios = rom_header->leaves,
@@ -3049,10 +3045,7 @@ grow_pci_tables(
 
 	atui_branch* atui_pci;
 	struct atui_funcify_args atui_args = {0};
-	atui_branch*
-	(* const atui_pci_func[]) (
-			struct atui_funcify_args const*
-			) = { // jump table
+	atuifunc const atui_pci_func[] = { // jump table
 		ATUI_FUNC(pci_rom_tables),
 		ATUI_FUNC(efi_pci_device_driver_image),
 	};
