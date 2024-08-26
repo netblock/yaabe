@@ -2620,7 +2620,7 @@ atombios_parse(
 	atree->alloced_bios = alloced_bios;
 
 	atree->bios = bios; // going to be used as the '0' in places.
-	atree->bios_image_size = (
+	atree->pci_first_image_size = (
 		image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
 	);
 
@@ -2677,7 +2677,7 @@ atomtree_bios_checksum(
 		struct atom_tree* const atree
 		) {
 	uint8_t const* const bios = atree->bios;
-	uint32_t const bios_size = atree->bios_image_size;
+	uint32_t const bios_size = atree->pci_first_image_size;
 	uint8_t offset = 0;
 
 	for (uint32_t i=0; i < bios_size; i++) {

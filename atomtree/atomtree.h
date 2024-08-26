@@ -69,7 +69,7 @@ struct atom_tree {
 		void* bios;
 		struct vbios_rom_header* image;
 	};
-	uint32_t bios_image_size;
+	uint32_t pci_first_image_size;
 
 	// for PCI ID based HW IP designation, not for new AMD cards
 	// TODO atomtree for HW IP when discovery.h is implemented.
