@@ -1318,7 +1318,7 @@ branch_type_column_bind(
 	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
 	g_object_unref(g_branch);
 
-	gtk_label_set_text(GTK_LABEL(label), a_branch->origname);
+	gtk_label_set_text(GTK_LABEL(label), a_branch->structname);
 }
 
 static void

@@ -925,6 +925,7 @@ PPATUI_HEADERIFY(%s) {
 	};
 	struct atui_branch_data const branch_embryo = {
 		.origname = "%s",
+		.structname = "%s",
 %s\
 		.table_start = (void*) (%s),
 		.table_size = (%s),
@@ -965,7 +966,7 @@ PPATUI_HEADERIFY(%s) {
 		out_text += branch_template % (
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
 			len(branch.leaves), leaves_to_text(branch.leaves, "\t\t"),
-			branch.name, # embryo
+			branch.name, branch.c_type, # embryo
 			description_to_text(branch.description, "\t\t"),
 			branch.table_start, branch.table_size,
 			"(%u + %s)" % (counters[0], counters[1]),

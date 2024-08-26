@@ -173,7 +173,9 @@ struct _atui_leaf {
 };
 struct _atui_branch {
 	char name[64];
+	// name and struct ("bios" namespace) may be different
 	char const* origname;
+	char const* structname;
 
 	char const* description[LANG_TOTALLANGS];
 
@@ -339,6 +341,7 @@ struct subleaf_meta {
 
 struct atui_branch_data {
 	char const* const origname;
+	char const* const structname;
 	char const* const description[LANG_TOTALLANGS];
 
 	// position and size of the struct the branch represents

@@ -475,6 +475,7 @@ atui_branch_allocator(
 
 
 	table->origname = embryo->origname;
+	table->structname = embryo->structname;
 	if (args->rename) {
 		strcpy(table->name, args->rename);
 	} else {
