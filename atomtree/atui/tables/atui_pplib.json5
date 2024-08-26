@@ -873,25 +873,11 @@ global_default: {
 	c_type: "atom_pplib_r600_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
+			access: "bios->EngineClock",
+			name: "EngineClock",
 		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-		},
-
-		{
-			access: "bios->MemoryClock_Low",
-			name: "MemoryClock_Low",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->MemoryClock_Hi",
-			name: "MemoryClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
 		}, {
 			access: "bios->VDDC",
 			name: "VDDC",
@@ -935,28 +921,16 @@ global_default: {
 	c_type: "atom_pplib_rs780_clock_info",
 	leaves: [
 		{
-			access: "bios->LowEngineClock_Lo",
-			name: "LowEngineClock_Lo",
+			access: "bios->LowEngineClock",
+			name: "LowEngineClock",
 			description: [
 				{language: "english", text: "Low Engine clock in MHz",},
 			],
 		}, {
-			access: "bios->LowEngineClock_Hi",
-			name: "LowEngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->HighEngineClock_Lo",
-			name: "HighEngineClock_Lo",
+			access: "bios->HighEngineClock",
+			name: "HighEngineClock",
 			description: [
 				{language: "english", text: "High Engine clock in MHz.",},
-			],
-		}, {
-			access: "bios->HighEngineClock_Hi",
-			name: "HighEngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
 			],
 		}, {
 			access: "bios->MemoryClock_Lo",
@@ -966,7 +940,7 @@ global_default: {
 			access: "bios->MemoryClock_Hi",
 			name: "MemoryClock_Hi",
 			description: [
-				{language: "english", text: "Currentyl unused.",},
+				{language: "english", text: "Currently unused.",},
 			],
 		}, {
 			access: "bios->Padding",
@@ -1029,34 +1003,12 @@ global_default: {
 	c_type: "atom_pplib_evergreen_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->EngineClock",
+			name: "EngineClock",
 		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		},
-
-		{
-			access: "bios->MemoryClock_Lo",
-			name: "MemoryClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
 		}, {
-			access: "bios->MemoryClock_Hi",
-			name: "MemoryClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		},
-
-		{
 			access: "bios->VDDC",
 			name: "VDDC",
 		}, {
@@ -1099,31 +1051,13 @@ global_default: {
 	c_type: "atom_pplib_si_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->EngineClock",
+			name: "EngineClock",
 		},
 
 		{
-			access: "bios->MemoryClock_Lo",
-			name: "MemoryClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->MemoryClock_Hi",
-			name: "MemoryClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
 		},
 
 		{
@@ -1179,31 +1113,13 @@ global_default: {
 	c_type: "atom_pplib_ci_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->EngineClock",
+			name: "EngineClock",
 		},
 
 		{
-			access: "bios->MemoryClock_Lo",
-			name: "MemoryClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->MemoryClock_Hi",
-			name: "MemoryClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->MemoryClock",
+			name: "MemoryClock",
 		},
 
 		{
@@ -1248,17 +1164,8 @@ global_default: {
 	c_type: "atom_pplib_sumo_clock_info",
 	leaves: [
 		{
-			access: "bios->EngineClock_Lo",
-			name: "EngineClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->EngineClock_Hi",
-			name: "EngineClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->EngineClock",
+			name: "EngineClock",
 		}, {
 			access: "bios->vddcIndex",
 			name: "vddcIndex",
@@ -2200,29 +2107,11 @@ global_default: {
 	c_type: "atom_pplib_vce_clock_info",
 	leaves: [
 		{
-			access: "bios->EVClk_Lo",
-			name: "EVClk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->EVClk",
+			name: "EVClk",
 		}, {
-			access: "bios->EVClk_Hi",
-			name: "EVClk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->ECClk_Lo",
-			name: "ECClk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->ECClk_Hi",
-			name: "ECClk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->ECClk",
+			name: "ECClk",
 		},
 	],
 }, {
@@ -2369,29 +2258,11 @@ global_default: {
 	c_type: "atom_pplib_uvd_clock_info",
 	leaves: [
 		{
-			access: "bios->VClk_Lo",
-			name: "VClk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->VClk",
+			name: "VClk",
 		}, {
-			access: "bios->VClk_Hi",
-			name: "VClk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->DClk_Lo",
-			name: "DClk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->DClk_Hi",
-			name: "DClk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->DClk",
+			name: "DClk",
 		},
 	],
 }, {
@@ -2480,17 +2351,8 @@ global_default: {
 			access: "bios->Voltage",
 			name: "Voltage",
 		}, {
-			access: "bios->SAMClock_Lo",
-			name: "SAMClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->SAMClock_Hi",
-			name: "SAMClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->SAMClock",
+			name: "SAMClock",
 		},
 	],
 }, {
@@ -2529,17 +2391,8 @@ global_default: {
 			access: "bios->Voltage",
 			name: "Voltage",
 		}, {
-			access: "bios->ACPClock_Lo",
-			name: "ACPClock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->ACPClock_Hi",
-			name: "ACPClock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->ACPClock",
+			name: "ACPClock",
 		},
 	],
 }, {
@@ -2647,17 +2500,8 @@ global_default: {
 	c_type: "atom_pplib_clock_voltage_dependency_record",
 	leaves: [
 		{
-			access: "bios->Clock_Lo",
-			name: "Clock_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->Clock_Hi",
-			name: "Clock_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->Clock",
+			name: "Clock",
 		}, {
 			access: "bios->Voltage",
 			name: "Voltage",
@@ -2755,29 +2599,11 @@ global_default: {
 	c_type: "atom_pplib_clock_voltage_limit_record",
 	leaves: [
 		{
-			access: "bios->Sclk_Lo",
-			name: "Sclk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->Sclk",
+			name: "Sclk",
 		}, {
-			access: "bios->Sclk_Hi",
-			name: "Sclk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->Mclk_Lo",
-			name: "Mclk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->Mclk_Hi",
-			name: "Mclk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->Mclk",
+			name: "Mclk",
 		}, {
 			access: "bios->Vddc",
 			name: "Vddc",
@@ -2819,29 +2645,11 @@ global_default: {
 			access: "bios->Voltage",
 			name: "Voltage",
 		}, {
-			access: "bios->Sclk_Lo",
-			name: "Sclk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->Sclk",
+			name: "Sclk",
 		}, {
-			access: "bios->Sclk_Hi",
-			name: "Sclk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->Mclk_Lo",
-			name: "Mclk_Lo",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
-		}, {
-			access: "bios->Mclk_Hi",
-			name: "Mclk_Hi",
-			description: [
-				{language: "english", text: "24-bit uint",},
-			],
+			access: "bios->Mclk",
+			name: "Mclk",
 		},
 	],
 }, {

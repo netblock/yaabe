@@ -40,7 +40,7 @@ atui_leaf_from_text(
 		char* const token_buffer = strdup(text);
 		char* walker = token_buffer;
 		switch (leaf->total_bits) {
-			case 8:
+			case  8:
 				for (size_t i=0; i < array_size; i++) {
 					leaf->u8[i] = strtoul(walker, &walker, base);
 				}
@@ -218,7 +218,7 @@ atui_leaf_to_text(
 		buffer = malloc(buffer_size);
 		char* buffer_walk = buffer;
 		switch (leaf->total_bits) {
-			case 8:
+			case  8:
 				for (size_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, leaf->u8[i]);
 				}
@@ -324,12 +324,14 @@ atui_leaf_set_val_unsigned(
 	val <<= leaf->bitfield_lo;
 
 	switch (leaf->total_bits) {
-		case 8:   *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | val; break;
+		case  8: *(leaf->u8)  = ( *(leaf->u8) & tokeep_mask) | val; break;
 		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val; break;
+		case 24: *(leaf->s24) = pt_to_npt_downgrade((int32_t*)&val); break;
 		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val; break;
 		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val; break;
 		default: assert(0); break;
 	}
+
 }
 uint64_t
 atui_leaf_get_val_unsigned(
@@ -340,8 +342,9 @@ atui_leaf_get_val_unsigned(
 
 	uint64_t val;
 	switch (leaf->total_bits) {
-		case 8:  val =  *(leaf->u8); break;
+		case  8: val =  *(leaf->u8); break;
 		case 16: val = *(leaf->u16); break;
+		case 24: val = npt_to_pt_upgrade(leaf->u24); break;
 		case 32: val = *(leaf->u32); break;
 		case 64: val = *(leaf->u64); break;
 		default: assert(0); break;
@@ -390,13 +393,15 @@ atui_leaf_set_val_signed(
 	raw_val <<= leaf->bitfield_lo;
 
 	switch (leaf->total_bits) {
-		case 8:   *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | raw_val; break;
-		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val; break;
-		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val; break;
-		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val; break;
+		case  8:  *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | raw_val;  break;
+		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;  break;
+		case 24: *(leaf->u24) = pt_to_npt_downgrade((uint32_t*)&raw_val); break;
+		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;  break;
+		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;  break;
 		default: assert(0); break;
 	}
 }
+
 int64_t
 atui_leaf_get_val_signed(
 		atui_leaf const* const leaf
@@ -406,8 +411,9 @@ atui_leaf_get_val_signed(
 
 	int64_t val;
 	switch (leaf->total_bits) {
-		case 8:  val =  *(leaf->s8); break;
+		case  8: val =  *(leaf->s8); break;
 		case 16: val = *(leaf->s16); break;
+		case 24: val = npt_to_pt_upgrade(leaf->s24); break;
 		case 32: val = *(leaf->s32); break;
 		case 64: val = *(leaf->s64); break;
 		default: assert(0); break;
@@ -448,7 +454,7 @@ atui_leaf_set_val_fraction(
 			fixed_val += frac;
 		}
 		switch (leaf->total_bits) {
-			case 8:   *(leaf->u8) = fixed_val; return;
+			case  8:  *(leaf->u8) = fixed_val; return;
 			case 16: *(leaf->u16) = fixed_val; return;
 			case 32: *(leaf->u32) = fixed_val; return;
 			case 64: *(leaf->u64) = fixed_val; return;
@@ -477,7 +483,7 @@ atui_leaf_get_val_fraction(
 		assert((leaf->total_bits - leaf->fractional_bits) < 53);
 		float64_t val;
 		switch (leaf->total_bits) {
-			case 8:  val =  *(leaf->u8); break;
+			case  8: val =  *(leaf->u8); break;
 			case 16: val = *(leaf->u16); break;
 			case 32: val = *(leaf->u32); break;
 			case 64: val = *(leaf->u64); break;

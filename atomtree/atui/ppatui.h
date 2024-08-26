@@ -71,6 +71,11 @@ C preprocessor side of ATUI table generation
 	int32_t:32, int32_t*:32, int32_t const*:32,\
 	int64_t:64, int64_t*:64, int64_t const*:64,\
 \
+	uint24_t:24, uint24_t*:24, uint24_t const*:24,\
+	uint48_t:48, uint48_t*:48, uint48_t const*:48,\
+	int24_t:24, int24_t*:24, int24_t const*:24,\
+	int48_t:48, int48_t*:48, int48_t const*:48,\
+\
 	uq6_2_t:8, uq6_2_t*:8, uq6_2_t const*:8,\
 	uq4_4_t:8, uq4_4_t*:8, uq4_4_t const*:8,\
 	uq14_2_t:16, uq14_2_t*:16, uq14_2_t const*:16,\
@@ -103,6 +108,9 @@ C preprocessor side of ATUI table generation
 	int16_t:true, int16_t*:true, int16_t const*:true,\
 	int32_t:true, int32_t*:true, int32_t const*:true,\
 	int64_t:true, int64_t*:true, int64_t const*:true,\
+\
+	int24_t:true, int24_t*:true, int24_t const*:true,\
+	int48_t:true, int48_t*:true, int48_t const*:true,\
 \
 /*
 	float16_t:true, float16_t*:true,\

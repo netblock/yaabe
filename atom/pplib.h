@@ -286,16 +286,11 @@ union atom_pplib_r600_flags {
 	};
 };
 struct atom_pplib_r600_clock_info {
-	uint16_t EngineClock_Lo;
-	uint8_t  EngineClock_Hi;
-
-	uint16_t MemoryClock_Low; // 24-bit uint
-	uint8_t  MemoryClock_Hi;  // 24-bit uint
-
+	uint24_t EngineClock;
+	uint24_t MemoryClock;
 	int16_t VDDC;
 	uint16_t Unused1;
 	uint16_t Unused2;
-
 	union atom_pplib_r600_flags Flags;
 };
 
@@ -317,12 +312,10 @@ enum ATOM_PPLIB_RS780_HTLINKFREQ:uint16_t {
 	ATOM_PPLIB_RS780_HTLINKFREQ_HIGH = 2, 
 };
 struct atom_pplib_rs780_clock_info {
-	uint16_t LowEngineClock_Lo;  // Low Engine clock in MHz
-	uint8_t  LowEngineClock_Hi;  // 24-bit uint
-	uint16_t HighEngineClock_Lo; // High Engine clock in MHz.
-	uint8_t  HighEngineClock_Hi; // 24-bit uint
+	uint24_t LowEngineClock;  // Low Engine clock in MHz
+	uint24_t HighEngineClock; // High Engine clock in MHz.
 	enum ATOM_PPLIB_RS780_SPMCLK  MemoryClock_Lo;
-	uint8_t  MemoryClock_Hi;    // Currentyl unused.
+	uint8_t MemoryClock_Hi; // Currently unused.
 	uint8_t  Padding;            // For proper alignment and size.
 	enum ATOM_PPLIB_RS780_VOLTAGE  VDDC;
 	uint8_t  MaxHTLinkWidth;     // From SBIOS - {2, 4, 8, 16}
@@ -332,31 +325,21 @@ struct atom_pplib_rs780_clock_info {
 };
 
 struct atom_pplib_evergreen_clock_info {
-	uint16_t EngineClock_Lo; // 24-bit uint
-	uint8_t  EngineClock_Hi; // 24-bit uint
-
-	uint16_t MemoryClock_Lo; // 24-bit uint
-	uint8_t  MemoryClock_Hi; // 24-bit uint
-
+	uint24_t EngineClock;
+	uint24_t MemoryClock;
 	int16_t VDDC;
 	int16_t VDDCI;
 	uint16_t Unused;
-
 	uint32_t Flags;
 };
 
 struct atom_pplib_si_clock_info {
-	uint16_t EngineClock_Lo; // 24-bit uint
-	uint8_t  EngineClock_Hi; // 24-bit uint
-
-	uint16_t MemoryClock_Lo; // 24-bit uint
-	uint8_t  MemoryClock_Hi; // 24-bit uint
-
+	uint24_t EngineClock;
+	uint24_t MemoryClock;
 	int16_t VDDC;
 	int16_t VDDCI;
 	uint8_t  PCIEGen;
 	uint8_t  Unused1;
-
 	uint32_t Flags;
 };
 struct atom_pplib_si_clock_info_array {
@@ -366,12 +349,8 @@ struct atom_pplib_si_clock_info_array {
 };
 
 struct atom_pplib_ci_clock_info {
-	uint16_t EngineClock_Lo; // 24-bit uint
-	uint8_t  EngineClock_Hi; // 24-bit uint
-
-	uint16_t MemoryClock_Lo; // 24-bit uint
-	uint8_t  MemoryClock_Hi; // 24-bit uint
-	
+	uint24_t EngineClock;
+	uint24_t MemoryClock;
 	uint8_t  PCIEGen;
 	uint16_t PCIELane;
 };
@@ -382,8 +361,7 @@ struct atom_pplib_ci_clock_info_array {
 };
 
 struct atom_pplib_sumo_clock_info {
-	uint16_t EngineClock_Lo; // 24-bit uint
-	uint8_t  EngineClock_Hi; // 24-bit uint
+	uint24_t EngineClock;
 	uint8_t  vddcIndex; // 2-bit vddc index
 	uint16_t tdpLimit;
 	uint16_t rsv1;
@@ -659,8 +637,7 @@ union atom_pplib_extended_headers {
 
 
 struct atom_pplib_clock_voltage_dependency_record {
-	uint16_t Clock_Lo; // 24-bit uint
-	uint8_t  Clock_Hi; // 24-bit uint
+	uint24_t Clock;
 	int16_t  Voltage;
 };
 struct atom_pplib_clock_voltage_dependency_table {
@@ -669,10 +646,8 @@ struct atom_pplib_clock_voltage_dependency_table {
 };
 
 struct atom_pplib_clock_voltage_limit_record {
-	uint16_t Sclk_Lo; // 24-bit uint
-	uint8_t  Sclk_Hi; // 24-bit uint
-	uint16_t Mclk_Lo; // 24-bit uint
-	uint8_t  Mclk_Hi; // 24-bit uint
+	uint24_t Sclk;
+	uint24_t Mclk;
 	uint16_t Vddc;
 	uint16_t Vddci;
 };
@@ -685,10 +660,8 @@ struct atom_pplib_clock_voltage_limit_table {
 
 struct atom_pplib_phaseshedding_limits_record {
 	int16_t  Voltage;
-	uint16_t Sclk_Lo; // 24-bit uint
-	uint8_t  Sclk_Hi; // 24-bit uint
-	uint16_t Mclk_Lo; // 24-bit uint
-	uint8_t  Mclk_Hi; // 24-bit uint
+	uint24_t Sclk;
+	uint24_t Mclk;
 };
 struct atom_pplib_phasesheddinglimits_table {
 	uint8_t  NumEntries;
@@ -722,10 +695,8 @@ union atom_pplib_cac_leakage_tables {
 
 
 struct atom_pplib_vce_clock_info {
-	uint16_t EVClk_Lo; // 24-bit uint
-	uint8_t  EVClk_Hi; // 24-bit uint
-	uint16_t ECClk_Lo; // 24-bit uint
-	uint8_t  ECClk_Hi; // 24-bit uint
+	uint24_t EVClk;
+	uint24_t ECClk;
 };
 struct atom_pplib_vce_clock_info_array {
 	uint8_t  NumEntries;
@@ -763,10 +734,8 @@ struct atom_pplib_vce_table { // 3 flex subtables in the table
 
 
 struct atom_pplib_uvd_clock_info {
-	uint16_t VClk_Lo; // 24-bit uint
-	uint8_t  VClk_Hi; // 24-bit uint
-	uint16_t DClk_Lo; // 24-bit uint
-	uint8_t  DClk_Hi; // 24-bit uint
+	uint24_t VClk;
+	uint24_t DClk;
 };
 struct atom_pplib_uvd_clock_info_array {
 	uint8_t  NumEntries;
@@ -788,8 +757,7 @@ struct atom_pplib_uvd_table { // 2 flex subtables in the table
 
 struct atom_pplib_samclk_voltage_limit_record {
 	int16_t  Voltage;
-	uint16_t SAMClock_Lo; // 24-bit uint
-	uint8_t  SAMClock_Hi; // 24-bit uint
+	uint24_t SAMClock;
 };
 struct atom_pplib_samu_table {
 	uint8_t  RevId;
@@ -799,8 +767,7 @@ struct atom_pplib_samu_table {
 
 struct atom_pplib_acpclk_voltage_limit_record {
 	int16_t  Voltage;
-	uint16_t ACPClock_Lo; // 24-bit uint
-	uint8_t  ACPClock_Hi; // 24-bit uint
+	uint24_t ACPClock;
 };
 struct atom_pplib_acp_table {
 	uint8_t  RevId;

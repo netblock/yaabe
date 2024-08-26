@@ -113,7 +113,7 @@ get_capsule_type(
 	if ((a_type.fancy == ATUI_ARRAY) && (a_type.radix)) {
 		typestr[0] = 'a';
 		switch (leaf->total_bits) {
-			case 8:typestr[1] = 'y'; break;
+			case  8: typestr[1] = 'y'; break;
 			case 16: typestr[1] = 'q'; break;
 			case 32: typestr[1] = 'u'; break;
 			case 64: typestr[1] = 't'; break;
@@ -126,18 +126,22 @@ get_capsule_type(
 			typestr[0] = 'd';
 		} else if (a_type.signed_num) {
 			switch (leaf->total_bits) {
-				case 8:  typestr[0] = 'y'; break;
+				case  8: typestr[0] = 'y'; break;
 				case 16: typestr[0] = 'n'; break;
 				case 32: typestr[0] = 'i'; break;
 				case 64: typestr[0] = 'x'; break;
+				case 48:
+				case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
 				default: assert(0); break;
 			}
 		} else {
 			switch (leaf->total_bits) {
-				case 8:  typestr[0] = 'y'; break;
+				case  8: typestr[0] = 'y'; break;
 				case 16: typestr[0] = 'q'; break;
 				case 32: typestr[0] = 'u'; break;
 				case 64: typestr[0] = 't'; break;
+				case 48:
+				case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
 				default: assert(0); break;
 			}
 		}

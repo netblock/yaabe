@@ -58,6 +58,7 @@ static_assert(sizeof(struct _tenbytes) == 10);
 
 
 #include "qnotation.h"
+#include "npt_ints.h"
 
 /******************************************************************************/
 

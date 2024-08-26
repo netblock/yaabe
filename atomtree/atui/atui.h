@@ -140,6 +140,11 @@ struct _atui_leaf {
 		int32_t*  s32;
 		int64_t*  s64;
 
+		uint24_t* u24;
+		uint48_t* u48;
+		int24_t*  s24;
+		int48_t*  s48;
+
 		uq6_2_t*     u6_2;
 		uq4_4_t*     u4_4;
 		uq14_2_t*   u14_2;
