@@ -5,10 +5,9 @@
 /******************************************************************************/
 
 
-#ifndef _ATOMBIOS_H
-#define _ATOMBIOS_H
-
-#pragma pack(push, 1) // BIOS data must use byte alignment
+#ifndef ATOMBIOS_H
+#define ATOMBIOS_H
+#pragma pack(push, 1) // bios data must use byte alignment
 
 /*
 #define ATOM_VERSION_MAJOR 0x00020000
@@ -9212,5 +9211,4 @@ struct gop_lib1_content {
 */
 
 #pragma pack(pop) // restore old packing
-
-#endif /* _ATOMBIOS_H */
+#endif

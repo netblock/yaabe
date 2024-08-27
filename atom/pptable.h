@@ -6,8 +6,7 @@ vega10_pptable.h has an extremely similar structure. TODO merge files?
 
 #ifndef PPTABLE_H
 #define PPTABLE_H
-
-#pragma pack(push, 1)
+#pragma pack(push, 1) // bios data must use byte alignment
 
 // #include "hwmgr.h" // this included in a packed state!
 
@@ -420,6 +419,5 @@ struct atom_pptable_gpio_table {
 	uint8_t  Reserved[5];
 };
 
-#pragma pack(pop)
-
+#pragma pack(pop) // restore old packing
 #endif

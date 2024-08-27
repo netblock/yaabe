@@ -10,7 +10,7 @@ register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set, NULL);
 #ifndef ASIC_REG_TOOLS_H
 #define ASIC_REG_TOOLS_H
 
-// check the bottom for more includes
+// see bottom for more includes
 
 
 struct register_set_entry { // register set entry

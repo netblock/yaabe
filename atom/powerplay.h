@@ -5,7 +5,6 @@ check bottom for includes
 
 #ifndef POWERPLAY_H
 #define POWERPLAY_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 struct smu_powerplay_table_header {

@@ -1,7 +1,7 @@
 /* For atomtree's abstract, check out atomtree_data_tables.h */
 
+#include "standard.h"
 #include "atomtree.h"
-#include "atui.h"
 
 // commented out; see message in standard.h
 //landing is in atombios_parse
@@ -2691,7 +2691,6 @@ void
 atomtree_destroy(
 		struct atom_tree* const atree
 		) {
-	atui_destroy_tree(atree->atui_root);
 	free(atree->alloced_bios);
 	free(atree);
 }

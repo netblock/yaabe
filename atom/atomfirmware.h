@@ -4,9 +4,8 @@
 *             drivers for SoC15 products
 \******************************************************************************/
 
-#ifndef _ATOMFIRMWARE_H_
-#define _ATOMFIRMWARE_H_
-
+#ifndef ATOMFIRMWARE_H
+#define ATOMFIRMWARE_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
 enum  atom_bios_header_version_def {
@@ -4382,5 +4381,4 @@ enum scratch_pre_os_mode_info_bits_def {
 /******************************************************************************/
 
 #pragma pack(pop) // restore old packing
-
 #endif

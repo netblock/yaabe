@@ -9,9 +9,8 @@ the target platform. If there's more than 4 contiguous reserved bits, there's
 probably a timing/field for a different platform there.
 */
 
-#ifndef _BITFIELD_OVERRIDES_H_
-#define _BITFIELD_OVERRIDES_H_
-
+#ifndef BITFIELD_OVERRIDES_H
+#define BITFIELD_OVERRIDES_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
 /******************************************************************************/

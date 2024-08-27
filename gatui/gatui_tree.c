@@ -1,3 +1,6 @@
+#include "standard.h"
+#include "atomtree.h"
+#include "atui.h"
 #include "gatui_private.h"
 
 struct _GATUITree {
@@ -38,6 +41,7 @@ gatui_tree_finalize(
 		GObject* const object
 		) {
 	GATUITree* const self = GATUI_TREE(object);
+	atui_destroy_tree(self->atomtree->atui_root);
 	atomtree_destroy(self->atomtree);
 }
 static void

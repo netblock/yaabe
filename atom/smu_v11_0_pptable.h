@@ -1,6 +1,5 @@
 #ifndef SMU_11_0_PPTABLE_H
 #define SMU_11_0_PPTABLE_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 #define ATOM_VEGA20_TABLE_REVISION_VEGA20 11
@@ -340,5 +339,4 @@ struct smu_11_0_7_powerplay_table {
 
 
 #pragma pack(pop) // restore old packing
-
 #endif

@@ -381,13 +381,11 @@ Considers %s versions: %s
 
 #ifndef %s_H
 #define %s_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 """
 	header_ender = """\
 #pragma pack(pop) // restore old packing
-
 #endif
 """
 

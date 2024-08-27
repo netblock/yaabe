@@ -4,7 +4,7 @@ AtomTree iterable interface for UIs.
 See ppatui.h for the metaprogramming and atui.h for general API.
 */
 
-#include "atomtree.h"
+#include "standard.h"
 #include "atui.h"
 #include <math.h>
 

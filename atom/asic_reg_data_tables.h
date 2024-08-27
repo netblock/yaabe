@@ -3,9 +3,8 @@ Register data block playback of common asic register tables
 See also asic_reg_indicies.json5
 */
 
-#ifndef _ASIC_REG_DATA_TABLES_H_
-#define _ASIC_REG_DATA_TABLES_H_
-
+#ifndef ASIC_REG_DATA_TABLES_H
+#define ASIC_REG_DATA_TABLES_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
 /******************************************************************************/
@@ -1409,5 +1408,4 @@ struct dpm7_atomctrl_edc_leakge_table {
 
 
 #pragma pack(pop) // restore old packing
-
 #endif

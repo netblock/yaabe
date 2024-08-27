@@ -1,6 +1,5 @@
 #ifndef SMU13_DRIVER_IF_SMU_13_0_7_H
 #define SMU13_DRIVER_IF_SMU_13_0_7_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 // *** IMPORTANT ***
@@ -1096,5 +1095,4 @@ struct atom_smc_dpm_info_table_13_0_7 {
 };
 
 #pragma pack(pop) // restore old packing
-
 #endif

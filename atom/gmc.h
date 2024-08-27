@@ -5,7 +5,6 @@ Considers GMC versions: 6_0, 7_0, 7_1, 8_1, 8_2
 
 #ifndef GMC_H
 #define GMC_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 #define mmATC_ATS_CNTL_6_0 0xCC9 // 6_0, 7_0, 7_1, 8_1, 8_2
@@ -26710,5 +26709,4 @@ union vm_prt_cntl_7_0 { // 7_0, 7_1, 8_1, 8_2
 
 
 #pragma pack(pop) // restore old packing
-
 #endif

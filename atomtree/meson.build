@@ -8,14 +8,16 @@ yaabe_src += files(
 	'pci_id_lut.c',
 )
 
-register_index_searchfields = files(
+json5_tables = files(
 	'gmc_searchfield.json5',
+	'asic_reg_indices.json5',
+	'amd_pci_ids.json5',
 )
 internal_depends += declare_dependency( # header generaton
 	sources: json5_to_h.process(
-		register_index_searchfields,
+		json5_tables,
 	),
 )
 yaabe_src += json5_to_c.process( # c file generaton
-	register_index_searchfields,
+	json5_tables,
 )

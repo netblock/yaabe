@@ -1,7 +1,6 @@
 #ifndef PPLIB_H
 #define PPLIB_H
-
-#pragma pack(push, 1)
+#pragma pack(push, 1) // bios data must use byte alignment
 
 struct atom_pplib_sized_array_header {
 	uint8_t  NumEntries;
@@ -827,6 +826,5 @@ struct atom_pplib_vq_budgeting_table {
 	struct atom_pplib_vq_budgeting_record entries[] __counted_by(NumEntries);
 };
 
-#pragma pack(pop)
-
+#pragma pack(pop) // restore old packing
 #endif

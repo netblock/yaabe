@@ -1,3 +1,6 @@
+// this technically compiles without standard.h, but takes forever to link
+#include "standard.h"
+
 #include "atomtree.h"
 #include "atui.h"
 #include "gatui.h"

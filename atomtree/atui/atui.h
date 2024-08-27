@@ -25,22 +25,15 @@ atui.h is about the core atui interface
 #ifndef ATUI_H
 #define ATUI_H
 
+#include "ppatui.h"
+#include "atui_types.h"
 // see bottom for more includes
 
-// GObject/GTK stuff.
-typedef struct _GATUILeaf GATUILeaf;
-typedef struct _GATUIBranch GATUIBranch;
-
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
-static const nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
+static constexpr nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
 // purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
 // relevant for that branch:
 typedef struct atui_nullstruct {} atui_nullstruct;
-
-struct atui_funcify_args; // internal use; see below
-// function pointer type:
-typedef atui_branch* (* atuifunc)(struct atui_funcify_args const*);
-
 
 enum i18n_languages:int8_t {
 	LANG_NOLANG = -1,
@@ -107,8 +100,6 @@ enum atui_type_disable:uint8_t {
 	ATUI_NUM_DISPLAY
 };
 
-typedef struct _atui_branch atui_branch;
-typedef struct _atui_leaf atui_leaf;
 struct _atui_leaf {
 	char name[72];
 	char const* origname;
@@ -367,7 +358,6 @@ atui_branch_allocator(
 	);
 
 
-#include "ppatui.h"
 #include "auto_includes.h"
 
 #endif

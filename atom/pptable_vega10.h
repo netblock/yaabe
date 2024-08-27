@@ -1,11 +1,10 @@
 // consider linux/drivers/gpu/drm/amd/include/pptable.h
 
-#ifndef _VEGA10_PPTABLE_H_
-#define _VEGA10_PPTABLE_H_
+#ifndef VEGA10_PPTABLE_H
+#define VEGA10_PPTABLE_H
+#pragma pack(push, 1) // bios data must use byte alignment
 
-#pragma pack(push, 1)
 #define ATOM_Vega10_TABLE_REVISION_VEGA10 8
-
 
 union vega10_powerplay_platform_caps {
 	uint32_t platform_caps;
@@ -378,8 +377,5 @@ struct atom_vega10_hard_limit_table {
 	struct atom_vega10_hard_limit_record  entries[1];
 };
 
-
-#pragma pack(pop)
-
+#pragma pack(pop) // restore old packing
 #endif
-

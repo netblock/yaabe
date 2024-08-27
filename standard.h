@@ -48,13 +48,11 @@ static_assert(sizeof(float16_t) == 2);
 static_assert(sizeof(float32_t) == 4);
 static_assert(sizeof(float64_t) == 8);
 //static_assert(sizeof(float128_t) == 16);
-#pragma pack(push, 1)
-struct _ninebytes { uint32_t a; uint8_t b; float32_t c; };
-struct _tenbytes { int8_t a; uint64_t b; uint8_t c; };
-#pragma pack(pop)
-static_assert(sizeof(struct _ninebytes) == 9);
-static_assert(sizeof(struct _tenbytes) == 10);
 
+#pragma pack(push, 1)
+static_assert(sizeof(struct {uint32_t a; uint8_t b; float32_t c;}) == 9);
+static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
+#pragma pack(pop)
 
 
 #include "qnotation.h"

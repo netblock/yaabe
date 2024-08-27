@@ -1,5 +1,6 @@
 #include <zlib.h>
 
+#include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
 #include "gatui.h"

@@ -1,6 +1,5 @@
 #ifndef SMU11_DRIVER_IF_H
 #define SMU11_DRIVER_IF_H
-
 #pragma pack(push, 1) // bios data must use byte alignment
 
 // pptable
@@ -1772,5 +1771,4 @@ struct smu11_smcpptable_v5 {
 };
 
 #pragma pack(pop) // restore old packing
-
 #endif

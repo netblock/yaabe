@@ -43,9 +43,8 @@ HBM3:
 Please refer to JESD 238 A.
 */
 
-#ifndef _DDRMODEREGISTERS_H_
-#define _DDRMODEREGISTERS_H_
-
+#ifndef DDRMODEREGISTERS_H
+#define DDRMODEREGISTERS_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
 union ddr1_mr0 {
