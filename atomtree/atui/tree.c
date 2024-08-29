@@ -1052,6 +1052,33 @@ grow_ppt(
 }
 
 static atui_branch*
+autogen_regblock_register_sequence(
+		atuifunc const* const func_playlist,
+		struct atom_reg_setting_data_block* const data_block,
+		uint8_t const num_data_entries
+		) {
+	struct atui_funcify_args atui_args = {
+		.suggestbios = &(data_block->block_id)
+	};
+	atui_branch** all_fields = malloc(
+		(1+num_data_entries) * sizeof(atui_branch*)
+	);
+	all_fields[0] = ATUI_FUNC(atom_mc_register_setting_id)(&atui_args);
+	atui_branch** reg_data_fields = all_fields + 1;
+
+	for (uint8_t i=0; i < num_data_entries; i++) {
+		atui_args.suggestbios = &(data_block->reg_data[i]);
+		reg_data_fields[i] = func_playlist[i](&atui_args);
+	}
+
+	// atui_add_leaves()
+
+	atui_branch* const auto_sequence = ATUI_MAKE_BRANCH(atui_nullstruct, NULL,
+		NULL,NULL,  (1+num_data_entries), all_fields
+	);
+	return auto_sequence;
+}
+static atui_branch*
 grow_init_reg_block(
 		struct atomtree_init_reg_block* const at_regblock,
 		uint8_t const num_extra_atuibranches

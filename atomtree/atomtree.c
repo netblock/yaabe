@@ -772,7 +772,7 @@ populate_init_reg_block(
 
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
 
-	at_regblock->num_index = // will include final 0xFFFF
+	at_regblock->num_index = // will include END_OF_REG_INDEX_BLOCK flag
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
 	at_regblock->register_index = leaves->RegIndexBuf;
 

@@ -590,7 +590,7 @@ global_default: {
 				name, bf_entries
 			)
 	#lazy approach: },\n{  to  }, {
-	out_text = re.sub("(\t*)},\n(\t*){\n", "\g<1>}, {\n", out_text) # lazy
+	out_text = re.sub("(\t*)},\n(\t*){\n", "\\g<1>}, {\n", out_text) # lazy
 	return out_text + json5_ender
 
 
@@ -611,9 +611,14 @@ Considers %s versions: %s
 
 {class: "searchfield", fields: [
 
-{name: "%s", constants: [
+{name: "%s", registers: [
 """
-	json5_entry = "\t\"%s\",\n"
+	json5_entry = """\
+	{
+		index: \"%s\",
+		field: \"%s\",
+	},
+"""
 	json5_ender = "]},\n\n]}"
 
 	versions.sort(key=lambda v: [int(n) for n in v.split("_")])
@@ -622,32 +627,40 @@ Considers %s versions: %s
 
 	# get index names
 	reg_list = {} # addr:[name,name]
-	addr_name = ""
+	indexname = ""
 	for bf_name in composite_bitfields:
 		for bf in composite_bitfields[bf_name]:
 			for addr in bf.addr_ver:
-				addr_name = get_newest_index_name(addr, bf)
-				if addr_name[:2] in {"ix", "mm"}: # caps name
-					addr_name = addr_name[:2] + addr_name[2:].upper()
-				elif addr_name[:3] == "reg": # caps name
-					addr_name = addr_name[:3] + addr_name[3:].upper()
+				# bitfields may have multiple numeric indexes, differing on ver
+				indexname = get_newest_index_name(addr, bf)
+				if indexname[:2] in {"ix", "mm"}: # caps name
+					indexname = indexname[:2] + indexname[2:].upper()
+				elif indexname[:3] == "reg": # caps name
+					indexname = indexname[:3] + indexname[3:].upper()
 				else:
-					addr_name.upper()
-				addr_name = addr_name + "_" + bf.addr_ver[addr][1] # primary ver
-				if addr in reg_list:
-					if addr_name not in reg_list[addr]:
-						reg_list[addr].append(addr_name)
+					indexname.upper()
+				indexname = indexname + "_" + bf.addr_ver[addr][1] # primary ver
+				fieldname = bf.name + "_" + tuple(bf.ver_addr)[0]
+				indexname_fieldname = (indexname, fieldname)
+				if addr in reg_list: 
+					assert (indexname_fieldname not in reg_list[addr])
+					reg_list[addr].append(indexname_fieldname)
 				else:
-					reg_list[addr] = [addr_name]
+					reg_list[addr] = [indexname_fieldname]
 
 	# compose json5 file
 	entry_count = 0
-	reg_list = dict(sorted(reg_list.items()))
+	reg_list = dict(sorted(reg_list.items())) # sort by the address integer
 	for addr in reg_list:
 		entry_count += len(reg_list[addr])
-		reg_list[addr].sort()
-		for name in reg_list[addr]:
-			out_text += json5_entry % name
+		reg_list[addr].sort( # sort alphabetically within a numetic index
+			key = lambda indexname_fieldname: indexname_fieldname[0]
+		)
+		for indexname_fieldname in reg_list[addr]:
+			out_text += json5_entry % (
+				indexname_fieldname[0], indexname_fieldname[1]
+			)
+	out_text = re.sub("(\t*)},\n(\t*){\n", "\\g<1>}, {\n", out_text) # lazy
 	return out_text + json5_ender
 
 # mode == 3

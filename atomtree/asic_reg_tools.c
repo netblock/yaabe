@@ -1,5 +1,6 @@
 #include "standard.h"
 #include "atomtree.h"
+#include "atui.h"
 
 uint8_t
 regcmp(
@@ -46,7 +47,6 @@ regset_bsearch_left(
 		return -1;
 	}
 }
-
 int16_t
 regset_bsearch_right(
 		struct register_set const* const reg_set,
@@ -80,6 +80,69 @@ regset_bsearch_right(
 		return -1;
 	}
 }
+static regset_bsearch_func const regset_bsearch_bool[] = {
+	regset_bsearch_left,
+	regset_bsearch_right,
+};
+
+static bool
+register_index_is_meta(
+		uint8_t PreRegDataLength,
+		bool* access_range
+		) {
+	uint8_t const pre_reg_data_lo = PreRegDataLength & 0xF;
+	if (VALUE_SAME_AS_ABOVE == pre_reg_data_lo) {
+		return true;
+	}
+	if (*access_range) {
+		if (INDEX_ACCESS_RANGE_END == pre_reg_data_lo) {
+			*access_range = false;
+		}
+		return true;
+	}
+	if (INDEX_ACCESS_RANGE_BEGIN == pre_reg_data_lo) {
+		*access_range = true;
+		return false;
+	}
+	return false;
+}
+
+atuifunc*
+register_set_build_atuifunc_playlist(
+		struct atomtree_init_reg_block const* const at_regblock,
+		struct register_set const* const reg_set,
+		bool const newest
+		) {
+	if (0 == at_regblock->num_data_entries) {
+		return NULL;
+	}
+	struct atom_init_reg_index_format const* const register_index =
+		at_regblock->register_index;
+	regset_bsearch_func const regset_bsearch = regset_bsearch_bool[newest];
+
+	atuifunc* playlist = malloc(
+		at_regblock->num_data_entries * sizeof(atuifunc)
+	);
+	uint8_t playlist_i = 0;
+
+	bool access_range = 0;
+	for (uint8_t rii=0; rii < (at_regblock->num_index-1); rii++) {
+		bool should_continue = register_index_is_meta(
+			register_index[rii].PreRegDataLength,  &access_range
+		);
+		if (should_continue) {
+			continue;
+		}
+		int16_t set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
+		assert(0 <= set_loc);
+		if (0 <= set_loc) {
+			playlist[playlist_i] = reg_set->entries[set_loc].atui_branch_func;
+			playlist_i++;
+		}
+	}
+
+	return playlist;
+}
 
 
 void
@@ -89,15 +152,7 @@ register_set_print_tables(
 		bool const newest,
 		char const* name
 		) {
-	int16_t (* regset_bsearch)(
-			struct register_set const* reg_set,
-			uint16_t address
-			); // function pointer
-	if (newest) {
-		regset_bsearch = regset_bsearch_right;
-	} else {
-		regset_bsearch = regset_bsearch_left;
-	}
+	regset_bsearch_func const regset_bsearch = regset_bsearch_bool[newest];
 
 	if (NULL == name) {
 		name = "";
@@ -108,6 +163,7 @@ register_set_print_tables(
 	char const* const struct_entry = "\tunion %s  %s;\n";
 
 	char const* reg_name;
+	char const* union_name;
 	char* token_save;
 	char const* token;
 	char tokens[16][16];
@@ -116,24 +172,21 @@ register_set_print_tables(
 	char temp_buffer[64];
 	char name_buffer[64];
 	char* name_ptr;
-	char union_name[64];
 	uint8_t str_i;
 
 	int16_t set_loc;
-	uint16_t rii;
 
 	// print assert-reg-index body
-	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++);
 	printf(
 		"{type: \"uint16_t\", name: \"%s\", // %u+1\n"
 		"\tconstants: [\n",
-		name, rii
+		name, (at_regblock->num_index-1)
 	);
-	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
+	for (uint8_t rii=0; rii < (at_regblock->num_index-1); rii++) {
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
 		// if this fails, we don't have the index and thus bitfield
 		assert(0 <= set_loc);
-		printf("\t\t\"%s\",\n", reg_set->entries[set_loc].name);
+		printf("\t\t\"%s\",\n", reg_set->entries[set_loc].index_name);
 	}
 
 	printf(
@@ -149,44 +202,19 @@ register_set_print_tables(
 	uint16_t unions = 0;
 	bool access_range = 0;
 	uint8_t pre_reg_data_lo;
-	for (rii=0; register_index[rii].RegIndex != END_OF_REG_INDEX_BLOCK; rii++) {
-		pre_reg_data_lo = register_index[rii].PreRegDataLength & 0xF;
-		if (VALUE_SAME_AS_ABOVE == pre_reg_data_lo) {
+	for (uint8_t rii=0; rii < (at_regblock->num_index-1); rii++) {
+		bool should_continue = register_index_is_meta(
+			register_index[rii].PreRegDataLength,  &access_range
+		);
+		if (should_continue) {
 			continue;
-		}
-		if (access_range) {
-			if (INDEX_ACCESS_RANGE_END == pre_reg_data_lo) {
-				access_range = 0;
-			}
-			continue;
-		}
-		if (INDEX_ACCESS_RANGE_BEGIN == pre_reg_data_lo) {
-			access_range = 1;
 		}
 
 		set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
-
-		// lop off prefix
-		reg_name = reg_set->entries[set_loc].name;
-		if (strncmp(reg_name, "mm",2) || strncmp(reg_name, "ix",2)) {
-			reg_name += 2;
-		} else if (strncmp(reg_name, "reg",3)) {
-			reg_name += 3;
-		} else {
-			reg_name += 0;
-		}
-
-		// lower case, and copy into temp buffer for tokenisation
-		for (str_i=0; reg_name[str_i]; str_i++) {
-			temp_buffer[str_i] = tolower(reg_name[str_i]);
-		}
-		temp_buffer[str_i] = '\0';
-		assert(strlen(temp_buffer) < sizeof(temp_buffer));
-
-		strcpy(union_name, temp_buffer);
-
+		union_name = reg_set->entries[set_loc].field_name;
 
 		// lop off the version bits at the end
+		strcpy(temp_buffer, union_name);
 		tokens_i = 0;
 		token_save = NULL;
 		name_ptr = name_buffer;

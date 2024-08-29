@@ -12,15 +12,21 @@ register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set, NULL);
 
 // see bottom for more includes
 
-
+/*
+A register of a general name may have multiple different versions. These
+versions may differ in the numeric address or its bitfield, or both. They also
+may not differ at all.
+*/
 struct register_set_entry { // register set entry
 	uint16_t address; // mm,ix,reg prefixed defines
-	char const* name;
+	char const* index_name;
+	char const* field_name;
+	atuifunc atui_branch_func;
 };
 struct register_set {
 	uint16_t num_reg_set_addresses;
 	char const* set_name;
-	struct register_set_entry const* entries;
+	struct register_set_entry entries[] __counted_by(num_reg_set_addresses);
 };
 #define RSE(reg_name)\
 	{\
@@ -28,6 +34,7 @@ struct register_set {
 		.name = u8###reg_name,\
 	},
 
+typedef int16_t (* regset_bsearch_func)(struct register_set const* reg_set, uint16_t address);
 int16_t
 regset_bsearch_left(
 		struct register_set const* reg_set,
@@ -37,6 +44,15 @@ int16_t
 regset_bsearch_right(
 		struct register_set const* reg_set,
 		uint16_t address
+		);
+
+
+// build a list of atui branch function pointers based off of the regblock.
+atuifunc* // must be freed; length is 1+atomtree_init_reg_block.num_data_entries
+register_set_build_atuifunc_playlist(
+		struct atomtree_init_reg_block const* const at_regblock,
+		struct register_set const* const reg_set,
+		bool newest // suggest oldest or newest if there's multiple versions
 		);
 void
 register_set_print_tables( // entirely a developer's tool

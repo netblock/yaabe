@@ -184,31 +184,43 @@ def searchfield_to_c(
 
 #include "standard.h"
 #include "atomtree.h"
+#include "atui.h"
 
 """
 	field_template = """\
 struct register_set const %s_reg_set = {
 	.num_reg_set_addresses = %u,
 	.set_name = "%s",
-	.entries = (struct register_set_entry const[%u]) {
+	.entries = {
 %s\
 	},
 };
 static_assert(%u < INT16_MAX); // reserve sign as flag for register_set_bsearch
 
 """
-	field_entry = """\t\t{.address=%s, .name="%s"},\n"""
+	field_entry = """\
+		{
+			.address = %s,
+			.index_name = "%s",
+			.field_name = "%s",
+			.atui_branch_func = ATUI_FUNC(%s),
+		},
+"""
 	out_text = cfile_header
 	entry_text = ""
 	num_constants = 0
 	for field in atui_data["fields"]:
 		entry_text = ""
-		for entry in field["constants"]:
-			entry_text += field_entry % (entry, entry)
-		num_constants = len(field["constants"])
+		for entry in field["registers"]:
+			index_name = entry["index"]
+			field_name = entry["field"]
+			entry_text += field_entry % (
+				index_name, index_name,  field_name, field_name
+			)
+		num_constants = len(field["registers"])
 		out_text += field_template % (
 			field["name"],
-			num_constants, field["name"], len(field["constants"]),
+			num_constants, field["name"],
 			entry_text,
 			num_constants, # assert
 		)
