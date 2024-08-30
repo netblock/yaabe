@@ -4370,7 +4370,7 @@ Considers GMC versions: 6_0, 7_0, 7_1, 8_1, 8_2
 		field: "mc_seq_misc6_6_0",
 	}, {
 		index: "mmMC_IO_APHY_STR_CNTL_D0_6_0",
-		field: "mc_io_aphy_str_cntl_d0_6_0",
+		field: "mc_io_aphy_str_cntl_d0_6_0_o",
 	}, {
 		index: "mmMC_IO_APHY_STR_CNTL_D1_6_0",
 		field: "mc_io_aphy_str_cntl_d1_6_0",
