@@ -1054,7 +1054,7 @@ grow_ppt(
 static atui_branch*
 autogen_regblock_register_sequence(
 		atuifunc const* const func_playlist,
-		struct atom_reg_setting_data_block* const data_block,
+		struct atom_reg_setting_data_block const* const data_block,
 		uint8_t const num_data_entries
 		) {
 	struct atui_funcify_args atui_args = {
@@ -1076,6 +1076,8 @@ autogen_regblock_register_sequence(
 	atui_branch* const auto_sequence = ATUI_MAKE_BRANCH(atui_nullstruct, NULL,
 		NULL,NULL,  (1+num_data_entries), all_fields
 	);
+
+	free(all_fields);
 	return auto_sequence;
 }
 
@@ -1153,6 +1155,17 @@ grow_init_reg_block(
 		== (NULL == atui_strap_func)
 	);
 
+	atui_branch* const atui_strap_set = ATUI_MAKE_BRANCH(atui_nullstruct, NULL,
+		NULL,NULL,  at_regblock->num_data_blocks, NULL
+	);
+
+	atuifunc* func_playlist = NULL;
+	if ((NULL == atui_strap_func) && at_regblock->num_data_blocks) {
+		func_playlist = register_set_build_atuifunc_playlist(
+			at_regblock, &GMC_reg_set, true
+		);
+	}
+
 	char const* table_name;
 	char const* strap_format_new;
 	char const* strap_format_old;
@@ -1179,16 +1192,6 @@ grow_init_reg_block(
 			break;
 	};
 
-	if (NULL == atui_strap_func) {
-		return ATUI_MAKE_BRANCH(atom_init_reg_block,  table_name,
-			at_regblock, at_regblock->leaves,  0,NULL
-		);
-	}
-
-	atui_branch* const atui_strap_set = ATUI_MAKE_BRANCH(atui_nullstruct, NULL,
-		NULL,NULL,  at_regblock->num_data_blocks, NULL
-	);
-
 	atui_branch* atui_strap;
 	struct atui_funcify_args atui_args = {0};
 	char const* vendor_part[2] = {0};
@@ -1203,8 +1206,14 @@ grow_init_reg_block(
 	);
 
 	for (uint8_t i = 0; i < at_regblock->num_data_blocks; i++) {
-		atui_args.suggestbios = data_blocks[i];
-		atui_strap = atui_strap_func(&atui_args);
+		if (atui_strap_func) {
+			atui_args.suggestbios = data_blocks[i];
+			atui_strap = atui_strap_func(&atui_args);
+		} else {
+			atui_strap = autogen_regblock_register_sequence(
+				func_playlist, data_blocks[i], at_regblock->num_data_entries 
+			);
+		}
 		ATUI_ADD_BRANCH(atui_strap_set, atui_strap);
 
 		union atom_mc_register_setting_id block_id = data_blocks[i]->block_id;
@@ -1236,14 +1245,10 @@ grow_init_reg_block(
 		if (atui_strap_func) {
 			strcpy(atui_strap_set->name, atui_strap->origname);
 		} else {
-			sprintf(atui_strap_set->name, "%s (has inaccuracies)",
-				atui_strap->origname
-			);
-			/* auto atui generation:
 			sprintf(atui_strap_set->name, "%s (auto decode; has inaccuracies)",
 				table_name
 			);
-			*/
+			free(func_playlist);
 		}
 	}
 
