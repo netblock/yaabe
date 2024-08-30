@@ -321,51 +321,19 @@ enum common_register_sequence:uint8_t {
 	COMMON_SET_UNKNOWN,
 
 	// reg_block_mem_adjust:
-	MEM_ADJUST_SET_TERASCALE2_DDR3,  // Caicos, Turks
-	MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE3, // Turks
-	MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE4, // Barts
-	MEM_ADJUST_SET_TERASCALE3_GDDR5, // Cayman
-	MEM_ADJUST_SET_GCN1_GDDR5_TYPE1, // Oland, Cape Verde
-	MEM_ADJUST_SET_GCN1_GDDR5_TYPE2, // Pitcairn
-	MEM_ADJUST_SET_GCN1_GDDR5_TYPE3, // Tahiti
-	MEM_ADJUST_SET_GCN1_GDDR5_TYPE4, // Tahiti
-	MEM_ADJUST_SET_GCN1_GDDR5_TYPE5, // Exo
-	MEM_ADJUST_SET_GCN2_GDDR5, // Bonaire, Hawaii, Grenada
-	MEM_ADJUST_SET_GCN3_GDDR5_TYPE1, // Tonga
-	MEM_ADJUST_SET_GCN3_GDDR5_TYPE2, // Tonga pro
-	MEM_ADJUST_SET_GCN3_GDDR5_TYPE3, // Tonga pro
-	MEM_ADJUST_SET_GCN3_HBM1,  // Fiji
-	MEM_ADJUST_SET_GCN4_GDDR5_TYPE1, // Polaris
-	MEM_ADJUST_SET_GCN4_GDDR5_TYPE2, // Polaris
-	MEM_ADJUST_SET_GCN4_GDDR5_TYPE3, // Polaris
-	MEM_ADJUST_SET_GCN4_GDDR5_TYPE4, // Polaris
-	MEM_ADJUST_SET_GCN4_GDDR5_TYPE5, // Polaris
 
 	// reg_block_mem_clk_patch:
 	TIMINGS_SET_ISLANDS_DDR3,
 	TIMINGS_SET_ISLANDS_GDDR5,
 	TIMINGS_SET_FIJI,
 	TIMINGS_SET_POLARIS,
-	//timings_set_vegam,
 	TIMINGS_SET_VEGA10,
 	TIMINGS_SET_VEGA20,
 	TIMINGS_SET_NAVI1,
 
 	// reg_block_mc_tile_adjust:
-	MC_TILE_ADJUST_SET_GCN3_GDDR5,
-	MC_TILE_ADJUST_SET_GCN4_GDDR5,
 
 	// reg_block_mc_phy_init:
-	MC_PHY_INIT_SET_GCN3_HBM1,  // Fiji
-	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE1, // Tonga
-	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE2, // Tonga pro
-	MC_PHY_INIT_SET_GCN3_GDDR5_TYPE3, // Tonga pro
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE1, // all other Polaris
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE2, // polaris20
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE3, // polaris20
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4, // polaris20
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE5, // polaris20
-	MC_PHY_INIT_SET_GCN4_GDDR5_TYPE6, // polaris20
 };
 
 #define ATOMTREE_MC_REG_MAX 48
@@ -395,59 +363,16 @@ struct atomtree_init_reg_block {
 		void* data_sets;
 
 		// reg_block_mem_adjust:
-		struct mem_adjust_set_terascale2_ddr3*  mem_adjust_set_terascale2_ddr3;
-		struct mem_adjust_set_terascale2_gddr5_type3*
-			mem_adjust_set_terascale2_gddr5_type3;
-		struct mem_adjust_set_terascale2_gddr5_type4*
-			mem_adjust_set_terascale2_gddr5_type4;
-		struct mem_adjust_set_terascale3_gddr5* mem_adjust_set_terascale3_gddr5;
-		struct mem_adjust_set_gcn1_gddr5_type1* mem_adjust_set_gcn1_gddr5_type1;
-		struct mem_adjust_set_gcn1_gddr5_type2* mem_adjust_set_gcn1_gddr5_type2;
-		struct mem_adjust_set_gcn1_gddr5_type3* mem_adjust_set_gcn1_gddr5_type3;
-		struct mem_adjust_set_gcn1_gddr5_type4* mem_adjust_set_gcn1_gddr5_type4;
-		struct mem_adjust_set_gcn1_gddr5_type5* mem_adjust_set_gcn1_gddr5_type5;
-		struct mem_adjust_set_gcn2_gddr5* mem_adjust_set_gcn2_gddr5;
-		struct mem_adjust_set_gcn3_gddr5_type1* mem_adjust_set_gcn3_gddr5_type1;
-		struct mem_adjust_set_gcn3_gddr5_type2* mem_adjust_set_gcn3_gddr5_type2;
-		struct mem_adjust_set_gcn3_gddr5_type3* mem_adjust_set_gcn3_gddr5_type3;
-		struct mem_adjust_set_gcn3_hbm1*  mem_adjust_set_gcn3_hbm1;
-		struct mem_adjust_set_gcn4_gddr5_type1* mem_adjust_set_gcn4_gddr5_type1;
-		struct mem_adjust_set_gcn4_gddr5_type2* mem_adjust_set_gcn4_gddr5_type2;
-		struct mem_adjust_set_gcn4_gddr5_type3* mem_adjust_set_gcn4_gddr5_type3;
-		struct mem_adjust_set_gcn4_gddr5_type4* mem_adjust_set_gcn4_gddr5_type4;
-		struct mem_adjust_set_gcn4_gddr5_type5* mem_adjust_set_gcn4_gddr5_type5;
 
 		// reg_block_mem_clk_patch:
 		struct timings_set_islands_ddr3*  timings_set_islands_ddr3;
 		struct timings_set_islands_gddr5* timings_set_islands_gddr5;
 		struct timings_set_fiji*    timings_set_fiji;
 		struct timings_set_polaris* timings_set_polaris;
-		//struct timings_set_vegam* timings_set_vegam;
 
 		// reg_block_mc_tile_adjust:
-		struct mc_tile_adjust_set_gcn3_gddr5* mc_tile_adjust_set_gcn3_gddr5;
-		struct mc_tile_adjust_set_gcn4_gddr5* mc_tile_adjust_set_gcn4_gddr5;
 
 		// reg_block_mc_phy_init:
-		struct mc_phy_init_set_gcn3_hbm1* mc_phy_init_set_gcn3_hbm1;
-		struct mc_phy_init_set_gcn3_gddr5_type1*
-			mc_phy_init_set_gcn3_gddr5_type1;
-		struct mc_phy_init_set_gcn3_gddr5_type2*
-			mc_phy_init_set_gcn3_gddr5_type2;
-		struct mc_phy_init_set_gcn3_gddr5_type3*
-			mc_phy_init_set_gcn3_gddr5_type3;
-		struct mc_phy_init_set_gcn4_gddr5_type1*
-			mc_phy_init_set_gcn4_gddr5_type1;
-		struct mc_phy_init_set_gcn4_gddr5_type2*
-			mc_phy_init_set_gcn4_gddr5_type2;
-		struct mc_phy_init_set_gcn4_gddr5_type3*
-			mc_phy_init_set_gcn4_gddr5_type3;
-		struct mc_phy_init_set_gcn4_gddr5_type4*
-			mc_phy_init_set_gcn4_gddr5_type4;
-		struct mc_phy_init_set_gcn4_gddr5_type5*
-			mc_phy_init_set_gcn4_gddr5_type5;
-		struct mc_phy_init_set_gcn4_gddr5_type6*
-			mc_phy_init_set_gcn4_gddr5_type6;
 	};
 };
 #define ATOMTREE_UMC_REG_MAX 64

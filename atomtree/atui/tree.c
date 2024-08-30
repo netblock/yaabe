@@ -1264,63 +1264,6 @@ grow_mem_adjust_table(
 		) {
 	atuifunc atui_strap_func = NULL;
 	switch (mem_adjust_table->reg_set) {
-		case MEM_ADJUST_SET_GCN3_HBM1:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_hbm1);
-			break;
-		case MEM_ADJUST_SET_GCN3_GDDR5_TYPE2:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type2);
-			break;
-		case MEM_ADJUST_SET_GCN4_GDDR5_TYPE1:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type1);
-			break;
-		case MEM_ADJUST_SET_GCN4_GDDR5_TYPE2:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type2);
-			break;
-		case MEM_ADJUST_SET_GCN4_GDDR5_TYPE4:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type4);
-			break;
-		case MEM_ADJUST_SET_GCN4_GDDR5_TYPE5:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type5);
-			break;
-		case MEM_ADJUST_SET_GCN4_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn4_gddr5_type3);
-			break;
-		case MEM_ADJUST_SET_GCN3_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type3);
-			break;
-		case MEM_ADJUST_SET_GCN3_GDDR5_TYPE1:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn3_gddr5_type1);
-			break;
-		case MEM_ADJUST_SET_TERASCALE2_DDR3:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_ddr3);
-			break;
-		case MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type3);
-			break;
-		case MEM_ADJUST_SET_GCN1_GDDR5_TYPE5:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type5);
-			break;
-		case MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE4:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale2_gddr5_type4);
-			break;
-		case MEM_ADJUST_SET_TERASCALE3_GDDR5:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_terascale3_gddr5);
-			break;
-		case MEM_ADJUST_SET_GCN1_GDDR5_TYPE1:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type1);
-			break;
-		case MEM_ADJUST_SET_GCN1_GDDR5_TYPE2:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type2);
-			break;
-		case MEM_ADJUST_SET_GCN1_GDDR5_TYPE4:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type4);
-			break;
-		case MEM_ADJUST_SET_GCN2_GDDR5:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn2_gddr5);
-			break;
-		case MEM_ADJUST_SET_GCN1_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mem_adjust_set_gcn1_gddr5_type3);
-			break;
 	}
 	return grow_init_reg_block(mem_adjust_table, vram_modules, atui_strap_func);
 }
@@ -1335,11 +1278,6 @@ grow_mem_clk_patch(
 		case TIMINGS_SET_POLARIS:
 			atui_strap_func = ATUI_FUNC(timings_set_polaris);
 			break;
-		/*
-		case TIMINGS_SET_VEGAM:
-			atui_strap_func = ATUI_FUNC(timings_set_vegam);
-			break;
-		*/
 		case TIMINGS_SET_ISLANDS_DDR3:
 			atui_strap_func = ATUI_FUNC(timings_set_islands_ddr3);
 			break;
@@ -1360,12 +1298,6 @@ grow_mc_tile_adjust(
 		) {
 	atuifunc atui_strap_func = NULL;
 	switch (mc_tile_adjust->reg_set) {
-		case MC_TILE_ADJUST_SET_GCN4_GDDR5:
-			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn4_gddr5);
-			break;
-		case MC_TILE_ADJUST_SET_GCN3_GDDR5:
-			atui_strap_func = ATUI_FUNC(mc_tile_adjust_set_gcn3_gddr5);
-			break;
 	}
 	return grow_init_reg_block(mc_tile_adjust, vram_modules, atui_strap_func);
 }
@@ -1377,36 +1309,6 @@ grow_init_mc_phy_init(
 		) {
 	atuifunc atui_strap_func = NULL;
 	switch (mc_phy_init->reg_set) {
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type4);
-			break;
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE6:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type6);
-			break;
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type3);
-			break;
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE5:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type5);
-			break;
-		case MC_PHY_INIT_SET_GCN3_HBM1:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_hbm1);
-			break;
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE2:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type2);
-			break;
-		case MC_PHY_INIT_SET_GCN4_GDDR5_TYPE1:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn4_gddr5_type1);
-			break;
-		case MC_PHY_INIT_SET_GCN3_GDDR5_TYPE1:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type1);
-			break;
-		case MC_PHY_INIT_SET_GCN3_GDDR5_TYPE3:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type3);
-			break;
-		case MC_PHY_INIT_SET_GCN3_GDDR5_TYPE2:
-			atui_strap_func = ATUI_FUNC(mc_phy_init_set_gcn3_gddr5_type2);
-			break;
 	}
 	return grow_init_reg_block(mc_phy_init, vram_modules, atui_strap_func);
 }

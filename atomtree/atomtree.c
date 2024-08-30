@@ -842,81 +842,18 @@ populate_mem_adjust_table(
 	struct atom_reg_setting_data_block const* const* const data_blocks =
 		(void*) mem_adjust_table->data_blocks;
 
-	// go by static tables instead of individually constructing the bitfields
-	// because static tables offers a more consise, typed API.
-	if (2 == mem_adjust_table->num_index) { // optimisation heuristic
-		if (regcmp(index, mem_adjust_set_gcn3_hbm1_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_HBM1;
-		} else if (regcmp(index, mem_adjust_set_gcn3_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE2;
-		}
-	} else if (7 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE1;
-		}
-	} else if (13 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE2;
-		} else if (regcmp(index, mem_adjust_set_gcn4_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE4;
-		}
-	} else if (14 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type5_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE5;
-		}
-	} else if (15 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn4_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN4_GDDR5_TYPE3;
-		}
-	} else if (43 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn3_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE3;
-		}
-	} else if (46 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn3_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN3_GDDR5_TYPE1;
-		}
-	} else if (54 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_terascale2_ddr3_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_DDR3;
-		}
-	} else if (64 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_terascale2_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE3;
-
-		} else if (regcmp(index, mem_adjust_set_gcn1_gddr5_type5_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE5;
-		}
-	} else if (70 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_terascale2_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE2_GDDR5_TYPE4;
-		} else if (regcmp(index, mem_adjust_set_terascale3_gddr5_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_TERASCALE3_GDDR5;
-		}
-	} else if (98 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type1_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE1;
-		}
-	} else if (124 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type2_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE2;
-		}
-	} else if (126 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type4_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE4;
-		}
-	} else if (127 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn2_gddr5_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN2_GDDR5;
-		}
-	} else if (134 == mem_adjust_table->num_index) {
-		if (regcmp(index, mem_adjust_set_gcn1_gddr5_type3_addresses)) {
-			mem_adjust_table->reg_set = MEM_ADJUST_SET_GCN1_GDDR5_TYPE3;
+	/*
+	if (0 == mem_adjust_table->num_index) { // heuristic
+		if regcmp(index, ...) {
+			mem_adjust_table->reg_set = ...
 		}
 	}
+	*/
+	if (COMMON_SET_UNKNOWN != mem_adjust_table->reg_set) {
+		mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
+	}
 
-	mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
-
+	/*
 	#ifndef NDEBUG
 	if ((1 < mem_adjust_table->num_index)
 			&& (COMMON_SET_UNKNOWN == mem_adjust_table->reg_set)
@@ -927,6 +864,7 @@ populate_mem_adjust_table(
 		//assert(mem_adjust_table->reg_set); // unknown adjust sequence
 	}
 	#endif
+	*/
 }
 
 static void
@@ -950,10 +888,6 @@ populate_mem_clk_patch(
 	if (14 == mem_clk_patch->num_index) { // optimisation heuristic
 		if (regcmp(index, timings_set_polaris_addresses)) {
 			mem_clk_patch->reg_set = TIMINGS_SET_POLARIS;
-		/*
-		} else if (regcmp(index, timings_set_vegam_addresses)) {
-			mem_clk_patch->reg_set = TIMINGS_SET_VEGAM;
-		*/
 		} else if (regcmp(index, timings_set_islands_type1_addresses)
 				|| regcmp(index, timings_set_islands_type2_addresses)
 				) {
@@ -970,7 +904,9 @@ populate_mem_clk_patch(
 		}
 	}
 
-	mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
+	if (COMMON_SET_UNKNOWN != mem_clk_patch->reg_set) {
+		mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
+	}
 
 	#ifndef NDEBUG
 	if ((1 < mem_clk_patch->num_index)
@@ -999,21 +935,20 @@ populate_mc_tile_adjust(
 		mc_tile_adjust->register_index;
 	struct atom_reg_setting_data_block const* const* const data_blocks =
 		(void*) mc_tile_adjust->data_blocks;
-
-	// go by static tables instead of individually constructing the bitfields
-	// because static tables offers a more consise, typed API.
-	if (2 == mc_tile_adjust->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_tile_adjust_set_gcn4_gddr5_addresses)) {
-			mc_tile_adjust->reg_set = MC_TILE_ADJUST_SET_GCN4_GDDR5;
-		}
-	} else if (3 == mc_tile_adjust->num_index) {
-		if (regcmp(index, mc_tile_adjust_set_gcn3_gddr5_addresses)) {
-			mc_tile_adjust->reg_set = MC_TILE_ADJUST_SET_GCN3_GDDR5;
+	
+	/*
+	if (0 == mc_tile_adjust->num_index) {
+		if regcmp(index, ...) {
+			mc_tile_adjust->reg_set = ...
 		}
 	}
+	*/
 
-	mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
+	if (COMMON_SET_UNKNOWN != mc_tile_adjust->reg_set) {
+		mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
+	}
 
+	/*
 	#ifndef NDEBUG
 	if ((1 < mc_tile_adjust->num_index)
 			&& (COMMON_SET_UNKNOWN == mc_tile_adjust->reg_set)
@@ -1021,9 +956,9 @@ populate_mc_tile_adjust(
 		register_set_print_tables(
 			mc_tile_adjust, &GMC_reg_set, true, "mc_tile_adjust_set"
 		);
-		//assert(mc_tile_adjust->reg_set); // unknown adjust sequence
 	}
 	#endif
+	*/
 }
 
 static void
@@ -1042,49 +977,19 @@ populate_init_mc_phy_init(
 	struct atom_reg_setting_data_block const* const* const data_blocks =
 		(void*) mc_phy_init->data_blocks;
 
-	// go by static tables instead of individually constructing the bitfields
-	// because static tables offers a more consise, typed API.
-	if (11 == mc_phy_init->num_index) { // optimisation heuristic
-		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type4_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE4;
-		}
-	} else if (12 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type6_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE6;
-		}
-	} else if (13 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type3_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE3;
-		} else if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type5_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE5;
-		}
-	} else if (14 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn3_hbm1_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_HBM1;
-		}
-	} else if (19 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type2_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE2;
-		}
-	} else if (25 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn4_gddr5_type1_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN4_GDDR5_TYPE1;
-		}
-	} else if (165 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type1_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE1;
-		}
-	} else if (168 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type3_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE3;
-		}
-	} else if (191 == mc_phy_init->num_index) {
-		if (regcmp(index, mc_phy_init_set_gcn3_gddr5_type2_addresses)) {
-			mc_phy_init->reg_set = MC_PHY_INIT_SET_GCN3_GDDR5_TYPE2;
+	/*
+	if (0 == mc_phy_init->num_index) {
+		if regcmp(index, ...) {
+			mc_phy_init->reg_set = ...
 		}
 	}
+	*/
 
-	mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
+	if (COMMON_SET_UNKNOWN != mc_phy_init->reg_set) {
+		mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
+	}
+
+	/*
 	#ifndef NDEBUG
 	if ((1 < mc_phy_init->num_index)
 			&& (COMMON_SET_UNKNOWN == mc_phy_init->reg_set)
@@ -1092,9 +997,9 @@ populate_init_mc_phy_init(
 		register_set_print_tables(
 			mc_phy_init, &GMC_reg_set, true, "mc_phy_init_set"
 		);
-		//assert(mc_phy_init->reg_set); // unknown phy init sequence
 	}
 	#endif
+	*/
 }
 
 
