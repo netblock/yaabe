@@ -403,7 +403,6 @@ atui_branch_allocator(
 		};
 		atui_leaves_printer(&tracker, &first_leaves);
 
-		table->max_leaves = embryo->num_leaves_init;
 		// shoot doesn't get counted
 		table->leaf_count = first_leaves.target.pos - table->leaves;
 

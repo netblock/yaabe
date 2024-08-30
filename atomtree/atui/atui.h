@@ -182,7 +182,6 @@ struct _atui_branch {
 	uint16_t max_num_branches; // import alloc'd but may not use
 
 	uint16_t leaf_count;
-	uint16_t max_leaves;
 
 	uint16_t num_copyable_leaves; // num_leaves that maps the bios
 
@@ -297,6 +296,15 @@ atui_destroy_tree(
 		atui_branch* tree
 		);
 
+// Destructively take all leaves and child branches of all source branches.
+// Does not modify bios mapping info
+void
+atui_assimilate(
+		atui_branch* dest,
+		atui_branch* const* src_array,
+		uint16_t src_array_len
+		);
+
 // funcify internal structs:
 
 struct atui_funcify_args {
@@ -356,7 +364,6 @@ atui_branch_allocator(
 	struct atui_branch_data const* embryo,
 	struct atui_funcify_args const* args
 	);
-
 
 #include "auto_includes.h"
 
