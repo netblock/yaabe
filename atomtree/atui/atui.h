@@ -185,8 +185,9 @@ struct _atui_branch {
 
 	uint16_t num_copyable_leaves; // num_leaves that maps the bios
 
-	// C struct may be larger than table_size; if this is the case, a simple
-	// copy/paste of the leaves themselves might be atom out-of-bounds.
+	// the C struct that the branch&leaves represent may be larger than
+	// table_size; if this is the case, a simple copy/paste of the leaves
+	// themselves might be atom out-of-bounds.
 	bool prefer_contiguous;
 	void* table_start; // position and size of the struct the branch represents
 	size_t table_size;

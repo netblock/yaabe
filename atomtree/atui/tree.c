@@ -1051,12 +1051,15 @@ grow_ppt(
 	return atui_ppt;
 }
 
+
+
 static atui_branch*
 autogen_regblock_register_sequence(
-		atuifunc const* const func_playlist,
+		struct register_set_entry const* const func_playlist,
 		struct atom_reg_setting_data_block const* const data_block,
-		uint8_t const num_data_entries
+		struct atomtree_init_reg_block const* const at_regblock
 		) {
+	uint8_t const num_data_entries = at_regblock->num_data_entries;
 	struct atui_funcify_args atui_args = {
 		.suggestbios = &(data_block->block_id)
 	};
@@ -1068,19 +1071,30 @@ autogen_regblock_register_sequence(
 
 	for (uint8_t i=0; i < num_data_entries; i++) {
 		atui_args.suggestbios = &(data_block->reg_data[i]);
-		reg_data_fields[i] = func_playlist[i](&atui_args);
+
+		reg_data_fields[i] = func_playlist[i].atui_branch_func(&atui_args);
+		if  (ATUI_FUNC(unknown_reg_data) == func_playlist[i].atui_branch_func) {
+			sprintf(reg_data_fields[i]->leaves[0].name,
+				"bad register index [%02u]: 0x%04X",
+				i,  func_playlist[i].address
+			);
+		}
 	}
 
 	atui_branch* const auto_sequence = ATUI_MAKE_BRANCH(atui_nullstruct, NULL,
 		NULL,NULL,  0,NULL
 	);
+	// set size metadata for copy/paste
+	auto_sequence->prefer_contiguous = true;
+	auto_sequence->table_start = (void*) data_block;
+	auto_sequence->table_size = at_regblock->data_block_element_size;
 
+	// steal leaves
 	atui_assimilate(auto_sequence, all_fields, (1+num_data_entries));
 	free(all_fields);
 
 	return auto_sequence;
 }
-
 static void
 get_memory_vendor_part_strs(
 		struct atomtree_vram_module const* const vram_module,
@@ -1159,7 +1173,7 @@ grow_init_reg_block(
 		NULL,NULL,  at_regblock->num_data_blocks, NULL
 	);
 
-	atuifunc* func_playlist = NULL;
+	struct register_set_entry* func_playlist = NULL;
 	if ((NULL == atui_strap_func) && at_regblock->num_data_blocks) {
 		func_playlist = register_set_build_atuifunc_playlist(
 			at_regblock, &GMC_reg_set, true
@@ -1211,7 +1225,7 @@ grow_init_reg_block(
 			atui_strap = atui_strap_func(&atui_args);
 		} else {
 			atui_strap = autogen_regblock_register_sequence(
-				func_playlist, data_blocks[i], at_regblock->num_data_entries 
+				func_playlist, data_blocks[i], at_regblock
 			);
 		}
 		ATUI_ADD_BRANCH(atui_strap_set, atui_strap);

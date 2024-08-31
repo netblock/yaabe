@@ -25,6 +25,19 @@ global_default: {
 		},
 	},
 }, branches: [
+{
+	c_type: "unknown_reg_data",
+	leaves: [
+		{
+			access: "bios->reg_data",
+			name: "reg_data",
+			display: "ATUI_HEX",
+			fancy: "ATUI_NOFANCY",
+		},
+	],
+},
+
+
 
 { // Northern, Southern, Sea, Volcanic Islands
 	c_type: "timings_set_islands_ddr3",

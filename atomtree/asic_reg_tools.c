@@ -107,7 +107,7 @@ register_index_is_meta(
 	return false;
 }
 
-atuifunc*
+struct register_set_entry*
 register_set_build_atuifunc_playlist(
 		struct atomtree_init_reg_block const* const at_regblock,
 		struct register_set const* const reg_set,
@@ -120,8 +120,8 @@ register_set_build_atuifunc_playlist(
 		at_regblock->register_index;
 	regset_bsearch_func const regset_bsearch = regset_bsearch_bool[newest];
 
-	atuifunc* playlist = malloc(
-		at_regblock->num_data_entries * sizeof(atuifunc)
+	struct register_set_entry* playlist = malloc(
+		at_regblock->num_data_entries * sizeof(struct register_set_entry)
 	);
 	uint8_t playlist_i = 0;
 
@@ -134,11 +134,15 @@ register_set_build_atuifunc_playlist(
 			continue;
 		}
 		int16_t set_loc = regset_bsearch(reg_set, register_index[rii].RegIndex);
-		assert(0 <= set_loc);
 		if (0 <= set_loc) {
-			playlist[playlist_i] = reg_set->entries[set_loc].atui_branch_func;
-			playlist_i++;
+			playlist[playlist_i] = reg_set->entries[set_loc];
+		} else { // unknown index
+			playlist[playlist_i] = (struct register_set_entry) {
+				.address = register_index[rii].RegIndex,				
+				.atui_branch_func = ATUI_FUNC(unknown_reg_data),
+			};
 		}
+		playlist_i++;
 	}
 
 	return playlist;

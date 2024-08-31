@@ -7,6 +7,10 @@ See also asic_reg_indicies.json5
 #define ASIC_REG_DATA_TABLES_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
+struct unknown_reg_data {
+	uint32_t reg_data;
+};
+
 /******************************************************************************/
 /******************************************************************************/
 // GMC

@@ -48,7 +48,8 @@ regset_bsearch_right(
 
 
 // build a list of atui branch function pointers based off of the regblock.
-atuifunc* // must be freed; length is 1+atomtree_init_reg_block.num_data_entries
+// must be freed; length is 1+atomtree_init_reg_block.num_data_entries
+struct register_set_entry*
 register_set_build_atuifunc_playlist(
 		struct atomtree_init_reg_block const* const at_regblock,
 		struct register_set const* const reg_set,
