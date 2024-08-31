@@ -18,6 +18,11 @@ typedef struct yaabegtk_commons { // global state tracker
 
 	GtkEditable* pathbar;
 
+	// preserve scroll position of the leaves pane if the previous branch is
+	// compatible with new selected branch
+	float64_t previous_scroll_position;
+	GATUIBranch* previous_selection;
+
 	struct pane_context branches;
 	struct pane_context leaves;
 
@@ -237,6 +242,18 @@ pathbar_sets_branch_selection(
 }
 
 static void
+leaves_view_deferred_restore_position(
+		GtkAdjustment* const adj,
+		yaabegtk_commons* const commons
+		) {
+	gtk_adjustment_set_value(adj, commons->previous_scroll_position);
+
+	g_signal_handlers_disconnect_matched(
+		adj,  G_SIGNAL_MATCH_FUNC,
+		0,0, NULL,  G_CALLBACK(leaves_view_deferred_restore_position),  NULL
+	);
+}
+static void
 select_changes_leaves(
 		GtkSingleSelection* const model,
 		guint const position __unused,
@@ -245,14 +262,41 @@ select_changes_leaves(
 		) {
 // Signal callback
 // Change the leaves pane's model based on the what is selected in brances
-	GtkTreeListRow* const row = gtk_single_selection_get_selected_item(model);
-	GATUIBranch* const g_branch = GATUI_BRANCH(gtk_tree_list_row_get_item(row));
+	GATUIBranch* const new_selection = GATUI_BRANCH(
+		gtk_tree_list_row_get_item(
+			gtk_single_selection_get_selected_item(model)
+		)
+	);
+	atui_branch* const a_branch_new = gatui_branch_get_atui(new_selection);
+	atui_branch* const a_branch_old = gatui_branch_get_atui(
+		commons->previous_selection
+	);
+
+	bool const similar_branches = (
+		(a_branch_new->leaf_count == a_branch_old->leaf_count)
+		&& (0 == strcmp(a_branch_new->origname, a_branch_old->origname))
+	);
+	if (similar_branches) { // restore scroll if compatible
+		GtkAdjustment* const adj = gtk_scrollable_get_vadjustment(
+			GTK_SCROLLABLE(commons->leaves.view)
+		);
+		commons->previous_scroll_position = gtk_adjustment_get_value(adj);
+		// we can't immedately set the new position because it takes a while
+		// for the set_model to propagate.
+		g_signal_connect(adj, "value-changed",
+			G_CALLBACK(leaves_view_deferred_restore_position), commons
+		);
+	}
+
 	gtk_column_view_set_model(
 		commons->leaves.view,
-		gatui_branch_get_leaves_model(g_branch)
+		gatui_branch_get_leaves_model(new_selection)
 	);
-	g_object_unref(g_branch);
+	commons->previous_selection = new_selection;
+
+	g_object_unref(new_selection);
 }
+
 static GListModel*
 branches_treelist_generate_children(
 		gpointer const parent_ptr,
@@ -299,6 +343,7 @@ create_and_set_active_atui_model(
 	GtkSelectionModel* const new_model = create_trunk_model(commons, trunk);
 	commons->root = new_root;
 
+	commons->previous_selection = trunk;
 	gtk_column_view_set_model(commons->branches.view, new_model);
 
 	// TODO divorce into notify::model signal/callback in create_branches_pane?
