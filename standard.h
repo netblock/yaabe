@@ -22,6 +22,9 @@ typedef uint8_t char8_t;
 #include <uchar.h>
 #endif
 
+#undef NULL
+#define NULL nullptr
+
 // weird bugs with sprintf when using _Floatn, but as long as we can assert...
 // float/double will be fine.
 typedef _Float16 float16_t;
