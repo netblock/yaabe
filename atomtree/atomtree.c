@@ -359,7 +359,7 @@ populate_pplib_ppt_extended_table(
 		case v1_0: break;
 		default: assert(0); break;
 	}
-};
+}
 
 inline static uint8_t
 get_early_clock_info_length(
@@ -390,7 +390,7 @@ get_early_clock_info_length(
 		&& (0 < ppt41->state_array[0].num_levels)
 	);
 	return n + has_state_array;
-};
+}
 inline static void
 set_pplib_ppt_clock_info(
 		struct atomtree_powerplay_table_v4_1* const ppt41,
@@ -2574,7 +2574,7 @@ set_ver(
 		) {
 	header->format_revision = ver / VER_MAJOR_MULTIPLIER;
 	header->content_revision = ver % VER_MAJOR_MULTIPLIER;
-};
+}
 
 
 void

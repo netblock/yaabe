@@ -305,7 +305,7 @@ gatui_branch_set_leaves_memory_package(
 		return true;
 	}
 	return false;
-};
+}
 
 char*
 gatui_branch_to_path(

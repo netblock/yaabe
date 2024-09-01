@@ -1520,7 +1520,7 @@ branch_right_click_paste_data_set_data(
 		if (header->target == B64_BRANCH_CONTIGUOUS) {
 			if (header->num_bytes != a_branch->table_size) {
 				error_popup = gtk_alert_dialog_new(
-					"%s has %lu contiguous bytes, but pasted data is %u bytes.",
+					"%s has %zu contiguous bytes, but pasted data is %u bytes.",
 					a_branch->name, a_branch->table_size, header->num_bytes
 				);
 				goto error_exit;

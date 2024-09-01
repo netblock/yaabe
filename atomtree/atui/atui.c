@@ -925,7 +925,7 @@ atui_assimilate(
 		free(src_array[i]->child_branches);
 		free(src_array[i]);
 	}	
-};
+}
 
 static void
 _atui_destroy_leaves(

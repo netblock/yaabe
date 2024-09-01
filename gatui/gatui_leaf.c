@@ -326,7 +326,7 @@ gatui_leaf_get_value(
 		);
 	}
 	return NULL;
-};
+}
 
 bool
 gatui_leaf_set_value(
@@ -481,7 +481,7 @@ gatui_leaf_enum_entry_sets_value(
 		return true;
 	}
 	return false;
-};
+}
 
 int16_t
 gatui_leaf_enum_entry_get_possible_index(
