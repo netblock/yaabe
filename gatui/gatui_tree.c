@@ -107,20 +107,18 @@ gatui_tree_boot_gatui_trunk(
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 
-	GObject* trunk = g_weak_ref_get(&(self->trunk));
+	GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
+	self->enum_models_cache = enum_models_cache;
+	generate_enum_models_cache(enum_models_cache);
 
-	if (NULL == trunk) {
-		GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
-		self->enum_models_cache = enum_models_cache;
-		generate_enum_models_cache(enum_models_cache);
+	GObject* const trunk = G_OBJECT(gatui_branch_new(
+		self->atomtree->atui_root, self
+	));
 
-		trunk = G_OBJECT(gatui_branch_new(self->atomtree->atui_root, self));
+	self->enum_models_cache = NULL;
+	unref_enum_models_cache(enum_models_cache);
 
-		self->enum_models_cache = NULL;
-		unref_enum_models_cache(enum_models_cache);
-
-		g_weak_ref_set(&(self->trunk), trunk);
-	}
+	g_weak_ref_set(&(self->trunk), trunk);
 
 	return trunk;
 }
@@ -166,7 +164,6 @@ atomtree_load_from_gfile(
 	}
 	generate_atui(atree);
 
-	atree->biosfile_size = filesize;
 	g_input_stream_close(readstream, NULL, &ferror);
 	// TODO does close errors really matter?
 	goto exit2;
@@ -319,8 +316,8 @@ GFile*
 gatui_tree_get_bios_file(
 		GATUITree* const self
 		) {
-	 g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
-	 return self->biosfile;
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return self->biosfile;
 }
 
 
@@ -328,15 +325,15 @@ GtkSelectionModel* const*
 gatui_tree_get_enum_models_cache(
 		GATUITree* const self
 		) {
-	 g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
-	 return (GtkSelectionModel* const*) self->enum_models_cache;
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return (GtkSelectionModel* const*) self->enum_models_cache;
 };
 
 GATUIBranch*
 gatui_tree_get_trunk(
 		GATUITree* const self
 		) {
-	 g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 
 	GObject* trunk;
 
@@ -349,11 +346,36 @@ gatui_tree_get_trunk(
 	return GATUI_BRANCH(trunk);
 }
 
+GATUITree*
+gatui_tree_copy_core(
+		GATUITree* const src
+		) {
+	g_return_val_if_fail(GATUI_IS_TREE(src), NULL);
+
+	size_t const biosfile_size = src->atomtree->biosfile_size;
+	void* const alloced_bios = malloc(biosfile_size);
+	memcpy(alloced_bios, src->atomtree->alloced_bios, biosfile_size);
+
+	struct atom_tree* const atree = atombios_parse(alloced_bios, biosfile_size);
+	if (NULL == atree) {
+		free(alloced_bios);
+		return NULL;
+	}
+	generate_atui(atree);
+
+	GATUITree* const self = g_object_new(GATUI_TYPE_TREE, NULL);
+	self->atomtree = atree;
+	self->biosfile = src->biosfile;
+	g_object_ref(self->biosfile);
+
+	return self;
+}
+
 
 struct atom_tree*
 gatui_tree_get_atom_tree(
 		GATUITree* const self
 		) {
-	 g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
-	 return self->atomtree;
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return self->atomtree;
 }

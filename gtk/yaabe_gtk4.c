@@ -28,7 +28,7 @@ typedef struct yaabegtk_commons { // global state tracker
 
 	// For gtk_widget_set_sensitive() -- don't allow when no bios is loaded
 	GtkWidget* save_buttons;
-	GtkWidget* reload_button;
+	GtkWidget* reload_buttons;
 
 	char* pathbar_string;
 
@@ -1843,7 +1843,7 @@ yaabegtk_load_bios(
 
 		if (gtk_widget_get_sensitive(commons->save_buttons) == false) {
 			gtk_widget_set_sensitive(commons->save_buttons, true);
-			gtk_widget_set_sensitive(commons->reload_button, true);
+			gtk_widget_set_sensitive(commons->reload_buttons, true);
 		}
 		set_editor_titlebar(commons);
 	}
@@ -1917,7 +1917,7 @@ load_button_open_bios(
 	g_object_unref(filer);
 }
 static void
-reload_button_reload_bios(
+discard_button_reload_bios(
 		yaabegtk_commons* const commons
 		) {
 // signal callback
@@ -1935,6 +1935,23 @@ reload_button_reload_bios(
 	create_and_set_active_atui_model(commons, new_tree);
 	g_object_unref(old_tree);
 }
+static void
+refresh_button_refresh_bios(
+		yaabegtk_commons* const commons
+		) {
+// signal callback
+	GATUITree* const old_tree = commons->root;
+	GATUITree* const new_tree = gatui_tree_copy_core(old_tree);
+	assert(new_tree);
+	if (NULL == new_tree) {
+		return;
+	}
+
+	create_and_set_active_atui_model(commons, new_tree);
+	g_object_unref(old_tree);
+}
+
+
 static void
 save_button_same_file(
 		yaabegtk_commons* const commons
@@ -2008,13 +2025,26 @@ construct_loadsave_buttons_box(
 	g_signal_connect_swapped(load_button, "clicked",
 		G_CALLBACK(load_button_open_bios), commons
 	);
-	GtkWidget* const reload_button = gtk_button_new_with_label("Reload");
-	g_signal_connect_swapped(reload_button, "clicked",
-		G_CALLBACK(reload_button_reload_bios), commons
+
+
+	GtkWidget* const discard_button = gtk_button_new_with_label("Discard");
+	gtk_widget_set_tooltip_text(discard_button, "Discard changes and reload");
+	g_signal_connect_swapped(discard_button, "clicked",
+		G_CALLBACK(discard_button_reload_bios), commons
 	);
-	GtkWidget* const load_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
-	gtk_box_append(GTK_BOX(load_buttons), load_button);
-	gtk_box_append(GTK_BOX(load_buttons), reload_button);
+	GtkWidget* const refresh_button = gtk_button_new_with_label("Refresh");
+	gtk_widget_set_tooltip_text(refresh_button,
+		"Recrawl bios based on changes"
+	);
+	g_signal_connect_swapped(refresh_button, "clicked",
+		G_CALLBACK(refresh_button_refresh_bios), commons
+	);
+	GtkWidget* const reload_buttons = gtk_box_new(
+		GTK_ORIENTATION_HORIZONTAL, 5
+	);
+	gtk_box_append(GTK_BOX(reload_buttons), discard_button);
+	gtk_box_append(GTK_BOX(reload_buttons), refresh_button);
+
 
 
 	GtkWidget* const save_button = gtk_button_new_with_label("Save");
@@ -2033,20 +2063,22 @@ construct_loadsave_buttons_box(
 	GtkWidget* const cf_button = gtk_button_new_with_label("Function Tables");
 	gtk_widget_set_sensitive(cf_button, false);
 
+
 	GtkWidget* const buttonboxes = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 30);
 	gtk_widget_set_margin_top(buttonboxes, 5);
 	gtk_widget_set_margin_bottom(buttonboxes, 5);
 	gtk_widget_set_margin_start(buttonboxes, 5);
 	gtk_widget_set_margin_end(buttonboxes, 5);
-	gtk_box_append(GTK_BOX(buttonboxes), load_buttons);
+	gtk_box_append(GTK_BOX(buttonboxes), load_button);
+	gtk_box_append(GTK_BOX(buttonboxes), reload_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
 
-	commons->reload_button = reload_button;
+	commons->reload_buttons = reload_buttons;
 	commons->save_buttons = save_buttons;
 	if (commons->root == NULL) {
 		gtk_widget_set_sensitive(save_buttons, false);
-		gtk_widget_set_sensitive(reload_button, false);
+		gtk_widget_set_sensitive(reload_buttons, false);
 	}
 
 	return buttonboxes;

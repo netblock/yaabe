@@ -2502,9 +2502,9 @@ bios_fastforward(
 struct atom_tree*
 atombios_parse(
 		void* const alloced_bios,
-		uint32_t const allocsize
+		uint32_t const biosfile_size
 		) {
-	void* const bios = bios_fastforward(alloced_bios, allocsize);
+	void* const bios = bios_fastforward(alloced_bios, biosfile_size);
 	if (bios == NULL) {
 		return NULL;
 	}
@@ -2521,8 +2521,8 @@ atombios_parse(
 	}
 	*/
 
-
 	atree->alloced_bios = alloced_bios;
+	atree->biosfile_size = biosfile_size;
 
 	atree->bios = bios; // going to be used as the '0' in places.
 	atree->pci_first_image_size = (

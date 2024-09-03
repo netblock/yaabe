@@ -97,7 +97,9 @@ gatui_branch_new(
 		atui_branch* const branch,
 		GATUITree* const root
 		) {
+	assert(branch);
 	assert(NULL == branch->self);
+	g_return_val_if_fail(branch != NULL, NULL);
 	g_return_val_if_fail(branch->self == NULL, NULL);
 
 	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH, NULL);

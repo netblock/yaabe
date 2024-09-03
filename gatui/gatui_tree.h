@@ -40,6 +40,14 @@ gatui_tree_get_trunk(
 		);
 
 
+// creates a new tree based off of the raw bios data buffer, and GFile.
+// useful when a new atomtree crawl is wanted.
+GATUITree*
+gatui_tree_copy_core(
+		GATUITree* src
+		);
+
+
 struct atom_tree*
 gatui_tree_get_atom_tree(
 		GATUITree* self
