@@ -322,11 +322,13 @@ atui_leaf_set_val_unsigned(
 	// ...11111 000.. 1111...
 	uint64_t const tokeep_mask = ~(max_val << leaf->bitfield_lo);
 	val <<= leaf->bitfield_lo;
-
 	switch (leaf->total_bits) {
 		case  8: *(leaf->u8)  = ( *(leaf->u8) & tokeep_mask) | val; break;
 		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | val; break;
-		case 24: *(leaf->s24) = pt_to_npt_downgrade((int32_t*)&val); break;
+		case 24:
+			uint32_t val_temp = val;
+			*(leaf->u24) = pt_to_npt_downgrade(&val_temp);
+			break;
 		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | val; break;
 		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | val; break;
 		default: assert(0); break;
@@ -395,7 +397,10 @@ atui_leaf_set_val_signed(
 	switch (leaf->total_bits) {
 		case  8:  *(leaf->u8) = ( *(leaf->u8) & tokeep_mask) | raw_val;  break;
 		case 16: *(leaf->u16) = (*(leaf->u16) & tokeep_mask) | raw_val;  break;
-		case 24: *(leaf->u24) = pt_to_npt_downgrade((uint32_t*)&raw_val); break;
+		case 24:
+			int32_t val_temp = raw_val;
+			*(leaf->s24) = pt_to_npt_downgrade(&val_temp);
+			break;
 		case 32: *(leaf->u32) = (*(leaf->u32) & tokeep_mask) | raw_val;  break;
 		case 64: *(leaf->u64) = (*(leaf->u64) & tokeep_mask) | raw_val;  break;
 		default: assert(0); break;

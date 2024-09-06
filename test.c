@@ -13,7 +13,7 @@ gatui_leaf_test(
 		) {
 	// TODO actually test stuff
 	atui_leaf const* const atui __unused = gatui_leaf_get_atui(leaf);
-	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
+	struct atom_tree* const a_root __unused = gatui_tree_get_atom_tree(root);
 
 	if (atui->val) {
 		assert(a_root->bios <= atui->val);
