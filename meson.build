@@ -17,6 +17,8 @@ add_project_arguments(
 	'-fwrapv',
 
 	'-Wformat-security',
+	'-Wstringop-overflow',
+	'-Wstringop-truncation',
 	'-Wno-switch',
 
 	language: 'c',

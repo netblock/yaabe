@@ -211,7 +211,7 @@ union pcir_indicator_byte {
 //                        R I C P
 #define PCIR_SIGNATURE 0x52494350
 struct pcir_data_structure { // PCI Rom
-	char  pcir_signature[4]; // "PCIR"
+	char  pcir_signature[4] __nonstring; // "PCIR"
 	uint16_t vendor_id;
 	uint16_t device_id;
 	uint16_t vpd_reserved; // was PCI Vital Product Data (VPD)
@@ -260,7 +260,7 @@ struct efi_pci_device_driver_image {
 struct vbios_rom_header {
 	struct pci_rom_header pci_header;
 	uint8_t  rsvd_1d_1a[4];
-	char  IBM[3]; // IBM
+	char  IBM[3] __nonstring; // IBM
 	uint8_t  checksum;
 	uint8_t  unsure[13]; // could be more checksums?
 	uint8_t  bios_msg_number;
@@ -300,7 +300,7 @@ struct atom_common_table_header {
 /******************************************************************************/
 struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 	struct atom_common_table_header  table_header;
-	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
+	char  FirmWareSignature[4] __nonstring; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -321,7 +321,7 @@ struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 
 struct atom_rom_header_v2_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  FirmWareSignature[4]; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
+	char  FirmWareSignature[4] __nonstring; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -7559,7 +7559,7 @@ struct atom_mc_init_param_table_v2_1 {
 // uCode block header for reference
 struct mcucodeheader {
 	//uint32_t Signature;
-	char  Signature[4]; // CuCM ?
+	char  Signature[4] __nonstring; // CuCM ?
 	uint8_t  Revision;
 	uint8_t  Checksum;
 	uint8_t  Reserved1;
