@@ -3,9 +3,9 @@
 #include "standard.h"
 #include "atomtree.h"
 
-// commented out; see message in standard.h
 //landing is in atombios_parse
-//static struct error error = {}; // error handling
+static struct error error = {}; // error handling
+
 //error_assert(&error, ERROR_WARNING, "hello!", NULL == atree);
 
 inline static void
@@ -233,7 +233,10 @@ populate_pplib_ppt_state_array(
 	} walker;
 
 	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
-		assert(pplibv1->NumStates < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
+		error_assert(&error, ERROR_ABORT,
+			"populate_pplib_ppt_state_array: too many states",
+			ATOMTREE_PPLIB_STATE_ARRAY_MAX > pplibv1->NumStates
+		);
 		ppt41->state_array_ver = v1_0;
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
@@ -251,7 +254,10 @@ populate_pplib_ppt_state_array(
 		}
 		ppt41->state_array_size = pplibv1->NumStates * pplibv1->StateEntrySize;
 	} else {
-		assert(base->v2.NumEntries < ATOMTREE_PPLIB_STATE_ARRAY_MAX);
+		error_assert(&error, ERROR_ABORT,
+			"populate_pplib_ppt_state_array: too many states",
+			ATOMTREE_PPLIB_STATE_ARRAY_MAX > base->v2.NumEntries
+		);
 		ppt41->state_array_ver = v2_0;
 		ppt41->num_state_array_entries = base->v2.NumEntries;
 
@@ -787,7 +793,10 @@ populate_init_reg_block(
 	);
 	uint8_t i = 0;
 	while (block->block_id.id_access) { // the datablock list ends with 0
-		assert(ATOMTREE_MC_REG_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_init_reg_block: too many data blocks",
+			ATOMTREE_MC_REG_MAX > i
+		);
 		at_regblock->data_blocks[i] = block;
 		i++;
 		block = (void*)block + at_regblock->data_block_element_size;
@@ -1043,7 +1052,10 @@ populate_umc_init_reg_block(
 	);
 	uint8_t i = 0;
 	while (block->block_id.id_access) { // the datablock list ends with 0
-		assert(ATOMTREE_UMC_REG_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_umc_init_reg_block: too many data blocks",
+			ATOMTREE_UMC_REG_MAX > i
+		);
 		at_regblock->data_blocks[i] = block;
 		i++;
 		block = (void*)block + at_regblock->data_block_element_size;
@@ -1098,7 +1110,10 @@ populate_vram_module(
 		enum atomtree_common_version const vram_modules_ver,
 		uint8_t const count
 		) {
-	assert(count <= ATOMTREE_VRAM_MODULES_MAX);
+	error_assert(&error, ERROR_ABORT,
+		"populate_vram_module: too many vram_modules",
+		ATOMTREE_VRAM_MODULES_MAX >= count
+	);
 	uint8_t i;
 	struct atomtree_vram_module* vmod;
 	switch (vram_modules_ver) {
@@ -1756,7 +1771,10 @@ populate_voltageobject_info_v1_1(
 		+ vo_info->table_header->structuresize
 	);
 	while (vobj.raw < end) {
-		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_voltageobject_info_v1_1: too many voltage objects",
+			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
+		);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
 		// NumOfVoltageEntries lies and can be 255.
@@ -1797,7 +1815,10 @@ populate_voltageobject_info_v1_2(
 		+ vo_info->table_header->structuresize
 	);
 	while (vobj.raw < end) {
-		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_voltageobject_info_v1_2: too many voltage objects",
+			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
+		);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v2_0;
 		// NumOfVoltageEntries lies and can be 255.
@@ -1838,7 +1859,10 @@ populate_voltageobject_info_v3_1(
 		+ vo_info->table_header->structuresize
 	);
 	while (vobj.raw < end) {
-		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_voltageobject_info_v3_1: too many voltage objects",
+			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
+		);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
 		switch (vobj.vobj->header.voltage_mode) {
@@ -1933,7 +1957,10 @@ populate_voltageobject_info_v4_1(
 		+ vo_info->table_header->structuresize
 	);
 	while (vobj.raw < end) {
-		assert(ATOMTREE_VOLTAGE_OBJECTS_MAX > i);
+		error_assert(&error, ERROR_ABORT,
+			"populate_voltageobject_info_v4_1: too many voltage objects",
+			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
+		);
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
 		switch (vobj.vobj->header.voltage_mode) {
@@ -2460,6 +2487,10 @@ populate_pci_tables(
 	struct pci_rom_tables* const tables = atree_pci->pci_tables;
 
 	do {
+		error_assert(&error, ERROR_ABORT,
+			"populate_pci_tables: too many PCI images",
+			NUM_PCIR_IMAGES_MAX > i
+		);
 		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
 			break;
 		}
@@ -2513,13 +2544,15 @@ atombios_parse(
 	// atomtree is highly conditional, so zeroing with calloc will make
 	// population easier.
 
-	/*
+
+	// currently only used for statically-sized alloc contention.
+	// moving away from statically-sized alloc would require a malloc tracker
+	// array
 	setjmp(error.env);
 	if (error.severity) {
 		free(atree);
 		return NULL;
 	}
-	*/
 
 	atree->alloced_bios = alloced_bios;
 	atree->biosfile_size = biosfile_size;
@@ -2533,7 +2566,10 @@ atombios_parse(
 	if (image->atom_bios_message_offset) {
 		char* strs = atree->bios + image->atom_bios_message_offset;
 		do {
-			assert(num_of_crawled_strings < NUM_ATOMBIOS_STRINGS); // see def
+			error_assert(&error, ERROR_ABORT,
+				"atombios_parse: too many strings",
+				ATOMBIOS_STRINGS_MAX > num_of_crawled_strings
+			);
 			atree->atombios_strings[num_of_crawled_strings] = strs;
 			num_of_crawled_strings++;
 			strs += (strlen(strs) + 1);

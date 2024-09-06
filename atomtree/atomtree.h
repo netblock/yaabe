@@ -46,7 +46,7 @@ struct atomtree_rom_header {
 };
 
 // Nearly all do 13, Navi3 7900XT does 16? Increase if necessary.
-#define NUM_ATOMBIOS_STRINGS 16
+#define ATOMBIOS_STRINGS_MAX 16
 struct atom_tree {
 	// file handling
 	size_t biosfile_size;
@@ -64,7 +64,7 @@ struct atom_tree {
 	enum amd_asic_type chip_type;
 
 	uint8_t num_of_crawled_strings;
-	char* atombios_strings[NUM_ATOMBIOS_STRINGS];
+	char* atombios_strings[ATOMBIOS_STRINGS_MAX];
 
 	struct atomtree_pci_tables pci_tables;
 	struct atomtree_rom_header rom_header;

@@ -125,6 +125,7 @@ error_emit( // severity and message must be set before calling
 		struct error* err
 		);
 // convienence macro meant to replace assert() ; msg can by dynamic
+// The intent is an error/warning message system that would replace assert()
 #define error_assert(errptr, sev, msg, test) do {\
 	 if (!(test)) {\
 		assert(test);\
@@ -138,23 +139,6 @@ error_emit( // severity and message must be set before calling
 		error_emit(errptr);\
 	}\
 } while(0)
-/*
-The intent is an error/warning message system that would replace assert(),
-where the usage would have,
-`static struct error error;` in atomtree.c and atui/tree.c and,
-    setjmp(error.env);
-    if (error.severity) {
-        free_stuff(...);
-		if (error_out) {
-			*error_out = error.message;
-		}
-        return NULL;
-    }
-in atombios_parse and generate_atui respectively.
-However at the time of writing, I am uncertain how useful this would actually
-be, or what messages would be worth reading.
-I'm keeping this as food for thought.
-*/
 
 
 #endif
