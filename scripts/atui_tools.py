@@ -17,7 +17,7 @@ class __regexvar:
 	# nc is noncapture; it does not have a referencable group num
 
 	white = "\\s*"
-	tabs_nc = "(?:\t+)"
+	tabs_nc = "(?:\t*)"
 	tabs = "(" + tabs_nc + ")"
 	space = "( +)"
 	spacetab = "[ \t]*"
@@ -94,7 +94,7 @@ def struct_to_atui(
 	)
 	text = re.sub("};","\t],\n},", text)
 
-	# ATUI_DYNARRAY
+	# ATUI_DYNARRAY part 1
 	dynarray = """
 		{
 			access: "bios->\\g<2>",
@@ -105,9 +105,8 @@ def struct_to_atui(
 				deferred: "NULL",
 				count: "\\g<3>\\g<4>",
 				enum: "ATUI_NULL",
-				pattern: [
-				\\g<1> \\g<2>;
-				],
+				pattern: [\
+			\\g<1> \\g<2>;],
 			},
 		},\
 """
@@ -210,6 +209,13 @@ def struct_to_atui(
 	text = re.sub(
 		s.tabs + "},\n" + s.tabs + "{\n",
 		"\\g<1>}, {\n",
+		text
+	)
+
+	# ATUI_DYNARRAY part 2
+	text = re.sub(
+		"pattern: \\[" + s.tabs + "{",
+		"pattern: [{",
 		text
 	)
 

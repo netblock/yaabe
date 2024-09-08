@@ -183,13 +183,11 @@ global_default: {
 				deferred: "atomtree->atombios_strings",
 				count: "atomtree->num_of_crawled_strings",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "string [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_STRING",
-					},
-				],
+				pattern: [{
+					name: "string [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_STRING",
+				},],
 			},
 		},
 	],
@@ -2794,13 +2792,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->VIDAdjustEntries",
-						name: "VIDAdjustEntries [%02u]",
-						display: "ATUI_HEX",
-					},
-				],
+				pattern: [{
+					access: "bios->VIDAdjustEntries",
+					name: "VIDAdjustEntries [%02u]",
+					display: "ATUI_HEX",
+				},],
 			},
 		},
 	],
@@ -2886,14 +2882,12 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->VIDAdjustEntries",
-						name: "VIDAdjustEntries [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "voltage_lut_entry",
-					},
-				],
+				pattern: [{
+					access: "bios->VIDAdjustEntries",
+					name: "VIDAdjustEntries [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "voltage_lut_entry",
+				},],
 			},
 		},
 	],
@@ -3016,14 +3010,12 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->voltage_gpio_lut",
-						name: "voltage_gpio_lut [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_gpio_map_lut",
-					},
-				],
+				pattern: [{
+					access: "bios->voltage_gpio_lut",
+					name: "voltage_gpio_lut [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_gpio_map_lut",
+				},],
 			},
 		},
 
@@ -3103,13 +3095,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "i2cdatalut [%u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_data_entry",
-					},
-				],
+				pattern: [{
+					name: "i2cdatalut [%u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_data_entry",
+				},],
 			},
 		},
 	],
@@ -3260,14 +3250,12 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->EvvDpmList",
-						name: "EvvDpmList",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "atom_evv_dpm_info",
-					},
-				],
+				pattern: [{
+					access: "bios->EvvDpmList",
+					name: "EvvDpmList",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_evv_dpm_info",
+				},],
 			},
 		},
 	],
@@ -3337,15 +3325,13 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->LeakageIdLut",
-						name: "LeakageIdLut [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT",
-						fancy_data: "leakage_voltage_lut_entry_v2",
-					},
-				],
+				pattern: [{
+					access: "bios->LeakageIdLut",
+					name: "LeakageIdLut [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT",
+					fancy_data: "leakage_voltage_lut_entry_v2",
+				},],
 			},
 		},
 	],
@@ -3485,12 +3471,10 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_data_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "reg_data [%02u]",
-						display: "ATUI_HEX",
-					},
-				],
+				pattern: [{
+					name: "reg_data [%02u]",
+					display: "ATUI_HEX",
+				},],
 			},
 		},
 	],
@@ -3508,13 +3492,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_index",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "RegIndexBuf [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "atom_init_reg_index_format",
-					},
-				],
+				pattern: [{
+					name: "RegIndexBuf [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_init_reg_index_format",
+				},],
 			},
 		},
 	],
@@ -3531,13 +3513,11 @@ global_default: {
 				deferred: "atomtree->data_blocks",
 				count: "atomtree->num_data_blocks",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "reg_setting_list [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_reg_setting_data_block",
-					},
-				],
+				pattern: [{
+					name: "reg_setting_list [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_reg_setting_data_block",
+				},],
 			},
 		},
 	],
@@ -5721,13 +5701,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumOfPowerModeEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PowerPlayInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info",
-					},
-				],
+				pattern: [{
+					name: "PowerPlayInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info",
+				},],
 			},
 		},
 	],
@@ -5769,13 +5747,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumOfPowerModeEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PowerPlayInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v2",
-					},
-				],
+				pattern: [{
+					name: "PowerPlayInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v2",
+				},],
 			},
 		},
 	],
@@ -5817,13 +5793,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumOfPowerModeEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PowerPlayInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v3",
-					},
-				],
+				pattern: [{
+					name: "PowerPlayInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_powermode_info_v3",
+				},],
 			},
 		},
 	],

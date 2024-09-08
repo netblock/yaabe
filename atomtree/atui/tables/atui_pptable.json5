@@ -311,11 +311,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pptable_state",
-					},
-				],
+				pattern: [{
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pptable_state",
+				},],
 			},
 		},
 	],
@@ -787,11 +785,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_mclk_dependency_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_mclk_dependency_record",
+				},],
 			},
 		},
 	],
@@ -867,11 +863,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_sclk_dependency_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_sclk_dependency_record",
+				},],
 			},
 		},
 	],
@@ -926,11 +920,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_polaris_sclk_dependency_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_polaris_sclk_dependency_record",
+				},],
 			},
 		},
 	],
@@ -974,11 +966,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_voltage_lookup_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_voltage_lookup_record",
+				},],
 			},
 		},
 	],
@@ -1049,11 +1039,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_mm_dependency_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_mm_dependency_record",
+				},],
 			},
 		},
 	],
@@ -1106,11 +1094,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_vce_state_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_vce_state_record",
+				},],
 			},
 		},
 	],
@@ -1429,11 +1415,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_hard_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_hard_limit_record",
+				},],
 			},
 		},
 	],
@@ -1473,11 +1457,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pptable_pcie_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pptable_pcie_record",
+				},],
 			},
 		},
 	],
@@ -1518,11 +1500,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_polaris_pcie_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_polaris_pcie_record",
+				},],
 			},
 		},
 	],

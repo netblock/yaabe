@@ -778,13 +778,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_levels",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "ClockStateIndices [%02u]",
-						display: "ATUI_DEC",
-						fancy: "ATUI_NOFANCY",
-					},
-				],
+				pattern: [{
+					name: "ClockStateIndices [%02u]",
+					display: "ATUI_DEC",
+					fancy: "ATUI_NOFANCY",
+				},],
 			},
 		},
 	],
@@ -812,13 +810,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_levels",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfoIndex",
-						display: "ATUI_DEC",
-						fancy: "ATUI_NOFANCY",
-					},
-				],
+				pattern: [{
+					name: "clockInfoIndex",
+					display: "ATUI_DEC",
+					fancy: "ATUI_NOFANCY",
+				},],
 			},
 		},
 	],
@@ -907,13 +903,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_r600_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_r600_clock_info",
+				},],
 			},
 		},
 	],
@@ -989,13 +983,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_rs780_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_rs780_clock_info",
+				},],
 			},
 		},
 	],
@@ -1037,13 +1029,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_evergreen_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_evergreen_clock_info",
+				},],
 			},
 		},
 	],
@@ -1097,13 +1087,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_si_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_si_clock_info",
+				},],
 			},
 		},
 	],
@@ -1148,13 +1136,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_ci_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_ci_clock_info",
+				},],
 			},
 		},
 	],
@@ -1203,13 +1189,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_sumo_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_sumo_clock_info",
+				},],
 			},
 		},
 	],
@@ -1244,13 +1228,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "clockInfo",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_cz_clock_info",
-					},
-				],
+				pattern: [{
+					name: "clockInfo",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_cz_clock_info",
+				},],
 			},
 		},
 	],
@@ -1309,13 +1291,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "nonClockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v1",
-					},
-				],
+				pattern: [{
+					name: "nonClockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v1",
+				},],
 			},
 		},
 	],
@@ -1377,13 +1357,11 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "nonClockInfo [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v2",
-					},
-				],
+				pattern: [{
+					name: "nonClockInfo [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_nonclock_info_v2",
+				},],
 			},
 		},
 	],
@@ -1417,13 +1395,11 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->leaves->v2.NumCustomThermalPolicy",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "thermal_state [%02u]",
-						display: "ATUI_DISPLAY",
-						fancy_data: "atom_pplib_thermal_state",
-					},
-				],
+				pattern: [{
+					name: "thermal_state [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy_data: "atom_pplib_thermal_state",
+				},],
 			},
 		},
 	],
@@ -2129,11 +2105,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_vce_clock_info",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_vce_clock_info",
+				},],
 			},
 		},
 	],
@@ -2163,11 +2137,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_vce_clock_voltage_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_vce_clock_voltage_limit_record",
+				},],
 			},
 		},
 	],
@@ -2219,11 +2191,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_vce_state_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_vce_state_record",
+				},],
 			},
 		},
 	],
@@ -2280,11 +2250,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_uvd_clock_info",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_uvd_clock_info",
+				},],
 			},
 		},
 	],
@@ -2314,11 +2282,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_uvd_clock_voltage_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_uvd_clock_voltage_limit_record",
+				},],
 			},
 		},
 	],
@@ -2373,11 +2339,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_samclk_voltage_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_samclk_voltage_limit_record",
+				},],
 			},
 		},
 	],
@@ -2413,11 +2377,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_acpclk_voltage_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_acpclk_voltage_limit_record",
+				},],
 			},
 		},
 	],
@@ -2522,11 +2484,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_clock_voltage_dependency_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_clock_voltage_dependency_record",
+				},],
 			},
 		},
 	],
@@ -2584,11 +2544,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_vq_budgeting_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_vq_budgeting_record",
+				},],
 			},
 		},
 	],
@@ -2627,11 +2585,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_clock_voltage_limit_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_clock_voltage_limit_record",
+				},],
 			},
 		},
 	],
@@ -2667,11 +2623,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_phaseshedding_limits_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_phaseshedding_limits_record",
+				},],
 			},
 		},
 	],
@@ -2707,11 +2661,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_cac_leakage_record_evv",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_cac_leakage_record_evv",
+				},],
 			},
 		},
 	],
@@ -2747,11 +2699,9 @@ global_default: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						fancy_data: "atom_pplib_cac_leakage_record",
-					},
-				],
+				pattern: [{
+					fancy_data: "atom_pplib_cac_leakage_record",
+				},],
 			},
 		},
 	],

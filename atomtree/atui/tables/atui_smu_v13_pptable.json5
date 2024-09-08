@@ -61,11 +61,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODCAP_COUNT",
 				enum: "SMU_11_0_ODFEATURE_CAP",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "(&(bios->cap[SMU_13_0_7_ODCAP_COUNT]))",
@@ -77,7 +75,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{ // if COUNT changes, please change this 16
-						name: "OD feature [16 + %02u]",
+					name: "OD feature [16 + %02u]",
 					},
 				],
 			},
@@ -89,11 +87,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
-				pattern: [
-					{
-						name: "max: %s",
-					},
-				],
+				pattern: [{
+					name: "max: %s",
+				},],
 			},
 		}, {
 			access: "bios->min",
@@ -103,11 +99,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
-				pattern: [
-					{
-						name: "min: %s",
-					},
-				],
+				pattern: [{
+					name: "min: %s",
+				},],
 			},
 		}, {
 			access: "(&(bios->max[SMU_13_0_7_ODSETTING_COUNT]))",
@@ -119,7 +113,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{ // if COUNT changes, please change this 32
-						name: "max: [32 + %02u]",
+					name: "max: [32 + %02u]",
 					},
 				],
 			},
@@ -133,7 +127,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{ // if COUNT changes, please change this 32
-						name: "min: [32 + %02u]",
+					name: "min: [32 + %02u]",
 					},
 				],
 			},
@@ -148,11 +142,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_PMSETTING_COUNT",
 				enum: "SMU_13_0_7_PWRMODE_SETTING",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "(&(bios->pm_setting[SMU_13_0_7_PMSETTING_COUNT]))",
@@ -167,7 +159,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{ // if COUNT changes, please change this 16
-						name: "pm_setting [16 + %02u]",
+					name: "pm_setting [16 + %02u]",
 					},
 				],
 			},
@@ -951,11 +943,9 @@ global_default: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
-				pattern: [
-					{
-						name: "Tdc (%s)",
-					},
-				],
+				pattern: [{
+					name: "Tdc (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Temperature",
@@ -968,11 +958,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "Temperature (%s)",
-					},
-				],
+				pattern: [{
+					name: "Temperature (%s)",
+				},],
 			},
 		}, {
 			access: "bios->PwmLimitMin",
@@ -1026,11 +1014,9 @@ global_default: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
-				pattern: [
-					{
-						name: "PowerMinPpt0 (%s)",
-					},
-				],
+				pattern: [{
+					name: "PowerMinPpt0 (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Spare",
@@ -1126,11 +1112,9 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_TEMP_COUNT",
 				enum: "AVFS_TEMP_e",
-				pattern: [
-					{
-						name: "AvfsTemp (%s)",
-					},
-				],
+				pattern: [{
+					name: "AvfsTemp (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VftFMin",
@@ -1152,13 +1136,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_TEMP_COUNT",
 				enum: "AVFS_TEMP_e",
-				pattern: [
-					{
-						name: "qVft (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-					},
-				],
+				pattern: [{
+					name: "qVft (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+				},],
 			},
 		}, {
 			access: "bios->qAvfsGb",
@@ -1341,11 +1323,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PPT %u",
-					},
-				],
+				pattern: [{
+					name: "PPT %u",
+				},],
 			},
 		}, {
 			access: "bios->SocketPowerLimitDc",
@@ -1358,11 +1338,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PPT %u",
-					},
-				],
+				pattern: [{
+					name: "PPT %u",
+				},],
 			},
 		}, {
 			access: "bios->SocketPowerLimitSmartShift2",
@@ -1404,11 +1382,9 @@ global_default: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
-				pattern: [
-					{
-						name: "VrTdcLimit (%s)",
-					},
-				],
+				pattern: [{
+					name: "VrTdcLimit (%s)",
+				},],
 			},
 		}, {
 			access: "bios->PlatformTdcLimit",
@@ -1421,11 +1397,9 @@ global_default: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
-				pattern: [
-					{
-						name: "PlatformTdcLimit (%s)",
-					},
-				],
+				pattern: [{
+					name: "PlatformTdcLimit (%s)",
+				},],
 			},
 		}, {
 			access: "bios->TemperatureLimit",
@@ -1438,11 +1412,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "TemperatureLimit (%s)",
-					},
-				],
+				pattern: [{
+					name: "TemperatureLimit (%s)",
+				},],
 			},
 		}, {
 			access: "bios->HwCtfTempLimit",
@@ -1499,11 +1471,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "UlvVoltageOffset (%s)",
-					},
-				],
+				pattern: [{
+					name: "UlvVoltageOffset (%s)",
+				},],
 			},
 		}, {
 			access: "bios->UlvVoltageOffsetU",
@@ -1528,11 +1498,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "DefaultMaxVoltage (%s)",
-					},
-				],
+				pattern: [{
+					name: "DefaultMaxVoltage (%s)",
+				},],
 			},
 		}, {
 			access: "bios->BoostMaxVoltage",
@@ -1545,11 +1513,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "BoostMaxVoltage (%s)",
-					},
-				],
+				pattern: [{
+					name: "BoostMaxVoltage (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VminTempHystersis",
@@ -1562,11 +1528,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VminTempHystersis (%s)",
-					},
-				],
+				pattern: [{
+					name: "VminTempHystersis (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VminTempThreshold",
@@ -1579,11 +1543,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VminTempThreshold (%s)",
-					},
-				],
+				pattern: [{
+					name: "VminTempThreshold (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_Hot_T0",
@@ -1596,11 +1558,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Vmin_Hot_T0 (%s)",
-					},
-				],
+				pattern: [{
+					name: "Vmin_Hot_T0 (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_Cold_T0",
@@ -1613,11 +1573,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Vmin_Cold_T0 (%s)",
-					},
-				],
+				pattern: [{
+					name: "Vmin_Cold_T0 (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_Hot_Eol",
@@ -1630,11 +1588,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Vmin_Hot_Eol (%s)",
-					},
-				],
+				pattern: [{
+					name: "Vmin_Hot_Eol (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_Cold_Eol",
@@ -1647,11 +1603,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Vmin_Cold_Eol (%s)",
-					},
-				],
+				pattern: [{
+					name: "Vmin_Cold_Eol (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_Aging_Offset",
@@ -1664,11 +1618,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Vmin_Aging_Offset (%s)",
-					},
-				],
+				pattern: [{
+					name: "Vmin_Aging_Offset (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Spare_Vmin_Plat_Offset_Hot",
@@ -1681,11 +1633,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Spare_Vmin_Plat_Offset_Hot (%s)",
-					},
-				],
+				pattern: [{
+					name: "Spare_Vmin_Plat_Offset_Hot (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Spare_Vmin_Plat_Offset_Cold",
@@ -1698,11 +1648,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "Spare_Vmin_Plat_Offset_Cold (%s)",
-					},
-				],
+				pattern: [{
+					name: "Spare_Vmin_Plat_Offset_Cold (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcFixedVminAgingOffset",
@@ -1715,11 +1663,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcFixedVminAgingOffset (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcFixedVminAgingOffset (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcVmin2PsmDegrationGb",
@@ -1732,11 +1678,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcVmin2PsmDegrationGb (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcVmin2PsmDegrationGb (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcPsmA",
@@ -1749,11 +1693,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcPsmA (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcPsmA (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcPsmB",
@@ -1766,11 +1708,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcPsmB (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcPsmB (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcVminA",
@@ -1783,11 +1723,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcVminA (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcVminA (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcVminB",
@@ -1800,11 +1738,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcVminB (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcVminB (%s)",
+				},],
 			},
 		}, {
 			access: "bios->PerPartVminEnabled",
@@ -1814,11 +1750,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "PerPartVminEnabled (%s)",
-					},
-				],
+				pattern: [{
+					name: "PerPartVminEnabled (%s)",
+				},],
 			},
 		}, {
 			access: "bios->VcBtcEnabled",
@@ -1828,11 +1762,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [
-					{
-						name: "VcBtcEnabled (%s)",
-					},
-				],
+				pattern: [{
+					name: "VcBtcEnabled (%s)",
+				},],
 			},
 		}, {
 			access: "bios->SocketPowerLimitAcTau",
@@ -1845,11 +1777,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PPT %u",
-					},
-				],
+				pattern: [{
+					name: "PPT %u",
+				},],
 			},
 		}, {
 			access: "bios->SocketPowerLimitDcTau",
@@ -1862,11 +1792,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PPT %u",
-					},
-				],
+				pattern: [{
+					name: "PPT %u",
+				},],
 			},
 		}, {
 			access: "bios->Vmin_droop",
@@ -1886,13 +1814,11 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU13_PPCLK_COUNT",
 				enum: "SMU13_PPCLK_e",
-				pattern: [
-					{
-						name: "DpmDescriptor (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
-					},
-				],
+				pattern: [{
+					name: "DpmDescriptor (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableGfx",
@@ -1905,11 +1831,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_GFXCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableGfx [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableGfx [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableVclk",
@@ -1922,11 +1846,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_VCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableVclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableVclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDclk",
@@ -1939,11 +1861,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableSocclk",
@@ -1956,11 +1876,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_SOCCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableSocclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableSocclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableUclk",
@@ -1973,11 +1891,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableUclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableUclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDispclk",
@@ -1990,11 +1906,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DISPCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDispclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDispclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDppClk",
@@ -2007,11 +1921,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DPPCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDppClk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDppClk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDprefclk",
@@ -2024,11 +1936,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DPREFCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDprefclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDprefclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDcfclk",
@@ -2041,11 +1951,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DCFCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDcfclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDcfclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableDtbclk",
@@ -2058,11 +1966,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_DTBCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableDtbclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableDtbclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableFclk",
@@ -2075,11 +1981,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableFclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FreqTableFclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->DcModeMaxFreq",
@@ -2092,11 +1996,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU13_PPCLK_COUNT",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "DcModeMaxFreq [%02u]",
-					},
-				],
+				pattern: [{
+					name: "DcModeMaxFreq [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->Mp0clkFreq",
@@ -2109,11 +2011,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Mp0clkFreq [%02u]",
-					},
-				],
+				pattern: [{
+					name: "Mp0clkFreq [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->Mp0DpmVoltage",
@@ -2126,11 +2026,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Mp0DpmVoltage [%02u]",
-					},
-				],
+				pattern: [{
+					name: "Mp0DpmVoltage [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->GfxclkSpare",
@@ -2302,11 +2200,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "ShadowFreqTableUclk [%02u]",
-					},
-				],
+				pattern: [{
+					name: "ShadowFreqTableUclk [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->UseStrobeModeOptimizations",
@@ -2330,12 +2226,10 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "UclkDpmPstates [%02u]",
-						fancy: "ATUI_ENUM", fancy_data: "DPM_PSTATES_e",
-					},
-				],
+				pattern: [{
+					name: "UclkDpmPstates [%02u]",
+					fancy: "ATUI_ENUM", fancy_data: "DPM_PSTATES_e",
+				},],
 			},
 		}, {
 			access: "bios->FreqTableUclkDiv",
@@ -2345,12 +2239,10 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FreqTableUclkDiv [%02u]",
-						fancy: "ATUI_ENUM", fancy_data: "UCLK_DIV_e",
-					},
-				],
+				pattern: [{
+					name: "FreqTableUclkDiv [%02u]",
+					fancy: "ATUI_ENUM", fancy_data: "UCLK_DIV_e",
+				},],
 			},
 		}, {
 			access: "bios->MemVmempVoltage",
@@ -2363,11 +2255,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "MemVmempVoltage [%02u]",
-					},
-				],
+				pattern: [{
+					name: "MemVmempVoltage [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->MemVddioVoltage",
@@ -2380,11 +2270,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "MemVddioVoltage [%02u]",
-					},
-				],
+				pattern: [{
+					name: "MemVddioVoltage [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FclkDpmUPstates",
@@ -2397,11 +2285,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FclkDpmUPstates [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FclkDpmUPstates [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FclkDpmVddU",
@@ -2414,11 +2300,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FclkDpmVddU [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FclkDpmVddU [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FclkDpmUSpeed",
@@ -2431,11 +2315,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_FCLK_DPM_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "FclkDpmUSpeed [%02u]",
-					},
-				],
+				pattern: [{
+					name: "FclkDpmUSpeed [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FclkDpmDisallowPstateFreq",
@@ -2455,12 +2337,10 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PcieGenSpeed [%02u]",
-						fancy: "ATUI_ENUM", fancy_data: "PCIE_SPEED_e",
-					},
-				],
+				pattern: [{
+					name: "PcieGenSpeed [%02u]",
+					fancy: "ATUI_ENUM", fancy_data: "PCIE_SPEED_e",
+				},],
 			},
 		}, {
 			access: "bios->PcieLaneCount",
@@ -2470,12 +2350,10 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "PcieLaneCount [%02u]",
-						fancy: "ATUI_ENUM", fancy_data: "PCIE_WIDTH_e",
-					},
-				],
+				pattern: [{
+					name: "PcieLaneCount [%02u]",
+					fancy: "ATUI_ENUM", fancy_data: "PCIE_WIDTH_e",
+				},],
 			},
 		}, {
 			access: "bios->LclkFreq",
@@ -2485,11 +2363,9 @@ global_default: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "LclkFreq [%02u]",
-					},
-				],
+				pattern: [{
+					name: "LclkFreq [%02u]",
+				},],
 			},
 		}, {
 			access: "bios->FanStopTemp",
@@ -2502,11 +2378,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "FanStopTemp (%s)",
-					},
-				],
+				pattern: [{
+					name: "FanStopTemp (%s)",
+				},],
 			},
 		}, {
 			access: "bios->FanStartTemp",
@@ -2519,11 +2393,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "FanStartTemp (%s)",
-					},
-				],
+				pattern: [{
+					name: "FanStartTemp (%s)",
+				},],
 			},
 		}, {
 			access: "bios->FanGain",
@@ -2533,11 +2405,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "FanGain (%s)",
-					},
-				],
+				pattern: [{
+					name: "FanGain (%s)",
+				},],
 			},
 		}, {
 			access: "bios->FanGainPadding",
@@ -2578,11 +2448,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "FanTargetTemperature (%s)",
-					},
-				],
+				pattern: [{
+					name: "FanTargetTemperature (%s)",
+				},],
 			},
 		}, {
 			access: "bios->FuzzyFan_ErrorSetDelta",
@@ -2604,11 +2472,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [
-					{
-						name: "FwCtfLimit (%s)",
-					},
-				],
+				pattern: [{
+					name: "FwCtfLimit (%s)",
+				},],
 			},
 		}, {
 			access: "bios->IntakeTempEnableRPM",
@@ -2672,11 +2538,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_HW_FUSE_COUNT",
 				enum: "PP_GRTAVFS_HW_FUSE_e",
-				pattern: [
-					{
-						name: "L2HwRtAvfsFuses (%s)",
-					},
-				],
+				pattern: [{
+					name: "L2HwRtAvfsFuses (%s)",
+				},],
 			},
 		}, {
 			access: "bios->SeHwRtAvfsFuses",
@@ -2686,11 +2550,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_HW_FUSE_COUNT",
 				enum: "PP_GRTAVFS_HW_FUSE_e",
-				pattern: [
-					{
-						name: "SeHwRtAvfsFuses (%s)",
-					},
-				],
+				pattern: [{
+					name: "SeHwRtAvfsFuses (%s)",
+				},],
 			},
 		}, {
 			access: "bios->CommonRtAvfs",
@@ -2700,11 +2562,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_COMMON_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_COMMON_FUSE_e",
-				pattern: [
-					{
-						name: "CommonRtAvfs (%s)",
-					},
-				],
+				pattern: [{
+					name: "CommonRtAvfs (%s)",
+				},],
 			},
 		}, {
 			access: "bios->L2FwRtAvfsFuses",
@@ -2714,11 +2574,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
-				pattern: [
-					{
-						name: "L2FwRtAvfsFuses (%s)",
-					},
-				],
+				pattern: [{
+					name: "L2FwRtAvfsFuses (%s)",
+				},],
 			},
 		}, {
 			access: "bios->SeFwRtAvfsFuses",
@@ -2728,11 +2586,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
-				pattern: [
-					{
-						name: "SeFwRtAvfsFuses (%s)",
-					},
-				],
+				pattern: [{
+					name: "SeFwRtAvfsFuses (%s)",
+				},],
 			},
 		}, {
 			access: "bios->Droop_PWL_F",
@@ -2742,11 +2598,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Droop_PWL_F [%u]",
-					},
-				],
+				pattern: [{
+					name: "Droop_PWL_F [%u]",
+				},],
 			},
 		}, {
 			access: "bios->Droop_PWL_a",
@@ -2756,11 +2610,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Droop_PWL_a [%u]",
-					},
-				],
+				pattern: [{
+					name: "Droop_PWL_a [%u]",
+				},],
 			},
 		}, {
 			access: "bios->Droop_PWL_b",
@@ -2770,11 +2622,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Droop_PWL_b [%u]",
-					},
-				],
+				pattern: [{
+					name: "Droop_PWL_b [%u]",
+				},],
 			},
 		}, {
 			access: "bios->Droop_PWL_c",
@@ -2784,11 +2634,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Droop_PWL_c [%u]",
-					},
-				],
+				pattern: [{
+					name: "Droop_PWL_c [%u]",
+				},],
 			},
 		}, {
 			access: "bios->Static_PWL_Offset",
@@ -2798,11 +2646,9 @@ global_default: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "Static_PWL_Offset [%u]",
-					},
-				],
+				pattern: [{
+					name: "Static_PWL_Offset [%u]",
+				},],
 			},
 		}, {
 			access: "bios->dGbV_dT_vmin",
@@ -2851,13 +2697,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
-				pattern: [
-					{
-						name: "SocAvfsFuseOverride (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
-					},
-				],
+				pattern: [{
+					name: "SocAvfsFuseOverride (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
+				},],
 			},
 		}, {
 			access: "bios->dBtcGbSoc",
@@ -2870,13 +2714,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
-				pattern: [
-					{
-						name: "dBtcGbSoc (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-					},
-				],
+				pattern: [{
+					name: "dBtcGbSoc (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
+				},],
 			},
 		}, {
 			access: "bios->qAgingGb",
@@ -2889,13 +2731,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
-				pattern: [
-					{
-						name: "qAgingGb (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-					},
-				],
+				pattern: [{
+					name: "qAgingGb (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
+				},],
 			},
 		}, {
 			access: "bios->qStaticVoltageOffset",
@@ -2908,13 +2748,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
-				pattern: [
-					{
-						name: "qStaticVoltageOffset (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-					},
-				],
+				pattern: [{
+					name: "qStaticVoltageOffset (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+				},],
 			},
 		}, {
 			access: "bios->DcBtcSocParams",
@@ -2924,13 +2762,11 @@ global_default: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
-				pattern: [
-					{
-						name: "DcBtcSocParams (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
-					},
-				],
+				pattern: [{
+					name: "DcBtcSocParams (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
+				},],
 			},
 		}, {
 			access: "bios->SocAvfsSpare",
@@ -3000,13 +2836,11 @@ global_default: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
-				pattern: [
-					{
-						name: "qFeffCoeffGameClock (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-					},
-				],
+				pattern: [{
+					name: "qFeffCoeffGameClock (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+				},],
 			},
 		}, {
 			access: "bios->qFeffCoeffBaseClock",
@@ -3016,13 +2850,11 @@ global_default: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
-				pattern: [
-					{
-						name: "qFeffCoeffBaseClock (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-					},
-				],
+				pattern: [{
+					name: "qFeffCoeffBaseClock (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+				},],
 			},
 		}, {
 			access: "bios->qFeffCoeffBoostClock",
@@ -3032,13 +2864,11 @@ global_default: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
-				pattern: [
-					{
-						name: "qFeffCoeffBoostClock (%s)",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-					},
-				],
+				pattern: [{
+					name: "qFeffCoeffBoostClock (%s)",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
+				},],
 			},
 		}, {
 			access: "bios->Spare",
@@ -3070,13 +2900,11 @@ global_default: {
 				deferred: "NULL",
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_13_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
+				},],
 			},
 		}, {
 			access: "bios->VddGfxVrMapping",
@@ -3142,11 +2970,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->VrPsiSupport",
@@ -3156,11 +2982,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->PaddingPsi",
@@ -3170,11 +2994,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->EnablePsi6",
@@ -3187,11 +3009,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->SviTelemetryScale",
@@ -3201,13 +3021,11 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
+				},],
 			},
 		}, {
 			access: "bios->VoltageTelemetryRatio",
@@ -3220,11 +3038,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->DownSlewRateVr",
@@ -3234,11 +3050,9 @@ global_default: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->LedOffGpio",
@@ -3344,11 +3158,9 @@ global_default: {
 				deferred: "NULL",
 				count: "MEM_VENDOR_COUNT",
 				enum: "MEM_VENDOR_e",
-				pattern: [
-					{
-						name: "%s",
-					},
-				],
+				pattern: [{
+					name: "%s",
+				},],
 			},
 		}, {
 			access: "bios->FclkSpreadPadding",

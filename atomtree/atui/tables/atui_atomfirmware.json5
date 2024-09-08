@@ -1061,13 +1061,11 @@ global_default: {
 				deferred: "NULL",
 				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
 				enum: "I2cControllerName_SMU_11_0_0_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u32",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u32",
+				},],
 			},
 		}, {
 			access: "bios->boardreserved",
@@ -1093,13 +1091,11 @@ global_default: {
 				deferred: "NULL",
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
+				},],
 			},
 		}, {
 			access: "bios->MaxVoltageStepGfx",
@@ -1623,13 +1619,11 @@ global_default: {
 				deferred: "NULL",
 				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
+				},],
 			},
 		}, {
 			access: "bios->memorychannelenabled",
@@ -1707,13 +1701,11 @@ global_default: {
 				deferred: "NULL",
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
+				},],
 			},
 		}, {
 			access: "bios->MaxVoltageStepGfx",
@@ -2072,13 +2064,11 @@ global_default: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
+				},],
 			},
 		}, {
 			access: "(&bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])",
@@ -2088,13 +2078,11 @@ global_default: {
 				deferred: "NULL",
 				count: "((sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])) - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "I2cControllers [8 + %02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8",
-					},
-				],
+				pattern: [{
+					name: "I2cControllers [8 + %02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8",
+				},],
 			},
 		}, {
 			access: "bios->GpioScl",
@@ -2616,13 +2604,11 @@ global_default: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [
-					{
-						name: "%s",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-					},
-				],
+				pattern: [{
+					name: "%s",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
+				},],
 			},
 		}, {
 			access: "bios->GpioI2cScl",
@@ -4465,14 +4451,12 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_gpio_pins",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						access: "bios->gpio_pin",
-						name: "gpio_pin [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_gpio_pin_assignment_v2_1",
-					},
-				],
+				pattern: [{
+					access: "bios->gpio_pin",
+					name: "gpio_pin [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_gpio_pin_assignment_v2_1",
+				},],
 			},
 		},
 	],
@@ -5260,13 +5244,11 @@ global_default: {
 				deferred: "NULL",
 				count: "((bios->table_size - offsetof(typeof(*bios), bit_byte_remap)) / sizeof(struct atom_gddr6_bit_byte_remap) )",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "bit_byte_remap [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_GRAFT", fancy_data: "atom_gddr6_bit_byte_remap",
-					},
-				],
+				pattern: [{
+					name: "bit_byte_remap [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_gddr6_bit_byte_remap",
+				},],
 			},
 		},
 	],
@@ -5291,20 +5273,20 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [
 					{
-						name: "umc_reg_addr [%02u]",
-						display: "ATUI_HEX",
-						fancy: "ATUI_BITFIELD", fancy_data: [
+					name: "umc_reg_addr [%02u]",
+					display: "ATUI_HEX",
+					fancy: "ATUI_BITFIELD", fancy_data: [
 							{
-								name: "umc_register_addr",
-								display: "ATUI_HEX",
-								hi: 23, lo: 0,
+							name: "umc_register_addr",
+							display: "ATUI_HEX",
+							hi: 23, lo: 0,
 							}, {
-								name: "umc_reg_type_ind",
-								hi: 24, lo: 24,
+							name: "umc_reg_type_ind",
+							hi: 24, lo: 24,
 							}, {
-								name: "umc_reg_rsvd",
-								display: "ATUI_BIN",
-								hi: 31, lo: 25,
+							name: "umc_reg_rsvd",
+							display: "ATUI_BIN",
+							hi: 31, lo: 25,
 							},
 						],
 					},
@@ -5349,12 +5331,10 @@ global_default: {
 				deferred: "NULL",
 				count: "atomtree->num_data_entries",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "umc_reg_data [%02u]",
-						display: "ATUI_HEX",
-					},
-				],
+				pattern: [{
+					name: "umc_reg_data [%02u]",
+					display: "ATUI_HEX",
+				},],
 			},
 		},
 	],
@@ -5371,13 +5351,11 @@ global_default: {
 				deferred: "atomtree->data_blocks",
 				count: "atomtree->num_data_blocks",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
-						name: "umc_reg_setting_list [%02u]",
-						display: "ATUI_NAN",
-						fancy: "ATUI_SHOOT", fancy_data: "atom_umc_reg_setting_data_block",
-					},
-				],
+				pattern: [{
+					name: "umc_reg_setting_list [%02u]",
+					display: "ATUI_NAN",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_umc_reg_setting_data_block",
+				},],
 			},
 		},
 	],
