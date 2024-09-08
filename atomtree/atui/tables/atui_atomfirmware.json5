@@ -343,6 +343,31 @@ global_default: {
 		},
 	],
 }, {
+	c_prefix: "union", c_type: "led_display_control",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->LedEnableMask",
+			name: "LedEnableMask",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "GFX_DPM",
+					hi: 0, lo: 0,
+				}, {
+					name: "PCIE",
+					hi: 1, lo: 1,
+				}, {
+					name: "ERROR",
+					hi: 2, lo: 2,
+				}, {
+					name: "reserved",
+					hi: 7, lo: 3,
+				},
+			],
+		},
+	],
+}, {
 	c_type: "atom_smc_dpm_info_v4_1",
 	atomtree: "atomtree_smc_dpm_info",
 	leaves: [

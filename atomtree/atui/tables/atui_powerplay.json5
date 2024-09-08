@@ -374,31 +374,6 @@ global_default: {
 			name: "c",
 		},
 	],
-}, {
-	c_prefix: "union", c_type: "led_display_control",
-	atomtree: "atui_nullstruct",
-	leaves: [
-		{
-			access: "bios->LedEnableMask",
-			name: "LedEnableMask",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "GFX_DPM",
-					hi: 0, lo: 0,
-				}, {
-					name: "PCIE",
-					hi: 1, lo: 1,
-				}, {
-					name: "ERROR",
-					hi: 2, lo: 2,
-				}, {
-					name: "reserved",
-					hi: 7, lo: 3,
-				},
-			],
-		},
-	],
-},
+}, 
 
 ], }
