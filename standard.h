@@ -117,8 +117,6 @@ enum error_severity:uint8_t {
 struct error { // sorta intended to be a static variable
 	char message[128];
 	enum error_severity severity;
-	int num_history; // practical length of backtrace
-	void* bt_history[10]; // backtrace
 	jmp_buf env;
 };
 void // may not return

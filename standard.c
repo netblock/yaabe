@@ -1,7 +1,5 @@
 #include "standard.h"
 
-#include <execinfo.h>
-
 int64_t
 strtoll_2(
 		char const* str
@@ -88,14 +86,6 @@ error_emit(
 				break;
 			case ERROR_CRASH:
 				fprintf(stderr, "catastrophic error: %s\n", err->message);
-				fprintf(stderr, "backtrace:\n");
-				err->num_history = backtrace(
-					err->bt_history, lengthof(err->bt_history)
-				);
-				backtrace_symbols_fd(
-					err->bt_history, err->num_history,
-					STDERR_FILENO
-				);
 				break;
 			case NO_ERROR:
 				break;
