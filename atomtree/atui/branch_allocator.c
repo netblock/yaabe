@@ -70,11 +70,7 @@ print_atui_nofancy_leaf(
 	if (level->suggestbios) {
 		leaf->val = level->suggestbios;
 	}
-	if (level->nametag) {
-		sprintf(leaf->name, leaf->origname, level->nametag, level->name_num);
-	} else {
-		sprintf(leaf->name, leaf->origname, level->name_num);
-	}
+	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 }
 
 
@@ -94,11 +90,7 @@ print_atui_bitfield_leaf(
 	if (level->suggestbios) {
 		leaf->val = level->suggestbios;
 	}
-	if (level->nametag) {
-		sprintf(leaf->name, leaf->origname, level->nametag, level->name_num);
-	} else {
-		sprintf(leaf->name, leaf->origname, level->name_num);
-	}
+	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	uint16_t const num_leaves = leaf_src->template_leaves->numleaves;
 	if (num_leaves) {
@@ -135,11 +127,7 @@ print_atui_string_leaf(
 	if (level->suggestbios) {
 		leaf->val = level->suggestbios;
 	}
-	if (level->nametag) {
-		sprintf(leaf->name, leaf->origname, level->nametag, level->name_num);
-	} else {
-		sprintf(leaf->name, leaf->origname, level->name_num);
-	}
+	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	leaf->array_size = 1 + strlen(leaf->c8); // +1 is NULL
 	leaf->num_bytes = leaf->array_size;
@@ -164,12 +152,7 @@ print_atui_graft_leaf(
 	if (level->suggestbios) {
 		leaf->val = level->suggestbios;
 	}
-	if (level->nametag) {
-		sprintf(leaf->name, leaf->origname, level->nametag, level->name_num);
-	} else {
-		sprintf(leaf->name, leaf->origname, level->name_num);
-	}
-
+	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	struct atui_funcify_args branch_args = {
 		.atomtree = global->atomtree,
@@ -211,15 +194,9 @@ print_atui_shoot_leaf(
 
 	*brancher = leaf_src->branch_bud(&branch_args);
 
-	if (level->nametag) {
-		sprintf((*brancher)->name, leaf_src->origname,
-			level->nametag, level->name_num
-		);
-	} else {
-		sprintf((*brancher)->name, leaf_src->origname,
-			level->name_num
-		);
-	}
+	sprintf((*brancher)->name, leaf_src->origname,
+		level->name_num, level->nametag
+	);
 	// handle branch->parent later
 }
 inline static void
@@ -238,11 +215,7 @@ print_atui_dynarray_leaf(
 	if (level->suggestbios) {
 		leaf->val = level->suggestbios;
 	}
-	if (level->nametag) {
-		sprintf(leaf->name, leaf->origname, level->nametag, level->name_num);
-	} else {
-		sprintf(leaf->name, leaf->origname, level->name_num);
-	}
+	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	struct subleaf_meta const* const sub_meta = leaf_src->template_leaves;
 	uint16_t const num_leaves = sub_meta->numleaves * sub_meta->dynarray_length;

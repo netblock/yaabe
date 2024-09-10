@@ -62,7 +62,7 @@ global_default: {
 				count: "SMU_13_0_7_ODCAP_COUNT",
 				enum: "SMU_11_0_ODFEATURE_CAP",
 				pattern: [{
-					name: "%s",
+					name: "cap [%02u]: %s",
 				},],
 			},
 		}, {
@@ -73,11 +73,9 @@ global_default: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT)",
 				enum: "ATUI_NULL",
-				pattern: [
-					{ // if COUNT changes, please change this 16
+				pattern: [{ // if COUNT changes, please change this 16
 					name: "OD feature [16 + %02u]",
-					},
-				],
+				},],
 			},
 		}, {
 			access: "bios->max",
@@ -88,7 +86,7 @@ global_default: {
 				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
 				pattern: [{
-					name: "max: %s",
+					name: "max [%02u]: %s",
 				},],
 			},
 		}, {
@@ -100,7 +98,7 @@ global_default: {
 				count: "SMU_13_0_7_ODSETTING_COUNT",
 				enum: "SMU_13_0_7_ODSETTING_ID",
 				pattern: [{
-					name: "min: %s",
+					name: "min [%02u]: %s",
 				},],
 			},
 		}, {
@@ -111,11 +109,10 @@ global_default: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
-				pattern: [
-					{ // if COUNT changes, please change this 32
+				pattern: [{ // if COUNT changes, please change this 32
 					name: "max: [32 + %02u]",
-					},
-				],
+				},],
+
 			},
 		}, {
 			access: "(&(bios->min[SMU_13_0_7_ODSETTING_COUNT]))",
@@ -125,11 +122,10 @@ global_default: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
 				enum: "ATUI_NULL",
-				pattern: [
-					{ // if COUNT changes, please change this 32
+				pattern: [{ // if COUNT changes, please change this 32
 					name: "min: [32 + %02u]",
-					},
-				],
+				},],
+
 			},
 		}, {
 			access: "bios->pm_setting",
@@ -143,7 +139,7 @@ global_default: {
 				count: "SMU_13_0_7_PMSETTING_COUNT",
 				enum: "SMU_13_0_7_PWRMODE_SETTING",
 				pattern: [{
-					name: "%s",
+					name: "pm_setting [%02u]: %s",
 				},],
 			},
 		}, {
@@ -157,11 +153,9 @@ global_default: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_PMSETTING - SMU_13_0_7_PMSETTING_COUNT)",
 				enum: "ATUI_NULL",
-				pattern: [
-					{ // if COUNT changes, please change this 16
+				pattern: [{ // if COUNT changes, please change this 16
 					name: "pm_setting [16 + %02u]",
-					},
-				],
+				},],
 			},
 		},
 	],
@@ -944,7 +938,7 @@ global_default: {
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
 				pattern: [{
-					name: "Tdc (%s)",
+					name: "Tdc [%02u]: %s",
 				},],
 			},
 		}, {
@@ -959,7 +953,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "Temperature (%s)",
+					name: "Temperature [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1015,7 +1009,7 @@ global_default: {
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
-					name: "PowerMinPpt0 (%s)",
+					name: "PowerMinPpt0 [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1113,7 +1107,7 @@ global_default: {
 				count: "AVFS_TEMP_COUNT",
 				enum: "AVFS_TEMP_e",
 				pattern: [{
-					name: "AvfsTemp (%s)",
+					name: "AvfsTemp [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1137,7 +1131,7 @@ global_default: {
 				count: "AVFS_TEMP_COUNT",
 				enum: "AVFS_TEMP_e",
 				pattern: [{
-					name: "qVft (%s)",
+					name: "qVft [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
@@ -1383,7 +1377,7 @@ global_default: {
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
 				pattern: [{
-					name: "VrTdcLimit (%s)",
+					name: "VrTdcLimit [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1398,7 +1392,7 @@ global_default: {
 				count: "TDC_THROTTLER_COUNT_SMU13",
 				enum: "TDC_THROTTLER_e",
 				pattern: [{
-					name: "PlatformTdcLimit (%s)",
+					name: "PlatformTdcLimit [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1413,7 +1407,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "TemperatureLimit (%s)",
+					name: "TemperatureLimit [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1472,7 +1466,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "UlvVoltageOffset (%s)",
+					name: "UlvVoltageOffset [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1499,7 +1493,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "DefaultMaxVoltage (%s)",
+					name: "DefaultMaxVoltage [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1514,7 +1508,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "BoostMaxVoltage (%s)",
+					name: "BoostMaxVoltage [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1529,7 +1523,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VminTempHystersis (%s)",
+					name: "VminTempHystersis [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1544,7 +1538,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VminTempThreshold (%s)",
+					name: "VminTempThreshold [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1559,7 +1553,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Vmin_Hot_T0 (%s)",
+					name: "Vmin_Hot_T0 [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1574,7 +1568,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Vmin_Cold_T0 (%s)",
+					name: "Vmin_Cold_T0 [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1589,7 +1583,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Vmin_Hot_Eol (%s)",
+					name: "Vmin_Hot_Eol [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1604,7 +1598,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Vmin_Cold_Eol (%s)",
+					name: "Vmin_Cold_Eol [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1619,7 +1613,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Vmin_Aging_Offset (%s)",
+					name: "Vmin_Aging_Offset [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1634,7 +1628,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Spare_Vmin_Plat_Offset_Hot (%s)",
+					name: "Spare_Vmin_Plat_Offset_Hot [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1649,7 +1643,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "Spare_Vmin_Plat_Offset_Cold (%s)",
+					name: "Spare_Vmin_Plat_Offset_Cold [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1664,7 +1658,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcFixedVminAgingOffset (%s)",
+					name: "VcBtcFixedVminAgingOffset [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1679,7 +1673,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcVmin2PsmDegrationGb (%s)",
+					name: "VcBtcVmin2PsmDegrationGb [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1694,7 +1688,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcPsmA (%s)",
+					name: "VcBtcPsmA [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1709,7 +1703,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcPsmB (%s)",
+					name: "VcBtcPsmB [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1724,7 +1718,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcVminA (%s)",
+					name: "VcBtcVminA [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1739,7 +1733,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcVminB (%s)",
+					name: "VcBtcVminB [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1751,7 +1745,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "PerPartVminEnabled (%s)",
+					name: "PerPartVminEnabled [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1763,7 +1757,7 @@ global_default: {
 				count: "PMFW_VOLT_PLANE_COUNT",
 				enum: "PMFW_VOLT_PLANE_e",
 				pattern: [{
-					name: "VcBtcEnabled (%s)",
+					name: "VcBtcEnabled [%02u]: %s",
 				},],
 			},
 		}, {
@@ -1815,7 +1809,7 @@ global_default: {
 				count: "SMU13_PPCLK_COUNT",
 				enum: "SMU13_PPCLK_e",
 				pattern: [{
-					name: "DpmDescriptor (%s)",
+					name: "DpmDescriptor [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
 				},],
@@ -2379,7 +2373,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "FanStopTemp (%s)",
+					name: "FanStopTemp [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2394,7 +2388,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "FanStartTemp (%s)",
+					name: "FanStartTemp [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2406,7 +2400,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "FanGain (%s)",
+					name: "FanGain [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2449,7 +2443,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "FanTargetTemperature (%s)",
+					name: "FanTargetTemperature [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2473,7 +2467,7 @@ global_default: {
 				count: "SMU_13_0_7_TEMP_COUNT",
 				enum: "SMU_13_0_7_TEMP_e",
 				pattern: [{
-					name: "FwCtfLimit (%s)",
+					name: "FwCtfLimit [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2539,7 +2533,7 @@ global_default: {
 				count: "PP_GRTAVFS_HW_FUSE_COUNT",
 				enum: "PP_GRTAVFS_HW_FUSE_e",
 				pattern: [{
-					name: "L2HwRtAvfsFuses (%s)",
+					name: "L2HwRtAvfsFuses [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2551,7 +2545,7 @@ global_default: {
 				count: "PP_GRTAVFS_HW_FUSE_COUNT",
 				enum: "PP_GRTAVFS_HW_FUSE_e",
 				pattern: [{
-					name: "SeHwRtAvfsFuses (%s)",
+					name: "SeHwRtAvfsFuses [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2563,7 +2557,7 @@ global_default: {
 				count: "PP_GRTAVFS_FW_COMMON_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_COMMON_FUSE_e",
 				pattern: [{
-					name: "CommonRtAvfs (%s)",
+					name: "CommonRtAvfs [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2575,7 +2569,7 @@ global_default: {
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
 				pattern: [{
-					name: "L2FwRtAvfsFuses (%s)",
+					name: "L2FwRtAvfsFuses [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2587,7 +2581,7 @@ global_default: {
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
 				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
 				pattern: [{
-					name: "SeFwRtAvfsFuses (%s)",
+					name: "SeFwRtAvfsFuses [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2698,7 +2692,7 @@ global_default: {
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
-					name: "SocAvfsFuseOverride (%s)",
+					name: "SocAvfsFuseOverride [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
 				},],
@@ -2715,7 +2709,7 @@ global_default: {
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
-					name: "dBtcGbSoc (%s)",
+					name: "dBtcGbSoc [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 				},],
@@ -2732,7 +2726,7 @@ global_default: {
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
-					name: "qAgingGb (%s)",
+					name: "qAgingGb [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 				},],
@@ -2749,7 +2743,7 @@ global_default: {
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
-					name: "qStaticVoltageOffset (%s)",
+					name: "qStaticVoltageOffset [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
@@ -2763,7 +2757,7 @@ global_default: {
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
-					name: "DcBtcSocParams (%s)",
+					name: "DcBtcSocParams [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
 				},],
@@ -2837,7 +2831,7 @@ global_default: {
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
-					name: "qFeffCoeffGameClock (%s)",
+					name: "qFeffCoeffGameClock [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
@@ -2851,7 +2845,7 @@ global_default: {
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
-					name: "qFeffCoeffBaseClock (%s)",
+					name: "qFeffCoeffBaseClock [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
@@ -2865,7 +2859,7 @@ global_default: {
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
-					name: "qFeffCoeffBoostClock (%s)",
+					name: "qFeffCoeffBoostClock [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
@@ -2901,7 +2895,7 @@ global_default: {
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_13_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "I2cControllers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
@@ -2971,7 +2965,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "SlaveAddrMapping [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2983,7 +2977,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "VrPsiSupport [%02u]: %s",
 				},],
 			},
 		}, {
@@ -2995,7 +2989,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "PaddingPsi [%02u]: %s",
 				},],
 			},
 		}, {
@@ -3010,7 +3004,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "EnablePsi6 [%02u]: %s",
 				},],
 			},
 		}, {
@@ -3022,7 +3016,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "SviTelemetryScale [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
 				},],
@@ -3039,7 +3033,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "VoltageTelemetryRatio [%02u]: %s",
 				},],
 			},
 		}, {
@@ -3051,7 +3045,7 @@ global_default: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "%s",
+					name: "DownSlewRateVr [%02u]: %s",
 				},],
 			},
 		}, {
@@ -3159,7 +3153,7 @@ global_default: {
 				count: "MEM_VENDOR_COUNT",
 				enum: "MEM_VENDOR_e",
 				pattern: [{
-					name: "%s",
+					name: "UclkSpreadPercent [%02u]: %s",
 				},],
 			},
 		}, {

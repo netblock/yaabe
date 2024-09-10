@@ -2478,18 +2478,22 @@ grow_vram_info(
 static void
 rename_volt_object_with_type(
 		atui_branch* const atui_volt_object,
-		enum  atom_voltage_type const type
+		enum  atom_voltage_type const type,
+		uint16_t const absolute_index
 		) {
 	struct atui_enum const* const volt_types = & ATUI_ENUM(atom_voltage_type);
 	int16_t const naming_enum_i = atui_enum_bsearch(volt_types, type);
 	if (0 <= naming_enum_i) {
-		sprintf(atui_volt_object->name, "%s (%s)",
+		sprintf(atui_volt_object->name, "%s [%u]: %s",
 			atui_volt_object->origname,
+			absolute_index,
 			volt_types->enum_array[naming_enum_i].name
 		);
 	} else {
-		sprintf(atui_volt_object->name, "%s (type %x)",
-			atui_volt_object->origname,  type
+		sprintf(atui_volt_object->name, "%s [%u]: type %x",
+			atui_volt_object->origname,
+			absolute_index,
+			type
 		);
 	}
 	assert(strlen(atui_volt_object->name) < sizeof(atui_volt_object->name));
@@ -2513,7 +2517,9 @@ grow_voltageobject_info_v1_1(
 			&(voltage_objects[i]),voltage_objects[i].obj,  0,NULL
 		);
 		rename_volt_object_with_type(
-			atui_volt_object, voltage_objects[i].obj->volt_obj_v1.VoltageType
+			atui_volt_object,
+			voltage_objects[i].obj->volt_obj_v1.VoltageType,
+			i
 		);
 		ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
 	};
@@ -2538,7 +2544,9 @@ grow_voltageobject_info_v1_2(
 			&(voltage_objects[i]),voltage_objects[i].obj,  0,NULL
 		);
 		rename_volt_object_with_type(
-			atui_volt_object, voltage_objects[i].obj->volt_obj_v2.VoltageType
+			atui_volt_object,
+			voltage_objects[i].obj->volt_obj_v2.VoltageType,
+			i
 		);
 		ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
 	};
@@ -2593,7 +2601,9 @@ grow_voltageobject_info_v3_1(
 		atui_args.suggestbios = voltage_objects[i].obj;
 		atui_volt_object = atui_vobj_func(&atui_args);
 		rename_volt_object_with_type(
-			atui_volt_object, voltage_objects[i].obj->header.voltage_type
+			atui_volt_object,
+			voltage_objects[i].obj->header.voltage_type,
+			i
 		);
 		ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
 	}
@@ -2646,7 +2656,9 @@ grow_voltageobject_info_v4_1(
 		atui_args.suggestbios = voltage_objects[i].obj;
 		atui_volt_object = atui_vobj_func(&atui_args);
 		rename_volt_object_with_type(
-			atui_volt_object, voltage_objects[i].obj->header.voltage_type
+			atui_volt_object,
+			voltage_objects[i].obj->header.voltage_type,
+			i
 		);
 		ATUI_ADD_BRANCH(atui_vo_info, atui_volt_object);
 	}

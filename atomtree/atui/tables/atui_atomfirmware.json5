@@ -1062,7 +1062,7 @@ global_default: {
 				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
 				enum: "I2cControllerName_SMU_11_0_0_e",
 				pattern: [{
-					name: "%s",
+					name: "i2ccontrollers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u32",
 				},],
@@ -1092,7 +1092,7 @@ global_default: {
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "I2cControllers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
@@ -1620,7 +1620,7 @@ global_default: {
 				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "i2ccontrollers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
@@ -1702,7 +1702,7 @@ global_default: {
 				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "I2cControllers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
@@ -2065,7 +2065,7 @@ global_default: {
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "I2cControllers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
@@ -2605,7 +2605,7 @@ global_default: {
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
-					name: "%s",
+					name: "I2cControllers [%02u]: %s",
 					display: "ATUI_NAN",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
