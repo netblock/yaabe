@@ -431,6 +431,11 @@ struct atomtree_vram_module {
 	void* tmrs_seq;
 };
 
+struct atomtree_gddr6_dram_data_remap {
+	struct atom_gddr6_dram_data_remap* dram_data_remap;
+	uint8_t bit_byte_remap_count;
+};
+
 #define ATOMTREE_VRAM_MODULES_MAX 8
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves; // nonzero if populated
@@ -503,8 +508,7 @@ struct atomtree_vram_info_header_v2_3 {
 
 	struct atomtree_umc_init_reg_block mc_tile_adjust;
 	struct atomtree_umc_init_reg_block mc_phy_init;
-	//struct atom_gddr6_dram_data_remap* dram_data_remap;
-	struct umc_atom_dram_data_remap* dram_data_remap;
+	void* dram_data_remap;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
 	struct atomtree_umc_init_reg_block post_ucode_init;
 
@@ -537,6 +541,7 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
 };
 
+
 struct atomtree_vram_info_header_v2_5 {
 	struct atom_vram_info_header_v2_5* leaves; // nonzero if populateda
 	struct atomtree_umc_init_reg_block mem_adjust_table;
@@ -546,7 +551,7 @@ struct atomtree_vram_info_header_v2_5 {
 
 	struct atomtree_umc_init_reg_block mc_tile_adjust;
 	struct atomtree_umc_init_reg_block mc_phy_init;
-	struct atom_gddr6_dram_data_remap* dram_data_remap;
+	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 
 	struct atomtree_umc_init_reg_block post_ucode_init;
 	struct atomtree_umc_init_reg_block strobe_mode_patch;
@@ -562,7 +567,7 @@ struct atomtree_vram_info_header_v2_6 {
 	struct atomtree_umc_init_reg_block mem_clk_patch;
 	struct atomtree_umc_init_reg_block mc_tile_adjust;
 	struct atomtree_umc_init_reg_block mc_phy_init;
-	struct atom_gddr6_dram_data_remap* dram_data_remap;
+	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block post_ucode_init;
 
@@ -577,7 +582,7 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	void* dram_info;
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block mc_init; // phy init? reg block anyway?
-	struct atom_gddr6_dram_data_remap* dram_data_remap;
+	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 	struct atomtree_umc_init_reg_block umc_emuinit; //TODO this is a guess
 	void* rsvd_tables[2]; // reserved_sub_table_offset
 

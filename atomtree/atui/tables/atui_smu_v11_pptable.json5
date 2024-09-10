@@ -6221,7 +6221,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->UclkSpreadPercent)/sizeof(bios->UclkSpreadPercent[0])",
+				count: "lengthof(bios->UclkSpreadPercent)",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "UclkSpreadPercent [%02u]",
@@ -6965,7 +6965,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->UclkSpreadPercent)/sizeof(bios->UclkSpreadPercent[0])",
+				count: "lengthof(bios->UclkSpreadPercent)",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "UclkSpreadPercent [%02u]",

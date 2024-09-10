@@ -1059,7 +1059,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
+				count: "lengthof(bios->i2ccontrollers)",
 				enum: "I2cControllerName_SMU_11_0_0_e",
 				pattern: [{
 					name: "i2ccontrollers [%02u]: %s",
@@ -1089,7 +1089,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
+				count: "lengthof(bios->I2cControllers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
@@ -1617,7 +1617,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->i2ccontrollers)/sizeof(bios->i2ccontrollers[0])",
+				count: "lengthof(bios->i2ccontrollers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "i2ccontrollers [%02u]: %s",
@@ -1699,7 +1699,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])",
+				count: "lengthof(bios->I2cControllers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
@@ -2076,7 +2076,7 @@ global_default: {
 			display: "ATUI_NAN",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "((sizeof(bios->I2cControllers)/sizeof(bios->I2cControllers[0])) - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
+				count: "((lengthof(bios->I2cControllers)) - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "I2cControllers [8 + %02u]",
@@ -5222,6 +5222,7 @@ global_default: {
 	],
 }, {
 	c_type: "atom_gddr6_dram_data_remap",
+	atomtree: "atomtree_gddr6_dram_data_remap",
 	table_size: "bios->table_size",
 	leaves: [
 		{
@@ -5242,7 +5243,7 @@ global_default: {
 			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
-				count: "((bios->table_size - offsetof(typeof(*bios), bit_byte_remap)) / sizeof(struct atom_gddr6_bit_byte_remap) )",
+				count: "atomtree->bit_byte_remap_count",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "bit_byte_remap [%02u]",

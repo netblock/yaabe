@@ -3154,7 +3154,7 @@ struct atom_gddr6_bit_byte_remap {
 struct atom_gddr6_dram_data_remap {
 	uint32_t table_size;
 	uint8_t  phyintf_ck_inverted[8]; // UMC_PHY_PHYINTF_CNTL.INV_CK
-	struct atom_gddr6_bit_byte_remap  bit_byte_remap[16];
+	struct atom_gddr6_bit_byte_remap  bit_byte_remap[];
 };
 
 struct atom_vram_module_v9 {

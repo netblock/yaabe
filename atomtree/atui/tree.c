@@ -1789,6 +1789,17 @@ grow_vram_module(
 			return NULL;
 	}
 }
+inline static atui_branch*
+grow_gddr6_dram_data_remap(
+		struct atomtree_gddr6_dram_data_remap* const at_remap
+		) {
+	if (NULL == at_remap->dram_data_remap) {
+		return NULL;
+	}
+	return ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,  NULL,
+		at_remap, at_remap->dram_data_remap,  0,NULL
+	);
+}
 
 inline static atui_branch*
 grow_vram_info_v1_2(
@@ -2263,12 +2274,9 @@ grow_vram_info_v2_5(
 		strcpy(atui_phyinit->name, "mc_phy_init_table");
 	}
 
-	atui_branch* atui_dram_remap = NULL;
-	if (vi25->dram_data_remap) {
-		atui_dram_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,  NULL,
-			NULL,vi25->dram_data_remap,  0,NULL
-		);
-	}
+	atui_branch* const atui_dram_remap = grow_gddr6_dram_data_remap(
+		&(vi25->dram_data_remap)
+	);
 
 	atui_branch* atui_postucode_init = NULL;
 	if (vi25->post_ucode_init.leaves) {
@@ -2346,12 +2354,9 @@ grow_vram_info_v2_6(
 	if (vi26->leaves->tmrs_seq_offset) {
 	}
 
-	atui_branch* atui_dram_remap = NULL;
-	if (vi26->dram_data_remap) {
-		atui_dram_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,  NULL,
-			NULL,vi26->dram_data_remap,  0,NULL
-		);
-	}
+	atui_branch* const atui_dram_remap = grow_gddr6_dram_data_remap(
+		&(vi26->dram_data_remap)
+	);
 
 	atui_branch* atui_postucode_init = NULL;
 	if (vi26->post_ucode_init.leaves) {
@@ -2406,12 +2411,9 @@ grow_vram_info_v3_0( // TODO finish this
 		strcpy(atui_mc_init->name, "mc_init_table");
 	}
 
-	atui_branch* atui_dram_remap = NULL;
-	if (vi30->dram_data_remap) {
-		atui_dram_remap = ATUI_MAKE_BRANCH(atom_gddr6_dram_data_remap,  NULL,
-			NULL,vi30->dram_data_remap,  0,NULL
-		);
-	}
+	atui_branch* const atui_dram_remap = grow_gddr6_dram_data_remap(
+		&(vi30->dram_data_remap)
+	);
 
 	atui_branch* atui_umc_emuinit = NULL;
 	if (vi30->umc_emuinit.leaves) {

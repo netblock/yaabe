@@ -1240,6 +1240,20 @@ populate_vram_module(
 	}
 }
 
+
+inline static void
+populate_gddr6_dram_data_remap(
+		struct atomtree_gddr6_dram_data_remap* const at_remap,
+		void* const remap_ptr
+		) {
+	struct atom_gddr6_dram_data_remap const* const dram_data_remap = remap_ptr;
+	at_remap->dram_data_remap = remap_ptr;
+	at_remap->bit_byte_remap_count = (
+		(dram_data_remap->table_size - sizeof(*dram_data_remap))
+		/ sizeof(dram_data_remap->bit_byte_remap[0])
+	);
+}
+
 inline static void
 populate_vram_info_v1_2(
 		struct atomtree_vram_info* const vram_info
@@ -1588,8 +1602,10 @@ populate_vram_info_v2_5(
 
 	if (vi25->leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi25->dram_data_remap =
-			(void*)vi25->leaves + vi25->leaves->dram_data_remap_tbloffset;
+		populate_gddr6_dram_data_remap(
+			&vi25->dram_data_remap,
+			(void*)vi25->leaves + vi25->leaves->dram_data_remap_tbloffset
+		);
 	}
 
 	if (vi25->leaves->post_ucode_init_offset) {
@@ -1655,8 +1671,10 @@ populate_vram_info_v2_6(
 
 	if (vi26->leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi26->dram_data_remap =
-			(void*)vi26->leaves + vi26->leaves->dram_data_remap_tbloffset;
+		populate_gddr6_dram_data_remap(
+			&vi26->dram_data_remap,
+			(void*)vi26->leaves + vi26->leaves->dram_data_remap_tbloffset
+		);
 	}
 
 	if (vi26->leaves->post_ucode_init_offset) {
@@ -1705,8 +1723,10 @@ populate_vram_info_v3_0( // TODO finish this
 
 	if (vi30->leaves->dram_data_remap_table_offset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
-		vi30->dram_data_remap =
-			(void*)vi30->leaves + vi30->leaves->dram_data_remap_table_offset;
+		populate_gddr6_dram_data_remap(
+			&vi30->dram_data_remap,
+			(void*)vi30->leaves + vi30->leaves->dram_data_remap_table_offset
+		);
 	}
 
 	if (vi30->leaves->umc_emuinit_table_offset) {
