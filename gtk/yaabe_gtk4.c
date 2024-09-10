@@ -854,7 +854,7 @@ leaves_offset_column_bind(
 	);
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
-	char buffer[18];
+	char buffer[sizeof("[123456 - 123456]")];
 	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
 		sprintf(buffer, "[%u:%u]",
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
@@ -865,7 +865,7 @@ leaves_offset_column_bind(
 		);
 		uint32_t const start = a_leaf->val - a_root->bios;
 		uint32_t const end = (start + a_leaf->num_bytes -1);
-		sprintf(buffer, "[%05X - %05X]", start, end);
+		sprintf(buffer, "[%06X - %06X]", start, end);
 	} else {
 		buffer[0] = '\0';
 	}
@@ -1313,7 +1313,7 @@ create_leaves_pane(
 		"swapped-signal::bind", G_CALLBACK(leaves_offset_column_bind), commons,
 		NULL
 	);
-	column = gtk_column_view_column_new("BIOS offset", factory);
+	column = gtk_column_view_column_new("BIOS Offset", factory);
 	gtk_column_view_column_set_resizable(column, true);
 	gtk_column_view_append_column(leaves_view, column);
 	g_object_unref(column);
@@ -1352,8 +1352,8 @@ branch_name_column_bind(
 	gtk_widget_set_tooltip_text(label, a_branch->description[current_lang]);
 }
 static void
-branch_type_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
+branch_offset_column_bind(
+		yaabegtk_commons* const commons,
 		GtkColumnViewCell* const column_cell
 		) {
 // bind
@@ -1362,9 +1362,22 @@ branch_type_column_bind(
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
 	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
-	g_object_unref(g_branch);
 
-	gtk_label_set_text(GTK_LABEL(label), a_branch->structname);
+	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
+		commons->root
+	);
+
+	char buffer[sizeof("[123456 - 123456]")];
+	if (a_branch->table_size) {
+		uint32_t const start = a_branch->table_start - a_root->bios;
+		uint32_t const end = (start + a_branch->table_size -1);
+		sprintf(buffer, "[%06X - %06X]", start, end);
+	} else {
+		buffer[0] = '\0';
+	}
+	assert(strlen(buffer) < sizeof(buffer));
+	gtk_label_set_text(GTK_LABEL(label), buffer);
+	g_object_unref(g_branch);
 }
 
 static void
@@ -1724,10 +1737,10 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branch_type_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(branch_offset_column_bind), commons,
 		NULL
 	);
-	column = gtk_column_view_column_new("Struct Type", factory);
+	column = gtk_column_view_column_new("BIOS Offset", factory);
 	gtk_column_view_column_set_resizable(column, true);
 	gtk_column_view_append_column(branches_view, column);
 	g_object_unref(column);
@@ -1754,8 +1767,7 @@ construct_tree_panes(
 	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
 	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
 	gtk_paned_set_shrink_end_child(GTK_PANED(tree_divider), false);
-	//gtk_widget_set_size_request(branches_pane, 34, 50); // 1/3 horizontal
-	//gtk_widget_set_size_request(leaves_pane, 66, 50);  // 2/3
+	gtk_widget_set_size_request(leaves_pane, 60, 50);  // 60% horizontal
 	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
 	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
