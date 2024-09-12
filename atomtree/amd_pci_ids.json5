@@ -1,4 +1,5 @@
 // AMD PCI ID - chip associations. See pci_id_lut.h
+// data is from amd's amdgpu/amdgpu_drv.c and linux/include/drm/drm_pciids.h
 
 {class: "pci_id_lut", ids: [
 

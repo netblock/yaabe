@@ -1,4 +1,7 @@
-/* For atomtree's abstract, check out atomtree_data_tables.h */
+/*
+AtomBIOS crawler.
+see atomtree.h and data_tables.h
+*/
 
 #include "standard.h"
 #include "atomtree.h"

@@ -77,7 +77,7 @@ gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* self
 		);
 
-char* // needs to be freed
+char* // must be freed
 gatui_leaf_to_path(
 		GATUILeaf* self
 		);

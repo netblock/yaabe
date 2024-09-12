@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 # A metaprogramming script that consumes json5 files to produce c source files
-# and c header files for atomtree ATUI.
-# see atomtree/atui_tables/atui_documentation.md for more info on ATUI.
+# and c header files for atomtree, usually specifically for ATUI.
+# see atomtree/atui_tables/README.md for more info on what the inputs are about
+# see also atomtree/atui/atui.h and atomtree/atui/ppatui.h
 
 # To generate C source files branches:
 # ppatui.py -s -o output.c -i input.json5
@@ -19,6 +20,7 @@ import json5
 import pathlib
 import argparse
 
+# atomtree/atui/atui.h has a copy
 ATUI_NOFANCY   = 0
 ATUI_BITFIELD  = 1
 ATUI_ENUM      = 2
@@ -28,7 +30,6 @@ ATUI_GRAFT     = 5
 ATUI_SHOOT     = 6
 ATUI_DYNARRAY  = 7
 _ATUI_BITCHILD = 8
-
 ATUI_FANCY_TYPES = (
 	"ATUI_NOFANCY",
 	"ATUI_BITFIELD",
@@ -45,6 +46,7 @@ def pcilut_to_c(
 		atui_data:dict,
 		fname:str
 		):
+	# see atomtree/pci_id_lut.h
 	assert(atui_data["class"] == "pci_id_lut")
 
 	unique_ids = set()

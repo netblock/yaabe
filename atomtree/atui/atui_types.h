@@ -5,7 +5,7 @@ typedef struct _atui_branch atui_branch;
 typedef struct _atui_leaf atui_leaf;
 
 struct atui_funcify_args;
-typedef atui_branch* (* atuifunc)(struct atui_funcify_args const*);
+typedef atui_branch* (* atuifunc)(struct atui_funcify_args const* atui_args);
 
 // GObject/GTK stuff.
 typedef struct _GATUILeaf GATUILeaf;

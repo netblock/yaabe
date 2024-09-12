@@ -86,6 +86,8 @@ cd build && meson compile nsis_installer
 
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd
 
+https://github.com/alterapraxisptyltd/openatom
+
 https://github.com/OhGodAPet/amdtimingcopy
 
 https://github.com/IndeedMiners/PolarisBiosEditor

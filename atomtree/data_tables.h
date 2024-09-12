@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
 CPU AtomBIOS directory tree, atomtree, is a large tree of C structs with the
 intent to abstract away AtomBIOS offset/pointer crawling and bounds checking.
 If a given AtomBIOS table has table offsets pointing to other tables, they will
@@ -9,22 +9,13 @@ reasonably possible.
 
 
 If there exists multiple versions of an atom table, then there is an enum-union
-pair to look up and walk the correct branch. For example,
+pair to look up and walk the correct branch. For example, (pseudocode)
 if (atree->data_table.vram_info.ver == v25)
 	atree->data_table.vram_info.v25.vram_module[0].gddr6_mr8 = mr8;
 	// bios edit
 you could then write atree.bios to a file; provided that you've done your
 sanity passes like the CRC checksum.
-
-future ideas:
-*large:
-	* fdisk/parted like allocation viewer? atombios creator?
-	* live i2c smu communicator?
-
-*******************************************************************************/
-
-/*******************************************************************************
-*******************************************************************************/
+*/
 
 #ifndef ATOMTREE_DATA_TABLES_H
 #define ATOMTREE_DATA_TABLES_H
@@ -391,16 +382,6 @@ struct atomtree_umc_init_reg_block {
 	uint8_t num_data_blocks; // atom_umc_init_reg_block's umc_reg_setting_list
 	uint8_t num_data_entries; // atom_umc_reg_setting_data_block's umc_reg_data
 };
-
-/*
-struct atomtree_gddr6_dram_data_remap { //TODO do we need this?
-	struct atom_gddr6_bit_byte_remap* leaves; // nonzero if populated
-
-	//uint32_t table_size;
-	//uint8_t phyintf_ck_inverted[8];	 //UMC_PHY_PHYINTF_CNTL.INV_CK
-	//struct atom_gddr6_bit_byte_remap bit_byte_remap[16];
-};
-*/
 
 struct atomtree_vram_module {
 	union {

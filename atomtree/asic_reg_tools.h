@@ -1,10 +1,22 @@
 /*
-Some tools to help write register definition tables; chiefly the ones involving
-struct register_set.
-The intended purpose of register_set_print_tables is to have it adjacent to
-atomtree_populate_init_reg_block.
+A major purpose of  struct register_set  is to have a searchable
+register index-bitfield database.
 
-register_set_print_tables(&(vi21->mem_clk_patch), &GMC_reg_set, NULL);
+register_set_print_tables crawls through the index list in the bios to print
+various text sequences to make it easier to write tables seen in
+atom/asic_reg_data_tables.h and atomtree/asic_reg_indices.json5
+
+Another purpose is register_set_build_atuifunc_playlist which is to have
+runtime ATUI branch generation based on the register index list in the bios
+
+see also:
+struct atomtree_init_reg_block
+atom/asic_reg_data_tables.h
+atomtree/asic_reg_indices.json5
+
+atomtree/gmc_searchfield.json5
+scripts/asic_reg/asic_reg.py
+searchfield_to_c in scripts/ppatui.py
 */
 
 #ifndef ASIC_REG_TOOLS_H
@@ -28,11 +40,6 @@ struct register_set {
 	char const* set_name;
 	struct register_set_entry entries[] __counted_by(num_reg_set_addresses);
 };
-#define RSE(reg_name)\
-	{\
-		.address = reg_name,\
-		.name = u8###reg_name,\
-	},
 
 typedef int16_t (* regset_bsearch_func)(struct register_set const* reg_set, uint16_t address);
 int16_t
@@ -48,7 +55,7 @@ regset_bsearch_right(
 
 
 // build a list of atui branch function pointers based off of the regblock.
-// must be freed; length is 1+atomtree_init_reg_block.num_data_entries
+// must be freed; length is atomtree_init_reg_block.num_data_entries
 struct register_set_entry*
 register_set_build_atuifunc_playlist(
 		struct atomtree_init_reg_block const* const at_regblock,

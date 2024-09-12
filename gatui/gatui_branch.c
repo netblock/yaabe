@@ -122,7 +122,7 @@ gatui_branch_new(
 		}
 	}
 
-	if (branch->leaf_count) {
+	if (branch->leaf_count) { // generate leaves_model
 		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
 		atui_leaves_to_gliststore(
 			leaf_list, branch->leaves, branch->leaf_count, root

@@ -24,11 +24,12 @@ C preprocessor side of ATUI table generation
 	)
 
 // Add a child branch to a parent branch
-#define ATUI_ADD_BRANCH(parent, child)\
+#define ATUI_ADD_BRANCH(parent, child) do {\
 	assert(parent->num_branches < parent->max_num_branches);\
 	parent->child_branches[parent->num_branches] = child;\
 	child->parent_branch = parent;\
-	parent->num_branches++;
+	parent->num_branches++;\
+} while(0)
 
 // ATUI function access
 #define ATUI_FUNC(atomstruct)\
@@ -112,7 +113,7 @@ C preprocessor side of ATUI table generation
 	int24_t:true, int24_t*:true, int24_t const*:true,\
 	int48_t:true, int48_t*:true, int48_t const*:true,\
 \
-/*
+/* no current purpose in flagging the floats
 	float16_t:true, float16_t*:true,\
 	float16_t const*:true,\
 	float32_t:true, float32_t*:true,\

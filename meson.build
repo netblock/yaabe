@@ -5,7 +5,7 @@ project('yaabe', 'c',
 		'c_std=gnu2x',
 		'buildtype=debug',
 		'b_ndebug=if-release',
-		'warning_level=2',
+		'warning_level=2', # 2 is -Wall -Wextra
 	]
 )
 

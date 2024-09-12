@@ -1,3 +1,9 @@
+/*
+gatui is a GObject-based wrapper to atui. Start at gatui_trunk.
+Since it's GObject, there is thread-safe reference counting.
+However bios-data IO is not thread-safe (spinlock? mode-based lock?).
+*/
+
 #ifndef GATUI_H
 #define GATUI_H
 

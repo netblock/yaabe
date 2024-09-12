@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# asic_reg.py is a script to process asic_reg's sh_mask.h and offset.h to output
-# something that is a little more readable.
+# a script to process AMD's include/asic_reg/'s sh_mask.h and offset.h
+# to output something that is a little more readable.
 
 #basic usage: asic_reg.py mode files
 #
@@ -12,20 +12,28 @@
 # this also finds commonality and associate versions.
 # asic_reg.py 0 gmc_out.h gmc_8_1_sh_mask.h gmc_8_1_d.h
 # asic_reg.py 0 gmc_out.h gmc_8_1_sh_mask.h gmc_8_1_d.h gmc_7_0_sh_mask.h gmc_7_0_d.h
+# an example of gmc_out.h would be atom/gmc.h and atom/gc.h
 #
 # mode = 1
-# Print out bitfields in the style of PPATUI JSON5.
+# Works just like mode 0. Print out bitfields in the style of PPATUI JSON5.
+# an example would be atomtree/atui/tables/atui_gmc.json5
+# see also scripts/ppatui.py
 #
 # mode = 2
-# Searchfield. Print out register names by the order of their address. The
-# primary purpose is to autogenerate a C header that contains a list that's
-# meant to be search upon
+# Searchfield. Print out register names by the order of their address.
+# see atomtree/asic_reg_tools.h
 #
 # mode = 3
-# intersect bitfields with a collection of register values, to find what
-# bitfields the values are about. Specifically, find all bitfields that keep
-# the 'rsvd' fields zero in value.
+# For manual bitfield hacking. Intersect bitfields with a collection of
+# register values, to find what bitfields the values are about.
+# Specifically, find all bitfields that keep the 'rsvd' fields zero in value.
 # asic_reg.py 3 gmc_8_1_sh_mask.h # # # #
+
+# takes a lot of files;  cleaned from command ls -lr
+# gmc/{gmc_8_2_sh_mask.h,gmc_8_2_d.h,gmc_8_1_sh_mask.h,gmc_8_1_d.h,gmc_7_1_sh_mask.h,gmc_7_1_d.h,gmc_7_0_sh_mask.h,gmc_7_0_d.h,gmc_6_0_sh_mask.h,gmc_6_0_d.h}
+
+# gc/{gc_9_4_3_sh_mask.h,gc_9_4_3_offset.h,gc_9_4_2_sh_mask.h,gc_9_4_2_offset.h,gc_9_4_1_sh_mask.h,gc_9_4_1_offset.h,gc_9_2_1_sh_mask.h,gc_9_2_1_offset.h,gc_9_1_sh_mask.h,gc_9_1_offset.h,gc_9_0_sh_mask.h,gc_9_0_offset.h,gc_11_5_0_sh_mask.h,gc_11_5_0_offset.h,gc_11_0_3_sh_mask.h,gc_11_0_3_offset.h,gc_11_0_0_sh_mask.h,gc_11_0_0_offset.h,gc_10_3_0_sh_mask.h,gc_10_3_0_offset.h,gc_10_1_0_sh_mask.h,gc_10_1_0_offset.h}
+
 
 import re
 from gmpy2 import popcount
@@ -446,7 +454,7 @@ union %s_%s {%s
 				define_vals = (addr_name, ver, addr_str, ver_str)
 				out_text += def_index_str % define_vals
 
-			for base in base_ver: # #define mmNAME_BASE_IDX_ver 0 // ver, ver
+			for base in base_ver: #  #define mmNAME_BASE_IDX_ver 0 // ver, ver
 				addr_name = ver_addr[ base_ver[base][-1] ][0] # get latest name
 				if addr_name[:2] in ("ix", "mm"): # caps name
 					assert(addr_name[2:] == name), name
@@ -600,8 +608,7 @@ def bitfield_to_reglist(
 		versions:list,
 		composite_bitfields:dict
 		):
-	# search fields for register_set_print_tables() in asic_reg)unducues.c
-	# which are about help develop stuff over AMD registers
+	# register search fields. see atomtree/asic_reg_tools.h
 	# "name": [bf,bf,bf]
 	json5_header = """\
 /*

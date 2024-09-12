@@ -1,5 +1,6 @@
 /*
 Non-Power-of-Two integers
+Current implementation requires little-endian
 */
 
 #ifndef NPT_INTS_H
@@ -50,7 +51,7 @@ union npt_pt_pun {
 ))
 
 // convert a power-of-two integer into its greater non-power-of-two counterpart
-// bits: 4/3
+// bits: 3/2
 #define pt_to_npt_upgrade(pt_ptr) (_Generic((*(pt_ptr)),\
 	uint16_t: (uint24_t) {.lo=*(pt_ptr)},\
 	int16_t:  (int24_t)  {.lo=*(pt_ptr), .hi=0-(*(pt_ptr) < 0)},\

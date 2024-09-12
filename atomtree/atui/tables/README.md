@@ -1,34 +1,45 @@
+atomtree's metaprogramming is represented in JSON5, and the preprocessing
+engine is `scripts/ppatui.py`
+
 # Format
 
-ATUI's metaprogramming is represented in JSON5, and what kind of data it holds
-is determined with the `class` attribute.
+What kind of data a json5 table holds is determined with the `class` attribute.
 
-the top-level as follows
+The top-level idiom is as follows where the array variable name depends on the
+class.
 ``` json5
-{class: "branch",
-global_default: {
-	...
-}, branches: [
+{class: "class_name", array_name: [
 	...
 ], }
 ```
 
+
 The `branch` class type is for describing C structs and their elements as
 branch-leaf complexes; 'branch' is a struct, and 'leaf' is an element of that
 struct.
+Array name is `branches`.
 
 The `enum` class type is for building a read-only structure of value-string
-pairs regarding a named constant.
+pairs regarding a named constant. Effectively type introspection for C's `enum`.
+Array name is `enums`.
 
 The `array` class type works much the same way, but for a simple read-only
-array[].
+array[]. It's about simplifying C `extern const` arrays.
+Array name is `arrays`.
 
-The `searchfield` is for `asic_reg_tools.h`, and is about  building an
-`enum`-esque val-name pair array of register IDs and their names.
+The `searchfield` is for `atomtree/asic_reg_tools.h`, and is about building a
+searchable database of register IDs and their bitfield names.
+Array name is `fields`.
+
+The `pci_id_lut` is a one-off for `atomtree/pci_id_lut.h`, which is about
+PCI ID to AMD chip association.
+Array name is `ids`.
 
 <br>
 
-# global\_default
+# Branch
+
+## global\_default
 
 `global_default` is currently only for the `branch` class. It holds branch and
 leaf data that will be used to infer missing fields.
@@ -64,7 +75,7 @@ global_default: {
 
 <br>
 
-# Basic Usage and Namespaces
+## Basic Usage and Namespaces
 
 There are two namespaces available, `bios` and `atomtree`.
 
@@ -133,14 +144,14 @@ ATUI_ADD_BRANCH(parent_branch, child_branch);
 <br>
 
 
-# Display / Fancy
+## Display / Fancy
 
 The display and fancy will appropriately set `atui_type` within the leaf.
 
 `union atui_type.signed_num` and `union atui_type.fraction` are usually set
 automatically based on the C data type.
 
-## Display / Radix
+### Display / Radix
 
 If the table element should be viewed as a number, set the `display` to a radix:
 `ATUI_DEC`, `ATUI_HEX`, `ATUI_OCT`, `ATUI_BIN`.
@@ -159,14 +170,14 @@ any. If the leaf's children should be viewed anyway, set the `display` to
 
 <br>
 
-## Fancy Types
+### Fancy Types
 
 Fancy types allow a leaf to present extra information beyond a value from the
 bios straightforward.
 
 <br>
 
-### ATUI\_BITFIELD
+#### ATUI\_BITFIELD
 
 Classic bitfield representation.
 
@@ -205,7 +216,7 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 
 <br>
 
-### ATUI\_ENUM
+#### ATUI\_ENUM
 
 If the element should have a list of text-val pairs, an enum, assocated with it,
 first populate the atui enum in `atui_enums.json5`:
@@ -234,7 +245,7 @@ And then for the atui leaf,
 
 <br>
 
-### ATUI\_GRAFT
+#### ATUI\_GRAFT
 
 If the element should embed a `atui_branch` to take/graft their leaves,
 
@@ -257,7 +268,7 @@ Also make sure the branch/table is defined elsewhere in ATUI.
 
 <br>
 
-### ATUI\_SHOOT
+#### ATUI\_SHOOT
 
 Working much the same way as `ATUI_GRAFT`, if the element should reference a
 `atui_branch` to automatically integrate as a child branch,
@@ -281,7 +292,7 @@ The name of the branch object will copy the UI display name of the leaf.
 
 <br>
 
-### ATUI\_STRING / ATUI\_ARRAY
+#### ATUI\_STRING / ATUI\_ARRAY
 
 If the element is a dynamically-sized NUL-terminated string, set the `fancy` to
 `ATUI_STRING`.
@@ -313,7 +324,7 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 
 <br>
 
-### ATUI\_DYNARRAY
+#### ATUI\_DYNARRAY
 ``` json5
 {
 	access: "bios->array_start_pointer",
@@ -326,16 +337,14 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 		deferred: "source->deferred_pointers",
 		count: "source->dynarray_number_of_elements"
 		enum: "enum_name",
-		pattern: [
-			{
-				name: "bios element",
-				display: "ATUI_HEX",
-				fancy: "ATUI_NOFANCY",
-				description: [
-					{language: "english", text "..."},
-				],
-			},
-		],
+		pattern: [{
+			name: "bios element",
+			display: "ATUI_HEX",
+			fancy: "ATUI_NOFANCY",
+			description: [
+				{language: "english", text "..."},
+			],
+		},],
 	},
 },
 ```
@@ -345,8 +354,9 @@ or number of elements needs a runtime computation, `ATUI_DYNARRY` can pull in
 the boundaries.
 
 The leaf pattern follows regular syntax and takes assumptions from the
-`dynpattern` section in `global_defaults`. Nested `ATUI_DYNARRAY` should be
-possible but is untested.
+`dynpattern` section in `global_defaults`.
+Nested `ATUI_DYNARRAY` should be possible but is untested.
+Multiple leaves in the pattern should be possible but is intested
 
 <br>
 
@@ -377,3 +387,71 @@ sequentially in the order as it is defined with `PPATUI_ENUMER()`.
 Furthermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
 
 The dynarray leaf can follow `ATUI_SUBONLY` and `ATUI_NODISPLAY`.
+
+<br>
+
+# enum
+
+The enums are fairly straightforward as they're about introspecting c enums.
+
+``` json5
+{name: "the_c_enum_struct_name",
+	description: [
+		{language: "english", text "..."},
+	],
+	constants: [
+		{name: "a_constant_of_that_enum",},
+		{name: "a_constant_of_that_enum2",
+			description: [
+				{language: "english", text "..."},
+			],
+		},
+]},
+```
+
+<br>
+
+# array
+
+The arrays are a straightforward reword of C `extern const` arrays.
+It currently does not support descriptions as seen in other ppatui classes.
+
+``` json5
+{type: "c_type", name "name_of_array",
+	constants: [
+		"entry0",
+		"entry1",
+]},
+```
+
+<br>
+
+# searchfield
+
+searchfields associate an AMD register index to its bitfield structure.
+From version to version, the index may change and/or the field may change.
+
+See `atomtree/asic_reg_tools.h`
+
+``` json5
+{
+	index: "INDEX_NAMED_CONSTANT",
+	field: "the_bitfield_that_goes_with_it",
+},
+```
+
+<br>
+
+# pci\_id\_lut
+
+a simple PCI ID to chip ID lookup table, with optional feature flags.
+The feature flags are booleans, but are currently dead code.
+
+See `atomtree/pci_id_lut.h`
+
+``` json5
+{
+	vendor: "16-bit PCI ID", device: "16-bit PCI ID", chip, "CHIP_NAME",
+	flags: ["various", "feature", "flags",],
+}
+```

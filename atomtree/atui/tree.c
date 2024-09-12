@@ -1,4 +1,7 @@
-/* For atomtree's abstract, check out atomtree_data_tables.h */
+/*
+atui counterpart to atomtree/atomtree.c
+walks the atomtree to construct the ATUI tree
+*/
 
 #include "standard.h"
 #include "atomtree.h"

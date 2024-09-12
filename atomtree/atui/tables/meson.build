@@ -1,4 +1,4 @@
-# when adding a file here, don't forget to add to auto_includes.h
+# when adding a file here, don't forget to add to atui/auto_includes.h
 atui_branches = files(
 	'atui_gc.json5',
 	'atui_gmc.json5', # extra long

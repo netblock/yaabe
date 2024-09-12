@@ -949,7 +949,9 @@ _atui_destroy_leaves(
 void
 atui_destroy_tree(
 		atui_branch* const tree
-		) { // a reference implementation
+		) {
+	// a reference implementation. deallocates the data set up by
+	// atui_branch_allocator
 	if (tree->leaf_count) {
 		_atui_destroy_leaves(tree->leaves, tree->leaf_count);
 		free(tree->leaves);

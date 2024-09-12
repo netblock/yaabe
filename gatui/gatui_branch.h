@@ -22,6 +22,7 @@ gatui_branch_get_leaves_model(
 		GATUIBranch* self
 		);
 
+// contiguous memory in the bios
 GVariant*
 gatui_branch_get_contiguous_memory(
 		GATUIBranch* self
@@ -31,6 +32,7 @@ gatui_branch_set_contiguous_memory(
 		GATUIBranch* self,
 		GVariant* data
 		);
+// the leaves of the branch, which may have arbitrary positions in the bios
 bool // success
 gatui_branch_get_leaves_memory_package(
 		GATUIBranch* self,

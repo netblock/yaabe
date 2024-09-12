@@ -78,7 +78,7 @@ enum atui_type_radix:uint8_t {
 	ATUI_NUM_RADIX,
 	ATUI_ANY = 0x7, // Mask
 };
-enum atui_type_fancy:uint8_t {
+enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
 	ATUI_BITFIELD = 1, // Is a bitfield parent
 	ATUI_ENUM     = 2, // See also PPATUI_FUNCIFY()

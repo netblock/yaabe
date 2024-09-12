@@ -1,9 +1,11 @@
 /*
-AMD/ATI uses PCI IDs of their older cards to select the correct hardware IP
-codepaths in the kernel.
+AMD/ATI uses the PCI IDs of their older cards to select the correct hardware IP
+codepaths in the driver. This unfortunately means some bios structures require
+such context to be correctly decoded.
 
 Sorta starting with navi10, AMD moved to a tell-me-what-you-have discovery
-system. See include/discovery.h for more info
+system.
+See AMD's include/discovery.h and amdgpu/amdgpu_discovery.c for more info
 Getting to the discovery table might be through pspdirtable
 https://doc.coreboot.org/soc/amd/psp_integration.html#psp-directory-table
 */
@@ -113,6 +115,8 @@ enum amd_asic_type:uint8_t { // ATI and AMD merged
 	CHIP_LAST,
 };
 
+// driver has feature flagging in its PCI ID list. Currently atomtree doesn't
+// need info from here.
 union amd_chip_flags {
     uint16_t chip_flags;
 	struct { uint16_t

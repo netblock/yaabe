@@ -36,7 +36,6 @@ gatui_leaf_dispose(
 		) {
 	GATUILeaf* const self = GATUI_LEAF(object);
 
-
 	// no need to kill the val-changed connection with parent leaf because
 	// parent holds ref; we wouldn't be here if parent is alive.
 

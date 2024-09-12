@@ -1,8 +1,9 @@
 /* AtomTree iterable interface for UIs
 
-atui_branch_allocator processes the data set up by the ATUI_FUNCIFY functions
-to spit out your branch
+atui_branch_allocator is a runtime function that processes the data set up by
+the JSON5 tables to generate a malloc'd branch.
 
+See scripts/ppatui.py for what the JSON5 tables compile to
 */
 
 #include "standard.h"
