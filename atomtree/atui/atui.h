@@ -31,9 +31,6 @@ atui.h is about the core atui interface
 
 // https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
 static constexpr nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
-// purely to satisfy the args of PPATUI_FUNCIFY if no atomtree struct is
-// relevant for that branch:
-typedef struct atui_nullstruct {} atui_nullstruct;
 
 enum i18n_languages:int8_t {
 	LANG_NOLANG = -1,
@@ -81,7 +78,7 @@ enum atui_type_radix:uint8_t {
 enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
 	ATUI_BITFIELD = 1, // Is a bitfield parent
-	ATUI_ENUM     = 2, // See also PPATUI_FUNCIFY()
+	ATUI_ENUM     = 2, // has a struct atui_enum over a C enum
 	ATUI_STRING   = 3, // Variable-length srings ending in \0
 	ATUI_ARRAY    = 4, // staticall-sized array and strings
 	ATUI_GRAFT    = 5, // Pull in leaves from other tables
@@ -158,7 +155,7 @@ struct _atui_leaf {
 	};
 	GATUILeaf* self; // weak reference
 
-	// allocator-funcify use only:
+	// atui_branch_allocator() use only:
 	union {
 		atuifunc branch_bud;
 		struct subleaf_meta const* template_leaves;
@@ -306,9 +303,9 @@ atui_assimilate(
 		uint16_t src_array_len
 		);
 
-// funcify internal structs:
 
-struct atui_funcify_args {
+// atui allocator functions internal structs:
+typedef struct atui_func_args {
 	char const* rename;
 	// optionally rename the branch.
 
@@ -327,7 +324,7 @@ struct atui_funcify_args {
 
 	uint8_t num_import_branches;
 	// Number of imported child branches this atui_branch will have.*/
-};
+} atuifunc_args;
 
 struct subleaf_meta {
 	uint32_t const element_size;   // Size of bios element. For pointer math.
@@ -363,7 +360,7 @@ struct atui_branch_data {
 atui_branch*
 atui_branch_allocator(
 	struct atui_branch_data const* embryo,
-	struct atui_funcify_args const* args
+	atuifunc_args const* args
 	);
 
 #include "auto_includes.h"

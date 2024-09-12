@@ -17,23 +17,23 @@ grow_smc_dpm_info(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = smc_dpm_info,
 		.suggestbios = smc_dpm_info->leaves,
 	};
 	switch (smc_dpm_info->ver) {
-		case v4_1:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_1);  break;
-		case v4_3:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_3);  break;
-		case v4_4:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_4);  break;
-		case v4_5:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_5);  break;
-		case v4_6:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_6);  break;
-		case v4_7:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_7);  break;
-		case v4_9:  atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_9);  break;
-		case v4_10: atui_func = ATUI_FUNC(atom_smc_dpm_info_v4_10); break;
-		case v5_0:  atui_func = ATUI_FUNC(atom_smc_dpm_info_table_13_0_7);break;
+		case v4_1:  atui_func = _atui_atom_smc_dpm_info_v4_1;  break;
+		case v4_3:  atui_func = _atui_atom_smc_dpm_info_v4_3;  break;
+		case v4_4:  atui_func = _atui_atom_smc_dpm_info_v4_4;  break;
+		case v4_5:  atui_func = _atui_atom_smc_dpm_info_v4_5;  break;
+		case v4_6:  atui_func = _atui_atom_smc_dpm_info_v4_6;  break;
+		case v4_7:  atui_func = _atui_atom_smc_dpm_info_v4_7;  break;
+		case v4_9:  atui_func = _atui_atom_smc_dpm_info_v4_9;  break;
+		case v4_10: atui_func = _atui_atom_smc_dpm_info_v4_10; break;
+		case v5_0:  atui_func = _atui_atom_smc_dpm_info_table_13_0_7;break;
 		default:
 			atui_args.rename = "smc_dpm_info (header only stub)";
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			break;
 	}
 	return atui_func(&atui_args);
@@ -50,24 +50,24 @@ grow_firmwareinfo(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = firmwareinfo,
 		.suggestbios = firmwareinfo->leaves,
 	};
 	switch (firmwareinfo->ver) {
-		case v1_0: atui_func = ATUI_FUNC(atom_firmware_info_v1_0); break;
-		case v1_2: atui_func = ATUI_FUNC(atom_firmware_info_v1_2); break;
-		case v1_3: atui_func = ATUI_FUNC(atom_firmware_info_v1_3); break;
-		case v1_4: atui_func = ATUI_FUNC(atom_firmware_info_v1_4); break;
-		case v2_1: atui_func = ATUI_FUNC(atom_firmware_info_v2_1); break;
-		case v2_2: atui_func = ATUI_FUNC(atom_firmware_info_v2_2); break;
-		case v3_1: atui_func = ATUI_FUNC(atom_firmware_info_v3_1); break;
-		case v3_2: atui_func = ATUI_FUNC(atom_firmware_info_v3_2); break;
-		case v3_3: atui_func = ATUI_FUNC(atom_firmware_info_v3_3); break;
-		case v3_4: atui_func = ATUI_FUNC(atom_firmware_info_v3_4); break;
+		case v1_0: atui_func = _atui_atom_firmware_info_v1_0; break;
+		case v1_2: atui_func = _atui_atom_firmware_info_v1_2; break;
+		case v1_3: atui_func = _atui_atom_firmware_info_v1_3; break;
+		case v1_4: atui_func = _atui_atom_firmware_info_v1_4; break;
+		case v2_1: atui_func = _atui_atom_firmware_info_v2_1; break;
+		case v2_2: atui_func = _atui_atom_firmware_info_v2_2; break;
+		case v3_1: atui_func = _atui_atom_firmware_info_v3_1; break;
+		case v3_2: atui_func = _atui_atom_firmware_info_v3_2; break;
+		case v3_3: atui_func = _atui_atom_firmware_info_v3_3; break;
+		case v3_4: atui_func = _atui_atom_firmware_info_v3_4; break;
 		default:
 			atui_args.rename = "firmwareinfo (header only stub)";
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			break;
 	}
 	return atui_func(&atui_args);
@@ -84,22 +84,22 @@ grow_lcd_info(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  lcd_info,
 		.suggestbios = lcd_info->leaves,
 	};
 	switch (lcd_info->ver) {
-		case v1_1: atui_func = ATUI_FUNC(atom_lvds_info_v1_1);
+		case v1_1: atui_func = _atui_atom_lvds_info_v1_1;
 			// TODO atom_lvds_info_v1_1's ModePatchTableOffset;
 			// see amdgpu_atombios_encoder_get_lcd_info
 			assert(0);
 			break;
-		case v1_2: atui_func = ATUI_FUNC(atom_lvds_info_v1_2); break;
-		case v1_3: atui_func = ATUI_FUNC(atom_lcd_info_v1_3);  break;
-		case v2_1: atui_func = ATUI_FUNC(atom_lcd_info_v2_1);  break;
+		case v1_2: atui_func = _atui_atom_lvds_info_v1_2; break;
+		case v1_3: atui_func = _atui_atom_lcd_info_v1_3;  break;
+		case v2_1: atui_func = _atui_atom_lcd_info_v2_1;  break;
 		default:
 			atui_args.rename = "lcd_info (header only stub)";
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			break;
 	}
 	return atui_func(&atui_args);
@@ -116,20 +116,20 @@ grow_smu_info(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  smu_info,
 		.suggestbios = smu_info->leaves,
 	};
 	switch (smu_info->ver) {
-		case v3_1: atui_func = ATUI_FUNC(atom_smu_info_v3_1); break;
-		case v3_2: atui_func = ATUI_FUNC(atom_smu_info_v3_2); break;
-		case v3_3: atui_func = ATUI_FUNC(atom_smu_info_v3_3); break;
+		case v3_1: atui_func = _atui_atom_smu_info_v3_1; break;
+		case v3_2: atui_func = _atui_atom_smu_info_v3_2; break;
+		case v3_3: atui_func = _atui_atom_smu_info_v3_3; break;
 		case v3_4: atui_args.rename = "atom_smu_info_v3_5 (forced)"; fall;
-		case v3_5: atui_func = ATUI_FUNC(atom_smu_info_v3_5); break;
-		case v3_6: atui_func = ATUI_FUNC(atom_smu_info_v3_6); break;
-		case v4_0: atui_func = ATUI_FUNC(atom_smu_info_v4_0); break;
+		case v3_5: atui_func = _atui_atom_smu_info_v3_5; break;
+		case v3_6: atui_func = _atui_atom_smu_info_v3_6; break;
+		case v4_0: atui_func = _atui_atom_smu_info_v4_0; break;
 		default:
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "smu_info (header only stub)";
 			break;
 	}
@@ -147,15 +147,15 @@ grow_vram_usagebyfirmware(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  fw_vram,
 		.suggestbios = fw_vram->leaves,
 	};
 	switch (fw_vram->ver) {
-		case v2_1: atui_func = ATUI_FUNC(vram_usagebyfirmware_v2_1); break;
-		case v2_2: atui_func = ATUI_FUNC(vram_usagebyfirmware_v2_2); break;
+		case v2_1: atui_func = _atui_vram_usagebyfirmware_v2_1; break;
+		case v2_2: atui_func = _atui_vram_usagebyfirmware_v2_2; break;
 		default:
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "vram_usagebyfirmware (header only stub)";
 			break;
 	}
@@ -173,14 +173,14 @@ grow_gpio_pin_lut(
 	}
 
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  gpio_pin_lut,
 		.suggestbios = gpio_pin_lut->leaves,
 	};
 	switch (gpio_pin_lut->ver) {
-		case v2_1: atui_func = ATUI_FUNC(atom_gpio_pin_lut_v2_1); break;
+		case v2_1: atui_func = _atui_atom_gpio_pin_lut_v2_1; break;
 		default:
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "gpio_pin_lut (header only stub)";
 			break;
 	}
@@ -199,7 +199,7 @@ grow_gfx_info(
 
 	atuifunc atui_func;
 	atui_branch* subtables[2] = {NULL};
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  gfx_info,
 		.suggestbios = gfx_info->leaves,
 		.import_branches = subtables,
@@ -207,13 +207,13 @@ grow_gfx_info(
 	};
 
 	switch (gfx_info->ver) {
-		case v2_1: atui_func = ATUI_FUNC(atom_gfx_info_v2_1); break;
-		case v2_2: atui_func = ATUI_FUNC(atom_gfx_info_v2_2); break;
+		case v2_1: atui_func = _atui_atom_gfx_info_v2_1; break;
+		case v2_2: atui_func = _atui_atom_gfx_info_v2_2; break;
 		case v2_3:
 			if (gfx_info->table_header->structuresize
 					== sizeof(*gfx_info->v2_3)
 					) {
-				atui_func = ATUI_FUNC(atom_gfx_info_v2_3);
+				atui_func = _atui_atom_gfx_info_v2_3;
 				if (gfx_info->edc_didt_lo) {
 					subtables[0] = ATUI_MAKE_BRANCH(
 						dpm7_atomctrl_edc_leakge_table,  NULL,
@@ -227,16 +227,16 @@ grow_gfx_info(
 					);
 				}
 			} else {
-				atui_func = ATUI_FUNC(atom_gfx_info_v2_3_2);
+				atui_func = _atui_atom_gfx_info_v2_3_2;
 			}
 			break;
-		case v2_4: atui_func = ATUI_FUNC(atom_gfx_info_v2_4); break;
+		case v2_4: atui_func = _atui_atom_gfx_info_v2_4; break;
 		case v2_6: atui_args.rename = "atom_gfx_info_v2_5 (forced)"; fall;
-		case v2_5: atui_func = ATUI_FUNC(atom_gfx_info_v2_5); break;
-		case v2_7: atui_func = ATUI_FUNC(atom_gfx_info_v2_7); break;
-		case v3_0: atui_func = ATUI_FUNC(atom_gfx_info_v3_0); break;
+		case v2_5: atui_func = _atui_atom_gfx_info_v2_5; break;
+		case v2_7: atui_func = _atui_atom_gfx_info_v2_7; break;
+		case v3_0: atui_func = _atui_atom_gfx_info_v3_0; break;
 		default:
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "gfx_info (header only stub)";
 			break;
 	}
@@ -254,7 +254,7 @@ grow_pplib_ppt_state_array(
 	}
 
 	atui_branch* base;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  ppt41,
 		.suggestbios = ppt41->state_array_base,
 		.num_import_branches = ppt41->num_state_array_entries,
@@ -263,12 +263,12 @@ grow_pplib_ppt_state_array(
 
 	switch (ppt41->state_array_ver) {
 		case v1_0:
-			base = ATUI_FUNC(atom_pplib_state_v1_array)(&atui_args);
-			atui_state_func = ATUI_FUNC(atom_pplib_state_v1);
+			base = _atui_atom_pplib_state_v1_array(&atui_args);
+			atui_state_func = _atui_atom_pplib_state_v1;
 			break;
 		case v2_0:
-			base = ATUI_FUNC(atom_pplib_state_array_v2)(&atui_args);
-			atui_state_func = ATUI_FUNC(atom_pplib_state_v2);
+			base = _atui_atom_pplib_state_array_v2(&atui_args);
+			atui_state_func = _atui_atom_pplib_state_v2;
 			break;
 		default: assert(0); return NULL;
 	}
@@ -290,28 +290,28 @@ grow_pplib_ppt_clock_info(
 		union atom_pplib_clock_info_arrays* const clock_info
 		) {
 	
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = ppt41,
 		.suggestbios = clock_info,
 	};
 	switch (ppt41->clock_info_ver) {
 		case ATOM_PPLIB_CLOCK_INFO_R600:
-			return ATUI_FUNC(atom_pplib_r600_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_r600_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_RS780:
-			return ATUI_FUNC(atom_pplib_rs780_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_rs780_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_GREEN:
-			return ATUI_FUNC(atom_pplib_evergreen_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_evergreen_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_SOUTH:
-			return ATUI_FUNC(atom_pplib_si_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_si_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_SEA:
-			return ATUI_FUNC(atom_pplib_ci_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_ci_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_SUMO:
-			return ATUI_FUNC(atom_pplib_sumo_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_sumo_clock_info_array(&atui_args);
 		case ATOM_PPLIB_CLOCK_INFO_CARRIZO:
-			return ATUI_FUNC(atom_pplib_cz_clock_info_array)(&atui_args);
+			return _atui_atom_pplib_cz_clock_info_array(&atui_args);
 		default:
 			atui_args.rename = "clock_info (header only stub)";
-			return ATUI_FUNC(atom_pplib_sized_array_header)(&atui_args);
+			return _atui_atom_pplib_sized_array_header(&atui_args);
 	}
 	
 	return NULL;
@@ -357,25 +357,21 @@ grow_pplib_ppt_extended_header(
 
 	atui_branch* powertune = NULL;
 	if (ppt41->powertune) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt41,
 			.suggestbios = ppt41->powertune,
 		};
 		switch (ppt41->powertune->RevId) {
 			case 0:
-				powertune = ATUI_FUNC(atom_pplib_powertune_table_v0)(
-					&atui_args
-				);
+				powertune = _atui_atom_pplib_powertune_table_v0(&atui_args);
 				break;
 			case 1:
-				powertune = ATUI_FUNC(atom_pplib_powertune_table_v1)(
-					&atui_args
-				);
+				powertune = _atui_atom_pplib_powertune_table_v1(&atui_args);
 				break;
 			default:
 				assert(0);
 				atui_args.rename = "powertune (header only stub)";
-				powertune = ATUI_FUNC(pplib_subtable_header)(&atui_args);
+				powertune = _atui_pplib_subtable_header(&atui_args);
 				break;
 		}
 	}
@@ -399,22 +395,22 @@ grow_pplib_ppt_extended_header(
 	atui_branch* const extended_children[] = {
 		vce, uvd, samu, ppm, acpclk, powertune, vddgfx_sclk, vq_budgeting,
 	};
-	struct atui_funcify_args const atui_args = {
+	atuifunc_args const atui_args = {
 		.atomtree = ppt41,
 		.suggestbios = ppt41->extended_header,
 		.import_branches = extended_children,
 		.num_import_branches = lengthof(extended_children),
 	};
 	switch (ppt41->extended_header_ver) {
-		case v1_0: return ATUI_FUNC(atom_pplib_extended_header_v1)(&atui_args);
-		case v2_0: return ATUI_FUNC(atom_pplib_extended_header_v2)(&atui_args);
-		case v3_0: return ATUI_FUNC(atom_pplib_extended_header_v3)(&atui_args);
-		case v4_0: return ATUI_FUNC(atom_pplib_extended_header_v4)(&atui_args);
-		case v5_0: return ATUI_FUNC(atom_pplib_extended_header_v5)(&atui_args);
-		case v6_0: return ATUI_FUNC(atom_pplib_extended_header_v6)(&atui_args);
-		case v7_0: return ATUI_FUNC(atom_pplib_extended_header_v7)(&atui_args);
-		case v8_0: return ATUI_FUNC(atom_pplib_extended_header_v8)(&atui_args);
-		case v9_0: return ATUI_FUNC(atom_pplib_extended_header_v9)(&atui_args);
+		case v1_0: return _atui_atom_pplib_extended_header_v1(&atui_args);
+		case v2_0: return _atui_atom_pplib_extended_header_v2(&atui_args);
+		case v3_0: return _atui_atom_pplib_extended_header_v3(&atui_args);
+		case v4_0: return _atui_atom_pplib_extended_header_v4(&atui_args);
+		case v5_0: return _atui_atom_pplib_extended_header_v5(&atui_args);
+		case v6_0: return _atui_atom_pplib_extended_header_v6(&atui_args);
+		case v7_0: return _atui_atom_pplib_extended_header_v7(&atui_args);
+		case v8_0: return _atui_atom_pplib_extended_header_v8(&atui_args);
+		case v9_0: return _atui_atom_pplib_extended_header_v9(&atui_args);
 		default: assert(0); return NULL; // TODO return size
 	}
 }
@@ -436,24 +432,24 @@ grow_pplib_ppt(
 
 	atui_branch* nonclock_info = NULL;
 	if (ppt41->nonclock_info) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt41,
 			.suggestbios = ppt41->nonclock_info,
 		};
 		switch (ppt41->nonclock_info_ver) {
 			case v1_0:
-				nonclock_info = ATUI_FUNC(atom_pplib_nonclock_info_array_v1)(
+				nonclock_info = _atui_atom_pplib_nonclock_info_array_v1(
 					&atui_args
 				);
 				break;
 			case v2_0:
-				nonclock_info = ATUI_FUNC(atom_pplib_nonclock_info_array_v2)(
+				nonclock_info = _atui_atom_pplib_nonclock_info_array_v2(
 					&atui_args
 				);
 				break;
 			default:
 				atui_args.rename = "nonclock_info (header only stub)";
-				nonclock_info = ATUI_FUNC(atom_pplib_sized_array_header)(
+				nonclock_info = _atui_atom_pplib_sized_array_header(
 					&atui_args
 				);
 			break;
@@ -483,26 +479,21 @@ grow_pplib_ppt(
 	// v3
 	atui_branch* fan_table = NULL;
 	if (ppt41->fan_table) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt41,
 			.suggestbios = ppt41->fan_table,
 		};
 		switch (ppt41->fan_table->RevId) {
-			case 1: fan_table = ATUI_FUNC(atom_pplib_fan_table_v1)(&atui_args);
-				break;
-			case 2: fan_table = ATUI_FUNC(atom_pplib_fan_table_v2)(&atui_args);
-				break;
+			case 1: fan_table = _atui_atom_pplib_fan_table_v1(&atui_args);break;
+			case 2: fan_table = _atui_atom_pplib_fan_table_v2(&atui_args);break;
 			case 5:
 			case 4:
-			case 3: fan_table = ATUI_FUNC(atom_pplib_fan_table_v3)(&atui_args);
-				break;
-			case 6: fan_table = ATUI_FUNC(atom_pplib_fan_table_v6)(&atui_args);
-				break;
-			case 7: fan_table = ATUI_FUNC(atom_pplib_fan_table_v7)(&atui_args);
-				break;
+			case 3: fan_table = _atui_atom_pplib_fan_table_v3(&atui_args);break;
+			case 6: fan_table = _atui_atom_pplib_fan_table_v6(&atui_args);break;
+			case 7: fan_table = _atui_atom_pplib_fan_table_v7(&atui_args);break;
 			default:
 				atui_args.rename = "fan_table (header only stub)";
-				fan_table = ATUI_FUNC(pplib_subtable_header)(&atui_args);
+				fan_table = _atui_pplib_subtable_header(&atui_args);
 				break;
 		}
 	}
@@ -560,16 +551,14 @@ grow_pplib_ppt(
 	// v5
 	atui_branch* cac_leakage = NULL;
 	if (ppt41->cac_leakage) {
-		struct atui_funcify_args const atui_args = {
+		atuifunc_args const atui_args = {
 			.atomtree = ppt41,
 			.suggestbios = ppt41->cac_leakage,
 		};
 		if (ppt41->leaves->v1.PlatformCaps.EVV) {
-			cac_leakage = ATUI_FUNC(atom_pplib_cac_leakage_record_evv)(
-				&atui_args
-			);
+			cac_leakage = _atui_atom_pplib_cac_leakage_record_evv(&atui_args);
 		} else {
-			cac_leakage = ATUI_FUNC(atom_pplib_cac_leakage_record)(&atui_args);
+			cac_leakage = _atui_atom_pplib_cac_leakage_record(&atui_args);
 		}
 	}
 
@@ -580,18 +569,18 @@ grow_pplib_ppt(
 		vddc_sclk, vddci_mclk, vddc_mclk, max_on_dc, phase_shed, mvdd_mclk,
 		cac_leakage,
 	};
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree =  ppt41,
 		.suggestbios = ppt41->leaves,
 		.import_branches = ppt41_children,
 		.num_import_branches = lengthof(ppt41_children),
 	};
 	switch (ppt41->pplib_ver) {
-		case v5_0: return ATUI_FUNC(atom_pplib_powerplaytable_v5)(&atui_args);
-		case v4_0: return ATUI_FUNC(atom_pplib_powerplaytable_v4)(&atui_args);
-		case v3_0: return ATUI_FUNC(atom_pplib_powerplaytable_v3)(&atui_args);
-		case v2_0: return ATUI_FUNC(atom_pplib_powerplaytable_v2)(&atui_args);
-		case v1_0: return ATUI_FUNC(atom_pplib_powerplaytable_v1)(&atui_args);
+		case v5_0: return _atui_atom_pplib_powerplaytable_v5(&atui_args);
+		case v4_0: return _atui_atom_pplib_powerplaytable_v4(&atui_args);
+		case v3_0: return _atui_atom_pplib_powerplaytable_v3(&atui_args);
+		case v2_0: return _atui_atom_pplib_powerplaytable_v2(&atui_args);
+		case v1_0: return _atui_atom_pplib_powerplaytable_v1(&atui_args);
 		default: return NULL;
 	}
 }
@@ -608,20 +597,20 @@ atui_generate_pptablev1_ppt(
 
 	atui_branch* fan_table = NULL;
 	if (ppt71->fan_table) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->fan_table,
 		};
 		uint8_t const RevId = ppt71->fan_table->RevId;
 		if (7 >= RevId) {
-			fan_table = ATUI_FUNC(atom_pptable_fan_table)(&atui_args);
+			fan_table = _atui_atom_pptable_fan_table(&atui_args);
 		} else if (8 == RevId) {
-			fan_table = ATUI_FUNC(atom_fiji_fan_table)(&atui_args);
+			fan_table = _atui_atom_fiji_fan_table(&atui_args);
 		} else if (9 == RevId) {
-			fan_table = ATUI_FUNC(atom_polaris_fan_table)(&atui_args);
+			fan_table = _atui_atom_polaris_fan_table(&atui_args);
 		} else {
 			atui_args.rename = "fan_table (header only stub)";
-			fan_table = ATUI_FUNC(pplib_subtable_header)(&atui_args);
+			fan_table = _atui_pplib_subtable_header(&atui_args);
 			assert(0);
 		}
 	}
@@ -646,20 +635,20 @@ atui_generate_pptablev1_ppt(
 			NULL,  ppt71,ppt71->sclk_dependency,  0,NULL
 		);
 		atuifunc atui_func;
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->sclk_dependency
 		};
 		switch (ppt71->sclk_dependency->RevId) {
 			case 0:
-				atui_func = ATUI_FUNC(atom_pptable_sclk_dependency_table);
+				atui_func = _atui_atom_pptable_sclk_dependency_table;
 				break;
 			case 1:
-				atui_func = ATUI_FUNC(atom_polaris_sclk_dependency_table);
+				atui_func = _atui_atom_polaris_sclk_dependency_table;
 				break;
 			default:
 				atui_args.rename = "sclk_dependency (header only stub)";
-				atui_func = ATUI_FUNC(pplib_subtable_header);
+				atui_func = _atui_pplib_subtable_header;
 				assert(0);
 				break;
 		};
@@ -705,20 +694,20 @@ atui_generate_pptablev1_ppt(
 
 	atui_branch* powertune = NULL;
 	if (ppt71->powertune) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->powertune,
 		};
 		uint8_t const RevId = ppt71->powertune->RevId;
 		if (2 >= RevId) {
-			powertune = ATUI_FUNC(atom_pptable_powertune_table)(&atui_args);
+			powertune = _atui_atom_pptable_powertune_table(&atui_args);
 		} else if (3 == RevId) {
-			powertune = ATUI_FUNC(atom_fiji_powertune_table)(&atui_args);
+			powertune = _atui_atom_fiji_powertune_table(&atui_args);
 		} else if (4 == RevId) {
-			powertune = ATUI_FUNC(atom_polaris_powertune_table)(&atui_args);
+			powertune = _atui_atom_polaris_powertune_table(&atui_args);
 		} else {
 			atui_args.rename = "powertune (header only stub)";
-			powertune = ATUI_FUNC(pplib_subtable_header)(&atui_args);
+			powertune = _atui_pplib_subtable_header(&atui_args);
 			assert(0);
 		}
 	}
@@ -736,16 +725,16 @@ atui_generate_pptablev1_ppt(
 			ppt71,ppt71->pcie_table,  0,NULL
 		);
 		atuifunc atui_func;
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.suggestbios = ppt71->pcie_table,
 		};
 		switch (ppt71->pcie_table->RevId) {
-			case 0: atui_func = ATUI_FUNC(atom_pptable_pcie_table); break;
-			case 1: atui_func = ATUI_FUNC(atom_polaris_pcie_table); break;
+			case 0: atui_func = _atui_atom_pptable_pcie_table; break;
+			case 1: atui_func = _atui_atom_polaris_pcie_table; break;
 			default:
 				atui_args.rename = "pcie_table (header only stub)";
-				atui_func = ATUI_FUNC(pplib_subtable_header);
+				atui_func = _atui_pplib_subtable_header;
 				break;
 		}
 		pcie_table = atui_func(&atui_args);
@@ -781,20 +770,20 @@ atui_generate_vega10_ppt(
 
 	atui_branch* fan_table = NULL;
 	if (ppt81->fan_table) {
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt81,
 			.suggestbios = ppt81->fan_table,
 		};
 		uint8_t const RevId = ppt81->fan_table->RevId;
 		if (10 == RevId) {
-			fan_table = ATUI_FUNC(atom_vega10_fan_table_v1)(&atui_args);
+			fan_table = _atui_atom_vega10_fan_table_v1(&atui_args);
 		} else if (11 == RevId) {
-			fan_table = ATUI_FUNC(atom_vega10_fan_table_v2)(&atui_args);
+			fan_table = _atui_atom_vega10_fan_table_v2(&atui_args);
 		} else if (12 >= RevId) {
-			fan_table = ATUI_FUNC(atom_vega10_fan_table_v3)(&atui_args);
+			fan_table = _atui_atom_vega10_fan_table_v3(&atui_args);
 		} else {
 			atui_args.rename = "fan_table (header only stub)";
-			fan_table = ATUI_FUNC(pplib_subtable_header)(&atui_args);
+			fan_table = _atui_pplib_subtable_header(&atui_args);
 			assert(0);
 		}
 	}
@@ -824,20 +813,20 @@ atui_generate_vega10_ppt(
 	atui_branch* gfxclk_dependency = NULL;
 	if (ppt81->gfxclk_dependency) {
 		atuifunc atui_func;
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt81,
 			.suggestbios = ppt81->gfxclk_dependency,
 		};
 		switch (ppt81->gfxclk_dependency->RevId) {
 			case 0:
-				atui_func = ATUI_FUNC(atom_vega10_gfxclk_dependency_table_v1);
+				atui_func = _atui_atom_vega10_gfxclk_dependency_table_v1;
 				break;
 			case 1:
-				atui_func = ATUI_FUNC(atom_vega10_gfxclk_dependency_table_v2);
+				atui_func = _atui_atom_vega10_gfxclk_dependency_table_v2;
 				break;
 			default:
 				atui_args.rename = "gfxclk_dependency (header only stub)";
-				atui_func = ATUI_FUNC(pplib_subtable_header);
+				atui_func = _atui_pplib_subtable_header;
 				assert(0);
 				break;
 		}
@@ -885,18 +874,18 @@ atui_generate_vega10_ppt(
 	atui_branch* powertune = NULL;
 	if (ppt81->powertune) {
 		atuifunc atui_func;
-		struct atui_funcify_args atui_args = {
+		atuifunc_args atui_args = {
 			.atomtree = ppt81,
 			.suggestbios = ppt81->powertune
 		};
 		switch (ppt81->powertune->RevId) {
-			case 5: atui_func = ATUI_FUNC(atom_vega10_powertune_table_v1);break;
-			case 6: atui_func = ATUI_FUNC(atom_vega10_powertune_table_v2);break;
-			default:atui_func = ATUI_FUNC(atom_vega10_powertune_table_v3);break;
+			case 5: atui_func = _atui_atom_vega10_powertune_table_v1;break;
+			case 6: atui_func = _atui_atom_vega10_powertune_table_v2;break;
+			default:atui_func = _atui_atom_vega10_powertune_table_v3;break;
 			/*
 			default:
 				atui_args.rename = "powertune (header only stub)";
-				atui_func = ATUI_FUNC(pplib_subtable_header);
+				atui_func = _atui_pplib_subtable_header;
 				break;
 			*/
 		};
@@ -966,16 +955,16 @@ atui_generate_smc_pptable(
 		struct atomtree_powerplay_table* const ppt,
 		void const* const smc_pptable
 		) {
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = ppt,
 		.suggestbios = smc_pptable,
 	};
 	switch (ver) {
-		case v3_0: return ATUI_FUNC(smu11_smcpptable_v3)(&atui_args);
-		case v5_0: return ATUI_FUNC(smu11_smcpptable_v5)(&atui_args);
+		case v3_0: return _atui_smu11_smcpptable_v3(&atui_args);
+		case v5_0: return _atui_smu11_smcpptable_v5(&atui_args);
 		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
-		case v7_0: return ATUI_FUNC(smu11_smcpptable_v7)(&atui_args);
-		case v8_0: return ATUI_FUNC(smu11_smcpptable_v8)(&atui_args);
+		case v7_0: return _atui_smu11_smcpptable_v7(&atui_args);
+		case v8_0: return _atui_smu11_smcpptable_v8(&atui_args);
 		default: assert(0);
 	}
 	return NULL;
@@ -992,7 +981,7 @@ grow_ppt(
 	atui_branch* atui_ppt;
 	atui_branch* atui_smctable = NULL;
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = ppt,
 		.suggestbios = ppt->leaves,
 		.import_branches = &atui_smctable,
@@ -1000,13 +989,13 @@ grow_ppt(
 	};
 	switch (ppt->ver) {
 		case v1_1:
-			atui_ppt = ATUI_FUNC(atom_powerplay_info_v1)(&atui_args);
+			atui_ppt = _atui_atom_powerplay_info_v1(&atui_args);
 			break;
 		case v2_1:
-			atui_ppt = ATUI_FUNC(atom_powerplay_info_v2)(&atui_args);
+			atui_ppt = _atui_atom_powerplay_info_v2(&atui_args);
 			break;
 		case v3_1:
-			atui_ppt = ATUI_FUNC(atom_powerplay_info_v3)(&atui_args);
+			atui_ppt = _atui_atom_powerplay_info_v3(&atui_args);
 			break;
 		case v6_1:
 		case v5_1:
@@ -1024,7 +1013,7 @@ grow_ppt(
 				ppt->v11_0.smc_pptable_ver,
 				ppt, &(ppt->v11_0.leaves->smc_pptable)
 			);
-			atui_ppt = ATUI_FUNC(atom_vega20_powerplay_table)(&atui_args);
+			atui_ppt = _atui_atom_vega20_powerplay_table(&atui_args);
 			break;
 		case v14_0:
 		case v12_0:
@@ -1032,7 +1021,7 @@ grow_ppt(
 				ppt->v12_0.smc_pptable_ver,
 				ppt, &(ppt->v12_0.leaves->smc_pptable)
 			);
-			atui_ppt = ATUI_FUNC(smu_11_0_powerplay_table)(&atui_args);
+			atui_ppt = _atui_smu_11_0_powerplay_table(&atui_args);
 			break;
 		case v19_0: // 6400
 		case v18_0: // navi2 xx50
@@ -1042,13 +1031,13 @@ grow_ppt(
 				ppt->v15_0.smc_pptable_ver,
 				ppt, &(ppt->v15_0.leaves->smc_pptable)
 			);
-			atui_ppt = ATUI_FUNC(smu_11_0_7_powerplay_table)(&atui_args);
+			atui_ppt = _atui_smu_11_0_7_powerplay_table(&atui_args);
 			break;
 		default:
 			atui_args.rename = (
 				"smu_powerplay_table_header (header only stub)"
 			);
-			atui_ppt = ATUI_FUNC(smu_powerplay_table_header)(&atui_args);
+			atui_ppt = _atui_smu_powerplay_table_header(&atui_args);
 			break;
 	}
 	return atui_ppt;
@@ -1063,20 +1052,20 @@ autogen_regblock_register_sequence(
 		struct atomtree_init_reg_block const* const at_regblock
 		) {
 	uint8_t const num_data_entries = at_regblock->num_data_entries;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.suggestbios = &(data_block->block_id)
 	};
 	atui_branch** const all_fields = malloc(
 		(1+num_data_entries) * sizeof(atui_branch*)
 	);
-	all_fields[0] = ATUI_FUNC(atom_mc_register_setting_id)(&atui_args);
+	all_fields[0] = _atui_atom_mc_register_setting_id(&atui_args);
 	atui_branch** const reg_data_fields = all_fields + 1;
 
 	for (uint8_t i=0; i < num_data_entries; i++) {
 		atui_args.suggestbios = &(data_block->reg_data[i]);
 
 		reg_data_fields[i] = func_playlist[i].atui_branch_func(&atui_args);
-		if  (ATUI_FUNC(unknown_reg_data) == func_playlist[i].atui_branch_func) {
+		if  (_atui_unknown_reg_data == func_playlist[i].atui_branch_func) {
 			sprintf(reg_data_fields[i]->leaves[0].name,
 				"bad register index [%02u]: 0x%04X",
 				i,  func_playlist[i].address
@@ -1210,7 +1199,7 @@ grow_init_reg_block(
 	};
 
 	atui_branch* atui_strap;
-	struct atui_funcify_args atui_args = {0};
+	atuifunc_args atui_args = {0};
 	char const* vendor_part[2] = {0};
 	bool const uses_vendor_parts = (NULL != strap_format_old);
 	bool const vram_module_v8_hack = (
@@ -1293,16 +1282,16 @@ grow_mem_clk_patch(
 	atuifunc atui_strap_func = NULL;
 	switch (mem_clk_patch->reg_set) {
 		case TIMINGS_SET_POLARIS:
-			atui_strap_func = ATUI_FUNC(timings_set_polaris);
+			atui_strap_func = _atui_timings_set_polaris;
 			break;
 		case TIMINGS_SET_ISLANDS_DDR3:
-			atui_strap_func = ATUI_FUNC(timings_set_islands_ddr3);
+			atui_strap_func = _atui_timings_set_islands_ddr3;
 			break;
 		case TIMINGS_SET_ISLANDS_GDDR5:
-			atui_strap_func = ATUI_FUNC(timings_set_islands_gddr5);
+			atui_strap_func = _atui_timings_set_islands_gddr5;
 			break;
 		case TIMINGS_SET_FIJI:
-			atui_strap_func = ATUI_FUNC(timings_set_fiji);
+			atui_strap_func = _atui_timings_set_fiji;
 			break;
 	}
 	return grow_init_reg_block(mem_clk_patch, vram_modules, atui_strap_func);
@@ -1365,37 +1354,37 @@ grow_atom_memory_timing_format(
 	);
 
 	atui_branch* atui_mrs[4] = {NULL};
-	struct atui_funcify_args atui_mrs_args = {0};
+	atuifunc_args atui_mrs_args = {0};
 	atuifunc atui_mrs_funcs[lengthof(atui_mrs)] = {
-		ATUI_FUNC(atui_nullstruct) // easier than null-testing
+		_atui_atui_nullstruct // easier than null-testing
 	};
 	switch (memory_type) { // mrs in straps
 		case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
-			atui_mrs_funcs[0] = ATUI_FUNC(ddr2_mr0);
-			atui_mrs_funcs[1] = ATUI_FUNC(ddr2_emr1);
-			atui_mrs_funcs[2] = ATUI_FUNC(ddr2_emr2);
+			atui_mrs_funcs[0] = _atui_ddr2_mr0;
+			atui_mrs_funcs[1] = _atui_ddr2_emr1;
+			atui_mrs_funcs[2] = _atui_ddr2_emr2;
 			break;
 		case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
-			atui_mrs_funcs[0] = ATUI_FUNC(ddr3_mr0);
-			atui_mrs_funcs[1] = ATUI_FUNC(ddr3_mr1);
-			atui_mrs_funcs[2] = ATUI_FUNC(ddr3_mr2);
+			atui_mrs_funcs[0] = _atui_ddr3_mr0;
+			atui_mrs_funcs[1] = _atui_ddr3_mr1;
+			atui_mrs_funcs[2] = _atui_ddr3_mr2;
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR3:
-			atui_mrs_funcs[0] = ATUI_FUNC(gddr3_mr0);
-			atui_mrs_funcs[1] = ATUI_FUNC(gddr3_emr1);
+			atui_mrs_funcs[0] = _atui_gddr3_mr0;
+			atui_mrs_funcs[1] = _atui_gddr3_emr1;
 			// GDDR3 has no MR2
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR4:
-			atui_mrs_funcs[0] = ATUI_FUNC(gddr4_mr0);
-			atui_mrs_funcs[1] = ATUI_FUNC(gddr4_emr1);
-			atui_mrs_funcs[2] = ATUI_FUNC(gddr4_emr2);
+			atui_mrs_funcs[0] = _atui_gddr4_mr0;
+			atui_mrs_funcs[1] = _atui_gddr4_emr1;
+			atui_mrs_funcs[2] = _atui_gddr4_emr2;
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 		case ATOM_DGPU_VRAM_TYPE_GDDR5:
-			atui_mrs_funcs[0] = ATUI_FUNC(gddr5_mr0);
-			atui_mrs_funcs[1] = ATUI_FUNC(gddr5_mr1);
-			atui_mrs_funcs[2] = ATUI_FUNC(gddr5_mr4);
-			atui_mrs_funcs[3] = ATUI_FUNC(gddr5_mr5);
+			atui_mrs_funcs[0] = _atui_gddr5_mr0;
+			atui_mrs_funcs[1] = _atui_gddr5_mr1;
+			atui_mrs_funcs[2] = _atui_gddr5_mr4;
+			atui_mrs_funcs[3] = _atui_gddr5_mr5;
 			break;
 		default:
 			assert(0);
@@ -1404,7 +1393,7 @@ grow_atom_memory_timing_format(
 	
 
 	atui_branch* atui_timings;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = vram_module,
 		.import_branches = atui_mrs,
 		.num_import_branches = lengthof(atui_mrs),
@@ -1422,9 +1411,7 @@ grow_atom_memory_timing_format(
 					atui_mrs[2] = atui_mrs_funcs[2](&atui_mrs_args);
 				}
 				atui_args.suggestbios = strap.raw;
-				atui_timings = ATUI_FUNC(atom_memory_timing_format_v0)(
-					&atui_args
-				);
+				atui_timings = _atui_atom_memory_timing_format_v0(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_0->ClkRange / 100)
 				);
@@ -1441,9 +1428,7 @@ grow_atom_memory_timing_format(
 				atui_mrs_args.suggestbios = &(strap.v1_1->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
 				atui_args.suggestbios = strap.raw;
-				atui_timings = ATUI_FUNC(atom_memory_timing_format_v1)(
-					&atui_args
-				);
+				atui_timings = _atui_atom_memory_timing_format_v1(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_1->ClkRange / 100)
 				);
@@ -1462,9 +1447,7 @@ grow_atom_memory_timing_format(
 				atui_mrs_args.suggestbios = &(strap.v1_2->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
 				atui_args.suggestbios = strap.raw;
-				atui_timings = ATUI_FUNC(atom_memory_timing_format_v2)(
-					&atui_args
-				);
+				atui_timings = _atui_atom_memory_timing_format_v2(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_2->ClkRange / 100)
 				);
@@ -1485,38 +1468,38 @@ grow_mr2_mr3(
 		void* const mr2,
 		void* const mr3
 		) {
-	struct atui_funcify_args atui_mrs_args = {0};
+	atuifunc_args atui_mrs_args = {0};
 	switch (memory_type) {
 		case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
 			atui_mrs_args.suggestbios = mr2;
-			targets[0] = ATUI_FUNC(ddr2_emr2)(&atui_mrs_args);
+			targets[0] = _atui_ddr2_emr2(&atui_mrs_args);
 			atui_mrs_args.suggestbios = mr3;
-			targets[1] = ATUI_FUNC(ddr2_emr3)(&atui_mrs_args);
+			targets[1] = _atui_ddr2_emr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
 			atui_mrs_args.suggestbios = mr2;
-			targets[0] = ATUI_FUNC(ddr3_mr2)(&atui_mrs_args);
+			targets[0] = _atui_ddr3_mr2(&atui_mrs_args);
 			atui_mrs_args.suggestbios = mr3;
-			targets[1] = ATUI_FUNC(ddr3_mr3)(&atui_mrs_args);
+			targets[1] = _atui_ddr3_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR4:
 			atui_mrs_args.suggestbios = mr2;
-			targets[0] = ATUI_FUNC(gddr4_emr2)(&atui_mrs_args);
+			targets[0] = _atui_gddr4_emr2(&atui_mrs_args);
 			atui_mrs_args.suggestbios = mr3;
-			targets[1] = ATUI_FUNC(gddr4_emr3)(&atui_mrs_args);
+			targets[1] = _atui_gddr4_emr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 		case ATOM_DGPU_VRAM_TYPE_GDDR5:
 			atui_mrs_args.suggestbios = mr2;
-			targets[0] = ATUI_FUNC(gddr5_mr2)(&atui_mrs_args);
+			targets[0] = _atui_gddr5_mr2(&atui_mrs_args);
 			atui_mrs_args.suggestbios = mr3;
-			targets[1] = ATUI_FUNC(gddr5_mr3)(&atui_mrs_args);
+			targets[1] = _atui_gddr5_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_HBM:
 			atui_mrs_args.suggestbios = mr2;
-			targets[0] = ATUI_FUNC(hbm_mr2)(&atui_mrs_args);
+			targets[0] = _atui_hbm_mr2(&atui_mrs_args);
 			atui_mrs_args.suggestbios = mr3;
-			targets[1] = ATUI_FUNC(hbm_mr3)(&atui_mrs_args);
+			targets[1] = _atui_hbm_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR3: // GDDR3 has no MR2,MR3
 			targets[0] = NULL;
@@ -1616,7 +1599,7 @@ grow_vram_module_v1_7(
 		NULL,  NULL,NULL,  count,NULL
 	);
 
-	struct atui_funcify_args atui_map_args = {
+	atuifunc_args atui_map_args = {
 		.rename = "ChannelMapCfg"
 	};
 	atui_branch* atui_vmod;
@@ -1626,9 +1609,9 @@ grow_vram_module_v1_7(
 
 		atui_map_args.suggestbios = &(vmod->v1_7->ChannelMapCfg);
 		if (v7_1 == vmod->gmc_bitfields_ver) {
-			atui_children[0] = ATUI_FUNC(mc_shared_chremap_7_1)(&atui_map_args);
+			atui_children[0] = _atui_mc_shared_chremap_7_1(&atui_map_args);
 		} else { // 6.0
-			atui_children[0] = ATUI_FUNC(mc_shared_chremap_6_0)(&atui_map_args);
+			atui_children[0] = _atui_mc_shared_chremap_6_0(&atui_map_args);
 		}
 
 		grow_mr2_mr3(
@@ -2039,11 +2022,11 @@ grow_vram_info_v2_3(
 
 		atui_branch* atui_strap;
 		atuifunc atui_strap_func;
-		struct atui_funcify_args atui_args = {0};
+		atuifunc_args atui_args = {0};
 		if (vi23->uses_vega20_timings) {
-			atui_strap_func = ATUI_FUNC(timings_set_vega20);
+			atui_strap_func = _atui_timings_set_vega20;
 		} else {
-			atui_strap_func = ATUI_FUNC(timings_set_vega10);
+			atui_strap_func = _atui_timings_set_vega10;
 		}
 		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
@@ -2151,8 +2134,8 @@ grow_vram_info_v2_4(
 
 		// to have similar topology like the rest
 		atui_branch* atui_strap;
-		atuifunc const atui_strap_func = ATUI_FUNC(timings_set_navi1);
-		struct atui_funcify_args atui_args = {0};
+		atuifunc const atui_strap_func = _atui_timings_set_navi1;
+		atuifunc_args atui_args = {0};
 		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
 			atui_args.suggestbios = data_blocks[i];
@@ -2572,33 +2555,33 @@ grow_voltageobject_info_v3_1(
 	);
 
 	atui_branch* atui_volt_object;
-	struct atui_funcify_args atui_args = {0};
+	atuifunc_args atui_args = {0};
 	atuifunc atui_vobj_func;
 	for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 		switch (voltage_objects[i].obj->header.voltage_mode) {
 			case VOLTAGE_OBJ_GPIO_LUT:
 			case VOLTAGE_OBJ_PHASE_LUT:
-				atui_vobj_func = ATUI_FUNC(atom_gpio_voltage_object_v1);
+				atui_vobj_func = _atui_atom_gpio_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
-				atui_vobj_func = ATUI_FUNC(atom_i2c_voltage_object_v1);
+				atui_vobj_func = _atui_atom_i2c_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_SVID2:
-				atui_vobj_func = ATUI_FUNC(atom_svid2_voltage_object_v1);
+				atui_vobj_func = _atui_atom_svid2_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_MERGED_POWER:
-				atui_vobj_func = ATUI_FUNC(atom_merged_voltage_object_v1);
+				atui_vobj_func = _atui_atom_merged_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_EVV:
-				atui_vobj_func = ATUI_FUNC(atom_evv_voltage_object_v1);
+				atui_vobj_func = _atui_atom_evv_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
 			case VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT:
 			case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
-				atui_vobj_func = ATUI_FUNC(atom_leakage_voltage_object_v1);
+				atui_vobj_func = _atui_atom_leakage_voltage_object_v1;
 				break;
 			default:
-				atui_vobj_func = ATUI_FUNC(atom_voltage_object_header);
+				atui_vobj_func = _atui_atom_voltage_object_header;
 				assert(0);
 				break;
 		}
@@ -2630,22 +2613,22 @@ grow_voltageobject_info_v4_1(
 	);
 
 	atui_branch* atui_volt_object;
-	struct atui_funcify_args atui_args = {0};
+	atuifunc_args atui_args = {0};
 	atuifunc atui_vobj_func;
 	for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 		switch (voltage_objects[i].obj->header.voltage_mode) {
 			case VOLTAGE_OBJ_GPIO_LUT:
 			case VOLTAGE_OBJ_PHASE_LUT:
-				atui_vobj_func = ATUI_FUNC(atom_gpio_voltage_object_v1);
+				atui_vobj_func = _atui_atom_gpio_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
-				atui_vobj_func = ATUI_FUNC(atom_i2c_voltage_object_v1);
+				atui_vobj_func = _atui_atom_i2c_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_SVID2:
-				atui_vobj_func = ATUI_FUNC(atom_svid2_voltage_object_v2);
+				atui_vobj_func = _atui_atom_svid2_voltage_object_v2;
 				break;
 			case VOLTAGE_OBJ_MERGED_POWER:
-				atui_vobj_func = ATUI_FUNC(atom_merged_voltage_object_v1);
+				atui_vobj_func = _atui_atom_merged_voltage_object_v1;
 				break;
 			case VOLTAGE_OBJ_EVV:
 			case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
@@ -2653,7 +2636,7 @@ grow_voltageobject_info_v4_1(
 			case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
 				assert(0);
 			default:
-				atui_vobj_func = ATUI_FUNC(atom_voltage_object_header);
+				atui_vobj_func = _atui_atom_voltage_object_header;
 				assert(0);
 				break;
 		}
@@ -2893,20 +2876,20 @@ grow_atom_rom_header(
 	atui_branch* const atui_dt = grow_datatables(atree);
 	atui_branch* atui_rom_header;
 	atuifunc atui_func;
-	struct atui_funcify_args atui_args = {
+	atuifunc_args atui_args = {
 		.atomtree = rom_header,
 		.suggestbios = rom_header->leaves,
 		.import_branches = &atui_dt,
 		.num_import_branches = 1,
 	};
 	switch (rom_header->ver) {
-		case v1_1: atui_func = ATUI_FUNC(atom_rom_header_v1_1); break;
-		case v2_1: atui_func = ATUI_FUNC(atom_rom_header_v2_1); break;
+		case v1_1: atui_func = _atui_atom_rom_header_v1_1; break;
+		case v2_1: atui_func = _atui_atom_rom_header_v2_1; break;
 		case v2_3: atui_args.rename = "atom_rom_header_v2_2 (forced)"; fall;
-		case v2_2: atui_func = ATUI_FUNC(atom_rom_header_v2_2); break;
+		case v2_2: atui_func = _atui_atom_rom_header_v2_2; break;
 		default:
 			atui_args.rename = "atom_rom_header (header only stub)";
-			atui_func = ATUI_FUNC(atom_common_table_header);
+			atui_func = _atui_atom_common_table_header;
 			break;
 	}
 	return atui_func(&atui_args);
@@ -2924,10 +2907,10 @@ grow_pci_tables(
 	);
 
 	atui_branch* atui_pci;
-	struct atui_funcify_args atui_args = {0};
+	atuifunc_args atui_args = {0};
 	atuifunc const atui_pci_func[] = { // jump table
-		ATUI_FUNC(pci_rom_tables),
-		ATUI_FUNC(efi_pci_device_driver_image),
+		_atui_pci_rom_tables,
+		_atui_efi_pci_device_driver_image,
 	};
 	for (uint8_t i=0; i < atree_pci->num_images; i++) {
 		atui_args.suggestbios = tables[i].header;

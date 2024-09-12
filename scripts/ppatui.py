@@ -205,7 +205,7 @@ static_assert(%u < INT16_MAX); // reserve sign as flag for register_set_bsearch
 			.address = %s,
 			.index_name = "%s",
 			.field_name = "%s",
-			.atui_branch_func = ATUI_FUNC(%s),
+			.atui_branch_func = _atui_%s,
 		},
 """
 	out_text = cfile_header
@@ -828,7 +828,7 @@ indent + "{\n"
 			leaf_text_extra %= (leaf.hi, leaf.lo)
 		elif leaf.fancy in (ATUI_SHOOT, ATUI_GRAFT):
 			leaf_text_extra = (
-				child_indent + ".branch_bud = ATUI_FUNC(%s),\n"
+				child_indent + ".branch_bud = _atui_%s,\n"
 			)
 			leaf_text_extra %= (leaf.fancy_data,)
 		elif leaf.fancy == ATUI_DYNARRAY:
@@ -934,7 +934,10 @@ def branches_to_c(
 # These arrays need to be in a function to handle the bios-> and atomtree->
 # everywhere. trying to globalise the vars gets annoying real fast.
 	branch_template = """
-PPATUI_HEADERIFY(%s) {
+atui_branch* 
+_atui_%s(
+		atuifunc_args const* const args
+		) {
 	%s %s const* const bios = args->suggestbios;
 	struct %s const* const atomtree = args->atomtree;
 
@@ -1010,7 +1013,12 @@ def branches_to_h(
 #define %s_H
 
 """
-	header_entry = "PPATUI_HEADERIFY(%s);\n"
+	header_entry = """\
+atui_branch*
+_atui_%s(
+		atuifunc_args const* args
+		);
+"""
 	header_ender = "\n#endif\n"
 
 	out_text = header_header % (fname.upper(), fname.upper())

@@ -9,12 +9,11 @@ C preprocessor side of ATUI table generation
 
 // Thing to call to instanciate an atui_branch
 #define ATUI_MAKE_BRANCH(\
-		atom_struct_name,\
-		new_name, atomtree_pointer, bios_pointer,\
+		atom_struct_name,  new_name,\
+		atomtree_pointer, bios_pointer,\
 		num_branches, branch_import_pointer)\
-\
-	_##atom_struct_name##_atui(\
-		&(struct atui_funcify_args const) {\
+	_atui_##atom_struct_name(\
+		& (atuifunc_args const) {\
 			.rename = new_name,\
 			.atomtree = atomtree_pointer,\
 			.suggestbios = bios_pointer,\
@@ -31,10 +30,6 @@ C preprocessor side of ATUI table generation
 	parent->num_branches++;\
 } while(0)
 
-// ATUI function access
-#define ATUI_FUNC(atomstruct)\
-	_##atomstruct##_atui
-
 // enum access
 // ATUI_ENUM_ARRAY_LENGTH is predefined
 #define ATUI_ENUM_ARRAY _atui_enumarray
@@ -44,12 +39,6 @@ C preprocessor side of ATUI table generation
 /***************************** PREPROCESSOR TOOLS *****************************/
 
 #define _atui_enum_ATUI_NULL ATUI_NULL
-
-// To define the header entries for the aformentioned allocator functions.
-#define PPATUI_HEADERIFY(atom_struct)\
-	atui_branch* ATUI_FUNC(atom_struct)(\
-		struct atui_funcify_args const* const args\
-	)
 
 #define _PPATUI_NULLPTR(var) _Generic((var),\
 	nullptr_t: nullptr,\

@@ -155,7 +155,7 @@ print_atui_graft_leaf(
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
-	struct atui_funcify_args branch_args = {
+	atuiargs branch_args = {
 		.atomtree = global->atomtree,
 		.rename = leaf->name,
 		.suggestbios = leaf->val,
@@ -184,7 +184,7 @@ print_atui_shoot_leaf(
 	atui_branch** const brancher = global->branches.pos;
 	global->branches.pos++;
 
-	struct atui_funcify_args branch_args = {
+	atuiargs branch_args = {
 		.atomtree = global->atomtree,
 	};
 	if (level->suggestbios) {
@@ -339,7 +339,7 @@ atui_leaves_printer(
 atui_branch*
 atui_branch_allocator(
 		struct atui_branch_data const* const embryo,
-		struct atui_funcify_args const* const args
+		atuiargs const* const args
 		) {
 	struct global_tracker tracker = {
 		.atomtree = args->atomtree,

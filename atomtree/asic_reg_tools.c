@@ -139,7 +139,7 @@ register_set_build_atuifunc_playlist(
 		} else { // unknown index
 			playlist[playlist_i] = (struct register_set_entry) {
 				.address = register_index[rii].RegIndex,				
-				.atui_branch_func = ATUI_FUNC(unknown_reg_data),
+				.atui_branch_func = _atui_unknown_reg_data,
 			};
 		}
 		playlist_i++;
