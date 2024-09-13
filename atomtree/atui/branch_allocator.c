@@ -345,7 +345,8 @@ atui_branch_allocator(
 		.atomtree = args->atomtree,
 	};
 
-	atui_branch* const table = calloc(1, sizeof(atui_branch));
+	atui_branch* const table = malloc(sizeof(atui_branch));
+	*table = embryo->seed;
 
 	atui_branch** branches = NULL;
 	atui_branch** grafters = NULL;
@@ -446,23 +447,132 @@ atui_branch_allocator(
 		branches[i]->parent_branch = table;
 	}
 
-
-	table->origname = embryo->origname;
-	table->structname = embryo->structname;
 	if (args->rename) {
+		assert(strlen(args->rename) < sizeof((atui_branch){}.name));
 		strcpy(table->name, args->rename);
-	} else {
-		strcpy(table->name, embryo->origname);
 	}
-	assert(strlen(table->name) < sizeof(((atui_branch*)0)->name));
-
-	memcpy(table->description, embryo->description, sizeof(table->description));
-
-	table->table_start = embryo->table_start;
-	table->table_size = embryo->table_size;
-	table->prefer_contiguous = (
-		embryo->sizeofbios && (embryo->sizeofbios >= embryo->table_size)
-	);
 
 	return table;
 }
+
+
+
+static void
+_atui_destroy_leaves(
+		atui_leaf* const leaves,
+		uint16_t const num_leaves
+		) {
+	for (uint16_t i = 0; i < num_leaves; i++) {
+		if (leaves[i].num_child_leaves) {
+			_atui_destroy_leaves(
+				leaves[i].child_leaves, leaves[i].num_child_leaves
+			);
+			free(leaves[i].child_leaves);
+		}
+	}
+}
+void
+atui_destroy_tree(
+		atui_branch* const tree
+		) {
+	// a reference implementation. deallocates the data set up by
+	// atui_branch_allocator
+	if (tree->leaf_count) {
+		_atui_destroy_leaves(tree->leaves, tree->leaf_count);
+		free(tree->leaves);
+	}
+	while (tree->num_branches) {
+		tree->num_branches--;
+		atui_destroy_tree(tree->child_branches[tree->num_branches]);
+	}
+	free(tree->child_branches);
+	free(tree);
+}
+
+
+static void
+atui_assimilate_leaves(
+		atui_branch* const dest,
+		atui_branch* const* const src_array,
+		uint16_t const src_array_len
+		) {
+	uint16_t new_leaf_count = dest->leaf_count;
+	for (uint16_t i=0; i < src_array_len; i++) {
+		new_leaf_count += src_array[i]->leaf_count;
+	}
+
+	if (0 == new_leaf_count) {
+		return;
+	}
+
+	atui_leaf* const leaves = realloc(
+		dest->leaves,  (new_leaf_count * sizeof(atui_leaf))
+	);
+
+	uint16_t dest_leaf_i = dest->leaf_count;
+	for (uint16_t i=0; i < src_array_len; i++) {
+		atui_branch const* src = src_array[i];
+		uint16_t src_leaf_i = 0;
+		while (src_leaf_i < src->leaf_count) {
+			leaves[dest_leaf_i] = src->leaves[src_leaf_i];
+			leaves[dest_leaf_i].parent_branch = dest;
+			src_leaf_i++;
+			dest_leaf_i++;
+		}
+	}
+	assert(dest_leaf_i == new_leaf_count);
+
+	dest->leaves = leaves;
+	dest->leaf_count = new_leaf_count;
+}
+static void
+atui_assimilate_branches(
+		atui_branch* const dest,
+		atui_branch* const* const src_array,
+		uint16_t const src_array_len
+		) {
+	uint16_t new_num_branches = dest->num_branches;
+	for (uint16_t i=0; i < src_array_len; i++) {
+		new_num_branches += src_array[i]->num_branches;
+	}
+
+	if (0 == new_num_branches) {
+		return;
+	}
+
+	atui_branch** const child_branches = realloc(
+		dest->child_branches,  (new_num_branches * sizeof(atui_branch*))
+	);
+
+	uint16_t dest_branch_i = dest->num_branches;
+	for (uint16_t i=0; i < src_array_len; i++) {
+		atui_branch const* src = src_array[i];
+		uint16_t src_branch_i = 0;
+		while (src_branch_i < src->num_branches) {
+			child_branches[dest_branch_i] = src->child_branches[src_branch_i];
+			child_branches[dest_branch_i]->parent_branch = dest;
+			src_branch_i++;
+			dest_branch_i++;
+		}
+	}
+	assert(dest_branch_i == new_num_branches);
+
+	dest->child_branches = child_branches;
+	dest->num_branches = new_num_branches;
+}
+void
+atui_assimilate(
+		atui_branch* const dest,
+		atui_branch* const* const src_array,
+		uint16_t const src_array_len
+		) {
+	atui_assimilate_leaves(dest, src_array, src_array_len);
+	atui_assimilate_branches(dest, src_array, src_array_len);
+
+	for (uint16_t i=0; i < src_array_len; i++) {
+		free(src_array[i]->leaves);
+		free(src_array[i]->child_branches);
+		free(src_array[i]);
+	}	
+}
+

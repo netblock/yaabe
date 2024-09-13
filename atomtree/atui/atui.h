@@ -287,21 +287,6 @@ atui_enum_lsearch( // linear; left
 		int64_t val
 		);
 
-// atui has auxiliary pointers to hang extra data off of and this deallocator
-// doesn't consider.
-void
-atui_destroy_tree(
-		atui_branch* tree
-		);
-
-// Destructively take all leaves and child branches of all source branches.
-// Does not modify bios mapping info
-void
-atui_assimilate(
-		atui_branch* dest,
-		atui_branch* const* src_array,
-		uint16_t src_array_len
-		);
 
 
 // atui allocator functions internal structs:
@@ -339,22 +324,15 @@ struct subleaf_meta {
 };
 
 struct atui_branch_data {
-	char const* const origname;
-	char const* const structname;
-	char const* const description[LANG_TOTALLANGS];
+	atui_branch seed;
 
-	// position and size of the struct the branch represents
-	void* const table_start;
-	size_t const table_size;
-	size_t const sizeofbios;
+	// does not include kids
+	atui_leaf const* leaves_init;
+	uint32_t num_leaves_init;
 
-	// leaves straightforward:
-	atui_leaf const* const leaves_init;
-
-	uint32_t const num_leaves_init; // sizeof(); does not include kids
-	uint32_t const computed_num_leaves;
-	uint32_t const computed_num_graft;
-	uint32_t const computed_num_shoot;
+	uint32_t computed_num_leaves;
+	uint32_t computed_num_graft;
+	uint32_t computed_num_shoot;
 };
 
 atui_branch*
@@ -362,6 +340,22 @@ atui_branch_allocator(
 	struct atui_branch_data const* embryo,
 	atuifunc_args const* args
 	);
+
+// atui has auxiliary pointers to hang extra data off of and this deallocator
+// doesn't consider.
+void
+atui_destroy_tree(
+		atui_branch* tree
+		);
+
+// Destructively take all leaves and child branches of all source branches.
+// Does not modify bios mapping info
+void
+atui_assimilate(
+		atui_branch* dest,
+		atui_branch* const* src_array,
+		uint16_t src_array_len
+		);
 
 #include "auto_includes.h"
 

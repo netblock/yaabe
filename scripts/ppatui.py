@@ -129,6 +129,8 @@ def description_to_text(
 		indent:str
 		):
 	# description segment meant for a segment of a c file
+	#indended to be used like
+	# ".description = {%s}" % description_to_text(...)
 	if (description is None):
 		return ""
 	lang_type = ""
@@ -140,11 +142,7 @@ def description_to_text(
 		descriptions[descr_index] = trans["text"]
 
 	child_indent = indent + "\t"
-	descr_template = (
-indent + ".description = {\n"
-+ "%s"
-+ indent + "},\n"
-	)
+	descr_template = "\n%s" + indent
 
 	des_entry_template = child_indent + "\"%s\",\n"
 	des_null_entry_template = child_indent + "NULL,\n"
@@ -345,7 +343,7 @@ struct atui_enum const _atui_enumarray[%u] = {
 		.name_length = %u,
 		.name = "%s",
 		.num_entries = %u,
-%s\
+		.description = {%s},
 		.enum_array = (struct atui_enum_entry const[%u]) {
 %s\
 		},
@@ -356,7 +354,7 @@ struct atui_enum const _atui_enumarray[%u] = {
 				.name = \"%s\",
 				.val = %s,
 				.name_length = %u,
-%s\
+				.description = {%s},
 			},
 """
 	enum_entry_assert_template = """\
@@ -757,20 +755,23 @@ indent + "{\n"
 + child_indent + ".name = \"%s\",\n"
 + child_indent + ".origname = \"%s\",\n"
 
-+ child_indent + ".type.radix = %s,\n"
-+ child_indent + ".type.signed_num = %s,\n"
-+ child_indent + ".type.fraction = %s,\n"
-+ child_indent + ".type.fancy = %s,\n"
-+ child_indent + ".type.disable = %s,\n"
++ child_indent + ".type = {\n"
++ child_indent + "\t.radix = %s,\n"
++ child_indent + "\t.signed_num = %s,\n"
++ child_indent + "\t.fraction = %s,\n"
++ child_indent + "\t.fancy = %s,\n"
++ child_indent + "\t.disable = %s,\n"
++ child_indent + "},\n"
 
 + child_indent + ".num_bytes = _PPATUI_NULLPTR_SIZE(%s),\n"
 + child_indent + ".array_size = 1,\n"
 + child_indent + ".fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
 + child_indent + ".total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
 + child_indent + ".bitfield_hi = _PPATUI_LEAF_BITNESS(%s) - 1,\n"
-+ child_indent + ".val = %s,\n"
 
-+ "%s"
++ child_indent + ".val = %s,\n"
++ child_indent + ".description = {%s},\n"
++ "%s" # extra
 + indent + "},\n"
 )
 
@@ -845,7 +846,6 @@ indent + "{\n"
 		else:
 			assert 0, leaf.fancy
 
-		leaf_text_extra += description_to_text(leaf.description, child_indent)
 		if leaf.parent_is_leaf:
 			leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
 		leaf.name = leaf.name.replace("\"","\\\"")
@@ -855,7 +855,9 @@ indent + "{\n"
 		leaves_text += leaf_template % (
 			leaf.name, leaf.name,
 			leaftype[0], leaftype[1], leaftype[2], leaftype[3], leaftype[4],
-			var_meta, var_meta, var_meta, var_meta,  var_access,
+			var_meta, var_meta, var_meta, var_meta,
+			var_access,
+			description_to_text(leaf.description, child_indent),
 			leaf_text_extra
 		)
 	return leaves_text
@@ -944,26 +946,36 @@ _atui_%s(
 	atui_leaf const leaves_init[%u] = {
 %s\
 	};
+
 	struct atui_branch_data const branch_embryo = {
-		.origname = "%s",
-		.structname = "%s",
-%s\
-		.table_start = (void*) (%s),
-		.table_size = (%s),
-		.sizeofbios = _PPATUI_NULLPTR_SIZE(*bios),
-		.leaves_init = leaves_init,
+		.seed = {
+			.name = "%s",
+			.origname = "%s",
+			.structname = "%s",
+			.description = {%s},
+			.table_start = (void*) (%s),
+			.table_size = (%s),
+			.prefer_contiguous = (
+				(0 < _PPATUI_NULLPTR_SIZE(*bios))
+				&& (
+					%s
+					<= _PPATUI_NULLPTR_SIZE(*bios)
+				)
+			),
+		},
+
+		.leaves_init =leaves_init,
 		.num_leaves_init = lengthof(leaves_init),
+
 		.computed_num_leaves = %s,
 		.computed_num_graft = %s,
 		.computed_num_shoot = %s,
 	};
 
-	assert(branch_embryo.num_leaves_init < UINT16_MAX);
+	static_assert(lengthof(leaves_init) < UINT16_MAX);
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
 	assert(branch_embryo.computed_num_graft < UINT8_MAX);
 	assert(branch_embryo.computed_num_shoot < UINT8_MAX);
-
-	static_assert(sizeof("%s") <= sizeof(((atui_branch*)0)->name));
 
 	return atui_branch_allocator(&branch_embryo, args);
 }
@@ -986,14 +998,15 @@ _atui_%s(
 
 		out_text += branch_template % (
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
-			len(branch.leaves), leaves_to_text(branch.leaves, "\t\t"),
-			branch.name, branch.c_type, # embryo
-			description_to_text(branch.description, "\t\t"),
-			branch.table_start, branch.table_size,
-			"(%u + %s)" % (counters[0], counters[1]),
+			len(branch.leaves),  leaves_to_text(branch.leaves, "\t\t\t"),
+
+			branch.name, branch.name, branch.c_type, # embryo
+			description_to_text(branch.description, "\t\t\t"),
+			branch.table_start, branch.table_size, branch.table_size,
+
+			"(%u + %s)" % (counters[0], counters[1]), # 'computed'
 			"(%u + %s)" % (counters[2], counters[3]),
 			"(%u + %s)" % (counters[4], counters[5]),
-			branch.name, # assert
 		)
 	return out_text
 
