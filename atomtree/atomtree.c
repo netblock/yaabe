@@ -9,8 +9,6 @@ see atomtree.h and data_tables.h
 //landing is in atombios_parse
 static struct error error = {}; // error handling
 
-//error_assert(&error, ERROR_WARNING, "hello!", NULL == atree);
-
 inline static void
 populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
