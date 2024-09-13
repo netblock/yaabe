@@ -214,7 +214,7 @@ global_default: {
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
-			fancy: "ATUI_ENUM", fancy_data: "ATOM_PP_THERMALCONTROLLER",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->small_power_limit1",
 			name: "small_power_limit1",
@@ -698,7 +698,7 @@ global_default: {
 		}, {
 			access: "bios->CalculateFopt",
 			name: "CalculateFopt",
-			fancy: "ATUI_ENUM", fancy_data: "FOPT_CALC_e",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "Indication whether FW should calculate Fopt or use values below. Reference FOPT_CALC_e",},
 			],
@@ -1282,14 +1282,14 @@ global_default: {
 		}, {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
-			fancy: "ATUI_ENUM", fancy_data: "PwrConfig_e",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "Determines how PMFW calculates the power.",},
 			],
 		}, {
 			access: "bios->CustomerVariant",
 			name: "CustomerVariant",
-			fancy: "ATUI_ENUM", fancy_data: "CUSTOMER_VARIANT_e",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e",},
 			],
@@ -1302,7 +1302,7 @@ global_default: {
 		}, {
 			access: "bios->SmartShiftVersion",
 			name: "SmartShiftVersion",
-			fancy: "ATUI_ENUM", fancy_data: "SMARTSHIFT_VERSION_e",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "Determine what SmartShift feature version is supported",},
 			],
@@ -2222,7 +2222,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "UclkDpmPstates [%02u]",
-					fancy: "ATUI_ENUM", fancy_data: "DPM_PSTATES_e",
+					fancy: "ATUI_ENUM",
 				},],
 			},
 		}, {
@@ -2235,7 +2235,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "FreqTableUclkDiv [%02u]",
-					fancy: "ATUI_ENUM", fancy_data: "UCLK_DIV_e",
+					fancy: "ATUI_ENUM",
 				},],
 			},
 		}, {
@@ -2333,7 +2333,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieGenSpeed [%02u]",
-					fancy: "ATUI_ENUM", fancy_data: "PCIE_SPEED_e",
+					fancy: "ATUI_ENUM",
 				},],
 			},
 		}, {
@@ -2346,7 +2346,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieLaneCount [%02u]",
-					fancy: "ATUI_ENUM", fancy_data: "PCIE_WIDTH_e",
+					fancy: "ATUI_ENUM",
 				},],
 			},
 		}, {

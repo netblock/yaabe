@@ -34,6 +34,7 @@ Enums for ATUI_ENUM
 ]},
 
 {name: "I2cControllerPort_e",
+	aliases: ["I2cControllerPort_u8", "I2cControllerPort_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_PORT_0",
 			description: [
@@ -47,6 +48,7 @@ Enums for ATUI_ENUM
 		},
 ]},
 {name: "I2cControllerName_e",
+	aliases: ["I2cControllerName_u8", "I2cControllerName_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
 		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
@@ -81,6 +83,7 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_NAME_COUNT_SMU13",},
 ]},
 {name: "I2cControllerThrottler_e",
+	aliases: ["I2cControllerThrottler_u8", "I2cControllerThrottler_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_THROTTLER_TYPE_NONE",},
 		{name: "I2C_CONTROLLER_THROTTLER_VR_GFX",},
@@ -105,6 +108,7 @@ Enums for ATUI_ENUM
 ]},
 
 {name: "I2cControllerProtocol_e",
+	aliases: ["I2cControllerProtocol_u8", "I2cControllerProtocol_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_PROTOCOL_VR_XPDE132G5",},
 		{name: "I2C_CONTROLLER_PROTOCOL_VR_IR35217",},
@@ -124,6 +128,7 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_PROTOCOL_INA3221_SMU_11_0x40",},
 ]},
 {name: "I2cControllerSpeed_e",
+	aliases: ["I2cControllerSpeed_u8", "I2cControllerSpeed_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_SPEED_SLOW",},
 		{name: "I2C_CONTROLLER_SPEED_FAST",},

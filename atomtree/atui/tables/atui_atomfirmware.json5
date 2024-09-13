@@ -798,23 +798,23 @@ global_default: {
 		}, {
 			access: "bios->controllerport",
 			name: "controllerport",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerPort_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->controllername",
 			name: "controllername",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerName_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->thermalthrottler",
 			name: "thermalthrottler",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerThrottler_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->i2cprotocol",
 			name: "i2cprotocol",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerProtocol_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->i2cspeed",
 			name: "i2cspeed",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerSpeed_e",
+			fancy: "ATUI_ENUM",
 		},
 	],
 }, {
@@ -827,26 +827,26 @@ global_default: {
 		}, {
 			access: "bios->speed",
 			name: "speed",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerSpeed_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->slaveaddress",
 			name: "slaveaddress",
 		}, {
 			access: "bios->controllerport",
 			name: "controllerport",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerPort_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->controllername",
 			name: "controllername",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerName_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->thermalthrottler",
 			name: "thermalthrottler",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerThrottler_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->i2cprotocol",
 			name: "i2cprotocol",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerProtocol_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->padding",
 			name: "padding",
@@ -862,7 +862,7 @@ global_default: {
 		}, {
 			access: "bios->speed",
 			name: "speed",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerSpeed_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->padding",
 			name: "padding",
@@ -874,19 +874,19 @@ global_default: {
 		}, {
 			access: "bios->controllerport",
 			name: "controllerport",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerPort_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->controllername",
 			name: "controllername",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerName_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->thermalthrottler",
 			name: "thermalthrottler",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerThrottler_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->i2cprotocol",
 			name: "i2cprotocol",
-			fancy: "ATUI_ENUM", fancy_data: "I2cControllerProtocol_e",
+			fancy: "ATUI_ENUM",
 		},
 	],
 }, {
@@ -1660,11 +1660,11 @@ global_default: {
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
-			fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_RATE_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->xgmilinkwidth",
 			name: "xgmilinkwidth",
-			fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_WIDTH_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->xgmifclkfreq",
 			name: "xgmifclkfreq",
@@ -2428,11 +2428,11 @@ global_default: {
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
-			fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_RATE_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->xgmilinkwidth",
 			name: "xgmilinkwidth",
-			fancy: "ATUI_ENUM", fancy_data: "XGMI_LINK_WIDTH_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->XgmiFclkFreq",
 			name: "XgmiFclkFreq",
@@ -3188,7 +3188,7 @@ global_default: {
 		}, {
 			access: "bios->panel_misc",
 			name: "panel_misc",
-			fancy: "ATUI_ENUM", fancy_data: "atom_lcd_info_panel_misc",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->lvds_max_slink_pclk",
 			name: "lvds_max_slink_pclk",
@@ -3249,10 +3249,7 @@ global_default: {
 		}, {
 			access: "bios->dplvdsrxid",
 			name: "dplvdsrxid",
-			fancy: "ATUI_ENUM", fancy_data: "atom_lcd_info_dptolvds_rx_id",
-			description: [
-				{language: "english", text: "eDP->LVDS translator chip. non-common like Realtek might require AMD SW init",},
-			],
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
@@ -3281,7 +3278,7 @@ global_default: {
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -3371,7 +3368,7 @@ global_default: {
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -3504,11 +3501,11 @@ global_default: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -3664,11 +3661,11 @@ global_default: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -3868,11 +3865,11 @@ global_default: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			fancy: "ATUI_ENUM", fancy_data: "atom_spread_spectrum_mode",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -5431,7 +5428,7 @@ global_default: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "atom_dgpu_vram_type",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "enum of atom_dgpu_vram_type",},
 			],
@@ -5451,7 +5448,7 @@ global_default: {
 			access: "bios->density",
 			name: "density",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
@@ -5625,7 +5622,7 @@ global_default: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "atom_dgpu_vram_type",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "enum of atom_dgpu_vram_type",},
 			],
@@ -5645,7 +5642,7 @@ global_default: {
 			access: "bios->density",
 			name: "density",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
@@ -5826,7 +5823,7 @@ global_default: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "atom_dgpu_vram_type",
+			fancy: "ATUI_ENUM",
 			description: [
 				{language: "english", text: "enum of atom_dgpu_vram_type",},
 			],
@@ -5846,7 +5843,7 @@ global_default: {
 			access: "bios->density",
 			name: "density",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
@@ -6239,7 +6236,7 @@ global_default: {
 			access: "bios->density",
 			name: "density",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "DRAM_DENSITY_e",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
@@ -6336,7 +6333,7 @@ global_default: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM", fancy_data: "atom_dgpu_vram_type",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",

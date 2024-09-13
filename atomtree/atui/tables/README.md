@@ -48,6 +48,8 @@ For `leaf_defaults`, the `generic` is for all leaves, except for bitfield
 children and dynarray patterns, which are what `bitchild` and `dynpattern` are
 for respectively.
 
+The `fancy_data` for leaves cannot be inferred through `global_default`.
+
 ``` json5
 global_default: {
 	branch_defaults: {
@@ -229,7 +231,9 @@ first populate the atui enum in `atui_enums.json5`:
 ]},
 ```
 
-And then for the atui leaf,
+And then set `fancy` on the leaf to `ATUI_ENUM`. The type of the enum can be
+inferred provided that the underlying c typ is an enum. If the underlying type
+is not an enum, you must specify the enum name through `fancy_data`.
 
 ``` json5
 {
@@ -239,7 +243,7 @@ And then for the atui leaf,
 	description: [
 		{language: "english", text "..."},
 	],
-	fancy: "ATUI_ENUM", fancy_data: "enum_struct_name"
+	fancy: "ATUI_ENUM",
 },
 ```
 
@@ -393,9 +397,12 @@ The dynarray leaf can follow `ATUI_SUBONLY` and `ATUI_NODISPLAY`.
 # enum
 
 The enums are fairly straightforward as they're about introspecting c enums.
+To promote consolidation if there are multiple underlying types to a given
+enum set, atui enum supports aliases.
 
 ``` json5
 {name: "the_c_enum_struct_name",
+	aliases: ["alt_name1", "alt_name2"],
 	description: [
 		{language: "english", text "..."},
 	],

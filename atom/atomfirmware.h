@@ -439,7 +439,7 @@ struct atom_lcd_info_v2_1 {
 	uint8_t  min_allowed_bl_level;
 	uint8_t  max_allowed_bl_level;
 	uint8_t  bootup_bl_level;
-	uint8_t  dplvdsrxid;
+	enum atom_lcd_info_dptolvds_rx_id dplvdsrxid;
 	uint32_t reserved1[8];
 };
 
@@ -2137,15 +2137,18 @@ struct atom_smc_dpm_info_v4_3 {
 };
 
 
-enum I2cControllerPort_u8:uint8_t  ;
-enum I2cControllerPort_u32:uint32_t  ;
+enum I2cControllerPort_u8:uint8_t;
+enum I2cControllerPort_u32:uint32_t;
 enum I2cControllerPort_e {
 	I2C_CONTROLLER_PORT_0 = 0, // CKSVII2C0
 	I2C_CONTROLLER_PORT_1 = 1, // CKSVII2C1
 };
 
-enum I2cControllerName_u8:uint8_t  ;
-enum I2cControllerName_u32:uint32_t  ;
+enum I2cControllerName_u8:uint8_t;
+enum I2cControllerName_u32:uint32_t;
+enum I2cControllerName_SMU_11_0_0_e:uint8_t;
+enum I2cControllerName_SMU_11_0_7_e:uint8_t;
+enum I2cControllerName_SMU_13_0_7_e:uint8_t;
 enum I2cControllerName_e {
 	I2C_CONTROLLER_NAME_VR_GFX     = 0,
 	I2C_CONTROLLER_NAME_VR_SOC     = 1,
@@ -2164,8 +2167,8 @@ enum I2cControllerName_e {
 	I2C_CONTROLLER_NAME_COUNT_SMU13  = 8,
 };
 
-enum I2cControllerThrottler_u8:uint8_t  ;
-enum I2cControllerThrottler_u32:uint32_t  ;
+enum I2cControllerThrottler_u8:uint8_t;
+enum I2cControllerThrottler_u32:uint32_t;
 enum I2cControllerThrottler_e {
 	I2C_CONTROLLER_THROTTLER_TYPE_NONE  = 0,
 	I2C_CONTROLLER_THROTTLER_VR_GFX     = 1,
@@ -2181,8 +2184,8 @@ enum I2cControllerThrottler_e {
     I2C_CONTROLLER_THROTTLER_INA3221_SMU11_0x40 = 8,
 };
 
-enum I2cControllerProtocol_u8:uint8_t  ;
-enum I2cControllerProtocol_u32:uint32_t  ;
+enum I2cControllerProtocol_u8:uint8_t;
+enum I2cControllerProtocol_u32:uint32_t;
 enum I2cControllerProtocol_e {
 	I2C_CONTROLLER_PROTOCOL_VR_XPDE132G5 = 0,
 	I2C_CONTROLLER_PROTOCOL_VR_IR35217   = 1,
@@ -2198,8 +2201,8 @@ enum I2cControllerProtocol_e {
     I2C_CONTROLLER_PROTOCOL_INA3221_SMU_11_0x40 = 3,
 };
 
-enum I2cControllerSpeed_u8:uint8_t  ;
-enum I2cControllerSpeed_u32:uint32_t  ;
+enum I2cControllerSpeed_u8:uint8_t;
+enum I2cControllerSpeed_u32:uint32_t;
 enum I2cControllerSpeed_e {
 	I2C_CONTROLLER_SPEED_SLOW = 0,
 	I2C_CONTROLLER_SPEED_FAST = 1,
@@ -2212,15 +2215,15 @@ enum I2cControllerSpeed_e {
     I2C_SPEED_HIGH_2M      = 5, // 2.3 Mbits/s
 };
 
-enum I2cPort_u8:uint8_t  ;
-enum I2cPort_u32:uint32_t  ;
+enum I2cPort_u8:uint8_t;
+enum I2cPort_u32:uint32_t;
 enum I2cPort_e {
     I2C_PORT_SVD_SCL = 0,
     I2C_PORT_GPIO    = 1,
 };
 
-enum I2cCmdType_u8:uint8_t  ;
-enum I2cCmdType_u32:uint32_t  ;
+enum I2cCmdType_u8:uint8_t;
+enum I2cCmdType_u32:uint32_t;
 enum I2cCmdType_e {
     I2C_CMD_READ  = 0,
     I2C_CMD_WRITE = 1,

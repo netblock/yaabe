@@ -242,7 +242,7 @@ global_default: {
 		}, {
 			access: "bios->PpmDesign",
 			name: "PpmDesign",
-			fancy: "ATUI_ENUM", fancy_data: "atom_ppm",
+			fancy: "ATUI_ENUM",
 		}, {
 			access: "bios->CpuCoreNumber",
 			name: "CpuCoreNumber",

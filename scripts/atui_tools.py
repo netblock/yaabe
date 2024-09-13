@@ -148,7 +148,7 @@ def struct_to_atui(
 	if explicit_attributes:
 		enum += atui_dec
 	enum += """\
-\\g<1>		fancy: "ATUI_ENUM", fancy_data: "\\g<3>",
+\\g<1>		fancy: "ATUI_ENUM",
 \\g<1>		__ATUIDESCR\\g<7>
 \\g<1>	},\
 """

@@ -300,6 +300,14 @@ enum enumarray_indicies_set {
 };
 """
 	enum_index_entry_template = "\tATUI_ENUM_INDEX(%s) = %u,\n"
+	enum_infer_template = """
+// cannot be used with non-enums types
+#define ATUI_ENUM_INFER(var) _Generic((var),\\
+%s\
+	default: NULL\\
+)
+"""
+	enum_infer_entry_template = "\tenum %s: & ATUI_ENUM(%s),\\\n"
 	header_end = "\n#endif\n"
 
 	enums = atui_data["enums"]
@@ -307,14 +315,22 @@ enum enumarray_indicies_set {
 
 	i = 0
 	indicies = ""
+	infers = ""
 	while i < num_enums:
 		enum = enums[i]
-		indicies += enum_index_entry_template % (enum["name"], i)
+		enum_name = enum["name"]
+		indicies += enum_index_entry_template % (enum_name, i)
+		infers += enum_infer_entry_template % (enum_name, enum_name)
+		if "aliases" in enum:
+			for alias in enum["aliases"]:
+				indicies += enum_index_entry_template % (alias, i)
+				infers += enum_infer_entry_template % (alias, alias)
 		i += 1
 
 	out_text = (
 		header_header % (fname.upper(), fname.upper(), num_enums)
 		+ enumarray_indicies_set_template % indicies
+		+ enum_infer_template % infers
 		+ header_end
 	)
 	return out_text
@@ -581,8 +597,10 @@ def infer_leaf_data(
 			leaf.display = leaf_default.display
 		if leaf.fancy is None:
 			leaf.fancy = leaf_default.fancy
-		if leaf.fancy_data is None:
-			leaf.fancy_data = leaf_default.fancy_data
+		# fancy_data cannot be inferred because of the implicit type-inference
+		# feature of ATUI_ENUM.
+		#if leaf.fancy_data is None:
+		#	leaf.fancy_data = leaf_default.fancy_data
 		if leaf.description is None:
 			leaf.description = leaf_default.description
 		if leaf.lo is None:
@@ -794,10 +812,17 @@ indent + "{\n"
 		if leaf.fancy == ATUI_NOFANCY:
 			leaf_text_extra = ""
 		elif leaf.fancy == ATUI_ENUM:
-			leaf_text_extra = (
-				child_indent + ".enum_options = &(ATUI_ENUM(%s)),\n"
-			)
-			leaf_text_extra %= (leaf.fancy_data,)
+			leaf_text_extra = child_indent
+			if leaf.fancy_data is None:
+				leaf_text_extra += (
+					".enum_options = ATUI_ENUM_INFER(%s),\n" % (
+						var_meta
+					)
+				)
+			else:
+				leaf_text_extra += ".enum_options = &(ATUI_ENUM(%s)),\n" % (
+					leaf.fancy_data,
+				)
 		elif leaf.fancy == ATUI_STRING:
 			if leaf.access:
 				var_access = leaf.access
