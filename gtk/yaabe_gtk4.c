@@ -796,7 +796,7 @@ leaves_val_column_bind(
 
 		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
 		GtkWidget* editable;
-		if (type.fancy == ATUI_ENUM) {
+		if (type.has_enum) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
 			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
 			GtkColumnView* const enum_list = GTK_COLUMN_VIEW(

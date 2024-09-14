@@ -82,7 +82,7 @@ atui_leaf_from_text(
 			leaf->c8[array_size-1] = '\0';
 		}
 	} else if (radix) {
-		if (fancy == ATUI_ENUM) {
+		if (leaf->type.has_enum) {
 			struct atui_enum const* const enum_set = leaf->enum_options;
 			struct atui_enum_entry const* entry;
 			int16_t str_diff;
@@ -253,7 +253,7 @@ atui_leaf_to_text(
 	} else if (radix) {
 		assert(num_digits);
 		buffer_size = num_digits+1; // +1 is \0
-		if (fancy == ATUI_ENUM) {
+		if (leaf->type.has_enum) {
 			int64_t val;
 			if (leaf->type.signed_num) {
 				val = atui_leaf_get_val_signed(leaf);
@@ -784,7 +784,7 @@ atui_enum_entry_to_text(
 		atui_leaf const* const leaf,
 		struct atui_enum_entry const* const enum_entry
 		) {
-	assert(leaf->type.fancy == ATUI_ENUM && leaf->type.radix);
+	assert(leaf->type.has_enum && leaf->type.radix);
 
 	char format_1[LEAF_SPRINTF_FORMAT_SIZE]; // stage 1
 	char format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2

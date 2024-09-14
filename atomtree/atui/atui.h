@@ -59,9 +59,10 @@ union atui_type {
 		radix      :2-0 +1, // enum atui_type_radix
 		signed_num :3-3 +1, // Usually internally-set. If it has a signing bit.
 		fraction   :4-4 +1, // Internally-set. Both Q and float.
-		fancy      :8-5 +1, // enum atui_type_fancy
-		disable   :10-9 +1, // enum atui_type_disable
-		reserved  :15-11 +1;
+		has_enum   :5-5 +1, // has a struct atui_enum over a C enum
+		fancy      :9-6 +1, // enum atui_type_fancy
+		disable   :11-10 +1, // enum atui_type_disable
+		reserved  :15-12 +1;
 	};
 	uint16_t type;
 };
@@ -78,14 +79,13 @@ enum atui_type_radix:uint8_t {
 enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
 	ATUI_BITFIELD = 1, // Is a bitfield parent
-	ATUI_ENUM     = 2, // has a struct atui_enum over a C enum
-	ATUI_STRING   = 3, // Variable-length srings ending in \0
-	ATUI_ARRAY    = 4, // staticall-sized array and strings
-	ATUI_GRAFT    = 5, // Pull in leaves from other tables
-	ATUI_SHOOT    = 6, // hard-attach a child branch
-	ATUI_DYNARRAY = 7, // For runtime array lengths
+	ATUI_STRING   = 2, // Variable-length srings ending in \0
+	ATUI_ARRAY    = 3, // staticall-sized array and strings
+	ATUI_GRAFT    = 4, // Pull in leaves from other tables
+	ATUI_SHOOT    = 5, // hard-attach a child branch
+	ATUI_DYNARRAY = 6, // For runtime array lengths
 
-	_ATUI_BITCHILD = 8, // Internally set. If it's a bitfield child.
+	_ATUI_BITCHILD = 7, // Internally set. If it's a bitfield child.
 
 	ATUI_NUM_FANCY
 };

@@ -48,8 +48,6 @@ For `leaf_defaults`, the `generic` is for all leaves, except for bitfield
 children and dynarray patterns, which are what `bitchild` and `dynpattern` are
 for respectively.
 
-The `fancy_data` for leaves cannot be inferred through `global_default`.
-
 ``` json5
 global_default: {
 	branch_defaults: {
@@ -172,6 +170,37 @@ any. If the leaf's children should be viewed anyway, set the `display` to
 
 <br>
 
+##### ATUI\_ENUM
+
+If the element should have a list of text-val pairs, an enum, assocated with it,
+first populate the atui enum in `atui_enums.json5`:
+
+``` json5
+{name: "enum_struct_name"
+	{name: "ENUM_ENTRY1",},
+	{name: "ENUM_ENTRY2",},
+	{name: "ENUM_ENTRY3",},
+]},
+```
+
+And then include `ATUI_ENUM` in the `display` list. The type of the enum can be
+inferred provided that the underlying c type is an enum. If the underlying type
+is not an enum, you must specify the enum name through `enum` keyword.
+
+``` json5
+{
+	access: "bios->bios_element",
+	name: "bios element",
+	display: ["ATUI_HEX", "ATUI_ENUM",]
+	description: [
+		{language: "english", text "..."},
+	],
+	enum: "optional_enum_type_override",
+},
+```
+
+<br>
+
 ### Fancy Types
 
 Fancy types allow a leaf to present extra information beyond a value from the
@@ -213,37 +242,6 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 			display: ["ATUI_DEC", "ATUI_SIGNED"], // order doesn't matter
 		},
 	],
-},
-```
-
-<br>
-
-#### ATUI\_ENUM
-
-If the element should have a list of text-val pairs, an enum, assocated with it,
-first populate the atui enum in `atui_enums.json5`:
-
-``` json5
-{name: "enum_struct_name"
-	{name: "ENUM_ENTRY1",},
-	{name: "ENUM_ENTRY2",},
-	{name: "ENUM_ENTRY3",},
-]},
-```
-
-And then set `fancy` on the leaf to `ATUI_ENUM`. The type of the enum can be
-inferred provided that the underlying c typ is an enum. If the underlying type
-is not an enum, you must specify the enum name through `fancy_data`.
-
-``` json5
-{
-	access: "bios->bios_element",
-	name: "bios element",
-	display: "ATUI_HEX",
-	description: [
-		{language: "english", text "..."},
-	],
-	fancy: "ATUI_ENUM",
 },
 ```
 

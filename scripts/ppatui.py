@@ -23,17 +23,15 @@ import argparse
 # atomtree/atui/atui.h has a copy
 ATUI_NOFANCY   = 0
 ATUI_BITFIELD  = 1
-ATUI_ENUM      = 2
-ATUI_STRING    = 3
-ATUI_ARRAY     = 4
-ATUI_GRAFT     = 5
-ATUI_SHOOT     = 6
-ATUI_DYNARRAY  = 7
-_ATUI_BITCHILD = 8
+ATUI_STRING    = 2
+ATUI_ARRAY     = 3
+ATUI_GRAFT     = 4
+ATUI_SHOOT     = 5
+ATUI_DYNARRAY  = 6
+_ATUI_BITCHILD = 7
 ATUI_FANCY_TYPES = (
 	"ATUI_NOFANCY",
 	"ATUI_BITFIELD",
-	"ATUI_ENUM",
 	"ATUI_STRING",
 	"ATUI_ARRAY",
 	"ATUI_GRAFT",
@@ -488,6 +486,10 @@ class atui_leaf:
 			self.hi = leaf["hi"]
 		else:
 			self.hi = None
+		if "enum" in leafkeys:
+			self.enum = leaf["enum"]
+		else:
+			self.enum = None
 
 
 class atui_branch:
@@ -597,16 +599,16 @@ def infer_leaf_data(
 			leaf.display = leaf_default.display
 		if leaf.fancy is None:
 			leaf.fancy = leaf_default.fancy
-		# fancy_data cannot be inferred because of the implicit type-inference
-		# feature of ATUI_ENUM.
-		#if leaf.fancy_data is None:
-		#	leaf.fancy_data = leaf_default.fancy_data
+		if leaf.fancy_data is None:
+			leaf.fancy_data = leaf_default.fancy_data
 		if leaf.description is None:
 			leaf.description = leaf_default.description
 		if leaf.lo is None:
 			leaf.lo = leaf_default.lo
 		if leaf.hi is None:
 			leaf.hi = leaf_default.hi
+		if leaf.enum is None:
+			leaf.enum = leaf_default.enum
 
 		fancy_data = None
 		old_default = None
@@ -737,29 +739,44 @@ def leaf_type_to_text(
 		leaf:atui_leaf,
 		var_meta:str
 		):
-	# leaftype : [radix, signed_num, fraction, fancy, disable]
+	# leaftype:
+	# [0] radix,
+	# [1] signed_num,
+	# [2] fraction,
+	# [3] enumtype
+	# [4] fancy,
+	# [5] disable,
+	# [6] enumpointer
 	leaftype[0] = ""
 	leaftype[1] = "_PPATUI_LEAF_SIGNED(%s)" % var_meta
 	leaftype[2] = "_PPATUI_LEAF_FRACTION(%s)" % var_meta
-	leaftype[3] = ATUI_FANCY_TYPES[leaf.fancy]
-	leaftype[4] = "ATUI_DISPLAY"
+	leaftype[3] = str("ATUI_ENUM" in leaf.display).lower()
+	leaftype[4] = ATUI_FANCY_TYPES[leaf.fancy]
+	leaftype[5] = "ATUI_DISPLAY"
+	leaftype[6] = "NULL"
 
 	if type(leaf.display) is str:
 		if leaf.display in ("ATUI_SUBONLY", "ATUI_NODISPLAY"):
 			leaftype[0] = "ATUI_NAN"
-			leaftype[4] = leaf.display
+			leaftype[5] = leaf.display
 		else:
 			leaftype[0] = leaf.display
 	elif type(leaf.display) is list:
 		if "ATUI_SIGNED" in leaf.display:
 			leaftype[1] = "true"
+		if "ATUI_ENUM" in leaf.display:
+			if leaf.enum is None:
+				leaftype[6] = "ATUI_ENUM_INFER(%s)" % var_meta
+			else:
+				leaftype[6] = "&(ATUI_ENUM(%s))" % leaf.enum
+
 		for radix in ("ATUI_NAN", "ATUI_DEC", "ATUI_HEX", "ATUI_BIN"):
 			if radix in leaf.display:
 				leaftype[0] = radix
 				break
 		for disable in ("ATUI_DISPLAY", "ATUI_SUBONLY", "ATUI_NODISPLAY"):
 			if disable in leaf.display:
-				leaftype[4] = disable
+				leaftype[5] = disable
 				break
 
 def leaves_to_text(
@@ -777,9 +794,11 @@ indent + "{\n"
 + child_indent + "\t.radix = %s,\n"
 + child_indent + "\t.signed_num = %s,\n"
 + child_indent + "\t.fraction = %s,\n"
++ child_indent + "\t.has_enum = %s,\n"
 + child_indent + "\t.fancy = %s,\n"
 + child_indent + "\t.disable = %s,\n"
 + child_indent + "},\n"
++ child_indent + ".enum_options = %s,\n"
 
 + child_indent + ".num_bytes = _PPATUI_NULLPTR_SIZE(%s),\n"
 + child_indent + ".array_size = 1,\n"
@@ -797,7 +816,10 @@ indent + "{\n"
 	var_meta = ""
 	leaves_text = ""
 
-	leaftype = ["radix","signed_num","fraction","fancy","disable"]
+	leaftype = [
+		"radix", "signed_num", "fraction",   "enumtype", "fancy", "disable",
+		"enumptr"
+	]
 
 	for leaf in leaves:
 		if leaf.access:
@@ -811,18 +833,6 @@ indent + "{\n"
 
 		if leaf.fancy == ATUI_NOFANCY:
 			leaf_text_extra = ""
-		elif leaf.fancy == ATUI_ENUM:
-			leaf_text_extra = child_indent
-			if leaf.fancy_data is None:
-				leaf_text_extra += (
-					".enum_options = ATUI_ENUM_INFER(%s),\n" % (
-						var_meta
-					)
-				)
-			else:
-				leaf_text_extra += ".enum_options = &(ATUI_ENUM(%s)),\n" % (
-					leaf.fancy_data,
-				)
 		elif leaf.fancy == ATUI_STRING:
 			if leaf.access:
 				var_access = leaf.access
@@ -880,6 +890,8 @@ indent + "{\n"
 		leaves_text += leaf_template % (
 			leaf.name, leaf.name,
 			leaftype[0], leaftype[1], leaftype[2], leaftype[3], leaftype[4],
+			leaftype[5], # type.disable
+			leaftype[6], # enumptr
 			var_meta, var_meta, var_meta, var_meta,
 			var_access,
 			description_to_text(leaf.description, child_indent),

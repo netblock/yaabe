@@ -1801,7 +1801,7 @@ global_default: {
 		{
 			access: "bios->VoltageMode",
 			name: "VoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->SnapToDiscrete",
 			name: "SnapToDiscrete",
@@ -1842,7 +1842,7 @@ global_default: {
 		{
 			access: "bios->VoltageMode",
 			name: "VoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->SnapToDiscrete",
 			name: "SnapToDiscrete",
@@ -2401,7 +2401,7 @@ global_default: {
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "0 = PLL, 1 = DFLL",},
 			],
@@ -2430,7 +2430,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieGenSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -2443,7 +2443,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieLaneCount [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -2681,7 +2681,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -2694,7 +2694,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkWidth [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -3514,7 +3514,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "FreqTableUclkDiv [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -3621,7 +3621,7 @@ global_default: {
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "0 = PLL, 1 = DFLL",},
 			],
@@ -3664,7 +3664,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieGenSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -3677,7 +3677,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieLaneCount [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -3954,7 +3954,7 @@ global_default: {
 		}, {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->TotalPowerSpare1",
 			name: "TotalPowerSpare1",
@@ -4713,7 +4713,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "FreqTableUclkDiv [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -4806,7 +4806,7 @@ global_default: {
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "0 = PLL, 1 = DFLL",},
 			],
@@ -4948,7 +4948,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "UclkDpmPstates [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -4986,7 +4986,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieGenSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -4999,7 +4999,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "PcieLaneCount [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -5111,7 +5111,7 @@ global_default: {
 		}, {
 			access: "bios->dBtcGbGfxDfllModelSelect",
 			name: "dBtcGbGfxDfllModelSelect",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->Padding8_Avfs",
 			name: "Padding8_Avfs",
@@ -5517,7 +5517,7 @@ global_default: {
 		}, {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "Determines how PMFW calculates the power.",},
 			],
@@ -5746,7 +5746,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiDpmPstates [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -5782,7 +5782,7 @@ global_default: {
 		}, {
 			access: "bios->CustomerVariant",
 			name: "CustomerVariant",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->VcBtcEnabled",
 			name: "VcBtcEnabled",
@@ -6164,7 +6164,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -6177,7 +6177,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkWidth [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -6261,7 +6261,7 @@ global_default: {
 		}, {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "Determines how PMFW calculates the power.",},
 			],
@@ -6490,7 +6490,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiDpmPstates [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -6526,7 +6526,7 @@ global_default: {
 		}, {
 			access: "bios->CustomerVariant",
 			name: "CustomerVariant",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->VcBtcEnabled",
 			name: "VcBtcEnabled",
@@ -6908,7 +6908,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkSpeed [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -6921,7 +6921,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "XgmiLinkWidth [%02u]",
-					fancy: "ATUI_ENUM",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
 				},],
 			},
 		}, {
@@ -7003,7 +7003,7 @@ global_default: {
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->small_power_limit1",
 			name: "small_power_limit1",
@@ -7065,7 +7065,7 @@ global_default: {
 		}, {
 			access: "bios->ThermalControllerType",
 			name: "ThermalControllerType",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->SmallPowerLimit1",
 			name: "SmallPowerLimit1",
@@ -7127,7 +7127,7 @@ global_default: {
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->small_power_limit1",
 			name: "small_power_limit1",

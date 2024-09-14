@@ -298,13 +298,11 @@ global_default: {
 		}, {
 			access: "bios->subsystem_value",
 			name: "subsystem_value",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->machine_type",
 			name: "machine_type",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->compression_type",
 			name: "compression_type",
@@ -2681,7 +2679,7 @@ global_default: {
 		}, {
 			access: "bios->eDPToLVDSRxId",
 			name: "eDPToLVDSRxId",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->LcdReservd",
 			name: "LcdReservd",
@@ -2703,8 +2701,7 @@ global_default: {
 		{
 			access: "bios->VoltageControlId",
 			name: "VoltageControlId",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 			description: [
 				{language: "english", text: "Indicate it is controlled by I2C or GPIO or HW state machine",},
 			],
@@ -2808,7 +2805,7 @@ global_default: {
 		{
 			access: "bios->VoltageType",
 			name: "VoltageType",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->Size",
 			name: "Size",
@@ -2899,7 +2896,7 @@ global_default: {
 		{
 			access: "bios->VoltageType",
 			name: "VoltageType",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->Size",
 			name: "Size",
@@ -2931,11 +2928,11 @@ global_default: {
 		{
 			access: "bios->voltage_type",
 			name: "voltage_type",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->voltage_mode",
 			name: "voltage_mode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->object_size",
 			name: "object_size",
@@ -3188,7 +3185,7 @@ global_default: {
 		}, {
 			access: "bios->merged_powerrail_type",
 			name: "merged_powerrail_type",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -3783,8 +3780,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -3793,8 +3789,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryDeviceCfg",
 			name: "MemoryDeviceCfg",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Row",
 			name: "Row",
@@ -3911,8 +3906,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -3921,8 +3915,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryDeviceCfg",
 			name: "MemoryDeviceCfg",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Row",
 			name: "Row",
@@ -4344,8 +4337,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->MemoryVendorID",
 			name: "MemoryVendorID",
@@ -4396,8 +4388,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Preamble",
 			name: "Preamble",
@@ -4448,8 +4439,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
@@ -4465,8 +4455,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
@@ -4573,8 +4562,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
@@ -4590,8 +4578,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
@@ -4704,8 +4691,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
@@ -4721,8 +4707,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
@@ -4833,8 +4818,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
@@ -4850,8 +4834,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->Reserve",
 			name: "Reserve",
@@ -4979,8 +4962,7 @@ global_default: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->ChannelNum",
 			name: "ChannelNum",
@@ -4996,8 +4978,7 @@ global_default: {
 		}, {
 			access: "bios->Density",
 			name: "Density",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->BankCol",
 			name: "BankCol",

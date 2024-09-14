@@ -115,31 +115,31 @@ global_default: {
 		}, {
 			access: "bios->GfxVoltageMode",
 			name: "GfxVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->SocVoltageMode",
 			name: "SocVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->UclkVoltageMode",
 			name: "UclkVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->UvdVoltageMode",
 			name: "UvdVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->VceVoltageMode",
 			name: "VceVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->Mp0VoltageMode",
 			name: "Mp0VoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->DcefVoltageMode",
 			name: "DcefVoltageMode",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->StateArrayOffset",
 			name: "StateArrayOffset",
@@ -543,7 +543,7 @@ global_default: {
 		}, {
 			access: "bios->Type",
 			name: "Type",
-			fancy: "ATUI_ENUM",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->I2cLine",
 			name: "I2cLine",

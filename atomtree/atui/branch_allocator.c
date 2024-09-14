@@ -315,7 +315,6 @@ static void
 		) = { // jump table
 	[ATUI_NOFANCY] = print_atui_nofancy_leaf,
 	[ATUI_BITFIELD] = print_atui_bitfield_leaf,
-	[ATUI_ENUM] = print_atui_nofancy_leaf,
 	[ATUI_STRING] = print_atui_string_leaf,
 	[ATUI_ARRAY] = print_atui_nofancy_leaf,
 	[ATUI_GRAFT] = print_atui_graft_leaf,
