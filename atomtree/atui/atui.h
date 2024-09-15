@@ -54,18 +54,6 @@ struct atui_enum {
 	uint16_t const name_length;
 };
 
-union atui_type {
-	struct { uint16_t
-		radix      :2-0 +1, // enum atui_type_radix
-		signed_num :3-3 +1, // Usually internally-set. If it has a signing bit.
-		fraction   :4-4 +1, // Internally-set. Both Q and float.
-		has_enum   :5-5 +1, // has a struct atui_enum over a C enum
-		fancy      :9-6 +1, // enum atui_type_fancy
-		disable   :11-10 +1, // enum atui_type_disable
-		reserved  :15-12 +1;
-	};
-	uint16_t type;
-};
 enum atui_type_radix:uint8_t {
 	ATUI_NAN = 0x0, // Not a number
 	ATUI_DEC = 0x1,
@@ -96,6 +84,14 @@ enum atui_type_disable:uint8_t {
 
 	ATUI_NUM_DISPLAY
 };
+struct atui_type {
+	enum atui_type_radix   radix;
+	enum atui_type_fancy   fancy;
+	enum atui_type_disable disable; // enum atui_type_disable
+	bool signed_num; // Usually internally-set.
+	bool fraction;   // Internally-set. Both Q and float.
+	bool has_enum;   // has a struct atui_enum
+};
 
 struct _atui_leaf {
 	char name[72];
@@ -104,7 +100,7 @@ struct _atui_leaf {
 
 	size_t num_bytes;  // number of bytes for quick leaf size
 	size_t array_size;
-	union atui_type type; // how to display text, and other config data
+	struct atui_type type; // how to display text, and other config data
 
 	uint8_t fractional_bits; // if fixed-point
 	int8_t total_bits;   // number of bits for the leaf

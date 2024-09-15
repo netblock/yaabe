@@ -128,10 +128,10 @@ error_emit( // severity and message must be set before calling
 #define error_assert(errptr, sev, msg, test) do {\
 	 if (!(test)) {\
 		assert(test);\
-		char* __unused walker = memccpy((errptr)->message, msg,\
+		char* walker __unused = memccpy((errptr)->message, msg,\
 			'\0', lengthof((errptr)->message)\
 		);\
-		assert(NULL != walker);\
+		assert(walker);\
 		(errptr)->message[lengthof((errptr)->message)-1] = '\0';\
 		\
 		(errptr)->severity = sev;\

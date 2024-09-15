@@ -17,7 +17,7 @@ gatui_leaf_generate_children_model(
 		GATUILeaf* self
 		);
 
-union atui_type
+struct atui_type
 gatui_leaf_get_atui_type(
 		GATUILeaf* self
 		);

@@ -69,7 +69,7 @@ struct b64_header { // paste header
 		num_segments :15-5 +1, // 2048 leaves
 		num_bytes    :31-16 +1; // 64 KiBytes
 	};
-	// segments? uint32_t n_bytes[]; bytes[]
+	uint8_t bytes[] __counted_by(num_bytes);
 };
 #pragma pack(pop)
 
@@ -791,7 +791,7 @@ leaves_val_column_bind(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 
-	union atui_type const type = gatui_leaf_get_atui_type(g_leaf);
+	struct atui_type const type = gatui_leaf_get_atui_type(g_leaf);
 	if (type.radix || type.fancy == ATUI_STRING || type.fancy == ATUI_ARRAY) {
 
 		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
@@ -933,32 +933,33 @@ b64_packet_encode(
 		enum b64_header_target const target,
 		uint8_t const num_segments
 		) {
+	union {
+		void* raw;
+		struct b64_header* header;
+	} h;
 	size_t const packet_size = sizeof(struct b64_header) + payload_size;
-	void* const data_packet = malloc(packet_size);
-	struct b64_header* const header = data_packet;
-	void* const payload_area = data_packet + sizeof(struct b64_header);
+	h.header = malloc(packet_size);
 
-	header->header_ver = 0;
-	header->target = target;
-	header->num_segments = num_segments;
-	header->num_bytes = payload_size;
-	memcpy(payload_area, payload, payload_size);
-	header->crc = crc32(
+	h.header->header_ver = 0;
+	h.header->target = target;
+	h.header->num_segments = num_segments;
+	h.header->num_bytes = payload_size;
+	memcpy(h.header->bytes, payload, payload_size);
+	h.header->crc = crc32(
 		0,
-		(data_packet + sizeof(uint32_t)), // exclude crc
-		(packet_size - sizeof(uint32_t))
+		(h.raw + sizeof(h.header->crc)), // exclude crc
+		(packet_size - sizeof(h.header->crc))
 	);
 
-	gchar* const b64_text = g_base64_encode(data_packet, packet_size);
-	free(data_packet);
+	gchar* const b64_text = g_base64_encode(h.raw, packet_size);
+	free(h.header);
 	return b64_text;
 }
 
 static bool // decode error
 b64_packet_decode(
 		char const* const b64_text,
-		struct b64_header** const header_out,
-		void** const payload
+		struct b64_header** const header_out
 		) {
 	size_t b64_num_bytes = 0;
 	struct b64_header* const header = (
@@ -969,30 +970,28 @@ b64_packet_decode(
 		return true;
 	}
 	*header_out = header;
-	if (b64_num_bytes < sizeof(struct b64_header)) {
+	if (b64_num_bytes < sizeof(*header)) {
 		return true;
 	}
-	if (b64_num_bytes < header->num_bytes + sizeof(struct b64_header)) {
+	if (b64_num_bytes < (header->num_bytes + sizeof(*header))) {
 		return true;
 	}
 	uint32_t const crc = crc32(
 		0,
-		((void*)header + sizeof(uint32_t)),
-		(header->num_bytes + sizeof(struct b64_header) - sizeof(uint32_t))
+		((void*)header + sizeof(header->crc)),
+		(sizeof(*header)-sizeof(header->crc)  +  header->num_bytes)
 	);
 	if (crc != header->crc) {
 		return true;
 	}
 
 	// strict compliance
-	if ((header->target==B64_BRANCH_CONTIGUOUS) && (header->num_segments!=1)) {
+	if ((header->target==B64_BRANCH_CONTIGUOUS) && (1!=header->num_segments)) {
 		return true;
 	}
-	if ((header->target==B64_LEAF) && (header->num_segments!=1)) {
+	if ((header->target==B64_LEAF) && (1!=header->num_segments)) {
 		return true;
 	}
-
-	*payload = (void*) header + sizeof(header);
 	return false;
 }
 
@@ -1045,8 +1044,7 @@ leaf_right_click_paste_data_set_data(
 
 	GtkAlertDialog* error_popup;
 	struct b64_header* header = NULL;
-	void* payload = NULL;
-	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	bool const decode_error = b64_packet_decode(b64_text, &header);
 	g_free(b64_text);
 	if (decode_error) {
 		error_popup = gtk_alert_dialog_new("Data decode error");
@@ -1062,8 +1060,11 @@ leaf_right_click_paste_data_set_data(
 
 	uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
 	if (a_leaf->type.fancy == ATUI_STRING) {
-		if (strnlen(payload, header->num_bytes) < header->num_bytes) {
-			gatui_leaf_set_value_from_text(pack->leaf, payload);
+		void const* const bytes = header->bytes;
+		size_t const str_length = strnlen(bytes,  header->num_bytes
+		);
+		if (str_length < header->num_bytes) {
+			gatui_leaf_set_value_from_text(pack->leaf, bytes);
 			goto success_exit;
 		} else {
 			error_popup = gtk_alert_dialog_new(
@@ -1077,7 +1078,7 @@ leaf_right_click_paste_data_set_data(
 		GVariantType* const raw_type = g_variant_type_new("ay");
 		GVariant* const new_val = g_variant_new_from_data(
 			raw_type,
-			payload, header->num_bytes,
+			header->bytes, header->num_bytes,
 			false,
 			free_notify, header
 		);
@@ -1510,8 +1511,7 @@ branch_right_click_paste_data_set_data(
 
 	GtkAlertDialog* error_popup;
 	struct b64_header* header = NULL;
-	void* payload = NULL;
-	bool const decode_error = b64_packet_decode(b64_text, &header, &payload);
+	bool const decode_error = b64_packet_decode(b64_text, &header);
 	g_free(b64_text);
 	if (decode_error) {
 		error_popup = gtk_alert_dialog_new("Data decode error");
@@ -1525,7 +1525,7 @@ branch_right_click_paste_data_set_data(
 		GVariantType* const raw_type = g_variant_type_new("ay");
 		new_val = g_variant_new_from_data(
 			raw_type,
-			payload, header->num_bytes,
+			header->bytes, header->num_bytes,
 			false,
 			free_notify, header
 		);

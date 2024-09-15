@@ -21,6 +21,20 @@ import pathlib
 import argparse
 
 # atomtree/atui/atui.h has a copy
+ATUI_NAN = 0x0
+ATUI_DEC = 0x1
+ATUI_HEX = 0x2
+ATUI_OCT = 0x3
+ATUI_BIN = 0x4
+ATUI_ANY = 0x7
+ATUI_TYPE_RADIX = (
+	"ATUI_NAN",
+	"ATUI_DEC",
+	"ATUI_HEX",
+	"ATUI_OCT",
+	"ATUI_BIN",
+)
+
 ATUI_NOFANCY   = 0
 ATUI_BITFIELD  = 1
 ATUI_STRING    = 2
@@ -29,7 +43,7 @@ ATUI_GRAFT     = 4
 ATUI_SHOOT     = 5
 ATUI_DYNARRAY  = 6
 _ATUI_BITCHILD = 7
-ATUI_FANCY_TYPES = (
+ATUI_TYPE_FANCY = (
 	"ATUI_NOFANCY",
 	"ATUI_BITFIELD",
 	"ATUI_STRING",
@@ -38,6 +52,15 @@ ATUI_FANCY_TYPES = (
 	"ATUI_SHOOT",
 	"ATUI_DYNARRAY",
 	"_ATUI_BITCHILD",
+)
+
+ATUI_DISPLAY   = 0
+ATUI_SUBONLY   = 1
+ATUI_NODISPLAY = 2
+ATUI_TYPE_DISABLE = (
+	"ATUI_DISPLAY",
+	"ATUI_SUBONLY",
+	"ATUI_NODISPLAY",
 )
 
 def pcilut_to_c(
@@ -467,7 +490,7 @@ class atui_leaf:
 		else:
 			self.display = None
 		if "fancy" in leafkeys:
-			self.fancy = ATUI_FANCY_TYPES.index(leaf["fancy"])
+			self.fancy = ATUI_TYPE_FANCY.index(leaf["fancy"])
 		else:
 			self.fancy = None
 		if "fancy_data" in leafkeys:
@@ -750,34 +773,37 @@ def leaf_type_to_text(
 	leaftype[0] = ""
 	leaftype[1] = "_PPATUI_LEAF_SIGNED(%s)" % var_meta
 	leaftype[2] = "_PPATUI_LEAF_FRACTION(%s)" % var_meta
-	leaftype[3] = str("ATUI_ENUM" in leaf.display).lower()
-	leaftype[4] = ATUI_FANCY_TYPES[leaf.fancy]
+	leaftype[3] = "false"
+	leaftype[4] = ATUI_TYPE_FANCY[leaf.fancy]
 	leaftype[5] = "ATUI_DISPLAY"
 	leaftype[6] = "NULL"
 
 	if type(leaf.display) is str:
-		if leaf.display in ("ATUI_SUBONLY", "ATUI_NODISPLAY"):
+		if leaf.display in ATUI_TYPE_DISABLE:
 			leaftype[0] = "ATUI_NAN"
 			leaftype[5] = leaf.display
-		else:
+		elif leaf.display in ATUI_TYPE_RADIX:
 			leaftype[0] = leaf.display
+			#leaftype[5] = "ATUI_DISPLAY"
+		else:
+			assert(0)
 	elif type(leaf.display) is list:
 		if "ATUI_SIGNED" in leaf.display:
 			leaftype[1] = "true"
 		if "ATUI_ENUM" in leaf.display:
+			leaftype[3] = "true"
 			if leaf.enum is None:
 				leaftype[6] = "ATUI_ENUM_INFER(%s)" % var_meta
 			else:
 				leaftype[6] = "&(ATUI_ENUM(%s))" % leaf.enum
-
-		for radix in ("ATUI_NAN", "ATUI_DEC", "ATUI_HEX", "ATUI_BIN"):
-			if radix in leaf.display:
-				leaftype[0] = radix
-				break
-		for disable in ("ATUI_DISPLAY", "ATUI_SUBONLY", "ATUI_NODISPLAY"):
-			if disable in leaf.display:
-				leaftype[5] = disable
-				break
+		for flag in leaf.display:
+			if flag in ATUI_TYPE_RADIX:
+				leaftype[0] = flag
+			elif flag in ATUI_TYPE_DISABLE:
+				leaftype[5] = flag
+	else:
+		assert(0)
+	assert(leaftype[0]), leaf.name
 
 def leaves_to_text(
 		leaves:list,
@@ -842,10 +868,10 @@ indent + "{\n"
 				var_access = leaf.access
 			var_meta = leaf.access_meta + "[0]"
 			leaf_text_extra = (
-				child_indent + ".array_size = (sizeof(%s)/sizeof(%s)),\n"
+				child_indent + ".array_size = lengthof(%s),\n"
 				+ child_indent + ".num_bytes = sizeof(%s),\n"
 			)
-			leaf_text_extra %= (leaf.access, var_meta, leaf.access)
+			leaf_text_extra %= (leaf.access, leaf.access)
 		elif leaf.fancy == ATUI_BITFIELD:
 			leaf_text_extra = (
 				child_indent + ".num_child_leaves = %u,\n"
@@ -1001,7 +1027,7 @@ _atui_%s(
 			),
 		},
 
-		.leaves_init =leaves_init,
+		.leaves_init = leaves_init,
 		.num_leaves_init = lengthof(leaves_init),
 
 		.computed_num_leaves = %s,

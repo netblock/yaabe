@@ -31,8 +31,8 @@ atui_leaf_from_text(
 	assert(leaf->val);
 
 	size_t const array_size = leaf->array_size;
-	uint8_t const radix = leaf->type.radix;
-	uint8_t const fancy = leaf->type.fancy;
+	enum atui_type_radix const radix = leaf->type.radix;
+	enum atui_type_fancy const fancy = leaf->type.fancy;
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		uint8_t const base = bases[radix];
@@ -122,8 +122,8 @@ get_sprintf_format_from_leaf(
 		) {
 // get reccomended sprintf format based on radix and other factors
 	size_t print_alloc_width; // caller handles the counting of \0
-	uint8_t const radix = leaf->type.radix;
-	uint8_t const fancy = leaf->type.fancy;
+	enum atui_type_radix const radix = leaf->type.radix;
+	enum atui_type_fancy const fancy = leaf->type.fancy;
 
 	if (radix) {
 		char const* const metaformat = "%s%u%s"; // amogus
@@ -136,10 +136,10 @@ get_sprintf_format_from_leaf(
 		} else {
 			uint64_t max_val;
 			uint8_t const num_bits = leaf->total_bits;
-			if (num_bits == (sizeof(max_val) * CHAR_BIT)) { // (1ULL<<64) == 1
-				max_val = ~0ULL;
+			if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
+				max_val = UINT64_MAX;
 			} else {
-				max_val = (1ULL << num_bits) - 1;
+				max_val = (UINT64_C(1) << num_bits) - 1;
 			}
 			num_digits = ceil( // round up because it's gonna be like x.9999
 				log(max_val) / log(bases[radix])
@@ -203,8 +203,8 @@ atui_leaf_to_text(
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
 	size_t const array_size = leaf->array_size;
-	uint8_t const radix = leaf->type.radix;
-	uint8_t const fancy = leaf->type.fancy;
+	enum atui_type_radix const radix = leaf->type.radix;
+	enum atui_type_fancy const fancy = leaf->type.fancy;
 	size_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
 
 	if ((fancy == ATUI_ARRAY) && radix) {
@@ -310,10 +310,10 @@ atui_leaf_set_val_unsigned(
 
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t max_val;
-	if (num_bits == (sizeof(max_val) * CHAR_BIT)) { // (1ULL<<64) == 1
+	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
 		max_val = UINT64_MAX;
 	} else {
-		max_val = (1ULL << num_bits) - 1;
+		max_val = (UINT64_C(1) << num_bits) - 1;
 	}
 	if (val > max_val) {
 		val = max_val;
@@ -375,10 +375,10 @@ atui_leaf_set_val_signed(
 	uint64_t raw_val; // some bit math preserves the sign
 	uint8_t const num_bits = (leaf->bitfield_hi - leaf->bitfield_lo) +1;
 	uint64_t mask;
-	if (num_bits == (sizeof(mask) * CHAR_BIT)) { // (1ULL<<64) == 1
+	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
 		mask = UINT64_MAX;
 	} else {
-		mask = (1ULL << num_bits) - 1;
+		mask = (UINT64_C(1) << num_bits) - 1;
 	}
 	int64_t const max_val = mask>>1; // max positive val 0111...
 	if (val > max_val) {

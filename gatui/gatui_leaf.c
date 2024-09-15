@@ -110,7 +110,7 @@ get_capsule_type(
 		atui_leaf const* const leaf
 		) {
 	gchar typestr[4] = {0};
-	union atui_type const a_type = leaf->type;
+	struct atui_type const a_type = leaf->type;
 	if ((a_type.fancy == ATUI_ARRAY) && (a_type.radix)) {
 		typestr[0] = 'a';
 		switch (leaf->total_bits) {
@@ -260,12 +260,12 @@ gatui_leaf_generate_children_model(
 	return NULL;
 }
 
-union atui_type
+struct atui_type
 gatui_leaf_get_atui_type(
 		GATUILeaf* const self
 		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), (union atui_type){0});
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), (union atui_type){0});
+	g_return_val_if_fail(GATUI_IS_LEAF(self), (struct atui_type){0});
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), (struct atui_type){0});
 	return self->atui->type;
 }
 uint32_t
