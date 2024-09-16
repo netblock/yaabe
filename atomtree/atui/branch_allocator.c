@@ -25,7 +25,7 @@ struct branch_array {
 struct global_tracker {
 	struct branch_array grafters;
 	struct branch_array branches; // initially shoot-only
-	void* atomtree;
+	void const* atomtree;
 };
 union dynarray_position_ptr {
 	void const* ptr; // union writes

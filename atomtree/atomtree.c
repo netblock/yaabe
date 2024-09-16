@@ -12,7 +12,7 @@ static struct error error = {}; // error handling
 inline static void
 populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -26,7 +26,7 @@ populate_smc_dpm_info(
 inline static void
 populate_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -40,7 +40,7 @@ populate_firmwareinfo(
 inline static void
 populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -53,7 +53,7 @@ populate_lcd_info(
 inline static void
 populate_smu_info(
 		struct atomtree_smu_info* const smu_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	// leaves is in a union with the structs.
@@ -114,7 +114,7 @@ populate_smu_info(
 inline static void
 populate_vram_usagebyfirmware(
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset) {
 	if (bios_offset) {
 		// leaves is in a union with the structs.
@@ -127,7 +127,7 @@ populate_vram_usagebyfirmware(
 inline static void
 populate_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -152,7 +152,7 @@ populate_gpio_pin_lut(
 inline static void
 populate_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -712,7 +712,7 @@ get_smc_pptable_ver(
 inline static void
 populate_ppt(
 		struct atomtree_powerplay_table* const ppt,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -1738,7 +1738,7 @@ populate_vram_info_v3_0( // TODO finish this
 inline static void
 populate_vram_info(
 		struct atomtree_vram_info* const vram_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -2015,7 +2015,7 @@ populate_voltageobject_info_v4_1(
 inline static void
 populate_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
-		struct atom_tree* const atree,
+		struct atom_tree const* const atree,
 		uint16_t const bios_offset
 		) {
 	if (bios_offset) {
@@ -2037,7 +2037,7 @@ populate_voltageobject_info(
 inline static void
 populate_master_datatable_v1_1(
 		struct atomtree_master_datatable* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree const* const atree
 		) {
 	void* const bios = atree->bios;
 	struct atomtree_master_datatable_v1_1* const dt11 = &(data_table->v1_1);
@@ -2175,7 +2175,7 @@ populate_master_datatable_v1_1(
 inline static void
 atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree const* const atree
 		) {
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
 	void* const bios = atree->bios;
@@ -2251,7 +2251,7 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 inline static void
 populate_master_datatable_v2_1(
 		struct atomtree_master_datatable* const data_table,
-		struct atom_tree* const atree
+		struct atom_tree const* const atree
 		) {
 	void* const bios = atree->bios;
 	struct atomtree_master_datatable_v2_1* const dt21 = &(data_table->v2_1);

@@ -162,7 +162,7 @@ atomtree_load_from_gfile(
 	if (atree == NULL) {
 		goto exit3;
 	}
-	generate_atui(atree);
+	atree->atui_root = generate_atui(atree);
 
 	g_input_stream_close(readstream, NULL, &ferror);
 	// TODO does close errors really matter?
@@ -361,7 +361,7 @@ gatui_tree_copy_core(
 		free(alloced_bios);
 		return NULL;
 	}
-	generate_atui(atree);
+	atree->atui_root = generate_atui(atree);
 
 	GATUITree* const self = g_object_new(GATUI_TYPE_TREE, NULL);
 	self->atomtree = atree;

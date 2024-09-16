@@ -188,9 +188,9 @@ struct _atui_branch {
 	// atom_common_table_header.structuresize
 };
 
-void
+atui_branch*
 generate_atui(
-		struct atom_tree* atree
+		struct atom_tree const* atree
 		);
 
 
@@ -290,7 +290,7 @@ typedef struct atui_func_args {
 	char const* rename;
 	// optionally rename the branch.
 
-	void* atomtree;
+	void const* atomtree;
 	// Pointer to the relevant atomtree struct. Mainly for the bios pointer,
 	// but is necessary if atomtree-computer data needs to be pulled in. Can be
 	// optional depending on defined atui branch; use suggestbios instead.
@@ -308,15 +308,15 @@ typedef struct atui_func_args {
 } atuifunc_args;
 
 struct subleaf_meta {
-	uint32_t const element_size;   // Size of bios element. For pointer math.
-	uint8_t const dynarray_length; // The number of elements in the bios array
-	bool const deferred_start_array;
+	uint32_t element_size;   // Size of bios element. For pointer math.
+	uint8_t dynarray_length; // The number of elements in the bios array
+	bool deferred_start_array;
 
-	uint8_t const numleaves; // number of leaves within the pattern.
+	uint8_t numleaves; // number of leaves within the pattern.
 	atui_leaf const* sub_leaves;
 
 	// optional enum for name sprintf'ing
-	struct atui_enum const* const enum_taglist;
+	struct atui_enum const* enum_taglist;
 };
 
 struct atui_branch_data {
