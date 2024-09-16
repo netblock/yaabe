@@ -1260,7 +1260,6 @@ populate_vram_info_v1_2(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
-	vi12->leaves = vram_info->leaves;
 
 	if (vi12->leaves->NumOfVRAMModule) {
 		vi12->vram_module_ver = v1_3;
@@ -1278,7 +1277,6 @@ populate_vram_info_v1_3(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_3* const vi13 = &(vram_info->v1_3);
-	vi13->leaves = vram_info->leaves;
 
 	if (vi13->leaves->NumOfVRAMModule) {
 		vi13->vram_module_ver = v1_3;
@@ -1310,7 +1308,6 @@ populate_vram_info_v1_4(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_4* const vi14 = &(vram_info->v1_4);
-	vi14->leaves = vram_info->leaves;
 
 	if (vi14->leaves->NumOfVRAMModule) {
 		vi14->vram_module_ver = v1_4;
@@ -1341,7 +1338,6 @@ populate_vram_info_v2_1(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_1* const vi21 = &(vram_info->v2_1);
-	vi21->leaves = vram_info->leaves;
 
 	if (vi21->leaves->NumOfVRAMModule) {
 		vi21->vram_module_ver = v1_7;
@@ -1380,7 +1376,6 @@ populate_vram_info_v2_2(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_2* const vi22 = &(vram_info->v2_2);
-	vi22->leaves = vram_info->leaves;
 
 	if (vi22->leaves->NumOfVRAMModule) {
 		vi22->vram_module_ver = v1_8;
@@ -1430,7 +1425,6 @@ populate_vram_info_v2_3(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
-	vi23->leaves = vram_info->leaves;
 
 	if (vi23->leaves->vram_module_num) {
 		vi23->vram_module_ver = v1_9;
@@ -1502,7 +1496,6 @@ populate_vram_info_v2_4(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
-	vi24->leaves = vram_info->leaves;
 	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
 
 	if (vi24->leaves->vram_module_num) {
@@ -1562,7 +1555,6 @@ populate_vram_info_v2_5(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
-	vi25->leaves = vram_info->leaves;
 
 	if (vi25->leaves->vram_module_num) {
 		vi25->vram_module_ver = v1_11;
@@ -1627,8 +1619,6 @@ populate_vram_info_v2_6(
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
-	vi26->leaves = vram_info->leaves;
-
 
 	if (vi26->leaves->vram_module_num) {
 		vi26->vram_module_ver = v1_9;
@@ -1690,7 +1680,6 @@ populate_vram_info_v3_0( // TODO finish this
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
-	vi30->leaves = vram_info->leaves;
 
 	if (vi30->leaves->vram_module_num) {
 		vi30->vram_module_ver = v3_0;
