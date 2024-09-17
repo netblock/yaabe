@@ -2174,78 +2174,95 @@ populate_master_datatable_v1_1(
 
 inline static void
 atomtree_datatable_v2_1_populate_sw_datatables(
-		struct atomtree_master_datatable_v2_1* const data_table,
+		struct atomtree_master_datatable_v2_1* const dt21,
 		struct atom_tree const* const atree
 		) {
-	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
+	struct atom_master_data_table_v2_1* const leaves = dt21->leaves;
 	void* const bios = atree->bios;
 
 	if (leaves->sw_datatable3) {
-		data_table->sw_datatable3.leaves = bios + leaves->sw_datatable3;
+		dt21->sw_datatable3.leaves = bios + leaves->sw_datatable3;
+		dt21->sw_datatable3.ver = get_ver(dt21->sw_datatable3.leaves);
 	}
 
 	if (leaves->sw_datatable5) {
-		data_table->sw_datatable5.leaves = bios + leaves->sw_datatable5;
+		dt21->sw_datatable5.leaves = bios + leaves->sw_datatable5;
+		dt21->sw_datatable5.ver = get_ver(dt21->sw_datatable5.leaves);
 	}
 
 	if (leaves->sw_datatable7) {
-		data_table->sw_datatable7.leaves = bios + leaves->sw_datatable7;
+		dt21->sw_datatable7.leaves = bios + leaves->sw_datatable7;
+		dt21->sw_datatable7.ver = get_ver(dt21->sw_datatable7.leaves);
 	}
 
 	if (leaves->sw_datatable9) {
-		data_table->sw_datatable9.leaves = bios + leaves->sw_datatable9;
+		dt21->sw_datatable9.leaves = bios + leaves->sw_datatable9;
+		dt21->sw_datatable9.ver = get_ver(dt21->sw_datatable9.leaves);
 	}
 
 	if (leaves->sw_datatable10) {
-		data_table->sw_datatable10.leaves = bios + leaves->sw_datatable10;
+		dt21->sw_datatable10.leaves = bios + leaves->sw_datatable10;
+		dt21->sw_datatable10.ver = get_ver(dt21->sw_datatable10.leaves);
 	}
 
 	if (leaves->sw_datatable13) {
-		data_table->sw_datatable13.leaves = bios + leaves->sw_datatable13;
+		dt21->sw_datatable13.leaves = bios + leaves->sw_datatable13;
+		dt21->sw_datatable13.ver = get_ver(dt21->sw_datatable13.leaves);
 	}
 
 	if (leaves->sw_datatable16) {
-		data_table->sw_datatable16.leaves = bios + leaves->sw_datatable16;
+		dt21->sw_datatable16.leaves = bios + leaves->sw_datatable16;
+		dt21->sw_datatable16.ver = get_ver(dt21->sw_datatable16.leaves);
 	}
 
 	if (leaves->sw_datatable17) {
-		data_table->sw_datatable17.leaves = bios + leaves->sw_datatable17;
+		dt21->sw_datatable17.leaves = bios + leaves->sw_datatable17;
+		dt21->sw_datatable17.ver = get_ver(dt21->sw_datatable17.leaves);
 	}
 
 	if (leaves->sw_datatable18) {
-		data_table->sw_datatable18.leaves = bios + leaves->sw_datatable18;
+		dt21->sw_datatable18.leaves = bios + leaves->sw_datatable18;
+		dt21->sw_datatable18.ver = get_ver(dt21->sw_datatable18.leaves);
 	}
 
 	if (leaves->sw_datatable19) {
-		data_table->sw_datatable19.leaves = bios + leaves->sw_datatable19;
+		dt21->sw_datatable19.leaves = bios + leaves->sw_datatable19;
+		dt21->sw_datatable19.ver = get_ver(dt21->sw_datatable19.leaves);
 	}
 
 	if (leaves->sw_datatable20) {
-		data_table->sw_datatable20.leaves = bios + leaves->sw_datatable20;
+		dt21->sw_datatable20.leaves = bios + leaves->sw_datatable20;
+		dt21->sw_datatable20.ver = get_ver(dt21->sw_datatable20.leaves);
 	}
 
 	if (leaves->sw_datatable21) {
-		data_table->sw_datatable21.leaves = bios + leaves->sw_datatable21;
+		dt21->sw_datatable21.leaves = bios + leaves->sw_datatable21;
+		dt21->sw_datatable21.ver = get_ver(dt21->sw_datatable21.leaves);
 	}
 
 	if (leaves->sw_datatable25) {
-		data_table->sw_datatable25.leaves = bios + leaves->sw_datatable25;
+		dt21->sw_datatable25.leaves = bios + leaves->sw_datatable25;
+		dt21->sw_datatable25.ver = get_ver(dt21->sw_datatable25.leaves);
 	}
 
 	if (leaves->sw_datatable26) {
-		data_table->sw_datatable26.leaves = bios + leaves->sw_datatable26;
+		dt21->sw_datatable26.leaves = bios + leaves->sw_datatable26;
+		dt21->sw_datatable26.ver = get_ver(dt21->sw_datatable26.leaves);
 	}
 
 	if (leaves->sw_datatable29) {
-		data_table->sw_datatable29.leaves = bios + leaves->sw_datatable29;
+		dt21->sw_datatable29.leaves = bios + leaves->sw_datatable29;
+		dt21->sw_datatable29.ver = get_ver(dt21->sw_datatable29.leaves);
 	}
 
 	if (leaves->sw_datatable33) {
-		data_table->sw_datatable33.leaves = bios + leaves->sw_datatable33;
+		dt21->sw_datatable33.leaves = bios + leaves->sw_datatable33;
+		dt21->sw_datatable33.ver = get_ver(dt21->sw_datatable33.leaves);
 	}
 
 	if (leaves->sw_datatable34) {
-		data_table->sw_datatable34.leaves = bios + leaves->sw_datatable34;
+		dt21->sw_datatable34.leaves = bios + leaves->sw_datatable34;
+		dt21->sw_datatable34.ver = get_ver(dt21->sw_datatable34.leaves);
 	}
 }
 inline static void

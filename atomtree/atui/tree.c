@@ -2776,9 +2776,136 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1 const* const data_table,
 		struct atom_tree const* const atree __unused
 		) {
-	// TODO have a table with a bunch of ATUI_INLINEs pointing at headers
-	struct atom_master_data_table_v2_1 const* const leaves = data_table->leaves;
-	return NULL;
+	atui_branch* sw_datatable3 = NULL;
+	if (data_table->sw_datatable3.leaves) {
+		sw_datatable3 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable3",  NULL,data_table->sw_datatable3.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable5 = NULL;
+	if (data_table->sw_datatable5.leaves) {
+		sw_datatable5 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable5",  NULL,data_table->sw_datatable5.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable7 = NULL;
+	if (data_table->sw_datatable7.leaves) {
+		sw_datatable7 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable7",  NULL,data_table->sw_datatable7.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable9 = NULL;
+	if (data_table->sw_datatable9.leaves) {
+		sw_datatable9 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable9",  NULL,data_table->sw_datatable9.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable10 = NULL;
+	if (data_table->sw_datatable10.leaves) {
+		sw_datatable10 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable10",  NULL,data_table->sw_datatable10.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable13 = NULL;
+	if (data_table->sw_datatable13.leaves) {
+		sw_datatable13 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable13",  NULL,data_table->sw_datatable13.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable16 = NULL;
+	if (data_table->sw_datatable16.leaves) {
+		sw_datatable16 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable16",  NULL,data_table->sw_datatable16.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable17 = NULL;
+	if (data_table->sw_datatable17.leaves) {
+		sw_datatable17 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable17",  NULL,data_table->sw_datatable17.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable18 = NULL;
+	if (data_table->sw_datatable18.leaves) {
+		sw_datatable18 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable18",  NULL,data_table->sw_datatable18.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable19 = NULL;
+	if (data_table->sw_datatable19.leaves) {
+		sw_datatable19 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable19",  NULL,data_table->sw_datatable19.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable20 = NULL;
+	if (data_table->sw_datatable20.leaves) {
+		sw_datatable20 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable20",  NULL,data_table->sw_datatable20.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable21 = NULL;
+	if (data_table->sw_datatable21.leaves) {
+		sw_datatable21 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable21",  NULL,data_table->sw_datatable21.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable25 = NULL;
+	if (data_table->sw_datatable25.leaves) {
+		sw_datatable25 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable25",  NULL,data_table->sw_datatable25.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable26 = NULL;
+	if (data_table->sw_datatable26.leaves) {
+		sw_datatable26 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable26",  NULL,data_table->sw_datatable26.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable29 = NULL;
+	if (data_table->sw_datatable29.leaves) {
+		sw_datatable29 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable29",  NULL,data_table->sw_datatable29.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable33 = NULL;
+	if (data_table->sw_datatable33.leaves) {
+		sw_datatable33 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable33",  NULL,data_table->sw_datatable33.leaves,  0,NULL
+		);
+	}
+
+	atui_branch* sw_datatable34 = NULL;
+	if (data_table->sw_datatable34.leaves) {
+		sw_datatable34 = ATUI_MAKE_BRANCH(atom_common_table_header,
+			"sw_datatable34",  NULL,data_table->sw_datatable34.leaves,  0,NULL
+		);
+	}
+
+
+	atui_branch* const atui_sw_datatables[] = {
+		sw_datatable3,  sw_datatable5,  sw_datatable7,  sw_datatable9,
+		sw_datatable10, sw_datatable13, sw_datatable16, sw_datatable17,
+		sw_datatable18, sw_datatable19, sw_datatable20, sw_datatable21,
+		sw_datatable25, sw_datatable26, sw_datatable29, sw_datatable33,
+		sw_datatable34,
+	};
+	return ATUI_MAKE_BRANCH(atui_nullstruct,  "sw_datatables",
+		NULL,NULL,  lengthof(atui_sw_datatables), atui_sw_datatables
+	);
 }
 inline static atui_branch*
 grow_master_datatable_v2_1(
@@ -2830,7 +2957,8 @@ grow_master_datatable_v2_1(
 		&(dt21->voltageobject_info), atree
 	);
 
-	atomtree_datatable_v2_1_populate_sw_datatables(dt21, atree);
+	atui_branch* const atui_sw_datatables =
+		atomtree_datatable_v2_1_populate_sw_datatables(dt21, atree);
 
 	atui_branch* const child_branches[] = {
 		// utility, multimedia
@@ -2839,7 +2967,8 @@ grow_master_datatable_v2_1(
 		// disp obj, indirect, umc, dce,
 		atui_vram_info,
 		// integrated, asic
-		atui_voltageobject_info
+		atui_voltageobject_info,
+		atui_sw_datatables,
 	};
 	return ATUI_MAKE_BRANCH(atom_master_data_table_v2_1,  NULL,
 		dt21,dt21->leaves,  lengthof(child_branches), child_branches
