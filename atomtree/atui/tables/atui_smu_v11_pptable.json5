@@ -5099,7 +5099,7 @@ global_default: {
 		{
 			access: "bios->OverrideAvfsGb",
 			name: "OverrideAvfsGb",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
@@ -5118,24 +5118,24 @@ global_default: {
 		}, {
 			access: "bios->qAvfsGb",
 			name: "qAvfsGb",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "GHz->V Override of fused curve",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
 				pattern: [{
 					name: "qAvfsGb [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->dBtcGbGfxPll",
 			name: "dBtcGbGfxPll",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 			description: [
 				{language: "english", text: "GHz->V BtcGb",},
@@ -5143,7 +5143,7 @@ global_default: {
 		}, {
 			access: "bios->dBtcGbGfxDfll",
 			name: "dBtcGbGfxDfll",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 			description: [
 				{language: "english", text: "GHz->V BtcGb",},
@@ -5151,7 +5151,7 @@ global_default: {
 		}, {
 			access: "bios->dBtcGbSoc",
 			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 			description: [
 				{language: "english", text: "GHz->V BtcGb",},
@@ -5159,188 +5159,24 @@ global_default: {
 		}, {
 			access: "bios->qAgingGb",
 			name: "qAgingGb",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
 				pattern: [{
 					name: "qAgingGb [%02u]: %s",
-					display: "ATUI_NAN",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->dBtcGbGfxPll",
-			name: "dBtcGbGfxPll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbGfxDfll",
-			name: "dBtcGbGfxDfll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbSoc",
-			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->qAgingGb",
-			name: "qAgingGb",
-			display: "ATUI_NAN",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_VOLTAGE_COUNT",
-				enum: "AVFS_VOLTAGE_TYPE_e",
-				pattern: [{
-					name: "s",
-					display: "ATUI_NAN",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->dBtcGbGfxPll",
-			name: "dBtcGbGfxPll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbGfxDfll",
-			name: "dBtcGbGfxDfll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbSoc",
-			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->qAgingGb",
-			name: "qAgingGb",
-			display: "ATUI_NAN",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_VOLTAGE_COUNT",
-				enum: "AVFS_VOLTAGE_TYPE_e",
-				pattern: [{
-					name: "qAgingGb [%02u]: %s",
-					display: "ATUI_NAN",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->dBtcGbGfxPll",
-			name: "dBtcGbGfxPll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbGfxDfll",
-			name: "dBtcGbGfxDfll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbSoc",
-			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->qAgingGb",
-			name: "qAgingGb",
-			display: "ATUI_NAN",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_VOLTAGE_COUNT",
-				enum: "AVFS_VOLTAGE_TYPE_e",
-				pattern: [{
-					name: "s",
-					display: "ATUI_NAN",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->dBtcGbGfxPll",
-			name: "dBtcGbGfxPll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbGfxDfll",
-			name: "dBtcGbGfxDfll",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->dBtcGbSoc",
-			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
-		}, {
-			access: "bios->qAgingGb",
-			name: "qAgingGb",
-			display: "ATUI_NAN",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_VOLTAGE_COUNT",
-				enum: "AVFS_VOLTAGE_TYPE_e",
-				pattern: [{
-					name: "s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 				},],
 			},
 		}, {
 			access: "bios->PiecewiseLinearDroopIntGfxDfll",
 			name: "PiecewiseLinearDroopIntGfxDfll",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "PiecewiseLinearDroopInt_t",
 			description: [
 				{language: "english", text: "GHz ->V",},
@@ -5348,27 +5184,27 @@ global_default: {
 		}, {
 			access: "bios->qStaticVoltageOffset",
 			name: "qStaticVoltageOffset",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
 				pattern: [{
 					name: "qStaticVoltageOffset [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->DcTol",
 			name: "DcTol",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
@@ -5380,7 +5216,7 @@ global_default: {
 		}, {
 			access: "bios->DcBtcEnabled",
 			name: "DcBtcEnabled",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
@@ -5397,10 +5233,10 @@ global_default: {
 		}, {
 			access: "bios->DcBtcMin",
 			name: "DcBtcMin",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
@@ -5412,10 +5248,10 @@ global_default: {
 		}, {
 			access: "bios->DcBtcMax",
 			name: "DcBtcMax",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
@@ -5427,16 +5263,16 @@ global_default: {
 		}, {
 			access: "bios->DcBtcGb",
 			name: "DcBtcGb",
-			display: "ATUI_NAN",
 			description: [
 				{language: "english", text: "mV Q2",},
 			],
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_VOLTAGE_COUNT",
 				enum: "AVFS_VOLTAGE_TYPE_e",
 				pattern: [{
-					name: "I2cControllers [%02u]: %s",
+					name: "DcBtcGb [%02u]: %s",
 				},],
 			},
 		},
@@ -6046,7 +5882,7 @@ global_default: {
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
-			display: "ATUI_NAN",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",
@@ -6790,7 +6626,7 @@ global_default: {
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
-			display: "ATUI_NAN",
+			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",

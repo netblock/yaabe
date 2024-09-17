@@ -144,11 +144,7 @@ def struct_to_atui(
 \\g<1>	{
 \\g<1>		access: "bios->\\g<4>",
 \\g<1>		name: "\\g<4>",
-"""
-	if explicit_attributes:
-		enum += atui_dec
-	enum += """\
-\\g<1>		fancy: "ATUI_ENUM",
+\\g<1>		display: ["ATUI_DEC", "ATUI_ENUM",],
 \\g<1>		__ATUIDESCR\\g<7>
 \\g<1>	},\
 """
