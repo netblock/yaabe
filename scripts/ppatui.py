@@ -609,7 +609,11 @@ def infer_leaf_data(
 	leaf_defaults = defaults["leaf_defaults"]
 	leaf_default = leaf_defaults[leaf_select]
 
-	for leaf in leaves:
+	num_leaves:int = len(leaves)
+	i:int = 0
+	while i < num_leaves:
+		leaf:atui_leaf = leaves[i]
+
 		leaf.parent_is_leaf = leaf_default.parent_is_leaf
 
 		if leaf.name is None:
@@ -632,6 +636,11 @@ def infer_leaf_data(
 			leaf.hi = leaf_default.hi
 		if leaf.enum is None:
 			leaf.enum = leaf_default.enum
+
+		if leaf.display == "ATUI_NODISPLAY":
+			leaves.remove(leaf) # for loop skips over next
+			num_leaves -= 1
+			continue
 
 		fancy_data = None
 		old_default = None
@@ -680,6 +689,7 @@ def infer_leaf_data(
 			infer_leaf_data(defaults, "dynpattern", pattern)
 
 			leaf_defaults["dynpattern"] = old_default
+		i += 1
 
 
 def infer_branch_data(

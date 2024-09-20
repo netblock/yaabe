@@ -205,22 +205,14 @@ gatui_leaf_new(
 	}
 
 	if (leaf->num_child_leaves) {
-		GListStore* const child_list = g_list_store_new(GATUI_TYPE_LEAF);
-		GListModel* const child_model = G_LIST_MODEL(child_list);
-		atui_leaves_to_gliststore( // handles ATUI_SUBONLY
-			child_list, leaf->child_leaves, leaf->num_child_leaves,
-			root
-		);
+		uint16_t const num_child_leaves = leaf->num_child_leaves;
 
-		uint16_t const num_children = g_list_model_get_n_items(child_model);
-		self->num_child_leaves = num_children;
-		self->child_leaves = malloc(num_children * sizeof(GATUILeaf*));
+		self->num_child_leaves = num_child_leaves;
+		self->child_leaves = malloc(num_child_leaves * sizeof(GATUILeaf*));
+		self->phone_book = malloc(num_child_leaves * sizeof(gulong));
 
-		self->phone_book = malloc(num_children * sizeof(gulong));
-
-		GATUILeaf* child;
-		for (uint16_t i = 0; i < num_children; i++) {
-			child = g_list_model_get_item(child_model, i); // refs for us
+		for (uint16_t i = 0; i < num_child_leaves; i++) {
+			GATUILeaf* child = gatui_leaf_new(&(leaf->child_leaves[i]), root);
 			self->child_leaves[i] = child;
 
 			self->phone_book[i] = g_signal_connect_data(child, "value-changed",
@@ -234,8 +226,6 @@ gatui_leaf_new(
 				NULL, G_CONNECT_SWAPPED
 			);
 		}
-
-		g_object_unref(child_model);
 	}
 
 	self->capsule_type = get_capsule_type(leaf);

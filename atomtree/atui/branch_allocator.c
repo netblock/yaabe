@@ -335,6 +335,108 @@ atui_leaves_printer(
 	}
 }
 
+
+static void
+atui_subonly_pullin(
+		atui_leaf** parent_leaves, 
+		uint16_t* num_child_leaves,
+		void* parent
+		) {
+	// pull in the child leaves from all children grandchildren etc where the
+	// parent is marked ATUI_SUBONLY
+	if (0 == num_child_leaves) {
+		return;
+	}
+	struct {
+		atui_leaf* start;
+		atui_leaf* pos;
+		atui_leaf* end;
+	} stack[ATUI_STACK_DEPTH];
+
+	uint8_t stack_i = 0;
+
+	uint16_t num_new_leaves = 0;
+	uint16_t num_subonlys = 0;
+
+	stack[0].pos = *parent_leaves;
+	stack[0].end = *parent_leaves + *num_child_leaves;
+	goto counter_loop_entry;
+	do { // iterative form
+		stack_i--;
+		counter_loop_entry:
+		while (stack[stack_i].pos < stack[stack_i].end) {
+			if (ATUI_SUBONLY == stack[stack_i].pos->type.disable) {
+				stack[stack_i+1].pos = stack[stack_i].pos->child_leaves;
+				stack[stack_i+1].end = (
+					stack[stack_i].pos->child_leaves
+					+ stack[stack_i].pos->num_child_leaves
+				);
+				stack[stack_i].pos++;
+				stack_i++;
+				num_subonlys++;
+				assert(stack_i < lengthof(stack));
+			} else {
+				stack[stack_i].pos++;
+				num_new_leaves++;
+			}
+		}
+	} while (stack_i);
+
+	if (0 == num_subonlys) {
+		goto handle_subonly_on_grandchildren;
+	}
+
+	atui_leaf* const newleaves = malloc(sizeof(atui_leaf) * num_new_leaves);
+	atui_leaf* walker = newleaves;
+
+	stack[0].start = *parent_leaves;
+	stack[0].pos = *parent_leaves;
+	goto puller_loop_entry;
+	do {
+		stack_i--;
+		puller_loop_entry:
+		while (stack[stack_i].pos < stack[stack_i].end) {
+			if (ATUI_SUBONLY == stack[stack_i].pos->type.disable) {
+				stack[stack_i+1].start = stack[stack_i].pos->child_leaves;
+				stack[stack_i+1].pos = stack[stack_i].pos->child_leaves;
+				stack[stack_i+1].end = (
+					stack[stack_i].pos->child_leaves
+					+ stack[stack_i].pos->num_child_leaves
+				);
+				stack[stack_i].pos++;
+				stack_i++;
+			} else {
+				*walker = *stack[stack_i].pos;
+				// handle parent association outside of this
+				walker++;
+				stack[stack_i].pos++;
+			}
+		}
+		free(stack[stack_i].start);
+	} while (stack_i);
+	assert(num_new_leaves == (walker - newleaves));
+
+	(*parent_leaves) = newleaves;
+	(*num_child_leaves) = num_new_leaves;
+
+	handle_subonly_on_grandchildren:
+	// needs to happen on child leaves as well.
+	// branch -> display -> subonly -> display
+	//              ^<-------------------<v
+	uint16_t const num_leaves = *num_child_leaves;
+	for (uint16_t i=0; i < num_leaves; i++) {
+		atui_leaf* leaf = &((*parent_leaves)[i]);
+		assert(ATUI_DISPLAY == leaf->type.disable);
+		// setting parent_is_leaf should not be necessary for leaves <- leaves
+		leaf->parent = parent;
+		if (leaf->num_child_leaves) {
+			atui_subonly_pullin(
+				&(leaf->child_leaves), &(leaf->num_child_leaves),  leaf
+			);
+		}
+	}
+}
+
 atui_branch*
 atui_branch_allocator(
 		struct atui_branch_data const* const embryo,
@@ -380,10 +482,15 @@ atui_branch_allocator(
 		// shoot doesn't get counted
 		table->leaf_count = first_leaves.target.pos - table->leaves;
 
+		atui_subonly_pullin(&(table->leaves), &(table->leaf_count), table);
+
 		for (uint16_t i=0; i < table->leaf_count; i++) {
 			if (table->leaves[i].num_bytes) { // if it maps the bios
 				table->num_copyable_leaves++;
 			}
+
+			// see atui_subonly_pullin
+			table->leaves[i].parent_is_leaf = false;
 		}
 	}
 	assert(tracker.branches.pos == tracker.branches.end);
@@ -439,6 +546,7 @@ atui_branch_allocator(
 			}
 		}
 	}
+
 	table->child_branches = branches;
 	table->max_num_branches = max_num_branches;
 	table->num_branches = tracker.branches.pos - branches;

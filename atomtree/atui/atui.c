@@ -516,7 +516,7 @@ struct path_meta {
 		void const* node;
 		atui_branch const* branch;
 		atui_leaf const* leaf;
-	} stack[16];
+	} stack[ATUI_STACK_DEPTH];
 	uint8_t n_leaves;
 	uint8_t n_branches;
 };
@@ -556,7 +556,7 @@ atui_branch_to_path(
 		) {
 	assert(tip);
 
-	atui_branch const* branchstack[16];
+	atui_branch const* branchstack[ATUI_STACK_DEPTH];
 	branchstack[0] = tip;
 	uint8_t i = 0;
 	size_t string_length = 1+1; // +1 for the initial / and +1 for \0
@@ -609,8 +609,8 @@ atui_leaf_to_path(
 
 	size_t string_length = 1; // +1 for \0; no final /
 
-	atui_leaf const* leafstack[16];
-	atui_branch const* branchstack[16];
+	atui_leaf const* leafstack[ATUI_STACK_DEPTH];
+	atui_branch const* branchstack[ATUI_STACK_DEPTH];
 	uint8_t leaves_i = 0;
 	uint8_t branches_i = 0;
 

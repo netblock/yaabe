@@ -286,6 +286,8 @@ atui_enum_lsearch( // linear; left
 
 
 // atui allocator functions internal structs:
+#define ATUI_STACK_DEPTH 16
+
 typedef struct atui_func_args {
 	char const* rename;
 	// optionally rename the branch.

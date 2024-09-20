@@ -124,14 +124,10 @@ gatui_branch_new(
 
 	if (branch->leaf_count) { // generate leaves_model
 		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
-		atui_leaves_to_gliststore(
-			leaf_list, branch->leaves, branch->leaf_count, root
-		);
-		GListModel* const leaf_list_model = G_LIST_MODEL(leaf_list);
 
-		uint16_t const num_leaves = g_list_model_get_n_items(leaf_list_model);
-		for (uint16_t i=0; i < num_leaves; i++) {
-			GATUILeaf* leaf = g_list_model_get_item(leaf_list_model, i);
+		for (uint16_t i=0; i < branch->leaf_count; i++) {
+			GATUILeaf* leaf = gatui_leaf_new(&(branch->leaves[i]), root);
+			g_list_store_append(leaf_list, leaf);
 			g_signal_connect_swapped(self, "value-changed",
 				G_CALLBACK(gatui_leaf_emit_val_changed), leaf
 			);
@@ -140,7 +136,7 @@ gatui_branch_new(
 
 		GtkSingleSelection* const single_model = gtk_single_selection_new(
 			G_LIST_MODEL(gtk_tree_list_model_new(
-				leaf_list_model,
+				G_LIST_MODEL(leaf_list),
 				false, true, leaves_treelist_generate_children, NULL,NULL
 			))
 		); // the later models take ownership of the earlier
