@@ -20,49 +20,6 @@ import json5
 import pathlib
 import argparse
 
-# atomtree/atui/atui.h has a copy
-ATUI_NAN = 0x0
-ATUI_DEC = 0x1
-ATUI_HEX = 0x2
-ATUI_OCT = 0x3
-ATUI_BIN = 0x4
-ATUI_ANY = 0x7
-ATUI_TYPE_RADIX = (
-	"ATUI_NAN",
-	"ATUI_DEC",
-	"ATUI_HEX",
-	"ATUI_OCT",
-	"ATUI_BIN",
-)
-
-ATUI_NOFANCY   = 0
-ATUI_BITFIELD  = 1
-ATUI_STRING    = 2
-ATUI_ARRAY     = 3
-ATUI_GRAFT     = 4
-ATUI_SHOOT     = 5
-ATUI_DYNARRAY  = 6
-_ATUI_BITCHILD = 7
-ATUI_TYPE_FANCY = (
-	"ATUI_NOFANCY",
-	"ATUI_BITFIELD",
-	"ATUI_STRING",
-	"ATUI_ARRAY",
-	"ATUI_GRAFT",
-	"ATUI_SHOOT",
-	"ATUI_DYNARRAY",
-	"_ATUI_BITCHILD",
-)
-
-ATUI_DISPLAY   = 0
-ATUI_SUBONLY   = 1
-ATUI_NODISPLAY = 2
-ATUI_TYPE_DISABLE = (
-	"ATUI_DISPLAY",
-	"ATUI_SUBONLY",
-	"ATUI_NODISPLAY",
-)
-
 def pcilut_to_c(
 		atui_data:dict,
 		fname:str
@@ -447,9 +404,65 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 
 
 
+class atui_type:
+	# atomtree/atui/atui.h has a copy
+	# radix
+	ATUI_NAN = 0x0
+	ATUI_DEC = 0x1
+	ATUI_HEX = 0x2
+	ATUI_OCT = 0x3
+	ATUI_BIN = 0x4
+	ATUI_ANY = 0x7
+	ATUI_TYPE_RADIX = (
+		"ATUI_NAN",
+		"ATUI_DEC",
+		"ATUI_HEX",
+		"ATUI_OCT",
+		"ATUI_BIN",
+	)
+
+	# fancy
+	ATUI_NOFANCY   = 0
+	ATUI_BITFIELD  = 1
+	ATUI_STRING    = 2
+	ATUI_ARRAY     = 3
+	ATUI_GRAFT     = 4
+	ATUI_SHOOT     = 5
+	ATUI_DYNARRAY  = 6
+	_ATUI_BITCHILD = 7
+	ATUI_TYPE_FANCY = (
+		"ATUI_NOFANCY",
+		"ATUI_BITFIELD",
+		"ATUI_STRING",
+		"ATUI_ARRAY",
+		"ATUI_GRAFT",
+		"ATUI_SHOOT",
+		"ATUI_DYNARRAY",
+		"_ATUI_BITCHILD",
+	)
+
+	# disable
+	ATUI_DISPLAY   = 0
+	ATUI_SUBONLY   = 1
+	ATUI_NODISPLAY = 2
+	ATUI_TYPE_DISABLE = (
+		"ATUI_DISPLAY",
+		"ATUI_SUBONLY",
+		"ATUI_NODISPLAY",
+	)
+
+	radix:int = None,
+	fancy:int = None,
+	disable:int = None,
+	# signed ~ enum may be handled through C generics, so usually False
+	signed_num:bool = None,
+	fraction:bool = None,
+	has_enum:bool = None
+
 class atui_leaf:
-	default_type:str  # for defaults; meta
 	parent_is_leaf:bool # parent type; meta
+
+	type:atui_type # constructed on intersect. see expand_leaf_type()
 
 	access:str # var
 	access_meta:str # for c preprocessor stuff
@@ -470,11 +483,6 @@ class atui_leaf:
 		self.parent_is_leaf = False
 		leafkeys = set(leaf)
 
-		if "default_type" in leafkeys:
-			self.default_type = leaf["default_type"]
-		else:
-			self.default_type = None
-
 		if "access" in leafkeys:
 			self.access = leaf["access"]
 			self.access_meta = leaf["access"]
@@ -485,12 +493,14 @@ class atui_leaf:
 			self.name = leaf["name"]
 		else:
 			self.name = None
+
 		if "display" in leafkeys:
 			self.display = leaf["display"]
 		else:
 			self.display = None
+
 		if "fancy" in leafkeys:
-			self.fancy = ATUI_TYPE_FANCY.index(leaf["fancy"])
+			self.fancy = leaf["fancy"]
 		else:
 			self.fancy = None
 		if "fancy_data" in leafkeys:
@@ -514,11 +524,7 @@ class atui_leaf:
 		else:
 			self.enum = None
 
-
 class atui_branch:
-	#parent_is_leaf:bool # would only exist for graft, but that needs to be
-	# runtime
-
 	c_prefix:str
 	c_type:str
 	atomtree:str
@@ -598,16 +604,52 @@ def populate_branch_defaults(
 	}
 	return classed_defaults
 
+def expand_leaf_type(
+		leaf:atui_leaf
+		):
+	# expand the python atui_type based on info within the leaf
+	atuitype = atui_type()
+	leaf.type = atuitype
+	if not (leaf.fancy is None):
+		assert (leaf.fancy in atui_type.ATUI_TYPE_FANCY), (leaf.name,leaf.fancy)
+		atuitype.fancy = atui_type.ATUI_TYPE_FANCY.index(leaf.fancy)
+
+	if type(leaf.display) is str:
+		if leaf.display in atui_type.ATUI_TYPE_RADIX:
+			atuitype.radix = atui_type.ATUI_TYPE_RADIX.index(leaf.display)
+			atuitype.disable = atui_type.ATUI_DISPLAY
+		elif leaf.display in atui_type.ATUI_TYPE_DISABLE:
+			atuitype.radix = atui_type.ATUI_NAN
+			atuitype.disable = atui_type.ATUI_TYPE_DISABLE.index(leaf.display)
+		else:
+			assert(0), (leaf.name, leaf.display)
+	elif type(leaf.display) is list:
+		if "ATUI_SIGNED" in leaf.display:
+			atuitype.signed_num = True
+		if "ATUI_ENUM" in leaf.display:
+			atuitype.has_enum = True
+		radix = None
+		disable = "ATUI_DISPLAY"
+		for flag in leaf.display:
+			if flag in atui_type.ATUI_TYPE_RADIX:
+				radix = flag
+			elif flag in atui_type.ATUI_TYPE_DISABLE:
+				disable = flag
+		assert (not (radix is None)), leaf.name
+		atuitype.radix = atui_type.ATUI_TYPE_RADIX.index(radix)
+		atuitype.disable = atui_type.ATUI_TYPE_DISABLE.index(disable)
+	else:
+		assert(0), leaf.name
 def infer_leaf_data(
 		defaults:dict,
 		leaf_select:str,
 		leaves:list
 		):
-	# infer missing data on a branch's leaves based on what already exists for
-	# a leaf, and the global_defaults
+	# infer missing data on a leaf based on what already exists for the leaf 
+	# and the global_defaults
 
-	leaf_defaults = defaults["leaf_defaults"]
-	leaf_default = leaf_defaults[leaf_select]
+	leaf_defaults:dict = defaults["leaf_defaults"]
+	leaf_default:atui_leaf = leaf_defaults[leaf_select]
 
 	num_leaves:int = len(leaves)
 	i:int = 0
@@ -615,7 +657,6 @@ def infer_leaf_data(
 		leaf:atui_leaf = leaves[i]
 
 		leaf.parent_is_leaf = leaf_default.parent_is_leaf
-
 		if leaf.name is None:
 			leaf.name = leaf_default.name
 		if leaf.access is None:
@@ -636,8 +677,9 @@ def infer_leaf_data(
 			leaf.hi = leaf_default.hi
 		if leaf.enum is None:
 			leaf.enum = leaf_default.enum
+		expand_leaf_type(leaf)
 
-		if leaf.display == "ATUI_NODISPLAY":
+		if leaf.type.disable == atui_type.ATUI_NODISPLAY:
 			leaves.remove(leaf) # for loop skips over next
 			num_leaves -= 1
 			continue
@@ -647,48 +689,49 @@ def infer_leaf_data(
 		child_leaf = None
 		access = ""
 		access_meta = ""
-		if leaf.fancy == ATUI_BITFIELD:
-			fancy_data = copy.copy(leaf.fancy_data)
-			leaf.fancy_data = []
-			for l in fancy_data:
-				 leaf.fancy_data.append(atui_leaf(l))
+		match (leaf.type.fancy):
+			case atui_type.ATUI_BITFIELD:
+				fancy_data = copy.copy(leaf.fancy_data)
+				leaf.fancy_data = []
+				for l in fancy_data:
+					 leaf.fancy_data.append(atui_leaf(l))
 
-			old_default = leaf_defaults["bitchild"]
-			new_default = old_default.copy()
-			leaf_defaults["bitchild"] = new_default
-			#new_default.access = leaf.access # unnecessary
-			new_default.access_meta = leaf.access_meta # c preprocessor stuff
-			new_default.fancy = _ATUI_BITCHILD
-			new_default.parent_is_leaf = True
-			infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
+				old_default = leaf_defaults["bitchild"]
+				new_default = old_default.copy()
+				leaf_defaults["bitchild"] = new_default
+				#new_default.access = leaf.access # unnecessary
+				new_default.access_meta = leaf.access_meta # c generics stuff
+				new_default.fancy = "_ATUI_BITCHILD"
+				new_default.parent_is_leaf = True
+				infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
 
-			leaf_defaults["bitchild"] = old_default
-		elif leaf.fancy == ATUI_DYNARRAY:
-			fancy_data = copy.copy(leaf.fancy_data)
-			pattern = []
-			leaf.fancy_data["pattern"] = pattern
-			for l in fancy_data["pattern"]:
-				 pattern.append(atui_leaf(l))
+				leaf_defaults["bitchild"] = old_default
+			case atui_type.ATUI_DYNARRAY:
+				fancy_data = copy.copy(leaf.fancy_data)
+				pattern = []
+				leaf.fancy_data["pattern"] = pattern
+				for l in fancy_data["pattern"]:
+					 pattern.append(atui_leaf(l))
 
-			if not ("enum" in leaf.fancy_data):
-				leaf.fancy_data["enum"] = "NULL"
+				if not ("enum" in leaf.fancy_data):
+					leaf.fancy_data["enum"] = "NULL"
 
-			if leaf.access and (leaf.access != "NULL"):
-				access_meta = leaf.access_meta # direct array
-			else:
-				leaf.access_meta = fancy_data["deferred"] + "[0]"
-				leaf.access = None
-				access_meta = fancy_data["deferred"] # array of pointers
-			access_meta += "[0]" # c preprocessor stuff
+				if leaf.access and (leaf.access != "NULL"):
+					access_meta = leaf.access_meta # direct array
+				else:
+					leaf.access_meta = fancy_data["deferred"] + "[0]"
+					leaf.access = None
+					access_meta = fancy_data["deferred"] # array of pointers
+				access_meta += "[0]" # c preprocessor stuff
 
-			old_default = leaf_defaults["dynpattern"]
-			new_default = old_default.copy()
-			leaf_defaults["dynpattern"] = new_default
-			new_default.access_meta = access_meta
-			new_default.parent_is_leaf = True
-			infer_leaf_data(defaults, "dynpattern", pattern)
+				old_default = leaf_defaults["dynpattern"]
+				new_default = old_default.copy()
+				leaf_defaults["dynpattern"] = new_default
+				new_default.access_meta = access_meta
+				new_default.parent_is_leaf = True
+				infer_leaf_data(defaults, "dynpattern", pattern)
 
-			leaf_defaults["dynpattern"] = old_default
+				leaf_defaults["dynpattern"] = old_default
 		i += 1
 
 
@@ -742,28 +785,29 @@ def leaf_to_subleaf(
 + indent + "},"
 )
 	bounds_vals = ()
-	if leaf.fancy == ATUI_DYNARRAY:
-		if leaf.fancy_data["enum"] == "ATUI_NULL":
-			enum_taglist = "NULL"
-		else:
-			enum_taglist = "&(ATUI_ENUM(%s))" % leaf.fancy_data["enum"]
-		bounds_vals = (
-			"sizeof(%s[0])" % leaf.access_meta,
-			leaf.fancy_data["count"],
-			str(not leaf.access).lower(),
-			len(leaf.fancy_data["pattern"]),
-			enum_taglist,
-			len(leaf.fancy_data["pattern"]),
-			leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
-		)
-	elif leaf.fancy == ATUI_BITFIELD:
-		bounds_vals = (
-			"0", "0", "0",
-			len(leaf.fancy_data),
-			"NULL",
-			len(leaf.fancy_data),
-			leaves_to_text(leaf.fancy_data, child_indent+"\t"),
-		)
+	match (leaf.type.fancy):
+		case atui_type.ATUI_DYNARRAY:
+			if leaf.fancy_data["enum"] == "ATUI_NULL":
+				enum_taglist = "NULL"
+			else:
+				enum_taglist = "&(ATUI_ENUM(%s))" % leaf.fancy_data["enum"]
+			bounds_vals = (
+				"sizeof(%s[0])" % leaf.access_meta,
+				leaf.fancy_data["count"],
+				str(not leaf.access).lower(),
+				len(leaf.fancy_data["pattern"]),
+				enum_taglist,
+				len(leaf.fancy_data["pattern"]),
+				leaves_to_text(leaf.fancy_data["pattern"], child_indent+"\t")
+			)
+		case atui_type.ATUI_BITFIELD:
+			bounds_vals = (
+				"0", "0", "0",
+				len(leaf.fancy_data),
+				"NULL",
+				len(leaf.fancy_data),
+				leaves_to_text(leaf.fancy_data, child_indent+"\t"),
+			)
 
 	return bounds_template % bounds_vals
 
@@ -780,40 +824,26 @@ def leaf_type_to_text(
 	# [4] fancy,
 	# [5] disable,
 	# [6] enumpointer
-	leaftype[0] = ""
+	leaftype[0] = atui_type.ATUI_TYPE_RADIX[leaf.type.radix]
 	leaftype[1] = "_PPATUI_LEAF_SIGNED(%s)" % var_meta
 	leaftype[2] = "_PPATUI_LEAF_FRACTION(%s)" % var_meta
 	leaftype[3] = "false"
-	leaftype[4] = ATUI_TYPE_FANCY[leaf.fancy]
-	leaftype[5] = "ATUI_DISPLAY"
+	leaftype[4] = atui_type.ATUI_TYPE_FANCY[leaf.type.fancy]
+	leaftype[5] = atui_type.ATUI_TYPE_DISABLE[leaf.type.disable]
 	leaftype[6] = "NULL"
 
-	if type(leaf.display) is str:
-		if leaf.display in ATUI_TYPE_DISABLE:
-			leaftype[0] = "ATUI_NAN"
-			leaftype[5] = leaf.display
-		elif leaf.display in ATUI_TYPE_RADIX:
-			leaftype[0] = leaf.display
-			#leaftype[5] = "ATUI_DISPLAY"
+	if leaf.type.signed_num is True:
+		leaftype[1] = "true"
+	if leaf.type.fraction is True:
+		leaftype[2] = "true"
+	if leaf.type.has_enum is True:
+		# would be as simple as signed or fraction, but c _Generic() has
+		# limitations around enums
+		leaftype[3] = "true"
+		if leaf.enum is None:
+			leaftype[6] = "ATUI_ENUM_INFER(%s)" % var_meta
 		else:
-			assert(0), (leaf.name, leaf.display)
-	elif type(leaf.display) is list:
-		if "ATUI_SIGNED" in leaf.display:
-			leaftype[1] = "true"
-		if "ATUI_ENUM" in leaf.display:
-			leaftype[3] = "true"
-			if leaf.enum is None:
-				leaftype[6] = "ATUI_ENUM_INFER(%s)" % var_meta
-			else:
-				leaftype[6] = "&(ATUI_ENUM(%s))" % leaf.enum
-		for flag in leaf.display:
-			if flag in ATUI_TYPE_RADIX:
-				leaftype[0] = flag
-			elif flag in ATUI_TYPE_DISABLE:
-				leaftype[5] = flag
-	else:
-		assert(0), leaf.name
-	assert(leaftype[0]), leaf.name
+			leaftype[6] = "&(ATUI_ENUM(%s))" % leaf.enum
 
 def leaves_to_text(
 		leaves:list,
@@ -866,56 +896,56 @@ indent + "{\n"
 			var_meta = leaf.access_meta
 		else:
 			var_meta = "NULL"
-
-		if leaf.fancy == ATUI_NOFANCY:
-			leaf_text_extra = ""
-		elif leaf.fancy == ATUI_STRING:
-			if leaf.access:
-				var_access = leaf.access
-			leaf_text_extra = ""
-		elif leaf.fancy == ATUI_ARRAY:
-			if leaf.access:
-				var_access = leaf.access
-			var_meta = leaf.access_meta + "[0]"
-			leaf_text_extra = (
-				child_indent + ".array_size = lengthof(%s),\n"
-				+ child_indent + ".num_bytes = sizeof(%s),\n"
-			)
-			leaf_text_extra %= (leaf.access, leaf.access)
-		elif leaf.fancy == ATUI_BITFIELD:
-			leaf_text_extra = (
-				child_indent + ".num_child_leaves = %u,\n"
-				+ child_indent +
-					".template_leaves = & (struct subleaf_meta const) %s\n"
-			)
-			leaf_text_extra %= (
-				len(leaf.fancy_data),
-				leaf_to_subleaf(leaf, child_indent),
-			)
-		elif leaf.fancy == _ATUI_BITCHILD:
-			leaf_text_extra = (
-				child_indent + ".bitfield_hi = %u,\n"
-				+ child_indent + ".bitfield_lo = %u,\n"
-			)
-			leaf_text_extra %= (leaf.hi, leaf.lo)
-		elif leaf.fancy in (ATUI_SHOOT, ATUI_GRAFT):
-			leaf_text_extra = (
-				child_indent + ".branch_bud = _atui_%s,\n"
-			)
-			leaf_text_extra %= (leaf.fancy_data,)
-		elif leaf.fancy == ATUI_DYNARRAY:
-			if leaf.access:
-				var_meta += "[0]"
-				var_access = leaf.access
-			else:
-				var_access = leaf.fancy_data["deferred"]
-			leaf_text_extra = (
-				child_indent +
-					".template_leaves = & (struct subleaf_meta const) %s\n"
-			)
-			leaf_text_extra %= (leaf_to_subleaf(leaf, child_indent),)
-		else:
-			assert 0, (leaf.name, leaf.fancy)
+		match (leaf.type.fancy):
+			case atui_type.ATUI_NOFANCY:
+				leaf_text_extra = ""
+			case atui_type.ATUI_STRING:
+				if leaf.access:
+					var_access = leaf.access
+				leaf_text_extra = ""
+			case atui_type.ATUI_ARRAY:
+				if leaf.access:
+					var_access = leaf.access
+				var_meta = leaf.access_meta + "[0]"
+				leaf_text_extra = (
+					child_indent + ".array_size = lengthof(%s),\n"
+					+ child_indent + ".num_bytes = sizeof(%s),\n"
+				)
+				leaf_text_extra %= (leaf.access, leaf.access)
+			case atui_type.ATUI_BITFIELD:
+				leaf_text_extra = (
+					child_indent + ".num_child_leaves = %u,\n"
+					+ child_indent +
+						".template_leaves = & (struct subleaf_meta const) %s\n"
+				)
+				leaf_text_extra %= (
+					len(leaf.fancy_data),
+					leaf_to_subleaf(leaf, child_indent),
+				)
+			case atui_type._ATUI_BITCHILD:
+				leaf_text_extra = (
+					child_indent + ".bitfield_hi = %u,\n"
+					+ child_indent + ".bitfield_lo = %u,\n"
+				)
+				leaf_text_extra %= (leaf.hi, leaf.lo)
+			case atui_type.ATUI_SHOOT | atui_type.ATUI_GRAFT: # fallthrough
+				leaf_text_extra = (
+					child_indent + ".branch_bud = _atui_%s,\n"
+				)
+				leaf_text_extra %= (leaf.fancy_data,)
+			case atui_type.ATUI_DYNARRAY:
+				if leaf.access:
+					var_meta += "[0]"
+					var_access = leaf.access
+				else:
+					var_access = leaf.fancy_data["deferred"]
+				leaf_text_extra = (
+					child_indent +
+						".template_leaves = & (struct subleaf_meta const) %s\n"
+				)
+				leaf_text_extra %= (leaf_to_subleaf(leaf, child_indent),)
+			case _:
+				assert 0, (leaf.name, leaf.fancy)
 
 		if leaf.parent_is_leaf:
 			leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
@@ -957,29 +987,30 @@ def deep_count_leaves(
 	dynlength = ""
 	counters[0] += len(leaves)
 	for leaf in leaves:
-		if leaf.fancy == ATUI_GRAFT:
-			counters[2] += 1
-		elif leaf.fancy == ATUI_SHOOT:
-			counters[4] += 1
-		#elif leaf.fancy == ATUI_BITFIELD:
-		#	counters[0] += len(leaf.fancy_data)
-		elif leaf.fancy == ATUI_DYNARRAY:
-			sub_counters = counters_template.copy()
-			# We're in dynarray. The dynarray segments of subcounters  will be
-			# non-'0' if there is a nested dynarray.
-			dynlength = leaf.fancy_data["count"]
-			deep_count_leaves(
-				sub_counters, leaf.fancy_data["pattern"],  counters_template
-			)
-			counters[1] += nest_dynarray % (
-				dynlength, sub_counters[0], sub_counters[1]
-			)
-			counters[3] += nest_dynarray % (
-				dynlength, sub_counters[2], sub_counters[3]
-			)
-			counters[5] += nest_dynarray % (
-				dynlength, sub_counters[4], sub_counters[5]
-			)
+		match (leaf.type.fancy):
+			case atui_type.ATUI_GRAFT:
+				counters[2] += 1
+			case atui_type.ATUI_SHOOT:
+				counters[4] += 1
+			#case atui_type.ATUI_BITFIELD:
+			#	counters[0] += len(leaf.fancy_data)
+			case atui_type.ATUI_DYNARRAY:
+				sub_counters = counters_template.copy()
+				# We're in dynarray. The dynarray segments of subcounters will
+				# be non-'0' if there is a nested dynarray.
+				dynlength = leaf.fancy_data["count"]
+				deep_count_leaves(
+					sub_counters, leaf.fancy_data["pattern"],  counters_template
+				)
+				counters[1] += nest_dynarray % (
+					dynlength, sub_counters[0], sub_counters[1]
+				)
+				counters[3] += nest_dynarray % (
+					dynlength, sub_counters[2], sub_counters[3]
+				)
+				counters[5] += nest_dynarray % (
+					dynlength, sub_counters[4], sub_counters[5]
+				)
 
 
 
