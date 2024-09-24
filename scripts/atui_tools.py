@@ -16,44 +16,44 @@ class __regexvar:
 	# https://docs.python.org/3/howto/regex.html
 	# nc is noncapture; it does not have a referencable group num
 
-	white = "\\s*"
-	tabs_nc = "(?:\t*)"
-	tabs = "(" + tabs_nc + ")"
-	space = "( +)"
-	spacetab = "[ \t]*"
-	nums = "(\\d+)"
+	white:str = "\\s*"
+	tabs_nc:str = "(?:\t*)"
+	tabs:str = "(" + tabs_nc + ")"
+	space:str = "( +)"
+	spacetab:str = "[ \t]*"
+	nums:str = "(\\d+)"
 
-	c_prefix_nc = "(?:struct|union)"
-	c_prefix = "(" + c_prefix_nc + ")" + white
-	c_num_types_nc = "(?:(?:u?int|char|float|uq\\d+_)\\d+_t)"
-	c_num_types = "(" + c_num_types_nc + ")" + white
-	c_ints_nc = "(?:(?:u?int|char)[0-9]+_t)"
-	c_ints = "(" + c_ints_nc + ")" + white
-	name_nc = "(?:[a-zA-Z_]\\w*)"
-	name = "(" + name_nc + ")" + white
+	c_prefix_nc:str = "(?:struct|union)"
+	c_prefix:str = "(" + c_prefix_nc + ")" + white
+	c_num_types_nc:str = "(?:(?:u?int|char|float|uq\\d+_)\\d+_t)"
+	c_num_types:str = "(" + c_num_types_nc + ")" + white
+	c_ints_nc:str = "(?:(?:u?int|char)[0-9]+_t)"
+	c_ints:str = "(" + c_ints_nc + ")" + white
+	name_nc:str = "(?:[a-zA-Z_]\\w*)"
+	name:str = "(" + name_nc + ")" + white
 
-	array_alnum =   "\\["+white+ "(\\w*)"         +white+"\\]" +white
-	array_var =     "\\["+white+ name             +white+"\\]" +white
-	array_num =     "\\["+white+ "(\\d*)"         +white+"\\]" +white
-	array_vlaflex = "\\["+white+ "("+name_nc+")?" +white+"\\]" +white
-	#array_countedby_nc = "(?:__counted_by\\(\\w*\\))?" +white
-	array_countedby_var = "(__counted_by\\((\\w*)\\))" +white
-	array_countedby_whole_q = "(__counted_by\\(\\w*\\))?" +white
+	array_alnum:str =   "\\["+white+ "(\\w*)"         +white+"\\]" +white
+	array_var:str =     "\\["+white+ name             +white+"\\]" +white
+	array_num:str =     "\\["+white+ "(\\d*)"         +white+"\\]" +white
+	array_vlaflex:str = "\\["+white+ "("+name_nc+")?" +white+"\\]" +white
+	#array_countedby_nc:str = "(?:__counted_by\\(\\w*\\))?" +white
+	array_countedby_var:str = "(__counted_by\\((\\w*)\\))" +white
+	array_countedby_whole_q:str = "(__counted_by\\(\\w*\\))?" +white
 
-	struct_or_cnumtype = "("  \
+	struct_or_cnumtype:str = "("  \
 		+ "(?:" + c_prefix_nc + white + name_nc + ")"  \
 		+ "|(?:" + c_num_types_nc + ")"  \
 	+ ")" + white
 
-	hi_lo = ":" + nums + "-" + nums + " \\+1[,;]"
+	hi_lo:str = ":" + nums + "-" + nums + " \\+1[,;]"
 
-	c_enum = "(enum)" + white
-	c_enum_type = ":" + white + c_num_types
-	c_enum_equals = "=" + white + "([^,]+)," + spacetab
+	c_enum:str = "(enum)" + white
+	c_enum_type:str = ":" + white + c_num_types
+	c_enum_equals:str = "=" + white + "([^,]+)," + spacetab
 
-	comments = "(?:" + white + "(//\\s*(.*)))?"
-	flagged_comment = "__ATUIDESCR//\\s*(.*)"
-	no_comment = tabs + "__ATUIDESCR\n"
+	comments:str = "(?:" + white + "(//\\s*(.*)))?"
+	flagged_comment:str = "__ATUIDESCR//\\s*(.*)"
+	no_comment:str = tabs + "__ATUIDESCR\n"
 
 def __atui_regex_prepare(
 		text:str
@@ -71,12 +71,12 @@ def struct_to_atui(
 		explicit_attributes:bool=False,
 		print_text:bool=True
 		):
-	s = __regexvar()
+	s:__regexvar = __regexvar
 	text = __atui_regex_prepare(text)
-	atui_dec = "\\g<1>\t\tdisplay: \"ATUI_DEC\",\n"
+	atui_dec:str = "\\g<1>\t\tdisplay: \"ATUI_DEC\",\n"
 
 	# self struct:
-	branch_text = """{\n\tc_type: "\\g<2>",\n"""
+	branch_text:str = """{\n\tc_type: "\\g<2>",\n"""
 	if explicit_attributes:
 		branch_text = """\
 {
@@ -95,7 +95,7 @@ def struct_to_atui(
 	text = re.sub("};","\t],\n},", text)
 
 	# ATUI_DYNARRAY part 1
-	dynarray = """
+	dynarray:str = """
 		{
 			access: "bios->\\g<2>",
 			name: "\\g<2>",
@@ -123,7 +123,7 @@ def struct_to_atui(
 	)
 
 	# ATUI_GRAFT
-	inline = """\
+	inline:str = """\
 \\g<1>	{
 \\g<1>		access: "bios->\\g<4>",
 \\g<1>		name: "\\g<4>",
@@ -140,7 +140,7 @@ def struct_to_atui(
 	)
 
 	# ATUI_ENUM
-	enum = """\
+	enum:str = """\
 \\g<1>	{
 \\g<1>		access: "bios->\\g<4>",
 \\g<1>		name: "\\g<4>",
@@ -156,7 +156,7 @@ def struct_to_atui(
 	)
 
 	# ATUI_NOFANCY
-	simple_nums = """\
+	simple_nums:str = """\
 \\g<1>	{
 \\g<1>		access: "bios->\\g<3>",
 \\g<1>		name: "\\g<3>",
@@ -174,7 +174,7 @@ def struct_to_atui(
 	)
 
 	# ATUI_ARRAY
-	num_arrays = """\
+	num_arrays:str = """\
 \\g<1>	{
 \\g<1>		access: "bios->\\g<3>",
 \\g<1>		name: "\\g<3>",
@@ -190,7 +190,7 @@ def struct_to_atui(
 	)
 
 	# descriptions
-	descriptions = """\
+	descriptions:str = """\
 \\g<1>description: [
 \\g<1>	{language: "english", text: "\\g<2>",},
 \\g<1>],\
@@ -226,10 +226,10 @@ def bitfield_to_atui(
 		explicit_attributes:bool=False,
 		print_text:bool=True
 		):
-	s = __regexvar()
+	s:__regexvar = __regexvar
 	text = __atui_regex_prepare(text)
 
-	union_text = """{\n\tc_type: "\\g<2>",\n"""
+	union_text:str = """{\n\tc_type: "\\g<2>",\n"""
 	if explicit_attributes:
 		union_text = """\
 {
@@ -253,7 +253,7 @@ def bitfield_to_atui(
 
 
 	# main leaf
-	bitfield_leaf = """\
+	bitfield_leaf:str = """\
 \\g<1>	{
 \\g<1>		access: "bios->\\g<3>",
 \\g<1>		name: "\\g<3>",
@@ -271,7 +271,7 @@ def bitfield_to_atui(
 	text = re.sub("\tstruct { uint[0-9]+_t\n", "", text)
 
 	# bitfield enries
-	bit_child = """\
+	bit_child:str = """\
 \\g<1>		{
 \\g<1>			name: "\\g<2>",
 \\g<1>			hi: \\g<4>, lo: \\g<5>,
@@ -287,7 +287,7 @@ def bitfield_to_atui(
 	)
 
 	# descriptions
-	descriptions = """\
+	descriptions:str = """\
 \\g<1>description: [
 \\g<1>	{language: "english", text: "\\g<2>",},
 \\g<1>],\
@@ -316,11 +316,11 @@ def enum_to_atui(
 		explicit_attributes:bool=False,
 		print_text:bool=True
 		):
-	s = __regexvar()
+	s:__regexvar = __regexvar
 	text = __atui_regex_prepare(text)
 
 	# main enum body
-	enum_text = """\
+	enum_text:str = """\
 {name: "\\g<2>",
 	__ATUIDESCR\\g<5>
 	constants: [\
@@ -333,7 +333,7 @@ def enum_to_atui(
 	text = re.sub("};","]},", text)
 
 	# enum entries
-	var_text = """\
+	var_text:str = """\
 		{name: "\\g<2>",
 			__ATUIDESCR\\g<4>
 		},\
@@ -345,7 +345,7 @@ def enum_to_atui(
 	)
 
 	# descriptions
-	descriptions = """\
+	descriptions:str = """\
 \\g<1>description: [
 \\g<1>	{language: "english", text: "\\g<2>",},
 \\g<1>],\

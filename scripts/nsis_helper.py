@@ -14,13 +14,14 @@ def enlist_shared_objs(
 		):
 	# objdump -p is unnecessarily more powerful
 	# ntldd is unexplored; might ultimately be the same as msys2 ldd
-	out = subprocess.check_output(("ldd", linked_obj), text=True)
-	lines = out.strip().split("\n")
+	out:str = subprocess.check_output(("ldd", linked_obj), text=True)
+	lines:list = out.strip().split("\n")
+	l:str
 	for l in lines:
-		parts = l.split()
+		parts:list = l.split()
 		if len(parts) != 4: # name => loc (addr)
 			continue
-		lib = parts[2]
+		lib:str = parts[2]
 		if (lib[:6] == "/mingw") and (lib not in objs):
 			objs.add(lib)
 			enlist_shared_objs(lib, objs)
@@ -29,17 +30,17 @@ def copy_skeuos(
 		source_dir:str,
 		themes_dir:str
 		):
-	skeuos_themes = os.path.join(source_dir, "skeuos-gtk", "themes")
-	blue_light = "Skeuos-Blue-Light"
-	blue_light_src = os.path.join(skeuos_themes, blue_light)
+	skeuos_themes:str = os.path.join(source_dir, "skeuos-gtk", "themes")
+	blue_light:str = "Skeuos-Blue-Light"
+	blue_light_src:str = os.path.join(skeuos_themes, blue_light)
 	if os.path.isdir(blue_light_src):
 		shutil.copytree(
 			blue_light_src,
 			os.path.join(themes_dir, blue_light),
 			dirs_exist_ok=True
 		)
-	blue_dark = "Skeuos-Blue-Dark"
-	blue_dark_src = os.path.join(skeuos_themes, blue_dark)
+	blue_dark:str = "Skeuos-Blue-Dark"
+	blue_dark_src:str = os.path.join(skeuos_themes, blue_dark)
 	if os.path.isdir(blue_dark_src):
 		shutil.copytree(
 			blue_dark_src,
@@ -52,9 +53,9 @@ def gather_assets(
 		exe_file:str,
 		stage_dir:str
 		):
-	share_dir = os.path.join(stage_dir, "share")
-	glib_dir = os.path.join(share_dir, "glib-2.0")
-	themes_dir = os.path.join(share_dir, "themes")
+	share_dir:str = os.path.join(stage_dir, "share")
+	glib_dir:str = os.path.join(share_dir, "glib-2.0")
+	themes_dir:str = os.path.join(share_dir, "themes")
 	shutil.copytree(
 		os.path.join(source_dir, "gtk-assets"),
 		stage_dir,
@@ -67,8 +68,8 @@ def gather_assets(
 	copy_skeuos(source_dir, themes_dir)
 
 	# cygpath translates / into an absolute path drive letter and all
-	root = subprocess.check_output(("cygpath", "-m", "/"), text=True)
-	root = root.strip().replace("/", os.path.sep)
+	root:str = subprocess.check_output(("cygpath", "-m", "/"), text=True)
+	root:str = root.strip().replace("/", os.path.sep)
 	host_share_dir = os.path.join(root, "mingw64", "share")
 	shutil.copytree(
 		os.path.join(host_share_dir, "glib-2.0", "schemas"),
@@ -82,8 +83,9 @@ def gather_assets(
 	)
 
 	# gtk is nonstandard on windows; find all relevant mingw .dlls
-	shared_objs = set()
+	shared_objs:set = set()
 	enlist_shared_objs(exe_file, shared_objs)
+	obj:str
 	for obj in shared_objs:
 		obj_cleaned_path = os.path.join(
 			root,
@@ -96,12 +98,12 @@ def main(
 		argv:list
 		):
 	assert (argc >= 7)
-	nsis_conf = argv[1]
-	source_dir = argv[2]
-	exe_file = argv[3]
-	stage_dir = argv[4]
-	output_exe = argv[5]
-	project_ver = argv[6]
+	nsis_conf:str = argv[1]
+	source_dir:str = argv[2]
+	exe_file:str = argv[3]
+	stage_dir:str = argv[4]
+	output_exe:str = argv[5]
+	project_ver:str = argv[6]
 
 	gather_assets(source_dir, exe_file, stage_dir)
 
