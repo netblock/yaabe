@@ -325,7 +325,7 @@ enum common_register_sequence:uint8_t {
 	// reg_block_mc_phy_init:
 };
 
-#define ATOMTREE_MC_REG_MAX 48
+#define ATOMTREE_MC_REG_MAX 64
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block*  leaves;
 
