@@ -933,12 +933,13 @@ b64_packet_encode(
 		enum b64_header_target const target,
 		uint8_t const num_segments
 		) {
+	size_t const packet_size = sizeof(struct b64_header) + payload_size;
 	union {
 		void* raw;
 		struct b64_header* header;
-	} h;
-	size_t const packet_size = sizeof(struct b64_header) + payload_size;
-	h.header = malloc(packet_size);
+	} const h = {
+		.header = malloc(packet_size)
+	};
 
 	h.header->header_ver = 0;
 	h.header->target = target;
@@ -962,34 +963,39 @@ b64_packet_decode(
 		struct b64_header** const header_out
 		) {
 	size_t b64_num_bytes = 0;
-	struct b64_header* const header = (
-		(void*) g_base64_decode(b64_text, &b64_num_bytes)
-	);
+	union {
+		void* raw;
+		struct b64_header* header;
+	} const h = {
+		.raw = g_base64_decode(b64_text, &b64_num_bytes)
+	};
 
 	if (0 == b64_num_bytes) {
 		return true;
 	}
-	*header_out = header;
-	if (b64_num_bytes < sizeof(*header)) {
+	*header_out = h.header;
+	if (b64_num_bytes < sizeof(*h.header)) {
 		return true;
 	}
-	if (b64_num_bytes < (header->num_bytes + sizeof(*header))) {
+	if (b64_num_bytes < (h.header->num_bytes + sizeof(*h.header))) {
 		return true;
 	}
 	uint32_t const crc = crc32(
 		0,
-		((void*)header + sizeof(header->crc)),
-		(sizeof(*header)-sizeof(header->crc)  +  header->num_bytes)
+		(h.raw + sizeof(h.header->crc)),
+		(sizeof(*h.header)-sizeof(h.header->crc)  +  h.header->num_bytes)
 	);
-	if (crc != header->crc) {
+	if (crc != h.header->crc) {
 		return true;
 	}
 
 	// strict compliance
-	if ((header->target==B64_BRANCH_CONTIGUOUS) && (1!=header->num_segments)) {
+	if ((B64_BRANCH_CONTIGUOUS == h.header->target)
+			&& (1 != h.header->num_segments)
+			) {
 		return true;
 	}
-	if ((header->target==B64_LEAF) && (1!=header->num_segments)) {
+	if ((B64_LEAF==h.header->target) && (1!=h.header->num_segments)) {
 		return true;
 	}
 	return false;

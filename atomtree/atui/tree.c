@@ -30,7 +30,7 @@ grow_smc_dpm_info(
 		case v4_7:  atui_func = _atui_atom_smc_dpm_info_v4_7;  break;
 		case v4_9:  atui_func = _atui_atom_smc_dpm_info_v4_9;  break;
 		case v4_10: atui_func = _atui_atom_smc_dpm_info_v4_10; break;
-		case v5_0:  atui_func = _atui_atom_smc_dpm_info_table_13_0_7;break;
+		case v5_0:  atui_func = _atui_atom_smc_dpm_info_table_13_0_7; break;
 		default:
 			atui_args.rename = "smc_dpm_info (header only stub)";
 			atui_func = _atui_atom_common_table_header;
@@ -1345,8 +1345,9 @@ grow_atom_memory_timing_format(
 		struct atom_memory_timing_format_v0 const* v1_0;
 		struct atom_memory_timing_format_v1 const* v1_1;
 		struct atom_memory_timing_format_v2 const* v1_2;
-	} strap;
-	strap.raw = timing_format_start;
+	} strap = {
+		.raw = timing_format_start
+	};
 	uint8_t const count = vram_module->num_memory_timing_format;
 
 	atui_branch* const atui_straps = ATUI_MAKE_BRANCH(atui_nullstruct,  NULL,

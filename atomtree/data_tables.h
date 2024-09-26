@@ -336,7 +336,7 @@ struct atomtree_init_reg_block {
 	struct atom_init_reg_index_format*   register_index;
 	struct atom_reg_setting_data_block** data_blocks;
 	uint8_t num_index; // num of register_index
-	uint8_t num_data_blocks; // atom_init_reg_block's RegDataBuf
+	uint8_t num_data_blocks;  // atom_init_reg_block's RegDataBuf
 	uint8_t num_data_entries; // atom_reg_setting_data_block's reg_data
 
 
@@ -345,7 +345,7 @@ struct atomtree_init_reg_block {
 	// However, register_index is hard to understand, but there are common
 	// sequences.
 	enum register_block_type      reg_type; // type of table
-	enum common_register_sequence reg_set; // denote a common sequence
+	enum common_register_sequence reg_set;  // denote a common sequence
 	union {
 		void* data_sets;
 
@@ -374,7 +374,7 @@ struct atomtree_umc_init_reg_block {
 	union atom_umc_register_addr_info_access* register_info;
 	struct atom_umc_reg_setting_data_block**  data_blocks;
 	uint8_t num_info;
-	uint8_t num_data_blocks; // atom_umc_init_reg_block's umc_reg_setting_list
+	uint8_t num_data_blocks;  // atom_umc_init_reg_block's umc_reg_setting_list
 	uint8_t num_data_entries; // atom_umc_reg_setting_data_block's umc_reg_data
 };
 

@@ -502,8 +502,9 @@ populate_pplib_ppt(
 		void* raw;
 		union atom_pplib_powerplaytables* all;
 		struct atom_pplib_powerplaytable_v5* v5;
-	} b;
-	b.raw = ppt41->leaves;
+	} const b = {
+		.raw = ppt41->leaves
+	};
 	switch (b.v5->TableSize) {
 		case sizeof(b.all->v5): ppt41->pplib_ver = v5_0; break;
 		case sizeof(b.all->v4): ppt41->pplib_ver = v4_0; break;
@@ -600,8 +601,9 @@ populate_pptablev1_ppt(
 	union {
 		void* raw;
 		struct atom_pptable_powerplaytable_v1* ppt;
-	} b;
-	b.raw = ppt71->leaves;
+	} const b = {
+		.raw = ppt71->leaves
+	};
 	if (b.ppt->StateArrayOffset) {
 		ppt71->state_array = b.raw + b.ppt->StateArrayOffset;
 	}
@@ -650,8 +652,9 @@ populate_vega10_ppt(
 	union {
 		void* raw;
 		struct atom_vega10_powerplaytable* ppt;
-	} b;
-	b.raw = ppt81->leaves;
+	} const b = {
+		.raw = ppt81->leaves
+	};
 	if (b.ppt->StateArrayOffset) {
 		ppt81->state_array = b.raw + b.ppt->StateArrayOffset;
 	}
@@ -2104,7 +2107,7 @@ populate_voltageobject_info(
 
 
 inline static void
-populate_master_datatable_v1_1(
+populate_datatable_v1_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atomtree_commons* const commons
 		) {
@@ -2335,7 +2338,7 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 	}
 }
 inline static void
-populate_master_datatable_v2_1(
+populate_datatable_v2_1(
 		struct atomtree_master_datatable* const data_table,
 		struct atomtree_commons* const commons
 		) {
@@ -2401,8 +2404,8 @@ populate_datatables(
 		data_table->leaves = commons->bios + bios_offset;
 		data_table->ver = get_ver(data_table->table_header);
 		switch (data_table->ver) {
-			case v1_1: populate_master_datatable_v1_1(data_table, commons); break;
-			case v2_1: populate_master_datatable_v2_1(data_table, commons); break;
+			case v1_1: populate_datatable_v1_1(data_table, commons); break;
+			case v2_1: populate_datatable_v2_1(data_table, commons); break;
 			default: assert(0); break;
 		}
 	}
@@ -2625,8 +2628,9 @@ bios_fastforward(
 	union {
 		void const* bios;
 		struct vbios_rom_header const* image;
-	} bi;
-	bi.bios = biosfile;
+	} bi = {
+		.bios = biosfile
+	};
 	void const* const end = biosfile + size;
 	while (bi.bios < end) {
 		if ((bi.image->pci_header.pci_rom_signature == ATOM_BIOS_MAGIC)
@@ -2645,14 +2649,18 @@ atombios_parse(
 		void* const alloced_bios,
 		uint32_t const biosfile_size
 		) {
-	void* const bios = bios_fastforward(alloced_bios, biosfile_size);
-	struct vbios_rom_header* const image = bios;
-	if (bios == NULL) {
+	union {
+		void* bios;
+		struct vbios_rom_header* image;
+	} const b = {
+		.bios = bios_fastforward(alloced_bios, biosfile_size)
+	};
+	if (b.bios == NULL) {
 		return NULL;
 	}
 
 	struct atomtree_commons commons = {
-		.bios = bios,
+		.bios = b.bios,
 	};
 
 	// atomtree is highly conditional, so zeroing with calloc will make
@@ -2675,14 +2683,14 @@ atombios_parse(
 	atree->alloced_bios = alloced_bios;
 	atree->biosfile_size = biosfile_size;
 
-	atree->bios = bios; // going to be used as the '0' in places.
+	atree->bios = b.bios; // going to be used as the '0' in places.
 	atree->pci_first_image_size = (
-		image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
+		b.image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
 	);
 
-	if (image->atom_bios_message_offset) {
+	if (b.image->atom_bios_message_offset) {
 		uint8_t i = 0;
-		char* strs = atree->bios + image->atom_bios_message_offset;
+		char* strs = b.bios + b.image->atom_bios_message_offset;
 		do {
 			i++;
 			strs += strlen(strs) + 1;
@@ -2693,7 +2701,7 @@ atombios_parse(
 			atree->num_of_crawled_strings * sizeof(atree->atombios_strings[0])
 		);
 		i = 0;
-		strs = atree->bios + image->atom_bios_message_offset;
+		strs = b.bios + b.image->atom_bios_message_offset;
 		do {
 			atree->atombios_strings[i] = strs;
 			i++;
@@ -2702,7 +2710,7 @@ atombios_parse(
 	}
 
 
-	populate_pci_tables(&(atree->pci_tables), &commons, &(image->pci_header));
+	populate_pci_tables(&(atree->pci_tables), &commons, &(b.image->pci_header));
 	if (atree->pci_tables.num_images) { // if this fails, no PCIR
 		atree->chip_type = get_amd_chip_from_pci_id(
 			atree->pci_tables.pci_tables[0].pcir->vendor_id,
@@ -2711,7 +2719,7 @@ atombios_parse(
 	}
 
 	populate_atom_rom_header(
-		&(atree->rom_header), &commons, image->rom_header_info_table_offset
+		&(atree->rom_header), &commons, b.image->rom_header_info_table_offset
 	);
 
 	// populate_commandtables(atree); // TODO
