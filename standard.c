@@ -98,3 +98,32 @@ error_emit(
 		case NO_ERROR: return;
 	};
 }
+
+void
+arena_init(
+		struct mem_arena* const arena,
+		size_t const arena_size,
+		bool const zeroed
+		) {
+	if (zeroed) {
+		arena->start = calloc(1,arena_size);
+	} else {
+		arena->start = malloc(arena_size);
+	}
+	arena->pos = arena->start;
+	arena->end = arena->start + arena_size;
+}
+void* arena_alloc(
+		struct mem_arena* const arena,
+		struct error* const err,
+		size_t const alloc_size
+		) {
+	void* const old_pos = arena->pos;
+	void* const new_pos = arena->pos + alloc_size;
+	error_assert(err, ERROR_ABORT,
+		"arena size too small",
+		old_pos < arena->end
+	);
+	arena->pos = new_pos;
+	return old_pos;
+}

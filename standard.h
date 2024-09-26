@@ -140,4 +140,22 @@ error_emit( // severity and message must be set before calling
 } while(0)
 
 
+struct mem_arena {
+	void* start;
+	void* pos;
+	void* end;
+};
+void
+arena_init( // initialise a new arena
+		struct mem_arena* arena,
+		size_t arena_size,
+		bool zeroed
+		);
+void*
+arena_alloc(
+		struct mem_arena* arena,
+		struct error* err, // required. Errors if here isn't enough room
+		size_t alloc_size
+		);
+
 #endif

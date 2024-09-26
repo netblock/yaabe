@@ -8,6 +8,7 @@ see atomtree.h and data_tables.h
 
 //landing is in atombios_parse
 static struct error error = {}; // error handling
+static struct mem_arena alloc_arena = {}; // arena alloc
 
 inline static void
 populate_smc_dpm_info(
@@ -234,9 +235,9 @@ populate_pplib_ppt_state_array(
 	} walker;
 
 	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
-		error_assert(&error, ERROR_ABORT,
-			"populate_pplib_ppt_state_array: too many states",
-			ATOMTREE_PPLIB_STATE_ARRAY_MAX > pplibv1->NumStates
+		ppt41->state_array = arena_alloc(
+			&alloc_arena, &error,
+			pplibv1->NumStates * sizeof(ppt41->state_array[0])
 		);
 		ppt41->state_array_ver = v1_0;
 		ppt41->num_state_array_entries = pplibv1->NumStates;
@@ -255,9 +256,9 @@ populate_pplib_ppt_state_array(
 		}
 		ppt41->state_array_size = pplibv1->NumStates * pplibv1->StateEntrySize;
 	} else {
-		error_assert(&error, ERROR_ABORT,
-			"populate_pplib_ppt_state_array: too many states",
-			ATOMTREE_PPLIB_STATE_ARRAY_MAX > base->v2.NumEntries
+		ppt41->state_array = arena_alloc(
+			&alloc_arena, &error,
+			base->v2.NumEntries * sizeof(ppt41->state_array[0])
 		);
 		ppt41->state_array_ver = v2_0;
 		ppt41->num_state_array_entries = base->v2.NumEntries;
@@ -789,20 +790,30 @@ populate_init_reg_block(
 			- sizeof(((struct atom_reg_setting_data_block*)0)->block_id)
 		) / sizeof(((struct atom_reg_setting_data_block*)0)->reg_data[0])
 	);
-	struct atom_reg_setting_data_block* block = (  // starting point
+
+	union {
+		struct atom_reg_setting_data_block* walker;
+		void* raw;
+	} w;
+	struct atom_reg_setting_data_block* const block_start = (
 		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
 	);
-	uint8_t i = 0;
-	while (block->block_id.id_access) { // the datablock list ends with 0
-		error_assert(&error, ERROR_ABORT,
-			"populate_init_reg_block: too many data blocks",
-			ATOMTREE_MC_REG_MAX > i
-		);
-		at_regblock->data_blocks[i] = block;
-		i++;
-		block = (void*)block + at_regblock->data_block_element_size;
+	w.walker = block_start;
+	while (w.walker->block_id.id_access) { // the datablock list ends with 0
+		at_regblock->num_data_blocks++;
+		w.raw += at_regblock->data_block_element_size;
 	}
-	at_regblock->num_data_blocks = i;
+	at_regblock->data_blocks = arena_alloc(
+		&alloc_arena, &error,
+		at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
+	);
+	w.walker = block_start;
+	uint8_t i = 0;
+	while (i < at_regblock->num_data_blocks) {
+		at_regblock->data_blocks[i] = w.walker;
+		w.raw += at_regblock->data_block_element_size;
+		i++;
+	}
 
 	at_regblock->index_table_size = leaves->RegIndexTblSize;
 	at_regblock->data_block_table_size = (
@@ -1045,23 +1056,32 @@ populate_umc_init_reg_block(
 			* at_regblock->num_data_entries
 		)
 	);
-	struct atom_umc_reg_setting_data_block* block = (   // starting point
+	union {
+		struct atom_umc_reg_setting_data_block* walker;
+		void* raw;
+	} w;
+	struct atom_umc_reg_setting_data_block* const block_start = (
 		(void*)leaves->umc_reg_list
 		+ (sizeof(union atom_umc_register_addr_info_access)
 			* leaves->umc_reg_num
 		) // size of umc_reg_list
 	);
-	uint8_t i = 0;
-	while (block->block_id.id_access) { // the datablock list ends with 0
-		error_assert(&error, ERROR_ABORT,
-			"populate_umc_init_reg_block: too many data blocks",
-			ATOMTREE_UMC_REG_MAX > i
-		);
-		at_regblock->data_blocks[i] = block;
-		i++;
-		block = (void*)block + at_regblock->data_block_element_size;
+	w.walker = block_start;
+	while (w.walker->block_id.id_access) { // the datablock list ends with 0
+		at_regblock->num_data_blocks++;
+		w.raw += at_regblock->data_block_element_size;
 	}
-	at_regblock->num_data_blocks = i;
+	at_regblock->data_blocks = arena_alloc(
+		&alloc_arena, &error,
+		at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
+	);
+	w.walker = block_start;
+	uint8_t i = 0;
+	while (i < at_regblock->num_data_blocks) {
+		at_regblock->data_blocks[i] = w.walker;
+		w.raw += at_regblock->data_block_element_size;
+		i++;
+	}
 
 	at_regblock->info_table_size = (
 		at_regblock->num_info * sizeof(union atom_umc_register_addr_info_access)
@@ -1104,22 +1124,20 @@ populate_atom_memory_timing_format(
 }
 
 
-inline static void
+inline static struct atomtree_vram_module*
 populate_vram_module(
 		void* vram_module_offset,
-		struct atomtree_vram_module* const vram_modules,
 		enum atomtree_common_version const vram_modules_ver,
 		uint8_t const count
 		) {
-	error_assert(&error, ERROR_ABORT,
-		"populate_vram_module: too many vram_modules",
-		ATOMTREE_VRAM_MODULES_MAX >= count
+	struct atomtree_vram_module* const vram_modules = arena_alloc(
+		&alloc_arena, &error,
+		count * sizeof(vram_modules[0])
 	);
-	uint8_t i;
 	struct atomtree_vram_module* vmod;
 	switch (vram_modules_ver) {
 		case v1_3: // atom_vram_module_v3. Will look very similar to v4
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_3;
@@ -1136,7 +1154,7 @@ populate_vram_module(
 			break;
 
 		case v1_4: // atom_vram_module_v4. Will look very similar to v3
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_4;
@@ -1154,7 +1172,7 @@ populate_vram_module(
 			break;
 
 		case v1_7:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_7;
@@ -1169,7 +1187,7 @@ populate_vram_module(
 			}
 			break;
 		case v1_8:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_8;
@@ -1179,7 +1197,7 @@ populate_vram_module(
 			break;
 
 		case v1_9:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_9;
@@ -1189,7 +1207,7 @@ populate_vram_module(
 			break;
 
 		case v1_10:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_10;
@@ -1199,7 +1217,7 @@ populate_vram_module(
 			break;
 
 		case v1_11:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v1_11;
@@ -1209,7 +1227,7 @@ populate_vram_module(
 			break;
 
 		case v3_0:
-			for (i=0; i < count; i++) {
+			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = vram_module_offset;
 				vmod->vram_module_ver = v3_0;
@@ -1239,6 +1257,7 @@ populate_vram_module(
 			assert(0); // TODO implement
 			break;
 	}
+	return vram_modules;
 }
 
 
@@ -1263,9 +1282,8 @@ populate_vram_info_v1_2(
 
 	if (vi12->leaves->NumOfVRAMModule) {
 		vi12->vram_module_ver = v1_3;
-		populate_vram_module(
+		vi12->vram_modules = populate_vram_module(
 			vi12->leaves->vram_module,
-			vi12->vram_modules,
 			vi12->vram_module_ver,
 			vi12->leaves->NumOfVRAMModule
 		);
@@ -1280,9 +1298,8 @@ populate_vram_info_v1_3(
 
 	if (vi13->leaves->NumOfVRAMModule) {
 		vi13->vram_module_ver = v1_3;
-		populate_vram_module(
+		vi13->vram_modules = populate_vram_module(
 			vi13->leaves->vram_module,
-			vi13->vram_modules,
 			vi13->vram_module_ver,
 			vi13->leaves->NumOfVRAMModule
 		);
@@ -1311,9 +1328,8 @@ populate_vram_info_v1_4(
 
 	if (vi14->leaves->NumOfVRAMModule) {
 		vi14->vram_module_ver = v1_4;
-		populate_vram_module(
+		vi14->vram_modules = populate_vram_module(
 			vi14->leaves->vram_module,
-			vi14->vram_modules,
 			vi14->vram_module_ver,
 			vi14->leaves->NumOfVRAMModule
 		);
@@ -1341,9 +1357,8 @@ populate_vram_info_v2_1(
 
 	if (vi21->leaves->NumOfVRAMModule) {
 		vi21->vram_module_ver = v1_7;
-		populate_vram_module(
+		vi21->vram_modules = populate_vram_module(
 			vi21->leaves->vram_module,
-			vi21->vram_modules,
 			vi21->vram_module_ver,
 			vi21->leaves->NumOfVRAMModule
 		);
@@ -1379,9 +1394,8 @@ populate_vram_info_v2_2(
 
 	if (vi22->leaves->NumOfVRAMModule) {
 		vi22->vram_module_ver = v1_8;
-		populate_vram_module(
+		vi22->vram_modules = populate_vram_module(
 			vi22->leaves->vram_module,
-			vi22->vram_modules,
 			vi22->vram_module_ver,
 			vi22->leaves->NumOfVRAMModule
 		);
@@ -1428,9 +1442,8 @@ populate_vram_info_v2_3(
 
 	if (vi23->leaves->vram_module_num) {
 		vi23->vram_module_ver = v1_9;
-		populate_vram_module(
+		vi23->vram_modules = populate_vram_module(
 			vi23->leaves->vram_module,
-			vi23->vram_modules,
 			vi23->vram_module_ver,
 			vi23->leaves->vram_module_num
 		);
@@ -1500,9 +1513,8 @@ populate_vram_info_v2_4(
 
 	if (vi24->leaves->vram_module_num) {
 		vi24->vram_module_ver = v1_10;
-		populate_vram_module(
+		vi24->vram_modules = populate_vram_module(
 			vi24->leaves->vram_module,
-			vi24->vram_modules,
 			vi24->vram_module_ver,
 			vi24->leaves->vram_module_num
 		);
@@ -1558,9 +1570,8 @@ populate_vram_info_v2_5(
 
 	if (vi25->leaves->vram_module_num) {
 		vi25->vram_module_ver = v1_11;
-		populate_vram_module(
+		vi25->vram_modules = populate_vram_module(
 			vi25->leaves->vram_module,
-			vi25->vram_modules,
 			vi25->vram_module_ver,
 			vi25->leaves->vram_module_num
 		);
@@ -1622,9 +1633,8 @@ populate_vram_info_v2_6(
 
 	if (vi26->leaves->vram_module_num) {
 		vi26->vram_module_ver = v1_9;
-		populate_vram_module(
+		vi26->vram_modules = populate_vram_module(
 			vi26->leaves->vram_module,
-			vi26->vram_modules,
 			vi26->vram_module_ver,
 			vi26->leaves->vram_module_num
 		);
@@ -1683,9 +1693,8 @@ populate_vram_info_v3_0( // TODO finish this
 
 	if (vi30->leaves->vram_module_num) {
 		vi30->vram_module_ver = v3_0;
-		populate_vram_module(
+		vi30->vram_modules = populate_vram_module(
 			vi30->leaves->vram_module,
-			vi30->vram_modules,
 			vi30->vram_module_ver,
 			vi30->leaves->vram_module_num
 		);
@@ -1764,27 +1773,33 @@ inline static void
 populate_voltageobject_info_v1_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
-	struct atomtree_voltage_object* const voltage_objects = (
-		vo_info->voltage_objects
-	);
-	uint16_t i = 0;
-
 	// get the size ofthe dynamically-sized voltage object array, and walk
 	// through the array based on what each element reports their size as.
 	union {
 		void* raw;
 		union atom_voltage_object_all* vobj;
 	} vobj;
-	vobj.raw = vo_info->v1_1->VoltageObj;
 	void const* const end = (
 		vo_info->leaves
 		+ vo_info->table_header->structuresize
 	);
+
+	vobj.raw = vo_info->v1_1->VoltageObj;
 	while (vobj.raw < end) {
-		error_assert(&error, ERROR_ABORT,
-			"populate_voltageobject_info_v1_1: too many voltage objects",
-			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
-		);
+		vobj.raw += vobj.vobj->volt_obj_v1.Size;
+		vo_info->num_voltage_objects++;
+	}
+	assert(vobj.raw == end);
+
+	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+		&alloc_arena, &error,
+		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+	);
+	vo_info->voltage_objects = voltage_objects;
+
+	vobj.raw = vo_info->v1_1->VoltageObj;
+	uint16_t i = 0;
+	while (vobj.raw < end) {
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v1_0;
 		// NumOfVoltageEntries lies and can be 255.
@@ -1800,35 +1815,39 @@ populate_voltageobject_info_v1_1(
 		vobj.raw += vobj.vobj->volt_obj_v1.Size;
 		i++;
 	}
-	assert(vobj.raw == end);
-	vo_info->num_voltage_objects = i;
 }
 
 inline static void
 populate_voltageobject_info_v1_2(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
-	struct atomtree_voltage_object* const voltage_objects = (
-		vo_info->voltage_objects
-	);
-	uint16_t i = 0;
-
 	// get the size ofthe dynamically-sized voltage object array, and walk
 	// through the array based on what each element reports their size as.
 	union {
 		void* raw;
 		union atom_voltage_object_all* vobj;
 	} vobj;
-	vobj.raw = vo_info->v1_2->VoltageObj;
 	void const* const end = (
 		vo_info->leaves
 		+ vo_info->table_header->structuresize
 	);
+
+	vobj.raw = vo_info->v1_2->VoltageObj;
 	while (vobj.raw < end) {
-		error_assert(&error, ERROR_ABORT,
-			"populate_voltageobject_info_v1_2: too many voltage objects",
-			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
-		);
+		vobj.raw += vobj.vobj->volt_obj_v2.Size;
+		vo_info->num_voltage_objects++;
+	}
+	assert(vobj.raw == end);
+
+	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+		&alloc_arena, &error,
+		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+	);
+	vo_info->voltage_objects = voltage_objects;
+
+	vobj.raw = vo_info->v1_2->VoltageObj;
+	uint16_t i = 0;
+	while (vobj.raw < end) {
 		voltage_objects[i].obj = vobj.vobj;
 		voltage_objects[i].ver = v2_0;
 		// NumOfVoltageEntries lies and can be 255.
@@ -1844,37 +1863,41 @@ populate_voltageobject_info_v1_2(
 		vobj.raw += vobj.vobj->volt_obj_v2.Size;
 		i++;
 	}
-	assert(vobj.raw == end);
-	vo_info->num_voltage_objects = i;
 }
 
 inline static void
 populate_voltageobject_info_v3_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
-	struct atomtree_voltage_object* const voltage_objects = (
-		vo_info->voltage_objects
-	);
-	uint16_t i = 0;
-
 	// get the size ofthe dynamically-sized voltage object array, and walk
 	// through the array based on what each element reports their size as.
 	union {
 		void* raw;
 		union atom_voltage_object_all* vobj;
 	} vobj;
-	vobj.raw = vo_info->v3_1->voltage_object;
 	void const* const end = (
 		vo_info->leaves
 		+ vo_info->table_header->structuresize
 	);
+
+	vobj.raw = vo_info->v3_1->voltage_object;
 	while (vobj.raw < end) {
-		error_assert(&error, ERROR_ABORT,
-			"populate_voltageobject_info_v3_1: too many voltage objects",
-			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
-		);
+		vobj.raw += vobj.vobj->header.object_size;
+		vo_info->num_voltage_objects++;
+	}
+	assert(vobj.raw == end);
+
+	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+		&alloc_arena, &error,
+		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+	);
+	vo_info->voltage_objects = voltage_objects;
+
+	vobj.raw = vo_info->v3_1->voltage_object;
+	uint16_t i = 0;
+	while (vobj.raw < end) {
 		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v1_0;
+		voltage_objects[i].ver = v1_0; // all v3_1 have v1_0 objects
 		switch (vobj.vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.
 			case VOLTAGE_OBJ_GPIO_LUT:
@@ -1941,8 +1964,6 @@ populate_voltageobject_info_v3_1(
 		vobj.raw += vobj.vobj->header.object_size;
 		i++;
 	}
-	assert(vobj.raw == end);
-	vo_info->num_voltage_objects = i;
 }
 
 
@@ -1950,29 +1971,36 @@ inline static void
 populate_voltageobject_info_v4_1(
 		struct atomtree_voltageobject_info* const vo_info
 		) {
-	struct atomtree_voltage_object* const voltage_objects = (
-		vo_info->voltage_objects
-	);
-	uint16_t i = 0;
-
 	// get the size ofthe dynamically-sized voltage object array, and walk
 	// through the array based on what each element reports their size as.
 	union {
 		void* raw;
 		union atom_voltage_object_all* vobj;
 	} vobj;
-	vobj.raw = vo_info->v4_1->voltage_object;
 	void const* const end = (
 		vo_info->leaves
 		+ vo_info->table_header->structuresize
 	);
+
+	vobj.raw = vo_info->v4_1->voltage_object;
 	while (vobj.raw < end) {
-		error_assert(&error, ERROR_ABORT,
-			"populate_voltageobject_info_v4_1: too many voltage objects",
-			ATOMTREE_VOLTAGE_OBJECTS_MAX > i
-		);
+		vobj.raw += vobj.vobj->header.object_size;
+		vo_info->num_voltage_objects++;
+	}
+	assert(vobj.raw == end);
+
+	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+		&alloc_arena, &error,
+		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+	);
+	vo_info->voltage_objects = voltage_objects;
+
+	vobj.raw = vo_info->v4_1->voltage_object;
+	uint16_t i = 0;
+
+	while (vobj.raw < end) {
 		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v1_0;
+		voltage_objects[i].ver = v1_0; // nearly all v4_1 have v1_0 objects
 		switch (vobj.vobj->header.voltage_mode) {
 			// some voltage objects have a dynamically-sized lookup table.
 			case VOLTAGE_OBJ_GPIO_LUT:
@@ -2007,8 +2035,6 @@ populate_voltageobject_info_v4_1(
 		vobj.raw += vobj.vobj->header.object_size;
 		i++;
 	}
-	assert(vobj.raw == end);
-	vo_info->num_voltage_objects = i;
 }
 
 
@@ -2509,15 +2535,9 @@ populate_pci_tables(
 		struct pcir_data_structure* pcir;
 	} pcir;
 
-	header.header = start;
 	uint8_t i = 0;
-	struct pci_rom_tables* const tables = atree_pci->pci_tables;
-
+	header.header = start;
 	do {
-		error_assert(&error, ERROR_ABORT,
-			"populate_pci_tables: too many PCI images",
-			NUM_PCIR_IMAGES_MAX > i
-		);
 		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
 			break;
 		}
@@ -2525,13 +2545,27 @@ populate_pci_tables(
 		if (*pcir.signature != PCIR_SIGNATURE) {
 			break;
 		}
-		tables[i].header = header.header;
-		tables[i].pcir = pcir.pcir;
-		tables[i].is_efi = (header.efi->efi_signature == EFI_SIGNATURE);
 		i++;
 		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
 	} while (!pcir.pcir->last.last_image);
 	atree_pci->num_images = i;
+
+	struct pci_rom_tables* const tables = arena_alloc(
+		&alloc_arena, &error,
+		atree_pci->num_images * sizeof(atree_pci->pci_tables[0])
+	);
+	atree_pci->pci_tables = tables;
+	i = 0;
+	header.header = start;
+	while (i < atree_pci->num_images) {
+		pcir.raw = header.raw + header.header->pcir_structure_offset;
+		tables[i].header = header.header;
+		tables[i].pcir = pcir.pcir;
+		tables[i].is_efi = (header.efi->efi_signature == EFI_SIGNATURE);
+
+		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
+		i++;
+	}
 }
 
 inline static void*
@@ -2567,19 +2601,22 @@ atombios_parse(
 		return NULL;
 	}
 	struct vbios_rom_header* const image = bios;
-	struct atom_tree* const atree = calloc(1,sizeof(struct atom_tree));
+
 	// atomtree is highly conditional, so zeroing with calloc will make
 	// population easier.
+	// allocating the size of the bios for atomtree is a heuristic, but should
+	// be far, far more than enough.
+	arena_init(&alloc_arena, biosfile_size, true);
 
-
-	// currently only used for statically-sized alloc contention.
-	// moving away from statically-sized alloc would require a malloc tracker
-	// array
 	setjmp(error.env);
 	if (error.severity) {
-		free(atree);
+		free(alloc_arena.start);
 		return NULL;
 	}
+
+	struct atom_tree* const atree = arena_alloc(
+		&alloc_arena, &error, sizeof(struct atom_tree)
+	);
 
 	atree->alloced_bios = alloced_bios;
 	atree->biosfile_size = biosfile_size;
@@ -2589,20 +2626,27 @@ atombios_parse(
 		image->pci_header.pci_rom_size_in_512 * BIOS_IMAGE_SIZE_UNIT
 	);
 
-	uint8_t num_of_crawled_strings = 0;
 	if (image->atom_bios_message_offset) {
+		uint8_t i = 0;
 		char* strs = atree->bios + image->atom_bios_message_offset;
 		do {
-			error_assert(&error, ERROR_ABORT,
-				"atombios_parse: too many strings",
-				ATOMBIOS_STRINGS_MAX > num_of_crawled_strings
-			);
-			atree->atombios_strings[num_of_crawled_strings] = strs;
-			num_of_crawled_strings++;
-			strs += (strlen(strs) + 1);
+			i++;
+			strs += strlen(strs) + 1;
 		} while (*strs); // the last string ends with 00 00
+		atree->num_of_crawled_strings = i;
+		atree->atombios_strings = arena_alloc(
+			&alloc_arena, &error,
+			atree->num_of_crawled_strings * sizeof(atree->atombios_strings[0])
+		);
+		i = 0;
+		strs = atree->bios + image->atom_bios_message_offset;
+		do {
+			atree->atombios_strings[i] = strs;
+			i++;
+			strs += strlen(strs) + 1;
+		} while (*strs);
 	}
-	atree->num_of_crawled_strings = num_of_crawled_strings;
+
 
 	populate_pci_tables(&(atree->pci_tables), &(image->pci_header));
 	if (atree->pci_tables.num_images) { // if this fails, no PCIR

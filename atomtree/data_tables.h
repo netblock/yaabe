@@ -146,7 +146,6 @@ struct atomtree_pplib_state {
 	uint8_t size;
 	uint8_t num_levels; // counting ClockStateIndices or v2's clockInfoIndex
 };
-#define ATOMTREE_PPLIB_STATE_ARRAY_MAX 16
 struct atomtree_powerplay_table_v4_1 {
 	union atom_pplib_powerplaytables* leaves;
 	enum atomtree_common_version  pplib_ver;
@@ -168,7 +167,7 @@ struct atomtree_powerplay_table_v4_1 {
 	size_t uvd_table_size;
 
 	// v1
-	struct atomtree_pplib_state  state_array[ATOMTREE_PPLIB_STATE_ARRAY_MAX];
+	struct atomtree_pplib_state*           state_array;
 	union atom_pplib_state_arrays*         state_array_base;
 	union atom_pplib_clock_info_arrays*    clock_info;
 	union atom_pplib_nonclock_info_arrays* nonclock_info;
@@ -325,7 +324,6 @@ enum common_register_sequence:uint8_t {
 	// reg_block_mc_phy_init:
 };
 
-#define ATOMTREE_MC_REG_MAX 64
 struct atomtree_init_reg_block {
 	struct atom_init_reg_block*  leaves;
 
@@ -335,8 +333,8 @@ struct atomtree_init_reg_block {
 	uint16_t data_block_table_size; // all of RegDataBuf
 	uint16_t total_size; // size of the practical atom_init_reg_block
 
-	struct atom_init_reg_index_format*  register_index;
-	struct atom_reg_setting_data_block* data_blocks[ATOMTREE_MC_REG_MAX];
+	struct atom_init_reg_index_format*   register_index;
+	struct atom_reg_setting_data_block** data_blocks;
 	uint8_t num_index; // num of register_index
 	uint8_t num_data_blocks; // atom_init_reg_block's RegDataBuf
 	uint8_t num_data_entries; // atom_reg_setting_data_block's reg_data
@@ -364,7 +362,6 @@ struct atomtree_init_reg_block {
 		// reg_block_mc_phy_init:
 	};
 };
-#define ATOMTREE_UMC_REG_MAX 64
 struct atomtree_umc_init_reg_block {
 	struct atom_umc_init_reg_block*  leaves;
 
@@ -375,7 +372,7 @@ struct atomtree_umc_init_reg_block {
 	uint16_t total_size; // size of the practical atom_umc_init_reg_block
 
 	union atom_umc_register_addr_info_access* register_info;
-	struct atom_umc_reg_setting_data_block*   data_blocks[ATOMTREE_UMC_REG_MAX];
+	struct atom_umc_reg_setting_data_block**  data_blocks;
 	uint8_t num_info;
 	uint8_t num_data_blocks; // atom_umc_init_reg_block's umc_reg_setting_list
 	uint8_t num_data_entries; // atom_umc_reg_setting_data_block's umc_reg_data
@@ -416,12 +413,11 @@ struct atomtree_gddr6_dram_data_remap {
 	uint8_t bit_byte_remap_count;
 };
 
-#define ATOMTREE_VRAM_MODULES_MAX 8
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_v1_3 {
@@ -431,7 +427,7 @@ struct atomtree_vram_info_v1_3 {
 	struct atomtree_init_reg_block  mem_clk_patch;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_v1_4 {
@@ -441,7 +437,7 @@ struct atomtree_vram_info_v1_4 {
 	struct atomtree_init_reg_block  mem_clk_patch;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_1 {
@@ -452,7 +448,7 @@ struct atomtree_vram_info_header_v2_1 {
 	struct atomtree_init_reg_block  per_byte_preset;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_2 {
@@ -465,7 +461,7 @@ struct atomtree_vram_info_header_v2_2 {
 	struct mc_atom_dram_data_remap* dram_data_remap;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_3 {
@@ -491,7 +487,7 @@ struct atomtree_vram_info_header_v2_3 {
 	struct atomtree_umc_init_reg_block  post_ucode_init;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_4 {
@@ -516,7 +512,7 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_umc_init_reg_block  post_ucode_init;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 
@@ -535,7 +531,7 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_umc_init_reg_block    strobe_mode_patch;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module   vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_6 {
@@ -550,7 +546,7 @@ struct atomtree_vram_info_header_v2_6 {
 	struct atomtree_umc_init_reg_block    post_ucode_init;
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
@@ -565,7 +561,7 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	void* rsvd_tables[2]; // reserved_sub_table_offset
 
 	enum atomtree_common_version  vram_module_ver;
-	struct atomtree_vram_module vram_modules[ATOMTREE_VRAM_MODULES_MAX];
+	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info {
@@ -588,7 +584,6 @@ struct atomtree_vram_info {
 };
 
 
-#define ATOMTREE_VOLTAGE_OBJECTS_MAX 16
 struct atomtree_voltage_object {
 	union atom_voltage_object_all* obj;
 	enum atomtree_common_version   ver;
@@ -607,9 +602,7 @@ struct atomtree_voltageobject_info {
 	enum atomtree_common_version  ver;
 
 	uint16_t num_voltage_objects;
-	struct atomtree_voltage_object voltage_objects[
-		ATOMTREE_VOLTAGE_OBJECTS_MAX
-	];
+	struct atomtree_voltage_object* voltage_objects;
 };
 
 struct atomtree_sw_datatable {
