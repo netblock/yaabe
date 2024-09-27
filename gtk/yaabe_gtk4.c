@@ -454,7 +454,7 @@ columnview_row_bind_attach_gesture(
 		// the gesture call creates and binds the actions of the right click
 		// menu to the view (view has the popup).
 		// in order to that, the gesture call needs to pass view, row and popup
-		struct rightclick_pack* const pack = malloc(
+		struct rightclick_pack* const pack = cralloc(
 			sizeof(struct rightclick_pack)
 		);
 		pack->commons = commons;
@@ -938,7 +938,7 @@ b64_packet_encode(
 		void* raw;
 		struct b64_header* header;
 	} const h = {
-		.header = malloc(packet_size)
+		.header = cralloc(packet_size)
 	};
 
 	h.header->header_ver = 0;
@@ -1805,7 +1805,7 @@ set_editor_titlebar(
 		formatstr = print_format_nofile;
 	}
 
-	char* const window_title = malloc(
+	char* const window_title = cralloc(
 		sizeof(yaabe_name)
 		+ filename_length
 		+ sizeof(print_format_file) // largest

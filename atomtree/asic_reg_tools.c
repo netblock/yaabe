@@ -120,7 +120,7 @@ register_set_build_atuifunc_playlist(
 		at_regblock->register_index;
 	regset_bsearch_func const regset_bsearch = regset_bsearch_bool[newest];
 
-	struct register_set_entry* playlist = malloc(
+	struct register_set_entry* playlist = cralloc(
 		at_regblock->num_data_entries * sizeof(struct register_set_entry)
 	);
 	uint8_t playlist_i = 0;

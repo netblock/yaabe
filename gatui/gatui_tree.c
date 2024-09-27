@@ -152,7 +152,7 @@ atomtree_load_from_gfile(
 	size_t const filesize = g_file_info_get_size(fi_size);
 	g_object_unref(fi_size);
 
-	bios = malloc(filesize);
+	bios = cralloc(filesize);
 	g_input_stream_read(readstream, bios, filesize, NULL, &ferror);
 	if (ferror) {
 		goto exit3;
@@ -353,7 +353,7 @@ gatui_tree_copy_core(
 	g_return_val_if_fail(GATUI_IS_TREE(src), NULL);
 
 	size_t const biosfile_size = src->atomtree->biosfile_size;
-	void* const alloced_bios = malloc(biosfile_size);
+	void* const alloced_bios = cralloc(biosfile_size);
 	memcpy(alloced_bios, src->atomtree->alloced_bios, biosfile_size);
 
 	struct atom_tree* const atree = atombios_parse(alloced_bios, biosfile_size);

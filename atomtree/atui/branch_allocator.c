@@ -1,7 +1,7 @@
 /* AtomTree iterable interface for UIs
 
 atui_branch_allocator is a runtime function that processes the data set up by
-the JSON5 tables to generate a malloc'd branch.
+the JSON5 tables to generate a cralloc'd branch.
 
 See scripts/ppatui.py for what the JSON5 tables compile to
 */
@@ -96,7 +96,7 @@ print_atui_bitfield_leaf(
 	uint16_t const num_leaves = leaf_src->template_leaves->numleaves;
 	if (num_leaves) {
 		assert(leaf->num_child_leaves == num_leaves); // ppatui.py sets
-		leaf->child_leaves = malloc(num_leaves * sizeof(atui_leaf));
+		leaf->child_leaves = cralloc(num_leaves * sizeof(atui_leaf));
 
 		struct level_data sub_leaves = {
 			.parent = leaf, // ppatui.py sets parent_is_leaf
@@ -222,7 +222,7 @@ print_atui_dynarray_leaf(
 	uint16_t const num_leaves = sub_meta->numleaves * sub_meta->dynarray_length;
 	if (num_leaves) {
 		atui_leaf const* const feed_start = sub_meta->sub_leaves;
-		leaf->child_leaves = malloc(num_leaves * sizeof(atui_leaf));
+		leaf->child_leaves = cralloc(num_leaves * sizeof(atui_leaf));
 
 		struct dynarray_position dynpos = { // direct/diferred positioner
 			.pos.ptr = leaf_src->val,
@@ -386,7 +386,7 @@ atui_subonly_pullin(
 		goto handle_subonly_on_grandchildren;
 	}
 
-	atui_leaf* const newleaves = malloc(sizeof(atui_leaf) * num_new_leaves);
+	atui_leaf* const newleaves = cralloc(sizeof(atui_leaf) * num_new_leaves);
 	atui_leaf* walker = newleaves;
 
 	stack[0].start = *parent_leaves;
@@ -446,7 +446,7 @@ atui_branch_allocator(
 		.atomtree = args->atomtree,
 	};
 
-	atui_branch* const table = malloc(sizeof(atui_branch));
+	atui_branch* const table = cralloc(sizeof(atui_branch));
 	*table = embryo->seed;
 
 	atui_branch** branches = NULL;
@@ -456,18 +456,20 @@ atui_branch_allocator(
 	);
 	uint8_t max_num_branches = num_direct_branches;
 	if (num_direct_branches) {
-		branches = malloc(num_direct_branches * sizeof(atui_branch*));
+		branches = cralloc(num_direct_branches * sizeof(atui_branch*));
 		tracker.branches.pos = branches;
 		tracker.branches.end = branches + embryo->computed_num_shoot;
 	}
 	if (embryo->computed_num_graft) {
-		grafters = malloc(embryo->computed_num_graft * sizeof(atui_branch*));
+		grafters = cralloc(embryo->computed_num_graft * sizeof(atui_branch*));
 		tracker.grafters.pos = grafters;
 		tracker.grafters.end = grafters + embryo->computed_num_graft;
 	}
 
 	if (embryo->computed_num_leaves) {
-		table->leaves = malloc(embryo->computed_num_leaves * sizeof(atui_leaf));
+		table->leaves = cralloc(
+			embryo->computed_num_leaves * sizeof(atui_leaf)
+		);
 
 		struct level_data first_leaves = {
 			.parent = table,
@@ -504,7 +506,9 @@ atui_branch_allocator(
 		}
 		if (num_indirect_branches) {
 			max_num_branches += num_indirect_branches;
-			branches = realloc(branches, max_num_branches*sizeof(atui_branch*));
+			branches = crealloc(
+				branches, max_num_branches*sizeof(atui_branch*)
+			);
 
 			tracker.branches.pos = branches + embryo->computed_num_shoot;
 			tracker.branches.end = tracker.branches.pos + num_indirect_branches;
@@ -612,7 +616,7 @@ atui_assimilate_leaves(
 		return;
 	}
 
-	atui_leaf* const leaves = realloc(
+	atui_leaf* const leaves = crealloc(
 		dest->leaves,  (new_leaf_count * sizeof(atui_leaf))
 	);
 
@@ -647,7 +651,7 @@ atui_assimilate_branches(
 		return;
 	}
 
-	atui_branch** const child_branches = realloc(
+	atui_branch** const child_branches = crealloc(
 		dest->child_branches,  (new_num_branches * sizeof(atui_branch*))
 	);
 

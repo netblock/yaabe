@@ -215,7 +215,7 @@ atui_leaf_to_text(
 		}
 
 		buffer_size = (num_digits * array_size) + 1;
-		buffer = malloc(buffer_size);
+		buffer = cralloc(buffer_size);
 		char* buffer_walk = buffer;
 		switch (leaf->total_bits) {
 			case  8:
@@ -247,7 +247,7 @@ atui_leaf_to_text(
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		buffer_size = array_size + 1;
-		buffer = malloc(buffer_size);
+		buffer = cralloc(buffer_size);
 		memcpy(buffer, leaf->c8, array_size);
 		buffer[array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
@@ -267,7 +267,7 @@ atui_leaf_to_text(
 					leaf->enum_options->enum_array[index]
 				);
 				buffer_size += entry->name_length + sizeof(" : ");
-				buffer = malloc(buffer_size);
+				buffer = cralloc(buffer_size);
 
 				char format_2[LEAF_SPRINTF_FORMAT_SIZE + 5]; // stage 2
 				sprintf(format_2, " : %s", format);
@@ -276,11 +276,11 @@ atui_leaf_to_text(
 				char* walked = stopcopy(buffer, entry->name);
 				sprintf(walked, format_2, val); // eats previous \0
 			} else {
-				buffer = malloc(buffer_size);
+				buffer = cralloc(buffer_size);
 				sprintf(buffer, format, val);
 			}
 		} else {
-			buffer = malloc(buffer_size);
+			buffer = cralloc(buffer_size);
 			if (leaf->type.fraction) {
 				// %G format can have agressive rounding:
 				// Q14.2 16383.75 -> 16383.8
@@ -561,7 +561,7 @@ atui_branch_to_path(
 	uint8_t i = 0;
 	size_t string_length = 1+1; // +1 for the initial / and +1 for \0
 	atui_path_populate_branch_stack(branchstack, &i, &string_length);
-	char* const pathstring = malloc(string_length);
+	char* const pathstring = cralloc(string_length);
 	pathstring[string_length-1] = '\0';
 	char* path_walk = _print_branch_path(branchstack, &i, pathstring);
 
@@ -622,7 +622,7 @@ atui_leaf_to_path(
 	atui_path_populate_branch_stack(branchstack, &branches_i, &string_length);
 	assert(branches_i < lengthof(branchstack));
 
-	char* const pathstring = malloc(string_length);
+	char* const pathstring = cralloc(string_length);
 	// pathstring[string_length-1] = '\0'; // print_leaf_path does the \0
 
 	char* path_walk = pathstring;
@@ -728,7 +728,7 @@ path_to_atui(
 		path_token = "";
 	}
 
-	void* partition = malloc(
+	void* partition = cralloc(
 		sizeof(struct atui_path_map)
 		+ (branch_depth * sizeof(atui_branch*))
 		+ (leaf_depth * sizeof(atui_leaf*))
@@ -796,7 +796,7 @@ atui_enum_entry_to_text(
 	size_t const buffer_size = (
 		enum_entry->name_length + sizeof(" : 0x") + num_digits
 	);
-	char* const buffer = malloc(buffer_size);
+	char* const buffer = cralloc(buffer_size);
 
 	char* walked = stopcopy(buffer, enum_entry->name); // walk the buffer
 	sprintf(walked, format_2, enum_entry->val);  // eats previous \0

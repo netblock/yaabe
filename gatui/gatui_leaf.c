@@ -208,8 +208,8 @@ gatui_leaf_new(
 		uint16_t const num_child_leaves = leaf->num_child_leaves;
 
 		self->num_child_leaves = num_child_leaves;
-		self->child_leaves = malloc(num_child_leaves * sizeof(GATUILeaf*));
-		self->phone_book = malloc(num_child_leaves * sizeof(gulong));
+		self->child_leaves = cralloc(num_child_leaves * sizeof(GATUILeaf*));
+		self->phone_book = cralloc(num_child_leaves * sizeof(gulong));
 
 		for (uint16_t i = 0; i < num_child_leaves; i++) {
 			GATUILeaf* child = gatui_leaf_new(&(leaf->child_leaves[i]), root);
@@ -304,7 +304,7 @@ gatui_leaf_get_value(
 		}
 		// g_variant_new_from_data is effectively a pointer container so we
 		// need to duplicate the data and free on notify
-		void* const valcopy = malloc(leaf->num_bytes);
+		void* const valcopy = cralloc(leaf->num_bytes);
 		memcpy(valcopy, valptr, leaf->num_bytes);
 		return g_variant_new_from_data(
 			// won't work on big-endian, but I'm not supporting BE.
@@ -443,7 +443,7 @@ gatui_leaf_enum_val_to_text(
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
 	size_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
-	char* const valstr = malloc(alloc_size + 1);
+	char* const valstr = cralloc(alloc_size + 1);
 	sprintf(valstr, format, enum_entry->val);
 	return valstr;
 }

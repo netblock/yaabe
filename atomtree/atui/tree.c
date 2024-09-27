@@ -1055,7 +1055,7 @@ autogen_regblock_register_sequence(
 	atuifunc_args atui_args = {
 		.suggestbios = &(data_block->block_id)
 	};
-	atui_branch** const all_fields = malloc(
+	atui_branch** const all_fields = cralloc(
 		(1+num_data_entries) * sizeof(atui_branch*)
 	);
 	all_fields[0] = _atui_atom_mc_register_setting_id(&atui_args);

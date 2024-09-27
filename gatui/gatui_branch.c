@@ -111,7 +111,7 @@ gatui_branch_new(
 
 	uint8_t const num_branches = branch->num_branches;
 	if (num_branches) {
-		self->child_branches = malloc(num_branches * sizeof(GATUIBranch*));
+		self->child_branches = cralloc(num_branches * sizeof(GATUIBranch*));
 
 		for (uint8_t i = 0; i < num_branches; i++) {
 			assert(branch->child_branches[i]);
@@ -191,7 +191,7 @@ gatui_branch_get_contiguous_memory(
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	atui_branch const* const branch = self->atui;
 	if (branch->table_size) {
-		void* const valcopy = malloc(branch->table_size);
+		void* const valcopy = cralloc(branch->table_size);
 		memcpy(valcopy, branch->table_start, branch->table_size);
 		return g_variant_new_from_data(
 			self->capsule_type,
@@ -246,7 +246,7 @@ gatui_branch_get_leaves_memory_package(
 	for (uint16_t i=0; i < leaf_count; i++) {
 		num_bytes += leaves[i].num_bytes;
 	}
-	void* const bytepack = malloc(num_bytes);
+	void* const bytepack = cralloc(num_bytes);
 	void* walker = bytepack;
 	for (uint16_t i=0; i < leaf_count; i++) {
 		if (leaves[i].num_bytes) {

@@ -140,11 +140,26 @@ error_emit( // severity and message must be set before calling
 } while(0)
 
 
+void*
+cralloc( // crashes if not enough space
+	size_t size
+	);
+void*
+crealloc(
+	void* old,
+	size_t size
+	);
+void*
+cralloc0( // zero-allocates
+	size_t size
+	);
+
 struct mem_arena {
 	void* start;
 	void* pos;
 	void* end;
 };
+
 void
 arena_init( // initialise a new arena
 		struct mem_arena* arena,

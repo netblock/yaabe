@@ -79,13 +79,13 @@ error_emit(
 	if (strlen(err->message)) {
 		switch (err->severity) {
 			case ERROR_WARNING:
-				fprintf(stderr, "warning: %s\n", err->message);
+				fprintf(stderr, "Warning: %s\n", err->message);
 				break;
 			case ERROR_ABORT:
-				fprintf(stderr, "error: %s\n", err->message);
+				fprintf(stderr, "Error: %s\n", err->message);
 				break;
 			case ERROR_CRASH:
-				fprintf(stderr, "catastrophic error: %s\n", err->message);
+				fprintf(stderr, "Catastrophic error: %s\n", err->message);
 				break;
 			case NO_ERROR:
 				break;
@@ -94,10 +94,53 @@ error_emit(
 	switch (err->severity) {
 		case ERROR_WARNING: return;
 		case ERROR_ABORT: longjmp(err->env, 0);
-		case ERROR_CRASH: exit(ERROR_CRASH);
+		case ERROR_CRASH: abort();
 		case NO_ERROR: return;
 	};
 }
+
+
+void*
+cralloc(
+	size_t const size
+	) {
+	void* const ptr = malloc(size);
+	if (ptr) {
+		return ptr;
+	}
+	fprintf(stderr,
+		"Catastrophic error: can't get memory from OS. Crashing.\n"
+	);
+	abort();
+}
+void*
+crealloc(
+	void* const old,
+	size_t const size
+	) {
+	void* const ptr = realloc(old, size);
+	if (ptr) {
+		return ptr;
+	}
+	fprintf(stderr,
+		"Catastrophic error: can't get memory from OS. Crashing.\n"
+	);
+	abort();
+}
+void*
+cralloc0(
+	size_t const size
+	) {
+	void* const ptr = calloc(1,size);
+	if (ptr) {
+		return ptr;
+	}
+	fprintf(stderr,
+		"Catastrophic error: can't get memory from OS. Crashing.\n"
+	);
+	abort();
+}
+
 
 void
 arena_init(
@@ -106,9 +149,9 @@ arena_init(
 		bool const zeroed
 		) {
 	if (zeroed) {
-		arena->start = calloc(1,arena_size);
+		arena->start = cralloc0(arena_size);
 	} else {
-		arena->start = malloc(arena_size);
+		arena->start = cralloc(arena_size);
 	}
 	arena->pos = arena->start;
 	arena->end = arena->start + arena_size;
