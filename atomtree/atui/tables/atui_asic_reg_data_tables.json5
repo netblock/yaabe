@@ -1,7 +1,6 @@
 /* For asic_reg_data_tables.h -- Register data block playback */
 
 // trimmer for atui_tools.py output in vim:
-// '<,'>s/display: "ATUI_NAN",\n\t*fancy: "ATUI_GRAFT", //
 
 {class: "branch",
 global_default: {

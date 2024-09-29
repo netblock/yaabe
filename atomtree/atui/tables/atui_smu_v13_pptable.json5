@@ -56,7 +56,7 @@ global_default: {
 		}, {
 			access: "bios->cap",
 			name: "Supported OD feature support flags",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODCAP_COUNT",
@@ -68,7 +68,7 @@ global_default: {
 		}, {
 			access: "(&(bios->cap[SMU_13_0_7_ODCAP_COUNT]))",
 			name: "Undefined OD feature support flags",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT)",
@@ -80,7 +80,7 @@ global_default: {
 		}, {
 			access: "bios->max",
 			name: "Supported Overdrive settings (max)",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODSETTING_COUNT",
@@ -92,7 +92,7 @@ global_default: {
 		}, {
 			access: "bios->min",
 			name: "Supported Overdrive settings (min)",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_ODSETTING_COUNT",
@@ -104,7 +104,7 @@ global_default: {
 		}, {
 			access: "(&(bios->max[SMU_13_0_7_ODSETTING_COUNT]))",
 			name: "Undefined OD settings (max)",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
@@ -117,7 +117,7 @@ global_default: {
 		}, {
 			access: "(&(bios->min[SMU_13_0_7_ODSETTING_COUNT]))",
 			name: "Undefined OD settings (min)",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
@@ -130,7 +130,7 @@ global_default: {
 		}, {
 			access: "bios->pm_setting",
 			name: "PowerMode feature settings",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Optimized power mode feature settings",},
 			],
@@ -145,7 +145,7 @@ global_default: {
 		}, {
 			access: "(&(bios->pm_setting[SMU_13_0_7_PMSETTING_COUNT]))",
 			name: "Undefined PowerMode feature settings",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Optimized power mode feature settings",},
 			],
@@ -167,7 +167,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 			description: [
 				{language: "english", text: "For PLUM_BONITO, header.format_revision = 15, header.content_revision = 0",},
@@ -238,7 +238,7 @@ global_default: {
 		}, {
 			access: "bios->overdrive_table",
 			name: "overdrive_table",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "smu_13_0_7_overdrive_table",
 		}, {
 			access: "bios->padding1",
@@ -705,7 +705,7 @@ global_default: {
 		}, {
 			access: "bios->ConversionToAvfsClk",
 			name: "ConversionToAvfsClk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 			description: [
 				{language: "english", text: "Transfer function to AVFS Clock (GHz->GHz)",},
@@ -929,7 +929,7 @@ global_default: {
 		{
 			access: "bios->Tdc",
 			name: "Tdc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Amps",},
 			],
@@ -944,7 +944,7 @@ global_default: {
 		}, {
 			access: "bios->Temperature",
 			name: "Temperature",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Celsius",},
 			],
@@ -1003,7 +1003,7 @@ global_default: {
 		}, {
 			access: "bios->PowerMinPpt0",
 			name: "PowerMinPpt0",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
@@ -1087,7 +1087,7 @@ global_default: {
 		}, {
 			access: "bios->DcBtcGbScalar",
 			name: "DcBtcGbScalar",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 		},
 	],
@@ -1098,7 +1098,7 @@ global_default: {
 		{
 			access: "bios->AvfsTemp",
 			name: "AvfsTemp",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "in degrees C",},
 			],
@@ -1125,26 +1125,26 @@ global_default: {
 		}, {
 			access: "bios->qVft",
 			name: "qVft",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_TEMP_COUNT",
 				enum: "AVFS_TEMP_e",
 				pattern: [{
 					name: "qVft [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->qAvfsGb",
 			name: "qAvfsGb",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		}, {
 			access: "bios->qAvfsGb2",
 			name: "qAvfsGb2",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		},
 	],
@@ -1277,7 +1277,7 @@ global_default: {
 		}, {
 			access: "bios->features",
 			name: "features",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu13",
 		}, {
 			access: "bios->TotalPowerConfig",
@@ -1309,7 +1309,7 @@ global_default: {
 		}, {
 			access: "bios->SocketPowerLimitAc",
 			name: "SocketPowerLimitAc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In Watts. Power limit that PMFW attempts to control to in AC mode. Multiple limits supported",},
 			],
@@ -1324,7 +1324,7 @@ global_default: {
 		}, {
 			access: "bios->SocketPowerLimitDc",
 			name: "SocketPowerLimitDc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In Watts. Power limit that PMFW attempts to control to in DC mode. Multiple limits supported",},
 			],
@@ -1368,7 +1368,7 @@ global_default: {
 		}, {
 			access: "bios->VrTdcLimit",
 			name: "VrTdcLimit",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In Amperes. Current limit associated with VR regulator maximum temperature",},
 			],
@@ -1383,7 +1383,7 @@ global_default: {
 		}, {
 			access: "bios->PlatformTdcLimit",
 			name: "PlatformTdcLimit",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In Amperes. Current limit associated with platform maximum temperature per VR current rail",},
 			],
@@ -1398,7 +1398,7 @@ global_default: {
 		}, {
 			access: "bios->TemperatureLimit",
 			name: "TemperatureLimit",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In degrees Celsius. Temperature limit associated with each input",},
 			],
@@ -1452,12 +1452,12 @@ global_default: {
 		}, {
 			access: "bios->FwDStateMask",
 			name: "FwDStateMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "fw_dstate_features_smu13_0x35",
 		}, {
 			access: "bios->UlvVoltageOffset",
 			name: "UlvVoltageOffset",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)",},
 			],
@@ -1484,7 +1484,7 @@ global_default: {
 		}, {
 			access: "bios->DefaultMaxVoltage",
 			name: "DefaultMaxVoltage",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Maximum voltage without FIT controller enabled",},
 			],
@@ -1499,7 +1499,7 @@ global_default: {
 		}, {
 			access: "bios->BoostMaxVoltage",
 			name: "BoostMaxVoltage",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Maximum voltage with FIT controller enabled",},
 			],
@@ -1514,7 +1514,7 @@ global_default: {
 		}, {
 			access: "bios->VminTempHystersis",
 			name: "VminTempHystersis",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Celsius Temperature hysteresis for switching between low/high temperature values for Vmin",},
 			],
@@ -1529,7 +1529,7 @@ global_default: {
 		}, {
 			access: "bios->VminTempThreshold",
 			name: "VminTempThreshold",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Celsius Temperature threshold for switching between low/high temperature values for Vmin",},
 			],
@@ -1544,7 +1544,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_Hot_T0",
 			name: "Vmin_Hot_T0",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Initial (pre-aging) Vset to be used at hot.",},
 			],
@@ -1559,7 +1559,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_Cold_T0",
 			name: "Vmin_Cold_T0",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Initial (pre-aging) Vset to be used at cold.",},
 			],
@@ -1574,7 +1574,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_Hot_Eol",
 			name: "Vmin_Hot_Eol",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) End-of-life Vset to be used at hot.",},
 			],
@@ -1589,7 +1589,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_Cold_Eol",
 			name: "Vmin_Cold_Eol",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) End-of-life Vset to be used at cold.",},
 			],
@@ -1604,7 +1604,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_Aging_Offset",
 			name: "Vmin_Aging_Offset",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Worst-case aging margin",},
 			],
@@ -1619,7 +1619,7 @@ global_default: {
 		}, {
 			access: "bios->Spare_Vmin_Plat_Offset_Hot",
 			name: "Spare_Vmin_Plat_Offset_Hot",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Platform offset apply to T0 Hot",},
 			],
@@ -1634,7 +1634,7 @@ global_default: {
 		}, {
 			access: "bios->Spare_Vmin_Plat_Offset_Cold",
 			name: "Spare_Vmin_Plat_Offset_Cold",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In mV(Q2) Platform offset apply to T0 Cold",},
 			],
@@ -1649,7 +1649,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcFixedVminAgingOffset",
 			name: "VcBtcFixedVminAgingOffset",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Linear offset or GB term to account for mis-correlation between PSM and Vmin shift trends across parts.",},
 			],
@@ -1664,7 +1664,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcVmin2PsmDegrationGb",
 			name: "VcBtcVmin2PsmDegrationGb",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Scalar coefficient of the PSM aging degradation function",},
 			],
@@ -1679,7 +1679,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcPsmA",
 			name: "VcBtcPsmA",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "A_PSM  // Exponential coefficient of the PSM aging degradation function",},
 			],
@@ -1694,7 +1694,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcPsmB",
 			name: "VcBtcPsmB",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "B_PSM  // Scalar coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold.",},
 			],
@@ -1709,7 +1709,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcVminA",
 			name: "VcBtcVminA",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "A_VMIN // Exponential coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold.",},
 			],
@@ -1724,7 +1724,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcVminB",
 			name: "VcBtcVminB",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "B_VMIN",},
 			],
@@ -1739,7 +1739,7 @@ global_default: {
 		}, {
 			access: "bios->PerPartVminEnabled",
 			name: "PerPartVminEnabled",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
@@ -1751,7 +1751,7 @@ global_default: {
 		}, {
 			access: "bios->VcBtcEnabled",
 			name: "VcBtcEnabled",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PMFW_VOLT_PLANE_COUNT",
@@ -1763,7 +1763,7 @@ global_default: {
 		}, {
 			access: "bios->SocketPowerLimitAcTau",
 			name: "SocketPowerLimitAcTau",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Time constant of LPF in ms",},
 			],
@@ -1778,7 +1778,7 @@ global_default: {
 		}, {
 			access: "bios->SocketPowerLimitDcTau",
 			name: "SocketPowerLimitDcTau",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Time constant of LPF in ms",},
 			],
@@ -1793,7 +1793,7 @@ global_default: {
 		}, {
 			access: "bios->Vmin_droop",
 			name: "Vmin_droop",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 		}, {
 			access: "bios->SpareVmin",
@@ -1803,21 +1803,21 @@ global_default: {
 		}, {
 			access: "bios->DpmDescriptor",
 			name: "DpmDescriptor",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU13_PPCLK_COUNT",
 				enum: "SMU13_PPCLK_e",
 				pattern: [{
 					name: "DpmDescriptor [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
 				},],
 			},
 		}, {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1832,7 +1832,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableVclk",
 			name: "FreqTableVclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1847,7 +1847,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDclk",
 			name: "FreqTableDclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1862,7 +1862,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableSocclk",
 			name: "FreqTableSocclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1877,7 +1877,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableUclk",
 			name: "FreqTableUclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1892,7 +1892,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDispclk",
 			name: "FreqTableDispclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1907,7 +1907,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDppClk",
 			name: "FreqTableDppClk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1922,7 +1922,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDprefclk",
 			name: "FreqTableDprefclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1937,7 +1937,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDcfclk",
 			name: "FreqTableDcfclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1952,7 +1952,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableDtbclk",
 			name: "FreqTableDtbclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1967,7 +1967,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableFclk",
 			name: "FreqTableFclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1982,7 +1982,7 @@ global_default: {
 		}, {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -1997,7 +1997,7 @@ global_default: {
 		}, {
 			access: "bios->Mp0clkFreq",
 			name: "Mp0clkFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "in MHz",},
 			],
@@ -2012,7 +2012,7 @@ global_default: {
 		}, {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
@@ -2186,7 +2186,7 @@ global_default: {
 		}, {
 			access: "bios->ShadowFreqTableUclk",
 			name: "ShadowFreqTableUclk",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -2212,7 +2212,7 @@ global_default: {
 		}, {
 			access: "bios->UclkDpmPstates",
 			name: "UclkDpmPstates",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "4 DPM states.",},
 			],
@@ -2228,7 +2228,7 @@ global_default: {
 		}, {
 			access: "bios->FreqTableUclkDiv",
 			name: "FreqTableUclkDiv",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU13",
@@ -2241,7 +2241,7 @@ global_default: {
 		}, {
 			access: "bios->MemVmempVoltage",
 			name: "MemVmempVoltage",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
@@ -2256,7 +2256,7 @@ global_default: {
 		}, {
 			access: "bios->MemVddioVoltage",
 			name: "MemVddioVoltage",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
@@ -2271,7 +2271,7 @@ global_default: {
 		}, {
 			access: "bios->FclkDpmUPstates",
 			name: "FclkDpmUPstates",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "U P-state ID associated with each FCLK DPM state.",},
 			],
@@ -2286,7 +2286,7 @@ global_default: {
 		}, {
 			access: "bios->FclkDpmVddU",
 			name: "FclkDpmVddU",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "mV(Q2) Vset U voltage associated with each FCLK DPM state.",},
 			],
@@ -2301,7 +2301,7 @@ global_default: {
 		}, {
 			access: "bios->FclkDpmUSpeed",
 			name: "FclkDpmUSpeed",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "U speed associated with each FCLK DPM state",},
 			],
@@ -2326,7 +2326,7 @@ global_default: {
 		}, {
 			access: "bios->PcieGenSpeed",
 			name: "PcieGenSpeed",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
@@ -2339,7 +2339,7 @@ global_default: {
 		}, {
 			access: "bios->PcieLaneCount",
 			name: "PcieLaneCount",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
@@ -2352,7 +2352,7 @@ global_default: {
 		}, {
 			access: "bios->LclkFreq",
 			name: "LclkFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU13",
@@ -2364,7 +2364,7 @@ global_default: {
 		}, {
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Celsius",},
 			],
@@ -2379,7 +2379,7 @@ global_default: {
 		}, {
 			access: "bios->FanStartTemp",
 			name: "FanStartTemp",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "Celsius",},
 			],
@@ -2394,7 +2394,7 @@ global_default: {
 		}, {
 			access: "bios->FanGain",
 			name: "FanGain",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
@@ -2437,7 +2437,7 @@ global_default: {
 		}, {
 			access: "bios->FanTargetTemperature",
 			name: "FanTargetTemperature",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
@@ -2461,7 +2461,7 @@ global_default: {
 		}, {
 			access: "bios->FwCtfLimit",
 			name: "FwCtfLimit",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU_13_0_7_TEMP_COUNT",
@@ -2524,7 +2524,7 @@ global_default: {
 		}, {
 			access: "bios->L2HwRtAvfsFuses",
 			name: "L2HwRtAvfsFuses",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "see fusedoc for encoding",},
 			],
@@ -2539,7 +2539,7 @@ global_default: {
 		}, {
 			access: "bios->SeHwRtAvfsFuses",
 			name: "SeHwRtAvfsFuses",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_HW_FUSE_COUNT",
@@ -2551,7 +2551,7 @@ global_default: {
 		}, {
 			access: "bios->CommonRtAvfs",
 			name: "CommonRtAvfs",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_COMMON_FUSE_COUNT",
@@ -2563,7 +2563,7 @@ global_default: {
 		}, {
 			access: "bios->L2FwRtAvfsFuses",
 			name: "L2FwRtAvfsFuses",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
@@ -2575,7 +2575,7 @@ global_default: {
 		}, {
 			access: "bios->SeFwRtAvfsFuses",
 			name: "SeFwRtAvfsFuses",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
@@ -2587,7 +2587,7 @@ global_default: {
 		}, {
 			access: "bios->Droop_PWL_F",
 			name: "Droop_PWL_F",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
@@ -2599,7 +2599,7 @@ global_default: {
 		}, {
 			access: "bios->Droop_PWL_a",
 			name: "Droop_PWL_a",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
@@ -2611,7 +2611,7 @@ global_default: {
 		}, {
 			access: "bios->Droop_PWL_b",
 			name: "Droop_PWL_b",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
@@ -2623,7 +2623,7 @@ global_default: {
 		}, {
 			access: "bios->Droop_PWL_c",
 			name: "Droop_PWL_c",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
@@ -2635,7 +2635,7 @@ global_default: {
 		}, {
 			access: "bios->Static_PWL_Offset",
 			name: "Static_PWL_Offset",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PP_NUM_RTAVFS_PWL_ZONES",
@@ -2665,7 +2665,7 @@ global_default: {
 		}, {
 			access: "bios->DcBtcGfxParams",
 			name: "DcBtcGfxParams",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
 		}, {
 			access: "bios->GfxAvfsSpare",
@@ -2686,21 +2686,21 @@ global_default: {
 		}, {
 			access: "bios->SocAvfsFuseOverride",
 			name: "SocAvfsFuseOverride",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
 					name: "SocAvfsFuseOverride [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
 				},],
 			},
 		}, {
 			access: "bios->dBtcGbSoc",
 			name: "dBtcGbSoc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "GHz->V BtcGb",},
 			],
@@ -2710,14 +2710,14 @@ global_default: {
 				enum: "AVFS_D_e",
 				pattern: [{
 					name: "dBtcGbSoc [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
 				},],
 			},
 		}, {
 			access: "bios->qAgingGb",
 			name: "qAgingGb",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
@@ -2727,14 +2727,14 @@ global_default: {
 				enum: "AVFS_D_e",
 				pattern: [{
 					name: "qAgingGb [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
 				},],
 			},
 		}, {
 			access: "bios->qStaticVoltageOffset",
 			name: "qStaticVoltageOffset",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "GHz->V",},
 			],
@@ -2744,21 +2744,21 @@ global_default: {
 				enum: "AVFS_D_e",
 				pattern: [{
 					name: "qStaticVoltageOffset [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->DcBtcSocParams",
 			name: "DcBtcSocParams",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "AVFS_D_COUNT",
 				enum: "AVFS_D_e",
 				pattern: [{
 					name: "DcBtcSocParams [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
 				},],
 			},
@@ -2770,37 +2770,37 @@ global_default: {
 		}, {
 			access: "bios->BootValues",
 			name: "BootValues",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "BootValues_t",
 		}, {
 			access: "bios->DriverReportedClocks",
 			name: "DriverReportedClocks",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "DriverReportedClocks_t",
 		}, {
 			access: "bios->MsgLimits",
 			name: "MsgLimits",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "MsgLimits_t",
 		}, {
 			access: "bios->OverDriveLimitsMin",
 			name: "OverDriveLimitsMin",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->OverDriveLimitsBasicMax",
 			name: "OverDriveLimitsBasicMax",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->OverDriveLimitsAdvancedMax",
 			name: "OverDriveLimitsAdvancedMax",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dpm_debug_override_smu13",
 		}, {
 			access: "bios->TotalBoardPowerSupport",
@@ -2825,42 +2825,42 @@ global_default: {
 		}, {
 			access: "bios->qFeffCoeffGameClock",
 			name: "qFeffCoeffGameClock",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
 					name: "qFeffCoeffGameClock [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->qFeffCoeffBaseClock",
 			name: "qFeffCoeffBaseClock",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
 					name: "qFeffCoeffBaseClock [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
 		}, {
 			access: "bios->qFeffCoeffBoostClock",
 			name: "qFeffCoeffBoostClock",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "POWER_SOURCE_COUNT",
 				enum: "POWER_SOURCE_e",
 				pattern: [{
 					name: "qFeffCoeffBoostClock [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
 				},],
 			},
@@ -2889,14 +2889,14 @@ global_default: {
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->I2cControllers)",
 				enum: "I2cControllerName_SMU_13_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
 			},
@@ -2927,7 +2927,7 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2935,7 +2935,7 @@ global_default: {
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2943,7 +2943,7 @@ global_default: {
 		}, {
 			access: "bios->VmempUlvPhaseSheddingMask",
 			name: "VmempUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2951,7 +2951,7 @@ global_default: {
 		}, {
 			access: "bios->VddioUlvPhaseSheddingMask",
 			name: "VddioUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2959,7 +2959,7 @@ global_default: {
 		}, {
 			access: "bios->SlaveAddrMapping",
 			name: "SlaveAddrMapping",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
@@ -2971,7 +2971,7 @@ global_default: {
 		}, {
 			access: "bios->VrPsiSupport",
 			name: "VrPsiSupport",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
@@ -2983,7 +2983,7 @@ global_default: {
 		}, {
 			access: "bios->PaddingPsi",
 			name: "PaddingPsi",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
@@ -2995,7 +2995,7 @@ global_default: {
 		}, {
 			access: "bios->EnablePsi6",
 			name: "EnablePsi6",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "only applicable in SVI3",},
 			],
@@ -3010,21 +3010,21 @@ global_default: {
 		}, {
 			access: "bios->SviTelemetryScale",
 			name: "SviTelemetryScale",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
 					name: "SviTelemetryScale [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
 				},],
 			},
 		}, {
 			access: "bios->VoltageTelemetryRatio",
 			name: "VoltageTelemetryRatio",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",},
 			],
@@ -3039,7 +3039,7 @@ global_default: {
 		}, {
 			access: "bios->DownSlewRateVr",
 			name: "DownSlewRateVr",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
@@ -3147,7 +3147,7 @@ global_default: {
 		}, {
 			access: "bios->UclkSpreadPercent",
 			name: "UclkSpreadPercent",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "MEM_VENDOR_COUNT",
@@ -3233,12 +3233,12 @@ global_default: {
 		{
 			access: "bios->SkuTable",
 			name: "SkuTable",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "smu13_skutable_v39",
 		}, {
 			access: "bios->BoardTable",
 			name: "BoardTable",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39",
 		},
 	],
@@ -3249,7 +3249,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->BoardTable",

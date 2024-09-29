@@ -16,7 +16,7 @@ global_default: {
 			fancy: "ATUI_NOFANCY",
 		},
 		dynpattern: {
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT",
 			name: "entries [%02u]",
 		},
@@ -126,7 +126,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "smu_powerplay_table_header",
 		}, {
 			access: "bios->VoltageTime",

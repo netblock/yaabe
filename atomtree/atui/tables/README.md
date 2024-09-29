@@ -160,9 +160,6 @@ If a leaf should be signed with Two's Complement despite the underlying
 C data type, set the leaf's `display` property to be a list that includes
 `ATUI_SIGNED` and its main radix.
 
-If the leaf should exist as a visual entry but shouldn't display a value, set
-the `display` to `ATUI_NAN`.
-
 If the leaf should be omitted from UI display entirely, set the `display` to
 `ATUI_NODISPLAY`. Note that this will prevent display its children if it has
 any. If the leaf's children should be viewed anyway, set the `display` to

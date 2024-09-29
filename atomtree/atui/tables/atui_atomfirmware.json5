@@ -34,12 +34,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->atom_bios_string",
 			name: "atom_bios_string",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,",},
@@ -119,7 +119,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->utilitypipeline",
@@ -374,7 +374,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->liquid1_i2c_address",
@@ -437,12 +437,12 @@ global_default: {
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->soculvphasesheddingmask",
 			name: "soculvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->padding8_v",
@@ -586,7 +586,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->liquid1_i2c_address",
@@ -649,12 +649,12 @@ global_default: {
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->soculvphasesheddingmask",
 			name: "soculvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->externalsensorpresent",
@@ -896,7 +896,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->i2c_padding",
@@ -924,12 +924,12 @@ global_default: {
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->soculvphasesheddingmask",
 			name: "soculvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->externalsensorpresent",
@@ -1056,14 +1056,14 @@ global_default: {
 		}, {
 			access: "bios->i2ccontrollers",
 			name: "I2C Controllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->i2ccontrollers)",
 				enum: "I2cControllerName_SMU_11_0_0_e",
 				pattern: [{
 					name: "i2ccontrollers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u32",
 				},],
 			},
@@ -1081,19 +1081,19 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2C Controllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->I2cControllers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
 			},
@@ -1136,7 +1136,7 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -1144,7 +1144,7 @@ global_default: {
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -1396,7 +1396,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->i2c_padding",
@@ -1445,7 +1445,7 @@ global_default: {
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set psi0/1 to 1 in ulv mode",},
@@ -1614,14 +1614,14 @@ global_default: {
 		}, {
 			access: "bios->i2ccontrollers",
 			name: "i2ccontrollers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->i2ccontrollers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "i2ccontrollers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
 			},
@@ -1691,19 +1691,19 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->I2cControllers)",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
 				},],
 			},
@@ -1746,7 +1746,7 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -1754,7 +1754,7 @@ global_default: {
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2028,12 +2028,12 @@ global_default: {
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->VddciUlvPhaseSheddingMask",
 			name: "VddciUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->Padding8_Psi1",
@@ -2054,33 +2054,33 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
 			},
 		}, {
 			access: "(&bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])",
 			name: "Undefined I2cControllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "((lengthof(bios->I2cControllers)) - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "I2cControllers [8 + %02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
 			},
@@ -2135,7 +2135,7 @@ global_default: {
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2143,7 +2143,7 @@ global_default: {
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2151,7 +2151,7 @@ global_default: {
 		}, {
 			access: "bios->VddciUlvPhaseSheddingMask",
 			name: "VddciUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2159,7 +2159,7 @@ global_default: {
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
 			description: [
 				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
@@ -2459,7 +2459,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->GfxMaxCurrent",
@@ -2599,14 +2599,14 @@ global_default: {
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
 				enum: "I2cControllerName_SMU_11_0_7_e",
 				pattern: [{
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
 				},],
 			},
@@ -2691,7 +2691,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->firmware_revision",
@@ -2768,7 +2768,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->firmware_revision",
@@ -2876,7 +2876,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->firmware_revision",
@@ -2993,7 +2993,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->firmware_revision",
@@ -3172,12 +3172,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->lcd_timing",
 			name: "lcd_timing",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->backlight_pwm",
@@ -3264,7 +3264,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->smuip_min_ver",
@@ -3354,7 +3354,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->smuip_min_ver",
@@ -3490,7 +3490,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->smuip_min_ver",
@@ -3650,7 +3650,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->smuip_min_ver",
@@ -3854,7 +3854,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->smuip_min_ver",
@@ -4069,7 +4069,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->bootup_gfxclk_bypass_10khz",
@@ -4292,7 +4292,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->start_address_in_kb",
@@ -4312,7 +4312,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->fw_region_start_address_in_kb",
@@ -4438,12 +4438,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gpio_pin",
 			name: "gpio_pin",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_gpio_pins",
@@ -4451,7 +4451,7 @@ global_default: {
 				pattern: [{
 					access: "bios->gpio_pin",
 					name: "gpio_pin [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "atom_gpio_pin_assignment_v2_1",
 				},],
 			},
@@ -4464,7 +4464,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -4530,7 +4530,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -4609,7 +4609,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -4723,7 +4723,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -4856,7 +4856,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -4994,7 +4994,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->gfxip_min_ver",
@@ -5244,7 +5244,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "bit_byte_remap [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "atom_gddr6_bit_byte_remap",
 				},],
 			},
@@ -5324,7 +5324,7 @@ global_default: {
 		}, {
 			access: "bios->umc_reg_data",
 			name: "umc_reg_data",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_data_entries",
@@ -5344,14 +5344,14 @@ global_default: {
 	leaves: [
 		{
 			name: "umc_reg_setting_list",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "atomtree->data_blocks",
 				count: "atomtree->num_data_blocks",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "umc_reg_setting_list [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "atom_umc_reg_setting_data_block",
 				},],
 			},
@@ -5370,11 +5370,11 @@ global_default: {
 			name: "reserved",
 		}, { // data for umc_reg_list, umc_reg_setting_list are through atomtree
 			name: "umc_reg_list",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_umc_register_addr_info_access",
 		}, {
 			name: "umc_reg_setting_list",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "umc_reg_settings_dummy",
 		},
 	],
@@ -5481,7 +5481,7 @@ global_default: {
 		}, {
 			access: "bios->dram_pnstring",
 			name: "dram_pnstring",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 			description: [
 				{language: "english", text: "part number end with '0'.",},
@@ -5494,7 +5494,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->mem_adjust_tbloffset",
@@ -5691,7 +5691,7 @@ global_default: {
 		}, {
 			access: "bios->dram_pnstring",
 			name: "dram_pnstring",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 			description: [
 				{language: "english", text: "part number end with '0'.",},
@@ -5705,7 +5705,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->mem_adjust_tbloffset",
@@ -5916,7 +5916,7 @@ global_default: {
 		}, {
 			access: "bios->dram_pnstring",
 			name: "dram_pnstring",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 			description: [
 				{language: "english", text: "part number end with '0'.",},
@@ -6088,7 +6088,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->mem_adjust_tbloffset",
@@ -6268,7 +6268,7 @@ global_default: {
 		}, {
 			access: "bios->dram_pnstring",
 			name: "dram_pnstring",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 		},
 	],
@@ -6369,7 +6369,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->loadline_psi1.loadline_psi1",

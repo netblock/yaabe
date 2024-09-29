@@ -78,7 +78,7 @@ global_default: {
 		{
 			access: "bios->pci_header",
 			name: "pci_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
 		}, {
 			access: "bios->rsvd_1d_1a",
@@ -88,7 +88,7 @@ global_default: {
 		}, {
 			access: "bios->IBM",
 			name: "IBM",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "IBM",},
@@ -111,7 +111,7 @@ global_default: {
 		}, {
 			access: "bios->atomati_magic",
 			name: "atomati_magic",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "\" 761295520\"",},
@@ -144,7 +144,7 @@ global_default: {
 		}, {
 			access: "bios->build_timestamp",
 			name: "build_timestamp",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 		}, {
 			access: "bios->jump_corex_func_far_handler",
@@ -178,14 +178,14 @@ global_default: {
 		}, {
 			access: "NULL",
 			name: "atombios strings",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "atomtree->atombios_strings",
 				count: "atomtree->num_of_crawled_strings",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "string [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_STRING",
 				},],
 			},
@@ -218,7 +218,7 @@ global_default: {
 		{
 			access: "bios->pcir_signature",
 			name: "pcir_signature",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "\"PCIR\"",},
@@ -329,7 +329,7 @@ global_default: {
 		}, {
 			access: "bios->pcir",
 			name: "pcir",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
 		},
 	],
@@ -341,12 +341,12 @@ global_default: {
 		{
 			access: "*(atomtree->header)",
 			name: "pci_rom_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "pci_rom_header",
 		}, {
 			access: "*(atomtree->pcir)",
 			name: "pcir_data_structure",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "pcir_data_structure",
 		},
 	],
@@ -383,12 +383,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmWareSignature",
 			name: "FirmWareSignature",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
@@ -467,12 +467,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmWareSignature",
 			name: "FirmWareSignature",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
@@ -555,7 +555,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->UtilityPipeLine",
@@ -861,7 +861,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -1045,7 +1045,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -1238,7 +1238,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -1436,7 +1436,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -1637,7 +1637,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -1869,7 +1869,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->FirmwareRevision",
@@ -2346,12 +2346,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->LCDTiming",
 			name: "LCDTiming",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ModePatchTableOffset",
@@ -2377,7 +2377,7 @@ global_default: {
 		}, {
 			access: "bios->lvds_misc",
 			name: "lvds_misc",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "lvds_misc",
 		}, {
 			access: "bios->PanelDefaultRefreshRate",
@@ -2439,12 +2439,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->LCDTiming",
 			name: "LCDTiming",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ExtInfoTableOffset",
@@ -2564,12 +2564,12 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->lcd_timing",
 			name: "lcd_timing",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
 		}, {
 			access: "bios->ExtInfoTableOffset",
@@ -2784,7 +2784,7 @@ global_default: {
 			description: [
 				{language: "english", text: "the actual number of entries is in ucNumOfVoltageEntries",},
 			],
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
@@ -2815,7 +2815,7 @@ global_default: {
 		}, {
 			access: "bios->Control",
 			name: "Control",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_control",
 			description: [
 				{language: "english", text: "describ how to control",},
@@ -2823,7 +2823,7 @@ global_default: {
 		}, {
 			access: "bios->Formula",
 			name: "Formula",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_voltage_formula_v1",
 			description: [
 				{language: "english", text: "Indicate How to convert real Voltage to VID",},
@@ -2882,7 +2882,7 @@ global_default: {
 				pattern: [{
 					access: "bios->VIDAdjustEntries",
 					name: "VIDAdjustEntries [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "voltage_lut_entry",
 				},],
 			},
@@ -2906,7 +2906,7 @@ global_default: {
 		}, {
 			access: "bios->Control",
 			name: "Control",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_control",
 			description: [
 				{language: "english", text: "describ how to control",},
@@ -2914,7 +2914,7 @@ global_default: {
 		}, {
 			access: "bios->Formula",
 			name: "Formula",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_voltage_formula_v2",
 			description: [
 				{language: "english", text: "Indicate How to convert real Voltage to VID",},
@@ -2968,7 +2968,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->gpio_control_id",
@@ -3010,7 +3010,7 @@ global_default: {
 				pattern: [{
 					access: "bios->voltage_gpio_lut",
 					name: "voltage_gpio_lut [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_gpio_map_lut",
 				},],
 			},
@@ -3046,7 +3046,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->regulator_id",
@@ -3094,7 +3094,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "i2cdatalut [%u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_data_entry",
 				},],
 			},
@@ -3142,7 +3142,7 @@ global_default: {
 		{
 			access: "bios->Header",
 			name: "Header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 			description: [
 				{language: "english", text: "voltage mode = VOLTAGE_OBJ_SVID2",},
@@ -3180,7 +3180,7 @@ global_default: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 		}, {
 			access: "bios->merged_powerrail_type",
@@ -3233,7 +3233,7 @@ global_default: {
 		{
 			access: "bios->Header",
 			name: "Header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 			description: [
 				{language: "english", text: "voltage mode = VOLTAGE_OBJ_EVV",},
@@ -3242,7 +3242,7 @@ global_default: {
 		}, {
 			access: "bios->EvvDpmList",
 			name: "EvvDpmList",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->lut_entries",
@@ -3250,7 +3250,7 @@ global_default: {
 				pattern: [{
 					access: "bios->EvvDpmList",
 					name: "EvvDpmList",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "atom_evv_dpm_info",
 				},],
 			},
@@ -3289,7 +3289,7 @@ global_default: {
 		{
 			access: "bios->Header",
 			name: "Header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_voltage_object_header",
 			description: [
 				{language: "english", text: "voltage mode = 0x10/0x11/0x12",},
@@ -3325,7 +3325,7 @@ global_default: {
 				pattern: [{
 					access: "bios->LeakageIdLut",
 					name: "LeakageIdLut [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT",
 					fancy_data: "leakage_voltage_lut_entry_v2",
 				},],
@@ -3341,7 +3341,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->GfxIpMinVer",
@@ -3375,7 +3375,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->GfxIpMinVer",
@@ -3463,7 +3463,7 @@ global_default: {
 		}, {
 			access: "bios->reg_data",
 			name: "reg_data",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_data_entries",
@@ -3491,7 +3491,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "RegIndexBuf [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "atom_init_reg_index_format",
 				},],
 			},
@@ -3505,14 +3505,14 @@ global_default: {
 	leaves: [
 		{
 			name: "reg_setting_list",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "atomtree->data_blocks",
 				count: "atomtree->num_data_blocks",
 				enum: "ATUI_NULL",
 				pattern: [{
 					name: "reg_setting_list [%02u]",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "atom_reg_setting_data_block",
 				},],
 			},
@@ -3531,11 +3531,11 @@ global_default: {
 			name: "RegDataBlkSize",
 		}, {  // data for RegIndexBuf and RegDataBuf is through atomtree
 			name: "RegIndexBuf",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "reg_index_dummy",
 		}, {
 			name: "RegDataBuf",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "reg_settings_dummy",
 		},
 	],
@@ -4915,7 +4915,7 @@ global_default: {
 		}, {
 			access: "bios->strMemPNString",
 			name: "strMemPNString",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 			description: [
 				{language: "english", text: "part number end with '0'.",},
@@ -5072,7 +5072,7 @@ global_default: {
 		}, {
 			access: "bios->strMemPNString",
 			name: "strMemPNString",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
 			description: [
 				{language: "english", text: "part number end with '0'.",},
@@ -5086,7 +5086,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->NumOfVRAMModule",
@@ -5100,7 +5100,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->MemAdjustTblOffset",
@@ -5140,7 +5140,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->MemAdjustTblOffset",
@@ -5187,7 +5187,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->MemAdjustTblOffset",
@@ -5246,7 +5246,7 @@ global_default: {
 		{
 			access: "bios->table_header",
 			name: "table_header",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->MemAdjustTblOffset",
