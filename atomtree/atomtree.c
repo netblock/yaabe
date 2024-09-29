@@ -1140,7 +1140,7 @@ populate_atom_memory_timing_format(
 inline static struct atomtree_vram_module*
 populate_vram_module(
 		struct atomtree_commons* const commons,
-		void* vram_module_offset,
+		void* bios_offset,
 		enum atomtree_common_version const vram_modules_ver,
 		uint8_t const count
 		) {
@@ -1153,10 +1153,10 @@ populate_vram_module(
 		case v1_3: // atom_vram_module_v3. Will look very similar to v4
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_3;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_3->ModuleSize;
+				bios_offset += vmod->v1_3->ModuleSize;
 
 				populate_atom_memory_timing_format(
 					vmod, vmod->v1_3->MemoryType, vmod->v1_3->MemTiming,
@@ -1170,10 +1170,10 @@ populate_vram_module(
 		case v1_4: // atom_vram_module_v4. Will look very similar to v3
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_4;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_4->ModuleSize;
+				bios_offset += vmod->v1_4->ModuleSize;
 
 				populate_atom_memory_timing_format(
 					vmod, vmod->v1_4->MemoryType, vmod->v1_4->MemTiming,
@@ -1186,68 +1186,74 @@ populate_vram_module(
 			break;
 
 		case v1_7:
-			for (uint8_t i=0; i < count; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
-				vmod->vram_module_ver = v1_7;
-				if (vmod->v1_7->ChannelMapCfg >> 24) { // infer
+			enum atomtree_common_version  gmc_bitfields_ver;
+			if (count) {
+				struct atom_vram_module_v7 const* const zero = bios_offset;
+				if (zero->ChannelMapCfg >> 24) { // infer
 					// TODO explicit way to find GMC?
 					// does it follow vram_module ver? doesn't seem so
-					vmod->gmc_bitfields_ver = v7_1;
+					gmc_bitfields_ver = v7_1;
 				} else {
-					vmod->gmc_bitfields_ver = v6_0;
+					gmc_bitfields_ver = v6_0;
 				}
-				vram_module_offset += vmod->v1_7->ModuleSize;
+			}
+
+			for (uint8_t i=0; i < count; i++) {
+				vmod = &(vram_modules[i]);
+				vmod->leaves = bios_offset;
+				vmod->vram_module_ver = v1_7;
+				vmod->gmc_bitfields_ver = gmc_bitfields_ver;
+				bios_offset += vmod->v1_7->ModuleSize;
 			}
 			break;
 		case v1_8:
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_8;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_8->ModuleSize;
+				bios_offset += vmod->v1_8->ModuleSize;
 			}
 			break;
 
 		case v1_9:
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_9;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_9->vram_module_size;
+				bios_offset += vmod->v1_9->vram_module_size;
 			}
 			break;
 
 		case v1_10:
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_10;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_10->vram_module_size;
+				bios_offset += vmod->v1_10->vram_module_size;
 			}
 			break;
 
 		case v1_11:
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v1_11;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				vram_module_offset += vmod->v1_11->vram_module_size;
+				bios_offset += vmod->v1_11->vram_module_size;
 			}
 			break;
 
 		case v3_0:
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
-				vmod->leaves = vram_module_offset;
+				vmod->leaves = bios_offset;
 				vmod->vram_module_ver = v3_0;
 				vmod->gmc_bitfields_ver = nover; // TODO
-				//vram_module_offset += vmod->v3_0->vram_module_size;
-				vram_module_offset += sizeof(*vmod->v3_0);
+				//bios_offset += vmod->v3_0->vram_module_size;
+				bios_offset += sizeof(*vmod->v3_0);
 
 				if (vmod->v3_0->dram_info_offset) {
 					vmod->dram_info = (
