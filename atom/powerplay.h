@@ -108,7 +108,7 @@ union atom_pplib_caps_and_settings {
 		single_display_only     :0-0 +1,
 		supports_video_playback :1-1 +1,
 		pcie_link_speed         :2-2 +1, // 0=PCIe1, 1=PCIe2
-		pcie_link_width         :7-3 +1,
+		pcie_link_width         :7-3 +1, // lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x
 		limited_refreshrate    :11-8 +1, // 1=50Hz, all else = TBD
 		disable_loadbalancing  :12-12 +1, // software side
 		enable_timestamp_sleep :13-13 +1,

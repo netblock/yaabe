@@ -4,6 +4,20 @@ pptable v1_0
 vega10_pptable.h has an extremely similar structure. TODO merge files?
 */
 
+/* On voltage levels:
+
+voltage levels -255 to -248 are virtual voltages (ATOM_VIRTUAL_VOLTAGE_ID), and
+the voltage is set either through:
+	"SetVoltage"; see linux radeon_atom_get_max_vddc;
+	or are from asic_profiling_info (atomctrl_get_leakage_vddc_base_on_leakage);
+	or "GetVoltageInfo" (atomctrl_get_voltage_evv_on_sclk_ai).
+
+Otherwise it's a simple offset.
+The driver is worded weirdly; in smu7_calc_voltage_dependency_tables they have
+    for uint16_t: -0xFFFF, which is -(-1), which is +1
+I'm not quite sure why they're +1mV if it has a negative offset.
+*/
+
 #ifndef PPTABLE_H
 #define PPTABLE_H
 #pragma pack(push, 1) // bios data must use byte alignment

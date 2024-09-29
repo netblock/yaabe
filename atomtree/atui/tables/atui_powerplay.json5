@@ -196,6 +196,9 @@ global_default: {
 				}, {
 					name: "pcie_link_width",
 					hi: 7, lo: 3,
+					description: [
+						{language: "english", text: "lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x",},
+					],
 				}, {
 					name: "limited_refreshrate",
 					hi: 11, lo: 8,
