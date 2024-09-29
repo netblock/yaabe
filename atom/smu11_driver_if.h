@@ -545,10 +545,23 @@ enum TEMP_SMU11_0_0_e {
 	TEMP_SMU11_0_0_HOTSPOT = 1,
 	TEMP_SMU11_0_0_LIQUID  = 2,
 	TEMP_SMU11_0_0_VR_GFX  = 3,
-	TEMP_SMU11_0_0_VR_SOC  = 3,
-	TEMP_SMU11_0_0_PLX     = 4,
-	TEMP_SMU11_0_0_HBM     = 5,
-	TEMP_SMU11_0_0_COUNT   = 6,
+	TEMP_SMU11_0_0_VR_SOC  = 4,
+	TEMP_SMU11_0_0_PLX     = 5,
+	TEMP_SMU11_0_0_HBM     = 6,
+	TEMP_SMU11_0_0_COUNT   = 7,
+};
+enum TEMP_SMU11_SMC8 {
+	TEMP_SMU11_SMC8_EDGE    = 0,
+	TEMP_SMU11_SMC8_HOTSPOT = 1,
+	TEMP_SMU11_SMC8_LIQUID0 = 2,
+	TEMP_SMU11_SMC8_LIQUID1 = 3,
+	TEMP_SMU11_SMC8_VR_GFX  = 4,
+	TEMP_SMU11_SMC8_VR_SOC  = 5,
+	TEMP_SMU11_SMC8_VR_MEM0 = 6,
+	TEMP_SMU11_SMC8_VR_MEM1 = 7,
+	TEMP_SMU11_SMC8_PLX     = 8,
+	TEMP_SMU11_SMC8_MEM     = 9,
+	TEMP_SMU11_SMC8_COUNT   = 10,
 };
 enum TEMP_SMU11_0_7_e {
 	TEMP_SMU_11_0_7_EDGE    = 0,
@@ -591,25 +604,9 @@ struct UclkDpmChangeRange_t { // Used for 2-step UCLK DPM change workaround
 };
 
 
-struct smu11_smcpptable_v3_i2c_control {
-	struct i2ccontrollerconfig_u32  I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3];
-};
-
-struct smu11_smcpptable_v8_i2c_control {
-	struct i2ccontrollerconfig_u8_mixed I2cControllers[
-		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
-	];
-};
 
 
-
-struct smu11_smcpptable_v3 { // Vega20
-	// copied comments from smu11_smcpptable_v8
-	uint32_t Version;
-
-	union powerplay_feature_control_smu11_0x13  features;
-
-	// SECTION: Infrastructure Limits
+struct smu11_smcpptable_v3_infrastructure_limits {
 	uint16_t SocketPowerLimitAc0;
 	uint16_t SocketPowerLimitAc0Tau;
 	uint16_t SocketPowerLimitAc1;
@@ -642,27 +639,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint8_t  MemoryOnPackage;
 	uint8_t  padding8_limits;
 	uint16_t Tvr_SocLimit; // Celcius
-
-	// SECTION: ULV Settings
-	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
-
-	uint8_t  UlvSmnclkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
-	uint8_t  UlvMp1clkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
-	uint8_t  UlvGfxclkBypass; // 1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV
-	uint8_t  Padding234;
-
-
-	// SECTION: Voltage Control Parameters
-	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
-
-	// Q8.8?
-	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
-	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
-
+};
+struct smu11_smcpptable_v3_dpm_config {
 	//SECTION: DPM Config 1
 	struct dpm_descriptor_smu11  DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
 
@@ -709,19 +687,13 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t TdpmHighHystTemperature;
 	uint16_t TdpmLowHystTemperature;
 	uint16_t GfxclkFreqHighTempLimit; // High limit on GFXCLK when temperature is high, for reliability.
-
+};
+struct smu11_smcpptable_v3_fan_control {
 	// SECTION: Fan Control
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
 
-	//uint16_t FanGain[TEMP_SMU11_0_0_COUNT]; // TODO
-	uint16_t FanGainEdge;
-	uint16_t FanGainHotspot;
-	uint16_t FanGainLiquid;
-	uint16_t FanGainVrGfx;
-	uint16_t FanGainVrSoc;
-	uint16_t FanGainPlx;
-	uint16_t FanGainHbm;
+	uint16_t FanGain[TEMP_SMU11_0_0_COUNT];
 	uint16_t FanPwmMin;
 	uint16_t FanAcousticLimitRpm;
 	uint16_t FanThrottlingRpm;
@@ -736,8 +708,8 @@ struct smu11_smcpptable_v3 { // Vega20
 	int16_t  FuzzyFan_ErrorRateSetDelta;
 	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
-
-
+};
+struct smu11_smcpptable_v3_avfs {
 	// SECTION: AVFS
 	// Overrides
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
@@ -766,7 +738,42 @@ struct smu11_smcpptable_v3 { // Vega20
 	uint16_t XgmiUclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiSocclkFreq[NUM_XGMI_LEVELS_SMU11];
 	uint16_t XgmiSocVoltage[NUM_XGMI_LEVELS_SMU11];
+};
+struct smu11_smcpptable_v3_i2c_control {
+	struct i2ccontrollerconfig_u32  I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3];
+};
+struct smu11_smcpptable_v3 { // Vega20
+	// copied comments from smu11_smcpptable_v8
+	uint32_t Version;
 
+	union powerplay_feature_control_smu11_0x13  features;
+
+	// SECTION: Infrastructure Limits
+	struct smu11_smcpptable_v3_infrastructure_limits  infrastructure_limits;
+
+	// SECTION: ULV Settings
+	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
+
+	uint8_t  UlvSmnclkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
+	uint8_t  UlvMp1clkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
+	uint8_t  UlvGfxclkBypass; // 1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV
+	uint8_t  Padding234;
+
+
+	// SECTION: Voltage Control Parameters
+	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+
+	// Q8.8?
+	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+
+	struct smu11_smcpptable_v3_dpm_config  dpm_config;
+	struct smu11_smcpptable_v3_fan_control fan_control;
+	struct smu11_smcpptable_v3_avfs        avfs;
 
 	// SECTION: Advanced Options
 	union dpm_debug_override_smu11_0x13  DebugOverrides;
@@ -864,11 +871,7 @@ struct smu11_smcpptable_v3 { // Vega20
 };
 
 
-struct smu11_smcpptable_v8 { // Navi10
-	uint32_t Version;
-
-	union powerplay_feature_control_smu11_0x33  features;
-
+struct smu11_smcpptable_v8_infrastructure_limits {
 	// SECTION: Infrastructure Limits
 	uint16_t SocketPowerLimitAc[PPT_THROTTLER_COUNT];
 	uint16_t SocketPowerLimitAcTau[PPT_THROTTLER_COUNT];
@@ -894,38 +897,8 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	uint16_t PpmPowerLimit; // Switch this this power limit when temperature is above PpmTempThreshold
 	uint16_t PpmTemperatureThreshold;
-
-	// SECTION: Throttler settings
-	union throttler_control_smu11_0x33  ThrottlerControlMask;
-
-	// SECTION: FW DSTATE Settings
-	union fw_dstate_features_smu11_0x33  FwDStateMask;
-
-	// SECTION: ULV Settings
-	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
-	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
-
-	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events
-	uint8_t  paddingRlcUlvParams[3];
-
-	uint8_t  UlvSmnclkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
-	uint8_t  UlvMp1clkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
-	uint8_t  UlvGfxclkBypass; // 1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV
-	uint8_t  Padding234;
-
-	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
-	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
-
-
-	// SECTION: Voltage Control Parameters
-	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
-	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
-	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
-	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
-
-	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
-	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
-
+};
+struct smu11_smcpptable_v8_dpm_config {
 	//SECTION: DPM Config 1
 	struct dpm_descriptor_smu11  DpmDescriptor[SMU11_PPT8_PPCLK_COUNT];
 
@@ -979,22 +952,13 @@ struct smu11_smcpptable_v8 { // Navi10
 	uint16_t TdpmHighHystTemperature;
 	uint16_t TdpmLowHystTemperature;
 	uint16_t GfxclkFreqHighTempLimit; // High limit on GFXCLK when temperature is high, for reliability.
-
+};
+struct smu11_smcpptable_v8_fan_control {
 	// SECTION: Fan Control
 	uint16_t FanStopTemp;  // Celcius
 	uint16_t FanStartTemp; // Celcius
 
-	//uint16_t FanGain[TEMP_SMU11_**_COUNT]; // TODO
-	uint16_t FanGainEdge;
-	uint16_t FanGainHotspot;
-	uint16_t FanGainLiquid0;
-	uint16_t FanGainLiquid1;
-	uint16_t FanGainVrGfx;
-	uint16_t FanGainVrSoc;
-	uint16_t FanGainVrMem0;
-	uint16_t FanGainVrMem1;
-	uint16_t FanGainPlx;
-	uint16_t FanGainMem;
+	uint16_t FanGain[TEMP_SMU11_SMC8_COUNT];
 	uint16_t FanPwmMin;
 	uint16_t FanAcousticLimitRpm;
 	uint16_t FanThrottlingRpm;
@@ -1012,7 +976,8 @@ struct smu11_smcpptable_v8 { // Navi10
 	int16_t  FuzzyFan_PwmSetDelta;
 	uint16_t FuzzyFan_Reserved;
 
-
+};
+struct smu11_smcpptable_v8_avfs {
 	// SECTION: AVFS
 	// Overrides
 	uint8_t  OverrideAvfsGb[AVFS_VOLTAGE_COUNT];
@@ -1033,6 +998,54 @@ struct smu11_smcpptable_v8 { // Navi10
 
 	uq14_2_t DcBtcMin[AVFS_VOLTAGE_COUNT]; // mV Q2
 	uq14_2_t DcBtcMax[AVFS_VOLTAGE_COUNT]; // mV Q2
+};
+
+struct smu11_smcpptable_v8_i2c_control {
+	struct i2ccontrollerconfig_u8_mixed I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+	];
+};
+struct smu11_smcpptable_v8 { // Navi10
+	uint32_t Version;
+
+	union powerplay_feature_control_smu11_0x33  features;
+
+	struct smu11_smcpptable_v8_infrastructure_limits  infrastructure_limits;
+
+	// SECTION: Throttler settings
+	union throttler_control_smu11_0x33  ThrottlerControlMask;
+
+	// SECTION: FW DSTATE Settings
+	union fw_dstate_features_smu11_0x33  FwDStateMask;
+
+	// SECTION: ULV Settings
+	uq14_2_t UlvVoltageOffsetSoc; // In mV(Q2)
+	uq14_2_t UlvVoltageOffsetGfx; // In mV(Q2)
+
+	uint8_t  GceaLinkMgrIdleThreshold; // Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events
+	uint8_t  paddingRlcUlvParams[3];
+
+	uint8_t  UlvSmnclkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
+	uint8_t  UlvMp1clkDid; // DID for ULV mode. 0 means CLK will not be modified in ULV.
+	uint8_t  UlvGfxclkBypass; // 1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV
+	uint8_t  Padding234;
+
+	uq14_2_t MinVoltageUlvGfx; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_GFX in ULV mode
+	uq14_2_t MinVoltageUlvSoc; // In mV(Q2)  Minimum Voltage ("Vmin") of VDD_SOC in ULV mode
+
+
+	// SECTION: Voltage Control Parameters
+	uq14_2_t MinVoltageGfx; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_GFX
+	uq14_2_t MinVoltageSoc; // In mV(Q2) Minimum Voltage ("Vmin") of VDD_SOC
+	uq14_2_t MaxVoltageGfx; // In mV(Q2) Maximum Voltage allowable of VDD_GFX
+	uq14_2_t MaxVoltageSoc; // In mV(Q2) Maximum Voltage allowable of VDD_SOC
+
+	uq8_8_t LoadLineResistanceGfx; // In mOhms with 8 fractional bits
+	uq8_8_t LoadLineResistanceSoc; // In mOhms with 8 fractional bits
+
+	struct smu11_smcpptable_v8_dpm_config  dpm_config;
+	struct smu11_smcpptable_v8_fan_control fan_control;
+	struct smu11_smcpptable_v8_avfs        avfs;
 
 	// SECTION: Advanced Options
 	union dpm_debug_override_smu11_0x33  DebugOverrides;
@@ -1397,14 +1410,10 @@ struct smu11_smcpptable_v7 { // Navi21
 	uint16_t VDDGFX_TVminHystersis; // Celcius
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 
-	//SECTION: DPM Config 1 & 2
 	struct smu11_smcpptable_v7_dpm_config  dpm_config;
-
-	// SECTION: Fan Control
 	struct smu11_smcpptable_v7_fan_control  fan_control;
-
-	// SECTION: AVFS
 	struct smu11_smcpptable_v7_avfs  avfs;
+
 	// SECTION: XGMI
 	enum DPM_PSTATES_e  XgmiDpmPstates[NUM_XGMI_LEVELS_SMU11]; // 2 DPM states, high and low.
 	uint8_t  XgmiDpmSpare[2];
@@ -1619,14 +1628,10 @@ struct smu11_smcpptable_v5 {
 	uint16_t VDDGFX_TVminHystersis; // Celcius
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 
-	//SECTION: DPM Config 1 & 2
 	struct smu11_smcpptable_v7_dpm_config  dpm_config;
-
-	// SECTION: Fan Control
 	struct smu11_smcpptable_v7_fan_control  fan_control;
-
-	// SECTION: AVFS
 	struct smu11_smcpptable_v7_avfs  avfs;
+
 	// SECTION: XGMI
 	enum DPM_PSTATES_e  XgmiDpmPstates[NUM_XGMI_LEVELS_SMU11]; // 2 DPM states, high and low.
 	uint8_t  XgmiDpmSpare[2];

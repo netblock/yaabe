@@ -1896,7 +1896,10 @@ global_default: {
 			name: "Fmax",
 		},
 	],
-}, {
+},
+
+
+{
 	c_type: "smu11_smcpptable_v3_i2c_control",
 	leaves: [
 		{
@@ -1908,46 +1911,17 @@ global_default: {
 				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3",
 				enum: "I2cControllerName_SMU_11_0_0_e",
 				pattern: [{
-					access: "bios->I2cControllers",
 					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u32",
 				},],
 			},
 		},
 	],
 }, {
-	c_type: "smu11_smcpptable_v8_i2c_control",
+	c_type: "smu11_smcpptable_v3_infrastructure_limits",
 	leaves: [
 		{
-			access: "bios->I2cControllers",
-			name: "I2cControllers",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					access: "bios->I2cControllers",
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_NAN",
-					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-				},],
-			},
-		},
-	],
-}, {
-	c_type: "smu11_smcpptable_v3",
-	leaves: [
-		{
-			access: "bios->Version",
-			name: "Version",
-		}, {
-			access: "bios->features",
-			name: "features",
-			display: "ATUI_NAN",
-			fancy: "ATUI_GRAFT", fancy_data: "powerplay_feature_control_smu11_0x13",
-		}, {
 			access: "bios->SocketPowerLimitAc0",
 			name: "SocketPowerLimitAc0",
 		}, {
@@ -2077,79 +2051,26 @@ global_default: {
 			description: [
 				{language: "english", text: "Celcius",},
 			],
-		}, {
-			access: "bios->UlvVoltageOffsetSoc",
-			name: "UlvVoltageOffsetSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
-		}, {
-			access: "bios->UlvVoltageOffsetGfx",
-			name: "UlvVoltageOffsetGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
-		}, {
-			access: "bios->UlvSmnclkDid",
-			name: "UlvSmnclkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
-		}, {
-			access: "bios->UlvMp1clkDid",
-			name: "UlvMp1clkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
-		}, {
-			access: "bios->UlvGfxclkBypass",
-			name: "UlvGfxclkBypass",
-			description: [
-				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
-			],
-		}, {
-			access: "bios->Padding234",
-			name: "Padding234",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->MinVoltageGfx",
-			name: "MinVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
-			],
-		}, {
-			access: "bios->MinVoltageSoc",
-			name: "MinVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
-			],
-		}, {
-			access: "bios->MaxVoltageGfx",
-			name: "MaxVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
-			],
-		}, {
-			access: "bios->MaxVoltageSoc",
-			name: "MaxVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
-			],
-		}, {
-			access: "bios->LoadLineResistanceGfx",
-			name: "LoadLineResistanceGfx",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
-		}, {
-			access: "bios->LoadLineResistanceSoc",
-			name: "LoadLineResistanceSoc",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
 		},
-		// struct dpm_descriptor_smu11 DpmDescriptor[SMU11_PPT3_PPCLK_COUNT];
+	],
+}, {
+	c_type: "smu11_smcpptable_v3_dpm_config",
+	leaves: [
 		{
+			access: "bios->DpmDescriptor",
+			name: "DpmDescriptor",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "SMU11_PPT3_PPCLK_COUNT",
+				enum: "SMU11_PPT3_PPCLK",
+				pattern: [{
+					name: "DpmDescriptor [%02u]: %s",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "dpm_descriptor_smu11",
+				},],
+			},
+		}, {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
 			display: "ATUI_NAN",
@@ -2317,7 +2238,7 @@ global_default: {
 		}, {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -2326,6 +2247,7 @@ global_default: {
 				count: "SMU11_PPT3_PPCLK_COUNT",
 				enum: "SMU11_PPT3_PPCLK",
 				pattern: [{
+					display: "ATUI_DISPLAY",
 					name: "FreqTablePhyclk [%02u]: %s",
 				},],
 			},
@@ -2473,7 +2395,12 @@ global_default: {
 			description: [
 				{language: "english", text: "High limit on GFXCLK when temperature is high, for reliability.",},
 			],
-		}, {
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v3_fan_control",
+	leaves: [
+		{
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
 			description: [
@@ -2486,26 +2413,17 @@ global_default: {
 				{language: "english", text: "Celcius",},
 			],
 		}, {
-			access: "bios->FanGainEdge",
-			name: "FanGainEdge",
-		}, {
-			access: "bios->FanGainHotspot",
-			name: "FanGainHotspot",
-		}, {
-			access: "bios->FanGainLiquid",
-			name: "FanGainLiquid",
-		}, {
-			access: "bios->FanGainVrGfx",
-			name: "FanGainVrGfx",
-		}, {
-			access: "bios->FanGainVrSoc",
-			name: "FanGainVrSoc",
-		}, {
-			access: "bios->FanGainPlx",
-			name: "FanGainPlx",
-		}, {
-			access: "bios->FanGainHbm",
-			name: "FanGainHbm",
+			access: "bios->FanGain",
+			name: "FanGain",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "TEMP_SMU11_0_0_COUNT",
+				enum: "TEMP_SMU11_0_7_e",
+				pattern: [{
+					name: "FanGain [%u]: %s",
+				},],
+			},
 		}, {
 			access: "bios->FanPwmMin",
 			name: "FanPwmMin",
@@ -2542,7 +2460,12 @@ global_default: {
 		}, {
 			access: "bios->FuzzyFan_Reserved",
 			name: "FuzzyFan_Reserved",
-		}, {
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v3_avfs",
+	leaves: [
+		{
 			access: "bios->OverrideAvfsGb[AVFS_VOLTAGE_GFX]",
 			name: "OverrideAvfsGb (GFX)",
 		}, {
@@ -2745,6 +2668,109 @@ global_default: {
 					name: "XgmiSocVoltage [%02u]",
 				},],
 			},
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v3",
+	leaves: [
+		{
+			access: "bios->Version",
+			name: "Version",
+		}, {
+			access: "bios->features",
+			name: "features",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu11_0x13",
+		}, {
+			access: "bios->infrastructure_limits",
+			name: "infrastructure_limits",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_infrastructure_limits",
+		}, {
+			access: "bios->UlvVoltageOffsetSoc",
+			name: "UlvVoltageOffsetSoc",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->UlvVoltageOffsetGfx",
+			name: "UlvVoltageOffsetGfx",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->UlvSmnclkDid",
+			name: "UlvSmnclkDid",
+			description: [
+				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
+			],
+		}, {
+			access: "bios->UlvMp1clkDid",
+			name: "UlvMp1clkDid",
+			description: [
+				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
+			],
+		}, {
+			access: "bios->UlvGfxclkBypass",
+			name: "UlvGfxclkBypass",
+			description: [
+				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
+			],
+		}, {
+			access: "bios->Padding234",
+			name: "Padding234",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MinVoltageGfx",
+			name: "MinVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MinVoltageSoc",
+			name: "MinVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
+			],
+		}, {
+			access: "bios->MaxVoltageGfx",
+			name: "MaxVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MaxVoltageSoc",
+			name: "MaxVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceGfx",
+			name: "LoadLineResistanceGfx",
+			description: [
+				{language: "english", text: "In mOhms with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceSoc",
+			name: "LoadLineResistanceSoc",
+			description: [
+				{language: "english", text: "In mOhms with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->dpm_config",
+			name: "dpm_config",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_dpm_config",
+		}, {
+			access: "bios->fan_control",
+			name: "fan_control",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_fan_control",
+		}, {
+			access: "bios->avfs",
+			name: "avfs",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_avfs",
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
@@ -3084,18 +3110,12 @@ global_default: {
 			fancy: "ATUI_ARRAY",
 		},
 	],
-}, {
-	c_type: "smu11_smcpptable_v8", // Navi10
+},
+
+{
+	c_type: "smu11_smcpptable_v8_infrastructure_limits",
 	leaves: [
 		{
-			access: "bios->Version",
-			name: "Version",
-		}, {
-			access: "bios->features",
-			name: "features",
-			display: "ATUI_NAN",
-			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu11_0x33",
-		}, {
 			access: "bios->SocketPowerLimitAc",
 			name: "SocketPowerLimitAc",
 			display: "ATUI_NAN",
@@ -3242,109 +3262,25 @@ global_default: {
 		}, {
 			access: "bios->PpmTemperatureThreshold",
 			name: "PpmTemperatureThreshold",
-		}, {
-			access: "bios->ThrottlerControlMask",
-			name: "ThrottlerControlMask",
-			display: "ATUI_NAN",
-			fancy: "ATUI_SHOOT", fancy_data: "throttler_control_smu11_0x33",
-		}, {
-			access: "bios->FwDStateMask",
-			name: "FwDStateMask",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "fw_dstate_features_smu11_0x33",
-		}, {
-			access: "bios->UlvVoltageOffsetSoc",
-			name: "UlvVoltageOffsetSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
-		}, {
-			access: "bios->UlvVoltageOffsetGfx",
-			name: "UlvVoltageOffsetGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
-		}, {
-			access: "bios->GceaLinkMgrIdleThreshold",
-			name: "GceaLinkMgrIdleThreshold",
-			description: [
-				{language: "english", text: "Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events",},
-			],
-		}, {
-			access: "bios->paddingRlcUlvParams",
-			name: "paddingRlcUlvParams",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->UlvSmnclkDid",
-			name: "UlvSmnclkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
-		}, {
-			access: "bios->UlvMp1clkDid",
-			name: "UlvMp1clkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
-		}, {
-			access: "bios->UlvGfxclkBypass",
-			name: "UlvGfxclkBypass",
-			description: [
-				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
-			],
-		}, {
-			access: "bios->Padding234",
-			name: "Padding234",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->MinVoltageUlvGfx",
-			name: "MinVoltageUlvGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",},
-			],
-		}, {
-			access: "bios->MinVoltageUlvSoc",
-			name: "MinVoltageUlvSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",},
-			],
-		}, {
-			access: "bios->MinVoltageGfx",
-			name: "MinVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
-			],
-		}, {
-			access: "bios->MinVoltageSoc",
-			name: "MinVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
-			],
-		}, {
-			access: "bios->MaxVoltageGfx",
-			name: "MaxVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
-			],
-		}, {
-			access: "bios->MaxVoltageSoc",
-			name: "MaxVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
-			],
-		}, {
-			access: "bios->LoadLineResistanceGfx",
-			name: "LoadLineResistanceGfx",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
-		}, {
-			access: "bios->LoadLineResistanceSoc",
-			name: "LoadLineResistanceSoc",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v8_dpm_config",
+	leaves: [
+		{
+			access: "bios->DpmDescriptor",
+			name: "DpmDescriptor",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "SMU11_PPT8_PPCLK_COUNT",
+				enum: "SMU11_PPT8_PPCLK",
+				pattern: [{
+					name: "DpmDescriptor [%u]: %s",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "dpm_descriptor_smu11",
+				},],
+			},
 		}, {
 			access: "bios->FreqTableGfx",
 			name: "FreqTableGfx",
@@ -3488,7 +3424,7 @@ global_default: {
 		}, {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -3497,7 +3433,8 @@ global_default: {
 				count: "SMU11_PPT8_PPCLK_COUNT",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "DcModeMaxFreq [%02u]",
+					display: "ATUI_DISPLAY",
+					name: "DcModeMaxFreq [%u]: %s",
 				},],
 			},
 		}, {
@@ -3707,7 +3644,12 @@ global_default: {
 			description: [
 				{language: "english", text: "High limit on GFXCLK when temperature is high, for reliability.",},
 			],
-		}, {
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v8_fan_control",
+	leaves: [
+		{
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
 			description: [
@@ -3720,35 +3662,17 @@ global_default: {
 				{language: "english", text: "Celcius",},
 			],
 		}, {
-			access: "bios->FanGainEdge",
-			name: "FanGainEdge",
-		}, {
-			access: "bios->FanGainHotspot",
-			name: "FanGainHotspot",
-		}, {
-			access: "bios->FanGainLiquid0",
-			name: "FanGainLiquid0",
-		}, {
-			access: "bios->FanGainLiquid1",
-			name: "FanGainLiquid1",
-		}, {
-			access: "bios->FanGainVrGfx",
-			name: "FanGainVrGfx",
-		}, {
-			access: "bios->FanGainVrSoc",
-			name: "FanGainVrSoc",
-		}, {
-			access: "bios->FanGainVrMem0",
-			name: "FanGainVrMem0",
-		}, {
-			access: "bios->FanGainVrMem1",
-			name: "FanGainVrMem1",
-		}, {
-			access: "bios->FanGainPlx",
-			name: "FanGainPlx",
-		}, {
-			access: "bios->FanGainMem",
-			name: "FanGainMem",
+			access: "bios->FanGain",
+			name: "FanGain",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "TEMP_SMU11_SMC8_COUNT",
+				enum: "TEMP_SMU11_SMC8",
+				pattern: [{
+					name: "FanGain [%02u]: %s",
+				},],
+			},
 		}, {
 			access: "bios->FanPwmMin",
 			name: "FanPwmMin",
@@ -3792,7 +3716,12 @@ global_default: {
 		}, {
 			access: "bios->FuzzyFan_Reserved",
 			name: "FuzzyFan_Reserved",
-		}, {
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v8_avfs",
+	leaves: [
+		{
 			access: "bios->OverrideAvfsGb[AVFS_VOLTAGE_GFX]",
 			name: "OverrideAvfsGb (GFX)",
 			display: "ATUI_HEX",
@@ -3926,6 +3855,161 @@ global_default: {
 			description: [
 				{language: "english", text: "mV(Q2)",},
 			],
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v8_i2c_control",
+	leaves: [
+		{
+			access: "bios->I2cControllers",
+			name: "I2cControllers",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
+				enum: "I2cControllerName_SMU_11_0_7_e",
+				pattern: [{
+					name: "I2cControllers [%02u]: %s",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8_mixed",
+				},],
+			},
+		},
+	],
+}, {
+	c_type: "smu11_smcpptable_v8", // Navi10
+	leaves: [
+		{
+			access: "bios->Version",
+			name: "Version",
+		}, {
+			access: "bios->features",
+			name: "features",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu11_0x33",
+		}, {
+			access: "bios->infrastructure_limits",
+			name: "infrastructure_limits",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v8_infrastructure_limits",
+		}, {
+			access: "bios->ThrottlerControlMask",
+			name: "ThrottlerControlMask",
+			display: "ATUI_NAN",
+			fancy: "ATUI_SHOOT", fancy_data: "throttler_control_smu11_0x33",
+		}, {
+			access: "bios->FwDStateMask",
+			name: "FwDStateMask",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "fw_dstate_features_smu11_0x33",
+		}, {
+			access: "bios->UlvVoltageOffsetSoc",
+			name: "UlvVoltageOffsetSoc",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->UlvVoltageOffsetGfx",
+			name: "UlvVoltageOffsetGfx",
+			description: [
+				{language: "english", text: "In mV(Q2)",},
+			],
+		}, {
+			access: "bios->GceaLinkMgrIdleThreshold",
+			name: "GceaLinkMgrIdleThreshold",
+			description: [
+				{language: "english", text: "Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events",},
+			],
+		}, {
+			access: "bios->paddingRlcUlvParams",
+			name: "paddingRlcUlvParams",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->UlvSmnclkDid",
+			name: "UlvSmnclkDid",
+			description: [
+				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
+			],
+		}, {
+			access: "bios->UlvMp1clkDid",
+			name: "UlvMp1clkDid",
+			description: [
+				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
+			],
+		}, {
+			access: "bios->UlvGfxclkBypass",
+			name: "UlvGfxclkBypass",
+			description: [
+				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
+			],
+		}, {
+			access: "bios->Padding234",
+			name: "Padding234",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->MinVoltageUlvGfx",
+			name: "MinVoltageUlvGfx",
+			description: [
+				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",},
+			],
+		}, {
+			access: "bios->MinVoltageUlvSoc",
+			name: "MinVoltageUlvSoc",
+			description: [
+				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",},
+			],
+		}, {
+			access: "bios->MinVoltageGfx",
+			name: "MinVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MinVoltageSoc",
+			name: "MinVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
+			],
+		}, {
+			access: "bios->MaxVoltageGfx",
+			name: "MaxVoltageGfx",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
+			],
+		}, {
+			access: "bios->MaxVoltageSoc",
+			name: "MaxVoltageSoc",
+			description: [
+				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceGfx",
+			name: "LoadLineResistanceGfx",
+			description: [
+				{language: "english", text: "In mOhms with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->LoadLineResistanceSoc",
+			name: "LoadLineResistanceSoc",
+			description: [
+				{language: "english", text: "In mOhms with 8 fractional bits",},
+			],
+		}, {
+			access: "bios->dpm_config",
+			name: "dpm_config",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v8_dpm_config",
+		}, {
+			access: "bios->fan_control",
+			name: "fan_control",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v8_fan_control",
+		}, {
+			access: "bios->avfs",
+			name: "avfs",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v8_avfs",
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
@@ -4659,7 +4743,7 @@ global_default: {
 				enum: "SMU11_PPT7_PPCLK_e",
 				pattern: [{
 					name: "DpmDescriptor [%02u]: %s",
-					display: "ATUI_NAN",
+					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "dpm_descriptor_smu11_0x40",
 				},],
 			},
@@ -4691,7 +4775,7 @@ global_default: {
 		}, {
 			access: "bios->DcModeMaxFreq",
 			name: "DcModeMaxFreq",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			description: [
 				{language: "english", text: "In MHz",},
 			],
@@ -4700,6 +4784,7 @@ global_default: {
 				count: "SMU11_PPT7_PPCLK_COUNT",
 				enum: "SMU11_PPT7_PPCLK_e",
 				pattern: [{
+					display: "ATUI_DISPLAY",
 					name: "DcModeMaxFreq [%02u]: %s",
 				},],
 			},

@@ -1229,7 +1229,7 @@ global_default: {
 				count: "bios->NumEntries",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "clockInfo",
+					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_cz_clock_info",
 				},],
