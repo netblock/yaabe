@@ -18,6 +18,7 @@ Also generic functions that would be in a standard.
 
 #ifdef C2X_COMPAT
 typedef uint8_t char8_t;
+#define UINT64_WIDTH 64 //IEC_60559_BFP_EXT_C23
 #else
 #include <uchar.h>
 #endif
