@@ -401,6 +401,7 @@ struct atomtree_vram_module {
 
 	enum atomtree_common_version  memory_timing_format_ver;
 	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
+	size_t memory_timing_format_total_size;
 
 	// v3.0
 	void* dram_info;

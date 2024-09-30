@@ -1134,6 +1134,7 @@ populate_atom_memory_timing_format(
 		table_size = sizeof(timings->v1_0);
 	}
 	vram_module->num_memory_timing_format = straps_total_size / table_size;
+	vram_module->memory_timing_format_total_size = straps_total_size;
 }
 
 
@@ -1630,7 +1631,7 @@ populate_vram_info_v2_5(
 	if (vi25->leaves->gddr6_ac_timing_offset) {
 		vi25->gddr6_ac_timings =
 			(void*)vi25->leaves + vi25->leaves->gddr6_ac_timing_offset;
-		uint16_t i = 0;
+		uint8_t i = 0;
 		for (; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
 		vi25->gddr6_acstrap_count = i;
 	}

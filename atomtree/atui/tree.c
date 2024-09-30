@@ -1256,6 +1256,9 @@ grow_init_reg_block(
 			);
 			free(func_playlist);
 		}
+		atui_strap_set->prefer_contiguous = true;
+		atui_strap_set->table_start = at_regblock->data_blocks[0];
+		atui_strap_set->table_size = at_regblock->data_block_table_size;
 	}
 
 	return ATUI_MAKE_BRANCH(atom_init_reg_block,  table_name,
@@ -1337,9 +1340,6 @@ grow_atom_memory_timing_format(
 		enum atom_dgpu_vram_type const memory_type,
 		union atom_memory_timing_format const* const timing_format_start
 		) {
-	enum atomtree_common_version const timing_ver = (
-		vram_module->memory_timing_format_ver
-	);
 	union {
 		void const* raw;
 		struct atom_memory_timing_format_v0 const* v1_0;
@@ -1353,6 +1353,10 @@ grow_atom_memory_timing_format(
 	atui_branch* const atui_straps = ATUI_MAKE_BRANCH(atui_nullstruct,  NULL,
 		NULL,NULL,  count,NULL
 	);
+	atui_straps->prefer_contiguous = true;
+	atui_straps->table_start = (void*) timing_format_start;
+	atui_straps->table_size = vram_module->memory_timing_format_total_size;
+
 
 	atui_branch* atui_mrs[4] = {NULL};
 	atuifunc_args atui_mrs_args = {0};
@@ -1400,7 +1404,7 @@ grow_atom_memory_timing_format(
 		.num_import_branches = lengthof(atui_mrs),
 	};
 
-	switch (timing_ver) {
+	switch (vram_module->memory_timing_format_ver) {
 		case v1_0:
 			for (uint8_t i=0; i < count; i++) {
 				atui_mrs_args.suggestbios = &(strap.v1_0->MR0);
@@ -1411,14 +1415,15 @@ grow_atom_memory_timing_format(
 					atui_mrs_args.suggestbios = &(strap.v1_0->MR2);
 					atui_mrs[2] = atui_mrs_funcs[2](&atui_mrs_args);
 				}
-				atui_args.suggestbios = strap.raw;
+				atui_args.suggestbios = strap.v1_0;
 				atui_timings = _atui_atom_memory_timing_format_v0(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_0->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
-				strap.raw += sizeof(*strap.v1_0);
+				strap.v1_0++;
 			}
+			strcpy(atui_straps->name, "atom_memory_timing_format_v0");
 			break;
 		case v1_1:
 			for (uint8_t i=0; i < count; i++) {
@@ -1428,14 +1433,15 @@ grow_atom_memory_timing_format(
 				atui_mrs[1] = atui_mrs_funcs[1](&atui_mrs_args);
 				atui_mrs_args.suggestbios = &(strap.v1_1->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
-				atui_args.suggestbios = strap.raw;
+				atui_args.suggestbios = strap.v1_1;
 				atui_timings = _atui_atom_memory_timing_format_v1(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_1->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
-				strap.raw += sizeof(*strap.v1_1);
+				strap.v1_1++;
 			}
+			strcpy(atui_straps->name, "atom_memory_timing_format_v1");
 			break;
 		case v1_2:
 			for (uint8_t i=0; i < count; i++) {
@@ -1447,18 +1453,18 @@ grow_atom_memory_timing_format(
 				atui_mrs[2] = atui_mrs_funcs[2](&atui_mrs_args);
 				atui_mrs_args.suggestbios = &(strap.v1_2->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
-				atui_args.suggestbios = strap.raw;
+				atui_args.suggestbios = strap.v1_2;
 				atui_timings = _atui_atom_memory_timing_format_v2(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_2->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
-				strap.raw += sizeof(*strap.v1_2);
+				strap.v1_2++;
 			}
+			strcpy(atui_straps->name, "atom_memory_timing_format_v2");
 			break;
 	};
 
-	strcpy(atui_straps->name, atui_timings->origname);
 	return atui_straps;
 }
 
@@ -2025,6 +2031,9 @@ grow_vram_info_v2_3(
 		}
 		if (mem_clk_patch->num_data_blocks) {
 			strcpy(atui_mem_timings->name, atui_strap->origname);
+			atui_mem_timings->prefer_contiguous = true;
+			atui_mem_timings->table_start = mem_clk_patch->data_blocks[0];
+			atui_mem_timings->table_size = mem_clk_patch->data_block_table_size;
 		}
 	}
 
@@ -2133,6 +2142,9 @@ grow_vram_info_v2_4(
 		}
 		if (mem_clk_patch->num_data_blocks) {
 			strcpy(atui_mem_timings->name, atui_strap->origname);
+			atui_mem_timings->prefer_contiguous = true;
+			atui_mem_timings->table_start = mem_clk_patch->data_blocks[0];
+			atui_mem_timings->table_size = mem_clk_patch->data_block_table_size;
 		}
 	}
 
@@ -2195,15 +2207,21 @@ grow_vram_info_v2_5(
 
 	atui_branch* atui_gddr6_ac_timings = NULL;
 	if (vi25->gddr6_ac_timings) {
-		atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
-			"atom_gddr6_ac_timing_v2_5",
-			NULL,NULL,  vi25->gddr6_acstrap_count,NULL
-		);
 		struct atom_gddr6_ac_timing_v2_5 const* const timings =
 			vi25->gddr6_ac_timings;
+		uint8_t const count = vi25->gddr6_acstrap_count;
+
+		atui_gddr6_ac_timings = ATUI_MAKE_BRANCH(atui_nullstruct,
+			"atom_gddr6_ac_timing_v2_5",
+			NULL,NULL,  count,NULL
+		);
+		atui_gddr6_ac_timings->prefer_contiguous = true;
+		atui_gddr6_ac_timings->table_start = (void*) timings;
+		atui_gddr6_ac_timings->table_size = count * sizeof(timings[0]);
+
 		atui_branch* atui_strap;
 		char const* vendor_part[2];
-		for (uint16_t i=0; i < vi25->gddr6_acstrap_count; i++) {
+		for (uint8_t i=0; i < count; i++) {
 			atui_strap = ATUI_MAKE_BRANCH(atom_gddr6_ac_timing_v2_5,  NULL,
 				NULL,&(timings[i]),  0,NULL
 			);
