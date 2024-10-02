@@ -13,17 +13,20 @@ struct atomtree_commons {
     struct mem_arena alloc_arena;
 };
 
+
 inline static void
 populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		// leaves is in a union with the structs.
-		smc_dpm_info->leaves = commons->bios + bios_offset;
-		smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
+	if (0 == bios_offset) {
+		return;
 	}
+
+	// leaves is in a union with the structs.
+	smc_dpm_info->leaves = commons->bios + bios_offset;
+	smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
 }
 
 
@@ -33,11 +36,13 @@ populate_firmwareinfo(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		// leaves is in a union with the structs.
-		firmwareinfo->leaves = commons->bios + bios_offset;
-		firmwareinfo->ver = get_ver(firmwareinfo->table_header);
+	if (0 == bios_offset) {
+		return;
 	}
+
+	// leaves is in a union with the structs.
+	firmwareinfo->leaves = commons->bios + bios_offset;
+	firmwareinfo->ver = get_ver(firmwareinfo->table_header);
 }
 
 
@@ -47,10 +52,12 @@ populate_lcd_info(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		lcd_info->leaves = commons->bios + bios_offset;
-		lcd_info->ver = get_ver(lcd_info->table_header);
+	if (0 == bios_offset) {
+		return;
 	}
+
+	lcd_info->leaves = commons->bios + bios_offset;
+	lcd_info->ver = get_ver(lcd_info->table_header);
 }
 
 
@@ -61,56 +68,58 @@ populate_smu_info(
 		uint16_t const bios_offset
 		) {
 	// leaves is in a union with the structs.
-	if (bios_offset) {
-		smu_info->leaves = commons->bios + bios_offset;
-		smu_info->ver = get_ver(smu_info->table_header);
-		switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
-			case v3_2:
-				if (smu_info->v3_2->smugoldenoffset) {
-					smu_info->smugolden =
-						smu_info->leaves + smu_info->v3_2->smugoldenoffset;
-				}
-				break;
-			case v3_3:
-				if (smu_info->v3_3->smugoldenoffset) {
-					smu_info->smugolden =
-						smu_info->leaves + smu_info->v3_3->smugoldenoffset;
-				}
-				if (smu_info->v3_3->smuinitoffset) {
-					smu_info->smuinit =
-						smu_info->leaves + smu_info->v3_3->smuinitoffset;
-				}
-				break;
-			case v3_4: // bios reports 244 bytes. v3_5 is 240 bytes.
-			case v3_5:
-				if (smu_info->v3_5->smugoldenoffset) {
-					smu_info->smugolden =
-						smu_info->leaves + smu_info->v3_5->smugoldenoffset;
-				}
-				if (smu_info->v3_5->smuinitoffset) {
-					smu_info->smuinit =
-						smu_info->leaves + smu_info->v3_5->smuinitoffset;
-				}
-				break;
-			case v3_6:
-				if (smu_info->v3_6->smugoldenoffset) {
-					smu_info->smugolden =
-						smu_info->leaves + smu_info->v3_6->smugoldenoffset;
-				}
-				if (smu_info->v3_6->smuinitoffset) {
-					smu_info->smuinit =
-						smu_info->leaves + smu_info->v3_6->smuinitoffset;
-				}
-				break;
-			case v4_0:
-				if (smu_info->v4_0->smuinitoffset) {
-					smu_info->smuinit =
-						smu_info->leaves + smu_info->v4_0->smuinitoffset;
-				}
-				break;
-			default:
-				break;
-		}
+	if (0 == bios_offset) {
+		return;
+	}
+
+	smu_info->leaves = commons->bios + bios_offset;
+	smu_info->ver = get_ver(smu_info->table_header);
+	switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
+		case v3_2:
+			if (smu_info->v3_2->smugoldenoffset) {
+				smu_info->smugolden =
+					smu_info->leaves + smu_info->v3_2->smugoldenoffset;
+			}
+			break;
+		case v3_3:
+			if (smu_info->v3_3->smugoldenoffset) {
+				smu_info->smugolden =
+					smu_info->leaves + smu_info->v3_3->smugoldenoffset;
+			}
+			if (smu_info->v3_3->smuinitoffset) {
+				smu_info->smuinit =
+					smu_info->leaves + smu_info->v3_3->smuinitoffset;
+			}
+			break;
+		case v3_4: // bios reports 244 bytes. v3_5 is 240 bytes.
+		case v3_5:
+			if (smu_info->v3_5->smugoldenoffset) {
+				smu_info->smugolden =
+					smu_info->leaves + smu_info->v3_5->smugoldenoffset;
+			}
+			if (smu_info->v3_5->smuinitoffset) {
+				smu_info->smuinit =
+					smu_info->leaves + smu_info->v3_5->smuinitoffset;
+			}
+			break;
+		case v3_6:
+			if (smu_info->v3_6->smugoldenoffset) {
+				smu_info->smugolden =
+					smu_info->leaves + smu_info->v3_6->smugoldenoffset;
+			}
+			if (smu_info->v3_6->smuinitoffset) {
+				smu_info->smuinit =
+					smu_info->leaves + smu_info->v3_6->smuinitoffset;
+			}
+			break;
+		case v4_0:
+			if (smu_info->v4_0->smuinitoffset) {
+				smu_info->smuinit =
+					smu_info->leaves + smu_info->v4_0->smuinitoffset;
+			}
+			break;
+		default:
+			break;
 	}
 }
 
@@ -120,11 +129,13 @@ populate_vram_usagebyfirmware(
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset) {
-	if (bios_offset) {
-		// leaves is in a union with the structs.
-		fw_vram->leaves = commons->bios + bios_offset;
-		fw_vram->ver = get_ver(fw_vram->table_header);
+	if (0 == bios_offset) {
+		return;
 	}
+
+	// leaves is in a union with the structs.
+	fw_vram->leaves = commons->bios + bios_offset;
+	fw_vram->ver = get_ver(fw_vram->table_header);
 }
 
 
@@ -134,21 +145,23 @@ populate_gpio_pin_lut(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		gpio_pin_lut->leaves = commons->bios + bios_offset;
-		gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
-		switch (gpio_pin_lut->ver) {
-			case v2_1:
-				gpio_pin_lut->num_gpio_pins = (
-					//dynamic array length of nothing but pins after the header
-					(gpio_pin_lut->table_header->structuresize
-						- sizeof(struct atom_common_table_header)
-					) / sizeof(struct atom_gpio_pin_assignment_v2_1)
-				);
-				break;
-			default:
-				break;
-		}
+	if (0 == bios_offset) {
+		return;
+	}
+
+	gpio_pin_lut->leaves = commons->bios + bios_offset;
+	gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
+	switch (gpio_pin_lut->ver) {
+		case v2_1:
+			gpio_pin_lut->num_gpio_pins = (
+				//dynamic array length of nothing but pins after the header
+				(gpio_pin_lut->table_header->structuresize
+					- sizeof(struct atom_common_table_header)
+				) / sizeof(struct atom_gpio_pin_assignment_v2_1)
+			);
+			break;
+		default:
+			break;
 	}
 }
 
@@ -159,65 +172,67 @@ populate_gfx_info(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		// leaves is in a union with the structs.
-		gfx_info->leaves = commons->bios + bios_offset;
-		gfx_info->ver = get_ver(gfx_info->table_header);
-		switch (gfx_info->ver) {
-			case v2_1:
-				break;
-			case v2_3:
-				if (gfx_info->table_header->structuresize
-						== sizeof(struct atom_gfx_info_v2_3)
-						) {
-					if (gfx_info->v2_3->EdcDidtLoDpm7TableOffset) {
-						gfx_info->edc_didt_lo = (
-							gfx_info->leaves
-							+ gfx_info->v2_3->EdcDidtLoDpm7TableOffset
-						);
-					}
-					if (gfx_info->v2_3->EdcDidtHiDpm7TableOffset) {
-						gfx_info->edc_didt_hi = (
-							gfx_info->leaves
-							+ gfx_info->v2_3->EdcDidtHiDpm7TableOffset
-						);
-					}
-				} else if (gfx_info->table_header->structuresize
-						== sizeof(struct atom_gfx_info_v2_3_2)) {
-					assert(0); // unsure what uses this
-					if (gfx_info->v2_3_2->gcgoldenoffset) {
-						gfx_info->gcgolden =
-							gfx_info->leaves + gfx_info->v2_3_2->gcgoldenoffset;
-					}
+	if (0 == bios_offset) {
+		return;
+	}
+
+	// leaves is in a union with the structs.
+	gfx_info->leaves = commons->bios + bios_offset;
+	gfx_info->ver = get_ver(gfx_info->table_header);
+	switch (gfx_info->ver) {
+		case v2_1:
+			break;
+		case v2_3:
+			if (gfx_info->table_header->structuresize
+					== sizeof(struct atom_gfx_info_v2_3)
+					) {
+				if (gfx_info->v2_3->EdcDidtLoDpm7TableOffset) {
+					gfx_info->edc_didt_lo = (
+						gfx_info->leaves
+						+ gfx_info->v2_3->EdcDidtLoDpm7TableOffset
+					);
 				}
-				break;
-			case v2_4:
-				if (gfx_info->v2_4->gcgoldenoffset) {
+				if (gfx_info->v2_3->EdcDidtHiDpm7TableOffset) {
+					gfx_info->edc_didt_hi = (
+						gfx_info->leaves
+						+ gfx_info->v2_3->EdcDidtHiDpm7TableOffset
+					);
+				}
+			} else if (gfx_info->table_header->structuresize
+					== sizeof(struct atom_gfx_info_v2_3_2)) {
+				assert(0); // unsure what uses this
+				if (gfx_info->v2_3_2->gcgoldenoffset) {
 					gfx_info->gcgolden =
-						gfx_info->leaves + gfx_info->v2_4->gcgoldenoffset;
+						gfx_info->leaves + gfx_info->v2_3_2->gcgoldenoffset;
 				}
-				break;
-			case v2_5:
-				if (gfx_info->v2_5->gcgoldenoffset) {
-					gfx_info->gcgolden =
-						gfx_info->leaves + gfx_info->v2_5->gcgoldenoffset;
-				}
-				break;
-			case v2_6: // force v2.5
-				if (gfx_info->v2_6->gcgoldenoffset) {
-					gfx_info->gcgolden =
-						gfx_info->leaves + gfx_info->v2_6->gcgoldenoffset;
-				}
-				break;
-			case v2_7:
-				if (gfx_info->v2_7->gcgoldenoffset) {
-					gfx_info->gcgolden =
-						gfx_info->leaves + gfx_info->v2_7->gcgoldenoffset;
-				}
-				break;
-			default:
-				break;
-		}
+			}
+			break;
+		case v2_4:
+			if (gfx_info->v2_4->gcgoldenoffset) {
+				gfx_info->gcgolden =
+					gfx_info->leaves + gfx_info->v2_4->gcgoldenoffset;
+			}
+			break;
+		case v2_5:
+			if (gfx_info->v2_5->gcgoldenoffset) {
+				gfx_info->gcgolden =
+					gfx_info->leaves + gfx_info->v2_5->gcgoldenoffset;
+			}
+			break;
+		case v2_6: // force v2.5
+			if (gfx_info->v2_6->gcgoldenoffset) {
+				gfx_info->gcgolden =
+					gfx_info->leaves + gfx_info->v2_6->gcgoldenoffset;
+			}
+			break;
+		case v2_7:
+			if (gfx_info->v2_7->gcgoldenoffset) {
+				gfx_info->gcgolden =
+					gfx_info->leaves + gfx_info->v2_7->gcgoldenoffset;
+			}
+			break;
+		default:
+			break;
 	}
 }
 
@@ -723,50 +738,52 @@ populate_ppt(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		ppt->leaves = commons->bios + bios_offset;
-		// leaves is in a union with the structs.
-		ppt->ver = get_ver(ppt->table_header);
+	if (0 == bios_offset) {
+		return;
+	}
 
-		switch (ppt->ver) {
-			case v1_1:
-			case v2_1:
-			case v3_1:
-				break; // absurdly simple powerplay.
-			case v6_1:
-			case v5_1:
-			case v4_1:
-				populate_pplib_ppt(&(ppt->v4_1), commons);
-				break;
-			case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
-				populate_pptablev1_ppt(&(ppt->v7_1));
-				break;
-			case v8_1:
-				populate_vega10_ppt(&(ppt->v8_1));
-				break;
-			case v11_0:
-				ppt->v11_0.smc_pptable_ver = get_smc_pptable_ver(
-					ppt->v11_0.leaves->smc_pptable.ver
-				);
-				break;
-			case v14_0:
-			case v12_0:
-				ppt->v12_0.smc_pptable_ver = get_smc_pptable_ver(
-					ppt->v12_0.leaves->smc_pptable.ver
-				);
-				break;
-			case v19_0: // 6400
-			case v18_0: // navi2 xx50
-			case v16_0: // 6700XT
-			case v15_0:
-				ppt->v15_0.smc_pptable_ver = get_smc_pptable_ver(
-					ppt->v15_0.leaves->smc_pptable.ver
-				);
-				break;
-			default:
-				assert(0);
-				break;
-		}
+	ppt->leaves = commons->bios + bios_offset;
+	// leaves is in a union with the structs.
+	ppt->ver = get_ver(ppt->table_header);
+
+	switch (ppt->ver) {
+		case v1_1:
+		case v2_1:
+		case v3_1:
+			break; // absurdly simple powerplay.
+		case v6_1:
+		case v5_1:
+		case v4_1:
+			populate_pplib_ppt(&(ppt->v4_1), commons);
+			break;
+		case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
+			populate_pptablev1_ppt(&(ppt->v7_1));
+			break;
+		case v8_1:
+			populate_vega10_ppt(&(ppt->v8_1));
+			break;
+		case v11_0:
+			ppt->v11_0.smc_pptable_ver = get_smc_pptable_ver(
+				ppt->v11_0.leaves->smc_pptable.ver
+			);
+			break;
+		case v14_0:
+		case v12_0:
+			ppt->v12_0.smc_pptable_ver = get_smc_pptable_ver(
+				ppt->v12_0.leaves->smc_pptable.ver
+			);
+			break;
+		case v19_0: // 6400
+		case v18_0: // navi2 xx50
+		case v16_0: // 6700XT
+		case v15_0:
+			ppt->v15_0.smc_pptable_ver = get_smc_pptable_ver(
+				ppt->v15_0.leaves->smc_pptable.ver
+			);
+			break;
+		default:
+			assert(0);
+			break;
 	}
 }
 
@@ -1799,22 +1816,24 @@ populate_vram_info(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		vram_info->leaves = commons->bios + bios_offset;
-		vram_info->ver = get_ver(vram_info->table_header);
-		switch (vram_info->ver) { // TODO: earlier tables than 2.3?
-			case v1_2: populate_vram_info_v1_2(vram_info, commons); break;
-			case v1_3: populate_vram_info_v1_3(vram_info, commons); break;
-			case v1_4: populate_vram_info_v1_4(vram_info, commons); break;
-			case v2_1: populate_vram_info_v2_1(vram_info, commons); break;
-			case v2_2: populate_vram_info_v2_2(vram_info, commons); break;
-			case v2_3: populate_vram_info_v2_3(vram_info, commons); break;
-			case v2_4: populate_vram_info_v2_4(vram_info, commons); break;
-			case v2_5: populate_vram_info_v2_5(vram_info, commons); break;
-			case v2_6: populate_vram_info_v2_6(vram_info, commons); break;
-			case v3_0: populate_vram_info_v3_0(vram_info, commons); break;
-			default: break;
-		}
+	if (0 == bios_offset) {
+		return;
+	}
+
+	vram_info->leaves = commons->bios + bios_offset;
+	vram_info->ver = get_ver(vram_info->table_header);
+	switch (vram_info->ver) { // TODO: earlier tables than 2.3?
+		case v1_2: populate_vram_info_v1_2(vram_info, commons); break;
+		case v1_3: populate_vram_info_v1_3(vram_info, commons); break;
+		case v1_4: populate_vram_info_v1_4(vram_info, commons); break;
+		case v2_1: populate_vram_info_v2_1(vram_info, commons); break;
+		case v2_2: populate_vram_info_v2_2(vram_info, commons); break;
+		case v2_3: populate_vram_info_v2_3(vram_info, commons); break;
+		case v2_4: populate_vram_info_v2_4(vram_info, commons); break;
+		case v2_5: populate_vram_info_v2_5(vram_info, commons); break;
+		case v2_6: populate_vram_info_v2_6(vram_info, commons); break;
+		case v3_0: populate_vram_info_v3_0(vram_info, commons); break;
+		default: break;
 	}
 }
 
@@ -2097,18 +2116,20 @@ populate_voltageobject_info(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (bios_offset) {
-		vo_info->leaves = commons->bios + bios_offset;
-		vo_info->ver = get_ver(vo_info->table_header);
-		switch (vo_info->ver) {
-			case v1_1: populate_voltageobject_info_v1_1(vo_info, commons);break;
-			case v1_2: populate_voltageobject_info_v1_2(vo_info, commons);break;
-			case v3_1: populate_voltageobject_info_v3_1(vo_info, commons);break;
-			case v4_2: // hopefully v4_2 is the same
-			case v4_1: populate_voltageobject_info_v4_1(vo_info, commons);break;
-			case v1_0: assert(0);
-			default: break;
-		}
+	if (0 == bios_offset) {
+		return;
+	}
+
+	vo_info->leaves = commons->bios + bios_offset;
+	vo_info->ver = get_ver(vo_info->table_header);
+	switch (vo_info->ver) {
+		case v1_1: populate_voltageobject_info_v1_1(vo_info, commons); break;
+		case v1_2: populate_voltageobject_info_v1_2(vo_info, commons); break;
+		case v3_1: populate_voltageobject_info_v3_1(vo_info, commons); break;
+		case v4_2: // hopefully v4_2 is the same
+		case v4_1: populate_voltageobject_info_v4_1(vo_info, commons); break;
+		case v1_0: assert(0);
+		default: break;
 	}
 }
 
@@ -2403,18 +2424,19 @@ populate_datatables(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
+	if (0 == bios_offset) {
+		return;
+	}
+
 	struct atomtree_master_datatable* const data_table = &(
 		commons->atree->data_table
 	);
-
-	if (bios_offset) {
-		data_table->leaves = commons->bios + bios_offset;
-		data_table->ver = get_ver(data_table->table_header);
-		switch (data_table->ver) {
-			case v1_1: populate_datatable_v1_1(data_table, commons); break;
-			case v2_1: populate_datatable_v2_1(data_table, commons); break;
-			default: assert(0); break;
-		}
+	data_table->leaves = commons->bios + bios_offset;
+	data_table->ver = get_ver(data_table->table_header);
+	switch (data_table->ver) {
+		case v1_1: populate_datatable_v1_1(data_table, commons); break;
+		case v2_1: populate_datatable_v2_1(data_table, commons); break;
+		default: assert(0); break;
 	}
 }
 
