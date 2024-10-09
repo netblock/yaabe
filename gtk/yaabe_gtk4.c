@@ -472,7 +472,6 @@ columnview_row_bind_attach_gesture(
 
 
 
-
 inline static GtkWidget*
 construct_path_bar(
 		yaabegtk_commons* const commons
@@ -1840,6 +1839,31 @@ filer_error_window(
 	g_object_unref(alert);
 }
 inline static void
+yaabegtk_load_enable_save_buttons(
+		yaabegtk_commons* const commons
+		) {
+	gtk_widget_set_sensitive(commons->save_buttons, true);
+	gtk_widget_set_sensitive(commons->reload_buttons, true);
+
+
+	// the main menu bar
+	GActionMap* const app_action_map = G_ACTION_MAP(commons->yaabe_gtk);
+	GValue enabled = G_VALUE_INIT;
+	g_value_init(&enabled, G_TYPE_BOOLEAN);
+	g_value_set_boolean(&enabled, true);
+	GAction* action;
+
+	action = g_action_map_lookup_action(app_action_map, "save");
+	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+	action = g_action_map_lookup_action(app_action_map, "saveas");
+	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+	action = g_action_map_lookup_action(app_action_map, "discard");
+	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+	action = g_action_map_lookup_action(app_action_map, "reload");
+	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+}
+
+inline static void
 yaabegtk_load_bios(
 		yaabegtk_commons* const commons,
 		GFile* const biosfile,
@@ -1856,13 +1880,11 @@ yaabegtk_load_bios(
 	if (new_tree) {
 		if (commons->root) {
 			g_object_unref(commons->root);
+		} else {
+			yaabegtk_load_enable_save_buttons(commons);		
 		}
 		create_and_set_active_atui_model(commons, new_tree);
 
-		if (gtk_widget_get_sensitive(commons->save_buttons) == false) {
-			gtk_widget_set_sensitive(commons->save_buttons, true);
-			gtk_widget_set_sensitive(commons->reload_buttons, true);
-		}
 		set_editor_titlebar(commons);
 	}
 
@@ -1909,10 +1931,9 @@ filedialog_load_and_set_bios(
 
 }
 static void
-load_button_open_bios(
+yaabe_open_bios(
 		yaabegtk_commons* const commons
 		) {
-// Signal callback
 	GtkFileDialog* const filer = gtk_file_dialog_new();
 	GtkWindow* const active_window = gtk_application_get_active_window(
 		commons->yaabe_gtk
@@ -1935,10 +1956,9 @@ load_button_open_bios(
 	g_object_unref(filer);
 }
 static void
-discard_button_reload_bios(
+yaabe_discard_changes(
 		yaabegtk_commons* const commons
 		) {
-// signal callback
 	GError* ferror = NULL;
 
 	GATUITree* const old_tree = commons->root;
@@ -1954,10 +1974,9 @@ discard_button_reload_bios(
 	g_object_unref(old_tree);
 }
 static void
-refresh_button_refresh_bios(
+yaabe_apply_changes(
 		yaabegtk_commons* const commons
 		) {
-// signal callback
 	GATUITree* const old_tree = commons->root;
 	GATUITree* const new_tree = gatui_tree_copy_core(old_tree);
 	assert(new_tree);
@@ -1971,10 +1990,9 @@ refresh_button_refresh_bios(
 
 
 static void
-save_button_same_file(
+yaabe_save_same_file(
 		yaabegtk_commons* const commons
 		) {
-// signal callback
 	GError* ferror = NULL;
 
 	gatui_tree_save(commons->root, &ferror);
@@ -2017,7 +2035,7 @@ filedialog_saveas_bios(
 	return;
 }
 static void
-saveas_button_name_bios(
+yaabe_saveas_name_bios(
 		yaabegtk_commons* const commons
 		) {
 // Signal callback
@@ -2041,37 +2059,37 @@ construct_loadsave_buttons_box(
 		) {
 	GtkWidget* const load_button = gtk_button_new_with_label("Load");
 	g_signal_connect_swapped(load_button, "clicked",
-		G_CALLBACK(load_button_open_bios), commons
+		G_CALLBACK(yaabe_open_bios), commons
 	);
 
 
 	GtkWidget* const discard_button = gtk_button_new_with_label("Discard");
 	gtk_widget_set_tooltip_text(discard_button, "Discard changes and reload");
 	g_signal_connect_swapped(discard_button, "clicked",
-		G_CALLBACK(discard_button_reload_bios), commons
+		G_CALLBACK(yaabe_discard_changes), commons
 	);
-	GtkWidget* const refresh_button = gtk_button_new_with_label("Refresh");
-	gtk_widget_set_tooltip_text(refresh_button,
+	GtkWidget* const apply_button = gtk_button_new_with_label("Apply");
+	gtk_widget_set_tooltip_text(apply_button,
 		"Recrawl bios based on changes"
 	);
-	g_signal_connect_swapped(refresh_button, "clicked",
-		G_CALLBACK(refresh_button_refresh_bios), commons
+	g_signal_connect_swapped(apply_button, "clicked",
+		G_CALLBACK(yaabe_apply_changes), commons
 	);
 	GtkWidget* const reload_buttons = gtk_box_new(
 		GTK_ORIENTATION_HORIZONTAL, 5
 	);
 	gtk_box_append(GTK_BOX(reload_buttons), discard_button);
-	gtk_box_append(GTK_BOX(reload_buttons), refresh_button);
+	gtk_box_append(GTK_BOX(reload_buttons), apply_button);
 
 
 
 	GtkWidget* const save_button = gtk_button_new_with_label("Save");
 	g_signal_connect_swapped(save_button, "clicked",
-		G_CALLBACK(save_button_same_file), commons
+		G_CALLBACK(yaabe_save_same_file), commons
 	);
 	GtkWidget* const saveas_button = gtk_button_new_with_label("Save As");
 	g_signal_connect_swapped(saveas_button, "clicked",
-		G_CALLBACK(saveas_button_name_bios), commons
+		G_CALLBACK(yaabe_saveas_name_bios), commons
 	);
 	GtkWidget* const save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
@@ -2103,6 +2121,136 @@ construct_loadsave_buttons_box(
 }
 
 
+static void
+yaabe_action_load_bios(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabe_open_bios(commons_ptr);
+}
+static void
+yaabe_action_save_bios(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabe_save_same_file(commons_ptr);
+}
+static void
+yaabe_action_saveas_bios(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabe_saveas_name_bios(commons_ptr);
+}
+static void
+yaabe_action_quit(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabegtk_commons const* const commons = commons_ptr;
+	g_application_quit(G_APPLICATION(commons->yaabe_gtk));
+	assert(0);
+	exit(0); 
+	/*
+	g_application_quit doesn't correctly unref stuff so just exit.
+	A proper solution would probably involve closing all open ApplicationWindows
+	but that is a lot of work for janitorial work for an exit
+	*/
+}
+static void
+yaabe_action_discard_changes(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabe_discard_changes(commons_ptr);
+}
+static void
+yaabe_action_apply_changes(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabe_apply_changes(commons_ptr);
+}
+inline static void
+construct_menu_bar(
+		GtkApplication* const gtkapp,
+		yaabegtk_commons* const commons
+		) {
+	// construct and attach menu model; UI portion
+	GMenu* const file_menu = g_menu_new();
+	g_menu_append(file_menu, "Load", "app.load");
+	g_menu_append(file_menu, "Save", "app.save");
+	g_menu_append(file_menu, "Save As", "app.saveas");
+	g_menu_append(file_menu, "Quit", "app.quit");
+
+	GMenu* const edit_menu = g_menu_new();
+	g_menu_append(edit_menu, "Discard Changes", "app.discard");
+	g_menu_append(edit_menu, "Apply Changes", "app.reload");
+
+	//GMenu* const magic_menu = g_menu_new();
+	//g_menu_append(magic_menu, "Insert UEFI GOP", "app.uefi_gop");
+
+	GMenu* const main_menu = g_menu_new();
+	g_menu_append_submenu(main_menu, "File", G_MENU_MODEL(file_menu));
+	g_menu_append_submenu(main_menu, "Edit", G_MENU_MODEL(edit_menu));
+	//g_menu_append_submenu(main_menu, "Magic", G_MENU_MODEL(magic_menu));
+	gtk_application_set_menubar(gtkapp, G_MENU_MODEL(main_menu));
+
+
+	// keybind accelerators
+	const char* accel[2] = {}; // NULL terminated list
+	accel[0] = "<ctrl>q";
+	gtk_application_set_accels_for_action(gtkapp, "app.quit", accel);
+	accel[0] = "<ctrl>o";
+	gtk_application_set_accels_for_action(gtkapp, "app.load", accel);
+	accel[0] = "<ctrl>s";
+	gtk_application_set_accels_for_action(gtkapp, "app.save", accel);
+	accel[0] = "<shift><ctrl>s";
+	gtk_application_set_accels_for_action(gtkapp, "app.saveas", accel);
+	accel[0] = "<ctrl>d";
+	gtk_application_set_accels_for_action(gtkapp, "app.discard", accel);
+	accel[0] = "<ctrl>r";
+	gtk_application_set_accels_for_action(gtkapp, "app.reload", accel);
+
+
+	// construct the actions of the menus; function portion
+	GActionMap* const app_action_map = G_ACTION_MAP(gtkapp);
+	GActionEntry const actions[] = {
+		{.name = "load",    .activate = yaabe_action_load_bios},
+		{.name = "save",    .activate = yaabe_action_save_bios},
+		{.name = "saveas",  .activate = yaabe_action_saveas_bios},
+		{.name = "quit",    .activate = yaabe_action_quit},
+
+		{.name = "discard", .activate = yaabe_action_discard_changes},
+		{.name = "reload",  .activate = yaabe_action_apply_changes},
+	};
+	g_action_map_add_action_entries(app_action_map,
+		actions, lengthof(actions),
+		commons
+	);
+	if (NULL == commons->root) {
+		// disable some menu entries if no bios is loaded
+		GAction* action;
+		GValue enabled = G_VALUE_INIT;
+		g_value_init(&enabled, G_TYPE_BOOLEAN);
+		g_value_set_boolean(&enabled, false);
+
+		action = g_action_map_lookup_action(app_action_map, "save");
+		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+		action = g_action_map_lookup_action(app_action_map, "saveas");
+		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+		action = g_action_map_lookup_action(app_action_map, "discard");
+		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+		action = g_action_map_lookup_action(app_action_map, "reload");
+		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+	}
+}
 
 static gboolean
 dropped_file_open_bios(
@@ -2126,7 +2274,7 @@ dropped_file_open_bios(
 		}
 		return true;
 	}
-	return false;
+			return false;
 
 }
 static void
@@ -2134,6 +2282,8 @@ yaabe_app_activate(
 		GtkApplication* const gtkapp,
 		yaabegtk_commons* const commons
 		) {
+	construct_menu_bar(gtkapp, commons);
+
 	GtkWidget* const path_bar = construct_path_bar(commons);
 	GtkWidget* const tree_divider = construct_tree_panes(commons);
 	GtkWidget* const button_box = construct_loadsave_buttons_box(commons);
@@ -2150,13 +2300,18 @@ yaabe_app_activate(
 		G_CALLBACK(dropped_file_open_bios), commons
 	);
 
-	GtkWindow* const window = GTK_WINDOW(gtk_application_window_new(gtkapp));
+	GtkApplicationWindow* const app_window = GTK_APPLICATION_WINDOW(
+		gtk_application_window_new(gtkapp)
+	);
+	gtk_application_window_set_show_menubar(app_window, true);
 	gtk_widget_add_controller(
-		GTK_WIDGET(window), GTK_EVENT_CONTROLLER(dropfile)
+		GTK_WIDGET(app_window), GTK_EVENT_CONTROLLER(dropfile)
 	);
 
+	GtkWindow* const window = GTK_WINDOW(app_window);
 	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, GTK_WIDGET(main_box));
+
 	gtk_widget_grab_focus(tree_divider);
 	gtk_widget_grab_focus(GTK_WIDGET(commons->branches.view));
 
