@@ -1930,6 +1930,115 @@ filedialog_load_and_set_bios(
 	return;
 
 }
+
+static void
+set_cached_working_dir(
+		GFile* const biosfile
+		) {
+	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
+	GFile* cached_history_path = NULL;
+	GFileType ftype;
+
+	GFile* const parent_dir = g_file_get_parent(biosfile);
+	char* const parent_dir_path = g_file_get_path(parent_dir);
+	if (NULL == parent_dir_path) {
+		goto parent_err;
+	}
+	size_t const parent_path_length = 1+strlen(parent_dir_path);
+	parent_dir_path[parent_path_length-1] = '\n'; // replace \0
+
+	// $XDG_CONFIG_HOME/yaabe/
+	GPathBuf history_dir_builder;
+	g_path_buf_init_from_path(&history_dir_builder, xdg_home);
+	g_path_buf_push(&history_dir_builder, "yaabe");
+	char* history_dir_path = g_path_buf_to_path(&history_dir_builder);
+	GFile* const history_dir = g_file_new_for_path(history_dir_path);
+	ftype = g_file_query_file_type(history_dir, G_FILE_QUERY_INFO_NONE, NULL);
+	if (G_FILE_TYPE_DIRECTORY != ftype 
+			&& (! g_file_make_directory_with_parents(history_dir,NULL,NULL) )
+			) { // important bit
+		goto history_dir_err;
+	}
+
+	// $XDG_CONFIG_HOME/yaabe/history
+	GPathBuf history_file_builder;
+	g_path_buf_init_from_path(&history_file_builder, xdg_home);
+	g_path_buf_push(&history_file_builder, "yaabe/history");
+	char* history_file_path = g_path_buf_to_path(&history_file_builder);
+	GFile* const history_file = g_file_new_for_path(history_file_path);
+
+	g_file_replace_contents(
+		history_file,
+		parent_dir_path, parent_path_length,
+		NULL,false, G_FILE_CREATE_NONE, NULL, NULL, NULL
+	);
+
+	g_object_unref(history_file);
+	free(history_file_path);
+	g_path_buf_clear(&history_file_builder);
+
+	history_dir_err:
+	g_object_unref(history_dir);
+	free(history_dir_path);
+	g_path_buf_clear(&history_dir_builder);
+
+	free(parent_dir_path);
+	parent_err:
+	g_object_unref(parent_dir);
+}
+static inline GFile*
+get_cached_working_dir(
+		) {
+	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
+	GFile* cached_history_path = NULL;
+	GFileType ftype;
+
+	// $XDG_CONFIG_HOME/yaabe/history
+	GPathBuf history_file_builder;
+	g_path_buf_init_from_path(&history_file_builder, xdg_home);
+	g_path_buf_push(&history_file_builder, "yaabe/history");
+	char* history_file_path = g_path_buf_to_path(&history_file_builder);
+	GFile* const history_file = g_file_new_for_path(history_file_path);
+	ftype = g_file_query_file_type(history_file, G_FILE_QUERY_INFO_NONE, NULL);
+	if (G_FILE_TYPE_REGULAR != ftype) {
+		goto history_file_err;
+	}
+
+	// read
+	char* history_contents;
+	size_t filesize;
+	bool const read_success = g_file_load_contents(
+		history_file,   NULL,
+		&history_contents,  &filesize,
+		NULL, NULL
+	);
+	if (!read_success) {
+		goto history_file_err;
+	}
+
+	// chop off trailing \n and check if contents points to a dir
+	char* save;
+	cached_history_path = g_file_new_for_path(
+		strtok_r(history_contents, "\n\r", &save)
+	);
+	ftype = g_file_query_file_type(
+		cached_history_path, G_FILE_QUERY_INFO_NONE, NULL
+	);
+	if (G_FILE_TYPE_DIRECTORY != ftype) {
+		g_object_unref(cached_history_path);
+		cached_history_path = NULL;
+	}
+	
+	free(history_contents);
+
+	history_file_err:
+	g_object_unref(history_file);
+	free(history_file_path);
+	g_path_buf_clear(&history_file_builder);
+
+	return cached_history_path;
+}
+
 static void
 yaabe_open_bios(
 		yaabegtk_commons* const commons
@@ -1944,7 +2053,9 @@ yaabe_open_bios(
 		working_dir = g_file_get_parent(
 			gatui_tree_get_bios_file(commons->root)
 		);
-	}else {
+	} else if (( working_dir = get_cached_working_dir() )) {
+		// assignment in if-statement
+	} else {
 		working_dir = g_file_new_for_path(".");
 	}
 	gtk_file_dialog_set_initial_folder(filer, working_dir);
@@ -2000,6 +2111,9 @@ yaabe_save_same_file(
 		filer_error_window(commons, ferror, "Save BIOS error");
 		g_error_free(ferror);
 	}
+	set_cached_working_dir(
+		gatui_tree_get_bios_file(commons->root)
+	);
 }
 static void
 filedialog_saveas_bios(
@@ -2025,7 +2139,9 @@ filedialog_saveas_bios(
 		g_object_unref(new_biosfile);
 		goto ferr_msg;
 	}
+
 	set_editor_titlebar(commons);
+	set_cached_working_dir(new_biosfile);
 	return;
 
 	ferr_msg:
@@ -2274,7 +2390,7 @@ dropped_file_open_bios(
 		}
 		return true;
 	}
-			return false;
+	return false;
 
 }
 static void
