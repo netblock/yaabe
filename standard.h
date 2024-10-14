@@ -38,6 +38,7 @@ typedef double float64_t;
 // we're dealing with a byte-packed little-endian ABI.
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__);
 static_assert(CHAR_BIT == 8);
+static_assert(sizeof(void) == 1); // void pointer arithmatic
 static_assert(sizeof(char) == 1);
 static_assert(sizeof(char8_t) == 1);
 static_assert(sizeof(uint8_t) == 1);
