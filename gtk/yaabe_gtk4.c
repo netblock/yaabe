@@ -1468,7 +1468,7 @@ branch_right_click_copy_leaves(
 	struct rightclick_pack const* const pack = pack_ptr;
 	GVariant* val = NULL;
 	uint16_t num_copyable_leaves;
-	bool const success = gatui_branch_get_leaves_memory_package(
+	gatui_branch_get_leaves_memory_package(
 		pack->branch,
 		&val,
 		&num_copyable_leaves
@@ -1936,7 +1936,6 @@ set_cached_working_dir(
 		GFile* const biosfile
 		) {
 	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
-	GFile* cached_history_path = NULL;
 	GFileType ftype;
 
 	GFile* const parent_dir = g_file_get_parent(biosfile);

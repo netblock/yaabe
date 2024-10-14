@@ -875,21 +875,17 @@ get_vram_type(
 static void
 populate_mem_adjust_table(
 		struct atomtree_init_reg_block* const mem_adjust_table,
-		struct atomtree_vram_module const* const vram_modules,
+		struct atomtree_vram_module const* const vram_modules __unused,
 		struct atomtree_commons* const commons
 		) {
 	populate_init_reg_block(mem_adjust_table, commons);
 	mem_adjust_table->reg_type = REG_BLOCK_MEM_ADJUST;
 
+	/*
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
-	enum atomtree_common_version const vram_module_ver =
-		vram_modules[0].vram_module_ver;
 	struct atom_init_reg_index_format const* const index =
 		mem_adjust_table->register_index;
-	struct atom_reg_setting_data_block const* const* const data_blocks =
-		(void*) mem_adjust_table->data_blocks;
 
-	/*
 	if (0 == mem_adjust_table->num_index) { // heuristic
 		if regcmp(index, ...) {
 			mem_adjust_table->reg_set = ...
@@ -924,12 +920,8 @@ populate_mem_clk_patch(
 	mem_clk_patch->reg_type = REG_BLOCK_MEM_CLK_PATCH;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
-	enum atomtree_common_version const vram_module_ver =
-		vram_modules[0].vram_module_ver;
 	struct atom_init_reg_index_format const* const index =
 		mem_clk_patch->register_index;
-	struct atom_reg_setting_data_block const* const* const data_blocks =
-		(void*) mem_clk_patch->data_blocks;
 
 	// go by static tables instead of individually constructing the bitfields
 	// because static tables offers a more consise, typed API.
@@ -971,21 +963,18 @@ populate_mem_clk_patch(
 static void
 populate_mc_tile_adjust(
 		struct atomtree_init_reg_block* const mc_tile_adjust,
-		struct atomtree_vram_module const* const vram_modules,
+		struct atomtree_vram_module const* const vram_modules __unused,
 		struct atomtree_commons* const commons
 		) {
 	populate_init_reg_block(mc_tile_adjust, commons);
 	mc_tile_adjust->reg_type = REG_BLOCK_MC_TILE_ADJUST;
 
+	/*
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
-	enum atomtree_common_version const vram_module_ver =
-		vram_modules[0].vram_module_ver;
+
 	struct atom_init_reg_index_format const* const index =
 		mc_tile_adjust->register_index;
-	struct atom_reg_setting_data_block const* const* const data_blocks =
-		(void*) mc_tile_adjust->data_blocks;
-	
-	/*
+
 	if (0 == mc_tile_adjust->num_index) {
 		if regcmp(index, ...) {
 			mc_tile_adjust->reg_set = ...
@@ -1013,21 +1002,17 @@ populate_mc_tile_adjust(
 static void
 populate_init_mc_phy_init(
 		struct atomtree_init_reg_block* const mc_phy_init,
-		struct atomtree_vram_module const* const vram_modules,
+		struct atomtree_vram_module const* const vram_modules __unused,
 		struct atomtree_commons* const commons
 		) {
 	populate_init_reg_block(mc_phy_init, commons);
 	mc_phy_init->reg_type = REG_BLOCK_MC_PHY_INIT;
 
+	/*
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
-	enum atomtree_common_version const vram_module_ver =
-		vram_modules[0].vram_module_ver;
 	struct atom_init_reg_index_format const* const index =
 		mc_phy_init->register_index;
-	struct atom_reg_setting_data_block const* const* const data_blocks =
-		(void*) mc_phy_init->data_blocks;
 
-	/*
 	if (0 == mc_phy_init->num_index) {
 		if regcmp(index, ...) {
 			mc_phy_init->reg_set = ...
@@ -1570,25 +1555,25 @@ populate_vram_info_v2_4(
 	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
 	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
 
-	if (vi24->leaves->vram_module_num) {
+	if (leaves->vram_module_num) {
 		vi24->vram_module_ver = v1_10;
 		vi24->vram_modules = populate_vram_module(
 			commons,
-			vi24->leaves->vram_module,
+			leaves->vram_module,
 			vi24->vram_module_ver,
-			vi24->leaves->vram_module_num
+			leaves->vram_module_num
 		);
 	}
 
-	if (vi24->leaves->mem_adjust_tbloffset) {
+	if (leaves->mem_adjust_tbloffset) {
 		vi24->mem_adjust_table.leaves =
-			(void*)vi24->leaves + vi24->leaves->mem_adjust_tbloffset;
+			(void*)leaves + leaves->mem_adjust_tbloffset;
 		populate_umc_init_reg_block(&(vi24->mem_adjust_table), commons);
 	}
 
-	if (vi24->leaves->mem_clk_patch_tbloffset) {
+	if (leaves->mem_clk_patch_tbloffset) {
 		vi24->mem_clk_patch.leaves =
-			(void*)vi24->leaves + vi24->leaves->mem_clk_patch_tbloffset;
+			(void*)leaves + leaves->mem_clk_patch_tbloffset;
 		populate_umc_init_reg_block(&(vi24->mem_clk_patch), commons);
 
 		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
@@ -1596,28 +1581,28 @@ populate_vram_info_v2_4(
 			(struct timings_set_navi1*) vi24->mem_clk_patch.data_blocks[0];
 	}
 
-	if (vi24->leaves->mc_adjust_pertile_tbloffset) {
+	if (leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi24->mc_tile_adjust.leaves =
-			(void*)vi24->leaves + vi24->leaves->mc_adjust_pertile_tbloffset;
+			(void*)leaves + leaves->mc_adjust_pertile_tbloffset;
 		populate_umc_init_reg_block(&(vi24->mc_tile_adjust), commons);
 	}
 
-	if (vi24->leaves->mc_phyinit_tbloffset) {
+	if (leaves->mc_phyinit_tbloffset) {
 		vi24->mc_phy_init.leaves =
-			(void*)vi24->leaves + vi24->leaves->mc_phyinit_tbloffset;
+			(void*)leaves + leaves->mc_phyinit_tbloffset;
 		populate_umc_init_reg_block(&(vi24->mc_phy_init), commons);
 	}
 
-	if (vi24->leaves->dram_data_remap_tbloffset) {
+	if (leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi24->dram_data_remap =
-			(void*)vi24->leaves + vi24->leaves->dram_data_remap_tbloffset;
+			(void*)leaves + leaves->dram_data_remap_tbloffset;
 	}
 
-	if (vi24->leaves->post_ucode_init_offset) {
+	if (leaves->post_ucode_init_offset) {
 		vi24->post_ucode_init.leaves =
-			(void*)vi24->leaves + vi24->leaves->post_ucode_init_offset;
+			(void*)leaves + leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(&(vi24->post_ucode_init), commons);
 	}
 }
@@ -1628,61 +1613,62 @@ populate_vram_info_v2_5(
 		struct atomtree_commons* const commons
 		) {
 	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
+	struct atom_vram_info_header_v2_5* const leaves = vram_info->leaves;
 
-	if (vi25->leaves->vram_module_num) {
+	if (leaves->vram_module_num) {
 		vi25->vram_module_ver = v1_11;
 		vi25->vram_modules = populate_vram_module(
 			commons,
-			vi25->leaves->vram_module,
+			leaves->vram_module,
 			vi25->vram_module_ver,
-			vi25->leaves->vram_module_num
+			leaves->vram_module_num
 		);
 	}
 
-	if (vi25->leaves->mem_adjust_tbloffset) {
+	if (leaves->mem_adjust_tbloffset) {
 		vi25->mem_adjust_table.leaves =
-			(void*)vi25->leaves + vi25->leaves->mem_adjust_tbloffset;
+			(void*)leaves + leaves->mem_adjust_tbloffset;
 		populate_umc_init_reg_block(&(vi25->mem_adjust_table), commons);
 	}
 
-	if (vi25->leaves->gddr6_ac_timing_offset) {
+	if (leaves->gddr6_ac_timing_offset) {
 		vi25->gddr6_ac_timings =
-			(void*)vi25->leaves + vi25->leaves->gddr6_ac_timing_offset;
+			(void*)leaves + leaves->gddr6_ac_timing_offset;
 		uint8_t i = 0;
 		for (; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
 		vi25->gddr6_acstrap_count = i;
 	}
 
-	if (vi25->leaves->mc_adjust_pertile_tbloffset) {
+	if (leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi25->mc_tile_adjust.leaves =
-			(void*)vi25->leaves + vi25->leaves->mc_adjust_pertile_tbloffset;
+			(void*)leaves + leaves->mc_adjust_pertile_tbloffset;
 		populate_umc_init_reg_block(&(vi25->mc_tile_adjust), commons);
 	}
 
-	if (vi25->leaves->mc_phyinit_tbloffset) {
+	if (leaves->mc_phyinit_tbloffset) {
 		vi25->mc_phy_init.leaves =
-			(void*)vi25->leaves + vi25->leaves->mc_phyinit_tbloffset;
+			(void*)leaves + leaves->mc_phyinit_tbloffset;
 		populate_umc_init_reg_block(&(vi25->mc_phy_init), commons);
 	}
 
-	if (vi25->leaves->dram_data_remap_tbloffset) {
+	if (leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
 			&vi25->dram_data_remap,
-			(void*)vi25->leaves + vi25->leaves->dram_data_remap_tbloffset
+			(void*)leaves + leaves->dram_data_remap_tbloffset
 		);
 	}
 
-	if (vi25->leaves->post_ucode_init_offset) {
+	if (leaves->post_ucode_init_offset) {
 		vi25->post_ucode_init.leaves =
-			(void*)vi25->leaves + vi25->leaves->post_ucode_init_offset;
+			(void*)leaves + leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(&(vi25->post_ucode_init), commons);
 	}
 
-	if (vi25->leaves->strobe_mode_patch_tbloffset) {
+	if (leaves->strobe_mode_patch_tbloffset) {
 		vi25->strobe_mode_patch.leaves =
-			(void*)vi25->leaves + vi25->leaves->strobe_mode_patch_tbloffset;
+			(void*)leaves + leaves->strobe_mode_patch_tbloffset;
 		populate_umc_init_reg_block(&(vi25->strobe_mode_patch), commons);
 	}
 }
@@ -1693,58 +1679,59 @@ populate_vram_info_v2_6(
 		struct atomtree_commons* const commons
 		) {
 	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
+	struct atom_vram_info_header_v2_6* const leaves = vram_info->leaves;
 
-	if (vi26->leaves->vram_module_num) {
+	if (leaves->vram_module_num) {
 		vi26->vram_module_ver = v1_9;
 		vi26->vram_modules = populate_vram_module(
 			commons,
-			vi26->leaves->vram_module,
+			leaves->vram_module,
 			vi26->vram_module_ver,
-			vi26->leaves->vram_module_num
+			leaves->vram_module_num
 		);
 	}
 
-	if (vi26->leaves->mem_adjust_tbloffset) {
+	if (leaves->mem_adjust_tbloffset) {
 		vi26->mem_adjust_table.leaves =
-			(void*)vi26->leaves + vi26->leaves->mem_adjust_tbloffset;
+			(void*)leaves + leaves->mem_adjust_tbloffset;
 		populate_umc_init_reg_block(&(vi26->mem_adjust_table), commons);
 	}
 
-	if (vi26->leaves->mem_clk_patch_tbloffset) {
+	if (leaves->mem_clk_patch_tbloffset) {
 		vi26->mem_clk_patch.leaves =
-			(void*)vi26->leaves + vi26->leaves->mem_clk_patch_tbloffset;
+			(void*)leaves + leaves->mem_clk_patch_tbloffset;
 		populate_umc_init_reg_block(&(vi26->mem_clk_patch), commons);
 	}
 
-	if (vi26->leaves->mc_adjust_pertile_tbloffset) {
+	if (leaves->mc_adjust_pertile_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi26->mc_tile_adjust.leaves =
-			(void*)vi26->leaves + vi26->leaves->mc_adjust_pertile_tbloffset;
+			(void*)leaves + leaves->mc_adjust_pertile_tbloffset;
 		populate_umc_init_reg_block(&(vi26->mc_tile_adjust), commons);
 	}
 
-	if (vi26->leaves->mc_phyinit_tbloffset) {
+	if (leaves->mc_phyinit_tbloffset) {
 		vi26->mc_phy_init.leaves =
-			(void*)vi26->leaves + vi26->leaves->mc_phyinit_tbloffset;
+			(void*)leaves + leaves->mc_phyinit_tbloffset;
 		populate_umc_init_reg_block(&(vi26->mc_phy_init), commons);
 	}
 
-	if (vi26->leaves->tmrs_seq_offset) {
+	if (leaves->tmrs_seq_offset) {
 		// TODO what is this?
-		vi26->tmrs_seq = (void*)vi26->leaves + vi26->leaves->tmrs_seq_offset;
+		vi26->tmrs_seq = (void*)leaves + leaves->tmrs_seq_offset;
 	}
 
-	if (vi26->leaves->dram_data_remap_tbloffset) {
+	if (leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
 			&vi26->dram_data_remap,
-			(void*)vi26->leaves + vi26->leaves->dram_data_remap_tbloffset
+			(void*)leaves + leaves->dram_data_remap_tbloffset
 		);
 	}
 
-	if (vi26->leaves->post_ucode_init_offset) {
+	if (leaves->post_ucode_init_offset) {
 		vi26->post_ucode_init.leaves =
-			(void*)vi26->leaves + vi26->leaves->post_ucode_init_offset;
+			(void*)leaves + leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(&(vi26->post_ucode_init), commons);
 	}
 }
@@ -1755,58 +1742,59 @@ populate_vram_info_v3_0( // TODO finish this
 		struct atomtree_commons* const commons
 		) {
 	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
+	struct atom_vram_info_header_v3_0* const leaves = vram_info->leaves;
 
-	if (vi30->leaves->vram_module_num) {
+	if (leaves->vram_module_num) {
 		vi30->vram_module_ver = v3_0;
 		vi30->vram_modules = populate_vram_module(
 			commons,
-			vi30->leaves->vram_module,
+			leaves->vram_module,
 			vi30->vram_module_ver,
-			vi30->leaves->vram_module_num
+			leaves->vram_module_num
 		);
 	}
 
-	if (vi30->leaves->mem_tuning_table_offset) {
+	if (leaves->mem_tuning_table_offset) {
 		vi30->mem_tuning =
-			(void*)vi30->leaves + vi30->leaves->mem_tuning_table_offset;
+			(void*)leaves + leaves->mem_tuning_table_offset;
 	}
 
-	if (vi30->leaves->dram_info_table_offset) {
+	if (leaves->dram_info_table_offset) {
 		vi30->dram_info =
-			(void*)vi30->leaves + vi30->leaves->dram_info_table_offset;
+			(void*)leaves + leaves->dram_info_table_offset;
 	}
 
-	if (vi30->leaves->tmrs_table_offset) {
-		vi30->tmrs_seq = (void*)vi30->leaves + vi30->leaves->tmrs_table_offset;
+	if (leaves->tmrs_table_offset) {
+		vi30->tmrs_seq = (void*)leaves + leaves->tmrs_table_offset;
 	}
 
-	if (vi30->leaves->mc_init_table_offset) {
+	if (leaves->mc_init_table_offset) {
 		vi30->mc_init.leaves =
-			(void*)vi30->leaves + vi30->leaves->mc_init_table_offset;
+			(void*)leaves + leaves->mc_init_table_offset;
 		populate_umc_init_reg_block(&(vi30->mc_init), commons);
 	}
 
-	if (vi30->leaves->dram_data_remap_table_offset) {
+	if (leaves->dram_data_remap_table_offset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
 			&vi30->dram_data_remap,
-			(void*)vi30->leaves + vi30->leaves->dram_data_remap_table_offset
+			(void*)leaves + leaves->dram_data_remap_table_offset
 		);
 	}
 
-	if (vi30->leaves->umc_emuinit_table_offset) {
+	if (leaves->umc_emuinit_table_offset) {
 		vi30->umc_emuinit.leaves =
-			(void*)vi30->leaves + vi30->leaves->umc_emuinit_table_offset;
+			(void*)leaves + leaves->umc_emuinit_table_offset;
 		populate_umc_init_reg_block(&(vi30->umc_emuinit), commons);
 	}
 
-	if (vi30->leaves->reserved_sub_table_offset[0]) {
+	if (leaves->reserved_sub_table_offset[0]) {
 		vi30->rsvd_tables[0] =
-			(void*)vi30->leaves + vi30->leaves->reserved_sub_table_offset[0];
+			(void*)leaves + leaves->reserved_sub_table_offset[0];
 	}
-	if (vi30->leaves->reserved_sub_table_offset[1]) {
+	if (leaves->reserved_sub_table_offset[1]) {
 		vi30->rsvd_tables[1] =
-			(void*)vi30->leaves + vi30->leaves->reserved_sub_table_offset[1];
+			(void*)leaves + leaves->reserved_sub_table_offset[1];
 	}
 }
 

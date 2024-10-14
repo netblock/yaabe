@@ -166,7 +166,6 @@ register_set_print_tables(
 		at_regblock->register_index;
 	char const* const struct_entry = "\tunion %s  %s;\n";
 
-	char const* reg_name;
 	char const* union_name;
 	char* token_save;
 	char const* token;
@@ -176,7 +175,6 @@ register_set_print_tables(
 	char temp_buffer[64];
 	char name_buffer[64];
 	char* name_ptr;
-	uint8_t str_i;
 
 	int16_t set_loc;
 
@@ -205,7 +203,6 @@ register_set_print_tables(
 	// print bitfield struct body
 	uint16_t unions = 0;
 	bool access_range = 0;
-	uint8_t pre_reg_data_lo;
 	for (uint8_t rii=0; rii < (at_regblock->num_index-1); rii++) {
 		bool should_continue = register_index_is_meta(
 			register_index[rii].PreRegDataLength,  &access_range
