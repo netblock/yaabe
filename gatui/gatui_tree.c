@@ -124,65 +124,6 @@ gatui_tree_boot_gatui_trunk(
 }
 
 
-static struct atom_tree*
-atomtree_load_from_gfile(
-		GFile* const biosfile,
-		GError** const ferror_out
-		) {
-// Geneate the atom_tree and atui from a GIO File
-	GError* ferror = NULL;
-	void* bios = NULL;
-	struct atom_tree* atree = NULL;
-
-
-	GInputStream* const readstream = G_INPUT_STREAM(g_file_read(
-		biosfile, NULL, &ferror
-	));
-	if (ferror) {
-		goto exit1;
-	}
-
-	GFileInfo* const fi_size = g_file_query_info(biosfile,
-		G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &ferror
-	);
-	if (ferror) {
-		goto exit2;
-	}
-
-	size_t const filesize = g_file_info_get_size(fi_size);
-	g_object_unref(fi_size);
-
-	bios = cralloc(filesize);
-	g_input_stream_read(readstream, bios, filesize, NULL, &ferror);
-	if (ferror) {
-		goto exit3;
-	}
-
-	atree = atombios_parse(bios, filesize);
-	if (atree == NULL) {
-		goto exit3;
-	}
-	atree->atui_root = generate_atui(atree);
-
-	g_input_stream_close(readstream, NULL, &ferror);
-	// TODO does close errors really matter?
-	goto exit2;
-
-	exit3:
-	free(bios);
-
-	exit2:
-	g_object_unref(readstream);
-
-	exit1:
-	if (ferror_out) {
-		*ferror_out = ferror;
-	} else if (ferror) {
-		g_error_free(ferror);
-	}
-
-	return atree;
-}
 GATUITree*
 gatui_tree_new_from_gfile(
 		GFile* const biosfile,
@@ -192,20 +133,23 @@ gatui_tree_new_from_gfile(
 
 	g_object_ref(biosfile);
 
-	GError* ferror = NULL;
-
-	struct atom_tree* const atree = atomtree_load_from_gfile(
-		biosfile, &ferror
+	char* bios;
+	size_t filesize;
+	bool const success = g_file_load_contents(
+		biosfile,
+		NULL,
+		&bios, &filesize,
+		NULL, ferror_out
 	);
-	if (ferror_out) {
-		*ferror_out = ferror;
-	} else if (ferror) {
-		g_error_free(ferror);
+	if (!success) {
+		goto bios_read_err;
 	}
+
+	struct atom_tree* const atree = atombios_parse(bios, filesize);
 	if (NULL == atree) {
-		g_object_unref(biosfile);
-		return NULL;
+		goto bios_parse_err;
 	}
+	atree->atui_root = generate_atui(atree);
 
 	GATUITree* const self = g_object_new(GATUI_TYPE_TREE, NULL);
 	self->atomtree = atree;
@@ -215,6 +159,12 @@ gatui_tree_new_from_gfile(
 	//gatui_tree_boot_gatui_trunk(self);
 
 	return self;
+
+	bios_parse_err:
+	free(bios);
+	bios_read_err:
+	g_object_unref(biosfile);
+	return NULL;
 }
 GATUITree*
 gatui_tree_new_from_path(
@@ -227,71 +177,19 @@ gatui_tree_new_from_path(
 	return tree;
 }
 
-static void
-atomtree_save_to_gfile(
-		struct atom_tree* const atree,
-		GFile* const biosfile,
-		GError** const ferror_out
-		) {
-	atomtree_bios_checksum(atree); // TODO emit change
-
-	GError* ferror = NULL;
-
-	GFileIOStream* biosfilestream = g_file_create_readwrite(
-		biosfile, G_FILE_CREATE_PRIVATE, NULL, &ferror
-	);
-	if (ferror && (ferror->code == G_IO_ERROR_EXISTS)) {
-		g_error_free(ferror);
-		ferror = NULL;
-		biosfilestream = g_file_open_readwrite(
-			biosfile, NULL, &ferror
-		);
-	}
-	if (ferror) {
-		goto ferr0;
-	}
-
-	GIOStream* const biosstream = G_IO_STREAM(biosfilestream);
-	GOutputStream* const writestream = g_io_stream_get_output_stream(
-		biosstream
-	);
-
-	g_output_stream_write_all(
-		writestream,  atree->alloced_bios,
-		atree->biosfile_size,  NULL,NULL,  &ferror
-	);
-	if (ferror) {
-		goto ferr1;
-	}
-
-	g_output_stream_close(writestream, NULL, &ferror);
-	if (ferror) {
-		goto ferr1;
-	}
-	g_io_stream_close(biosstream, NULL, &ferror);
-	if (ferror) {
-		goto ferr1;
-	}
-
-	ferr1:
-	g_object_unref(biosstream);
-
-	ferr0:
-	if (ferror_out) {
-		*ferror_out = ferror;
-	} else {
-		g_error_free(ferror);
-	}
-
-	return;
-}
 void
 gatui_tree_save(
 		GATUITree* const self,
 		GError** const ferror_out
 		) {
 	g_return_if_fail(GATUI_IS_TREE(self));
-	atomtree_save_to_gfile(self->atomtree, self->biosfile, ferror_out);
+
+	atomtree_bios_checksum(self->atomtree); // TODO emit change
+	g_file_replace_contents(
+		self->biosfile,
+		self->atomtree->alloced_bios, self->atomtree->biosfile_size,
+		NULL, false, G_FILE_CREATE_NONE, NULL, NULL, ferror_out
+	);
 }
 void
 gatui_tree_saveas(
@@ -300,15 +198,16 @@ gatui_tree_saveas(
 		GError** const ferror_out
 		) {
 	g_return_if_fail(GATUI_IS_TREE(self));
-	GError* ferror = NULL;
-	atomtree_save_to_gfile(self->atomtree, biosfile, &ferror);
-	if (NULL == ferror) {
+
+	atomtree_bios_checksum(self->atomtree); // TODO emit change
+	bool const success = g_file_replace_contents(
+		biosfile,
+		self->atomtree->alloced_bios, self->atomtree->biosfile_size,
+		NULL, false, G_FILE_CREATE_NONE, NULL, NULL, ferror_out
+	);
+	if (success) {
 		g_object_unref(self->biosfile);
 		self->biosfile = biosfile;
-	} else if (ferror_out) {
-		*ferror_out = ferror;
-	} else {
-		g_error_free(ferror);
 	}
 }
 
