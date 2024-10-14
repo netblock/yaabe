@@ -13,11 +13,11 @@ json5_tables = files(
 	'asic_reg_indices.json5',
 	'amd_pci_ids.json5',
 )
-internal_depends += declare_dependency( # header generaton
+autogen_depends += declare_dependency( # header generaton
 	sources: json5_to_h.process(
 		json5_tables,
 	),
 )
-yaabe_src += json5_to_c.process( # c file generaton
+yaabe_autogen_src += json5_to_c.process( # c file generaton
 	json5_tables,
 )

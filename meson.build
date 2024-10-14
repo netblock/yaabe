@@ -42,6 +42,7 @@ if 'debug' == get_option('buildtype')
 	)
 endif
 
+
 external_depends = [
 	cc.find_library('m', required: true),
 	dependency('gtk4', version: '>= 4.12.0', required: true),
@@ -59,10 +60,11 @@ json5_to_h = generator(ppatui,
 	output: '@BASENAME@.h',
 )
 
-internal_depends = []
 include_dirs = []
 yaabe_src = []
-# for YAABE, subdir order doesn't technically matter, but atomtree is slowest
+autogen_depends = []
+yaabe_autogen_src = []
+# for YAABE, subdir order doesn't technically matter
 subdir('atomtree')
 subdir('atom')
 subdir('gatui')
@@ -71,7 +73,6 @@ yaabe_src += files(
 	'standard.c',
 )
 include_dirs += include_directories('.')
-
 
 if 'windows' == target_machine.system()
 	# msys2 isn't caught up with C23
@@ -92,24 +93,39 @@ if 'windows' == target_machine.system()
 	))
 endif
 
-libyaabe = static_library('libyaabe',
-	sources: yaabe_src,
+# in order to give a selection of c files their own C_FLAGS we need to group
+# them into a static library. The flags in declare_dependency() are for the
+# thing that uses the dependency.
+# TODO see if 1.6.0's declare_dependency().as_static() is useful
+libyaabe_autogen = static_library('libyaabe_autogen',
+	sources: yaabe_autogen_src,
 	include_directories: include_dirs,
-	dependencies: (external_depends + internal_depends),
+	dependencies: (external_depends + autogen_depends),
+	c_args: [ # autogen'd code is noisy; mute
+		'-Wno-unused-variable',
+		'-Wno-override-init',
+	],
 	name_prefix: '',
 )
+include_dirs += libyaabe_autogen.private_dir_include()
 
+libyaabe = static_library('libyaabe',
+	sources: yaabe_src,
+	link_with: libyaabe_autogen,
+	include_directories: include_dirs,
+	dependencies: external_depends,
+	name_prefix: '',
+)
 yaabe = executable('yaabe',
 	sources: 'main.c',
-	include_directories: [
-		include_dirs,
-		libyaabe.private_dir_include()
-	],
-	dependencies: external_depends,
 	link_with: libyaabe,
+	include_directories: include_dirs,
+	dependencies: external_depends,
 	install: true,
 	win_subsystem: 'windows',
 )
+
+
 
 if get_option('nsis_installer')
 	# dummy requirements for nsis_helper.py
@@ -145,6 +161,8 @@ if get_option('nsis_installer')
 	)
 endif
 
+
+
 yaabe_test = executable('yaabe_test',
 	sources: 'test.c',
 	include_directories: [
@@ -157,7 +175,6 @@ yaabe_test = executable('yaabe_test',
 	win_subsystem: 'windows',
 	build_by_default: false,
 )
-
 
 # all test_roms/*.rom will become a test
 # If you already built but want to change the roms,

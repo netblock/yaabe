@@ -18,18 +18,14 @@ atui_const_tables = files(
 	'atui_enums.json5',
 )
 
-internal_depends += declare_dependency( # header generaton
+autogen_depends += declare_dependency( # header generaton
 	sources: json5_to_h.process(
 		atui_branches,
 		atui_const_tables,
 	),
-	compile_args: [
-		'-Wno-unused-variable',
-		'-Wno-override-init',
-	],
 )
 
-yaabe_src += json5_to_c.process( # c file generaton
+yaabe_autogen_src += json5_to_c.process( # c file generaton
 	atui_branches,
 	atui_const_tables,
 )
