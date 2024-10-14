@@ -378,7 +378,7 @@ calculate_rightclick_popup_location(
 	// x,y is relative to the widget.
 	// x,y is from row widget, translate it to the view widget.
 	graphene_point_t view_coords;
-	bool computed = gtk_widget_compute_point(
+	bool const computed __unused = gtk_widget_compute_point(
 		row_widget,
 		GTK_WIDGET(context->view),
 		& (graphene_point_t const) {.x=x, .y=y},
@@ -652,7 +652,9 @@ enum_list_sets_leaf(
 		gtk_column_view_cell_get_item(leaves_column_cell)
 	);
 
-	bool const has_set = gatui_leaf_enum_entry_sets_value(g_leaf, enum_entry);
+	bool const has_set __unused = gatui_leaf_enum_entry_sets_value(
+		g_leaf, enum_entry
+	);
 	assert(has_set);
 
 	g_object_unref(g_leaf);

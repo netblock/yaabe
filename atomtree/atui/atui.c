@@ -563,7 +563,7 @@ atui_branch_to_path(
 	atui_path_populate_branch_stack(branchstack, &i, &string_length);
 	char* const pathstring = cralloc(string_length);
 	pathstring[string_length-1] = '\0';
-	char* path_walk = _print_branch_path(branchstack, &i, pathstring);
+	char* path_walk __unused = _print_branch_path(branchstack, &i, pathstring);
 
 	assert(path_walk == (pathstring+string_length-1));
 	assert(strlen(pathstring) == (string_length-1));
