@@ -47,6 +47,111 @@ populate_firmwareinfo(
 
 
 inline static void
+populate_lcd_info_record_table(
+		struct atomtree_lcd_info* const lcd_info,
+		struct atomtree_commons* const commons,
+		void* const record_start
+		) {
+	if (NULL == record_start) {
+		return;
+	}
+	union {
+		void* raw;
+		enum lcd_record_type* RecordType;
+		union lcd_record* records;
+	} r = {
+		.raw = record_start
+	};
+	uint8_t num_records = 0;
+	while (LCD_RECORD_END_TYPE != *r.RecordType) {
+		switch (*r.RecordType) {
+			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
+				r.raw += sizeof(r.records->patch_record);
+				break;
+			case LCD_RTS_RECORD_TYPE:
+				r.raw += sizeof(r.records->lcd_rts_record);
+				break;
+			case LCD_CAP_RECORD_TYPE:
+				r.raw += sizeof(r.records->lcd_mode_control_cap);
+				break;
+			case LCD_FAKE_EDID_PATCH_RECORD_TYPE:
+				uint16_t length = (
+					r.records->fake_edid_patch_record.FakeEDIDLength
+				);
+				if (length == 128) { // 128 is 128 (why???)
+				} else if (length) { // all other non-zero is * 128
+					length *= 128;
+				} else {
+					length = 1;
+				}
+				r.raw += sizeof_flex(
+					&r.records->fake_edid_patch_record,
+					FakeEDIDString, length
+				);
+				break;
+			case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+				r.raw += sizeof(r.records->panel_resolution_patch_record);
+				break;
+			case LCD_EDID_OFFSET_PATCH_RECORD_TYPE: // no idea
+			default:
+				assert(0);
+				goto record_counter_loop_uberbreak;
+		}
+		num_records++;
+	}
+	record_counter_loop_uberbreak:
+
+	lcd_info->record_table_size = r.raw - record_start;
+	lcd_info->num_records = num_records;
+	if (0 == num_records) {
+		return;
+	}
+
+	lcd_info->record_table = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		num_records * sizeof(lcd_info->record_table[0])
+	);
+
+	r.raw = record_start;
+	for (uint8_t i = 0; i < num_records; i++) {
+		lcd_info->record_table[i].record = r.records;
+		switch (*r.RecordType) {
+			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
+				r.raw += sizeof(r.records->patch_record);
+				break;
+			case LCD_RTS_RECORD_TYPE:
+				r.raw += sizeof(r.records->lcd_rts_record);
+				break;
+			case LCD_CAP_RECORD_TYPE:
+				r.raw += sizeof(r.records->lcd_mode_control_cap);
+				break;
+			case LCD_FAKE_EDID_PATCH_RECORD_TYPE:
+				uint16_t length = (
+					r.records->fake_edid_patch_record.FakeEDIDLength
+				);
+				if (length == 128) { // 128 is 128 (why???)
+				} else if (length) { // all other non-zero is * 128
+					length *= 128;
+				} else {
+					length = 1;
+				}
+				lcd_info->record_table[i].edid_length = length;
+				r.raw += sizeof_flex(
+					&r.records->fake_edid_patch_record,
+					FakeEDIDString, length
+				);
+				break;
+			case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+				r.raw += sizeof(r.records->panel_resolution_patch_record);
+				break;
+			case LCD_EDID_OFFSET_PATCH_RECORD_TYPE: // no idea
+			default:
+				assert(0);
+				break;
+		}
+	}
+}
+inline static void
 populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
 		struct atomtree_commons* const commons,
@@ -58,6 +163,34 @@ populate_lcd_info(
 
 	lcd_info->leaves = commons->bios + bios_offset;
 	lcd_info->ver = get_ver(lcd_info->table_header);
+
+	void* record_start = NULL;
+
+	switch (lcd_info->ver) {
+		case v1_1:
+			if (lcd_info->v1_1->ModePatchTableOffset) {
+				// v1_1 uses an absolute position
+				record_start = (
+					commons->bios + lcd_info->v1_1->ModePatchTableOffset
+				);
+			}
+			break;
+		case v1_2:
+			if (lcd_info->v1_2->ExtInfoTableOffset) {
+				record_start = (
+					lcd_info->leaves + lcd_info->v1_2->ExtInfoTableOffset
+				);
+			}
+			break;
+		case v1_3:
+			if (lcd_info->v1_3->ExtInfoTableOffset) {
+				record_start = (
+					lcd_info->leaves + lcd_info->v1_3->ExtInfoTableOffset
+				);
+			}
+			break;
+	}
+	populate_lcd_info_record_table(lcd_info, commons, record_start);
 }
 
 

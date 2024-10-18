@@ -73,6 +73,53 @@ grow_firmwareinfo(
 	return atui_func(&atui_args);
 }
 
+inline static atui_branch*
+grow_lcd_info_record_table(
+		struct atomtree_lcd_info const* const lcd_info
+		) {
+	if (0 == lcd_info->num_records) {
+		return NULL;
+	}
+	struct atomtree_lcd_record const* const records = lcd_info->record_table;
+
+	atui_branch* const record_table = ATUI_MAKE_BRANCH(atui_nullstruct,
+		"record table",  NULL,NULL,  lcd_info->num_records,NULL
+	);
+	// set size metadata for copy/paste
+	record_table->prefer_contiguous = true;
+	record_table->table_start = records[0].record;
+	record_table->table_size = lcd_info->record_table_size;
+
+	atui_branch* record;
+	atuifunc_args rec_args = {};
+	for (uint8_t i=0; i < lcd_info->num_records; i++) {
+		rec_args.atomtree = &(records[i]);
+		rec_args.suggestbios = records[i].record;
+		switch (records[i].record->RecordType) {
+			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
+				record = _atui_atom_patch_record_mode(&rec_args);
+				break;
+			case LCD_RTS_RECORD_TYPE:
+				record = _atui_atom_lcd_rts_record(&rec_args);
+				break;
+			case LCD_CAP_RECORD_TYPE:
+				record = _atui_atom_lcd_mode_control_cap(&rec_args);
+				break;
+			case LCD_FAKE_EDID_PATCH_RECORD_TYPE:
+				record = _atui_atom_fake_edid_patch_record(&rec_args);
+				break;
+			case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+				record = _atui_atom_panel_resolution_patch_record(&rec_args);
+				break;
+			default:
+				record = _atui_atui_nullstruct(&rec_args);
+				break;
+		}
+		ATUI_ADD_BRANCH(record_table, record);
+	}
+
+	return record_table;
+}
 
 inline static atui_branch*
 grow_lcd_info(
@@ -83,17 +130,17 @@ grow_lcd_info(
 		return NULL;
 	}
 
+	atui_branch* const record_table = grow_lcd_info_record_table(lcd_info);
+
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
-		.atomtree =  lcd_info,
+		.atomtree = lcd_info,
 		.suggestbios = lcd_info->leaves,
+		.import_branches = &record_table,
+		.num_import_branches = 1,
 	};
 	switch (lcd_info->ver) {
-		case v1_1: atui_func = _atui_atom_lvds_info_v1_1;
-			// TODO atom_lvds_info_v1_1's ModePatchTableOffset;
-			// see amdgpu_atombios_encoder_get_lcd_info
-			assert(0);
-			break;
+		case v1_1: atui_func = _atui_atom_lvds_info_v1_1; break;
 		case v1_2: atui_func = _atui_atom_lvds_info_v1_2; break;
 		case v1_3: atui_func = _atui_atom_lcd_info_v1_3;  break;
 		case v2_1: atui_func = _atui_atom_lcd_info_v2_1;  break;

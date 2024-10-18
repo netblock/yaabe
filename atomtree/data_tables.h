@@ -57,6 +57,11 @@ struct atomtree_firmware_info {
 	};
 	enum atomtree_common_version  ver;
 };
+
+struct atomtree_lcd_record {
+	union lcd_record* record;
+	uint16_t edid_length;
+};
 struct atomtree_lcd_info {
 	union {
 		void* leaves;
@@ -68,6 +73,10 @@ struct atomtree_lcd_info {
 		struct atom_lcd_info_v2_1*   v2_1;
 	};
 	enum atomtree_common_version  ver;
+
+	uint8_t num_records;
+	size_t record_table_size;
+	struct atomtree_lcd_record* record_table;
 };
 
 struct atomtree_smu_info {

@@ -2690,6 +2690,130 @@ global_default: {
 			fancy: "ATUI_ARRAY",
 		},
 	],
+}, {
+	c_type: "atom_patch_record_mode",
+	atomtree: "atomtree_lcd_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->RecordType",
+			name: "RecordType",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->HDisp",
+			name: "HDisp",
+		}, {
+			access: "bios->VDisp",
+			name: "VDisp",
+		},
+	],
+}, {
+	c_type: "atom_lcd_rts_record",
+	atomtree: "atomtree_lcd_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->RecordType",
+			name: "RecordType",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->RTSValue",
+			name: "RTSValue",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "lcd_mode_cap",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->LCDCap",
+			name: "LCDCap",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "BL_off",
+					hi: 0, lo: 0,
+				}, {
+					name: "CRTC_off",
+					hi: 1, lo: 1,
+				}, {
+					name: "panel_off",
+					hi: 2, lo: 2,
+				}, {
+					name: "reserved",
+					hi: 15, lo: 3,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_lcd_mode_control_cap",
+	atomtree: "atomtree_lcd_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->RecordType",
+			name: "RecordType",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->LCDCap",
+			name: "LCDCap",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "lcd_mode_cap",
+		},
+	],
+}, {
+	c_type: "atom_fake_edid_patch_record",
+	atomtree: "atomtree_lcd_record",
+	table_size: "sizeof_flex(bios, FakeEDIDString, atomtree->edid_length)",
+	leaves: [
+		{
+			access: "bios->RecordType",
+			name: "RecordType",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->FakeEDIDLength",
+			name: "FakeEDIDLength",
+			description: [
+				{language: "english", text: "= 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128",},
+			],
+		}, {
+			access: "bios->FakeEDIDString",
+			name: "FakeEDIDString",
+			description: [
+				{language: "english", text: "This actually has ucFakeEdidLength elements.",},
+			],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->edid_length",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "FakeEDIDString [%02u]",
+					display: "ATUI_HEX"
+				},],
+			},
+		},
+	],
+},
+
+{
+	c_type: "atom_panel_resolution_patch_record",
+	atomtree: "atomtree_lcd_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->RecordType",
+			name: "RecordType",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->HSize",
+			name: "HSize",
+		}, {
+			access: "bios->VSize",
+			name: "VSize",
+		},
+	],
 },
 
 

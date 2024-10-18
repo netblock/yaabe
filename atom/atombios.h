@@ -3939,8 +3939,6 @@ union lcd_panel_special_handling_cap {
 	};
 };
 
-// ucTableFormatRevision=1
-// ucTableContentRevision=1
 struct atom_lvds_info_v1_1 {
 	struct atom_common_table_header  table_header;
 	struct atom_dtd_format  LCDTiming;
@@ -3956,8 +3954,6 @@ struct atom_lvds_info_v1_1 {
 	uint8_t  SS_Id;
 };
 
-// ucTableFormatRevision=1
-// ucTableContentRevision=2
 struct atom_lvds_info_v1_2 {
 	struct atom_common_table_header  table_header;
 	struct atom_dtd_format  LCDTiming;
@@ -4121,10 +4117,9 @@ struct atom_lcd_info_v1_3 {
 // LVDS or eDP.
 // 1 = = LCDPANEL_CAP_eDP no change comparing to previous version
 #define LCDPANEL_CAP_V13_eDP           0x4
-
 */
 
-enum lcd_record_type:uint8_t { // see amdgpu_atombios_encoder_get_lcd_info
+enum lcd_record_type:uint8_t {
 	LCD_MODE_PATCH_RECORD_MODE_TYPE   = 1,
 	LCD_RTS_RECORD_TYPE               = 2,
 	LCD_CAP_RECORD_TYPE               = 3,
@@ -4139,6 +4134,7 @@ struct atom_patch_record_mode {
 	uint16_t HDisp;
 	uint16_t VDisp;
 };
+
 struct atom_lcd_rts_record {
 	enum lcd_record_type RecordType;
 	uint8_t  RTSValue;
@@ -4146,14 +4142,19 @@ struct atom_lcd_rts_record {
 
 // !! If the record below exits, it shoud always be the first record for easy use in command table!!!
 // The record below is only used when LVDS_Info is present. From ATOM_LVDS_INFO_V12, use ucLCDPanel_SpecialHandlingCap instead.
+union lcd_mode_cap {
+	uint16_t LCDCap;
+	struct { uint16_t
+		BL_off    :0-0 +1,
+		CRTC_off  :1-1 +1,
+		panel_off :2-2 +1,
+		reserved :15-3 +1;
+	};
+};
 struct atom_lcd_mode_control_cap {
 	enum lcd_record_type RecordType;
-	uint16_t LCDCap;
+	union lcd_mode_cap LCDCap;
 };
-
-#define LCD_MODE_CAP_BL_OFF    1
-#define LCD_MODE_CAP_CRTC_OFF  2
-#define LCD_MODE_CAP_PANEL_OFF 4
 
 struct atom_fake_edid_patch_record {
 	enum lcd_record_type RecordType;
@@ -4168,9 +4169,10 @@ struct atom_panel_resolution_patch_record {
 };
 
 union lcd_record {
-	struct atom_lcd_mode_control_cap    lcd_mode_control_cap;
+	enum lcd_record_type                RecordType;
 	struct atom_patch_record_mode       patch_record;
 	struct atom_lcd_rts_record          lcd_rts_record;
+	struct atom_lcd_mode_control_cap    lcd_mode_control_cap;
 	struct atom_fake_edid_patch_record  fake_edid_patch_record;
 	struct atom_panel_resolution_patch_record  panel_resolution_patch_record;
 };
