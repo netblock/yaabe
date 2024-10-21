@@ -25,10 +25,12 @@ class __regexvar:
 
 	c_prefix_nc:str = "(?:struct|union)"
 	c_prefix:str = "(" + c_prefix_nc + ")" + white
-	c_num_types_nc:str = "(?:(?:u?int|char|float|uq\\d+_)\\d+_t)"
+	c_num_types_nc:str = "(?:(?:u?int|float|uq\\d+_)\\d+_t)"
 	c_num_types:str = "(" + c_num_types_nc + ")" + white
-	c_ints_nc:str = "(?:(?:u?int|char)[0-9]+_t)"
+	c_ints_nc:str = "(?:(?:u?int)\\d+_t)"
 	c_ints:str = "(" + c_ints_nc + ")" + white
+	c_str_nc:str = "(?:char(?:\\d+_t)?)"
+	c_str:str = "(" + c_str_nc +")" + white
 	name_nc:str = "(?:[a-zA-Z_]\\w*)"
 	name:str = "(" + name_nc + ")" + white
 
@@ -39,6 +41,7 @@ class __regexvar:
 	#array_countedby_nc:str = "(?:__counted_by\\(\\w*\\))?" +white
 	array_countedby_var:str = "(__counted_by\\((\\w*)\\))" +white
 	array_countedby_whole_q:str = "(__counted_by\\(\\w*\\))?" +white
+	nonstring_nc:str = "(?:__nonstring)?" +white
 
 	struct_or_cnumtype:str = "("  \
 		+ "(?:" + c_prefix_nc + white + name_nc + ")"  \
@@ -184,8 +187,26 @@ def struct_to_atui(
 \\g<1>	},\
 """
 	text = re.sub(
-		s.tabs + s.c_num_types + s.name + s.array_num + ";" + s.comments,
+		s.tabs + s.c_num_types + s.name + s.array_num + ";"
+		+ s.comments,
 		num_arrays,
+		text
+	)
+
+	# ATUI_ARRAY based string
+	string_arrays:str = """\
+\\g<1>	{
+\\g<1>		access: "bios->\\g<3>",
+\\g<1>		name: "\\g<3>",
+\\g<1>		display: "ATUI_NAN",
+\\g<1>		fancy: "ATUI_ARRAY",
+\\g<1>		__ATUIDESCR\\g<5>
+\\g<1>	},\
+"""
+	text = re.sub(
+		s.tabs + s.c_str + s.name + s.array_num + s.nonstring_nc + ";"
+		+ s.comments,
+		string_arrays,
 		text
 	)
 

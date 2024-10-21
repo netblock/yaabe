@@ -88,7 +88,7 @@ global_default: {
 		}, {
 			access: "bios->IBM",
 			name: "IBM",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "IBM",},
@@ -111,7 +111,7 @@ global_default: {
 		}, {
 			access: "bios->atomati_magic",
 			name: "atomati_magic",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "\" 761295520\"",},
@@ -144,7 +144,7 @@ global_default: {
 		}, {
 			access: "bios->build_timestamp",
 			name: "build_timestamp",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 		}, {
 			access: "bios->jump_corex_func_far_handler",
@@ -218,7 +218,7 @@ global_default: {
 		{
 			access: "bios->pcir_signature",
 			name: "pcir_signature",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "\"PCIR\"",},
@@ -388,7 +388,7 @@ global_default: {
 		}, {
 			access: "bios->FirmWareSignature",
 			name: "FirmWareSignature",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
@@ -472,7 +472,7 @@ global_default: {
 		}, {
 			access: "bios->FirmWareSignature",
 			name: "FirmWareSignature",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},

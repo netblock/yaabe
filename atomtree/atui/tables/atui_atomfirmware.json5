@@ -39,7 +39,7 @@ global_default: {
 		}, {
 			access: "bios->atom_bios_string",
 			name: "atom_bios_string",
-			display: "ATUI_DISPLAY",
+			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
 				{language: "english", text: "enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,",},
