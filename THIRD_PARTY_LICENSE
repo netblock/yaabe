@@ -11,9 +11,11 @@ https://github.com/daniruiz/skeuos-gtk/tree/de8a4b1c7182b9f0a20b17298f4eee927ba6
 /******************************************************************************/
 
 Many .h header files are heavily modified versions of what exists in the linux
-kernel.
+kernel, or coreboot.
 
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd?h=HEAD
+
+https://github.com/coreboot/coreboot/commit/0b11bd0d028089288e52f9f08cdcfafc9910511b
 
 AMD uses the MIT license:
 
