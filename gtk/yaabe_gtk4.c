@@ -726,9 +726,19 @@ construct_enum_dropdown(
 
 	GtkWidget* const enum_list = construct_enum_columnview(leaves_column_cell);
 
+	// huge menus too big for the display vertical fails to spawn; so scrolled
+	// window
+	GtkScrolledWindow* const enum_scroll = GTK_SCROLLED_WINDOW(
+		gtk_scrolled_window_new()
+	);
+	gtk_scrolled_window_set_propagate_natural_height(enum_scroll, true);
+	gtk_scrolled_window_set_propagate_natural_width(enum_scroll, true);
+	gtk_scrolled_window_set_child(enum_scroll, enum_list);
+
+
 	GtkPopover* const popover = GTK_POPOVER(gtk_popover_new());
 	gtk_popover_set_has_arrow(popover, false);
-	gtk_popover_set_child(popover, enum_list);
+	gtk_popover_set_child(popover, GTK_WIDGET(enum_scroll));
 
 	g_object_connect(enum_list,
 		"signal::map", G_CALLBACK(enummenu_sets_selection), leaves_column_cell,
@@ -801,11 +811,13 @@ leaves_val_column_bind(
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
 			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
 			GtkColumnView* const enum_list = GTK_COLUMN_VIEW(
-				gtk_popover_get_child(
-					gtk_menu_button_get_popover(GTK_MENU_BUTTON(
-						gtk_widget_get_first_child(enumbox)
-					))
-				)
+				gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(
+					gtk_popover_get_child(
+						gtk_menu_button_get_popover(GTK_MENU_BUTTON(
+							gtk_widget_get_first_child(enumbox)
+						))
+					)
+				))
 			);
 			GtkSelectionModel* const enum_model = (
 				gatui_leaf_get_enum_menu_selection_model(g_leaf)
