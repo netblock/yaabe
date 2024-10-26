@@ -250,11 +250,11 @@ def bitfield_to_atui(
 	s:__regexvar = __regexvar
 	text = __atui_regex_prepare(text)
 
-	union_text:str = """{\n\tc_type: "\\g<2>",\n"""
+	union_text:str = """{\n\tc_prefix: "\\g<1>", c_type: "\\g<2>",\n"""
 	if explicit_attributes:
 		union_text = """\
 {
-	c_prefix:"\\g<1>", c_type: "\\g<2>",
+	c_prefix: "\\g<1>", c_type: "\\g<2>",
 	atomtree: "atui_nullstruct",
 """
 	union_text += """\
