@@ -3053,6 +3053,88 @@ grow_datatables(
 }
 
 
+inline static void
+rename_psp_blob_with_type(
+		atui_branch* const atui_psp_blob,
+		enum  psp_entry_type const fw_type,
+		uint16_t const absolute_index
+		) {
+	struct atui_enum const* const fw_types = & ATUI_ENUM(psp_entry_type);
+	int16_t const naming_enum_i = atui_enum_bsearch(fw_types, fw_type);
+	if (0 <= naming_enum_i) {
+		sprintf(atui_psp_blob->name, "%s [%u]: %s",
+			atui_psp_blob->origname,
+			absolute_index,
+			fw_types->enum_array[naming_enum_i].name
+		);
+	} else {
+		sprintf(atui_psp_blob->name, "%s [%u]: fw_type: %u",
+			atui_psp_blob->origname,
+			absolute_index,
+			fw_type
+		);
+	}
+	assert(strlen(atui_psp_blob->name) < sizeof(atui_psp_blob->name));
+}
+inline static atui_branch*
+grow_psp_directory(
+		struct atomtree_psp_directory const* const pspdir,
+		struct atom_tree const* const atree __unused
+		) {
+	if (NULL == pspdir->directory) {
+		return NULL;
+	}
+
+	atui_branch* const directory = ATUI_MAKE_BRANCH(psp_directory, NULL,
+		NULL, pspdir->directory, 0,NULL
+	);
+
+	atui_branch* fw_blobs = NULL;
+	uint8_t const num_entries = pspdir->directory->header.totalentries;
+	if (num_entries) {
+		fw_blobs = ATUI_MAKE_BRANCH(atui_nullstruct, "firmware blobs",
+			NULL,NULL, num_entries,NULL
+		);
+		struct psp_directory_entry const* const pspentry = (
+			pspdir->directory->pspentry
+		);
+		atui_branch* blob;
+		atuifunc_args blob_args = {.atomtree=pspdir};
+		for (uint8_t i=0; i < num_entries; i++) {
+			blob_args.suggestbios = pspdir->fw_entries[i];
+			enum psp_entry_type fw_type = pspentry[i].type;
+			switch (fw_type) {
+				case PSP_NV_DATA:
+				case BIOS_PUBLIC_KEY:
+				case BIOS_RTM_SIGNATURE:
+				case PSP_AMD_SECURE_DEBUG_KEY:
+				case PSP_SECURE_OS_SIGNING_KEY:
+				case PSP_BOOT_TIME_TRUSTLETS_KEY:
+				case AMD_WRAPPED_IKEK:
+				case 35:
+				case AMD_ABL5:
+				case AMD_SEV_DATA:
+				case AMD_FW_L2_PTR:
+				case AMD_FW_DXIO:
+					blob = _atui_atui_nullstruct(&blob_args); break;
+				// TODO some fw blobs don't do the psp fw header
+				default: blob = _atui_amd_fw_header(&blob_args); break;
+			}
+			rename_psp_blob_with_type(blob, fw_type, i);
+			blob->prefer_contiguous = true;
+			blob->table_size = pspentry[i].size;
+			ATUI_ADD_BRANCH(fw_blobs, blob);
+		}
+	}
+
+	atui_branch* const child_branches[] = {
+		directory, fw_blobs
+	};
+	return ATUI_MAKE_BRANCH(atui_nullstruct, "PSP firmware tables",
+		NULL,NULL, lengthof(child_branches),child_branches
+	);
+}
+
 inline static atui_branch*
 grow_atom_rom_header(
 		struct atomtree_rom_header const* const rom_header,
@@ -3061,13 +3143,16 @@ grow_atom_rom_header(
 	if (NULL == rom_header->leaves) {
 		return NULL;
 	}
-	atui_branch* const atui_dt = grow_datatables(atree);
+	atui_branch* const child_branches[] = {
+		grow_datatables(atree),
+		grow_psp_directory(&(atree->psp_directory), atree),
+	};
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = rom_header,
 		.suggestbios = rom_header->leaves,
-		.import_branches = &atui_dt,
-		.num_import_branches = 1,
+		.import_branches = child_branches,
+		.num_import_branches = lengthof(child_branches),
 	};
 	switch (rom_header->ver) {
 		case v1_1: atui_func = _atui_atom_rom_header_v1_1; break;

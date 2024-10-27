@@ -21,5 +21,6 @@ See atomtree/atui/tables/meson.build and scripts/ppatui.py
 #include "atui_ddrmoderegisters.h"
 #include "atui_asic_reg_data_tables.h"
 #include "atui_bitfield_overrides.h"
+#include "atui_psp.h"
 
 #endif

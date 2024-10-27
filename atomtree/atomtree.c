@@ -2563,6 +2563,44 @@ populate_datatables(
 
 
 inline static void
+populate_psp_directory_table(
+		struct atomtree_psp_directory* const pspdir,
+		struct atomtree_commons* const commons,
+		uint32_t const bios_offset
+		) {
+	void* const bios = commons->bios;
+	if (0 == bios_offset) {
+		return;
+	}
+	union {
+		void* raw;
+		uint32_t* cookie;
+		struct psp_directory* dir;
+	} const d = {
+		.raw = bios + bios_offset
+	};
+	if (PSP_COOKIE != *d.cookie) {
+		return;
+	};
+
+	pspdir->directory = d.dir;
+
+	uint8_t const totalentries = d.dir->header.totalentries;
+	if (totalentries) {
+		union psp_directory_entries** const fw_entries = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			totalentries * sizeof(pspdir->fw_entries[0])
+		);
+		for (uint8_t i=0; i < totalentries; i++) {
+			fw_entries[i] = bios + d.dir->pspentry[i].address.address;
+		}
+
+		pspdir->fw_entries = fw_entries;
+	}
+}
+
+
+inline static void
 populate_atom_rom_header_v1_1(
 		struct atomtree_rom_header* const rom_header,
 		struct atomtree_commons* const commons
@@ -2621,14 +2659,14 @@ populate_atom_rom_header_v2_1(
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
 	}
-	if (leaves->PSPDirTableOffset) {
-		atree->psp_dir_table = bios + leaves->PSPDirTableOffset;
-	}
+	
+	populate_psp_directory_table(
+		&(atree->psp_directory), commons, leaves->PSPDirTableOffset
+	);
 
 	//rom_header->data_table = &(atree->data_table);
 	populate_datatables(commons, leaves->MasterDataTableOffset);
 }
-
 inline static void
 populate_atom_rom_header_v2_2(
 		struct atomtree_rom_header* const rom_header,
@@ -2656,9 +2694,9 @@ populate_atom_rom_header_v2_2(
 	if (leaves->pci_info_offset) {
 		atree->pci_info = bios + leaves->pci_info_offset;
 	}
-	if (leaves->pspdirtableoffset) {
-		atree->psp_dir_table = bios + leaves->pspdirtableoffset;
-	}
+	populate_psp_directory_table(
+		&(atree->psp_directory), commons, leaves->pspdirtableoffset
+	);
 
 	//rom_header->data_table = &(atree->data_table);
 	populate_datatables(commons, leaves->masterdatatable_offset);

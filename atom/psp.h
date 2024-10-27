@@ -27,7 +27,7 @@ struct psp_directory_header {
 	union psp_directory_additional_info additional_info;
 };
 
-enum psp_directory_entry_type:uint8_t {
+enum psp_entry_type:uint8_t {
 	AMD_PUBLIC_KEY               = 0, // AMD public key
 	PSP_FW_BOOT_LOADER           = 1, // PSP boot loader in SPI space
 	PSP_FW_TRUSTED_OS            = 2, // PSP Firmware region in SPI space
@@ -153,12 +153,19 @@ union psp_directory_entry_extra {
 		rsvd_1  :15-7 +1;
 	};
 };
+union psp_directory_entry_address {
+	uint64_t location;
+	struct { uint64_t
+		address :61-0 +1,
+		mode    :63-62 +1; // 0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset
+	};
+};
 struct psp_directory_entry {
-	enum psp_directory_entry_type  type;
+	enum psp_entry_type type;
 	uint8_t subprog;
 	union psp_directory_entry_extra extra;
 	uint32_t size;     // Size of PSP Entry in bytes
-	uint64_t location; // Location of PSP Entry (byte offset from start of SPI-ROM)
+	union psp_directory_entry_address address;
 };
 
 // Structure for PSP directory
@@ -184,7 +191,7 @@ struct amd_fw_header {
 	uint8_t  reserved_64[8];
 	uint32_t size_total;
 	uint8_t  reserved_70[12];
-	uint8_t  fw_type; // Starting MDN fw_id is populated instead of fw_type. fw_type will still be around for backwards compatibility.
+	enum psp_entry_type fw_type; // Starting MDN fw_id is populated instead of fw_type. fw_type will still be around for backwards compatibility.
 	uint8_t  fw_subtype;
 	uint8_t  fw_subprog;
 	uint8_t  reserved_7f;

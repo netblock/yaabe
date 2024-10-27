@@ -32,6 +32,17 @@ struct atomtree_pci_tables {
 	struct pci_rom_tables* pci_tables;
 };
 
+union psp_directory_entries {
+	// TODO some fw blobs don't do the psp fw header
+	// A trick to tell is if,
+	// struct psp_directory_entry.type == struct amd_fw_header.fw_type
+	struct amd_fw_header header;
+};
+struct atomtree_psp_directory {
+	struct psp_directory* directory;
+	union psp_directory_entries** fw_entries;
+};
+
 struct atomtree_rom_header {
 	enum atomtree_common_version ver;
 	union {
@@ -79,7 +90,8 @@ struct atom_tree {
 	char* bootup_mesage;
 	void* int10;
 	void* pci_info;
-	void* psp_dir_table;
+
+	struct atomtree_psp_directory psp_directory;
 
 	atui_branch* atui_root;
 };
