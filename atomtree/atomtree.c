@@ -103,51 +103,50 @@ populate_lcd_info_record_table(
 
 	lcd_info->record_table_size = r.raw - record_start;
 	lcd_info->num_records = num_records;
-	if (0 == num_records) {
-		return;
-	}
 
-	lcd_info->record_table = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		num_records * sizeof(lcd_info->record_table[0])
-	);
+	if (num_records) {
+		lcd_info->record_table = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			num_records * sizeof(lcd_info->record_table[0])
+		);
 
-	r.raw = record_start;
-	for (uint8_t i = 0; i < num_records; i++) {
-		lcd_info->record_table[i].record = r.records;
-		switch (*r.RecordType) {
-			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
-				r.raw += sizeof(r.records->patch_record);
-				break;
-			case LCD_RTS_RECORD_TYPE:
-				r.raw += sizeof(r.records->lcd_rts_record);
-				break;
-			case LCD_CAP_RECORD_TYPE:
-				r.raw += sizeof(r.records->lcd_mode_control_cap);
-				break;
-			case LCD_FAKE_EDID_PATCH_RECORD_TYPE:
-				uint16_t length = (
-					r.records->fake_edid_patch_record.FakeEDIDLength
-				);
-				if (length == 128) { // 128 is 128 (why???)
-				} else if (length) { // all other non-zero is * 128
-					length *= 128;
-				} else {
-					length = 1;
-				}
-				lcd_info->record_table[i].edid_length = length;
-				r.raw += sizeof_flex(
-					&r.records->fake_edid_patch_record,
-					FakeEDIDString, length
-				);
-				break;
-			case LCD_PANEL_RESOLUTION_RECORD_TYPE:
-				r.raw += sizeof(r.records->panel_resolution_patch_record);
-				break;
-			case LCD_EDID_OFFSET_PATCH_RECORD_TYPE: // no idea
-			default:
-				assert(0);
-				break;
+		r.raw = record_start;
+		for (uint8_t i = 0; i < num_records; i++) {
+			lcd_info->record_table[i].record = r.records;
+			switch (*r.RecordType) {
+				case LCD_MODE_PATCH_RECORD_MODE_TYPE:
+					r.raw += sizeof(r.records->patch_record);
+					break;
+				case LCD_RTS_RECORD_TYPE:
+					r.raw += sizeof(r.records->lcd_rts_record);
+					break;
+				case LCD_CAP_RECORD_TYPE:
+					r.raw += sizeof(r.records->lcd_mode_control_cap);
+					break;
+				case LCD_FAKE_EDID_PATCH_RECORD_TYPE:
+					uint16_t length = (
+						r.records->fake_edid_patch_record.FakeEDIDLength
+					);
+					if (length == 128) { // 128 is 128 (why???)
+					} else if (length) { // all other non-zero is * 128
+						length *= 128;
+					} else {
+						length = 1;
+					}
+					lcd_info->record_table[i].edid_length = length;
+					r.raw += sizeof_flex(
+						&r.records->fake_edid_patch_record,
+						FakeEDIDString, length
+					);
+					break;
+				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+					r.raw += sizeof(r.records->panel_resolution_patch_record);
+					break;
+				case LCD_EDID_OFFSET_PATCH_RECORD_TYPE: // no idea
+				default:
+					assert(0);
+					break;
+			}
 		}
 	}
 }
@@ -387,46 +386,54 @@ populate_pplib_ppt_state_array(
 	} walker;
 
 	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
-		ppt41->state_array = arena_alloc(
-			&(commons->alloc_arena), &(commons->error),
-			pplibv1->NumStates * sizeof(ppt41->state_array[0])
-		);
 		ppt41->state_array_ver = v1_0;
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
-		uint8_t const entry_size = pplibv1->StateEntrySize;
-		uint8_t const num_levels = (
-			(entry_size - sizeof(base->v1))
-			/ sizeof(base->v1.ClockStateIndices[0])
-		);
-		walker.raw = &(base->v1);
-		for (uint8_t i=0; i < pplibv1->NumStates; i++) {
-			ppt41->state_array[i].num_levels = num_levels;
-			ppt41->state_array[i].state = walker.states;
-			ppt41->state_array[i].size = entry_size;
-			walker.raw += entry_size;
+		if (pplibv1->NumStates) {
+			ppt41->state_array = arena_alloc(
+				&(commons->alloc_arena), &(commons->error),
+				pplibv1->NumStates * sizeof(ppt41->state_array[0])
+			);
+
+			uint8_t const entry_size = pplibv1->StateEntrySize;
+			uint8_t const num_levels = (
+				(entry_size - sizeof(base->v1))
+				/ sizeof(base->v1.ClockStateIndices[0])
+			);
+			walker.raw = &(base->v1);
+			for (uint8_t i=0; i < pplibv1->NumStates; i++) {
+				ppt41->state_array[i].num_levels = num_levels;
+				ppt41->state_array[i].state = walker.states;
+				ppt41->state_array[i].size = entry_size;
+				walker.raw += entry_size;
+			}
+			ppt41->state_array_size = (
+				pplibv1->NumStates * pplibv1->StateEntrySize
+			);
 		}
-		ppt41->state_array_size = pplibv1->NumStates * pplibv1->StateEntrySize;
 	} else {
-		ppt41->state_array = arena_alloc(
-			&(commons->alloc_arena), &(commons->error),
-			base->v2.NumEntries * sizeof(ppt41->state_array[0])
-		);
 		ppt41->state_array_ver = v2_0;
 		ppt41->num_state_array_entries = base->v2.NumEntries;
 
-		uint16_t entry_size;
-		walker.v2 = base->v2.states;
-		for (uint8_t i=0; i < base->v2.NumEntries; i++) {
-			ppt41->state_array[i].num_levels = walker.v2->NumDPMLevels;
-			ppt41->state_array[i].state = walker.states;
-			entry_size = sizeof_flex(
-				walker.v2, clockInfoIndex, walker.v2->NumDPMLevels
+		if (base->v2.NumEntries) {
+			ppt41->state_array = arena_alloc(
+				&(commons->alloc_arena), &(commons->error),
+				base->v2.NumEntries * sizeof(ppt41->state_array[0])
 			);
-			ppt41->state_array[i].size = entry_size;
-			walker.raw += entry_size;
+
+			uint16_t entry_size;
+			walker.v2 = base->v2.states;
+			for (uint8_t i=0; i < base->v2.NumEntries; i++) {
+				ppt41->state_array[i].num_levels = walker.v2->NumDPMLevels;
+				ppt41->state_array[i].state = walker.states;
+				entry_size = sizeof_flex(
+					walker.v2, clockInfoIndex, walker.v2->NumDPMLevels
+				);
+				ppt41->state_array[i].size = entry_size;
+				walker.raw += entry_size;
+			}
+			ppt41->state_array_size = walker.raw - (void*)base;
 		}
-		ppt41->state_array_size = walker.raw - (void*)base;
 	}
 }
 
@@ -961,22 +968,25 @@ populate_init_reg_block(
 		at_regblock->num_data_blocks++;
 		w.raw += at_regblock->data_block_element_size;
 	}
-	at_regblock->data_blocks = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
-	);
-	w.walker = block_start;
-	uint8_t i = 0;
-	while (i < at_regblock->num_data_blocks) {
-		at_regblock->data_blocks[i] = w.walker;
-		w.raw += at_regblock->data_block_element_size;
-		i++;
+
+	if (at_regblock->num_data_blocks) {
+		at_regblock->data_blocks = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
+		);
+		w.walker = block_start;
+		uint8_t i = 0;
+		while (i < at_regblock->num_data_blocks) {
+			at_regblock->data_blocks[i] = w.walker;
+			w.raw += at_regblock->data_block_element_size;
+			i++;
+		}
+		at_regblock->data_block_table_size = (
+			at_regblock->data_block_element_size * at_regblock->num_data_blocks
+		);
 	}
 
 	at_regblock->index_table_size = leaves->RegIndexTblSize;
-	at_regblock->data_block_table_size = (
-	 	at_regblock->data_block_element_size * at_regblock->num_data_blocks
-	);
 	at_regblock->total_size = (
 		offsetof(struct atom_init_reg_block, RegIndexBuf) // 4 bytes
 		+ at_regblock->index_table_size
@@ -1219,23 +1229,26 @@ populate_umc_init_reg_block(
 		at_regblock->num_data_blocks++;
 		w.raw += at_regblock->data_block_element_size;
 	}
-	at_regblock->data_blocks = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
-	);
-	w.walker = block_start;
-	uint8_t i = 0;
-	while (i < at_regblock->num_data_blocks) {
-		at_regblock->data_blocks[i] = w.walker;
-		w.raw += at_regblock->data_block_element_size;
-		i++;
+
+	if (at_regblock->num_data_blocks) {
+		at_regblock->data_blocks = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
+		);
+		w.walker = block_start;
+		uint8_t i = 0;
+		while (i < at_regblock->num_data_blocks) {
+			at_regblock->data_blocks[i] = w.walker;
+			w.raw += at_regblock->data_block_element_size;
+			i++;
+		}
+		at_regblock->data_block_table_size = (
+			at_regblock->data_block_element_size * at_regblock->num_data_blocks
+		);
 	}
 
 	at_regblock->info_table_size = (
 		at_regblock->num_info * sizeof(union atom_umc_register_addr_info_access)
-	);
-	at_regblock->data_block_table_size = (
-	 	at_regblock->data_block_element_size * at_regblock->num_data_blocks
 	);
 	at_regblock->total_size = (
 		offsetof(struct atom_umc_init_reg_block, umc_reg_list) // 4 bytes
@@ -1280,6 +1293,10 @@ populate_vram_module(
 		enum atomtree_common_version const vram_modules_ver,
 		uint8_t const count
 		) {
+	if (0 == count) {
+		return NULL;
+	}
+
 	struct atomtree_vram_module* const vram_modules = arena_alloc(
 		&(commons->alloc_arena), &(commons->error),
 		count * sizeof(vram_modules[0])
@@ -1981,29 +1998,31 @@ populate_voltageobject_info_v1_1(
 	}
 	assert(vobj.raw == end);
 
-	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
-	);
-	vo_info->voltage_objects = voltage_objects;
-
-	vobj.raw = vo_info->v1_1->VoltageObj;
-	uint16_t i = 0;
-	while (vobj.raw < end) {
-		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v1_0;
-		// NumOfVoltageEntries lies and can be 255.
-		voltage_objects[i].lut_entries = (
-			(
-				vobj.vobj->volt_obj_v1.Size
-				- offsetof(
-					struct atom_voltage_object_v1,
-					Formula.VIDAdjustEntries[0]
-				)
-			) / sizeof(uint8_t)
+	if (vo_info->num_voltage_objects) {
+		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
 		);
-		vobj.raw += vobj.vobj->volt_obj_v1.Size;
-		i++;
+		vo_info->voltage_objects = voltage_objects;
+
+		vobj.raw = vo_info->v1_1->VoltageObj;
+		uint16_t i = 0;
+		while (vobj.raw < end) {
+			voltage_objects[i].obj = vobj.vobj;
+			voltage_objects[i].ver = v1_0;
+			// NumOfVoltageEntries lies and can be 255.
+			voltage_objects[i].lut_entries = (
+				(
+					vobj.vobj->volt_obj_v1.Size
+					- offsetof(
+						struct atom_voltage_object_v1,
+						Formula.VIDAdjustEntries[0]
+					)
+				) / sizeof(uint8_t)
+			);
+			vobj.raw += vobj.vobj->volt_obj_v1.Size;
+			i++;
+		}
 	}
 }
 
@@ -2030,29 +2049,31 @@ populate_voltageobject_info_v1_2(
 	}
 	assert(vobj.raw == end);
 
-	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
-	);
-	vo_info->voltage_objects = voltage_objects;
-
-	vobj.raw = vo_info->v1_2->VoltageObj;
-	uint16_t i = 0;
-	while (vobj.raw < end) {
-		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v2_0;
-		// NumOfVoltageEntries lies and can be 255.
-		voltage_objects[i].lut_entries = (
-			(
-				vobj.vobj->volt_obj_v2.Size
-				- offsetof(
-					struct atom_voltage_object_v2,
-					Formula.VIDAdjustEntries[0]
-				)
-			) / sizeof(struct voltage_lut_entry)
+	if (vo_info->num_voltage_objects) {
+		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
 		);
-		vobj.raw += vobj.vobj->volt_obj_v2.Size;
-		i++;
+		vo_info->voltage_objects = voltage_objects;
+
+		vobj.raw = vo_info->v1_2->VoltageObj;
+		uint16_t i = 0;
+		while (vobj.raw < end) {
+			voltage_objects[i].obj = vobj.vobj;
+			voltage_objects[i].ver = v2_0;
+			// NumOfVoltageEntries lies and can be 255.
+			voltage_objects[i].lut_entries = (
+				(
+					vobj.vobj->volt_obj_v2.Size
+					- offsetof(
+						struct atom_voltage_object_v2,
+						Formula.VIDAdjustEntries[0]
+					)
+				) / sizeof(struct voltage_lut_entry)
+			);
+			vobj.raw += vobj.vobj->volt_obj_v2.Size;
+			i++;
+		}
 	}
 }
 
@@ -2079,82 +2100,84 @@ populate_voltageobject_info_v3_1(
 	}
 	assert(vobj.raw == end);
 
-	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
-	);
-	vo_info->voltage_objects = voltage_objects;
+	if (vo_info->num_voltage_objects) {
+		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+		);
+		vo_info->voltage_objects = voltage_objects;
 
-	vobj.raw = vo_info->v3_1->voltage_object;
-	uint16_t i = 0;
-	while (vobj.raw < end) {
-		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v1_0; // all v3_1 have v1_0 objects
-		switch (vobj.vobj->header.voltage_mode) {
-			// some voltage objects have a dynamically-sized lookup table.
-			case VOLTAGE_OBJ_GPIO_LUT:
-			case VOLTAGE_OBJ_PHASE_LUT:
-				voltage_objects[i].lut_entries = (
-					vobj.vobj->gpio_voltage_obj_v1.gpio_entry_num
-				);
-				assert(voltage_objects[i].lut_entries == (
-					(
-						vobj.vobj->header.object_size
-						- offsetof(
-							struct atom_gpio_voltage_object_v1,
-							voltage_gpio_lut[0]
-						)
-					) / sizeof(struct atom_voltage_gpio_map_lut)
-				));
-				break;
-			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
-				voltage_objects[i].lut_entries = (
-					(
-						vobj.vobj->header.object_size
-						- offsetof(
-							struct atom_i2c_voltage_object_v1,
-							i2cdatalut[0]
-						)
-					) / sizeof(struct atom_i2c_data_entry)
-				);
-				break;
-			case VOLTAGE_OBJ_EVV:
-				voltage_objects[i].lut_entries = (
+		vobj.raw = vo_info->v3_1->voltage_object;
+		uint16_t i = 0;
+		while (vobj.raw < end) {
+			voltage_objects[i].obj = vobj.vobj;
+			voltage_objects[i].ver = v1_0; // all v3_1 have v1_0 objects
+			switch (vobj.vobj->header.voltage_mode) {
+				// some voltage objects have a dynamically-sized lookup table.
+				case VOLTAGE_OBJ_GPIO_LUT:
+				case VOLTAGE_OBJ_PHASE_LUT:
+					voltage_objects[i].lut_entries = (
+						vobj.vobj->gpio_voltage_obj_v1.gpio_entry_num
+					);
+					assert(voltage_objects[i].lut_entries == (
 						(
 							vobj.vobj->header.object_size
 							- offsetof(
-								struct atom_evv_voltage_object_v1,
-								EvvDpmList[0]
+								struct atom_gpio_voltage_object_v1,
+								voltage_gpio_lut[0]
 							)
-						) / sizeof(struct atom_evv_dpm_info)
+						) / sizeof(struct atom_voltage_gpio_map_lut)
+					));
+					break;
+				case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+					voltage_objects[i].lut_entries = (
+						(
+							vobj.vobj->header.object_size
+							- offsetof(
+								struct atom_i2c_voltage_object_v1,
+								i2cdatalut[0]
+							)
+						) / sizeof(struct atom_i2c_data_entry)
 					);
-				assert(
-					vobj.vobj->header.object_size
-					== sizeof(struct atom_evv_voltage_object_v1)
-				);
-				break;
-			case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
-			case VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT:
-			case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
-				voltage_objects[i].lut_entries = (
-					vobj.vobj->leakage_voltage_obj_v1.LeakageEntryNum
-				);
-				assert(voltage_objects[i].lut_entries == (
-					(
+					break;
+				case VOLTAGE_OBJ_EVV:
+					voltage_objects[i].lut_entries = (
+							(
+								vobj.vobj->header.object_size
+								- offsetof(
+									struct atom_evv_voltage_object_v1,
+									EvvDpmList[0]
+								)
+							) / sizeof(struct atom_evv_dpm_info)
+						);
+					assert(
 						vobj.vobj->header.object_size
-						- offsetof(
-							struct atom_leakage_voltage_object_v1,
-							LeakageIdLut[0]
-						)
-					) / sizeof(struct leakage_voltage_lut_entry_v2)
-				));
-				break;
-			default:
-				break;
-		}
+						== sizeof(struct atom_evv_voltage_object_v1)
+					);
+					break;
+				case VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT:
+				case VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT:
+				case VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT:
+					voltage_objects[i].lut_entries = (
+						vobj.vobj->leakage_voltage_obj_v1.LeakageEntryNum
+					);
+					assert(voltage_objects[i].lut_entries == (
+						(
+							vobj.vobj->header.object_size
+							- offsetof(
+								struct atom_leakage_voltage_object_v1,
+								LeakageIdLut[0]
+							)
+						) / sizeof(struct leakage_voltage_lut_entry_v2)
+					));
+					break;
+				default:
+					break;
+			}
 
-		vobj.raw += vobj.vobj->header.object_size;
-		i++;
+			vobj.raw += vobj.vobj->header.object_size;
+			i++;
+		}
 	}
 }
 
@@ -2182,51 +2205,53 @@ populate_voltageobject_info_v4_1(
 	}
 	assert(vobj.raw == end);
 
-	struct atomtree_voltage_object* const voltage_objects = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
-	);
-	vo_info->voltage_objects = voltage_objects;
+	if (vo_info->num_voltage_objects) {
+		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			vo_info->num_voltage_objects * sizeof(vo_info->voltage_objects[0])
+		);
+		vo_info->voltage_objects = voltage_objects;
 
-	vobj.raw = vo_info->v4_1->voltage_object;
-	uint16_t i = 0;
+		vobj.raw = vo_info->v4_1->voltage_object;
+		uint16_t i = 0;
 
-	while (vobj.raw < end) {
-		voltage_objects[i].obj = vobj.vobj;
-		voltage_objects[i].ver = v1_0; // nearly all v4_1 have v1_0 objects
-		switch (vobj.vobj->header.voltage_mode) {
-			// some voltage objects have a dynamically-sized lookup table.
-			case VOLTAGE_OBJ_GPIO_LUT:
-			case VOLTAGE_OBJ_PHASE_LUT:
-				voltage_objects[i].lut_entries = (
-					(
-						vobj.vobj->header.object_size
-						- offsetof(
-							struct atom_gpio_voltage_object_v1,
-							voltage_gpio_lut[0]
-						)
-					) / sizeof(struct atom_voltage_gpio_map_lut)
-				);
-				break;
-			case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
-				voltage_objects[i].lut_entries = (
-					(
-						vobj.vobj->header.object_size
-						- offsetof(
-							struct atom_i2c_voltage_object_v1,
-							i2cdatalut[0]
-						)
-					) / sizeof(struct atom_i2c_data_entry)
-				);
-				break;
-			case VOLTAGE_OBJ_SVID2:
-				voltage_objects[i].ver = v2_0;
-			default:
-				break;
+		while (vobj.raw < end) {
+			voltage_objects[i].obj = vobj.vobj;
+			voltage_objects[i].ver = v1_0; // nearly all v4_1 have v1_0 objects
+			switch (vobj.vobj->header.voltage_mode) {
+				// some voltage objects have a dynamically-sized lookup table.
+				case VOLTAGE_OBJ_GPIO_LUT:
+				case VOLTAGE_OBJ_PHASE_LUT:
+					voltage_objects[i].lut_entries = (
+						(
+							vobj.vobj->header.object_size
+							- offsetof(
+								struct atom_gpio_voltage_object_v1,
+								voltage_gpio_lut[0]
+							)
+						) / sizeof(struct atom_voltage_gpio_map_lut)
+					);
+					break;
+				case VOLTAGE_OBJ_VR_I2C_INIT_SEQ:
+					voltage_objects[i].lut_entries = (
+						(
+							vobj.vobj->header.object_size
+							- offsetof(
+								struct atom_i2c_voltage_object_v1,
+								i2cdatalut[0]
+							)
+						) / sizeof(struct atom_i2c_data_entry)
+					);
+					break;
+				case VOLTAGE_OBJ_SVID2:
+					voltage_objects[i].ver = v2_0;
+				default:
+					break;
+			}
+
+			vobj.raw += vobj.vobj->header.object_size;
+			i++;
 		}
-
-		vobj.raw += vobj.vobj->header.object_size;
-		i++;
 	}
 }
 
@@ -2802,21 +2827,23 @@ populate_pci_tables(
 	} while (!pcir.pcir->last.last_image);
 	atree_pci->num_images = i;
 
-	struct pci_rom_tables* const tables = arena_alloc(
-		&(commons->alloc_arena), &(commons->error),
-		atree_pci->num_images * sizeof(atree_pci->pci_tables[0])
-	);
-	atree_pci->pci_tables = tables;
-	i = 0;
-	header.header = start;
-	while (i < atree_pci->num_images) {
-		pcir.raw = header.raw + header.header->pcir_structure_offset;
-		tables[i].header = header.header;
-		tables[i].pcir = pcir.pcir;
-		tables[i].is_efi = (header.efi->efi_signature == EFI_SIGNATURE);
+	if (atree_pci->num_images) {
+		struct pci_rom_tables* const tables = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			atree_pci->num_images * sizeof(atree_pci->pci_tables[0])
+		);
+		atree_pci->pci_tables = tables;
+		i = 0;
+		header.header = start;
+		while (i < atree_pci->num_images) {
+			pcir.raw = header.raw + header.header->pcir_structure_offset;
+			tables[i].header = header.header;
+			tables[i].pcir = pcir.pcir;
+			tables[i].is_efi = (header.efi->efi_signature == EFI_SIGNATURE);
 
-		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
-		i++;
+			header.raw += pcir.pcir->image_length_in_512*BIOS_IMAGE_SIZE_UNIT;
+			i++;
+		}
 	}
 }
 
