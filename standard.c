@@ -170,3 +170,33 @@ void* arena_alloc(
 	arena->pos = new_pos;
 	return old_pos;
 }
+
+uint32_t
+fletcher32(
+		const void* data,
+		size_t length
+		) {
+	const uint16_t* pptr = data;
+	uint32_t c0 = 0;
+	uint32_t c1 = 0;
+
+	length = (length+1) & (~UINT64_C(1));
+
+	while (length) {
+		size_t block_length;
+		if (length > (360*2)) {
+			block_length = 360*2;
+		} else {
+			block_length = length;
+		}
+		length -= block_length;
+		do {
+			c0 += *(pptr++);
+			c1 += c0;
+			block_length -= 2;
+		} while (block_length);
+		c0 %= 0xFFFF;
+		c1 %= 0xFFFF;
+	}
+	return (c1 << 16) | c0;
+}

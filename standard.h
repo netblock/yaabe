@@ -175,4 +175,11 @@ arena_alloc(
 		size_t alloc_size
 		);
 
+uint32_t
+fletcher32(
+		const void* data,
+		size_t length
+		);
+
+
 #endif

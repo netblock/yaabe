@@ -142,7 +142,7 @@ set_ver(
 		);
 
 void
-atomtree_bios_checksum(
+atomtree_calculate_checksums(
 		struct atom_tree* atree
 		);
 

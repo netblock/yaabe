@@ -2561,7 +2561,19 @@ populate_datatables(
 	}
 }
 
+inline static void
+pspdirectory_checksum(
+		struct atomtree_psp_directory* const pspdir
+		) {
+	struct psp_directory* const dir = pspdir->directory;
+	dir->header.checksum = fletcher32(
+		&(dir->header.totalentries),
+		(sizeof_flex(dir, pspentry, dir->header.totalentries)
+			- offsetof(typeof(*dir), header.totalentries)
+		)
 
+	);
+}
 inline static void
 populate_psp_directory_table(
 		struct atomtree_psp_directory* const pspdir,
@@ -2934,8 +2946,8 @@ set_ver(
 }
 
 
-void
-atomtree_bios_checksum(
+inline static void
+atombios_checksum(
 		struct atom_tree* const atree
 		) {
 	uint8_t const* const bios = atree->bios;
@@ -2948,6 +2960,15 @@ atomtree_bios_checksum(
 
 	atree->image->checksum -= offset;
 }
+
+void
+atomtree_calculate_checksums(
+		struct atom_tree* const atree
+		) {
+	pspdirectory_checksum(&(atree->psp_directory));
+	atombios_checksum(atree);
+}
+
 
 void
 atomtree_destroy(

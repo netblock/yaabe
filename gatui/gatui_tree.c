@@ -184,7 +184,7 @@ gatui_tree_save(
 		) {
 	g_return_if_fail(GATUI_IS_TREE(self));
 
-	atomtree_bios_checksum(self->atomtree); // TODO emit change
+	atomtree_calculate_checksums(self->atomtree);
 	g_file_replace_contents(
 		self->biosfile,
 		self->atomtree->alloced_bios, self->atomtree->biosfile_size,
@@ -199,7 +199,7 @@ gatui_tree_saveas(
 		) {
 	g_return_if_fail(GATUI_IS_TREE(self));
 
-	atomtree_bios_checksum(self->atomtree); // TODO emit change
+	atomtree_calculate_checksums(self->atomtree);
 	bool const success = g_file_replace_contents(
 		biosfile,
 		self->atomtree->alloced_bios, self->atomtree->biosfile_size,
