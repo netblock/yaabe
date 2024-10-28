@@ -42,7 +42,7 @@ struct level_data {
 	struct leaf_array_const feed;
 
 	struct dynarray_position dynpos;
-	void const* suggestbios;
+	void const* bios;
 	char const* nametag;
 	void* parent;
 	uint16_t name_num;
@@ -68,8 +68,8 @@ print_atui_nofancy_leaf(
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
-	if (level->suggestbios) {
-		leaf->val = level->suggestbios;
+	if (level->bios) {
+		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 }
@@ -88,8 +88,8 @@ print_atui_bitfield_leaf(
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
-	if (level->suggestbios) {
-		leaf->val = level->suggestbios;
+	if (level->bios) {
+		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
@@ -100,7 +100,7 @@ print_atui_bitfield_leaf(
 
 		struct level_data sub_leaves = {
 			.parent = leaf, // ppatui.py sets parent_is_leaf
-			.suggestbios = leaf->val,
+			.bios = leaf->val,
 
 			.feed.pos = leaf_src->template_leaves->sub_leaves,
 			.feed.end = leaf_src->template_leaves->sub_leaves + num_leaves,
@@ -125,8 +125,8 @@ print_atui_string_leaf(
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
-	if (level->suggestbios) {
-		leaf->val = level->suggestbios;
+	if (level->bios) {
+		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
@@ -150,15 +150,15 @@ print_atui_graft_leaf(
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
-	if (level->suggestbios) {
-		leaf->val = level->suggestbios;
+	if (level->bios) {
+		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	atuiargs branch_args = {
 		.atomtree = global->atomtree,
 		.rename = leaf->name,
-		.suggestbios = leaf->val,
+		.bios = leaf->val,
 	};
 	*grafter = leaf->branch_bud(&branch_args);
 
@@ -187,10 +187,10 @@ print_atui_shoot_leaf(
 	atuiargs branch_args = {
 		.atomtree = global->atomtree,
 	};
-	if (level->suggestbios) {
-		branch_args.suggestbios = level->suggestbios;
+	if (level->bios) {
+		branch_args.bios = level->bios;
 	} else {
-		branch_args.suggestbios = leaf_src->val;
+		branch_args.bios = leaf_src->val;
 	}
 
 	*brancher = leaf_src->branch_bud(&branch_args);
@@ -213,8 +213,8 @@ print_atui_dynarray_leaf(
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
-	if (level->suggestbios) {
-		leaf->val = level->suggestbios;
+	if (level->bios) {
+		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
@@ -252,7 +252,7 @@ print_atui_dynarray_leaf(
 					assert(sub_leaves.name_num < taglist->num_entries);
 					sub_leaves.nametag = enum_array[sub_leaves.name_num].name;
 				}
-				sub_leaves.suggestbios = *dynpos.pos.deffer;
+				sub_leaves.bios = *dynpos.pos.deffer;
 				atui_leaves_printer(global, &sub_leaves);
 				sub_leaves.feed.pos = feed_start;
 				dynpos.pos.deffer++;
@@ -266,7 +266,7 @@ print_atui_dynarray_leaf(
 				if (enum_array) {
 					sub_leaves.nametag = enum_array[sub_leaves.name_num].name;
 				}
-				sub_leaves.suggestbios = dynpos.pos.direct;
+				sub_leaves.bios = dynpos.pos.direct;
 				atui_leaves_printer(global, &sub_leaves);
 				sub_leaves.feed.pos = feed_start;
 				dynpos.pos.direct += sub_meta->element_size;

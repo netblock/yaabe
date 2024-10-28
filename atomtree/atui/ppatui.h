@@ -16,7 +16,7 @@ C preprocessor side of ATUI table generation
 		& (atuifunc_args const) {\
 			.rename = new_name,\
 			.atomtree = atomtree_pointer,\
-			.suggestbios = bios_pointer,\
+			.bios = bios_pointer,\
 			.import_branches = branch_import_pointer,\
 			.num_import_branches = num_branches,\
 		}\

@@ -19,7 +19,7 @@ grow_smc_dpm_info(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = smc_dpm_info,
-		.suggestbios = smc_dpm_info->leaves,
+		.bios = smc_dpm_info->leaves,
 	};
 	switch (smc_dpm_info->ver) {
 		case v4_1:  atui_func = _atui_atom_smc_dpm_info_v4_1;  break;
@@ -52,7 +52,7 @@ grow_firmwareinfo(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = firmwareinfo,
-		.suggestbios = firmwareinfo->leaves,
+		.bios = firmwareinfo->leaves,
 	};
 	switch (firmwareinfo->ver) {
 		case v1_0: atui_func = _atui_atom_firmware_info_v1_0; break;
@@ -94,7 +94,7 @@ grow_lcd_info_record_table(
 	atuifunc_args rec_args = {};
 	for (uint8_t i=0; i < lcd_info->num_records; i++) {
 		rec_args.atomtree = &(records[i]);
-		rec_args.suggestbios = records[i].record;
+		rec_args.bios = records[i].record;
 		switch (records[i].record->RecordType) {
 			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
 				record = _atui_atom_patch_record_mode(&rec_args);
@@ -135,7 +135,7 @@ grow_lcd_info(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = lcd_info,
-		.suggestbios = lcd_info->leaves,
+		.bios = lcd_info->leaves,
 		.import_branches = &record_table,
 		.num_import_branches = 1,
 	};
@@ -165,7 +165,7 @@ grow_smu_info(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree =  smu_info,
-		.suggestbios = smu_info->leaves,
+		.bios = smu_info->leaves,
 	};
 	switch (smu_info->ver) {
 		case v3_1: atui_func = _atui_atom_smu_info_v3_1; break;
@@ -196,7 +196,7 @@ grow_vram_usagebyfirmware(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree =  fw_vram,
-		.suggestbios = fw_vram->leaves,
+		.bios = fw_vram->leaves,
 	};
 	switch (fw_vram->ver) {
 		case v2_1: atui_func = _atui_vram_usagebyfirmware_v2_1; break;
@@ -222,7 +222,7 @@ grow_gpio_pin_lut(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = gpio_pin_lut,
-		.suggestbios = gpio_pin_lut->leaves,
+		.bios = gpio_pin_lut->leaves,
 	};
 	switch (gpio_pin_lut->ver) {
 		case v2_1: atui_func = _atui_atom_gpio_pin_lut_v2_1; break;
@@ -248,7 +248,7 @@ grow_gfx_info(
 	atui_branch* subtables[2] = {NULL};
 	atuifunc_args atui_args = {
 		.atomtree =  gfx_info,
-		.suggestbios = gfx_info->leaves,
+		.bios = gfx_info->leaves,
 		.import_branches = subtables,
 		.num_import_branches = lengthof(subtables),
 	};
@@ -303,7 +303,7 @@ grow_pplib_ppt_state_array(
 	atui_branch* base;
 	atuifunc_args atui_args = {
 		.atomtree =  ppt41,
-		.suggestbios = ppt41->state_array_base,
+		.bios = ppt41->state_array_base,
 		.num_import_branches = ppt41->num_state_array_entries,
 	};
 	atuifunc atui_state_func;
@@ -322,7 +322,7 @@ grow_pplib_ppt_state_array(
 
 	atui_args.num_import_branches = 0;
 	for (uint8_t i = 0; i < ppt41->num_state_array_entries; i++) {
-		atui_args.suggestbios = ppt41->state_array[i].state;
+		atui_args.bios = ppt41->state_array[i].state;
 		atui_args.atomtree = &(ppt41->state_array[i]);
 		atui_branch* state_entry = atui_state_func(&atui_args);
 		sprintf(state_entry->name, "%s [%02u]", state_entry->origname, i);
@@ -339,7 +339,7 @@ grow_pplib_ppt_clock_info(
 	
 	atuifunc_args atui_args = {
 		.atomtree = ppt41,
-		.suggestbios = clock_info,
+		.bios = clock_info,
 	};
 	switch (ppt41->clock_info_ver) {
 		case ATOM_PPLIB_CLOCK_INFO_R600:
@@ -406,7 +406,7 @@ grow_pplib_ppt_extended_header(
 	if (ppt41->powertune) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt41,
-			.suggestbios = ppt41->powertune,
+			.bios = ppt41->powertune,
 		};
 		switch (ppt41->powertune->RevId) {
 			case 0:
@@ -444,7 +444,7 @@ grow_pplib_ppt_extended_header(
 	};
 	atuifunc_args const atui_args = {
 		.atomtree = ppt41,
-		.suggestbios = ppt41->extended_header,
+		.bios = ppt41->extended_header,
 		.import_branches = extended_children,
 		.num_import_branches = lengthof(extended_children),
 	};
@@ -481,7 +481,7 @@ grow_pplib_ppt(
 	if (ppt41->nonclock_info) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt41,
-			.suggestbios = ppt41->nonclock_info,
+			.bios = ppt41->nonclock_info,
 		};
 		switch (ppt41->nonclock_info_ver) {
 			case v1_0:
@@ -528,7 +528,7 @@ grow_pplib_ppt(
 	if (ppt41->fan_table) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt41,
-			.suggestbios = ppt41->fan_table,
+			.bios = ppt41->fan_table,
 		};
 		switch (ppt41->fan_table->RevId) {
 			case 1: fan_table = _atui_atom_pplib_fan_table_v1(&atui_args);break;
@@ -600,7 +600,7 @@ grow_pplib_ppt(
 	if (ppt41->cac_leakage) {
 		atuifunc_args const atui_args = {
 			.atomtree = ppt41,
-			.suggestbios = ppt41->cac_leakage,
+			.bios = ppt41->cac_leakage,
 		};
 		if (ppt41->leaves->v1.PlatformCaps.EVV) {
 			cac_leakage = _atui_atom_pplib_cac_leakage_record_evv(&atui_args);
@@ -618,7 +618,7 @@ grow_pplib_ppt(
 	};
 	atuifunc_args atui_args = {
 		.atomtree =  ppt41,
-		.suggestbios = ppt41->leaves,
+		.bios = ppt41->leaves,
 		.import_branches = ppt41_children,
 		.num_import_branches = lengthof(ppt41_children),
 	};
@@ -646,7 +646,7 @@ atui_generate_pptablev1_ppt(
 	if (ppt71->fan_table) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
-			.suggestbios = ppt71->fan_table,
+			.bios = ppt71->fan_table,
 		};
 		uint8_t const RevId = ppt71->fan_table->RevId;
 		if (7 >= RevId) {
@@ -684,7 +684,7 @@ atui_generate_pptablev1_ppt(
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
-			.suggestbios = ppt71->sclk_dependency
+			.bios = ppt71->sclk_dependency
 		};
 		switch (ppt71->sclk_dependency->RevId) {
 			case 0:
@@ -743,7 +743,7 @@ atui_generate_pptablev1_ppt(
 	if (ppt71->powertune) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
-			.suggestbios = ppt71->powertune,
+			.bios = ppt71->powertune,
 		};
 		uint8_t const RevId = ppt71->powertune->RevId;
 		if (2 >= RevId) {
@@ -774,7 +774,7 @@ atui_generate_pptablev1_ppt(
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
-			.suggestbios = ppt71->pcie_table,
+			.bios = ppt71->pcie_table,
 		};
 		switch (ppt71->pcie_table->RevId) {
 			case 0: atui_func = _atui_atom_pptable_pcie_table; break;
@@ -819,7 +819,7 @@ atui_generate_vega10_ppt(
 	if (ppt81->fan_table) {
 		atuifunc_args atui_args = {
 			.atomtree = ppt81,
-			.suggestbios = ppt81->fan_table,
+			.bios = ppt81->fan_table,
 		};
 		uint8_t const RevId = ppt81->fan_table->RevId;
 		if (10 == RevId) {
@@ -862,7 +862,7 @@ atui_generate_vega10_ppt(
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt81,
-			.suggestbios = ppt81->gfxclk_dependency,
+			.bios = ppt81->gfxclk_dependency,
 		};
 		switch (ppt81->gfxclk_dependency->RevId) {
 			case 0:
@@ -923,7 +923,7 @@ atui_generate_vega10_ppt(
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt81,
-			.suggestbios = ppt81->powertune
+			.bios = ppt81->powertune
 		};
 		switch (ppt81->powertune->RevId) {
 			case 5: atui_func = _atui_atom_vega10_powertune_table_v1;break;
@@ -1004,7 +1004,7 @@ atui_generate_smc_pptable(
 		) {
 	atuifunc_args atui_args = {
 		.atomtree = ppt,
-		.suggestbios = smc_pptable,
+		.bios = smc_pptable,
 	};
 	switch (ver) {
 		case v3_0: return _atui_smu11_smcpptable_v3(&atui_args);
@@ -1029,7 +1029,7 @@ grow_ppt(
 	atui_branch* atui_smctable = NULL;
 	atuifunc_args atui_args = {
 		.atomtree = ppt,
-		.suggestbios = ppt->leaves,
+		.bios = ppt->leaves,
 		.import_branches = &atui_smctable,
 		.num_import_branches = 1,
 	};
@@ -1099,7 +1099,7 @@ autogen_regblock_register_sequence(
 		) {
 	uint8_t const num_data_entries = at_regblock->num_data_entries;
 	atuifunc_args atui_args = {
-		.suggestbios = &(data_block->block_id)
+		.bios = &(data_block->block_id)
 	};
 	atui_branch** const all_fields = cralloc(
 		(1+num_data_entries) * sizeof(atui_branch*)
@@ -1108,7 +1108,7 @@ autogen_regblock_register_sequence(
 	atui_branch** const reg_data_fields = all_fields + 1;
 
 	for (uint8_t i=0; i < num_data_entries; i++) {
-		atui_args.suggestbios = &(data_block->reg_data[i]);
+		atui_args.bios = &(data_block->reg_data[i]);
 
 		reg_data_fields[i] = func_playlist[i].atui_branch_func(&atui_args);
 		if  (_atui_unknown_reg_data == func_playlist[i].atui_branch_func) {
@@ -1259,7 +1259,7 @@ grow_init_reg_block(
 
 	for (uint8_t i = 0; i < at_regblock->num_data_blocks; i++) {
 		if (atui_strap_func) {
-			atui_args.suggestbios = data_blocks[i];
+			atui_args.bios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
 		} else {
 			atui_strap = autogen_regblock_register_sequence(
@@ -1453,15 +1453,15 @@ grow_atom_memory_timing_format(
 	switch (vram_module->memory_timing_format_ver) {
 		case v1_0:
 			for (uint8_t i=0; i < count; i++) {
-				atui_mrs_args.suggestbios = &(strap.v1_0->MR0);
+				atui_mrs_args.bios = &(strap.v1_0->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_0->MR1);
+				atui_mrs_args.bios = &(strap.v1_0->MR1);
 				atui_mrs[1] = atui_mrs_funcs[1](&atui_mrs_args);
 				if (memory_type != ATOM_DGPU_VRAM_TYPE_GDDR3) {
-					atui_mrs_args.suggestbios = &(strap.v1_0->MR2);
+					atui_mrs_args.bios = &(strap.v1_0->MR2);
 					atui_mrs[2] = atui_mrs_funcs[2](&atui_mrs_args);
 				}
-				atui_args.suggestbios = strap.v1_0;
+				atui_args.bios = strap.v1_0;
 				atui_timings = _atui_atom_memory_timing_format_v0(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_0->ClkRange / 100)
@@ -1473,13 +1473,13 @@ grow_atom_memory_timing_format(
 			break;
 		case v1_1:
 			for (uint8_t i=0; i < count; i++) {
-				atui_mrs_args.suggestbios = &(strap.v1_1->MR0);
+				atui_mrs_args.bios = &(strap.v1_1->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_1->MR1);
+				atui_mrs_args.bios = &(strap.v1_1->MR1);
 				atui_mrs[1] = atui_mrs_funcs[1](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_1->MR5);
+				atui_mrs_args.bios = &(strap.v1_1->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
-				atui_args.suggestbios = strap.v1_1;
+				atui_args.bios = strap.v1_1;
 				atui_timings = _atui_atom_memory_timing_format_v1(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_1->ClkRange / 100)
@@ -1491,15 +1491,15 @@ grow_atom_memory_timing_format(
 			break;
 		case v1_2:
 			for (uint8_t i=0; i < count; i++) {
-				atui_mrs_args.suggestbios = &(strap.v1_2->MR0);
+				atui_mrs_args.bios = &(strap.v1_2->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_2->MR1);
+				atui_mrs_args.bios = &(strap.v1_2->MR1);
 				atui_mrs[1] = atui_mrs_funcs[1](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_2->MR4);
+				atui_mrs_args.bios = &(strap.v1_2->MR4);
 				atui_mrs[2] = atui_mrs_funcs[2](&atui_mrs_args);
-				atui_mrs_args.suggestbios = &(strap.v1_2->MR5);
+				atui_mrs_args.bios = &(strap.v1_2->MR5);
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
-				atui_args.suggestbios = strap.v1_2;
+				atui_args.bios = strap.v1_2;
 				atui_timings = _atui_atom_memory_timing_format_v2(&atui_args);
 				sprintf(atui_timings->name, "MemTiming (%u MHz)",
 					(strap.v1_2->ClkRange / 100)
@@ -1524,34 +1524,34 @@ grow_mr2_mr3(
 	atuifunc_args atui_mrs_args = {0};
 	switch (memory_type) {
 		case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
-			atui_mrs_args.suggestbios = mr2;
+			atui_mrs_args.bios = mr2;
 			targets[0] = _atui_ddr2_emr2(&atui_mrs_args);
-			atui_mrs_args.suggestbios = mr3;
+			atui_mrs_args.bios = mr3;
 			targets[1] = _atui_ddr2_emr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_DDR3: // non-G
-			atui_mrs_args.suggestbios = mr2;
+			atui_mrs_args.bios = mr2;
 			targets[0] = _atui_ddr3_mr2(&atui_mrs_args);
-			atui_mrs_args.suggestbios = mr3;
+			atui_mrs_args.bios = mr3;
 			targets[1] = _atui_ddr3_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR4:
-			atui_mrs_args.suggestbios = mr2;
+			atui_mrs_args.bios = mr2;
 			targets[0] = _atui_gddr4_emr2(&atui_mrs_args);
-			atui_mrs_args.suggestbios = mr3;
+			atui_mrs_args.bios = mr3;
 			targets[1] = _atui_gddr4_emr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR5_2:
 		case ATOM_DGPU_VRAM_TYPE_GDDR5:
-			atui_mrs_args.suggestbios = mr2;
+			atui_mrs_args.bios = mr2;
 			targets[0] = _atui_gddr5_mr2(&atui_mrs_args);
-			atui_mrs_args.suggestbios = mr3;
+			atui_mrs_args.bios = mr3;
 			targets[1] = _atui_gddr5_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_HBM:
-			atui_mrs_args.suggestbios = mr2;
+			atui_mrs_args.bios = mr2;
 			targets[0] = _atui_hbm_mr2(&atui_mrs_args);
-			atui_mrs_args.suggestbios = mr3;
+			atui_mrs_args.bios = mr3;
 			targets[1] = _atui_hbm_mr3(&atui_mrs_args);
 			break;
 		case ATOM_DGPU_VRAM_TYPE_GDDR3: // GDDR3 has no MR2,MR3
@@ -1677,7 +1677,7 @@ grow_vram_module(
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
-				atui_map_args.suggestbios = &(vmod->v1_7->ChannelMapCfg);
+				atui_map_args.bios = &(vmod->v1_7->ChannelMapCfg);
 				atui_children[0] = chremap(&atui_map_args);
 
 				grow_mr2_mr3(
@@ -2064,7 +2064,7 @@ grow_vram_info_v2_3(
 		}
 		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
-			atui_args.suggestbios = data_blocks[i];
+			atui_args.bios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
 			ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
 
@@ -2175,7 +2175,7 @@ grow_vram_info_v2_4(
 		atuifunc_args atui_args = {0};
 		char const* vendor_part[2];
 		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
-			atui_args.suggestbios = data_blocks[i];
+			atui_args.bios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
 			ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
 
@@ -2632,7 +2632,7 @@ grow_voltageobject_info_v3_1(
 				break;
 		}
 		atui_args.atomtree = &(voltage_objects[i]);
-		atui_args.suggestbios = voltage_objects[i].obj;
+		atui_args.bios = voltage_objects[i].obj;
 		atui_volt_object = atui_vobj_func(&atui_args);
 		rename_volt_object_with_type(
 			atui_volt_object,
@@ -2687,7 +2687,7 @@ grow_voltageobject_info_v4_1(
 				break;
 		}
 		atui_args.atomtree = &(voltage_objects[i]);
-		atui_args.suggestbios = voltage_objects[i].obj;
+		atui_args.bios = voltage_objects[i].obj;
 		atui_volt_object = atui_vobj_func(&atui_args);
 		rename_volt_object_with_type(
 			atui_volt_object,
@@ -3101,7 +3101,7 @@ grow_psp_directory(
 		atui_branch* blob;
 		atuifunc_args blob_args = {.atomtree=pspdir};
 		for (uint8_t i=0; i < num_entries; i++) {
-			blob_args.suggestbios = pspdir->fw_entries[i];
+			blob_args.bios = pspdir->fw_entries[i];
 			enum psp_entry_type fw_type = pspentry[i].type;
 			switch (fw_type) {
 				case PSP_NV_DATA:
@@ -3150,7 +3150,7 @@ grow_atom_rom_header(
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
 		.atomtree = rom_header,
-		.suggestbios = rom_header->leaves,
+		.bios = rom_header->leaves,
 		.import_branches = child_branches,
 		.num_import_branches = lengthof(child_branches),
 	};
@@ -3185,7 +3185,7 @@ grow_pci_tables(
 		_atui_efi_pci_device_driver_image,
 	};
 	for (uint8_t i=0; i < atree_pci->num_images; i++) {
-		atui_args.suggestbios = tables[i].header;
+		atui_args.bios = tables[i].header;
 		atui_args.atomtree = &(tables[i]);
 		atui_pci = atui_pci_func[tables[i].is_efi](&atui_args);
 		sprintf(atui_pci->name, "%s [%u]", atui_pci->origname, i);

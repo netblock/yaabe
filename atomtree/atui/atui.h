@@ -295,9 +295,9 @@ typedef struct atui_func_args {
 	void const* atomtree;
 	// Pointer to the relevant atomtree struct. Mainly for the bios pointer,
 	// but is necessary if atomtree-computer data needs to be pulled in. Can be
-	// optional depending on defined atui branch; use suggestbios instead.
+	// optional depending on defined atui branch; use bios instead.
 
-	void const* suggestbios;
+	void const* bios;
 	// Optional. A pointer to somewhere in the bios memory; mainly useful for
 	// looping across an array within an atom struct.
 

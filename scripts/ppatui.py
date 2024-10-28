@@ -1066,7 +1066,7 @@ atui_branch*
 _atui_%s(
 		atuifunc_args const* const args
 		) {
-	%s %s const* const bios = args->suggestbios;
+	%s %s const* const bios = args->bios;
 	struct %s const* const atomtree = args->atomtree;
 
 	atui_leaf const leaves_init[%u] = {
