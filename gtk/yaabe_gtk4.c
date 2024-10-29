@@ -1780,17 +1780,22 @@ construct_tree_panes(
 		) {
 	GtkWidget* const branches_pane = create_branches_pane(commons);
 	GtkWidget* const leaves_pane = create_leaves_pane(commons);
-	GtkWidget* const tree_divider = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-	gtk_widget_set_vexpand(tree_divider, true);
-	gtk_paned_set_resize_start_child(GTK_PANED(tree_divider), true);
-	gtk_paned_set_shrink_start_child(GTK_PANED(tree_divider), false);
-	gtk_paned_set_resize_end_child(GTK_PANED(tree_divider), true);
-	gtk_paned_set_shrink_end_child(GTK_PANED(tree_divider), false);
-	gtk_widget_set_size_request(leaves_pane, 60, 50);  // 60% horizontal
-	gtk_paned_set_start_child(GTK_PANED(tree_divider), branches_pane);
-	gtk_paned_set_end_child(GTK_PANED(tree_divider), leaves_pane);
 
-	return tree_divider;
+	GtkPaned* const tree_divider = GTK_PANED(
+		gtk_paned_new(GTK_ORIENTATION_HORIZONTAL)
+	);
+	gtk_paned_set_wide_handle(tree_divider, true);
+
+	gtk_paned_set_resize_start_child(tree_divider, true);
+	gtk_paned_set_shrink_start_child(tree_divider, false);
+	gtk_paned_set_resize_end_child(tree_divider, true);
+	gtk_paned_set_shrink_end_child(tree_divider, false);
+	gtk_widget_set_size_request(leaves_pane, 60, 50);  // 60% horizontal
+	gtk_paned_set_start_child(tree_divider, branches_pane);
+	gtk_paned_set_end_child(tree_divider, leaves_pane);
+
+	gtk_widget_set_vexpand(GTK_WIDGET(tree_divider), true);
+	return GTK_WIDGET(tree_divider);
 }
 
 
