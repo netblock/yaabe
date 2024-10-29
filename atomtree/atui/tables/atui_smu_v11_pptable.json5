@@ -2247,7 +2247,6 @@ global_default: {
 				count: "SMU11_PPT3_PPCLK_COUNT",
 				enum: "SMU11_PPT3_PPCLK",
 				pattern: [{
-					display: "ATUI_DISPLAY",
 					name: "FreqTablePhyclk [%02u]: %s",
 				},],
 			},
@@ -3431,9 +3430,8 @@ global_default: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SMU11_PPT8_PPCLK_COUNT",
-				enum: "ATUI_NULL",
+				enum: "SMU11_PPT8_PPCLK",
 				pattern: [{
-					display: "ATUI_DISPLAY",
 					name: "DcModeMaxFreq [%u]: %s",
 				},],
 			},
@@ -4784,7 +4782,6 @@ global_default: {
 				count: "SMU11_PPT7_PPCLK_COUNT",
 				enum: "SMU11_PPT7_PPCLK_e",
 				pattern: [{
-					display: "ATUI_DISPLAY",
 					name: "DcModeMaxFreq [%02u]: %s",
 				},],
 			},
