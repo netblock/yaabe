@@ -153,6 +153,9 @@ union psp_directory_entry_extra {
 		rsvd_1  :15-7 +1;
 	};
 };
+
+// TODO no clue where "partition offset" is relative to.
+// Seems per-entry ad-hoc since directory entries offset+size overlap.
 union psp_directory_entry_address {
 	uint64_t location;
 	struct { uint64_t

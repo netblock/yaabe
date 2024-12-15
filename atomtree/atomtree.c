@@ -2599,6 +2599,26 @@ pspdirectory_checksum(
 
 	);
 }
+
+inline static void
+verify_discovery_binary_header_checksum(
+		struct discovery_binary_header const* const dis
+		) {
+	uint8_t const* pos = (
+		(void*) dis + offsetof(typeof(*dis), binary_size) // start
+	);
+	uint8_t const* const end = (
+		(void*) dis
+		+ offsetof(typeof(*dis), binary_signature)
+		+ dis->binary_size
+	);
+	uint16_t sum = 0;
+	for (; pos < end; pos++) {
+		sum += *pos;
+	};
+	//assert(sum == dis->binary_checksum);
+}
+
 inline static void
 populate_psp_directory_table(
 		struct atomtree_psp_directory* const pspdir,
@@ -2615,21 +2635,44 @@ populate_psp_directory_table(
 		struct psp_directory* dir;
 	} const d = {
 		.raw = bios + bios_offset
+		//.raw = commons->atree->alloced_bios + 0x20000
 	};
 	if (PSP_COOKIE != *d.cookie) {
 		return;
 	};
+	assert(
+		d.dir->header.checksum
+		== fletcher32(
+			&(d.dir->header.totalentries),
+			(sizeof_flex(d.dir, pspentry, d.dir->header.totalentries)
+				- offsetof(typeof(*d.dir), header.totalentries)
+			)
+		)
+	);
 
 	pspdir->directory = d.dir;
 
 	uint8_t const totalentries = d.dir->header.totalentries;
 	if (totalentries) {
-		union psp_directory_entries** const fw_entries = arena_alloc(
+		union psp_directory_entries* const fw_entries = arena_alloc(
 			&(commons->alloc_arena), &(commons->error),
 			totalentries * sizeof(pspdir->fw_entries[0])
 		);
+		void* const moded_start[4] = { // see union psp_directory_entry_address
+			commons->atree->alloced_bios, // physical
+			bios, // bios; unsure, untested
+			d.raw, // dir header; unsure, untested
+
+			commons->atree->alloced_bios, // partition; incorrect, no clue
+			//commons->atree->alloced_bios
+			//commons->atree->alloced_bios + 0x93c00
+		};
+		union psp_directory_entry_address addr;
 		for (uint8_t i=0; i < totalentries; i++) {
-			fw_entries[i] = bios + d.dir->pspentry[i].address.address;
+			addr = d.dir->pspentry[i].address;
+			if (3 != addr.mode) {
+				fw_entries[i].raw = moded_start[addr.mode] + addr.address;
+			}
 		}
 
 		pspdir->fw_entries = fw_entries;

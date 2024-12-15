@@ -36,11 +36,13 @@ union psp_directory_entries {
 	// TODO some fw blobs don't do the psp fw header
 	// A trick to tell is if,
 	// struct psp_directory_entry.type == struct amd_fw_header.fw_type
-	struct amd_fw_header header;
+	void* raw;
+	struct amd_fw_header* header;
+	//struct discovery_binary_header* discovery;
 };
 struct atomtree_psp_directory {
 	struct psp_directory* directory;
-	union psp_directory_entries** fw_entries;
+	union psp_directory_entries* fw_entries;
 };
 
 struct atomtree_rom_header {

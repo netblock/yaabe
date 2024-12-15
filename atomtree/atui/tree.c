@@ -3077,6 +3077,84 @@ rename_psp_blob_with_type(
 	assert(strlen(atui_psp_blob->name) < sizeof(atui_psp_blob->name));
 }
 inline static atui_branch*
+grow_psp_directory_fw_blobs(
+		struct atomtree_psp_directory const* const pspdir
+		) {
+	union psp_directory_entries const* const fw_entries = pspdir->fw_entries;
+	struct psp_directory_entry const* const pspentry = (
+		pspdir->directory->pspentry
+	);
+	uint8_t const num_entries = pspdir->directory->header.totalentries;
+	if (0 == num_entries) {
+		return NULL;
+	}
+
+	atui_branch* const fw_blobs = ATUI_MAKE_BRANCH(atui_nullstruct,
+		"firmware blobs",
+		NULL,NULL, num_entries,NULL
+	);
+
+	atui_branch* blob;
+	atuifunc_args blob_args = {.atomtree=pspdir};
+	for (uint8_t i=0; i < num_entries; i++) {
+		if (NULL == fw_entries[i].raw) {
+			continue;
+			// TODO this is a hack because "partition offset" type is unknown
+			// see union psp_directory_entry_address
+		}
+		blob_args.bios = fw_entries[i].raw;
+		enum psp_entry_type fw_type = pspentry[i].type;
+		switch (fw_type) {
+			case AMD_ABL0:
+			case AMD_ABL1:
+			case AMD_ABL2:
+			case AMD_ABL3:
+			case AMD_ABL4:
+			case AMD_ABL5:
+			case AMD_ABL6:
+			case AMD_ABL7:
+				// the ABLs are generic types so we need test with magic
+				/*
+				if (pspentry[i].size >= sizeof(*fw_entries[i].discovery)
+						&& (
+							BINARY_SIGNATURE
+							== fw_entries[i].discovery->binary_signature
+						)) { // discovery will usually be in ABL7
+					blob = _atui_discovery_binary_header(&blob_args);
+
+				} else {
+					blob = _atui_amd_fw_header(&blob_args);
+				};
+				*/
+				blob = _atui_amd_fw_header(&blob_args);
+				break;
+			case AMD_PUBLIC_KEY:
+			case PSP_NV_DATA:
+			case BIOS_PUBLIC_KEY: // discovery for Navi3 is in here.
+			case BIOS_RTM_SIGNATURE:
+			case PSP_AMD_SECURE_DEBUG_KEY:
+			case PSP_SECURE_OS_SIGNING_KEY:
+			case PSP_BOOT_TIME_TRUSTLETS_KEY:
+			case AMD_WRAPPED_IKEK:
+			case 35:
+			case AMD_SEV_DATA:
+			case AMD_FW_L2_PTR:
+			case AMD_FW_DXIO:
+			case AMD_FW_USB_PHY:
+				blob = _atui_atui_nullstruct(&blob_args); break;
+			// TODO some fw blobs don't do the psp fw header
+			default:
+				blob = _atui_amd_fw_header(&blob_args); break;
+		}
+		rename_psp_blob_with_type(blob, fw_type, i);
+		blob->prefer_contiguous = true;
+		blob->table_size = pspentry[i].size;
+		ATUI_ADD_BRANCH(fw_blobs, blob);
+	}
+
+	return fw_blobs;
+}
+inline static atui_branch*
 grow_psp_directory(
 		struct atomtree_psp_directory const* const pspdir,
 		struct atom_tree const* const atree __unused
@@ -3089,43 +3167,7 @@ grow_psp_directory(
 		NULL, pspdir->directory, 0,NULL
 	);
 
-	atui_branch* fw_blobs = NULL;
-	uint8_t const num_entries = pspdir->directory->header.totalentries;
-	if (num_entries) {
-		fw_blobs = ATUI_MAKE_BRANCH(atui_nullstruct, "firmware blobs",
-			NULL,NULL, num_entries,NULL
-		);
-		struct psp_directory_entry const* const pspentry = (
-			pspdir->directory->pspentry
-		);
-		atui_branch* blob;
-		atuifunc_args blob_args = {.atomtree=pspdir};
-		for (uint8_t i=0; i < num_entries; i++) {
-			blob_args.bios = pspdir->fw_entries[i];
-			enum psp_entry_type fw_type = pspentry[i].type;
-			switch (fw_type) {
-				case PSP_NV_DATA:
-				case BIOS_PUBLIC_KEY:
-				case BIOS_RTM_SIGNATURE:
-				case PSP_AMD_SECURE_DEBUG_KEY:
-				case PSP_SECURE_OS_SIGNING_KEY:
-				case PSP_BOOT_TIME_TRUSTLETS_KEY:
-				case AMD_WRAPPED_IKEK:
-				case 35:
-				case AMD_ABL5:
-				case AMD_SEV_DATA:
-				case AMD_FW_L2_PTR:
-				case AMD_FW_DXIO:
-					blob = _atui_atui_nullstruct(&blob_args); break;
-				// TODO some fw blobs don't do the psp fw header
-				default: blob = _atui_amd_fw_header(&blob_args); break;
-			}
-			rename_psp_blob_with_type(blob, fw_type, i);
-			blob->prefer_contiguous = true;
-			blob->table_size = pspentry[i].size;
-			ATUI_ADD_BRANCH(fw_blobs, blob);
-		}
-	}
+	atui_branch* const fw_blobs = grow_psp_directory_fw_blobs(pspdir);
 
 	atui_branch* const child_branches[] = {
 		directory, fw_blobs
