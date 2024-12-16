@@ -32,17 +32,38 @@ struct atomtree_pci_tables {
 	struct pci_rom_tables* pci_tables;
 };
 
-union psp_directory_entries {
-	// TODO some fw blobs don't do the psp fw header
-	// A trick to tell is if,
-	// struct psp_directory_entry.type == struct amd_fw_header.fw_type
-	void* raw;
-	struct amd_fw_header* header;
-	//struct discovery_binary_header* discovery;
+struct atomtree_discovery_table {
+	struct discovery_binary_header* binary;
+
+	struct ip_discovery_header*     ip_discovery;
+	union ip_dies*                  dies[IP_DISCOVERY_MAX_NUM_DIES];
+	union discovery_gc_info*        gc_info;
+	struct discovery_harvest_table* harvest;
+};
+
+enum atomtree_psp_fw_payload_type:uint8_t {
+// This enum may not be technically necessary given
+// struct amd_fw_header.fw_type and .fw_id
+// but there's not much info about it and seems generic
+	PSPFW_DISCOVERY = AMD_ABL7,
+};
+struct psp_directory_entries {
+	union {
+		// TODO some fw blobs don't do the psp fw header
+		// A trick to tell is if,
+		// struct psp_directory_entry.type == struct amd_fw_header.fw_type
+		void* raw;
+		struct amd_fw_header* header;
+
+		struct atomtree_discovery_table discovery;
+	};
+
+	enum atomtree_psp_fw_payload_type type;
+	bool has_fw_header;
 };
 struct atomtree_psp_directory {
 	struct psp_directory* directory;
-	union psp_directory_entries* fw_entries;
+	struct psp_directory_entries* fw_entries;
 };
 
 struct atomtree_rom_header {

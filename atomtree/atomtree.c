@@ -2586,21 +2586,8 @@ populate_datatables(
 	}
 }
 
-inline static void
-pspdirectory_checksum(
-		struct atomtree_psp_directory* const pspdir
-		) {
-	struct psp_directory* const dir = pspdir->directory;
-	dir->header.checksum = fletcher32(
-		&(dir->header.totalentries),
-		(sizeof_flex(dir, pspentry, dir->header.totalentries)
-			- offsetof(typeof(*dir), header.totalentries)
-		)
 
-	);
-}
-
-inline static void
+inline static bool
 verify_discovery_binary_header_checksum(
 		struct discovery_binary_header const* const dis
 		) {
@@ -2616,9 +2603,48 @@ verify_discovery_binary_header_checksum(
 	for (; pos < end; pos++) {
 		sum += *pos;
 	};
-	//assert(sum == dis->binary_checksum);
+	return sum == dis->binary_checksum;
+}
+inline static void
+populate_disovery_table(
+		struct atomtree_discovery_table* const dis
+		) {
 }
 
+inline static void
+populate_psp_fw_payload_type(
+		struct psp_directory_entry const* const pspentry,
+		struct psp_directory_entries* const fw_entry
+		) {
+	fw_entry->has_fw_header = (
+		(sizeof(*fw_entry->header) <= pspentry->size)
+		&& (fw_entry->header->fw_type == pspentry->type)
+	);
+
+	if (fw_entry->has_fw_header) {
+		if ((sizeof(*fw_entry->discovery.binary) <= pspentry->size
+				) && (
+					BINARY_SIGNATURE
+					== fw_entry->discovery.binary->binary_signature
+				)) {
+			fw_entry->type = PSPFW_DISCOVERY;
+			populate_disovery_table(&(fw_entry->discovery));
+		}
+	}
+}
+inline static void
+pspdirectory_checksum(
+		struct atomtree_psp_directory* const pspdir
+		) {
+	struct psp_directory* const dir = pspdir->directory;
+	dir->header.checksum = fletcher32(
+		&(dir->header.totalentries),
+		(sizeof_flex(dir, pspentry, dir->header.totalentries)
+			- offsetof(typeof(*dir), header.totalentries)
+		)
+
+	);
+}
 inline static void
 populate_psp_directory_table(
 		struct atomtree_psp_directory* const pspdir,
@@ -2635,48 +2661,43 @@ populate_psp_directory_table(
 		struct psp_directory* dir;
 	} const d = {
 		.raw = bios + bios_offset
-		//.raw = commons->atree->alloced_bios + 0x20000
 	};
 	if (PSP_COOKIE != *d.cookie) {
 		return;
 	};
-	assert(
-		d.dir->header.checksum
-		== fletcher32(
-			&(d.dir->header.totalentries),
-			(sizeof_flex(d.dir, pspentry, d.dir->header.totalentries)
-				- offsetof(typeof(*d.dir), header.totalentries)
-			)
-		)
-	);
 
 	pspdir->directory = d.dir;
 
 	uint8_t const totalentries = d.dir->header.totalentries;
-	if (totalentries) {
-		union psp_directory_entries* const fw_entries = arena_alloc(
-			&(commons->alloc_arena), &(commons->error),
-			totalentries * sizeof(pspdir->fw_entries[0])
-		);
-		void* const moded_start[4] = { // see union psp_directory_entry_address
-			commons->atree->alloced_bios, // physical
-			bios, // bios; unsure, untested
-			d.raw, // dir header; unsure, untested
+	if (0 == totalentries) {
+		return;
 
-			commons->atree->alloced_bios, // partition; incorrect, no clue
-			//commons->atree->alloced_bios
-			//commons->atree->alloced_bios + 0x93c00
-		};
-		union psp_directory_entry_address addr;
-		for (uint8_t i=0; i < totalentries; i++) {
-			addr = d.dir->pspentry[i].address;
-			if (3 != addr.mode) {
-				fw_entries[i].raw = moded_start[addr.mode] + addr.address;
-			}
+	}
+	struct psp_directory_entries* const fw_entries = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		totalentries * sizeof(pspdir->fw_entries[0])
+	);
+	void* moded_start[4] = { // see union psp_directory_entry_address
+		commons->atree->alloced_bios, // physical
+		bios, // bios; unsure, untested
+		d.raw, // dir header; unsure, untested
+
+		commons->atree->alloced_bios, // partition; incorrect
+		// partition seems per-entry ad-hoc; but relative to what?
+	};
+	union psp_directory_entry_address addr;
+	for (uint8_t i=0; i < totalentries; i++) {
+
+		addr = d.dir->pspentry[i].address;
+		if (3 == addr.mode) {
+			continue;
 		}
 
-		pspdir->fw_entries = fw_entries;
+		fw_entries[i].raw = moded_start[addr.mode] + addr.address;
+		populate_psp_fw_payload_type(&(d.dir->pspentry[i]), &(fw_entries[i]));
 	}
+
+	pspdir->fw_entries = fw_entries;
 }
 
 

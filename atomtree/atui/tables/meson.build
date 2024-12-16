@@ -14,6 +14,7 @@ atui_branches = files(
 	'atui_asic_reg_data_tables.json5',
 	'atui_bitfield_overrides.json5',
 	'atui_psp.json5',
+	'atui_discovery.json5',
 )
 atui_const_tables = files(
 	'atui_enums.json5',

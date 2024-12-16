@@ -1398,4 +1398,18 @@ Enums for ATUI_ENUM
 ]},
 
 /******************************************************************************/
+// discovery.h
+
+{name: "discovery_tables",
+	constants: [
+		{name: "DISCOVERY_IP_DISCOVERY",},
+		{name: "DISCOVERY_GC",},
+		{name: "DISCOVERY_HARVEST_INFO",},
+		{name: "DISCOVERY_VCN_INFO",},
+		{name: "DISCOVERY_MALL_INFO",},
+		{name: "DISCOVERY_NPS_INFO",},
+		{name: "DISCOVERY_TOTAL_TABLES",},
+]},
+
+/******************************************************************************/
 ]}

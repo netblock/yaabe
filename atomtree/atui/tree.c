@@ -3052,6 +3052,13 @@ grow_datatables(
 	}
 }
 
+inline static atui_branch*
+grow_discovery_tables(
+		struct discovery_binary_header const* const dis
+		) {
+	atui_branch* blob = NULL;
+	return blob;
+}
 
 inline static void
 rename_psp_blob_with_type(
@@ -3080,7 +3087,7 @@ inline static atui_branch*
 grow_psp_directory_fw_blobs(
 		struct atomtree_psp_directory const* const pspdir
 		) {
-	union psp_directory_entries const* const fw_entries = pspdir->fw_entries;
+	struct psp_directory_entries const* const fw_entries = pspdir->fw_entries;
 	struct psp_directory_entry const* const pspentry = (
 		pspdir->directory->pspentry
 	);
@@ -3113,20 +3120,12 @@ grow_psp_directory_fw_blobs(
 			case AMD_ABL5:
 			case AMD_ABL6:
 			case AMD_ABL7:
-				// the ABLs are generic types so we need test with magic
-				/*
-				if (pspentry[i].size >= sizeof(*fw_entries[i].discovery)
-						&& (
-							BINARY_SIGNATURE
-							== fw_entries[i].discovery->binary_signature
-						)) { // discovery will usually be in ABL7
-					blob = _atui_discovery_binary_header(&blob_args);
-
-				} else {
-					blob = _atui_amd_fw_header(&blob_args);
-				};
-				*/
-				blob = _atui_amd_fw_header(&blob_args);
+				switch (fw_entries[i].type) {
+					case PSPFW_DISCOVERY:
+						blob = _atui_discovery_binary_header(&blob_args); break;
+					default:
+						blob = _atui_amd_fw_header(&blob_args); break;
+				}
 				break;
 			case AMD_PUBLIC_KEY:
 			case PSP_NV_DATA:

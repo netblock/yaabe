@@ -1,0 +1,97 @@
+/* For discovery.h */
+
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+	},
+}, branches: [
+
+{
+	c_type: "discovery_table_info",
+	leaves: [
+		{
+			access: "bios->offset",
+			name: "offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->checksum",
+			name: "checksum",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Byte sum of the table",},
+			],
+		}, {
+			access: "bios->size",
+			name: "size",
+		}, {
+			access: "bios->padding",
+			name: "padding",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "discovery_binary_header",
+	leaves: [
+		{
+			access: "bios->fw_header",
+			name: "fw_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "amd_fw_header",
+		}, {
+			access: "bios->binary_signature",
+			name: "binary_signature",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->version_major",
+			name: "version_major",
+		}, {
+			access: "bios->version_minor",
+			name: "version_minor",
+		}, {
+			access: "bios->binary_checksum",
+			name: "binary_checksum",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "Byte sum of the binary after this field",},
+			],
+		}, {
+			access: "bios->binary_size",
+			name: "binary_size",
+		}, {
+			access: "bios->table_list",
+			name: "table_list",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "DISCOVERY_TOTAL_TABLES",
+				enum: "discovery_tables",
+				pattern: [{
+					access: "bios->table_list",
+					name: "table_list [%u]: %s",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "discovery_table_info",
+				},],
+			},
+		},
+	],
+},
+
+], }

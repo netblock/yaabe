@@ -1,0 +1,281 @@
+/* For psp.h */
+
+{class: "branch",
+global_default: {
+	branch_defaults: {
+		c_prefix: "struct",
+		atomtree: "atui_nullstruct",
+		table_start: "bios",
+		table_size: "sizeof(*bios)",
+	},
+	leaf_defaults: {
+		generic: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+	},
+}, branches: [
+
+{
+	c_prefix:"union", c_type: "psp_directory_additional_info",
+	leaves: [
+		{
+			access: "bios->additional_info",
+			name: "additional_info",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "dir_size",
+					hi: 9, lo: 0,
+				}, {
+					name: "spi_block_size",
+					hi: 13, lo: 10,
+				}, {
+					name: "base_addr",
+					hi: 28, lo: 14,
+				}, {
+					name: "address_mode",
+					hi: 30, lo: 29,
+				}, {
+					name: "not_used",
+					hi: 31, lo: 31,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "psp_directory_header",
+	leaves: [
+		{
+			access: "bios->pspcookie",
+			name: "pspcookie",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "\"$PSP\"",},
+			],
+		}, {
+			access: "bios->checksum",
+			name: "checksum",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "32 bit CRC of header items below and the entire table",},
+			],
+		}, {
+			access: "bios->totalentries",
+			name: "totalentries",
+		}, {
+			access: "bios->additional_info",
+			name: "additional_info",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_directory_additional_info",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "psp_directory_entry_extra",
+	leaves: [
+		{
+			access: "bios->extra",
+			name: "extra",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "rom_id",
+					hi: 1, lo: 0,
+				}, {
+					name: "writable",
+					hi: 2, lo: 2,
+				}, {
+					name: "inst",
+					hi: 6, lo: 3,
+				}, {
+					name: "rsvd_1",
+					hi: 15, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "psp_directory_entry_address",
+	leaves: [
+		{
+			access: "bios->location",
+			name: "location",
+			display: "ATUI_HEX",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "address",
+					display: "ATUI_HEX",
+					hi: 61, lo: 0,
+				}, {
+					name: "mode",
+					hi: 63, lo: 62,
+					description: [
+						{language: "english", text: "0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset",},
+					],
+				},
+			],
+		},
+	],
+}, {
+	c_type: "psp_directory_entry",
+	leaves: [
+		{
+			access: "bios->type",
+			name: "type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->subprog",
+			name: "subprog",
+		}, {
+			access: "bios->extra",
+			name: "extra",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_directory_entry_extra",
+		}, {
+			access: "bios->size",
+			name: "size",
+			description: [
+				{language: "english", text: "Size of PSP Entry in bytes",},
+			],
+		}, {
+			access: "bios->address",
+			name: "address",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_directory_entry_address",
+		},
+	],
+}, {
+	c_type: "psp_directory",
+	table_size: "sizeof_flex(bios, pspentry, bios->header.totalentries)",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_directory_header",
+		}, {
+			access: "bios->pspentry",
+			name: "pspentry",
+			description: [
+				{language: "english", text: "Array of PSP entries each pointing to a binary in SPI flash",},
+			],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->header.totalentries",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "pspentry [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "psp_directory_entry",
+				},],
+			},
+		},
+	],
+},
+
+{
+	c_type: "amd_fw_header",
+	leaves: [
+		{
+			access: "bios->reserved_0",
+			name: "reserved_0",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->fw_size_signed",
+			name: "fw_size_signed",
+		}, {
+			access: "bios->reserved_18",
+			name: "reserved_18",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->sig_opt",
+			name: "sig_opt",
+			description: [
+				{language: "english", text: "1 if the image is signed, 0 otherwise",},
+			],
+		}, {
+			access: "bios->sig_id",
+			name: "sig_id",
+		}, {
+			access: "bios->sig_param",
+			name: "sig_param",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->comp_opt",
+			name: "comp_opt",
+		}, {
+			access: "bios->reserved_4c",
+			name: "reserved_4c",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->uncomp_size",
+			name: "uncomp_size",
+		}, {
+			access: "bios->comp_size",
+			name: "comp_size",
+		}, {
+			access: "bios->fw_id",
+			name: "fw_id",
+		}, {
+			access: "bios->reserved_5a",
+			name: "reserved_5a",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->version",
+			name: "version",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->reserved_64",
+			name: "reserved_64",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->size_total",
+			name: "size_total",
+		}, {
+			access: "bios->reserved_70",
+			name: "reserved_70",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->fw_type",
+			name: "fw_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+			description: [
+				{language: "english", text: "Starting MDN fw_id is populated instead of fw_type. fw_type will still be around for backwards compatibility.",},
+			],
+		}, {
+			access: "bios->fw_subtype",
+			name: "fw_subtype",
+		}, {
+			access: "bios->fw_subprog",
+			name: "fw_subprog",
+		}, {
+			access: "bios->reserved_7f",
+			name: "reserved_7f",
+		}, {
+			access: "bios->reserved_80",
+			name: "reserved_80",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+], }
