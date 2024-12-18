@@ -1,8 +1,6 @@
 #ifndef DISCOVERY_H
 #define DISCOVERY_H
 
-#define HWIP_MAX_INSTANCE 44
-#define HW_ID_MAX         300
 
 #define PSP_HEADER_SIZE           256
 
@@ -24,6 +22,89 @@ enum discovery_tables {
 	DISCOVERY_TOTAL_TABLES = 6,
 };
 
+#define HWIP_MAX_INSTANCE 44
+enum soc15_hwid:uint16_t {
+	MP1_HWID          = 1,
+	MP2_HWID          = 2,
+	THM_HWID          = 3,
+	SMUIO_HWID        = 4,
+	FUSE_HWID         = 5,
+	CLKA_HWID         = 6,
+	PWR_HWID         = 10,
+	GC_HWID          = 11,
+	UVD_HWID         = 12,
+	VCN_HWID         = UVD_HWID,
+	AUDIO_AZ_HWID    = 13,
+	ACP_HWID         = 14,
+	DCI_HWID         = 15,
+	DCO_HWID         = 16,
+	XDMA_HWID        = 17,
+	DCEAZ_HWID       = 18,
+	SDPMUX_HWID      = 19,
+	NTB_HWID         = 20,
+	VPE_HWID         = 21,
+	IOHC_HWID        = 24,
+	L2IMU_HWID       = 28,
+	VCE_HWID         = 32,
+	MMHUB_HWID       = 34,
+	ATHUB_HWID       = 35,
+	DBGU_NBIO_HWID   = 36,
+	DFX_HWID         = 37,
+	DBGU0_HWID       = 38,
+	DBGU1_HWID       = 39,
+	OSSSYS_HWID      = 40,
+	HDP_HWID         = 41,
+	SDMA0_HWID       = 42,
+	SDMA1_HWID       = 43,
+	ISP_HWID         = 44,
+	DBGU_IO_HWID     = 45,
+	DF_HWID          = 46,
+	CLKB_HWID        = 47,
+	FCH_HWID         = 48,
+	DFX_DAP_HWID     = 49,
+	L1IMU_PCIE_HWID  = 50,
+	L1IMU_NBIF_HWID  = 51,
+	L1IMU_IOAGR_HWID = 52,
+	L1IMU3_HWID      = 53,
+	L1IMU4_HWID      = 54,
+	L1IMU5_HWID      = 55,
+	L1IMU6_HWID      = 56,
+	L1IMU7_HWID      = 57,
+	L1IMU8_HWID      = 58,
+	L1IMU9_HWID      = 59,
+	L1IMU10_HWID     = 60,
+	L1IMU11_HWID     = 61,
+	L1IMU12_HWID     = 62,
+	L1IMU13_HWID     = 63,
+	L1IMU14_HWID     = 64,
+	L1IMU15_HWID     = 65,
+	WAFLC_HWID       = 66,
+	FCH_USB_PD_HWID  = 67,
+	SDMA2_HWID       = 68,
+	SDMA3_HWID       = 69,
+	PCIE_HWID        = 70,
+	PCS_HWID         = 80,
+	DDCL_HWID        = 89,
+	SST_HWID         = 90,
+	LSDMA_HWID       = 91,
+	IOAGR_HWID      = 100,
+	NBIF_HWID       = 108,
+	IOAPIC_HWID     = 124,
+	SYSTEMHUB_HWID  = 128,
+	NTBCCP_HWID     = 144,
+	UMC_HWID        = 150,
+	SATA_HWID       = 168,
+	USB_HWID        = 170,
+	CCXSEC_HWID     = 176,
+	XGMI_HWID       = 200,
+	XGBE_HWID       = 216,
+	MP0_HWID        = 255,
+	DMU_HWID        = 271,
+	DIO_HWID        = 272,
+	DAZ_HWID        = 274,
+	HWID_MAX        = 300,
+};
+
 #pragma pack(push, 1) // bios data must use byte alignment
 
 struct discovery_table_info {
@@ -34,13 +115,16 @@ struct discovery_table_info {
 };
 
 struct discovery_binary_header {
-	struct amd_fw_header fw_header;
 	uint32_t binary_signature;
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint16_t binary_checksum; // Byte sum of the binary after this field 
 	uint16_t binary_size;
 	struct discovery_table_info table_list[DISCOVERY_TOTAL_TABLES];
+};
+struct discovery_fw_blob {
+	struct amd_fw_header           firmware_header;
+	struct discovery_binary_header binary_header;
 };
 
 struct ip_die_info {
@@ -68,7 +152,7 @@ struct ip_discovery_header {
 struct ip_die_header {
 	uint16_t die_id;
 	uint16_t num_ips;
-	uint16_t hardware_id;    //  max: HW_ID_MAX
+	enum soc15_hwid hardware_id;
 	uint8_t instance_number; // max: HWIP_MAX_INSTANCE
 	uint8_t num_base_address;
 	uint8_t major;
@@ -86,7 +170,7 @@ union ip_harvest {
 struct ip_v1 {
 	struct ip_die_header header;
 	union ip_harvest harvest;
-	uint32_t base_address[] __counted_by(num_base_address);
+	uint32_t base_address[] __counted_by(header.num_base_address);
 };
 
 
@@ -100,15 +184,15 @@ union ip_hcid_sub {
 struct ip_v3 {
 	struct ip_die_header header;
 	union ip_hcid_sub sub;
-	uint32_t base_address[] __counted_by(num_base_address);
+	uint32_t base_address[] __counted_by(header.num_base_address);
 };
 struct ip_v4_64 {
 	struct ip_die_header header;
 	union ip_hcid_sub sub;
-	uint64_t base_address[] __counted_by(num_base_address);
+	uint64_t base_address[] __counted_by(header.num_base_address);
 };
 
-union ip_dies {
+union discovery_ip_dies {
 	struct ip_die_header header;
 	struct ip_v1    v1;
 	struct ip_v3    v3;
@@ -117,7 +201,7 @@ union ip_dies {
 };
 
 
-struct gpu_info_header {
+struct discovery_gpu_info_header {
 	uint32_t table_id;
 	uint16_t version_major;
 	uint16_t version_minor;
@@ -125,8 +209,8 @@ struct gpu_info_header {
 };
 
 
-struct gc_info_v1_0 {
-	struct gpu_info_header header;
+struct discovery_gc_info_v1_0 {
+	struct discovery_gpu_info_header header;
 
 	uint32_t gc_num_se;
 	uint32_t gc_num_wgp0_per_sa;
@@ -149,8 +233,8 @@ struct gc_info_v1_0 {
 	uint32_t gc_num_gl2a;
 };
 
-struct gc_info_v1_1 {
-	struct gpu_info_header header;
+struct discovery_gc_info_v1_1 {
+	struct discovery_gpu_info_header header;
 
 	uint32_t gc_num_se;
 	uint32_t gc_num_wgp0_per_sa;
@@ -176,8 +260,8 @@ struct gc_info_v1_1 {
 	uint32_t gc_num_tcps;
 };
 
-struct gc_info_v1_2 {
-	struct gpu_info_header header;
+struct discovery_gc_info_v1_2 {
+	struct discovery_gpu_info_header header;
 	uint32_t gc_num_se;
 	uint32_t gc_num_wgp0_per_sa;
 	uint32_t gc_num_wgp1_per_sa;
@@ -210,8 +294,8 @@ struct gc_info_v1_2 {
 	uint32_t gc_gl2c_per_gpu;
 };
 
-struct gc_info_v1_3 {
-    struct gpu_info_header header;
+struct discovery_gc_info_v1_3 {
+    struct discovery_gpu_info_header header;
     uint32_t gc_num_se;
     uint32_t gc_num_wgp0_per_sa;
     uint32_t gc_num_wgp1_per_sa;
@@ -252,8 +336,8 @@ struct gc_info_v1_3 {
     uint32_t gc_tcc_cache_line_size;
 };
 
-struct gc_info_v2_0 {
-	struct gpu_info_header header;
+struct discovery_gc_info_v2_0 {
+	struct discovery_gpu_info_header header;
 
 	uint32_t gc_num_se;
 	uint32_t gc_num_cu_per_sh;
@@ -274,8 +358,8 @@ struct gc_info_v2_0 {
 	uint32_t gc_num_packer_per_sc;
 };
 
-struct gc_info_v2_1 {
-	struct gpu_info_header header;
+struct discovery_gc_info_v2_1 {
+	struct discovery_gpu_info_header header;
 
 	uint32_t gc_num_se;
 	uint32_t gc_num_cu_per_sh;
@@ -304,13 +388,13 @@ struct gc_info_v2_1 {
 };
 
 union discovery_gc_info {
-	struct gpu_info_header header;
-	struct gc_info_v1_0  v1_0;
-	struct gc_info_v1_1  v1_1;
-	struct gc_info_v1_2  v1_2;
-	struct gc_info_v1_3  v1_3;
-	struct gc_info_v2_0  v2_0;
-	struct gc_info_v2_1  v2_1;
+	struct discovery_gpu_info_header header;
+	struct discovery_gc_info_v1_0  v1_0;
+	struct discovery_gc_info_v1_1  v1_1;
+	struct discovery_gc_info_v1_2  v1_2;
+	struct discovery_gc_info_v1_3  v1_3;
+	struct discovery_gc_info_v2_0  v2_0;
+	struct discovery_gc_info_v2_1  v2_1;
 };
 
 struct discovery_harvest_info_header {
@@ -319,7 +403,7 @@ struct discovery_harvest_info_header {
 };
 
 struct discovery_harvest_info {
-	uint16_t hardware_id;
+	enum soc15_hwid hardware_id;
 	uint8_t ip_instance_number;
 	uint8_t reserved;
 };
@@ -329,15 +413,15 @@ struct discovery_harvest_table {
 	struct discovery_harvest_info list[32];
 };
 
-struct mall_info_header {
+struct discovery_mall_info_header {
 	uint32_t table_id;
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size_bytes;
 };
 
-struct mall_info_v1_0 {
-	struct mall_info_header header;
+struct discovery_mall_info_v1_0 {
+	struct discovery_mall_info_header header;
 	uint32_t mall_size_per_m;
 	uint32_t m_s_present;
 	uint32_t m_half_use;
@@ -345,14 +429,19 @@ struct mall_info_v1_0 {
 	uint32_t reserved[5];
 };
 
-struct mall_info_v2_0 {
-	struct mall_info_header header;
+struct discovery_mall_info_v2_0 {
+	struct discovery_mall_info_header header;
 	uint32_t mall_size_per_umc;
 	uint32_t reserved[8];
 };
 
+union discovery_mall_info {
+	struct discovery_mall_info_header header;
+	struct discovery_mall_info_v1_0   v1_0;
+	struct discovery_mall_info_v2_0   v2_0;
+};
 
-struct vcn_info_header {
+struct discovery_vcn_info_header {
     uint32_t table_id;
     uint16_t version_major;
     uint16_t version_minor;
@@ -368,38 +457,40 @@ union vcn_fuse_data {
 		reserved     :31-4 +1;
 	};	
 };
-struct vcn_instance_info_v1_0 {
+struct discovery_vcn_instance_info_v1_0 {
 	uint32_t instance_num; // VCN IP instance number. 0 - VCN0; 1 - VCN1 etc
 	union vcn_fuse_data fuse_data;
 	uint32_t reserved[2];
 };
-#define VCN_INFO_TABLE_MAX_NUM_INSTANCES 4
-struct vcn_info_v1_0 {
-	struct vcn_info_header header;
+#define DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES 4
+struct discovery_vcn_info_v1_0 {
+	struct discovery_vcn_info_header header;
 	uint32_t num_of_instances; // number of entries used in instance_info below
-	struct vcn_instance_info_v1_0 instance_info[VCN_INFO_TABLE_MAX_NUM_INSTANCES];
+	struct discovery_vcn_instance_info_v1_0 instance_info[
+		DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES
+	];
 	uint32_t reserved[4];
 };
 
-#define NPS_INFO_TABLE_MAX_NUM_INSTANCES 12
+#define DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES 12
 
-struct nps_info_header {
+struct discovery_nps_info_header {
 	uint32_t table_id;
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size_bytes; // size of the entire header+data in bytes = 0x000000D4 (212) 
 };
 
-struct nps_instance_info_v1_0 {
+struct discovery_nps_instance_info_v1_0 {
 	uint64_t base_address;
 	uint64_t limit_address;
 };
 
-struct nps_info_v1_0 {
-	struct nps_info_header header;
+struct discovery_nps_info_v1_0 {
+	struct discovery_nps_info_header header;
 	uint32_t nps_type;
 	uint32_t count;
-	struct nps_instance_info_v1_0 instance_info[NPS_INFO_TABLE_MAX_NUM_INSTANCES];
+	struct discovery_nps_instance_info_v1_0 instance_info[DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES];
 };
 
 #pragma pack(pop) // restore old packing

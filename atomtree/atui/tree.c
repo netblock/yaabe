@@ -3054,9 +3054,13 @@ grow_datatables(
 
 inline static atui_branch*
 grow_discovery_tables(
-		struct discovery_binary_header const* const dis
+		struct atomtree_discovery_table const* const dis
 		) {
-	atui_branch* blob = NULL;
+	atuifunc_args blob_args = {.atomtree=dis};
+
+	blob_args.bios = dis->blob;
+	atui_branch* const blob = _atui_discovery_fw_blob(&blob_args);
+
 	return blob;
 }
 
@@ -3122,7 +3126,10 @@ grow_psp_directory_fw_blobs(
 			case AMD_ABL7:
 				switch (fw_entries[i].type) {
 					case PSPFW_DISCOVERY:
-						blob = _atui_discovery_binary_header(&blob_args); break;
+						blob = grow_discovery_tables(
+							&(fw_entries[i].discovery)
+						);
+						break;
 					default:
 						blob = _atui_amd_fw_header(&blob_args); break;
 				}

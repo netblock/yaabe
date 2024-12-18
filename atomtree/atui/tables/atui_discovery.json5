@@ -51,11 +51,6 @@ global_default: {
 	c_type: "discovery_binary_header",
 	leaves: [
 		{
-			access: "bios->fw_header",
-			name: "fw_header",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "amd_fw_header",
-		}, {
 			access: "bios->binary_signature",
 			name: "binary_signature",
 			display: "ATUI_HEX",
@@ -93,5 +88,21 @@ global_default: {
 		},
 	],
 },
+{
+	c_type: "discovery_fw_blob",
+	leaves: [
+		{
+			access: "bios->firmware_header",
+			name: "firmware_header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "amd_fw_header",
+		}, {
+			access: "bios->binary_header",
+			name: "binary_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_binary_header",
+		},
+	],
+}
 
 ], }

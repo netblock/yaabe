@@ -2589,26 +2589,57 @@ populate_datatables(
 
 inline static bool
 verify_discovery_binary_header_checksum(
-		struct discovery_binary_header const* const dis
+		struct discovery_fw_blob const* const dis
 		) {
 	uint8_t const* pos = (
-		(void*) dis + offsetof(typeof(*dis), binary_size) // start
+		(void*) & (dis->binary_header)
+		+ offsetof(typeof(dis->binary_header), binary_size) // start
 	);
 	uint8_t const* const end = (
-		(void*) dis
-		+ offsetof(typeof(*dis), binary_signature)
-		+ dis->binary_size
+		(void*) & (dis->binary_header)
+		+ dis->binary_header.binary_size
 	);
 	uint16_t sum = 0;
 	for (; pos < end; pos++) {
 		sum += *pos;
 	};
-	return sum == dis->binary_checksum;
+	return sum == dis->binary_header.binary_checksum;
 }
 inline static void
-populate_disovery_table(
+populate_discovery_table(
 		struct atomtree_discovery_table* const dis
 		) {
+	union {
+		void* raw;
+		struct discovery_binary_header* bin;
+	} const b = {
+		.bin = & (dis->blob->binary_header)
+	};
+	struct discovery_table_info const* const table_list = b.bin->table_list;
+
+	if (table_list[DISCOVERY_IP_DISCOVERY].offset) {
+		dis->ip_discovery = b.raw + table_list[DISCOVERY_IP_DISCOVERY].offset;
+		uint16_t const num_dies = dis->ip_discovery->num_dies;
+		for (uint8_t i=0; (i<num_dies) && (i<IP_DISCOVERY_MAX_NUM_DIES); i++) {
+			dis->dies[i] = b.raw + dis->ip_discovery->die_info[i].die_offset;
+		}
+	}
+
+	if (table_list[DISCOVERY_GC].offset) {
+		dis->gc_info = b.raw + table_list[DISCOVERY_GC].offset;
+	}
+	if (table_list[DISCOVERY_HARVEST_INFO].offset) {
+		dis->harvest = b.raw + table_list[DISCOVERY_HARVEST_INFO].offset;
+	}
+	if (table_list[DISCOVERY_VCN_INFO].offset) {
+		dis->vcn_info = b.raw + table_list[DISCOVERY_VCN_INFO].offset;
+	}
+	if (table_list[DISCOVERY_MALL_INFO].offset) {
+		dis->mall_info = b.raw + table_list[DISCOVERY_MALL_INFO].offset;
+	}
+	if (table_list[DISCOVERY_NPS_INFO].offset) {
+		dis->nps_info = b.raw + table_list[DISCOVERY_NPS_INFO].offset;
+	}
 }
 
 inline static void
@@ -2622,13 +2653,13 @@ populate_psp_fw_payload_type(
 	);
 
 	if (fw_entry->has_fw_header) {
-		if ((sizeof(*fw_entry->discovery.binary) <= pspentry->size
+		if ((sizeof(*fw_entry->discovery.blob) <= pspentry->size
 				) && (
 					BINARY_SIGNATURE
-					== fw_entry->discovery.binary->binary_signature
+					== fw_entry->discovery.blob->binary_header.binary_signature
 				)) {
 			fw_entry->type = PSPFW_DISCOVERY;
-			populate_disovery_table(&(fw_entry->discovery));
+			populate_discovery_table(&(fw_entry->discovery));
 		}
 	}
 }
