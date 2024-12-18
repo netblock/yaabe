@@ -3091,7 +3091,9 @@ inline static atui_branch*
 grow_psp_directory_fw_blobs(
 		struct atomtree_psp_directory const* const pspdir
 		) {
-	struct psp_directory_entries const* const fw_entries = pspdir->fw_entries;
+	struct atomtree_psp_directory_entries const* const fw_entries = (
+		pspdir->fw_entries
+	);
 	struct psp_directory_entry const* const pspentry = (
 		pspdir->directory->pspentry
 	);

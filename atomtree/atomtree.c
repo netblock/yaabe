@@ -2645,7 +2645,7 @@ populate_discovery_table(
 inline static void
 populate_psp_fw_payload_type(
 		struct psp_directory_entry const* const pspentry,
-		struct psp_directory_entries* const fw_entry
+		struct atomtree_psp_directory_entries* const fw_entry
 		) {
 	fw_entry->has_fw_header = (
 		(sizeof(*fw_entry->header) <= pspentry->size)
@@ -2704,7 +2704,7 @@ populate_psp_directory_table(
 		return;
 
 	}
-	struct psp_directory_entries* const fw_entries = arena_alloc(
+	struct atomtree_psp_directory_entries* const fw_entries = arena_alloc(
 		&(commons->alloc_arena), &(commons->error),
 		totalentries * sizeof(pspdir->fw_entries[0])
 	);

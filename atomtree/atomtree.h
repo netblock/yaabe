@@ -50,7 +50,7 @@ enum atomtree_psp_fw_payload_type:uint8_t {
 // but there's not much info about it and seems generic
 	PSPFW_DISCOVERY = AMD_ABL7,
 };
-struct psp_directory_entries {
+struct atomtree_psp_directory_entries {
 	union {
 		// TODO some fw blobs don't do the psp fw header
 		// A trick to tell is if,
@@ -66,7 +66,7 @@ struct psp_directory_entries {
 };
 struct atomtree_psp_directory {
 	struct psp_directory* directory;
-	struct psp_directory_entries* fw_entries;
+	struct atomtree_psp_directory_entries* fw_entries;
 };
 
 struct atomtree_rom_header {
