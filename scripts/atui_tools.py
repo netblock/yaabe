@@ -38,9 +38,9 @@ class __regexvar:
 	array_var:str =     "\\["+white+ name             +white+"\\]" +white
 	array_num:str =     "\\["+white+ "(\\d*)"         +white+"\\]" +white
 	array_vlaflex:str = "\\["+white+ "("+name_nc+")?" +white+"\\]" +white
-	#array_countedby_nc:str = "(?:__counted_by\\(\\w*\\))?" +white
-	array_countedby_var:str = "(__counted_by\\((\\w*)\\))" +white
-	array_countedby_whole_q:str = "(__counted_by\\(\\w*\\))?" +white
+	#array_countedby_nc:str = "(?:__counted_by\\([\\w\\.]*\\))?" +white
+	array_countedby_var:str = "(__counted_by\\(([\\w\\.]*)\\))" +white
+	array_countedby_whole_q:str = "(__counted_by\\([\\w\\.]*\\))?" +white
 	nonstring_nc:str = "(?:__nonstring)?" +white
 
 	struct_or_cnumtype:str = "("  \
@@ -52,7 +52,7 @@ class __regexvar:
 
 	c_enum:str = "(enum)" + white
 	c_enum_type:str = ":" + white + c_num_types
-	c_enum_equals:str = "=" + white + "([^,]+)," + spacetab
+	c_enum_equals:str = "=" + white + "(\\S+),?" + spacetab
 
 	comments:str = "(?:" + white + "(//\\s*(.*)))?"
 	flagged_comment:str = "__ATUIDESCR//\\s*(.*)"
@@ -351,6 +351,7 @@ def enum_to_atui(
 		enum_text,
 		text
 	)
+
 	text = re.sub("};","]},", text)
 
 	# enum entries
@@ -377,6 +378,8 @@ def enum_to_atui(
 		text
 	)
 	text = re.sub(s.no_comment, "", text)
+
+	# (?<!...) is, matches if not preceeded by ...
 	text = re.sub("(?<!\\],)\n" +s.tabs+ "},\n", "},\n", text)
 
 	if print_text:
