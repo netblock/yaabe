@@ -4,14 +4,6 @@
 
 #define PSP_HEADER_SIZE           256
 
-#define BINARY_SIGNATURE          0x28211407
-#define DISCOVERY_TABLE_SIGNATURE 0x53445049
-#define GC_TABLE_ID               0x4347
-#define HARVEST_TABLE_SIGNATURE   0x56524148
-#define VCN_INFO_TABLE_ID         0x004E4356
-#define MALL_INFO_TABLE_ID        0x4C4C414D
-#define NPS_INFO_TABLE_ID         0x0053504E
-
 enum discovery_tables {
 	DISCOVERY_IP_DISCOVERY = 0,
 	DISCOVERY_GC           = 1,
@@ -114,6 +106,7 @@ struct discovery_table_info {
 	uint16_t padding;
 };
 
+#define BINARY_SIGNATURE          0x28211407
 struct discovery_binary_header {
 	uint32_t binary_signature;
 	uint16_t version_major;
@@ -129,7 +122,7 @@ struct discovery_fw_blob {
 
 struct ip_die_info {
 	uint16_t die_id;
-	uint16_t die_offset; // Points to the corresponding die_header structure 
+	uint16_t die_offset;
 };
 union ip_discovery_header_flags_v4 { // reserved in v3
 	uint16_t flags;
@@ -139,17 +132,20 @@ union ip_discovery_header_flags_v4 { // reserved in v3
 	};
 };
 #define IP_DISCOVERY_MAX_NUM_DIES 16
+//                    little-endian: 3 2 1 0
+//                                   S D P I
+#define DISCOVERY_TABLE_SIGNATURE 0x53445049
 struct ip_discovery_header {
-	uint32_t signature; // Table Signature 
-	uint16_t version;   // Table Version 
-	uint16_t size;      // Table Size 
-	uint32_t id;        // Table ID 
-	uint16_t num_dies;  // Number of Dies 
+	char signature[4] __nonstring; // IPDS
+	uint16_t version;
+	uint16_t size;
+	uint32_t id;
+	uint16_t num_dies;
 	struct ip_die_info die_info[IP_DISCOVERY_MAX_NUM_DIES];
-	union ip_discovery_header_flags_v4 flags;
+	union ip_discovery_header_flags_v4 flags; // reserved in v3 and older
 };
 
-struct ip_die_header {
+struct ip_discovery_die_header {
 	uint16_t die_id;
 	uint16_t num_ips;
 	enum soc15_hwid hardware_id;
@@ -167,8 +163,8 @@ union ip_harvest {
 		reserved :7-4 +1; 
 	};
 };
-struct ip_v1 {
-	struct ip_die_header header;
+struct ip_discovery_die_v1 {
+	struct ip_discovery_die_header header;
 	union ip_harvest harvest;
 	uint32_t base_address[] __counted_by(header.num_base_address);
 };
@@ -181,224 +177,225 @@ union ip_hcid_sub {
 		variant      :7-4 +1;
 	};
 };
-struct ip_v3 {
-	struct ip_die_header header;
+struct ip_discovery_die_v3 {
+	struct ip_discovery_die_header header;
 	union ip_hcid_sub sub;
 	uint32_t base_address[] __counted_by(header.num_base_address);
 };
-struct ip_v4_64 {
-	struct ip_die_header header;
+struct ip_discovery_die_v4_64 {
+	struct ip_discovery_die_header header;
 	union ip_hcid_sub sub;
 	uint64_t base_address[] __counted_by(header.num_base_address);
 };
 
 union discovery_ip_dies {
-	struct ip_die_header header;
-	struct ip_v1    v1;
-	struct ip_v3    v3;
-	struct ip_v3    v4_32;
-	struct ip_v4_64 v4_64;
+	struct ip_discovery_die_header header;
+	struct ip_discovery_die_v1     v1;
+	struct ip_discovery_die_v3     v3;
+	struct ip_discovery_die_v3     v4_32;
+	struct ip_discovery_die_v4_64  v4_64;
 };
 
-
-struct discovery_gpu_info_header {
-	uint32_t table_id;
+// GPU core info
+//                    little-endian: 3 2 1 0
+//                                       C G
+#define GC_TABLE_SIGNATURE        0x00004347
+struct discovery_gc_info_header {
+	char signature[4] __nonstring; // GC
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size;
 };
 
-
 struct discovery_gc_info_v1_0 {
-	struct discovery_gpu_info_header header;
-
-	uint32_t gc_num_se;
-	uint32_t gc_num_wgp0_per_sa;
-	uint32_t gc_num_wgp1_per_sa;
-	uint32_t gc_num_rb_per_se;
-	uint32_t gc_num_gl2c;
-	uint32_t gc_num_gprs;
-	uint32_t gc_num_max_gs_thds;
-	uint32_t gc_gs_table_depth;
-	uint32_t gc_gsprim_buff_depth;
-	uint32_t gc_parameter_cache_depth;
-	uint32_t gc_double_offchip_lds_buffer;
-	uint32_t gc_wave_size;
-	uint32_t gc_max_waves_per_simd;
-	uint32_t gc_max_scratch_slots_per_cu;
-	uint32_t gc_lds_size;
-	uint32_t gc_num_sc_per_se;
-	uint32_t gc_num_sa_per_se;
-	uint32_t gc_num_packer_per_sc;
-	uint32_t gc_num_gl2a;
+	struct discovery_gc_info_header header;
+	uint32_t num_se;
+	uint32_t num_wgp0_per_sa;
+	uint32_t num_wgp1_per_sa;
+	uint32_t num_rb_per_se;
+	uint32_t num_gl2c;
+	uint32_t num_gprs;
+	uint32_t num_max_gs_thds;
+	uint32_t gs_table_depth;
+	uint32_t gsprim_buff_depth;
+	uint32_t parameter_cache_depth;
+	uint32_t double_offchip_lds_buffer;
+	uint32_t wave_size;
+	uint32_t max_waves_per_simd;
+	uint32_t max_scratch_slots_per_cu;
+	uint32_t lds_size;
+	uint32_t num_sc_per_se;
+	uint32_t num_sa_per_se;
+	uint32_t num_packer_per_sc;
+	uint32_t num_gl2a;
 };
 
 struct discovery_gc_info_v1_1 {
-	struct discovery_gpu_info_header header;
-
-	uint32_t gc_num_se;
-	uint32_t gc_num_wgp0_per_sa;
-	uint32_t gc_num_wgp1_per_sa;
-	uint32_t gc_num_rb_per_se;
-	uint32_t gc_num_gl2c;
-	uint32_t gc_num_gprs;
-	uint32_t gc_num_max_gs_thds;
-	uint32_t gc_gs_table_depth;
-	uint32_t gc_gsprim_buff_depth;
-	uint32_t gc_parameter_cache_depth;
-	uint32_t gc_double_offchip_lds_buffer;
-	uint32_t gc_wave_size;
-	uint32_t gc_max_waves_per_simd;
-	uint32_t gc_max_scratch_slots_per_cu;
-	uint32_t gc_lds_size;
-	uint32_t gc_num_sc_per_se;
-	uint32_t gc_num_sa_per_se;
-	uint32_t gc_num_packer_per_sc;
-	uint32_t gc_num_gl2a;
-	uint32_t gc_num_tcp_per_sa;
-	uint32_t gc_num_sdp_interface;
-	uint32_t gc_num_tcps;
+	struct discovery_gc_info_header header;
+	uint32_t num_se;
+	uint32_t num_wgp0_per_sa;
+	uint32_t num_wgp1_per_sa;
+	uint32_t num_rb_per_se;
+	uint32_t num_gl2c;
+	uint32_t num_gprs;
+	uint32_t num_max_gs_thds;
+	uint32_t gs_table_depth;
+	uint32_t gsprim_buff_depth;
+	uint32_t parameter_cache_depth;
+	uint32_t double_offchip_lds_buffer;
+	uint32_t wave_size;
+	uint32_t max_waves_per_simd;
+	uint32_t max_scratch_slots_per_cu;
+	uint32_t lds_size;
+	uint32_t num_sc_per_se;
+	uint32_t num_sa_per_se;
+	uint32_t num_packer_per_sc;
+	uint32_t num_gl2a;
+	uint32_t num_tcp_per_sa;
+	uint32_t num_sdp_interface;
+	uint32_t num_tcps;
 };
 
 struct discovery_gc_info_v1_2 {
-	struct discovery_gpu_info_header header;
-	uint32_t gc_num_se;
-	uint32_t gc_num_wgp0_per_sa;
-	uint32_t gc_num_wgp1_per_sa;
-	uint32_t gc_num_rb_per_se;
-	uint32_t gc_num_gl2c;
-	uint32_t gc_num_gprs;
-	uint32_t gc_num_max_gs_thds;
-	uint32_t gc_gs_table_depth;
-	uint32_t gc_gsprim_buff_depth;
-	uint32_t gc_parameter_cache_depth;
-	uint32_t gc_double_offchip_lds_buffer;
-	uint32_t gc_wave_size;
-	uint32_t gc_max_waves_per_simd;
-	uint32_t gc_max_scratch_slots_per_cu;
-	uint32_t gc_lds_size;
-	uint32_t gc_num_sc_per_se;
-	uint32_t gc_num_sa_per_se;
-	uint32_t gc_num_packer_per_sc;
-	uint32_t gc_num_gl2a;
-	uint32_t gc_num_tcp_per_sa;
-	uint32_t gc_num_sdp_interface;
-	uint32_t gc_num_tcps;
-	uint32_t gc_num_tcp_per_wpg;
-	uint32_t gc_tcp_l1_size;
-	uint32_t gc_num_sqc_per_wgp;
-	uint32_t gc_l1_instruction_cache_size_per_sqc;
-	uint32_t gc_l1_data_cache_size_per_sqc;
-	uint32_t gc_gl1c_per_sa;
-	uint32_t gc_gl1c_size_per_instance;
-	uint32_t gc_gl2c_per_gpu;
+	struct discovery_gc_info_header header;
+	uint32_t num_se;
+	uint32_t num_wgp0_per_sa;
+	uint32_t num_wgp1_per_sa;
+	uint32_t num_rb_per_se;
+	uint32_t num_gl2c;
+	uint32_t num_gprs;
+	uint32_t num_max_gs_thds;
+	uint32_t gs_table_depth;
+	uint32_t gsprim_buff_depth;
+	uint32_t parameter_cache_depth;
+	uint32_t double_offchip_lds_buffer;
+	uint32_t wave_size;
+	uint32_t max_waves_per_simd;
+	uint32_t max_scratch_slots_per_cu;
+	uint32_t lds_size;
+	uint32_t num_sc_per_se;
+	uint32_t num_sa_per_se;
+	uint32_t num_packer_per_sc;
+	uint32_t num_gl2a;
+	uint32_t num_tcp_per_sa;
+	uint32_t num_sdp_interface;
+	uint32_t num_tcps;
+	uint32_t num_tcp_per_wpg;
+	uint32_t tcp_l1_size;
+	uint32_t num_sqc_per_wgp;
+	uint32_t l1_instruction_cache_size_per_sqc;
+	uint32_t l1_data_cache_size_per_sqc;
+	uint32_t gl1c_per_sa;
+	uint32_t gl1c_size_per_instance;
+	uint32_t gl2c_per_gpu;
 };
 
 struct discovery_gc_info_v1_3 {
-    struct discovery_gpu_info_header header;
-    uint32_t gc_num_se;
-    uint32_t gc_num_wgp0_per_sa;
-    uint32_t gc_num_wgp1_per_sa;
-    uint32_t gc_num_rb_per_se;
-    uint32_t gc_num_gl2c;
-    uint32_t gc_num_gprs;
-    uint32_t gc_num_max_gs_thds;
-    uint32_t gc_gs_table_depth;
-    uint32_t gc_gsprim_buff_depth;
-    uint32_t gc_parameter_cache_depth;
-    uint32_t gc_double_offchip_lds_buffer;
-    uint32_t gc_wave_size;
-    uint32_t gc_max_waves_per_simd;
-    uint32_t gc_max_scratch_slots_per_cu;
-    uint32_t gc_lds_size;
-    uint32_t gc_num_sc_per_se;
-    uint32_t gc_num_sa_per_se;
-    uint32_t gc_num_packer_per_sc;
-    uint32_t gc_num_gl2a;
-    uint32_t gc_num_tcp_per_sa;
-    uint32_t gc_num_sdp_interface;
-    uint32_t gc_num_tcps;
-    uint32_t gc_num_tcp_per_wpg;
-    uint32_t gc_tcp_l1_size;
-    uint32_t gc_num_sqc_per_wgp;
-    uint32_t gc_l1_instruction_cache_size_per_sqc;
-    uint32_t gc_l1_data_cache_size_per_sqc;
-    uint32_t gc_gl1c_per_sa;
-    uint32_t gc_gl1c_size_per_instance;
-    uint32_t gc_gl2c_per_gpu;
-    uint32_t gc_tcp_size_per_cu;
-    uint32_t gc_tcp_cache_line_size;
-    uint32_t gc_instruction_cache_size_per_sqc;
-    uint32_t gc_instruction_cache_line_size;
-    uint32_t gc_scalar_data_cache_size_per_sqc;
-    uint32_t gc_scalar_data_cache_line_size;
-    uint32_t gc_tcc_size;
-    uint32_t gc_tcc_cache_line_size;
+    struct discovery_gc_info_header header;
+    uint32_t num_se;
+    uint32_t num_wgp0_per_sa;
+    uint32_t num_wgp1_per_sa;
+    uint32_t num_rb_per_se;
+    uint32_t num_gl2c;
+    uint32_t num_gprs;
+    uint32_t num_max_gs_thds;
+    uint32_t gs_table_depth;
+    uint32_t gsprim_buff_depth;
+    uint32_t parameter_cache_depth;
+    uint32_t double_offchip_lds_buffer;
+    uint32_t wave_size;
+    uint32_t max_waves_per_simd;
+    uint32_t max_scratch_slots_per_cu;
+    uint32_t lds_size;
+    uint32_t num_sc_per_se;
+    uint32_t num_sa_per_se;
+    uint32_t num_packer_per_sc;
+    uint32_t num_gl2a;
+    uint32_t num_tcp_per_sa;
+    uint32_t num_sdp_interface;
+    uint32_t num_tcps;
+    uint32_t num_tcp_per_wpg;
+    uint32_t tcp_l1_size;
+    uint32_t num_sqc_per_wgp;
+    uint32_t l1_instruction_cache_size_per_sqc;
+    uint32_t l1_data_cache_size_per_sqc;
+    uint32_t gl1c_per_sa;
+    uint32_t gl1c_size_per_instance;
+    uint32_t gl2c_per_gpu;
+    uint32_t tcp_size_per_cu;
+    uint32_t tcp_cache_line_size;
+    uint32_t instruction_cache_size_per_sqc;
+    uint32_t instruction_cache_line_size;
+    uint32_t scalar_data_cache_size_per_sqc;
+    uint32_t scalar_data_cache_line_size;
+    uint32_t tcc_size;
+    uint32_t tcc_cache_line_size;
 };
 
 struct discovery_gc_info_v2_0 {
-	struct discovery_gpu_info_header header;
-
-	uint32_t gc_num_se;
-	uint32_t gc_num_cu_per_sh;
-	uint32_t gc_num_sh_per_se;
-	uint32_t gc_num_rb_per_se;
-	uint32_t gc_num_tccs;
-	uint32_t gc_num_gprs;
-	uint32_t gc_num_max_gs_thds;
-	uint32_t gc_gs_table_depth;
-	uint32_t gc_gsprim_buff_depth;
-	uint32_t gc_parameter_cache_depth;
-	uint32_t gc_double_offchip_lds_buffer;
-	uint32_t gc_wave_size;
-	uint32_t gc_max_waves_per_simd;
-	uint32_t gc_max_scratch_slots_per_cu;
-	uint32_t gc_lds_size;
-	uint32_t gc_num_sc_per_se;
-	uint32_t gc_num_packer_per_sc;
+	struct discovery_gc_info_header header;
+	uint32_t num_se;
+	uint32_t num_cu_per_sh;
+	uint32_t num_sh_per_se;
+	uint32_t num_rb_per_se;
+	uint32_t num_tccs;
+	uint32_t num_gprs;
+	uint32_t num_max_gs_thds;
+	uint32_t gs_table_depth;
+	uint32_t gsprim_buff_depth;
+	uint32_t parameter_cache_depth;
+	uint32_t double_offchip_lds_buffer;
+	uint32_t wave_size;
+	uint32_t max_waves_per_simd;
+	uint32_t max_scratch_slots_per_cu;
+	uint32_t lds_size;
+	uint32_t num_sc_per_se;
+	uint32_t num_packer_per_sc;
 };
 
 struct discovery_gc_info_v2_1 {
-	struct discovery_gpu_info_header header;
-
-	uint32_t gc_num_se;
-	uint32_t gc_num_cu_per_sh;
-	uint32_t gc_num_sh_per_se;
-	uint32_t gc_num_rb_per_se;
-	uint32_t gc_num_tccs;
-	uint32_t gc_num_gprs;
-	uint32_t gc_num_max_gs_thds;
-	uint32_t gc_gs_table_depth;
-	uint32_t gc_gsprim_buff_depth;
-	uint32_t gc_parameter_cache_depth;
-	uint32_t gc_double_offchip_lds_buffer;
-	uint32_t gc_wave_size;
-	uint32_t gc_max_waves_per_simd;
-	uint32_t gc_max_scratch_slots_per_cu;
-	uint32_t gc_lds_size;
-	uint32_t gc_num_sc_per_se;
-	uint32_t gc_num_packer_per_sc;
-	uint32_t gc_num_tcp_per_sh;
-	uint32_t gc_tcp_size_per_cu;
-	uint32_t gc_num_sdp_interface;
-	uint32_t gc_num_cu_per_sqc;
-	uint32_t gc_instruction_cache_size_per_sqc;
-	uint32_t gc_scalar_data_cache_size_per_sqc;
-	uint32_t gc_tcc_size;
+	struct discovery_gc_info_header header;
+	uint32_t num_se;
+	uint32_t num_cu_per_sh;
+	uint32_t num_sh_per_se;
+	uint32_t num_rb_per_se;
+	uint32_t num_tccs;
+	uint32_t num_gprs;
+	uint32_t num_max_gs_thds;
+	uint32_t gs_table_depth;
+	uint32_t gsprim_buff_depth;
+	uint32_t parameter_cache_depth;
+	uint32_t double_offchip_lds_buffer;
+	uint32_t wave_size;
+	uint32_t max_waves_per_simd;
+	uint32_t max_scratch_slots_per_cu;
+	uint32_t lds_size;
+	uint32_t num_sc_per_se;
+	uint32_t num_packer_per_sc;
+	uint32_t num_tcp_per_sh;
+	uint32_t tcp_size_per_cu;
+	uint32_t num_sdp_interface;
+	uint32_t num_cu_per_sqc;
+	uint32_t instruction_cache_size_per_sqc;
+	uint32_t scalar_data_cache_size_per_sqc;
+	uint32_t tcc_size;
 };
 
 union discovery_gc_info {
-	struct discovery_gpu_info_header header;
-	struct discovery_gc_info_v1_0  v1_0;
-	struct discovery_gc_info_v1_1  v1_1;
-	struct discovery_gc_info_v1_2  v1_2;
-	struct discovery_gc_info_v1_3  v1_3;
-	struct discovery_gc_info_v2_0  v2_0;
-	struct discovery_gc_info_v2_1  v2_1;
+	struct discovery_gc_info_header header;
+	struct discovery_gc_info_v1_0   v1_0;
+	struct discovery_gc_info_v1_1   v1_1;
+	struct discovery_gc_info_v1_2   v1_2;
+	struct discovery_gc_info_v1_3   v1_3;
+	struct discovery_gc_info_v2_0   v2_0;
+	struct discovery_gc_info_v2_1   v2_1;
 };
 
+//                    little-endian: 3 2 1 0
+//                                   V R A H
+#define HARVEST_TABLE_SIGNATURE   0x56524148
 struct discovery_harvest_info_header {
-	uint32_t signature;
+	char signature[4] __nonstring; // HARV
 	uint32_t version;
 };
 
@@ -413,36 +410,11 @@ struct discovery_harvest_table {
 	struct discovery_harvest_info list[32];
 };
 
-struct discovery_mall_info_header {
-	uint32_t table_id;
-	uint16_t version_major;
-	uint16_t version_minor;
-	uint32_t size_bytes;
-};
-
-struct discovery_mall_info_v1_0 {
-	struct discovery_mall_info_header header;
-	uint32_t mall_size_per_m;
-	uint32_t m_s_present;
-	uint32_t m_half_use;
-	uint32_t m_mall_config;
-	uint32_t reserved[5];
-};
-
-struct discovery_mall_info_v2_0 {
-	struct discovery_mall_info_header header;
-	uint32_t mall_size_per_umc;
-	uint32_t reserved[8];
-};
-
-union discovery_mall_info {
-	struct discovery_mall_info_header header;
-	struct discovery_mall_info_v1_0   v1_0;
-	struct discovery_mall_info_v2_0   v2_0;
-};
-
+//                    little-endian: 3 2 1 0
+//                                     N C V
+#define VCN_INFO_TABLE_ID         0x004E4356
 struct discovery_vcn_info_header {
-    uint32_t table_id;
+	char signature[4] __nonstring; // VCN
     uint16_t version_major;
     uint16_t version_minor;
     uint32_t size_bytes;
@@ -472,13 +444,49 @@ struct discovery_vcn_info_v1_0 {
 	uint32_t reserved[4];
 };
 
-#define DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES 12
 
-struct discovery_nps_info_header {
-	uint32_t table_id;
+//                    little-endian: 3 2 1 0
+//                                   L L A M
+#define MALL_INFO_TABLE_SIGNATURE 0x4C4C414D
+struct discovery_mall_info_header {
+	char signature[4] __nonstring; // MALL
 	uint16_t version_major;
 	uint16_t version_minor;
-	uint32_t size_bytes; // size of the entire header+data in bytes = 0x000000D4 (212) 
+	uint32_t size_bytes;
+};
+
+struct discovery_mall_info_v1_0 {
+	struct discovery_mall_info_header header;
+	uint32_t mall_size_per_m;
+	uint32_t m_s_present;
+	uint32_t m_half_use;
+	uint32_t m_mall_config;
+	uint32_t reserved[5];
+};
+
+struct discovery_mall_info_v2_0 {
+	struct discovery_mall_info_header header;
+	uint32_t mall_size_per_umc;
+	uint32_t reserved[8];
+};
+
+union discovery_mall_info {
+	struct discovery_mall_info_header header;
+	struct discovery_mall_info_v1_0   v1_0;
+	struct discovery_mall_info_v2_0   v2_0;
+};
+
+
+#define DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES 12
+
+//                    little-endian: 3 2 1 0
+//                                     S P N
+#define NPS_INFO_TABLE_SIGNATURE  0x0053504E
+struct discovery_nps_info_header {
+	char signature[4] __nonstring; // NPS
+	uint16_t version_major;
+	uint16_t version_minor;
+	uint32_t size_bytes;
 };
 
 struct discovery_nps_instance_info_v1_0 {
@@ -490,7 +498,9 @@ struct discovery_nps_info_v1_0 {
 	struct discovery_nps_info_header header;
 	uint32_t nps_type;
 	uint32_t count;
-	struct discovery_nps_instance_info_v1_0 instance_info[DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES];
+	struct discovery_nps_instance_info_v1_0 instance_info[
+		DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES
+	];
 };
 
 #pragma pack(pop) // restore old packing

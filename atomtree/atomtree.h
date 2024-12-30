@@ -35,12 +35,20 @@ struct atomtree_pci_tables {
 struct atomtree_discovery_table {
 	struct discovery_fw_blob* blob;
 
+	enum atomtree_common_version binary_ver;
+	enum atomtree_common_version ip_ver;
+	enum atomtree_common_version gc_ver;
+	enum atomtree_common_version harvest_ver;
+	enum atomtree_common_version vcn_ver;
+	enum atomtree_common_version mall_ver;
+	enum atomtree_common_version nps_ver;
+
 	struct ip_discovery_header*     ip_discovery;
-	union discovery_ip_dies*        dies[IP_DISCOVERY_MAX_NUM_DIES];
-	union discovery_gc_info*        gc_info;
+	union  discovery_ip_dies*       dies[IP_DISCOVERY_MAX_NUM_DIES];
+	union  discovery_gc_info*       gc_info;
 	struct discovery_harvest_table* harvest;
 	struct discovery_vcn_info_v1_0* vcn_info;
-	union discovery_mall_info*      mall_info;
+	union  discovery_mall_info*     mall_info;
 	struct discovery_nps_info_v1_0* nps_info;
 };
 

@@ -4,7 +4,7 @@
 global_default: {
 	branch_defaults: {
 		c_prefix: "struct",
-		atomtree: "atui_nullstruct",
+		atomtree: "atomtree_discovery_table",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
 	},
@@ -49,6 +49,7 @@ global_default: {
 	],
 }, {
 	c_type: "discovery_binary_header",
+	table_size: "bios->binary_size",
 	leaves: [
 		{
 			access: "bios->binary_signature",
@@ -70,6 +71,7 @@ global_default: {
 		}, {
 			access: "bios->binary_size",
 			name: "binary_size",
+		/* Manually add tables so we can attach sub branches
 		}, {
 			access: "bios->table_list",
 			name: "table_list",
@@ -79,12 +81,12 @@ global_default: {
 				count: "DISCOVERY_TOTAL_TABLES",
 				enum: "discovery_tables",
 				pattern: [{
-					access: "bios->table_list",
 					name: "table_list [%u]: %s",
 					display: "ATUI_DISPLAY",
 					fancy: "ATUI_SHOOT", fancy_data: "discovery_table_info",
 				},],
 			},
+		*/
 		},
 	],
 },
@@ -100,9 +102,1092 @@ global_default: {
 			access: "bios->binary_header",
 			name: "binary_header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_binary_header",
+			fancy: "ATUI_SHOOT", fancy_data: "discovery_binary_header",
 		},
 	],
-}
+},
+
+{
+	c_type: "ip_die_info",
+	leaves: [
+		{
+			access: "bios->die_id",
+			name: "die_id",
+		}, {
+			access: "bios->die_offset",
+			name: "die_offset",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "ip_discovery_header_flags_v4",
+	description: [
+		{language: "english", text: "reserved in v3 and older",},
+	],
+	leaves: [
+		{
+			access: "bios->flags",
+			name: "flags",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "base_addr_64_bit",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "ip structures are using 64 bit base address",},
+					],
+				}, {
+					name: "reserved",
+					hi: 15, lo: 1,
+					display: "ATUI_HEX",
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ip_discovery_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "IPDS",},
+			],
+		}, {
+			access: "bios->version",
+			name: "version",
+		}, {
+			access: "bios->size",
+			name: "size",
+		}, {
+			access: "bios->id",
+			name: "id",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->num_dies",
+			name: "num_dies",
+		}, {
+			access: "bios->die_info",
+			name: "die_info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "IP_DISCOVERY_MAX_NUM_DIES",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "die_info [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "ip_die_info",
+				},],
+			},
+		}, {
+			access: "bios->flags",
+			name: "flags",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_header_flags_v4",
+			description: [
+				{language: "english", text: "reserved in v3 and older",},
+			],
+		},
+	],
+}, {
+	c_type: "ip_discovery_die_header",
+	leaves: [
+		{
+			access: "bios->die_id",
+			name: "die_id",
+		}, {
+			access: "bios->num_ips",
+			name: "num_ips",
+		}, {
+			access: "bios->hardware_id",
+			name: "hardware_id",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->instance_number",
+			name: "instance_number",
+			description: [
+				{language: "english", text: "max: HWIP_MAX_INSTANCE",},
+			],
+		}, {
+			access: "bios->num_base_address",
+			name: "num_base_address",
+		}, {
+			access: "bios->major",
+			name: "major",
+		}, {
+			access: "bios->minor",
+			name: "minor",
+		}, {
+			access: "bios->revision",
+			name: "revision",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "ip_harvest",
+	leaves: [
+		{
+			access: "bios->raw",
+			name: "harvest",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "harvest",
+					hi: 3, lo: 0,
+				}, {
+					name: "reserved",
+					hi: 7, lo: 4,
+					display: "ATUI_HEX",
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ip_discovery_die_v1",
+	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+		}, {
+			access: "bios->harvest",
+			name: "harvest",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_harvest",
+		}, {
+			access: "bios->base_address",
+			name: "base_address",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->header.num_base_address",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "base_address [%02u]",
+					display: "ATUI_HEX",
+				},],
+			},
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "ip_hcid_sub",
+	leaves: [
+		{
+			access: "bios->raw",
+			name: "raw",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "sub_revision",
+					hi: 3, lo: 0,
+				}, {
+					name: "variant",
+					hi: 7, lo: 4,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "ip_discovery_die_v3",
+	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+		}, {
+			access: "bios->sub",
+			name: "sub",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_hcid_sub",
+		}, {
+			access: "bios->base_address",
+			name: "base_address",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->header.num_base_address",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "base_address [%02u]",
+					display: "ATUI_HEX",
+				},],
+			},
+		},
+	],
+}, {
+	c_type: "ip_discovery_die_v4_64",
+	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+		}, {
+			access: "bios->sub",
+			name: "sub",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "ip_hcid_sub",
+		}, {
+			access: "bios->base_address",
+			name: "base_address",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->header.num_base_address",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "base_address [%02u]",
+					display: "ATUI_HEX",
+				},],
+			},
+		},
+	],
+},
+
+{
+	c_type: "discovery_gc_info_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "GC",},
+			],
+		}, {
+			access: "bios->version_major",
+			name: "version_major",
+		}, {
+			access: "bios->version_minor",
+			name: "version_minor",
+		}, {
+			access: "bios->size",
+			name: "size",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v1_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_wgp0_per_sa",
+			name: "num_wgp0_per_sa",
+		}, {
+			access: "bios->num_wgp1_per_sa",
+			name: "num_wgp1_per_sa",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_gl2c",
+			name: "num_gl2c",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_sa_per_se",
+			name: "num_sa_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		}, {
+			access: "bios->num_gl2a",
+			name: "num_gl2a",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v1_1",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_wgp0_per_sa",
+			name: "num_wgp0_per_sa",
+		}, {
+			access: "bios->num_wgp1_per_sa",
+			name: "num_wgp1_per_sa",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_gl2c",
+			name: "num_gl2c",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_sa_per_se",
+			name: "num_sa_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		}, {
+			access: "bios->num_gl2a",
+			name: "num_gl2a",
+		}, {
+			access: "bios->num_tcp_per_sa",
+			name: "num_tcp_per_sa",
+		}, {
+			access: "bios->num_sdp_interface",
+			name: "num_sdp_interface",
+		}, {
+			access: "bios->num_tcps",
+			name: "num_tcps",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v1_2",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_wgp0_per_sa",
+			name: "num_wgp0_per_sa",
+		}, {
+			access: "bios->num_wgp1_per_sa",
+			name: "num_wgp1_per_sa",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_gl2c",
+			name: "num_gl2c",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_sa_per_se",
+			name: "num_sa_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		}, {
+			access: "bios->num_gl2a",
+			name: "num_gl2a",
+		}, {
+			access: "bios->num_tcp_per_sa",
+			name: "num_tcp_per_sa",
+		}, {
+			access: "bios->num_sdp_interface",
+			name: "num_sdp_interface",
+		}, {
+			access: "bios->num_tcps",
+			name: "num_tcps",
+		}, {
+			access: "bios->num_tcp_per_wpg",
+			name: "num_tcp_per_wpg",
+		}, {
+			access: "bios->tcp_l1_size",
+			name: "tcp_l1_size",
+		}, {
+			access: "bios->num_sqc_per_wgp",
+			name: "num_sqc_per_wgp",
+		}, {
+			access: "bios->l1_instruction_cache_size_per_sqc",
+			name: "l1_instruction_cache_size_per_sqc",
+		}, {
+			access: "bios->l1_data_cache_size_per_sqc",
+			name: "l1_data_cache_size_per_sqc",
+		}, {
+			access: "bios->gl1c_per_sa",
+			name: "gl1c_per_sa",
+		}, {
+			access: "bios->gl1c_size_per_instance",
+			name: "gl1c_size_per_instance",
+		}, {
+			access: "bios->gl2c_per_gpu",
+			name: "gl2c_per_gpu",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v1_3",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_wgp0_per_sa",
+			name: "num_wgp0_per_sa",
+		}, {
+			access: "bios->num_wgp1_per_sa",
+			name: "num_wgp1_per_sa",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_gl2c",
+			name: "num_gl2c",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_sa_per_se",
+			name: "num_sa_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		}, {
+			access: "bios->num_gl2a",
+			name: "num_gl2a",
+		}, {
+			access: "bios->num_tcp_per_sa",
+			name: "num_tcp_per_sa",
+		}, {
+			access: "bios->num_sdp_interface",
+			name: "num_sdp_interface",
+		}, {
+			access: "bios->num_tcps",
+			name: "num_tcps",
+		}, {
+			access: "bios->num_tcp_per_wpg",
+			name: "num_tcp_per_wpg",
+		}, {
+			access: "bios->tcp_l1_size",
+			name: "tcp_l1_size",
+		}, {
+			access: "bios->num_sqc_per_wgp",
+			name: "num_sqc_per_wgp",
+		}, {
+			access: "bios->l1_instruction_cache_size_per_sqc",
+			name: "l1_instruction_cache_size_per_sqc",
+		}, {
+			access: "bios->l1_data_cache_size_per_sqc",
+			name: "l1_data_cache_size_per_sqc",
+		}, {
+			access: "bios->gl1c_per_sa",
+			name: "gl1c_per_sa",
+		}, {
+			access: "bios->gl1c_size_per_instance",
+			name: "gl1c_size_per_instance",
+		}, {
+			access: "bios->gl2c_per_gpu",
+			name: "gl2c_per_gpu",
+		}, {
+			access: "bios->tcp_size_per_cu",
+			name: "tcp_size_per_cu",
+		}, {
+			access: "bios->tcp_cache_line_size",
+			name: "tcp_cache_line_size",
+		}, {
+			access: "bios->instruction_cache_size_per_sqc",
+			name: "instruction_cache_size_per_sqc",
+		}, {
+			access: "bios->instruction_cache_line_size",
+			name: "instruction_cache_line_size",
+		}, {
+			access: "bios->scalar_data_cache_size_per_sqc",
+			name: "scalar_data_cache_size_per_sqc",
+		}, {
+			access: "bios->scalar_data_cache_line_size",
+			name: "scalar_data_cache_line_size",
+		}, {
+			access: "bios->tcc_size",
+			name: "tcc_size",
+		}, {
+			access: "bios->tcc_cache_line_size",
+			name: "tcc_cache_line_size",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v2_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_cu_per_sh",
+			name: "num_cu_per_sh",
+		}, {
+			access: "bios->num_sh_per_se",
+			name: "num_sh_per_se",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_tccs",
+			name: "num_tccs",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		},
+	],
+}, {
+	c_type: "discovery_gc_info_v2_1",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+		}, {
+			access: "bios->num_se",
+			name: "num_se",
+		}, {
+			access: "bios->num_cu_per_sh",
+			name: "num_cu_per_sh",
+		}, {
+			access: "bios->num_sh_per_se",
+			name: "num_sh_per_se",
+		}, {
+			access: "bios->num_rb_per_se",
+			name: "num_rb_per_se",
+		}, {
+			access: "bios->num_tccs",
+			name: "num_tccs",
+		}, {
+			access: "bios->num_gprs",
+			name: "num_gprs",
+		}, {
+			access: "bios->num_max_gs_thds",
+			name: "num_max_gs_thds",
+		}, {
+			access: "bios->gs_table_depth",
+			name: "gs_table_depth",
+		}, {
+			access: "bios->gsprim_buff_depth",
+			name: "gsprim_buff_depth",
+		}, {
+			access: "bios->parameter_cache_depth",
+			name: "parameter_cache_depth",
+		}, {
+			access: "bios->double_offchip_lds_buffer",
+			name: "double_offchip_lds_buffer",
+		}, {
+			access: "bios->wave_size",
+			name: "wave_size",
+		}, {
+			access: "bios->max_waves_per_simd",
+			name: "max_waves_per_simd",
+		}, {
+			access: "bios->max_scratch_slots_per_cu",
+			name: "max_scratch_slots_per_cu",
+		}, {
+			access: "bios->lds_size",
+			name: "lds_size",
+		}, {
+			access: "bios->num_sc_per_se",
+			name: "num_sc_per_se",
+		}, {
+			access: "bios->num_packer_per_sc",
+			name: "num_packer_per_sc",
+		}, {
+			access: "bios->num_tcp_per_sh",
+			name: "num_tcp_per_sh",
+		}, {
+			access: "bios->tcp_size_per_cu",
+			name: "tcp_size_per_cu",
+		}, {
+			access: "bios->num_sdp_interface",
+			name: "num_sdp_interface",
+		}, {
+			access: "bios->num_cu_per_sqc",
+			name: "num_cu_per_sqc",
+		}, {
+			access: "bios->instruction_cache_size_per_sqc",
+			name: "instruction_cache_size_per_sqc",
+		}, {
+			access: "bios->scalar_data_cache_size_per_sqc",
+			name: "scalar_data_cache_size_per_sqc",
+		}, {
+			access: "bios->tcc_size",
+			name: "tcc_size",
+		},
+	],
+},
+
+{
+	c_type: "discovery_harvest_info_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "HARV",},
+			],
+		}, {
+			access: "bios->version",
+			name: "version",
+		},
+	],
+}, {
+	c_type: "discovery_harvest_info",
+	leaves: [
+		{
+			access: "bios->hardware_id",
+			name: "hardware_id",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->ip_instance_number",
+			name: "ip_instance_number",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "discovery_harvest_table",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_harvest_info_header",
+		}, {
+			access: "bios->list",
+			name: "list",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->list)",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "list [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "discovery_harvest_info",
+				},],
+			},
+		},
+	],
+},
+
+{
+	c_type: "discovery_vcn_info_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "VCN",},
+			],
+		}, {
+			access: "bios->version_major",
+			name: "version_major",
+		}, {
+			access: "bios->version_minor",
+			name: "version_minor",
+		}, {
+			access: "bios->size_bytes",
+			name: "size_bytes",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "vcn_fuse_data",
+	leaves: [
+		{
+			access: "bios->fuse_data",
+			name: "fuse_data",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "av1_disabled",
+					hi: 0, lo: 0,
+				}, {
+					name: "vp9_disabled",
+					hi: 1, lo: 1,
+				}, {
+					name: "hevc_disabled",
+					hi: 2, lo: 2,
+				}, {
+					name: "h264_disabled",
+					hi: 3, lo: 3,
+				}, {
+					name: "reserved",
+					hi: 31, lo: 4,
+					display: "ATUI_HEX",
+				},
+			],
+		},
+	],
+}, {
+	c_type: "discovery_vcn_instance_info_v1_0",
+	leaves: [
+		{
+			access: "bios->instance_num",
+			name: "instance_num",
+			description: [
+				{language: "english", text: "VCN IP instance number. 0 - VCN0; 1 - VCN1 etc",},
+			],
+		}, {
+			access: "bios->fuse_data",
+			name: "fuse_data",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "vcn_fuse_data",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "discovery_vcn_info_v1_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_vcn_info_header",
+		}, {
+			access: "bios->num_of_instances",
+			name: "num_of_instances",
+			description: [
+				{language: "english", text: "number of entries used in instance_info below",},
+			],
+		}, {
+			access: "bios->instance_info",
+			name: "instance_info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES",
+				enum: "ATUI_NULL",
+				pattern: [{
+					access: "bios->instance_info",
+					name: "instance_info",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT",
+					fancy_data: "discovery_vcn_instance_info_v1_0",
+				},],
+			},
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+{
+	c_type: "discovery_mall_info_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "MALL",},
+			],
+		}, {
+			access: "bios->version_major",
+			name: "version_major",
+		}, {
+			access: "bios->version_minor",
+			name: "version_minor",
+		}, {
+			access: "bios->size_bytes",
+			name: "size_bytes",
+		},
+	],
+}, {
+	c_type: "discovery_mall_info_v1_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_mall_info_header",
+		}, {
+			access: "bios->mall_size_per_m",
+			name: "mall_size_per_m",
+		}, {
+			access: "bios->m_s_present",
+			name: "m_s_present",
+		}, {
+			access: "bios->m_half_use",
+			name: "m_half_use",
+		}, {
+			access: "bios->m_mall_config",
+			name: "m_mall_config",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "discovery_mall_info_v2_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_mall_info_header",
+		}, {
+			access: "bios->mall_size_per_umc",
+			name: "mall_size_per_umc",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
+	c_type: "discovery_nps_info_header",
+	leaves: [
+		{
+			access: "bios->signature",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "NPS",},
+			],
+		}, {
+			access: "bios->version_major",
+			name: "version_major",
+		}, {
+			access: "bios->version_minor",
+			name: "version_minor",
+		}, {
+			access: "bios->size_bytes",
+			name: "size_bytes",
+		},
+	],
+}, {
+	c_type: "discovery_nps_instance_info_v1_0",
+	leaves: [
+		{
+			access: "bios->base_address",
+			name: "base_address",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->limit_address",
+			name: "limit_address",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "discovery_nps_info_v1_0",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_nps_info_header",
+		}, {
+			access: "bios->nps_type",
+			name: "nps_type",
+		}, {
+			access: "bios->count",
+			name: "count",
+		}, {
+			access: "bios->instance_info",
+			name: "instance_info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "instance_info [%u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT",
+					fancy_data: "discovery_nps_instance_info_v1_0",
+				},],
+			},
+		},
+	],
+},
 
 ], }

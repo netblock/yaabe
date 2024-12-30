@@ -2617,28 +2617,53 @@ populate_discovery_table(
 	};
 	struct discovery_table_info const* const table_list = b.bin->table_list;
 
+	dis->binary_ver = (
+		b.bin->version_major * VER_MAJOR_MULTIPLIER
+		+ b.bin->version_minor
+	);
+
 	if (table_list[DISCOVERY_IP_DISCOVERY].offset) {
 		dis->ip_discovery = b.raw + table_list[DISCOVERY_IP_DISCOVERY].offset;
+		dis->ip_ver = dis->ip_discovery->version * VER_MAJOR_MULTIPLIER;
 		uint16_t const num_dies = dis->ip_discovery->num_dies;
 		for (uint8_t i=0; (i<num_dies) && (i<IP_DISCOVERY_MAX_NUM_DIES); i++) {
 			dis->dies[i] = b.raw + dis->ip_discovery->die_info[i].die_offset;
+			assert(dis->dies[i]->header.major == dis->ip_discovery->version);
+			assert(dis->dies[i]->header.minor == dis->dies[0]->header.minor);
 		}
 	}
 
 	if (table_list[DISCOVERY_GC].offset) {
 		dis->gc_info = b.raw + table_list[DISCOVERY_GC].offset;
+		dis->gc_ver = (
+			dis->gc_info->header.version_major * VER_MAJOR_MULTIPLIER
+			+ dis->gc_info->header.version_minor
+		);
 	}
 	if (table_list[DISCOVERY_HARVEST_INFO].offset) {
 		dis->harvest = b.raw + table_list[DISCOVERY_HARVEST_INFO].offset;
+		dis->harvest_ver = dis->harvest->header.version * VER_MAJOR_MULTIPLIER;
 	}
 	if (table_list[DISCOVERY_VCN_INFO].offset) {
 		dis->vcn_info = b.raw + table_list[DISCOVERY_VCN_INFO].offset;
+		dis->vcn_ver = (
+			dis->vcn_info->header.version_major * VER_MAJOR_MULTIPLIER
+			+ dis->vcn_info->header.version_minor
+		);
 	}
 	if (table_list[DISCOVERY_MALL_INFO].offset) {
 		dis->mall_info = b.raw + table_list[DISCOVERY_MALL_INFO].offset;
+		dis->mall_ver = (
+			dis->mall_info->header.version_major * VER_MAJOR_MULTIPLIER
+			+ dis->mall_info->header.version_minor
+		);
 	}
 	if (table_list[DISCOVERY_NPS_INFO].offset) {
 		dis->nps_info = b.raw + table_list[DISCOVERY_NPS_INFO].offset;
+		dis->nps_ver = (
+			dis->nps_info->header.version_major * VER_MAJOR_MULTIPLIER
+			+ dis->nps_info->header.version_minor
+		);
 	}
 }
 

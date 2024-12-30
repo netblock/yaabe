@@ -3056,12 +3056,123 @@ inline static atui_branch*
 grow_discovery_tables(
 		struct atomtree_discovery_table const* const dis
 		) {
-	atuifunc_args blob_args = {.atomtree=dis};
+	atui_branch* discovery_tables[DISCOVERY_TOTAL_TABLES];
+	struct atui_enum const* const tables_enum = & ATUI_ENUM(discovery_tables);
+	for (uint8_t i=0; i < DISCOVERY_TOTAL_TABLES; i++) {
+		discovery_tables[i] = ATUI_MAKE_BRANCH(discovery_table_info,  NULL,
+			dis, &(dis->blob->binary_header.table_list[i]),
+			1, NULL
+		);
+		sprintf(discovery_tables[i]->name,
+			"table_list [%u]: %s",
+			i, tables_enum->enum_array[i].name
+		);
+	};
 
-	blob_args.bios = dis->blob;
-	atui_branch* const blob = _atui_discovery_fw_blob(&blob_args);
+	if (dis->ip_discovery) {
+		struct ip_discovery_header const* const ip = dis->ip_discovery;
 
-	return blob;
+		atui_branch* ip_dies[IP_DISCOVERY_MAX_NUM_DIES];
+		atuifunc_args atui_args = {.atomtree=dis};
+		atuifunc ip_die_func;
+		switch (ip->version) {
+			case 1:
+			case 2:
+				ip_die_func = _atui_ip_discovery_die_v1;
+				break;
+			case 3:
+			case 4:
+				if (ip->flags.base_addr_64_bit) {
+					ip_die_func = _atui_ip_discovery_die_v4_64;
+				} else {
+					ip_die_func = _atui_ip_discovery_die_v3;
+				}
+				break;
+			default:
+				ip_die_func = _atui_ip_discovery_die_header;
+				break;
+		}
+		for (uint8_t i=0; i < ip->num_dies; i++) {
+			atui_args.bios = dis->dies[i];
+			ip_dies[i] = ip_die_func(&atui_args);
+			sprintf(ip_dies[i]->name, "%s [%02u]", ip_dies[i]->origname, i);
+		}
+		ATUI_ADD_BRANCH(
+			discovery_tables[DISCOVERY_IP_DISCOVERY],
+			ATUI_MAKE_BRANCH(ip_discovery_header,  NULL,
+				dis,dis->ip_discovery,  ip->num_dies,ip_dies
+			)
+		);
+	}
+
+	if (dis->gc_info) {
+		atuifunc_args atui_args = {
+			.atomtree = dis,
+			.bios = dis->gc_info
+		};
+		atui_branch* gc;
+		switch (dis->gc_ver) {
+			case v1_0: gc = _atui_discovery_gc_info_v1_0(&atui_args); break;
+			case v1_1: gc = _atui_discovery_gc_info_v1_1(&atui_args); break;
+			case v1_2: gc = _atui_discovery_gc_info_v1_2(&atui_args); break;
+			case v1_3: gc = _atui_discovery_gc_info_v1_3(&atui_args); break;
+			case v2_0: gc = _atui_discovery_gc_info_v2_0(&atui_args); break;
+			case v2_1: gc = _atui_discovery_gc_info_v2_1(&atui_args); break;
+			default:   gc = _atui_discovery_gc_info_header(&atui_args); break;
+		}
+		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_GC], gc);
+	}
+
+	if (dis->harvest) {
+		ATUI_ADD_BRANCH(
+			discovery_tables[DISCOVERY_HARVEST_INFO],
+			ATUI_MAKE_BRANCH(discovery_harvest_table,  NULL,
+				dis,dis->harvest,  0,NULL
+			)
+		);
+	}
+
+	if (dis->vcn_info) {
+		assert(dis->vcn_ver == v1_0);
+		ATUI_ADD_BRANCH(
+			discovery_tables[DISCOVERY_VCN_INFO],
+			ATUI_MAKE_BRANCH(discovery_vcn_info_v1_0,  NULL,
+				dis,dis->vcn_info,  0,NULL
+			)
+		);
+	}
+
+	if (dis->mall_info) {
+		atuifunc_args atui_args = {
+			.atomtree = dis,
+			.bios = dis->mall_info
+		};
+		atui_branch* mi;
+		switch (dis->mall_ver) {
+			case v1_0: mi = _atui_discovery_mall_info_v1_0(&atui_args); break;
+			case v2_0: mi = _atui_discovery_mall_info_v2_0(&atui_args); break;
+			default:   mi = _atui_discovery_mall_info_header(&atui_args); break;
+		}
+		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_MALL_INFO], mi);
+	}
+
+	if (dis->nps_info) {
+		assert(dis->nps_ver == v1_0);
+		ATUI_ADD_BRANCH(
+			discovery_tables[DISCOVERY_NPS_INFO],
+			ATUI_MAKE_BRANCH(discovery_nps_info_v1_0,  NULL,
+				dis,dis->nps_info,  0,NULL
+			)
+		);
+	}
+
+	atui_branch* const binary = ATUI_MAKE_BRANCH(discovery_binary_header,  NULL,
+		dis, &(dis->blob->binary_header),
+		DISCOVERY_TOTAL_TABLES, discovery_tables
+	);
+	return ATUI_MAKE_BRANCH(amd_fw_header,  NULL,
+		dis,dis->blob,  1,&binary
+	);
 }
 
 inline static void
