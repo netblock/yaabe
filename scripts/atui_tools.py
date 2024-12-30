@@ -16,7 +16,8 @@ class __regexvar:
 	# https://docs.python.org/3/howto/regex.html
 	# nc is noncapture; it does not have a referencable group num
 
-	white:str = "\\s*"
+	white_0:str = "\\s*"
+	white_1:str = "\\s+"
 	tabs_nc:str = "(?:\t*)"
 	tabs:str = "(" + tabs_nc + ")"
 	space:str = "( +)"
@@ -24,37 +25,37 @@ class __regexvar:
 	nums:str = "(\\d+)"
 
 	c_prefix_nc:str = "(?:struct|union)"
-	c_prefix:str = "(" + c_prefix_nc + ")" + white
+	c_prefix:str = "(" + c_prefix_nc + ")" + white_1
 	c_num_types_nc:str = "(?:(?:u?int|float|uq\\d+_)\\d+_t)"
-	c_num_types:str = "(" + c_num_types_nc + ")" + white
+	c_num_types:str = "(" + c_num_types_nc + ")" + white_1
 	c_ints_nc:str = "(?:(?:u?int)\\d+_t)"
-	c_ints:str = "(" + c_ints_nc + ")" + white
+	c_ints:str = "(" + c_ints_nc + ")" + white_1
 	c_str_nc:str = "(?:char(?:\\d+_t)?)"
-	c_str:str = "(" + c_str_nc +")" + white
+	c_str:str = "(" + c_str_nc +")" + white_1
 	name_nc:str = "(?:[a-zA-Z_]\\w*)"
-	name:str = "(" + name_nc + ")" + white
+	name:str = "(" + name_nc + ")" + white_0
 
-	array_alnum:str =   "\\["+white+ "(\\w*)"         +white+"\\]" +white
-	array_var:str =     "\\["+white+ name             +white+"\\]" +white
-	array_num:str =     "\\["+white+ "(\\d*)"         +white+"\\]" +white
-	array_vlaflex:str = "\\["+white+ "("+name_nc+")?" +white+"\\]" +white
-	#array_countedby_nc:str = "(?:__counted_by\\([\\w\\.]*\\))?" +white
-	array_countedby_var:str = "(__counted_by\\(([\\w\\.]*)\\))" +white
-	array_countedby_whole_q:str = "(__counted_by\\([\\w\\.]*\\))?" +white
-	nonstring_nc:str = "(?:__nonstring)?" +white
+	array_alnum:str =   "\\["+white_0+ "(\\w*)"         +white_0+"\\]" +white_0
+	array_var:str =     "\\["+white_0+ name             +white_0+"\\]" +white_0
+	array_num:str =     "\\["+white_0+ "(\\d*)"         +white_0+"\\]" +white_0
+	array_vlaflex:str = "\\["+white_0+ "("+name_nc+")?" +white_0+"\\]" +white_0
+	#array_countedby_nc:str = "(?:__counted_by\\([\\w\\.]*\\))?" +white_0
+	array_countedby_var:str = "(__counted_by\\(([\\w\\.]*)\\))" +white_0
+	array_countedby_whole_q:str = "(__counted_by\\([\\w\\.]*\\))?" +white_0
+	nonstring_nc:str = "(?:__nonstring)?" +white_0
 
 	struct_or_cnumtype:str = "("  \
-		+ "(?:" + c_prefix_nc + white + name_nc + ")"  \
+		+ "(?:" + c_prefix_nc + white_1 + name_nc + ")"  \
 		+ "|(?:" + c_num_types_nc + ")"  \
-	+ ")" + white
+	+ ")" + white_1
 
 	hi_lo:str = ":" + nums + "-" + nums + " \\+1[,;]"
 
-	c_enum:str = "(enum)" + white
-	c_enum_type:str = ":" + white + c_num_types
-	c_enum_equals:str = "=" + white + "(\\S+),?" + spacetab
+	c_enum:str = "(enum)" + white_1
+	c_enum_type:str = ":" + white_1 + c_num_types
+	c_enum_equals:str = "=" + white_1 + "(\\S+),?" + spacetab
 
-	comments:str = "(?:" + white + "(//\\s*(.*)))?"
+	comments:str = "(?:" + white_0 + "(//\\s*(.*)))?"
 	flagged_comment:str = "__ATUIDESCR//\\s*(.*)"
 	no_comment:str = tabs + "__ATUIDESCR\n"
 
