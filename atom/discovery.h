@@ -148,12 +148,6 @@ struct ip_discovery_header {
 struct ip_discovery_die_header {
 	uint16_t die_id;
 	uint16_t num_ips;
-	enum soc15_hwid hardware_id;
-	uint8_t instance_number; // max: HWIP_MAX_INSTANCE
-	uint8_t num_base_address;
-	uint8_t major;
-	uint8_t minor;
-	uint8_t revision;
 };
 
 union ip_harvest {
@@ -163,13 +157,21 @@ union ip_harvest {
 		reserved :7-4 +1; 
 	};
 };
-struct ip_discovery_die_v1 {
-	struct ip_discovery_die_header header;
+
+struct discovery_ip_entry_header {
+	enum soc15_hwid hardware_id;
+	uint8_t instance_number; // max: HWIP_MAX_INSTANCE
+	uint8_t num_base_address;
+	uint8_t major;
+	uint8_t minor;
+	uint8_t revision;
+};
+
+struct discovery_ip_entry_v1 {
+	struct discovery_ip_entry_header header;
 	union ip_harvest harvest;
 	uint32_t base_address[] __counted_by(header.num_base_address);
 };
-
-
 union ip_hcid_sub {
 	uint8_t raw;
 	struct { uint8_t
@@ -177,23 +179,27 @@ union ip_hcid_sub {
 		variant      :7-4 +1;
 	};
 };
-struct ip_discovery_die_v3 {
-	struct ip_discovery_die_header header;
+struct discovery_ip_entry_v3 {
+	struct discovery_ip_entry_header header;
 	union ip_hcid_sub sub;
 	uint32_t base_address[] __counted_by(header.num_base_address);
 };
-struct ip_discovery_die_v4_64 {
-	struct ip_discovery_die_header header;
+struct discovery_ip_entry_v4_64 {
+	struct discovery_ip_entry_header header;
 	union ip_hcid_sub sub;
 	uint64_t base_address[] __counted_by(header.num_base_address);
 };
 
-union discovery_ip_dies {
+union discovery_ip_entry {
+	struct discovery_ip_entry_header header;
+	struct discovery_ip_entry_v1    v1;
+	struct discovery_ip_entry_v3    v3;
+	struct discovery_ip_entry_v3    v4_32;
+	struct discovery_ip_entry_v4_64 v4_64;
+};
+struct discovery_ip_die {
 	struct ip_discovery_die_header header;
-	struct ip_discovery_die_v1     v1;
-	struct ip_discovery_die_v3     v3;
-	struct ip_discovery_die_v3     v4_32;
-	struct ip_discovery_die_v4_64  v4_64;
+	union discovery_ip_entry entries[] __counted_by(header.num_ips);
 };
 
 // GPU core info

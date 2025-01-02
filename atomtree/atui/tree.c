@@ -3070,32 +3070,58 @@ grow_discovery_tables(
 	};
 
 	if (dis->ip_discovery) {
+		struct atui_enum const* const ip_enum = & ATUI_ENUM(soc15_hwid);
 		struct ip_discovery_header const* const ip = dis->ip_discovery;
 
 		atui_branch* ip_dies[IP_DISCOVERY_MAX_NUM_DIES];
 		atuifunc_args atui_args = {.atomtree=dis};
-		atuifunc ip_die_func;
+		atuifunc ip_func;
 		switch (ip->version) {
 			case 1:
 			case 2:
-				ip_die_func = _atui_ip_discovery_die_v1;
+				ip_func = _atui_discovery_ip_entry_v1;
 				break;
 			case 3:
 			case 4:
 				if (ip->flags.base_addr_64_bit) {
-					ip_die_func = _atui_ip_discovery_die_v4_64;
+					ip_func = _atui_discovery_ip_entry_v4_64;
 				} else {
-					ip_die_func = _atui_ip_discovery_die_v3;
+					ip_func = _atui_discovery_ip_entry_v3;
 				}
 				break;
 			default:
-				ip_die_func = _atui_ip_discovery_die_header;
+				ip_func = _atui_discovery_ip_entry_header;
 				break;
 		}
-		for (uint8_t i=0; i < ip->num_dies; i++) {
-			atui_args.bios = dis->dies[i];
-			ip_dies[i] = ip_die_func(&atui_args);
-			sprintf(ip_dies[i]->name, "%s [%02u]", ip_dies[i]->origname, i);
+		for (uint8_t dies_i=0; dies_i < dis->num_dies; dies_i++) {
+			uint16_t num_ips = dis->dies[dies_i].header->num_ips;
+			ip_dies[dies_i] = ATUI_MAKE_BRANCH(ip_discovery_die_header,  NULL,
+				dis, dis->dies[dies_i].header,  num_ips,NULL
+			);
+			sprintf(ip_dies[dies_i]->name, "ip_discovery_die_header [%02u]",
+				dies_i
+			);
+			for (uint16_t ip_i=0; ip_i < num_ips; ip_i++) {
+				atui_args.bios = dis->dies[dies_i].entries[ip_i].raw;
+				atui_branch* entry = ip_func(&atui_args);
+				ATUI_ADD_BRANCH(ip_dies[dies_i], entry);
+				enum soc15_hwid hwid = (
+					dis->dies[dies_i].entries[ip_i].header->hardware_id
+				);
+				int16_t naming_enum_i = atui_enum_bsearch(ip_enum, hwid);
+				if (-1 < naming_enum_i) {
+					sprintf(entry->name, "%s [%02u]: %s (%u)",
+						entry->origname, ip_i,
+						ip_enum->enum_array[naming_enum_i].name,
+						dis->dies[dies_i].entries[ip_i].header->instance_number
+					);
+				} else {
+					sprintf(entry->name, "%s [%02u]: hardware ID %u (%u)",
+						entry->origname, ip_i,  hwid,
+						dis->dies[dies_i].entries[ip_i].header->instance_number
+					);
+				}
+			}
 		}
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_IP_DISCOVERY],

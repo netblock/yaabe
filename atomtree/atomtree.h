@@ -32,6 +32,24 @@ struct atomtree_pci_tables {
 	struct pci_rom_tables* pci_tables;
 };
 
+
+struct atomtree_discovery_ip_entry {
+	union {
+		void* raw;
+		union  discovery_ip_entry*        entry;
+		struct discovery_ip_entry_header* header;
+		struct discovery_ip_entry_v1*     v1;
+		struct discovery_ip_entry_v3*     v3;
+		struct discovery_ip_entry_v3*     v4_32;
+		struct discovery_ip_entry_v4_64*  v4_64;
+	};
+	enum atomtree_common_version ver;
+};
+struct atomtree_discovery_ip_die {
+	 struct ip_discovery_die_header* header;
+	 struct atomtree_discovery_ip_entry* entries;
+};
+
 struct atomtree_discovery_table {
 	struct discovery_fw_blob* blob;
 
@@ -42,14 +60,15 @@ struct atomtree_discovery_table {
 	enum atomtree_common_version vcn_ver;
 	enum atomtree_common_version mall_ver;
 	enum atomtree_common_version nps_ver;
+	uint8_t num_dies;
 
-	struct ip_discovery_header*     ip_discovery;
-	union  discovery_ip_dies*       dies[IP_DISCOVERY_MAX_NUM_DIES];
-	union  discovery_gc_info*       gc_info;
-	struct discovery_harvest_table* harvest;
-	struct discovery_vcn_info_v1_0* vcn_info;
-	union  discovery_mall_info*     mall_info;
-	struct discovery_nps_info_v1_0* nps_info;
+	struct ip_discovery_header*       ip_discovery;
+	struct atomtree_discovery_ip_die  dies[IP_DISCOVERY_MAX_NUM_DIES];
+	union  discovery_gc_info*         gc_info;
+	struct discovery_harvest_table*   harvest;
+	struct discovery_vcn_info_v1_0*   vcn_info;
+	union  discovery_mall_info*       mall_info;
+	struct discovery_nps_info_v1_0*   nps_info;
 };
 
 enum atomtree_psp_fw_payload_type:uint8_t {

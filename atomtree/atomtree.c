@@ -2586,7 +2586,6 @@ populate_datatables(
 	}
 }
 
-
 inline static bool
 verify_discovery_binary_header_checksum(
 		struct discovery_fw_blob const* const dis
@@ -2606,8 +2605,82 @@ verify_discovery_binary_header_checksum(
 	return sum == dis->binary_header.binary_checksum;
 }
 inline static void
+populate_discovery_table_ip_dies(
+		struct atomtree_discovery_table* const dis,
+		struct atomtree_commons* const commons,
+		void* const binary
+		) {
+	// double flex array: each die has an array of IP entries, each IP with an
+	// array of base addresses.
+	struct ip_die_info* const die_offsets = dis->ip_discovery->die_info;
+	struct atomtree_discovery_ip_die* const dies = dis->dies;
+
+	uint8_t const version = dis->ip_discovery->version;
+	bool const base_addr_64_bit = dis->ip_discovery->flags.base_addr_64_bit;
+
+	if (dis->ip_discovery->num_dies < IP_DISCOVERY_MAX_NUM_DIES) {
+		dis->num_dies = dis->ip_discovery->num_dies;
+	} else {
+		dis->num_dies = IP_DISCOVERY_MAX_NUM_DIES;
+	}
+	for (uint8_t die_i=0; die_i < dis->num_dies; die_i++) {
+		dies[die_i].header = binary + die_offsets[die_i].die_offset;
+
+		uint16_t num_ips = dies[die_i].header->num_ips;
+		if (0 == num_ips) {
+			assert(0);
+			continue;
+		}
+		struct atomtree_discovery_ip_entry* ips = arena_alloc(
+			&(commons->alloc_arena), &(commons->error),
+			num_ips * sizeof(dies[die_i].entries[0])
+		);
+		dies[die_i].entries = ips;
+		union {
+			void* raw;
+			union discovery_ip_entry* e;
+		} ip = {
+			.raw = (void*)(dies[die_i].header) + sizeof(*(dies[die_i].header))
+		};
+		uint16_t ip_i = 0;
+		do {
+			ips[ip_i].raw = ip.raw;
+			ips[ip_i].ver = ( // TODO major minor revision
+				(ip.e->header.major * VER_MAJOR_MULTIPLIER)
+				+ ip.e->header.minor 
+			);
+			switch (version) {
+				case 1:
+				case 2:
+					ip.raw += sizeof_flex(
+						&(ip.e->v1),  base_address,
+						ip.e->header.num_base_address
+					);
+					break;
+				case 3:
+				case 4:
+					if (base_addr_64_bit) {
+						ip.raw += sizeof_flex(
+							&(ip.e->v4_64),  base_address,
+							ip.e->header.num_base_address
+						);
+					} else {
+						ip.raw += sizeof_flex(
+							&(ip.e->v3),  base_address,
+							ip.e->header.num_base_address
+						);
+					}
+					break;
+				default: assert(0);
+			}
+			ip_i++;
+		} while (ip_i < num_ips);
+	}
+}
+inline static void
 populate_discovery_table(
-		struct atomtree_discovery_table* const dis
+		struct atomtree_discovery_table* const dis,
+		struct atomtree_commons* const commons
 		) {
 	union {
 		void* raw;
@@ -2618,19 +2691,15 @@ populate_discovery_table(
 	struct discovery_table_info const* const table_list = b.bin->table_list;
 
 	dis->binary_ver = (
-		b.bin->version_major * VER_MAJOR_MULTIPLIER
+		(b.bin->version_major * VER_MAJOR_MULTIPLIER)
 		+ b.bin->version_minor
 	);
 
 	if (table_list[DISCOVERY_IP_DISCOVERY].offset) {
 		dis->ip_discovery = b.raw + table_list[DISCOVERY_IP_DISCOVERY].offset;
 		dis->ip_ver = dis->ip_discovery->version * VER_MAJOR_MULTIPLIER;
-		uint16_t const num_dies = dis->ip_discovery->num_dies;
-		for (uint8_t i=0; (i<num_dies) && (i<IP_DISCOVERY_MAX_NUM_DIES); i++) {
-			dis->dies[i] = b.raw + dis->ip_discovery->die_info[i].die_offset;
-			assert(dis->dies[i]->header.major == dis->ip_discovery->version);
-			assert(dis->dies[i]->header.minor == dis->dies[0]->header.minor);
-		}
+
+		populate_discovery_table_ip_dies(dis, commons, b.raw);
 	}
 
 	if (table_list[DISCOVERY_GC].offset) {
@@ -2647,21 +2716,21 @@ populate_discovery_table(
 	if (table_list[DISCOVERY_VCN_INFO].offset) {
 		dis->vcn_info = b.raw + table_list[DISCOVERY_VCN_INFO].offset;
 		dis->vcn_ver = (
-			dis->vcn_info->header.version_major * VER_MAJOR_MULTIPLIER
+			(dis->vcn_info->header.version_major * VER_MAJOR_MULTIPLIER)
 			+ dis->vcn_info->header.version_minor
 		);
 	}
 	if (table_list[DISCOVERY_MALL_INFO].offset) {
 		dis->mall_info = b.raw + table_list[DISCOVERY_MALL_INFO].offset;
 		dis->mall_ver = (
-			dis->mall_info->header.version_major * VER_MAJOR_MULTIPLIER
+			(dis->mall_info->header.version_major * VER_MAJOR_MULTIPLIER)
 			+ dis->mall_info->header.version_minor
 		);
 	}
 	if (table_list[DISCOVERY_NPS_INFO].offset) {
 		dis->nps_info = b.raw + table_list[DISCOVERY_NPS_INFO].offset;
 		dis->nps_ver = (
-			dis->nps_info->header.version_major * VER_MAJOR_MULTIPLIER
+			(dis->nps_info->header.version_major * VER_MAJOR_MULTIPLIER)
 			+ dis->nps_info->header.version_minor
 		);
 	}
@@ -2670,7 +2739,8 @@ populate_discovery_table(
 inline static void
 populate_psp_fw_payload_type(
 		struct psp_directory_entry const* const pspentry,
-		struct atomtree_psp_directory_entries* const fw_entry
+		struct atomtree_psp_directory_entries* const fw_entry,
+		struct atomtree_commons* const commons
 		) {
 	fw_entry->has_fw_header = (
 		(sizeof(*fw_entry->header) <= pspentry->size)
@@ -2684,7 +2754,7 @@ populate_psp_fw_payload_type(
 					== fw_entry->discovery.blob->binary_header.binary_signature
 				)) {
 			fw_entry->type = PSPFW_DISCOVERY;
-			populate_discovery_table(&(fw_entry->discovery));
+			populate_discovery_table(&(fw_entry->discovery), commons);
 		}
 	}
 }
@@ -2750,7 +2820,10 @@ populate_psp_directory_table(
 		}
 
 		fw_entries[i].raw = moded_start[addr.mode] + addr.address;
-		populate_psp_fw_payload_type(&(d.dir->pspentry[i]), &(fw_entries[i]));
+		populate_psp_fw_payload_type(
+			&(d.dir->pspentry[i]), &(fw_entries[i]),
+			commons
+		);
 	}
 
 	pspdir->fw_entries = fw_entries;

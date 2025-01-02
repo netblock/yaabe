@@ -200,7 +200,12 @@ global_default: {
 		}, {
 			access: "bios->num_ips",
 			name: "num_ips",
-		}, {
+		},
+	],
+}, {
+	c_type: "discovery_ip_entry_header",
+	leaves: [
+		{
 			access: "bios->hardware_id",
 			name: "hardware_id",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -244,14 +249,13 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "ip_discovery_die_v1",
-	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	c_type: "discovery_ip_entry_v1",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_ip_entry_header",
 		}, {
 			access: "bios->harvest",
 			name: "harvest",
@@ -266,8 +270,8 @@ global_default: {
 				count: "bios->header.num_base_address",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "base_address [%02u]",
 					display: "ATUI_HEX",
+					name: "base_address",
 				},],
 			},
 		},
@@ -291,14 +295,13 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "ip_discovery_die_v3",
-	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	c_type: "discovery_ip_entry_v3",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_ip_entry_header",
 		}, {
 			access: "bios->sub",
 			name: "sub",
@@ -313,21 +316,20 @@ global_default: {
 				count: "bios->header.num_base_address",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "base_address [%02u]",
 					display: "ATUI_HEX",
+					name: "base_address",
 				},],
 			},
 		},
 	],
 }, {
-	c_type: "ip_discovery_die_v4_64",
-	table_size: "sizeof_flex(bios,base_address,bios->header.num_base_address)",
+	c_type: "discovery_ip_entry_v4_64",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_die_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_ip_entry_header",
 		}, {
 			access: "bios->sub",
 			name: "sub",
@@ -342,13 +344,14 @@ global_default: {
 				count: "bios->header.num_base_address",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "base_address [%02u]",
 					display: "ATUI_HEX",
+					name: "base_address",
 				},],
 			},
 		},
 	],
 },
+
 
 {
 	c_type: "discovery_gc_info_header",
