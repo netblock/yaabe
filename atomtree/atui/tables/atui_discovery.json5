@@ -52,8 +52,8 @@ global_default: {
 	table_size: "bios->binary_size",
 	leaves: [
 		{
-			access: "bios->binary_signature",
-			name: "binary_signature",
+			access: "bios->signature",
+			name: "signature",
 			display: "ATUI_HEX",
 		}, {
 			access: "bios->version_major",
@@ -147,7 +147,7 @@ global_default: {
 	c_type: "ip_discovery_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -357,7 +357,7 @@ global_default: {
 	c_type: "discovery_gc_info_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -891,7 +891,7 @@ global_default: {
 	c_type: "discovery_harvest_info_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -949,7 +949,7 @@ global_default: {
 	c_type: "discovery_vcn_info_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -1060,7 +1060,7 @@ global_default: {
 	c_type: "discovery_mall_info_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -1129,7 +1129,7 @@ global_default: {
 	c_type: "discovery_nps_info_header",
 	leaves: [
 		{
-			access: "bios->signature",
+			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",

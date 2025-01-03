@@ -2750,8 +2750,8 @@ populate_psp_fw_payload_type(
 	if (fw_entry->has_fw_header) {
 		if ((sizeof(*fw_entry->discovery.blob) <= pspentry->size
 				) && (
-					BINARY_SIGNATURE
-					== fw_entry->discovery.blob->binary_header.binary_signature
+					DISCOVERY_BINARY_SIGNATURE
+					== fw_entry->discovery.blob->binary_header.signature
 				)) {
 			fw_entry->type = PSPFW_DISCOVERY;
 			populate_discovery_table(commons, &(fw_entry->discovery));
@@ -2783,12 +2783,11 @@ populate_psp_directory_table(
 	}
 	union {
 		void* raw;
-		uint32_t* cookie;
 		struct psp_directory* dir;
 	} const d = {
 		.raw = bios + bios_offset
 	};
-	if (PSP_COOKIE != *d.cookie) {
+	if (PSP_COOKIE != d.dir->header.pspcookie.num) {
 		return;
 	};
 
@@ -2837,6 +2836,8 @@ populate_atom_rom_header_v1_1(
 	struct atom_tree* const atree = commons->atree;
 	struct atom_rom_header_v1_1* const leaves = rom_header->v1_1;
 	void* const bios = commons->bios;
+	
+	assert(ATOM_SIGNATURE == rom_header->v1_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
@@ -2869,6 +2870,8 @@ populate_atom_rom_header_v2_1(
 	struct atom_tree* const atree = commons->atree;
 	struct atom_rom_header_v2_1* const leaves = rom_header->v2_1;
 	void* const bios = commons->bios;
+
+	assert(ATOM_SIGNATURE == rom_header->v2_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
@@ -2904,6 +2907,8 @@ populate_atom_rom_header_v2_2(
 	struct atom_tree* const atree = commons->atree;
 	struct atom_rom_header_v2_2* const leaves = rom_header->v2_2;
 	void* const bios = commons->bios;
+
+	assert(ATOM_SIGNATURE == rom_header->v2_2->signature.num);
 
 	if (leaves->protectedmodeoffset) {
 		atree->protected_mode = bios + leaves->protectedmodeoffset;
@@ -3000,18 +3005,17 @@ populate_pci_tables(
 	} header;
 	union {
 		void* raw;
-		uint32_t* signature;
 		struct pcir_data_structure* pcir;
 	} pcir;
 
 	uint8_t i = 0;
 	header.header = start;
 	do {
-		if (header.header->pci_rom_signature != PCI_HEADER_MAGIC) {
+		if (PCI_HEADER_MAGIC != header.header->pci_rom_signature) {
 			break;
 		}
 		pcir.raw = header.raw + header.header->pcir_structure_offset;
-		if (*pcir.signature != PCIR_SIGNATURE) {
+		if (PCIR_SIGNATURE != pcir.pcir->signature.num) {
 			break;
 		}
 		i++;

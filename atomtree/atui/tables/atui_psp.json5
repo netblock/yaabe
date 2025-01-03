@@ -55,7 +55,7 @@ global_default: {
 	c_type: "psp_directory_header",
 	leaves: [
 		{
-			access: "bios->pspcookie",
+			access: "bios->pspcookie.str",
 			name: "pspcookie",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",

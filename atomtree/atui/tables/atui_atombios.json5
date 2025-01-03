@@ -86,7 +86,7 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->IBM",
+			access: "bios->IBM.str",
 			name: "IBM",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
@@ -216,12 +216,12 @@ global_default: {
 	table_size: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->pcir_signature",
-			name: "pcir_signature",
+			access: "bios->signature.str",
+			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "\"PCIR\"",},
+				{language: "english", text: "PCIR",},
 			],
 		}, {
 			access: "bios->vendor_id",
@@ -386,12 +386,12 @@ global_default: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->FirmWareSignature",
+			access: "bios->FirmWareSignature.str",
 			name: "FirmWareSignature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
+				{language: "english", text: "ATOM",},
 			],
 		}, {
 			access: "bios->BiosRuntimeSegmentAddress",
@@ -470,12 +470,12 @@ global_default: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->FirmWareSignature",
+			access: "bios->FirmWareSignature.str",
 			name: "FirmWareSignature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "Signature to distinguish between Atombios and non-atombios, atombios should init it as \"ATOM\", don't change the position",},
+				{language: "english", text: "ATOM",},
 			],
 		}, {
 			access: "bios->BiosRuntimeSegmentAddress",

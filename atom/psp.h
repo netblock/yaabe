@@ -5,10 +5,6 @@
 #define PSP_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
-// Define structure for PSP directory
-//     little-endian: 3 2 1 0
-//                    P S P $
-#define PSP_COOKIE 0x50535024
 #define MAX_PSP_ENTRIES 0xFF
 union psp_directory_additional_info {
 	uint32_t additional_info;
@@ -20,8 +16,13 @@ union psp_directory_additional_info {
 		not_used       :31-31 +1;
 	};
 };
+// Define structure for PSP directory
+//         little-endian: 3 2 1 0
+//                        P S P $
+#define PSP_COOKIE     0x50535024
+#define PSP_COOKIE_STR "$PSP"
 struct psp_directory_header {
-	char pspcookie[4] __nonstring; // "$PSP"
+	union magic_32 pspcookie; // $PSP
 	uint32_t checksum; // 32 bit CRC of header items below and the entire table
 	uint32_t totalentries;
 	union psp_directory_additional_info additional_info;

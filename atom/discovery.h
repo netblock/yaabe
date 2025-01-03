@@ -106,9 +106,9 @@ struct discovery_table_info {
 	uint16_t padding;
 };
 
-#define BINARY_SIGNATURE          0x28211407
+#define DISCOVERY_BINARY_SIGNATURE    0x28211407
 struct discovery_binary_header {
-	uint32_t binary_signature;
+	uint32_t signature;
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint16_t binary_checksum; // Byte sum of the binary after this field 
@@ -132,11 +132,12 @@ union ip_discovery_header_flags_v4 { // reserved in v3
 	};
 };
 #define IP_DISCOVERY_MAX_NUM_DIES 16
-//                    little-endian: 3 2 1 0
-//                                   S D P I
-#define DISCOVERY_TABLE_SIGNATURE 0x53445049
+//                        little-endian: 3 2 1 0
+//                                       S D P I
+#define DISCOVERY_TABLE_SIGNATURE     0x53445049
+#define DISCOVERY_TABLE_SIGNATURE_STR "IPDS"
 struct ip_discovery_header {
-	char signature[4] __nonstring; // IPDS
+	union magic_32 signature; // IPDS
 	uint16_t version;
 	uint16_t size;
 	uint32_t id;
@@ -203,11 +204,12 @@ struct discovery_ip_die {
 };
 
 // GPU core info
-//                    little-endian: 3 2 1 0
-//                                       C G
-#define GC_TABLE_SIGNATURE        0x00004347
+//                        little-endian: 3 2 1 0
+//                                           C G
+#define GC_TABLE_SIGNATURE            0x00004347
+#define GC_TABLE_SIGNATURE_STR        "GC"
 struct discovery_gc_info_header {
-	char signature[4] __nonstring; // GC
+	union magic_32 signature; // GC
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size;
@@ -397,11 +399,13 @@ union discovery_gc_info {
 	struct discovery_gc_info_v2_1   v2_1;
 };
 
-//                    little-endian: 3 2 1 0
-//                                   V R A H
-#define HARVEST_TABLE_SIGNATURE   0x56524148
+//                        little-endian: 3 2 1 0
+//                                       V R A H
+#define HARVEST_TABLE_SIGNATURE       0x56524148
+#define HARVEST_TABLE_SIGNATURE_STR   "HARV"
+
 struct discovery_harvest_info_header {
-	char signature[4] __nonstring; // HARV
+	union magic_32 signature; // HARV
 	uint32_t version;
 };
 
@@ -416,11 +420,13 @@ struct discovery_harvest_table {
 	struct discovery_harvest_info list[32];
 };
 
-//                    little-endian: 3 2 1 0
-//                                     N C V
-#define VCN_INFO_TABLE_ID         0x004E4356
+//                        little-endian: 3 2 1 0
+//                                         N C V
+#define VCN_INFO_TABLE_SIGNATURE      0x004E4356
+#define VCN_INFO_TABLE_SIGNATURE_STR  "VCN"
+
 struct discovery_vcn_info_header {
-	char signature[4] __nonstring; // VCN
+	union magic_32 signature; // VCN
     uint16_t version_major;
     uint16_t version_minor;
     uint32_t size_bytes;
@@ -451,11 +457,12 @@ struct discovery_vcn_info_v1_0 {
 };
 
 
-//                    little-endian: 3 2 1 0
-//                                   L L A M
-#define MALL_INFO_TABLE_SIGNATURE 0x4C4C414D
+//                        little-endian: 3 2 1 0
+//                                       L L A M
+#define MALL_INFO_TABLE_SIGNATURE     0x4C4C414D
+#define MALL_INFO_TABLE_SIGNATURE_STR "MALL"
 struct discovery_mall_info_header {
-	char signature[4] __nonstring; // MALL
+	union magic_32 signature; // MALL
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size_bytes;
@@ -485,11 +492,12 @@ union discovery_mall_info {
 
 #define DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES 12
 
-//                    little-endian: 3 2 1 0
-//                                     S P N
-#define NPS_INFO_TABLE_SIGNATURE  0x0053504E
+//                        little-endian: 3 2 1 0
+//                                         S P N
+#define NPS_INFO_TABLE_SIGNATURE      0x0053504E
+#define NPS_INFO_TABLE_SIGNATURE_STR  "NPS"
 struct discovery_nps_info_header {
-	char signature[4] __nonstring; // NPS
+	union magic_32 signature; // NPS
 	uint16_t version_major;
 	uint16_t version_minor;
 	uint32_t size_bytes;

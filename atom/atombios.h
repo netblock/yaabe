@@ -207,11 +207,12 @@ union pcir_indicator_byte {
 };
 
 
-//         little-endian: 3 2 1 0
-//                        R I C P
-#define PCIR_SIGNATURE 0x52494350
+//             little-endian: 3 2 1 0
+//                            R I C P
+#define PCIR_SIGNATURE     0x52494350
+#define PCIR_SIGNATURE_STR "PCIR"
 struct pcir_data_structure { // PCI Rom
-	char  pcir_signature[4] __nonstring; // "PCIR"
+	union magic_32 signature; // PCIR
 	uint16_t vendor_id;
 	uint16_t device_id;
 	uint16_t vpd_reserved; // was PCI Vital Product Data (VPD)
@@ -260,7 +261,7 @@ struct efi_pci_device_driver_image {
 struct vbios_rom_header {
 	struct pci_rom_header pci_header;
 	uint8_t  rsvd_1d_1a[4];
-	char  IBM[3] __nonstring; // IBM
+	union magic_24 IBM; // IBM
 	uint8_t  checksum;
 	uint8_t  unsure[13]; // could be more checksums?
 	uint8_t  bios_msg_number;
@@ -295,12 +296,17 @@ struct atom_common_table_header {
 	uint8_t  content_revision; // change it when a data table has a structure change, or a hw function has a input/output parameter change
 };
 
-/******************************************************************************/
+/*****************************************************************************/
 // Structure stores the ROM header.
-/******************************************************************************/
+/*****************************************************************************/
+
+//             little-endian: 3 2 1 0
+//                            M T O M
+#define ATOM_SIGNATURE     0x4D4F5441
+#define ATOM_SIGNATURE_STR "ATOM"
 struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 	struct atom_common_table_header  table_header;
-	char  FirmWareSignature[4] __nonstring; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
+	union magic_32 FirmWareSignature; // ATOM
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -321,7 +327,7 @@ struct atom_rom_header_v1_1 { // TODO is this actually v1.1?
 
 struct atom_rom_header_v2_1 {
 	struct atom_common_table_header  table_header;
-	char  FirmWareSignature[4] __nonstring; // Signature to distinguish between Atombios and non-atombios, atombios should init it as "ATOM", don't change the position
+	union magic_32 FirmWareSignature; // ATOM
 	uint16_t BiosRuntimeSegmentAddress;
 	uint16_t ProtectedModeInfoOffset;
 	uint16_t ConfigFilenameOffset;
@@ -7558,10 +7564,10 @@ struct atom_mc_init_param_table_v2_1 {
 /******************************************************************************/
 #define UCODE_ROM_START_ADDRESS 0x1b800
 #define UCODE_SIGNATURE      0x4375434d // 'MCuC' - MC uCode
+#define UCODE_SIGNATURE_STR  "CuCM"
 // uCode block header for reference
 struct mcucodeheader {
-	//uint32_t Signature;
-	char  Signature[4] __nonstring; // CuCM ?
+	union magic_32 Signature; // CuCM
 	uint8_t  Revision;
 	uint8_t  Checksum;
 	uint8_t  Reserved1;

@@ -37,12 +37,12 @@ global_default: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->atom_bios_string",
-			name: "atom_bios_string",
+			access: "bios->signature.str",
+			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
 			description: [
-				{language: "english", text: "enum atom_string_def atom_bios_string. Signature to distinguish between Atombios and non-atombios,",},
+				{language: "english", text: "ATOM",},
 			],
 		}, {
 			access: "bios->bios_segment_address",
