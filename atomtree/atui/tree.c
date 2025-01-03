@@ -9,8 +9,8 @@ walks the atomtree to construct the ATUI tree
 
 inline static atui_branch*
 grow_smc_dpm_info(
-		struct atomtree_smc_dpm_info const* const smc_dpm_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_smc_dpm_info const* const smc_dpm_info
 		) {
 	if (NULL == smc_dpm_info->leaves) {
 		return NULL;
@@ -42,8 +42,8 @@ grow_smc_dpm_info(
 
 inline static atui_branch*
 grow_firmwareinfo(
-		struct atomtree_firmware_info const* const firmwareinfo,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_firmware_info const* const firmwareinfo
 		) {
 	if (NULL == firmwareinfo->leaves) {
 		return NULL;
@@ -123,8 +123,8 @@ grow_lcd_info_record_table(
 
 inline static atui_branch*
 grow_lcd_info(
-		struct atomtree_lcd_info const* const lcd_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_lcd_info const* const lcd_info
 		) {
 	if (NULL == lcd_info->leaves) {
 		return NULL;
@@ -155,8 +155,8 @@ grow_lcd_info(
 
 inline static atui_branch*
 grow_smu_info(
-		struct atomtree_smu_info const* const smu_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_smu_info const* const smu_info
 		) {
 	if (NULL == smu_info->leaves) {
 		return NULL;
@@ -186,8 +186,8 @@ grow_smu_info(
 
 inline static atui_branch*
 grow_vram_usagebyfirmware(
-		struct atomtree_vram_usagebyfirmware const* const fw_vram,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_vram_usagebyfirmware const* const fw_vram
 		) {
 	if (NULL == fw_vram->leaves) {
 		return NULL;
@@ -212,8 +212,8 @@ grow_vram_usagebyfirmware(
 
 inline static atui_branch*
 grow_gpio_pin_lut(
-		struct atomtree_gpio_pin_lut const* const gpio_pin_lut,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_gpio_pin_lut const* const gpio_pin_lut
 		) {
 	if (NULL == gpio_pin_lut->leaves) {
 		return NULL;
@@ -237,8 +237,8 @@ grow_gpio_pin_lut(
 
 inline static atui_branch*
 grow_gfx_info(
-		struct atomtree_gfx_info const* const gfx_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_gfx_info const* const gfx_info
 		) {
 	if (NULL == gfx_info->leaves) {
 		return NULL;
@@ -1018,8 +1018,8 @@ atui_generate_smc_pptable(
 }
 inline static atui_branch*
 grow_ppt(
-		struct atomtree_powerplay_table const* const ppt,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_powerplay_table const* const ppt
 		) {
 	if (NULL == ppt->leaves) {
 		return NULL;
@@ -2480,8 +2480,8 @@ grow_vram_info_v3_0( // TODO finish this
 
 inline static atui_branch*
 grow_vram_info(
-		struct atomtree_vram_info const* const vram_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_vram_info const* const vram_info
 		) {
 	if (NULL == vram_info->leaves) {
 		return NULL;
@@ -2702,8 +2702,8 @@ grow_voltageobject_info_v4_1(
 
 inline static atui_branch*
 grow_voltageobject_info(
-		struct atomtree_voltageobject_info const* const vo_info,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_voltageobject_info const* const vo_info
 		) {
 	if (NULL == vo_info->leaves) {
 		return NULL;
@@ -2734,8 +2734,8 @@ grow_voltageobject_info(
 
 inline static atui_branch*
 grow_master_datatable_v1_1(
-		struct atomtree_master_datatable const* const data_table,
-		struct atom_tree const* const atree
+		struct atom_tree const* const atree,
+		struct atomtree_master_datatable const* const data_table
 		) {
 	struct atomtree_master_datatable_v1_1 const* const dt11 = &(
 		data_table->v1_1
@@ -2748,35 +2748,35 @@ grow_master_datatable_v1_1(
 	atui_branch* const atui_vesa_timing = NULL;
 
 	atui_branch* const atui_firmwareinfo = grow_firmwareinfo(
-		&(dt11->firmwareinfo), atree
+		atree, &(dt11->firmwareinfo)
 	);
 
 	atui_branch* const atui_palette_data = NULL;
 
-	atui_branch* const atui_lcd_info = grow_lcd_info(&(dt11->lcd_info), atree);
+	atui_branch* const atui_lcd_info = grow_lcd_info(atree, &(dt11->lcd_info));
 
 	atui_branch* const atui_dig_transmitter_info = NULL;
 
 	atui_branch* const atui_smu_info = grow_smu_info(
-		&(dt11->smu_info), atree
+		atree, &(dt11->smu_info)
 	);
 
 	atui_branch* const atui_supported_devices_info = NULL;
 	atui_branch* const atui_gpio_i2c_info = NULL;
 
 	atui_branch* const atui_fw_vram = grow_vram_usagebyfirmware(
-		&(dt11->vram_usagebyfirmware), atree
+		atree, &(dt11->vram_usagebyfirmware)
 	);
 
 	atui_branch* const atui_gpio_pin_lut = grow_gpio_pin_lut(
-		&(dt11->gpio_pin_lut), atree
+		atree, &(dt11->gpio_pin_lut)
 	);
 
 	atui_branch* const atui_vesa_to_internal_mode = NULL;
 
-	atui_branch* const atui_gfx_info = grow_gfx_info(&(dt11->gfx_info), atree);
+	atui_branch* const atui_gfx_info = grow_gfx_info(atree, &(dt11->gfx_info));
 
-	atui_branch* const atui_ppt = grow_ppt(&(dt11->powerplayinfo), atree);
+	atui_branch* const atui_ppt = grow_ppt(atree, &(dt11->powerplayinfo));
 
 	atui_branch* const atui_gpu_virtualization_info = NULL;
 	atui_branch* const atui_save_restore_info = NULL;
@@ -2792,7 +2792,7 @@ grow_master_datatable_v1_1(
 	atui_branch* const atui_tv_video_mode = NULL;
 
 	atui_branch* const atui_vram_info = grow_vram_info(
-		&(dt11->vram_info), atree
+		atree, &(dt11->vram_info)
 	);
 
 	atui_branch* const atui_memory_training_info = NULL;
@@ -2800,7 +2800,7 @@ grow_master_datatable_v1_1(
 	atui_branch* const atui_asic_profiling_info = NULL;
 
 	atui_branch* const atui_voltageobject_info = grow_voltageobject_info(
-		&(dt11->voltageobject_info), atree
+		atree, &(dt11->voltageobject_info)
 	);
 
 	atui_branch* const atui_power_source_info = NULL;
@@ -2828,8 +2828,8 @@ grow_master_datatable_v1_1(
 
 inline static atui_branch*
 atomtree_datatable_v2_1_populate_sw_datatables(
-		struct atomtree_master_datatable_v2_1 const* const data_table,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_master_datatable_v2_1 const* const data_table
 		) {
 	atui_branch* sw_datatable3 = NULL;
 	if (data_table->sw_datatable3.leaves) {
@@ -2964,8 +2964,8 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 }
 inline static atui_branch*
 grow_master_datatable_v2_1(
-		struct atomtree_master_datatable const* const data_table,
-		struct atom_tree const* const atree 
+		struct atom_tree const* const atree,
+		struct atomtree_master_datatable const* const data_table
 		) {
 	struct atomtree_master_datatable_v2_1 const* const dt21 = &(data_table->v2_1);
 
@@ -2973,28 +2973,28 @@ grow_master_datatable_v2_1(
 	atui_branch* const atui_multimedia_info = NULL;
 
 	atui_branch* const atui_smc_dpm_info = grow_smc_dpm_info(
-		&(dt21->smc_dpm_info), atree
+		atree, &(dt21->smc_dpm_info)
 	);
 
 	atui_branch* const atui_firmwareinfo = grow_firmwareinfo(
-		&(dt21->firmwareinfo), atree
+		atree, &(dt21->firmwareinfo)
 	);
 
-	atui_branch* const atui_lcd_info = grow_lcd_info(&(dt21->lcd_info), atree);
+	atui_branch* const atui_lcd_info = grow_lcd_info(atree, &(dt21->lcd_info));
 
-	atui_branch* const atui_smu_info = grow_smu_info(&(dt21->smu_info), atree);
+	atui_branch* const atui_smu_info = grow_smu_info(atree, &(dt21->smu_info));
 
 	atui_branch* const atui_fw_vram = grow_vram_usagebyfirmware(
-		&(dt21->vram_usagebyfirmware), atree
+		atree, &(dt21->vram_usagebyfirmware)
 	);
 
 	atui_branch* const atui_gpio_pin_lut = grow_gpio_pin_lut(
-		&(dt21->gpio_pin_lut), atree
+		atree, &(dt21->gpio_pin_lut)
 	);
 
-	atui_branch* const atui_gfx_info = grow_gfx_info(&(dt21->gfx_info), atree);
+	atui_branch* const atui_gfx_info = grow_gfx_info(atree, &(dt21->gfx_info));
 
-	atui_branch* const atui_ppt = grow_ppt(&(dt21->powerplayinfo), atree);
+	atui_branch* const atui_ppt = grow_ppt(atree, &(dt21->powerplayinfo));
 
 	//displayobjectinfo
 	//indirectioaccess
@@ -3002,18 +3002,18 @@ grow_master_datatable_v2_1(
 	//dce_info
 
 	atui_branch* const atui_vram_info = grow_vram_info(
-		&(dt21->vram_info), atree
+		atree, &(dt21->vram_info)
 	);
 
 	//integratedsysteminfo
 	//asic_profiling_info
 	//voltageobject_info
 	atui_branch* const atui_voltageobject_info = grow_voltageobject_info(
-		&(dt21->voltageobject_info), atree
+		atree, &(dt21->voltageobject_info)
 	);
 
 	atui_branch* const atui_sw_datatables =
-		atomtree_datatable_v2_1_populate_sw_datatables(dt21, atree);
+		atomtree_datatable_v2_1_populate_sw_datatables(atree, dt21);
 
 	atui_branch* const child_branches[] = {
 		atui_utilitypipeline, atui_multimedia_info,
@@ -3032,8 +3032,8 @@ grow_master_datatable_v2_1(
 
 inline static atui_branch*
 grow_datatables(
-		//struct atomtree_master_datatable const* const data_table,
 		struct atom_tree const* const atree
+		//struct atomtree_master_datatable const* const data_table
 		) {
 	struct atomtree_master_datatable const* const data_table = &(
 		atree->data_table
@@ -3042,8 +3042,8 @@ grow_datatables(
 		return NULL;
 	}
 	switch (data_table->ver) {
-		case v1_1: return grow_master_datatable_v1_1(data_table, atree);
-		case v2_1: return grow_master_datatable_v2_1(data_table, atree);
+		case v1_1: return grow_master_datatable_v1_1(atree, data_table);
+		case v2_1: return grow_master_datatable_v2_1(atree, data_table);
 		default:
 			return ATUI_MAKE_BRANCH(atom_common_table_header,
 				"atom_master_data_table (header only stub)",
@@ -3301,8 +3301,8 @@ grow_psp_directory_fw_blobs(
 }
 inline static atui_branch*
 grow_psp_directory(
-		struct atomtree_psp_directory const* const pspdir,
-		struct atom_tree const* const atree __unused
+		struct atom_tree const* const atree __unused,
+		struct atomtree_psp_directory const* const pspdir
 		) {
 	if (NULL == pspdir->directory) {
 		return NULL;
@@ -3324,15 +3324,15 @@ grow_psp_directory(
 
 inline static atui_branch*
 grow_atom_rom_header(
-		struct atomtree_rom_header const* const rom_header,
-		struct atom_tree const* const atree
+		struct atom_tree const* const atree,
+		struct atomtree_rom_header const* const rom_header
 		) {
 	if (NULL == rom_header->leaves) {
 		return NULL;
 	}
 	atui_branch* const child_branches[] = {
 		grow_datatables(atree),
-		grow_psp_directory(&(atree->psp_directory), atree),
+		grow_psp_directory(atree, &(atree->psp_directory)),
 	};
 	atuifunc atui_func;
 	atuifunc_args atui_args = {
@@ -3387,7 +3387,7 @@ generate_atui(
 		struct atom_tree const* const atree
 		) {
 	atui_branch* const atui_atom_rom_header = grow_atom_rom_header(
-		&(atree->rom_header), atree
+		atree, &(atree->rom_header)
 	);
 	atui_branch* const atui_pci_tables = grow_pci_tables(&(atree->pci_tables));
 
