@@ -21,16 +21,16 @@ grow_smc_dpm_info(
 		.atomtree = smc_dpm_info,
 		.bios = smc_dpm_info->leaves,
 	};
-	switch (smc_dpm_info->ver) {
-		case v4_1:  atui_func = _atui_atom_smc_dpm_info_v4_1;  break;
-		case v4_3:  atui_func = _atui_atom_smc_dpm_info_v4_3;  break;
-		case v4_4:  atui_func = _atui_atom_smc_dpm_info_v4_4;  break;
-		case v4_5:  atui_func = _atui_atom_smc_dpm_info_v4_5;  break;
-		case v4_6:  atui_func = _atui_atom_smc_dpm_info_v4_6;  break;
-		case v4_7:  atui_func = _atui_atom_smc_dpm_info_v4_7;  break;
-		case v4_9:  atui_func = _atui_atom_smc_dpm_info_v4_9;  break;
-		case v4_10: atui_func = _atui_atom_smc_dpm_info_v4_10; break;
-		case v5_0:  atui_func = _atui_atom_smc_dpm_info_table_13_0_7; break;
+	switch (smc_dpm_info->ver.ver) {
+		case V(4,1):  atui_func = _atui_atom_smc_dpm_info_v4_1;  break;
+		case V(4,3):  atui_func = _atui_atom_smc_dpm_info_v4_3;  break;
+		case V(4,4):  atui_func = _atui_atom_smc_dpm_info_v4_4;  break;
+		case V(4,5):  atui_func = _atui_atom_smc_dpm_info_v4_5;  break;
+		case V(4,6):  atui_func = _atui_atom_smc_dpm_info_v4_6;  break;
+		case V(4,7):  atui_func = _atui_atom_smc_dpm_info_v4_7;  break;
+		case V(4,9):  atui_func = _atui_atom_smc_dpm_info_v4_9;  break;
+		case V(4,10): atui_func = _atui_atom_smc_dpm_info_v4_10; break;
+		case V(5,0):  atui_func = _atui_atom_smc_dpm_info_table_13_0_7; break;
 		default:
 			atui_args.rename = "smc_dpm_info (header only stub)";
 			atui_func = _atui_atom_common_table_header;
@@ -54,17 +54,17 @@ grow_firmwareinfo(
 		.atomtree = firmwareinfo,
 		.bios = firmwareinfo->leaves,
 	};
-	switch (firmwareinfo->ver) {
-		case v1_0: atui_func = _atui_atom_firmware_info_v1_0; break;
-		case v1_2: atui_func = _atui_atom_firmware_info_v1_2; break;
-		case v1_3: atui_func = _atui_atom_firmware_info_v1_3; break;
-		case v1_4: atui_func = _atui_atom_firmware_info_v1_4; break;
-		case v2_1: atui_func = _atui_atom_firmware_info_v2_1; break;
-		case v2_2: atui_func = _atui_atom_firmware_info_v2_2; break;
-		case v3_1: atui_func = _atui_atom_firmware_info_v3_1; break;
-		case v3_2: atui_func = _atui_atom_firmware_info_v3_2; break;
-		case v3_3: atui_func = _atui_atom_firmware_info_v3_3; break;
-		case v3_4: atui_func = _atui_atom_firmware_info_v3_4; break;
+	switch (firmwareinfo->ver.ver) {
+		case V(1,0): atui_func = _atui_atom_firmware_info_v1_0; break;
+		case V(1,2): atui_func = _atui_atom_firmware_info_v1_2; break;
+		case V(1,3): atui_func = _atui_atom_firmware_info_v1_3; break;
+		case V(1,4): atui_func = _atui_atom_firmware_info_v1_4; break;
+		case V(2,1): atui_func = _atui_atom_firmware_info_v2_1; break;
+		case V(2,2): atui_func = _atui_atom_firmware_info_v2_2; break;
+		case V(3,1): atui_func = _atui_atom_firmware_info_v3_1; break;
+		case V(3,2): atui_func = _atui_atom_firmware_info_v3_2; break;
+		case V(3,3): atui_func = _atui_atom_firmware_info_v3_3; break;
+		case V(3,4): atui_func = _atui_atom_firmware_info_v3_4; break;
 		default:
 			atui_args.rename = "firmwareinfo (header only stub)";
 			atui_func = _atui_atom_common_table_header;
@@ -139,11 +139,11 @@ grow_lcd_info(
 		.import_branches = &record_table,
 		.num_import_branches = 1,
 	};
-	switch (lcd_info->ver) {
-		case v1_1: atui_func = _atui_atom_lvds_info_v1_1; break;
-		case v1_2: atui_func = _atui_atom_lvds_info_v1_2; break;
-		case v1_3: atui_func = _atui_atom_lcd_info_v1_3;  break;
-		case v2_1: atui_func = _atui_atom_lcd_info_v2_1;  break;
+	switch (lcd_info->ver.ver) {
+		case V(1,1): atui_func = _atui_atom_lvds_info_v1_1; break;
+		case V(1,2): atui_func = _atui_atom_lvds_info_v1_2; break;
+		case V(1,3): atui_func = _atui_atom_lcd_info_v1_3;  break;
+		case V(2,1): atui_func = _atui_atom_lcd_info_v2_1;  break;
 		default:
 			atui_args.rename = "lcd_info (header only stub)";
 			atui_func = _atui_atom_common_table_header;
@@ -167,14 +167,14 @@ grow_smu_info(
 		.atomtree =  smu_info,
 		.bios = smu_info->leaves,
 	};
-	switch (smu_info->ver) {
-		case v3_1: atui_func = _atui_atom_smu_info_v3_1; break;
-		case v3_2: atui_func = _atui_atom_smu_info_v3_2; break;
-		case v3_3: atui_func = _atui_atom_smu_info_v3_3; break;
-		case v3_4: atui_args.rename = "atom_smu_info_v3_5 (forced)"; fall;
-		case v3_5: atui_func = _atui_atom_smu_info_v3_5; break;
-		case v3_6: atui_func = _atui_atom_smu_info_v3_6; break;
-		case v4_0: atui_func = _atui_atom_smu_info_v4_0; break;
+	switch (smu_info->ver.ver) {
+		case V(3,1): atui_func = _atui_atom_smu_info_v3_1; break;
+		case V(3,2): atui_func = _atui_atom_smu_info_v3_2; break;
+		case V(3,3): atui_func = _atui_atom_smu_info_v3_3; break;
+		case V(3,4): atui_args.rename = "atom_smu_info_v3_5 (forced)"; fall;
+		case V(3,5): atui_func = _atui_atom_smu_info_v3_5; break;
+		case V(3,6): atui_func = _atui_atom_smu_info_v3_6; break;
+		case V(4,0): atui_func = _atui_atom_smu_info_v4_0; break;
 		default:
 			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "smu_info (header only stub)";
@@ -198,9 +198,9 @@ grow_vram_usagebyfirmware(
 		.atomtree =  fw_vram,
 		.bios = fw_vram->leaves,
 	};
-	switch (fw_vram->ver) {
-		case v2_1: atui_func = _atui_vram_usagebyfirmware_v2_1; break;
-		case v2_2: atui_func = _atui_vram_usagebyfirmware_v2_2; break;
+	switch (fw_vram->ver.ver) {
+		case V(2,1): atui_func = _atui_vram_usagebyfirmware_v2_1; break;
+		case V(2,2): atui_func = _atui_vram_usagebyfirmware_v2_2; break;
 		default:
 			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "vram_usagebyfirmware (header only stub)";
@@ -224,8 +224,8 @@ grow_gpio_pin_lut(
 		.atomtree = gpio_pin_lut,
 		.bios = gpio_pin_lut->leaves,
 	};
-	switch (gpio_pin_lut->ver) {
-		case v2_1: atui_func = _atui_atom_gpio_pin_lut_v2_1; break;
+	switch (gpio_pin_lut->ver.ver) {
+		case V(2,1): atui_func = _atui_atom_gpio_pin_lut_v2_1; break;
 		default:
 			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "gpio_pin_lut (header only stub)";
@@ -253,10 +253,10 @@ grow_gfx_info(
 		.num_import_branches = lengthof(subtables),
 	};
 
-	switch (gfx_info->ver) {
-		case v2_1: atui_func = _atui_atom_gfx_info_v2_1; break;
-		case v2_2: atui_func = _atui_atom_gfx_info_v2_2; break;
-		case v2_3:
+	switch (gfx_info->ver.ver) {
+		case V(2,1): atui_func = _atui_atom_gfx_info_v2_1; break;
+		case V(2,2): atui_func = _atui_atom_gfx_info_v2_2; break;
+		case V(2,3):
 			if (gfx_info->table_header->structuresize
 					== sizeof(*gfx_info->v2_3)
 					) {
@@ -277,11 +277,11 @@ grow_gfx_info(
 				atui_func = _atui_atom_gfx_info_v2_3_2;
 			}
 			break;
-		case v2_4: atui_func = _atui_atom_gfx_info_v2_4; break;
-		case v2_6: atui_args.rename = "atom_gfx_info_v2_5 (forced)"; fall;
-		case v2_5: atui_func = _atui_atom_gfx_info_v2_5; break;
-		case v2_7: atui_func = _atui_atom_gfx_info_v2_7; break;
-		case v3_0: atui_func = _atui_atom_gfx_info_v3_0; break;
+		case V(2,4): atui_func = _atui_atom_gfx_info_v2_4; break;
+		case V(2,6): atui_args.rename = "atom_gfx_info_v2_5 (forced)"; fall;
+		case V(2,5): atui_func = _atui_atom_gfx_info_v2_5; break;
+		case V(2,7): atui_func = _atui_atom_gfx_info_v2_7; break;
+		case V(3,0): atui_func = _atui_atom_gfx_info_v3_0; break;
 		default:
 			atui_func = _atui_atom_common_table_header;
 			atui_args.rename = "gfx_info (header only stub)";
@@ -296,7 +296,7 @@ inline static atui_branch*
 grow_pplib_ppt_state_array(
 		struct atomtree_powerplay_table_v4_1 const* const ppt41
 		) {
-	if (nover == ppt41->state_array_ver) {
+	if (V(0) == ppt41->state_array_ver.ver) {
 		return NULL;
 	}
 
@@ -308,12 +308,12 @@ grow_pplib_ppt_state_array(
 	};
 	atuifunc atui_state_func;
 
-	switch (ppt41->state_array_ver) {
-		case v1_0:
+	switch (ppt41->state_array_ver.ver) {
+		case V(1):
 			base = _atui_atom_pplib_state_v1_array(&atui_args);
 			atui_state_func = _atui_atom_pplib_state_v1;
 			break;
-		case v2_0:
+		case V(2):
 			base = _atui_atom_pplib_state_array_v2(&atui_args);
 			atui_state_func = _atui_atom_pplib_state_v2;
 			break;
@@ -448,16 +448,16 @@ grow_pplib_ppt_extended_header(
 		.import_branches = extended_children,
 		.num_import_branches = lengthof(extended_children),
 	};
-	switch (ppt41->extended_header_ver) {
-		case v1_0: return _atui_atom_pplib_extended_header_v1(&atui_args);
-		case v2_0: return _atui_atom_pplib_extended_header_v2(&atui_args);
-		case v3_0: return _atui_atom_pplib_extended_header_v3(&atui_args);
-		case v4_0: return _atui_atom_pplib_extended_header_v4(&atui_args);
-		case v5_0: return _atui_atom_pplib_extended_header_v5(&atui_args);
-		case v6_0: return _atui_atom_pplib_extended_header_v6(&atui_args);
-		case v7_0: return _atui_atom_pplib_extended_header_v7(&atui_args);
-		case v8_0: return _atui_atom_pplib_extended_header_v8(&atui_args);
-		case v9_0: return _atui_atom_pplib_extended_header_v9(&atui_args);
+	switch (ppt41->extended_header_ver.ver) {
+		case V(1): return _atui_atom_pplib_extended_header_v1(&atui_args);
+		case V(2): return _atui_atom_pplib_extended_header_v2(&atui_args);
+		case V(3): return _atui_atom_pplib_extended_header_v3(&atui_args);
+		case V(4): return _atui_atom_pplib_extended_header_v4(&atui_args);
+		case V(5): return _atui_atom_pplib_extended_header_v5(&atui_args);
+		case V(6): return _atui_atom_pplib_extended_header_v6(&atui_args);
+		case V(7): return _atui_atom_pplib_extended_header_v7(&atui_args);
+		case V(8): return _atui_atom_pplib_extended_header_v8(&atui_args);
+		case V(9): return _atui_atom_pplib_extended_header_v9(&atui_args);
 		default: assert(0); return NULL; // TODO return size
 	}
 }
@@ -483,13 +483,13 @@ grow_pplib_ppt(
 			.atomtree = ppt41,
 			.bios = ppt41->nonclock_info,
 		};
-		switch (ppt41->nonclock_info_ver) {
-			case v1_0:
+		switch (ppt41->nonclock_info_ver.ver) {
+			case V(1):
 				nonclock_info = _atui_atom_pplib_nonclock_info_array_v1(
 					&atui_args
 				);
 				break;
-			case v2_0:
+			case V(2):
 				nonclock_info = _atui_atom_pplib_nonclock_info_array_v2(
 					&atui_args
 				);
@@ -622,12 +622,12 @@ grow_pplib_ppt(
 		.import_branches = ppt41_children,
 		.num_import_branches = lengthof(ppt41_children),
 	};
-	switch (ppt41->pplib_ver) {
-		case v5_0: return _atui_atom_pplib_powerplaytable_v5(&atui_args);
-		case v4_0: return _atui_atom_pplib_powerplaytable_v4(&atui_args);
-		case v3_0: return _atui_atom_pplib_powerplaytable_v3(&atui_args);
-		case v2_0: return _atui_atom_pplib_powerplaytable_v2(&atui_args);
-		case v1_0: return _atui_atom_pplib_powerplaytable_v1(&atui_args);
+	switch (ppt41->pplib_ver.ver) {
+		case V(5): return _atui_atom_pplib_powerplaytable_v5(&atui_args);
+		case V(4): return _atui_atom_pplib_powerplaytable_v4(&atui_args);
+		case V(3): return _atui_atom_pplib_powerplaytable_v3(&atui_args);
+		case V(2): return _atui_atom_pplib_powerplaytable_v2(&atui_args);
+		case V(1): return _atui_atom_pplib_powerplaytable_v1(&atui_args);
 		default: return NULL;
 	}
 }
@@ -998,7 +998,7 @@ atui_generate_vega10_ppt(
 
 inline static atui_branch*
 atui_generate_smc_pptable(
-		enum atomtree_common_version ver,
+		semver ver,
 		struct atomtree_powerplay_table const* const ppt,
 		void const* const smc_pptable
 		) {
@@ -1006,12 +1006,12 @@ atui_generate_smc_pptable(
 		.atomtree = ppt,
 		.bios = smc_pptable,
 	};
-	switch (ver) {
-		case v3_0: return _atui_smu11_smcpptable_v3(&atui_args);
-		case v5_0: return _atui_smu11_smcpptable_v5(&atui_args);
-		case v6_0: atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
-		case v7_0: return _atui_smu11_smcpptable_v7(&atui_args);
-		case v8_0: return _atui_smu11_smcpptable_v8(&atui_args);
+	switch (ver.ver) {
+		case V(3): return _atui_smu11_smcpptable_v3(&atui_args);
+		case V(5): return _atui_smu11_smcpptable_v5(&atui_args);
+		case V(6): atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
+		case V(7): return _atui_smu11_smcpptable_v7(&atui_args);
+		case V(8): return _atui_smu11_smcpptable_v8(&atui_args);
 		default: assert(0);
 	}
 	return NULL;
@@ -1033,46 +1033,46 @@ grow_ppt(
 		.import_branches = &atui_smctable,
 		.num_import_branches = 1,
 	};
-	switch (ppt->ver) {
-		case v1_1:
+	switch (ppt->ver.ver) {
+		case V(1,1):
 			atui_ppt = _atui_atom_powerplay_info_v1(&atui_args);
 			break;
-		case v2_1:
+		case V(2,1):
 			atui_ppt = _atui_atom_powerplay_info_v2(&atui_args);
 			break;
-		case v3_1:
+		case V(3,1):
 			atui_ppt = _atui_atom_powerplay_info_v3(&atui_args);
 			break;
-		case v6_1:
-		case v5_1:
-		case v4_1:
+		case V(6,1):
+		case V(5,1):
+		case V(4,1):
 			atui_ppt = grow_pplib_ppt(&(ppt->v4_1));
 			break;
-		case v7_1: // Tonga, Fiji, Polaris
+		case V(7,1): // Tonga, Fiji, Polaris
 			atui_ppt = atui_generate_pptablev1_ppt(&(ppt->v7_1));
 			break;
-		case v8_1:
+		case V(8,1):
 			atui_ppt = atui_generate_vega10_ppt(&(ppt->v8_1));
 			break;
-		case v11_0:
+		case V(11,0):
 			atui_smctable = atui_generate_smc_pptable(
 				ppt->v11_0.smc_pptable_ver,
 				ppt, &(ppt->v11_0.leaves->smc_pptable)
 			);
 			atui_ppt = _atui_atom_vega20_powerplay_table(&atui_args);
 			break;
-		case v14_0:
-		case v12_0:
+		case V(14,0):
+		case V(12,0):
 			atui_smctable = atui_generate_smc_pptable(
 				ppt->v12_0.smc_pptable_ver,
 				ppt, &(ppt->v12_0.leaves->smc_pptable)
 			);
 			atui_ppt = _atui_smu_11_0_powerplay_table(&atui_args);
 			break;
-		case v19_0: // 6400
-		case v18_0: // navi2 xx50
-		case v16_0: // 6700XT
-		case v15_0:
+		case V(19,0): // 6400
+		case V(18,0): // navi2 xx50
+		case V(16,0): // 6700XT
+		case V(15,0):
 			atui_smctable = atui_generate_smc_pptable(
 				ppt->v15_0.smc_pptable_ver,
 				ppt, &(ppt->v15_0.leaves->smc_pptable)
@@ -1140,46 +1140,46 @@ get_memory_vendor_part_strs(
 		) {
 	union memory_vendor_id vendor_rev_id;
 	vendor_part_output[1] = NULL;
-	switch (vram_module->vram_module_ver) {
-		case v1_1:
+	switch (vram_module->vram_module_ver.ver) {
+		case V(1,1):
 			 vendor_rev_id = vram_module->v1_1->MemoryVendorID;
 			 break;
-		case v1_2:
+		case V(1,2):
 			 vendor_rev_id = vram_module->v1_2->MemoryVendorID;
 			 break;
-		case v1_3:
+		case V(1,3):
 			 vendor_rev_id = vram_module->v1_3->MemoryVendorID;
 			 break;
-		case v1_4:
+		case V(1,4):
 			 vendor_rev_id = vram_module->v1_4->MemoryVendorID;
 			 break;
-		case v1_5:
+		case V(1,5):
 			 vendor_rev_id = vram_module->v1_5->MemoryVendorID;
 			 break;
-		case v1_6:
+		case V(1,6):
 			 vendor_rev_id = vram_module->v1_6->MemoryVendorID;
 			 break;
-		case v1_7:
+		case V(1,7):
 			 vendor_rev_id = vram_module->v1_7->MemoryVendorID;
 			 vendor_part_output[1] = vram_module->v1_7->strMemPNString;
 			 break;
-		case v1_8:
+		case V(1,8):
 			 vendor_rev_id = vram_module->v1_8->MemoryVendorID;
 			 vendor_part_output[1] = vram_module->v1_8->strMemPNString;
 			 break;
-		case v1_9:
+		case V(1,9):
 			 vendor_rev_id = vram_module->v1_9->vendor_rev_id;
 			 vendor_part_output[1] = vram_module->v1_9->dram_pnstring;
 			 break;
-		case v1_10:
+		case V(1,10):
 			 vendor_rev_id = vram_module->v1_10->vendor_rev_id;
 			 vendor_part_output[1] = vram_module->v1_10->dram_pnstring;
 			 break;
-		case v1_11:
+		case V(1,11):
 			 vendor_rev_id = vram_module->v1_11->vendor_rev_id;
 			 vendor_part_output[1] = vram_module->v1_11->dram_pnstring;
 			 break;
-		case v3_0:
+		case V(3,0):
 			 vendor_rev_id = vram_module->v3_0->dram_vendor_id;
 			 vendor_part_output[1] = vram_module->v3_0->dram_pnstring;
 			 break;
@@ -1198,7 +1198,7 @@ grow_init_reg_block(
 	enum register_block_type const reg_type = at_regblock->reg_type;
 	struct atom_reg_setting_data_block const* const* const data_blocks =
 		(void*) at_regblock->data_blocks;
-	enum atomtree_common_version const vram_module_ver =
+	semver const vram_module_ver =
 		vram_modules[0].vram_module_ver;
 
 	assert(reg_type);
@@ -1253,7 +1253,7 @@ grow_init_reg_block(
 		// mem_adjust table. It seems to exist as a way to exlude the
 		// 'generic' vram_module.
 		(REG_BLOCK_MEM_ADJUST == reg_type)
-		&& (v1_8 == vram_modules[0].vram_module_ver)
+		&& (V(1,8) == vram_modules[0].vram_module_ver.ver)
 		&& (GENERIC == vram_modules[0].v1_8->MemoryVendorID.vendor_code)
 	);
 
@@ -1275,12 +1275,14 @@ grow_init_reg_block(
 			);
 			get_memory_vendor_part_strs(vmod, vendor_part);
 			#ifndef NDEBUG // test if vram_module_v8_hack is sane
-			if ((v1_8==vram_module_ver) && (REG_BLOCK_MEM_ADJUST==reg_type)) {
+			if ((V(1,8) == vram_module_ver.ver)
+					&& (REG_BLOCK_MEM_ADJUST == reg_type)
+					) {
 				assert(vmod->v1_8->McTunningSetId == block_id.mem_block_id);
 			}
 			#endif
 		}
-		if (v1_7 <= vram_module_ver) {
+		if (V(1,7) <= vram_module_ver.ver) {
 			sprintf(atui_strap->name, strap_format_new,
 				i,  vendor_part[1], vendor_part[0],
 				(block_id.mem_clock_range / 100)
@@ -1450,8 +1452,8 @@ grow_atom_memory_timing_format(
 		.num_import_branches = lengthof(atui_mrs),
 	};
 
-	switch (vram_module->memory_timing_format_ver) {
-		case v1_0:
+	switch (vram_module->memory_timing_format_ver.ver) {
+		case V(1,0):
 			for (uint8_t i=0; i < count; i++) {
 				atui_mrs_args.bios = &(strap.v1_0->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
@@ -1471,7 +1473,7 @@ grow_atom_memory_timing_format(
 			}
 			strcpy(atui_straps->name, "atom_memory_timing_format_v0");
 			break;
-		case v1_1:
+		case V(1,1):
 			for (uint8_t i=0; i < count; i++) {
 				atui_mrs_args.bios = &(strap.v1_1->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
@@ -1489,7 +1491,7 @@ grow_atom_memory_timing_format(
 			}
 			strcpy(atui_straps->name, "atom_memory_timing_format_v1");
 			break;
-		case v1_2:
+		case V(1,2):
 			for (uint8_t i=0; i < count; i++) {
 				atui_mrs_args.bios = &(strap.v1_2->MR0);
 				atui_mrs[0] = atui_mrs_funcs[0](&atui_mrs_args);
@@ -1584,7 +1586,7 @@ rename_vram_module_with_vendor(
 static atui_branch*
 grow_vram_module(
 		struct atomtree_vram_module const* const vram_modules,
-		enum atomtree_common_version const vram_modules_ver,
+		semver const vram_modules_ver,
 		uint8_t const count
 		) {
 	atui_branch* const atui_vram_modules = ATUI_MAKE_BRANCH(atui_nullstruct,
@@ -1607,8 +1609,8 @@ grow_vram_module(
 	struct atomtree_vram_module const* vmod;
 	atui_branch* atui_vmod;
 	atui_branch* atui_children[3] = {}; // both mrs and timings
-	switch (vram_modules_ver) {
-		case v1_3:
+	switch (vram_modules_ver.ver) {
+		case V(1,3):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1635,7 +1637,7 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v1_4:
+		case V(1,4):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1662,13 +1664,13 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v1_7:
+		case V(1,7):
 			atuifunc_args atui_map_args = {
 				.rename = "ChannelMapCfg"
 			};
 			atuifunc chremap;
 			if (count) {
-				if (v7_1 == vram_modules[0].gmc_bitfields_ver) {
+				if (V(7,1) == vram_modules[0].gmc_bitfields_ver.ver) {
 					chremap = _atui_mc_shared_chremap_7_1;
 				} else {
 					chremap = _atui_mc_shared_chremap_6_0;
@@ -1700,7 +1702,7 @@ grow_vram_module(
 			}
 			strcpy(atui_vram_modules->name, "atom_vram_module_v7");
 			break;
-		case v1_8:
+		case V(1,8):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1724,7 +1726,7 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v1_9:
+		case V(1,9):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1743,7 +1745,7 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v1_10:
+		case V(1,10):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1762,7 +1764,7 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v1_11:
+		case V(1,11):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -1781,7 +1783,7 @@ grow_vram_module(
 				);
 			}
 			break;
-		case v3_0:
+		case V(3,0):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 
@@ -2488,17 +2490,17 @@ grow_vram_info(
 	}
 
 	atui_branch* atui_vi;
-	switch (vram_info->ver) {
-		case v1_2: atui_vi = grow_vram_info_v1_2(vram_info); break;
-		case v1_3: atui_vi = grow_vram_info_v1_3(vram_info); break;
-		case v1_4: atui_vi = grow_vram_info_v1_4(vram_info); break;
-		case v2_1: atui_vi = grow_vram_info_v2_1(vram_info); break;
-		case v2_2: atui_vi = grow_vram_info_v2_2(vram_info); break;
-		case v2_3: atui_vi = grow_vram_info_v2_3(vram_info); break;
-		case v2_4: atui_vi = grow_vram_info_v2_4(vram_info); break;
-		case v2_5: atui_vi = grow_vram_info_v2_5(vram_info); break;
-		case v2_6: atui_vi = grow_vram_info_v2_6(vram_info); break;
-		case v3_0: atui_vi = grow_vram_info_v3_0(vram_info); break;
+	switch (vram_info->ver.ver) {
+		case V(1,2): atui_vi = grow_vram_info_v1_2(vram_info); break;
+		case V(1,3): atui_vi = grow_vram_info_v1_3(vram_info); break;
+		case V(1,4): atui_vi = grow_vram_info_v1_4(vram_info); break;
+		case V(2,1): atui_vi = grow_vram_info_v2_1(vram_info); break;
+		case V(2,2): atui_vi = grow_vram_info_v2_2(vram_info); break;
+		case V(2,3): atui_vi = grow_vram_info_v2_3(vram_info); break;
+		case V(2,4): atui_vi = grow_vram_info_v2_4(vram_info); break;
+		case V(2,5): atui_vi = grow_vram_info_v2_5(vram_info); break;
+		case V(2,6): atui_vi = grow_vram_info_v2_6(vram_info); break;
+		case V(3,0): atui_vi = grow_vram_info_v3_0(vram_info); break;
 		default:
 			atui_vi = ATUI_MAKE_BRANCH(atom_common_table_header,
 				"vram_info (header only stub)",
@@ -2710,12 +2712,12 @@ grow_voltageobject_info(
 	}
 	atui_branch* atui_vo_info = NULL;
 
-	switch (vo_info->ver) {
-		case v1_1: atui_vo_info = grow_voltageobject_info_v1_1(vo_info); break;
-		case v1_2: atui_vo_info = grow_voltageobject_info_v1_2(vo_info); break;
-		case v3_1: atui_vo_info = grow_voltageobject_info_v3_1(vo_info); break;
-		case v4_1: atui_vo_info = grow_voltageobject_info_v4_1(vo_info); break;
-		case v4_2: // hopefully v4_2 is the same
+	switch (vo_info->ver.ver) {
+		case V(1,1): atui_vo_info = grow_voltageobject_info_v1_1(vo_info);break;
+		case V(1,2): atui_vo_info = grow_voltageobject_info_v1_2(vo_info);break;
+		case V(3,1): atui_vo_info = grow_voltageobject_info_v3_1(vo_info);break;
+		case V(4,1): atui_vo_info = grow_voltageobject_info_v4_1(vo_info);break;
+		case V(4,2): // hopefully v4_2 is the same
 			atui_vo_info = grow_voltageobject_info_v4_1(vo_info);
 			strcpy(atui_vo_info->name,
 				"atom_voltage_objects_info_v4_1 (forced)"
@@ -3041,9 +3043,9 @@ grow_datatables(
 	if (NULL == data_table->leaves) {
 		return NULL;
 	}
-	switch (data_table->ver) {
-		case v1_1: return grow_master_datatable_v1_1(atree, data_table);
-		case v2_1: return grow_master_datatable_v2_1(atree, data_table);
+	switch (data_table->ver.ver) {
+		case V(1,1): return grow_master_datatable_v1_1(atree, data_table);
+		case V(2,1): return grow_master_datatable_v2_1(atree, data_table);
 		default:
 			return ATUI_MAKE_BRANCH(atom_common_table_header,
 				"atom_master_data_table (header only stub)",
@@ -3137,13 +3139,13 @@ grow_discovery_tables(
 			.bios = dis->gc_info
 		};
 		atui_branch* gc;
-		switch (dis->gc_ver) {
-			case v1_0: gc = _atui_discovery_gc_info_v1_0(&atui_args); break;
-			case v1_1: gc = _atui_discovery_gc_info_v1_1(&atui_args); break;
-			case v1_2: gc = _atui_discovery_gc_info_v1_2(&atui_args); break;
-			case v1_3: gc = _atui_discovery_gc_info_v1_3(&atui_args); break;
-			case v2_0: gc = _atui_discovery_gc_info_v2_0(&atui_args); break;
-			case v2_1: gc = _atui_discovery_gc_info_v2_1(&atui_args); break;
+		switch (dis->gc_ver.ver) {
+			case V(1,0): gc = _atui_discovery_gc_info_v1_0(&atui_args); break;
+			case V(1,1): gc = _atui_discovery_gc_info_v1_1(&atui_args); break;
+			case V(1,2): gc = _atui_discovery_gc_info_v1_2(&atui_args); break;
+			case V(1,3): gc = _atui_discovery_gc_info_v1_3(&atui_args); break;
+			case V(2,0): gc = _atui_discovery_gc_info_v2_0(&atui_args); break;
+			case V(2,1): gc = _atui_discovery_gc_info_v2_1(&atui_args); break;
 			default:   gc = _atui_discovery_gc_info_header(&atui_args); break;
 		}
 		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_GC], gc);
@@ -3159,7 +3161,7 @@ grow_discovery_tables(
 	}
 
 	if (dis->vcn_info) {
-		assert(dis->vcn_ver == v1_0);
+		assert(dis->vcn_ver.ver == V(1,0));
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_VCN_INFO],
 			ATUI_MAKE_BRANCH(discovery_vcn_info_v1_0,  NULL,
@@ -3174,16 +3176,16 @@ grow_discovery_tables(
 			.bios = dis->mall_info
 		};
 		atui_branch* mi;
-		switch (dis->mall_ver) {
-			case v1_0: mi = _atui_discovery_mall_info_v1_0(&atui_args); break;
-			case v2_0: mi = _atui_discovery_mall_info_v2_0(&atui_args); break;
+		switch (dis->mall_ver.ver) {
+			case V(1,0): mi = _atui_discovery_mall_info_v1_0(&atui_args); break;
+			case V(2,0): mi = _atui_discovery_mall_info_v2_0(&atui_args); break;
 			default:   mi = _atui_discovery_mall_info_header(&atui_args); break;
 		}
 		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_MALL_INFO], mi);
 	}
 
 	if (dis->nps_info) {
-		assert(dis->nps_ver == v1_0);
+		assert(dis->nps_ver.ver == V(1,0));
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_NPS_INFO],
 			ATUI_MAKE_BRANCH(discovery_nps_info_v1_0,  NULL,
@@ -3341,11 +3343,11 @@ grow_atom_rom_header(
 		.import_branches = child_branches,
 		.num_import_branches = lengthof(child_branches),
 	};
-	switch (rom_header->ver) {
-		case v1_1: atui_func = _atui_atom_rom_header_v1_1; break;
-		case v2_1: atui_func = _atui_atom_rom_header_v2_1; break;
-		case v2_3: atui_args.rename = "atom_rom_header_v2_2 (forced)"; fall;
-		case v2_2: atui_func = _atui_atom_rom_header_v2_2; break;
+	switch (rom_header->ver.ver) {
+		case V(1,1): atui_func = _atui_atom_rom_header_v1_1; break;
+		case V(2,1): atui_func = _atui_atom_rom_header_v2_1; break;
+		case V(2,3): atui_args.rename = "atom_rom_header_v2_2 (forced)"; fall;
+		case V(2,2): atui_func = _atui_atom_rom_header_v2_2; break;
 		default:
 			atui_args.rename = "atom_rom_header (header only stub)";
 			atui_func = _atui_atom_common_table_header;

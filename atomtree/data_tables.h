@@ -36,7 +36,7 @@ struct atomtree_smc_dpm_info {
 		struct atom_smc_dpm_info_v4_10* v4_10;
 		struct atom_smc_dpm_info_table_13_0_7* v5_0;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 struct atomtree_firmware_info {
@@ -55,7 +55,7 @@ struct atomtree_firmware_info {
 		struct atom_firmware_info_v3_3*  v3_3;
 		struct atom_firmware_info_v3_4*  v3_4;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 struct atomtree_lcd_record {
@@ -72,7 +72,7 @@ struct atomtree_lcd_info {
 		struct atom_lcd_info_v1_3*   v1_3;
 		struct atom_lcd_info_v2_1*   v2_1;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 
 	uint8_t num_records;
 	size_t record_table_size;
@@ -93,7 +93,7 @@ struct atomtree_smu_info {
 		struct atom_smu_info_v3_6*  v3_6;
 		struct atom_smu_info_v4_0*  v4_0;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 
 	// TODO explode the versions into their own atomtree entities?
 	void* smugolden; // not all smu_info versions have these
@@ -110,7 +110,7 @@ struct atomtree_vram_usagebyfirmware {
 		struct vram_usagebyfirmware_v2_1*  v2_1;
 		struct vram_usagebyfirmware_v2_2*  v2_2;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 struct atomtree_gpio_pin_lut {
@@ -120,7 +120,7 @@ struct atomtree_gpio_pin_lut {
 
 		struct atom_gpio_pin_lut_v2_1* v2_1;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 	uint16_t num_gpio_pins;
 };
 
@@ -140,7 +140,7 @@ struct atomtree_gfx_info {
 		struct atom_gfx_info_v2_7*   v2_7;
 		struct atom_gfx_info_v3_0*   v3_0;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 
 	// TODO explode the versions into their own atomtree entities?
 	// not all gfx_info versions have these:
@@ -157,19 +157,19 @@ struct atomtree_pplib_state {
 };
 struct atomtree_powerplay_table_v4_1 {
 	union atom_pplib_powerplaytables* leaves;
-	enum atomtree_common_version  pplib_ver;
+	semver pplib_ver;
 
-	enum atomtree_common_version  state_array_ver;
+	semver state_array_ver;
 	uint8_t num_state_array_entries;
 	size_t state_array_size;
 
-	enum ATOM_PPLIB_CLOCK_INFO   clock_info_ver;
+	enum ATOM_PPLIB_CLOCK_INFO clock_info_ver;
 	// counts clock_info[] or clock_info->clockInfo
 	uint8_t num_clock_info_entries;
 	size_t clock_info_size;
 
-	enum atomtree_common_version  nonclock_info_ver;
-	enum atomtree_common_version  extended_header_ver;
+	semver nonclock_info_ver;
+	semver extended_header_ver;
 
 
 	size_t vce_table_size;
@@ -270,15 +270,15 @@ struct atomtree_powerplay_table_v8_1 {
 };
 struct atomtree_powerplay_table_v11_0 {
 	struct atom_vega20_powerplay_table* leaves;
-	enum atomtree_common_version        smc_pptable_ver;
+	semver smc_pptable_ver;
 };
 struct atomtree_powerplay_table_v12_0 {
 	struct smu_11_0_powerplay_table* leaves; // v12 ~ v14
-	enum atomtree_common_version     smc_pptable_ver;
+	semver smc_pptable_ver;
 };
 struct atomtree_powerplay_table_v15_0 {
 	struct smu_11_0_7_powerplay_table* leaves; // v15 ~ v18
-	enum atomtree_common_version       smc_pptable_ver;
+	semver smc_pptable_ver;
 };
 
 struct atomtree_powerplay_table {
@@ -303,7 +303,7 @@ struct atomtree_powerplay_table {
 		// 13_0 has more stuff than 13_0_0; I wonder if they can be spliced
 		//struct smu_13_0_powerplay_table* aldebaran;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 enum register_block_type:uint8_t {
@@ -404,11 +404,11 @@ struct atomtree_vram_module {
 		struct atom_vram_module_v11*  v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 
-	enum atomtree_common_version  gmc_bitfields_ver;
+	semver gmc_bitfields_ver;
 
-	enum atomtree_common_version  memory_timing_format_ver;
+	semver memory_timing_format_ver;
 	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
 	size_t memory_timing_format_total_size;
 
@@ -426,7 +426,7 @@ struct atomtree_gddr6_dram_data_remap {
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -436,7 +436,7 @@ struct atomtree_vram_info_v1_3 {
 	struct atomtree_init_reg_block  mem_adjust_table;
 	struct atomtree_init_reg_block  mem_clk_patch;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -446,7 +446,7 @@ struct atomtree_vram_info_v1_4 {
 	struct atomtree_init_reg_block  mem_adjust_table;
 	struct atomtree_init_reg_block  mem_clk_patch;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -457,7 +457,7 @@ struct atomtree_vram_info_header_v2_1 {
 	struct atomtree_init_reg_block  mem_clk_patch;
 	struct atomtree_init_reg_block  per_byte_preset;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -470,7 +470,7 @@ struct atomtree_vram_info_header_v2_2 {
 	struct atomtree_init_reg_block  mc_phy_init;
 	struct mc_atom_dram_data_remap* dram_data_remap;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -496,7 +496,7 @@ struct atomtree_vram_info_header_v2_3 {
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
 	struct atomtree_umc_init_reg_block  post_ucode_init;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -521,7 +521,7 @@ struct atomtree_vram_info_header_v2_4 {
 
 	struct atomtree_umc_init_reg_block  post_ucode_init;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -540,7 +540,7 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_umc_init_reg_block    post_ucode_init;
 	struct atomtree_umc_init_reg_block    strobe_mode_patch;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -555,7 +555,7 @@ struct atomtree_vram_info_header_v2_6 {
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block    post_ucode_init;
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -570,7 +570,7 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atomtree_umc_init_reg_block    umc_emuinit; //TODO this is a guess
 	void* rsvd_tables[2]; // reserved_sub_table_offset
 
-	enum atomtree_common_version  vram_module_ver;
+	semver vram_module_ver;
 	struct atomtree_vram_module*  vram_modules;
 };
 
@@ -590,13 +590,13 @@ struct atomtree_vram_info {
 		struct atomtree_vram_info_header_v2_6  v2_6;
 		struct atomtree_vram_info_header_v3_0  v3_0;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 
 struct atomtree_voltage_object {
 	union atom_voltage_object_all* obj;
-	enum atomtree_common_version   ver;
+	semver ver;
 	uint16_t lut_entries; // has entries if i2c or gpio
 };
 struct atomtree_voltageobject_info {
@@ -609,7 +609,7 @@ struct atomtree_voltageobject_info {
 		struct atom_voltage_objects_info_v3_1* v3_1;
 		struct atom_voltage_objects_info_v4_1* v4_1;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 
 	uint16_t num_voltage_objects;
 	struct atomtree_voltage_object* voltage_objects;
@@ -620,7 +620,7 @@ struct atomtree_sw_datatable {
 		void* leaves;
 		struct atom_common_table_header* table_header;
 	};
-	enum atomtree_common_version  ver; // meh
+	semver ver; // meh
 };
 struct atomtree_master_datatable_v1_1 {
 	struct atom_master_data_table_v1_1* leaves;
@@ -731,7 +731,7 @@ struct atomtree_master_datatable {
 		struct atomtree_master_datatable_v1_1 v1_1;
 		struct atomtree_master_datatable_v2_1 v2_1;
 	};
-	enum atomtree_common_version  ver;
+	semver ver;
 };
 
 #endif

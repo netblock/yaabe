@@ -26,7 +26,7 @@ populate_smc_dpm_info(
 
 	// leaves is in a union with the structs.
 	smc_dpm_info->leaves = commons->bios + bios_offset;
-	smc_dpm_info->ver = get_ver(smc_dpm_info->table_header);
+	smc_dpm_info->ver = atom_get_ver(smc_dpm_info->table_header);
 }
 
 
@@ -42,7 +42,7 @@ populate_firmwareinfo(
 
 	// leaves is in a union with the structs.
 	firmwareinfo->leaves = commons->bios + bios_offset;
-	firmwareinfo->ver = get_ver(firmwareinfo->table_header);
+	firmwareinfo->ver = atom_get_ver(firmwareinfo->table_header);
 }
 
 
@@ -161,12 +161,12 @@ populate_lcd_info(
 	}
 
 	lcd_info->leaves = commons->bios + bios_offset;
-	lcd_info->ver = get_ver(lcd_info->table_header);
+	lcd_info->ver = atom_get_ver(lcd_info->table_header);
 
 	void* record_start = NULL;
 
-	switch (lcd_info->ver) {
-		case v1_1:
+	switch (lcd_info->ver.ver) {
+		case V(1,1):
 			if (lcd_info->v1_1->ModePatchTableOffset) {
 				// v1_1 uses an absolute position
 				record_start = (
@@ -174,14 +174,14 @@ populate_lcd_info(
 				);
 			}
 			break;
-		case v1_2:
+		case V(1,2):
 			if (lcd_info->v1_2->ExtInfoTableOffset) {
 				record_start = (
 					lcd_info->leaves + lcd_info->v1_2->ExtInfoTableOffset
 				);
 			}
 			break;
-		case v1_3:
+		case V(1,3):
 			if (lcd_info->v1_3->ExtInfoTableOffset) {
 				record_start = (
 					lcd_info->leaves + lcd_info->v1_3->ExtInfoTableOffset
@@ -205,15 +205,15 @@ populate_smu_info(
 	}
 
 	smu_info->leaves = commons->bios + bios_offset;
-	smu_info->ver = get_ver(smu_info->table_header);
-	switch (smu_info->ver) { // TODO if init,golden are 0, catch them.
-		case v3_2:
+	smu_info->ver = atom_get_ver(smu_info->table_header);
+	switch (smu_info->ver.ver) { // TODO if init,golden are 0, catch them.
+		case V(3,2):
 			if (smu_info->v3_2->smugoldenoffset) {
 				smu_info->smugolden =
 					smu_info->leaves + smu_info->v3_2->smugoldenoffset;
 			}
 			break;
-		case v3_3:
+		case V(3,3):
 			if (smu_info->v3_3->smugoldenoffset) {
 				smu_info->smugolden =
 					smu_info->leaves + smu_info->v3_3->smugoldenoffset;
@@ -223,8 +223,8 @@ populate_smu_info(
 					smu_info->leaves + smu_info->v3_3->smuinitoffset;
 			}
 			break;
-		case v3_4: // bios reports 244 bytes. v3_5 is 240 bytes.
-		case v3_5:
+		case V(3,4): // bios reports 244 bytes. v3_5 is 240 bytes.
+		case V(3,5):
 			if (smu_info->v3_5->smugoldenoffset) {
 				smu_info->smugolden =
 					smu_info->leaves + smu_info->v3_5->smugoldenoffset;
@@ -234,7 +234,7 @@ populate_smu_info(
 					smu_info->leaves + smu_info->v3_5->smuinitoffset;
 			}
 			break;
-		case v3_6:
+		case V(3,6):
 			if (smu_info->v3_6->smugoldenoffset) {
 				smu_info->smugolden =
 					smu_info->leaves + smu_info->v3_6->smugoldenoffset;
@@ -244,7 +244,7 @@ populate_smu_info(
 					smu_info->leaves + smu_info->v3_6->smuinitoffset;
 			}
 			break;
-		case v4_0:
+		case V(4,0):
 			if (smu_info->v4_0->smuinitoffset) {
 				smu_info->smuinit =
 					smu_info->leaves + smu_info->v4_0->smuinitoffset;
@@ -267,7 +267,7 @@ populate_vram_usagebyfirmware(
 
 	// leaves is in a union with the structs.
 	fw_vram->leaves = commons->bios + bios_offset;
-	fw_vram->ver = get_ver(fw_vram->table_header);
+	fw_vram->ver = atom_get_ver(fw_vram->table_header);
 }
 
 
@@ -282,9 +282,9 @@ populate_gpio_pin_lut(
 	}
 
 	gpio_pin_lut->leaves = commons->bios + bios_offset;
-	gpio_pin_lut->ver = get_ver(gpio_pin_lut->table_header);
-	switch (gpio_pin_lut->ver) {
-		case v2_1:
+	gpio_pin_lut->ver = atom_get_ver(gpio_pin_lut->table_header);
+	switch (gpio_pin_lut->ver.ver) {
+		case V(2,1):
 			gpio_pin_lut->num_gpio_pins = (
 				//dynamic array length of nothing but pins after the header
 				(gpio_pin_lut->table_header->structuresize
@@ -310,11 +310,11 @@ populate_gfx_info(
 
 	// leaves is in a union with the structs.
 	gfx_info->leaves = commons->bios + bios_offset;
-	gfx_info->ver = get_ver(gfx_info->table_header);
-	switch (gfx_info->ver) {
-		case v2_1:
+	gfx_info->ver = atom_get_ver(gfx_info->table_header);
+	switch (gfx_info->ver.ver) {
+		case V(2,1):
 			break;
-		case v2_3:
+		case V(2,3):
 			if (gfx_info->table_header->structuresize
 					== sizeof(struct atom_gfx_info_v2_3)
 					) {
@@ -339,25 +339,25 @@ populate_gfx_info(
 				}
 			}
 			break;
-		case v2_4:
+		case V(2,4):
 			if (gfx_info->v2_4->gcgoldenoffset) {
 				gfx_info->gcgolden =
 					gfx_info->leaves + gfx_info->v2_4->gcgoldenoffset;
 			}
 			break;
-		case v2_5:
+		case V(2,5):
 			if (gfx_info->v2_5->gcgoldenoffset) {
 				gfx_info->gcgolden =
 					gfx_info->leaves + gfx_info->v2_5->gcgoldenoffset;
 			}
 			break;
-		case v2_6: // force v2.5
+		case V(2,6): // force v2.5
 			if (gfx_info->v2_6->gcgoldenoffset) {
 				gfx_info->gcgolden =
 					gfx_info->leaves + gfx_info->v2_6->gcgoldenoffset;
 			}
 			break;
-		case v2_7:
+		case V(2,7):
 			if (gfx_info->v2_7->gcgoldenoffset) {
 				gfx_info->gcgolden =
 					gfx_info->leaves + gfx_info->v2_7->gcgoldenoffset;
@@ -385,8 +385,10 @@ populate_pplib_ppt_state_array(
 		union atom_pplib_states*    states;
 	} walker;
 
-	if (v6_0 > get_ver(&(pplibv1->header))) { // driver gates with the atom ver
-		ppt41->state_array_ver = v1_0;
+
+	// driver gates with the atom ver
+	if (V(6,0) > atom_get_ver(&(pplibv1->header)).ver) {
+		ppt41->state_array_ver = SET_VER(1);
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
 		if (pplibv1->NumStates) {
@@ -412,7 +414,7 @@ populate_pplib_ppt_state_array(
 			);
 		}
 	} else {
-		ppt41->state_array_ver = v2_0;
+		ppt41->state_array_ver = SET_VER(2);
 		ppt41->num_state_array_entries = base->v2.NumEntries;
 
 		if (base->v2.NumEntries) {
@@ -445,49 +447,49 @@ populate_pplib_ppt_extended_table(
 	union atom_pplib_extended_headers* const ext = ppt41->extended_header;
 
 	switch (ext->Size) {
-		case sizeof(ext->v9): ppt41->extended_header_ver = v9_0; break;
-		case sizeof(ext->v8): ppt41->extended_header_ver = v8_0; break;
-		case sizeof(ext->v7): ppt41->extended_header_ver = v7_0; break;
-		case sizeof(ext->v6): ppt41->extended_header_ver = v6_0; break;
-		case sizeof(ext->v5): ppt41->extended_header_ver = v5_0; break;
-		case sizeof(ext->v4): ppt41->extended_header_ver = v4_0; break;
-		case sizeof(ext->v3): ppt41->extended_header_ver = v3_0; break;
-		case sizeof(ext->v2): ppt41->extended_header_ver = v2_0; break;
-		case sizeof(ext->v1): ppt41->extended_header_ver = v1_0; break;
+		case sizeof(ext->v9): ppt41->extended_header_ver = SET_VER(9); break;
+		case sizeof(ext->v8): ppt41->extended_header_ver = SET_VER(8); break;
+		case sizeof(ext->v7): ppt41->extended_header_ver = SET_VER(7); break;
+		case sizeof(ext->v6): ppt41->extended_header_ver = SET_VER(6); break;
+		case sizeof(ext->v5): ppt41->extended_header_ver = SET_VER(5); break;
+		case sizeof(ext->v4): ppt41->extended_header_ver = SET_VER(4); break;
+		case sizeof(ext->v3): ppt41->extended_header_ver = SET_VER(3); break;
+		case sizeof(ext->v2): ppt41->extended_header_ver = SET_VER(2); break;
+		case sizeof(ext->v1): ppt41->extended_header_ver = SET_VER(1); break;
 		default: assert(0); break;
 	}
-	switch (ppt41->extended_header_ver) {
-		case v9_0:
+	switch (ppt41->extended_header_ver.ver) {
+		case V(9):
 			if (ext->v9.VQBudgetingTableOffset) {
 				ppt41->vq_budgeting = raw + ext->v9.VQBudgetingTableOffset;
 			}
 			fall;
-		case v8_0:
+		case V(8):
 			if (ext->v9.SclkVddgfxTableOffset) {
 				ppt41->vddgfx_sclk = raw + ext->v9.SclkVddgfxTableOffset;
 			}
 			fall;
-		case v7_0:
+		case V(7):
 			if (ext->v9.PowerTuneTableOffset) {
 				ppt41->powertune = raw + ext->v9.PowerTuneTableOffset;
 			}
 			fall;
-		case v6_0:
+		case V(6):
 			if (ext->v9.ACPTableOffset) {
 				ppt41->acpclk = raw + ext->v9.ACPTableOffset;
 			}
 			fall;
-		case v5_0:
+		case V(5):
 			if (ext->v9.PPMTableOffset) {
 				ppt41->ppm = raw + ext->v9.PPMTableOffset;
 			}
 			fall;
-		case v4_0:
+		case V(4):
 			if (ext->v9.SAMUTableOffset) {
 				ppt41->samu = raw + ext->v9.SAMUTableOffset;
 			}
 			fall;
-		case v3_0:
+		case V(3):
 			if (ext->v9.UVDTableOffset) { // 2 flex subtables in the table
 				void* walker = raw + ext->v9.UVDTableOffset;
 				ppt41->uvd_root = walker;
@@ -503,7 +505,7 @@ populate_pplib_ppt_extended_table(
 				ppt41->uvd_table_size = walker - (void*)(ppt41->uvd_root);
 			};
 			fall;
-		case v2_0:
+		case V(2):
 			if (ext->v9.VCETableOffset) { // 3 flex subtables in the table
 				void* walker = raw + ext->v9.VCETableOffset;
 				ppt41->vce_root = walker;
@@ -523,7 +525,7 @@ populate_pplib_ppt_extended_table(
 				ppt41->vce_table_size = walker - (void*)(ppt41->vce_root);
 			};
 			fall;
-		case v1_0: break;
+		case V(1): break;
 		default: assert(0); break;
 	}
 }
@@ -541,7 +543,7 @@ get_early_clock_info_length(
 	A possible optimisation is to get the value from [-1][-1] as they seem to
 	count up contiguously.
 	*/
-	assert(v1_0 == ppt41->state_array_ver);
+	assert(V(1) == ppt41->state_array_ver.ver);
 	uint8_t n = 0;
 	for (uint8_t i = 0; i < ppt41->num_state_array_entries; i++) {
 		struct atomtree_pplib_state const* state = &(ppt41->state_array[i]);
@@ -661,21 +663,21 @@ populate_pplib_ppt(
 		.raw = ppt41->leaves
 	};
 	switch (b.v5->TableSize) {
-		case sizeof(b.all->v5): ppt41->pplib_ver = v5_0; break;
-		case sizeof(b.all->v4): ppt41->pplib_ver = v4_0; break;
-		case sizeof(b.all->v3): ppt41->pplib_ver = v3_0; break;
-		case sizeof(b.all->v2): ppt41->pplib_ver = v2_0; break;
+		case sizeof(b.all->v5): ppt41->pplib_ver = SET_VER(5); break;
+		case sizeof(b.all->v4): ppt41->pplib_ver = SET_VER(4); break;
+		case sizeof(b.all->v3): ppt41->pplib_ver = SET_VER(3); break;
+		case sizeof(b.all->v2): ppt41->pplib_ver = SET_VER(2); break;
 		case 0: // R600
-		case sizeof(b.all->v1): ppt41->pplib_ver = v1_0; break;
+		case sizeof(b.all->v1): ppt41->pplib_ver = SET_VER(1); break;
 		default: assert(0);
 	};
-	switch (ppt41->pplib_ver) {
-		case v5_0:
+	switch (ppt41->pplib_ver.ver) {
+		case V(5):
 			if (b.v5->CACLeakageTableOffset) {
 				ppt41->cac_leakage = b.raw + b.v5->CACLeakageTableOffset;
 			}
 			fall;
-		case v4_0:
+		case V(4):
 			if (b.v5->VddcDependencyOnSCLKOffset) {
 				ppt41->vddc_sclk = b.raw + b.v5->VddcDependencyOnSCLKOffset;
 			}
@@ -697,7 +699,7 @@ populate_pplib_ppt(
 				ppt41->mvdd_mclk = b.raw + b.v5->MvddDependencyOnMCLKOffset;
 			}
 			fall;
-		case v3_0:
+		case V(3):
 			if (b.v5->FanTableOffset) {
 				ppt41->fan_table = b.raw + b.v5->FanTableOffset;
 			}
@@ -706,14 +708,14 @@ populate_pplib_ppt(
 				populate_pplib_ppt_extended_table(ppt41);
 			}
 			fall;
-		case v2_0:
+		case V(2):
 			if (b.v5->CustomThermalPolicyArrayOffset) {
 				ppt41->thermal_policy = (
 					b.raw + b.v5->CustomThermalPolicyArrayOffset
 				);
 			}
 			fall;
-		case v1_0:
+		case V(1):
 			if (b.v5->StateArrayOffset) {
 				ppt41->state_array_base = b.raw + b.v5->StateArrayOffset;
 				populate_pplib_ppt_state_array(commons, ppt41);
@@ -727,10 +729,10 @@ populate_pplib_ppt(
 				
 				switch (ppt41->nonclock_info->header.EntrySize) {
 					case sizeof(ppt41->nonclock_info->v1.nonClockInfo[0]):
-						 ppt41->nonclock_info_ver = v1_0;
+						 ppt41->nonclock_info_ver = SET_VER(1);
 						 break;
 					case sizeof(ppt41->nonclock_info->v2.nonClockInfo[0]):
-						 ppt41->nonclock_info_ver = v2_0;
+						 ppt41->nonclock_info_ver = SET_VER(2);
 						 break;
 					case 0: break;
 					default: assert(0); break;
@@ -865,13 +867,6 @@ populate_vega10_ppt(
 		ppt81->phyclk_dependency = b.raw + b.ppt->PhyClkDependencyTableOffset;
 	}
 }
-inline static enum atomtree_common_version
-get_smc_pptable_ver(
-		uint32_t const pp_ver
-		) {
-	assert(pp_ver < (UINT16_MAX/VER_MAJOR_MULTIPLIER));
-	return pp_ver * VER_MAJOR_MULTIPLIER;
-}
 inline static void
 populate_ppt(
 		struct atomtree_commons* const commons,
@@ -884,40 +879,40 @@ populate_ppt(
 
 	ppt->leaves = commons->bios + bios_offset;
 	// leaves is in a union with the structs.
-	ppt->ver = get_ver(ppt->table_header);
+	ppt->ver = atom_get_ver(ppt->table_header);
 
-	switch (ppt->ver) {
-		case v1_1:
-		case v2_1:
-		case v3_1:
+	switch (ppt->ver.ver) {
+		case V(1,1):
+		case V(2,1):
+		case V(3,1):
 			break; // absurdly simple powerplay.
-		case v6_1:
-		case v5_1:
-		case v4_1:
+		case V(6,1):
+		case V(5,1):
+		case V(4,1):
 			populate_pplib_ppt(commons, &(ppt->v4_1));
 			break;
-		case v7_1: // Tonga, Fiji, Polaris ; pptable and vega10 look similar
+		case V(7,1): // Tonga, Fiji, Polaris ; pptable and vega10 look similar
 			populate_pptablev1_ppt(&(ppt->v7_1));
 			break;
-		case v8_1:
+		case V(8,1):
 			populate_vega10_ppt(&(ppt->v8_1));
 			break;
-		case v11_0:
-			ppt->v11_0.smc_pptable_ver = get_smc_pptable_ver(
+		case V(11,0):
+			ppt->v11_0.smc_pptable_ver = SET_VER(
 				ppt->v11_0.leaves->smc_pptable.ver
 			);
 			break;
-		case v14_0:
-		case v12_0:
-			ppt->v12_0.smc_pptable_ver = get_smc_pptable_ver(
+		case V(14,0):
+		case V(12,0):
+			ppt->v12_0.smc_pptable_ver = SET_VER(
 				ppt->v12_0.leaves->smc_pptable.ver
 			);
 			break;
-		case v19_0: // 6400
-		case v18_0: // navi2 xx50
-		case v16_0: // 6700XT
-		case v15_0:
-			ppt->v15_0.smc_pptable_ver = get_smc_pptable_ver(
+		case V(19,0): // 6400
+		case V(18,0): // navi2 xx50
+		case V(16,0): // 6700XT
+		case V(15,0):
+			ppt->v15_0.smc_pptable_ver = SET_VER(
 				ppt->v15_0.leaves->smc_pptable.ver
 			);
 			break;
@@ -997,19 +992,19 @@ static enum atom_dgpu_vram_type
 get_vram_type(
 		struct atomtree_vram_module const* const vram_module
 		) {
-	switch (vram_module->vram_module_ver) {
-		case v1_1:  return vram_module->v1_1->MemoryType;
-		case v1_2:  return vram_module->v1_2->MemoryType;
-		case v1_3:  return vram_module->v1_3->MemoryType;
-		case v1_4:  return vram_module->v1_4->MemoryType;
-		case v1_5:  return vram_module->v1_5->MemoryType;
-		case v1_6:  return vram_module->v1_6->MemoryType;
-		case v1_7:  return vram_module->v1_7->MemoryType;
-		case v1_8:  return vram_module->v1_8->MemoryType;
-		case v1_9:  return vram_module->v1_9->memory_type;
-		case v1_10: return vram_module->v1_10->memory_type;
-		case v1_11: return vram_module->v1_11->memory_type;
-		case v3_0:
+	switch (vram_module->vram_module_ver.ver) {
+		case V(1,1):  return vram_module->v1_1->MemoryType;
+		case V(1,2):  return vram_module->v1_2->MemoryType;
+		case V(1,3):  return vram_module->v1_3->MemoryType;
+		case V(1,4):  return vram_module->v1_4->MemoryType;
+		case V(1,5):  return vram_module->v1_5->MemoryType;
+		case V(1,6):  return vram_module->v1_6->MemoryType;
+		case V(1,7):  return vram_module->v1_7->MemoryType;
+		case V(1,8):  return vram_module->v1_8->MemoryType;
+		case V(1,9):  return vram_module->v1_9->memory_type;
+		case V(1,10): return vram_module->v1_10->memory_type;
+		case V(1,11): return vram_module->v1_11->memory_type;
+		case V(3,0):
 		default: assert(0);
 	}
 	return ATOM_DGPU_VRAM_TYPE_NONE;
@@ -1270,15 +1265,15 @@ populate_atom_memory_timing_format(
 			|| (memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5_2)
 			) {
 		if (0xFF == timings->v1_1.Terminator) {
-			vram_module->memory_timing_format_ver = v1_1;
+			vram_module->memory_timing_format_ver = SET_VER(1,1);
 			table_size = sizeof(timings->v1_1);
 		} else {
 			assert(0xFF == timings->v1_2.Terminator);
-			vram_module->memory_timing_format_ver = v1_2;
+			vram_module->memory_timing_format_ver = SET_VER(1,2);
 			table_size = sizeof(timings->v1_2);
 		}
 	} else {
-		vram_module->memory_timing_format_ver = v1_0;
+		vram_module->memory_timing_format_ver = SET_VER(1,0);
 		table_size = sizeof(timings->v1_0);
 	}
 	vram_module->num_memory_timing_format = straps_total_size / table_size;
@@ -1290,7 +1285,7 @@ inline static struct atomtree_vram_module*
 populate_vram_module(
 		struct atomtree_commons* const commons,
 		void* bios_offset,
-		enum atomtree_common_version const vram_modules_ver,
+		semver const vram_modules_ver,
 		uint8_t const count
 		) {
 	if (0 == count) {
@@ -1302,13 +1297,13 @@ populate_vram_module(
 		count * sizeof(vram_modules[0])
 	);
 	struct atomtree_vram_module* vmod;
-	switch (vram_modules_ver) {
-		case v1_3: // atom_vram_module_v3. Will look very similar to v4
+	switch (vram_modules_ver.ver) {
+		case V(1,3): // atom_vram_module_v3. Will look very similar to v4
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_3;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,3);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_3->ModuleSize;
 
 				populate_atom_memory_timing_format(
@@ -1320,12 +1315,12 @@ populate_vram_module(
 			} // loop
 			break;
 
-		case v1_4: // atom_vram_module_v4. Will look very similar to v3
+		case V(1,4): // atom_vram_module_v4. Will look very similar to v3
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_4;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,4);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_4->ModuleSize;
 
 				populate_atom_memory_timing_format(
@@ -1338,73 +1333,73 @@ populate_vram_module(
 			} // loop
 			break;
 
-		case v1_7:
-			enum atomtree_common_version  gmc_bitfields_ver;
+		case V(1,7):
+			semver gmc_bitfields_ver;
 			if (count) {
 				struct atom_vram_module_v7 const* const zero = bios_offset;
 				if (zero->ChannelMapCfg >> 24) { // infer
 					// TODO explicit way to find GMC?
 					// does it follow vram_module ver? doesn't seem so
-					gmc_bitfields_ver = v7_1;
+					gmc_bitfields_ver = SET_VER(7,1);
 				} else {
-					gmc_bitfields_ver = v6_0;
+					gmc_bitfields_ver = SET_VER(6,0);
 				}
 			}
 
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_7;
+				vmod->vram_module_ver = SET_VER(1,7);
 				vmod->gmc_bitfields_ver = gmc_bitfields_ver;
 				bios_offset += vmod->v1_7->ModuleSize;
 			}
 			break;
-		case v1_8:
+		case V(1,8):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_8;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,8);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_8->ModuleSize;
 			}
 			break;
 
-		case v1_9:
+		case V(1,9):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_9;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,9);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_9->vram_module_size;
 			}
 			break;
 
-		case v1_10:
+		case V(1,10):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_10;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,10);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_10->vram_module_size;
 			}
 			break;
 
-		case v1_11:
+		case V(1,11):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v1_11;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(1,11);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				bios_offset += vmod->v1_11->vram_module_size;
 			}
 			break;
 
-		case v3_0:
+		case V(3,0):
 			for (uint8_t i=0; i < count; i++) {
 				vmod = &(vram_modules[i]);
 				vmod->leaves = bios_offset;
-				vmod->vram_module_ver = v3_0;
-				vmod->gmc_bitfields_ver = nover; // TODO
+				vmod->vram_module_ver = SET_VER(3,0);
+				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
 				//bios_offset += vmod->v3_0->vram_module_size;
 				bios_offset += sizeof(*vmod->v3_0);
 
@@ -1455,7 +1450,7 @@ populate_vram_info_v1_2(
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
 
 	if (vi12->leaves->NumOfVRAMModule) {
-		vi12->vram_module_ver = v1_3;
+		vi12->vram_module_ver = SET_VER(1,3);
 		vi12->vram_modules = populate_vram_module(
 			commons,
 			vi12->leaves->vram_module,
@@ -1473,7 +1468,7 @@ populate_vram_info_v1_3(
 	struct atomtree_vram_info_v1_3* const vi13 = &(vram_info->v1_3);
 
 	if (vi13->leaves->NumOfVRAMModule) {
-		vi13->vram_module_ver = v1_3;
+		vi13->vram_module_ver = SET_VER(1,3);
 		vi13->vram_modules = populate_vram_module(
 			commons,
 			vi13->leaves->vram_module,
@@ -1505,7 +1500,7 @@ populate_vram_info_v1_4(
 	struct atomtree_vram_info_v1_4* const vi14 = &(vram_info->v1_4);
 
 	if (vi14->leaves->NumOfVRAMModule) {
-		vi14->vram_module_ver = v1_4;
+		vi14->vram_module_ver = SET_VER(1,4);
 		vi14->vram_modules = populate_vram_module(
 			commons,
 			vi14->leaves->vram_module,
@@ -1536,7 +1531,7 @@ populate_vram_info_v2_1(
 	struct atomtree_vram_info_header_v2_1* const vi21 = &(vram_info->v2_1);
 
 	if (vi21->leaves->NumOfVRAMModule) {
-		vi21->vram_module_ver = v1_7;
+		vi21->vram_module_ver = SET_VER(1,7);
 		vi21->vram_modules = populate_vram_module(
 			commons,
 			vi21->leaves->vram_module,
@@ -1577,7 +1572,7 @@ populate_vram_info_v2_2(
 	struct atomtree_vram_info_header_v2_2* const vi22 = &(vram_info->v2_2);
 
 	if (vi22->leaves->NumOfVRAMModule) {
-		vi22->vram_module_ver = v1_8;
+		vi22->vram_module_ver = SET_VER(1,8);
 		vi22->vram_modules = populate_vram_module(
 			commons,
 			vi22->leaves->vram_module,
@@ -1633,7 +1628,7 @@ populate_vram_info_v2_3(
 	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
 
 	if (vi23->leaves->vram_module_num) {
-		vi23->vram_module_ver = v1_9;
+		vi23->vram_module_ver = SET_VER(1,9);
 		vi23->vram_modules = populate_vram_module(
 			commons,
 			vi23->leaves->vram_module,
@@ -1706,7 +1701,7 @@ populate_vram_info_v2_4(
 	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
 
 	if (leaves->vram_module_num) {
-		vi24->vram_module_ver = v1_10;
+		vi24->vram_module_ver = SET_VER(1,10);
 		vi24->vram_modules = populate_vram_module(
 			commons,
 			leaves->vram_module,
@@ -1766,7 +1761,7 @@ populate_vram_info_v2_5(
 	struct atom_vram_info_header_v2_5* const leaves = vram_info->leaves;
 
 	if (leaves->vram_module_num) {
-		vi25->vram_module_ver = v1_11;
+		vi25->vram_module_ver = SET_VER(1,11);
 		vi25->vram_modules = populate_vram_module(
 			commons,
 			leaves->vram_module,
@@ -1832,7 +1827,7 @@ populate_vram_info_v2_6(
 	struct atom_vram_info_header_v2_6* const leaves = vram_info->leaves;
 
 	if (leaves->vram_module_num) {
-		vi26->vram_module_ver = v1_9;
+		vi26->vram_module_ver = SET_VER(1,9);
 		vi26->vram_modules = populate_vram_module(
 			commons,
 			leaves->vram_module,
@@ -1895,7 +1890,7 @@ populate_vram_info_v3_0( // TODO finish this
 	struct atom_vram_info_header_v3_0* const leaves = vram_info->leaves;
 
 	if (leaves->vram_module_num) {
-		vi30->vram_module_ver = v3_0;
+		vi30->vram_module_ver = SET_VER(3,0);
 		vi30->vram_modules = populate_vram_module(
 			commons,
 			leaves->vram_module,
@@ -1959,18 +1954,18 @@ populate_vram_info(
 	}
 
 	vram_info->leaves = commons->bios + bios_offset;
-	vram_info->ver = get_ver(vram_info->table_header);
-	switch (vram_info->ver) { // TODO: earlier tables than 2.3?
-		case v1_2: populate_vram_info_v1_2(commons, vram_info); break;
-		case v1_3: populate_vram_info_v1_3(commons, vram_info); break;
-		case v1_4: populate_vram_info_v1_4(commons, vram_info); break;
-		case v2_1: populate_vram_info_v2_1(commons, vram_info); break;
-		case v2_2: populate_vram_info_v2_2(commons, vram_info); break;
-		case v2_3: populate_vram_info_v2_3(commons, vram_info); break;
-		case v2_4: populate_vram_info_v2_4(commons, vram_info); break;
-		case v2_5: populate_vram_info_v2_5(commons, vram_info); break;
-		case v2_6: populate_vram_info_v2_6(commons, vram_info); break;
-		case v3_0: populate_vram_info_v3_0(commons, vram_info); break;
+	vram_info->ver = atom_get_ver(vram_info->table_header);
+	switch (vram_info->ver.ver) { // TODO: earlier tables than 2.3?
+		case V(1,2): populate_vram_info_v1_2(commons, vram_info); break;
+		case V(1,3): populate_vram_info_v1_3(commons, vram_info); break;
+		case V(1,4): populate_vram_info_v1_4(commons, vram_info); break;
+		case V(2,1): populate_vram_info_v2_1(commons, vram_info); break;
+		case V(2,2): populate_vram_info_v2_2(commons, vram_info); break;
+		case V(2,3): populate_vram_info_v2_3(commons, vram_info); break;
+		case V(2,4): populate_vram_info_v2_4(commons, vram_info); break;
+		case V(2,5): populate_vram_info_v2_5(commons, vram_info); break;
+		case V(2,6): populate_vram_info_v2_6(commons, vram_info); break;
+		case V(3,0): populate_vram_info_v3_0(commons, vram_info); break;
 		default: break;
 	}
 }
@@ -2009,7 +2004,7 @@ populate_voltageobject_info_v1_1(
 		uint16_t i = 0;
 		while (vobj.raw < end) {
 			voltage_objects[i].obj = vobj.vobj;
-			voltage_objects[i].ver = v1_0;
+			voltage_objects[i].ver = SET_VER(1,0);
 			// NumOfVoltageEntries lies and can be 255.
 			voltage_objects[i].lut_entries = (
 				(
@@ -2060,7 +2055,7 @@ populate_voltageobject_info_v1_2(
 		uint16_t i = 0;
 		while (vobj.raw < end) {
 			voltage_objects[i].obj = vobj.vobj;
-			voltage_objects[i].ver = v2_0;
+			voltage_objects[i].ver = SET_VER(2,0);
 			// NumOfVoltageEntries lies and can be 255.
 			voltage_objects[i].lut_entries = (
 				(
@@ -2111,7 +2106,7 @@ populate_voltageobject_info_v3_1(
 		uint16_t i = 0;
 		while (vobj.raw < end) {
 			voltage_objects[i].obj = vobj.vobj;
-			voltage_objects[i].ver = v1_0; // all v3_1 have v1_0 objects
+			voltage_objects[i].ver = SET_VER(1,0); // all v3_1 have v1_0 objects
 			switch (vobj.vobj->header.voltage_mode) {
 				// some voltage objects have a dynamically-sized lookup table.
 				case VOLTAGE_OBJ_GPIO_LUT:
@@ -2217,7 +2212,8 @@ populate_voltageobject_info_v4_1(
 
 		while (vobj.raw < end) {
 			voltage_objects[i].obj = vobj.vobj;
-			voltage_objects[i].ver = v1_0; // nearly all v4_1 have v1_0 objects
+			// nearly all v4_1 have v1_0 objects
+			voltage_objects[i].ver = SET_VER(1,0);
 			switch (vobj.vobj->header.voltage_mode) {
 				// some voltage objects have a dynamically-sized lookup table.
 				case VOLTAGE_OBJ_GPIO_LUT:
@@ -2244,7 +2240,7 @@ populate_voltageobject_info_v4_1(
 					);
 					break;
 				case VOLTAGE_OBJ_SVID2:
-					voltage_objects[i].ver = v2_0;
+					voltage_objects[i].ver = SET_VER(2,0);
 				default:
 					break;
 			}
@@ -2267,14 +2263,14 @@ populate_voltageobject_info(
 	}
 
 	vo_info->leaves = commons->bios + bios_offset;
-	vo_info->ver = get_ver(vo_info->table_header);
-	switch (vo_info->ver) {
-		case v1_1: populate_voltageobject_info_v1_1(commons, vo_info); break;
-		case v1_2: populate_voltageobject_info_v1_2(commons, vo_info); break;
-		case v3_1: populate_voltageobject_info_v3_1(commons, vo_info); break;
-		case v4_2: // hopefully v4_2 is the same
-		case v4_1: populate_voltageobject_info_v4_1(commons, vo_info); break;
-		case v1_0: assert(0);
+	vo_info->ver = atom_get_ver(vo_info->table_header);
+	switch (vo_info->ver.ver) {
+		case V(1,1): populate_voltageobject_info_v1_1(commons, vo_info); break;
+		case V(1,2): populate_voltageobject_info_v1_2(commons, vo_info); break;
+		case V(3,1): populate_voltageobject_info_v3_1(commons, vo_info); break;
+		case V(4,2): // hopefully v4_2 is the same
+		case V(4,1): populate_voltageobject_info_v4_1(commons, vo_info); break;
+		case V(1,0): assert(0);
 		default: break;
 	}
 }
@@ -2428,87 +2424,87 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 
 	if (leaves->sw_datatable3) {
 		dt21->sw_datatable3.leaves = bios + leaves->sw_datatable3;
-		dt21->sw_datatable3.ver = get_ver(dt21->sw_datatable3.leaves);
+		dt21->sw_datatable3.ver = atom_get_ver(dt21->sw_datatable3.leaves);
 	}
 
 	if (leaves->sw_datatable5) {
 		dt21->sw_datatable5.leaves = bios + leaves->sw_datatable5;
-		dt21->sw_datatable5.ver = get_ver(dt21->sw_datatable5.leaves);
+		dt21->sw_datatable5.ver = atom_get_ver(dt21->sw_datatable5.leaves);
 	}
 
 	if (leaves->sw_datatable7) {
 		dt21->sw_datatable7.leaves = bios + leaves->sw_datatable7;
-		dt21->sw_datatable7.ver = get_ver(dt21->sw_datatable7.leaves);
+		dt21->sw_datatable7.ver = atom_get_ver(dt21->sw_datatable7.leaves);
 	}
 
 	if (leaves->sw_datatable9) {
 		dt21->sw_datatable9.leaves = bios + leaves->sw_datatable9;
-		dt21->sw_datatable9.ver = get_ver(dt21->sw_datatable9.leaves);
+		dt21->sw_datatable9.ver = atom_get_ver(dt21->sw_datatable9.leaves);
 	}
 
 	if (leaves->sw_datatable10) {
 		dt21->sw_datatable10.leaves = bios + leaves->sw_datatable10;
-		dt21->sw_datatable10.ver = get_ver(dt21->sw_datatable10.leaves);
+		dt21->sw_datatable10.ver = atom_get_ver(dt21->sw_datatable10.leaves);
 	}
 
 	if (leaves->sw_datatable13) {
 		dt21->sw_datatable13.leaves = bios + leaves->sw_datatable13;
-		dt21->sw_datatable13.ver = get_ver(dt21->sw_datatable13.leaves);
+		dt21->sw_datatable13.ver = atom_get_ver(dt21->sw_datatable13.leaves);
 	}
 
 	if (leaves->sw_datatable16) {
 		dt21->sw_datatable16.leaves = bios + leaves->sw_datatable16;
-		dt21->sw_datatable16.ver = get_ver(dt21->sw_datatable16.leaves);
+		dt21->sw_datatable16.ver = atom_get_ver(dt21->sw_datatable16.leaves);
 	}
 
 	if (leaves->sw_datatable17) {
 		dt21->sw_datatable17.leaves = bios + leaves->sw_datatable17;
-		dt21->sw_datatable17.ver = get_ver(dt21->sw_datatable17.leaves);
+		dt21->sw_datatable17.ver = atom_get_ver(dt21->sw_datatable17.leaves);
 	}
 
 	if (leaves->sw_datatable18) {
 		dt21->sw_datatable18.leaves = bios + leaves->sw_datatable18;
-		dt21->sw_datatable18.ver = get_ver(dt21->sw_datatable18.leaves);
+		dt21->sw_datatable18.ver = atom_get_ver(dt21->sw_datatable18.leaves);
 	}
 
 	if (leaves->sw_datatable19) {
 		dt21->sw_datatable19.leaves = bios + leaves->sw_datatable19;
-		dt21->sw_datatable19.ver = get_ver(dt21->sw_datatable19.leaves);
+		dt21->sw_datatable19.ver = atom_get_ver(dt21->sw_datatable19.leaves);
 	}
 
 	if (leaves->sw_datatable20) {
 		dt21->sw_datatable20.leaves = bios + leaves->sw_datatable20;
-		dt21->sw_datatable20.ver = get_ver(dt21->sw_datatable20.leaves);
+		dt21->sw_datatable20.ver = atom_get_ver(dt21->sw_datatable20.leaves);
 	}
 
 	if (leaves->sw_datatable21) {
 		dt21->sw_datatable21.leaves = bios + leaves->sw_datatable21;
-		dt21->sw_datatable21.ver = get_ver(dt21->sw_datatable21.leaves);
+		dt21->sw_datatable21.ver = atom_get_ver(dt21->sw_datatable21.leaves);
 	}
 
 	if (leaves->sw_datatable25) {
 		dt21->sw_datatable25.leaves = bios + leaves->sw_datatable25;
-		dt21->sw_datatable25.ver = get_ver(dt21->sw_datatable25.leaves);
+		dt21->sw_datatable25.ver = atom_get_ver(dt21->sw_datatable25.leaves);
 	}
 
 	if (leaves->sw_datatable26) {
 		dt21->sw_datatable26.leaves = bios + leaves->sw_datatable26;
-		dt21->sw_datatable26.ver = get_ver(dt21->sw_datatable26.leaves);
+		dt21->sw_datatable26.ver = atom_get_ver(dt21->sw_datatable26.leaves);
 	}
 
 	if (leaves->sw_datatable29) {
 		dt21->sw_datatable29.leaves = bios + leaves->sw_datatable29;
-		dt21->sw_datatable29.ver = get_ver(dt21->sw_datatable29.leaves);
+		dt21->sw_datatable29.ver = atom_get_ver(dt21->sw_datatable29.leaves);
 	}
 
 	if (leaves->sw_datatable33) {
 		dt21->sw_datatable33.leaves = bios + leaves->sw_datatable33;
-		dt21->sw_datatable33.ver = get_ver(dt21->sw_datatable33.leaves);
+		dt21->sw_datatable33.ver = atom_get_ver(dt21->sw_datatable33.leaves);
 	}
 
 	if (leaves->sw_datatable34) {
 		dt21->sw_datatable34.leaves = bios + leaves->sw_datatable34;
-		dt21->sw_datatable34.ver = get_ver(dt21->sw_datatable34.leaves);
+		dt21->sw_datatable34.ver = atom_get_ver(dt21->sw_datatable34.leaves);
 	}
 }
 inline static void
@@ -2578,10 +2574,10 @@ populate_datatables(
 		commons->atree->data_table
 	);
 	data_table->leaves = commons->bios + bios_offset;
-	data_table->ver = get_ver(data_table->table_header);
-	switch (data_table->ver) {
-		case v1_1: populate_datatable_v1_1(commons, data_table); break;
-		case v2_1: populate_datatable_v2_1(commons, data_table); break;
+	data_table->ver = atom_get_ver(data_table->table_header);
+	switch (data_table->ver.ver) {
+		case V(1,1): populate_datatable_v1_1(commons, data_table); break;
+		case V(2,1): populate_datatable_v2_1(commons, data_table); break;
 		default: assert(0); break;
 	}
 }
@@ -2645,9 +2641,8 @@ populate_discovery_table_ip_dies(
 		uint16_t ip_i = 0;
 		do {
 			ips[ip_i].raw = ip.raw;
-			ips[ip_i].ver = ( // TODO major minor revision
-				(ip.e->header.major * VER_MAJOR_MULTIPLIER)
-				+ ip.e->header.minor 
+			ips[ip_i].ver = SET_VER(
+				ip.e->header.major, ip.e->header.minor, ip.e->header.revision
 			);
 			switch (version) {
 				case 1:
@@ -2690,48 +2685,45 @@ populate_discovery_table(
 	};
 	struct discovery_table_info const* const table_list = b.bin->table_list;
 
-	dis->binary_ver = (
-		(b.bin->version_major * VER_MAJOR_MULTIPLIER)
-		+ b.bin->version_minor
-	);
+	dis->binary_ver = SET_VER(b.bin->version_major, b.bin->version_minor);
 
 	if (table_list[DISCOVERY_IP_DISCOVERY].offset) {
 		dis->ip_discovery = b.raw + table_list[DISCOVERY_IP_DISCOVERY].offset;
-		dis->ip_ver = dis->ip_discovery->version * VER_MAJOR_MULTIPLIER;
+		dis->ip_ver = SET_VER(dis->ip_discovery->version);
 
 		populate_discovery_table_ip_dies(commons, dis, b.raw);
 	}
 
 	if (table_list[DISCOVERY_GC].offset) {
 		dis->gc_info = b.raw + table_list[DISCOVERY_GC].offset;
-		dis->gc_ver = (
-			dis->gc_info->header.version_major * VER_MAJOR_MULTIPLIER
-			+ dis->gc_info->header.version_minor
+		dis->gc_ver = SET_VER(
+			dis->gc_info->header.version_major,
+			dis->gc_info->header.version_minor
 		);
 	}
 	if (table_list[DISCOVERY_HARVEST_INFO].offset) {
 		dis->harvest = b.raw + table_list[DISCOVERY_HARVEST_INFO].offset;
-		dis->harvest_ver = dis->harvest->header.version * VER_MAJOR_MULTIPLIER;
+		dis->harvest_ver = SET_VER(dis->harvest->header.version);
 	}
 	if (table_list[DISCOVERY_VCN_INFO].offset) {
 		dis->vcn_info = b.raw + table_list[DISCOVERY_VCN_INFO].offset;
-		dis->vcn_ver = (
-			(dis->vcn_info->header.version_major * VER_MAJOR_MULTIPLIER)
-			+ dis->vcn_info->header.version_minor
+		dis->vcn_ver = SET_VER(
+			dis->vcn_info->header.version_major,
+			dis->vcn_info->header.version_minor
 		);
 	}
 	if (table_list[DISCOVERY_MALL_INFO].offset) {
 		dis->mall_info = b.raw + table_list[DISCOVERY_MALL_INFO].offset;
-		dis->mall_ver = (
-			(dis->mall_info->header.version_major * VER_MAJOR_MULTIPLIER)
-			+ dis->mall_info->header.version_minor
+		dis->mall_ver = SET_VER(
+			dis->mall_info->header.version_major,
+			dis->mall_info->header.version_minor
 		);
 	}
 	if (table_list[DISCOVERY_NPS_INFO].offset) {
 		dis->nps_info = b.raw + table_list[DISCOVERY_NPS_INFO].offset;
-		dis->nps_ver = (
-			(dis->nps_info->header.version_major * VER_MAJOR_MULTIPLIER)
-			+ dis->nps_info->header.version_minor
+		dis->nps_ver = SET_VER(
+			dis->nps_info->header.version_major,
+			dis->nps_info->header.version_minor
 		);
 	}
 }
@@ -2831,13 +2823,13 @@ populate_psp_directory_table(
 inline static void
 populate_atom_rom_header_v1_1(
 		struct atomtree_commons* const commons,
-		struct atomtree_rom_header* const rom_header
+		struct atomtree_rom_header* const rom
 		) {
 	struct atom_tree* const atree = commons->atree;
-	struct atom_rom_header_v1_1* const leaves = rom_header->v1_1;
+	struct atom_rom_header_v1_1* const leaves = rom->v1_1;
 	void* const bios = commons->bios;
 	
-	assert(ATOM_SIGNATURE == rom_header->v1_1->FirmWareSignature.num);
+	assert(ATOM_SIGNATURE == rom->v1_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
@@ -2858,20 +2850,20 @@ populate_atom_rom_header_v1_1(
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
 	}
 
-	//rom_header->data_table = &(atree->data_table);
+	//rom->data_table = &(atree->data_table);
 	populate_datatables(commons, leaves->MasterDataTableOffset);
 }
 
 inline static void
 populate_atom_rom_header_v2_1(
 		struct atomtree_commons* const commons,
-		struct atomtree_rom_header* const rom_header
+		struct atomtree_rom_header* const rom
 		) {
 	struct atom_tree* const atree = commons->atree;
-	struct atom_rom_header_v2_1* const leaves = rom_header->v2_1;
+	struct atom_rom_header_v2_1* const leaves = rom->v2_1;
 	void* const bios = commons->bios;
 
-	assert(ATOM_SIGNATURE == rom_header->v2_1->FirmWareSignature.num);
+	assert(ATOM_SIGNATURE == rom->v2_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
@@ -2896,19 +2888,19 @@ populate_atom_rom_header_v2_1(
 		commons, &(atree->psp_directory), leaves->PSPDirTableOffset
 	);
 
-	//rom_header->data_table = &(atree->data_table);
+	//rom->data_table = &(atree->data_table);
 	populate_datatables(commons, leaves->MasterDataTableOffset);
 }
 inline static void
 populate_atom_rom_header_v2_2(
 		struct atomtree_commons* const commons,
-		struct atomtree_rom_header* const rom_header
+		struct atomtree_rom_header* const rom
 		) {
 	struct atom_tree* const atree = commons->atree;
-	struct atom_rom_header_v2_2* const leaves = rom_header->v2_2;
+	struct atom_rom_header_v2_2* const leaves = rom->v2_2;
 	void* const bios = commons->bios;
 
-	assert(ATOM_SIGNATURE == rom_header->v2_2->signature.num);
+	assert(ATOM_SIGNATURE == rom->v2_2->signature.num);
 
 	if (leaves->protectedmodeoffset) {
 		atree->protected_mode = bios + leaves->protectedmodeoffset;
@@ -2932,13 +2924,13 @@ populate_atom_rom_header_v2_2(
 		commons, &(atree->psp_directory), leaves->pspdirtableoffset
 	);
 
-	//rom_header->data_table = &(atree->data_table);
+	//rom->data_table = &(atree->data_table);
 	populate_datatables(commons, leaves->masterdatatable_offset);
 
 	/*
 	//atree->crc_block = bios + atree->leaves->crc_block_offset;
 	TODO what are these locations?
-	TODO double-check if all rom_header has same place as v2.1
+	TODO double-check if all rom has same place as v2.1
 	uint32_t crc = *(atree->crc_block);
 	zlib's crc32(0, startptr, bytes);
 	see also the sratch/crc.c brute-forcing tool
@@ -2975,17 +2967,17 @@ populate_atom_rom_header_v2_2(
 inline static void
 populate_atom_rom_header(
 		struct atomtree_commons* const commons,
-		struct atomtree_rom_header* const rom_header,
+		struct atomtree_rom_header* const rom,
 		uint16_t offset
 		) {
 	if (offset) {
-		rom_header->leaves = commons->bios + offset;
-		rom_header->ver = get_ver(rom_header->table_header);
-		switch (rom_header->ver) {
-			case v1_1: populate_atom_rom_header_v1_1(commons, rom_header);break;
-			case v2_1: populate_atom_rom_header_v2_1(commons, rom_header);break;
-			case v2_3: // forced
-			case v2_2: populate_atom_rom_header_v2_2(commons, rom_header);break;
+		rom->leaves = commons->bios + offset;
+		rom->ver = atom_get_ver(rom->table_header);
+		switch (rom->ver.ver) {
+			case V(1,1): populate_atom_rom_header_v1_1(commons, rom); break;
+			case V(2,1): populate_atom_rom_header_v2_1(commons, rom); break;
+			case V(2,3): // forced
+			case V(2,2): populate_atom_rom_header_v2_2(commons, rom); break;
 			default: break;
 		}
 	}
@@ -3150,22 +3142,22 @@ atombios_parse(
 }
 
 
-inline enum atomtree_common_version
-get_ver(
+inline semver
+atom_get_ver(
 		struct atom_common_table_header const* const header
 		) {
-	return (
-		(header->format_revision * VER_MAJOR_MULTIPLIER)
-		+ header->content_revision
-	);
+	return (semver) {
+		.major = header->format_revision,
+		.minor = header->content_revision,
+	};
 }
 inline void
-set_ver(
-		enum atomtree_common_version const ver,
+atom_set_ver(
+		semver const ver,
 		struct atom_common_table_header* const header
 		) {
-	header->format_revision = ver / VER_MAJOR_MULTIPLIER;
-	header->content_revision = ver % VER_MAJOR_MULTIPLIER;
+	header->format_revision = ver.major;
+	header->content_revision = ver.minor;
 }
 
 

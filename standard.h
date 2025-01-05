@@ -63,6 +63,8 @@ static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
 #include "qnotation.h"
 #include "npt_ints.h"
 
+#include "semver.h"
+
 /******************************************************************************/
 
 #define lengthof(array) (sizeof(array)/sizeof(array[0]))
