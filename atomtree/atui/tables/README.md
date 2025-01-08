@@ -169,8 +169,9 @@ any. If the leaf's children should be viewed anyway, set the `display` to
 
 ##### ATUI\_ENUM
 
-If the element should have a list of text-val pairs, an enum, assocated with it,
-first populate the atui enum in `atui_enums.json5`:
+`ATUI_ENUM` may only be used with `ATUI_NOFANCY` and `ATUI_BITFIELD` fancy
+types. If the element should have a list of text-val pairs, an enum, assocated
+with it, first populate the atui enum in `atui_enums.json5`:
 
 ``` json5
 {name: "enum_struct_name"
@@ -194,6 +195,7 @@ is not an enum, you must specify the enum name through `enum` keyword.
 	],
 	enum: "optional_enum_type_override",
 },
+
 ```
 
 <br>

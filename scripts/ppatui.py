@@ -298,6 +298,14 @@ enum enumarray_indicies_set {
 )
 """
 	enum_infer_entry_template:str = "\tenum %s: & ATUI_ENUM(%s),\\\n"
+	enum_indexof_template:str = """
+// cannot be used with non-enums types
+#define ATUI_ENUM_INDEXOF(var) _Generic((var),\\
+%s\
+	default: ATUI_ENUM_ARRAY_LENGTH\\
+)
+"""
+	enum_indexof_entry_template:str = "\tenum %s: ATUI_ENUM_INDEX(%s),\\\n"
 	header_end:str = "\n#endif\n"
 
 	enums:list = atui_data["enums"]
@@ -306,22 +314,26 @@ enum enumarray_indicies_set {
 	i:int = 0
 	indicies:str = ""
 	infers:str = ""
+	indexofs:str = ""
 	while i < num_enums:
 		enum:dict = enums[i]
 		enum_name:str = enum["name"]
 		indicies += enum_index_entry_template % (enum_name, i)
 		infers += enum_infer_entry_template % (enum_name, enum_name)
+		indexofs +=  enum_indexof_entry_template % (enum_name, enum_name)
 		if "aliases" in enum:
 			alias:str
 			for alias in enum["aliases"]:
 				indicies += enum_index_entry_template % (alias, i)
 				infers += enum_infer_entry_template % (alias, alias)
+				indexofs +=  enum_indexof_entry_template % (alias, alias)
 		i += 1
 
 	out_text = (
 		header_header % (fname.upper(), fname.upper(), num_enums)
 		+ enumarray_indicies_set_template % indicies
 		+ enum_infer_template % infers
+		+ enum_indexof_template % indexofs
 		+ header_end
 	)
 	return out_text
@@ -472,7 +484,7 @@ class atui_type:
 	# signed ~ enum may be handled through C generics, so usually False
 	signed_num:bool = None,
 	fraction:bool = None,
-	has_enum:bool = None
+	has_enum:bool = False
 
 class atui_leaf:
 	parent_is_leaf:bool # parent type; meta
@@ -707,6 +719,16 @@ def infer_leaf_data(
 		child_leaf = None
 		access:str = ""
 		access_meta:str = ""
+
+		if (leaf.type.has_enum and (leaf.type.fancy not in (
+					atui_type.ATUI_NOFANCY,
+					atui_type.ATUI_BITFIELD,
+					atui_type._ATUI_BITCHILD,
+				))):
+			assert (0), "%s can't have an enum: %s" % (
+				atui_type.ATUI_TYPE_FANCY[leaf.type.fancy], leaf.name
+			)
+
 		match (leaf.type.fancy):
 			case atui_type.ATUI_BITFIELD:
 				fancy_data = copy.copy(leaf.fancy_data)
@@ -724,6 +746,8 @@ def infer_leaf_data(
 				infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
 
 				leaf_defaults["bitchild"] = old_default
+			case atui_type.ATUI_ARRAY:
+				leaf.access_meta += "[0]"
 			case atui_type.ATUI_DYNARRAY:
 				fancy_data = copy.copy(leaf.fancy_data)
 				pattern:list = []
@@ -928,7 +952,6 @@ indent + "{\n"
 			case atui_type.ATUI_ARRAY:
 				if leaf.access:
 					var_access = leaf.access
-				var_meta = leaf.access_meta + "[0]"
 				leaf_text_extra = (
 					child_indent + ".array_size = lengthof(%s),\n"
 					+ child_indent + ".num_bytes = sizeof(%s),\n"
@@ -986,6 +1009,39 @@ indent + "{\n"
 			leaf_text_extra
 		)
 	return leaves_text
+
+def leaves_asserts_to_text(
+		leaves:list,
+		indent:str
+		) -> str:
+	# various asserts and static_asserts over the leaves
+	assert_template:str = indent + "assert(%s);\n"
+	static_template:str = indent + "static_assert(%s);\n"
+
+	atui_auto_enum_index_assert:str = static_template % (
+		"ATUI_ENUM_INDEXOF(%s) < ATUI_ENUM_ARRAY_LENGTH",
+	)
+	atui_expl_enum_index_assert:str = static_template % (
+		"ATUI_ENUM_INDEX(%s) < ATUI_ENUM_ARRAY_LENGTH",
+	)
+
+	assert_text:str = ""
+	var_meta:str = ""
+	leaf:atui_leaf
+	for leaf in leaves:
+		if leaf.access_meta:
+			var_meta = leaf.access_meta
+		else:
+			var_meta = "NULL"
+		if (leaf.type.has_enum):
+			if leaf.enum is None:
+				assert_text += atui_auto_enum_index_assert % var_meta
+			else:
+				assert_text += atui_expl_enum_index_assert % leaf.enum
+		match (leaf.type.fancy):
+			case _:
+				pass
+	return assert_text
 
 
 def deep_count_leaves(
@@ -1098,6 +1154,8 @@ _atui_%s(
 		.computed_num_shoot = %s,
 	};
 
+%s\
+
 	static_assert(lengthof(leaves_init) < UINT16_MAX);
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
 	assert(branch_embryo.computed_num_graft < UINT8_MAX);
@@ -1134,6 +1192,7 @@ _atui_%s(
 			"(%u + %s)" % (counters[0], counters[1]), # 'computed'
 			"(%u + %s)" % (counters[2], counters[3]),
 			"(%u + %s)" % (counters[4], counters[5]),
+			leaves_asserts_to_text(branch.leaves, "\t"),
 		)
 	return out_text
 
