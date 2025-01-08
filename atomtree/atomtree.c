@@ -194,6 +194,20 @@ populate_lcd_info(
 
 
 inline static void
+populate_analog_tv_info(
+		struct atomtree_commons* const commons,
+		struct atomtree_analog_tv_info* const atv,
+		uint16_t const bios_offset
+		) {
+	if (0 == bios_offset) {
+		return;
+	}
+
+	atv->leaves = commons->bios + bios_offset;
+	atv->ver = atom_get_ver(atv->table_header);
+}
+
+inline static void
 populate_smu_info(
 		struct atomtree_commons* const commons,
 		struct atomtree_smu_info* const smu_info,
@@ -2315,7 +2329,18 @@ populate_datatable_v1_1(
 		dt11->dig_transmitter_info = bios + leaves->DIGTransmitterInfo;
 	}
 
-	populate_smu_info(commons, &(dt11->smu_info), leaves->SMU_Info);
+	if (leaves->ATV_SMU_Info) {
+		struct atom_common_table_header const* header = (
+			bios + leaves->ATV_SMU_Info
+		);
+		if (1 == header->format_revision) {
+			populate_analog_tv_info(
+				commons, &(dt11->analog_tv), leaves->ATV_SMU_Info
+			);
+		} else {
+			populate_smu_info(commons, &(dt11->smu_info), leaves->ATV_SMU_Info);
+		}
+	}
 
 	if (leaves->SupportedDevicesInfo) {
 		dt11->supported_devices_info = bios + leaves->SupportedDevicesInfo;

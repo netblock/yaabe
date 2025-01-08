@@ -152,6 +152,29 @@ grow_lcd_info(
 	return atui_func(&atui_args);
 }
 
+inline static atui_branch*
+grow_analog_tv_info(
+		struct atom_tree const* const atree __unused,
+		struct atomtree_analog_tv_info const* const atv
+		) {
+	if (NULL == atv->leaves) {
+		return NULL;
+	}
+	atuifunc_args atui_args = {
+		.atomtree = atv,
+		.bios = atv->leaves,
+	};
+	atuifunc atui_func;
+	switch (atv->ver.ver) {
+		case V(1,1): atui_func = _atui_atom_analog_tv_info_v1_1; break;
+		case V(1,2): atui_func = _atui_atom_analog_tv_info_v1_2; break;
+		default:
+			atui_args.rename = "atom_analog_tv_info (header only stub)";
+			atui_func = _atui_atom_common_table_header;
+			break;
+	}
+	return atui_func(&atui_args);
+}
 
 inline static atui_branch*
 grow_smu_info(
@@ -168,6 +191,7 @@ grow_smu_info(
 		.bios = smu_info->leaves,
 	};
 	switch (smu_info->ver.ver) {
+		case V(2,1): atui_func = _atui_atom_smu_info_v2_1; break;
 		case V(3,1): atui_func = _atui_atom_smu_info_v3_1; break;
 		case V(3,2): atui_func = _atui_atom_smu_info_v3_2; break;
 		case V(3,3): atui_func = _atui_atom_smu_info_v3_3; break;
@@ -2759,9 +2783,12 @@ grow_master_datatable_v1_1(
 
 	atui_branch* const atui_dig_transmitter_info = NULL;
 
-	atui_branch* const atui_smu_info = grow_smu_info(
-		atree, &(dt11->smu_info)
-	);
+	atui_branch* atui_atv_smu_info = NULL;
+	if (dt11->analog_tv.ver.ver) {
+		atui_atv_smu_info = grow_analog_tv_info(atree, &(dt11->analog_tv));
+	} else {
+		atui_atv_smu_info = grow_smu_info(atree, &(dt11->smu_info));
+	}
 
 	atui_branch* const atui_supported_devices_info = NULL;
 	atui_branch* const atui_gpio_i2c_info = NULL;
@@ -2812,7 +2839,7 @@ grow_master_datatable_v1_1(
 		atui_utilitypipeline, atui_multimedia_capability_info,
 		atui_multimedia_config_info, atui_vesa_timing, atui_firmwareinfo,
 		atui_palette_data, atui_lcd_info, atui_dig_transmitter_info,
-		atui_smu_info, atui_supported_devices_info, atui_gpio_i2c_info,
+		atui_atv_smu_info, atui_supported_devices_info, atui_gpio_i2c_info,
 		atui_fw_vram, atui_gpio_pin_lut, atui_vesa_to_internal_mode,
 		atui_gfx_info, atui_ppt, atui_gpu_virtualization_info,
 		atui_save_restore_info, atui_ppll_ss_info, atui_oem_info,

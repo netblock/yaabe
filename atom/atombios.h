@@ -89,16 +89,6 @@
 #define ATOM_CRT1 0
 #define ATOM_CRT2 1
 
-#define ATOM_TV_NTSC  1
-#define ATOM_TV_NTSCJ 2
-#define ATOM_TV_PAL   3
-#define ATOM_TV_PALM  4
-#define ATOM_TV_PALCN 5
-#define ATOM_TV_PALN  6
-#define ATOM_TV_PAL60 7
-#define ATOM_TV_SECAM 8
-#define ATOM_TV_CV    16
-
 #define ATOM_DAC1_PS2  1
 #define ATOM_DAC1_CV   2
 #define ATOM_DAC1_NTSC 3
@@ -296,9 +286,9 @@ struct atom_common_table_header {
 	uint8_t  content_revision; // change it when a data table has a structure change, or a hw function has a input/output parameter change
 };
 
-/*****************************************************************************/
+/******************************************************************************/
 // Structure stores the ROM header.
-/*****************************************************************************/
+/******************************************************************************/
 
 //             little-endian: 3 2 1 0
 //                            M T O M
@@ -2708,7 +2698,7 @@ struct atom_master_data_table_v1_1 {
 	uint16_t PaletteData;              // Only used by BIOS
 	uint16_t LCD_Info;                 // Shared by various SW components,latest version 1.3, was called LVDS_Info
 	uint16_t DIGTransmitterInfo;       // Internal used by VBIOS only version 3.1
-	uint16_t SMU_Info;                 // Shared by various SW components,latest version 1.1
+	uint16_t ATV_SMU_Info;             // AnalogTV until 1.1, then SMU
 	uint16_t SupportedDevicesInfo;     // Will be obsolete from R600
 	uint16_t GPIO_I2C_Info;            // Shared by various SW components,latest version 1.2 will be used from R600
 	uint16_t VRAM_UsageByFirmware;     // Shared by various SW components,latest version 1.3 will be used from R600
@@ -3834,7 +3824,7 @@ struct set_crtc_timing_parameters {
 	uint16_t V_Disp;         // vertical display
 	uint16_t V_SyncStart;    // vertical Sync start
 	uint16_t V_SyncWidth;    // vertical Sync width
-	union atom_dtd_format_modemiscinfo  usModeMiscInfo;
+	union atom_dtd_format_modemiscinfo  ModeMiscInfo;
 	uint8_t  CRTC;           // ATOM_CRTC1 or ATOM_CRTC2
 	uint8_t  OverscanRight;  // right
 	uint8_t  OverscanLeft;   // left
@@ -3861,7 +3851,7 @@ struct atom_mode_timing {
 	uint16_t CRTC_V_SyncStart;
 	uint16_t CRTC_V_SyncWidth;
 	uint16_t PixelClock; // in 10Khz unit
-	union atom_dtd_format_modemiscinfo  usModeMiscInfo;
+	union atom_dtd_format_modemiscinfo  ModeMiscInfo;
 	uint16_t CRTC_OverscanRight;
 	uint16_t CRTC_OverscanLeft;
 	uint16_t CRTC_OverscanBottom;
@@ -3870,7 +3860,6 @@ struct atom_mode_timing {
 	uint8_t  InternalModeNumber;
 	uint8_t  RefreshRate;
 };
-
 
 struct atom_dtd_format {
 	uint16_t pixclk;
@@ -4228,37 +4217,50 @@ struct atom_spread_spectrum_info {
 /******************************************************************************/
 // Structure used in AnalogTV_InfoTable (Top level)
 /******************************************************************************/
-// ucTVBootUpDefaultStd definiton:
 
-// ATOM_TV_NTSC  1
-// ATOM_TV_NTSCJ 2
-// ATOM_TV_PAL   3
-// ATOM_TV_PALM  4
-// ATOM_TV_PALCN 5
-// ATOM_TV_PALN  6
-// ATOM_TV_PAL60 7
-// ATOM_TV_SECAM 8
+enum TV_standard:uint8_t {
+	ATOM_TV_NTSC  = 1,
+	ATOM_TV_NTSCJ = 2,
+	ATOM_TV_PAL   = 3,
+	ATOM_TV_PALM  = 4,
+	ATOM_TV_PALCN = 5,
+	ATOM_TV_PALN  = 6,
+	ATOM_TV_PAL60 = 7,
+	ATOM_TV_SECAM = 8,
+	ATOM_TV_CV   = 16,
+};
+union TV_SuppportedStandard {
+	uint8_t supported;
+	struct { uint8_t
+		NTSC  :0-0 +1,
+		NTSCJ :1-1 +1,
+		PAL   :2-2 +1,
+		PALM  :3-3 +1,
+		PALCN :4-4 +1,
+		PALN  :5-5 +1,
+		PAL60 :6-6 +1,
+		SECAM :7-7 +1;
+	};
+};
 
-// ucTVSuppportedStd definition:
-#define NTSC_SUPPORT  0x1
-#define NTSCJ_SUPPORT 0x2
+#define MAX_SUPPORTED_TV_TIMING_V1_1 2
+#define MAX_SUPPORTED_TV_TIMING_V1_2 3
 
-#define PAL_SUPPORT   0x4
-#define PALM_SUPPORT  0x8
-#define PALCN_SUPPORT 0x10
-#define PALN_SUPPORT  0x20
-#define PAL60_SUPPORT 0x40
-#define SECAM_SUPPORT 0x80
-
-#define MAX_SUPPORTED_TV_TIMING 2
-
-struct atom_analog_tv_info {
+struct atom_analog_tv_info_v1_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  TV_SuppportedStandard;
-	uint8_t  TV_BootUpDefaultStandard;
+	union TV_SuppportedStandard supported;
+	enum TV_standard BootUpDefault;
 	uint8_t  Ext_TV_ASIC_ID;
 	uint8_t  Ext_TV_ASIC_SlaveAddr;
-	struct atom_dtd_format  aModeTimings[MAX_SUPPORTED_TV_TIMING];
+	struct atom_mode_timing ModeTimings[MAX_SUPPORTED_TV_TIMING_V1_1];
+};
+struct atom_analog_tv_info_v1_2 {
+	struct atom_common_table_header  table_header;
+	union TV_SuppportedStandard supported;
+	enum TV_standard BootUpDefault;
+	uint8_t  Ext_TV_ASIC_ID;
+	uint8_t  Ext_TV_ASIC_SlaveAddr;
+	struct atom_dtd_format  ModeTimings[MAX_SUPPORTED_TV_TIMING_V1_2];
 };
 
 struct atom_dpcd_info {
@@ -5673,7 +5675,7 @@ struct atom_asic_profiling_info_v3_6 {
 };
 
 
-struct atom_sclk_fcw_range_entry_v1{
+struct atom_sclk_fcw_range_entry_v1 {
 	uint32_t MaxSclkFreq;
 	uint8_t  Vco_setting; // 1: 3-6GHz, 3: 2-4GHz
 	uint8_t  Postdiv;     // divide by 2^n
@@ -5681,18 +5683,14 @@ struct atom_sclk_fcw_range_entry_v1{
 	uint16_t ucFcw_trans_upper;
 	uint16_t ucRcw_trans_lower;
 };
-
-
-// SMU_InfoTable for  Polaris10/Polaris11
 struct atom_smu_info_v2_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  SclkEntryNum; // for potential future extend, indicate the number of ATOM_SCLK_FCW_RANGE_ENTRY_V1
+	uint8_t  SclkEntryNum;
 	uint8_t  SMUVer;
 	uint8_t  SharePowerSource;
 	uint8_t  Reserved;
-	struct atom_sclk_fcw_range_entry_v1  SclkFcwRangeEntry[8];
+	struct atom_sclk_fcw_range_entry_v1 SclkFcwRangeEntry[] __counted_by(SclkEntryNum);
 };
-
 
 // GFX_InfoTable for Polaris10/Polaris11
 struct atom_gfx_info_v2_1 {

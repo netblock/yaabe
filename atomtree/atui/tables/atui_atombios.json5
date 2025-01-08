@@ -614,11 +614,11 @@ global_default: {
 				{language: "english", text: "Internal used by VBIOS only version 3.1",},
 			],
 		}, {
-			access: "bios->SMU_Info",
-			name: "SMU_Info",
+			access: "bios->ATV_SMU_Info",
+			name: "ATV_SMU_Info",
 			display: "ATUI_HEX",
 			description: [
-				{language: "english", text: "Shared by various SW components,latest version 1.1",},
+				{language: "english", text: "AnalogTV until 1.1, then SMU",},
 			],
 		}, {
 			access: "bios->SupportedDevicesInfo",
@@ -2171,6 +2171,68 @@ global_default: {
 		},
 	],
 }, {
+	c_type: "atom_mode_timing",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->CRTC_H_Total",
+			name: "CRTC_H_Total",
+		}, {
+			access: "bios->CRTC_H_Disp",
+			name: "CRTC_H_Disp",
+		}, {
+			access: "bios->CRTC_H_SyncStart",
+			name: "CRTC_H_SyncStart",
+		}, {
+			access: "bios->CRTC_H_SyncWidth",
+			name: "CRTC_H_SyncWidth",
+		}, {
+			access: "bios->CRTC_V_Total",
+			name: "CRTC_V_Total",
+		}, {
+			access: "bios->CRTC_V_Disp",
+			name: "CRTC_V_Disp",
+		}, {
+			access: "bios->CRTC_V_SyncStart",
+			name: "CRTC_V_SyncStart",
+		}, {
+			access: "bios->CRTC_V_SyncWidth",
+			name: "CRTC_V_SyncWidth",
+		}, {
+			access: "bios->PixelClock",
+			name: "PixelClock",
+			description: [
+				{language: "english", text: "in 10Khz unit",},
+			],
+		}, {
+			access: "bios->ModeMiscInfo",
+			name: "ModeMiscInfo",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format_modemiscinfo",
+		}, {
+			access: "bios->CRTC_OverscanRight",
+			name: "CRTC_OverscanRight",
+		}, {
+			access: "bios->CRTC_OverscanLeft",
+			name: "CRTC_OverscanLeft",
+		}, {
+			access: "bios->CRTC_OverscanBottom",
+			name: "CRTC_OverscanBottom",
+		}, {
+			access: "bios->CRTC_OverscanTop",
+			name: "CRTC_OverscanTop",
+		}, {
+			access: "bios->Reserve",
+			name: "Reserve",
+		}, {
+			access: "bios->InternalModeNumber",
+			name: "InternalModeNumber",
+		}, {
+			access: "bios->RefreshRate",
+			name: "RefreshRate",
+		},
+	],
+}, {
 	c_type: "atom_dtd_format",
 	table_size: "sizeof(*bios)",
 	leaves: [
@@ -2795,9 +2857,7 @@ global_default: {
 			},
 		},
 	],
-},
-
-{
+}, {
 	c_type: "atom_panel_resolution_patch_record",
 	atomtree: "atomtree_lcd_record",
 	table_size: "sizeof(*bios)",
@@ -2816,6 +2876,127 @@ global_default: {
 	],
 },
 
+
+{
+	c_prefix: "union", c_type: "TV_SuppportedStandard",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->supported",
+			name: "supported",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "NTSC",
+					hi: 0, lo: 0,
+				}, {
+					name: "NTSCJ",
+					hi: 1, lo: 1,
+				}, {
+					name: "PAL",
+					hi: 2, lo: 2,
+				}, {
+					name: "PALM",
+					hi: 3, lo: 3,
+				}, {
+					name: "PALCN",
+					hi: 4, lo: 4,
+				}, {
+					name: "PALN",
+					hi: 5, lo: 5,
+				}, {
+					name: "PAL60",
+					hi: 6, lo: 6,
+				}, {
+					name: "SECAM",
+					hi: 7, lo: 7,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_analog_tv_info_v1_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->supported",
+			name: "supported",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "TV_SuppportedStandard",
+		}, {
+			access: "bios->BootUpDefault",
+			name: "BootUpDefault",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Ext_TV_ASIC_ID",
+			name: "Ext_TV_ASIC_ID",
+		}, {
+			access: "bios->Ext_TV_ASIC_SlaveAddr",
+			name: "Ext_TV_ASIC_SlaveAddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ModeTimings",
+			name: "ModeTimings",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "MAX_SUPPORTED_TV_TIMING_V1_1",
+				enum: "ATUI_NULL",
+				pattern: [{
+					access: "bios->ModeTimings",
+					name: "ModeTimings [%u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_mode_timing",
+				},],
+			},
+		},
+	],
+}, {
+	c_type: "atom_analog_tv_info_v1_2",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->supported",
+			name: "supported",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "TV_SuppportedStandard",
+		}, {
+			access: "bios->BootUpDefault",
+			name: "BootUpDefault",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Ext_TV_ASIC_ID",
+			name: "Ext_TV_ASIC_ID",
+		}, {
+			access: "bios->Ext_TV_ASIC_SlaveAddr",
+			name: "Ext_TV_ASIC_SlaveAddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ModeTimings",
+			name: "ModeTimings",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "MAX_SUPPORTED_TV_TIMING_V1_2",
+				enum: "ATUI_NULL",
+				pattern: [{
+					access: "bios->ModeTimings",
+					name: "ModeTimings [%u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_dtd_format",
+				},],
+			},
+		},
+	],
+},
 
 {
 	c_type: "atom_voltage_control",
@@ -3458,6 +3639,74 @@ global_default: {
 	],
 },
 
+{
+	c_type: "atom_sclk_fcw_range_entry_v1",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->MaxSclkFreq",
+			name: "MaxSclkFreq",
+		}, {
+			access: "bios->Vco_setting",
+			name: "Vco_setting",
+			description: [
+				{language: "english", text: "1: 3-6GHz, 3: 2-4GHz",},
+			],
+		}, {
+			access: "bios->Postdiv",
+			name: "Postdiv",
+			description: [
+				{language: "english", text: "divide by 2^n",},
+			],
+		}, {
+			access: "bios->ucFcw_pcc",
+			name: "ucFcw_pcc",
+		}, {
+			access: "bios->ucFcw_trans_upper",
+			name: "ucFcw_trans_upper",
+		}, {
+			access: "bios->ucRcw_trans_lower",
+			name: "ucRcw_trans_lower",
+		},
+	],
+}, {
+	c_type: "atom_smu_info_v2_1",
+	table_size: "sizeof_flex(bios, SclkFcwRangeEntry, bios->SclkEntryNum)",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->SclkEntryNum",
+			name: "SclkEntryNum",
+		}, {
+			access: "bios->SMUVer",
+			name: "SMUVer",
+		}, {
+			access: "bios->SharePowerSource",
+			name: "SharePowerSource",
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+		}, {
+			access: "bios->SclkFcwRangeEntry",
+			name: "SclkFcwRangeEntry",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->SclkEntryNum",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "SclkFcwRangeEntry [%u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_sclk_fcw_range_entry_v1",
+				},],
+			},
+		},
+	],
+},
 
 {
 	c_type: "atom_gfx_info_v2_1",

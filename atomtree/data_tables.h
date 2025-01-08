@@ -79,6 +79,16 @@ struct atomtree_lcd_info {
 	struct atomtree_lcd_record* record_table;
 };
 
+struct atomtree_analog_tv_info {
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct atom_analog_tv_info_v1_1* v1_1;
+		struct atom_analog_tv_info_v1_2* v1_2;
+	};
+	semver ver;
+};
+
 struct atomtree_smu_info {
 	union {
 		void* leaves;
@@ -643,7 +653,8 @@ struct atomtree_master_datatable_v1_1 {
 	//dig_transmitter_info_header_v3_1  atom_tmds_info ?
 	void* dig_transmitter_info;
 
-	struct atomtree_smu_info  smu_info;
+	struct atomtree_analog_tv_info analog_tv;
+	struct atomtree_smu_info       smu_info;
 
 	void* supported_devices_info; // atom_supported_devices_info
 	void* gpio_i2c_info;          // atom_gpio_i2c_info ?

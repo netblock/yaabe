@@ -319,6 +319,20 @@ Enums for ATUI_ENUM
 		{name: "LCD_RECORD_END_TYPE",},
 ]},
 
+{name: "TV_standard",
+	constants: [
+		{name: "ATOM_TV_NTSC",},
+		{name: "ATOM_TV_NTSCJ",},
+		{name: "ATOM_TV_PAL",},
+		{name: "ATOM_TV_PALM",},
+		{name: "ATOM_TV_PALCN",},
+		{name: "ATOM_TV_PALN",},
+		{name: "ATOM_TV_PAL60",},
+		{name: "ATOM_TV_SECAM",},
+		{name: "ATOM_TV_CV",},
+]},
+
+
 {name: "atom_voltage_type",
 	constants: [
 		{name: "VOLTAGE_TYPE_VDDC",},
