@@ -1660,11 +1660,29 @@ global_default: {
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->xgmilinkspeed)",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "xgmilinkspeed [%u]",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+				},],
+			},
 		}, {
 			access: "bios->xgmilinkwidth",
 			name: "xgmilinkwidth",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->xgmilinkwidth)",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "xgmilinkwidth [%u]",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+				},],
+			},
 		}, {
 			access: "bios->xgmifclkfreq",
 			name: "xgmifclkfreq",
@@ -2428,11 +2446,29 @@ global_default: {
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->xgmilinkspeed)",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "xgmilinkspeed [%u]",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+				},],
+			},
 		}, {
 			access: "bios->xgmilinkwidth",
 			name: "xgmilinkwidth",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->xgmilinkwidth)",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "xgmilinkwidth [%u]",
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+				},],
+			},
 		}, {
 			access: "bios->XgmiFclkFreq",
 			name: "XgmiFclkFreq",

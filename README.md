@@ -109,3 +109,5 @@ https://www.igorslab.de/red-bios-editor-bios-eintraege-anpassen-optimieren-und-n
 https://github.com/cyring/CoreFreq
 
 https://www.jedec.org/standards-documents/docs/jesd250d
+
+https://doc.coreboot.org/soc/amd/psp_integration.html

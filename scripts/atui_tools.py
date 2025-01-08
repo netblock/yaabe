@@ -52,7 +52,6 @@ class __regexvar:
 	hi_lo:str = ":" + nums + "-" + nums + " \\+1[,;]"
 
 	c_enum:str = "(enum)" + white_1
-	c_enum_type:str = ":" + white_1 + c_num_types
 	c_enum_equals:str = "=" + white_1 + "(\\S+),?" + spacetab
 
 	comments:str = "(?:" + white_0 + "(//\\s*(.*)))?"
@@ -348,7 +347,7 @@ def enum_to_atui(
 	constants: [\
 """
 	text = re.sub(
-		s.c_enum + s.name + "("+s.c_enum_type+")?"+ "{" + s.comments,
+		s.c_enum + s.name + "(?::\\s*("+s.c_num_types+"))\\s*{" + s.comments,
 		enum_text,
 		text
 	)

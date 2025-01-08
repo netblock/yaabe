@@ -271,7 +271,7 @@ global_default: {
 				enum: "ATUI_NULL",
 				pattern: [{
 					display: "ATUI_HEX",
-					name: "base_address",
+					name: "base_address [%02u]",
 				},],
 			},
 		},
