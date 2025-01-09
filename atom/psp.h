@@ -178,8 +178,13 @@ struct psp_directory {
 	struct psp_directory_entry   pspentry[] __counted_by(header.totalentries); // Array of PSP entries each pointing to a binary in SPI flash
 };
 
+//            little-endian: 3 2 1 0
+//                           1 S P $
+#define PS1_SIGNATURE     0x31535024
+#define PS1_SIGNATURE_STR "$PS1"
 struct amd_fw_header {
-	uint8_t  reserved_0[20];
+	uint8_t  reserved_0[16];
+	union magic_32 signature;
 	uint32_t fw_size_signed;
 	uint8_t  reserved_18[24];
 	uint32_t sig_opt; // 1 if the image is signed, 0 otherwise

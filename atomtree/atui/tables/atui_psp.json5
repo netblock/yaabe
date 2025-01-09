@@ -192,6 +192,11 @@ global_default: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
+			access: "bios->signature.str",
+			name: "signature",
+			display: "ATUI_NAN",
+			fancy: "ATUI_ARRAY",
+		}, {
 			access: "bios->fw_size_signed",
 			name: "fw_size_signed",
 		}, {

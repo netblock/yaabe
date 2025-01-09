@@ -250,6 +250,7 @@ global_default: {
 	],
 }, {
 	c_type: "discovery_ip_entry_v1",
+	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -296,6 +297,7 @@ global_default: {
 	],
 }, {
 	c_type: "discovery_ip_entry_v3",
+	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -324,6 +326,7 @@ global_default: {
 	],
 }, {
 	c_type: "discovery_ip_entry_v4_64",
+	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
