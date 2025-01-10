@@ -30,11 +30,12 @@ union magic_64 {
 #include "ddrmoderegisters.h"
 #include "bitfield_overrides.h"
 #include "asic_reg_data_tables.h"
+#include "pci.h"
+#include "psp.h"
+#include "discovery.h"
 #include "atombios.h"
 #include "atomfirmware.h"
 #include "powerplay.h"
-#include "psp.h"
-#include "discovery.h"
 
 // make sure we're not on 1-byte packing after all the including
 static_assert(sizeof(struct {uint64_t a; uint8_t b; uint64_t c;}) == 24);

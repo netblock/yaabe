@@ -1,20 +1,23 @@
 # when adding a file here, don't forget to add to atui/auto_includes.h
+# order doesn't matter outside of compile time
 atui_branches = files(
 	'atui_gc.json5',
 	'atui_gmc.json5', # extra long
+	'atui_ddrmoderegisters.json5',
+	'atui_bitfield_overrides.json5',
+	'atui_asic_reg_data_tables.json5',
+	'atui_pci.json5',
+	'atui_psp.json5',
+	'atui_discovery.json5',
 	'atui_atombios.json5',
 	'atui_atomfirmware.json5',
+
 	'atui_powerplay.json5',
 	'atui_pplib.json5',
 	'atui_pptable.json5',
 	'atui_pptable_vega10.json5',
 	'atui_smu_v11_pptable.json5',
 	'atui_smu_v13_pptable.json5',
-	'atui_ddrmoderegisters.json5',
-	'atui_asic_reg_data_tables.json5',
-	'atui_bitfield_overrides.json5',
-	'atui_psp.json5',
-	'atui_discovery.json5',
 )
 atui_const_tables = files(
 	'atui_enums.json5',
