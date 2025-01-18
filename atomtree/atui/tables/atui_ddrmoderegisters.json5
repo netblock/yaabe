@@ -2321,7 +2321,7 @@ global_default: {
 					],
 				}, {
 					name: "PLLDLL_reset",
-					hi: 14, lo: 11,
+					hi: 11, lo: 11,
 					description: [
 						{language: "english", text: "1 = reset. self-clears after reset.",},
 					],

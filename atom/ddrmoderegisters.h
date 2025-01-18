@@ -643,7 +643,7 @@ union gddr6_mr1 {
 		read_DBI      :8-8 +1, // Data Bus Inversion, for reads.   0=enabled
 		write_DBI     :9-9 +1, // Data Bus Inversion, for writes.  1=disabled
 		addrcmd_BI   :10-10 +1, // Command-address bus inversion.  0=enabled
-		PLLDLL_reset :14-11 +1, // 1 = reset. self-clears after reset.
+		PLLDLL_reset :11-11 +1, // 1 = reset. self-clears after reset.
 		ID           :15-12 +1; // MR 1
 	};
 };
