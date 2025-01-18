@@ -288,22 +288,44 @@ def bitfield_to_atui(
 		text
 	)
 
-	# eat struct { uint
-	text = re.sub("\tstruct { uint[0-9]+_t\n", "", text)
+	# eat struct { uint, for non-enum fields
+	text = re.sub("\tstruct {( uint[0-9]+_t)?\n", "", text)
+
+	# eat the generic int prefixes if we're doing bitfield enums
+	text = re.sub(s.c_ints, "", text)
 
 	# bitfield enries
 	bit_child:str = """\
 \\g<1>		{
-\\g<1>			name: "\\g<2>",
-\\g<1>			hi: \\g<4>, lo: \\g<5>,
-\\g<1>			__ATUIDESCR\\g<6>
+\\g<1>			name: "\\g<4>",
+\\g<1>			hi: \\g<6>, lo: \\g<7>,
+\\g<1>			__ATUIDESCR\\g<8>
+\\g<1>			__ATUIBITENUM\\g<3>
+\\g<1>		},\
 """
-	if explicit_attributes:
-		bit_child += "\\g<1>\t\t\tdisplay: \"ATUI_DEC\",\n"
-	bit_child += "\\g<1>\t\t},"
 	text = re.sub(
-		s.tabs + s.name + s.space + s.hi_lo + s.comments,
+		s.tabs + "(?:" + s.c_enum + s.name + ")?" + s.name + s.space + s.hi_lo
+		+ s.comments,
 		bit_child,
+		text
+	)
+
+	enumless:str = ""
+	if explicit_attributes:
+		enumless = "\\g<1>display: \"ATUI_DEC\",\n"
+	text = re.sub(
+		s.tabs + "__ATUIBITENUM\n",
+		enumless,
+		text
+	)
+
+	bitenum:str = """\
+\\g<1>display: ["ATUI_DEC", "ATUI_ENUM",],
+\\g<1>enum: "\\g<2>",
+"""
+	text = re.sub(
+		s.tabs + "__ATUIBITENUM" + s.name + "\n",
+		bitenum,
 		text
 	)
 
