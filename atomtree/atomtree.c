@@ -937,6 +937,104 @@ populate_ppt(
 }
 
 static void
+populate_display_object_records(
+		struct atomtree_commons* const commons,
+		struct atomtree_display_path_record_set* const set,
+		void* const start
+		) {
+	union {
+		void* raw;
+		 union display_records* records;
+	} r = {
+		.records = start
+	};
+
+	while (ATOM_RECORD_END_TYPE != r.records->header.record_type) {
+		set->num_records++;
+		r.raw += r.records->header.record_size;
+	}
+	set->records_size = r.raw - start;
+	if (0 == set->num_records) {
+		return;
+	}
+
+	set->records = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		set->num_records * sizeof(set->records[0])
+	);
+	r.records = start;
+	for (uint8_t i=0; i < set->num_records; i++) {
+		set->records[i] = r.records;
+		r.raw += r.records->header.record_size;
+	}
+}
+inline static void
+populate_display_object(
+		struct atomtree_commons* const commons,
+		struct atomtree_display_object* const disp,
+		uint16_t const bios_offset
+		) {
+	if (0 == bios_offset) {
+		return;
+	}
+	disp->leaves = commons->bios + bios_offset;
+	disp->ver = atom_get_ver(disp->table_header);
+	switch (disp->ver.ver) {
+		case V(1,4): {
+			disp->records = arena_alloc(
+				&(commons->alloc_arena), &(commons->error),
+				disp->v1_4->number_of_path * sizeof(disp->records[0])
+			);
+			
+			struct atom_display_object_path_v2 const* const path = (
+				disp->v1_4->display_path
+			);
+			for (uint8_t i=0; i < disp->v1_4->number_of_path; i++) {
+				if (path[i].disp_recordoffset) {
+					populate_display_object_records(
+						commons, &(disp->records[i].connector),
+						disp->leaves + path[i].disp_recordoffset
+					);
+				}
+				if (path[i].encoder_recordoffset) {
+					populate_display_object_records(
+						commons, &(disp->records[i].encoder),
+						disp->leaves + path[i].encoder_recordoffset
+					);
+				}
+				if (path[i].extencoder_recordoffset) {
+					populate_display_object_records(
+						commons, &(disp->records[i].extern_encoder),
+						disp->leaves + path[i].extencoder_recordoffset
+					);
+				}
+			}
+			break;
+		}
+		case V(1,5): {
+			disp->records = arena_alloc(
+				&(commons->alloc_arena), &(commons->error),
+				disp->v1_5->number_of_path * sizeof(disp->records[0])
+			);
+			
+			struct atom_display_object_path_v3 const* const path = (
+				disp->v1_5->display_path
+			);
+			for (uint8_t i=0; i < disp->v1_5->number_of_path; i++) {
+				if (path[i].disp_recordoffset) {
+					populate_display_object_records(
+						commons, &(disp->records[i].connector),
+						disp->leaves + path[i].disp_recordoffset
+					);
+				}
+			}
+			break;
+		}
+	}
+}
+
+
+static void
 populate_init_reg_block(
 		struct atomtree_commons* const commons,
 		struct atomtree_init_reg_block* const at_regblock
@@ -2567,6 +2665,11 @@ populate_datatable_v2_1(
 	populate_gfx_info(commons, &(dt21->gfx_info), leaves->gfx_info);
 
 	populate_ppt(commons, &(dt21->powerplayinfo), leaves->powerplayinfo);
+
+	populate_display_object(
+		commons, &(dt21->display_object), leaves->displayobjectinfo
+	);
+
 
 	//displayobjectinfo
 	//indirectioaccess

@@ -2792,6 +2792,22 @@ global_default: {
 },
 
 {
+	c_type: "atom_common_record_header",
+	table_size: "bios->record_size",
+	leaves: [
+		{
+			access: "bios->record_type",
+			name: "record_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->record_size",
+			name: "record_size",
+		},
+	],
+},
+
+
+{
 	c_type: "atom_voltage_control",
 	atomtree: "atomtree_voltage_object",
 	table_size: "sizeof(*bios)",

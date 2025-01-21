@@ -316,6 +316,28 @@ struct atomtree_powerplay_table {
 	semver ver;
 };
 
+struct atomtree_display_path_record_set {
+	uint8_t num_records;
+	size_t  records_size;
+	union display_records**  records;
+};
+struct atomtree_display_path_records {
+	struct atomtree_display_path_record_set connector;
+	struct atomtree_display_path_record_set encoder;
+	struct atomtree_display_path_record_set extern_encoder;
+};
+
+struct atomtree_display_object {
+	union {
+		void* leaves;
+		struct atom_common_table_header*       table_header;
+		struct display_object_info_table_v1_4* v1_4;
+		struct display_object_info_table_v1_5* v1_5;
+	};
+	struct atomtree_display_path_records* records;
+	semver ver;
+};
+
 enum register_block_type:uint8_t {
 	REG_BLOCK_UNKNOWN,
 	REG_BLOCK_MEM_ADJUST,
@@ -664,7 +686,7 @@ struct atomtree_master_datatable_v1_1 {
 
 	void* vesa_to_internal_mode; // atom_vesa_to_internal_mode_lut ?
 
-	struct atomtree_gfx_info gfx_info;
+	struct atomtree_gfx_info        gfx_info;
 	struct atomtree_powerplay_table powerplayinfo;
 
 	// atom_gpu_virtualization_info_v2_1  compassionate_data ?
@@ -710,6 +732,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_gfx_info             gfx_info;
 
 	struct atomtree_powerplay_table      powerplayinfo;
+	struct atomtree_display_object       display_object;
 
 	struct atomtree_vram_info            vram_info;
 	struct atomtree_voltageobject_info   voltageobject_info;

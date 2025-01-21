@@ -4493,7 +4493,671 @@ global_default: {
 			},
 		},
 	],
+},
+
+{
+	c_type: "atom_i2c_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->i2c_id",
+			name: "i2c_id",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_i2c_id_config",
+		}, {
+			access: "bios->i2c_slave_addr",
+			name: "i2c_slave_addr",
+			description: [
+				{language: "english", text: "The slave address, it's 0 when the record is attached to connector for DDC",},
+			],
+		},
+	],
 }, {
+	c_type: "atom_hpd_int_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->pin_id",
+			name: "pin_id",
+			description: [
+				{language: "english", text: "Corresponding block in GPIO_PIN_INFO table gives the pin info",},
+			],
+		}, {
+			access: "bios->plugin_pin_state",
+			name: "plugin_pin_state",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "record_connector_caps",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->connector_caps",
+			name: "connector_caps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "internal_display_checked",
+					hi: 0, lo: 0,
+				}, {
+					name: "internal_backlight_checked",
+					hi: 1, lo: 1,
+				}, {
+					name: "reserved",
+					hi: 15, lo: 2,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_connector_caps_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->caps",
+			name: "caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "record_connector_caps",
+		},
+	],
+}, {
+	c_type: "atom_connector_speed_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->connector_max_speed",
+			name: "connector_max_speed",
+			description: [
+				{language: "english", text: "connector Max speed attribute, it sets 8100 in Mhz when DP connector @8.1Ghz.",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+		},
+	],
+}, {
+	c_type: "atom_connector_hpdpin_lut_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->hpd_pin_map",
+			name: "hpd_pin_map",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "EXT_HPDPIN_LUT. An fixed size array which maps external pins to internal GPIO_PIN_INFO table",},
+			],
+		},
+	],
+}, {
+	c_type: "atom_connector_auxddc_lut_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->aux_ddc_map",
+			name: "aux_ddc_map",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: [
+				{language: "english", text: "EXT_AUXDDC_LUT.  An fixed size array which maps external pins to internal DDC ID.",},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "atom_encoder_caps",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->encodercaps",
+			name: "encodercaps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "HBR2__MST_enable",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "DP1.2 HBR2 is supported by HW encoder, it is retired in NI. the real meaning from SI is MST_EN",},
+					],
+				}, {
+					name: "HBR2_enable",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "DP1.2 HBR2 setting is qualified and HBR2 can be enabled",},
+					],
+				}, {
+					name: "HDMI6GBPS_enable",
+					hi: 2, lo: 2,
+					description: [
+						{language: "english", text: "HDMI2.0 6Gbps enable or not.",},
+					],
+				}, {
+					name: "HBR3_enable",
+					hi: 3, lo: 3,
+					description: [
+						{language: "english", text: "DP1.3 HBR3 is supported by board.",},
+					],
+				}, {
+					name: "DP2",
+					hi: 4, lo: 4,
+					description: [
+						{language: "english", text: "DP2 is supported by ASIC/board.",},
+					],
+				}, {
+					name: "UHBR10_enable",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "DP2.0 UHBR10 settings is supported by board",},
+					],
+				}, {
+					name: "UHBR13_5_enable",
+					hi: 6, lo: 6,
+					description: [
+						{language: "english", text: "DP2.0 UHBR13.5 settings is supported by board",},
+					],
+				}, {
+					name: "UHBR20_enable",
+					hi: 7, lo: 7,
+					description: [
+						{language: "english", text: "DP2.0 UHBR20 settings is supported by board",},
+					],
+				}, {
+					name: "USB_C_type",
+					hi: 8, lo: 8,
+					description: [
+						{language: "english", text: "the DP connector is a USB-C type.",},
+					],
+				}, {
+					name: "reserved0",
+					hi: 31, lo: 9,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_encoder_caps_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->encodercaps",
+			name: "encodercaps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_encoder_caps",
+		},
+	],
+}, {
+	c_type: "atom_connector_layout_info",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->connectorobjid",
+			name: "connectorobjid",
+		}, {
+			access: "bios->connector_type",
+			name: "connector_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->position",
+			name: "position",
+		},
+	],
+}, {
+	c_type: "atom_bracket_layout_record_v1",
+	table_size: "0",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->bracketlen",
+			name: "bracketlen",
+		}, {
+			access: "bios->bracketwidth",
+			name: "bracketwidth",
+		}, {
+			access: "bios->conn_num",
+			name: "conn_num",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+		}, {
+			access: "bios->conn_info",
+			name: "conn_info",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_connector_layout_info",
+		},
+	],
+}, {
+	c_type: "atom_bracket_layout_record_v2",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+			description: [
+				{language: "english", text: "record_type = ATOM_BRACKET_LAYOUT_RECORD_TYPE",},
+			],
+		}, {
+			access: "bios->bracketlen",
+			name: "bracketlen",
+			description: [
+				{language: "english", text: "Bracket Length in mm",},
+			],
+		}, {
+			access: "bios->bracketwidth",
+			name: "bracketwidth",
+			description: [
+				{language: "english", text: "Bracket Width in mm",},
+			],
+		}, {
+			access: "bios->conn_num",
+			name: "conn_num",
+			description: [
+				{language: "english", text: "Connector numbering",},
+			],
+		}, {
+			access: "bios->mini_type",
+			name: "mini_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->reserved1",
+			name: "reserved1",
+		}, {
+			access: "bios->reserved2",
+			name: "reserved2",
+		},
+	],
+}, {
+	c_type: "atom_forced_tmds_cap_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->maxtmdsclkrate_in_2_5mhz",
+			name: "maxtmdsclkrate_in_2_5mhz",
+			description: [
+				{language: "english", text: "in units of 2.5MHz override TMDS capability on this connector when it operate in TMDS mode",},
+			],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "disp_connector_caps",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->connectcaps",
+			name: "connectcaps",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "internal_display",
+					hi: 0, lo: 0,
+					description: [
+						{language: "english", text: "this non-embedded display connector is an internal display",},
+					],
+				}, {
+					name: "internal_backlight",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "this internal display requires BL control from GPU, refers to lcd_info for BL PWM freq",},
+					],
+				}, {
+					name: "reserved",
+					display: "ATUI_HEX",
+					hi: 31, lo: 2,
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_disp_connector_caps_record",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->record_header",
+			name: "record_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_record_header",
+		}, {
+			access: "bios->caps",
+			name: "caps",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "disp_connector_caps",
+		},
+	],
+}, 
+
+
+{
+	c_prefix: "union", c_type: "atom_display_device_tag",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->device_tag",
+			name: "device_tag",
+			display: "ATUI_BIN",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "reserved0",
+					hi: 0, lo: 0,
+				}, {
+					name: "LCD1_SUPPORT",
+					hi: 1, lo: 1,
+					description: [
+						{language: "english", text: "an embedded display is either an LVDS or eDP signal type of display",},
+					],
+				}, {
+					name: "reserved1",
+					hi: 2, lo: 2,
+				}, {
+					name: "DFP1_SUPPORT",
+					hi: 3, lo: 3,
+				}, {
+					name: "reserved2",
+					hi: 4, lo: 4,
+				}, {
+					name: "LCD2_SUPPORT",
+					hi: 5, lo: 5,
+					description: [
+						{language: "english", text: "second edp device tag 0x0020 for backward compability",},
+					],
+				}, {
+					name: "DFP6_SUPPORT",
+					hi: 6, lo: 6,
+				}, {
+					name: "DFP2_SUPPORT",
+					hi: 7, lo: 7,
+				}, {
+					name: "reserved3",
+					hi: 8, lo: 8,
+				}, {
+					name: "DFP3_SUPPORT",
+					hi: 9, lo: 9,
+				}, {
+					name: "DFP4_SUPPORT",
+					hi: 10, lo: 10,
+				}, {
+					name: "DFP5_SUPPORT",
+					hi: 11, lo: 11,
+				}, {
+					name: "reserved4",
+					hi: 15, lo: 12,
+				},
+			],
+		},
+	],
+
+}, {
+	c_prefix: "union", c_type: "display_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->display_objid",
+			name: "display_objid",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "id",
+					hi: 7, lo: 0,
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+					enum: "connector_id",
+				}, {
+					name: "enum_id",
+					hi: 11, lo: 8,
+				}, {
+					name: "type",
+					hi: 15, lo: 12,
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+					enum: "object_type",
+				},
+			],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "encoder_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->encoder_objid",
+			name: "encoder_objiad",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_BITFIELD", fancy_data: [
+				{
+					name: "id",
+					hi: 7, lo: 0,
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+					enum: "encoder_id",
+				}, {
+					name: "enum_id",
+					hi: 11, lo: 8,
+				}, {
+					name: "type",
+					hi: 15, lo: 12,
+					display: ["ATUI_DEC", "ATUI_ENUM",],
+					enum: "object_type",
+				},
+			],
+		},
+	],
+}, {
+	c_type: "atom_display_object_path_v2",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->display",
+			name: "display",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "display_object_id",
+		}, {
+			access: "bios->disp_recordoffset",
+			name: "disp_recordoffset",
+		}, {
+			access: "bios->encoder",
+			name: "encoder",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
+			description: [
+				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
+			],
+		}, {
+			access: "bios->extern_encoder",
+			name: "extern_encoder",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
+			description: [
+				{language: "english", text: "2nd encoder after the first encoder, from the connector point of view;",},
+			],
+		}, {
+			access: "bios->encoder_recordoffset",
+			name: "encoder_recordoffset",
+		}, {
+			access: "bios->extencoder_recordoffset",
+			name: "extencoder_recordoffset",
+		}, {
+			access: "bios->device_tag",
+			name: "device_tag",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_display_device_tag",
+			description: [
+				{language: "english", text: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",},
+			],
+		}, {
+			access: "bios->priority_id",
+			name: "priority_id",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+		},
+	],
+}, {
+	c_type: "atom_display_object_path_v3",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->display",
+			name: "display",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "display_object_id",
+		}, {
+			access: "bios->disp_recordoffset",
+			name: "disp_recordoffset",
+		}, {
+			access: "bios->encoder",
+			name: "encoder",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
+			description: [
+				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
+			],
+		}, {
+			access: "bios->reserved1",
+			name: "reserved1",
+			description: [
+				{language: "english", text: "only on USBC case, otherwise always = 0",},
+			],
+		}, {
+			access: "bios->reserved2",
+			name: "reserved2",
+		}, {
+			access: "bios->reserved3",
+			name: "reserved3",
+			description: [
+				{language: "english", text: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority,",},
+			],
+		},
+	// a path appears first
+		{
+			access: "bios->device_tag",
+			name: "device_tag",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_display_device_tag",
+		}, {
+			access: "bios->reserved4",
+			name: "reserved4",
+		},
+	],
+}, {
+	c_type: "display_object_info_table_v1_4",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->supporteddevices",
+			name: "supporteddevices",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_display_device_tag",
+		}, {
+			access: "bios->number_of_path",
+			name: "number_of_path",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+		/*  manually walk to attach subtables
+		}, {
+			access: "bios->display_path",
+			name: "display_path",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->number_of_path",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "display_path [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_display_object_path_v2",
+				},],
+			},
+		*/
+		},
+	],
+}, {
+	c_type: "display_object_info_table_v1_5",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->supporteddevices",
+			name: "supporteddevices",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_display_device_tag",
+		}, {
+			access: "bios->number_of_path",
+			name: "number_of_path",
+		}, {
+			access: "bios->reservd",
+			name: "reservd",
+		/*  manually walk to attach subtables
+		}, {
+			access: "bios->display_path",
+			name: "display_path",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->number_of_path",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "display_path [%02u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_display_object_path_v3",
+				},],
+			},
+		*/
+		},
+	],
+},
+
+{
 	c_type: "atom_gfx_info_v2_2",
 	atomtree: "atomtree_gfx_info",
 	leaves: [

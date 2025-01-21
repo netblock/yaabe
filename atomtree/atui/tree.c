@@ -1114,6 +1114,132 @@ grow_ppt(
 }
 
 
+static atui_branch*
+grow_display_info_records_set(
+		struct atomtree_display_path_record_set const* const set,
+		char const* const set_name
+		) {
+	if (0 == set->num_records) {
+		return NULL;
+	}
+
+	atui_branch* const atui_records = ATUI_MAKE_BRANCH(atui_nullstruct,
+		set_name,  NULL,NULL,  set->num_records,NULL
+	);
+	atui_records->prefer_contiguous = true;
+	atui_records->table_start = set->records[0];
+	atui_records->table_size = set->records_size;
+
+	atui_branch* rec;
+	atuifunc_args atui_args = {
+		.atomtree = set,
+	};
+
+	for (uint8_t i=0; i < set->num_records; i++) {
+		atui_args.bios = set->records[i];
+		switch (set->records[i]->header.record_type) {
+			case ATOM_I2C_RECORD_TYPE:
+				rec = _atui_atom_i2c_record(&atui_args); break;
+			case ATOM_HPD_INT_RECORD_TYPE:
+				rec = _atui_atom_hpd_int_record(&atui_args); break;
+			case ATOM_CONNECTOR_CAP_RECORD_TYPE:
+				rec = _atui_atom_connector_caps_record(&atui_args); break;
+			case ATOM_CONNECTOR_SPEED_UPTO:
+				rec = _atui_atom_connector_speed_record(&atui_args); break;
+			case ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE:
+				rec = _atui_atom_connector_hpdpin_lut_record(&atui_args); break;
+			case ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE:
+				rec = _atui_atom_connector_auxddc_lut_record(&atui_args); break;
+			case ATOM_ENCODER_CAP_RECORD_TYPE:
+				rec = _atui_atom_encoder_caps_record(&atui_args); break;
+			case ATOM_BRACKET_LAYOUT_RECORD_TYPE:
+				rec = _atui_atom_bracket_layout_record_v1(&atui_args); break;
+			case ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE:
+				rec = _atui_atom_bracket_layout_record_v2(&atui_args); break;
+			case ATOM_FORCED_TMDS_CAP_RECORD_TYPE:
+				rec = _atui_atom_forced_tmds_cap_record(&atui_args); break;
+			case ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE:
+				rec = _atui_atom_disp_connector_caps_record(&atui_args); break;
+			case ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE:
+			default:
+				rec = _atui_atom_common_record_header(&atui_args); break;
+		}
+		ATUI_ADD_BRANCH(atui_records, rec);
+	}
+	return atui_records;
+}
+inline static atui_branch*
+grow_display_info(
+		struct atom_tree const* const atree __unused,
+		struct atomtree_display_object const* const disp
+		) {
+	struct atomtree_display_path_records const* const records = disp->records;
+
+	atui_branch* atui_disp;
+	atuifunc_args atui_args = {
+		.atomtree = disp,
+		.bios = disp->leaves,
+	};
+	switch (disp->ver.ver) {
+		case V(1,4): { // v1.4 and 1.5 should look very similar
+			atui_args.num_import_branches = disp->v1_4->number_of_path;
+			atui_disp = _atui_display_object_info_table_v1_4(&atui_args);
+
+			atui_branch* atui_path;
+			atui_branch* record_tables[3];
+			atuifunc_args path_args = {
+				.atomtree = disp,
+				.import_branches = record_tables,
+				.num_import_branches = lengthof(record_tables),
+			};
+
+			for (uint8_t i=0; i < disp->v1_4->number_of_path; i++) {
+				record_tables[0] = grow_display_info_records_set(
+					&(records[i].connector), "display records"
+				);
+				record_tables[1] = grow_display_info_records_set(
+					&(records[i].encoder), "internal encoder"
+				);
+				record_tables[2] = grow_display_info_records_set(
+					&(records[i].extern_encoder), "external encoder"
+				);
+				path_args.bios = &(disp->v1_4->display_path[i]);
+				atui_path = _atui_atom_display_object_path_v2(&path_args);
+				sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
+				ATUI_ADD_BRANCH(atui_disp, atui_path);
+			}
+			break;
+		}
+		case V(1,5): {
+			atui_args.num_import_branches = disp->v1_5->number_of_path;
+			atui_disp = _atui_display_object_info_table_v1_5(&atui_args);
+
+			atui_branch* atui_path;
+			atui_branch* record_tables;
+			atuifunc_args path_args = {
+				.atomtree = disp,
+				.import_branches = &record_tables,
+				.num_import_branches = 1,
+			};
+
+			for (uint8_t i=0; i < disp->v1_5->number_of_path; i++) {
+				record_tables = grow_display_info_records_set(
+					&(records[i].connector), "display records"
+				);
+				path_args.bios = &(disp->v1_5->display_path[i]);
+				atui_path = _atui_atom_display_object_path_v3(&path_args);
+				sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
+				ATUI_ADD_BRANCH(atui_disp, atui_path);
+			}
+			break;
+		}
+		default:
+			atui_disp = _atui_atom_common_table_header(&atui_args);
+			break;
+	}
+	return atui_disp;
+}
+
 
 static atui_branch*
 autogen_regblock_register_sequence(
@@ -3025,7 +3151,9 @@ grow_master_datatable_v2_1(
 
 	atui_branch* const atui_ppt = grow_ppt(atree, &(dt21->powerplayinfo));
 
-	//displayobjectinfo
+	 atui_branch* const atui_display = grow_display_info(
+	 	atree, &(dt21->display_object)
+	);
 	//indirectioaccess
 	//umc_info
 	//dce_info
@@ -3047,8 +3175,8 @@ grow_master_datatable_v2_1(
 	atui_branch* const child_branches[] = {
 		atui_utilitypipeline, atui_multimedia_info,
 		atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
-		atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt,
-		// disp obj, indirect, umc, dce,
+		atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt, atui_display,
+		// indirect, umc, dce,
 		atui_vram_info,
 		// integrated, asic
 		atui_voltageobject_info,

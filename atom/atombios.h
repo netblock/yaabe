@@ -4648,19 +4648,20 @@ enum atom_object_record_type_id:uint8_t {
 	ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE = 17,
 	ATOM_ENCODER_CAP_RECORD_TYPE          = 20,
 	ATOM_BRACKET_LAYOUT_RECORD_TYPE       = 21,
-	ATOM_CONNECTOR_FORCED_TMDS_CAP_RECORD_TYPE = 22,
+	ATOM_FORCED_TMDS_CAP_RECORD_TYPE      = 22,
 	ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE  = 23,
 	ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE    = 25,
 	ATOM_RECORD_END_TYPE = 0xFF,
 };
 struct atom_common_record_header {
 	enum  atom_object_record_type_id  record_type;
-	uint8_t  record_size; // The size of the whole record in byte
+	uint8_t  record_size;
 };
 
 
 #define ATOM_I2C_RECORD_TYPE                           1
 #define ATOM_HPD_INT_RECORD_TYPE                       2
+
 #define ATOM_OUTPUT_PROTECTION_RECORD_TYPE             3
 #define ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE          4
 #define ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE       5 // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
@@ -4710,12 +4711,11 @@ struct atom_connector_device_tag {
 	uint16_t DeviceID; // This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
 	uint16_t Padding;
 };
-
 struct atom_connector_device_tag_record {
 	struct atom_common_record_header  header;
 	uint8_t  NumberOfDevice;
 	uint8_t  Reserved;
-	struct atom_connector_device_tag  DeviceTag[]; // This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
+	struct atom_connector_device_tag  DeviceTag[] __counted_by(NumberOfDevice); // This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
 };
 
 
@@ -4822,7 +4822,7 @@ struct atom_object_gpio_cntl_record {
 	struct atom_common_record_header  record_header;
 	uint8_t  flag;           // Future expnadibility
 	uint8_t  number_of_pins; // Number of GPIO pins used to control the object
-	struct atom_gpio_pin_control_pair  gpio[1]; // the real gpio pin pair determined by number of pins ucNumberOfPins
+	struct atom_gpio_pin_control_pair  gpio[] __counted_by(number_of_pins);
 };
 
 struct atom_encoder_dvo_cf_record {
