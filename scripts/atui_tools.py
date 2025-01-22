@@ -266,21 +266,26 @@ def bitfield_to_atui(
 		union_text,
 		text
 	)
+	tail_cap:str = """\
+		],},
+	},],
+},\
+	"""
 	text = re.sub(
 		"\t};\n};",
-		"\t\t\t],\n\t\t},\n\t],\n},",
+		tail_cap,
 		text
 	)
 
 
 	# main leaf
 	bitfield_leaf:str = """\
-\\g<1>	{
-\\g<1>		access: "bios->\\g<3>",
-\\g<1>		name: "\\g<3>",
-\\g<1>		display: "ATUI_BIN",
-\\g<1>		__ATUIDESCR\\g<4>
-\\g<1>		fancy: "ATUI_BITFIELD", fancy_data: [\
+\\g<1>{
+\\g<1>	access: "bios->\\g<3>",
+\\g<1>	name: "\\g<3>",
+\\g<1>	display: "ATUI_BIN",
+\\g<1>	__ATUIDESCR\\g<4>
+\\g<1>	fancy: "ATUI_BITFIELD", fancy_data: { fields: [\
 """
 	text = re.sub(
 		s.tabs + s.c_ints + s.name + ";" + s.comments,
@@ -296,12 +301,11 @@ def bitfield_to_atui(
 
 	# bitfield enries
 	bit_child:str = """\
-\\g<1>		{
-\\g<1>			name: "\\g<4>",
-\\g<1>			hi: \\g<6>, lo: \\g<7>,
-\\g<1>			__ATUIDESCR\\g<8>
-\\g<1>			__ATUIBITENUM\\g<3>
-\\g<1>		},\
+\\g<1>	{
+\\g<1>		name: "\\g<4>",
+\\g<1>		__ATUIDESCR\\g<8>
+\\g<1>		__ATUIBITENUM\\g<3>
+\\g<1>	},\
 """
 	text = re.sub(
 		s.tabs + "(?:" + s.c_enum + s.name + ")?" + s.name + s.space + s.hi_lo
@@ -345,6 +349,11 @@ def bitfield_to_atui(
 	text = re.sub(
 		s.tabs + "},\n" + s.tabs + "{\n",
 		"\\g<1>}, {\n",
+		text
+	)
+	text = re.sub(
+		s.tabs + "leaves: \\[\n" + s.tabs + "{\n",
+		"\\g<1>leaves: [{\n",
 		text
 	)
 

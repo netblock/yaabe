@@ -6,15 +6,16 @@ Also generic functions that would be in a standard.
 #define STANDARD_H
 
 #include <stdint.h>
+#include <ctype.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdbit.h>
 #include <stdio.h>
 #include <string.h>
-#include <gtk/gtk.h>
 #include <assert.h>
-#include <ctype.h>
 #include <setjmp.h>
+#include <gtk/gtk.h>
 
 #ifdef C2X_COMPAT
 typedef uint8_t char8_t;

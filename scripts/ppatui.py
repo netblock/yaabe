@@ -498,8 +498,7 @@ class atui_leaf:
 	fancy:str
 	fancy_data:None #dict, str, list
 	description:dict
-	lo:str # bitfield children
-	hi:str
+	union:str # bitfield type
 
 	def copy(self):
 		return copy.copy(self)
@@ -538,18 +537,14 @@ class atui_leaf:
 			self.description = leaf["description"]
 		else:
 			self.description = None
-		if "lo" in leafkeys:
-			self.lo = leaf["lo"]
-		else:
-			self.lo = None
-		if "hi" in leafkeys:
-			self.hi = leaf["hi"]
-		else:
-			self.hi = None
 		if "enum" in leafkeys:
 			self.enum = leaf["enum"]
 		else:
 			self.enum = None
+		if "union" in leafkeys:
+			self.union = leaf["union"]
+		else:
+			self.union = None
 
 class atui_branch:
 	c_prefix:str
@@ -701,12 +696,10 @@ def infer_leaf_data(
 			leaf.fancy_data = leaf_default.fancy_data
 		if leaf.description is None:
 			leaf.description = leaf_default.description
-		if leaf.lo is None:
-			leaf.lo = leaf_default.lo
-		if leaf.hi is None:
-			leaf.hi = leaf_default.hi
 		if leaf.enum is None:
 			leaf.enum = leaf_default.enum
+		if leaf.union is None:
+			leaf.union = leaf_default.union
 		expand_leaf_type(leaf)
 
 		if leaf.type.disable == atui_type.ATUI_NODISPLAY:
@@ -732,9 +725,13 @@ def infer_leaf_data(
 		match (leaf.type.fancy):
 			case atui_type.ATUI_BITFIELD:
 				fancy_data = copy.copy(leaf.fancy_data)
-				leaf.fancy_data = []
-				for l in fancy_data:
-					 leaf.fancy_data.append(atui_leaf(l))
+				fields:list = []
+				leaf.fancy_data["fields"] = fields
+				l:dict
+				for l in fancy_data["fields"]:
+					 fields.append(atui_leaf(l))
+				if not ("union" in fancy_data):
+					leaf.fancy_data["union"] = "typeof(*bios)"
 
 				old_default:atui_leaf = leaf_defaults["bitchild"]
 				new_default:atui_leaf = old_default.copy()
@@ -743,9 +740,14 @@ def infer_leaf_data(
 				new_default.access_meta = leaf.access_meta # c generics stuff
 				new_default.fancy = "_ATUI_BITCHILD"
 				new_default.parent_is_leaf = True
-				infer_leaf_data(defaults, "bitchild", leaf.fancy_data)
+				new_default.union = leaf.fancy_data["union"]
+				infer_leaf_data(defaults, "bitchild", fields)
 
 				leaf_defaults["bitchild"] = old_default
+			case atui_type._ATUI_BITCHILD:
+				if leaf.name is None:
+					leaf.name = leaf.access
+				leaf.access_meta = leaf_default.access_meta
 			case atui_type.ATUI_ARRAY:
 				leaf.access_meta += "[0]"
 			case atui_type.ATUI_DYNARRAY:
@@ -846,10 +848,10 @@ def leaf_to_subleaf(
 		case atui_type.ATUI_BITFIELD:
 			bounds_vals = (
 				"0", "0", "0",
-				len(leaf.fancy_data),
+				len(leaf.fancy_data["fields"]),
 				"NULL",
-				len(leaf.fancy_data),
-				leaves_to_text(leaf.fancy_data, child_indent+"\t"),
+				len(leaf.fancy_data["fields"]),
+				leaves_to_text(leaf.fancy_data["fields"], child_indent+"\t"),
 			)
 		case _:
 			assert 0, (leaf.name, leaf.type.fancy)
@@ -933,7 +935,7 @@ indent + "{\n"
 	]
 
 	leaf:atui_leaf
-	for leaf in leaves:
+	for leaf in leaves: # infer_leaf_data() may have other text gen
 		if leaf.access:
 			var_access = "&(%s)" % leaf.access
 		else:
@@ -964,15 +966,19 @@ indent + "{\n"
 						".template_leaves = & (struct subleaf_meta const) %s\n"
 				)
 				leaf_text_extra %= (
-					len(leaf.fancy_data),
+					len(leaf.fancy_data["fields"]),
 					leaf_to_subleaf(leaf, child_indent),
 				)
 			case atui_type._ATUI_BITCHILD:
 				leaf_text_extra = (
-					child_indent + ".bitfield_hi = %u,\n"
-					+ child_indent + ".bitfield_lo = %u,\n"
+					child_indent   + ".bitfield_hi = _PPATUI_BIT_HI(%s, %s),\n"
+					+ child_indent + ".bitfield_lo = _PPATUI_BIT_LO(%s, %s),\n"
 				)
-				leaf_text_extra %= (leaf.hi, leaf.lo)
+				leaf_text_extra %= (
+					leaf.union, leaf.access,
+					leaf.union, leaf.access
+				)
+				var_access = "&(%s)" % leaf.access_meta
 			case atui_type.ATUI_SHOOT | atui_type.ATUI_GRAFT: # fallthrough
 				leaf_text_extra = (
 					child_indent + ".branch_bud = _atui_%s,\n"
@@ -1015,15 +1021,19 @@ def leaves_asserts_to_text(
 		indent:str
 		) -> str:
 	# various asserts and static_asserts over the leaves
-	assert_template:str = indent + "assert(%s);\n"
-	static_template:str = indent + "static_assert(%s);\n"
 
-	atui_auto_enum_index_assert:str = static_template % (
-		"ATUI_ENUM_INDEXOF(%s) < ATUI_ENUM_ARRAY_LENGTH",
+	atui_auto_enum_index_assert:str = (
+		"static_assert(ATUI_ENUM_INDEXOF(%s) < ATUI_ENUM_ARRAY_LENGTH);"
+		" // enum not registered\n"
 	)
-	atui_expl_enum_index_assert:str = static_template % (
-		"ATUI_ENUM_INDEX(%s) < ATUI_ENUM_ARRAY_LENGTH",
+	atui_expl_enum_index_assert:str = (
+		"static_assert(ATUI_ENUM_INDEX(%s) < ATUI_ENUM_ARRAY_LENGTH);"
+		" // enum not registered\n"
 	)
+	bitfield_assert:str = """\
+static_assert(sizeof(%s) == sizeof(%s)); // too big
+assert((sizeof(%s)*CHAR_BIT - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out
+"""
 
 	assert_text:str = ""
 	var_meta:str = ""
@@ -1039,8 +1049,14 @@ def leaves_asserts_to_text(
 			else:
 				assert_text += atui_expl_enum_index_assert % leaf.enum
 		match (leaf.type.fancy):
-			case _:
-				pass
+			case atui_type.ATUI_BITFIELD:
+				pass # TODO re enable
+				#higest_field:atui_leaf = leaf.fancy_data["fields"][-1]
+				#assert_text += bitfield_assert % (
+				#	leaf.access, leaf.fancy_data["union"],
+				#	leaf.access, leaf.fancy_data["union"], highest_field.access
+				#)
+
 	return assert_text
 
 

@@ -598,55 +598,40 @@ global_default: {
 	c_prefix: "union", c_type: "atombios_firmware_capability_v1",
 	atomtree: "atomtree_firmware_info",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->FirmwareCapability",
-			name: "FirmwareCapability",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "FirmwarePosted",
-					hi: 0, lo: 0,
-				}, {
-					name: "DualCRTC_Support",
-					hi: 1, lo: 1,
-				}, {
-					name: "ExtendedDesktopSupport",
-					hi: 2, lo: 2,
-				}, {
-					name: "MemoryClockSS_Support",
-					hi: 3, lo: 3,
-				}, {
-					name: "EngineClockSS_Support",
-					hi: 4, lo: 4,
-				}, {
-					name: "GPUControlsBL",
-					hi: 5, lo: 5,
-				}, {
-					name: "WMI_SUPPORT",
-					hi: 6, lo: 6,
-				}, {
-					name: "PPMode_Assigned",
-					hi: 7, lo: 7,
-				}, {
-					name: "HyperMemory_Support",
-					hi: 8, lo: 8,
-				}, {
-					name: "HyperMemory_Size",
-					hi: 12, lo: 9,
-				}, {
-					name: "PostWithoutModeSet",
-					hi: 13, lo: 13,
-				}, {
-					name: "SCL2Redefined",
-					hi: 14, lo: 14,
-				}, {
-					name: "Reserved",
-					hi: 15, lo: 15,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->FirmwareCapability",
+		name: "FirmwareCapability",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "FirmwarePosted",
+			}, {
+				access: "DualCRTC_Support",
+			}, {
+				access: "ExtendedDesktopSupport",
+			}, {
+				access: "MemoryClockSS_Support",
+			}, {
+				access: "EngineClockSS_Support",
+			}, {
+				access: "GPUControlsBL",
+			}, {
+				access: "WMI_SUPPORT",
+			}, {
+				access: "PPMode_Assigned",
+			}, {
+				access: "HyperMemory_Support",
+			}, {
+				access: "HyperMemory_Size",
+			}, {
+				access: "PostWithoutModeSet",
+			}, {
+				access: "SCL2Redefined",
+			}, {
+				access: "Reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_firmware_info_v1_0",
 	atomtree: "atomtree_firmware_info",
@@ -1627,34 +1612,29 @@ global_default: {
 	c_prefix: "union", c_type: "product_branding_v2",
 	atomtree: "atomtree_firmware_info",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->ProductBranding",
-			name: "ProductBranding",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "EMBEDDED_CAP",
-					hi: 1, lo: 0,
-					description: [
-						{language: "english", text: "Embedded feature level",},
-					],
-				}, {
-					name: "Reserved",
-					hi: 3, lo: 2,
-					description: [
-						{language: "english", text: "Reserved",},
-					],
-				}, {
-					name: "BRANDING_ID",
-					hi: 7, lo: 4,
-					description: [
-						{language: "english", text: "Branding ID",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->ProductBranding",
+		name: "ProductBranding",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "EMBEDDED_CAP",
+				description: [
+					{language: "english", text: "Embedded feature level",},
+				],
+			}, {
+				access: "Reserved",
+				description: [
+					{language: "english", text: "Reserved",},
+				],
+			}, {
+				access: "BRANDING_ID",
+				description: [
+					{language: "english", text: "Branding ID",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_firmware_info_v2_2",
 	atomtree: "atomtree_firmware_info",
@@ -1887,82 +1867,65 @@ global_default: {
 {
 	c_prefix: "union", c_type: "memory_vendor_id",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->memory_vendor_id",
-			name: "memory_vendor_id",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "vendor_code",
-					display: "ATUI_HEX",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "GDDR vendor ID",},
-					],
-				}, {
-					name: "revision",
-					display: "ATUI_HEX",
-					hi: 7, lo: 4,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->memory_vendor_id",
+		name: "memory_vendor_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "vendor_code",
+				display: "ATUI_HEX",
+				description: [
+					{language: "english", text: "GDDR vendor ID",},
+				],
+			}, {
+				access: "revision",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 },
 
 
 {
 	c_prefix: "union", c_type: "atom_dtd_format_modemiscinfo",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->miscinfo",
-			name: "miscinfo",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "HORIZONTAL_CUTOFF",
-					hi: 0, lo: 0,
-				}, {
-					name: "HSYNC_POLARITY",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "0=Active High, 1=Active Low",},
-					],
-				}, {
-					name: "VSYNC_POLARITY",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "0=Active High, 1=Active Low",},
-					],
-				}, {
-					name: "VERTICAL_CUTOFF",
-					hi: 3, lo: 3,
-				}, {
-					name: "H_REPLICATIONBY2",
-					hi: 4, lo: 4,
-				}, {
-					name: "V_REPLICATIONBY2",
-					hi: 5, lo: 5,
-				}, {
-					name: "COMPOSITESYNC",
-					hi: 6, lo: 6,
-				}, {
-					name: "INTERLACE",
-					hi: 7, lo: 7,
-				}, {
-					name: "DOUBLECLOCK",
-					hi: 8, lo: 8,
-				}, {
-					name: "RGB888",
-					hi: 9, lo: 9,
-				}, {
-					name: "reserved",
-					hi: 15, lo: 10,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->miscinfo",
+		name: "miscinfo",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "HORIZONTAL_CUTOFF",
+			}, {
+				access: "HSYNC_POLARITY",
+				description: [
+					{language: "english", text: "0=Active High, 1=Active Low",},
+				],
+			}, {
+				access: "VSYNC_POLARITY",
+				description: [
+					{language: "english", text: "0=Active High, 1=Active Low",},
+				],
+			}, {
+				access: "VERTICAL_CUTOFF",
+			}, {
+				access: "H_REPLICATIONBY2",
+			}, {
+				access: "V_REPLICATIONBY2",
+			}, {
+				access: "COMPOSITESYNC",
+			}, {
+				access: "INTERLACE",
+			}, {
+				access: "DOUBLECLOCK",
+			}, {
+				access: "RGB888",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_mode_timing",
 	table_size: "sizeof(*bios)",
@@ -2087,43 +2050,33 @@ global_default: {
 	description: [
 		{language: "english", text: "Refer to panel info table in ATOMBIOS extension Spec.",},
 	],
-	leaves: [
-		{
-			access: "bios->supported_refresh_rate",
-			name: "supported_refresh_rate",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "rsvd_1",
-					hi: 1, lo: 1,
-					display: "ATUI_HEX",
-				}, {
-					name: "rsvd_2",
-					hi: 1, lo: 1,
-					display: "ATUI_HEX",
-				}, {
-					name: "_30Hz",
-					hi: 2, lo: 2,
-				}, {
-					name: "_40Hz",
-					hi: 3, lo: 3,
-				}, {
-					name: "_50Hz",
-					hi: 4, lo: 4,
-				}, {
-					name: "_60Hz",
-					hi: 5, lo: 5,
-				}, {
-					name: "_48Hz",
-					hi: 6, lo: 6,
-				}, {
-					name: "rsvd_7",
-					hi: 7, lo: 7,
-					display: "ATUI_HEX",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->supported_refresh_rate",
+		name: "supported_refresh_rate",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_1",
+				display: "ATUI_HEX",
+			}, {
+				access: "rsvd_2",
+				display: "ATUI_HEX",
+			}, {
+				access: "_30Hz",
+			}, {
+				access: "_40Hz",
+			}, {
+				access: "_50Hz",
+			}, {
+				access: "_60Hz",
+			}, {
+				access: "_48Hz",
+			}, {
+				access: "rsvd_7",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_lvds_refresh_rate_support",
 	table_size: "sizeof(*bios)",
@@ -2145,56 +2098,47 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "lvds_misc",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->lvds_misc",
-			name: "lvds_misc",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "dual_link",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "0 = single; 1 = dual",},
-					],
-				}, {
-					name: "RGB888",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "0 = 666; 1 = 888",},
-					],
-				}, {
-					name: "grey_level",
-					hi: 3, lo: 2,
-				}, {
-					name: "FPDI",
-					hi: 4, lo: 4,
-					description: [
-						{language: "english", text: "for RGB888; 0 = LDI; 1 = FPDI",},
-					],
-				}, {
-					name: "spatial_dither",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "0=disabled",},
-					],
-				}, {
-					name: "temporal_dither",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "0=disabled",},
-					],
-				}, {
-					name: "rsvd_7",
-					hi: 7, lo: 7,
-					display: "ATUI_HEX",
-					description: [
-						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->lvds_misc",
+		name: "lvds_misc",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "dual_link",
+				description: [
+					{language: "english", text: "0 = single; 1 = dual",},
+				],
+			}, {
+				access: "RGB888",
+				description: [
+					{language: "english", text: "0 = 666; 1 = 888",},
+				],
+			}, {
+				access: "grey_level",
+			}, {
+				access: "FPDI",
+				description: [
+					{language: "english", text: "for RGB888; 0 = LDI; 1 = FPDI",},
+				],
+			}, {
+				access: "spatial_dither",
+				description: [
+					{language: "english", text: "0=disabled",},
+				],
+			}, {
+				access: "temporal_dither",
+				description: [
+					{language: "english", text: "0=disabled",},
+				],
+			}, {
+				access: "rsvd_7",
+				display: "ATUI_HEX",
+				description: [
+					{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_lvds_info_v1_1",
 	leaves: [
@@ -2248,46 +2192,39 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "lcd_panel_special_handling_cap",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->lcd_panel_special_handling_cap",
-			name: "lcd_panel_special_handling_cap",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "read_edid",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "1=DAL reads EDID instead of atom_dtd_format",},
-					],
-				}, {
-					name: "drr_supported",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "1=dynamic refresh rate",},
-					],
-				}, {
-					name: "is_edp",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "0=LVDS 1=eDP",},
-					],
-				}, {
-					name: "color_depth",
-					hi: 6, lo: 4,
-					description: [
-						{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
-					],
-				}, {
-					name: "random_dither",
-					hi: 7, lo: 7,
-					description: [
-						{language: "english", text: "0=disabled",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->lcd_panel_special_handling_cap",
+		name: "lcd_panel_special_handling_cap",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "read_edid",
+				description: [
+					{language: "english", text: "1=DAL reads EDID instead of atom_dtd_format",},
+				],
+			}, {
+				access: "drr_supported",
+				description: [
+					{language: "english", text: "1=dynamic refresh rate",},
+				],
+			}, {
+				access: "is_edp",
+				description: [
+					{language: "english", text: "0=LVDS 1=eDP",},
+				],
+			}, {
+				access: "color_depth",
+				description: [
+					{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
+				],
+			}, {
+				access: "random_dither",
+				description: [
+					{language: "english", text: "0=disabled",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_lvds_info_v1_2",
 	leaves: [
@@ -2375,44 +2312,37 @@ global_default: {
 {
 	c_prefix: "union", c_type: "lcd_misc",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->lcd_misc",
-			name: "lcd_misc",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "dual_link",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "0 = single; 1 = dual",},
-					],
-				}, {
-					name: "FPDI",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "0 = LDI; 1 = FPDI",},
-					],
-				}, {
-					name: "grey_level",
-					hi: 3, lo: 2,
-				}, {
-					name: "color_depth",
-					hi: 6, lo: 4,
-					description: [
-						{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
-					],
-				}, {
-					name: "rsvd_7",
-					hi: 7, lo: 7,
-					display: "ATUI_HEX",
-					description: [
-						{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->lcd_misc",
+		name: "lcd_misc",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "dual_link",
+				description: [
+					{language: "english", text: "0 = single; 1 = dual",},
+				],
+			}, {
+				access: "FPDI",
+				description: [
+					{language: "english", text: "0 = LDI; 1 = FPDI",},
+				],
+			}, {
+				access: "grey_level",
+			}, {
+				access: "color_depth",
+				description: [
+					{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},
+				],
+			}, {
+				access: "rsvd_7",
+				display: "ATUI_HEX",
+				description: [
+					{language: "english", text: "ATOM_PANEL_MISC_API_ENABLED",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_lcd_info_v1_3",
 	leaves: [
@@ -2579,28 +2509,22 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "lcd_mode_cap",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->LCDCap",
-			name: "LCDCap",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "BL_off",
-					hi: 0, lo: 0,
-				}, {
-					name: "CRTC_off",
-					hi: 1, lo: 1,
-				}, {
-					name: "panel_off",
-					hi: 2, lo: 2,
-				}, {
-					name: "reserved",
-					hi: 15, lo: 3,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->LCDCap",
+		name: "LCDCap",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "BL_off",
+			}, {
+				access: "CRTC_off",
+			}, {
+				access: "panel_off",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_lcd_mode_control_cap",
 	atomtree: "atomtree_lcd_record",
@@ -2673,40 +2597,30 @@ global_default: {
 {
 	c_prefix: "union", c_type: "TV_SuppportedStandard",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->supported",
-			name: "supported",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "NTSC",
-					hi: 0, lo: 0,
-				}, {
-					name: "NTSCJ",
-					hi: 1, lo: 1,
-				}, {
-					name: "PAL",
-					hi: 2, lo: 2,
-				}, {
-					name: "PALM",
-					hi: 3, lo: 3,
-				}, {
-					name: "PALCN",
-					hi: 4, lo: 4,
-				}, {
-					name: "PALN",
-					hi: 5, lo: 5,
-				}, {
-					name: "PAL60",
-					hi: 6, lo: 6,
-				}, {
-					name: "SECAM",
-					hi: 7, lo: 7,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->supported",
+		name: "supported",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "NTSC",
+			}, {
+				access: "NTSCJ",
+			}, {
+				access: "PAL",
+			}, {
+				access: "PALM",
+			}, {
+				access: "PALCN",
+			}, {
+				access: "PALN",
+			}, {
+				access: "PAL60",
+			}, {
+				access: "SECAM",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_analog_tv_info_v1_1",
 	leaves: [
@@ -3217,34 +3131,26 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "loadline_psi0",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->loadline_psi0",
-			name: "loadline_psi0",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "offset_trim",
-					hi: 1, lo: 0,
-				}, {
-					name: "loadline_slope",
-					hi: 4, lo: 2,
-				}, {
-					name: "PSI1",
-					hi: 5, lo: 5,
-				}, {
-					name: "PSI0_enable",
-					hi: 6, lo: 6,
-				}, {
-					name: "PSI0_VID",
-					hi: 14, lo: 7,
-				}, {
-					name: "reserved",
-					hi: 15, lo: 15,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->loadline_psi0",
+		name: "loadline_psi0",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "offset_trim",
+			}, {
+				access: "loadline_slope",
+			}, {
+				access: "PSI1",
+			}, {
+				access: "PSI0_enable",
+			}, {
+				access: "PSI0_VID",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 },
 
 
@@ -3724,158 +3630,129 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "vram_module_channel_config",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->ChannelConfig",
-			name: "ChannelConfig",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "channel_combo",
-					hi: 3, lo: 0,
-				}, {
-					name: "channel_width",
-					hi: 7, lo: 4,
-					description: [
-						{language: "english", text: "in number of 2",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->ChannelConfig",
+		name: "ChannelConfig",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "channel_combo",
+			}, {
+				access: "channel_width",
+				description: [
+					{language: "english", text: "in number of 2",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "npl_rtdelay",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->NPL_RT",
-			name: "NPL_RT",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "board dependent parameter:NPL round trip delay, used for calculate memory timing parameters",},
-			],
-			fancy_data: [
-				{
-					name: "npl_round_trip",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2.",},
-					],
-				}, {
-					name: "reserved",
-					hi: 5, lo: 4,
-				}, {
-					name: "battery_odt_mask",
-					hi: 7, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->NPL_RT",
+		name: "NPL_RT",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "board dependent parameter:NPL round trip delay, used for calculate memory timing parameters",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "npl_round_trip",
+				description: [
+					{language: "english", text: "MC_SEQ_CAS_TIMING [28:24]:TCL=CL+NPL_RT-2). Always 2.",},
+				],
+			}, {
+				access: "reserved",
+			}, {
+				access: "battery_odt_mask",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "mem_preamble",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->Preamble",
-			name: "Preamble",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "read",
-					hi: 3, lo: 0,
-				}, {
-					name: "write",
-					hi: 7, lo: 4,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->Preamble",
+		name: "Preamble",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "read",
+			}, {
+				access: "write",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "vrammodule_misc",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->Misc",
-			name: "Misc",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "dual_rank",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "0=single rank; 1=dual",},
-					],
-				}, {
-					name: "Burstlength_8",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "0=BL4; 1=BL8",},
-					],
-				}, {
-					name: "reserved1",
-					hi: 4, lo: 2,
-				}, {
-					name: "dual_cs",
-					hi: 5, lo: 5,
-				}, {
-					name: "reserved2",
-					hi: 7, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->Misc",
+		name: "Misc",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "dual_rank",
+				description: [
+					{language: "english", text: "0=single rank; 1=dual",},
+				],
+			}, {
+				access: "Burstlength_8",
+				description: [
+					{language: "english", text: "0=BL4; 1=BL8",},
+				],
+			}, {
+				access: "reserved1",
+			}, {
+				access: "dual_cs",
+			}, {
+				access: "reserved2",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "cdr_bandwidth",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->CDR_Bandwidth",
-			name: "CDR_Bandwidth",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "clock and data recovery?",},
-			],
-			fancy_data: [
-				{
-					name: "read_bandwidth",
-					hi: 3, lo: 0,
-				}, {
-					name: "write_bandwidth",
-					hi: 7, lo: 4,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->CDR_Bandwidth",
+		name: "CDR_Bandwidth",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "clock and data recovery?",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "read_bandwidth",
+			}, {
+				access: "write_bandwidth",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "bank_col_counts",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->BankCol",
-			name: "BankCol",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "num_columns",
-					hi: 1, lo: 0,
-					description: [
-						{language: "english", text: "encoded; actual = 8+n bits",},
-					],
-				}, {
-					name: "num_banks",
-					hi: 3, lo: 2,
-					description: [
-						{language: "english", text: "encoded; actual = 2**(n+2) banks",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 4,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->BankCol",
+		name: "BankCol",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "num_columns",
+				description: [
+					{language: "english", text: "encoded; actual = 8+n bits",},
+				],
+			}, {
+				access: "num_banks",
+				description: [
+					{language: "english", text: "encoded; actual = 2**(n+2) banks",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_atom_dram_data_remap",
 	table_size: "sizeof(*bios)",
@@ -5500,171 +5377,127 @@ global_default: {
 {
 	c_prefix: "union", c_type: "atom_powerplay_misc_info",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->MiscInfo",
-			name: "MiscInfo",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "using_mclk_src",
-					hi: 0, lo: 0,
-				}, {
-					name: "using_sclk_src",
-					hi: 1, lo: 1,
-				}, {
-					name: "voltage_drop_support",
-					hi: 2, lo: 2,
-				}, {
-					name: "voltage_drop_active_high",
-					hi: 3, lo: 3,
-				}, {
-					name: "load_performance_en",
-					hi: 4, lo: 4,
-				}, {
-					name: "engine_clock_contrl_en",
-					hi: 5, lo: 5,
-				}, {
-					name: "memory_clock_contrl_en",
-					hi: 6, lo: 6,
-				}, {
-					name: "program_voltage",
-					hi: 7, lo: 7,
-					description: [
-						{language: "english", text: "When this bit set, ucVoltageDropIndex is not an index for GPIO pin, but a voltage ID that SW needs program",},
-					],
-				}, {
-					name: "asic_reduced_speed_sclk_en",
-					hi: 8, lo: 8,
-				}, {
-					name: "asic_dynamic_voltage_en",
-					hi: 9, lo: 9,
-				}, {
-					name: "asic_sleep_mode_en",
-					hi: 10, lo: 10,
-				}, {
-					name: "load_balance_en",
-					hi: 11, lo: 11,
-				}, {
-					name: "default_dc_state_entry_true",
-					hi: 12, lo: 12,
-				}, {
-					name: "default_low_dc_state_entry_true",
-					hi: 13, lo: 13,
-				}, {
-					name: "low_lcd_refresh_rate",
-					hi: 14, lo: 14,
-				}, {
-					name: "driver_default_mode",
-					hi: 15, lo: 15,
-				}, {
-					name: "over_clock_mode",
-					hi: 16, lo: 16,
-				}, {
-					name: "over_drive_mode",
-					hi: 17, lo: 17,
-				}, {
-					name: "power_saving_mode",
-					hi: 18, lo: 18,
-				}, {
-					name: "thermal_diode_mode",
-					hi: 19, lo: 19,
-				}, {
-					name: "frame_modulation_mask",
-					hi: 21, lo: 20,
-					description: [
-						{language: "english", text: "0-FM Disable, 1:2-level FM, 2:4-level FM, 3:Reserved",},
-					],
-				}, {
-					name: "dyn_clk_3d_idle",
-					hi: 22, lo: 22,
-				}, {
-					name: "dynamic_clock_divider_by_2",
-					hi: 23, lo: 23,
-				}, {
-					name: "dynamic_clock_divider_by_4",
-					hi: 24, lo: 24,
-				}, {
-					name: "dynamic_hdp_block_en",
-					hi: 25, lo: 25,
-					description: [
-						{language: "english", text: "When set, Dynamic",},
-					],
-				}, {
-					name: "dynamic_mc_host_block_en",
-					hi: 26, lo: 26,
-					description: [
-						{language: "english", text: "When set, Dynamic",},
-					],
-				}, {
-					name: "enable_3D_acceleration",
-					hi: 27, lo: 27,
-					description: [
-						{language: "english", text: "When set, This mode is for acceleated 3D mode",},
-					],
-				}, {
-					name: "powerplay_settings_group_mask",
-					hi: 30, lo: 28,
-					description: [
-						{language: "english", text: "1-Optimal Battery Life Group, 2-High Battery, 3-Balanced, 4-High Performance, 5- Optimal Performance (Default state with Default clocks)",},
-					],
-				}, {
-					name: "enable_back_bias",
-					hi: 31, lo: 31,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->MiscInfo",
+		name: "MiscInfo",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "using_mclk_src",
+			}, {
+				access: "using_sclk_src",
+			}, {
+				access: "voltage_drop_support",
+			}, {
+				access: "voltage_drop_active_high",
+			}, {
+				access: "load_performance_en",
+			}, {
+				access: "engine_clock_contrl_en",
+			}, {
+				access: "memory_clock_contrl_en",
+			}, {
+				access: "program_voltage",
+				description: [
+					{language: "english", text: "When this bit set, ucVoltageDropIndex is not an index for GPIO pin, but a voltage ID that SW needs program",},
+				],
+			}, {
+				access: "asic_reduced_speed_sclk_en",
+			}, {
+				access: "asic_dynamic_voltage_en",
+			}, {
+				access: "asic_sleep_mode_en",
+			}, {
+				access: "load_balance_en",
+			}, {
+				access: "default_dc_state_entry_true",
+			}, {
+				access: "default_low_dc_state_entry_true",
+			}, {
+				access: "low_lcd_refresh_rate",
+			}, {
+				access: "driver_default_mode",
+			}, {
+				access: "over_clock_mode",
+			}, {
+				access: "over_drive_mode",
+			}, {
+				access: "power_saving_mode",
+			}, {
+				access: "thermal_diode_mode",
+			}, {
+				access: "frame_modulation_mask",
+				description: [
+					{language: "english", text: "0-FM Disable, 1:2-level FM, 2:4-level FM, 3:Reserved",},
+				],
+			}, {
+				access: "dyn_clk_3d_idle",
+			}, {
+				access: "dynamic_clock_divider_by_2",
+			}, {
+				access: "dynamic_clock_divider_by_4",
+			}, {
+				access: "dynamic_hdp_block_en",
+				description: [
+					{language: "english", text: "When set, Dynamic",},
+				],
+			}, {
+				access: "dynamic_mc_host_block_en",
+				description: [
+					{language: "english", text: "When set, Dynamic",},
+				],
+			}, {
+				access: "enable_3D_acceleration",
+				description: [
+					{language: "english", text: "When set, This mode is for acceleated 3D mode",},
+				],
+			}, {
+				access: "powerplay_settings_group_mask",
+				description: [
+					{language: "english", text: "1-Optimal Battery Life Group, 2-High Battery, 3-Balanced, 4-High Performance, 5- Optimal Performance (Default state with Default clocks)",},
+				],
+			}, {
+				access: "enable_back_bias",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_powerplay_misc_info2",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->MiscInfo2",
-			name: "MiscInfo2",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "system_ac_lite_mode",
-					hi: 0, lo: 0,
-				}, {
-					name: "multi_display_support",
-					hi: 1, lo: 1,
-				}, {
-					name: "dynamic_back_bias_en",
-					hi: 2, lo: 2,
-				}, {
-					name: "fs3d_overdrive_info",
-					hi: 3, lo: 3,
-				}, {
-					name: "forcedlowpwr_mode",
-					hi: 4, lo: 4,
-				}, {
-					name: "vddci_dynamic_voltage_en",
-					hi: 5, lo: 5,
-				}, {
-					name: "video_playback_capable",
-					hi: 6, lo: 6,
-					description: [
-						{language: "english", text: "If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption. If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback",},
-					],
-				}, {
-					name: "not_valid_on_dc",
-					hi: 7, lo: 7,
-				}, {
-					name: "stutter_mode_en",
-					hi: 8, lo: 8,
-				}, {
-					name: "uvd_support_mode",
-					hi: 9, lo: 9,
-				}, {
-					name: "rsvd0",
-					display: "ATUI_HEX",
-					hi: 31, lo: 10,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->MiscInfo2",
+		name: "MiscInfo2",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "system_ac_lite_mode",
+			}, {
+				access: "multi_display_support",
+			}, {
+				access: "dynamic_back_bias_en",
+			}, {
+				access: "fs3d_overdrive_info",
+			}, {
+				access: "forcedlowpwr_mode",
+			}, {
+				access: "vddci_dynamic_voltage_en",
+			}, {
+				access: "video_playback_capable",
+				description: [
+					{language: "english", text: "If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption. If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback",},
+				],
+			}, {
+				access: "not_valid_on_dc",
+			}, {
+				access: "stutter_mode_en",
+			}, {
+				access: "uvd_support_mode",
+			}, {
+				access: "rsvd0",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_powermode_info",
 	table_size: "sizeof(*bios)",
@@ -5807,25 +5640,20 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "overdrive_intbitmap",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->OverdriveIntBitmap",
-			name: "OverdriveIntBitmap",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "auxwin",
-					hi: 0, lo: 0,
-				}, {
-					name: "overdrive",
-					hi: 1, lo: 1,
-				}, {
-					name: "rsvd_7_2",
-					hi: 7, lo: 2,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->OverdriveIntBitmap",
+		name: "OverdriveIntBitmap",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "auxwin",
+			}, {
+				access: "overdrive",
+			}, {
+				access: "rsvd_7_2",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_powerplay_info_v1",
 	atomtree: "atomtree_powerplay_table",

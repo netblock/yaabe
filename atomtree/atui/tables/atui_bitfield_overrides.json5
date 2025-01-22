@@ -26,1363 +26,1041 @@ global_default: {
 
 {
 	c_type: "DRAMTiming1",
-	leaves: [
-		{
-			access: "bios->DRAMTiming1",
-			name: "DRAMTiming1",
-			fancy_data: [
-				{
-					name: "tCL",
-					hi: 5, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 6,
-				}, {
-					name: "tRAS",
-					hi: 14, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 15,
-				}, {
-					name: "tRCDRD",
-					hi: 21, lo: 16,
-				}, {
-					name: "rsvd2",
-					hi: 23, lo: 22,
-				}, {
-					name: "tRCDWR",
-					hi: 29, lo: 24,
-				}, {
-					name: "rsvd3",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming1",
+		name: "DRAMTiming1",
+		fancy_data: { fields: [
+			{
+				access: "tCL",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tRAS",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tRCDRD",
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tRCDWR",
+			}, {
+				access: "rsvd3",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming2",
-			name: "DRAMTiming2",
-			fancy_data: [
-				{
-					name: "tRC_S",
-					hi: 7, lo: 0,
-					description: [
-						{language: "english", text: "per-bank",},
-					],
-				}, {
-					name: "tRC_L",
-					hi: 15, lo: 8,
-					description: [
-						{language: "english", text: "all-bank?",},
-					],
-				}, {
-					name: "tRP_S",
-					hi: 21, lo: 16,
-				}, {
-					name: "rsvd0",
-					hi: 23, lo: 22,
-				}, {
-					name: "tRP_L",
-					hi: 29, lo: 24,
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming2",
+		name: "DRAMTiming2",
+		fancy_data: { fields: [
+			{
+				access: "tRC_S",
+				description: [
+					{language: "english", text: "per-bank",},
+				],
+			}, {
+				access: "tRC_L",
+				description: [
+					{language: "english", text: "all-bank?",},
+				],
+			}, {
+				access: "tRP_S",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tRP_L",
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming3",
-	leaves: [
-		{
-			access: "bios->DRAMTiming3",
-			name: "DRAMTiming3",
-			fancy_data: [
-				{
-					name: "tRRD_S",
-					hi: 4, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 5,
-				}, {
-					name: "tRRD_L",
-					hi: 12, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 23, lo: 13,
-					description: [
-						{language: "english", text: "3+5+3, middle 5 has tRRDDLR for 3D stacked memory.",},
-					],
-				}, {
-					name: "tRTP",
-					hi: 28, lo: 24,
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 29,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming3",
+		name: "DRAMTiming3",
+		fancy_data: { fields: [
+			{
+				access: "tRRD_S",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tRRD_L",
+			}, {
+				access: "rsvd1",
+				description: [
+					{language: "english", text: "3+5+3, middle 5 has tRRDDLR for 3D stacked memory.",},
+				],
+			}, {
+				access: "tRTP",
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming4",
-	leaves: [
-		{
-			access: "bios->DRAMTiming4",
-			name: "DRAMTiming4",
-			fancy_data: [
-				{
-					name: "tFAW",
-					hi: 6, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 7,
-				}, {
-					name: "t32AW",
-					hi: 16, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 17,
-					description: [
-						{language: "english", text: "1, tFAWSLR:6, 1, tFAWDLR:6, 1",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming4",
+		name: "DRAMTiming4",
+		fancy_data: { fields: [
+			{
+				access: "tFAW",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "t32AW",
+			}, {
+				access: "rsvd1",
+				description: [
+					{language: "english", text: "1, tFAWSLR:6, 1, tFAWDLR:6, 1",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming5",
-	leaves: [
-		{
-			access: "bios->DRAMTiming5",
-			name: "DRAMTiming5",
-			fancy_data: [
-				{
-					name: "tWL",
-					hi: 5, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 6,
-				}, {
-					name: "tWTRS",
-					hi: 12, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 13,
-				}, {
-					name: "tWTRL",
-					hi: 22, lo: 16,
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 23,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming5",
+		name: "DRAMTiming5",
+		fancy_data: { fields: [
+			{
+				access: "tWL",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tWTRS",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tWTRL",
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming6",
-	leaves: [
-		{
-			access: "bios->DRAMTiming6",
-			name: "DRAMTiming6",
-			fancy_data: [
-				{
-					name: "tWR",
-					hi: 6, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 7,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming6",
+		name: "DRAMTiming6",
+		fancy_data: { fields: [
+			{
+				access: "tWR",
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming7",
-	leaves: [
-		{
-			access: "bios->DRAMTiming7",
-			name: "DRAMTiming7",
-			fancy_data: [
-				{
-					name: "PPD",
-					hi: 2, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 3, lo: 3,
-				}, {
-					name: "tCRCRL",
-					hi: 6, lo: 4,
-				}, {
-					name: "rsvd1",
-					hi: 7, lo: 7,
-				}, {
-					name: "tRREFD",
-					hi: 13, lo: 8,
-				}, {
-					name: "rsvd2",
-					hi: 14, lo: 14,
-				}, {
-					name: "tCRCWL",
-					hi: 19, lo: 15,
-				}, {
-					name: "tRCPAGE",
-					hi: 31, lo: 20,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming7",
+		name: "DRAMTiming7",
+		fancy_data: { fields: [
+			{
+				access: "PPD",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tCRCRL",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tRREFD",
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tCRCWL",
+			}, {
+				access: "tRCPAGE",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming8",
-	leaves: [
-		{
-			access: "bios->DRAMTiming8",
-			name: "DRAMTiming8",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "Specifies the minimum number of cycles from the last clock of virtual CAS of the first burst operation to the clock in which CAS is asserted for a following bust operation. A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle.",},
-			],
-			fancy_data: [
-				{
-					name: "tRDRD_DD",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "Different DIMM",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 4,
-				}, {
-					name: "tRDRD_SD",
-					hi: 11, lo: 8,
-					description: [
-						{language: "english", text: "Same DIMM",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 12,
-				}, {
-					name: "tRDRD_SC",
-					hi: 19, lo: 16,
-					description: [
-						{language: "english", text: "JEDEC tCCD_S",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 23, lo: 20,
-				}, {
-					name: "tRDRD_SCL",
-					hi: 27, lo: 24,
-					description: [
-						{language: "english", text: "tCCD_L",},
-					],
-				}, {
-					name: "rsvd3",
-					hi: 29, lo: 28,
-				}, {
-					name: "tRDRD_BAN",
-					hi: 31, lo: 30,
-					description: [
-						{language: "english", text: "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming8",
+		name: "DRAMTiming8",
+		description: [
+			{language: "english", text: "Specifies the minimum number of cycles from the last clock of virtual CAS of the first burst operation to the clock in which CAS is asserted for a following bust operation. A value of 1 means 0 idle clock cycles between two bursts; 2 = 1 idle cycle.",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "tRDRD_DD",
+				description: [
+					{language: "english", text: "Different DIMM",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tRDRD_SD",
+				description: [
+					{language: "english", text: "Same DIMM",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tRDRD_SC",
+				description: [
+					{language: "english", text: "JEDEC tCCD_S",},
+				],
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tRDRD_SCL",
+				description: [
+					{language: "english", text: "tCCD_L",},
+				],
+			}, {
+				access: "rsvd3",
+			}, {
+				access: "tRDRD_BAN",
+				description: [
+					{language: "english", text: "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming9_HBM2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming9",
-			name: "DRAMTiming9",
-			fancy_data: [
-				{
-					name: "tWRWR_DD",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "Different DIMM",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 4,
-				}, {
-					name: "tWRWR_SD",
-					hi: 11, lo: 8,
-					description: [
-						{language: "english", text: "Same DIMM",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 12,
-				}, {
-					name: "tWRWR_SC",
-					hi: 19, lo: 16,
-					description: [
-						{language: "english", text: "JEDEC tCCD_S",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 23, lo: 20,
-				}, {
-					name: "tWRWR_SCL",
-					hi: 27, lo: 24,
-					description: [
-						{language: "english", text: "tCCD_L",},
-					],
-				}, {
-					name: "rsvd3",
-					hi: 29, lo: 28,
-				}, {
-					name: "tWRWR_BAN",
-					hi: 31, lo: 30,
-					description: [
-						{language: "english", text: "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming9",
+		name: "DRAMTiming9",
+		fancy_data: { fields: [
+			{
+				access: "tWRWR_DD",
+				description: [
+					{language: "english", text: "Different DIMM",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tWRWR_SD",
+				description: [
+					{language: "english", text: "Same DIMM",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tWRWR_SC",
+				description: [
+					{language: "english", text: "JEDEC tCCD_S",},
+				],
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tWRWR_SCL",
+				description: [
+					{language: "english", text: "tCCD_L",},
+				],
+			}, {
+				access: "rsvd3",
+			}, {
+				access: "tWRWR_BAN",
+				description: [
+					{language: "english", text: "Preamble2t ?1:0. Ban traffic:1=tCCD=5;2=tCCD=5,6",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming9",
-	leaves: [
-		{
-			access: "bios->DRAMTiming9",
-			name: "DRAMTiming9",
-			fancy_data: [
-				{
-					name: "tWRWR_MW",
-					hi: 4, lo: 0,
-					description: [
-						{language: "english", text: "masked write; GDDR",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 5,
-				}, {
-					name: "tWRWR_SC",
-					hi: 19, lo: 16,
-				}, {
-					name: "rsvd1",
-					hi: 23, lo: 20,
-				}, {
-					name: "tWRWR_SCL",
-					hi: 29, lo: 24,
-				}, {
-					name: "tWRWR_BAN",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming9",
+		name: "DRAMTiming9",
+		fancy_data: { fields: [
+			{
+				access: "tWRWR_MW",
+				description: [
+					{language: "english", text: "masked write; GDDR",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tWRWR_SC",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tWRWR_SCL",
+			}, {
+				access: "tWRWR_BAN",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming10",
-	leaves: [
-		{
-			access: "bios->DRAMTiming10",
-			name: "DRAMTiming10",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "tWRRD and tRDWR also follows the 'last clock of virtual CAS'. LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD. LD is about making sure one burst happens after the other. And x and y follow the 'last clock of virtual CAS' and are about making sure the data bus is stable.",},
-			],
-			fancy_data: [
-				{
-					name: "tWRRD",
-					hi: 3, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 4,
-				}, {
-					name: "tRDWR",
-					hi: 13, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 14,
-				}, {
-					name: "RDRspDelay",
-					hi: 21, lo: 16,
-				}, {
-					name: "tREFTTAdj",
-					hi: 28, lo: 22,
-					description: [
-						{language: "english", text: "was tREFTT; a typo? tREFTR is a GDDR6 timing",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 29,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming10",
+		name: "DRAMTiming10",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "tWRRD and tRDWR also follows the 'last clock of virtual CAS'. LD = tCL - tCWL ; tWRRD has x-LD and tRDWR has y+LD. LD is about making sure one burst happens after the other. And x and y follow the 'last clock of virtual CAS' and are about making sure the data bus is stable.",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "tWRRD",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tRDWR",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "RDRspDelay",
+			}, {
+				access: "tREFTTAdj",
+				description: [
+					{language: "english", text: "was tREFTT; a typo? tREFTR is a GDDR6 timing",},
+				],
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming12",
-	leaves: [
-		{
-			access: "bios->DRAMTiming12",
-			name: "DRAMTiming12",
-			fancy_data: [
-				{
-					name: "tREFI",
-					hi: 15, lo: 0,
-					description: [
-						{language: "english", text: "tREFI is milliseconds; tREF is microseconds",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 16,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming12",
+		name: "DRAMTiming12",
+		fancy_data: { fields: [
+			{
+				access: "tREFI",
+				description: [
+					{language: "english", text: "tREFI is milliseconds; tREF is microseconds",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming13",
-	leaves: [
-		{
-			access: "bios->DRAMTiming13",
-			name: "DRAMTiming13",
-			fancy_data: [
-				{
-					name: "tMRD",
-					hi: 5, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 6,
-				}, {
-					name: "tMOD",
-					hi: 13, lo: 8,
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 14,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming13",
+		name: "DRAMTiming13",
+		fancy_data: { fields: [
+			{
+				access: "tMRD",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tMOD",
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming14_HBM2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming14",
-			name: "DRAMTiming14",
-			fancy_data: [
-				{
-					name: "tXS",
-					hi: 10, lo: 0,
-					description: [
-						{language: "english", text: "exit self refreh to not requiring a locked DLL",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 11,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming14",
+		name: "DRAMTiming14",
+		fancy_data: { fields: [
+			{
+				access: "tXS",
+				description: [
+					{language: "english", text: "exit self refreh to not requiring a locked DLL",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming14",
-	leaves: [
-		{
-			access: "bios->DRAMTiming14",
-			name: "DRAMTiming14",
-			fancy_data: [
-				{
-					name: "tXS",
-					hi: 10, lo: 0,
-					description: [
-						{language: "english", text: "exit self refreh to not requiring a locked DLL",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 11,
-				}, {
-					name: "tDLLK",
-					hi: 26, lo: 16,
-					description: [
-						{language: "english", text: "exit self refresh to requiring a locked DLL",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 27,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming14",
+		name: "DRAMTiming14",
+		fancy_data: { fields: [
+			{
+				access: "tXS",
+				description: [
+					{language: "english", text: "exit self refreh to not requiring a locked DLL",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tDLLK",
+				description: [
+					{language: "english", text: "exit self refresh to requiring a locked DLL",},
+				],
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming15",
-	leaves: [
-		{
-			access: "bios->DRAMTiming15",
-			name: "DRAMTiming15",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "DDR reliability RAS",},
-			],
-			fancy_data: [
-				{
-					name: "AlertCrcDly",
-					hi: 6, lo: 0,
-					description: [
-						{language: "english", text: "expected alert crc error dely, in memclocks",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 7,
-				}, {
-					name: "AlertParDly",
-					hi: 14, lo: 8,
-					description: [
-						{language: "english", text: "Parity error",},
-					],
-				}, {
-					name: "PL",
-					hi: 18, lo: 15,
-					description: [
-						{language: "english", text: "Cmd/Addr Parity Latency. See DDR4 MR5",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 22, lo: 19,
-				}, {
-					name: "RankBusyDly",
-					hi: 29, lo: 23,
-					description: [
-						{language: "english", text: "max of CRC/ECC alert delays",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming15",
+		name: "DRAMTiming15",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "DDR reliability RAS",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "AlertCrcDly",
+				description: [
+					{language: "english", text: "expected alert crc error dely, in memclocks",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "AlertParDly",
+				description: [
+					{language: "english", text: "Parity error",},
+				],
+			}, {
+				access: "PL",
+				description: [
+					{language: "english", text: "Cmd/Addr Parity Latency. See DDR4 MR5",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "RankBusyDly",
+				description: [
+					{language: "english", text: "max of CRC/ECC alert delays",},
+				],
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming16",
-	leaves: [
-		{
-			access: "bios->DRAMTiming16",
-			name: "DRAMTiming16",
-			fancy_data: [
-				{
-					name: "tXSMRS",
-					hi: 10, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 11,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming16",
+		name: "DRAMTiming16",
+		fancy_data: { fields: [
+			{
+				access: "tXSMRS",
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming17_HBM2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming17",
-			name: "DRAMTiming17",
-			fancy_data: [
-				{
-					name: "tPD",
-					hi: 3, lo: 0,
-				}, {
-					name: "tCKSRE",
-					hi: 9, lo: 4,
-				}, {
-					name: "tCKSRX",
-					hi: 15, lo: 10,
-				}, {
-					name: "PwrDownDly",
-					hi: 23, lo: 16,
-					description: [
-						{language: "english", text: "last command to PowerDown",},
-					],
-				}, {
-					name: "AggPwrDownDly",
-					hi: 29, lo: 24,
-					description: [
-						{language: "english", text: "last DRAM activity to precharge, for PD",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming17",
+		name: "DRAMTiming17",
+		fancy_data: { fields: [
+			{
+				access: "tPD",
+			}, {
+				access: "tCKSRE",
+			}, {
+				access: "tCKSRX",
+			}, {
+				access: "PwrDownDly",
+				description: [
+					{language: "english", text: "last command to PowerDown",},
+				],
+			}, {
+				access: "AggPwrDownDly",
+				description: [
+					{language: "english", text: "last DRAM activity to precharge, for PD",},
+				],
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming17",
-	leaves: [
-		{
-			access: "bios->DRAMTiming17",
-			name: "DRAMTiming17",
-			fancy_data: [
-				{
-					name: "tPD",
-					hi: 4, lo: 0,
-				}, {
-					name: "tCKSRE",
-					hi: 10, lo: 5,
-				}, {
-					name: "tCKSRX",
-					hi: 16, lo: 11,
-				}, {
-					name: "PwrDownDly",
-					hi: 24, lo: 17,
-					description: [
-						{language: "english", text: "last command to PowerDown",},
-					],
-				}, {
-					name: "AggPwrDownDly",
-					hi: 30, lo: 25,
-					description: [
-						{language: "english", text: "last DRAM activity to precharge, for PD",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 31,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming17",
+		name: "DRAMTiming17",
+		fancy_data: { fields: [
+			{
+				access: "tPD",
+			}, {
+				access: "tCKSRE",
+			}, {
+				access: "tCKSRX",
+			}, {
+				access: "PwrDownDly",
+				description: [
+					{language: "english", text: "last command to PowerDown",},
+				],
+			}, {
+				access: "AggPwrDownDly",
+				description: [
+					{language: "english", text: "last DRAM activity to precharge, for PD",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming18_HBM2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming18",
-			name: "DRAMTiming18",
-			fancy_data: [
-				{
-					name: "tRFCSB",
-					hi: 10, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 11,
-				}, {
-					name: "tSTAG",
-					hi: 23, lo: 16,
-					description: [
-						{language: "english", text: "ref-to-ref different rank",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 24,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming18",
+		name: "DRAMTiming18",
+		fancy_data: { fields: [
+			{
+				access: "tRFCSB",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tSTAG",
+				description: [
+					{language: "english", text: "ref-to-ref different rank",},
+				],
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming20",
-	leaves: [
-		{
-			access: "bios->DRAMTiming20",
-			name: "DRAMTiming20",
-			fancy_data: [
-				{
-					name: "tRFCSB",
-					hi: 10, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 11,
-				}, {
-					name: "tSTAG",
-					hi: 23, lo: 16,
-					description: [
-						{language: "english", text: "ref-to-ref different rank",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 24,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming20",
+		name: "DRAMTiming20",
+		fancy_data: { fields: [
+			{
+				access: "tRFCSB",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tSTAG",
+				description: [
+					{language: "english", text: "ref-to-ref different rank",},
+				],
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming21",
-	leaves: [
-		{
-			access: "bios->DRAMTiming21",
-			name: "DRAMTiming21",
-			fancy_data: [
-				{
-					name: "tXP",
-					hi: 5, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 6,
-				}, {
-					name: "tCPDED",
-					hi: 19, lo: 16,
-				}, {
-					name: "rsvd1",
-					hi: 23, lo: 20,
-				}, {
-					name: "tCKE",
-					hi: 28, lo: 24,
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 29,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming21",
+		name: "DRAMTiming21",
+		fancy_data: { fields: [
+			{
+				access: "tXP",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tCPDED",
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tCKE",
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming22_HBM2",
-	leaves: [
-		{
-			access: "bios->DRAMTiming22",
-			name: "DRAMTiming22",
-			fancy_data: [
-				{
-					name: "rsvd0_0",
-					hi: 1, lo: 0,
-					description: [
-						{language: "english", text: "makes n=3,3",},
-					],
-				}, {
-					name: "tRDDATA_EN",
-					hi: 6, lo: 2,
-					description: [
-						{language: "english", text: "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 7,
-				}, {
-					name: "tPHY_WRLAT",
-					hi: 12, lo: 8,
-					description: [
-						{language: "english", text: "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 13,
-				}, {
-					name: "tPHY_RDLAT",
-					hi: 21, lo: 16,
-					description: [
-						{language: "english", text: "dfi_rddata_en to dfi_rddata_vld dely",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 23, lo: 22,
-				}, {
-					name: "tPHY_WRDATA",
-					hi: 26, lo: 24,
-					description: [
-						{language: "english", text: "dfi_wrdata_en to dfi_wrdata delay",},
-					],
-				}, {
-					name: "rsvd3",
-					hi: 27, lo: 27,
-				}, {
-					name: "tPARIN_LAT",
-					hi: 29, lo: 28,
-					description: [
-						{language: "english", text: "ctrl signals to parity delay",},
-					],
-				}, {
-					name: "rsvd4",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming22",
+		name: "DRAMTiming22",
+		fancy_data: { fields: [
+			{
+				access: "rsvd0_0",
+				description: [
+					{language: "english", text: "makes n=3,3",},
+				],
+			}, {
+				access: "tRDDATA_EN",
+				description: [
+					{language: "english", text: "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tPHY_WRLAT",
+				description: [
+					{language: "english", text: "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tPHY_RDLAT",
+				description: [
+					{language: "english", text: "dfi_rddata_en to dfi_rddata_vld dely",},
+				],
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tPHY_WRDATA",
+				description: [
+					{language: "english", text: "dfi_wrdata_en to dfi_wrdata delay",},
+				],
+			}, {
+				access: "rsvd3",
+			}, {
+				access: "tPARIN_LAT",
+				description: [
+					{language: "english", text: "ctrl signals to parity delay",},
+				],
+			}, {
+				access: "rsvd4",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming22",
-	leaves: [
-		{
-			access: "bios->DRAMTiming22",
-			name: "DRAMTiming22",
-			fancy_data: [
-				{
-					name: "tRDDATA_EN",
-					hi: 6, lo: 0,
-					description: [
-						{language: "english", text: "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 7,
-				}, {
-					name: "tPHY_WRLAT",
-					hi: 12, lo: 8,
-					description: [
-						{language: "english", text: "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 13,
-				}, {
-					name: "tPHY_RDLAT",
-					hi: 21, lo: 16,
-					description: [
-						{language: "english", text: "dfi_rddata_en to dfi_rddata_vld dely",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 23, lo: 22,
-				}, {
-					name: "tPHY_WRDATA",
-					hi: 26, lo: 24,
-					description: [
-						{language: "english", text: "dfi_wrdata_en to dfi_wrdata delay",},
-					],
-				}, {
-					name: "rsvd3",
-					hi: 27, lo: 27,
-				}, {
-					name: "tPARIN_LAT",
-					hi: 29, lo: 28,
-					description: [
-						{language: "english", text: "ctrl signals to parity delay",},
-					],
-				}, {
-					name: "rsvd4",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming22",
+		name: "DRAMTiming22",
+		fancy_data: { fields: [
+			{
+				access: "tRDDATA_EN",
+				description: [
+					{language: "english", text: "tCL-n; GD6 n=1, D4 n=5. READ to dfi_rddata_en",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tPHY_WRLAT",
+				description: [
+					{language: "english", text: "tCWL-n; GD6 n=2, D4 n=5. WRITE to dfi_wrdata_en",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "tPHY_RDLAT",
+				description: [
+					{language: "english", text: "dfi_rddata_en to dfi_rddata_vld dely",},
+				],
+			}, {
+				access: "rsvd2",
+			}, {
+				access: "tPHY_WRDATA",
+				description: [
+					{language: "english", text: "dfi_wrdata_en to dfi_wrdata delay",},
+				],
+			}, {
+				access: "rsvd3",
+			}, {
+				access: "tPARIN_LAT",
+				description: [
+					{language: "english", text: "ctrl signals to parity delay",},
+				],
+			}, {
+				access: "rsvd4",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming23",
-	leaves: [
-		{
-			access: "bios->DRAMTiming23",
-			name: "DRAMTiming23",
-			fancy_data: [
-				{
-					name: "LpDly",
-					hi: 5, lo: 0,
-					description: [
-						{language: "english", text: "hysteresis before placing PHY into low power",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 7, lo: 6,
-				}, {
-					name: "LpExitDly",
-					hi: 13, lo: 8,
-					description: [
-						{language: "english", text: "min memclk before taking a rank out of powerdown",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 15, lo: 14,
-				}, {
-					name: "CKESTAGDLY",
-					hi: 19, lo: 16,
-				}, {
-					name: "rsvd3",
-					hi: 31, lo: 20,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming23",
+		name: "DRAMTiming23",
+		fancy_data: { fields: [
+			{
+				access: "LpDly",
+				description: [
+					{language: "english", text: "hysteresis before placing PHY into low power",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "LpExitDly",
+				description: [
+					{language: "english", text: "min memclk before taking a rank out of powerdown",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "CKESTAGDLY",
+			}, {
+				access: "rsvd3",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming34",
-	leaves: [
-		{
-			access: "bios->DRAMTiming34",
-			name: "DRAMTiming34",
-			fancy_data: [
-				{
-					name: "tPhyupd_resp",
-					hi: 3, lo: 0,
-				}, {
-					name: "tRDEDC_EN",
-					hi: 10, lo: 4,
-				}, {
-					name: "rsvd0",
-					hi: 11, lo: 11,
-				}, {
-					name: "tWREDC_EN",
-					hi: 18, lo: 12,
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 19,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming34",
+		name: "DRAMTiming34",
+		fancy_data: { fields: [
+			{
+				access: "tPhyupd_resp",
+			}, {
+				access: "tRDEDC_EN",
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tWREDC_EN",
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming35",
-	leaves: [
-		{
-			access: "bios->DRAMTiming35",
-			name: "DRAMTiming35",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "reliability RAS",},
-			],
-			fancy_data: [
-				{
-					name: "ReceiverWait",
-					hi: 10, lo: 0,
-					description: [
-						{language: "english", text: "Wait time to start recovery sequence",},
-					],
-				}, {
-					name: "CmdStageCnt",
-					hi: 21, lo: 11,
-					description: [
-						{language: "english", text: "Recov. seq. cmd stagger counter. See CmdStgFrc. CmdStgFrc:1; 1=enable recovery command stagger in recovery phase",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 23, lo: 22,
-				}, {
-					name: "tWRMPR",
-					hi: 29, lo: 24,
-				}, {
-					name: "rsvd1",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming35",
+		name: "DRAMTiming35",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "reliability RAS",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "ReceiverWait",
+				description: [
+					{language: "english", text: "Wait time to start recovery sequence",},
+				],
+			}, {
+				access: "CmdStageCnt",
+				description: [
+					{language: "english", text: "Recov. seq. cmd stagger counter. See CmdStgFrc. CmdStgFrc:1; 1=enable recovery command stagger in recovery phase",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "tWRMPR",
+			}, {
+				access: "rsvd1",
+			},
+		],},
+	},],
 }, {
 	c_type: "DRAMTiming36",
-	leaves: [
-		{
-			access: "bios->DRAMTiming36",
-			name: "DRAMTiming36",
-			fancy: "ATUI_BITFIELD",
-			description: [
-				{language: "english", text: "GDDR training",},
-			],
-			fancy_data: [
-				{
-					name: "tWTRTR",
-					hi: 5, lo: 0,
-					description: [
-						{language: "english", text: "WRITE to WRTR",},
-					],
-				}, {
-					name: "tREFTR",
-					hi: 11, lo: 6,
-					description: [
-						{language: "english", text: "was named tREFTT. REFab to RDTR/WRTR",},
-					],
-				}, {
-					name: "tTTROW",
-					hi: 17, lo: 12,
-					description: [
-						{language: "english", text: "??",},
-					],
-				}, {
-					name: "tLDTLD",
-					hi: 23, lo: 18,
-					description: [
-						{language: "english", text: "JEDEC tLTLTR?",},
-					],
-				}, {
-					name: "tUPDN",
-					hi: 29, lo: 24,
-					description: [
-						{language: "english", text: "??",},
-					],
-				}, {
-					name: "tREFTR_MSB",
-					hi: 30, lo: 30,
-					description: [
-						{language: "english", text: "was named tREFTT",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 31,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DRAMTiming36",
+		name: "DRAMTiming36",
+		fancy: "ATUI_BITFIELD",
+		description: [
+			{language: "english", text: "GDDR training",},
+		],
+		fancy_data: { fields: [
+			{
+				access: "tWTRTR",
+				description: [
+					{language: "english", text: "WRITE to WRTR",},
+				],
+			}, {
+				access: "tREFTR",
+				description: [
+					{language: "english", text: "was named tREFTT. REFab to RDTR/WRTR",},
+				],
+			}, {
+				access: "tTTROW",
+				description: [
+					{language: "english", text: "??",},
+				],
+			}, {
+				access: "tLDTLD",
+				description: [
+					{language: "english", text: "JEDEC tLTLTR?",},
+				],
+			}, {
+				access: "tUPDN",
+				description: [
+					{language: "english", text: "??",},
+				],
+			}, {
+				access: "tREFTR_MSB",
+				description: [
+					{language: "english", text: "was named tREFTT",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "TRFCTimingCS01",
-	leaves: [
-		{
-			access: "bios->TRFCTimingCS01",
-			name: "TRFCTimingCS01",
-			fancy_data: [
-				{
-					name: "tRFC",
-					hi: 10, lo: 0,
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 11,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->TRFCTimingCS01",
+		name: "TRFCTimingCS01",
+		fancy_data: { fields: [
+			{
+				access: "tRFC",
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "TRFCTimingCS01_DDR4",
-	leaves: [
-		{
-			access: "bios->TRFCTimingCS01_DDR4",
-			name: "TRFCTimingCS01_DDR4",
-			fancy_data: [
-				{
-					name: "tRFC",
-					hi: 10, lo: 0,
-				}, {
-					name: "tRFC2",
-					hi: 21, lo: 11,
-				}, {
-					name: "tRFC4",
-					hi: 31, lo: 22,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->TRFCTimingCS01_DDR4",
+		name: "TRFCTimingCS01_DDR4",
+		fancy_data: { fields: [
+			{
+				access: "tRFC",
+			}, {
+				access: "tRFC2",
+			}, {
+				access: "tRFC4",
+			},
+		],},
+	},],
 }, {
 	c_type: "ChanPipeDly",
-	leaves: [
-		{
-			access: "bios->ChanPipeDly",
-			name: "ChanPipeDly",
-			fancy_data: [
-				{
-					name: "TXCtrlChanDly",
-					hi: 2, lo: 0,
-					description: [
-						{language: "english", text: "# of delay stages on DFI control from UMC to PHY",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 3, lo: 3,
-				}, {
-					name: "TXDataChanDly",
-					hi: 6, lo: 4,
-					description: [
-						{language: "english", text: "... on DFI write data from UMC to PHY",},
-					],
-				}, {
-					name: "rsvd1",
-					hi: 7, lo: 7,
-				}, {
-					name: "RXDataChanDly",
-					hi: 10, lo: 8,
-					description: [
-						{language: "english", text: "... on DFI read data from PHY to UMC",},
-					],
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 11,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->ChanPipeDly",
+		name: "ChanPipeDly",
+		fancy_data: { fields: [
+			{
+				access: "TXCtrlChanDly",
+				description: [
+					{language: "english", text: "# of delay stages on DFI control from UMC to PHY",},
+				],
+			}, {
+				access: "rsvd0",
+			}, {
+				access: "TXDataChanDly",
+				description: [
+					{language: "english", text: "... on DFI write data from UMC to PHY",},
+				],
+			}, {
+				access: "rsvd1",
+			}, {
+				access: "RXDataChanDly",
+				description: [
+					{language: "english", text: "... on DFI read data from PHY to UMC",},
+				],
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_misc_timing_6_0_o",
-	leaves: [
-		{
-			access: "bios->mc_seq_misc_timing",
-			name: "mc_seq_misc_timing",
-			fancy_data: [
-				{
-					name: "trp_wra",
-					hi: 6, lo: 0,
-					description: [
-						{language: "english", text: "autoprecharge?",},
-					],
-				}, {
-					name: "trp_rda",
-					hi: 13, lo: 7,
-					description: [
-						{language: "english", text: "autoprecharge?",},
-					],
-				}, {
-					name: "trp",
-					hi: 19, lo: 14,
-				}, {
-					name: "trfc",
-					hi: 28, lo: 20,
-				}, {
-					name: "rsvd2",
-					hi: 31, lo: 29,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->mc_seq_misc_timing",
+		name: "mc_seq_misc_timing",
+		fancy_data: { fields: [
+			{
+				access: "trp_wra",
+				description: [
+					{language: "english", text: "autoprecharge?",},
+				],
+			}, {
+				access: "trp_rda",
+				description: [
+					{language: "english", text: "autoprecharge?",},
+				],
+			}, {
+				access: "trp",
+			}, {
+				access: "trfc",
+			}, {
+				access: "rsvd2",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_misc_timing2_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_seq_misc_timing2",
-			fancy_data: [
-				{
-					name: "pa2rdata",
-					hi: 3, lo: 0,
-				}, {
-					name: "pa2wdata",
-					hi: 7, lo: 4,
-				}, {
-					name: "faw",
-					hi: 12, lo: 8,
-				}, {
-					name: "tredc",
-					hi: 15, lo: 13,
-				}, {
-					name: "twedc",
-					hi: 20, lo: 16,
-				}, {
-					name: "t32aw",
-					hi: 24, lo: 21,
-				}, {
-					name: "_rsvd02",
-					hi: 27, lo: 25,
-				}, {
-					name: "twdatatr",
-					hi: 31, lo: 28,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_seq_misc_timing2",
+		fancy_data: { fields: [
+			{
+				access: "pa2rdata",
+			}, {
+				access: "pa2wdata",
+			}, {
+				access: "faw",
+			}, {
+				access: "tredc",
+			}, {
+				access: "twedc",
+			}, {
+				access: "t32aw",
+			}, {
+				access: "_rsvd02",
+			}, {
+				access: "twdatatr",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_cmd_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_seq_cmd",
-			fancy_data: [
-				{
-					name: "adr",
-					hi: 15, lo: 0,
-				}, {
-					name: "mop",
-					hi: 19, lo: 16,
-				}, {
-					name: "end",
-					hi: 20, lo: 20,
-				}, {
-					name: "csb",
-					hi: 22, lo: 21,
-				}, {
-					name: "_rsvd00",
-					hi: 23, lo: 23,
-				}, {
-					name: "chan0",
-					hi: 24, lo: 24,
-				}, {
-					name: "chan1",
-					hi: 25, lo: 25,
-				}, {
-					name: "chan2",
-					hi: 26, lo: 26,
-				}, {
-					name: "chan3",
-					hi: 27, lo: 27,
-				}, {
-					name: "adr_msb1",
-					hi: 28, lo: 28,
-				}, {
-					name: "adr_msb0",
-					hi: 29, lo: 29,
-				}, {
-					name: "_rsvd02",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_seq_cmd",
+		fancy_data: { fields: [
+			{
+				access: "adr",
+			}, {
+				access: "mop",
+			}, {
+				access: "end",
+			}, {
+				access: "csb",
+			}, {
+				access: "_rsvd00",
+			}, {
+				access: "chan0",
+			}, {
+				access: "chan1",
+			}, {
+				access: "chan2",
+			}, {
+				access: "chan3",
+			}, {
+				access: "adr_msb1",
+			}, {
+				access: "adr_msb0",
+			}, {
+				access: "_rsvd02",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_cas_timing_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_seq_cas_timing",
-			fancy_data: [
-				{
-					name: "tnopw",
-					hi: 4, lo: 0,
-				}, {
-					name: "tnopr",
-					hi: 9, lo: 5,
-				}, {
-					name: "tr2w",
-					hi: 14, lo: 10,
-				}, {
-					name: "tr2r",
-					hi: 18, lo: 15,
-				}, {
-					name: "tw2r",
-					hi: 23, lo: 19,
-				}, {
-					name: "tcl",
-					hi: 28, lo: 24,
-				}, {
-					name: "_rsvd01",
-					hi: 31, lo: 29,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_seq_cas_timing",
+		fancy_data: { fields: [
+			{
+				access: "tnopw",
+			}, {
+				access: "tnopr",
+			}, {
+				access: "tr2w",
+			}, {
+				access: "tr2r",
+			}, {
+				access: "tw2r",
+			}, {
+				access: "tcl",
+			}, {
+				access: "_rsvd01",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_byte_remap_d0_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_seq_byte_remap_d0",
-			fancy_data: [
-				{
-					name: "byte0",
-					hi: 1, lo: 0,
-				}, {
-					name: "byte1",
-					hi: 3, lo: 2,
-				}, {
-					name: "byte2",
-					hi: 5, lo: 4,
-				}, {
-					name: "byte3",
-					hi: 7, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_seq_byte_remap_d0",
+		fancy_data: { fields: [
+			{
+				access: "byte0",
+			}, {
+				access: "byte1",
+			}, {
+				access: "byte2",
+			}, {
+				access: "byte3",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_arb_ramcfg_7_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_arb_ramcfg",
-			fancy_data: [
-				{
-					name: "noofbank",
-					hi: 1, lo: 0,
-				}, {
-					name: "noofranks",
-					hi: 2, lo: 2,
-				}, {
-					name: "noofrows",
-					hi: 5, lo: 3,
-				}, {
-					name: "noofcols",
-					hi: 7, lo: 6,
-				}, {
-					name: "chansize",
-					hi: 8, lo: 8,
-				}, {
-					name: "burstlength",
-					hi: 9, lo: 9,
-				}, {
-					name: "rsv_2",
-					hi: 10, lo: 10,
-				}, {
-					name: "chansize_override",
-					hi: 11, lo: 11,
-				}, {
-					name: "noofgroups",
-					hi: 12, lo: 12,
-				}, {
-					name: "rsv_4",
-					hi: 15, lo: 13,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_arb_ramcfg",
+		fancy_data: { fields: [
+			{
+				access: "noofbank",
+			}, {
+				access: "noofranks",
+			}, {
+				access: "noofrows",
+			}, {
+				access: "noofcols",
+			}, {
+				access: "chansize",
+			}, {
+				access: "burstlength",
+			}, {
+				access: "rsv_2",
+			}, {
+				access: "chansize_override",
+			}, {
+				access: "noofgroups",
+			}, {
+				access: "rsv_4",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_io_aphy_str_cntl_d0_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_io_aphy_str_cntl_d0",
-			fancy_data: [
-				{
-					name: "pstr_off_a",
-					hi: 5, lo: 0,
-				}, {
-					name: "nstr_off_a",
-					hi: 11, lo: 6,
-				}, {
-					name: "pstr_off_d_rd",
-					hi: 17, lo: 12,
-				}, {
-					name: "nstr_off_d_rd",
-					hi: 23, lo: 18,
-				}, {
-					name: "use_a_cal",
-					hi: 24, lo: 24,
-				}, {
-					name: "use_d_rd_cal",
-					hi: 25, lo: 25,
-				}, {
-					name: "cal_sel",
-					hi: 27, lo: 26,
-				}, {
-					name: "load_a_str",
-					hi: 28, lo: 28,
-				}, {
-					name: "load_d_rd_str",
-					hi: 29, lo: 29,
-				}, {
-					name: "_rsvd01",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_io_aphy_str_cntl_d0",
+		fancy_data: { fields: [
+			{
+				access: "pstr_off_a",
+			}, {
+				access: "nstr_off_a",
+			}, {
+				access: "pstr_off_d_rd",
+			}, {
+				access: "nstr_off_d_rd",
+			}, {
+				access: "use_a_cal",
+			}, {
+				access: "use_d_rd_cal",
+			}, {
+				access: "cal_sel",
+			}, {
+				access: "load_a_str",
+			}, {
+				access: "load_d_rd_str",
+			}, {
+				access: "_rsvd01",
+			},
+		],},
+	},],
 }, {
 	c_type: "mc_seq_rxframing_dbi_d1_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_seq_rxframing_dbi_d1",
-			fancy_data: [
-				{
-					name: "dbi0",
-					hi: 3, lo: 0,
-				}, {
-					name: "dbi1",
-					hi: 7, lo: 4,
-				}, {
-					name: "dbi2",
-					hi: 11, lo: 8,
-				}, {
-					name: "dbi3",
-					hi: 15, lo: 12,
-				}, {
-					name: "dbi4",
-					hi: 19, lo: 16,
-				}, {
-					name: "dbi5",
-					hi: 23, lo: 20,
-				}, {
-					name: "dbi6",
-					hi: 27, lo: 24,
-				}, {
-					name: "dbi7",
-					hi: 31, lo: 28,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_seq_rxframing_dbi_d1",
+		fancy_data: { fields: [
+			{
+				access: "dbi0",
+			}, {
+				access: "dbi1",
+			}, {
+				access: "dbi2",
+			}, {
+				access: "dbi3",
+			}, {
+				access: "dbi4",
+			}, {
+				access: "dbi5",
+			}, {
+				access: "dbi6",
+			}, {
+				access: "dbi7",
+			},
+		],},
+	},],
 },
 
 {
 	c_type: "mc_arb_rfsh_rate_6_0_o",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "mc_arb_rfsh_rate",
-			fancy_data: [
-				{
-					name: "_rsvd0",
-					hi: 13, lo: 0,
-				}, {
-					name: "tRFC",
-					hi: 21, lo: 14,
-					description: [
-						{language: "english", text: "unsure which is tRFC and tRFCSB",},
-					],
-				}, {
-					name: "tRFCSB",
-					hi: 29, lo: 22,
-					description: [
-						{language: "english", text: "unsure which is tRFC and tRFCSB",},
-					],
-				}, {
-					name: "_rsvd1",
-					hi: 31, lo: 30,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "mc_arb_rfsh_rate",
+		fancy_data: { fields: [
+			{
+				access: "_rsvd0",
+			}, {
+				access: "tRFC",
+				description: [
+					{language: "english", text: "unsure which is tRFC and tRFCSB",},
+				],
+			}, {
+				access: "tRFCSB",
+				description: [
+					{language: "english", text: "unsure which is tRFC and tRFCSB",},
+				],
+			}, {
+				access: "_rsvd1",
+			},
+		],},
+	},],
 },
 
 ], }

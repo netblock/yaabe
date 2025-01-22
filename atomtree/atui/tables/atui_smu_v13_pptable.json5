@@ -249,433 +249,298 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "powerplay_feature_control_smu13",
 	atomtree: "atomtree_powerplay_table",
-	leaves: [
-		{
-			access: "bios->feature_control",
-			name: "feature_control",
-			display: "ATUI_HEX",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "FW_DATA_READ",
-					hi: 0, lo: 0,
-				}, {
-					name: "DPM_GFXCLK",
-					hi: 1, lo: 1,
-				}, {
-					name: "DPM_GFX_POWER_OPTIMIZER",
-					hi: 2, lo: 2,
-				}, {
-					name: "DPM_UCLK",
-					hi: 3, lo: 3,
-				}, {
-					name: "DPM_FCLK",
-					hi: 4, lo: 4,
-				}, {
-					name: "DPM_SOCCLK",
-					hi: 5, lo: 5,
-				}, {
-					name: "DPM_MP0CLK",
-					hi: 6, lo: 6,
-				}, {
-					name: "DPM_LINK",
-					hi: 7, lo: 7,
-				}, {
-					name: "DPM_DCN",
-					hi: 8, lo: 8,
-				}, {
-					name: "VMEMP_SCALING",
-					hi: 9, lo: 9,
-				}, {
-					name: "VDDIO_MEM_SCALING",
-					hi: 10, lo: 10,
-				}, {
-					name: "DS_GFXCLK",
-					hi: 11, lo: 11,
-				}, {
-					name: "DS_SOCCLK",
-					hi: 12, lo: 12,
-				}, {
-					name: "DS_FCLK",
-					hi: 13, lo: 13,
-				}, {
-					name: "DS_LCLK",
-					hi: 14, lo: 14,
-				}, {
-					name: "DS_DCFCLK",
-					hi: 15, lo: 15,
-				}, {
-					name: "DS_UCLK",
-					hi: 16, lo: 16,
-				}, {
-					name: "GFX_ULV",
-					hi: 17, lo: 17,
-				}, {
-					name: "FW_DSTATE",
-					hi: 18, lo: 18,
-				}, {
-					name: "GFXOFF",
-					hi: 19, lo: 19,
-				}, {
-					name: "BACO",
-					hi: 20, lo: 20,
-				}, {
-					name: "MM_DPM",
-					hi: 21, lo: 21,
-				}, {
-					name: "SOC_MPCLK_DS",
-					hi: 22, lo: 22,
-				}, {
-					name: "BACO_MPCLK_DS",
-					hi: 23, lo: 23,
-				}, {
-					name: "THROTTLERS",
-					hi: 24, lo: 24,
-				}, {
-					name: "SMARTSHIFT",
-					hi: 25, lo: 25,
-				}, {
-					name: "GTHR",
-					hi: 26, lo: 26,
-				}, {
-					name: "ACDC",
-					hi: 27, lo: 27,
-				}, {
-					name: "VR0HOT",
-					hi: 28, lo: 28,
-				}, {
-					name: "FW_CTF",
-					hi: 29, lo: 29,
-				}, {
-					name: "FAN_CONTROL",
-					hi: 30, lo: 30,
-				}, {
-					name: "GFX_DCS",
-					hi: 31, lo: 31,
-				}, {
-					name: "GFX_READ_MARGIN",
-					hi: 32, lo: 32,
-				}, {
-					name: "LED_DISPLAY",
-					hi: 33, lo: 33,
-				}, {
-					name: "GFXCLK_SPREAD_SPECTRUM",
-					hi: 34, lo: 34,
-				}, {
-					name: "OUT_OF_BAND_MONITOR",
-					hi: 35, lo: 35,
-				}, {
-					name: "OPTIMIZED_VMIN",
-					hi: 36, lo: 36,
-				}, {
-					name: "GFX_IMU",
-					hi: 37, lo: 37,
-				}, {
-					name: "BOOT_TIME_CAL",
-					hi: 38, lo: 38,
-				}, {
-					name: "GFX_PCC_DFLL",
-					hi: 39, lo: 39,
-				}, {
-					name: "SOC_CG",
-					hi: 40, lo: 40,
-				}, {
-					name: "DF_CSTATE",
-					hi: 41, lo: 41,
-				}, {
-					name: "GFX_EDC",
-					hi: 42, lo: 42,
-				}, {
-					name: "BOOT_POWER_OPT",
-					hi: 43, lo: 43,
-				}, {
-					name: "CLOCK_POWER_DOWN_BYPASS",
-					hi: 44, lo: 44,
-				}, {
-					name: "DS_VCN",
-					hi: 45, lo: 45,
-				}, {
-					name: "BACO_CG",
-					hi: 46, lo: 46,
-				}, {
-					name: "MEM_TEMP_READ",
-					hi: 47, lo: 47,
-				}, {
-					name: "ATHUB_MMHUB_PG",
-					hi: 48, lo: 48,
-				}, {
-					name: "SOC_PCC",
-					hi: 49, lo: 49,
-				}, {
-					name: "EDC_PWRBRK",
-					hi: 50, lo: 50,
-				}, {
-					name: "SPARE_51",
-					hi: 51, lo: 51,
-				}, {
-					name: "SPARE_52",
-					hi: 52, lo: 52,
-				}, {
-					name: "SPARE_53",
-					hi: 53, lo: 53,
-				}, {
-					name: "SPARE_54",
-					hi: 54, lo: 54,
-				}, {
-					name: "SPARE_55",
-					hi: 55, lo: 55,
-				}, {
-					name: "SPARE_56",
-					hi: 56, lo: 56,
-				}, {
-					name: "SPARE_57",
-					hi: 57, lo: 57,
-				}, {
-					name: "SPARE_58",
-					hi: 58, lo: 58,
-				}, {
-					name: "SPARE_59",
-					hi: 59, lo: 59,
-				}, {
-					name: "SPARE_60",
-					hi: 60, lo: 60,
-				}, {
-					name: "SPARE_61",
-					hi: 61, lo: 61,
-				}, {
-					name: "SPARE_62",
-					hi: 62, lo: 62,
-				}, {
-					name: "SPARE_63",
-					hi: 63, lo: 63,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->feature_control",
+		name: "feature_control",
+		display: "ATUI_HEX",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "FW_DATA_READ",
+			}, {
+				access: "DPM_GFXCLK",
+			}, {
+				access: "DPM_GFX_POWER_OPTIMIZER",
+			}, {
+				access: "DPM_UCLK",
+			}, {
+				access: "DPM_FCLK",
+			}, {
+				access: "DPM_SOCCLK",
+			}, {
+				access: "DPM_MP0CLK",
+			}, {
+				access: "DPM_LINK",
+			}, {
+				access: "DPM_DCN",
+			}, {
+				access: "VMEMP_SCALING",
+			}, {
+				access: "VDDIO_MEM_SCALING",
+			}, {
+				access: "DS_GFXCLK",
+			}, {
+				access: "DS_SOCCLK",
+			}, {
+				access: "DS_FCLK",
+			}, {
+				access: "DS_LCLK",
+			}, {
+				access: "DS_DCFCLK",
+			}, {
+				access: "DS_UCLK",
+			}, {
+				access: "GFX_ULV",
+			}, {
+				access: "FW_DSTATE",
+			}, {
+				access: "GFXOFF",
+			}, {
+				access: "BACO",
+			}, {
+				access: "MM_DPM",
+			}, {
+				access: "SOC_MPCLK_DS",
+			}, {
+				access: "BACO_MPCLK_DS",
+			}, {
+				access: "THROTTLERS",
+			}, {
+				access: "SMARTSHIFT",
+			}, {
+				access: "GTHR",
+			}, {
+				access: "ACDC",
+			}, {
+				access: "VR0HOT",
+			}, {
+				access: "FW_CTF",
+			}, {
+				access: "FAN_CONTROL",
+			}, {
+				access: "GFX_DCS",
+			}, {
+				access: "GFX_READ_MARGIN",
+			}, {
+				access: "LED_DISPLAY",
+			}, {
+				access: "GFXCLK_SPREAD_SPECTRUM",
+			}, {
+				access: "OUT_OF_BAND_MONITOR",
+			}, {
+				access: "OPTIMIZED_VMIN",
+			}, {
+				access: "GFX_IMU",
+			}, {
+				access: "BOOT_TIME_CAL",
+			}, {
+				access: "GFX_PCC_DFLL",
+			}, {
+				access: "SOC_CG",
+			}, {
+				access: "DF_CSTATE",
+			}, {
+				access: "GFX_EDC",
+			}, {
+				access: "BOOT_POWER_OPT",
+			}, {
+				access: "CLOCK_POWER_DOWN_BYPASS",
+			}, {
+				access: "DS_VCN",
+			}, {
+				access: "BACO_CG",
+			}, {
+				access: "MEM_TEMP_READ",
+			}, {
+				access: "ATHUB_MMHUB_PG",
+			}, {
+				access: "SOC_PCC",
+			}, {
+				access: "EDC_PWRBRK",
+			}, {
+				access: "SPARE_51",
+			}, {
+				access: "SPARE_52",
+			}, {
+				access: "SPARE_53",
+			}, {
+				access: "SPARE_54",
+			}, {
+				access: "SPARE_55",
+			}, {
+				access: "SPARE_56",
+			}, {
+				access: "SPARE_57",
+			}, {
+				access: "SPARE_58",
+			}, {
+				access: "SPARE_59",
+			}, {
+				access: "SPARE_60",
+			}, {
+				access: "SPARE_61",
+			}, {
+				access: "SPARE_62",
+			}, {
+				access: "SPARE_63",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "dpm_debug_override_smu13",
-	leaves: [
-		{
-			access: "bios->DebugOverrides",
-			name: "DebugOverrides",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "disable_volt_link_vcn_fclk",
-					hi: 0, lo: 0,
-				}, {
-					name: "disable_volt_link_dcn_fclk",
-					hi: 1, lo: 1,
-				}, {
-					name: "disable_volt_link_mp0_fclk",
-					hi: 2, lo: 2,
-				}, {
-					name: "disable_volt_link_vcn_dcfclk",
-					hi: 3, lo: 3,
-				}, {
-					name: "disable_fast_fclk_timer",
-					hi: 4, lo: 4,
-				}, {
-					name: "disable_vcn_pg",
-					hi: 5, lo: 5,
-				}, {
-					name: "disable_fmax_vmax",
-					hi: 6, lo: 6,
-				}, {
-					name: "disable_imu_fw_checks",
-					hi: 7, lo: 7,
-				}, {
-					name: "disable_d0i2_reentry_hsr_timer_check",
-					hi: 8, lo: 8,
-				}, {
-					name: "disable_dfll",
-					hi: 9, lo: 9,
-				}, {
-					name: "enable_rlc_vf_bringup_mode",
-					hi: 10, lo: 10,
-				}, {
-					name: "dfll_master_mode",
-					hi: 11, lo: 11,
-				}, {
-					name: "enable_profiling_mode",
-					hi: 12, lo: 12,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 13,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->DebugOverrides",
+		name: "DebugOverrides",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "disable_volt_link_vcn_fclk",
+			}, {
+				access: "disable_volt_link_dcn_fclk",
+			}, {
+				access: "disable_volt_link_mp0_fclk",
+			}, {
+				access: "disable_volt_link_vcn_dcfclk",
+			}, {
+				access: "disable_fast_fclk_timer",
+			}, {
+				access: "disable_vcn_pg",
+			}, {
+				access: "disable_fmax_vmax",
+			}, {
+				access: "disable_imu_fw_checks",
+			}, {
+				access: "disable_d0i2_reentry_hsr_timer_check",
+			}, {
+				access: "disable_dfll",
+			}, {
+				access: "enable_rlc_vf_bringup_mode",
+			}, {
+				access: "dfll_master_mode",
+			}, {
+				access: "enable_profiling_mode",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "throttler_control_smu13_0x35",
-	leaves: [
-		{
-			access: "bios->ThrottlerControlMask",
-			name: "ThrottlerControlMask",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "TEMP_EDGE",
-					hi: 0, lo: 0,
-				}, {
-					name: "TEMP_HOTSPOT",
-					hi: 1, lo: 1,
-				}, {
-					name: "TEMP_HOTSPOT_G",
-					hi: 2, lo: 2,
-				}, {
-					name: "TEMP_HOTSPOT_M",
-					hi: 3, lo: 3,
-				}, {
-					name: "TEMP_MEM",
-					hi: 4, lo: 4,
-				}, {
-					name: "TEMP_VR_GFX",
-					hi: 5, lo: 5,
-				}, {
-					name: "TEMP_VR_MEM0",
-					hi: 6, lo: 6,
-				}, {
-					name: "TEMP_VR_MEM1",
-					hi: 7, lo: 7,
-				}, {
-					name: "TEMP_VR_SOC",
-					hi: 8, lo: 8,
-				}, {
-					name: "TEMP_VR_U",
-					hi: 9, lo: 9,
-				}, {
-					name: "TEMP_LIQUID0",
-					hi: 10, lo: 10,
-				}, {
-					name: "TEMP_LIQUID1",
-					hi: 11, lo: 11,
-				}, {
-					name: "TEMP_PLX",
-					hi: 12, lo: 12,
-				}, {
-					name: "TDC_GFX",
-					hi: 13, lo: 13,
-				}, {
-					name: "TDC_SOC",
-					hi: 14, lo: 14,
-				}, {
-					name: "TDC_U",
-					hi: 15, lo: 15,
-				}, {
-					name: "PPT0",
-					hi: 16, lo: 16,
-				}, {
-					name: "PPT1",
-					hi: 17, lo: 17,
-				}, {
-					name: "PPT2",
-					hi: 18, lo: 18,
-				}, {
-					name: "PPT3",
-					hi: 19, lo: 19,
-				}, {
-					name: "FIT",
-					hi: 20, lo: 20,
-				}, {
-					name: "GFX_APCC_PLUS",
-					hi: 21, lo: 21,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 22,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->ThrottlerControlMask",
+		name: "ThrottlerControlMask",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "TEMP_EDGE",
+			}, {
+				access: "TEMP_HOTSPOT",
+			}, {
+				access: "TEMP_HOTSPOT_G",
+			}, {
+				access: "TEMP_HOTSPOT_M",
+			}, {
+				access: "TEMP_MEM",
+			}, {
+				access: "TEMP_VR_GFX",
+			}, {
+				access: "TEMP_VR_MEM0",
+			}, {
+				access: "TEMP_VR_MEM1",
+			}, {
+				access: "TEMP_VR_SOC",
+			}, {
+				access: "TEMP_VR_U",
+			}, {
+				access: "TEMP_LIQUID0",
+			}, {
+				access: "TEMP_LIQUID1",
+			}, {
+				access: "TEMP_PLX",
+			}, {
+				access: "TDC_GFX",
+			}, {
+				access: "TDC_SOC",
+			}, {
+				access: "TDC_U",
+			}, {
+				access: "PPT0",
+			}, {
+				access: "PPT1",
+			}, {
+				access: "PPT2",
+			}, {
+				access: "PPT3",
+			}, {
+				access: "FIT",
+			}, {
+				access: "GFX_APCC_PLUS",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "fw_dstate_features_smu13_0x35",
-	leaves: [
-		{
-			access: "bios->FwDStateMask",
-			name: "FwDStateMask",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "SOC_ULV",
-					hi: 0, lo: 0,
-				}, {
-					name: "G6_HSR",
-					hi: 1, lo: 1,
-				}, {
-					name: "G6_PHY_VMEMP_OFF",
-					hi: 2, lo: 2,
-				}, {
-					name: "SMN_DS",
-					hi: 3, lo: 3,
-				}, {
-					name: "MP1_WHISPER_MODE",
-					hi: 4, lo: 4,
-				}, {
-					name: "SOC_LIV_MIN",
-					hi: 5, lo: 5,
-				}, {
-					name: "SOC_PLL_PWRDN",
-					hi: 6, lo: 6,
-				}, {
-					name: "MEM_PLL_PWRDN",
-					hi: 7, lo: 7,
-				}, {
-					name: "MALL_ALLOC",
-					hi: 8, lo: 8,
-				}, {
-					name: "MEM_PSI",
-					hi: 9, lo: 9,
-				}, {
-					name: "HSR_NON_STROBE",
-					hi: 10, lo: 10,
-				}, {
-					name: "MP0_ENTER_WFI",
-					hi: 11, lo: 11,
-				}, {
-					name: "U_ULV",
-					hi: 12, lo: 12,
-				}, {
-					name: "MALL_FLUSH",
-					hi: 13, lo: 13,
-				}, {
-					name: "SOC_PSI",
-					hi: 14, lo: 14,
-				}, {
-					name: "U_PSI",
-					hi: 15, lo: 15,
-				}, {
-					name: "UCP_DS",
-					hi: 16, lo: 16,
-				}, {
-					name: "CSRCLK_DS",
-					hi: 17, lo: 17,
-				}, {
-					name: "MMHUB_INTERLOCK",
-					hi: 18, lo: 18,
-				}, {
-					name: "D0i3_2_QUIET_FW",
-					hi: 19, lo: 19,
-				}, {
-					name: "CLDO_PRG",
-					hi: 20, lo: 20,
-				}, {
-					name: "DF_PLL_PWRDN",
-					hi: 21, lo: 21,
-				}, {
-					name: "U_LOW_PWR_MODE_EN",
-					hi: 22, lo: 22,
-				}, {
-					name: "GFX_PSI6",
-					hi: 23, lo: 23,
-				}, {
-					name: "GFX_VR_PWR_STAGE",
-					hi: 24, lo: 24,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 25,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->FwDStateMask",
+		name: "FwDStateMask",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "SOC_ULV",
+			}, {
+				access: "G6_HSR",
+			}, {
+				access: "G6_PHY_VMEMP_OFF",
+			}, {
+				access: "SMN_DS",
+			}, {
+				access: "MP1_WHISPER_MODE",
+			}, {
+				access: "SOC_LIV_MIN",
+			}, {
+				access: "SOC_PLL_PWRDN",
+			}, {
+				access: "MEM_PLL_PWRDN",
+			}, {
+				access: "MALL_ALLOC",
+			}, {
+				access: "MEM_PSI",
+			}, {
+				access: "HSR_NON_STROBE",
+			}, {
+				access: "MP0_ENTER_WFI",
+			}, {
+				access: "U_ULV",
+			}, {
+				access: "MALL_FLUSH",
+			}, {
+				access: "SOC_PSI",
+			}, {
+				access: "U_PSI",
+			}, {
+				access: "UCP_DS",
+			}, {
+				access: "CSRCLK_DS",
+			}, {
+				access: "MMHUB_INTERLOCK",
+			}, {
+				access: "D0i3_2_QUIET_FW",
+			}, {
+				access: "CLDO_PRG",
+			}, {
+				access: "DF_PLL_PWRDN",
+			}, {
+				access: "U_LOW_PWR_MODE_EN",
+			}, {
+				access: "GFX_PSI6",
+			}, {
+				access: "GFX_VR_PWR_STAGE",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "DpmDescriptor_t",
 	atomtree: "atomtree_powerplay_table",

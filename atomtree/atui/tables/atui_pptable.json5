@@ -24,101 +24,81 @@ global_default: {
 }, branches: [
 
 {
-	c_prefix:"union", c_type: "pptable_powerplay_platform_caps_v1",
-	leaves: [
-		{
-			access: "bios->platform_caps",
-			name: "platform_caps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "VDDGFX_control",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "if vddgfx will be a separated power rail.",},
-					],
-				}, {
-					name: "powerplay",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "if this is a mobile part and CCC need to show Powerplay page.",},
-					],
-				}, {
-					name: "SBIOS_powersource",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
-					],
-				}, {
-					name: "disable_voltage_island",
-					hi: 3, lo: 3,
-					description: [
-						{language: "english", text: "option to overwrite voltage island feature, regardless of VddGfx power rail support.",},
-					],
-				}, {
-					name: "reserved_4",
-					hi: 4, lo: 4,
-				}, {
-					name: "hardware_DC",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
-					],
-				}, {
-					name: "reserved_11_6",
-					hi: 11, lo: 6,
-				}, {
-					name: "MVDD_control",
-					hi: 12, lo: 12,
-					description: [
-						{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
-					],
-				}, {
-					name: "reserved_14_13",
-					hi: 14, lo: 13,
-				}, {
-					name: "VDDCI_control",
-					hi: 15, lo: 15,
-					description: [
-						{language: "english", text: "if dynamic VDDCI is required. Uncheck to disable it.",},
-					],
-				}, {
-					name: "reserved_16",
-					hi: 16, lo: 16,
-				}, {
-					name: "BACO",
-					hi: 17, lo: 17,
-					description: [
-						{language: "english", text: "Enable to indicate the driver supports BACO state.",},
-					],
-				}, {
-					name: "reserved_19_18",
-					hi: 19, lo: 18,
-				}, {
-					name: "output_thermal2GPIO17",
-					hi: 20, lo: 20,
-					description: [
-						{language: "english", text: "Enable to indicate the driver supports thermal2GPIO17.",},
-					],
-				}, {
-					name: "reserved_23_21",
-					hi: 23, lo: 21,
-				}, {
-					name: "PCC_shares_thermal_GPIO",
-					hi: 24, lo: 24,
-					description: [
-						{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
-					],
-				}, {
-					name: "load_post_production_FW",
-					hi: 25, lo: 25,
-				}, {
-					name: "reserved_31_26",
-					hi: 31, lo: 26,
-				},
-			],
-		},
-	],
+	c_prefix: "union", c_type: "pptable_powerplay_platform_caps_v1",
+	leaves: [{
+		access: "bios->platform_caps",
+		name: "platform_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "VDDGFX_control",
+				description: [
+					{language: "english", text: "if vddgfx will be a separated power rail.",},
+				],
+			}, {
+				access: "powerplay",
+				description: [
+					{language: "english", text: "if this is a mobile part and CCC need to show Powerplay page.",},
+				],
+			}, {
+				access: "SBIOS_powersource",
+				description: [
+					{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
+				],
+			}, {
+				access: "disable_voltage_island",
+				description: [
+					{language: "english", text: "option to overwrite voltage island feature, regardless of VddGfx power rail support.",},
+				],
+			}, {
+				access: "reserved_4",
+			}, {
+				access: "hardware_DC",
+				description: [
+					{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
+				],
+			}, {
+				access: "reserved_11_6",
+			}, {
+				access: "MVDD_control",
+				description: [
+					{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
+				],
+			}, {
+				access: "reserved_14_13",
+			}, {
+				access: "VDDCI_control",
+				description: [
+					{language: "english", text: "if dynamic VDDCI is required. Uncheck to disable it.",},
+				],
+			}, {
+				access: "reserved_16",
+			}, {
+				access: "BACO",
+				description: [
+					{language: "english", text: "Enable to indicate the driver supports BACO state.",},
+				],
+			}, {
+				access: "reserved_19_18",
+			}, {
+				access: "output_thermal2GPIO17",
+				description: [
+					{language: "english", text: "Enable to indicate the driver supports thermal2GPIO17.",},
+				],
+			}, {
+				access: "reserved_23_21",
+			}, {
+				access: "PCC_shares_thermal_GPIO",
+				description: [
+					{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
+				],
+			}, {
+				access: "load_post_production_FW",
+			}, {
+				access: "reserved_31_26",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_pptable_powerplaytable_v1",
 	table_size: "bios->header.header.structuresize",
@@ -794,26 +774,22 @@ global_default: {
 },
 
 {
-	c_prefix:"union", c_type: "clock_stretch_config_u8",
-	leaves: [
-		{
-			access: "bios->CKSVOffsetandDisable",
-			name: "CKSVOffsetandDisable",
-			display: "ATUI_BIN",
-			description: [
-				{language: "english", text: "clock stretch",},
-			],
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "cks_voltage_offset",
-					hi: 6, lo: 0,
-				}, {
-					name: "disable_stretch",
-					hi: 7, lo: 7,
-				},
-			],
-		},
-	],
+	c_prefix: "union", c_type: "clock_stretch_config_u8",
+	leaves: [{
+		access: "bios->CKSVOffsetandDisable",
+		name: "CKSVOffsetandDisable",
+		display: "ATUI_BIN",
+		description: [
+			{language: "english", text: "clock stretch",},
+		],
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "cks_voltage_offset",
+			}, {
+				access: "disable_stretch",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_pptable_sclk_dependency_record",
 	leaves: [

@@ -70,172 +70,130 @@ global_default: {
 	leaves: [{access: "bios->RevId", name: "RevId",},],
 }, {
 	c_prefix: "union", c_type: "atom_pp_fanparameters",
-	leaves: [
-		{
-			access: "bios->FanParameters",
-			name: "FanParameters",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "tachometer_pulses_per_revolution",
-					hi: 3, lo: 0,
-				}, {
-					name: "rsvd",
-					hi: 6, lo: 4,
-				}, {
-					name: "no_fan",
-					hi: 7, lo: 7,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->FanParameters",
+		name: "FanParameters",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "tachometer_pulses_per_revolution",
+			}, {
+				access: "rsvd",
+			}, {
+				access: "no_fan",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_pplib_classification",
-	leaves: [
-		{
-			access: "bios->Classification",
-			name: "Classification",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "ui_label",
-					hi: 2, lo: 0,
-					description: [
-						{language: "english", text: "enum atom_pplib_classification_ui",},
-					],
-				}, {
-					name: "boot",
-					hi: 3, lo: 3,
-				}, {
-					name: "thermal",
-					hi: 4, lo: 4,
-				}, {
-					name: "limited_power",
-					hi: 5, lo: 5,
-				}, {
-					name: "reset",
-					hi: 6, lo: 6,
-				}, {
-					name: "forced",
-					hi: 7, lo: 7,
-				}, {
-					name: "performance_3D",
-					hi: 8, lo: 8,
-				}, {
-					name: "overdrive_template",
-					hi: 9, lo: 9,
-				}, {
-					name: "uvd_state",
-					hi: 10, lo: 10,
-				}, {
-					name: "low_3D",
-					hi: 11, lo: 11,
-				}, {
-					name: "acpi",
-					hi: 12, lo: 12,
-				}, {
-					name: "hd2_state",
-					hi: 13, lo: 13,
-				}, {
-					name: "hd_state",
-					hi: 14, lo: 14,
-				}, {
-					name: "sd_state",
-					hi: 15, lo: 15,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->Classification",
+		name: "Classification",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "ui_label",
+				description: [
+					{language: "english", text: "enum atom_pplib_classification_ui",},
+				],
+			}, {
+				access: "boot",
+			}, {
+				access: "thermal",
+			}, {
+				access: "limited_power",
+			}, {
+				access: "reset",
+			}, {
+				access: "forced",
+			}, {
+				access: "performance_3D",
+			}, {
+				access: "overdrive_template",
+			}, {
+				access: "uvd_state",
+			}, {
+				access: "low_3D",
+			}, {
+				access: "acpi",
+			}, {
+				access: "hd2_state",
+			}, {
+				access: "hd_state",
+			}, {
+				access: "sd_state",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_pplib_classification2",
-	leaves: [
-		{
-			access: "bios->Classification2",
-			name: "Classification2",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "limitedpowersource_2",
-					hi: 0, lo: 0,
-				}, {
-					name: "ULV",
-					hi: 1, lo: 1,
-				}, {
-					name: "multi_view_codec",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "BD-3D",},
-					],
-				}, {
-					name: "rsvd0",
-					hi: 15, lo: 3,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->Classification2",
+		name: "Classification2",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "limitedpowersource_2",
+			}, {
+				access: "ULV",
+			}, {
+				access: "multi_view_codec",
+				description: [
+					{language: "english", text: "BD-3D",},
+				],
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_pplib_caps_and_settings",
-	leaves: [
-		{
-			access: "bios->CapsAndSettings",
-			name: "CapsAndSettings",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "single_display_only",
-					hi: 0, lo: 0,
-				}, {
-					name: "supports_video_playback",
-					hi: 1, lo: 1,
-				}, {
-					name: "pcie_link_speed",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "0=PCIe1, 1=PCIe2",},
-					],
-				}, {
-					name: "pcie_link_width",
-					hi: 7, lo: 3,
-					description: [
-						{language: "english", text: "lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x",},
-					],
-				}, {
-					name: "limited_refreshrate",
-					hi: 11, lo: 8,
-					description: [
-						{language: "english", text: "1=50Hz, all else = TBD",},
-					],
-				}, {
-					name: "disable_loadbalancing",
-					hi: 12, lo: 12,
-					description: [
-						{language: "english", text: "software side",},
-					],
-				}, {
-					name: "enable_timestamp_sleep",
-					hi: 13, lo: 13,
-				}, {
-					name: "disallow_on_dc",
-					hi: 14, lo: 14,
-				}, {
-					name: "enable_varibright",
-					hi: 15, lo: 15,
-				}, {
-					name: "swstate_memory_dll_off",
-					hi: 16, lo: 16,
-				}, {
-					name: "m3_arb",
-					hi: 18, lo: 17,
-				}, {
-					name: "enable_drr",
-					hi: 19, lo: 19,
-				}, {
-					name: "rsvd0",
-					hi: 31, lo: 20,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->CapsAndSettings",
+		name: "CapsAndSettings",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "single_display_only",
+			}, {
+				access: "supports_video_playback",
+			}, {
+				access: "pcie_link_speed",
+				description: [
+					{language: "english", text: "0=PCIe1, 1=PCIe2",},
+				],
+			}, {
+				access: "pcie_link_width",
+				description: [
+					{language: "english", text: "lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x",},
+				],
+			}, {
+				access: "limited_refreshrate",
+				description: [
+					{language: "english", text: "1=50Hz, all else = TBD",},
+				],
+			}, {
+				access: "disable_loadbalancing",
+				description: [
+					{language: "english", text: "software side",},
+				],
+			}, {
+				access: "enable_timestamp_sleep",
+			}, {
+				access: "disallow_on_dc",
+			}, {
+				access: "enable_varibright",
+			}, {
+				access: "swstate_memory_dll_off",
+			}, {
+				access: "m3_arb",
+			}, {
+				access: "enable_drr",
+			}, {
+				access: "rsvd0",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_pplib_ppm_table",
 	leaves: [
@@ -283,55 +241,46 @@ global_default: {
 {
 	c_prefix: "union", c_type: "powerplay_platform_caps",
 	atomtree: "atomtree_powerplaytable",
-	leaves: [
-		{
-			access: "bios->platform_caps",
-			name: "platform_caps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "powerplay",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "whether CCC needs to show Powerplay page.",},
-					],
-				}, {
-					name: "sbios_powersource",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
-					],
-				}, {
-					name: "hardware_dc",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
-					],
-				}, {
-					name: "BACO",
-					hi: 3, lo: 3,
-					description: [
-						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
-					],
-				}, {
-					name: "MACO",
-					hi: 4, lo: 4,
-					description: [
-						{language: "english", text: "whether board supports the MACO circuitry.",},
-					],
-				}, {
-					name: "shadow_pstate",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "whether board supports the Shadow Pstate.",},
-					],
-				}, {
-					name: "reserved",
-					hi: 31, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->platform_caps",
+		name: "platform_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "powerplay",
+				description: [
+					{language: "english", text: "whether CCC needs to show Powerplay page.",},
+				],
+			}, {
+				access: "sbios_powersource",
+				description: [
+					{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
+				],
+			}, {
+				access: "hardware_dc",
+				description: [
+					{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
+				],
+			}, {
+				access: "BACO",
+				description: [
+					{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
+				],
+			}, {
+				access: "MACO",
+				description: [
+					{language: "english", text: "whether board supports the MACO circuitry.",},
+				],
+			}, {
+				access: "shadow_pstate",
+				description: [
+					{language: "english", text: "whether board supports the Shadow Pstate.",},
+				],
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "struct",
 	c_type: "quadratic_f32",

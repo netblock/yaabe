@@ -308,65 +308,49 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "psi_sel_mask",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->sel_mask",
-			name: "sel_mask",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "VR0_PLANE0_PSI0",
-					hi: 0, lo: 0,
-				}, {
-					name: "VR0_PLANE0_PSI1",
-					hi: 1, lo: 1,
-				}, {
-					name: "VR0_PLANE1_PSI0",
-					hi: 2, lo: 2,
-				}, {
-					name: "VR0_PLANE1_PSI1",
-					hi: 3, lo: 3,
-				}, {
-					name: "VR1_PLANE0_PSI0",
-					hi: 4, lo: 4,
-				}, {
-					name: "VR1_PLANE0_PSI1",
-					hi: 5, lo: 5,
-				}, {
-					name: "VR1_PLANE1_PSI0",
-					hi: 6, lo: 6,
-				}, {
-					name: "VR1_PLANE1_PSI1",
-					hi: 7, lo: 7,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->sel_mask",
+		name: "sel_mask",
+		display: "ATUI_SUBONLY",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "VR0_PLANE0_PSI0",
+			}, {
+				access: "VR0_PLANE0_PSI1",
+			}, {
+				access: "VR0_PLANE1_PSI0",
+			}, {
+				access: "VR0_PLANE1_PSI1",
+			}, {
+				access: "VR1_PLANE0_PSI0",
+			}, {
+				access: "VR1_PLANE0_PSI1",
+			}, {
+				access: "VR1_PLANE1_PSI0",
+			}, {
+				access: "VR1_PLANE1_PSI1",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "led_display_control",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->LedEnableMask",
-			name: "LedEnableMask",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "GFX_DPM",
-					hi: 0, lo: 0,
-				}, {
-					name: "PCIE",
-					hi: 1, lo: 1,
-				}, {
-					name: "ERROR",
-					hi: 2, lo: 2,
-				}, {
-					name: "reserved",
-					hi: 7, lo: 3,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->LedEnableMask",
+		name: "LedEnableMask",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "GFX_DPM",
+			}, {
+				access: "PCIE",
+			}, {
+				access: "ERROR",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_smc_dpm_info_v4_1",
 	atomtree: "atomtree_smc_dpm_info",
@@ -2671,55 +2655,40 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "atombios_firmware_capability_v3",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->firmware_capability",
-			name: "firmware_capability",
-			display: "ATUI_HEX",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "FIRMWARE_POSTED",
-					hi: 0, lo: 0,
-				}, {
-					name: "GPU_VIRTUALIZATION",
-					hi: 1, lo: 1,
-				}, {
-					name: "reserved0",
-					hi: 5, lo: 2,
-				}, {
-					name: "WMI_SUPPORT",
-					hi: 6, lo: 6,
-				}, {
-					name: "HWEMU_ENABLE",
-					hi: 7, lo: 7,
-				}, {
-					name: "HWEMU_UMC_CFG",
-					hi: 8, lo: 8,
-				}, {
-					name: "SRAM_ECC",
-					hi: 9, lo: 9,
-				}, {
-					name: "ENABLE_2STAGE_BIST_TRAINING",
-					hi: 10, lo: 10,
-				}, {
-					name: "reserved1",
-					hi: 14, lo: 11,
-				}, {
-					name: "ENABLE_2ND_USB20PORT",
-					hi: 15, lo: 15,
-				}, {
-					name: "reserved2",
-					hi: 16, lo: 16,
-				}, {
-					name: "DYNAMIC_BOOT_CFG_ENABLE",
-					hi: 17, lo: 17,
-				}, {
-					name: "reserved3",
-					hi: 31, lo: 18,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->firmware_capability",
+		name: "firmware_capability",
+		display: "ATUI_HEX",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "FIRMWARE_POSTED",
+			}, {
+				access: "GPU_VIRTUALIZATION",
+			}, {
+				access: "reserved0",
+			}, {
+				access: "WMI_SUPPORT",
+			}, {
+				access: "HWEMU_ENABLE",
+			}, {
+				access: "HWEMU_UMC_CFG",
+			}, {
+				access: "SRAM_ECC",
+			}, {
+				access: "ENABLE_2STAGE_BIST_TRAINING",
+			}, {
+				access: "reserved1",
+			}, {
+				access: "ENABLE_2ND_USB20PORT",
+			}, {
+				access: "reserved2",
+			}, {
+				access: "DYNAMIC_BOOT_CFG_ENABLE",
+			}, {
+				access: "reserved3",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_firmware_info_v3_1",
 	atomtree: "atomtree_firmware_info",
@@ -4377,72 +4346,68 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "atom_i2c_id_config",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->i2c_id",
-			name: "i2c_id",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "i2c_line_mux",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
-					],
-				}, {
-					name: "hw_engine_id",
-					hi: 6, lo: 4,
-					description: [
-						{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
-					],
-				}, {
-					name: "hw_capable",
-					hi: 7, lo: 7,
-					description: [
-						{language: "english", text: "=0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->i2c_id",
+		name: "i2c_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "i2c_line_mux",
+				description: [
+					{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
+				],
+			}, {
+				access: "hw_engine_id",
+				description: [
+					{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
+				],
+			}, {
+				access: "hw_capable",
+				description: [
+					{language: "english", text: "=0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_gpioi2c_pin_id",
 	atomtree: "atomtree_gpio_pin_lut",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->gpio_id",
-			name: "gpio_id",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "i2c_line_mux",
-					hi: 3, lo: 0,
-					description: [
-						{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
-					],
-				}, {
-					name: "hw_engine_id",
-					hi: 6, lo: 4,
-					description: [
-						{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
-					],
-				}, {
-					name: "hw_capable",
-					hi: 7, lo: 7,
-					description: [
-						{language: "english", text: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",},
-					],
-				}, {
-					name: "GPIO_PINID",
-					hi: 6, lo: 0,
-					description: [
-						{language: "english", text: "enum of atom_gpio_pin_assignment_gpio_id",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->gpio_id",
+		name: "gpio_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "i2c_config.i2c_line_mux",
+				description: [
+					{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
+				],
+			}, {
+				access: "i2c_config.hw_engine_id",
+				name: "hw_engine_id",
+				description: [
+					{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
+				],
+			}, {
+				access: "i2c_config.hw_capable",
+				name: "hw_capable",
+				description: [
+					{language: "english", text: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",},
+				],
+			}, {
+				access: "GPIO_PINID",
+				description: [
+					{language: "english", text: "enum of atom_gpio_pin_assignment_gpio_id",},
+				],
+			}, {
+				access: "HW_CAP",
+				description: [
+					{language: "english", text: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_gpio_pin_assignment_v2_1",
 	atomtree: "atomtree_gpio_pin_lut",
@@ -4540,25 +4505,20 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "record_connector_caps",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->connector_caps",
-			name: "connector_caps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "internal_display_checked",
-					hi: 0, lo: 0,
-				}, {
-					name: "internal_backlight_checked",
-					hi: 1, lo: 1,
-				}, {
-					name: "reserved",
-					hi: 15, lo: 2,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->connector_caps",
+		name: "connector_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "internal_display_checked",
+			}, {
+				access: "internal_backlight_checked",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_connector_caps_record",
 	table_size: "sizeof(*bios)",
@@ -4636,73 +4596,61 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "atom_encoder_caps",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->encodercaps",
-			name: "encodercaps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "HBR2__MST_enable",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "DP1.2 HBR2 is supported by HW encoder, it is retired in NI. the real meaning from SI is MST_EN",},
-					],
-				}, {
-					name: "HBR2_enable",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "DP1.2 HBR2 setting is qualified and HBR2 can be enabled",},
-					],
-				}, {
-					name: "HDMI6GBPS_enable",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "HDMI2.0 6Gbps enable or not.",},
-					],
-				}, {
-					name: "HBR3_enable",
-					hi: 3, lo: 3,
-					description: [
-						{language: "english", text: "DP1.3 HBR3 is supported by board.",},
-					],
-				}, {
-					name: "DP2",
-					hi: 4, lo: 4,
-					description: [
-						{language: "english", text: "DP2 is supported by ASIC/board.",},
-					],
-				}, {
-					name: "UHBR10_enable",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "DP2.0 UHBR10 settings is supported by board",},
-					],
-				}, {
-					name: "UHBR13_5_enable",
-					hi: 6, lo: 6,
-					description: [
-						{language: "english", text: "DP2.0 UHBR13.5 settings is supported by board",},
-					],
-				}, {
-					name: "UHBR20_enable",
-					hi: 7, lo: 7,
-					description: [
-						{language: "english", text: "DP2.0 UHBR20 settings is supported by board",},
-					],
-				}, {
-					name: "USB_C_type",
-					hi: 8, lo: 8,
-					description: [
-						{language: "english", text: "the DP connector is a USB-C type.",},
-					],
-				}, {
-					name: "reserved0",
-					hi: 31, lo: 9,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->encodercaps",
+		name: "encodercaps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "HBR2__MST_enable",
+				description: [
+					{language: "english", text: "DP1.2 HBR2 is supported by HW encoder, it is retired in NI. the real meaning from SI is MST_EN",},
+				],
+			}, {
+				access: "HBR2_enable",
+				description: [
+					{language: "english", text: "DP1.2 HBR2 setting is qualified and HBR2 can be enabled",},
+				],
+			}, {
+				access: "HDMI6GBPS_enable",
+				description: [
+					{language: "english", text: "HDMI2.0 6Gbps enable or not.",},
+				],
+			}, {
+				access: "HBR3_enable",
+				description: [
+					{language: "english", text: "DP1.3 HBR3 is supported by board.",},
+				],
+			}, {
+				access: "DP2",
+				description: [
+					{language: "english", text: "DP2 is supported by ASIC/board.",},
+				],
+			}, {
+				access: "UHBR10_enable",
+				description: [
+					{language: "english", text: "DP2.0 UHBR10 settings is supported by board",},
+				],
+			}, {
+				access: "UHBR13_5_enable",
+				description: [
+					{language: "english", text: "DP2.0 UHBR13.5 settings is supported by board",},
+				],
+			}, {
+				access: "UHBR20_enable",
+				description: [
+					{language: "english", text: "DP2.0 UHBR20 settings is supported by board",},
+				],
+			}, {
+				access: "USB_C_type",
+				description: [
+					{language: "english", text: "the DP connector is a USB-C type.",},
+				],
+			}, {
+				access: "reserved0",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_encoder_caps_record",
 	table_size: "sizeof(*bios)",
@@ -4828,32 +4776,27 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "disp_connector_caps",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->connectcaps",
-			name: "connectcaps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "internal_display",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "this non-embedded display connector is an internal display",},
-					],
-				}, {
-					name: "internal_backlight",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "this internal display requires BL control from GPU, refers to lcd_info for BL PWM freq",},
-					],
-				}, {
-					name: "reserved",
-					display: "ATUI_HEX",
-					hi: 31, lo: 2,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->connectcaps",
+		name: "connectcaps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "internal_display",
+				description: [
+					{language: "english", text: "this non-embedded display connector is an internal display",},
+				],
+			}, {
+				access: "internal_backlight",
+				description: [
+					{language: "english", text: "this internal display requires BL control from GPU, refers to lcd_info for BL PWM freq",},
+				],
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_disp_connector_caps_record",
 	table_size: "sizeof(*bios)",
@@ -4876,114 +4819,89 @@ global_default: {
 {
 	c_prefix: "union", c_type: "atom_display_device_tag",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->device_tag",
-			name: "device_tag",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "reserved0",
-					hi: 0, lo: 0,
-				}, {
-					name: "LCD1_SUPPORT",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "an embedded display is either an LVDS or eDP signal type of display",},
-					],
-				}, {
-					name: "reserved1",
-					hi: 2, lo: 2,
-				}, {
-					name: "DFP1_SUPPORT",
-					hi: 3, lo: 3,
-				}, {
-					name: "reserved2",
-					hi: 4, lo: 4,
-				}, {
-					name: "LCD2_SUPPORT",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "second edp device tag 0x0020 for backward compability",},
-					],
-				}, {
-					name: "DFP6_SUPPORT",
-					hi: 6, lo: 6,
-				}, {
-					name: "DFP2_SUPPORT",
-					hi: 7, lo: 7,
-				}, {
-					name: "reserved3",
-					hi: 8, lo: 8,
-				}, {
-					name: "DFP3_SUPPORT",
-					hi: 9, lo: 9,
-				}, {
-					name: "DFP4_SUPPORT",
-					hi: 10, lo: 10,
-				}, {
-					name: "DFP5_SUPPORT",
-					hi: 11, lo: 11,
-				}, {
-					name: "reserved4",
-					hi: 15, lo: 12,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->device_tag",
+		name: "device_tag",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "reserved0",
+			}, {
+				access: "LCD1_SUPPORT",
+				description: [
+					{language: "english", text: "an embedded display is either an LVDS or eDP signal type of display",},
+				],
+			}, {
+				access: "reserved1",
+			}, {
+				access: "DFP1_SUPPORT",
+			}, {
+				access: "reserved2",
+			}, {
+				access: "LCD2_SUPPORT",
+				description: [
+					{language: "english", text: "second edp device tag 0x0020 for backward compability",},
+				],
+			}, {
+				access: "DFP6_SUPPORT",
+			}, {
+				access: "DFP2_SUPPORT",
+			}, {
+				access: "reserved3",
+			}, {
+				access: "DFP3_SUPPORT",
+			}, {
+				access: "DFP4_SUPPORT",
+			}, {
+				access: "DFP5_SUPPORT",
+			}, {
+				access: "reserved4",
+			},
+		],},
+	},],
 
 }, {
 	c_prefix: "union", c_type: "display_object_id",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->display_objid",
-			name: "display_objid",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "id",
-					hi: 7, lo: 0,
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-					enum: "connector_id",
-				}, {
-					name: "enum_id",
-					hi: 11, lo: 8,
-				}, {
-					name: "type",
-					hi: 15, lo: 12,
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-					enum: "object_type",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->display_objid",
+		name: "display_objid",
+		display: "ATUI_SUBONLY",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "connector_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "encoder_object_id",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->encoder_objid",
-			name: "encoder_objiad",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "id",
-					hi: 7, lo: 0,
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-					enum: "encoder_id",
-				}, {
-					name: "enum_id",
-					hi: 11, lo: 8,
-				}, {
-					name: "type",
-					hi: 15, lo: 12,
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-					enum: "object_type",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->encoder_objid",
+		name: "encoder_objiad",
+		display: "ATUI_SUBONLY",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "encoder_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_display_object_path_v2",
 	table_size: "sizeof(*bios)",
@@ -5803,77 +5721,57 @@ global_default: {
 }, {
 	c_prefix: "union", c_type: "dphy_bitremap0",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "dphy_bitremap",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "bit0",
-					hi: 3, lo: 0,
-				}, {
-					name: "bit1",
-					hi: 7, lo: 4,
-				}, {
-					name: "bit2",
-					hi: 11, lo: 8,
-				}, {
-					name: "bit3",
-					hi: 15, lo: 12,
-				}, {
-					name: "bit4",
-					hi: 19, lo: 16,
-				}, {
-					name: "bit5",
-					hi: 23, lo: 20,
-				}, {
-					name: "bit6",
-					hi: 27, lo: 24,
-				}, {
-					name: "bit7",
-					hi: 31, lo: 28,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "dphy_bitremap",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "bit0",
+			}, {
+				access: "bit1",
+			}, {
+				access: "bit2",
+			}, {
+				access: "bit3",
+			}, {
+				access: "bit4",
+			}, {
+				access: "bit5",
+			}, {
+				access: "bit6",
+			}, {
+				access: "bit7",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "dphy_byteremap0",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->raw_data",
-			name: "dphy_byteremap",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "byte0",
-					hi: 3, lo: 0,
-				}, {
-					name: "byte1",
-					hi: 7, lo: 4,
-				}, {
-					name: "byte2",
-					hi: 11, lo: 8,
-				}, {
-					name: "byte3",
-					hi: 15, lo: 12,
-				}, {
-					name: "byte4",
-					hi: 19, lo: 16,
-				}, {
-					name: "byte5",
-					hi: 23, lo: 20,
-				}, {
-					name: "byte6",
-					hi: 27, lo: 24,
-				}, {
-					name: "byte7",
-					hi: 31, lo: 28,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw_data",
+		name: "dphy_byteremap",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "byte0",
+			}, {
+				access: "byte1",
+			}, {
+				access: "byte2",
+			}, {
+				access: "byte3",
+			}, {
+				access: "byte4",
+			}, {
+				access: "byte5",
+			}, {
+				access: "byte6",
+			}, {
+				access: "byte7",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_gddr6_bit_byte_remap",
 	table_size: "sizeof(*bios)",
@@ -5957,60 +5855,48 @@ global_default: {
 	atomtree: "atomtree_umc_init_reg_block",
 	table_start: "atomtree->register_info",
 	table_size: "atomtree->info_table_size",
-	leaves: [
-		{
-			// the uint32_t* typecast is about stripping the 'union'
-			// abstraction so that the preprocessor can correctly calculate
-			// the bitfield
-			access: "((uint32_t*)atomtree->register_info)",
+	leaves: [{
+			access: "(&(atomtree->register_info[0].umc_reg_addr))",
 			name: "umc_reg_list",
 			display: "ATUI_SUBONLY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_info",
 				enum: "ATUI_NULL",
-				pattern: [
-					{
+				pattern: [{
 					name: "umc_reg_addr [%02u]",
 					display: "ATUI_HEX",
-					fancy: "ATUI_BITFIELD", fancy_data: [
+					fancy: "ATUI_BITFIELD", fancy_data: {
+						union: "atomtree->register_info[0]", fields: [
 							{
-							name: "umc_register_addr",
-							display: "ATUI_HEX",
-							hi: 23, lo: 0,
+								access: "umc_register_addr",
+								display: "ATUI_HEX",
 							}, {
-							name: "umc_reg_type_ind",
-							hi: 24, lo: 24,
+								access: "umc_reg_type_ind",
 							}, {
-							name: "umc_reg_rsvd",
-							display: "ATUI_BIN",
-							hi: 31, lo: 25,
+								access: "umc_reg_rsvd",
+								display: "ATUI_BIN",
 							},
 						],
 					},
-				],
+				},],
 			},
-		},
-	],
+	},],
 }, {
 	c_prefix: "union", c_type: "atom_mc_register_setting_id",
 	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->id_access",
-			name: "id_access",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "mem_clock_range",
-					hi: 23, lo: 0,
-				}, {
-					name: "mem_block_id",
-					hi: 31, lo: 24,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->id_access",
+		name: "id_access",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "mem_clock_range",
+			}, {
+				access: "mem_block_id",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_umc_reg_setting_data_block",
 	atomtree: "atomtree_umc_init_reg_block",
@@ -7075,22 +6961,20 @@ global_default: {
 			access: "bios->loadline_psi1.loadline_psi1",
 			name: "loadline_psi1",
 			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "offset_trim",
-					hi: 1, lo: 0,
-				}, {
-					name: "loadline_slope",
-					hi: 4, lo: 2,
-				}, {
-					name: "PSI1_L_enable",
-					hi: 5, lo: 5,
-				}, {
-					name: "reserved",
-					display: "ATUI_HEX",
-					hi: 7, lo: 6,
-				},
-			],
+			fancy: "ATUI_BITFIELD", fancy_data: {
+				union: "bios->loadline_psi1", fields: [
+					{
+						access: "offset_trim",
+					}, {
+						access: "loadline_slope",
+					}, {
+						access: "PSI1_L_enable",
+					}, {
+						access: "reserved",
+						display: "ATUI_HEX",
+					},
+				],
+			},
 		}, {
 			access: "bios->psi0_l_vid_thresd",
 			name: "psi0_l_vid_thresd",

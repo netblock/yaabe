@@ -25,32 +25,25 @@ global_default: {
 }, branches: [
 
 {
-	c_prefix:"union", c_type: "psp_directory_additional_info",
-	leaves: [
-		{
-			access: "bios->additional_info",
-			name: "additional_info",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "dir_size",
-					hi: 9, lo: 0,
-				}, {
-					name: "spi_block_size",
-					hi: 13, lo: 10,
-				}, {
-					name: "base_addr",
-					hi: 28, lo: 14,
-				}, {
-					name: "address_mode",
-					hi: 30, lo: 29,
-				}, {
-					name: "not_used",
-					hi: 31, lo: 31,
-				},
-			],
-		},
-	],
+	c_prefix: "union", c_type: "psp_directory_additional_info",
+	leaves: [{
+		access: "bios->additional_info",
+		name: "additional_info",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "dir_size",
+			}, {
+				access: "spi_block_size",
+			}, {
+				access: "base_addr",
+			}, {
+				access: "address_mode",
+			}, {
+				access: "not_used",
+			},
+		],},
+	},],
 }, {
 	c_type: "psp_directory_header",
 	leaves: [
@@ -81,50 +74,40 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "psp_directory_entry_extra",
-	leaves: [
-		{
-			access: "bios->extra",
-			name: "extra",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "rom_id",
-					hi: 1, lo: 0,
-				}, {
-					name: "writable",
-					hi: 2, lo: 2,
-				}, {
-					name: "inst",
-					hi: 6, lo: 3,
-				}, {
-					name: "rsvd_1",
-					hi: 15, lo: 7,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->extra",
+		name: "extra",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rom_id",
+			}, {
+				access: "writable",
+			}, {
+				access: "inst",
+			}, {
+				access: "rsvd_1",
+			},
+		],},
+	},],
 }, {
 	c_prefix: "union", c_type: "psp_directory_entry_address",
-	leaves: [
-		{
-			access: "bios->location",
-			name: "location",
-			display: "ATUI_HEX",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "address",
-					display: "ATUI_HEX",
-					hi: 61, lo: 0,
-				}, {
-					name: "mode",
-					hi: 63, lo: 62,
-					description: [
-						{language: "english", text: "0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset",},
-					],
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->location",
+		name: "location",
+		display: "ATUI_HEX",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "address",
+				display: "ATUI_HEX",
+			}, {
+				access: "mode",
+				description: [
+					{language: "english", text: "0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset",},
+				],
+			},
+		],},
+	},],
 }, {
 	c_type: "psp_directory_entry",
 	leaves: [

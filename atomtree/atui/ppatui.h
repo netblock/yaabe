@@ -133,4 +133,28 @@ C preprocessor side of ATUI table generation
 	default:false\
 )
 
+
+// bitfield tools to extract various details of a little-endian bitfield
+// -O1 and higher compiles to a static number
+#define _PPATUI_BIT_SIZEOF(bios, f) _BIT_SIZEOF(typeof(bios), f)
+#define _BIT_SIZEOF(un, f) (\
+	stdc_count_ones((un) {.f = -1}.f)\
+)
+#define _PPATUI_BIT_LO(bios, f) _BIT_LO(typeof(bios), f)
+#define _BIT_LO(un, f) (\
+	stdc_first_trailing_one(\
+		(union {\
+			un anon;\
+			uint64_t all;\
+		}) {\
+			.anon.f = -1\
+		}.all\
+	) - 1\
+)
+#define _PPATUI_BIT_HI(bios, f) _BIT_HI(typeof(bios), f)
+#define _BIT_HI(un, f) (\
+	_BIT_LO(un, f) + _BIT_SIZEOF(un, f) - 1\
+)
+
+
 #endif

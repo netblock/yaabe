@@ -24,47 +24,39 @@ global_default: {
 }, branches: [
 
 {
-	c_prefix:"union", c_type: "vega10_powerplay_platform_caps",
-	leaves: [
-		{
-			access: "bios->platform_caps",
-			name: "platform_caps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "powerplay",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "whether CCC needs to show Powerplay page.",},
-					],
-				}, {
-					name: "sbios_powersource",
-					hi: 1, lo: 1,
-					description: [
-						{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
-					],
-				}, {
-					name: "hardware_dc",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
-					],
-				}, {
-					name: "BACO",
-					hi: 3, lo: 3,
-					description: [
-						{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
-					],
-				}, {
-					name: "combine_pcc_with_thermal_signal",
-					hi: 4, lo: 4,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 5,
-				},
-			],
-		},
-	],
+	c_prefix: "union", c_type: "vega10_powerplay_platform_caps",
+	leaves: [{
+		access: "bios->platform_caps",
+		name: "platform_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "powerplay",
+				description: [
+					{language: "english", text: "whether CCC needs to show Powerplay page.",},
+				],
+			}, {
+				access: "sbios_powersource",
+				description: [
+					{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
+				],
+			}, {
+				access: "hardware_dc",
+				description: [
+					{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
+				],
+			}, {
+				access: "BACO",
+				description: [
+					{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
+				],
+			}, {
+				access: "combine_pcc_with_thermal_signal",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_vega10_powerplaytable",
 	table_size: "bios->header.header.structuresize",
@@ -675,25 +667,21 @@ global_default: {
 
 {
 	c_prefix: "union", c_type: "clock_stretch_config_u16",
-	leaves: [
-		{
-			access: "bios->CKSVOffsetandDisable",
-			name: "CKSVOffsetandDisable",
-			display: "ATUI_BIN",
-			description: [
-				{language: "english", text: "clock stretch",},
-			],
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "cks_voltage_offset",
-					hi: 14, lo: 0,
-				}, {
-					name: "disable_stretch",
-					hi: 15, lo: 15,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->CKSVOffsetandDisable",
+		name: "CKSVOffsetandDisable",
+		display: "ATUI_BIN",
+		description: [
+			{language: "english", text: "clock stretch",},
+		],
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "cks_voltage_offset",
+			}, {
+				access: "disable_stretch",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_vega10_gfxclk_dependency_record",
 	leaves: [

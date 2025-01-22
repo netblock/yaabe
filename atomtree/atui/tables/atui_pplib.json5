@@ -81,148 +81,117 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "pplib_powerplay_platform_caps",
-	leaves: [
-		{
-			access: "bios->platform_caps",
-			name: "platform_caps",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "back_bias",
-					hi: 0, lo: 0,
-				}, {
-					name: "powerplay",
-					hi: 1, lo: 1,
-				}, {
-					name: "sbios_powersource",
-					hi: 2, lo: 2,
-					description: [
-						{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
-					],
-				}, {
-					name: "ASPM_L0S",
-					hi: 3, lo: 3,
-				}, {
-					name: "ASPM_L1",
-					hi: 4, lo: 4,
-				}, {
-					name: "hardware_DC",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
-					],
-				}, {
-					name: "gemini_primary",
-					hi: 6, lo: 6,
-				}, {
-					name: "step_VDDC",
-					hi: 7, lo: 7,
-				}, {
-					name: "voltage_control",
-					hi: 8, lo: 8,
-				}, {
-					name: "sideport_control",
-					hi: 9, lo: 9,
-				}, {
-					name: "turn_off_PLL_ASPML1",
-					hi: 10, lo: 10,
-				}, {
-					name: "ht_link_control",
-					hi: 11, lo: 11,
-				}, {
-					name: "MVDD_control",
-					hi: 12, lo: 12,
-					description: [
-						{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
-					],
-				}, {
-					name: "goto_boot_on_alert",
-					hi: 13, lo: 13,
-					description: [
-						{language: "english", text: "Go to boot state on alerts, e.g. on an AC->DC transition.",},
-					],
-				}, {
-					name: "dont_wait_for_vblank",
-					hi: 14, lo: 14,
-					description: [
-						{language: "english", text: "Do NOT wait for VBLANK during an alert (e.g. AC->DC transition).",},
-					],
-				}, {
-					name: "VDDCI_control",
-					hi: 15, lo: 15,
-					description: [
-						{language: "english", text: "Does the driver control VDDCI independently from VDDC.",},
-					],
-				}, {
-					name: "regulator_hot",
-					hi: 16, lo: 16,
-					description: [
-						{language: "english", text: "Enable the 'regulator hot' feature.",},
-					],
-				}, {
-					name: "BACO",
-					hi: 17, lo: 17,
-					description: [
-						{language: "english", text: "Does the driver supports BACO state.",},
-					],
-				}, {
-					name: "new_CAC_voltage",
-					hi: 18, lo: 18,
-					description: [
-						{language: "english", text: "Does the driver supports new CAC voltage table.",},
-					],
-				}, {
-					name: "revert_GPIO5_polarity",
-					hi: 19, lo: 19,
-					description: [
-						{language: "english", text: "Does the driver supports revert GPIO5 polarity.",},
-					],
-				}, {
-					name: "output_thermal2GPIO17",
-					hi: 20, lo: 20,
-					description: [
-						{language: "english", text: "Does the driver supports thermal2GPIO17.",},
-					],
-				}, {
-					name: "vrhot_gpio_configurable",
-					hi: 21, lo: 21,
-					description: [
-						{language: "english", text: "Does the driver supports VR HOT GPIO Configurable.",},
-					],
-				}, {
-					name: "temp_inversion",
-					hi: 22, lo: 22,
-					description: [
-						{language: "english", text: "Does the driver supports Temp Inversion feature.",},
-					],
-				}, {
-					name: "EVV",
-					hi: 23, lo: 23,
-				}, {
-					name: "PCC_shares_thermal_GPIO",
-					hi: 24, lo: 24,
-					description: [
-						{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
-					],
-				}, {
-					name: "load_post_production_FW",
-					hi: 25, lo: 25,
-				}, {
-					name: "no_temp_in_power_calc",
-					hi: 26, lo: 26,
-					description: [
-						{language: "english", text: "disable using actual temperature for power calc",},
-					],
-				}, {
-					name: "VRHOT_polarity_high",
-					hi: 27, lo: 27,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 28,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->platform_caps",
+		name: "platform_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "back_bias",
+			}, {
+				access: "powerplay",
+			}, {
+				access: "sbios_powersource",
+				description: [
+					{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
+				],
+			}, {
+				access: "ASPM_L0S",
+			}, {
+				access: "ASPM_L1",
+			}, {
+				access: "hardware_DC",
+				description: [
+					{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
+				],
+			}, {
+				access: "gemini_primary",
+			}, {
+				access: "step_VDDC",
+			}, {
+				access: "voltage_control",
+			}, {
+				access: "sideport_control",
+			}, {
+				access: "turn_off_PLL_ASPML1",
+			}, {
+				access: "ht_link_control",
+			}, {
+				access: "MVDD_control",
+				description: [
+					{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
+				],
+			}, {
+				access: "goto_boot_on_alert",
+				description: [
+					{language: "english", text: "Go to boot state on alerts, e.g. on an AC->DC transition.",},
+				],
+			}, {
+				access: "dont_wait_for_vblank",
+				description: [
+					{language: "english", text: "Do NOT wait for VBLANK during an alert (e.g. AC->DC transition).",},
+				],
+			}, {
+				access: "VDDCI_control",
+				description: [
+					{language: "english", text: "Does the driver control VDDCI independently from VDDC.",},
+				],
+			}, {
+				access: "regulator_hot",
+				description: [
+					{language: "english", text: "Enable the 'regulator hot' feature.",},
+				],
+			}, {
+				access: "BACO",
+				description: [
+					{language: "english", text: "Does the driver supports BACO state.",},
+				],
+			}, {
+				access: "new_CAC_voltage",
+				description: [
+					{language: "english", text: "Does the driver supports new CAC voltage table.",},
+				],
+			}, {
+				access: "revert_GPIO5_polarity",
+				description: [
+					{language: "english", text: "Does the driver supports revert GPIO5 polarity.",},
+				],
+			}, {
+				access: "output_thermal2GPIO17",
+				description: [
+					{language: "english", text: "Does the driver supports thermal2GPIO17.",},
+				],
+			}, {
+				access: "vrhot_gpio_configurable",
+				description: [
+					{language: "english", text: "Does the driver supports VR HOT GPIO Configurable.",},
+				],
+			}, {
+				access: "temp_inversion",
+				description: [
+					{language: "english", text: "Does the driver supports Temp Inversion feature.",},
+				],
+			}, {
+				access: "EVV",
+			}, {
+				access: "PCC_shares_thermal_GPIO",
+				description: [
+					{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
+				],
+			}, {
+				access: "load_post_production_FW",
+			}, {
+				access: "no_temp_in_power_calc",
+				description: [
+					{language: "english", text: "disable using actual temperature for power calc",},
+				],
+			}, {
+				access: "VRHOT_polarity_high",
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 },
 
 {
@@ -831,40 +800,31 @@ global_default: {
 
 {
 	c_prefix: "union", c_type: "atom_pplib_r600_flags",
-	leaves: [
-		{
-			access: "bios->Flags",
-			name: "Flags",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "pciegen2",
-					hi: 0, lo: 0,
-				}, {
-					name: "uvdsafe",
-					hi: 1, lo: 1,
-				}, {
-					name: "backbiasenable",
-					hi: 2, lo: 2,
-				}, {
-					name: "memory_odt_off",
-					hi: 3, lo: 3,
-				}, {
-					name: "memory_dll_off",
-					hi: 4, lo: 4,
-				}, {
-					name: "lowpower",
-					hi: 5, lo: 5,
-					description: [
-						{language: "english", text: "On the RV770 use 'low power' setting (sequencer S0).",},
-					],
-				}, {
-					name: "reserved",
-					hi: 31, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->Flags",
+		name: "Flags",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "pciegen2",
+			}, {
+				access: "uvdsafe",
+			}, {
+				access: "backbiasenable",
+			}, {
+				access: "memory_odt_off",
+			}, {
+				access: "memory_dll_off",
+			}, {
+				access: "lowpower",
+				description: [
+					{language: "english", text: "On the RV770 use 'low power' setting (sequencer S0).",},
+				],
+			}, {
+				access: "reserved",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_pplib_r600_clock_info",
 	leaves: [
@@ -2147,22 +2107,18 @@ global_default: {
 
 {
 	c_prefix: "union", c_type: "atom_pplib_vce_clock_info_index",
-	leaves: [
-		{
-			access: "bios->ClockInfoIndex",
-			name: "ClockInfoIndex",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "ClockInfoArrary_index",
-					hi: 5, lo: 0,
-				}, {
-					name: "memory_pstate",
-					hi: 7, lo: 6,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->ClockInfoIndex",
+		name: "ClockInfoIndex",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "ClockInfoArrary_index",
+			}, {
+				access: "memory_pstate",
+			},
+		],},
+	},],
 }, {
 	c_type: "atom_pplib_vce_state_record",
 	leaves: [

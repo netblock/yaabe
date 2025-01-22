@@ -211,13 +211,20 @@ bios straightforward.
 
 Classic bitfield representation.
 
+`ATUI_BITFIELD` is intended to be under its own unique branch, but can be in a
+branch representing a struct. If the `ATUI_BITFIELD` leaf is in a branch
+representing a struct, set the `union` field of the fancy data to the union type
+the bitfield represents. The `union` field is optional, and if it doesn't exist,
+it will be inferred from the `bios` namespace.
+
+The `ATUI_BITFIELD` leaf may take a radix.
+
 The child leaves will assume missing fields from the `bitchild` section in
 `global_defaults`.
 
 The children will be automatically marked with `_ATUI_BITCHILD` as its
 fancy type; as a result, the children can't have a fancy type.
 
-If the leaf should be viewed in base 2, but also has bitfields for children:
 
 ``` json5
 {
@@ -227,20 +234,19 @@ If the leaf should be viewed in base 2, but also has bitfields for children:
 	description: [
 		{language: "english", text "..."},
 	],
-	fancy: "ATUI_BITFIELD", fancy_data: [
+	fancy: "ATUI_BITFIELD", fancy_data: {
+		union: "bitfield_union_name", fields: [
 		{
 			name: "bitfield entry name 0",
-			hi: 7, lo: 0,
 			display: "ATUI_DEC",
 			description: [
 				{language: "english", text "..."},
 			],
 		}, {
 			name: "bitfield entry name 1",
-			hi: 31, lo: 8,
 			display: ["ATUI_DEC", "ATUI_SIGNED"], // order doesn't matter
 		},
-	],
+	]},
 },
 ```
 

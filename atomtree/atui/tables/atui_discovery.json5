@@ -123,26 +123,22 @@ global_default: {
 	description: [
 		{language: "english", text: "reserved in v3 and older",},
 	],
-	leaves: [
-		{
-			access: "bios->flags",
-			name: "flags",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "base_addr_64_bit",
-					hi: 0, lo: 0,
-					description: [
-						{language: "english", text: "ip structures are using 64 bit base address",},
-					],
-				}, {
-					name: "reserved",
-					hi: 15, lo: 1,
-					display: "ATUI_HEX",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->flags",
+		name: "flags",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "base_addr_64_bit",
+				description: [
+					{language: "english", text: "ip structures are using 64 bit base address",},
+				],
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "ip_discovery_header",
 	leaves: [
@@ -231,23 +227,19 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "ip_harvest",
-	leaves: [
-		{
-			access: "bios->raw",
-			name: "harvest",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "harvest",
-					hi: 3, lo: 0,
-				}, {
-					name: "reserved",
-					hi: 7, lo: 4,
-					display: "ATUI_HEX",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw",
+		name: "harvest",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "harvest",
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "discovery_ip_entry_v1",
 	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
@@ -279,22 +271,18 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "ip_hcid_sub",
-	leaves: [
-		{
-			access: "bios->raw",
-			name: "raw",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "sub_revision",
-					hi: 3, lo: 0,
-				}, {
-					name: "variant",
-					hi: 7, lo: 4,
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->raw",
+		name: "raw",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "sub_revision",
+			}, {
+				access: "variant",
+			},
+		],},
+	},],
 }, {
 	c_type: "discovery_ip_entry_v3",
 	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
@@ -972,32 +960,25 @@ global_default: {
 	],
 }, {
 	c_prefix: "union", c_type: "vcn_fuse_data",
-	leaves: [
-		{
-			access: "bios->fuse_data",
-			name: "fuse_data",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "av1_disabled",
-					hi: 0, lo: 0,
-				}, {
-					name: "vp9_disabled",
-					hi: 1, lo: 1,
-				}, {
-					name: "hevc_disabled",
-					hi: 2, lo: 2,
-				}, {
-					name: "h264_disabled",
-					hi: 3, lo: 3,
-				}, {
-					name: "reserved",
-					hi: 31, lo: 4,
-					display: "ATUI_HEX",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->fuse_data",
+		name: "fuse_data",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "av1_disabled",
+			}, {
+				access: "vp9_disabled",
+			}, {
+				access: "hevc_disabled",
+			}, {
+				access: "h264_disabled",
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
 }, {
 	c_type: "discovery_vcn_instance_info_v1_0",
 	leaves: [

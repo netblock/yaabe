@@ -68,23 +68,19 @@ global_default: {
 
 {
 	c_prefix: "union", c_type: "pcir_indicator_byte",
-	leaves: [
-		{
-			access: "bios->indicator",
-			name: "indicator",
-			display: "ATUI_BIN",
-			fancy: "ATUI_BITFIELD", fancy_data: [
-				{
-					name: "indicator_reserved",
-					hi: 6, lo: 0,
-				}, {
-					name: "last_image",
-					hi: 7, lo: 7,
-					display: "ATUI_DEC",
-				},
-			],
-		},
-	],
+	leaves: [{
+		access: "bios->indicator",
+		name: "indicator",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "indicator_reserved",
+			}, {
+				access: "last_image",
+				display: "ATUI_DEC",
+			},
+		],},
+	},],
 }, {
 	c_type: "pcir_data_structure",
 	leaves: [

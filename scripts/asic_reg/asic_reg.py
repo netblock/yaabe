@@ -591,21 +591,16 @@ global_default: {
 	branch_template:str = """\
 {
 	c_type: "%s_%s",
-	leaves: [
-		{
-			name: "%s",
-			fancy_data: [
+	leaves: [{
+		name: "%s",
+		fancy_data: { fields: [
 %s\
-			],
-		},
-	],
+		],},
+	},],
 },
 """
 	bf_entry_template:str = """\
-				{
-					name: "%s",
-					hi: %u, lo: %u,
-				},
+			{access: "%s",},
 """
 
 	out_text:str = "" # the final buffer
@@ -622,9 +617,7 @@ global_default: {
 			bf_entries:str = ""
 			entry:bitfield_entry
 			for entry in bf.entries:
-				bf_entries += bf_entry_template % (
-					entry.name, entry.hi, entry.lo,
-				)
+				bf_entries += bf_entry_template % entry.name
 			out_text += branch_template % (
 				name, tuple(bf.ver_addr)[0],
 				name, bf_entries
