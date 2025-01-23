@@ -2213,6 +2213,8 @@ global_default: {
 					{language: "english", text: "0=LVDS 1=eDP",},
 				],
 			}, {
+				access: "reserved",
+			}, {
 				access: "color_depth",
 				description: [
 					{language: "english", text: "EDID V1.4 bits per color; 1=6,2=8..6=16 bpc",},

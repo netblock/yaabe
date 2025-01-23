@@ -327,13 +327,13 @@ union dpm_debug_override_smu11_0x40 {
 		DISABLE_VOLT_LINK_DCE_FCLK       :7-7 +1,
 		DISABLE_VOLT_LINK_MP0_SOCCLK     :8-8 +1,
 		DISABLE_DFLL_PLL_SHUTDOWN        :9-9 +1,
-		DISABLE_MEMORY_TEMPERATURE_READ :11-11 +1,
-		DISABLE_VOLT_LINK_VCN_DCEFCLK   :12-12 +1,
-		DISABLE_FAST_FCLK_TIMER         :13-13 +1,
-		DISABLE_VCN_PG                  :14-14 +1,
-		DISABLE_FMAX_VMAX               :15-15 +1,
-		ENABLE_eGPU_USB_WA              :16-16 +1,
-		reserved                        :31-17 +1;
+		DISABLE_MEMORY_TEMPERATURE_READ :10-10 +1,
+		DISABLE_VOLT_LINK_VCN_DCEFCLK   :11-11 +1,
+		DISABLE_FAST_FCLK_TIMER         :12-12 +1,
+		DISABLE_VCN_PG                  :13-13 +1,
+		DISABLE_FMAX_VMAX               :14-14 +1,
+		ENABLE_eGPU_USB_WA              :15-15 +1,
+		reserved                        :31-16 +1;
 	};
 };
 

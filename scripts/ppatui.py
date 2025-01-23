@@ -1023,16 +1023,16 @@ def leaves_asserts_to_text(
 	# various asserts and static_asserts over the leaves
 
 	atui_auto_enum_index_assert:str = (
-		"static_assert(ATUI_ENUM_INDEXOF(%s) < ATUI_ENUM_ARRAY_LENGTH);"
+		"	static_assert(ATUI_ENUM_INDEXOF(%s) < ATUI_ENUM_ARRAY_LENGTH);"
 		" // enum not registered\n"
 	)
 	atui_expl_enum_index_assert:str = (
-		"static_assert(ATUI_ENUM_INDEX(%s) < ATUI_ENUM_ARRAY_LENGTH);"
+		"	static_assert(ATUI_ENUM_INDEX(%s) < ATUI_ENUM_ARRAY_LENGTH);"
 		" // enum not registered\n"
 	)
 	bitfield_assert:str = """\
-static_assert(sizeof(%s) == sizeof(%s)); // too big
-assert((sizeof(%s)*CHAR_BIT - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out
+	static_assert(sizeof(%s) == sizeof(%s)); // too big
+	assert(((sizeof(%s)*CHAR_BIT) - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out
 """
 
 	assert_text:str = ""
@@ -1050,12 +1050,11 @@ assert((sizeof(%s)*CHAR_BIT - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out
 				assert_text += atui_expl_enum_index_assert % leaf.enum
 		match (leaf.type.fancy):
 			case atui_type.ATUI_BITFIELD:
-				pass # TODO re enable
-				#higest_field:atui_leaf = leaf.fancy_data["fields"][-1]
-				#assert_text += bitfield_assert % (
-				#	leaf.access, leaf.fancy_data["union"],
-				#	leaf.access, leaf.fancy_data["union"], highest_field.access
-				#)
+				highest_field:atui_leaf = leaf.fancy_data["fields"][-1]
+				assert_text += bitfield_assert % (
+					leaf.access, leaf.fancy_data["union"],
+					leaf.access, leaf.fancy_data["union"], highest_field.access
+				)
 
 	return assert_text
 

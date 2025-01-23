@@ -222,7 +222,7 @@ union ddr4_mr0 {
 		tWRtRTP_lo :11-9 +1, // auto-pre; MR0[13,11:9] -> tWRtRTP[3:0]
 		tCL_hi     :12-12 +1,
 		tWRtRTP_hi :13-13 +1, // tWR is 2x; tRTP: 0..5=5+n; 6=12 7=11 8=13 9=14
-		mr_zero    :16-14 +1;
+		mr_zero    :15-14 +1;
 	};
 };
 union ddr4_mr1 {
@@ -237,7 +237,7 @@ union ddr4_mr1 {
 		TDQS      :11-11 +1, // DQS termination (x8 only); 0=disabled; 1=enabled
 		Qoff      :12-12 +1, // output buffer disabled; 0=normal; 1=ODI/RTT off
 		RXCTLE_hi :13-13 +1, // MR1[13,6:5] -> RX_CTLE_CTRL[2:0]
-		mr_zero   :16-14 +1;
+		mr_zero   :15-14 +1;
 	};
 };
 union ddr4_mr2 {
@@ -250,7 +250,7 @@ union ddr4_mr2 {
 		RTT_WR  :11-9 +1, // 0=disabled 1=RZQ/2 2=/1 3=HiZ 4=/3
 		WRCRC   :12-12 +1, // write CRC; 0=disabled
 		RFU_13  :13-13 +1,
-		mr_zero :16-14 +1;
+		mr_zero :15-14 +1;
 	};
 };
 union ddr4_mr3 {
@@ -265,7 +265,7 @@ union ddr4_mr3 {
 		tWCL       :10-9 +1, // when CRC, DM are both enabled; 0..2=4+n
 		MPR_format :12-11 +1, // read format; 0=serial 1=parallell 2=staggered
 		RFU_13     :13-13 +1,
-		mr_zero    :16-14 +1;
+		mr_zero    :15-14 +1;
 	};
 };
 union ddr4_mr4 {
@@ -283,7 +283,7 @@ union ddr4_mr4 {
 		read_preamble       :11-11 +1, // 0=1tCK 1=2tCK
 		write_preamble      :12-12 +1, // 0=1tCK; 1=2tCK, tCWL must be >9
 		hard_PPR            :13-13 +1, // hard post-package-repair; 0=disabled
-		mr_zero             :16-14 +1;
+		mr_zero             :15-14 +1;
 	};
 };
 union ddr4_mr5 {
@@ -299,7 +299,7 @@ union ddr4_mr5 {
 		read_DBI       :11-11 +1, // data bus inversion; 0=disabled
 		write_DBI      :12-12 +1, // data bus inversion; 0=disabled
 		RFU_13         :13-13 +1,
-		mr_zero        :16-14 +1;
+		mr_zero        :15-14 +1;
 	};
 };
 union ddr4_mr6 {
@@ -311,7 +311,7 @@ union ddr4_mr6 {
 		RFU_9_8        :9-8 +1,
 		data_rate     :12-10 +1, // 0:<=1333; 1:<=1866; 2:<=2400; 3:<=2666; 4:<=3200
 		RFU_13        :13-13 +1,
-		mr_zero       :16-14 +1;
+		mr_zero       :15-14 +1;
 	};
 };
 
@@ -321,7 +321,7 @@ union gddr2_mr0 {
 	uint16_t gddr2_mr0;
 	struct { uint16_t
 		burst_length :0-0 +1, // 0=4, 1=reserved
-		WL           :3-0 +1, // 1=1..7=7; 0=reserved
+		WL           :3-1 +1, // 1=1..7=7; 0=reserved
 		RL           :6-4 +1, // 8,9,10,rsvd,4,5,6,7
 		testmode     :7-7 +1, // behaviour is vendor specific
 		DLL_reset    :8-8 +1, // self clearing
@@ -357,6 +357,9 @@ union gddr2_emr2 {
 		rsvd_15_12      :15-12 +1;
 	};
 };
+
+
+
 union gddr3_mr0 {
 	uint16_t gddr3_mr0;
 	struct { uint16_t
@@ -377,8 +380,9 @@ union gddr3_emr1 {
 		data_terminaton :3-2 +1, // 0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2
 		WR_lo_bits      :5-4 +1, // A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10
 		DLL             :6-6 +1, // 0=enable
+		tWR_hi_bit      :7-7 +1,
 		rsvd_8_8        :8-8 +1, // reserved
-		R_on            :8-8 +1, // 0=40 ohms, 1=60 ohms; pull-up
+		R_on            :9-9 +1, // 0=40 ohms, 1=60 ohms; pull-up
 		vendor_ID      :10-10 +1, // 0=off
 		AddrCmd_term   :11-11 +1, // 0=inherit CKE, 1=CKE/2
 		rsvd_15_12     :15-12 +1;
@@ -493,7 +497,7 @@ union gddr5_mr4 {
 	struct { uint16_t
 		EDC_pattern  :3-0 +1, // little-endian-based burst position
 		CRCWL        :6-4 +1, // 7+n; CRC write latency
-		CRCRL        :8-8 +1, // 4,1,2,3; CRC read laency
+		CRCRL        :8-7 +1, // 4,1,2,3; CRC read laency
 		read_CRC     :9-9 +1, // 0=on
 		write_crc   :10-10 +1, // 0=on
 		hold_invert :11-11 +1, // 1=inverted; EDC hold pattern inversion

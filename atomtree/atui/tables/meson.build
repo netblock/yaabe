@@ -1,8 +1,8 @@
 # when adding a file here, don't forget to add to atui/auto_includes.h
 # order doesn't matter outside of compile time
 atui_branches = files(
-	'atui_gc.json5',
 	'atui_gmc.json5', # extra long
+	'atui_gc.json5',
 	'atui_ddrmoderegisters.json5',
 	'atui_bitfield_overrides.json5',
 	'atui_asic_reg_data_tables.json5',

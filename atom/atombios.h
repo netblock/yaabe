@@ -3860,6 +3860,7 @@ union lcd_panel_special_handling_cap {
 		read_edid     :0-0 +1, // 1=DAL reads EDID instead of atom_dtd_format
 		drr_supported :1-1 +1, // 1=dynamic refresh rate
 		is_edp        :2-2 +1, // 0=LVDS 1=eDP
+		reserved      :3-3 +1,
 		color_depth   :6-4 +1, // EDID V1.4 bits per color; 1=6,2=8..6=16 bpc
 		random_dither :7-7 +1; // 0=disabled
 	};

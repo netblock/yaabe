@@ -1033,6 +1033,8 @@ global_default: {
 					{language: "english", text: "0=enable",},
 				],
 			}, {
+				access: "tWR_hi_bit",
+			}, {
 				access: "rsvd_8_8",
 				display: "ATUI_HEX",
 				description: [
