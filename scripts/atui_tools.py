@@ -250,12 +250,17 @@ def bitfield_to_atui(
 	s:__regexvar = __regexvar
 	text = __atui_regex_prepare(text)
 
-	union_text:str = """{\n\tc_prefix: "\\g<1>", c_type: "\\g<2>",\n"""
+	union_text:str = """\
+{
+	c_prefix: "\\g<1>", c_type: "\\g<2>",
+	table_size: "sizeof(*bios)",
+"""
 	if explicit_attributes:
 		union_text = """\
 {
 	c_prefix: "\\g<1>", c_type: "\\g<2>",
 	atomtree: "atui_nullstruct",
+	table_size: "sizeof(*bios)",
 """
 	union_text += """\
 	__ATUIDESCR\\g<3>
@@ -302,7 +307,7 @@ def bitfield_to_atui(
 	# bitfield enries
 	bit_child:str = """\
 \\g<1>	{
-\\g<1>		name: "\\g<4>",
+\\g<1>		access: "\\g<4>",
 \\g<1>		__ATUIDESCR\\g<8>
 \\g<1>		__ATUIBITENUM\\g<3>
 \\g<1>	},\
