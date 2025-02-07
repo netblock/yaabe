@@ -180,7 +180,9 @@ yaabe_test = executable('yaabe_test',
 # If you already built but want to change the roms,
 # meson --reconfigure
 test_roms_dir = 'test_roms'
+test_roms_fail_dir = test_roms_dir + '_fail'
 romfiles = files()
+romfiles_fail = files()
 if fs.is_dir(test_roms_dir)
 	lsroms = run_command('ls', test_roms_dir, check:false)
 	if 0 == lsroms.returncode()
@@ -190,10 +192,30 @@ if fs.is_dir(test_roms_dir)
 			endif
 		endforeach
 	endif
+	lsroms = run_command('ls', test_roms_fail_dir, check:false)
+	if 0 == lsroms.returncode()
+		foreach name : lsroms.stdout().strip().split('\n')
+			if name.endswith('.rom')
+				romfiles_fail += files(join_paths(test_roms_fail_dir, name))
+			endif
+		endforeach
+	endif
 endif
 foreach bios : romfiles
 	test(fs.name(bios),
 		yaabe_test, args: [bios],
 		env: ['G_DEBUG=fatal_warnings',],
+		suite: ['yaabe', 'pass'],
+		timeout: 3, # should take less than 1s
+
+	)
+endforeach
+foreach bios : romfiles_fail
+	test(fs.name(bios),
+		yaabe_test, args: [bios],
+		env: ['G_DEBUG=fatal_warnings',],
+		suite: ['yaabe', 'fail'],
+		timeout: 3, # should take less than 1s
+		should_fail: true,
 	)
 endforeach
