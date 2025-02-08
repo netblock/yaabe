@@ -3497,48 +3497,6 @@ struct atom_gpu_virtualization_info_v2_1 {
 #define ATOM_ENCODER_ENUM_ID5  0x40
 #define ATOM_ENCODER_ENUM_ID6  0x50
 
-#define ATOM_DEVICE_CRT1_INDEX 0x00000000
-#define ATOM_DEVICE_LCD1_INDEX 0x00000001
-#define ATOM_DEVICE_TV1_INDEX  0x00000002
-#define ATOM_DEVICE_DFP1_INDEX 0x00000003
-#define ATOM_DEVICE_CRT2_INDEX 0x00000004
-#define ATOM_DEVICE_LCD2_INDEX 0x00000005
-#define ATOM_DEVICE_DFP6_INDEX 0x00000006
-#define ATOM_DEVICE_DFP2_INDEX 0x00000007
-#define ATOM_DEVICE_CV_INDEX   0x00000008
-#define ATOM_DEVICE_DFP3_INDEX 0x00000009
-#define ATOM_DEVICE_DFP4_INDEX 0x0000000A
-#define ATOM_DEVICE_DFP5_INDEX 0x0000000B
-
-#define ATOM_DEVICE_RESERVEDC_INDEX      0x0000000C
-#define ATOM_DEVICE_RESERVEDD_INDEX      0x0000000D
-#define ATOM_DEVICE_RESERVEDE_INDEX      0x0000000E
-#define ATOM_DEVICE_RESERVEDF_INDEX      0x0000000F
-#define ATOM_MAX_SUPPORTED_DEVICE_INFO   (ATOM_DEVICE_DFP3_INDEX+1)
-#define ATOM_MAX_SUPPORTED_DEVICE_INFO_2 ATOM_MAX_SUPPORTED_DEVICE_INFO
-#define ATOM_MAX_SUPPORTED_DEVICE_INFO_3 (ATOM_DEVICE_DFP5_INDEX + 1 )
-
-#define atom_max_supported_device        (ATOM_DEVICE_RESERVEDF_INDEX+1)
-
-#define ATOM_DEVICE_CRT1_SUPPORT         (0x1L << ATOM_DEVICE_CRT1_INDEX )
-#define ATOM_DEVICE_LCD1_SUPPORT         (0x1L << ATOM_DEVICE_LCD1_INDEX )
-#define ATOM_DEVICE_TV1_SUPPORT          (0x1L << ATOM_DEVICE_TV1_INDEX  )
-#define ATOM_DEVICE_DFP1_SUPPORT         (0x1L << ATOM_DEVICE_DFP1_INDEX )
-#define ATOM_DEVICE_CRT2_SUPPORT         (0x1L << ATOM_DEVICE_CRT2_INDEX )
-#define ATOM_DEVICE_LCD2_SUPPORT         (0x1L << ATOM_DEVICE_LCD2_INDEX )
-#define ATOM_DEVICE_DFP6_SUPPORT         (0x1L << ATOM_DEVICE_DFP6_INDEX )
-#define ATOM_DEVICE_DFP2_SUPPORT         (0x1L << ATOM_DEVICE_DFP2_INDEX )
-#define ATOM_DEVICE_CV_SUPPORT           (0x1L << ATOM_DEVICE_CV_INDEX   )
-#define ATOM_DEVICE_DFP3_SUPPORT         (0x1L << ATOM_DEVICE_DFP3_INDEX )
-#define ATOM_DEVICE_DFP4_SUPPORT         (0x1L << ATOM_DEVICE_DFP4_INDEX )
-#define ATOM_DEVICE_DFP5_SUPPORT         (0x1L << ATOM_DEVICE_DFP5_INDEX )
-
-
-#define ATOM_DEVICE_CRT_SUPPORT          (ATOM_DEVICE_CRT1_SUPPORT | ATOM_DEVICE_CRT2_SUPPORT)
-#define ATOM_DEVICE_DFP_SUPPORT          (ATOM_DEVICE_DFP1_SUPPORT | ATOM_DEVICE_DFP2_SUPPORT |  ATOM_DEVICE_DFP3_SUPPORT | ATOM_DEVICE_DFP4_SUPPORT | ATOM_DEVICE_DFP5_SUPPORT | ATOM_DEVICE_DFP6_SUPPORT)
-#define ATOM_DEVICE_TV_SUPPORT           ATOM_DEVICE_TV1_SUPPORT
-#define ATOM_DEVICE_LCD_SUPPORT          (ATOM_DEVICE_LCD1_SUPPORT | ATOM_DEVICE_LCD2_SUPPORT)
-
 #define ATOM_DEVICE_CONNECTOR_TYPE_MASK   0x000000F0
 #define ATOM_DEVICE_CONNECTOR_TYPE_SHIFT  0x00000004
 #define ATOM_DEVICE_CONNECTOR_VGA         0x00000001
@@ -3579,22 +3537,6 @@ struct atom_gpu_virtualization_info_v2_1 {
 #define ATOM_DEVICE_I2C_HARDWARE_CAP_SHIFT     0x00000007
 #define ATOM_DEVICE_USES_SOFTWARE_ASSISTED_I2C 0x00000000
 #define ATOM_DEVICE_USES_HARDWARE_ASSISTED_I2C 0x00000001
-
-// usDeviceSupport:
-// Bits0   = 0 - no CRT1 support= 1- CRT1 is supported
-// Bit 1   = 0 - no LCD1 support= 1- LCD1 is supported
-// Bit 2   = 0 - no TV1  support= 1- TV1  is supported
-// Bit 3   = 0 - no DFP1 support= 1- DFP1 is supported
-// Bit 4   = 0 - no CRT2 support= 1- CRT2 is supported
-// Bit 5   = 0 - no LCD2 support= 1- LCD2 is supported
-// Bit 6   = 0 - no DFP6 support= 1- DFP6 is supported
-// Bit 7   = 0 - no DFP2 support= 1- DFP2 is supported
-// Bit 8   = 0 - no CV   support= 1- CV   is supported
-// Bit 9   = 0 - no DFP3 support= 1- DFP3 is supported
-// Bit 10= 0 - no DFP4 support= 1- DFP4 is supported
-// Bit 11= 0 - no DFP5 support= 1- DFP5 is supported
-//
-//
 */
 
 /******************************************************************************/
@@ -4467,9 +4409,170 @@ struct atom_component_video_info_v21 {
 /******************************************************************************/
 // Structure used in object_InfoTable
 /******************************************************************************/
-struct atom_object_header {
+
+enum object_type:uint16_t {
+	OBJECT_TYPE_UNKNOWN   = 0,
+
+	// Direct ATOM BIOS translation
+	OBJECT_TYPE_GPU       = 1,
+	OBJECT_TYPE_ENCODER   = 2,
+	OBJECT_TYPE_CONNECTOR = 3,
+	OBJECT_TYPE_ROUTER    = 4,
+	OBJECT_TYPE_GENERIC   = 5,
+
+	// Driver specific
+	OBJECT_TYPE_AUDIO        = 6,
+	OBJECT_TYPE_CONTROLLER   = 7,
+	OBJECT_TYPE_CLOCK_SOURCE = 8,
+	OBJECT_TYPE_ENGINE       = 9,
+
+	OBJECT_TYPE_COUNT = 10,
+};
+
+union generic_object_id {
+	uint16_t object_id;
+	struct {
+		uint16_t id            :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+enum connector_id:uint16_t {
+    CONNECTOR_ID_UNKNOWN            = 0,
+    CONNECTOR_ID_SINGLE_LINK_DVII   = 1,
+    CONNECTOR_ID_DUAL_LINK_DVII     = 2,
+    CONNECTOR_ID_SINGLE_LINK_DVID   = 3,
+    CONNECTOR_ID_DUAL_LINK_DVID     = 4,
+    CONNECTOR_ID_VGA                = 5,
+	CONNECTOR_OBJECT_ID_COMPOSITE   = 6,
+	CONNECTOR_OBJECT_ID_SVIDEO      = 7,
+	CONNECTOR_OBJECT_ID_YPbPr       = 8,
+	CONNECTOR_OBJECT_ID_D_CONNECTOR = 9,
+	CONNECTOR_OBJECT_ID_9PIN_DIN   = 10,  // Supports both CV & TV
+	CONNECTOR_OBJECT_ID_SCART      = 11,
+    CONNECTOR_ID_HDMI_TYPE_A       = 12,
+    CONNECTOR_ID_LVDS              = 14,
+    CONNECTOR_ID_PCIE              = 16,
+    CONNECTOR_ID_HARDCODE_DVI      = 18,
+    CONNECTOR_ID_DISPLAY_PORT      = 19,
+    CONNECTOR_ID_EDP               = 20,
+    CONNECTOR_ID_MXM               = 21,
+    CONNECTOR_ID_WIRELESS          = 22,
+    CONNECTOR_ID_MIRACAST          = 23,
+    CONNECTOR_ID_USBC              = 24,
+    CONNECTOR_ID_VIRTUAL          = 100
+};
+union connector_object_id {
+	uint16_t object_id;
+	struct {
+		enum connector_id id   :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+enum encoder_id:uint16_t {
+	ENCODER_ID_UNKNOWN                = 0,
+	ENCODER_ID_INTERNAL_LVDS          = 1,
+	ENCODER_ID_INTERNAL_TMDS1         = 2,
+	ENCODER_ID_INTERNAL_TMDS2         = 3,
+	ENCODER_ID_INTERNAL_DAC1          = 4,
+	ENCODER_ID_INTERNAL_DAC2          = 5, // TV/CV DAC
+	ENCODER_ID_INTERNAL_LVTM1         = 6, // not used for Radeon
+	ENCODER_ID_INTERNAL_HDMI          = 7,
+	ENCODER_ID_INTERNAL_KLDSCP_TMDS1  = 8, // Kaledisope
+	ENCODER_ID_INTERNAL_KLDSCP_DAC1   = 9, // Kaledisope
+	ENCODER_ID_INTERNAL_KLDSCP_DAC2  = 10, // Kaledisope; shared with CV/TV and CRT
+	ENCODER_ID_EXTERNAL_MVPU_FPGA    = 11, // MVPU FPGA chip
+	ENCODER_ID_INTERNAL_DDI          = 12,
+	ENCODER_ID_INTERNAL_UNIPHY       = 13,
+	ENCODER_ID_INTERNAL_KLDSCP_LVTMA = 14,
+	ENCODER_ID_INTERNAL_UNIPHY1      = 15,
+	ENCODER_ID_INTERNAL_UNIPHY2      = 16,
+	ENCODER_ID_EXTERNAL_NUTMEG       = 17,
+	ENCODER_ID_EXTERNAL_TRAVIS       = 18,
+	ENCODER_ID_INTERNAL_WIRELESS     = 19, // Internal wireless display encoder
+	ENCODER_ID_INTERNAL_UNIPHY3      = 20,
+	ENCODER_ID_INTERNAL_VIRTUAL      = 21,
+
+	ENCODER_OBJECT_ID_INTERNAL_SDVOA        = 6,
+	ENCODER_OBJECT_ID_INTERNAL_SDVOB        = 7,
+	ENCODER_OBJECT_ID_SI170B                = 8,
+	ENCODER_OBJECT_ID_CH7303                = 9,
+	ENCODER_OBJECT_ID_CH7301                = 10,
+	ENCODER_OBJECT_ID_INTERNAL_DVO1         = 11, // This belongs to Radeon Class Display Hardware
+	ENCODER_OBJECT_ID_EXTERNAL_SDVOA        = 12,
+	ENCODER_OBJECT_ID_EXTERNAL_SDVOB        = 13,
+	ENCODER_OBJECT_ID_TITFP513              = 14,
+	ENCODER_OBJECT_ID_INTERNAL_LVTM1        = 15, // not used for Radeon
+	ENCODER_OBJECT_ID_VT1623                = 16,
+	ENCODER_OBJECT_ID_HDMI_SI1930           = 17,
+	ENCODER_OBJECT_ID_HDMI_INTERNAL         = 18,
+	ENCODER_OBJECT_ID_ALMOND                = 34,
+	ENCODER_OBJECT_ID_NUTMEG                = 34,
+	ENCODER_OBJECT_ID_TRAVIS                = 35,
+	ENCODER_OBJECT_ID_HDMI_ANX9805          = 38,
+
+	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_TMDS1 = 19,
+	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DVO1  = 20,
+	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC1  = 21,
+	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC2  = 22, // Shared with CV/TV and CRT
+	ENCODER_OBJECT_ID_SI178                 = 23, // External TMDS (dual link, no HDCP.)
+	ENCODER_OBJECT_ID_MVPU_FPGA             = 24, // MVPU FPGA chip
+	ENCODER_OBJECT_ID_INTERNAL_DDI          = 25,
+	ENCODER_OBJECT_ID_VT1625                = 26,
+	ENCODER_OBJECT_ID_HDMI_SI1932           = 27,
+	ENCODER_OBJECT_ID_DP_AN9801             = 28,
+	ENCODER_OBJECT_ID_DP_DP501              = 29,
+	ENCODER_OBJECT_ID_INTERNAL_UNIPHY       = 30,
+	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_LVTMA = 31,
+	ENCODER_OBJECT_ID_INTERNAL_UNIPHY1      = 32,
+	ENCODER_OBJECT_ID_INTERNAL_UNIPHY2      = 33,
+	ENCODER_OBJECT_ID_INTERNAL_VCE          = 36,
+	ENCODER_OBJECT_ID_INTERNAL_UNIPHY3      = 37,
+	ENCODER_OBJECT_ID_INTERNAL_AMCLK        = 39,
+
+	ENCODER_OBJECT_ID_GENERAL_EXTERNAL_DVO = 255,
+};
+union encoder_object_id {
+	uint16_t object_id;
+	struct {
+		enum encoder_id id     :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+union object_ids {
+	uint16_t object_id;
+	union generic_object_id  generic;
+	union encoder_object_id  encoder;
+	union connector_object_id connector;
+};
+
+union atom_display_device_tag {
+	uint16_t device_tag;
+	struct { uint16_t
+		CRT1_INDEX    :0-0 +1,
+		LCD1_SUPPORT  :1-1 +1, // an embedded display is either an LVDS or eDP signal type of display
+		TV1_INDEX     :2-2 +1,
+		DFP1_SUPPORT  :3-3 +1,
+		CRT2_INDEX    :4-4 +1,
+		LCD2_SUPPORT  :5-5 +1, // second edp device tag 0x0020 for backward compability
+		DFP6_SUPPORT  :6-6 +1,
+		DFP2_SUPPORT  :7-7 +1,
+		CV_SUPPORT    :8-8 +1,
+		DFP3_SUPPORT  :9-9 +1,
+		DFP4_SUPPORT :10-10 +1,
+		DFP5_SUPPORT :11-11 +1,
+		reserved_F_C :15-12 +1;
+	};
+};
+
+struct atom_object_header_v1_1 {
 	struct atom_common_table_header  table_header;
-	uint16_t DeviceSupport;
+	union atom_display_device_tag DeviceSupport;
 	uint16_t ConnectorObjectTableOffset;
 	uint16_t RouterObjectTableOffset;
 	uint16_t EncoderObjectTableOffset;
@@ -4477,9 +4580,9 @@ struct atom_object_header {
 	uint16_t DisplayPathTableOffset;
 };
 
-struct atom_object_header_v3 {
+struct atom_object_header_v1_3 {
 	struct atom_common_table_header  table_header;
-	uint16_t DeviceSupport;
+	union atom_display_device_tag DeviceSupport;
 	uint16_t ConnectorObjectTableOffset;
 	uint16_t RouterObjectTableOffset;
 	uint16_t EncoderObjectTableOffset;
@@ -4509,11 +4612,10 @@ struct atom_display_object_path_table {
 	uint8_t  NumOfDispPath;
 	uint8_t  Version;
 	uint8_t  Padding[2];
-	struct atom_display_object_path  DispPath[];
+	struct atom_display_object_path  DispPath[] __counted_by(NumOfDispPath);
 };
-
 struct atom_object { // each object has this structure
-	uint16_t ObjectID;
+	union generic_object_id ObjectID;
 	uint16_t SrcDstTableOffset;
 	uint16_t RecordOffset; // this pointing to a bunch of records defined below
 	uint16_t Reserved;
@@ -4522,7 +4624,7 @@ struct atom_object { // each object has this structure
 struct atom_object_table { // Above 4 object table offset pointing to a bunch of objects all have this structure
 	uint8_t  NumberOfObjects;
 	uint8_t  Padding[3];
-	struct atom_object  Objects[];
+	struct atom_object  Objects[] __counted_by(NumberOfObjects);
 };
 
 struct atom_src_dst_table_for_one_object { // usSrcDstTableOffset pointing to this structure
@@ -4532,6 +4634,10 @@ struct atom_src_dst_table_for_one_object { // usSrcDstTableOffset pointing to th
 	uint16_t DstObjectID[1];
 };
 
+struct atom_srcdst_table {
+	uint8_t num_of_objs;
+	union object_ids object_id[] __counted_by(num_of_objs);
+};
 
 // Two definitions below are for OPM on MXM module designs
 
@@ -4561,11 +4667,22 @@ struct atom_src_dst_table_for_one_object { // usSrcDstTableOffset pointing to th
 // Bit[3:2]: Define which pin connect to DP connector DP_Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
 // Bit[5:4]: Define which pin connect to DP connector DP_Lane2, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
 // Bit[7:6]: Define which pin connect to DP connector DP_Lane3, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+/*
 struct atom_dp_conn_channel_mapping {
 	uint8_t  DP_Lane0_Source:2;
 	uint8_t  DP_Lane1_Source:2;
 	uint8_t  DP_Lane2_Source:2;
 	uint8_t  DP_Lane3_Source:2;
+};
+*/
+union atom_dp_conn_channel_mapping {
+	uint8_t  ChannelMapping;
+	struct { uint8_t
+		DP_Lane0_Source :1-0 +1,
+		DP_Lane1_Source :3-2 +1,
+		DP_Lane2_Source :5-4 +1,
+		DP_Lane3_Source :7-6 +1;
+	};
 };
 
 // for DVI/HDMI, in dual link case, both links have to have same mapping.
@@ -4573,11 +4690,22 @@ struct atom_dp_conn_channel_mapping {
 // Bit[3:2]: Define which pin connect to DVI connector data Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
 // Bit[5:4]: Define which pin connect to DVI connector data Lane0, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
 // Bit[7:6]: Define which pin connect to DVI connector clock lane, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+/*
 struct atom_dvi_conn_channel_mapping {
 	uint8_t  DVI_DATA2_Source:2;
 	uint8_t  DVI_DATA1_Source:2;
 	uint8_t  DVI_DATA0_Source:2;
 	uint8_t  DVI_CLK_Source:2;
+};
+*/
+union atom_dvi_conn_channel_mapping {
+	uint8_t  ChannelMapping;
+	struct { uint8_t
+		DVI_DATA2_Source :1-0 +1,
+		DVI_DATA1_Source :3-2 +1,
+		DVI_DATA0_Source :5-4 +1,
+		DVI_CLK_Source   :7-6 +1;
+	};
 };
 
 struct ext_display_path { // TODO merge?
@@ -4589,8 +4717,8 @@ struct ext_display_path { // TODO merge?
 	uint16_t ExtEncoderObjId;    // external encoder object id
 	union {
 		uint8_t  ChannelMapping; // if ucChannelMapping=0, using default one to one mapping
-		struct atom_dp_conn_channel_mapping  DPMapping;
-		struct atom_dvi_conn_channel_mapping  DVIMapping;
+		union atom_dp_conn_channel_mapping  DPMapping;
+		union atom_dvi_conn_channel_mapping  DVIMapping;
 	};
 	uint8_t  ChPNInvert; // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
 	uint16_t Caps;
@@ -4640,18 +4768,33 @@ struct atom_external_display_connection_info {
 
 // Related definitions, all records are different but they have a common header
 enum atom_object_record_type_id:uint8_t {
-	ATOM_I2C_RECORD_TYPE              = 1,
-	ATOM_HPD_INT_RECORD_TYPE          = 2,
-	ATOM_CONNECTOR_CAP_RECORD_TYPE    = 3,
-	ATOM_CONNECTOR_SPEED_UPTO         = 4,
-	ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE = 9,
-	ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE = 16,
-	ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE = 17,
-	ATOM_ENCODER_CAP_RECORD_TYPE          = 20,
-	ATOM_BRACKET_LAYOUT_RECORD_TYPE       = 21,
-	ATOM_FORCED_TMDS_CAP_RECORD_TYPE      = 22,
-	ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE  = 23,
-	ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE    = 25,
+	ATOM_I2C_RECORD_TYPE                      = 1,
+	ATOM_HPD_INT_RECORD_TYPE                  = 2,
+	ATOM_CONNECTOR_CAP_RECORD_TYPE            = 3,
+	ATOM_OUTPUT_PROTECTION_RECORD_TYPE        = 3, // unused
+	ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE     = 4, // older hardware; object info/header <=v1.3
+	ATOM_CONNECTOR_SPEED_UPTO                 = 4, // newer hardware; object info/header >=v1.4
+	ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE  = 5, // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
+	ATOM_ENCODER_FPGA_CONTROL_RECORD_TYPE     = 6, // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
+	ATOM_CONNECTOR_CVTV_SHARE_DIN_RECORD_TYPE = 7,
+	ATOM_JTAG_RECORD_TYPE                     = 8, // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
+	ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE         = 9,
+	ATOM_ENCODER_DVO_CF_RECORD_TYPE          = 10,
+	ATOM_CONNECTOR_CF_RECORD_TYPE            = 11,
+	ATOM_CONNECTOR_HARDCODE_DTD_RECORD_TYPE  = 12,
+	ATOM_PCIE_SUBCONNECTOR_RECORD_TYPE       = 13,
+	ATOM_ROUTER_DDC_PATH_SELECT_RECORD_TYPE        = 14,
+	ATOM_ROUTER_DATA_CLOCK_PATH_SELECT_RECORD_TYPE = 15,
+	ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE    = 16,
+	ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE    = 17,
+	ATOM_OBJECT_LINK_RECORD_TYPE             = 18, // Once this record is present under one object, it indicats the oobject is linked to another obj described by the record
+	ATOM_CONNECTOR_REMOTE_CAP_RECORD_TYPE    = 19,
+	ATOM_ENCODER_CAPS_RECORD_TYPE            = 20,
+	ATOM_BRACKET_LAYOUT_V1_RECORD_TYPE       = 21,
+	ATOM_FORCED_TMDS_CAP_RECORD_TYPE         = 22,
+	ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE     = 23,
+	ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE       = 25,
+
 	ATOM_RECORD_END_TYPE = 0xFF,
 };
 struct atom_common_record_header {
@@ -4659,47 +4802,30 @@ struct atom_common_record_header {
 	uint8_t  record_size;
 };
 
-
-#define ATOM_I2C_RECORD_TYPE                           1
-#define ATOM_HPD_INT_RECORD_TYPE                       2
-
-#define ATOM_OUTPUT_PROTECTION_RECORD_TYPE             3
-#define ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE          4
-#define ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE       5 // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
-#define ATOM_ENCODER_FPGA_CONTROL_RECORD_TYPE          6 // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
-#define ATOM_CONNECTOR_CVTV_SHARE_DIN_RECORD_TYPE      7
-#define ATOM_JTAG_RECORD_TYPE                          8 // Obsolete, switch to use GPIO_CNTL_RECORD_TYPE
-#define ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE              9
-#define ATOM_ENCODER_DVO_CF_RECORD_TYPE                10
-#define ATOM_CONNECTOR_CF_RECORD_TYPE                  11
-#define ATOM_CONNECTOR_HARDCODE_DTD_RECORD_TYPE        12
-#define ATOM_CONNECTOR_PCIE_SUBCONNECTOR_RECORD_TYPE   13
-#define ATOM_ROUTER_DDC_PATH_SELECT_RECORD_TYPE        14
-#define ATOM_ROUTER_DATA_CLOCK_PATH_SELECT_RECORD_TYPE 15
-#define ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE          16 // This is for the case when connectors are not known to object table
-#define ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE          17 // This is for the case when connectors are not known to object table
-#define ATOM_OBJECT_LINK_RECORD_TYPE                   18 // Once this record is present under one object, it indicats the oobject is linked to another obj described by the record
-#define ATOM_CONNECTOR_REMOTE_CAP_RECORD_TYPE          19
-#define ATOM_ENCODER_CAP_RECORD_TYPE                   20
-#define ATOM_BRACKET_LAYOUT_RECORD_TYPE                21
-#define ATOM_CONNECTOR_FORCED_TMDS_CAP_RECORD_TYPE     22
-
-// Must be updated when new record type is added,equal to that record definition!
-//#define ATOM_MAX_OBJECT_RECORD_NUMBER                  ATOM_CONNECTOR_FORCED_TMDS_CAP_RECORD_TYPE
-
-/* duplicate
 struct atom_i2c_record {
-	struct atom_common_record_header  header;
-	union atom_i2c_id_config  I2cId;
-	uint8_t  I2CAddr; // The slave address, it's 0 when the record is attached to connector for DDC
+	struct atom_common_record_header  record_header;
+	union atom_i2c_id_config  i2c_id;
+	uint8_t  i2c_slave_addr; // The slave address, it's 0 when the record is attached to connector for DDC
 };
 
 struct atom_hpd_int_record {
-	struct atom_common_record_header  header;
-	uint8_t  HPDIntGPIOID; // Corresponding block in GPIO_PIN_INFO table gives the pin info
-	uint8_t  Plugged_PinState;
+	struct atom_common_record_header  record_header;
+	uint8_t  pin_id; // Corresponding block in GPIO_PIN_INFO table gives the pin info
+	uint8_t  plugin_pin_state;
 };
-*/
+
+union record_connector_caps {
+	uint16_t connector_caps;
+	struct { uint16_t
+		internal_display_checked   :0-0 +1,
+		internal_backlight_checked :1-1 +1,
+		reserved :15-2 +1;
+	};
+};
+struct atom_connector_caps_record {
+	struct atom_common_record_header  record_header;
+	union record_connector_caps caps;
+};
 
 struct atom_output_protection_record {
 	struct atom_common_record_header  header;
@@ -4709,16 +4835,15 @@ struct atom_output_protection_record {
 
 struct atom_connector_device_tag {
 	uint32_t ACPIDeviceEnum; // Reserved for now
-	uint16_t DeviceID; // This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
+	union atom_display_device_tag DeviceID;
 	uint16_t Padding;
 };
 struct atom_connector_device_tag_record {
 	struct atom_common_record_header  header;
 	uint8_t  NumberOfDevice;
 	uint8_t  Reserved;
-	struct atom_connector_device_tag  DeviceTag[] __counted_by(NumberOfDevice); // This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
+	struct atom_connector_device_tag  DeviceTag[] __counted_by(NumberOfDevice);
 };
-
 
 struct atom_connector_dvi_ext_input_record {
 	struct atom_common_record_header  header;
@@ -4759,66 +4884,20 @@ struct atom_jtag_record {
 	uint8_t  Padding[2];
 };
 
+union atom_gpio_pin_control_pinstate {
+	uint8_t gpio_pinstate;
+	struct { uint8_t
+		input    :0-0 +1,
+		rsvd_3_1 :3-1 +1,
+		output   :4-4 +1,
+		rsvd_7_5 :7-5 +1;
 
-/* duplicate
-// The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
-struct atom_gpio_pin_control_pair {
-	uint8_t  GPIOID;        // GPIO_ID, find the corresponding ID in GPIO_LUT table
-	uint8_t  GPIO_PinState; // Pin state showing how to set-up the pin
+	};
 };
-
-struct atom_object_gpio_cntl_record {
-	struct atom_common_record_header  header;
-	uint8_t  Flags;        // Future expnadibility
-	uint8_t  NumberOfPins; // Number of GPIO pins used to control the object
-	struct atom_gpio_pin_control_pair  Gpio[]; // the real gpio pin pair determined by number of pins ucNumberOfPins
-};
-*/
-
-// Definitions for GPIO pin state
-/*
-#define GPIO_PIN_TYPE_INPUT             0x00
-#define GPIO_PIN_TYPE_OUTPUT            0x10
-#define GPIO_PIN_TYPE_HW_CONTROL        0x20
-
-// For GPIO_PIN_TYPE_OUTPUT the following is defined
-#define GPIO_PIN_OUTPUT_STATE_MASK      0x01
-#define GPIO_PIN_OUTPUT_STATE_SHIFT     0
-#define GPIO_PIN_STATE_ACTIVE_LOW       0x0
-#define GPIO_PIN_STATE_ACTIVE_HIGH      0x1
-
-// Indexes to GPIO array in GLSync record
-// GLSync record is for Frame Lock/Gen Lock feature.
-#define ATOM_GPIO_INDEX_GLSYNC_REFCLK    0
-#define ATOM_GPIO_INDEX_GLSYNC_HSYNC     1
-#define ATOM_GPIO_INDEX_GLSYNC_VSYNC     2
-#define ATOM_GPIO_INDEX_GLSYNC_SWAP_REQ  3
-#define ATOM_GPIO_INDEX_GLSYNC_SWAP_GNT  4
-#define ATOM_GPIO_INDEX_GLSYNC_INTERRUPT 5
-#define ATOM_GPIO_INDEX_GLSYNC_V_RESET   6
-#define ATOM_GPIO_INDEX_GLSYNC_SWAP_CNTL 7
-#define ATOM_GPIO_INDEX_GLSYNC_SWAP_SEL  8
-#define ATOM_GPIO_INDEX_GLSYNC_MAX       9
-*/
-
-// Definitions for GPIO pin state
-enum atom_gpio_pin_control_pinstate_def:uint8_t {
-	GPIO_PIN_TYPE_INPUT      = 0x00,
-	GPIO_PIN_TYPE_OUTPUT     = 0x10,
-	GPIO_PIN_TYPE_HW_CONTROL = 0x20,
-
-// For GPIO_PIN_TYPE_OUTPUT the following is defined
-	GPIO_PIN_OUTPUT_STATE_MASK  = 0x01,
-	GPIO_PIN_OUTPUT_STATE_SHIFT = 0,
-	GPIO_PIN_STATE_ACTIVE_LOW   = 0x0,
-	GPIO_PIN_STATE_ACTIVE_HIGH  = 0x1,
-};
-// The following generic object gpio pin control record type will replace JTAG_RECORD/FPGA_CONTROL_RECORD/DVI_EXT_INPUT_RECORD above gradually
 struct atom_gpio_pin_control_pair {
 	uint8_t  gpio_id; // GPIO_ID, find the corresponding ID in GPIO_LUT table
-	enum  atom_gpio_pin_control_pinstate_def  gpio_pinstate; // Pin state showing how to set-up the pin
+	union atom_gpio_pin_control_pinstate  gpio_pinstate; // Pin state showing how to set-up the pin
 };
-
 struct atom_object_gpio_cntl_record {
 	struct atom_common_record_header  record_header;
 	uint8_t  flag;           // Future expnadibility
@@ -4832,52 +4911,16 @@ struct atom_encoder_dvo_cf_record {
 	uint8_t  Padding[2];
 };
 
-/*
-// Bit maps for ATOM_ENCODER_CAP_RECORD.usEncoderCap
-#define ATOM_ENCODER_CAP_RECORD_HBR2         0x01 // DP1.2 HBR2 is supported by HW encoder, it is retired in NI. the real meaning from SI is MST_EN
-#define ATOM_ENCODER_CAP_RECORD_MST_EN       0x01 // from SI, this bit means DP MST is enable or not.
-#define ATOM_ENCODER_CAP_RECORD_HBR2_EN      0x02 // DP1.2 HBR2 setting is qualified and HBR2 can be enabled
-#define ATOM_ENCODER_CAP_RECORD_HDMI6Gbps_EN 0x04 // HDMI2.0 6Gbps enable or not.
-#define ATOM_ENCODER_CAP_RECORD_HBR3_EN      0x08 // DP1.3 HBR3 is supported by board.
-*/
-struct atom_encoder_cap_record {
-	struct atom_common_record_header  header;
-	union {
-		uint16_t EncoderCap;
-		struct {
-			uint16_t HBR2Cap:1;   // Bit0 is for DP1.2 HBR2 capability.
-			uint16_t HBR2En:1;    // Bit1 is for DP1.2 HBR2 enable
-			uint16_t Reserved:14; // Bit1-15 may be defined for other capability in future
-		};
-	};
+enum connector_cf_record_connected:uint8_t {
+	CONNECTED_UPPER_12BIT_BUNDLE_A = 1,
+	CONNECTED_LOWER_12BIT_BUNDLE_B = 2,
 };
-
-// Used after SI
-struct atom_encoder_cap_record_v2 {
-	struct atom_common_record_header  header;
-	union {
-		uint16_t EncoderCap;
-		struct {
-			uint16_t MSTEn:1;     // Bit0 is for DP1.2 MST enable
-			uint16_t HBR2En:1;    // Bit1 is for DP1.2 HBR2 enable
-			uint16_t HDMI6GEn:1;  // Bit2 is for HDMI6Gbps enable, this bit is used starting from CZ( APU) Ellemere (dGPU)
-			uint16_t HBR3En:1;    // bit3 is for DP1.3 HBR3 enable
-			uint16_t Reserved:12; // Bit4-15 may be defined for other capability in future
-		};
-	};
-};
-
-
-// value for ATOM_CONNECTOR_CF_RECORD.ucConnectedDvoBundle
-#define ATOM_CONNECTOR_CF_RECORD_CONNECTED_UPPER12BITBUNDLEA 1
-#define ATOM_CONNECTOR_CF_RECORD_CONNECTED_LOWER12BITBUNDLEB 2
-
 struct atom_connector_cf_record {
 	struct atom_common_record_header  header;
 	uint16_t MaxPixClk;
 	uint8_t  FlowCntlGpioId;
 	uint8_t  SwapCntlGpioId;
-	uint8_t  ConnectedDvoBundle;
+	enum connector_cf_record_connected ConnectedDvoBundle;
 	uint8_t  Padding;
 };
 
@@ -4886,12 +4929,13 @@ struct atom_connector_hardcode_dtd_record {
 	struct atom_dtd_format  Timing;
 };
 
-struct atom_connector_pcie_subconnector_record {
-	struct atom_common_record_header  header; // ATOM_CONNECTOR_PCIE_SUBCONNECTOR_RECORD_TYPE
+//enum connector_id ?
+struct atom_pcie_subconnector_record {
+	struct atom_common_record_header  header;
 	uint8_t  SubConnectorType; // CONNECTOR_OBJECT_ID_SINGLE_LINK_DVI_D|X_ID_DUAL_LINK_DVI_D|HDMI_TYPE_A
+
 	uint8_t  Reserved;
 };
-
 
 struct atom_router_ddc_path_select_record {
 	struct atom_common_record_header  header;
@@ -4900,6 +4944,9 @@ struct atom_router_ddc_path_select_record {
 	uint8_t  MuxState[2]; // for alligment purpose
 };
 
+// define ucMuxType
+#define ATOM_ROUTER_MUX_PIN_STATE_MASK              0x0f
+#define ATOM_ROUTER_MUX_PIN_SINGLE_STATE_COMPLEMENT 0x01
 struct atom_router_data_clock_path_select_record {
 	struct atom_common_record_header  header;
 	uint8_t  MuxType;
@@ -4907,24 +4954,19 @@ struct atom_router_data_clock_path_select_record {
 	uint8_t  MuxState[2]; // for alligment purpose
 };
 
-// define ucMuxType
-#define ATOM_ROUTER_MUX_PIN_STATE_MASK              0x0f
-#define ATOM_ROUTER_MUX_PIN_SINGLE_STATE_COMPLEMENT 0x01
-
-/* duplicate
-struct atom_connector_hpdpin_lut_record { // record for ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE
-	struct atom_common_record_header  header;
-	uint8_t  HPDPINMap[MAX_NUMBER_OF_EXT_HPDPIN_LUT_ENTRIES];  // An fixed size array which maps external pins to internal GPIO_PIN_INFO table
+struct atom_connector_hpdpin_lut_record {
+	struct atom_common_record_header  record_header;
+	uint8_t  hpd_pin_map[8]; // EXT_HPDPIN_LUT. An fixed size array which maps external pins to internal GPIO_PIN_INFO table
 };
 
-struct atom_connector_auxddc_lut_record { // record for ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE
-	struct atom_common_record_header  header;
-	union atom_i2c_id_config  ucAUXDDCMap[MAX_NUMBER_OF_EXT_AUXDDC_LUT_ENTRIES];  // An fixed size array which maps external pins to internal DDC ID
+struct atom_connector_auxddc_lut_record {
+	struct atom_common_record_header  record_header;
+	uint8_t  aux_ddc_map[8]; // EXT_AUXDDC_LUT. An fixed size array which maps external pins to internal DDC ID.
 };
-*/
+
 struct atom_object_link_record {
 	struct atom_common_record_header  header;
-	uint16_t ObjectID; // could be connector, encorder or other object in object.h
+	union generic_object_id ObjectID; // could be connector, encorder or other object in object.h
 };
 
 struct atom_connector_remote_cap_record {
@@ -4932,38 +4974,55 @@ struct atom_connector_remote_cap_record {
 	uint16_t Reserved;
 };
 
-/* duplicate
-struct atom_connector_forced_tmds_cap_record {
-	struct atom_common_record_header  header;
-  // override TMDS capability on this connector when it operate in TMDS mode.  usMaxTmdsClkRate = max TMDS Clock in Mhz/2.5
-	uint8_t  MaxTmdsClkRateIn2_5Mhz;
-	uint8_t  Reserved;
+union atom_encoder_caps {
+	uint32_t encodercaps;
+	struct { uint32_t
+		HBR2__MST_enable :0-0 +1, // DP1.2 HBR2 is supported by HW encoder, it is retired in NI. The real meaning from SI is MST_EN
+		HBR2_enable      :1-1 +1, // DP1.2 HBR2 setting is qualified and HBR2 can be enabled
+		HDMI6GBPS_enable :2-2 +1, // HDMI2.0 6Gbps enable or not.
+		HBR3_enable      :3-3 +1, // DP1.3 HBR3 is supported by board.
+		DP2              :4-4 +1, // DP2 is supported by ASIC/board.
+		UHBR10_enable    :5-5 +1, // DP2.0 UHBR10 settings is supported by board
+		UHBR13_5_enable  :6-6 +1, // DP2.0 UHBR13.5 settings is supported by board
+		UHBR20_enable    :7-7 +1, // DP2.0 UHBR20 settings is supported by board
+		USB_C_type       :8-8 +1, // the DP connector is a USB-C type.
+		reserved0       :31-9 +1;
+	};
+};
+struct atom_encoder_caps_record {
+	struct atom_common_record_header  record_header;
+	union atom_encoder_caps  encodercaps;
 };
 
 
+enum connector_layout_info_type:uint8_t {
+	CONNECTOR_TYPE_DVI_D             = 1,
+	CONNECTOR_TYPE_DVI_I             = 2,
+	ONNECTOR_TYPE_VGA                = 3,
+	CONNECTOR_TYPE_HDMI              = 4,
+	CONNECTOR_TYPE_DISPLAY_PORT      = 5,
+	CONNECTOR_TYPE_MINI_DISPLAY_PORT = 6,
+};
 struct atom_connector_layout_info {
-	uint16_t ConnectorObjectId;
-	uint8_t  ConnectorType;
-	uint8_t  Position;
+	uint16_t connectorobjid;
+	enum  connector_layout_info_type connector_type;
+	uint8_t  position;
+};
+struct atom_bracket_layout_record_v1 {
+	struct atom_common_record_header  record_header;
+	uint8_t  bracketlen;
+	uint8_t  bracketwidth;
+	uint8_t  conn_num;
+	uint8_t  reserved;
+	struct atom_connector_layout_info  conn_info[] __counted_by(conn_num);
 };
 
-// define ATOM_CONNECTOR_LAYOUT_INFO.ucConnectorType to describe the display connector size
-#define CONNECTOR_TYPE_DVI_D             1
-#define CONNECTOR_TYPE_DVI_I             2
-#define CONNECTOR_TYPE_VGA               3
-#define CONNECTOR_TYPE_HDMI              4
-#define CONNECTOR_TYPE_DISPLAY_PORT      5
-#define CONNECTOR_TYPE_MINI_DISPLAY_PORT 6
-
-struct atom_bracket_layout_record {
-	struct atom_common_record_header  header;
-	uint8_t  Length;
-	uint8_t  Width;
-	uint8_t  ConnNum;
-	uint8_t  Reserved;
-	struct atom_connector_layout_info  ConnInfo[];
+struct atom_forced_tmds_cap_record {
+	struct atom_common_record_header  record_header;
+	uint8_t  maxtmdsclkrate_in_2_5mhz;  // in units of 2.5MHz override TMDS capability on this connector when it operate in TMDS mode
+	uint8_t  reserved;
 };
-*/
+
 
 /******************************************************************************/
 // Structure used in XXXX
@@ -8959,10 +9018,6 @@ struct atom_powerplay_info_v3 {
 #define ASIC_MVDDC_Info                   ASIC_InternalSS_Info
 #define DispDevicePriorityInfo            SaveRestoreInfo
 #define DispOutInfo                       TV_VideoMode
-
-
-#define ATOM_ENCODER_OBJECT_TABLE         ATOM_OBJECT_TABLE
-#define ATOM_CONNECTOR_OBJECT_TABLE       ATOM_OBJECT_TABLE
 
 // New device naming, remove them when both DAL/VBIOS is ready
 #define DFP2I_OUTPUT_CONTROL_PARAMETERS    CRT1_OUTPUT_CONTROL_PARAMETERS

@@ -569,38 +569,7 @@ struct vram_usagebyfirmware_v2_2 {
 // Data Table displayobjectinfo  structure
 /******************************************************************************/
 
-struct atom_i2c_record {
-	struct atom_common_record_header  record_header;
-	union atom_i2c_id_config  i2c_id;
-	uint8_t  i2c_slave_addr; // The slave address, it's 0 when the record is attached to connector for DDC
-};
-
-struct atom_hpd_int_record {
-	struct atom_common_record_header  record_header;
-	uint8_t  pin_id; // Corresponding block in GPIO_PIN_INFO table gives the pin info
-	uint8_t  plugin_pin_state;
-};
-
-union record_connector_caps {
-	uint16_t connector_caps;
-	struct { uint16_t
-		internal_display_checked   :0-0 +1,
-		internal_backlight_checked :1-1 +1,
-		reserved :15-2 +1;
-	};
-};
-struct atom_connector_caps_record {
-	struct atom_common_record_header  record_header;
-	union record_connector_caps caps;
-};
-
-struct atom_connector_speed_record {
-	struct atom_common_record_header  record_header;
-	uint32_t connector_max_speed; // connector Max speed attribute, it sets 8100 in Mhz when DP connector @8.1Ghz.
-	uint16_t reserved;
-};
-
-
+/*
 // Indexes to GPIO array in GLSync record
 // GLSync record is for Frame Lock/Gen Lock feature.
 enum atom_glsync_record_gpio_index_def {
@@ -615,79 +584,13 @@ enum atom_glsync_record_gpio_index_def {
 	ATOM_GPIO_INDEX_GLSYNC_SWAP_SEL  = 8,
 	ATOM_GPIO_INDEX_GLSYNC_MAX       = 9,
 };
+*/
 
-struct atom_connector_hpdpin_lut_record {
+struct atom_connector_speed_record {
 	struct atom_common_record_header  record_header;
-	uint8_t  hpd_pin_map[8]; // EXT_HPDPIN_LUT. An fixed size array which maps external pins to internal GPIO_PIN_INFO table
+	uint32_t connector_max_speed; // connector Max speed attribute, it sets 8100 in Mhz when DP connector @8.1Ghz.
+	uint16_t reserved;
 };
-
-struct atom_connector_auxddc_lut_record {
-	struct atom_common_record_header  record_header;
-	uint8_t  aux_ddc_map[8]; // EXT_AUXDDC_LUT.  An fixed size array which maps external pins to internal DDC ID.
-};
-
-union atom_encoder_caps {
-	uint32_t encodercaps;
-	struct { uint32_t
-		HBR2__MST_enable :0-0 +1, // DP1.2 HBR2 is supported by HW encoder, it is retired in NI. the real meaning from SI is MST_EN
-		HBR2_enable      :1-1 +1, // DP1.2 HBR2 setting is qualified and HBR2 can be enabled
-		HDMI6GBPS_enable :2-2 +1, // HDMI2.0 6Gbps enable or not.
-		HBR3_enable      :3-3 +1, // DP1.3 HBR3 is supported by board.
-		DP2              :4-4 +1, // DP2 is supported by ASIC/board.
-		UHBR10_enable    :5-5 +1, // DP2.0 UHBR10 settings is supported by board
-		UHBR13_5_enable  :6-6 +1, // DP2.0 UHBR13.5 settings is supported by board
-		UHBR20_enable    :7-7 +1, // DP2.0 UHBR20 settings is supported by board
-		USB_C_type       :8-8 +1, // the DP connector is a USB-C type.
-		reserved0       :31-9 +1;
-	};
-};
-struct atom_encoder_caps_record {
-	struct atom_common_record_header  record_header;
-	union atom_encoder_caps  encodercaps;
-};
-
-enum connector_layout_info_type:uint8_t {
-	CONNECTOR_TYPE_DVI_D             = 1,
-	CONNECTOR_TYPE_DVI_I             = 2,
-	ONNECTOR_TYPE_VGA                = 3,
-	CONNECTOR_TYPE_HDMI              = 4,
-	CONNECTOR_TYPE_DISPLAY_PORT      = 5,
-	CONNECTOR_TYPE_MINI_DISPLAY_PORT = 6,
-};
-struct atom_connector_layout_info {
-	uint16_t connectorobjid;
-	enum  connector_layout_info_type connector_type;
-	uint8_t  position;
-};
-struct atom_bracket_layout_record_v1 {
-	struct atom_common_record_header  record_header;
-	uint8_t  bracketlen;
-	uint8_t  bracketwidth;
-	uint8_t  conn_num;
-	uint8_t  reserved;
-	struct atom_connector_layout_info  conn_info[1];
-};
-enum atom_connector_layout_info_mini_type_def:uint8_t {
-	MINI_TYPE_NORMAL = 0,
-	MINI_TYPE_MINI   = 1,
-};
-struct atom_bracket_layout_record_v2 {
-	struct atom_common_record_header  record_header; // record_type = ATOM_BRACKET_LAYOUT_RECORD_TYPE
-	uint8_t  bracketlen;   // Bracket Length in mm
-	uint8_t  bracketwidth; // Bracket Width in mm
-	uint8_t  conn_num;     // Connector numbering
-	enum  atom_connector_layout_info_mini_type_def  mini_type;
-	uint8_t  reserved1;
-	uint8_t  reserved2;
-};
-
-
-struct atom_forced_tmds_cap_record {
-	struct atom_common_record_header  record_header;
-	uint8_t  maxtmdsclkrate_in_2_5mhz;  // in units of 2.5MHz override TMDS capability on this connector when it operate in TMDS mode
-	uint8_t  reserved;
-};
-
 
 union disp_connector_caps {
 	uint32_t connectcaps;
@@ -702,170 +605,50 @@ struct atom_disp_connector_caps_record {
 	union disp_connector_caps  caps;
 };
 
+enum atom_connector_layout_info_mini_type:uint8_t {
+	MINI_TYPE_NORMAL = 0,
+	MINI_TYPE_MINI   = 1,
+};
+struct atom_bracket_layout_record_v2 {
+	struct atom_common_record_header  record_header;
+	uint8_t  bracketlen;   // Bracket Length in mm
+	uint8_t  bracketwidth; // Bracket Width in mm
+	uint8_t  conn_num;     // Connector numbering
+	enum  atom_connector_layout_info_mini_type  mini_type;
+	uint8_t  reserved1;
+	uint8_t  reserved2;
+};
 
 union display_records {
-	struct atom_common_record_header        header;
-	struct atom_i2c_record                  i2c;
-	struct atom_hpd_int_record              hdp_int;
-	struct atom_connector_caps_record       connector_caps;
-	struct atom_connector_speed_record      speed;
-	struct atom_connector_hpdpin_lut_record hpdpin_lut;
-	struct atom_connector_auxddc_lut_record auxddc_lut;
-	struct atom_encoder_caps_record         encoder_caps;
-	struct atom_bracket_layout_record_v1    bracket_layout_v1;
-	struct atom_bracket_layout_record_v2    bracket_layout_v2;
-	struct atom_forced_tmds_cap_record      tmds_cap;
-	struct atom_disp_connector_caps_record  display_caps;
+	struct atom_common_record_header           header;
+	struct atom_i2c_record                     i2c;
+	struct atom_hpd_int_record                 hpd_int;
+	struct atom_connector_caps_record          connector_caps;
+	struct atom_connector_device_tag_record    device_tag;
+	struct atom_connector_speed_record         speed;
+	struct atom_connector_dvi_ext_input_record dvi_exernal;
+	struct atom_encoder_fpga_control_record    fpga_control;
+	struct atom_jtag_record                    jtag;
+	struct atom_encoder_dvo_cf_record          dvo_cf;
+	struct atom_connector_hardcode_dtd_record  hardcode_dtd;
+	struct atom_pcie_subconnector_record       pcie_subconnector;
+	struct atom_router_ddc_path_select_record  ddc_path;
+	struct atom_router_data_clock_path_select_record  data_clock_path;
+	struct atom_connector_hpdpin_lut_record    hpdpin_lut;
+	struct atom_connector_auxddc_lut_record    auxddc_lut;
+	struct atom_object_link_record             object_link;
+	struct atom_connector_remote_cap_record    remote_cap;
+	struct atom_encoder_caps_record            encoder_caps;
+	struct atom_bracket_layout_record_v1       bracket_layout_v1;
+	struct atom_forced_tmds_cap_record         tmds_cap;
+	struct atom_disp_connector_caps_record     display_caps;
+	struct atom_bracket_layout_record_v2       bracket_layout_v2;
 };
 
 
-union atom_display_device_tag {
-	uint16_t device_tag;
-	struct { uint16_t
-		reserved0     :0-0 +1,
-		LCD1_SUPPORT  :1-1 +1, // an embedded display is either an LVDS or eDP signal type of display
-		reserved1     :2-2 +1,
-		DFP1_SUPPORT  :3-3 +1,
-		reserved2     :4-4 +1,
-		LCD2_SUPPORT  :5-5 +1, // second edp device tag 0x0020 for backward compability
-		DFP6_SUPPORT  :6-6 +1,
-		DFP2_SUPPORT  :7-7 +1,
-		reserved3     :8-8 +1,
-		DFP3_SUPPORT  :9-9 +1,
-		DFP4_SUPPORT :10-10 +1,
-		DFP5_SUPPORT :11-11 +1,
-		reserved4    :15-12 +1;
-	};
-};
-
-enum object_type:uint16_t {
-	OBJECT_TYPE_UNKNOWN   = 0,
-
-	// Direct ATOM BIOS translation
-	OBJECT_TYPE_GPU       = 1,
-	OBJECT_TYPE_ENCODER   = 2,
-	OBJECT_TYPE_CONNECTOR = 3,
-	OBJECT_TYPE_ROUTER    = 4,
-	OBJECT_TYPE_GENERIC   = 5,
-
-	// Driver specific
-	OBJECT_TYPE_AUDIO        = 6,
-	OBJECT_TYPE_CONTROLLER   = 7,
-	OBJECT_TYPE_CLOCK_SOURCE = 8,
-	OBJECT_TYPE_ENGINE       = 9,
-
-	OBJECT_TYPE_COUNT = 10,
-};
-
-enum connector_id:uint16_t {
-    CONNECTOR_ID_UNKNOWN            = 0,
-    CONNECTOR_ID_SINGLE_LINK_DVII   = 1,
-    CONNECTOR_ID_DUAL_LINK_DVII     = 2,
-    CONNECTOR_ID_SINGLE_LINK_DVID   = 3,
-    CONNECTOR_ID_DUAL_LINK_DVID     = 4,
-    CONNECTOR_ID_VGA                = 5,
-	CONNECTOR_OBJECT_ID_COMPOSITE   = 6,
-	CONNECTOR_OBJECT_ID_SVIDEO      = 7,
-	CONNECTOR_OBJECT_ID_YPbPr       = 8,
-	CONNECTOR_OBJECT_ID_D_CONNECTOR = 9,
-	CONNECTOR_OBJECT_ID_9PIN_DIN   = 10,  // Supports both CV & TV
-	CONNECTOR_OBJECT_ID_SCART      = 11,
-    CONNECTOR_ID_HDMI_TYPE_A       = 12,
-    CONNECTOR_ID_LVDS              = 14,
-    CONNECTOR_ID_PCIE              = 16,
-    CONNECTOR_ID_HARDCODE_DVI      = 18,
-    CONNECTOR_ID_DISPLAY_PORT      = 19,
-    CONNECTOR_ID_EDP               = 20,
-    CONNECTOR_ID_MXM               = 21,
-    CONNECTOR_ID_WIRELESS          = 22,
-    CONNECTOR_ID_MIRACAST          = 23,
-    CONNECTOR_ID_USBC              = 24,
-    CONNECTOR_ID_VIRTUAL          = 100
-};
-union display_object_id {
-	uint16_t display_objid;
-	struct {
-		enum connector_id id   :7-0 +1;
-		uint16_t enum_id      :11-8 +1;
-		enum object_type type :15-12 +1;
-	};
-};
-
-enum encoder_id:uint16_t {
-	ENCODER_ID_UNKNOWN                = 0,
-	ENCODER_ID_INTERNAL_LVDS          = 1,
-	ENCODER_ID_INTERNAL_TMDS1         = 2,
-	ENCODER_ID_INTERNAL_TMDS2         = 3,
-	ENCODER_ID_INTERNAL_DAC1          = 4,
-	ENCODER_ID_INTERNAL_DAC2          = 5, // TV/CV DAC
-	ENCODER_ID_INTERNAL_LVTM1         = 6, // not used for Radeon
-	ENCODER_ID_INTERNAL_HDMI          = 7,
-	ENCODER_ID_INTERNAL_KLDSCP_TMDS1  = 8, // Kaledisope
-	ENCODER_ID_INTERNAL_KLDSCP_DAC1   = 9, // Kaledisope
-	ENCODER_ID_INTERNAL_KLDSCP_DAC2  = 10, // Kaledisope; shared with CV/TV and CRT
-	ENCODER_ID_EXTERNAL_MVPU_FPGA    = 11, // MVPU FPGA chip
-	ENCODER_ID_INTERNAL_DDI          = 12,
-	ENCODER_ID_INTERNAL_UNIPHY       = 13,
-	ENCODER_ID_INTERNAL_KLDSCP_LVTMA = 14,
-	ENCODER_ID_INTERNAL_UNIPHY1      = 15,
-	ENCODER_ID_INTERNAL_UNIPHY2      = 16,
-	ENCODER_ID_EXTERNAL_NUTMEG       = 17,
-	ENCODER_ID_EXTERNAL_TRAVIS       = 18,
-	ENCODER_ID_INTERNAL_WIRELESS     = 19, // Internal wireless display encoder
-	ENCODER_ID_INTERNAL_UNIPHY3      = 20,
-	ENCODER_ID_INTERNAL_VIRTUAL      = 21,
-
-	ENCODER_OBJECT_ID_INTERNAL_SDVOA        = 6,
-	ENCODER_OBJECT_ID_INTERNAL_SDVOB        = 7,
-	ENCODER_OBJECT_ID_SI170B                = 8,
-	ENCODER_OBJECT_ID_CH7303                = 9,
-	ENCODER_OBJECT_ID_CH7301                = 10,
-	ENCODER_OBJECT_ID_INTERNAL_DVO1         = 11, // This belongs to Radeon Class Display Hardware
-	ENCODER_OBJECT_ID_EXTERNAL_SDVOA        = 12,
-	ENCODER_OBJECT_ID_EXTERNAL_SDVOB        = 13,
-	ENCODER_OBJECT_ID_TITFP513              = 14,
-	ENCODER_OBJECT_ID_INTERNAL_LVTM1        = 15, // not used for Radeon
-	ENCODER_OBJECT_ID_VT1623                = 16,
-	ENCODER_OBJECT_ID_HDMI_SI1930           = 17,
-	ENCODER_OBJECT_ID_HDMI_INTERNAL         = 18,
-	ENCODER_OBJECT_ID_ALMOND                = 34,
-	ENCODER_OBJECT_ID_NUTMEG                = 34,
-	ENCODER_OBJECT_ID_TRAVIS                = 35,
-	ENCODER_OBJECT_ID_HDMI_ANX9805          = 38,
-
-	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_TMDS1 = 19,
-	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DVO1  = 20,
-	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC1  = 21,
-	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC2  = 22, // Shared with CV/TV and CRT
-	ENCODER_OBJECT_ID_SI178                 = 23, // External TMDS (dual link, no HDCP.)
-	ENCODER_OBJECT_ID_MVPU_FPGA             = 24, // MVPU FPGA chip
-	ENCODER_OBJECT_ID_INTERNAL_DDI          = 25,
-	ENCODER_OBJECT_ID_VT1625                = 26,
-	ENCODER_OBJECT_ID_HDMI_SI1932           = 27,
-	ENCODER_OBJECT_ID_DP_AN9801             = 28,
-	ENCODER_OBJECT_ID_DP_DP501              = 29,
-	ENCODER_OBJECT_ID_INTERNAL_UNIPHY       = 30,
-	ENCODER_OBJECT_ID_INTERNAL_KLDSCP_LVTMA = 31,
-	ENCODER_OBJECT_ID_INTERNAL_UNIPHY1      = 32,
-	ENCODER_OBJECT_ID_INTERNAL_UNIPHY2      = 33,
-	ENCODER_OBJECT_ID_INTERNAL_VCE          = 36,
-	ENCODER_OBJECT_ID_INTERNAL_UNIPHY3      = 37,
-	ENCODER_OBJECT_ID_INTERNAL_AMCLK        = 39,
-
-	ENCODER_OBJECT_ID_GENERAL_EXTERNAL_DVO = 255,
-};
-
-union encoder_object_id {
-	uint16_t encoder_objid;
-	struct {
-		enum encoder_id id     :7-0 +1;
-		uint16_t enum_id      :11-8 +1;
-		enum object_type type :15-12 +1;
-	};
-};
 
 struct atom_display_object_path_v2 {
-	union display_object_id display;
+	union connector_object_id display;
 	uint16_t disp_recordoffset;
 	union encoder_object_id encoder; // first encoder closer to the connector, could be either an external or intenal encoder
 	union encoder_object_id extern_encoder; // 2nd encoder after the first encoder, from the connector point of view;
@@ -877,15 +660,13 @@ struct atom_display_object_path_v2 {
 };
 
 struct atom_display_object_path_v3 {
-	union display_object_id display;
+	union connector_object_id display;
 	uint16_t disp_recordoffset;
 	union encoder_object_id encoder; // first encoder closer to the connector, could be either an external or intenal encoder
-	uint16_t reserved1;     // only on USBC case, otherwise always = 0
+	uint16_t reserved1; // only on USBC case, otherwise always = 0
 	uint16_t reserved2;
 	uint16_t reserved3;
-	// a supported device vector, each display path starts with this.the paths are enumerated in the way of priority,
-	// a path appears first
-	union atom_display_device_tag  device_tag;
+	union atom_display_device_tag  device_tag; // a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first
 	uint16_t reserved4;
 };
 

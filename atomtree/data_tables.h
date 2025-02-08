@@ -321,22 +321,41 @@ struct atomtree_display_path_record_set {
 	size_t  records_size;
 	union display_records**  records;
 };
+struct atomtree_object_table_tables {
+	struct atom_srcdst_table* src;
+	struct atom_srcdst_table* dst;
+	struct atomtree_display_path_record_set records;
+};
+struct atomtree_object_table {
+	struct atom_object_table* table;
+	struct atomtree_object_table_tables* objects;
+};
 struct atomtree_display_path_records {
 	struct atomtree_display_path_record_set connector;
 	struct atomtree_display_path_record_set encoder;
 	struct atomtree_display_path_record_set extern_encoder;
 };
-
 struct atomtree_display_object {
 	union {
 		void* leaves;
 		struct atom_common_table_header*       table_header;
+		struct atom_object_header_v1_1*        v1_1;
+		struct atom_object_header_v1_3*        v1_3;
 		struct display_object_info_table_v1_4* v1_4;
 		struct display_object_info_table_v1_5* v1_5;
 	};
-	struct atomtree_display_path_records* records;
 	semver ver;
+
+	// v1.1 .. v1.3
+	struct atomtree_object_table connector;
+	struct atomtree_object_table router;
+	struct atomtree_object_table encoder;
+	struct atomtree_object_table protection;
+
+	// v1.4, 1.5
+	struct atomtree_display_path_records* records;
 };
+
 
 enum register_block_type:uint8_t {
 	REG_BLOCK_UNKNOWN,
@@ -696,7 +715,9 @@ struct atomtree_master_datatable_v1_1 {
 	void*  oem_info;              // atom_oem_info ?
 	void*  xtmds_info;            // atom_xtmds_info ?
 	void*  mclk_ss_info;          // ??  atom_asic_mvdd_info ?
-	void*  object_header;         // atom_object_header ?
+
+	struct atomtree_display_object       display_object;
+
 	void*  indirect_io_access;    // struct indirect_io_access ?
 	void*  mc_init_parameter;     // atom_mc_init_param_table ?
 	void*  asic_vddc_info;        // unsure

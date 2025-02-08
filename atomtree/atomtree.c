@@ -936,6 +936,7 @@ populate_ppt(
 	}
 }
 
+
 static void
 populate_display_object_records(
 		struct atomtree_commons* const commons,
@@ -952,6 +953,7 @@ populate_display_object_records(
 	while (ATOM_RECORD_END_TYPE != r.records->header.record_type) {
 		set->num_records++;
 		r.raw += r.records->header.record_size;
+		assert(255 > set->num_records);
 	}
 	set->records_size = r.raw - start;
 	if (0 == set->num_records) {
@@ -968,6 +970,124 @@ populate_display_object_records(
 		r.raw += r.records->header.record_size;
 	}
 }
+static void
+populate_atom_object_table(
+		struct atomtree_commons* const commons,
+		struct atomtree_object_table* const table,
+		void* const bios,
+		uint16_t const offset
+		) {
+	struct atom_object_table* const header = bios + offset;
+	table->table = header;
+	uint8_t const num_objects = header->NumberOfObjects;
+	struct atomtree_object_table_tables* const objects = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		num_objects * sizeof(table->objects[0])
+	);
+	table->objects = objects;
+
+	for (uint8_t i=0; i < num_objects; i++) {
+		if (header->Objects[i].SrcDstTableOffset) {
+			void* srcdst = bios + header->Objects[i].SrcDstTableOffset;
+			objects[i].src = srcdst;
+			objects[i].dst = srcdst + sizeof_flex(
+				objects[i].src, object_id, objects[i].src->num_of_objs
+			);
+		}
+		if (header->Objects[i].RecordOffset) {
+			populate_display_object_records(
+				commons, &(objects[i].records),
+				bios + header->Objects[i].RecordOffset
+			);
+		}
+	}
+}
+inline static void
+populate_atom_object_header(
+		struct atomtree_commons* const commons,
+		struct atomtree_display_object* const disp
+		) {
+	// v1.1 .. 1.3
+	void* bios; // 1.1 is absolute; 1.2<= is relative
+	if (1 == disp->ver.minor) {
+		bios = commons->bios;
+	} else {
+		bios = disp->leaves;
+	}
+	if (disp->v1_1->ConnectorObjectTableOffset) {
+		populate_atom_object_table(commons, &(disp->connector),
+			bios, disp->v1_1->ConnectorObjectTableOffset
+		);
+	}
+	if (disp->v1_1->RouterObjectTableOffset) {
+		populate_atom_object_table(commons, &(disp->router),
+			bios, disp->v1_1->RouterObjectTableOffset
+		);
+	}
+	if (disp->v1_1->EncoderObjectTableOffset) {
+		populate_atom_object_table(commons, &(disp->encoder),
+			bios, disp->v1_1->EncoderObjectTableOffset
+		);
+	}
+	if (disp->v1_1->ProtectionObjectTableOffset) {
+		populate_atom_object_table(commons, &(disp->protection),
+			bios, disp->v1_1->ProtectionObjectTableOffset
+		);
+	}
+}
+inline static void
+populate_display_object_info_table(
+		struct atomtree_commons* const commons,
+		struct atomtree_display_object* const disp
+		) {
+	// v1.4, 1.5
+	void* const leaves = disp->leaves;
+	uint8_t const number_of_path = disp->v1_4->number_of_path;
+	struct atomtree_display_path_records* const records = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		number_of_path * sizeof(disp->records[0])
+	);
+	disp->records = records;
+
+	if (V(1,4) == disp->ver.ver) {
+		struct atom_display_object_path_v2 const* const path = (
+			disp->v1_4->display_path
+		);
+		for (uint8_t i=0; i < number_of_path; i++) {
+			if (path[i].disp_recordoffset) {
+				populate_display_object_records(
+					commons, &(records[i].connector),
+					leaves + path[i].disp_recordoffset
+				);
+			}
+			if (path[i].encoder_recordoffset) {
+				populate_display_object_records(
+					commons, &(records[i].encoder),
+					leaves + path[i].encoder_recordoffset
+				);
+			}
+			if (path[i].extencoder_recordoffset) {
+				populate_display_object_records(
+					commons, &(records[i].extern_encoder),
+					leaves + path[i].extencoder_recordoffset
+				);
+			}
+		}
+	} else {
+		struct atom_display_object_path_v3 const* const path = (
+			disp->v1_5->display_path
+		);
+		for (uint8_t i=0; i < number_of_path; i++) {
+			if (path[i].disp_recordoffset) {
+				populate_display_object_records(
+					commons, &(records[i].connector),
+					leaves + path[i].disp_recordoffset
+				);
+			}
+		}
+	}
+}
+
 inline static void
 populate_display_object(
 		struct atomtree_commons* const commons,
@@ -980,56 +1100,11 @@ populate_display_object(
 	disp->leaves = commons->bios + bios_offset;
 	disp->ver = atom_get_ver(disp->table_header);
 	switch (disp->ver.ver) {
-		case V(1,4): {
-			disp->records = arena_alloc(
-				&(commons->alloc_arena), &(commons->error),
-				disp->v1_4->number_of_path * sizeof(disp->records[0])
-			);
-			
-			struct atom_display_object_path_v2 const* const path = (
-				disp->v1_4->display_path
-			);
-			for (uint8_t i=0; i < disp->v1_4->number_of_path; i++) {
-				if (path[i].disp_recordoffset) {
-					populate_display_object_records(
-						commons, &(disp->records[i].connector),
-						disp->leaves + path[i].disp_recordoffset
-					);
-				}
-				if (path[i].encoder_recordoffset) {
-					populate_display_object_records(
-						commons, &(disp->records[i].encoder),
-						disp->leaves + path[i].encoder_recordoffset
-					);
-				}
-				if (path[i].extencoder_recordoffset) {
-					populate_display_object_records(
-						commons, &(disp->records[i].extern_encoder),
-						disp->leaves + path[i].extencoder_recordoffset
-					);
-				}
-			}
-			break;
-		}
-		case V(1,5): {
-			disp->records = arena_alloc(
-				&(commons->alloc_arena), &(commons->error),
-				disp->v1_5->number_of_path * sizeof(disp->records[0])
-			);
-			
-			struct atom_display_object_path_v3 const* const path = (
-				disp->v1_5->display_path
-			);
-			for (uint8_t i=0; i < disp->v1_5->number_of_path; i++) {
-				if (path[i].disp_recordoffset) {
-					populate_display_object_records(
-						commons, &(disp->records[i].connector),
-						disp->leaves + path[i].disp_recordoffset
-					);
-				}
-			}
-			break;
-		}
+		case V(1,1):
+		case V(1,2):
+		case V(1,3): populate_atom_object_header(commons, disp); break;
+		case V(1,4): 
+		case V(1,5): populate_display_object_info_table(commons, disp); break;
 	}
 }
 
@@ -2486,9 +2561,9 @@ populate_datatable_v1_1(
 		dt11->mclk_ss_info = bios + leaves->MclkSS_Info;
 	}
 
-	if (leaves->Object_Header) {
-		dt11->object_header = bios + leaves->Object_Header;
-	}
+	populate_display_object(
+		commons, &(dt11->display_object), leaves->Object_Header
+	);
 
 	if (leaves->IndirectIOAccess) {
 		dt11->indirect_io_access = bios + leaves->IndirectIOAccess;

@@ -1117,11 +1117,18 @@ grow_ppt(
 static atui_branch*
 grow_display_info_records_set(
 		struct atomtree_display_path_record_set const* const set,
+		bool const is_v1_4_or_newer, // main display object
 		char const* const set_name
 		) {
 	if (0 == set->num_records) {
 		return NULL;
 	}
+
+	// ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE vs ATOM_CONNECTOR_SPEED_UPTO
+	atuifunc const entry_val_4 = (atuifunc[2]) {
+		[false] = _atui_atom_connector_device_tag_record,
+		[true]  = _atui_atom_connector_speed_record
+	}[is_v1_4_or_newer];
 
 	atui_branch* const atui_records = ATUI_MAKE_BRANCH(atui_nullstruct,
 		set_name,  NULL,NULL,  set->num_records,NULL
@@ -1131,110 +1138,272 @@ grow_display_info_records_set(
 	atui_records->table_size = set->records_size;
 
 	atui_branch* rec;
-	atuifunc_args atui_args = {
+	atuifunc_args rec_args = {
 		.atomtree = set,
 	};
-
 	for (uint8_t i=0; i < set->num_records; i++) {
-		atui_args.bios = set->records[i];
+		rec_args.bios = set->records[i];
 		switch (set->records[i]->header.record_type) {
 			case ATOM_I2C_RECORD_TYPE:
-				rec = _atui_atom_i2c_record(&atui_args); break;
+				rec = _atui_atom_i2c_record(&rec_args); break;
 			case ATOM_HPD_INT_RECORD_TYPE:
-				rec = _atui_atom_hpd_int_record(&atui_args); break;
+				rec = _atui_atom_hpd_int_record(&rec_args); break;
 			case ATOM_CONNECTOR_CAP_RECORD_TYPE:
-				rec = _atui_atom_connector_caps_record(&atui_args); break;
-			case ATOM_CONNECTOR_SPEED_UPTO:
-				rec = _atui_atom_connector_speed_record(&atui_args); break;
-			case ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE:
-				rec = _atui_atom_connector_hpdpin_lut_record(&atui_args); break;
-			case ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE:
-				rec = _atui_atom_connector_auxddc_lut_record(&atui_args); break;
-			case ATOM_ENCODER_CAP_RECORD_TYPE:
-				rec = _atui_atom_encoder_caps_record(&atui_args); break;
-			case ATOM_BRACKET_LAYOUT_RECORD_TYPE:
-				rec = _atui_atom_bracket_layout_record_v1(&atui_args); break;
-			case ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE:
-				rec = _atui_atom_bracket_layout_record_v2(&atui_args); break;
-			case ATOM_FORCED_TMDS_CAP_RECORD_TYPE:
-				rec = _atui_atom_forced_tmds_cap_record(&atui_args); break;
-			case ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE:
-				rec = _atui_atom_disp_connector_caps_record(&atui_args); break;
+				rec = _atui_atom_connector_caps_record(&rec_args); break;
+			//case ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE:
+			//case ATOM_CONNECTOR_SPEED_UPTO:
+			case 4:
+				rec = entry_val_4(&rec_args); break;
+			case ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE:
+				rec = _atui_atom_connector_dvi_ext_input_record(&rec_args);
+				break;
+			case ATOM_ENCODER_FPGA_CONTROL_RECORD_TYPE:
+				rec = _atui_atom_encoder_fpga_control_record(&rec_args); break;
+			case ATOM_CONNECTOR_CVTV_SHARE_DIN_RECORD_TYPE:
+				rec = _atui_atom_connector_cvtv_share_din_record(&rec_args);
+				break;
+			case ATOM_JTAG_RECORD_TYPE:
+				rec = _atui_atom_jtag_record(&rec_args); break;
 			case ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE:
+				rec = _atui_atom_object_gpio_cntl_record(&rec_args); break;
+			case ATOM_ENCODER_DVO_CF_RECORD_TYPE:
+				rec = _atui_atom_encoder_dvo_cf_record(&rec_args); break;
+			case ATOM_CONNECTOR_CF_RECORD_TYPE:
+				rec = _atui_atom_connector_cf_record(&rec_args); break;
+			case ATOM_CONNECTOR_HARDCODE_DTD_RECORD_TYPE:
+				rec = _atui_atom_connector_hardcode_dtd_record(&rec_args);break;
+			case ATOM_PCIE_SUBCONNECTOR_RECORD_TYPE:
+				assert(0); // incomplete atui
+				rec = _atui_atom_pcie_subconnector_record(&rec_args); break;
+			case ATOM_ROUTER_DDC_PATH_SELECT_RECORD_TYPE:
+				assert(0); // incomplete atui
+				rec = _atui_atom_router_ddc_path_select_record(&rec_args);break;
+			case ATOM_ROUTER_DATA_CLOCK_PATH_SELECT_RECORD_TYPE:
+				assert(0); // incomplete atui
+				rec = _atui_atom_router_data_clock_path_select_record(
+					&rec_args
+				);
+				break;
+			case ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE:
+				rec = _atui_atom_connector_hpdpin_lut_record(&rec_args); break;
+			case ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE:
+				rec = _atui_atom_connector_auxddc_lut_record(&rec_args); break;
+			case ATOM_OBJECT_LINK_RECORD_TYPE:
+				assert(0); // incomplete atui. select object id union?
+				rec = _atui_atom_object_link_record(&rec_args); break;
+			case ATOM_CONNECTOR_REMOTE_CAP_RECORD_TYPE:
+				assert(0); // incomplete atui
+				rec = _atui_atom_connector_remote_cap_record(&rec_args); break;
+			case ATOM_ENCODER_CAPS_RECORD_TYPE:
+				rec = _atui_atom_encoder_caps_record(&rec_args); break;
+			case ATOM_BRACKET_LAYOUT_V1_RECORD_TYPE:
+				rec = _atui_atom_bracket_layout_record_v1(&rec_args); break;
+			case ATOM_FORCED_TMDS_CAP_RECORD_TYPE:
+				rec = _atui_atom_forced_tmds_cap_record(&rec_args); break;
+			case ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE:
+				rec = _atui_atom_disp_connector_caps_record(&rec_args); break;
+			case ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE:
+				rec = _atui_atom_bracket_layout_record_v2(&rec_args); break;
 			default:
-				rec = _atui_atom_common_record_header(&atui_args); break;
+				assert(0);
+				rec = _atui_atom_common_record_header(&rec_args); break;
 		}
 		ATUI_ADD_BRANCH(atui_records, rec);
 	}
 	return atui_records;
 }
+static atui_branch*
+grow_atom_srcdst_table(
+		struct atom_srcdst_table const* const table,
+		char const* const rename
+		) {
+	atui_branch* const header = ATUI_MAKE_BRANCH(atom_srcdst_table,  rename,
+		NULL, table,  0,NULL
+	);
+	atui_branch* objs[UINT8_MAX]; // cheaper than malloc
+	if (table->num_of_objs) {
+		atuifunc_args obj_args = {};
+
+		for (uint8_t i=0; i < table->num_of_objs; i++) {
+			obj_args.bios = &(table->object_id[i]);
+			switch (table->object_id[i].generic.type) {
+				case OBJECT_TYPE_ENCODER:
+					objs[i] = _atui_encoder_object_id(&obj_args); break;
+				case OBJECT_TYPE_CONNECTOR: 
+					objs[i] = _atui_connector_object_id(&obj_args); break;
+				default:
+					objs[i] = _atui_generic_object_id(&obj_args); break;
+			}
+			sprintf(objs[i]->leaves[0].name, "%s [%02u]",
+				objs[i]->leaves[0].origname, i
+			);
+		}
+
+		// steal leaves
+		atui_assimilate(header, objs, table->num_of_objs);
+	}
+	assert(header->leaf_count == (1+table->num_of_objs)); // loop renames leaves
+	return header;
+}
+static atui_branch*
+grow_atom_object_table(
+		struct atomtree_object_table const* const table,
+		char const* const rename
+		) {
+	struct atom_object_table const* const header = table->table;
+	struct atomtree_object_table_tables const* const atobjs = table->objects;
+
+	atui_branch* const atui_header = ATUI_MAKE_BRANCH(atom_object_table, rename,
+		table, header,  header->NumberOfObjects,NULL
+	);
+
+	atui_branch* obj;
+	atui_branch* subtables[3];
+	atuifunc_args obj_args = {
+		.import_branches = subtables,
+		.num_import_branches = lengthof(subtables),
+	};
+
+	for (uint8_t i=0; i < header->NumberOfObjects; i++) {
+		if (atobjs[i].src) {
+			 subtables[0] = grow_atom_srcdst_table(atobjs[i].src, "src");
+			 subtables[1] = grow_atom_srcdst_table(atobjs[i].dst, "dst");
+		} else {
+			subtables[0] = NULL;
+			subtables[1] = NULL;
+		}
+		subtables[2] = grow_display_info_records_set(
+			&(atobjs[i].records), false, "records"
+		);
+		obj_args.atomtree = &(atobjs[i]);
+		obj_args.bios = &(header->Objects[i]);
+		obj = _atui_atom_object(&obj_args);
+		sprintf(obj->name, "%s [%02u]", obj->origname, i);
+		ATUI_ADD_BRANCH(atui_header, obj);
+	}
+	return atui_header;
+}
+
+inline static atui_branch*
+grow_atom_object_header(
+		struct atomtree_display_object const* const disp
+		) {
+	// v1.1 .. 1.3
+
+	atui_branch* connector = NULL;
+	if (disp->connector.table) {
+		connector = grow_atom_object_table(&(disp->connector), "connector");
+	}
+	atui_branch* router = NULL;
+	if (disp->router.table) {
+		router = grow_atom_object_table(&(disp->router), "router");
+	}
+	atui_branch* encoder = NULL;
+	if (disp->encoder.table) {
+		encoder = grow_atom_object_table(&(disp->encoder), "encoder");
+	}
+	atui_branch* protection = NULL;
+	if (disp->protection.table) {
+		protection = grow_atom_object_table(&(disp->protection), "protection");
+	}
+	atui_branch* path = NULL;
+	atui_branch* misc = NULL;
+
+
+	atui_branch* const subtables[] = {
+		connector, router, encoder, protection, path, misc
+	};
+
+	atuifunc_args atui_args = {
+		.atomtree = disp,
+		.bios = disp->leaves,
+		.import_branches = subtables,
+		.num_import_branches = lengthof(subtables),
+	};
+	switch (disp->ver.minor) {
+		case 2: atui_args.rename = "atom_object_header_v1_1 (forced)"; fall;
+		case 1: return _atui_atom_object_header_v1_1(&atui_args);
+		case 3: return _atui_atom_object_header_v1_3(&atui_args);
+		default: assert(0);
+	}
+}
+inline static atui_branch*
+grow_display_object_info_table(
+		struct atomtree_display_object const* const disp
+		) {
+	// v1.4, 1.5
+	struct atomtree_display_path_records const* const records = disp->records;
+	uint8_t const number_of_path = disp->v1_4->number_of_path;
+
+	atui_branch* atui_disp;
+	atuifunc_args const disp_args = {
+		.atomtree = disp,
+		.bios = disp->leaves,
+		.num_import_branches = number_of_path,
+	};
+
+	atui_branch* atui_path;
+	atui_branch* record_tables[3];
+	atuifunc_args path_args = {
+		.atomtree = disp,
+		.import_branches = record_tables,
+		.num_import_branches = lengthof(record_tables),
+	};
+
+	if (V(1,4) == disp->ver.ver) {
+		atui_disp = _atui_display_object_info_table_v1_4(&disp_args);
+		for (uint8_t i=0; i < number_of_path; i++) {
+			record_tables[0] = grow_display_info_records_set(
+				&(records[i].connector),      true, "display records"
+			);
+			record_tables[1] = grow_display_info_records_set(
+				&(records[i].encoder),        true, "internal encoder"
+			);
+			record_tables[2] = grow_display_info_records_set(
+				&(records[i].extern_encoder), true, "external encoder"
+			);
+			path_args.bios = &(disp->v1_4->display_path[i]);
+			atui_path = _atui_atom_display_object_path_v2(&path_args);
+			sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
+			ATUI_ADD_BRANCH(atui_disp, atui_path);
+		}
+	} else {
+		atui_disp = _atui_display_object_info_table_v1_5(&disp_args);
+		path_args.num_import_branches = 1;
+		for (uint8_t i=0; i < number_of_path; i++) {
+			record_tables[0] = grow_display_info_records_set(
+				&(records[i].connector),      true, "display records"
+			);
+			path_args.bios = &(disp->v1_5->display_path[i]);
+			atui_path = _atui_atom_display_object_path_v3(&path_args);
+			sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
+			ATUI_ADD_BRANCH(atui_disp, atui_path);
+		}
+	}
+
+	return atui_disp;
+}
+
 inline static atui_branch*
 grow_display_info(
 		struct atom_tree const* const atree __unused,
 		struct atomtree_display_object const* const disp
 		) {
-	struct atomtree_display_path_records const* const records = disp->records;
-
+	if (NULL == disp->leaves) {
+		return NULL;
+	}
 	atui_branch* atui_disp;
-	atuifunc_args atui_args = {
-		.atomtree = disp,
-		.bios = disp->leaves,
-	};
 	switch (disp->ver.ver) {
-		case V(1,4): { // v1.4 and 1.5 should look very similar
-			atui_args.num_import_branches = disp->v1_4->number_of_path;
-			atui_disp = _atui_display_object_info_table_v1_4(&atui_args);
-
-			atui_branch* atui_path;
-			atui_branch* record_tables[3];
-			atuifunc_args path_args = {
-				.atomtree = disp,
-				.import_branches = record_tables,
-				.num_import_branches = lengthof(record_tables),
-			};
-
-			for (uint8_t i=0; i < disp->v1_4->number_of_path; i++) {
-				record_tables[0] = grow_display_info_records_set(
-					&(records[i].connector), "display records"
-				);
-				record_tables[1] = grow_display_info_records_set(
-					&(records[i].encoder), "internal encoder"
-				);
-				record_tables[2] = grow_display_info_records_set(
-					&(records[i].extern_encoder), "external encoder"
-				);
-				path_args.bios = &(disp->v1_4->display_path[i]);
-				atui_path = _atui_atom_display_object_path_v2(&path_args);
-				sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
-				ATUI_ADD_BRANCH(atui_disp, atui_path);
-			}
-			break;
-		}
-		case V(1,5): {
-			atui_args.num_import_branches = disp->v1_5->number_of_path;
-			atui_disp = _atui_display_object_info_table_v1_5(&atui_args);
-
-			atui_branch* atui_path;
-			atui_branch* record_tables;
-			atuifunc_args path_args = {
-				.atomtree = disp,
-				.import_branches = &record_tables,
-				.num_import_branches = 1,
-			};
-
-			for (uint8_t i=0; i < disp->v1_5->number_of_path; i++) {
-				record_tables = grow_display_info_records_set(
-					&(records[i].connector), "display records"
-				);
-				path_args.bios = &(disp->v1_5->display_path[i]);
-				atui_path = _atui_atom_display_object_path_v3(&path_args);
-				sprintf(atui_path->name, "%s [%u]", atui_path->origname, i);
-				ATUI_ADD_BRANCH(atui_disp, atui_path);
-			}
-			break;
-		}
+		case V(1,1):
+		case V(1,2):
+		case V(1,3): atui_disp = grow_atom_object_header(disp); break;
+		case V(1,4):
+		case V(1,5): atui_disp = grow_display_object_info_table(disp); break;
 		default:
-			atui_disp = _atui_atom_common_table_header(&atui_args);
+			atui_disp = ATUI_MAKE_BRANCH(atom_common_table_header,
+				"adisplay_object_info_table (header only stub)",
+				disp, disp->leaves,  0,NULL
+			);
 			break;
 	}
 	return atui_disp;
@@ -2939,7 +3108,11 @@ grow_master_datatable_v1_1(
 	atui_branch* const atui_oem_info = NULL;
 	atui_branch* const atui_xtmds_info = NULL;
 	atui_branch* const atui_mclk_ss_info = NULL;
-	atui_branch* const atui_object_header = NULL;
+
+	atui_branch* const atui_object_header = grow_display_info(
+	 	atree, &(dt11->display_object)
+	);
+
 	atui_branch* const atui_indirect_io_access = NULL;
 	atui_branch* const atui_mc_init_parameter = NULL;
 	atui_branch* const atui_asic_vddc_info = NULL;
