@@ -1171,7 +1171,6 @@ _atui_%s(
 
 %s\
 
-	static_assert(lengthof(leaves_init) < UINT16_MAX);
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
 	assert(branch_embryo.computed_num_graft < UINT8_MAX);
 	assert(branch_embryo.computed_num_shoot < UINT8_MAX);

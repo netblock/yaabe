@@ -41,13 +41,13 @@ enum i18n_languages:int8_t {
 };
 
 struct atui_enum_entry {
-	char const* const name;
+	char const name[64];
 	char const* const description[LANG_TOTALLANGS];
 	int64_t const val;
 	uint16_t const name_length;
 };
 struct atui_enum {
-	char const* const name;
+	char const name[40];
 	char const* const description[LANG_TOTALLANGS];
 	struct atui_enum_entry const* const enum_array;
 	uint8_t const num_entries;
@@ -94,7 +94,7 @@ struct atui_type {
 };
 
 struct _atui_leaf {
-	char name[72];
+	char name[80];
 	char const* origname;
 	char const* description[LANG_TOTALLANGS];
 
@@ -158,7 +158,7 @@ struct _atui_leaf {
 	};
 };
 struct _atui_branch {
-	char name[64];
+	char name[80];
 	// name and struct ("bios" namespace) may be different
 	char const* origname;
 	char const* structname;
@@ -259,7 +259,7 @@ path_to_atui( // crawls path and makes a map of that path
 		);
 
 
-#define LEAF_SPRINTF_FORMAT_SIZE 10
+static constexpr uint16_t LEAF_SPRINTF_FORMAT_SIZE = 10;
 size_t // num bytes
 get_sprintf_format_from_leaf(
 		char* format,
@@ -286,7 +286,7 @@ atui_enum_lsearch( // linear; left
 
 
 // atui allocator functions internal structs:
-#define ATUI_STACK_DEPTH 16
+static constexpr uint16_t ATUI_STACK_DEPTH = 16;
 
 typedef struct atui_func_args {
 	char const* rename;
@@ -326,7 +326,7 @@ struct atui_branch_data {
 
 	// does not include kids
 	atui_leaf const* leaves_init;
-	uint32_t num_leaves_init;
+	uint16_t num_leaves_init;
 
 	uint32_t computed_num_leaves;
 	uint32_t computed_num_graft;

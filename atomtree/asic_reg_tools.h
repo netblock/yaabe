@@ -36,8 +36,8 @@ struct register_set_entry { // register set entry
 	atuifunc atui_branch_func;
 };
 struct register_set {
-	uint16_t num_reg_set_addresses;
 	char const* set_name;
+	uint16_t num_reg_set_addresses;
 	struct register_set_entry entries[] __counted_by(num_reg_set_addresses);
 };
 

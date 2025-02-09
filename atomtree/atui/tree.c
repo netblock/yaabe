@@ -1568,7 +1568,7 @@ grow_init_reg_block(
 	char const* vendor_part[2] = {0};
 	bool const uses_vendor_parts = (NULL != strap_format_old);
 	bool const vram_module_v8_hack = (
-		// uniquely, atom_vram_module_v8 uses McTunningSetId to ID
+		// Uniquely, atom_vram_module_v8 uses McTunningSetId to ID
 		// mem_adjust table. It seems to exist as a way to exlude the
 		// 'generic' vram_module.
 		(REG_BLOCK_MEM_ADJUST == reg_type)
@@ -1727,8 +1727,9 @@ grow_atom_memory_timing_format(
 
 	atui_branch* atui_mrs[4] = {NULL};
 	atuifunc_args atui_mrs_args = {0};
-	atuifunc atui_mrs_funcs[lengthof(atui_mrs)] = {
-		_atui_atui_nullstruct // easier than null-testing
+	atuifunc atui_mrs_funcs[] = {
+		// easier than null-testing
+		[0 ... (lengthof(atui_mrs)-1)] = _atui_atui_nullstruct
 	};
 	switch (memory_type) { // mrs in straps
 		case ATOM_DGPU_VRAM_TYPE_DDR2: // non-G
@@ -3566,7 +3567,8 @@ grow_psp_directory_fw_blob(
 
 	atui_branch* blob;
 	atuifunc const generic_entry = (atuifunc const[2]) {
-		_atui_atui_nullstruct, _atui_amd_fw_header
+		[false] = _atui_atui_nullstruct,
+		[true] = _atui_amd_fw_header
 	}[fw_entry->has_fw_header];
 	atuifunc_args const blob_args = {
 		.atomtree = fw_entry,
@@ -3678,9 +3680,9 @@ grow_pci_tables(
 
 	atui_branch* atui_pci;
 	atuifunc_args atui_args = {0};
-	atuifunc const atui_pci_func[] = { // jump table
-		_atui_pci_rom_tables,
-		_atui_efi_pci_device_driver_image,
+	atuifunc const atui_pci_func[2] = { // jump table
+		[false] = _atui_pci_rom_tables,
+		[true] = _atui_efi_pci_device_driver_image,
 	};
 	for (uint8_t i=0; i < atree_pci->num_images; i++) {
 		atui_args.bios = tables[i].header;

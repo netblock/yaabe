@@ -9,15 +9,15 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 #include <math.h>
 
 #ifdef C2X_COMPAT
-static char const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0x%0"};
-static char const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llX"};
-static char const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llX"};
-static uint8_t const bases[] = {0, 10, 16, 8, 16};
+static constexpr char prefixes_int[][5] = {"", "%0", "0x%0", "0o%0", "0x%0"};
+static constexpr char suffixes_uint[][4] = {"", "llu", "llX", "llo", "llX"};
+static constexpr char suffixes_int[][4]  = {"", "lli", "llX", "llo", "llX"};
+static constexpr uint8_t bases[] = {0, 10, 16, 8, 16};
 #else
-static char const* const prefixes_int[] = {"", "%0", "0x%0", "0o%0", "0b%0"};
-static char const* const suffixes_uint[] = {"", "llu", "llX", "llo", "llb"};
-static char const* const suffixes_int[]  = {"", "lli", "llX", "llo", "llb"};
-static uint8_t const bases[] = {0, 10, 16, 8, 2};
+static constexpr char prefixes_int[][5] = {"", "%0", "0x%0", "0o%0", "0b%0"};
+static constexpr char suffixes_uint[][4] = {"", "llu", "llX", "llo", "llb"};
+static constexpr char suffixes_int[][4]  = {"", "lli", "llX", "llo", "llb"};
+static constexpr uint8_t bases[] = {0, 10, 16, 8, 2};
 #endif
 
 

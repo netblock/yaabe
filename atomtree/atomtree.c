@@ -619,6 +619,7 @@ set_pplib_ppt_clock_info(
 			break;
 		case CHIP_BONAIRE:
 		case CHIP_HAWAII:
+		case CHIP_TOPAZ:
 			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_SEA;
 			break;
 		case CHIP_PALM:
@@ -630,7 +631,6 @@ set_pplib_ppt_clock_info(
 		case CHIP_MULLINS:
 			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_SUMO;
 			break;
-		case CHIP_TOPAZ:
 		case CHIP_CARRIZO:
 		case CHIP_STONEY:
 			ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_CARRIZO;
@@ -1499,7 +1499,7 @@ populate_vram_module(
 						- offsetof(typeof(*vmod->v1_3), MemTiming)
 					)
 				);
-			} // loop
+			}
 			break;
 
 		case V(1,4): // atom_vram_module_v4. Will look very similar to v3
@@ -1517,7 +1517,7 @@ populate_vram_module(
 					)
 				);
 
-			} // loop
+			}
 			break;
 
 		case V(1,7):
