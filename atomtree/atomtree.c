@@ -982,7 +982,7 @@ populate_atom_object_table(
 	uint8_t const num_objects = header->NumberOfObjects;
 	struct atomtree_object_table_tables* const objects = arena_alloc(
 		&(commons->alloc_arena), &(commons->error),
-		num_objects * sizeof(table->objects[0])
+		num_objects * sizeof(objects[0])
 	);
 	table->objects = objects;
 
@@ -1001,6 +1001,38 @@ populate_atom_object_table(
 			);
 		}
 	}
+}
+inline static void
+populate_display_object_path_table(
+		struct atomtree_commons* const commons,
+		struct atomtree_object_path* const table,
+		void* const bios,
+		uint16_t const offset
+		) {
+	struct atom_display_object_path_table* const header = bios + offset;
+	table->header = header;
+	uint8_t const num_paths = header->NumOfDispPath;
+
+	if (0 == num_paths) {
+		return;
+	}
+	struct atomtree_object_path_entry* const paths = arena_alloc(
+		&(commons->alloc_arena), &(commons->error),
+		num_paths * sizeof(paths[0])
+	);
+	table->paths = paths;
+
+	void* pos = header->DispPath;
+
+	for (uint8_t i=0; i < num_paths; i++) {
+		paths[i].path = pos;
+		paths[i].num_graphic_ids = (
+			(paths[i].path->Size - sizeof(*(paths[i].path)))
+			/ sizeof(paths[i].path->GraphicObjIds[0])
+		);
+		pos += paths[i].path->Size;
+	}
+	table->total_size = pos - (void*) header;
 }
 inline static void
 populate_atom_object_header(
@@ -1032,6 +1064,16 @@ populate_atom_object_header(
 	if (disp->v1_1->ProtectionObjectTableOffset) {
 		populate_atom_object_table(commons, &(disp->protection),
 			bios, disp->v1_1->ProtectionObjectTableOffset
+		);
+	}
+	if (disp->v1_1->DisplayPathTableOffset) {
+		populate_display_object_path_table(commons, &(disp->path),
+			bios, disp->v1_1->DisplayPathTableOffset
+		);
+	}
+	if ((3 == disp->ver.minor) && disp->v1_3->MiscObjectTableOffset) {
+		populate_atom_object_table(commons, &(disp->misc),
+			bios, disp->v1_3->MiscObjectTableOffset
 		);
 	}
 }

@@ -1212,6 +1212,24 @@ grow_display_info_records_set(
 	}
 	return atui_records;
 }
+
+static atui_branch*
+grow_object_id(
+		union object_ids const* const obj_id
+		) {
+	atuifunc_args const a = {.bios = obj_id};
+	switch (obj_id->basic.type) {
+		case OBJECT_TYPE_ENCODER:      return _atui_encoder_object_id(&a);
+		case OBJECT_TYPE_CONNECTOR:    return _atui_connector_object_id(&a);
+		case OBJECT_TYPE_GENERIC:      return _atui_generic_object_id(&a);
+		case OBJECT_TYPE_AUDIO:        return _atui_audio_object_id(&a);
+		case OBJECT_TYPE_CONTROLLER:   return _atui_controller_object_id(&a);
+		case OBJECT_TYPE_CLOCK_SOURCE: return _atui_clock_source_object_id(&a);
+		case OBJECT_TYPE_ENGINE:       return _atui_engine_object_id(&a);
+		default: return _atui_object_id_template(&a);
+	}
+}
+
 static atui_branch*
 grow_atom_srcdst_table(
 		struct atom_srcdst_table const* const table,
@@ -1222,18 +1240,8 @@ grow_atom_srcdst_table(
 	);
 	atui_branch* objs[UINT8_MAX]; // cheaper than malloc
 	if (table->num_of_objs) {
-		atuifunc_args obj_args = {};
-
 		for (uint8_t i=0; i < table->num_of_objs; i++) {
-			obj_args.bios = &(table->object_id[i]);
-			switch (table->object_id[i].generic.type) {
-				case OBJECT_TYPE_ENCODER:
-					objs[i] = _atui_encoder_object_id(&obj_args); break;
-				case OBJECT_TYPE_CONNECTOR: 
-					objs[i] = _atui_connector_object_id(&obj_args); break;
-				default:
-					objs[i] = _atui_generic_object_id(&obj_args); break;
-			}
+			objs[i] = grow_object_id(&(table->object_id[i]));
 			sprintf(objs[i]->leaves[0].name, "%s [%02u]",
 				objs[i]->leaves[0].origname, i
 			);
@@ -1248,8 +1256,24 @@ grow_atom_srcdst_table(
 static atui_branch*
 grow_atom_object_table(
 		struct atomtree_object_table const* const table,
-		char const* const rename
+		enum object_type const type
 		) {
+	char const* rename = "generic";
+	atuifunc atomobject_func = _atui_atom_object_generic;
+	switch (type) {
+		case OBJECT_TYPE_ENCODER:
+			rename = "encoder";
+			atomobject_func = _atui_atom_object_encoder;
+			break;
+		case OBJECT_TYPE_CONNECTOR:
+			rename = "connector";
+			atomobject_func = _atui_atom_object_connector;
+			break;
+		case OBJECT_TYPE_ROUTER:
+			rename = "router";
+			break;
+	}
+
 	struct atom_object_table const* const header = table->table;
 	struct atomtree_object_table_tables const* const atobjs = table->objects;
 
@@ -1277,11 +1301,52 @@ grow_atom_object_table(
 		);
 		obj_args.atomtree = &(atobjs[i]);
 		obj_args.bios = &(header->Objects[i]);
-		obj = _atui_atom_object(&obj_args);
+		obj = atomobject_func(&obj_args);
 		sprintf(obj->name, "%s [%02u]", obj->origname, i);
 		ATUI_ADD_BRANCH(atui_header, obj);
 	}
 	return atui_header;
+}
+inline static atui_branch*
+grow_display_object_path_table(
+		struct atomtree_object_path const* const table
+		) {
+	struct atomtree_object_path_entry const* const paths = table->paths;
+
+	atui_branch* const header = ATUI_MAKE_BRANCH(atom_display_object_path_table,
+		NULL,  table,table->header, table->header->NumOfDispPath, NULL
+	);
+
+	atui_branch* graphic_objs;
+	atui_branch* objs[UINT8_MAX]; // cheaper than malloc
+	atui_branch* path;
+
+	for (uint8_t paths_i=0; paths_i < table->header->NumOfDispPath; paths_i++) {
+		for (uint8_t obj_i=0; obj_i < paths[paths_i].num_graphic_ids; obj_i++) {
+			objs[obj_i] = grow_object_id(
+				&(paths[paths_i].path->GraphicObjIds[obj_i])
+			);
+			sprintf(objs[obj_i]->leaves[0].name, "%s [%02u]",
+				objs[obj_i]->leaves[0].origname, obj_i
+			);
+		}
+		graphic_objs = ATUI_MAKE_BRANCH(atui_nullstruct,  "GraphicObjIds",
+			NULL,NULL,  0,NULL
+		);
+		graphic_objs->prefer_contiguous = true;
+		graphic_objs->table_start = paths[paths_i].path->GraphicObjIds;
+		graphic_objs->table_size = ( // multiple ways to get this
+			paths[paths_i].num_graphic_ids
+			* sizeof(paths[paths_i].path->GraphicObjIds[0])
+		);
+		atui_assimilate(graphic_objs, objs, paths[paths_i].num_graphic_ids);
+		path = ATUI_MAKE_BRANCH(atom_display_object_path,  NULL,
+			&(paths[paths_i]), paths[paths_i].path,  1,&graphic_objs
+		);
+		sprintf(path->name, "%s [%02u]", path->origname, paths_i);
+		ATUI_ADD_BRANCH(header, path);
+	}
+	return header;
 }
 
 inline static atui_branch*
@@ -1292,22 +1357,35 @@ grow_atom_object_header(
 
 	atui_branch* connector = NULL;
 	if (disp->connector.table) {
-		connector = grow_atom_object_table(&(disp->connector), "connector");
+		connector = grow_atom_object_table(
+			&(disp->connector), OBJECT_TYPE_CONNECTOR
+		);
 	}
 	atui_branch* router = NULL;
 	if (disp->router.table) {
-		router = grow_atom_object_table(&(disp->router), "router");
+		router = grow_atom_object_table(&(disp->router), OBJECT_TYPE_ROUTER);
 	}
 	atui_branch* encoder = NULL;
 	if (disp->encoder.table) {
-		encoder = grow_atom_object_table(&(disp->encoder), "encoder");
+		encoder = grow_atom_object_table(&(disp->encoder), OBJECT_TYPE_ENCODER);
 	}
 	atui_branch* protection = NULL;
 	if (disp->protection.table) {
-		protection = grow_atom_object_table(&(disp->protection), "protection");
+		assert(0); // what object_type is this?
+		protection = grow_atom_object_table(
+			&(disp->protection), OBJECT_TYPE_GENERIC
+		);
+		strcpy(protection->name, "protection");
 	}
 	atui_branch* path = NULL;
+	if (disp->path.header) {
+		path = grow_display_object_path_table(&(disp->path));
+	}
 	atui_branch* misc = NULL;
+	if (disp->misc.table) {
+		misc = grow_atom_object_table(&(disp->misc), OBJECT_TYPE_GENERIC);
+		strcpy(misc->name, "misc");
+	}
 
 
 	atui_branch* const subtables[] = {

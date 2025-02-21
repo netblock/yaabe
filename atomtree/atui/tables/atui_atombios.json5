@@ -2708,11 +2708,11 @@ global_default: {
 },
 
 {
-	c_prefix: "union", c_type: "generic_object_id",
+	c_prefix: "union", c_type: "object_id_template",
 	table_size: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->object_id",
-		name: "generic_object_id",
+		name: "object_id_template",
 		display: "ATUI_BIN",
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
@@ -2768,7 +2768,112 @@ global_default: {
 			},
 		],},
 	},],
-},
+}, {
+	c_prefix: "union", c_type: "generic_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->object_id",
+		name: "generic_object_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "generic_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "audio_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->object_id",
+		name: "object_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "audio_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "controller_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->object_id",
+		name: "object_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "controller_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "clock_source_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->object_id",
+		name: "object_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "clock_source_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "engine_object_id",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->object_id",
+		name: "object_id",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "id",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "engine_id",
+			}, {
+				access: "enum_id",
+			}, {
+				access: "type",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "object_type",
+			},
+		],},
+	},],
+},	
 
 {
 	c_prefix: "union", c_type: "atom_display_device_tag",
@@ -2896,17 +3001,101 @@ global_default: {
 },
 
 {
+	c_type: "atom_display_object_path",
+	atomtree: "atomtree_object_path_entry",
+	table_size: "bios->Size",
+	leaves: [
+		{
+			access: "bios->DeviceTag",
+			name: "DeviceTag",
+			description: [
+				{language: "english", text: "supported device",},
+			],
+		}, {
+			access: "bios->Size",
+			name: "Size",
+			description: [
+				{language: "english", text: "the size of ATOM_DISPLAY_OBJECT_PATH",},
+			],
+		}, {
+			access: "bios->ConnObjectId",
+			name: "ConnObjectId",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "connector_object_id",
+		}, {
+			access: "bios->GPUObjectId",
+			name: "GPUObjectId",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "object_id_template",
+		/* manually walk and add
+		}, {
+			access: "bios->GraphicObjIds",
+			name: "GraphicObjIds",
+			description: [
+				{language: "english", text: "1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.",},
+			],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->num_graphic_ids",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "GraphicObjIds [%02u]",
+				},],
+			},
+		*/
+		},
+	],
+}, {
+	c_type: "atom_display_object_path_table",
+	atomtree: "atomtree_object_path",
+	table_size: "atomtree->total_size",
+	leaves: [
+		{
+			access: "bios->NumOfDispPath",
+			name: "NumOfDispPath",
+		}, {
+			access: "bios->Version",
+			name: "Version",
+		}, {
+			access: "bios->Padding",
+			name: "Padding",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		/* manually walk and add
+		}, {
+			access: "bios->DispPath",
+			name: "DispPath",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "bios->NumOfDispPath",
+				enum: "ATUI_NULL",
+				pattern: [{
+					access: "bios->DispPath",
+					name: "DispPath",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "atom_display_object_path",
+				},],
+			},
+		*/
+		},
+	],
+},
+
+{
 	c_type: "atom_object",
+	name: "atom_object_generic",
 	table_size: "sizeof(*bios)",
 	description: [
 		{language: "english", text: "each object has this structure",},
 	],
 	leaves: [
 		{
-			access: "bios->ObjectID",
+			access: "bios->ObjectID.basic",
 			name: "ObjectID",
 			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "generic_object_id",
+			fancy: "ATUI_GRAFT", fancy_data: "object_id_template",
 		}, {
 			access: "bios->SrcDstTableOffset",
 			name: "SrcDstTableOffset",
@@ -2921,9 +3110,73 @@ global_default: {
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
+	c_type: "atom_object",
+	name: "atom_object_encoder",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "each object has this structure",},
+	],
+	leaves: [
+		{
+			access: "bios->ObjectID.encoder",
+			name: "ObjectID",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
+		}, {
+			access: "bios->SrcDstTableOffset",
+			name: "SrcDstTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->RecordOffset",
+			name: "RecordOffset",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "this pointing to a bunch of records defined below",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_object",
+	name: "atom_object_connector",
+	table_size: "sizeof(*bios)",
+	description: [
+		{language: "english", text: "each object has this structure",},
+	],
+	leaves: [
+		{
+			access: "bios->ObjectID.connector",
+			name: "ObjectID",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "connector_object_id",
+		}, {
+			access: "bios->SrcDstTableOffset",
+			name: "SrcDstTableOffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->RecordOffset",
+			name: "RecordOffset",
+			display: "ATUI_HEX",
+			description: [
+				{language: "english", text: "this pointing to a bunch of records defined below",},
+			],
+		}, {
+			access: "bios->Reserved",
+			name: "Reserved",
+			display: "ATUI_HEX",
+		},
+	],
+},
+
+
+{
 	c_type: "atom_object_table",
 	table_size: "sizeof_flex(bios, Objects, bios->NumberOfObjects)",
 	description: [
@@ -2978,7 +3231,7 @@ global_default: {
 				pattern: [{
 					name: "object_id [%02u]",
 					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "generic_object_id",
+					fancy: "ATUI_GRAFT", fancy_data: "object_id_template",
 				},],
 			},
 		*/
@@ -3561,7 +3814,7 @@ global_default: {
 			access: "bios->ObjectID",
 			name: "ObjectID",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "generic_object_id",
+			fancy: "ATUI_GRAFT", fancy_data: "object_id_template",
 			description: [
 				{language: "english", text: "could be connector, encorder or other object in object.h",},
 			],

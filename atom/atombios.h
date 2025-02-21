@@ -4429,44 +4429,10 @@ enum object_type:uint16_t {
 	OBJECT_TYPE_COUNT = 10,
 };
 
-union generic_object_id {
+union object_id_template {
 	uint16_t object_id;
 	struct {
 		uint16_t id            :7-0 +1;
-		uint16_t enum_id      :11-8 +1;
-		enum object_type type :15-12 +1;
-	};
-};
-
-enum connector_id:uint16_t {
-    CONNECTOR_ID_UNKNOWN            = 0,
-    CONNECTOR_ID_SINGLE_LINK_DVII   = 1,
-    CONNECTOR_ID_DUAL_LINK_DVII     = 2,
-    CONNECTOR_ID_SINGLE_LINK_DVID   = 3,
-    CONNECTOR_ID_DUAL_LINK_DVID     = 4,
-    CONNECTOR_ID_VGA                = 5,
-	CONNECTOR_OBJECT_ID_COMPOSITE   = 6,
-	CONNECTOR_OBJECT_ID_SVIDEO      = 7,
-	CONNECTOR_OBJECT_ID_YPbPr       = 8,
-	CONNECTOR_OBJECT_ID_D_CONNECTOR = 9,
-	CONNECTOR_OBJECT_ID_9PIN_DIN   = 10,  // Supports both CV & TV
-	CONNECTOR_OBJECT_ID_SCART      = 11,
-    CONNECTOR_ID_HDMI_TYPE_A       = 12,
-    CONNECTOR_ID_LVDS              = 14,
-    CONNECTOR_ID_PCIE              = 16,
-    CONNECTOR_ID_HARDCODE_DVI      = 18,
-    CONNECTOR_ID_DISPLAY_PORT      = 19,
-    CONNECTOR_ID_EDP               = 20,
-    CONNECTOR_ID_MXM               = 21,
-    CONNECTOR_ID_WIRELESS          = 22,
-    CONNECTOR_ID_MIRACAST          = 23,
-    CONNECTOR_ID_USBC              = 24,
-    CONNECTOR_ID_VIRTUAL          = 100
-};
-union connector_object_id {
-	uint16_t object_id;
-	struct {
-		enum connector_id id   :7-0 +1;
 		uint16_t enum_id      :11-8 +1;
 		enum object_type type :15-12 +1;
 	};
@@ -4544,12 +4510,155 @@ union encoder_object_id {
 	};
 };
 
+enum connector_id:uint16_t {
+    CONNECTOR_ID_UNKNOWN            = 0,
+    CONNECTOR_ID_SINGLE_LINK_DVII   = 1,
+    CONNECTOR_ID_DUAL_LINK_DVII     = 2,
+    CONNECTOR_ID_SINGLE_LINK_DVID   = 3,
+    CONNECTOR_ID_DUAL_LINK_DVID     = 4,
+    CONNECTOR_ID_VGA                = 5,
+	CONNECTOR_OBJECT_ID_COMPOSITE   = 6,
+	CONNECTOR_OBJECT_ID_SVIDEO      = 7,
+	CONNECTOR_OBJECT_ID_YPbPr       = 8,
+	CONNECTOR_OBJECT_ID_D_CONNECTOR = 9,
+	CONNECTOR_OBJECT_ID_9PIN_DIN   = 10,  // Supports both CV & TV
+	CONNECTOR_OBJECT_ID_SCART      = 11,
+    CONNECTOR_ID_HDMI_TYPE_A       = 12,
+    CONNECTOR_ID_LVDS              = 14,
+    CONNECTOR_ID_PCIE              = 16,
+    CONNECTOR_ID_HARDCODE_DVI      = 18,
+    CONNECTOR_ID_DISPLAY_PORT      = 19,
+    CONNECTOR_ID_EDP               = 20,
+    CONNECTOR_ID_MXM               = 21,
+    CONNECTOR_ID_WIRELESS          = 22,
+    CONNECTOR_ID_MIRACAST          = 23,
+    CONNECTOR_ID_USBC              = 24,
+    CONNECTOR_ID_VIRTUAL          = 100
+};
+union connector_object_id {
+	uint16_t object_id;
+	struct {
+		enum connector_id id   :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+enum generic_id:uint16_t {
+    GENERIC_ID_UNKNOWN = 0,
+    GENERIC_ID_MXM_OPM = 1,
+    GENERIC_ID_GLSYNC  = 2,
+    GENERIC_ID_STEREO  = 3,
+};
+union generic_object_id {
+	uint16_t object_id;
+	struct {
+		enum generic_id id     :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+enum audio_id:uint16_t {
+    AUDIO_ID_UNKNOWN         = 0,
+    AUDIO_ID_INTERNAL_AZALIA = 1,
+};
+union audio_object_id {
+	uint16_t object_id;
+	struct {
+		enum audio_id id :7-0 +1;
+		uint16_t enum_id       :11-8 +1;
+		enum object_type type  :15-12 +1;
+	};
+};
+
+enum controller_id:uint16_t {
+    CONTROLLER_ID_UNDEFINED = 0,
+    CONTROLLER_ID_D0        = 1,
+    CONTROLLER_ID_D1        = 2,
+    CONTROLLER_ID_D2        = 3,
+    CONTROLLER_ID_D3        = 4,
+    CONTROLLER_ID_D4        = 5,
+    CONTROLLER_ID_D5        = 6,
+    CONTROLLER_ID_UNDERLAY0 = 7,
+};
+union controller_object_id {
+	uint16_t object_id;
+	struct {
+		enum controller_id id  :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
+enum clock_source_id:uint16_t {
+    CLOCK_SOURCE_ID_UNDEFINED        = 0,
+    CLOCK_SOURCE_ID_PLL0             = 1,
+    CLOCK_SOURCE_ID_PLL1             = 2,
+    CLOCK_SOURCE_ID_PLL2             = 3,
+    CLOCK_SOURCE_ID_EXTERNAL         = 4, // ID (Phy) ref. clk. for DP
+    CLOCK_SOURCE_ID_DCPLL            = 5,
+    CLOCK_SOURCE_ID_DFS              = 6, // DENTIST
+    CLOCK_SOURCE_ID_VCE              = 7, // VCE does not need a real PLL
+    CLOCK_SOURCE_ID_DP_DTO           = 8, // Used to distinguish between programming pixel clock and ID (Phy) clock
+    CLOCK_SOURCE_COMBO_PHY_PLL0      = 9, // combo PHY PLL defines (DC 11.2 and up)
+    CLOCK_SOURCE_COMBO_PHY_PLL1     = 10,
+    CLOCK_SOURCE_COMBO_PHY_PLL2     = 11,
+    CLOCK_SOURCE_COMBO_PHY_PLL3     = 12,
+    CLOCK_SOURCE_COMBO_PHY_PLL4     = 13,
+    CLOCK_SOURCE_COMBO_PHY_PLL5     = 14,
+    CLOCK_SOURCE_COMBO_DISPLAY_PLL0 = 15,
+};
+union clock_source_object_id {
+	uint16_t object_id;
+	struct {
+		enum clock_source_id id :7-0 +1;
+		uint16_t enum_id       :11-8 +1;
+		enum object_type type  :15-12 +1;
+	};
+};
+
+enum engine_id:uint16_t {
+    ENGINE_ID_DIGA      = 0,
+    ENGINE_ID_DIGB      = 1,
+    ENGINE_ID_DIGC      = 2,
+    ENGINE_ID_DIGD      = 3,
+    ENGINE_ID_DIGE      = 4,
+    ENGINE_ID_DIGF      = 5,
+    ENGINE_ID_DIGG      = 6,
+    ENGINE_ID_DACA      = 7,
+    ENGINE_ID_DACB      = 8,
+    ENGINE_ID_VCE       = 9, // wireless display pseudo-encoder
+    ENGINE_ID_HPO_0    = 10,
+    ENGINE_ID_HPO_1    = 11,
+    ENGINE_ID_HPO_DP_0 = 12,
+    ENGINE_ID_HPO_DP_1 = 13,
+    ENGINE_ID_HPO_DP_2 = 14,
+    ENGINE_ID_HPO_DP_3 = 15,
+    ENGINE_ID_VIRTUAL  = 16,
+    ENGINE_ID_UNKNOWN = 0xFF,
+};
+union engine_object_id {
+	uint16_t object_id;
+	struct {
+		enum engine_id id      :7-0 +1;
+		uint16_t enum_id      :11-8 +1;
+		enum object_type type :15-12 +1;
+	};
+};
+
 union object_ids {
 	uint16_t object_id;
-	union generic_object_id  generic;
-	union encoder_object_id  encoder;
-	union connector_object_id connector;
+	union object_id_template     basic;
+	union encoder_object_id      encoder;
+	union connector_object_id    connector;
+	union generic_object_id      generic;
+	union audio_object_id        audio;
+	union controller_object_id   controller;
+	union clock_source_object_id clock_source;
+	union engine_object_id       engine;
 };
+
 
 union atom_display_device_tag {
 	uint16_t device_tag;
@@ -4595,9 +4704,9 @@ struct atom_object_header_v1_3 {
 struct atom_display_object_path {
 	uint16_t DeviceTag;       // supported device
 	uint16_t Size;            // the size of ATOM_DISPLAY_OBJECT_PATH
-	uint16_t ConnObjectId;    // Connector Object ID
-	uint16_t GPUObjectId;     // GPU ID
-	uint16_t GraphicObjIds[]; // 1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
+	union connector_object_id ConnObjectId;
+	union object_id_template   GPUObjectId;
+	union object_ids GraphicObjIds[]; // 1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
 };
 
 struct atom_display_external_object_path {
@@ -4614,8 +4723,10 @@ struct atom_display_object_path_table {
 	uint8_t  Padding[2];
 	struct atom_display_object_path  DispPath[] __counted_by(NumOfDispPath);
 };
+
+// atom_object_generic atom_object_encoder atom_object_connector
 struct atom_object { // each object has this structure
-	union generic_object_id ObjectID;
+	union object_ids ObjectID;
 	uint16_t SrcDstTableOffset;
 	uint16_t RecordOffset; // this pointing to a bunch of records defined below
 	uint16_t Reserved;
@@ -4639,132 +4750,6 @@ struct atom_srcdst_table {
 	union object_ids object_id[] __counted_by(num_of_objs);
 };
 
-// Two definitions below are for OPM on MXM module designs
-
-#define EXT_HPDPIN_LUTINDEX_0 0
-#define EXT_HPDPIN_LUTINDEX_1 1
-#define EXT_HPDPIN_LUTINDEX_2 2
-#define EXT_HPDPIN_LUTINDEX_3 3
-#define EXT_HPDPIN_LUTINDEX_4 4
-#define EXT_HPDPIN_LUTINDEX_5 5
-#define EXT_HPDPIN_LUTINDEX_6 6
-#define EXT_HPDPIN_LUTINDEX_7 7
-#define MAX_NUMBER_OF_EXT_HPDPIN_LUT_ENTRIES   (EXT_HPDPIN_LUTINDEX_7+1)
-
-#define EXT_AUXDDC_LUTINDEX_0 0
-#define EXT_AUXDDC_LUTINDEX_1 1
-#define EXT_AUXDDC_LUTINDEX_2 2
-#define EXT_AUXDDC_LUTINDEX_3 3
-#define EXT_AUXDDC_LUTINDEX_4 4
-#define EXT_AUXDDC_LUTINDEX_5 5
-#define EXT_AUXDDC_LUTINDEX_6 6
-#define EXT_AUXDDC_LUTINDEX_7 7
-#define MAX_NUMBER_OF_EXT_AUXDDC_LUT_ENTRIES   (EXT_AUXDDC_LUTINDEX_7+1)
-
-// ucChannelMapping are defined as following
-// for DP connector, eDP, DP to VGA/LVDS
-// Bit[1:0]: Define which pin connect to DP connector DP_Lane0, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[3:2]: Define which pin connect to DP connector DP_Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[5:4]: Define which pin connect to DP connector DP_Lane2, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[7:6]: Define which pin connect to DP connector DP_Lane3, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-/*
-struct atom_dp_conn_channel_mapping {
-	uint8_t  DP_Lane0_Source:2;
-	uint8_t  DP_Lane1_Source:2;
-	uint8_t  DP_Lane2_Source:2;
-	uint8_t  DP_Lane3_Source:2;
-};
-*/
-union atom_dp_conn_channel_mapping {
-	uint8_t  ChannelMapping;
-	struct { uint8_t
-		DP_Lane0_Source :1-0 +1,
-		DP_Lane1_Source :3-2 +1,
-		DP_Lane2_Source :5-4 +1,
-		DP_Lane3_Source :7-6 +1;
-	};
-};
-
-// for DVI/HDMI, in dual link case, both links have to have same mapping.
-// Bit[1:0]: Define which pin connect to DVI connector data Lane2, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[3:2]: Define which pin connect to DVI connector data Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[5:4]: Define which pin connect to DVI connector data Lane0, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-// Bit[7:6]: Define which pin connect to DVI connector clock lane, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
-/*
-struct atom_dvi_conn_channel_mapping {
-	uint8_t  DVI_DATA2_Source:2;
-	uint8_t  DVI_DATA1_Source:2;
-	uint8_t  DVI_DATA0_Source:2;
-	uint8_t  DVI_CLK_Source:2;
-};
-*/
-union atom_dvi_conn_channel_mapping {
-	uint8_t  ChannelMapping;
-	struct { uint8_t
-		DVI_DATA2_Source :1-0 +1,
-		DVI_DATA1_Source :3-2 +1,
-		DVI_DATA0_Source :5-4 +1,
-		DVI_CLK_Source   :7-6 +1;
-	};
-};
-
-struct ext_display_path { // TODO merge?
-	uint16_t DeviceTag;          // A bit vector to show what devices are supported
-	uint16_t DeviceACPIEnum;     // 16bit device ACPI id.
-	uint16_t DeviceConnector;    // A physical connector for displays to plug in, using object connector definitions
-	uint8_t  ExtAUXDDCLutIndex;  // An index into external AUX/DDC channel LUT
-	uint8_t  ExtHPDPINLutIndex;  // An index into external HPD pin LUT
-	uint16_t ExtEncoderObjId;    // external encoder object id
-	union {
-		uint8_t  ChannelMapping; // if ucChannelMapping=0, using default one to one mapping
-		union atom_dp_conn_channel_mapping  DPMapping;
-		union atom_dvi_conn_channel_mapping  DVIMapping;
-	};
-	uint8_t  ChPNInvert; // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
-	uint16_t Caps;
-	uint16_t Reserved;
-};
-struct atom_ext_display_path {
-	uint16_t device_tag;        // A bit vector to show what devices are supported
-	uint16_t device_acpi_enum   ;  // 16bit device ACPI id.
-	uint16_t connectorobjid;    // A physical connector for displays to plug in, using object connector definitions
-	uint8_t  auxddclut_index;   // An index into external AUX/DDC channel LUT
-	uint8_t  hpdlut_index;      // An index into external HPD pin LUT
-	uint16_t ext_encoder_objid; // external encoder object id
-	uint8_t  channelmapping;    // if ucChannelMapping=0, using default one to one mapping
-	uint8_t  chpninvert;        // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
-	uint16_t caps;
-	uint16_t reserved;
-};
-
-
-
-/*
-// usCaps
-#define EXT_DISPLAY_PATH_CAPS__HBR2_DISABLE           0x0001
-#define EXT_DISPLAY_PATH_CAPS__DP_FIXED_VS_EN         0x0002
-#define EXT_DISPLAY_PATH_CAPS__EXT_CHIP_MASK          0x007C
-#define EXT_DISPLAY_PATH_CAPS__HDMI20_PI3EQX1204      (0x01 << 2 ) // PI redriver chip
-#define EXT_DISPLAY_PATH_CAPS__HDMI20_TISN65DP159RSBT (0x02 << 2 ) // TI retimer chip
-#define EXT_DISPLAY_PATH_CAPS__HDMI20_PARADE_PS175    (0x03 << 2 ) // Parade DP->HDMI recoverter chip
-*/
-
-
-/*
-#define NUMBER_OF_uint8_t_FOR_GUID    16
-#define MAX_NUMBER_OF_EXT_DISPLAY_PATH 7
-*/
-struct atom_external_display_connection_info {
-	struct atom_common_table_header  table_header;
-	uint8_t  guid[16];    // a GUID is a 16 byte long string
-	struct atom_ext_display_path  path[7]; // total of fixed 7 entries.
-	uint8_t  checksum;    // a simple Checksum of the sum of whole structure equal to 0x0.
-	uint8_t  stereopinid; // use for eDP panel
-	uint8_t  remotedisplayconfig;
-	enum  atom_lcd_info_dptolvds_rx_id  edptolvdsrxid;
-	uint8_t  fixdpvoltageswing; // usCaps[1]=1, this indicate DP_LANE_SET value
-	uint8_t  reserved[3];       // for potential expansion
-};
 
 // Related definitions, all records are different but they have a common header
 enum atom_object_record_type_id:uint8_t {
@@ -4929,7 +4914,7 @@ struct atom_connector_hardcode_dtd_record {
 	struct atom_dtd_format  Timing;
 };
 
-//enum connector_id ?
+//TODO enum connector_id ?
 struct atom_pcie_subconnector_record {
 	struct atom_common_record_header  header;
 	uint8_t  SubConnectorType; // CONNECTOR_OBJECT_ID_SINGLE_LINK_DVI_D|X_ID_DUAL_LINK_DVI_D|HDMI_TYPE_A
@@ -4966,7 +4951,7 @@ struct atom_connector_auxddc_lut_record {
 
 struct atom_object_link_record {
 	struct atom_common_record_header  header;
-	union generic_object_id ObjectID; // could be connector, encorder or other object in object.h
+	union object_id_template ObjectID; // could be connector, encorder or other object in object.h
 };
 
 struct atom_connector_remote_cap_record {
@@ -5021,6 +5006,132 @@ struct atom_forced_tmds_cap_record {
 	struct atom_common_record_header  record_header;
 	uint8_t  maxtmdsclkrate_in_2_5mhz;  // in units of 2.5MHz override TMDS capability on this connector when it operate in TMDS mode
 	uint8_t  reserved;
+};
+
+
+
+// Two definitions below are for OPM on MXM module designs
+
+#define EXT_HPDPIN_LUTINDEX_0 0
+#define EXT_HPDPIN_LUTINDEX_1 1
+#define EXT_HPDPIN_LUTINDEX_2 2
+#define EXT_HPDPIN_LUTINDEX_3 3
+#define EXT_HPDPIN_LUTINDEX_4 4
+#define EXT_HPDPIN_LUTINDEX_5 5
+#define EXT_HPDPIN_LUTINDEX_6 6
+#define EXT_HPDPIN_LUTINDEX_7 7
+#define MAX_NUMBER_OF_EXT_HPDPIN_LUT_ENTRIES   (EXT_HPDPIN_LUTINDEX_7+1)
+
+#define EXT_AUXDDC_LUTINDEX_0 0
+#define EXT_AUXDDC_LUTINDEX_1 1
+#define EXT_AUXDDC_LUTINDEX_2 2
+#define EXT_AUXDDC_LUTINDEX_3 3
+#define EXT_AUXDDC_LUTINDEX_4 4
+#define EXT_AUXDDC_LUTINDEX_5 5
+#define EXT_AUXDDC_LUTINDEX_6 6
+#define EXT_AUXDDC_LUTINDEX_7 7
+#define MAX_NUMBER_OF_EXT_AUXDDC_LUT_ENTRIES   (EXT_AUXDDC_LUTINDEX_7+1)
+
+// ucChannelMapping are defined as following
+// for DP connector, eDP, DP to VGA/LVDS
+// Bit[1:0]: Define which pin connect to DP connector DP_Lane0, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[3:2]: Define which pin connect to DP connector DP_Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[5:4]: Define which pin connect to DP connector DP_Lane2, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[7:6]: Define which pin connect to DP connector DP_Lane3, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+/*
+struct atom_dp_conn_channel_mapping {
+	uint8_t  DP_Lane0_Source:2;
+	uint8_t  DP_Lane1_Source:2;
+	uint8_t  DP_Lane2_Source:2;
+	uint8_t  DP_Lane3_Source:2;
+};
+*/
+union atom_dp_conn_channel_mapping {
+	uint8_t  ChannelMapping;
+	struct { uint8_t
+		DP_Lane0_Source :1-0 +1,
+		DP_Lane1_Source :3-2 +1,
+		DP_Lane2_Source :5-4 +1,
+		DP_Lane3_Source :7-6 +1;
+	};
+};
+
+// for DVI/HDMI, in dual link case, both links have to have same mapping.
+// Bit[1:0]: Define which pin connect to DVI connector data Lane2, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[3:2]: Define which pin connect to DVI connector data Lane1, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[5:4]: Define which pin connect to DVI connector data Lane0, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+// Bit[7:6]: Define which pin connect to DVI connector clock lane, =0: source from GPU pin TX0, =1: from GPU pin TX1, =2: from GPU pin TX2, =3 from GPU pin TX3
+/*
+struct atom_dvi_conn_channel_mapping {
+	uint8_t  DVI_DATA2_Source:2;
+	uint8_t  DVI_DATA1_Source:2;
+	uint8_t  DVI_DATA0_Source:2;
+	uint8_t  DVI_CLK_Source:2;
+};
+*/
+union atom_dvi_conn_channel_mapping {
+	uint8_t  ChannelMapping;
+	struct { uint8_t
+		DVI_DATA2_Source :1-0 +1,
+		DVI_DATA1_Source :3-2 +1,
+		DVI_DATA0_Source :5-4 +1,
+		DVI_CLK_Source   :7-6 +1;
+	};
+};
+
+struct ext_display_path { // TODO merge?
+	uint16_t DeviceTag;          // A bit vector to show what devices are supported
+	uint16_t DeviceACPIEnum;     // 16bit device ACPI id.
+	uint16_t DeviceConnector;    // A physical connector for displays to plug in, using object connector definitions
+	uint8_t  ExtAUXDDCLutIndex;  // An index into external AUX/DDC channel LUT
+	uint8_t  ExtHPDPINLutIndex;  // An index into external HPD pin LUT
+	uint16_t ExtEncoderObjId;    // external encoder object id
+	union {
+		uint8_t  ChannelMapping; // if ucChannelMapping=0, using default one to one mapping
+		union atom_dp_conn_channel_mapping  DPMapping;
+		union atom_dvi_conn_channel_mapping  DVIMapping;
+	};
+	uint8_t  ChPNInvert; // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
+	uint16_t Caps;
+	uint16_t Reserved;
+};
+struct atom_ext_display_path {
+	uint16_t device_tag;        // A bit vector to show what devices are supported
+	uint16_t device_acpi_enum   ;  // 16bit device ACPI id.
+	uint16_t connectorobjid;    // A physical connector for displays to plug in, using object connector definitions
+	uint8_t  auxddclut_index;   // An index into external AUX/DDC channel LUT
+	uint8_t  hpdlut_index;      // An index into external HPD pin LUT
+	uint16_t ext_encoder_objid; // external encoder object id
+	uint8_t  channelmapping;    // if ucChannelMapping=0, using default one to one mapping
+	uint8_t  chpninvert;        // bit vector for up to 8 lanes, =0: P and N is not invert, =1 P and N is inverted
+	uint16_t caps;
+	uint16_t reserved;
+};
+
+/*
+// usCaps
+#define EXT_DISPLAY_PATH_CAPS__HBR2_DISABLE           0x0001
+#define EXT_DISPLAY_PATH_CAPS__DP_FIXED_VS_EN         0x0002
+#define EXT_DISPLAY_PATH_CAPS__EXT_CHIP_MASK          0x007C
+#define EXT_DISPLAY_PATH_CAPS__HDMI20_PI3EQX1204      (0x01 << 2 ) // PI redriver chip
+#define EXT_DISPLAY_PATH_CAPS__HDMI20_TISN65DP159RSBT (0x02 << 2 ) // TI retimer chip
+#define EXT_DISPLAY_PATH_CAPS__HDMI20_PARADE_PS175    (0x03 << 2 ) // Parade DP->HDMI recoverter chip
+*/
+
+/*
+#define NUMBER_OF_uint8_t_FOR_GUID    16
+#define MAX_NUMBER_OF_EXT_DISPLAY_PATH 7
+*/
+struct atom_external_display_connection_info {
+	struct atom_common_table_header  table_header;
+	uint8_t  guid[16];    // a GUID is a 16 byte long string
+	struct atom_ext_display_path  path[7]; // total of fixed 7 entries.
+	uint8_t  checksum;    // a simple Checksum of the sum of whole structure equal to 0x0.
+	uint8_t  stereopinid; // use for eDP panel
+	uint8_t  remotedisplayconfig;
+	enum  atom_lcd_info_dptolvds_rx_id  edptolvdsrxid;
+	uint8_t  fixdpvoltageswing; // usCaps[1]=1, this indicate DP_LANE_SET value
+	uint8_t  reserved[3];       // for potential expansion
 };
 
 

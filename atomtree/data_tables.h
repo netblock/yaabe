@@ -316,11 +316,14 @@ struct atomtree_powerplay_table {
 	semver ver;
 };
 
+
+
 struct atomtree_display_path_record_set {
 	uint8_t num_records;
 	size_t  records_size;
 	union display_records**  records;
 };
+
 struct atomtree_object_table_tables {
 	struct atom_srcdst_table* src;
 	struct atom_srcdst_table* dst;
@@ -330,6 +333,17 @@ struct atomtree_object_table {
 	struct atom_object_table* table;
 	struct atomtree_object_table_tables* objects;
 };
+
+struct atomtree_object_path_entry {
+	struct atom_display_object_path* path;
+	uint8_t num_graphic_ids;
+};
+struct atomtree_object_path {
+	struct atom_display_object_path_table* header;
+	size_t total_size; // table header + paths
+	struct atomtree_object_path_entry* paths;
+};
+
 struct atomtree_display_path_records {
 	struct atomtree_display_path_record_set connector;
 	struct atomtree_display_path_record_set encoder;
@@ -351,10 +365,13 @@ struct atomtree_display_object {
 	struct atomtree_object_table router;
 	struct atomtree_object_table encoder;
 	struct atomtree_object_table protection;
+	struct atomtree_object_path  path;
+	struct atomtree_object_table misc;
 
 	// v1.4, 1.5
 	struct atomtree_display_path_records* records;
 };
+
 
 
 enum register_block_type:uint8_t {
