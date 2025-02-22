@@ -1,5 +1,5 @@
 project('yaabe', 'c',
-	version: '0.7.0',
+	version: '0.8.0',
 	meson_version: '>= 1.2.3',
 	default_options: [
 		'c_std=gnu2x',
