@@ -1402,7 +1402,10 @@ grow_atom_object_header(
 		case 2: atui_args.rename = "atom_object_header_v1_1 (forced)"; fall;
 		case 1: return _atui_atom_object_header_v1_1(&atui_args);
 		case 3: return _atui_atom_object_header_v1_3(&atui_args);
-		default: assert(0);
+		default:
+			assert(0);
+			atui_args.rename = "atom_object_header (header only stub)";
+			return _atui_atom_common_table_header(&atui_args);
 	}
 }
 inline static atui_branch*

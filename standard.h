@@ -10,7 +10,6 @@ Also generic functions that would be in a standard.
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdbit.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -18,10 +17,16 @@ Also generic functions that would be in a standard.
 #include <gtk/gtk.h>
 
 #ifdef C2X_COMPAT
-typedef uint8_t char8_t;
-#define UINT64_WIDTH 64 //IEC_60559_BFP_EXT_C23
+	typedef uint8_t char8_t; // uchar.h
+
+	#define UINT64_WIDTH 64 // IEC_60559_BFP_EXT_C23
+
+	// stdbit.h
+	#define stdc_count_ones(arg) __builtin_popcountg(arg)
+	#define stdc_first_trailing_one(arg) (__builtin_ctzg(arg, -1) + 1U)
 #else
-#include <uchar.h>
+	#include <uchar.h>
+	#include <stdbit.h>
 #endif
 
 #undef NULL

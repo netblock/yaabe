@@ -5327,7 +5327,7 @@ enum atom_i2c_voltage_control_flag {
 
 union loadline_psi0 {
 	uint16_t  loadline_psi0;
-	struct { uint8_t
+	struct { uint16_t
 		offset_trim    :1-0 +1,
 		loadline_slope :4-2 +1,
 		PSI1           :5-5 +1,
