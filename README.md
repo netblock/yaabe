@@ -51,14 +51,14 @@ cd build && meson compile
 Install [MSYS2](https://www.msys2.org) (MSYS2 must be installed on an NTFS
 partition as FAT and ReFS filesystems are incompatible).
 
-Launch MSYS2's MINGW64 environment by running `mingw64.exe` (you should see a
-purple "MINGW64" in your command prompt).
+Launch MSYS2's UCRT64 environment by running `ucrt64.exe` (you should see a
+purple "UCRT64" in your command prompt).
 
-Install mingw toolchain and the gtk4 libraries,
+Install UCRT toolchains and the gtk4 libraries,
 
 ```shell
 pacman -Syuu # update if it's an old install
-pacman -S mingw-w64-x86_64-toolchain base-devel mingw-w64-x86_64-meson mingw-w64-x86_64-gtk4 mingw-w64-x86_64-python-json5 mingw-w64-x86_64-nsis
+pacman -S base-devel mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-gtk4 mingw-w64-ucrt-x86_64-python-json5 mingw-w64-ucrt-x86_64-nsis
 ```
 
 The msys2 shell root `/` is the msys2 install location. Your current working

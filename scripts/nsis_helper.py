@@ -6,7 +6,13 @@ import os
 import shutil
 import subprocess
 
-# enviornment assumes msys2
+# environment assumes msys2
+MSYS2_ENVIRONMENTS:tuple = (
+	"usr", 
+	"ucrt64",
+	"msys64", "msys32",
+	"clang64", "clangarm64", "clang32",
+)
 
 def enlist_shared_objs(
 		linked_obj:str,
@@ -22,7 +28,7 @@ def enlist_shared_objs(
 		if len(parts) != 4: # name => loc (addr)
 			continue
 		lib:str = parts[2]
-		if (lib[:6] == "/mingw") and (lib not in objs):
+		if (lib.split(os.sep)[1] in MSYS2_ENVIRONMENTS) and (lib not in objs):
 			objs.add(lib)
 			enlist_shared_objs(lib, objs)
 

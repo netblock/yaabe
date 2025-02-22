@@ -28,15 +28,15 @@ jobs:
           ref: ${{inputs.tag}} # just the tag name itself, excluding refs/tags/
       - uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw64
+          msystem: ucrt64
           update: true
           install: >-
-            mingw-w64-x86_64-toolchain
             base-devel
-            mingw-w64-x86_64-meson
-            mingw-w64-x86_64-gtk4
-            mingw-w64-x86_64-python-json5
-            mingw-w64-x86_64-nsis
+            mingw-w64-ucrt-x86_64-toolchain
+            mingw-w64-ucrt-x86_64-meson
+            mingw-w64-ucrt-x86_64-gtk4
+            mingw-w64-ucrt-x86_64-python-json5
+            mingw-w64-ucrt-x86_64-nsis
       - name: env_setup
         id: env_setup
         run: |
