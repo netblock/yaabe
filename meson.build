@@ -74,6 +74,7 @@ yaabe_src += files(
 )
 include_dirs += include_directories('.')
 
+yaabe_exe_src = files()
 if 'windows' == target_machine.system()
 	# msys2 isn't caught up with C23
 	add_project_arguments('-DC2X_COMPAT', language:'c')
@@ -81,7 +82,7 @@ if 'windows' == target_machine.system()
 	# windows resource compiler .rc file
 	ver_array = meson.project_version().split('.')
 	windows = import('windows')
-	yaabe_src += windows.compile_resources(configure_file(
+	yaabe_exe_src += windows.compile_resources(configure_file(
 		input: files('yaabewindows.rc.in'),
 		output: 'yaabewindows.rc',
 		configuration: configuration_data({
@@ -117,7 +118,7 @@ libyaabe = static_library('libyaabe',
 	name_prefix: '',
 )
 yaabe = executable('yaabe',
-	sources: 'main.c',
+	sources: files('main.c') + yaabe_exe_src,
 	link_with: libyaabe,
 	include_directories: include_dirs,
 	dependencies: external_depends,
@@ -164,7 +165,7 @@ endif
 
 
 yaabe_test = executable('yaabe_test',
-	sources: 'test.c',
+	sources: files('test.c') + yaabe_exe_src,
 	include_directories: [
 		include_dirs,
 		libyaabe.private_dir_include()
