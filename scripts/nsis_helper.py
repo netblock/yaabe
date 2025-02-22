@@ -76,7 +76,7 @@ def gather_assets(
 	# cygpath translates / into an absolute path drive letter and all
 	root:str = subprocess.check_output(("cygpath", "-m", "/"), text=True)
 	root:str = root.strip().replace("/", os.path.sep)
-	host_share_dir = os.path.join(root, "mingw64", "share")
+	host_share_dir = os.path.join(os.environ["MSYSTEM_PREFIX"], "share")
 	shutil.copytree(
 		os.path.join(host_share_dir, "glib-2.0", "schemas"),
 		os.path.join(glib_dir, "schemas"),
