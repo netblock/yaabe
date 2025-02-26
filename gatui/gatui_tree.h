@@ -39,6 +39,12 @@ gatui_tree_get_trunk(
 		GATUITree* self
 		);
 
+GtkSelectionModel*
+gatui_tree_create_trunk_model( // generate a TreeListModel for use in a ListView
+        GATUITree* self
+        );
+
+
 
 // creates a new tree based off of the raw bios data buffer, and GFile.
 // useful when a new atomtree crawl is wanted.

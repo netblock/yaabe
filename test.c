@@ -35,21 +35,23 @@ gatui_leaf_test(
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
-	GListModel* const leaves = gatui_leaf_generate_children_model(leaf);
-	if (leaves) {
+	GListModel* const child_leaves = leaves_treelist_generate_children(
+		leaf, NULL
+	);
+	if (child_leaves) {
 		GObject* child = NULL;
-		uint16_t const num_leaves = g_list_model_get_n_items(leaves);
+		uint16_t const num_leaves = g_list_model_get_n_items(child_leaves);
 		error_assert(&error, ERROR_CRASH,
 			"gatui leaf count incorrect",
 			atui->num_child_leaves <= num_leaves
 			// would be == but ATUI_SUBONLY is not handled at allocation time
 		);
 		for (uint16_t i=0; i < num_leaves; i++) {
-			child = g_list_model_get_object(leaves, i);
+			child = g_list_model_get_object(child_leaves, i);
 			gatui_leaf_test(GATUI_LEAF(child), root);
 			g_object_unref(child);
 		}
-		g_object_unref(leaves);
+		g_object_unref(child_leaves);
 	}
 }
 
@@ -102,19 +104,21 @@ gatui_branch_test(
 	}
 
 
-	GListModel* const branches = gatui_branch_generate_children_model(branch);
-	if (branches) {
-		uint16_t const num_branches = g_list_model_get_n_items(branches);
+	GListModel* const child_branches = branches_treelist_generate_children(
+		branch, NULL
+	);
+	if (child_branches) {
+		uint16_t const num_branches = g_list_model_get_n_items(child_branches);
 		error_assert(&error, ERROR_CRASH,
-			"incorrect number of branches",
+			"incorrect number of child_branches",
 			atui->num_branches == num_branches
 		);
 		for (uint16_t i=0; i < num_branches; i++) {
-			child = g_list_model_get_object(branches, i);
+			child = g_list_model_get_object(child_branches, i);
 			gatui_branch_test(GATUI_BRANCH(child), root);
 			g_object_unref(child);
 		}
-		g_object_unref(branches);
+		g_object_unref(child_branches);
 	}
 }
 

@@ -13,6 +13,5 @@ void
 gatui_leaf_emit_val_changed( // single-signal multi-user alert network
 		GATUILeaf* self
 		);
-
-
 #endif
+

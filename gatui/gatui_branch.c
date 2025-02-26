@@ -31,8 +31,8 @@ gatui_branch_dispose(
 	if (self->child_branches) {
 		GATUIBranch** const child_branches = self->child_branches;
 		self->child_branches = NULL;
-		uint8_t const num_branches = self->atui->num_branches;
-		for (uint8_t i = 0; i < num_branches; i++) {
+		uint16_t const num_branches = self->atui->num_branches;
+		for (uint16_t i = 0; i < num_branches; i++) {
 			g_object_unref(child_branches[i]);
 		}
 		free(child_branches);
@@ -82,16 +82,6 @@ gatui_branch_init(
 	self->leaves_model = NULL;
 }
 
-
-static GListModel*
-leaves_treelist_generate_children(
-		gpointer const parent_leaf,
-		gpointer const user_data __unused
-		) {
-// GtkTreeListModelCreateModelFunc for leaves
-	return gatui_leaf_generate_children_model(parent_leaf);
-}
-
 GATUIBranch*
 gatui_branch_new(
 		atui_branch* const branch,
@@ -109,11 +99,11 @@ gatui_branch_new(
 	g_object_ref(root);
 	self->root = root;
 
-	uint8_t const num_branches = branch->num_branches;
+	uint16_t const num_branches = branch->num_branches;
 	if (num_branches) {
 		self->child_branches = cralloc(num_branches * sizeof(GATUIBranch*));
 
-		for (uint8_t i = 0; i < num_branches; i++) {
+		for (uint16_t i = 0; i < num_branches; i++) {
 			assert(branch->child_branches[i]);
 			self->child_branches[i] = gatui_branch_new(
 				branch->child_branches[i], root
@@ -136,8 +126,8 @@ gatui_branch_new(
 
 		GtkSingleSelection* const single_model = gtk_single_selection_new(
 			G_LIST_MODEL(gtk_tree_list_model_new(
-				G_LIST_MODEL(leaf_list),
-				false, true, leaves_treelist_generate_children, NULL,NULL
+				G_LIST_MODEL(leaf_list),  false, true,
+				leaves_treelist_generate_children, NULL,NULL
 			))
 		); // the later models take ownership of the earlier
 		gtk_single_selection_set_can_unselect(single_model, true);
@@ -156,22 +146,6 @@ gatui_branch_new(
 	return self;
 }
 
-GListModel*
-gatui_branch_generate_children_model(
-		GATUIBranch* const self
-		) {
-// this is intended to be used in a GtkTreeListModelCreateModelFunc
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	if (self->atui->num_branches) {
-		GListStore* const children = g_list_store_new(GATUI_TYPE_BRANCH);
-		g_list_store_splice(children,0,0,
-			(void**)self->child_branches, self->atui->num_branches
-		);
-		return G_LIST_MODEL(children);
-	}
-	return NULL;
-}
 
 GtkSelectionModel*
 gatui_branch_get_leaves_model(
@@ -322,3 +296,79 @@ gatui_branch_get_atui(
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->atui;
 }
+
+GListModel*
+branches_treelist_generate_children(
+		gpointer const parent_branch,
+		gpointer const data __unused
+		) {
+// GtkTreeListModelCreateModelFunc for branches
+	GATUIBranch* const self = parent_branch;
+	if (self->atui->num_branches) {
+		GListStore* const children = g_list_store_new(GATUI_TYPE_BRANCH);
+		g_list_store_splice(children,0,0,
+			(void**)self->child_branches, self->atui->num_branches
+		);
+		return G_LIST_MODEL(children);
+	} else {
+		return NULL;
+	}
+}
+
+void
+branches_track_expand_state(
+		GtkTreeListRow* const tree_row,
+		GParamFlags* const param __unused,
+		gpointer const data __unused
+		) {
+	if (false == gtk_tree_list_row_is_expandable(tree_row)) {
+		return;
+		/*
+		upon collapse, all child rows will have their expand state change
+		because the children stop being expandable if they previously were.
+		As a result, the simple binding of properties that track the expand
+		state, wouldn't work.
+		*/
+	}
+	GATUIBranch* const branch = GATUI_BRANCH(gtk_tree_list_row_get_item(
+		tree_row
+	));
+	branch->atui->expanded = gtk_tree_list_row_get_expanded(tree_row);
+	if (branch->atui->expanded) {
+		uint16_t const num_branches = branch->atui->num_branches;
+		GATUIBranch* const* const child_branches = branch->child_branches;
+		for (uint16_t i=0; i < num_branches; i++) {
+			GtkTreeListRow* child_row = gtk_tree_list_row_get_child_row(
+				tree_row, i
+			);
+			uint32_t handler_id = g_signal_handler_find(child_row,
+				G_SIGNAL_MATCH_FUNC,  0,0,NULL,
+				branches_track_expand_state,  NULL
+			);
+			if (0 == handler_id) {
+				g_signal_connect(child_row, "notify::expanded",
+					G_CALLBACK(branches_track_expand_state), NULL
+				);
+			}
+			gtk_tree_list_row_set_expanded(
+				child_row, child_branches[i]->atui->expanded
+			);
+
+			g_object_unref(child_row);
+		}
+	}
+	g_object_unref(branch);
+}
+
+void
+gatui_branch_right_click_expand_family(
+		GATUIBranch* const self
+		) {
+	self->atui->expanded = true;
+	uint16_t const num_branches = self->atui->num_branches;
+	GATUIBranch* const* const child_branches = self->child_branches;
+	for (uint16_t i=0; i < num_branches; i++) {
+		gatui_branch_right_click_expand_family(child_branches[i]);
+	}
+}
+

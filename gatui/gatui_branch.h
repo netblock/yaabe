@@ -12,15 +12,17 @@ gatui_branch_new( // including all of its descendants and leaves
 		GATUITree* root
 		);
 
-GListModel* // basic model for GtkTreeListModelCreateModelFunc
-gatui_branch_generate_children_model(
-		GATUIBranch* self
-		);
-
 GtkSelectionModel* // no-selection of a tree-model
 gatui_branch_get_leaves_model(
 		GATUIBranch* self
 		);
+
+// GtkTreeListModelCreateModelFunc for branches
+GListModel*
+branches_treelist_generate_children(
+        gpointer parent_branch,
+        gpointer data // unused
+        );
 
 // contiguous memory in the bios
 GVariant*
@@ -54,6 +56,30 @@ gatui_branch_to_path(
 atui_branch*
 gatui_branch_get_atui(
 		GATUIBranch* self
+		);
+
+void
+gatui_branch_right_click_expand_family( // recursively expand all sub branches
+		GATUIBranch* self
+		);
+
+// should be moved into private if the notify problem gets solved.
+void
+branches_track_expand_state( // branch expand/collapse state managment
+        GtkTreeListRow* tree_row,
+        GParamFlags* param,
+        gpointer data // unused
+        );
+
+void
+gatui_branch_load_expand_state(
+		GATUIBranch* self,
+		GtkTreeListRow* row
+		);
+void
+gatui_branch_load_expand_state(
+		GATUIBranch* self,
+		GtkTreeListRow* tree_row
 		);
 
 G_END_DECLS

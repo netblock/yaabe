@@ -178,6 +178,8 @@ struct _atui_branch {
 
 	uint16_t num_copyable_leaves; // num_leaves that maps the bios
 
+	bool expanded; // user input flag saving the UI expandable state on branches
+
 	// the C struct that the branch&leaves represent may be larger than
 	// table_size; if this is the case, a simple copy/paste of the leaves
 	// themselves might be atom out-of-bounds.

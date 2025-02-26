@@ -5,6 +5,7 @@ global_default: {
 		atomtree: "atomtree_powerplay_table_v4_1",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
+		expanded: true,
 	},
 	leaf_defaults: {
 		generic: {

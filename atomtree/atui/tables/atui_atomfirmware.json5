@@ -7,6 +7,7 @@ global_default: {
 		atomtree: "atui_nullstruct",
 		table_start: "bios",
 		table_size: "bios->table_header.structuresize",
+		expanded: true,
 	},
 	leaf_defaults: {
 		generic: {
@@ -5589,6 +5590,7 @@ global_default: {
 	atomtree: "atomtree_umc_init_reg_block",
 	table_size: "atomtree->data_block_table_size",
 	table_start: "atomtree->data_blocks[0]",
+	expanded: false,
 	leaves: [
 		{
 			name: "umc_reg_setting_list",

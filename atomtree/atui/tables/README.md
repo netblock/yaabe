@@ -55,6 +55,7 @@ global_default: {
 		atomtree: "atui_nullstruct", // nullstruct is an empty struct
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
+		expanded: true, // expand state for child branches
 	},
 	leaf_defaults: {
 		generic: {

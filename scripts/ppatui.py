@@ -549,9 +549,12 @@ class atui_leaf:
 class atui_branch:
 	c_prefix:str
 	c_type:str
-	atomtree:str
 	name:str
+	atomtree:str
 	description:dict
+	table_start:str
+	table_size:str
+	expanded:bool
 	leaves:list
 
 	def copy(self):
@@ -589,6 +592,10 @@ class atui_branch:
 			self.table_size = branch["table_size"]
 		else:
 			self.table_size = None
+		if "expanded" in branchkeys:
+			self.expanded = branch["expanded"]
+		else:
+			self.expanded = None
 
 		if "leaves" in branchkeys:
 			self.leaves = []
@@ -802,6 +809,8 @@ def infer_branch_data(
 		branch.table_start = branch_defaults.table_start
 	if branch.table_size is None:
 		branch.table_size = branch_defaults.table_size
+	if branch.expanded is None:
+		branch.expanded = branch_defaults.expanded
 
 	assert (not (branch.c_type is None)), branch.name
 	if branch.name is None:
@@ -1159,6 +1168,7 @@ _atui_%s(
 					<= _PPATUI_NULLPTR_SIZE(*bios)
 				)
 			),
+			.expanded = %s,
 		},
 
 		.leaves_init = leaves_init,
@@ -1202,6 +1212,7 @@ _atui_%s(
 			branch.name, branch.name, branch.c_type, # embryo
 			description_to_text(branch.description, "\t\t\t"),
 			branch.table_start, branch.table_size, branch.table_size,
+			str(branch.expanded).lower(),
 
 			"(%u + %s)" % (counters[0], counters[1]), # 'computed'
 			"(%u + %s)" % (counters[2], counters[3]),

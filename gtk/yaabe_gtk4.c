@@ -296,57 +296,29 @@ select_changes_leaves(
 
 	g_object_unref(new_selection);
 }
-
-static GListModel*
-branches_treelist_generate_children(
-		gpointer const parent_ptr,
-		gpointer const data __unused
-		) {
-// GtkTreeListModelCreateModelFunc for branches
-// Creates the children models for the collapsable tree, of the branches pane.
-	return gatui_branch_generate_children_model(parent_ptr);
-}
-inline static GtkSelectionModel*
-create_trunk_model(
-		yaabegtk_commons* const commons,
-		GATUIBranch* const trunk
-		) {
-// Generate the very first model, of the tippy top of the tree, for the
-// branches pane
-	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
-	g_list_store_append(base_model, trunk);
-
-	// TreeList, along with branches_treelist_generate_children, creates our
-	// collapsable model.
-	GObject* const trunk_model = G_OBJECT(gtk_single_selection_new(G_LIST_MODEL(
-		gtk_tree_list_model_new(
-			G_LIST_MODEL(base_model),  false, true,
-			branches_treelist_generate_children,  NULL,NULL
-		)
-	))); // the later models take ownership of the earlier
-
-	g_object_connect(trunk_model,
-		"signal::selection-changed", G_CALLBACK(select_changes_leaves), commons,
-		"signal::selection-changed", G_CALLBACK(pathbar_update_path), commons,
-		NULL
-	);
-
-	return GTK_SELECTION_MODEL(trunk_model);
-}
 static void
 create_and_set_active_atui_model(
 		yaabegtk_commons* const commons,
 		GATUITree* const new_root
 		) {
 // create and set the main branch model
-	GATUIBranch* const trunk = gatui_tree_get_trunk(new_root);
-	GtkSelectionModel* const new_model = create_trunk_model(commons, trunk);
-	commons->root = new_root;
+	GtkSelectionModel* const new_model = gatui_tree_create_trunk_model(
+		new_root
+	);
+	g_object_connect(new_model,
+		"signal::selection-changed", G_CALLBACK(select_changes_leaves), commons,
+		"signal::selection-changed", G_CALLBACK(pathbar_update_path), commons,
+		NULL
+	);
 
+	commons->root = new_root;
+	GATUIBranch* const trunk = gatui_tree_get_trunk(new_root);
 	commons->previous_selection = trunk;
+
 	gtk_column_view_set_model(commons->branches.view, new_model);
 
-	// TODO divorce into notify::model signal/callback in create_branches_pane?
+	// TODO eject leaves model first-time loader into a notify::model callback
+	// in create_branches_pane?
 	gtk_column_view_set_model(
 		commons->leaves.view,
 		gatui_branch_get_leaves_model(trunk)
@@ -360,10 +332,8 @@ create_and_set_active_atui_model(
 
 	g_object_unref(trunk);
 	g_object_unref(new_model);
-
 	// TODO move the call of set_editor_titlebar in here?
 }
-
 
 
 
@@ -1187,34 +1157,32 @@ leaves_rightclick_popup(
 	struct pane_context const* const leaves_context = &(pack->commons->leaves);
 
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
-		gtk_column_view_row_get_item(pack->row)
-	);
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
+	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(tree_row);
 	g_object_unref(g_leaf); // we don't need a second reference
 	pack->leaf = g_leaf;
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
 
 	// see also create_leaves_rightclick_menu
-	GActionEntry actions[4] = {0};
-	actions[0].name = "name";
-	actions[0].activate = leaf_right_click_copy_name;
-	actions[1].name = "path";
-	actions[1].activate = leaf_right_click_copy_path;
-	uint8_t num_actions = 2;
+	GActionEntry actions[4] = {
+		{.name = "name", .activate = leaf_right_click_copy_name},
+		{.name = "path", .activate = leaf_right_click_copy_path},
+	};
+	uint8_t act_i = 2;
 
 	if (a_leaf->num_bytes || a_leaf->type.fancy == _ATUI_BITCHILD) {
-		actions[num_actions].name = "copy_data";
-		actions[num_actions].activate = leaf_right_click_copy_data;
-		num_actions++;
-		actions[num_actions].name = "paste_data";
-		actions[num_actions].activate = leaf_right_click_paste_data;
-		num_actions++;
+		actions[act_i].name = "copy_data";
+		actions[act_i].activate = leaf_right_click_copy_data;
+		act_i++;
+		actions[act_i].name = "paste_data";
+		actions[act_i].activate = leaf_right_click_paste_data;
+		act_i++;
 	}
-	assert(num_actions <= lengthof(actions));
+	assert(act_i <= lengthof(actions));
 	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	g_action_map_add_action_entries(action_set,
-		actions, num_actions,
+		actions, act_i,
 		pack
 	);
 	gtk_widget_insert_action_group(GTK_WIDGET(leaves_context->view),
@@ -1349,7 +1317,6 @@ create_leaves_pane(
 	return scrolledlist;
 }
 
-
 static void
 branch_name_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
@@ -1359,7 +1326,22 @@ branch_name_column_bind(
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
 	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
-	g_object_unref(g_branch);
+
+
+	/* TODO
+	This should be tucked away in the model creation, but for some reason 
+	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
+	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
+	*/
+	gulong const handler_id = g_signal_handler_find(tree_row,
+		G_SIGNAL_MATCH_FUNC,    0,0,NULL,
+		branches_track_expand_state,  NULL
+	);
+	if (0 == handler_id) { // usually passes
+		g_signal_connect(tree_row, "notify::expanded",
+			G_CALLBACK(branches_track_expand_state), g_branch
+		);
+	}
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_column_view_cell_get_child(column_cell)
@@ -1370,6 +1352,8 @@ branch_name_column_bind(
 	gtk_label_set_text(GTK_LABEL(label), a_branch->name);
 	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(label, a_branch->description[current_lang]);
+
+	g_object_unref(g_branch);
 }
 static void
 branch_offset_column_bind(
@@ -1622,6 +1606,37 @@ branch_right_click_paste_data(
 	);
 }
 static void
+branch_right_click_collapse_children(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
+	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+
+	for (uint16_t i=0; i < a_branch->num_branches; i++) {
+		GtkTreeListRow* child = gtk_tree_list_row_get_child_row(tree_row, i);
+		gtk_tree_list_row_set_expanded(child, false);
+		g_object_unref(child);
+	}
+}
+
+static void
+branch_right_click_expand_family(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
+
+	gtk_tree_list_row_set_expanded(tree_row, false);
+	gatui_branch_right_click_expand_family(pack->branch);
+	gtk_tree_list_row_set_expanded(tree_row, true);
+}
+
+static void
 branches_rightclick_popup(
 		GtkGesture* const click_sense,
 		gint const num_presses,
@@ -1638,41 +1653,48 @@ branches_rightclick_popup(
 	);
 
 	// connect  actions
-	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(
-		gtk_column_view_row_get_item(pack->row)
-	);
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
+	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
 	g_object_unref(g_branch); // we don't need a second reference.
 	pack->branch = g_branch;
 
 	atui_branch const* const branch = gatui_branch_get_atui(g_branch);
 	// see also create_branches_rightclick_menu
-	GActionEntry actions[6] = {0};
-	actions[0].name = "name";
-	actions[0].activate = branch_right_click_copy_name;
-	actions[1].name = "struct";
-	actions[1].activate = branch_right_click_copy_struct_name;
-	actions[2].name = "path";
-	actions[2].activate = branch_right_click_copy_path;
-	uint8_t num_actions = 3;
-
-	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
+	GActionEntry actions[8] = {
+		{.name = "name",   .activate = branch_right_click_copy_name},
+		{.name = "struct", .activate = branch_right_click_copy_struct_name},
+		{.name = "path",   .activate = branch_right_click_copy_path},
+	};
+	uint8_t act_i = 3;
 	if (branch->num_copyable_leaves || branch->table_size) {
 		if (branch->num_copyable_leaves && ! branch->prefer_contiguous) {
-			actions[num_actions].name = "copy_leaves";
-			actions[num_actions].activate = branch_right_click_copy_leaves;
-			num_actions++;
+			actions[act_i].name = "copy_leaves";
+			actions[act_i].activate = branch_right_click_copy_leaves;
+			act_i++;
 		}
 		if (branch->table_size) {
-			actions[num_actions].name = "copy_contiguous";
-			actions[num_actions].activate = branch_right_click_copy_contiguous;
-			num_actions++;
+			actions[act_i].name = "copy_contiguous";
+			actions[act_i].activate = branch_right_click_copy_contiguous;
+			act_i++;
 		}
-		actions[num_actions].name = "paste_data";
-		actions[num_actions].activate = branch_right_click_paste_data;
-		num_actions++;
+		actions[act_i].name = "paste_data";
+		actions[act_i].activate = branch_right_click_paste_data;
+		act_i++;
 	};
+	if (branch->num_branches) {
+		if (gtk_tree_list_row_get_expanded(tree_row)) {
+			actions[act_i].name = "collapse_children";
+			actions[act_i].activate = branch_right_click_collapse_children;
+			act_i++;
+		}
+		actions[act_i].name = "expand_family";
+		actions[act_i].activate = branch_right_click_expand_family;
+		act_i++;
+	}
+	assert(act_i <= lengthof(actions));
+	GActionMap* const action_set = G_ACTION_MAP(g_simple_action_group_new());
 	g_action_map_add_action_entries(action_set,
-		actions, num_actions,
+		actions, act_i,
 		pack
 	);
 	gtk_widget_insert_action_group(GTK_WIDGET(branches_context->view),
@@ -1704,6 +1726,8 @@ create_branches_rightclick_menu(
 	g_menu_append(menu_model, "Copy Leaves", "branch.copy_leaves");
 	g_menu_append(menu_model, "Copy Contiguous Data", "branch.copy_contiguous");
 	g_menu_append(menu_model, "Paste Data", "branch.paste_data");
+	g_menu_append(menu_model, "Collapse Children", "branch.collapse_children");
+	g_menu_append(menu_model, "Expand Family", "branch.expand_family");
 	// see also branches_rightclick_popup
 
 	columnview_create_rightclick_popup(

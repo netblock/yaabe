@@ -245,6 +245,48 @@ gatui_tree_get_trunk(
 	return GATUI_BRANCH(trunk);
 }
 
+
+GtkSelectionModel*
+gatui_tree_create_trunk_model(
+		GATUITree* const self
+		) {
+// Generate the very first model, of the tippy top of the tree
+	GATUIBranch* const trunk = gatui_tree_get_trunk(self);
+	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
+	g_list_store_append(base_model, trunk);
+	g_object_unref(trunk);
+
+	// TreeList, along with branches_treelist_generate_children, creates our
+	// collapsable model.
+	GtkTreeListModel* tree_model = gtk_tree_list_model_new(
+		G_LIST_MODEL(base_model),  false, false,
+		branches_treelist_generate_children,  NULL,NULL
+	);
+	GtkSelectionModel* const trunk_model = GTK_SELECTION_MODEL(
+		gtk_single_selection_new(G_LIST_MODEL(tree_model
+		))
+	); // the later models take ownership of the earlier
+
+	/* TODO
+	For some reason the GtkTreeListRow's notify breaks in a weird way if the
+	gtk_tree_list_row_set_expanded is done before gtk_column_view_set_model.
+	Doing it after fixes most issues, but not all of them. Furthermore, putting 
+	a notify connect in the ColumnView bind not only all-1 connects, but
+	reliably works.
+	It seems like the rows get stolen/copied?
+	*/
+	GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
+		g_list_model_get_item(G_LIST_MODEL(trunk_model), 0)
+	);
+	g_signal_connect(root_row,
+		"notify::expanded", G_CALLBACK(branches_track_expand_state), NULL
+	);
+	gtk_tree_list_row_set_expanded(root_row, true);
+	g_object_unref(root_row);
+
+	return GTK_SELECTION_MODEL(trunk_model);
+}
+
 GATUITree*
 gatui_tree_copy_core(
 		GATUITree* const src

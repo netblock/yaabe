@@ -12,10 +12,12 @@ gatui_leaf_new( // including all of is subleaves
 		GATUITree* root
 		);
 
-GListModel* // for GtkTreeListModelCreateModelFunc
-gatui_leaf_generate_children_model(
-		GATUILeaf* self
-		);
+// GtkTreeListModelCreateModelFunc for leaves
+GListModel*
+leaves_treelist_generate_children(
+        gpointer parent_leaf,
+        gpointer data // unused
+        );
 
 struct atui_type
 gatui_leaf_get_atui_type(

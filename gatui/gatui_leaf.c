@@ -234,20 +234,21 @@ gatui_leaf_new(
 }
 
 GListModel*
-gatui_leaf_generate_children_model(
-		GATUILeaf* const self
+leaves_treelist_generate_children(
+		gpointer const parent_leaf,
+		gpointer const user_data __unused
 		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-
+// GtkTreeListModelCreateModelFunc for leaves
+	GATUILeaf* const self = parent_leaf;
 	if (self->num_child_leaves) {
 		GListStore* const children = g_list_store_new(GATUI_TYPE_LEAF);
 		g_list_store_splice(children, 0,0,
 			(void**)self->child_leaves, self->num_child_leaves
 		);
 		return G_LIST_MODEL(children);
+	} else {
+		return NULL;
 	}
-	return NULL;
 }
 
 struct atui_type

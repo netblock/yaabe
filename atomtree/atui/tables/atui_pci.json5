@@ -7,6 +7,7 @@ global_default: {
 		atomtree: "pci_rom_tables",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
+		expanded: true,
 	},
 	leaf_defaults: {
 		generic: {

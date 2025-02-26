@@ -565,6 +565,7 @@ global_default: {
 		atomtree: "atui_nullstruct",
 		table_start: "bios",
 		table_size: "sizeof(*bios)",
+		expanded: true,
 	},
 	leaf_defaults: {
 		generic: {
