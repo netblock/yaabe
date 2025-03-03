@@ -1975,61 +1975,137 @@ filedialog_load_and_set_bios(
 }
 
 static void
+get_config_file(
+		GFile** const gf_out,
+		GKeyFile** const kf_out,
+		GError** const ferror_out
+		) {
+	// gf_out, kf_out, ferror_out are all required.
+	// gf_out and kf_out may be set with bogus data if there's an error.
+
+	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
+	GFileType ftype;
+	GError* err = NULL;
+
+	// $XDG_CONFIG_HOME/yaabe/
+	GPathBuf yaabe_dir_builder;
+	g_path_buf_init_from_path(&yaabe_dir_builder, xdg_home);
+	g_path_buf_push(&yaabe_dir_builder, "yaabe");
+	char* yaabe_dir_path = g_path_buf_to_path(&yaabe_dir_builder);
+
+	GFile* const yaabe_dir = g_file_new_for_path(yaabe_dir_path);
+	ftype = g_file_query_file_type(yaabe_dir, G_FILE_QUERY_INFO_NONE, NULL);
+	if (G_FILE_TYPE_DIRECTORY != ftype) {
+		g_file_make_directory_with_parents(yaabe_dir, NULL, &err);
+		if (err) {
+			goto yaabe_dir_err;
+		}
+	}
+
+	// $XDG_CONFIG_HOME/yaabe/yaabe.conf
+	GPathBuf config_file_builder;
+	g_path_buf_init_from_path(&config_file_builder, xdg_home);
+	g_path_buf_push(&config_file_builder, "yaabe/yaabe.conf");
+	char* const config_file_path = g_path_buf_to_path(&config_file_builder);
+
+	GFile* const conffile = g_file_new_for_path(config_file_path);
+	GKeyFile* const conf = g_key_file_new();
+	*gf_out = conffile;
+	*kf_out = conf;
+
+	bool const kf_success = g_key_file_load_from_file(
+		conf, config_file_path,
+		(G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS),
+		NULL // not necessary
+	);
+	if (kf_success) {
+		goto all_success;
+	}
+	
+	ftype = g_file_query_file_type(conffile, G_FILE_QUERY_INFO_NONE, NULL);
+	if ((G_FILE_TYPE_UNKNOWN != ftype) && (G_FILE_TYPE_REGULAR != ftype)) {
+		goto conffile_err;
+	}
+	// file does not exist, or fails parse. Create a new config.
+
+	constexpr char header[] = ( // TODO do the #embed thing
+		"# syntax is described in:\n"
+		"# https://freedesktop.org/wiki/Specifications/desktop-entry-spec/\n"
+		"# https://docs.gtk.org/glib/struct.KeyFile.html\n"
+		"\n"
+		"[main]\n"
+		"config_version=1\n"
+		"\n"
+		"[history]\n"
+		"# cwd is the last saved-to directory\n"
+		"cwd=\n"
+	);
+	g_key_file_load_from_data(
+		conf, header, lengthof(header)-1,
+		(G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS),
+		&err
+	);
+	if (NULL == err) {
+		goto all_success;
+	}
+
+	conffile_err:
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+
+	all_success:
+	free(config_file_path);
+	g_path_buf_clear(&config_file_builder);
+
+	yaabe_dir_err:
+	g_object_unref(yaabe_dir);
+	free(yaabe_dir_path);
+	g_path_buf_clear(&yaabe_dir_builder);
+
+	*ferror_out = err;
+}
+static void
+write_config_file(
+		GFile* const conffile,
+		GKeyFile* const conf,
+		GError** const ferror_out
+		) {
+	size_t num_bytes;
+	char* const conf_data = g_key_file_to_data(conf, &num_bytes, NULL);
+	g_file_replace_contents(
+		conffile, conf_data, num_bytes,
+		NULL, false, G_FILE_CREATE_NONE, NULL,NULL, ferror_out
+	);
+	free(conf_data);
+}
+
+static void
 set_cached_working_dir(
 		GFile* const biosfile
 		) {
-	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
-	GFileType ftype;
-
+	GFile* conffile;
+	GKeyFile* conf;
+	GError* error = NULL;
+	get_config_file(&conffile, &conf, &error);
+	if (error) {
+		g_error_free(error);
+		return;
+	}
 	GFile* const parent_dir = g_file_get_parent(biosfile);
 	char* const parent_dir_path = g_file_get_path(parent_dir);
+	g_object_unref(parent_dir);
 	if (NULL == parent_dir_path) {
-		goto parent_err;
-	}
-	size_t const parent_path_length = 1+strlen(parent_dir_path);
-	parent_dir_path[parent_path_length-1] = '\n'; // replace \0
-
-	// $XDG_CONFIG_HOME/yaabe/
-	GPathBuf history_dir_builder;
-	g_path_buf_init_from_path(&history_dir_builder, xdg_home);
-	g_path_buf_push(&history_dir_builder, "yaabe");
-	char* history_dir_path = g_path_buf_to_path(&history_dir_builder);
-	GFile* const history_dir = g_file_new_for_path(history_dir_path);
-	ftype = g_file_query_file_type(history_dir, G_FILE_QUERY_INFO_NONE, NULL);
-	if (G_FILE_TYPE_DIRECTORY != ftype 
-			&& (! g_file_make_directory_with_parents(history_dir,NULL,NULL) )
-			) { // important bit
-		goto history_dir_err;
+		return;
 	}
 
-	// $XDG_CONFIG_HOME/yaabe/history
-	GPathBuf history_file_builder;
-	g_path_buf_init_from_path(&history_file_builder, xdg_home);
-	g_path_buf_push(&history_file_builder, "yaabe/history");
-	char* history_file_path = g_path_buf_to_path(&history_file_builder);
-	GFile* const history_file = g_file_new_for_path(history_file_path);
-
-	g_file_replace_contents(
-		history_file,
-		parent_dir_path, parent_path_length,
-		NULL,false, G_FILE_CREATE_NONE, NULL, NULL, NULL
-	);
-
-	g_object_unref(history_file);
-	free(history_file_path);
-	g_path_buf_clear(&history_file_builder);
-
-	history_dir_err:
-	g_object_unref(history_dir);
-	free(history_dir_path);
-	g_path_buf_clear(&history_dir_builder);
+	g_key_file_set_string(conf, "history", "cwd", parent_dir_path);
+	write_config_file(conffile, conf, NULL);
 
 	free(parent_dir_path);
-	parent_err:
-	g_object_unref(parent_dir);
 }
+
 static inline GFile*
-get_cached_working_dir(
+get_cached_working_dir_old(
 		) {
 	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
 	GFile* cached_history_path = NULL;
@@ -2057,6 +2133,7 @@ get_cached_working_dir(
 	if (!read_success) {
 		goto history_file_err;
 	}
+	g_file_delete(history_file, NULL, NULL); // !!! XXX !!!
 
 	// chop off trailing \n and check if contents points to a dir
 	char* save;
@@ -2080,6 +2157,44 @@ get_cached_working_dir(
 
 	return cached_history_path;
 }
+static inline GFile*
+get_cached_working_dir(
+		) {
+	GFile* working_dir = get_cached_working_dir_old();
+
+	GFile* conffile;
+	GKeyFile* conf;
+	GError* error = NULL;
+	get_config_file(&conffile, &conf, &error);
+	if (error) {
+		g_error_free(error);
+		return working_dir;
+	}
+
+	char* dir_path;
+	if (working_dir) { // merge old history into config
+		dir_path = g_file_get_path(working_dir);
+		g_key_file_set_string(conf, "history", "cwd", dir_path);
+		write_config_file(conffile, conf, NULL);
+	} else {
+		dir_path = g_key_file_get_string(conf, "history", "cwd", NULL);
+		if (dir_path) {
+			working_dir = g_file_new_for_path(dir_path);
+			GFileType const ftype = g_file_query_file_type(
+				working_dir, G_FILE_QUERY_INFO_NONE, NULL
+			);
+			if (G_FILE_TYPE_DIRECTORY != ftype) {
+				g_object_unref(working_dir);
+				working_dir = NULL;
+			}
+		}
+	}
+
+	free(dir_path);
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+	return working_dir;
+}
 
 static void
 yaabe_open_bios(
@@ -2091,15 +2206,17 @@ yaabe_open_bios(
 	);
 
 	GFile* working_dir;
-	if (commons->root) {
+	if (commons->root) { // if commandline file
 		working_dir = g_file_get_parent(
 			gatui_tree_get_bios_file(commons->root)
 		);
-	} else if (( working_dir = get_cached_working_dir() )) {
-		// assignment in if-statement
 	} else {
-		working_dir = g_file_new_for_path(".");
+		working_dir = get_cached_working_dir();
+		if (NULL == working_dir) {
+			working_dir = g_file_new_for_path(".");
+		}
 	}
+
 	gtk_file_dialog_set_initial_folder(filer, working_dir);
 	g_object_unref(working_dir);
 
