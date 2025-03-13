@@ -6,6 +6,7 @@ See ppatui.h for the metaprogramming and atui.h for general API.
 
 #include "standard.h"
 #include "atui.h"
+#include "atui_allocator.h"
 #include <math.h>
 
 #ifdef C2X_COMPAT

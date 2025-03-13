@@ -1,5 +1,4 @@
 #include "standard.h"
-#include "atui.h"
 #include "gatui_private.h"
 
 enum {

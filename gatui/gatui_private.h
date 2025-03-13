@@ -2,6 +2,7 @@
 #define GATUI_PRIVATE_H
 
 #include "gatui.h"
+#include "atui_allocator.h"
 #include "yaabe_gtk4.h"
 
 GtkSelectionModel* const*

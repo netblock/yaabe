@@ -1,6 +1,7 @@
 #include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
+#include "atui_allocator.h"
 
 uint8_t
 regcmp(

@@ -170,6 +170,7 @@ def searchfield_to_c(
 #include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
+#include "atui_allocator.h"
 
 """
 	field_template:str = """\
@@ -349,6 +350,7 @@ def enum_to_c(
 #include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
+#include "atui_allocator.h"
 
 """
 	enumarray_template:str = """\
@@ -1138,6 +1140,7 @@ def branches_to_c(
 #include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
+#include "atui_allocator.h"
 """
 # These arrays need to be in a function to handle the bios-> and atomtree->
 # everywhere. trying to globalise the vars gets annoying real fast.

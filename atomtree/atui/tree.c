@@ -6,6 +6,7 @@ walks the atomtree to construct the ATUI tree
 #include "standard.h"
 #include "atomtree.h"
 #include "atui.h"
+#include "atui_allocator.h"
 
 inline static atui_branch*
 grow_smc_dpm_info(

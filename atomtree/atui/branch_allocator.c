@@ -8,6 +8,7 @@ See scripts/ppatui.py for what the JSON5 tables compile to
 
 #include "standard.h"
 #include "atui.h"
+#include "atui_allocator.h"
 
 // The leaves and branches arrays will be walked through via pointer math
 struct leaf_array {

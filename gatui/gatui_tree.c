@@ -1,7 +1,6 @@
 #include "standard.h"
-#include "atomtree.h"
-#include "atui.h"
 #include "gatui_private.h"
+#include "atomtree.h"
 
 struct _GATUITree {
 	GObject parent_instance;
