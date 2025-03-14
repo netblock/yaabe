@@ -6,6 +6,7 @@ struct _GATUITree {
 	GObject parent_instance;
 
 	GWeakRef trunk;
+	GWeakRef trunk_model;
 	/*
 	All branches, leaves depend on the root, the GATUITree, because it holds the
 	bios memory and is responsible for freeing it. As a result the root must
@@ -29,6 +30,8 @@ gatui_tree_dispose(
 
 	GObject* trunk = g_weak_ref_get(&(self->trunk));
 	g_assert(NULL == trunk);
+	GObject* trunk_model = g_weak_ref_get(&(self->trunk_model));
+	g_assert(NULL == trunk_model);
 
 	if (self->biosfile) {
 		g_object_unref(self->biosfile);
@@ -57,6 +60,7 @@ gatui_tree_init(
 	GATUITree* const self
 	) {
 	g_weak_ref_init(&self->trunk, NULL);
+	g_weak_ref_init(&self->trunk_model, NULL);
 	self->enum_models_cache = NULL;
 }
 
@@ -100,27 +104,13 @@ unref_enum_models_cache(
 		g_clear_object(&(enum_models_cache[set_i]));
 	}
 }
-static GObject*
-gatui_tree_boot_gatui_trunk(
+GtkSelectionModel* const*
+gatui_tree_get_enum_models_cache(
 		GATUITree* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
-
-	GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
-	self->enum_models_cache = enum_models_cache;
-	generate_enum_models_cache(enum_models_cache);
-
-	GObject* const trunk = G_OBJECT(gatui_branch_new(
-		self->atomtree->atui_root, self
-	));
-
-	self->enum_models_cache = NULL;
-	unref_enum_models_cache(enum_models_cache);
-
-	g_weak_ref_set(&(self->trunk), trunk);
-
-	return trunk;
-}
+	return (GtkSelectionModel* const*) self->enum_models_cache;
+};
 
 
 GATUITree*
@@ -218,72 +208,75 @@ gatui_tree_get_bios_file(
 	return self->biosfile;
 }
 
-
-GtkSelectionModel* const*
-gatui_tree_get_enum_models_cache(
-		GATUITree* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
-	return (GtkSelectionModel* const*) self->enum_models_cache;
-};
-
 GATUIBranch*
 gatui_tree_get_trunk(
 		GATUITree* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 
-	GObject* trunk;
-
 	// g_weak_ref_get refs for us
-	trunk = g_weak_ref_get(&(self->trunk));
-	if (NULL == trunk) {
-		trunk = gatui_tree_boot_gatui_trunk(self);
+	GObject* trunk = g_weak_ref_get(&(self->trunk));
+	if (NULL == trunk) { // boot the trunk
+		GtkSelectionModel* enum_models_cache[ATUI_ENUM_ARRAY_LENGTH];
+		self->enum_models_cache = enum_models_cache;
+		generate_enum_models_cache(enum_models_cache);
+
+		trunk = G_OBJECT(gatui_branch_new(self->atomtree->atui_root, self));
+		g_weak_ref_set(&(self->trunk), trunk);
+
+		self->enum_models_cache = NULL;
+		unref_enum_models_cache(enum_models_cache);
 	}
 
 	return GATUI_BRANCH(trunk);
 }
 
-
 GtkSelectionModel*
 gatui_tree_create_trunk_model(
 		GATUITree* const self
 		) {
-// Generate the very first model, of the tippy top of the tree
-	GATUIBranch* const trunk = gatui_tree_get_trunk(self);
-	GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
-	g_list_store_append(base_model, trunk);
-	g_object_unref(trunk);
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 
-	// TreeList, along with branches_treelist_generate_children, creates our
-	// collapsable model.
-	GtkTreeListModel* tree_model = gtk_tree_list_model_new(
-		G_LIST_MODEL(base_model),  false, false,
-		branches_treelist_generate_children,  NULL,NULL
-	);
-	GtkSelectionModel* const trunk_model = GTK_SELECTION_MODEL(
-		gtk_single_selection_new(G_LIST_MODEL(tree_model
-		))
-	); // the later models take ownership of the earlier
+	// g_weak_ref_get refs for us
+	GtkSelectionModel* trunk_model = g_weak_ref_get(&(self->trunk_model));
+	if (NULL == trunk_model) { // boot the model
+		// Generate the very first model, of the tippy top of the tree
+		GATUIBranch* const trunk = gatui_tree_get_trunk(self);
+		GListStore* const base_model = g_list_store_new(GATUI_TYPE_BRANCH);
+		g_list_store_append(base_model, trunk);
+		g_object_unref(trunk);
 
-	/* TODO
-	For some reason the GtkTreeListRow's notify breaks in a weird way if the
-	gtk_tree_list_row_set_expanded is done before gtk_column_view_set_model.
-	Doing it after fixes most issues, but not all of them. Furthermore, putting 
-	a notify connect in the ColumnView bind not only all-1 connects, but
-	reliably works.
-	It seems like the rows get stolen/copied?
-	*/
-	GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
-		g_list_model_get_item(G_LIST_MODEL(trunk_model), 0)
-	);
-	g_signal_connect(root_row,
-		"notify::expanded", G_CALLBACK(branches_track_expand_state), NULL
-	);
-	gtk_tree_list_row_set_expanded(root_row, true);
-	g_object_unref(root_row);
+		// TreeList, along with branches_treelist_generate_children, creates our
+		// collapsable model.
+		trunk_model = GTK_SELECTION_MODEL(
+			gtk_single_selection_new(G_LIST_MODEL(
+				gtk_tree_list_model_new(
+					G_LIST_MODEL(base_model),  false, false,
+					branches_treelist_generate_children,  NULL,NULL
+				)
+			))
+		); // the later models take ownership of the earlier
+		g_weak_ref_set(&(self->trunk_model), trunk_model);
 
-	return GTK_SELECTION_MODEL(trunk_model);
+		/* TODO
+		For some reason the GtkTreeListRow's notify breaks in a weird way if the
+		gtk_tree_list_row_set_expanded is done before gtk_column_view_set_model.
+		Doing it after fixes most issues, but not all of them. Furthermore,
+		putting a notify connect in the ColumnView bind not only all-1 connects,
+		but reliably works.
+		It seems like the rows get stolen/copied?
+		*/
+		GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
+			g_list_model_get_item(G_LIST_MODEL(trunk_model), 0)
+		);
+		g_signal_connect(root_row,
+			"notify::expanded", G_CALLBACK(branches_track_expand_state), NULL
+		);
+		gtk_tree_list_row_set_expanded(root_row, true);
+		g_object_unref(root_row);
+	}
+
+	return trunk_model;
 }
 
 GATUITree*
@@ -311,11 +304,18 @@ gatui_tree_copy_core(
 	return self;
 }
 
-
 struct atom_tree*
 gatui_tree_get_atom_tree(
 		GATUITree* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 	return self->atomtree;
+}
+
+void const*
+gatui_tree_get_bios_pointer(
+		GATUITree* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return self->atomtree->bios;
 }

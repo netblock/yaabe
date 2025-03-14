@@ -18,17 +18,12 @@ leaves_treelist_generate_children(
         gpointer parent_leaf,
         gpointer data // unused
         );
-
-struct atui_type
-gatui_leaf_get_atui_type(
-		GATUILeaf* self
+size_t
+gatui_leaf_get_region_bounds(
+		GATUILeaf* self,
+		size_t* start, // can be NULL
+		size_t* end // can be NULL; last byte within 
 		);
-uint32_t
-gatui_leaf_num_bytes(
-		GATUILeaf* self
-		);
-
-
 
 GVariantType const*
 gatui_leaf_get_gvariant_type(
@@ -85,7 +80,7 @@ gatui_leaf_to_path(
 		);
 
 
-atui_leaf*
+atui_leaf const*
 gatui_leaf_get_atui(
 		GATUILeaf* self
 		);

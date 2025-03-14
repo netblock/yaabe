@@ -24,6 +24,13 @@ branches_treelist_generate_children(
         gpointer data // unused
         );
 
+size_t
+gatui_branch_get_region_bounds(
+		GATUIBranch* self,
+		size_t* start, // can be NULL
+		size_t* end // can be NULL; last byte within 
+		);
+
 // contiguous memory in the bios
 GVariant*
 gatui_branch_get_contiguous_memory(
@@ -53,8 +60,8 @@ gatui_branch_to_path(
 		GATUIBranch* self
 		);
 
-atui_branch*
-gatui_branch_get_atui(
+atui_branch const*
+gatui_branch_get_atui( // for the trivial atui_branch data
 		GATUIBranch* self
 		);
 

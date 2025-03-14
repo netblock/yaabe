@@ -250,22 +250,31 @@ leaves_treelist_generate_children(
 	}
 }
 
-struct atui_type
-gatui_leaf_get_atui_type(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), (struct atui_type){0});
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), (struct atui_type){0});
-	return self->atui->type;
-}
-uint32_t
-gatui_leaf_num_bytes(
-		GATUILeaf* const self
+
+size_t
+gatui_leaf_get_region_bounds(
+		GATUILeaf* const self,
+		size_t* start,
+		size_t* end
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), 0);
-	return self->atui->num_bytes;
+
+	atui_leaf const* const leaf = self->atui;
+	if (leaf->num_bytes) {
+		size_t const bios_offset = (
+			leaf->val - gatui_tree_get_bios_pointer(self->root)
+		);
+		if (start) {
+			*start = bios_offset;
+		}
+		if (end) {
+			*end = bios_offset + leaf->num_bytes - 1;
+		}
+	}
+
+	return leaf->num_bytes;
 }
+
 
 GVariantType const*
 gatui_leaf_get_gvariant_type(
@@ -496,7 +505,7 @@ gatui_leaf_to_path(
 	return atui_leaf_to_path(self->atui);
 }
 
-atui_leaf*
+atui_leaf const*
 gatui_leaf_get_atui(
 		GATUILeaf* const self
 		) {

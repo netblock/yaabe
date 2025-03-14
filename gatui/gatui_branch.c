@@ -155,6 +155,30 @@ gatui_branch_get_leaves_model(
 	return self->leaves_model;
 }
 
+size_t
+gatui_branch_get_region_bounds(
+		GATUIBranch* const self,
+		size_t* start,
+		size_t* end
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), 0);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), 0);
+
+	atui_branch const* const branch = self->atui;
+	if (branch->table_size) {
+		size_t const bios_offset = (
+			branch->table_start - gatui_tree_get_bios_pointer(self->root)
+		);
+		if (start) {
+			*start = bios_offset;
+		}
+		if (end) {
+			*end = bios_offset + branch->table_size - 1;
+		}
+	}
+
+	return branch->table_size;
+}
 
 GVariant*
 gatui_branch_get_contiguous_memory(
@@ -287,7 +311,7 @@ gatui_branch_to_path(
 	return atui_branch_to_path(self->atui);
 }
 
-atui_branch*
+atui_branch const*
 gatui_branch_get_atui(
 		GATUIBranch* const self
 		) {

@@ -1,5 +1,4 @@
 #include "yaabe_gtk_internal.h"
-#include "atomtree.h"
 
 static constexpr char yaabe_name[] = "YAABE BIOS Editor";
 
@@ -70,15 +69,13 @@ pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
 		) {
 // callback; go to branch based on path string
-	char const* const editable_text = (
-		(char const* const) gtk_editable_get_text(commons->pathbar)
-	);
-	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
-		commons->root
-	);
+	char const* const editable_text = gtk_editable_get_text(commons->pathbar);
+
+	GATUIBranch* g_root = gatui_tree_get_trunk(commons->root);
+	g_object_unref(g_root); // we don't need a 2nd reference
 	struct atui_path_map* const map = path_to_atui(
 		editable_text,
-		a_root->atui_root
+		gatui_branch_get_atui(g_root)
 	);
 
 	if (NULL == map->not_found) { // if directory is found
@@ -251,8 +248,10 @@ select_changes_leaves(
 			gtk_single_selection_get_selected_item(model)
 		)
 	);
-	atui_branch* const a_branch_new = gatui_branch_get_atui(new_selection);
-	atui_branch* const a_branch_old = gatui_branch_get_atui(
+	atui_branch const* const a_branch_new = gatui_branch_get_atui(
+		new_selection
+	);
+	atui_branch const* const a_branch_old = gatui_branch_get_atui(
 		commons->previous_selection
 	);
 

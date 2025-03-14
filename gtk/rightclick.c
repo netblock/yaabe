@@ -1,7 +1,6 @@
 #include <zlib.h>
 
 #include "yaabe_gtk_internal.h"
-#include "atomtree.h"
 
 // struct shamelessly stolen from https://gitlab.gnome.org/GNOME/gtk/-/blob/3fac42fd3c213e3d7c6bf3ce08c4ffd084abb45a/gtk/gtkcolumnviewrowprivate.h
 // desperate times call for desperate measures
@@ -669,7 +668,7 @@ leaf_right_click_paste_data_set_data(
 		goto error_exit;
 	}
 
-	uint32_t const leaf_num_bytes = gatui_leaf_num_bytes(pack->leaf);
+	uint32_t const leaf_num_bytes = gatui_leaf_get_atui(pack->leaf)->num_bytes;
 	if (a_leaf->type.fancy == ATUI_STRING) {
 		void const* const bytes = header->bytes;
 		size_t const str_length = strnlen(bytes,  header->num_bytes

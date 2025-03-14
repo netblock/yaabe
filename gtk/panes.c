@@ -1,5 +1,4 @@
 #include "yaabe_gtk_internal.h"
-#include "atomtree.h"
 
 static void
 label_column_setup(
@@ -62,14 +61,14 @@ branch_name_column_bind(
 
 	GtkWidget* const label = gtk_tree_expander_get_child(expander);
 	gtk_label_set_text(GTK_LABEL(label), a_branch->name);
-	uint8_t const current_lang = LANG_ENGLISH;
+	enum i18n_languages const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(label, a_branch->description[current_lang]);
 
 	g_object_unref(g_branch);
 }
 static void
 branch_offset_column_bind(
-		yaabegtk_commons* const commons,
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind
@@ -77,19 +76,12 @@ branch_offset_column_bind(
 
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
-	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
 
-	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
-		commons->root
-	);
-
-	char buffer[sizeof("[123456 - 123456]")];
-	if (a_branch->table_size) {
-		uint32_t const start = a_branch->table_start - a_root->bios;
-		uint32_t const end = (start + a_branch->table_size -1);
-		sprintf(buffer, "[%06X - %06X]", start, end);
-	} else {
-		buffer[0] = '\0';
+	size_t start;
+	size_t end;
+	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
+	if (gatui_branch_get_region_bounds(g_branch, &start, &end)) {
+		sprintf(buffer, "[%06lX - %06lX]", start, end);
 	}
 	assert(strlen(buffer) < sizeof(buffer));
 	gtk_label_set_text(GTK_LABEL(label), buffer);
@@ -131,7 +123,7 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branch_offset_column_bind), commons,
+		"swapped-signal::bind", G_CALLBACK(branch_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -435,12 +427,11 @@ leaves_val_column_bind(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 
-	struct atui_type const type = gatui_leaf_get_atui_type(g_leaf);
-	if (type.radix || type.fancy == ATUI_STRING || type.fancy == ATUI_ARRAY) {
-
+	struct atui_type const* const type = &(gatui_leaf_get_atui(g_leaf)->type);
+	if (type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy) {
 		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
 		GtkWidget* editable;
-		if (type.has_enum) {
+		if (type->has_enum) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
 			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
 			GtkColumnView* const enum_list = GTK_COLUMN_VIEW(
@@ -489,7 +480,7 @@ leaves_val_column_unbind(
 }
 static void
 leaves_offset_column_bind(
-		yaabegtk_commons* const commons,
+		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -500,20 +491,15 @@ leaves_offset_column_bind(
 	);
 	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
-	char buffer[sizeof("[123456 - 123456]")];
+	size_t start;
+	size_t end;
+	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
 	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
 		sprintf(buffer, "[%u:%u]",
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
 		);
-	} else if (a_leaf->num_bytes) {
-		struct atom_tree const* const a_root = gatui_tree_get_atom_tree(
-			commons->root
-		);
-		uint32_t const start = a_leaf->val - a_root->bios;
-		uint32_t const end = (start + a_leaf->num_bytes -1);
-		sprintf(buffer, "[%06X - %06X]", start, end);
-	} else {
-		buffer[0] = '\0';
+	} else if (gatui_leaf_get_region_bounds(g_leaf, &start, &end)) {
+		sprintf(buffer, "[%06lX - %06lX]", start, end);
 	}
 	assert(strlen(buffer) < sizeof(buffer));
 	gtk_label_set_text(GTK_LABEL(label), buffer);
@@ -568,7 +554,7 @@ create_leaves_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(leaves_offset_column_bind), commons,
+		"swapped-signal::bind", G_CALLBACK(leaves_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
