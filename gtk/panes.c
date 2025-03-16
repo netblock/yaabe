@@ -81,7 +81,7 @@ branch_offset_column_bind(
 	size_t end;
 	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
 	if (gatui_branch_get_region_bounds(g_branch, &start, &end)) {
-		sprintf(buffer, "[%06lX - %06lX]", start, end);
+		sprintf(buffer, "[%06zX - %06zX]", start, end);
 	}
 	assert(strlen(buffer) < sizeof(buffer));
 	gtk_label_set_text(GTK_LABEL(label), buffer);
@@ -499,7 +499,7 @@ leaves_offset_column_bind(
 			a_leaf->bitfield_hi, a_leaf->bitfield_lo
 		);
 	} else if (gatui_leaf_get_region_bounds(g_leaf, &start, &end)) {
-		sprintf(buffer, "[%06lX - %06lX]", start, end);
+		sprintf(buffer, "[%06zX - %06zX]", start, end);
 	}
 	assert(strlen(buffer) < sizeof(buffer));
 	gtk_label_set_text(GTK_LABEL(label), buffer);
