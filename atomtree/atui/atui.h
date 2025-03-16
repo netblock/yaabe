@@ -247,17 +247,17 @@ atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
 		atui_leaf const* tip
 		);
 
-struct atui_path_map { // the trail of objects for a map
+struct atui_path_goto { // final branch and leaf
 	char* not_found; // non-NULL if error; name of the not-found branch/leaf
-	atui_branch** branch_path;
-	atui_leaf** leaf_path;
-	uint8_t branch_depth;
+	atui_branch* branch;
+	atui_leaf* leaf;
+	uint8_t branch_depth; // guaranteed to be non-0 if NULL==not_found
 	uint8_t leaf_depth;
 };
-struct atui_path_map* // needs to be freed
+struct atui_path_goto* // needs to be freed
 path_to_atui( // crawls path and makes a map of that path
-		char const* path,
-		atui_branch const* root
+		atui_branch const* root,
+		char const* path
 		);
 
 

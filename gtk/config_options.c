@@ -1,17 +1,20 @@
 #include "yaabe_gtk_internal.h"
 
-static constexpr char basic_config_file[] = (
 // TODO do the #embed thing when GCC 15 comes out
-	"# syntax is described in:\n"
-	"# https://freedesktop.org/wiki/Specifications/desktop-entry-spec/\n"
-	"# https://docs.gtk.org/glib/struct.KeyFile.html\n"
-	"\n"
-	"[main]\n"
-	"config_version=1\n"
-	"\n"
-	"[history]\n"
-	"# cwd is the last saved-to directory\n"
-	"cwd=\n"
+static constexpr char basic_config_file[] = (
+"# syntax is described in:\n"
+"# https://freedesktop.org/wiki/Specifications/desktop-entry-spec/\n"
+"# https://docs.gtk.org/glib/struct.KeyFile.html\n"
+"\n"
+"[main]\n"
+"config_version=1\n"
+"\n"
+"[history]\n"
+"# cwd is the last saved-to directory\n"
+"cwd=\n"
+"# path is about restoring the scroll position,"
+" based on the last selected structure path\n"
+"path=\n"
 );
 
 static void
@@ -221,4 +224,47 @@ set_cached_working_dir(
 	write_config_file(conffile, conf, NULL);
 
 	free(parent_dir_path);
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+}
+
+
+void
+set_cached_scroll_path(
+		char const* path
+		) {
+	GFile* conffile;
+	GKeyFile* conf;
+	GError* error = NULL;
+	get_config_file(&conffile, &conf, &error);
+	if (error) {
+		g_error_free(error);
+		return;
+	}
+
+	g_key_file_set_string(conf, "history", "path", path);
+	write_config_file(conffile, conf, NULL);
+
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+}
+
+char*
+get_cached_scroll_path(
+		) {
+	GFile* conffile;
+	GKeyFile* conf;
+	GError* error = NULL;
+	get_config_file(&conffile, &conf, &error);
+	if (error) {
+		g_error_free(error);
+		return NULL;
+	}
+
+	char* const path = g_key_file_get_string(conf, "history", "path", NULL);
+
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+
+	return path;
 }

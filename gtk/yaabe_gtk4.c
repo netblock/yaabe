@@ -64,127 +64,60 @@ pathbar_editable_reset(
 	return true;
 }
 
+
+void
+yaabe_gtk_scroll_to_path(
+		yaabegtk_commons* const commons,
+		char const* const path,
+		struct atui_path_goto** const map_error
+		) {
+	int16_t branch_index;
+	int16_t leaf_index;
+	bool const success = gatui_tree_select_in_model_by_path(commons->root,
+		path,  &branch_index, &leaf_index, map_error
+	);
+	if (success) {
+		if (-1 < branch_index) {
+			gtk_column_view_scroll_to(commons->branches.view,
+				branch_index, NULL, GTK_LIST_SCROLL_FOCUS, NULL
+			);
+		}
+		if (-1 < leaf_index) {
+			gtk_column_view_scroll_to(commons->leaves.view,
+				leaf_index, NULL, GTK_LIST_SCROLL_FOCUS, NULL
+			);
+		}
+	}
+}
+void
+first_load_restore_path(
+		yaabegtk_commons* const commons
+		) {
+	char* const path = get_cached_scroll_path();
+	yaabe_gtk_scroll_to_path(commons, path, NULL);
+	free(path);
+}
+
 static void
 pathbar_sets_branch_selection(
 		yaabegtk_commons* const commons
 		) {
 // callback; go to branch based on path string
 	char const* const editable_text = gtk_editable_get_text(commons->pathbar);
+	struct atui_path_goto* map_error = NULL;
 
-	GATUIBranch* g_root = gatui_tree_get_trunk(commons->root);
-	g_object_unref(g_root); // we don't need a 2nd reference
-	struct atui_path_map* const map = path_to_atui(
-		editable_text,
-		gatui_branch_get_atui(g_root)
-	);
+	yaabe_gtk_scroll_to_path(commons, editable_text, &map_error);
 
-	if (NULL == map->not_found) { // if directory is found
-		GObject const* target;
-		GObject* questioned;
-		GtkTreeListRow* tree_item;
-		uint16_t model_i;
-		uint8_t depth_i;
-
-		GListModel* const branch_model = G_LIST_MODEL(gtk_column_view_get_model(
-			commons->branches.view
-		));
-
-		// test to see if our target is already selected
-		target = G_OBJECT(map->branch_path[map->branch_depth - 1]->self);
-		questioned = G_OBJECT(gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
-			gtk_single_selection_get_selected_item(GTK_SINGLE_SELECTION(
-				branch_model
-			))
-		)));
-		g_object_unref(questioned); // we don't need a 2nd reference
-		if (target == questioned) {
-			model_i = gtk_single_selection_get_selected(GTK_SINGLE_SELECTION(
-				branch_model
-			));
-			pathbar_update_path(
-				GTK_SINGLE_SELECTION(branch_model), 0,0, commons
-			);
-		} else {
-			// map has an objective form of the path string.
-			// Even though branch_model will have the final destination, it
-			// might not yet due to it being under a GtkTreeListModel
-			// collapsable.
-			model_i = -1;
-			depth_i = 0;
-			do {
-				target = G_OBJECT(map->branch_path[depth_i]->self);
-				while (true) {
-					model_i++;
-					tree_item = GTK_TREE_LIST_ROW(
-						g_list_model_get_object(branch_model, model_i)
-					);
-					questioned = G_OBJECT(
-						gtk_tree_list_row_get_item(tree_item)
-					);
-					g_object_unref(questioned); // we don't need a 2nd reference
-					if (target == questioned) {
-						break;
-					}
-					g_object_unref(tree_item);
-				};
-				gtk_tree_list_row_set_expanded(tree_item, true);
-				// may be collapsed
-				g_object_unref(tree_item);
-				depth_i++;
-			} while (depth_i < map->branch_depth);
-		}
-
-		gtk_column_view_scroll_to(commons->branches.view,
-			model_i, NULL,
-			(GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT),
-			NULL
-		);
-
-		if (map->leaf_depth) { // if a leaf
-			// the exact same idea as what happened with the branhes
-			GListModel* const leaf_model = G_LIST_MODEL(
-				gtk_column_view_get_model(commons->leaves.view)
-			);
-			model_i = -1;
-			depth_i = 0;
-			do {
-				target = G_OBJECT(map->leaf_path[depth_i]->self);
-				while (true) {
-					model_i++;
-					tree_item = GTK_TREE_LIST_ROW(
-						g_list_model_get_object(leaf_model, model_i)
-					);
-					questioned = G_OBJECT(
-						gtk_tree_list_row_get_item(tree_item)
-					);
-					g_object_unref(questioned); // we don't need a 2nd reference
-					if (target == questioned) {
-						break;
-					}
-					g_object_unref(tree_item);
-				};
-				// may be collapsed
-				gtk_tree_list_row_set_expanded(tree_item, true);
-				g_object_unref(tree_item);
-				depth_i++;
-			} while (depth_i < map->leaf_depth);
-
-			gtk_column_view_scroll_to(commons->leaves.view,
-				model_i, NULL,
-				GTK_LIST_SCROLL_FOCUS,
-				NULL
-			);
-		}
-	} else {
+	if (map_error) {
 		GtkWindow* const editor_window = gtk_application_get_active_window(
 			commons->yaabe_gtk
 		);
 		GtkAlertDialog* alert;
-		if (map->branch_depth) {
+		if (map_error->branch_depth) {
 			alert = gtk_alert_dialog_new(
 				"\n%s\n not found in:\n %s\n",
-				map->not_found,
-				map->branch_path[map->branch_depth-1]->name
+				map_error->not_found,
+				map_error->branch->name
 			);
 		} else {
 			alert = gtk_alert_dialog_new("bad root");
@@ -193,8 +126,8 @@ pathbar_sets_branch_selection(
 		gtk_alert_dialog_show(alert, editor_window);
 
 		g_object_unref(alert);
+		free(map_error);
 	}
-	free(map);
 }
 inline static GtkWidget*
 construct_path_bar(
@@ -360,9 +293,8 @@ set_editor_titlebar(
 	}
 }
 
-
 static void
-yaabe_app_activate(
+yaabe_gtk_activate(
 		GtkApplication* const gtkapp,
 		yaabegtk_commons* const commons
 		) {
@@ -401,10 +333,20 @@ yaabe_app_activate(
 
 	if (commons->root) {
 		create_and_set_active_gatui_model(commons, commons->root);
+		//first_load_restore_path(commons); // TODO
+		// columnview scroll position bugs out when done here
 	}
 
 	set_editor_titlebar(commons);
 	gtk_window_present(window);
+}
+static void
+yaabe_gtk_save_path(
+		yaabegtk_commons* const commons
+		) {
+	if (commons->pathbar_string) {
+		set_cached_scroll_path(commons->pathbar_string);
+	}
 }
 int8_t
 yaabe_gtk(
@@ -414,8 +356,10 @@ yaabe_gtk(
 	commons.root = *root;
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
-	g_signal_connect(commons.yaabe_gtk, "activate",
-		G_CALLBACK(yaabe_app_activate), &commons
+	g_object_connect(commons.yaabe_gtk,
+		"signal::activate", G_CALLBACK(yaabe_gtk_activate), &commons,
+		"swapped-signal::shutdown", G_CALLBACK(yaabe_gtk_save_path), &commons,
+		NULL
 	);
 	int8_t const status = g_application_run(
 		G_APPLICATION(commons.yaabe_gtk), 0,NULL

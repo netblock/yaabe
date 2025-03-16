@@ -279,6 +279,126 @@ gatui_tree_create_trunk_model(
 	return trunk_model;
 }
 
+
+
+static int16_t
+expand_model_with_object_path(
+		GListModel* const model,
+		GObject const* const* const path,
+		uint8_t const path_depth
+		) {
+	int16_t model_i = -1; // -1 for loop entry
+	uint8_t depth_i = 0;
+	do {
+		GtkTreeListRow* tree_item;
+		while (true) {
+			model_i++;
+			tree_item = GTK_TREE_LIST_ROW(
+				g_list_model_get_object(model, model_i)
+			);
+			GObject* questioned = G_OBJECT(
+				gtk_tree_list_row_get_item(tree_item)
+			);
+			g_object_unref(questioned); // we don't need a 2nd reference
+			if (path[depth_i] == questioned) {
+				break;
+			}
+			g_object_unref(tree_item);
+		};
+		gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
+		g_object_unref(tree_item);
+		depth_i++;
+	} while (depth_i < path_depth);
+
+	return model_i;
+};
+
+bool
+gatui_tree_select_in_model_by_path(
+		GATUITree* const self,
+		char const* const path,
+		int16_t* const branch_index,
+		int16_t* const leaf_index,
+		struct atui_path_goto** const map_error
+		) {
+	g_return_val_if_fail(GATUI_IS_TREE(self), false);
+
+	if (NULL == path) {
+		return false;
+	}
+	// g_weak_ref_get refs for us
+	GtkSelectionModel* trunk_model = g_weak_ref_get(&(self->trunk_model));
+	if (NULL == trunk_model) {
+		return false;
+	}
+	struct atui_path_goto* const map = path_to_atui(
+		self->atomtree->atui_root, path
+	);
+	if (map->not_found) {
+		if (map_error) {
+			*map_error = map;
+		} else {
+			free(map);
+		}
+		g_object_unref(trunk_model);
+		return false;
+	}
+
+	// build a GOBject array of the path
+	GObject const** const object_path = cralloc(
+		// technically need larger of the two
+		(map->branch_depth + map->leaf_depth)
+		* sizeof(GObject*)
+	);
+
+	int16_t branch_i = -1;
+	if (map->branch_depth) {
+		atui_branch const* branch = map->branch;
+		uint8_t i = map->branch_depth;
+		do {
+			i--;
+			object_path[i] = G_OBJECT(branch->self);
+			branch = branch->parent_branch;
+		} while (i);
+		assert(NULL == branch);
+		branch_i = expand_model_with_object_path(
+			G_LIST_MODEL(trunk_model), 
+			object_path, map->branch_depth
+		);
+		if (-1 < branch_i) {
+			gtk_single_selection_set_selected(GTK_SINGLE_SELECTION(trunk_model),
+				branch_i
+			);
+		}
+	}
+	if (branch_index) {
+		*branch_index = branch_i;
+	}
+
+	int16_t leaf_i = -1;
+	if (map->leaf_depth) {
+		atui_leaf const* leaf = map->leaf;
+		uint8_t i = map->leaf_depth;
+		do {
+			i--;
+			object_path[i] = G_OBJECT(leaf->self);
+			leaf = leaf->parent_leaf;
+		} while (i);
+		leaf_i = expand_model_with_object_path(
+			G_LIST_MODEL(gatui_branch_get_leaves_model(map->branch->self)),
+			object_path, map->leaf_depth
+		);
+	}
+	if (leaf_index) {
+		*leaf_index = leaf_i;
+	}
+
+	free(object_path);
+	free(map);
+	g_object_unref(trunk_model);
+
+	return true;
+}
 GATUITree*
 gatui_tree_copy_core(
 		GATUITree* const src

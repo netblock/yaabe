@@ -637,7 +637,6 @@ atui_leaf_to_path(
 	return pathstring;
 }
 
-//static const atui_leaf*
 static uint8_t
 _path_to_atui_has_leaf(
 		atui_leaf const* const leaves,
@@ -679,10 +678,10 @@ _path_to_atui_has_leaf(
 
 	return 0;
 }
-struct atui_path_map*
+struct atui_path_goto*
 path_to_atui(
-		char const* const path,
-		atui_branch const* const root
+		atui_branch const* const root,
+		char const* const path
 		) {
 	char* const token_buffer = strdup(path);
 	char* token_save;
@@ -730,47 +729,24 @@ path_to_atui(
 	}
 
 	void* partition = cralloc(
-		sizeof(struct atui_path_map)
-		+ (branch_depth * sizeof(atui_branch*))
-		+ (leaf_depth * sizeof(atui_leaf*))
+		sizeof(struct atui_path_goto)
 		+ not_found_arraylen
 	);
-	struct atui_path_map* const map = partition;
-	partition += sizeof(struct atui_path_map);
-	if (branch_depth) {
-		map->branch_path = partition;
-		partition += (branch_depth * sizeof(atui_branch*));
-	} else {
-		map->branch_path = NULL;
-	}
-	if (leaf_depth) {
-		map->leaf_path = partition;
-		partition += (leaf_depth * sizeof(atui_leaf*));
-	} else {
-		map->leaf_path = NULL;
-	}
+
+	struct atui_path_goto* const map = partition;
+	map->branch = (atui_branch*) dir;
+	map->branch_depth = branch_depth;
+	map->leaf = (atui_leaf*) file;
+	map->leaf_depth = leaf_depth;
+
+	partition += sizeof(struct atui_path_goto);
 	if (not_found_arraylen) {
 		map->not_found = partition;
+		strcpy(map->not_found, path_token);
 	} else {
 		map->not_found = NULL;
 	}
 	partition = NULL; // we're done partitioning
-
-	map->branch_depth = branch_depth;
-	map->leaf_depth = leaf_depth;
-	while (branch_depth) {
-		branch_depth--;
-		map->branch_path[branch_depth] = (atui_branch*) dir;
-		dir = dir->parent_branch;
-	}
-	while (leaf_depth) {
-		leaf_depth--;
-		map->leaf_path[leaf_depth] = (atui_leaf*) file;
-		file = file->parent_leaf;
-	}
-	if (not_found_arraylen) {
-		strcpy(map->not_found, path_token);
-	}
 
 	free(token_buffer);
 	return map;

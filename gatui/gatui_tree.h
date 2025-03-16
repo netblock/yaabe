@@ -45,6 +45,15 @@ gatui_tree_create_trunk_model( // generate a TreeListModel for use in a ListView
         );
 
 
+bool // success
+gatui_tree_select_in_model_by_path( // model must be already created
+		GATUITree* self,
+		char const* path, // /path/string/to/nativate/to
+		int16_t* branch_index, // model index
+		int16_t* leaf_index, // model index
+		struct atui_path_goto** map_error
+		// if there's a navigation error, must be freed
+		);
 
 // creates a new tree based off of the raw bios data buffer, and GFile.
 // useful when a new atomtree crawl is wanted.

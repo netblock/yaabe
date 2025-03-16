@@ -28,10 +28,19 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* reload_buttons;
 
 	char* pathbar_string;
-
 } yaabegtk_commons;
 
-
+void
+yaabe_gtk_scroll_to_path( // /scroll/to/based/on/path
+		yaabegtk_commons* commons,
+		char const* path,
+		struct atui_path_goto** map_error // optional
+		);
+                                                                                
+void
+first_load_restore_path( // from config file
+        yaabegtk_commons* commons
+        );
 void
 generic_error_popup(
 		char const* primary, // message
@@ -102,6 +111,15 @@ get_cached_working_dir(
 void
 set_cached_working_dir(
 		GFile* biosfile
+		);
+
+void
+set_cached_scroll_path(
+		char const* path
+		);
+
+char* // needs to be freed.
+get_cached_scroll_path(
 		);
 
 #endif

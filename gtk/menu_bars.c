@@ -41,7 +41,7 @@ yaabegtk_load_enable_save_buttons(
 	action = g_action_map_lookup_action(app_action_map, "reload");
 	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
 }
-inline static void
+static void
 yaabegtk_load_bios(
 		yaabegtk_commons* const commons,
 		GFile* const biosfile,
@@ -56,12 +56,18 @@ yaabegtk_load_bios(
 	}
 
 	if (new_tree) {
-		if (commons->root) {
+		if (commons->root) { // has loaded
 			g_object_unref(commons->root);
+			char* const old_path = commons->pathbar_string;
+			commons->pathbar_string = NULL; // steal it
+			create_and_set_active_gatui_model(commons, new_tree);
+			yaabe_gtk_scroll_to_path(commons, old_path, NULL);
+			free(old_path);
 		} else {
+			create_and_set_active_gatui_model(commons, new_tree);
+			first_load_restore_path(commons);
 			yaabegtk_load_enable_save_buttons(commons);		
 		}
-		create_and_set_active_gatui_model(commons, new_tree);
 
 		set_editor_titlebar(commons);
 	}
