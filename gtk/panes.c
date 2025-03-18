@@ -10,12 +10,13 @@ struct widget_cache {
 static struct widget_cache*
 widget_cache_new(
 		) {
-	struct widget_cache* const cache = cralloc(sizeof(cache));
+	struct widget_cache* const cache = cralloc(sizeof(*cache));
 	cache->n_widgets = 0;
 	cache->max_widgets = 256; // seems to be more than enough
-	cache->widget_stack = cralloc(
+	void* wha = cralloc(
 		cache->max_widgets * sizeof(cache->widget_stack[0])
 	);
+	cache->widget_stack = wha;
 	return cache;
 }
 static void

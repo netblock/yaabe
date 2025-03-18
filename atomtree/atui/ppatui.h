@@ -23,7 +23,10 @@ C preprocessor side of ATUI table generation
 	)
 
 // Add a child branch to a parent branch
-#define ATUI_ADD_BRANCH(parent, child) do {\
+#define ATUI_ADD_BRANCH(parentptr, childptr) do {\
+	atui_branch* const restrict parent = parentptr;\
+	atui_branch* const restrict child = childptr;\
+	assert(parent != child);\
 	assert(parent->num_branches < parent->max_num_branches);\
 	parent->child_branches[parent->num_branches] = child;\
 	child->parent_branch = parent;\
