@@ -354,7 +354,7 @@ branch_right_click_paste_data_set_data(
 			raw_type,
 			header->bytes, header->num_bytes,
 			false,
-			free_notify, header
+			(GDestroyNotify) free, header
 		);
 		g_free(raw_type);
 		if (header->target == B64_BRANCH_CONTIGUOUS) {
@@ -690,7 +690,7 @@ leaf_right_click_paste_data_set_data(
 			raw_type,
 			header->bytes, header->num_bytes,
 			false,
-			free_notify, header
+			(GDestroyNotify) free, header
 		);
 		header = NULL; // g_variant_new_from_data takes ownership
 		g_free(raw_type);

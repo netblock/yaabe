@@ -5,13 +5,7 @@ static constexpr char yaabe_name[] = "YAABE BIOS Editor";
 void
 free_closure(
 		gpointer data,
-		GClosure* closure __unused
-		) {
-	free(data);
-}
-void
-free_notify(
-		gpointer data
+		GClosure* const closure __unused
 		) {
 	free(data);
 }

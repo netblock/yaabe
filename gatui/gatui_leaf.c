@@ -320,7 +320,7 @@ gatui_leaf_get_value(
 			self->capsule_type,
 			valcopy, leaf->num_bytes,
 			false,
-			free_notify, valcopy
+			(GDestroyNotify) free, valcopy
 		);
 	}
 	return NULL;

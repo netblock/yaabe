@@ -194,7 +194,7 @@ gatui_branch_get_contiguous_memory(
 			self->capsule_type,
 			valcopy, branch->table_size,
 			false,
-			free_notify, valcopy
+			(GDestroyNotify) free, valcopy
 		);
 	}
 	return NULL;
@@ -256,7 +256,7 @@ gatui_branch_get_leaves_memory_package(
 		self->capsule_type,
 		bytepack, num_bytes,
 		false,
-		free_notify, bytepack
+		(GDestroyNotify) free, bytepack
 	);
 	return true;
 }

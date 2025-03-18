@@ -1,5 +1,63 @@
 #include "yaabe_gtk_internal.h"
 
+
+// widget cache for GtkColumnView. see leaves_val_column_setup for more info
+struct widget_cache {
+	uint32_t n_widgets;
+	uint32_t max_widgets;
+	GtkWidget** widget_stack;
+};
+static struct widget_cache*
+widget_cache_new(
+		) {
+	struct widget_cache* const cache = cralloc(sizeof(cache));
+	cache->n_widgets = 0;
+	cache->max_widgets = 256; // seems to be more than enough
+	cache->widget_stack = cralloc(
+		cache->max_widgets * sizeof(cache->widget_stack[0])
+	);
+	return cache;
+}
+static void
+widget_cache_push(
+		struct widget_cache* const cache,
+		GtkWidget* const widget
+		) {
+	g_object_ref_sink(widget);
+	if (cache->n_widgets == cache->max_widgets) {
+		cache->max_widgets *= 2;
+		cache->widget_stack = crealloc(
+			cache->widget_stack,
+			cache->max_widgets * sizeof(cache->widget_stack[0])
+		);
+	}
+	cache->widget_stack[cache->n_widgets] = widget;
+	cache->n_widgets++;
+}
+static GtkWidget*
+widget_cache_pop(
+		struct widget_cache* const cache
+		) {
+	GtkWidget* widget = NULL;
+	if (cache->n_widgets) {
+		cache->n_widgets--;
+		widget = cache->widget_stack[cache->n_widgets];
+	}
+	return widget;
+}
+static void
+widget_cache_destroy(
+		struct widget_cache* const cache
+		) {
+	while (cache->n_widgets) {
+		cache->n_widgets--;
+		g_object_unref(cache->widget_stack[cache->n_widgets]);
+	}
+	free(cache->widget_stack);
+	free(cache);
+}
+
+
 static void
 label_column_setup(
 		void const* const _null __unused, // swapped-signal:: with factory
@@ -180,10 +238,12 @@ leaf_sets_editable(
 }
 static void
 leaves_editable_stray_reset(
-		GtkColumnViewCell* const column_cell
+		GtkColumnViewCell* const* const cell_cache
 		) {
 // If the value wasn't applied with enter, sync the text back to the actual
 // data when keyboard leaves the textbox
+	GtkColumnViewCell* const column_cell = *cell_cache;
+
 	GtkEditable* const editable = GTK_EDITABLE(
 		gtk_stack_get_child_by_name(
 			GTK_STACK(gtk_column_view_cell_get_child(column_cell)), "text"
@@ -199,9 +259,10 @@ leaves_editable_stray_reset(
 static void
 editable_sets_leaf(
 		GtkEditable* const editable,
-		GtkColumnViewCell* const column_cell
+		GtkColumnViewCell* const* const cell_cache
 		) {
 // Only way to apply the value is to hit enter
+	GtkColumnViewCell* const column_cell = *cell_cache;
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
@@ -214,7 +275,7 @@ editable_sets_leaf(
 
 static void
 enum_name_column_bind(
-		GtkColumnViewCell* const leaves_column_cell __unused,
+		GtkColumnViewCell* const* const leaves_cell_cache __unused,
 		GtkColumnViewCell* const enum_column_cell
 		) {
 // bind
@@ -234,10 +295,12 @@ enum_name_column_bind(
 }
 static void
 enum_val_column_bind(
-		GtkColumnViewCell* const leaves_column_cell,
+		GtkColumnViewCell* const* const leaves_cell_cache,
 		GtkColumnViewCell* const enum_column_cell
 		) {
 // bind
+	GtkColumnViewCell* const leaves_column_cell = *leaves_cell_cache;
+
 	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
 		enum_column_cell
 	));
@@ -264,8 +327,10 @@ static void
 enum_list_sets_leaf(
 		GtkColumnView* const enum_list,
 		guint const paosition __unused,
-		GtkColumnViewCell* const leaves_column_cell
+		GtkColumnViewCell* const* const leaves_cell_cache
 		) {
+	GtkColumnViewCell* const leaves_column_cell = *leaves_cell_cache;
+
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
 		gtk_single_selection_get_selected_item(
 			GTK_SINGLE_SELECTION(gtk_column_view_get_model(enum_list))
@@ -287,8 +352,10 @@ enum_list_sets_leaf(
 static void
 enummenu_sets_selection(
 		GtkWidget* const enum_list,
-		GtkColumnViewCell* const leaves_column_cell
+		GtkColumnViewCell* const* const leaves_cell_cache
 		) {
+	GtkColumnViewCell* const leaves_column_cell = *leaves_cell_cache;
+
 	GtkSingleSelection* const enum_model = GTK_SINGLE_SELECTION(
 		gtk_column_view_get_model(GTK_COLUMN_VIEW(enum_list))
 	);
@@ -308,7 +375,7 @@ enummenu_sets_selection(
 }
 inline static GtkWidget*
 construct_enum_columnview(
-		GtkColumnViewCell* const leaves_column_cell
+		GtkColumnViewCell** const leaves_cell_cache
 		) {
 	GtkColumnView* const enum_list = GTK_COLUMN_VIEW(gtk_column_view_new(NULL));
 	GtkListItemFactory* factory;
@@ -317,7 +384,7 @@ construct_enum_columnview(
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(enum_name_column_bind),
-			leaves_column_cell,
+			leaves_cell_cache,
 		NULL
 	);
 	column = gtk_column_view_column_new("name", factory);
@@ -327,7 +394,7 @@ construct_enum_columnview(
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(enum_val_column_bind),
-			leaves_column_cell,
+			leaves_cell_cache,
 		NULL
 	);
 	column = gtk_column_view_column_new("value", factory);
@@ -338,18 +405,19 @@ construct_enum_columnview(
 }
 inline static GtkWidget*
 construct_enum_dropdown(
+		GObject* const widget_bag,
 		GtkEntryBuffer* const entry_buffer,
-		GtkColumnViewCell* const leaves_column_cell
+		GtkColumnViewCell** const leaves_cell_cache
 		) {
 	GtkEditable* const enumentry = GTK_EDITABLE(gtk_entry_new_with_buffer(
 		entry_buffer
 	));
 	g_signal_connect(enumentry, "activate",
-		G_CALLBACK(editable_sets_leaf), leaves_column_cell
+		G_CALLBACK(editable_sets_leaf), leaves_cell_cache
 	);
 	gtk_widget_set_hexpand(GTK_WIDGET(enumentry), true);
 
-	GtkWidget* const enum_list = construct_enum_columnview(leaves_column_cell);
+	GtkWidget* const enum_list = construct_enum_columnview(leaves_cell_cache);
 
 	// huge menus too big for the display vertical fails to spawn; so scrolled
 	// window
@@ -365,9 +433,13 @@ construct_enum_dropdown(
 	gtk_popover_set_has_arrow(popover, false);
 	gtk_popover_set_child(popover, GTK_WIDGET(enum_scroll));
 
+	// shortcut way
+	g_object_set_data(widget_bag, "enum_list", GTK_COLUMN_VIEW(enum_list));
+	g_object_set_data(widget_bag, "enum_editable", GTK_WIDGET(enumentry));
+
 	g_object_connect(enum_list,
-		"signal::map", G_CALLBACK(enummenu_sets_selection), leaves_column_cell,
-		"signal::activate", G_CALLBACK(enum_list_sets_leaf), leaves_column_cell,
+		"signal::map", G_CALLBACK(enummenu_sets_selection), leaves_cell_cache,
+		"signal::activate", G_CALLBACK(enum_list_sets_leaf), leaves_cell_cache,
 		"swapped-signal::activate", G_CALLBACK(gtk_popover_popdown), popover,
 		NULL
 	);
@@ -381,39 +453,70 @@ construct_enum_dropdown(
 	gtk_box_append(GTK_BOX(enumdropdown), GTK_WIDGET(enumentry));
 	return enumdropdown;
 }
+
 static void
 leaves_val_column_setup(
-		void const* const _null __unused, // swapped-signal:: with factory
+		struct widget_cache* const cache, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // setup
-	GtkStack* const widget_bag = GTK_STACK(gtk_stack_new());
-	gtk_column_view_cell_set_child(column_cell, GTK_WIDGET(widget_bag));
-	GtkEventController* const focus_sense = gtk_event_controller_focus_new();
-	g_signal_connect_swapped(focus_sense, "leave",
-		G_CALLBACK(leaves_editable_stray_reset), column_cell
-	);
-	gtk_widget_add_controller(GTK_WIDGET(widget_bag), focus_sense);
-	// widget takes ownership of the controller, no need to unref.
+/*
+When moving between different models the GtkColumnView unrefs ALL of its widgets
+it generated during a previous setup pass, which makes moving loading a new
+branch's leaves into view, slow. So, cache them with a stack.
+*/
+	GtkColumnViewCell** cell_cache;
+	GtkWidget* widget_bag = widget_cache_pop(cache);
+	if (widget_bag) {
+		cell_cache = g_object_get_data(G_OBJECT(widget_bag), "cell_cache");
+	} else {
+		widget_bag = gtk_stack_new();
+		g_object_ref_sink(widget_bag); // ref parity with cached alternative
+		cell_cache = cralloc(sizeof(column_cell));
+		g_object_set_data_full(G_OBJECT(widget_bag),
+			"cell_cache", cell_cache, (GDestroyNotify) free
+		);
 
-	GtkEntryBuffer* const entry_buffer = gtk_entry_buffer_new(NULL,0);
+		GtkEventController* const focus_sense = (
+			gtk_event_controller_focus_new());
+		g_signal_connect_swapped(focus_sense, "leave",
+			G_CALLBACK(leaves_editable_stray_reset), cell_cache
+		);
+		gtk_widget_add_controller(widget_bag, focus_sense);
+		// widget takes ownership of the controller, no need to unref.
 
-	// numbers, strings
-	//sub_widget = gtk_text_new();
-	GtkWidget* const regular = gtk_entry_new_with_buffer(entry_buffer);
-	gtk_stack_add_named(widget_bag, regular, "text");
-	g_signal_connect(GTK_EDITABLE(regular), "activate",
-		G_CALLBACK(editable_sets_leaf), column_cell
-	);
+		GtkEntryBuffer* const entry_buffer = gtk_entry_buffer_new(NULL,0);
 
-	// enums
-	GtkWidget* const enumdropdown = construct_enum_dropdown(
-		entry_buffer, column_cell
-	);
-	gtk_stack_add_named(widget_bag, enumdropdown, "enum");
+		// numbers, strings
+		//sub_widget = gtk_text_new();
+		GtkWidget* const regular = gtk_entry_new_with_buffer(entry_buffer);
+		gtk_stack_add_named(GTK_STACK(widget_bag), regular, "text");
+		g_signal_connect(GTK_EDITABLE(regular), "activate",
+			G_CALLBACK(editable_sets_leaf), cell_cache
+		);
 
-	g_object_unref(entry_buffer);
+		// enums
+		GtkWidget* const enumdropdown = construct_enum_dropdown(
+			G_OBJECT(widget_bag), entry_buffer, cell_cache
+		);
+		gtk_stack_add_named(GTK_STACK(widget_bag), enumdropdown, "enum");
+
+		g_object_unref(entry_buffer);
+	}
+
+	*cell_cache = column_cell;
+	gtk_column_view_cell_set_child(column_cell, widget_bag);
+	g_object_unref(widget_bag);
 }
+static void
+leaves_val_column_teardown(
+		struct widget_cache* const cache, // swapped-signal:: with factory
+		GtkColumnViewCell* const column_cell
+		) {
+	GtkWidget* const widget_bag = gtk_column_view_cell_get_child(column_cell);
+	widget_cache_push(cache, widget_bag);
+}
+
 static void
 leaves_val_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
@@ -433,22 +536,19 @@ leaves_val_column_bind(
 		GtkWidget* editable;
 		if (type->has_enum) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
-			GtkWidget* const enumbox = gtk_stack_get_visible_child(widget_bag);
-			GtkColumnView* const enum_list = GTK_COLUMN_VIEW(
-				gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(
-					gtk_popover_get_child(
-						gtk_menu_button_get_popover(GTK_MENU_BUTTON(
-							gtk_widget_get_first_child(enumbox)
-						))
-					)
-				))
+			// technically possible to get the list through other methods
+			GtkColumnView* const enum_list = g_object_get_data(
+				G_OBJECT(widget_bag), "enum_list"
 			);
 			GtkSelectionModel* const enum_model = (
 				gatui_leaf_get_enum_menu_selection_model(g_leaf)
 			);
 
 			gtk_column_view_set_model(enum_list, enum_model);
-			editable = gtk_widget_get_last_child(enumbox);
+			// technically possible to get the editable through other methods
+			editable = g_object_get_data(
+				G_OBJECT(widget_bag), "enum_editable"
+			);
 		} else {
 			gtk_stack_set_visible_child_name(widget_bag, "text");
 			editable = gtk_stack_get_visible_child(widget_bag);
@@ -539,8 +639,16 @@ create_leaves_pane(
 	g_object_unref(column);
 
 
-	factory = g_object_connect(gtk_signal_list_item_factory_new(),
-		"swapped-signal::setup", G_CALLBACK(leaves_val_column_setup), NULL,
+	factory = gtk_signal_list_item_factory_new();
+	// see leaves_val_column_setup for more info.
+	// queue could technically be allocated on commons.
+	struct widget_cache* const cache = widget_cache_new();
+	g_object_set_data_full(G_OBJECT(factory),
+		"widget_cache", cache, (GDestroyNotify) widget_cache_destroy
+	);
+	g_object_connect(factory,
+		"swapped-signal::setup", G_CALLBACK(leaves_val_column_setup), cache,
+		"swapped-signal::teardown",G_CALLBACK(leaves_val_column_teardown),cache,
 		"swapped-signal::bind", G_CALLBACK(leaves_val_column_bind), NULL,
 		"swapped-signal::unbind", G_CALLBACK(leaves_val_column_unbind), NULL,
 		NULL

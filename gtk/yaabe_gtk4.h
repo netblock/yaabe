@@ -11,9 +11,5 @@ free_closure(
 		gpointer data,
 		GClosure* closure
 		);
-void
-free_notify(
-		gpointer data
-		);
 
 #endif
