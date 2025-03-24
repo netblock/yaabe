@@ -49,6 +49,7 @@ struct level_data {
 	uint16_t name_num;
 };
 
+
 static void
 atui_leaves_printer(
 		struct global_tracker* global,
@@ -73,6 +74,14 @@ print_atui_nofancy_leaf(
 		leaf->val = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
+}
+inline static void
+print_atui_noprint(
+		struct global_tracker* const global __unused,
+		struct level_data* const level __unused
+		) {
+	assert(0);
+	unreachable();
 }
 
 
@@ -202,6 +211,45 @@ print_atui_shoot_leaf(
 	// handle branch->parent later
 }
 inline static void
+print_atui_petiole_leaf(
+		struct global_tracker* const global,
+		struct level_data* const level
+		) {
+	atui_leaf const* const leaf_src = level->feed.pos;
+	atui_branch** const brancher = global->branches.pos;
+	global->branches.pos++;
+
+	atuiargs branch_args = {};
+	if (level->bios) {
+		branch_args.bios = level->bios;
+	} else {
+		branch_args.bios = leaf_src->val;
+	}
+	*brancher = atui_branch_allocator(leaf_src->template_branch, &branch_args);
+	atui_branch* const branch = *brancher;
+	// handle branch->parent later
+
+	if (branch->leaf_count) { // calculate bytes
+		// feed the loop
+		atui_leaf const* const leaves = branch->leaves;
+		bool is_contiguous;
+		void const* val_end = leaves[0].val;
+		uint16_t i=0;
+		do {
+			is_contiguous = (
+				(leaves[i].val == val_end)
+				&& (leaves[i].num_bytes)
+			);
+			val_end = leaves[i].val + leaves[i].num_bytes;
+		} while ((i < branch->leaf_count) && is_contiguous);
+		if (is_contiguous) {
+			branch->prefer_contiguous = true;
+			branch->table_start = (void*) leaves[0].val;
+			branch->table_size = val_end - leaves[0].val;
+		}
+	}
+}
+inline static void
 print_atui_dynarray_leaf(
 		struct global_tracker* const global,
 		struct level_data* const level
@@ -309,7 +357,8 @@ print_atui_dynarray_leaf(
 	}
 }
 
-static void
+
+void
 (* const print_fancy[]) (
 		struct global_tracker* global,
 		struct level_data* level
@@ -320,6 +369,7 @@ static void
 	[ATUI_ARRAY] = print_atui_nofancy_leaf,
 	[ATUI_GRAFT] = print_atui_graft_leaf,
 	[ATUI_SHOOT] = print_atui_shoot_leaf,
+	[ATUI_PETIOLE] = print_atui_petiole_leaf,
 	[ATUI_DYNARRAY] = print_atui_dynarray_leaf,
 	[_ATUI_BITCHILD] = print_atui_nofancy_leaf,
 };

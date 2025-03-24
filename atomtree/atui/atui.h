@@ -71,9 +71,12 @@ enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_ARRAY    = 3, // staticall-sized array and strings
 	ATUI_GRAFT    = 4, // Pull in leaves from other tables
 	ATUI_SHOOT    = 5, // hard-attach a child branch
-	ATUI_DYNARRAY = 6, // For runtime array lengths
+	ATUI_PETIOLE  = 6, // ejects off given leaves into a branch
+	ATUI_DYNARRAY = 7, // For runtime array lengths
 
-	_ATUI_BITCHILD = 7, // Internally set. If it's a bitfield child.
+
+	_ATUI_BITCHILD = 8, // Internally set. If it's a bitfield child.
+
 
 	ATUI_NUM_FANCY
 };
@@ -155,6 +158,7 @@ struct _atui_leaf {
 	union {
 		atuifunc branch_bud;
 		struct subleaf_meta const* template_leaves;
+		struct atui_branch_data const* template_branch;
 	};
 };
 struct _atui_branch {

@@ -40,13 +40,12 @@ struct subleaf_meta {
 struct atui_branch_data {
 	atui_branch seed;
 
-	// does not include kids
-	atui_leaf const* leaves_init;
-	uint16_t num_leaves_init;
-
-	uint32_t computed_num_leaves;
+	uint32_t computed_num_leaves; // the "computed" is the final amount of X
 	uint32_t computed_num_graft;
 	uint32_t computed_num_shoot;
+
+	uint16_t num_leaves_init;
+	atui_leaf const* leaves_init;
 };
 
 atui_branch*

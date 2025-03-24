@@ -114,7 +114,7 @@ declaration pseudo example:
 		}, {
 			access: "bios->bios_subtable",
 			name: "subtable",
-			display: "ATUI_NAN",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "bios_subtable_v1",
 			description: [
 				{language: "english", text "..."},
@@ -261,7 +261,7 @@ If the element should embed a `atui_branch` to take/graft their leaves,
 {
 	access: "bios->bios_element",
 	name: "bios element",
-	display: "ATUI_NAN",
+	display: "ATUI_DISPLAY",
 	description: [
 		{language: "english", text "..."},
 	],
@@ -285,11 +285,11 @@ Working much the same way as `ATUI_GRAFT`, if the element should reference a
 {
 	access: "bios->bios_element",
 	name: "bios element",
-	display: "ATUI_HEX",
+	display: "ATUI_DISPLAY",
 	description: [
 		{language: "english", text "..."},
 	],
-	fancy: "ATUI_SHOOT", fancy_data: "table_to_inline"
+	fancy: "ATUI_SHOOT", fancy_data: "table_to_install"
 },
 ```
 
@@ -298,6 +298,39 @@ and the leaf won't exist in the instantiation.
 
 The name of the branch object will copy the UI display name of the leaf.
 
+<br>
+
+#### ATUI\_PETIOLE
+
+`ATUI_PETIOLE` takes an array of leaves and pushes them off into a child branch.
+
+If `ATUI_PETIOLE` is given one total leaf of 
+`ATUI_BITFIELD`, `ATUI_GRAFT`, `ATUI_SHOOT`, or a `ATUI_DYNARRAY` containing one
+pattern leaf of the aforementioned, then `ATUI_PETIOLE`'s branch will copy the
+name of the struct.
+
+If `ATUI_PETIOLE` leaves are contiguous in memory, the branch will represent it.
+
+``` json5
+{
+	name: "branch name",
+	display: "ATUI_DISPLAY"
+	fancy: "ATUI_SHOOT", fancy_data: [{
+		access: "bios->bios_element",
+		name: "bios element",
+		display: "ATUI_DISPLAY",
+		description: [
+			{language: "english", text "..."},
+		],
+		fancy: "ATUI_SHOOT", fancy_data: "table_to_install"
+	},].
+},
+```
+`ATUI_DYNSHOOT` is just like `ATUI_DYNARRAY` but will shoot off itself to be a
+leaf of a child branch.
+
+There is one additional `fancy_data` entry: `expanded`, which will determine the
+default expand state for the generated branch.
 <br>
 
 #### ATUI\_STRING / ATUI\_ARRAY
@@ -337,7 +370,7 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 {
 	access: "bios->array_start_pointer",
 	name: "bios tables",
-	display: "ATUI_NAN",
+	display: "ATUI_DISPLAY",
 	description: [
 		{language: "english", text "..."},
 	],
