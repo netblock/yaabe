@@ -241,6 +241,7 @@ print_atui_petiole_leaf(
 				&& (leaves[i].num_bytes)
 			);
 			val_end = leaves[i].val + leaves[i].num_bytes;
+			i++;
 		} while ((i < branch->leaf_count) && is_contiguous);
 		if (is_contiguous) {
 			branch->prefer_contiguous = true;
