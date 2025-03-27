@@ -54,16 +54,6 @@ struct atui_enum {
 	uint16_t const name_length;
 };
 
-enum atui_type_radix:uint8_t {
-	ATUI_NAN = 0x0, // Not a number
-	ATUI_DEC = 0x1,
-	ATUI_HEX = 0x2,
-	ATUI_OCT = 0x3,
-	ATUI_BIN = 0x4,
-
-	ATUI_NUM_RADIX,
-	ATUI_ANY = 0x7, // Mask
-};
 enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_NOFANCY  = 0, // Nothing fancy to the leaf
 	ATUI_BITFIELD = 1, // Is a bitfield parent
@@ -80,6 +70,16 @@ enum atui_type_fancy:uint8_t { // ppatui.py has a copy
 
 	ATUI_NUM_FANCY
 };
+enum atui_type_radix:uint8_t {
+	ATUI_NAN = 0x0, // Not a number
+	ATUI_DEC = 0x1,
+	ATUI_HEX = 0x2,
+	ATUI_OCT = 0x3,
+	ATUI_BIN = 0x4,
+
+	ATUI_NUM_RADIX,
+	ATUI_ANY = 0x7, // Mask
+};
 enum atui_type_disable:uint8_t {
 	ATUI_DISPLAY   = 0, // show everything
 	ATUI_SUBONLY   = 1, // show only the children
@@ -88,8 +88,8 @@ enum atui_type_disable:uint8_t {
 	ATUI_NUM_DISPLAY
 };
 struct atui_type {
-	enum atui_type_radix   radix;
 	enum atui_type_fancy   fancy;
+	enum atui_type_radix   radix;
 	enum atui_type_disable disable; // enum atui_type_disable
 	bool signed_num; // Usually internally-set.
 	bool fraction;   // Internally-set. Both Q and float.
