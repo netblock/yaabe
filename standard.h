@@ -84,10 +84,11 @@ static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
 #define __unused __attribute__((unused))
 #define __nonstring __attribute__((nonstring))
 
+#undef __counted_by // TODO remove for GCC 15
 #if __has_attribute(counted_by)
-# define __counted_by(member) __attribute__((counted_by__(member)))
+	#define __counted_by(member) __attribute__((counted_by__(member)))
 #else
-# define __counted_by(member)
+	#define __counted_by(member)
 #endif
 
 
