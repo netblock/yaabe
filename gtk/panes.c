@@ -515,6 +515,12 @@ leaves_val_column_teardown(
 		GtkColumnViewCell* const column_cell
 		) {
 	GtkWidget* const widget_bag = gtk_column_view_cell_get_child(column_cell);
+	/* shouldn't be necessary because we can set before parenting
+	GtkColumnViewCell** const cell_cache = g_object_get_data(
+		G_OBJECT(widget_bag), "cell_cache"
+	);
+	*cell_cache = NULL;
+	*/
 	widget_cache_push(cache, widget_bag);
 }
 
@@ -569,6 +575,13 @@ leaves_val_column_unbind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
+	gtk_column_view_set_model(
+		g_object_get_data(
+			G_OBJECT(gtk_column_view_cell_get_child(column_cell)),
+			"enum_list"
+		),
+		NULL
+	);
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);

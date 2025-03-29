@@ -449,6 +449,7 @@ gatui_leaf_enum_val_to_text(
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	assert(self->atui->type.has_enum);
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
 	size_t alloc_size = get_sprintf_format_from_leaf(format, self->atui);
