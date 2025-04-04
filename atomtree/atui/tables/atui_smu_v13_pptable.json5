@@ -2667,7 +2667,7 @@ global_default: {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "dpm_debug_override_smu13",
+			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu13",
 		}, {
 			access: "bios->TotalBoardPowerSupport",
 			name: "TotalBoardPowerSupport",

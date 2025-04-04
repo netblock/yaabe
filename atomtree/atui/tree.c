@@ -3369,9 +3369,12 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 		sw_datatable25, sw_datatable26, sw_datatable29, sw_datatable33,
 		sw_datatable34,
 	};
-	return ATUI_MAKE_BRANCH(atui_nullstruct,  "sw_datatables",
+	atui_branch* const tables = ATUI_MAKE_BRANCH(atui_nullstruct,
+		"sw_datatables",
 		NULL,NULL,  lengthof(atui_sw_datatables), atui_sw_datatables
 	);
+	tables->expanded = false;
+	return tables;
 }
 inline static atui_branch*
 grow_master_datatable_v2_1(

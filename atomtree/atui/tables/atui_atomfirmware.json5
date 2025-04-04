@@ -334,6 +334,24 @@ global_default: {
 		],},
 	},],
 }, {
+	c_prefix: "union", c_type: "vr_mapping",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->vr_mapping",
+		name: "vr_mapping",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "vr_select",
+			}, {
+				access: "plane_select",
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
 	c_prefix: "union", c_type: "led_display_control",
 	table_size: "sizeof(*bios)",
 	leaves: [{
@@ -349,6 +367,7 @@ global_default: {
 				access: "ERROR",
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -443,6 +462,7 @@ global_default: {
 		}, {
 			access: "bios->padding_telemetrygfx",
 			name: "padding_telemetrygfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->socmaxcurrent",
 			name: "socmaxcurrent",
@@ -835,6 +855,7 @@ global_default: {
 		}, {
 			access: "bios->padding",
 			name: "padding",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -1143,6 +1164,7 @@ global_default: {
 		}, {
 			access: "bios->Padding8_V",
 			name: "Padding8_V",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Telemetry Settings",},
 			],
@@ -1161,6 +1183,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
@@ -1176,6 +1199,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
@@ -1191,6 +1215,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
@@ -1206,6 +1231,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "GPIO Settings",},
 			],
@@ -1278,6 +1304,7 @@ global_default: {
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->PllGfxclkSpreadEnabled",
 			name: "PllGfxclkSpreadEnabled",
@@ -1359,6 +1386,7 @@ global_default: {
 		}, {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Mvdd Svi2 Div Ratio Setting",},
 			],
@@ -1464,6 +1492,7 @@ global_default: {
 		}, {
 			access: "bios->padding_telemetrygfx",
 			name: "padding_telemetrygfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->socmaxcurrent",
 			name: "socmaxcurrent",
@@ -1479,6 +1508,7 @@ global_default: {
 		}, {
 			access: "bios->padding_telemetrysoc",
 			name: "padding_telemetrysoc",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->memmaxcurrent",
 			name: "memmaxcurrent",
@@ -1494,6 +1524,7 @@ global_default: {
 		}, {
 			access: "bios->padding_telemetrymem",
 			name: "padding_telemetrymem",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->boardmaxcurrent",
 			name: "boardmaxcurrent",
@@ -1509,6 +1540,7 @@ global_default: {
 		}, {
 			access: "bios->padding_telemetryboardinput",
 			name: "padding_telemetryboardinput",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "gpio settings",},
 			],
@@ -1639,6 +1671,7 @@ global_default: {
 		}, {
 			access: "bios->boardpadding",
 			name: "boardpadding",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "section: xgmi training",},
 			],
@@ -1771,6 +1804,7 @@ global_default: {
 		}, {
 			access: "bios->Padding8_V",
 			name: "Padding8_V",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Telemetry Settings",},
 			],
@@ -1789,6 +1823,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
@@ -1804,6 +1839,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
@@ -1819,6 +1855,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
@@ -1834,6 +1871,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "GPIO Settings",},
 			],
@@ -1906,6 +1944,7 @@ global_default: {
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "GFXCLK PLL Spread Spectrum",},
 			],
@@ -1978,6 +2017,7 @@ global_default: {
 		}, {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Mvdd Svi2 Div Ratio Setting",},
 			],
@@ -2002,6 +2042,7 @@ global_default: {
 		}, {
 			access: "bios->GpioPadding",
 			name: "GpioPadding",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Additional LED Display Settings",},
 			],
@@ -2041,9 +2082,11 @@ global_default: {
 		}, {
 			access: "bios->Padding8_Psi1",
 			name: "Padding8_Psi1",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Padding8_Psi2",
 			name: "Padding8_Psi2",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->BoardReserved",
 			name: "BoardReserved",
@@ -2182,6 +2225,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
@@ -2197,6 +2241,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
@@ -2212,6 +2257,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
@@ -2227,6 +2273,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
@@ -2497,6 +2544,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
@@ -2512,6 +2560,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->MemMaxCurrent",
 			name: "MemMaxCurrent",
@@ -2527,6 +2576,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryMem",
 			name: "Padding_TelemetryMem",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->BoardMaxCurrent",
 			name: "BoardMaxCurrent",
@@ -2542,6 +2592,7 @@ global_default: {
 		}, {
 			access: "bios->Padding_TelemetryBoardInput",
 			name: "Padding_TelemetryBoardInput",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "Platform input telemetry voltage coefficient",},
 			],
@@ -2667,6 +2718,7 @@ global_default: {
 				access: "GPU_VIRTUALIZATION",
 			}, {
 				access: "reserved0",
+				display: "ATUI_HEX",
 			}, {
 				access: "WMI_SUPPORT",
 			}, {
@@ -2679,14 +2731,17 @@ global_default: {
 				access: "ENABLE_2STAGE_BIST_TRAINING",
 			}, {
 				access: "reserved1",
+				display: "ATUI_HEX",
 			}, {
 				access: "ENABLE_2ND_USB20PORT",
 			}, {
 				access: "reserved2",
+				display: "ATUI_HEX",
 			}, {
 				access: "DYNAMIC_BOOT_CFG_ENABLE",
 			}, {
 				access: "reserved3",
+			ndisplay: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -3647,6 +3702,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -3996,6 +4052,7 @@ global_default: {
 		}, {
 			access: "bios->reserved_clk",
 			name: "reserved_clk",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->fclk_syspll_refclk_10khz",
 			name: "fclk_syspll_refclk_10khz",
@@ -4330,6 +4387,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->driver_region0_start_address_in_kb",
 			name: "driver_region0_start_address_in_kb",
@@ -4431,6 +4489,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -4480,6 +4539,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -4614,6 +4674,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -4639,15 +4700,18 @@ global_default: {
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "only on USBC case, otherwise always = 0",},
 			],
 		}, {
 			access: "bios->reserved2",
 			name: "reserved2",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->reserved3",
 			name: "reserved3",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",},
 			],
@@ -4660,6 +4724,7 @@ global_default: {
 		}, {
 			access: "bios->reserved4",
 			name: "reserved4",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -4681,6 +4746,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		/*  manually walk to attach subtables
 		}, {
 			access: "bios->display_path",
@@ -4904,6 +4970,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->max_cu_per_sh",
 			name: "max_cu_per_sh",
@@ -5018,6 +5085,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->max_cu_per_sh",
 			name: "max_cu_per_sh",
@@ -5151,6 +5219,7 @@ global_default: {
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->max_cu_per_sh",
 			name: "max_cu_per_sh",
@@ -5344,6 +5413,7 @@ global_default: {
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->sram_rm_fuses_val",
 			name: "sram_rm_fuses_val",
@@ -5915,6 +5985,7 @@ global_default: {
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "reserved",},
 			],

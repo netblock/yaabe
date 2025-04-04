@@ -1862,6 +1862,14 @@ union psi_sel_mask { // from *driver_if*.h
 		VR1_PLANE1_PSI1 :7-7 +1;
 	};
 };
+union vr_mapping { // from *driver_if*.h
+	uint8_t vr_mapping;
+	struct { uint8_t
+		vr_select    :0-0 +1,
+		plane_select :1-1 +1,
+		reserved     :7-2 +1;
+	};
+};
 
 union led_display_control { // from *driver_if*.h
 	uint8_t  LedEnableMask;

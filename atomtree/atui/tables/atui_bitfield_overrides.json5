@@ -35,18 +35,22 @@ global_default: {
 				access: "tCL",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRAS",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRCDRD",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRCDWR",
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -70,10 +74,12 @@ global_default: {
 				access: "tRP_S",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRP_L",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -87,10 +93,12 @@ global_default: {
 				access: "tRRD_S",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRRD_L",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 				description: [
 					{language: "english", text: "3+5+3, middle 5 has tRRDDLR for 3D stacked memory.",},
 				],
@@ -98,6 +106,7 @@ global_default: {
 				access: "tRTP",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -111,10 +120,12 @@ global_default: {
 				access: "tFAW",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "t32AW",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 				description: [
 					{language: "english", text: "1, tFAWSLR:6, 1, tFAWDLR:6, 1",},
 				],
@@ -131,14 +142,17 @@ global_default: {
 				access: "tWL",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWTRS",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWTRL",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -152,6 +166,7 @@ global_default: {
 				access: "tWR",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -165,14 +180,17 @@ global_default: {
 				access: "PPD",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tCRCRL",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRREFD",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tCRCWL",
 			}, {
@@ -196,6 +214,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRDRD_SD",
 				description: [
@@ -203,6 +222,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRDRD_SC",
 				description: [
@@ -210,6 +230,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRDRD_SCL",
 				description: [
@@ -217,6 +238,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRDRD_BAN",
 				description: [
@@ -238,6 +260,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_SD",
 				description: [
@@ -245,6 +268,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_SC",
 				description: [
@@ -252,6 +276,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_SCL",
 				description: [
@@ -259,6 +284,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_BAN",
 				description: [
@@ -280,10 +306,12 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_SC",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRWR_SCL",
 			}, {
@@ -305,10 +333,12 @@ global_default: {
 				access: "tWRRD",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRDWR",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "RDRspDelay",
 			}, {
@@ -318,6 +348,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -334,6 +365,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -347,10 +379,12 @@ global_default: {
 				access: "tMRD",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tMOD",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -367,6 +401,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -383,6 +418,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tDLLK",
 				description: [
@@ -390,6 +426,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -410,6 +447,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "AlertParDly",
 				description: [
@@ -422,6 +460,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "RankBusyDly",
 				description: [
@@ -429,6 +468,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -442,6 +482,7 @@ global_default: {
 				access: "tXSMRS",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -469,6 +510,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -496,6 +538,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -509,6 +552,7 @@ global_default: {
 				access: "tRFCSB",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tSTAG",
 				description: [
@@ -516,6 +560,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -529,6 +574,7 @@ global_default: {
 				access: "tRFCSB",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tSTAG",
 				description: [
@@ -536,6 +582,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -549,14 +596,17 @@ global_default: {
 				access: "tXP",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tCPDED",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tCKE",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -568,6 +618,7 @@ global_default: {
 		fancy_data: { fields: [
 			{
 				access: "rsvd0_0",
+				display: "ATUI_HEX",
 				description: [
 					{language: "english", text: "makes n=3,3",},
 				],
@@ -578,6 +629,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_WRLAT",
 				description: [
@@ -585,6 +637,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_RDLAT",
 				description: [
@@ -592,6 +645,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_WRDATA",
 				description: [
@@ -599,6 +653,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPARIN_LAT",
 				description: [
@@ -606,6 +661,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd4",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -622,6 +678,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_WRLAT",
 				description: [
@@ -629,6 +686,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_RDLAT",
 				description: [
@@ -636,6 +694,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPHY_WRDATA",
 				description: [
@@ -643,6 +702,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			}, {
 				access: "tPARIN_LAT",
 				description: [
@@ -650,6 +710,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd4",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -666,6 +727,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "LpExitDly",
 				description: [
@@ -673,10 +735,12 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "CKESTAGDLY",
 			}, {
 				access: "rsvd3",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -692,10 +756,12 @@ global_default: {
 				access: "tRDEDC_EN",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWREDC_EN",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -721,10 +787,12 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tWRMPR",
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -770,6 +838,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -783,6 +852,7 @@ global_default: {
 				access: "tRFC",
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -814,6 +884,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "TXDataChanDly",
 				description: [
@@ -821,6 +892,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd1",
+				display: "ATUI_HEX",
 			}, {
 				access: "RXDataChanDly",
 				description: [
@@ -828,6 +900,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -853,6 +926,7 @@ global_default: {
 				access: "trfc",
 			}, {
 				access: "rsvd2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -876,6 +950,7 @@ global_default: {
 				access: "t32aw",
 			}, {
 				access: "_rsvd02",
+				display: "ATUI_HEX",
 			}, {
 				access: "twdatatr",
 			},
@@ -897,6 +972,7 @@ global_default: {
 				access: "csb",
 			}, {
 				access: "_rsvd00",
+				display: "ATUI_HEX",
 			}, {
 				access: "chan0",
 			}, {
@@ -911,6 +987,7 @@ global_default: {
 				access: "adr_msb0",
 			}, {
 				access: "_rsvd02",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -934,6 +1011,7 @@ global_default: {
 				access: "tcl",
 			}, {
 				access: "_rsvd01",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -1009,6 +1087,7 @@ global_default: {
 				access: "load_d_rd_str",
 			}, {
 				access: "_rsvd01",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -1045,6 +1124,7 @@ global_default: {
 		fancy_data: { fields: [
 			{
 				access: "_rsvd0",
+				display: "ATUI_HEX",
 			}, {
 				access: "tRFC",
 				description: [
@@ -1057,6 +1137,7 @@ global_default: {
 				],
 			}, {
 				access: "_rsvd1",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],

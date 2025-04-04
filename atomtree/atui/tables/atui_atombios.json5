@@ -630,6 +630,7 @@ global_default: {
 				access: "SCL2Redefined",
 			}, {
 				access: "Reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -1625,6 +1626,7 @@ global_default: {
 				],
 			}, {
 				access: "Reserved",
+				display: "ATUI_HEX",
 				description: [
 					{language: "english", text: "Reserved",},
 				],
@@ -1841,6 +1843,7 @@ global_default: {
 		}, {
 			access: "bios->Reserved9",
 			name: "Reserved9",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->BootUpMVDDCVoltage",
 			name: "BootUpMVDDCVoltage",
@@ -1924,6 +1927,7 @@ global_default: {
 				access: "RGB888",
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -2215,6 +2219,7 @@ global_default: {
 				],
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			}, {
 				access: "color_depth",
 				description: [
@@ -2525,6 +2530,7 @@ global_default: {
 				access: "panel_off",
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -2916,6 +2922,7 @@ global_default: {
 				access: "DFP5_SUPPORT",
 			}, {
 				access: "reserved_F_C",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -3309,6 +3316,7 @@ global_default: {
 				access: "internal_backlight_checked",
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -3671,6 +3679,7 @@ global_default: {
 		}, {
 			access: "bios->Padding",
 			name: "Padding",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -3709,6 +3718,7 @@ global_default: {
 		{
 			access: "bios->Reserved",
 			name: "Reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -3833,6 +3843,7 @@ global_default: {
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
+			display: "ATUI_HEX",
 		},
 	],
 }, {
@@ -4416,6 +4427,7 @@ global_default: {
 				access: "PSI0_VID",
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -4673,6 +4685,7 @@ global_default: {
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->SclkFcwRangeEntry",
 			name: "SclkFcwRangeEntry",
@@ -4832,28 +4845,6 @@ global_default: {
 		},
 	],
 }, {
-	c_type: "reg_index_dummy",
-	atomtree: "atomtree_init_reg_block",
-	table_start: "atomtree->register_index",
-	table_size: "atomtree->index_table_size",
-	leaves: [
-		{
-			access: "atomtree->register_index",
-			name: "RegIndexBuf",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "atomtree->num_index",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "RegIndexBuf [%02u]",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "atom_init_reg_index_format",
-				},],
-			},
-		},
-	],
-}, {
 	c_type: "reg_settings_dummy",
 	atomtree: "atomtree_init_reg_block",
 	table_start: "atomtree->data_blocks[0]",
@@ -4886,10 +4877,25 @@ global_default: {
 		}, {
 			access: "bios->RegDataBlkSize",
 			name: "RegDataBlkSize",
-		}, {  // data for RegIndexBuf and RegDataBuf is through atomtree
+		}, { // data for RegIndexBuf and RegDataBuf is through atomtree
 			name: "RegIndexBuf",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "reg_index_dummy",
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "atomtree->register_index",
+				name: "RegIndexBuf",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "atomtree->num_index",
+					enum: "ATUI_NULL",
+					pattern: [{
+						name: "RegIndexBuf [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_GRAFT",
+						fancy_data: "atom_init_reg_index_format",
+					},],
+				},
+			},],
 		}, {
 			name: "RegDataBuf",
 			display: "ATUI_DISPLAY",
@@ -4933,6 +4939,7 @@ global_default: {
 				],
 			}, {
 				access: "reserved",
+				display: "ATUI_HEX",
 			}, {
 				access: "battery_odt_mask",
 			},
@@ -4973,10 +4980,12 @@ global_default: {
 				],
 			}, {
 				access: "reserved1",
+				display: "ATUI_HEX",
 			}, {
 				access: "dual_cs",
 			}, {
 				access: "reserved2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -5019,6 +5028,7 @@ global_default: {
 				],
 			}, {
 				access: "rsvd0",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],
@@ -6779,12 +6789,14 @@ global_default: {
 		}, {
 			access: "bios->Reserved1",
 			name: "Reserved1",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "must set to 0",},
 			],
 		}, {
 			access: "bios->Reserved2",
 			name: "Reserved2",
+			display: "ATUI_HEX",
 			description: [
 				{language: "english", text: "must set to 0",},
 			],
@@ -6920,6 +6932,7 @@ global_default: {
 				access: "overdrive",
 			}, {
 				access: "rsvd_7_2",
+				display: "ATUI_HEX",
 			},
 		],},
 	},],

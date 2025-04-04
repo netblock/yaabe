@@ -7580,9 +7580,6 @@ struct atom_init_reg_index_format {
 	uint16_t RegIndex;         // MC register index
 	uint8_t  PreRegDataLength; // offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf
 };
-struct reg_index_dummy {
-	struct atom_init_reg_index_format  RegIndexBuf[1];
-};
 struct reg_settings_dummy { // dummy table for ATUI
 	struct atom_reg_setting_data_block  RegDataBuf[1];
 };
@@ -7590,7 +7587,7 @@ struct atom_init_reg_block {  // like atom_umc_init_reg_block
 	uint16_t RegIndexTblSize; // size of RegIndexBuf
 	uint16_t RegDataBlkSize;  // size of each atom_memory_setting_data_block for RegDataBuf
 	struct atom_init_reg_index_format  RegIndexBuf[1];
-	struct atom_reg_setting_data_block  RegDataBuf[1];
+	struct atom_reg_setting_data_block RegDataBuf[1];
 };
 //#define VBIOS_MC_REGISTER_ARRAY_SIZE 32 // max
 //#define VBIOS_MAX_AC_TIMING_ENTRIES  20 // max
