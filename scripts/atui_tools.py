@@ -43,15 +43,17 @@ class __regexvar:
 	array_countedby_var:str = "(__counted_by\\(([\\w\\.]*)\\))" +white_0
 	array_countedby_whole_q:str = "(__counted_by\\([\\w\\.]*\\))?" +white_0
 	nonstring_nc:str = "(?:__nonstring)?" +white_0
+	c_enum_nc:str = "(?:enum)"
+	c_enum:str = "("+c_enum_nc+")" + white_1
 
-	struct_or_cnumtype:str = "("  \
+	struct_num_enum_type:str = "("  \
 		+ "(?:" + c_prefix_nc + white_1 + name_nc + ")"  \
 		+ "|(?:" + c_num_types_nc + ")"  \
+		+ "|(?:" + c_enum_nc + white_1 + name_nc + ")"  \
 	+ ")" + white_1
 
 	hi_lo:str = ":" + nums + "-" + nums + " \\+1[,;]"
 
-	c_enum:str = "(enum)" + white_1
 	c_enum_equals:str = "=" + white_1 + "(\\S+),?" + spacetab
 
 	comments:str = "(?:" + white_0 + "(//\\s*(.*)))?"
@@ -114,7 +116,7 @@ def struct_to_atui(
 		},\
 """
 	text = re.sub(
-		"\\s*" + s.struct_or_cnumtype + s.name + s.array_vlaflex
+		"\\s*" + s.struct_num_enum_type + s.name + s.array_vlaflex
 		+ s.array_countedby_whole_q + ";" + s.comments,
 		dynarray,
 		text
