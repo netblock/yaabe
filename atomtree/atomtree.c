@@ -3425,7 +3425,9 @@ void
 atomtree_calculate_checksums(
 		struct atom_tree* const atree
 		) {
-	pspdirectory_checksum(&(atree->psp_directory));
+	if (atree->psp_directory.directory) {
+		pspdirectory_checksum(&(atree->psp_directory));
+	}
 	atombios_checksum(atree);
 }
 
