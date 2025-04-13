@@ -2220,7 +2220,14 @@ populate_voltageobject_info_v1_1(
 		vobj.raw += vobj.vobj->volt_obj_v1.Size;
 		vo_info->num_voltage_objects++;
 	}
-	assert(vobj.raw == end);
+
+	error_assert(&(commons->error), ERROR_WARNING,
+		"voltageobject_info_v1_1 buggy table sizes",
+		vobj.raw == end
+	);
+	if (vobj.raw != end) {
+		vo_info->num_voltage_objects--;
+	}
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2230,8 +2237,7 @@ populate_voltageobject_info_v1_1(
 		vo_info->voltage_objects = voltage_objects;
 
 		vobj.raw = vo_info->v1_1->VoltageObj;
-		uint16_t i = 0;
-		while (vobj.raw < end) {
+		for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 			voltage_objects[i].obj = vobj.vobj;
 			voltage_objects[i].ver = SET_VER(1,0);
 			// NumOfVoltageEntries lies and can be 255.
@@ -2245,7 +2251,6 @@ populate_voltageobject_info_v1_1(
 				) / sizeof(uint8_t)
 			);
 			vobj.raw += vobj.vobj->volt_obj_v1.Size;
-			i++;
 		}
 	}
 }
@@ -2271,7 +2276,14 @@ populate_voltageobject_info_v1_2(
 		vobj.raw += vobj.vobj->volt_obj_v2.Size;
 		vo_info->num_voltage_objects++;
 	}
-	assert(vobj.raw == end);
+
+	error_assert(&(commons->error), ERROR_WARNING,
+		"voltageobject_info_v1_2 buggy table sizes",
+		vobj.raw == end
+	);
+	if (vobj.raw != end) {
+		vo_info->num_voltage_objects--;
+	}
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2281,8 +2293,7 @@ populate_voltageobject_info_v1_2(
 		vo_info->voltage_objects = voltage_objects;
 
 		vobj.raw = vo_info->v1_2->VoltageObj;
-		uint16_t i = 0;
-		while (vobj.raw < end) {
+		for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 			voltage_objects[i].obj = vobj.vobj;
 			voltage_objects[i].ver = SET_VER(2,0);
 			// NumOfVoltageEntries lies and can be 255.
@@ -2296,7 +2307,6 @@ populate_voltageobject_info_v1_2(
 				) / sizeof(struct voltage_lut_entry)
 			);
 			vobj.raw += vobj.vobj->volt_obj_v2.Size;
-			i++;
 		}
 	}
 }
@@ -2322,7 +2332,14 @@ populate_voltageobject_info_v3_1(
 		vobj.raw += vobj.vobj->header.object_size;
 		vo_info->num_voltage_objects++;
 	}
-	assert(vobj.raw == end);
+
+	error_assert(&(commons->error), ERROR_WARNING,
+		"voltageobject_info_v3_1 buggy table sizes",
+		vobj.raw == end
+	);
+	if (vobj.raw != end) {
+		vo_info->num_voltage_objects--;
+	}
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2332,8 +2349,7 @@ populate_voltageobject_info_v3_1(
 		vo_info->voltage_objects = voltage_objects;
 
 		vobj.raw = vo_info->v3_1->voltage_object;
-		uint16_t i = 0;
-		while (vobj.raw < end) {
+		for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 			voltage_objects[i].obj = vobj.vobj;
 			voltage_objects[i].ver = SET_VER(1,0); // all v3_1 have v1_0 objects
 			switch (vobj.vobj->header.voltage_mode) {
@@ -2400,7 +2416,6 @@ populate_voltageobject_info_v3_1(
 			}
 
 			vobj.raw += vobj.vobj->header.object_size;
-			i++;
 		}
 	}
 }
@@ -2427,7 +2442,14 @@ populate_voltageobject_info_v4_1(
 		vobj.raw += vobj.vobj->header.object_size;
 		vo_info->num_voltage_objects++;
 	}
-	assert(vobj.raw == end);
+
+	error_assert(&(commons->error), ERROR_WARNING,
+		"voltageobject_info_v4_1 buggy table sizes",
+		vobj.raw == end
+	);
+	if (vobj.raw != end) { // buggy V620
+		vo_info->num_voltage_objects--;
+	}
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2437,9 +2459,7 @@ populate_voltageobject_info_v4_1(
 		vo_info->voltage_objects = voltage_objects;
 
 		vobj.raw = vo_info->v4_1->voltage_object;
-		uint16_t i = 0;
-
-		while (vobj.raw < end) {
+		for (uint16_t i=0; i < vo_info->num_voltage_objects; i++) {
 			voltage_objects[i].obj = vobj.vobj;
 			// nearly all v4_1 have v1_0 objects
 			voltage_objects[i].ver = SET_VER(1,0);
@@ -2475,7 +2495,6 @@ populate_voltageobject_info_v4_1(
 			}
 
 			vobj.raw += vobj.vobj->header.object_size;
-			i++;
 		}
 	}
 }
