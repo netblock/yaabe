@@ -10,6 +10,38 @@
 static struct error error = {}; // error handling
 
 void
+gatui_leaf_test_get_set_memory(
+		GATUILeaf* const leaf
+		) {
+	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
+	bool success;
+	GVariant* val; 
+	if (atui->num_bytes || _ATUI_BITCHILD == atui->type.fancy) {
+		val = gatui_leaf_get_value(leaf, true);
+		success = gatui_leaf_set_value(leaf, val);
+		error_assert(&error, ERROR_CRASH,
+			"leaf contiguous memory fail 1",
+			success
+		);
+		g_variant_unref(val);
+		val = gatui_leaf_get_value(leaf, false);
+		success = gatui_leaf_set_value(leaf, val);
+		error_assert(&error, ERROR_CRASH,
+			"leaf contiguous memory fail 2",
+			success
+		);
+		char* const b64_text = gatui_leaf_value_to_base64(leaf);
+		success = gatui_leaf_value_from_base64(leaf, b64_text, NULL);
+		error_assert(&error, ERROR_CRASH,
+			"leaf base64 fail",
+			success
+		);
+		free(b64_text);
+		g_variant_unref(val);
+	};
+}
+
+void
 gatui_leaf_test(
 		GATUILeaf* const leaf,
 		GATUITree* const root
@@ -35,6 +67,8 @@ gatui_leaf_test(
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
+	gatui_leaf_test_get_set_memory(leaf);
+
 	GListModel* const child_leaves = leaves_treelist_generate_children(
 		leaf, NULL
 	);
@@ -53,6 +87,70 @@ gatui_leaf_test(
 		}
 		g_object_unref(child_leaves);
 	}
+}
+
+
+void
+gatui_branch_test_get_set_memory(
+		GATUIBranch* const branch
+		) {
+	atui_branch const* const atui = gatui_branch_get_atui(branch);
+	bool success;
+	char* b64_text;
+	if (atui->num_copyable_leaves || atui->table_size) {
+		GVariant* val = NULL;
+		if (atui->num_copyable_leaves && ! atui->prefer_contiguous) {
+			uint16_t num_copyable_leaves;
+			success = gatui_branch_get_leaves_memory_package(
+				branch, &val, &num_copyable_leaves
+			);
+			error_assert(&error, ERROR_CRASH,
+				"branch leaves memory fail 1",
+				success
+			);
+			success = gatui_branch_set_leaves_memory_package(
+				branch, val, num_copyable_leaves
+			);
+			error_assert(&error, ERROR_CRASH,
+				"branch leaves memory fail 2",
+				success
+			);
+			g_variant_unref(val);
+			b64_text = gatui_branch_to_base64(branch, true);
+			error_assert(&error, ERROR_CRASH,
+				"branch leaves memory fail 3",
+				b64_text
+			);
+			success = gatui_branch_from_base64(branch, b64_text, NULL);
+			error_assert(&error, ERROR_CRASH,
+				"branch leaves memory fail 4",
+				success
+			);
+			free(b64_text);
+		}
+		if (atui->table_size) {
+			val = gatui_branch_get_contiguous_memory(branch);
+			success = gatui_branch_set_contiguous_memory(branch, val);
+			error_assert(&error, ERROR_CRASH,
+				"branch contiguous memory fail 1",
+				success
+			);
+			g_variant_unref(val);
+
+			b64_text = gatui_branch_to_base64(branch, false);
+			error_assert(&error, ERROR_CRASH,
+				"branch contiguous memory fail 2",
+				b64_text
+			);
+
+			success = gatui_branch_from_base64(branch, b64_text, NULL);
+			error_assert(&error, ERROR_CRASH,
+				"branch contiguous memory fail 3",
+				success
+			);
+			free(b64_text);
+		}
+	};
 }
 
 void
@@ -82,12 +180,14 @@ gatui_branch_test(
 	);
 
 
+	gatui_branch_test_get_set_memory(branch);
+
 	GObject* child = NULL;
 	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);
 	if (leaves) {
 		GListModel* const leaves_model = G_LIST_MODEL(leaves);
 		uint16_t const num_leaves = g_list_model_get_n_items(leaves_model);
-		/* ATUI_SUBONLY complications
+		/* model counts expanded children as well
 		error_assert(&error, ERROR_CRASH,
 			"gatui leaf count incorrect",
 			atui->leaf_count == num_leaves
@@ -153,9 +253,11 @@ main(
 		);
 
 		GATUIBranch* const trunk = gatui_tree_get_trunk(root);
+		GtkSelectionModel* const model = gatui_tree_create_trunk_model(root);
 
 		gatui_branch_test(trunk, root);
 
+		g_assert_finalize_object(model);
 		g_assert_finalize_object(trunk);
 		g_assert_finalize_object(root);
 	}

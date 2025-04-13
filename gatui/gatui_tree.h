@@ -70,7 +70,8 @@ gatui_tree_get_atom_tree(
 
 void const*
 gatui_tree_get_bios_pointer(
-		GATUITree* self
+		GATUITree* self,
+		size_t* size // optional
 		);
 
 G_END_DECLS

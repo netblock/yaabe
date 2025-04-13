@@ -1,6 +1,12 @@
 #include "standard.h"
 #include "gatui_private.h"
 
+union variant_dock { // g_variant loading/unloading dock
+	uint64_t  u64;
+	int64_t   s64;
+	float64_t f64;
+};
+
 enum {
 	VALUE_CHANGED,
 	LAST_SIGNAL
@@ -19,11 +25,15 @@ struct _GATUILeaf {
 	gulong parent_number;
 	gulong* phone_book;
 
-	uint16_t num_child_leaves;
 	GATUILeaf** child_leaves;
+	uint16_t num_child_leaves;
 	// may be different from atui_leaf.num_child_leaves due to ATUI_SUBONLY
 
+	// if the leaf can support getting/setting data, capsule_type will be
+	// non-null
+	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
+
 	GtkSelectionModel* enum_model;
 };
 G_DEFINE_TYPE(GATUILeaf, gatui_leaf, G_TYPE_OBJECT)
@@ -100,57 +110,59 @@ gatui_leaf_init(
 	self->child_leaves = NULL;
 	self->num_child_leaves = 0;
 
+	memset(self->typestr, 0, sizeof(self->typestr));
 	self->capsule_type = NULL;
 	self->enum_model = NULL;
 }
 
 inline static GVariantType*
 get_capsule_type(
-		atui_leaf const* const leaf
+		GATUILeaf* const self
 		) {
-	gchar typestr[4] = {0};
-	struct atui_type const a_type = leaf->type;
-	if ((a_type.fancy == ATUI_ARRAY) && (a_type.radix)) {
-		typestr[0] = 'a';
-		switch (leaf->total_bits) {
-			case  8: typestr[1] = 'y'; break;
-			case 16: typestr[1] = 'q'; break;
-			case 32: typestr[1] = 'u'; break;
-			case 64: typestr[1] = 't'; break;
-			default: assert(0); break;
-		}
-	} else if ((a_type.fancy==ATUI_STRING) || (a_type.fancy==ATUI_ARRAY)) {
-		typestr[0] = 's';
-	} else if (a_type.radix) {
-		if (a_type.fraction) {
-			typestr[0] = 'd';
-		} else if (a_type.signed_num) {
-			switch (leaf->total_bits) {
-				case  8: typestr[0] = 'y'; break;
-				case 16: typestr[0] = 'n'; break;
-				case 32: typestr[0] = 'i'; break;
-				case 64: typestr[0] = 'x'; break;
-				case 48:
-				case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
-				default: assert(0); break;
-			}
+	atui_leaf const* const leaf = self->atui;
+	char* const typestr = self->typestr;
+	char* typestrptr = typestr;
+
+	struct atui_type const* const type = &(leaf->type);
+	if (type->radix) {
+		if (type->fraction) {
+			 typestr[0] = 'd';
 		} else {
-			switch (leaf->total_bits) {
-				case  8: typestr[0] = 'y'; break;
-				case 16: typestr[0] = 'q'; break;
-				case 32: typestr[0] = 'u'; break;
-				case 64: typestr[0] = 't'; break;
-				case 48:
-				case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
-				default: assert(0); break;
+			if (type->fancy == ATUI_ARRAY) {
+				typestr[0] = 'a';
+				typestrptr++;
+			}
+			if (type->signed_num) {
+				switch (leaf->total_bits) {
+					case  8: *typestrptr = 'y'; break;
+					case 16: *typestrptr = 'n'; break;
+					case 32: *typestrptr = 'i'; break;
+					case 64: *typestrptr = 'x'; break;
+					case 48:
+					case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
+					default: assert(0); break;
+				}
+			} else  {
+				switch (leaf->total_bits) {
+					case  8: *typestrptr = 'y'; break;
+					case 16: *typestrptr = 'q'; break;
+					case 32: *typestrptr = 'u'; break;
+					case 64: *typestrptr = 't'; break;
+					case 48:
+					case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
+					default: assert(0); break;
+				}
 			}
 		}
+	} else if ((type->fancy==ATUI_STRING) || (ATUI_ARRAY==type->fancy)) {
+		typestr[0] = 's';
 	} else if (leaf->num_bytes) { // raw data
 		typestr[0] = 'a';
 		typestr[1] = 'y';
 	} else {
 		return NULL;
 	}
+	assert(sizeof(self->typestr) > strlen(typestr));
 	return g_variant_type_new(typestr);
 }
 
@@ -227,7 +239,7 @@ gatui_leaf_new(
 		}
 	}
 
-	self->capsule_type = get_capsule_type(leaf);
+	self->capsule_type = get_capsule_type(self);
 
 	return self;
 }
@@ -261,14 +273,19 @@ gatui_leaf_get_region_bounds(
 
 	atui_leaf const* const leaf = self->atui;
 	if (leaf->num_bytes) {
-		size_t const bios_offset = (
-			leaf->val - gatui_tree_get_bios_pointer(self->root)
+		size_t bios_size;
+		void const* const bios = gatui_tree_get_bios_pointer(
+			self->root, &bios_size
 		);
+		ptrdiff_t const offset_start = leaf->val - bios;
+		size_t const offset_end = offset_start + leaf->num_bytes - 1;
+		assert(0 <= offset_start);
+		assert(offset_end < bios_size);
 		if (start) {
-			*start = bios_offset;
+			*start = offset_start;
 		}
 		if (end) {
-			*end = bios_offset + leaf->num_bytes - 1;
+			*end = offset_end;
 		}
 	}
 
@@ -287,43 +304,66 @@ gatui_leaf_get_gvariant_type(
 
 GVariant*
 gatui_leaf_get_value(
-		GATUILeaf* const self
+		GATUILeaf* const self,
+		bool const raw_data
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	g_return_val_if_fail(self->capsule_type, NULL);
 
+	atui_leaf const* const leaf = self->atui;
+	struct atui_type const* const type = &(leaf->type);
 
-	if (self->capsule_type) {
-		atui_leaf const* const leaf = self->atui;
+	
+	GVariantType* capsule_type = self->capsule_type;
+	size_t num_bytes;
+	void* valcopy;
 
-		union {
-			uint64_t u64;
-			int64_t  s64;
-		} bfval;
-		const void* valptr;
-		if (leaf->type.fancy == _ATUI_BITCHILD) {
-			valptr = &bfval;
-			if (leaf->type.signed_num) {
-				bfval.s64 = atui_leaf_get_val_signed(leaf);
+	if (raw_data) {
+		num_bytes = leaf->num_bytes;
+		valcopy = cralloc(num_bytes);
+		memcpy(valcopy, leaf->val, num_bytes);
+		capsule_type = g_variant_type_new("ay");
+	} else if ((ATUI_STRING==type->fancy)
+		|| ((ATUI_ARRAY==type->fancy) && (ATUI_NAN==type->radix))
+		) {
+		valcopy = gatui_leaf_value_to_text(self);
+		num_bytes = leaf->array_size + 1;
+	} else {
+		union variant_dock conv_val;
+		const void* valptr = &conv_val;
+		if (_ATUI_BITCHILD == type->fancy) {
+			if (type->signed_num) {
+				conv_val.s64 = atui_leaf_get_val_signed(leaf);
 			} else {
-				bfval.u64 = atui_leaf_get_val_unsigned(leaf);
+				conv_val.u64 = atui_leaf_get_val_unsigned(leaf);
 			}
+			num_bytes = leaf->num_bytes;
+		} else if (type->radix && type->fraction) {
+			conv_val.f64 = atui_leaf_get_val_fraction(leaf);
+			num_bytes = sizeof(conv_val);
 		} else {
 			valptr = leaf->val;
+			num_bytes = leaf->num_bytes;
 		}
-		// g_variant_new_from_data is effectively a pointer container so we
-		// need to duplicate the data and free on notify
-		void* const valcopy = cralloc(leaf->num_bytes);
-		memcpy(valcopy, valptr, leaf->num_bytes);
-		return g_variant_new_from_data(
-			// won't work on big-endian, but I'm not supporting BE.
-			self->capsule_type,
-			valcopy, leaf->num_bytes,
-			false,
-			(GDestroyNotify) free, valcopy
-		);
+		valcopy = cralloc(num_bytes);
+		memcpy(valcopy, valptr, num_bytes);
 	}
-	return NULL;
+	// g_variant_new_from_data is effectively a pointer container so we
+	// need to duplicate the data and free on notify
+	GVariant* const value = g_variant_new_from_data(
+		// won't work on big-endian, but I'm not supporting BE.
+		capsule_type,
+		valcopy, num_bytes,
+		false,
+		(GDestroyNotify) free, valcopy
+	);
+
+	if (raw_data) {
+		free(capsule_type);
+	}
+
+	return value;
 }
 
 bool
@@ -336,65 +376,62 @@ gatui_leaf_set_value(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail(NULL != value, false);
+	g_return_val_if_fail(self->capsule_type, false);
+
 	atui_leaf const* const leaf = self->atui;
+	struct atui_type const* const type = &(leaf->type);
 
-	size_t const num_bytes = g_variant_get_size(value);
-	if (g_variant_is_of_type(value, self->capsule_type)
-			&& (leaf->type.fancy != _ATUI_BITCHILD)
-			) {
-		if (leaf->type.fancy == ATUI_STRING) {
-			atui_leaf_from_text( // has special bounds checks
-				leaf, g_variant_get_string(value, NULL)
-			);
-			goto success_exit;
+	void const* const input_data = g_variant_get_data(value);
+	size_t const input_size = g_variant_get_size(value);
+	char const* const typestr = g_variant_get_type_string(value);
+
+	union variant_dock val;
+
+	bool const both_are_integers = (
+		char_in_string(typestr[0], "ynqiuxt")
+		&& type->radix && (! type->fraction) && (1 == leaf->array_size)
+	);
+	if (both_are_integers) {
+		switch (typestr[0]) {
+			case 'y': val.u64 = g_variant_get_byte(value);   break;
+			case 'n': val.s64 = g_variant_get_int16(value);  break;
+			case 'q': val.u64 = g_variant_get_uint16(value); break;
+			case 'i': val.s64 = g_variant_get_int32(value);  break;
+			case 'u': val.u64 = g_variant_get_uint32(value); break;
+			case 'x': val.s64 = g_variant_get_int64(value);  break;
+			case 't': val.u64 = g_variant_get_uint64(value); break;
+			default: goto fail_exit;
+		}
+		if (type->signed_num) {
+			atui_leaf_set_val_signed(leaf, val.s64);
 		} else {
-			void const* const input_data = g_variant_get_data(value);
-			assert(input_data);
-			assert(leaf->num_bytes == num_bytes);
-
-			if (input_data && (leaf->num_bytes == num_bytes)) {
-				// won't work on big-endian, but I'm not supporting BE.
-				memcpy(leaf->u8, input_data, num_bytes);
-				goto success_exit;
-			}
+			atui_leaf_set_val_unsigned(leaf, val.u64);
 		}
-	} else { // loose compliance
-		char const* const typestr = g_variant_get_type_string(value);
-		size_t const typestr_len = strlen(typestr);
-		if ((leaf->num_bytes == num_bytes) && (typestr_len == 2)) {
-			if (('a' == typestr[0]) && char_in_string(typestr[1], "ynqiuxt")) {
-				// un/signed 8-bit~64-bit
-				void const* const input_data = g_variant_get_data(value);
-				assert(input_data);
-				if (input_data) {
-					memcpy(leaf->u8, input_data, num_bytes);
-					goto success_exit;
-				}
+		goto success_exit;
+	} else if (0 == strcmp(typestr, self->typestr)) { // same type
+		if ('s' == typestr[0]) { // string
+			atui_leaf_from_text(leaf, input_data); // has special bounds checks
+			goto success_exit;
+		} else if ('a' == typestr[0]) {
+			if (input_size != leaf->num_bytes) {
+				goto fail_exit;
 			}
-		} else if (typestr_len == 1) {
-			union {
-				uint64_t u64;
-				int64_t  s64;
-			} val;
-			switch (typestr[0]) {
-				case 'y': val.u64 = g_variant_get_byte(value);   break;
-				case 'n': val.s64 = g_variant_get_int16(value);  break;
-				case 'q': val.u64 = g_variant_get_uint16(value); break;
-				case 'i': val.s64 = g_variant_get_int32(value);  break;
-				case 'u': val.u64 = g_variant_get_uint32(value); break;
-				case 'x': val.s64 = g_variant_get_int64(value);  break;
-				case 't': val.u64 = g_variant_get_uint64(value); break;
-				default: assert(0); goto fail_exit;
-			}
-			if (leaf->type.signed_num) {
-				atui_leaf_set_val_signed(leaf, val.s64);
-			} else {
-				atui_leaf_set_val_unsigned(leaf, val.u64);
-			}
+			memcpy(leaf->u8, input_data, input_size);
+			goto success_exit;
+		} else if ('d' == typestr[0]) {
+			atui_leaf_set_val_fraction(leaf, g_variant_get_double(value));
 			goto success_exit;
 		}
+		assert(0); // should be unreachable
+		goto fail_exit;
+	} else if (typestr[0]=='a' && 'y'==typestr[1]) {
+		if (input_size != leaf->num_bytes) {
+			goto fail_exit;
+		}
+		memcpy(leaf->u8, input_data, input_size);
+		goto success_exit;
 	}
-
+	
 	fail_exit:
 	return false;
 
@@ -403,9 +440,76 @@ gatui_leaf_set_value(
 	return true;
 }
 
+char*
+gatui_leaf_value_to_base64(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	g_return_val_if_fail(self->capsule_type, NULL);
+
+	GVariant* const val = gatui_leaf_get_value(self, false);
+	struct b64_header config = {
+		.version = B64_HEADER_VER_CURRENT,
+		.target = B64_LEAF,
+		.num_segments = 1,
+		.num_bytes = g_variant_get_size(val),
+	};
+	memcpy(config.typestr,   self->typestr,   sizeof(self->typestr));
+	char* const b64_text = b64_packet_encode(&config, g_variant_get_data(val));
+	g_variant_unref(val);
+	return b64_text;
+}
+bool
+gatui_leaf_value_from_base64(
+		GATUILeaf* const self,
+		char const* const b64_text,
+		struct b64_header** const error_out
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
+	g_return_val_if_fail(b64_text, false);
+	g_return_val_if_fail(self->capsule_type, false);
+
+	struct b64_header* const header = b64_packet_decode(b64_text);
+	if (NULL == header) {
+		goto error_exit;
+	}
+
+	if (B64_LEAF != header->target) {
+		goto error_exit;
+	}
+
+	GVariantType* const header_type = g_variant_type_new(header->typestr);
+	GVariant* const new_val = g_variant_new_from_data(
+		header_type,
+		header->bytes, header->num_bytes,
+		false,
+		NULL, NULL
+	);
+	bool const success = gatui_leaf_set_value(self, new_val);
+	free(header_type);
+	g_variant_unref(new_val);
+	if (!success) {
+		goto error_exit;
+	}
+
+	//success_exit:
+	free(header);
+	return true;
+
+	error_exit:
+	if (error_out) {
+		*error_out = header;
+	} else {
+		free(header);
+	}
+	return false;
+}
+
 void
 gatui_leaf_set_value_from_text(
-		GATUILeaf* self,
+		GATUILeaf* const self,
 		char const* text
 		) {
 	g_return_if_fail(GATUI_IS_LEAF(self));

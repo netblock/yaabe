@@ -22,7 +22,7 @@ size_t
 gatui_leaf_get_region_bounds(
 		GATUILeaf* self,
 		size_t* start, // can be NULL
-		size_t* end // can be NULL; last byte within 
+		size_t* end // can be NULL; -1 last byte within 
 		);
 
 GVariantType const*
@@ -31,12 +31,25 @@ gatui_leaf_get_gvariant_type(
 		);
 GVariant*
 gatui_leaf_get_value(
-		GATUILeaf* self
+		GATUILeaf* self,
+		bool raw_data // as a byte array without any type conversion
 		);
 bool // true if successful
 gatui_leaf_set_value(
 		GATUILeaf* self,
 		GVariant* value
+		);
+
+char* // needs to be freed
+gatui_leaf_value_to_base64( // base64 string contains metadata
+		GATUILeaf* self
+		);
+bool // success
+gatui_leaf_value_from_base64(
+		GATUILeaf* self,
+		char const* b64_text,
+		// error diagnostics; optional; needs to be freed:
+		struct b64_header** error_out
 		);
 
 void

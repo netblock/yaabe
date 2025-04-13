@@ -434,8 +434,14 @@ gatui_tree_get_atom_tree(
 
 void const*
 gatui_tree_get_bios_pointer(
-		GATUITree* const self
+		GATUITree* const self,
+		size_t* const size
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+
+	if (size) {
+		*size = self->atomtree->biosfile_size;
+	}
+
 	return self->atomtree->bios;
 }

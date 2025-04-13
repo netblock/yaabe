@@ -5831,6 +5831,7 @@ global_default: {
 			access: "bios->Reserved2",
 			name: "Reserved2",
 			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 		}, {
 			access: "bios->MR2",
 			name: "MR2",

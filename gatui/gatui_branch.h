@@ -28,8 +28,9 @@ size_t
 gatui_branch_get_region_bounds(
 		GATUIBranch* self,
 		size_t* start, // can be NULL
-		size_t* end // can be NULL; last byte within 
+		size_t* end // can be NULL; -1 last byte within 
 		);
+
 
 // contiguous memory in the bios
 GVariant*
@@ -45,7 +46,7 @@ gatui_branch_set_contiguous_memory(
 bool // success
 gatui_branch_get_leaves_memory_package(
 		GATUIBranch* self,
-		GVariant** value,
+		GVariant** value, // data package out
 		uint16_t* num_copyable_leaves
 		);
 bool // success
@@ -53,6 +54,19 @@ gatui_branch_set_leaves_memory_package(
 		GATUIBranch* self,
 		GVariant* value,
 		uint16_t num_copyable_leaves
+		);
+
+char* // needs to be freed
+gatui_branch_to_base64(
+		GATUIBranch* self,
+		bool leaves_package // if leaves package; else contiguous
+		);
+bool // success
+gatui_branch_from_base64(
+		GATUIBranch* self,
+		char const* b64_text,
+		// error diagnostics; optional; needs to be freed:
+		struct b64_header** error_out
 		);
 
 char* // needs to be freed

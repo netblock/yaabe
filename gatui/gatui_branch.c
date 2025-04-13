@@ -16,6 +16,7 @@ struct _GATUIBranch {
 	GATUIBranch** child_branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
 
+	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
 };
 G_DEFINE_TYPE(GATUIBranch, gatui_branch, G_TYPE_OBJECT)
@@ -140,7 +141,8 @@ gatui_branch_new(
 		self->leaves_model = GTK_SELECTION_MODEL(single_model);
 	}
 
-	self->capsule_type = g_variant_type_new("ay");
+	strcpy(self->typestr, "ay");
+	self->capsule_type = g_variant_type_new(self->typestr);
 
 	return self;
 }
@@ -166,14 +168,19 @@ gatui_branch_get_region_bounds(
 
 	atui_branch const* const branch = self->atui;
 	if (branch->table_size) {
-		size_t const bios_offset = (
-			branch->table_start - gatui_tree_get_bios_pointer(self->root)
+		size_t bios_size;
+		void const* const bios = gatui_tree_get_bios_pointer(
+			self->root, &bios_size
 		);
+		ptrdiff_t const offset_start = branch->table_start - bios;
+		size_t const offset_end = offset_start + branch->table_size - 1;
+		assert(0 <= offset_start);
+		assert(offset_end < bios_size);
 		if (start) {
-			*start = bios_offset;
+			*start = offset_start;
 		}
 		if (end) {
-			*end = bios_offset + branch->table_size - 1;
+			*end = offset_end;
 		}
 	}
 
@@ -186,13 +193,13 @@ gatui_branch_get_contiguous_memory(
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	atui_branch const* const branch = self->atui;
-	if (branch->table_size) {
-		void* const valcopy = cralloc(branch->table_size);
-		memcpy(valcopy, branch->table_start, branch->table_size);
+	atui_branch const* const atui = self->atui;
+	if (atui->table_size) {
+		void* const valcopy = cralloc(atui->table_size);
+		memcpy(valcopy, atui->table_start, atui->table_size);
 		return g_variant_new_from_data(
 			self->capsule_type,
-			valcopy, branch->table_size,
+			valcopy, atui->table_size,
 			false,
 			(GDestroyNotify) free, valcopy
 		);
@@ -212,7 +219,6 @@ gatui_branch_set_contiguous_memory(
 	size_t const num_bytes = g_variant_get_size(value);
 	void const* const input_data = g_variant_get_data(value);
 	assert(input_data);
-	assert(branch->table_size == num_bytes);
 	if ((branch->table_size == num_bytes) && input_data) {
 		memcpy(branch->table_start, input_data, num_bytes);
 		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
@@ -301,6 +307,100 @@ gatui_branch_set_leaves_memory_package(
 	}
 	return false;
 }
+
+char*
+gatui_branch_to_base64(
+		GATUIBranch* const self,
+		bool const leaves_package
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+
+	atui_branch const* const branch = self->atui;
+
+	struct b64_header config = {
+		.version = B64_HEADER_VER_CURRENT,
+	};
+	GVariant* val;
+
+	if (leaves_package) {
+		if (branch->prefer_contiguous || !branch->num_copyable_leaves) {
+			return NULL;
+		}
+		uint16_t num_segments;
+		gatui_branch_get_leaves_memory_package(self, &val, &num_segments);
+		config.target = B64_BRANCH_LEAVES;
+		config.num_segments = num_segments;
+	} else { // contiguous
+		if (!branch->table_size) {
+			return NULL;
+		}
+		val = gatui_branch_get_contiguous_memory(self);
+		config.target = B64_BRANCH_CONTIGUOUS;
+		config.num_segments = 1;
+	}
+
+	config.num_bytes = g_variant_get_size(val);
+	memcpy(config.typestr,   self->typestr,   sizeof(self->typestr));
+	char* const b64_text = b64_packet_encode(&config, g_variant_get_data(val));
+	g_variant_unref(val);
+	return b64_text;
+}
+bool
+gatui_branch_from_base64(
+		GATUIBranch* const self,
+		char const* const b64_text,
+		struct b64_header** const error_out
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
+	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
+	g_return_val_if_fail(b64_text, false);
+
+	struct b64_header* const header = b64_packet_decode(b64_text);
+	if (NULL == header) {
+		goto error_exit;
+	}
+
+	if ((B64_BRANCH_CONTIGUOUS != header->target)
+			&& (B64_BRANCH_LEAVES != header->target)
+			) {
+		goto error_exit;
+	}
+
+	GVariantType* const header_type = g_variant_type_new(header->typestr);
+	GVariant* const new_val = g_variant_new_from_data(
+		header_type,
+		header->bytes, header->num_bytes,
+		false,
+		NULL, NULL
+	);
+	bool success;
+	if (B64_BRANCH_CONTIGUOUS == header->target) {
+		success = gatui_branch_set_contiguous_memory(self, new_val);
+	} else {
+		success = gatui_branch_set_leaves_memory_package(self,
+			new_val, header->num_segments
+		);
+	}
+	free(header_type);
+	g_variant_unref(new_val);
+	if (!success) {
+		goto error_exit;
+	}
+	
+	//success_exit:
+	free(header);
+	return true;
+
+	error_exit:
+	if (error_out) {
+		*error_out = header;
+	} else {
+		free(header);
+	}
+	return false;
+}
+
 
 char*
 gatui_branch_to_path(
