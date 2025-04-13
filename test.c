@@ -19,21 +19,18 @@ gatui_leaf_test_get_set_memory(
 	if (atui->num_bytes || _ATUI_BITCHILD == atui->type.fancy) {
 		val = gatui_leaf_get_value(leaf, true);
 		success = gatui_leaf_set_value(leaf, val);
-		error_assert(&error, ERROR_CRASH,
-			"leaf contiguous memory fail 1",
+		error_assert(&error, ERROR_CRASH, NULL,
 			success
 		);
 		g_variant_unref(val);
 		val = gatui_leaf_get_value(leaf, false);
 		success = gatui_leaf_set_value(leaf, val);
-		error_assert(&error, ERROR_CRASH,
-			"leaf contiguous memory fail 2",
+		error_assert(&error, ERROR_CRASH, NULL,
 			success
 		);
 		char* const b64_text = gatui_leaf_value_to_base64(leaf);
 		success = gatui_leaf_value_from_base64(leaf, b64_text, NULL);
-		error_assert(&error, ERROR_CRASH,
-			"leaf base64 fail",
+		error_assert(&error, ERROR_CRASH, NULL,
 			success
 		);
 		free(b64_text);
@@ -51,19 +48,16 @@ gatui_leaf_test(
 	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
 
 	if (atui->val) {
-		error_assert(&error, ERROR_CRASH,
-			"leaf bios val out of bounds",
+		error_assert(&error, ERROR_CRASH, NULL,
 			a_root->bios <= atui->val
 		);
-		error_assert(&error, ERROR_CRASH,
-			"leaf bios val out of bounds",
+		error_assert(&error, ERROR_CRASH, NULL,
 			(atui->val + atui->num_bytes - 1)
 			<= (a_root->bios + a_root->biosfile_size)
 		);
 	}
 
-	error_assert(&error, ERROR_CRASH,
-		"leaf name too long",
+	error_assert(&error, ERROR_CRASH, NULL,
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
@@ -75,8 +69,7 @@ gatui_leaf_test(
 	if (child_leaves) {
 		GObject* child = NULL;
 		uint16_t const num_leaves = g_list_model_get_n_items(child_leaves);
-		error_assert(&error, ERROR_CRASH,
-			"gatui leaf count incorrect",
+		error_assert(&error, ERROR_CRASH, NULL,
 			atui->num_child_leaves <= num_leaves
 			// would be == but ATUI_SUBONLY is not handled at allocation time
 		);
@@ -104,26 +97,22 @@ gatui_branch_test_get_set_memory(
 			success = gatui_branch_get_leaves_memory_package(
 				branch, &val, &num_copyable_leaves
 			);
-			error_assert(&error, ERROR_CRASH,
-				"branch leaves memory fail 1",
+			error_assert(&error, ERROR_CRASH, NULL,
 				success
 			);
 			success = gatui_branch_set_leaves_memory_package(
 				branch, val, num_copyable_leaves
 			);
-			error_assert(&error, ERROR_CRASH,
-				"branch leaves memory fail 2",
+			error_assert(&error, ERROR_CRASH, NULL,
 				success
 			);
 			g_variant_unref(val);
 			b64_text = gatui_branch_to_base64(branch, true);
-			error_assert(&error, ERROR_CRASH,
-				"branch leaves memory fail 3",
+			error_assert(&error, ERROR_CRASH, NULL,
 				b64_text
 			);
 			success = gatui_branch_from_base64(branch, b64_text, NULL);
-			error_assert(&error, ERROR_CRASH,
-				"branch leaves memory fail 4",
+			error_assert(&error, ERROR_CRASH, NULL,
 				success
 			);
 			free(b64_text);
@@ -131,21 +120,18 @@ gatui_branch_test_get_set_memory(
 		if (atui->table_size) {
 			val = gatui_branch_get_contiguous_memory(branch);
 			success = gatui_branch_set_contiguous_memory(branch, val);
-			error_assert(&error, ERROR_CRASH,
-				"branch contiguous memory fail 1",
+			error_assert(&error, ERROR_CRASH, NULL,
 				success
 			);
 			g_variant_unref(val);
 
 			b64_text = gatui_branch_to_base64(branch, false);
-			error_assert(&error, ERROR_CRASH,
-				"branch contiguous memory fail 2",
+			error_assert(&error, ERROR_CRASH, NULL,
 				b64_text
 			);
 
 			success = gatui_branch_from_base64(branch, b64_text, NULL);
-			error_assert(&error, ERROR_CRASH,
-				"branch contiguous memory fail 3",
+			error_assert(&error, ERROR_CRASH, NULL,
 				success
 			);
 			free(b64_text);
@@ -163,19 +149,16 @@ gatui_branch_test(
 	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
 
 	if (atui->table_start) {
-		error_assert(&error, ERROR_CRASH,
-			"branch bios val out of bounds",
+		error_assert(&error, ERROR_CRASH, NULL,
 			a_root->bios <= atui->table_start
 		);
-		error_assert(&error, ERROR_CRASH,
-			"branch bios val out of bounds",
+		error_assert(&error, ERROR_CRASH, NULL,
 			(atui->table_start + atui->table_size - 1)
 			<= (a_root->bios + a_root->biosfile_size)
 		);
 	}
 
-	error_assert(&error, ERROR_CRASH,
-		"branch name too long",
+	error_assert(&error, ERROR_CRASH, NULL,
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
@@ -188,8 +171,7 @@ gatui_branch_test(
 		GListModel* const leaves_model = G_LIST_MODEL(leaves);
 		uint16_t const num_leaves = g_list_model_get_n_items(leaves_model);
 		/* model counts expanded children as well
-		error_assert(&error, ERROR_CRASH,
-			"gatui leaf count incorrect",
+		error_assert(&error, ERROR_CRASH, NULL,
 			atui->leaf_count == num_leaves
 		);
 		*/
@@ -209,8 +191,7 @@ gatui_branch_test(
 	);
 	if (child_branches) {
 		uint16_t const num_branches = g_list_model_get_n_items(child_branches);
-		error_assert(&error, ERROR_CRASH,
-			"incorrect number of child_branches",
+		error_assert(&error, ERROR_CRASH, NULL,
 			atui->num_branches == num_branches
 		);
 		for (uint16_t i=0; i < num_branches; i++) {
@@ -247,8 +228,7 @@ main(
 	}
 
 	if (root) {
-		error_assert(&error, ERROR_CRASH,
-			"can't get struct atom_tree",
+		error_assert(&error, ERROR_CRASH, NULL,
 			gatui_tree_get_atom_tree(root)
 		);
 

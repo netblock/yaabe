@@ -136,16 +136,22 @@ error_emit( // severity and message must be set before calling
 		);
 // convienence macro meant to replace assert() ; msg can by dynamic
 // The intent is an error/warning message system that would replace assert()
-#define error_assert(errptr, sev, msg, test) do {\
-	 if (!(test)) {\
-		assert(test);\
-		char* walker __unused = memccpy((errptr)->message, msg,\
-			'\0', lengthof((errptr)->message)\
-		);\
-		assert(walker);\
-		(errptr)->message[lengthof((errptr)->message)-1] = '\0';\
-		\
-		(errptr)->severity = sev;\
+#define error_assert(err, sev, msg, test) do {\
+	struct error* const errptr = (err);\
+	bool const fail = ! (test);\
+	char const* const msgptr = (msg);\
+	if (fail) {\
+		assert(!fail);\
+		errptr->message[0] = '\0';\
+		if (msgptr) {\
+			char* walker __unused = memccpy(errptr->message, msgptr,\
+				'\0', lengthof(errptr->message)\
+			);\
+			assert(walker);\
+			errptr->message[lengthof(errptr->message)-1] = '\0';\
+			\
+		}\
+		errptr->severity = sev;\
 		error_emit(errptr);\
 	}\
 } while(0)
