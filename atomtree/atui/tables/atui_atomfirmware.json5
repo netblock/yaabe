@@ -4633,7 +4633,7 @@ global_default: {
 		{
 			access: "bios->display",
 			name: "display",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "connector_object_id",
 		}, {
 			access: "bios->disp_recordoffset",
@@ -4641,7 +4641,7 @@ global_default: {
 		}, {
 			access: "bios->encoder",
 			name: "encoder",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
 			description: [
 				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
@@ -4649,7 +4649,7 @@ global_default: {
 		}, {
 			access: "bios->extern_encoder",
 			name: "extern_encoder",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
 			description: [
 				{language: "english", text: "2nd encoder after the first encoder, from the connector point of view;",},
@@ -4684,15 +4684,16 @@ global_default: {
 		{
 			access: "bios->display",
 			name: "display",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "connector_object_id",
 		}, {
 			access: "bios->disp_recordoffset",
 			name: "disp_recordoffset",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->encoder",
 			name: "encoder",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
 			description: [
 				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
@@ -5512,32 +5513,32 @@ global_default: {
 		{
 			access: "bios->dphy_byteremap",
 			name: "dphy_byteremap",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_byteremap0",
 		}, {
 			access: "bios->dphy_bitremap0",
 			name: "dphy_bitremap0",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->dphy_bitremap1",
 			name: "dphy_bitremap1",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->dphy_bitremap2",
 			name: "dphy_bitremap2",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->aphy_bitremap0",
 			name: "aphy_bitremap0",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->aphy_bitremap1",
 			name: "aphy_bitremap1",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "dphy_bitremap0",
 		}, {
 			access: "bios->phy_dram",
@@ -5576,7 +5577,7 @@ global_default: {
 				pattern: [{
 					name: "bit_byte_remap [%02u]",
 					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "atom_gddr6_bit_byte_remap",
+					fancy: "ATUI_SHOOT", fancy_data: "atom_gddr6_bit_byte_remap",
 				},],
 			},
 		},
@@ -5597,7 +5598,7 @@ global_default: {
 				count: "atomtree->num_info",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "umc_reg_addr [%02u]",
+					name: "umc_reg_addr [%03u]",
 					display: "ATUI_HEX",
 					fancy: "ATUI_BITFIELD", fancy_data: {
 						union: "atomtree->register_info[0]", fields: [
@@ -5649,7 +5650,7 @@ global_default: {
 				count: "atomtree->num_data_entries",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "umc_reg_data [%02u]",
+					name: "umc_reg_data [%03u]",
 					display: "ATUI_HEX",
 				},],
 			},

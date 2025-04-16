@@ -12,7 +12,7 @@ gatui_branch_new( // including all of its descendants and leaves
 		GATUITree* root
 		);
 
-GtkSelectionModel* // no-selection of a tree-model
+GtkSelectionModel* // no-selection of a tree-model; does not ref
 gatui_branch_get_leaves_model(
 		GATUIBranch* self
 		);

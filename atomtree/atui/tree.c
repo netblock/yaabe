@@ -1514,8 +1514,13 @@ autogen_regblock_register_sequence(
 		reg_data_fields[i] = func_playlist[i].atui_branch_func(&atui_args);
 		if  (_atui_unknown_reg_data == func_playlist[i].atui_branch_func) {
 			sprintf(reg_data_fields[i]->leaves[0].name,
-				"bad register index [%02u]: 0x%04X",
+				"[%03u]: bad register index: 0x%04X",
 				i,  func_playlist[i].address
+			);
+		} else {
+			sprintf(reg_data_fields[i]->leaves[0].name,
+				"[%03u]: %s",
+				i,  reg_data_fields[i]->leaves[0].origname
 			);
 		}
 	}
@@ -1867,8 +1872,8 @@ grow_atom_memory_timing_format(
 				}
 				atui_args.bios = strap.v1_0;
 				atui_timings = _atui_atom_memory_timing_format_v0(&atui_args);
-				sprintf(atui_timings->name, "MemTiming (%u MHz)",
-					(strap.v1_0->ClkRange / 100)
+				sprintf(atui_timings->name, "MemTiming [%02u]: %u MHz",
+					i, (strap.v1_0->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
 				strap.v1_0++;
@@ -1885,8 +1890,8 @@ grow_atom_memory_timing_format(
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
 				atui_args.bios = strap.v1_1;
 				atui_timings = _atui_atom_memory_timing_format_v1(&atui_args);
-				sprintf(atui_timings->name, "MemTiming (%u MHz)",
-					(strap.v1_1->ClkRange / 100)
+				sprintf(atui_timings->name, "MemTiming [%02u]: %u MHz",
+					i, (strap.v1_1->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
 				strap.v1_1++;
@@ -1905,8 +1910,8 @@ grow_atom_memory_timing_format(
 				atui_mrs[3] = atui_mrs_funcs[3](&atui_mrs_args);
 				atui_args.bios = strap.v1_2;
 				atui_timings = _atui_atom_memory_timing_format_v2(&atui_args);
-				sprintf(atui_timings->name, "MemTiming (%u MHz)",
-					(strap.v1_2->ClkRange / 100)
+				sprintf(atui_timings->name, "MemTiming [%02u]: %u MHz",
+					i, (strap.v1_2->ClkRange / 100)
 				);
 				ATUI_ADD_BRANCH(atui_straps, atui_timings);
 				strap.v1_2++;

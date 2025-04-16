@@ -659,22 +659,25 @@ atui_assimilate_leaves(
 		atui_branch* const* const src_array,
 		uint16_t const src_array_len
 		) {
+	uint16_t const old_leaf_count = dest->leaf_count;
 	uint16_t new_leaf_count = dest->leaf_count;
 	for (uint16_t i=0; i < src_array_len; i++) {
 		new_leaf_count += src_array[i]->leaf_count;
 	}
 
-	if (0 == new_leaf_count) {
+	if (old_leaf_count == new_leaf_count) {
 		return;
 	}
 
 	atui_leaf* const leaves = crealloc(
 		dest->leaves,  (new_leaf_count * sizeof(atui_leaf))
 	);
+	dest->leaves = leaves;
+	dest->leaf_count = new_leaf_count;
 
-	uint16_t dest_leaf_i = dest->leaf_count;
-	for (uint16_t i=0; i < src_array_len; i++) {
-		atui_branch const* src = src_array[i];
+	uint16_t dest_leaf_i = old_leaf_count;
+	for (uint16_t src_branch_i=0; src_branch_i < src_array_len; src_branch_i++){
+		atui_branch const* src = src_array[src_branch_i];
 		uint16_t src_leaf_i = 0;
 		while (src_leaf_i < src->leaf_count) {
 			leaves[dest_leaf_i] = src->leaves[src_leaf_i];
@@ -685,8 +688,15 @@ atui_assimilate_leaves(
 	}
 	assert(dest_leaf_i == new_leaf_count);
 
-	dest->leaves = leaves;
-	dest->leaf_count = new_leaf_count;
+	while (dest_leaf_i) { // the realloc may change parent leaf address
+		dest_leaf_i--;
+		atui_leaf* grandchildren = leaves[dest_leaf_i].child_leaves;
+		uint16_t num_grandchildren = leaves[dest_leaf_i].num_child_leaves;
+		int16_t grand_child_i = 0;
+		for (; grand_child_i < num_grandchildren; grand_child_i++) {
+			grandchildren[grand_child_i].parent_leaf = &(leaves[dest_leaf_i]);
+		}
+	}
 }
 static void
 atui_assimilate_branches(
@@ -694,34 +704,46 @@ atui_assimilate_branches(
 		atui_branch* const* const src_array,
 		uint16_t const src_array_len
 		) {
+	uint16_t const old_num_branches = dest->num_branches;
 	uint16_t new_num_branches = dest->num_branches;
 	for (uint16_t i=0; i < src_array_len; i++) {
 		new_num_branches += src_array[i]->num_branches;
 	}
 
-	if (0 == new_num_branches) {
+	if (old_num_branches == new_num_branches) {
 		return;
 	}
 
-	atui_branch** const child_branches = crealloc(
+	atui_branch** const branches = crealloc(
 		dest->child_branches,  (new_num_branches * sizeof(atui_branch*))
 	);
+	dest->child_branches = branches;
+	dest->num_branches = new_num_branches;
 
 	uint16_t dest_branch_i = dest->num_branches;
 	for (uint16_t i=0; i < src_array_len; i++) {
 		atui_branch const* src = src_array[i];
 		uint16_t src_branch_i = 0;
 		while (src_branch_i < src->num_branches) {
-			child_branches[dest_branch_i] = src->child_branches[src_branch_i];
-			child_branches[dest_branch_i]->parent_branch = dest;
+			branches[dest_branch_i] = src->child_branches[src_branch_i];
+			branches[dest_branch_i]->parent_branch = dest;
 			src_branch_i++;
 			dest_branch_i++;
 		}
 	}
 	assert(dest_branch_i == new_num_branches);
 
-	dest->child_branches = child_branches;
-	dest->num_branches = new_num_branches;
+	while (dest_branch_i) { // the realloc may change parent branch address
+		dest_branch_i--;
+		atui_branch** grandchildren = branches[dest_branch_i]->child_branches;
+		uint16_t num_grandchildren = branches[dest_branch_i]->num_branches;
+		int16_t grand_child_i = 0;
+		for (; grand_child_i < num_grandchildren; grand_child_i++) {
+			grandchildren[grand_child_i]->parent_branch = (
+				branches[dest_branch_i]
+			);
+		}
+	}
 }
 void
 atui_assimilate(

@@ -781,7 +781,7 @@ global_default: {
 				count: "atomtree->num_levels",
 				enum: "ATUI_NULL",
 				pattern: [{
-					name: "clockInfoIndex",
+					name: "clockInfoIndex [%02u]",
 					display: "ATUI_DEC",
 					fancy: "ATUI_NOFANCY",
 				},],

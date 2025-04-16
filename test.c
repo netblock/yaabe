@@ -1,4 +1,7 @@
 // this technically compiles without standard.h, but takes forever to link
+
+// gatui_tree_select_in_model_by_path makes this extremely expensive
+
 #include "standard.h"
 
 #include "atomtree.h"
@@ -9,7 +12,7 @@
 // landing is in main
 static struct error error = {}; // error handling
 
-void
+static void
 gatui_leaf_test_get_set_memory(
 		GATUILeaf* const leaf
 		) {
@@ -38,14 +41,65 @@ gatui_leaf_test_get_set_memory(
 	};
 }
 
-void
+static char*
+gatui_leaf_test_path(
+		GATUILeaf* const leaf,
+		GATUITree* const root
+		) {
+	char* const path = gatui_leaf_to_path(leaf);
+	bool success;
+
+	int16_t branch_index;
+	int16_t leaf_index;
+	success = gatui_tree_select_in_model_by_path(root,
+		path, &branch_index, &leaf_index, NULL
+	);
+	error_assert(&error, ERROR_CRASH, NULL,
+		success
+	);
+
+	GListModel* const branch_model = G_LIST_MODEL(
+		gatui_tree_create_trunk_model(root)
+	);
+	GtkTreeListRow* const branch_row = GTK_TREE_LIST_ROW(
+		g_list_model_get_item(branch_model, branch_index)
+	);
+	GATUIBranch* const owning_branch = GATUI_BRANCH(
+		gtk_tree_list_row_get_item(branch_row)
+	);
+
+	GListModel* const leaves_model = G_LIST_MODEL(
+		gatui_branch_get_leaves_model(owning_branch)
+	);
+	GtkTreeListRow* const leaf_row = GTK_TREE_LIST_ROW(
+		g_list_model_get_item(leaves_model, leaf_index)
+	);
+	GATUILeaf* const self = GATUI_LEAF(gtk_tree_list_row_get_item(leaf_row));
+
+	error_assert(&error, ERROR_CRASH, NULL,
+		leaf == self // path uniqueness
+	);
+
+	g_object_unref(self);
+	g_object_unref(leaf_row);
+	//g_object_unref(leaves_model); // does not get ref'd
+
+	g_object_unref(owning_branch);
+	g_object_unref(branch_row);
+	g_object_unref(branch_model);
+
+	return path;
+}
+
+static void
 gatui_leaf_test(
 		GATUILeaf* const leaf,
 		GATUITree* const root
 		) {
 	// TODO actually test stuff
 	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
-	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
+	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
+	//bool success;
 
 	if (atui->val) {
 		error_assert(&error, ERROR_CRASH, NULL,
@@ -63,27 +117,26 @@ gatui_leaf_test(
 
 	gatui_leaf_test_get_set_memory(leaf);
 
+	char* const path = gatui_leaf_test_path(leaf, root); // free later for debug
+
 	GListModel* const child_leaves = leaves_treelist_generate_children(
 		leaf, NULL
 	);
+	error_assert(&error, ERROR_CRASH, NULL,
+		(NULL == child_leaves) ^ (0 < atui->num_child_leaves)
+	);
 	if (child_leaves) {
-		GObject* child = NULL;
-		uint16_t const num_leaves = g_list_model_get_n_items(child_leaves);
-		error_assert(&error, ERROR_CRASH, NULL,
-			atui->num_child_leaves <= num_leaves
-			// would be == but ATUI_SUBONLY is not handled at allocation time
-		);
-		for (uint16_t i=0; i < num_leaves; i++) {
-			child = g_list_model_get_object(child_leaves, i);
-			gatui_leaf_test(GATUI_LEAF(child), root);
-			g_object_unref(child);
+		for (uint16_t i=0; i < atui->num_child_leaves; i++) {
+			gatui_leaf_test(atui->child_leaves[i].self, root);
 		}
 		g_object_unref(child_leaves);
 	}
+
+	free(path);
 }
 
 
-void
+static void
 gatui_branch_test_get_set_memory(
 		GATUIBranch* const branch
 		) {
@@ -139,14 +192,15 @@ gatui_branch_test_get_set_memory(
 	};
 }
 
-void
+static void
 gatui_branch_test(
 		GATUIBranch* const branch,
 		GATUITree* const root
 		) {
 	// TODO actually test stuff
 	atui_branch const* const atui = gatui_branch_get_atui(branch);
-	struct atom_tree* const a_root = gatui_tree_get_atom_tree(root);
+	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
+	bool success;
 
 	if (atui->table_start) {
 		error_assert(&error, ERROR_CRASH, NULL,
@@ -162,26 +216,21 @@ gatui_branch_test(
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
-
 	gatui_branch_test_get_set_memory(branch);
 
-	GObject* child = NULL;
+	char* const path = gatui_branch_to_path(branch); // free later for debug
+	success = gatui_tree_select_in_model_by_path(root, path, NULL,NULL,NULL);
+	error_assert(&error, ERROR_CRASH, NULL,
+		success
+	);
+
 	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);
-	if (leaves) {
-		GListModel* const leaves_model = G_LIST_MODEL(leaves);
-		uint16_t const num_leaves = g_list_model_get_n_items(leaves_model);
-		/* model counts expanded children as well
-		error_assert(&error, ERROR_CRASH, NULL,
-			atui->leaf_count == num_leaves
-		);
-		*/
-		GtkTreeListRow* row = NULL;
-		for (uint16_t i=0; i < num_leaves; i++) {
-			row = GTK_TREE_LIST_ROW(g_list_model_get_object(leaves_model, i));
-			child = gtk_tree_list_row_get_item(row);
-			gatui_leaf_test(GATUI_LEAF(child), root);
-			g_object_unref(row);
-			g_object_unref(child);
+	error_assert(&error, ERROR_CRASH, NULL,
+		(NULL == leaves) ^ (0 < atui->leaf_count)
+	);
+	if (atui->leaf_count) {
+		for (uint16_t i=0; i < atui->leaf_count; i++) {
+			gatui_leaf_test(atui->leaves[i].self, root);
 		}
 	}
 
@@ -189,18 +238,17 @@ gatui_branch_test(
 	GListModel* const child_branches = branches_treelist_generate_children(
 		branch, NULL
 	);
+	error_assert(&error, ERROR_CRASH, NULL,
+		(NULL == child_branches) ^ (0 < atui->num_branches)
+	);
 	if (child_branches) {
-		uint16_t const num_branches = g_list_model_get_n_items(child_branches);
-		error_assert(&error, ERROR_CRASH, NULL,
-			atui->num_branches == num_branches
-		);
-		for (uint16_t i=0; i < num_branches; i++) {
-			child = g_list_model_get_object(child_branches, i);
-			gatui_branch_test(GATUI_BRANCH(child), root);
-			g_object_unref(child);
+		for (uint16_t i=0; i < atui->num_branches; i++) {
+			gatui_branch_test(atui->child_branches[i]->self, root);
 		}
 		g_object_unref(child_branches);
 	}
+
+	free(path);
 }
 
 int
