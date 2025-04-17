@@ -74,9 +74,13 @@ char_in_string(
 
 void
 error_emit(
-		struct error* const err
+		struct error* const err,
+		char const* const message
 		) {
-	if (strlen(err->message)) {
+	err->message[0] = '\0';
+	if (message) {
+		memccpy(err->message, message, '\0', lengthof(err->message));
+		err->message[lengthof(err->message)-1] = '\0';
 		switch (err->severity) {
 			case ERROR_WARNING:
 				fprintf(stderr, "Warning: %s\n", err->message);
