@@ -33,66 +33,66 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "VDDGFX_control",
-				description: [
-					{language: "english", text: "if vddgfx will be a separated power rail.",},
-				],
+				description: {
+					eng: "if vddgfx will be a separated power rail.",
+				},
 			}, {
 				access: "powerplay",
-				description: [
-					{language: "english", text: "if this is a mobile part and CCC need to show Powerplay page.",},
-				],
+				description: {
+					eng: "if this is a mobile part and CCC need to show Powerplay page.",
+				},
 			}, {
 				access: "SBIOS_powersource",
-				description: [
-					{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
-				],
+				description: {
+					eng: "if power source notificaiton is done by SBIOS directly.",
+				},
 			}, {
 				access: "disable_voltage_island",
-				description: [
-					{language: "english", text: "option to overwrite voltage island feature, regardless of VddGfx power rail support.",},
-				],
+				description: {
+					eng: "option to overwrite voltage island feature, regardless of VddGfx power rail support.",
+				},
 			}, {
 				access: "reserved_4",
 			}, {
 				access: "hardware_DC",
-				description: [
-					{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
-				],
+				description: {
+					eng: "if power source notificaiton is done by GPIO directly.",
+				},
 			}, {
 				access: "reserved_11_6",
 			}, {
 				access: "MVDD_control",
-				description: [
-					{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
-				],
+				description: {
+					eng: "if dynamic MVDD is required. Uncheck to disable it.",
+				},
 			}, {
 				access: "reserved_14_13",
 			}, {
 				access: "VDDCI_control",
-				description: [
-					{language: "english", text: "if dynamic VDDCI is required. Uncheck to disable it.",},
-				],
+				description: {
+					eng: "if dynamic VDDCI is required. Uncheck to disable it.",
+				},
 			}, {
 				access: "reserved_16",
 			}, {
 				access: "BACO",
-				description: [
-					{language: "english", text: "Enable to indicate the driver supports BACO state.",},
-				],
+				description: {
+					eng: "Enable to indicate the driver supports BACO state.",
+				},
 			}, {
 				access: "reserved_19_18",
 			}, {
 				access: "output_thermal2GPIO17",
-				description: [
-					{language: "english", text: "Enable to indicate the driver supports thermal2GPIO17.",},
-				],
+				description: {
+					eng: "Enable to indicate the driver supports thermal2GPIO17.",
+				},
 			}, {
 				access: "reserved_23_21",
 			}, {
 				access: "PCC_shares_thermal_GPIO",
-				description: [
-					{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
-				],
+				description: {
+					eng: "Enable to indicate if thermal and PCC are sharing the same GPIO",
+				},
 			}, {
 				access: "load_post_production_FW",
 			}, {
@@ -112,9 +112,9 @@ global_defaults: {
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -123,24 +123,24 @@ global_defaults: {
 		}, {
 			access: "bios->MaxODEngineClock",
 			name: "MaxODEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxODMemoryClock",
 			name: "MaxODMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->PowerControlLimit",
 			name: "PowerControlLimit",
 		}, {
 			access: "bios->UlvVoltageOffset",
 			name: "UlvVoltageOffset",
-			description: [
-				{language: "english", text: "in mv units",},
-			],
+			description: {
+				eng: "in mv units",
+			},
 		}, {
 			access: "bios->StateArrayOffset",
 			name: "StateArrayOffset",
@@ -157,9 +157,9 @@ global_defaults: {
 			access: "bios->Reserved0",
 			name: "Reserved0",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "CustomThermalPolicy removed for Tonga. Keep this filed as reserved.",},
-			],
+			description: {
+				eng: "CustomThermalPolicy removed for Tonga. Keep this filed as reserved.",
+			},
 		}, {
 			access: "bios->MclkDependencyTableOffset",
 			name: "MclkDependencyTableOffset",
@@ -306,99 +306,99 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->THyst",
 			name: "THyst",
-			description: [
-				{language: "english", text: "Temperature hysteresis. Integer.",},
-			],
+			description: {
+				eng: "Temperature hysteresis. Integer.",
+			},
 		}, {
 			access: "bios->TMin",
 			name: "TMin",
-			description: [
-				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
-			],
+			description: {
+				eng: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",
+			},
 		}, {
 			access: "bios->TMed",
 			name: "TMed",
-			description: [
-				{language: "english", text: "The middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "The middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->THigh",
 			name: "THigh",
-			description: [
-				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "The high point above TMed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->PWMMin",
 			name: "PWMMin",
-			description: [
-				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "The minimum PWM value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->PWMMed",
 			name: "PWMMed",
-			description: [
-				{language: "english", text: "The PWM value (in percent) at TMed.",},
-			],
+			description: {
+				eng: "The PWM value (in percent) at TMed.",
+			},
 		}, {
 			access: "bios->PWMHigh",
 			name: "PWMHigh",
-			description: [
-				{language: "english", text: "The PWM value at THigh.",},
-			],
+			description: {
+				eng: "The PWM value at THigh.",
+			},
 		}, {
 			access: "bios->TMax",
 			name: "TMax",
-			description: [
-				{language: "english", text: "The max temperature",},
-			],
+			description: {
+				eng: "The max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
-			description: [
-				{language: "english", text: "Legacy or Fuzzy Fan mode",},
-			],
+			description: {
+				eng: "Legacy or Fuzzy Fan mode",
+			},
 		}, {
 			access: "bios->FanPWMMax",
 			name: "FanPWMMax",
-			description: [
-				{language: "english", text: "Maximum allowed fan power in percent",},
-			],
+			description: {
+				eng: "Maximum allowed fan power in percent",
+			},
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes",
+			},
 		}, {
 			access: "bios->FanRPMMax",
 			name: "FanRPMMax",
-			description: [
-				{language: "english", text: "The default value in RPM",},
-			],
+			description: {
+				eng: "The default value in RPM",
+			},
 		}, {
 			access: "bios->MinFanSCLKAcousticLimit",
 			name: "MinFanSCLKAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "Advanced fan controller target temperature.",},
-			],
+			description: {
+				eng: "Advanced fan controller target temperature.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",
+			},
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
@@ -411,99 +411,99 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->THyst",
 			name: "THyst",
-			description: [
-				{language: "english", text: "Temperature hysteresis. Integer.",},
-			],
+			description: {
+				eng: "Temperature hysteresis. Integer.",
+			},
 		}, {
 			access: "bios->TMin",
 			name: "TMin",
-			description: [
-				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
-			],
+			description: {
+				eng: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",
+			},
 		}, {
 			access: "bios->TMed",
 			name: "TMed",
-			description: [
-				{language: "english", text: "The middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "The middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->THigh",
 			name: "THigh",
-			description: [
-				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "The high point above TMed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->PWMMin",
 			name: "PWMMin",
-			description: [
-				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "The minimum PWM value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->PWMMed",
 			name: "PWMMed",
-			description: [
-				{language: "english", text: "The PWM value (in percent) at TMed.",},
-			],
+			description: {
+				eng: "The PWM value (in percent) at TMed.",
+			},
 		}, {
 			access: "bios->PWMHigh",
 			name: "PWMHigh",
-			description: [
-				{language: "english", text: "The PWM value at THigh.",},
-			],
+			description: {
+				eng: "The PWM value at THigh.",
+			},
 		}, {
 			access: "bios->TMax",
 			name: "TMax",
-			description: [
-				{language: "english", text: "The max temperature",},
-			],
+			description: {
+				eng: "The max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
-			description: [
-				{language: "english", text: "Legacy or Fuzzy Fan mode",},
-			],
+			description: {
+				eng: "Legacy or Fuzzy Fan mode",
+			},
 		}, {
 			access: "bios->FanPWMMax",
 			name: "FanPWMMax",
-			description: [
-				{language: "english", text: "Maximum allowed fan power in percent",},
-			],
+			description: {
+				eng: "Maximum allowed fan power in percent",
+			},
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes",
+			},
 		}, {
 			access: "bios->FanRPMMax",
 			name: "FanRPMMax",
-			description: [
-				{language: "english", text: "The default value in RPM",},
-			],
+			description: {
+				eng: "The default value in RPM",
+			},
 		}, {
 			access: "bios->MinFanSCLKAcousticLimit",
 			name: "MinFanSCLKAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "Advanced fan controller target temperature.",},
-			],
+			description: {
+				eng: "Advanced fan controller target temperature.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",
+			},
 		}, {
 			access: "bios->FanGainEdge",
 			name: "FanGainEdge",
@@ -537,99 +537,99 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->THyst",
 			name: "THyst",
-			description: [
-				{language: "english", text: "Temperature hysteresis. Integer.",},
-			],
+			description: {
+				eng: "Temperature hysteresis. Integer.",
+			},
 		}, {
 			access: "bios->TMin",
 			name: "TMin",
-			description: [
-				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
-			],
+			description: {
+				eng: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",
+			},
 		}, {
 			access: "bios->TMed",
 			name: "TMed",
-			description: [
-				{language: "english", text: "The middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "The middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->THigh",
 			name: "THigh",
-			description: [
-				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "The high point above TMed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->PWMMin",
 			name: "PWMMin",
-			description: [
-				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "The minimum PWM value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->PWMMed",
 			name: "PWMMed",
-			description: [
-				{language: "english", text: "The PWM value (in percent) at TMed.",},
-			],
+			description: {
+				eng: "The PWM value (in percent) at TMed.",
+			},
 		}, {
 			access: "bios->PWMHigh",
 			name: "PWMHigh",
-			description: [
-				{language: "english", text: "The PWM value at THigh.",},
-			],
+			description: {
+				eng: "The PWM value at THigh.",
+			},
 		}, {
 			access: "bios->TMax",
 			name: "TMax",
-			description: [
-				{language: "english", text: "The max temperature",},
-			],
+			description: {
+				eng: "The max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
-			description: [
-				{language: "english", text: "Legacy or Fuzzy Fan mode",},
-			],
+			description: {
+				eng: "Legacy or Fuzzy Fan mode",
+			},
 		}, {
 			access: "bios->FanPWMMax",
 			name: "FanPWMMax",
-			description: [
-				{language: "english", text: "Maximum allowed fan power in percent",},
-			],
+			description: {
+				eng: "Maximum allowed fan power in percent",
+			},
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes",
+			},
 		}, {
 			access: "bios->FanRPMMax",
 			name: "FanRPMMax",
-			description: [
-				{language: "english", text: "The default value in RPM",},
-			],
+			description: {
+				eng: "The default value in RPM",
+			},
 		}, {
 			access: "bios->MinFanSCLKAcousticLimit",
 			name: "MinFanSCLKAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller SCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "Advanced fan controller target temperature.",},
-			],
+			description: {
+				eng: "Advanced fan controller target temperature.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.  This should be set to the highest PWM that will run the fan at its lowest RPM.",
+			},
 		}, {
 			access: "bios->FanGainEdge",
 			name: "FanGainEdge",
@@ -681,9 +681,9 @@ global_defaults: {
 		}, {
 			access: "bios->I2cLine",
 			name: "I2cLine",
-			description: [
-				{language: "english", text: "as interpreted by DAL I2C",},
-			],
+			description: {
+				eng: "as interpreted by DAL I2C",
+			},
 		}, {
 			access: "bios->I2cAddress",
 			name: "I2cAddress",
@@ -695,15 +695,15 @@ global_defaults: {
 		}, {
 			access: "bios->FanMinRPM",
 			name: "FanMinRPM",
-			description: [
-				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Minimum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->FanMaxRPM",
 			name: "FanMaxRPM",
-			description: [
-				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Maximum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
@@ -711,9 +711,9 @@ global_defaults: {
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
-			description: [
-				{language: "english", text: "to be defined",},
-			],
+			description: {
+				eng: "to be defined",
+			},
 		},
 	],
 },
@@ -724,18 +724,18 @@ global_defaults: {
 		{
 			access: "bios->VddcInd",
 			name: "VddcInd",
-			description: [
-				{language: "english", text: "Base voltage ; SOC_VDD index",},
-			],
+			description: {
+				eng: "Base voltage ; SOC_VDD index",
+			},
 		}, {
 			access: "bios->Vddci",
 			name: "Vddci",
 		}, {
 			access: "bios->VddgfxOffset",
 			name: "VddgfxOffset",
-			description: [
-				{language: "english", text: "Offset relative to Vddc voltage",},
-			],
+			description: {
+				eng: "Offset relative to Vddc voltage",
+			},
 		}, {
 			access: "bios->Mvdd",
 			name: "Mvdd",
@@ -780,9 +780,9 @@ global_defaults: {
 		access: "bios->CKSVOffsetandDisable",
 		name: "CKSVOffsetandDisable",
 		display: "ATUI_BIN",
-		description: [
-			{language: "english", text: "clock stretch",},
-		],
+		description: {
+			eng: "clock stretch",
+		},
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "cks_voltage_offset",
@@ -797,15 +797,15 @@ global_defaults: {
 		{
 			access: "bios->VddInd",
 			name: "VddInd",
-			description: [
-				{language: "english", text: "Base voltage ; SOC_VDD index",},
-			],
+			description: {
+				eng: "Base voltage ; SOC_VDD index",
+			},
 		}, {
 			access: "bios->VddcOffset",
 			name: "VddcOffset",
-			description: [
-				{language: "english", text: "Offset relative to base voltage",},
-			],
+			description: {
+				eng: "Offset relative to base voltage",
+			},
 		}, {
 			access: "bios->Sclk",
 			name: "Sclk",
@@ -854,9 +854,9 @@ global_defaults: {
 		{
 			access: "bios->VddInd",
 			name: "VddInd",
-			description: [
-				{language: "english", text: "Base voltage ; SOC_VDD index",},
-			],
+			description: {
+				eng: "Base voltage ; SOC_VDD index",
+			},
 		}, {
 			access: "bios->VddcOffset",
 			name: "VddcOffset",
@@ -911,9 +911,9 @@ global_defaults: {
 		{
 			access: "bios->Vdd",
 			name: "Vdd",
-			description: [
-				{language: "english", text: "Base voltage",},
-			],
+			description: {
+				eng: "Base voltage",
+			},
 		}, {
 			access: "bios->CACLow",
 			name: "CACLow",
@@ -957,45 +957,45 @@ global_defaults: {
 		{
 			access: "bios->VddcInd",
 			name: "VddcInd",
-			description: [
-				{language: "english", text: "Base voltage ; SOC_VDD index",},
-			],
+			description: {
+				eng: "Base voltage ; SOC_VDD index",
+			},
 		}, {
 			access: "bios->VddgfxOffset",
 			name: "VddgfxOffset",
-			description: [
-				{language: "english", text: "Offset relative to VDDC voltage",},
-			],
+			description: {
+				eng: "Offset relative to VDDC voltage",
+			},
 		}, {
 			access: "bios->DClk",
 			name: "DClk",
-			description: [
-				{language: "english", text: "UVD D-clock",},
-			],
+			description: {
+				eng: "UVD D-clock",
+			},
 		}, {
 			access: "bios->VClk",
 			name: "VClk",
-			description: [
-				{language: "english", text: "UVD V-clock",},
-			],
+			description: {
+				eng: "UVD V-clock",
+			},
 		}, {
 			access: "bios->EClk",
 			name: "EClk",
-			description: [
-				{language: "english", text: "VCE clock",},
-			],
+			description: {
+				eng: "VCE clock",
+			},
 		}, {
 			access: "bios->AClk",
 			name: "AClk",
-			description: [
-				{language: "english", text: "ACP clock",},
-			],
+			description: {
+				eng: "ACP clock",
+			},
 		}, {
 			access: "bios->SAMUClk",
 			name: "SAMUClk",
-			description: [
-				{language: "english", text: "SAMU clock",},
-			],
+			description: {
+				eng: "SAMU clock",
+			},
 		},
 	],
 }, {
@@ -1030,27 +1030,27 @@ global_defaults: {
 		{
 			access: "bios->VCEClockIndex",
 			name: "VCEClockIndex",
-			description: [
-				{language: "english", text: "index into usVCEDependencyTableOffset of 'ATOM_pptable_MM_Dependency_Table' type",},
-			],
+			description: {
+				eng: "index into usVCEDependencyTableOffset of 'ATOM_pptable_MM_Dependency_Table' type",
+			},
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
-			description: [
-				{language: "english", text: "2 bits indicates memory p-states",},
-			],
+			description: {
+				eng: "2 bits indicates memory p-states",
+			},
 		}, {
 			access: "bios->SCLKIndex",
 			name: "SCLKIndex",
-			description: [
-				{language: "english", text: "index into ATOM_pptable_SCLK_Dependency_Table",},
-			],
+			description: {
+				eng: "index into ATOM_pptable_SCLK_Dependency_Table",
+			},
 		}, {
 			access: "bios->MCLKIndex",
 			name: "MCLKIndex",
-			description: [
-				{language: "english", text: "index into ATOM_pptable_MCLK_Dependency_Table",},
-			],
+			description: {
+				eng: "index into ATOM_pptable_MCLK_Dependency_Table",
+			},
 		},
 	],
 }, {
@@ -1165,9 +1165,9 @@ global_defaults: {
 		}, {
 			access: "bios->TjMax",
 			name: "TjMax",
-			description: [
-				{language: "english", text: "For Fiji, this is also usTemperatureLimitEdge;",},
-			],
+			description: {
+				eng: "For Fiji, this is also usTemperatureLimitEdge;",
+			},
 		}, {
 			access: "bios->PowerTuneDataSetID",
 			name: "PowerTuneDataSetID",
@@ -1183,9 +1183,9 @@ global_defaults: {
 		}, {
 			access: "bios->TemperatureLimitHotspot",
 			name: "TemperatureLimitHotspot",
-			description: [
-				{language: "english", text: "The following are added for Fiji",},
-			],
+			description: {
+				eng: "The following are added for Fiji",
+			},
 		}, {
 			access: "bios->TemperatureLimitLiquid1",
 			name: "TemperatureLimitLiquid1",
@@ -1204,9 +1204,9 @@ global_defaults: {
 		}, {
 			access: "bios->Liquid1_I2C_address",
 			name: "Liquid1_I2C_address",
-			description: [
-				{language: "english", text: "Liquid",},
-			],
+			description: {
+				eng: "Liquid",
+			},
 		}, {
 			access: "bios->Liquid2_I2C_address",
 			name: "Liquid2_I2C_address",
@@ -1216,18 +1216,18 @@ global_defaults: {
 		}, {
 			access: "bios->Vr_I2C_address",
 			name: "Vr_I2C_address",
-			description: [
-				{language: "english", text: "VR",},
-			],
+			description: {
+				eng: "VR",
+			},
 		}, {
 			access: "bios->Vr_I2C_Line",
 			name: "Vr_I2C_Line",
 		}, {
 			access: "bios->Plx_I2C_address",
 			name: "Plx_I2C_address",
-			description: [
-				{language: "english", text: "PLX",},
-			],
+			description: {
+				eng: "PLX",
+			},
 		}, {
 			access: "bios->Plx_I2C_Line",
 			name: "Plx_I2C_Line",
@@ -1270,9 +1270,9 @@ global_defaults: {
 		}, {
 			access: "bios->TjMax",
 			name: "TjMax",
-			description: [
-				{language: "english", text: "For Fiji, this is also usTemperatureLimitEdge;",},
-			],
+			description: {
+				eng: "For Fiji, this is also usTemperatureLimitEdge;",
+			},
 		}, {
 			access: "bios->PowerTuneDataSetID",
 			name: "PowerTuneDataSetID",
@@ -1306,9 +1306,9 @@ global_defaults: {
 		}, {
 			access: "bios->Liquid1_I2C_address",
 			name: "Liquid1_I2C_address",
-			description: [
-				{language: "english", text: "Liquid",},
-			],
+			description: {
+				eng: "Liquid",
+			},
 		}, {
 			access: "bios->Liquid2_I2C_address",
 			name: "Liquid2_I2C_address",
@@ -1318,18 +1318,18 @@ global_defaults: {
 		}, {
 			access: "bios->Vr_I2C_address",
 			name: "Vr_I2C_address",
-			description: [
-				{language: "english", text: "VR",},
-			],
+			description: {
+				eng: "VR",
+			},
 		}, {
 			access: "bios->Vr_I2C_Line",
 			name: "Vr_I2C_Line",
 		}, {
 			access: "bios->Plx_I2C_address",
 			name: "Plx_I2C_address",
-			description: [
-				{language: "english", text: "PLX",},
-			],
+			description: {
+				eng: "PLX",
+			},
 		}, {
 			access: "bios->Plx_I2C_Line",
 			name: "Plx_I2C_Line",
@@ -1494,9 +1494,9 @@ global_defaults: {
 		}, {
 			access: "bios->VRHotTriggeredSclkDpmIndex",
 			name: "VRHotTriggeredSclkDpmIndex",
-			description: [
-				{language: "english", text: "If VRHot signal is triggered SCLK will be limited to this DPM level",},
-			],
+			description: {
+				eng: "If VRHot signal is triggered SCLK will be limited to this DPM level",
+			},
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",

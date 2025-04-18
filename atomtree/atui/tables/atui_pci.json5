@@ -27,29 +27,29 @@ global_defaults: {
 
 {
 	c_type: "pci_rom_header",
-	description: [
-		{language: "english", text: "standard PCIe ROM header",},
-	],
+	description: {
+		eng: "standard PCIe ROM header",
+	},
 	leaves: [
 		{
 			access: "bios->pci_rom_signature",
 			name: "pci_rom_signature",
-			description: [
-				{language: "english", text: "0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.",},
-			],
+			description: {
+				eng: "0xAA55 has been around since IBM PC; is a part of PCIe, and a part of ATOM.",
+			},
 		}, {
 			access: "bios->pci_rom_size_in_512",
 			name: "pci_rom_size_in_512",
 			display: "ATUI_DEC",
-			description: [
-				{language: "english", text: "in 512 Bytes",},
-			],
+			description: {
+				eng: "in 512 Bytes",
+			},
 		}, {
 			access: "bios->jump_core_main_init_bios",
 			name: "jump_core_main_init_bios",
-			description: [
-				{language: "english", text: "x86 init code",},
-			],
+			description: {
+				eng: "x86 init code",
+			},
 		}, {
 			access: "bios->label_core_main_init_bios",
 			name: "label_core_main_init_bios",
@@ -57,9 +57,9 @@ global_defaults: {
 			access: "bios->pci_reserved",
 			name: "pci_reserved",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "reserved for user",},
-			],
+			description: {
+				eng: "reserved for user",
+			},
 		}, {
 			access: "bios->pcir_structure_offset",
 			name: "pcir_structure_offset",
@@ -90,9 +90,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "PCIR",},
-			],
+			description: {
+				eng: "PCIR",
+			},
 		}, {
 			access: "bios->vendor_id",
 			name: "vendor_id",
@@ -102,9 +102,9 @@ global_defaults: {
 		}, {
 			access: "bios->vpd_reserved",
 			name: "vpd_reserved",
-			description: [
-				{language: "english", text: "was PCI Vital Product Data (VPD)",},
-			],
+			description: {
+				eng: "was PCI Vital Product Data (VPD)",
+			},
 		}, {
 			access: "bios->structure_length",
 			name: "structure_length",
@@ -143,22 +143,22 @@ global_defaults: {
 		{
 			access: "bios->pci_rom_signature",
 			name: "pci_rom_signature",
-			description: [
-				{language: "english", text: "0xAA55",},
-			],
+			description: {
+				eng: "0xAA55",
+			},
 		}, {
 			access: "bios->pci_rom_size_in_512",
 			name: "pci_rom_size_in_512",
 			display: "ATUI_DEC",
-			description: [
-				{language: "english", text: "in 512 Bytes",},
-			],
+			description: {
+				eng: "in 512 Bytes",
+			},
 		}, {
 			access: "bios->efi_signature",
 			name: "efi_signature",
-			description: [
-				{language: "english", text: "0xEF1",},
-			],
+			description: {
+				eng: "0xEF1",
+			},
 		}, {
 			access: "bios->subsystem_value",
 			name: "subsystem_value",
@@ -170,9 +170,9 @@ global_defaults: {
 		}, {
 			access: "bios->compression_type",
 			name: "compression_type",
-			description: [
-				{language: "english", text: "1 = Compressed following the UEFI algo",},
-			],
+			description: {
+				eng: "1 = Compressed following the UEFI algo",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",

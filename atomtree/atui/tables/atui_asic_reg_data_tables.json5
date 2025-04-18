@@ -257,9 +257,9 @@ global_defaults: {
 			access: "bios->mc_seq_misc1.gddr5_mr0",
 			name: "gddr5_mr0",
 			fancy_data: "gddr5_mr0",
-			description: [
-				{language: "english", text: "seq_misc1",},
-			],
+			description: {
+				eng: "seq_misc1",
+			},
 		}, {
 			access: "bios->mc_seq_misc1.gddr5_mr1",
 			name: "gddr5_mr1",
@@ -268,9 +268,9 @@ global_defaults: {
 			access: "bios->mc_seq_misc3.gddr5_mr4",
 			name: "gddr5_mr4",
 			fancy_data: "gddr5_mr4",
-			description: [
-				{language: "english", text: "seq_misc3",},
-			],
+			description: {
+				eng: "seq_misc3",
+			},
 		}, {
 			access: "bios->mc_seq_misc3.gddr5_mr5",
 			name: "gddr5_mr5",
@@ -283,9 +283,9 @@ global_defaults: {
 			access: "bios->mc_seq_misc8.gddr5_mr8",
 			name: "gddr5_mr8",
 			fancy_data: "gddr5_mr8",
-			description: [
-				{language: "english", text: "seq_misc8",},
-			],
+			description: {
+				eng: "seq_misc8",
+			},
 		}, {
 			access: "bios->mc_arb_dram_timing",
 			name: "mc_arb_dram_timing",
@@ -361,9 +361,9 @@ global_defaults: {
 			name: "unknown15",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		}, {
 			access: "bios->DRAMTiming16",
 			name: "DRAMTiming16",
@@ -385,17 +385,17 @@ global_defaults: {
 			name: "unknown19",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		}, {
 			access: "bios->unknown20",
 			name: "unknown20",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		}, {
 			access: "bios->tRFC",
 			name: "tRFC",
@@ -471,9 +471,9 @@ global_defaults: {
 			name: "unknown15",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		}, {
 			access: "bios->DRAMTiming16",
 			name: "DRAMTiming16",
@@ -499,9 +499,9 @@ global_defaults: {
 			name: "unknown23",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		}, {
 			access: "bios->tRFC",
 			name: "tRFC",
@@ -515,9 +515,9 @@ global_defaults: {
 			name: "unkown24",
 			display: "ATUI_BIN",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text: "unsure",},
-			],
+			description: {
+				eng: "unsure",
+			},
 		},
 	],
 }, {

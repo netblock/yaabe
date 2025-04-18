@@ -33,24 +33,24 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "powerplay",
-				description: [
-					{language: "english", text: "whether CCC needs to show Powerplay page.",},
-				],
+				description: {
+					eng: "whether CCC needs to show Powerplay page.",
+				},
 			}, {
 				access: "sbios_powersource",
-				description: [
-					{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
-				],
+				description: {
+					eng: "whether power source notificaiton is done by SBIOS instead of OS.",
+				},
 			}, {
 				access: "hardware_dc",
-				description: [
-					{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
-				],
+				description: {
+					eng: "whether DC mode notificaiton is done by GPIO pin directly.",
+				},
 			}, {
 				access: "BACO",
-				description: [
-					{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
-				],
+				description: {
+					eng: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",
+				},
 			}, {
 				access: "combine_pcc_with_thermal_signal",
 			}, {
@@ -75,24 +75,24 @@ global_defaults: {
 		}, {
 			access: "bios->MaxODEngineClock",
 			name: "MaxODEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxODMemoryClock",
 			name: "MaxODMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->PowerControlLimit",
 			name: "PowerControlLimit",
 		}, {
 			access: "bios->UlvVoltageOffset",
 			name: "UlvVoltageOffset",
-			description: [
-				{language: "english", text: "in mv units",},
-			],
+			description: {
+				eng: "in mv units",
+			},
 		}, {
 			access: "bios->UlvSmnclkDid",
 			name: "UlvSmnclkDid",
@@ -181,9 +181,9 @@ global_defaults: {
 			access: "bios->Reserve",
 			name: "Reserve",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "No PPM Support for Vega10",},
-			],
+			description: {
+				eng: "No PPM Support for Vega10",
+			},
 		}, {
 			access: "bios->PowerTuneTableOffset",
 			name: "PowerTuneTableOffset",
@@ -290,42 +290,42 @@ global_defaults: {
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes.",
+			},
 		}, {
 			access: "bios->FanRPMMax",
 			name: "FanRPMMax",
-			description: [
-				{language: "english", text: "The default value in RPM.",},
-			],
+			description: {
+				eng: "The default value in RPM.",
+			},
 		}, {
 			access: "bios->ThrottlingRPM",
 			name: "ThrottlingRPM",
 		}, {
 			access: "bios->FanAcousticLimit",
 			name: "FanAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "The default ideal temperature in Celcius.",},
-			],
+			description: {
+				eng: "The default ideal temperature in Celcius.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.",
+			},
 		}, {
 			access: "bios->TargetGfxClk",
 			name: "TargetGfxClk",
-			description: [
-				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->FanGainEdge",
 			name: "FanGainEdge",
@@ -367,36 +367,36 @@ global_defaults: {
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes.",
+			},
 		}, {
 			access: "bios->FanAcousticLimit",
 			name: "FanAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->ThrottlingRPM",
 			name: "ThrottlingRPM",
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "The default ideal temperature in Celcius.",},
-			],
+			description: {
+				eng: "The default ideal temperature in Celcius.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.",
+			},
 		}, {
 			access: "bios->TargetGfxClk",
 			name: "TargetGfxClk",
-			description: [
-				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->FanGainEdge",
 			name: "FanGainEdge",
@@ -449,36 +449,36 @@ global_defaults: {
 		}, {
 			access: "bios->FanOutputSensitivity",
 			name: "FanOutputSensitivity",
-			description: [
-				{language: "english", text: "Sensitivity of fan reaction to temepature changes.",},
-			],
+			description: {
+				eng: "Sensitivity of fan reaction to temepature changes.",
+			},
 		}, {
 			access: "bios->FanAcousticLimit",
 			name: "FanAcousticLimit",
-			description: [
-				{language: "english", text: "Minimum Fan Controller Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "Minimum Fan Controller Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->ThrottlingRPM",
 			name: "ThrottlingRPM",
 		}, {
 			access: "bios->TargetTemperature",
 			name: "TargetTemperature",
-			description: [
-				{language: "english", text: "The default ideal temperature in Celcius.",},
-			],
+			description: {
+				eng: "The default ideal temperature in Celcius.",
+			},
 		}, {
 			access: "bios->MinimumPWMLimit",
 			name: "MinimumPWMLimit",
-			description: [
-				{language: "english", text: "The minimum PWM that the advanced fan controller can set.",},
-			],
+			description: {
+				eng: "The minimum PWM that the advanced fan controller can set.",
+			},
 		}, {
 			access: "bios->TargetGfxClk",
 			name: "TargetGfxClk",
-			description: [
-				{language: "english", text: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",},
-			],
+			description: {
+				eng: "The ideal Fan Controller GFXCLK Frequency Acoustic Limit.",
+			},
 		}, {
 			access: "bios->FanGainEdge",
 			name: "FanGainEdge",
@@ -540,9 +540,9 @@ global_defaults: {
 		}, {
 			access: "bios->I2cLine",
 			name: "I2cLine",
-			description: [
-				{language: "english", text: "as interpreted by DAL I2C",},
-			],
+			description: {
+				eng: "as interpreted by DAL I2C",
+			},
 		}, {
 			access: "bios->I2cAddress",
 			name: "I2cAddress",
@@ -554,21 +554,21 @@ global_defaults: {
 		}, {
 			access: "bios->FanMinRPM",
 			name: "FanMinRPM",
-			description: [
-				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Minimum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->FanMaxRPM",
 			name: "FanMaxRPM",
-			description: [
-				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Maximum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
-			description: [
-				{language: "english", text: "to be defined",},
-			],
+			description: {
+				eng: "to be defined",
+			},
 		},
 	],
 },
@@ -579,15 +579,15 @@ global_defaults: {
 		{
 			access: "bios->Clk",
 			name: "Clk",
-			description: [
-				{language: "english", text: "Frequency of Clock",},
-			],
+			description: {
+				eng: "Frequency of Clock",
+			},
 		}, {
 			access: "bios->VddInd",
 			name: "VddInd",
-			description: [
-				{language: "english", text: "Base voltage ; SOC_VDD index",},
-			],
+			description: {
+				eng: "Base voltage ; SOC_VDD index",
+			},
 		},
 	],
 },
@@ -629,15 +629,15 @@ global_defaults: {
 		}, {
 			access: "bios->VddMemInd",
 			name: "VddMemInd",
-			description: [
-				{language: "english", text: "MEM_VDD - only non zero for MCLK record",},
-			],
+			description: {
+				eng: "MEM_VDD - only non zero for MCLK record",
+			},
 		}, {
 			access: "bios->VddciInd",
 			name: "VddciInd",
-			description: [
-				{language: "english", text: "VDDCI   = only non zero for MCLK record",},
-			],
+			description: {
+				eng: "VDDCI   = only non zero for MCLK record",
+			},
 		},
 	],
 }, {
@@ -672,9 +672,9 @@ global_defaults: {
 		access: "bios->CKSVOffsetandDisable",
 		name: "CKSVOffsetandDisable",
 		display: "ATUI_BIN",
-		description: [
-			{language: "english", text: "clock stretch",},
-		],
+		description: {
+			eng: "clock stretch",
+		},
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "cks_voltage_offset",
@@ -699,9 +699,9 @@ global_defaults: {
 		}, {
 			access: "bios->AVFSOffset",
 			name: "AVFSOffset",
-			description: [
-				{language: "english", text: "AVFS Voltage offset",},
-			],
+			description: {
+				eng: "AVFS Voltage offset",
+			},
 		},
 	],
 }, {
@@ -744,9 +744,9 @@ global_defaults: {
 		}, {
 			access: "bios->AVFSOffset",
 			name: "AVFSOffset",
-			description: [
-				{language: "english", text: "AVFS Voltage offset",},
-			],
+			description: {
+				eng: "AVFS Voltage offset",
+			},
 		}, {
 			access: "bios->ACGEnable",
 			name: "ACGEnable",
@@ -817,33 +817,33 @@ global_defaults: {
 		{
 			access: "bios->VddcInd",
 			name: "VddcInd",
-			description: [
-				{language: "english", text: "SOC_VDD voltage",},
-			],
+			description: {
+				eng: "SOC_VDD voltage",
+			},
 		}, {
 			access: "bios->DClk",
 			name: "DClk",
-			description: [
-				{language: "english", text: "UVD D-clock",},
-			],
+			description: {
+				eng: "UVD D-clock",
+			},
 		}, {
 			access: "bios->VClk",
 			name: "VClk",
-			description: [
-				{language: "english", text: "UVD V-clock",},
-			],
+			description: {
+				eng: "UVD V-clock",
+			},
 		}, {
 			access: "bios->EClk",
 			name: "EClk",
-			description: [
-				{language: "english", text: "VCE clock",},
-			],
+			description: {
+				eng: "VCE clock",
+			},
 		}, {
 			access: "bios->PSPClk",
 			name: "PSPClk",
-			description: [
-				{language: "english", text: "PSP clock",},
-			],
+			description: {
+				eng: "PSP clock",
+			},
 		},
 	],
 }, {
@@ -878,27 +878,27 @@ global_defaults: {
 		{
 			access: "bios->VCEClockIndex",
 			name: "VCEClockIndex",
-			description: [
-				{language: "english", text: "index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type",},
-			],
+			description: {
+				eng: "index into usVCEDependencyTableOffset of 'ATOM_Vega10_MM_Dependency_Table' type",
+			},
 		}, {
 			access: "bios->Flag",
 			name: "Flag",
-			description: [
-				{language: "english", text: "2 bits indicates memory p-states",},
-			],
+			description: {
+				eng: "2 bits indicates memory p-states",
+			},
 		}, {
 			access: "bios->SCLKIndex",
 			name: "SCLKIndex",
-			description: [
-				{language: "english", text: "index into ATOM_Vega10_SCLK_Dependency_Table",},
-			],
+			description: {
+				eng: "index into ATOM_Vega10_SCLK_Dependency_Table",
+			},
 		}, {
 			access: "bios->MCLKIndex",
 			name: "MCLKIndex",
-			description: [
-				{language: "english", text: "index into ATOM_Vega10_MCLK_Dependency_Table",},
-			],
+			description: {
+				eng: "index into ATOM_Vega10_MCLK_Dependency_Table",
+			},
 		},
 	],
 }, {
@@ -1230,21 +1230,21 @@ global_defaults: {
 		{
 			access: "bios->LCLK",
 			name: "LCLK",
-			description: [
-				{language: "english", text: "LClock",},
-			],
+			description: {
+				eng: "LClock",
+			},
 		}, {
 			access: "bios->PCIEGenSpeed",
 			name: "PCIEGenSpeed",
-			description: [
-				{language: "english", text: "PCIE Speed",},
-			],
+			description: {
+				eng: "PCIE Speed",
+			},
 		}, {
 			access: "bios->PCIELaneWidth",
 			name: "PCIELaneWidth",
-			description: [
-				{language: "english", text: "PCIE Lane Width",},
-			],
+			description: {
+				eng: "PCIE Lane Width",
+			},
 		},
 	],
 }, {

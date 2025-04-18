@@ -42,9 +42,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "ATOM",},
-			],
+			description: {
+				eng: "ATOM",
+			},
 		}, {
 			access: "bios->bios_segment_address",
 			name: "bios_segment_address",
@@ -93,16 +93,16 @@ global_defaults: {
 			access: "bios->masterhwfunction_offset",
 			name: "masterhwfunction_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Offest for SW to get all command function offsets, Don't change the position",},
-			],
+			description: {
+				eng: "Offest for SW to get all command function offsets, Don't change the position",
+			},
 		}, {
 			access: "bios->masterdatatable_offset",
 			name: "masterdatatable_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Offest for SW to get all data table offsets, Don't change the position",},
-			],
+			description: {
+				eng: "Offest for SW to get all data table offsets, Don't change the position",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -126,9 +126,9 @@ global_defaults: {
 			access: "bios->utilitypipeline",
 			name: "utilitypipeline",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Offest for the utility to get parser info, Don't change this position!",},
-			],
+			description: {
+				eng: "Offest for the utility to get parser info, Don't change this position!",
+			},
 		}, {
 			access: "bios->multimedia_info",
 			name: "multimedia_info",
@@ -145,9 +145,9 @@ global_defaults: {
 			access: "bios->firmwareinfo",
 			name: "firmwareinfo",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable5",
 			name: "sw_datatable5",
@@ -156,9 +156,9 @@ global_defaults: {
 			access: "bios->lcd_info",
 			name: "lcd_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable7",
 			name: "sw_datatable7",
@@ -179,16 +179,16 @@ global_defaults: {
 			access: "bios->vram_usagebyfirmware",
 			name: "vram_usagebyfirmware",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->gpio_pin_lut",
 			name: "gpio_pin_lut",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable13",
 			name: "sw_datatable13",
@@ -201,9 +201,9 @@ global_defaults: {
 			access: "bios->powerplayinfo",
 			name: "powerplayinfo",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable16",
 			name: "sw_datatable16",
@@ -232,23 +232,23 @@ global_defaults: {
 			access: "bios->displayobjectinfo",
 			name: "displayobjectinfo",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->indirectioaccess",
 			name: "indirectioaccess",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "used as an internal one",},
-			],
+			description: {
+				eng: "used as an internal one",
+			},
 		}, {
 			access: "bios->umc_info",
 			name: "umc_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable25",
 			name: "sw_datatable25",
@@ -261,16 +261,16 @@ global_defaults: {
 			access: "bios->dce_info",
 			name: "dce_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->vram_info",
 			name: "vram_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable29",
 			name: "sw_datatable29",
@@ -279,23 +279,23 @@ global_defaults: {
 			access: "bios->integratedsysteminfo",
 			name: "integratedsysteminfo",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->asic_profiling_info",
 			name: "asic_profiling_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Shared by various SW components",},
-			],
+			description: {
+				eng: "Shared by various SW components",
+			},
 		}, {
 			access: "bios->voltageobject_info",
 			name: "voltageobject_info",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "shared by various SW components",},
-			],
+			description: {
+				eng: "shared by various SW components",
+			},
 		}, {
 			access: "bios->sw_datatable33",
 			name: "sw_datatable33",
@@ -1106,80 +1106,80 @@ global_defaults: {
 		}, {
 			access: "bios->MaxVoltageStepGfx",
 			name: "MaxVoltageStepGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->MaxVoltageStepSoc",
 			name: "MaxVoltageStepSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->VddGfxVrMapping",
 			name: "VddGfxVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddSocVrMapping",
 			name: "VddSocVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem0VrMapping",
 			name: "VddMem0VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem1VrMapping",
 			name: "VddMem1VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->ExternalSensorPresent",
 			name: "ExternalSensorPresent",
-			description: [
-				{language: "english", text: "External RDI connected to TMON (aka TEMP IN)",},
-			],
+			description: {
+				eng: "External RDI connected to TMON (aka TEMP IN)",
+			},
 		}, {
 			access: "bios->Padding8_V",
 			name: "Padding8_V",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Telemetry Settings",},
-			],
+			description: {
+				eng: "Telemetry Settings",
+			},
 		}, {
 			access: "bios->GfxMaxCurrent",
 			name: "GfxMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->GfxOffset",
 			name: "GfxOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
@@ -1187,15 +1187,15 @@ global_defaults: {
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->SocOffset",
 			name: "SocOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
@@ -1203,15 +1203,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem0Offset",
 			name: "Mem0Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
@@ -1219,88 +1219,88 @@ global_defaults: {
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem1Offset",
 			name: "Mem1Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "GPIO Settings",},
-			],
+			description: {
+				eng: "GPIO Settings",
+			},
 		}, {
 			access: "bios->AcDcGpio",
 			name: "AcDcGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO pin configured for AC/DC switching",
+			},
 		}, {
 			access: "bios->AcDcPolarity",
 			name: "AcDcPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->VR0HotGpio",
 			name: "VR0HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR0HotPolarity",
 			name: "VR0HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotGpio",
 			name: "VR1HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR1 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotPolarity",
 			name: "VR1HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->GthrGpio",
 			name: "GthrGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for GTHR Event",},
-			],
+			description: {
+				eng: "GPIO pin configured for GTHR Event",
+			},
 		}, {
 			access: "bios->GthrPolarity",
 			name: "GthrPolarity",
-			description: [
-				{language: "english", text: "replace GPIO polarity for GTHR",},
-			],
+			description: {
+				eng: "replace GPIO polarity for GTHR",
+			},
 		}, {
 			access: "bios->LedPin0",
 			name: "LedPin0",
-			description: [
-				{language: "english", text: "LED Display Settings GPIO number for LedPin[0]",},
-			],
+			description: {
+				eng: "LED Display Settings GPIO number for LedPin[0]",
+			},
 		}, {
 			access: "bios->LedPin1",
 			name: "LedPin1",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[1]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[1]",
+			},
 		}, {
 			access: "bios->LedPin2",
 			name: "LedPin2",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[2]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[2]",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
@@ -1308,94 +1308,94 @@ global_defaults: {
 		}, {
 			access: "bios->PllGfxclkSpreadEnabled",
 			name: "PllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadPercent",
 			name: "PllGfxclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadFreq",
 			name: "PllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadEnabled",
 			name: "DfllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "GFXCLK DFLL Spread Spectrum on or off",},
-			],
+			description: {
+				eng: "GFXCLK DFLL Spread Spectrum on or off",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadPercent",
 			name: "DfllGfxclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadFreq",
 			name: "DfllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->UclkSpreadEnabled",
 			name: "UclkSpreadEnabled",
-			description: [
-				{language: "english", text: "UCLK Spread Spectrum  on or off",},
-			],
+			description: {
+				eng: "UCLK Spread Spectrum  on or off",
+			},
 		}, {
 			access: "bios->UclkSpreadPercent",
 			name: "UclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->UclkSpreadFreq",
 			name: "UclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->SoclkSpreadEnabled",
 			name: "SoclkSpreadEnabled",
-			description: [
-				{language: "english", text: "SOCCLK Spread Spectrum on or off",},
-			],
+			description: {
+				eng: "SOCCLK Spread Spectrum on or off",
+			},
 		}, {
 			access: "bios->SocclkSpreadPercent",
 			name: "SocclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->SocclkSpreadFreq",
 			name: "SocclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Mvdd Svi2 Div Ratio Setting",},
-			],
+			description: {
+				eng: "Mvdd Svi2 Div Ratio Setting",
+			},
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
-			description: [
-				{language: "english", text: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",},
-			],
+			description: {
+				eng: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",
+			},
 		}, {
 			access: "bios->BoardReserved",
 			name: "BoardReserved",
@@ -1416,79 +1416,79 @@ global_defaults: {
 			name: "i2c_padding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "old i2c control are moved to new area",},
-			],
+			description: {
+				eng: "old i2c control are moved to new area",
+			},
 		}, {
 			access: "bios->maxvoltagestepgfx",
 			name: "maxvoltagestepgfx",
-			description: [
-				{language: "english", text: "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->maxvoltagestepsoc",
 			name: "maxvoltagestepsoc",
-			description: [
-				{language: "english", text: "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->vddgfxvrmapping",
 			name: "vddgfxvrmapping",
-			description: [
-				{language: "english", text: "use vr_mapping* bitfields",},
-			],
+			description: {
+				eng: "use vr_mapping* bitfields",
+			},
 		}, {
 			access: "bios->vddsocvrmapping",
 			name: "vddsocvrmapping",
-			description: [
-				{language: "english", text: "use vr_mapping* bitfields",},
-			],
+			description: {
+				eng: "use vr_mapping* bitfields",
+			},
 		}, {
 			access: "bios->vddmemvrmapping",
 			name: "vddmemvrmapping",
-			description: [
-				{language: "english", text: "use vr_mapping* bitfields",},
-			],
+			description: {
+				eng: "use vr_mapping* bitfields",
+			},
 		}, {
 			access: "bios->boardvrmapping",
 			name: "boardvrmapping",
-			description: [
-				{language: "english", text: "use vr_mapping* bitfields",},
-			],
+			description: {
+				eng: "use vr_mapping* bitfields",
+			},
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set psi0/1 to 1 in ulv mode",},
-			],
+			description: {
+				eng: "set this to 1 to set psi0/1 to 1 in ulv mode",
+			},
 		}, {
 			access: "bios->externalsensorpresent",
 			name: "externalsensorpresent",
-			description: [
-				{language: "english", text: "external rdi connected to tmon (aka temp in)",},
-			],
+			description: {
+				eng: "external rdi connected to tmon (aka temp in)",
+			},
 		}, {
 			access: "bios->padding8_v",
 			name: "padding8_v",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "telemetry settings",},
-			],
+			description: {
+				eng: "telemetry settings",
+			},
 		}, {
 			access: "bios->gfxmaxcurrent",
 			name: "gfxmaxcurrent",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->gfxoffset",
 			name: "gfxoffset",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->padding_telemetrygfx",
 			name: "padding_telemetrygfx",
@@ -1496,15 +1496,15 @@ global_defaults: {
 		}, {
 			access: "bios->socmaxcurrent",
 			name: "socmaxcurrent",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->socoffset",
 			name: "socoffset",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->padding_telemetrysoc",
 			name: "padding_telemetrysoc",
@@ -1512,15 +1512,15 @@ global_defaults: {
 		}, {
 			access: "bios->memmaxcurrent",
 			name: "memmaxcurrent",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->memoffset",
 			name: "memoffset",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->padding_telemetrymem",
 			name: "padding_telemetrymem",
@@ -1528,106 +1528,106 @@ global_defaults: {
 		}, {
 			access: "bios->boardmaxcurrent",
 			name: "boardmaxcurrent",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->boardoffset",
 			name: "boardoffset",
-			description: [
-				{language: "english", text: "in amps",},
-			],
+			description: {
+				eng: "in amps",
+			},
 		}, {
 			access: "bios->padding_telemetryboardinput",
 			name: "padding_telemetryboardinput",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "gpio settings",},
-			],
+			description: {
+				eng: "gpio settings",
+			},
 		}, {
 			access: "bios->vr0hotgpio",
 			name: "vr0hotgpio",
-			description: [
-				{language: "english", text: "gpio pin configured for vr0 hot event",},
-			],
+			description: {
+				eng: "gpio pin configured for vr0 hot event",
+			},
 		}, {
 			access: "bios->vr0hotpolarity",
 			name: "vr0hotpolarity",
-			description: [
-				{language: "english", text: "gpio polarity for vr0 hot event",},
-			],
+			description: {
+				eng: "gpio polarity for vr0 hot event",
+			},
 		}, {
 			access: "bios->vr1hotgpio",
 			name: "vr1hotgpio",
-			description: [
-				{language: "english", text: "gpio pin configured for vr1 hot event",},
-			],
+			description: {
+				eng: "gpio pin configured for vr1 hot event",
+			},
 		}, {
 			access: "bios->vr1hotpolarity",
 			name: "vr1hotpolarity",
-			description: [
-				{language: "english", text: "gpio polarity for vr1 hot event",},
-			],
+			description: {
+				eng: "gpio polarity for vr1 hot event",
+			},
 		}, {
 			access: "bios->pllgfxclkspreadenabled",
 			name: "pllgfxclkspreadenabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->pllgfxclkspreadpercent",
 			name: "pllgfxclkspreadpercent",
 		}, {
 			access: "bios->pllgfxclkspreadfreq",
 			name: "pllgfxclkspreadfreq",
-			description: [
-				{language: "english", text: "khz",},
-			],
+			description: {
+				eng: "khz",
+			},
 		}, {
 			access: "bios->uclkspreadenabled",
 			name: "uclkspreadenabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->uclkspreadpercent",
 			name: "uclkspreadpercent",
 		}, {
 			access: "bios->uclkspreadfreq",
 			name: "uclkspreadfreq",
-			description: [
-				{language: "english", text: "khz",},
-			],
+			description: {
+				eng: "khz",
+			},
 		}, {
 			access: "bios->fclkspreadenabled",
 			name: "fclkspreadenabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->fclkspreadpercent",
 			name: "fclkspreadpercent",
 		}, {
 			access: "bios->fclkspreadfreq",
 			name: "fclkspreadfreq",
-			description: [
-				{language: "english", text: "khz",},
-			],
+			description: {
+				eng: "khz",
+			},
 		}, {
 			access: "bios->fllgfxclkspreadenabled",
 			name: "fllgfxclkspreadenabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->fllgfxclkspreadpercent",
 			name: "fllgfxclkspreadpercent",
 		}, {
 			access: "bios->fllgfxclkspreadfreq",
 			name: "fllgfxclkspreadfreq",
-			description: [
-				{language: "english", text: "khz",},
-			],
+			description: {
+				eng: "khz",
+			},
 		}, {
 			access: "bios->i2ccontrollers",
 			name: "i2ccontrollers",
@@ -1645,36 +1645,36 @@ global_defaults: {
 		}, {
 			access: "bios->memorychannelenabled",
 			name: "memorychannelenabled",
-			description: [
-				{language: "english", text: "for dram use only, max 32 channels enabled bit mask.",},
-			],
+			description: {
+				eng: "for dram use only, max 32 channels enabled bit mask.",
+			},
 		}, {
 			access: "bios->drambitwidth",
 			name: "drambitwidth",
-			description: [
-				{language: "english", text: "for dram use only. see dram bit width type defines",},
-			],
+			description: {
+				eng: "for dram use only. see dram bit width type defines",
+			},
 		}, {
 			access: "bios->paddingmem",
 			name: "paddingmem",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "total board power",},
-			],
+			description: {
+				eng: "total board power",
+			},
 		}, {
 			access: "bios->totalboardpower",
 			name: "totalboardpower",
-			description: [
-				{language: "english", text: "only needed for tcp estimated case, where tcp = tgp+total board power",},
-			],
+			description: {
+				eng: "only needed for tcp estimated case, where tcp = tgp+total board power",
+			},
 		}, {
 			access: "bios->boardpadding",
 			name: "boardpadding",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "section: xgmi training",},
-			],
+			description: {
+				eng: "section: xgmi training",
+			},
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
@@ -1711,9 +1711,9 @@ global_defaults: {
 			name: "xgmisocvoltage",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "reserved",},
-			],
+			description: {
+				eng: "reserved",
+			},
 		}, {
 			access: "bios->boardreserved",
 			name: "boardreserved",
@@ -1746,80 +1746,80 @@ global_defaults: {
 		}, {
 			access: "bios->MaxVoltageStepGfx",
 			name: "MaxVoltageStepGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->MaxVoltageStepSoc",
 			name: "MaxVoltageStepSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->VddGfxVrMapping",
 			name: "VddGfxVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddSocVrMapping",
 			name: "VddSocVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem0VrMapping",
 			name: "VddMem0VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem1VrMapping",
 			name: "VddMem1VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->ExternalSensorPresent",
 			name: "ExternalSensorPresent",
-			description: [
-				{language: "english", text: "External RDI connected to TMON (aka TEMP IN)",},
-			],
+			description: {
+				eng: "External RDI connected to TMON (aka TEMP IN)",
+			},
 		}, {
 			access: "bios->Padding8_V",
 			name: "Padding8_V",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Telemetry Settings",},
-			],
+			description: {
+				eng: "Telemetry Settings",
+			},
 		}, {
 			access: "bios->GfxMaxCurrent",
 			name: "GfxMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->GfxOffset",
 			name: "GfxOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
@@ -1827,15 +1827,15 @@ global_defaults: {
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->SocOffset",
 			name: "SocOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
@@ -1843,15 +1843,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem0Offset",
 			name: "Mem0Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
@@ -1859,205 +1859,205 @@ global_defaults: {
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem1Offset",
 			name: "Mem1Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "GPIO Settings",},
-			],
+			description: {
+				eng: "GPIO Settings",
+			},
 		}, {
 			access: "bios->AcDcGpio",
 			name: "AcDcGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO pin configured for AC/DC switching",
+			},
 		}, {
 			access: "bios->AcDcPolarity",
 			name: "AcDcPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->VR0HotGpio",
 			name: "VR0HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR0HotPolarity",
 			name: "VR0HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotGpio",
 			name: "VR1HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR1 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotPolarity",
 			name: "VR1HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->GthrGpio",
 			name: "GthrGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for GTHR Event",},
-			],
+			description: {
+				eng: "GPIO pin configured for GTHR Event",
+			},
 		}, {
 			access: "bios->GthrPolarity",
 			name: "GthrPolarity",
-			description: [
-				{language: "english", text: "replace GPIO polarity for GTHR",},
-			],
+			description: {
+				eng: "replace GPIO polarity for GTHR",
+			},
 		}, {
 			access: "bios->LedPin0",
 			name: "LedPin0",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[0]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[0]",
+			},
 		}, {
 			access: "bios->LedPin1",
 			name: "LedPin1",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[1]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[1]",
+			},
 		}, {
 			access: "bios->LedPin2",
 			name: "LedPin2",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[2]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[2]",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "GFXCLK PLL Spread Spectrum",},
-			],
+			description: {
+				eng: "GFXCLK PLL Spread Spectrum",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadEnabled",
 			name: "PllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadPercent",
 			name: "PllGfxclkSpreadPercent",
 		}, {
 			access: "bios->PllGfxclkSpreadFreq",
 			name: "PllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadEnabled",
 			name: "DfllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadPercent",
 			name: "DfllGfxclkSpreadPercent",
 		}, {
 			access: "bios->DfllGfxclkSpreadFreq",
 			name: "DfllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->UclkSpreadEnabled",
 			name: "UclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->UclkSpreadPercent",
 			name: "UclkSpreadPercent",
 		}, {
 			access: "bios->UclkSpreadFreq",
 			name: "UclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->SoclkSpreadEnabled",
 			name: "SoclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->SocclkSpreadPercent",
 			name: "SocclkSpreadPercent",
 		}, {
 			access: "bios->SocclkSpreadFreq",
 			name: "SocclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Mvdd Svi2 Div Ratio Setting",},
-			],
+			description: {
+				eng: "Mvdd Svi2 Div Ratio Setting",
+			},
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
-			description: [
-				{language: "english", text: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",},
-			],
+			description: {
+				eng: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",
+			},
 		}, {
 			access: "bios->GpioI2cScl",
 			name: "GpioI2cScl",
-			description: [
-				{language: "english", text: "Serial Clock",},
-			],
+			description: {
+				eng: "Serial Clock",
+			},
 		}, {
 			access: "bios->GpioI2cSda",
 			name: "GpioI2cSda",
-			description: [
-				{language: "english", text: "Serial Data",},
-			],
+			description: {
+				eng: "Serial Data",
+			},
 		}, {
 			access: "bios->GpioPadding",
 			name: "GpioPadding",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Additional LED Display Settings",},
-			],
+			description: {
+				eng: "Additional LED Display Settings",
+			},
 		}, {
 			access: "bios->LedPin3",
 			name: "LedPin3",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[3] - PCIE GEN Speed",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[3] - PCIE GEN Speed",
+			},
 		}, {
 			access: "bios->LedPin4",
 			name: "LedPin4",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[4] - PMFW Error Status",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[4] - PMFW Error Status",
+			},
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
@@ -2066,9 +2066,9 @@ global_defaults: {
 			name: "PowerLimitScalar",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "[PPT_THROTTLER_COUNT]",},
-			],
+			description: {
+				eng: "[PPT_THROTTLER_COUNT]",
+			},
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
@@ -2133,95 +2133,95 @@ global_defaults: {
 		}, {
 			access: "bios->GpioScl",
 			name: "GpioScl",
-			description: [
-				{language: "english", text: "GPIO Number for SCL Line, used only for CKSVII2C1",},
-			],
+			description: {
+				eng: "GPIO Number for SCL Line, used only for CKSVII2C1",
+			},
 		}, {
 			access: "bios->GpioSda",
 			name: "GpioSda",
-			description: [
-				{language: "english", text: "GPIO Number for SDA Line, used only for CKSVII2C1",},
-			],
+			description: {
+				eng: "GPIO Number for SDA Line, used only for CKSVII2C1",
+			},
 		}, {
 			access: "bios->FchUsbPdSlaveAddr",
 			name: "FchUsbPdSlaveAddr",
-			description: [
-				{language: "english", text: "For requesting USB PD controller S-states via FCH I2C when entering PME turn off",},
-			],
+			description: {
+				eng: "For requesting USB PD controller S-states via FCH I2C when entering PME turn off",
+			},
 		}, {
 			access: "bios->I2cSpare",
 			name: "I2cSpare",
-			description: [
-				{language: "english", text: "SECTION: SVI2 Board Parameters",},
-			],
+			description: {
+				eng: "SECTION: SVI2 Board Parameters",
+			},
 		}, {
 			access: "bios->VddGfxVrMapping",
 			name: "VddGfxVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddSocVrMapping",
 			name: "VddSocVrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem0VrMapping",
 			name: "VddMem0VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->VddMem1VrMapping",
 			name: "VddMem1VrMapping",
-			description: [
-				{language: "english", text: "Use VR_MAPPING* bitfields",},
-			],
+			description: {
+				eng: "Use VR_MAPPING* bitfields",
+			},
 		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->VddciUlvPhaseSheddingMask",
 			name: "VddciUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->GfxMaxCurrent",
 			name: "GfxMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->GfxOffset",
 			name: "GfxOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
@@ -2229,15 +2229,15 @@ global_defaults: {
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->SocOffset",
 			name: "SocOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
@@ -2245,15 +2245,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem0Offset",
 			name: "Mem0Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
@@ -2261,15 +2261,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem1Offset",
 			name: "Mem1Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
@@ -2277,75 +2277,75 @@ global_defaults: {
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
-			description: [
-				{language: "english", text: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",},
-			],
+			description: {
+				eng: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",
+			},
 		}, {
 			access: "bios->AcDcGpio",
 			name: "AcDcGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO pin configured for AC/DC switching",
+			},
 		}, {
 			access: "bios->AcDcPolarity",
 			name: "AcDcPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->VR0HotGpio",
 			name: "VR0HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR0HotPolarity",
 			name: "VR0HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotGpio",
 			name: "VR1HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR1 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotPolarity",
 			name: "VR1HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->GthrGpio",
 			name: "GthrGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for GTHR Event",},
-			],
+			description: {
+				eng: "GPIO pin configured for GTHR Event",
+			},
 		}, {
 			access: "bios->GthrPolarity",
 			name: "GthrPolarity",
-			description: [
-				{language: "english", text: "replace GPIO polarity for GTHR",},
-			],
+			description: {
+				eng: "replace GPIO polarity for GTHR",
+			},
 		}, {
 			access: "bios->LedPin0",
 			name: "LedPin0",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[0]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[0]",
+			},
 		}, {
 			access: "bios->LedPin1",
 			name: "LedPin1",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[1]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[1]",
+			},
 		}, {
 			access: "bios->LedPin2",
 			name: "LedPin2",
-			description: [
-				{language: "english", text: "GPIO number for LedPin[2]",},
-			],
+			description: {
+				eng: "GPIO number for LedPin[2]",
+			},
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
@@ -2354,127 +2354,127 @@ global_defaults: {
 		}, {
 			access: "bios->LedPcie",
 			name: "LedPcie",
-			description: [
-				{language: "english", text: "GPIO number for PCIE results",},
-			],
+			description: {
+				eng: "GPIO number for PCIE results",
+			},
 		}, {
 			access: "bios->LedError",
 			name: "LedError",
-			description: [
-				{language: "english", text: "GPIO number for Error Cases",},
-			],
+			description: {
+				eng: "GPIO number for Error Cases",
+			},
 		}, {
 			access: "bios->LedSpare1",
 			name: "LedSpare1",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "SECTION: Clock Spread Spectrum",},
-			],
+			description: {
+				eng: "SECTION: Clock Spread Spectrum",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadEnabled",
 			name: "PllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadPercent",
 			name: "PllGfxclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->PllGfxclkSpreadFreq",
 			name: "PllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadEnabled",
 			name: "DfllGfxclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadPercent",
 			name: "DfllGfxclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->DfllGfxclkSpreadFreq",
 			name: "DfllGfxclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->UclkSpreadEnabled",
 			name: "UclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->UclkSpreadPercent",
 			name: "UclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->UclkSpreadFreq",
 			name: "UclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->FclkSpreadEnabled",
 			name: "FclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->FclkSpreadPercent",
 			name: "FclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->FclkSpreadFreq",
 			name: "FclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->MemoryChannelEnabled",
 			name: "MemoryChannelEnabled",
-			description: [
-				{language: "english", text: "For DRAM use only, Max 32 channels enabled bit mask.",},
-			],
+			description: {
+				eng: "For DRAM use only, Max 32 channels enabled bit mask.",
+			},
 		}, {
 			access: "bios->DramBitWidth",
 			name: "DramBitWidth",
-			description: [
-				{language: "english", text: "For DRAM use only. See Dram Bit width type defines",},
-			],
+			description: {
+				eng: "For DRAM use only. See Dram Bit width type defines",
+			},
 		}, {
 			access: "bios->PaddingMem1",
 			name: "PaddingMem1",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Section: Total Board Power",},
-			],
+			description: {
+				eng: "Section: Total Board Power",
+			},
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPowerPadding",
 			name: "BoardPowerPadding",
-			description: [
-				{language: "english", text: "SECTION: XGMI Training",},
-			],
+			description: {
+				eng: "SECTION: XGMI Training",
+			},
 		}, {
 			access: "bios->xgmilinkspeed",
 			name: "xgmilinkspeed",
@@ -2511,9 +2511,9 @@ global_defaults: {
 			name: "XgmiSocVoltage",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "SECTION: Board Reserved",},
-			],
+			description: {
+				eng: "SECTION: Board Reserved",
+			},
 		}, {
 			access: "bios->BoardReserved",
 			name: "BoardReserved",
@@ -2532,15 +2532,15 @@ global_defaults: {
 		}, {
 			access: "bios->GfxMaxCurrent",
 			name: "GfxMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->GfxOffset",
 			name: "GfxOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
@@ -2548,15 +2548,15 @@ global_defaults: {
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->SocOffset",
 			name: "SocOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
@@ -2564,15 +2564,15 @@ global_defaults: {
 		}, {
 			access: "bios->MemMaxCurrent",
 			name: "MemMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->MemOffset",
 			name: "MemOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem",
 			name: "Padding_TelemetryMem",
@@ -2580,94 +2580,94 @@ global_defaults: {
 		}, {
 			access: "bios->BoardMaxCurrent",
 			name: "BoardMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->BoardOffset",
 			name: "BoardOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryBoardInput",
 			name: "Padding_TelemetryBoardInput",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Platform input telemetry voltage coefficient",},
-			],
+			description: {
+				eng: "Platform input telemetry voltage coefficient",
+			},
 		}, {
 			access: "bios->BoardVoltageCoeffA",
 			name: "BoardVoltageCoeffA",
-			description: [
-				{language: "english", text: "decode by /1000",},
-			],
+			description: {
+				eng: "decode by /1000",
+			},
 		}, {
 			access: "bios->BoardVoltageCoeffB",
 			name: "BoardVoltageCoeffB",
-			description: [
-				{language: "english", text: "decode by /1000",},
-			],
+			description: {
+				eng: "decode by /1000",
+			},
 		}, {
 			access: "bios->VR0HotGpio",
 			name: "VR0HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR0HotPolarity",
 			name: "VR0HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotGpio",
 			name: "VR1HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR1 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotPolarity",
 			name: "VR1HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->UclkSpreadEnabled",
 			name: "UclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->UclkSpreadPercent",
 			name: "UclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->UclkSpreadFreq",
 			name: "UclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->FclkSpreadEnabled",
 			name: "FclkSpreadEnabled",
-			description: [
-				{language: "english", text: "on or off",},
-			],
+			description: {
+				eng: "on or off",
+			},
 		}, {
 			access: "bios->FclkSpreadPercent",
 			name: "FclkSpreadPercent",
-			description: [
-				{language: "english", text: "Q4.4",},
-			],
+			description: {
+				eng: "Q4.4",
+			},
 		}, {
 			access: "bios->FclkSpreadFreq",
 			name: "FclkSpreadFreq",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		}, {
 			access: "bios->I2cControllers",
 			name: "I2cControllers",
@@ -2685,15 +2685,15 @@ global_defaults: {
 		}, {
 			access: "bios->GpioI2cScl",
 			name: "GpioI2cScl",
-			description: [
-				{language: "english", text: "Serial Clock",},
-			],
+			description: {
+				eng: "Serial Clock",
+			},
 		}, {
 			access: "bios->GpioI2cSda",
 			name: "GpioI2cSda",
-			description: [
-				{language: "english", text: "Serial Data",},
-			],
+			description: {
+				eng: "Serial Data",
+			},
 		}, {
 			access: "bios->spare5",
 			name: "spare5",
@@ -2772,15 +2772,15 @@ global_defaults: {
 		}, {
 			access: "bios->main_call_parser_entry",
 			name: "main_call_parser_entry",
-			description: [
-				{language: "english", text: "direct address of main parser call in VBIOS binary.",},
-			],
+			description: {
+				eng: "direct address of main parser call in VBIOS binary.",
+			},
 		}, {
 			access: "bios->bios_scratch_reg_startaddr",
 			name: "bios_scratch_reg_startaddr",
-			description: [
-				{language: "english", text: "1st bios scratch register dword address",},
-			],
+			description: {
+				eng: "1st bios scratch register dword address",
+			},
 		}, {
 			access: "bios->bootup_vddc_mv",
 			name: "bootup_vddc_mv",
@@ -2799,9 +2799,9 @@ global_defaults: {
 		}, {
 			access: "bios->coolingsolution_id",
 			name: "coolingsolution_id",
-			description: [
-				{language: "english", text: "0: Air cooling; 1: Liquid cooling ...",},
-			],
+			description: {
+				eng: "0: Air cooling; 1: Liquid cooling ...",
+			},
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
@@ -2850,16 +2850,16 @@ global_defaults: {
 			access: "bios->main_call_parser_entry",
 			name: "main_call_parser_entry",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "direct address of main parser call in VBIOS binary.",},
-			],
+			description: {
+				eng: "direct address of main parser call in VBIOS binary.",
+			},
 		}, {
 			access: "bios->bios_scratch_reg_startaddr",
 			name: "bios_scratch_reg_startaddr",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "1st bios scratch register dword address",},
-			],
+			description: {
+				eng: "1st bios scratch register dword address",
+			},
 		}, {
 			access: "bios->bootup_vddc_mv",
 			name: "bootup_vddc_mv",
@@ -2878,9 +2878,9 @@ global_defaults: {
 		}, {
 			access: "bios->coolingsolution_id",
 			name: "coolingsolution_id",
-			description: [
-				{language: "english", text: "0: Air cooling; 1: Liquid cooling ...",},
-			],
+			description: {
+				eng: "0: Air cooling; 1: Liquid cooling ...",
+			},
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
@@ -2896,16 +2896,16 @@ global_defaults: {
 			access: "bios->board_i2c_feature_id",
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "enum of atom_board_i2c_feature_id_def",},
-			],
+			description: {
+				eng: "enum of atom_board_i2c_feature_id_def",
+			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
 			name: "board_i2c_feature_gpio_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "i2c id find in gpio_lut data table gpio_id",},
-			],
+			description: {
+				eng: "i2c id find in gpio_lut data table gpio_id",
+			},
 		}, {
 			access: "bios->board_i2c_feature_slave_addr",
 			name: "board_i2c_feature_slave_addr",
@@ -2958,16 +2958,16 @@ global_defaults: {
 			access: "bios->main_call_parser_entry",
 			name: "main_call_parser_entry",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "direct address of main parser call in VBIOS binary.",},
-			],
+			description: {
+				eng: "direct address of main parser call in VBIOS binary.",
+			},
 		}, {
 			access: "bios->bios_scratch_reg_startaddr",
 			name: "bios_scratch_reg_startaddr",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "1st bios scratch register dword address",},
-			],
+			description: {
+				eng: "1st bios scratch register dword address",
+			},
 		}, {
 			access: "bios->bootup_vddc_mv",
 			name: "bootup_vddc_mv",
@@ -2986,9 +2986,9 @@ global_defaults: {
 		}, {
 			access: "bios->coolingsolution_id",
 			name: "coolingsolution_id",
-			description: [
-				{language: "english", text: "0: Air cooling; 1: Liquid cooling ...",},
-			],
+			description: {
+				eng: "0: Air cooling; 1: Liquid cooling ...",
+			},
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
@@ -3006,16 +3006,16 @@ global_defaults: {
 			access: "bios->board_i2c_feature_id",
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "enum of atom_board_i2c_feature_id_def",},
-			],
+			description: {
+				eng: "enum of atom_board_i2c_feature_id_def",
+			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
 			name: "board_i2c_feature_gpio_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "i2c id find in gpio_lut data table gpio_id",},
-			],
+			description: {
+				eng: "i2c id find in gpio_lut data table gpio_id",
+			},
 		}, {
 			access: "bios->board_i2c_feature_slave_addr",
 			name: "board_i2c_feature_slave_addr",
@@ -3037,9 +3037,9 @@ global_defaults: {
 		}, {
 			access: "bios->pplib_pptable_id",
 			name: "pplib_pptable_id",
-			description: [
-				{language: "english", text: "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS",},
-			],
+			description: {
+				eng: "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS",
+			},
 		}, {
 			access: "bios->reserved2",
 			name: "reserved2",
@@ -3075,16 +3075,16 @@ global_defaults: {
 			access: "bios->main_call_parser_entry",
 			name: "main_call_parser_entry",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "direct address of main parser call in VBIOS binary.",},
-			],
+			description: {
+				eng: "direct address of main parser call in VBIOS binary.",
+			},
 		}, {
 			access: "bios->bios_scratch_reg_startaddr",
 			name: "bios_scratch_reg_startaddr",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "1st bios scratch register dword address",},
-			],
+			description: {
+				eng: "1st bios scratch register dword address",
+			},
 		}, {
 			access: "bios->bootup_vddc_mv",
 			name: "bootup_vddc_mv",
@@ -3103,9 +3103,9 @@ global_defaults: {
 		}, {
 			access: "bios->coolingsolution_id",
 			name: "coolingsolution_id",
-			description: [
-				{language: "english", text: "0: Air cooling; 1: Liquid cooling ... */",},
-			],
+			description: {
+				eng: "0: Air cooling; 1: Liquid cooling ... */",
+			},
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
@@ -3123,16 +3123,16 @@ global_defaults: {
 			access: "bios->board_i2c_feature_id",
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "enum of atom_board_i2c_feature_id_def",},
-			],
+			description: {
+				eng: "enum of atom_board_i2c_feature_id_def",
+			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
 			name: "board_i2c_feature_gpio_id",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "i2c id find in gpio_lut data table gpio_id",},
-			],
+			description: {
+				eng: "i2c id find in gpio_lut data table gpio_id",
+			},
 		}, {
 			access: "bios->board_i2c_feature_slave_addr",
 			name: "board_i2c_feature_slave_addr",
@@ -3153,57 +3153,57 @@ global_defaults: {
 		}, {
 			access: "bios->pplib_pptable_id",
 			name: "pplib_pptable_id",
-			description: [
-				{language: "english", text: "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS",},
-			],
+			description: {
+				eng: "if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS",
+			},
 		}, {
 			access: "bios->mvdd_ratio",
 			name: "mvdd_ratio",
-			description: [
-				{language: "english", text: "mvdd_raio = (real mvdd in power rail)*1000/(mvdd_output_from_svi2)",},
-			],
+			description: {
+				eng: "mvdd_raio = (real mvdd in power rail)*1000/(mvdd_output_from_svi2)",
+			},
 		}, {
 			access: "bios->hw_bootup_vddgfx_mv",
 			name: "hw_bootup_vddgfx_mv",
-			description: [
-				{language: "english", text: "hw default vddgfx voltage level decide by board strap",},
-			],
+			description: {
+				eng: "hw default vddgfx voltage level decide by board strap",
+			},
 		}, {
 			access: "bios->hw_bootup_vddc_mv",
 			name: "hw_bootup_vddc_mv",
-			description: [
-				{language: "english", text: "hw default vddc voltage level decide by board strap",},
-			],
+			description: {
+				eng: "hw default vddc voltage level decide by board strap",
+			},
 		}, {
 			access: "bios->hw_bootup_mvddc_mv",
 			name: "hw_bootup_mvddc_mv",
-			description: [
-				{language: "english", text: "hw default mvddc voltage level decide by board strap",},
-			],
+			description: {
+				eng: "hw default mvddc voltage level decide by board strap",
+			},
 		}, {
 			access: "bios->hw_bootup_vddci_mv",
 			name: "hw_bootup_vddci_mv",
-			description: [
-				{language: "english", text: "hw default vddci voltage level decide by board strap",},
-			],
+			description: {
+				eng: "hw default vddci voltage level decide by board strap",
+			},
 		}, {
 			access: "bios->maco_pwrlimit_mw",
 			name: "maco_pwrlimit_mw",
-			description: [
-				{language: "english", text: "bomaco mode power limit in unit of m-watt",},
-			],
+			description: {
+				eng: "bomaco mode power limit in unit of m-watt",
+			},
 		}, {
 			access: "bios->usb_pwrlimit_mw",
 			name: "usb_pwrlimit_mw",
-			description: [
-				{language: "english", text: "power limit when USB is enable in unit of m-watt",},
-			],
+			description: {
+				eng: "power limit when USB is enable in unit of m-watt",
+			},
 		}, {
 			access: "bios->fw_reserved_size_in_kb",
 			name: "fw_reserved_size_in_kb",
-			description: [
-				{language: "english", text: "VBIOS reserved extra fw size in unit of kb.",},
-			],
+			description: {
+				eng: "VBIOS reserved extra fw size in unit of kb.",
+			},
 		}, {
 			access: "bios->pspbl_init_done_reg_addr",
 			name: "pspbl_init_done_reg_addr",
@@ -3214,9 +3214,9 @@ global_defaults: {
 		}, {
 			access: "bios->pspbl_init_done_check_timeout",
 			name: "pspbl_init_done_check_timeout",
-			description: [
-				{language: "english", text: "time out in unit of us when polling pspbl init done",},
-			],
+			description: {
+				eng: "time out in unit of us when polling pspbl init done",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -3262,9 +3262,9 @@ global_defaults: {
 		}, {
 			access: "bios->pwr_on_digon_to_de",
 			name: "pwr_on_digon_to_de",
-			description: [
-				{language: "english", text: "all pwr sequence numbers below are in uint of 4ms",},
-			],
+			description: {
+				eng: "all pwr sequence numbers below are in uint of 4ms",
+			},
 		}, {
 			access: "bios->pwr_on_de_to_vary_bl",
 			name: "pwr_on_de_to_vary_bl",
@@ -3349,9 +3349,9 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_percentage",
 			name: "gpuclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->gpuclk_ss_rate_10hz",
 			name: "gpuclk_ss_rate_10hz",
@@ -3361,51 +3361,51 @@ global_defaults: {
 		}, {
 			access: "bios->ac_dc_gpio_bit",
 			name: "ac_dc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",
+			},
 		}, {
 			access: "bios->ac_dc_polarity",
 			name: "ac_dc_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->vr0hot_gpio_bit",
 			name: "vr0hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr0hot_polarity",
 			name: "vr0hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->vr1hot_gpio_bit",
 			name: "vr1hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr1hot_polarity",
 			name: "vr1hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->fw_ctf_gpio_bit",
 			name: "fw_ctf_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",
+			},
 		}, {
 			access: "bios->fw_ctf_polarity",
 			name: "fw_ctf_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		},
 	],
 }, {
@@ -3439,9 +3439,9 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_percentage",
 			name: "gpuclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->gpuclk_ss_rate_10hz",
 			name: "gpuclk_ss_rate_10hz",
@@ -3451,63 +3451,63 @@ global_defaults: {
 		}, {
 			access: "bios->ac_dc_gpio_bit",
 			name: "ac_dc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",
+			},
 		}, {
 			access: "bios->ac_dc_polarity",
 			name: "ac_dc_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->vr0hot_gpio_bit",
 			name: "vr0hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr0hot_polarity",
 			name: "vr0hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->vr1hot_gpio_bit",
 			name: "vr1hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr1hot_polarity",
 			name: "vr1hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->fw_ctf_gpio_bit",
 			name: "fw_ctf_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",
+			},
 		}, {
 			access: "bios->fw_ctf_polarity",
 			name: "fw_ctf_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->pcc_gpio_bit",
 			name: "pcc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",
+			},
 		}, {
 			access: "bios->pcc_gpio_polarity",
 			name: "pcc_gpio_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->smugoldenoffset",
 			name: "smugoldenoffset",
@@ -3576,9 +3576,9 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_percentage",
 			name: "gpuclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->gpuclk_ss_rate_10hz",
 			name: "gpuclk_ss_rate_10hz",
@@ -3588,63 +3588,63 @@ global_defaults: {
 		}, {
 			access: "bios->ac_dc_gpio_bit",
 			name: "ac_dc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for AC/DC switching, =0xff means invalid",
+			},
 		}, {
 			access: "bios->ac_dc_polarity",
 			name: "ac_dc_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->vr0hot_gpio_bit",
 			name: "vr0hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A  configured for VR0 HOT event, =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr0hot_polarity",
 			name: "vr0hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->vr1hot_gpio_bit",
 			name: "vr1hot_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for VR1 HOT event , =0xff means invalid",
+			},
 		}, {
 			access: "bios->vr1hot_polarity",
 			name: "vr1hot_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->fw_ctf_gpio_bit",
 			name: "fw_ctf_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for CTF, =0xff means invalid",
+			},
 		}, {
 			access: "bios->fw_ctf_polarity",
 			name: "fw_ctf_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->pcc_gpio_bit",
 			name: "pcc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",
+			},
 		}, {
 			access: "bios->pcc_gpio_polarity",
 			name: "pcc_gpio_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->smugoldenoffset",
 			name: "smugoldenoffset",
@@ -3692,9 +3692,9 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_percentage",
 			name: "waflclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->smuinitoffset",
 			name: "smuinitoffset",
@@ -3737,9 +3737,9 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_percentage",
 			name: "gpuclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->gpuclk_ss_rate_10hz",
 			name: "gpuclk_ss_rate_10hz",
@@ -3755,15 +3755,15 @@ global_defaults: {
 		}, {
 			access: "bios->pcc_gpio_bit",
 			name: "pcc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",
+			},
 		}, {
 			access: "bios->pcc_gpio_polarity",
 			name: "pcc_gpio_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->smugoldenoffset",
 			name: "smugoldenoffset",
@@ -3811,9 +3811,9 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_percentage",
 			name: "waflclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->smuinitoffset",
 			name: "smuinitoffset",
@@ -3956,15 +3956,15 @@ global_defaults: {
 		}, {
 			access: "bios->pcc_gpio_bit",
 			name: "pcc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",
+			},
 		}, {
 			access: "bios->pcc_gpio_polarity",
 			name: "pcc_gpio_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->smugoldenoffset",
 			name: "smugoldenoffset",
@@ -4012,9 +4012,9 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_percentage",
 			name: "waflclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->smuinitoffset",
 			name: "smuinitoffset",
@@ -4155,15 +4155,15 @@ global_defaults: {
 		}, {
 			access: "bios->pcc_gpio_bit",
 			name: "pcc_gpio_bit",
-			description: [
-				{language: "english", text: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",},
-			],
+			description: {
+				eng: "GPIO bit shift in SMU_GPIOPAD_A configured for PCC, =0xff means invalid",
+			},
 		}, {
 			access: "bios->pcc_gpio_polarity",
 			name: "pcc_gpio_polarity",
-			description: [
-				{language: "english", text: "GPIO polarity for CTF",},
-			],
+			description: {
+				eng: "GPIO polarity for CTF",
+			},
 		}, {
 			access: "bios->bootup_vddusr_mv",
 			name: "bootup_vddusr_mv",
@@ -4210,9 +4210,9 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_percentage",
 			name: "waflclk_ss_percentage",
-			description: [
-				{language: "english", text: "in unit of 0.001%",},
-			],
+			description: {
+				eng: "in unit of 0.001%",
+			},
 		}, {
 			access: "bios->smuinitoffset",
 			name: "smuinitoffset",
@@ -4412,19 +4412,19 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "i2c_line_mux",
-				description: [
-					{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
-				],
+				description: {
+					eng: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",
+				},
 			}, {
 				access: "hw_engine_id",
-				description: [
-					{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
-				],
+				description: {
+					eng: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",
+				},
 			}, {
 				access: "hw_capable",
-				description: [
-					{language: "english", text: "=0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)",},
-				],
+				description: {
+					eng: "=0 SW assisted I2C ID; =1 HW assisted I2C ID(HW line selection)",
+				},
 			},
 		],},
 	},],
@@ -4439,31 +4439,31 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "i2c_config.i2c_line_mux",
-				description: [
-					{language: "english", text: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",},
-				],
+				description: {
+					eng: "A Mux number when it's HW assisted I2C or GPIO ID when it's SW I2C",
+				},
 			}, {
 				access: "i2c_config.hw_engine_id",
 				name: "hw_engine_id",
-				description: [
-					{language: "english", text: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",},
-				],
+				description: {
+					eng: "=1 HW engine for NON multimedia use; =2 HW engine for Multimedia use; 3-7 Reserved for future I2C engines",
+				},
 			}, {
 				access: "i2c_config.hw_capable",
 				name: "hw_capable",
-				description: [
-					{language: "english", text: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",},
-				],
+				description: {
+					eng: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",
+				},
 			}, {
 				access: "GPIO_PINID",
-				description: [
-					{language: "english", text: "enum of atom_gpio_pin_assignment_gpio_id",},
-				],
+				description: {
+					eng: "enum of atom_gpio_pin_assignment_gpio_id",
+				},
 			}, {
 				access: "HW_CAP",
-				description: [
-					{language: "english", text: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",},
-				],
+				description: {
+					eng: "only when the I2C_HW_CAP is set, the pin ID is assigned to an I2C pin pair, otherwise, it's an generic GPIO pin",
+				},
 			},
 		],},
 	},],
@@ -4533,9 +4533,9 @@ global_defaults: {
 		}, {
 			access: "bios->connector_max_speed",
 			name: "connector_max_speed",
-			description: [
-				{language: "english", text: "connector Max speed attribute, it sets 8100 in Mhz when DP connector @8.1Ghz.",},
-			],
+			description: {
+				eng: "connector Max speed attribute, it sets 8100 in Mhz when DP connector @8.1Ghz.",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -4552,14 +4552,14 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "internal_display",
-				description: [
-					{language: "english", text: "this non-embedded display connector is an internal display",},
-				],
+				description: {
+					eng: "this non-embedded display connector is an internal display",
+				},
 			}, {
 				access: "internal_backlight",
-				description: [
-					{language: "english", text: "this internal display requires BL control from GPU, refers to lcd_info for BL PWM freq",},
-				],
+				description: {
+					eng: "this internal display requires BL control from GPU, refers to lcd_info for BL PWM freq",
+				},
 			}, {
 				access: "reserved",
 				display: "ATUI_HEX",
@@ -4594,21 +4594,21 @@ global_defaults: {
 		}, {
 			access: "bios->bracketlen",
 			name: "bracketlen",
-			description: [
-				{language: "english", text: "Bracket Length in mm",},
-			],
+			description: {
+				eng: "Bracket Length in mm",
+			},
 		}, {
 			access: "bios->bracketwidth",
 			name: "bracketwidth",
-			description: [
-				{language: "english", text: "Bracket Width in mm",},
-			],
+			description: {
+				eng: "Bracket Width in mm",
+			},
 		}, {
 			access: "bios->conn_num",
 			name: "conn_num",
-			description: [
-				{language: "english", text: "Connector numbering",},
-			],
+			description: {
+				eng: "Connector numbering",
+			},
 		}, {
 			access: "bios->mini_type",
 			name: "mini_type",
@@ -4643,17 +4643,17 @@ global_defaults: {
 			name: "encoder",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
-			description: [
-				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
-			],
+			description: {
+				eng: "first encoder closer to the connector, could be either an external or intenal encoder",
+			},
 		}, {
 			access: "bios->extern_encoder",
 			name: "extern_encoder",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
-			description: [
-				{language: "english", text: "2nd encoder after the first encoder, from the connector point of view;",},
-			],
+			description: {
+				eng: "2nd encoder after the first encoder, from the connector point of view;",
+			},
 		}, {
 			access: "bios->encoder_recordoffset",
 			name: "encoder_recordoffset",
@@ -4665,9 +4665,9 @@ global_defaults: {
 			name: "device_tag",
 			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_display_device_tag",
-			description: [
-				{language: "english", text: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",},
-			],
+			description: {
+				eng: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",
+			},
 		}, {
 			access: "bios->priority_id",
 			name: "priority_id",
@@ -4695,16 +4695,16 @@ global_defaults: {
 			name: "encoder",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "encoder_object_id",
-			description: [
-				{language: "english", text: "first encoder closer to the connector, could be either an external or intenal encoder",},
-			],
+			description: {
+				eng: "first encoder closer to the connector, could be either an external or intenal encoder",
+			},
 		}, {
 			access: "bios->reserved1",
 			name: "reserved1",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "only on USBC case, otherwise always = 0",},
-			],
+			description: {
+				eng: "only on USBC case, otherwise always = 0",
+			},
 		}, {
 			access: "bios->reserved2",
 			name: "reserved2",
@@ -4713,9 +4713,9 @@ global_defaults: {
 			access: "bios->reserved3",
 			name: "reserved3",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",},
-			],
+			description: {
+				eng: "a supported device vector, each display path starts with this.the paths are enumerated in the way of priority, a path appears first",
+			},
 		},
 		{
 			access: "bios->device_tag",
@@ -5544,9 +5544,9 @@ global_defaults: {
 			access: "bios->phy_dram",
 			name: "phy_dram",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "mmUMC_PHY_DRAM",},
-			],
+			description: {
+				eng: "mmUMC_PHY_DRAM",
+			},
 		},
 	],
 }, {
@@ -5563,9 +5563,9 @@ global_defaults: {
 			name: "phyintf_ck_inverted",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "UMC_PHY_PHYINTF_CNTL.INV_CK",},
-			],
+			description: {
+				eng: "UMC_PHY_PHYINTF_CNTL.INV_CK",
+			},
 		}, {
 			access: "bios->bit_byte_remap",
 			name: "atom_gddr6_bit_byte_remap",
@@ -5706,22 +5706,22 @@ global_defaults: {
 		{
 			access: "bios->memory_size",
 			name: "memory_size",
-			description: [
-				{language: "english", text: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",},
-			],
+			description: {
+				eng: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",
+			},
 		}, {
 			access: "bios->channel_enable",
 			name: "channel_enable",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "bit vector, each bit indicate specific channel enable or not",},
-			],
+			description: {
+				eng: "bit vector, each bit indicate specific channel enable or not",
+			},
 		}, {
 			access: "bios->max_mem_clk",
 			name: "max_mem_clk",
-			description: [
-				{language: "english", text: "max memory clock of this memory in unit of 10kHz, =0 means it is not defined",},
-			],
+			description: {
+				eng: "max memory clock of this memory in unit of 10kHz, =0 means it is not defined",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -5730,40 +5730,40 @@ global_defaults: {
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: [
-				{language: "english", text: "mem_voltage",},
-			],
+			description: {
+				eng: "mem_voltage",
+			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: [
-				{language: "english", text: "Size of atom_vram_module_v9",},
-			],
+			description: {
+				eng: "Size of atom_vram_module_v9",
+			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
-			description: [
-				{language: "english", text: "Current memory module ID",},
-			],
+			description: {
+				eng: "Current memory module ID",
+			},
 		}, {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "enum of atom_dgpu_vram_type",},
-			],
+			description: {
+				eng: "enum of atom_dgpu_vram_type",
+			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
-			description: [
-				{language: "english", text: "Number of mem. channels supported in this module",},
-			],
+			description: {
+				eng: "Number of mem. channels supported in this module",
+			},
 		}, {
 			access: "bios->channel_width",
 			name: "channel_width",
-			description: [
-				{language: "english", text: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",},
-			],
+			description: {
+				eng: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",
+			},
 		}, {
 			access: "bios->density",
 			name: "density",
@@ -5771,9 +5771,9 @@ global_defaults: {
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
-			description: [
-				{language: "english", text: "MC phy registers set per.",},
-			],
+			description: {
+				eng: "MC phy registers set per.",
+			},
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
@@ -5783,30 +5783,30 @@ global_defaults: {
 			access: "bios->refreshrate",
 			name: "refreshrate",
 			display: "ATUI_BIN",
-			description: [
-				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
-			],
+			description: {
+				eng: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",
+			},
 		}, {
 			access: "bios->hbm_ven_rev_id",
 			name: "hbm_ven_rev_id",
-			description: [
-				{language: "english", text: "hbm_ven_rev_id",},
-			],
+			description: {
+				eng: "hbm_ven_rev_id",
+			},
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "reserved",},
-			],
+			description: {
+				eng: "reserved",
+			},
 		}, {
 			access: "bios->dram_pnstring",
 			name: "dram_pnstring",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
-			description: [
-				{language: "english", text: "part number end with '0'.",},
-			],
+			description: {
+				eng: "part number end with '0'.",
+			},
 		},
 	],
 }, {
@@ -5821,51 +5821,51 @@ global_defaults: {
 			access: "bios->mem_adjust_tbloffset",
 			name: "mem_adjust_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting",
+			},
 		}, {
 			access: "bios->mem_clk_patch_tbloffset",
 			name: "mem_clk_patch_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting",
+			},
 		}, {
 			access: "bios->mc_adjust_pertile_tbloffset",
 			name: "mc_adjust_pertile_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",
+			},
 		}, {
 			access: "bios->mc_phyinit_tbloffset",
 			name: "mc_phyinit_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init set",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init set",
+			},
 		}, {
 			access: "bios->dram_data_remap_tbloffset",
 			name: "dram_data_remap_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "reserved for now",},
-			],
+			description: {
+				eng: "reserved for now",
+			},
 		}, {
 			access: "bios->tmrs_seq_offset",
 			name: "tmrs_seq_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of HBM tmrs",},
-			],
+			description: {
+				eng: "offset of HBM tmrs",
+			},
 		}, {
 			access: "bios->post_ucode_init_offset",
 			name: "post_ucode_init_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",
+			},
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
@@ -5873,9 +5873,9 @@ global_defaults: {
 		}, {
 			access: "bios->vram_module_num",
 			name: "vram_module_num",
-			description: [
-				{language: "english", text: "indicate number of VRAM module",},
-			],
+			description: {
+				eng: "indicate number of VRAM module",
+			},
 		}, {
 			access: "bios->umcip_min_ver",
 			name: "umcip_min_ver",
@@ -5885,9 +5885,9 @@ global_defaults: {
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
-			description: [
-				{language: "english", text: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",},
-			],
+			description: {
+				eng: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",
+			},
 		},
 	],
 }, {
@@ -5898,22 +5898,22 @@ global_defaults: {
 		{
 			access: "bios->memory_size",
 			name: "memory_size",
-			description: [
-				{language: "english", text: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",},
-			],
+			description: {
+				eng: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",
+			},
 		}, {
 			access: "bios->channel_enable",
 			name: "channel_enable",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "bit vector, each bit indicate specific channel enable or not",},
-			],
+			description: {
+				eng: "bit vector, each bit indicate specific channel enable or not",
+			},
 		}, {
 			access: "bios->max_mem_clk",
 			name: "max_mem_clk",
-			description: [
-				{language: "english", text: "max memory clock of this memory in unit of 10kHz, =0 means it is not defined",},
-			],
+			description: {
+				eng: "max memory clock of this memory in unit of 10kHz, =0 means it is not defined",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -5922,40 +5922,40 @@ global_defaults: {
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: [
-				{language: "english", text: "mem_voltage",},
-			],
+			description: {
+				eng: "mem_voltage",
+			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: [
-				{language: "english", text: "Size of atom_vram_module_v9",},
-			],
+			description: {
+				eng: "Size of atom_vram_module_v9",
+			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
-			description: [
-				{language: "english", text: "Current memory module ID",},
-			],
+			description: {
+				eng: "Current memory module ID",
+			},
 		}, {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "enum of atom_dgpu_vram_type",},
-			],
+			description: {
+				eng: "enum of atom_dgpu_vram_type",
+			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
-			description: [
-				{language: "english", text: "Number of mem. channels supported in this module",},
-			],
+			description: {
+				eng: "Number of mem. channels supported in this module",
+			},
 		}, {
 			access: "bios->channel_width",
 			name: "channel_width",
-			description: [
-				{language: "english", text: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",},
-			],
+			description: {
+				eng: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",
+			},
 		}, {
 			access: "bios->density",
 			name: "density",
@@ -5963,9 +5963,9 @@ global_defaults: {
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
-			description: [
-				{language: "english", text: "MC phy registers set per",},
-			],
+			description: {
+				eng: "MC phy registers set per",
+			},
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
@@ -5974,22 +5974,22 @@ global_defaults: {
 		}, {
 			access: "bios->refreshrate",
 			name: "refreshrate",
-			description: [
-				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
-			],
+			description: {
+				eng: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",
+			},
 		}, {
 			access: "bios->vram_flags",
 			name: "vram_flags",
-			description: [
-				{language: "english", text: "bit0= bankgroup enable",},
-			],
+			description: {
+				eng: "bit0= bankgroup enable",
+			},
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "reserved",},
-			],
+			description: {
+				eng: "reserved",
+			},
 		}, {
 			access: "bios->gddr6_mr10",
 			name: "gddr6_mr10",
@@ -6015,9 +6015,9 @@ global_defaults: {
 			name: "dram_pnstring",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
-			description: [
-				{language: "english", text: "part number end with '0'.",},
-			],
+			description: {
+				eng: "part number end with '0'.",
+			},
 		},
 	],
 }, {
@@ -6033,51 +6033,51 @@ global_defaults: {
 			access: "bios->mem_adjust_tbloffset",
 			name: "mem_adjust_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust setting",
+			},
 		}, {
 			access: "bios->mem_clk_patch_tbloffset",
 			name: "mem_clk_patch_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for memory clock specific UMC setting",
+			},
 		}, {
 			access: "bios->mc_adjust_pertile_tbloffset",
 			name: "mc_adjust_pertile_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",
+			},
 		}, {
 			access: "bios->mc_phyinit_tbloffset",
 			name: "mc_phyinit_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init set",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init set",
+			},
 		}, {
 			access: "bios->dram_data_remap_tbloffset",
 			name: "dram_data_remap_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "reserved for now",},
-			],
+			description: {
+				eng: "reserved for now",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of reserved",},
-			],
+			description: {
+				eng: "offset of reserved",
+			},
 		}, {
 			access: "bios->post_ucode_init_offset",
 			name: "post_ucode_init_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",
+			},
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
@@ -6085,9 +6085,9 @@ global_defaults: {
 		}, {
 			access: "bios->vram_module_num",
 			name: "vram_module_num",
-			description: [
-				{language: "english", text: "indicate number of VRAM module",},
-			],
+			description: {
+				eng: "indicate number of VRAM module",
+			},
 		}, {
 			access: "bios->umcip_min_ver",
 			name: "umcip_min_ver",
@@ -6097,9 +6097,9 @@ global_defaults: {
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
-			description: [
-				{language: "english", text: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",},
-			],
+			description: {
+				eng: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",
+			},
 		},
 	],
 }, {
@@ -6110,52 +6110,52 @@ global_defaults: {
 		{
 			access: "bios->memory_size",
 			name: "memory_size",
-			description: [
-				{language: "english", text: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",},
-			],
+			description: {
+				eng: "Total memory size in unit of MB for CONFIG_MEMSIZE zeros",
+			},
 		}, {
 			access: "bios->channel_enable",
 			name: "channel_enable",
-			description: [
-				{language: "english", text: "bit vector, each bit indicate specific channel enable or not",},
-			],
+			description: {
+				eng: "bit vector, each bit indicate specific channel enable or not",
+			},
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: [
-				{language: "english", text: "mem_voltage",},
-			],
+			description: {
+				eng: "mem_voltage",
+			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: [
-				{language: "english", text: "Size of atom_vram_module_v9",},
-			],
+			description: {
+				eng: "Size of atom_vram_module_v9",
+			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
-			description: [
-				{language: "english", text: "Current memory module ID",},
-			],
+			description: {
+				eng: "Current memory module ID",
+			},
 		}, {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "enum of atom_dgpu_vram_type",},
-			],
+			description: {
+				eng: "enum of atom_dgpu_vram_type",
+			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
-			description: [
-				{language: "english", text: "Number of mem. channels supported in this module",},
-			],
+			description: {
+				eng: "Number of mem. channels supported in this module",
+			},
 		}, {
 			access: "bios->channel_width",
 			name: "channel_width",
-			description: [
-				{language: "english", text: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",},
-			],
+			description: {
+				eng: "CHANNEL_16BIT/CHANNEL_32BIT/CHANNEL_64BIT",
+			},
 		}, {
 			access: "bios->density",
 			name: "density",
@@ -6163,17 +6163,17 @@ global_defaults: {
 		}, {
 			access: "bios->tunningset_id",
 			name: "tunningset_id",
-			description: [
-				{language: "english", text: "MC phy registers set per.",},
-			],
+			description: {
+				eng: "MC phy registers set per.",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "reserved",},
-			],
+			description: {
+				eng: "reserved",
+			},
 		}, {
 			access: "bios->vendor_rev_id",
 			name: "vendor_rev_id",
@@ -6183,23 +6183,23 @@ global_defaults: {
 			access: "bios->refreshrate",
 			name: "refreshrate",
 			display: "ATUI_BIN",
-			description: [
-				{language: "english", text: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",},
-			],
+			description: {
+				eng: "[1:0]=RefreshFactor (00=8ms, 01=16ms, 10=32ms,11=64ms)",
+			},
 		}, {
 			access: "bios->vram_flags",
 			name: "vram_flags",
 			display: "ATUI_BIN",
-			description: [
-				{language: "english", text: "bit0= bankgroup enable",},
-			],
+			description: {
+				eng: "bit0= bankgroup enable",
+			},
 		}, {
 			access: "bios->vram_rsd2",
 			name: "vram_rsd2",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "reserved",},
-			],
+			description: {
+				eng: "reserved",
+			},
 		}, {
 			access: "bios->gddr6_mr10",
 			name: "gddr6_mr10",
@@ -6240,9 +6240,9 @@ global_defaults: {
 			name: "dram_pnstring",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_STRING",
-			description: [
-				{language: "english", text: "part number end with '0'.",},
-			],
+			description: {
+				eng: "part number end with '0'.",
+			},
 		},
 	],
 }, {
@@ -6416,64 +6416,64 @@ global_defaults: {
 			access: "bios->mem_adjust_tbloffset",
 			name: "mem_adjust_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust settings",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for memory vendor specific UMC adjust settings",
+			},
 		}, {
 			access: "bios->gddr6_ac_timing_offset",
 			name: "gddr6_ac_timing_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_gddr6_ac_timing_v2_5 structure for memory clock specific UMC settings",},
-			],
+			description: {
+				eng: "offset of atom_gddr6_ac_timing_v2_5 structure for memory clock specific UMC settings",
+			},
 		}, {
 			access: "bios->mc_adjust_pertile_tbloffset",
 			name: "mc_adjust_pertile_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for Per Byte Offset Preset Settings",
+			},
 		}, {
 			access: "bios->mc_phyinit_tbloffset",
 			name: "mc_phyinit_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init set",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init set",
+			},
 		}, {
 			access: "bios->dram_data_remap_tbloffset",
 			name: "dram_data_remap_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_gddr6_dram_data_remap array to indicate DRAM data lane to GPU mapping",},
-			],
+			description: {
+				eng: "offset of atom_gddr6_dram_data_remap array to indicate DRAM data lane to GPU mapping",
+			},
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of reserved",},
-			],
+			description: {
+				eng: "offset of reserved",
+			},
 		}, {
 			access: "bios->post_ucode_init_offset",
 			name: "post_ucode_init_offset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init",
+			},
 		}, {
 			access: "bios->strobe_mode_patch_tbloffset",
 			name: "strobe_mode_patch_tbloffset",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "offset of atom_umc_init_reg_block structure for Strobe Mode memory clock specific UMC settings",},
-			],
+			description: {
+				eng: "offset of atom_umc_init_reg_block structure for Strobe Mode memory clock specific UMC settings",
+			},
 		}, {
 			access: "bios->vram_module_num",
 			name: "vram_module_num",
-			description: [
-				{language: "english", text: "indicate number of VRAM module",},
-			],
+			description: {
+				eng: "indicate number of VRAM module",
+			},
 		}, {
 			access: "bios->umcip_min_ver",
 			name: "umcip_min_ver",
@@ -6483,9 +6483,9 @@ global_defaults: {
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
-			description: [
-				{language: "english", text: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",},
-			],
+			description: {
+				eng: "indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset",
+			},
 		},
 	],
 }, {
@@ -6714,9 +6714,9 @@ global_defaults: {
 		}, {
 			access: "bios->psi0_l_vid_thresd",
 			name: "psi0_l_vid_thresd",
-			description: [
-				{language: "english", text: "VR PSI0_L VID threshold",},
-			],
+			description: {
+				eng: "VR PSI0_L VID threshold",
+			},
 		}, {
 			access: "bios->psi0_enable",
 			name: "psi0_enable",

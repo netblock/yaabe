@@ -46,9 +46,9 @@ global_defaults: {
 		}, {
 			access: "bios->I2cLine",
 			name: "I2cLine",
-			description: [
-				{language: "english", text: "as interpreted by DAL I2C",},
-			],
+			description: {
+				eng: "as interpreted by DAL I2C",
+			},
 		}, {
 			access: "bios->I2cAddress",
 			name: "I2cAddress",
@@ -60,24 +60,24 @@ global_defaults: {
 		}, {
 			access: "bios->FanMinRPM",
 			name: "FanMinRPM",
-			description: [
-				{language: "english", text: "Fan Minimum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Minimum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->FanMaxRPM",
 			name: "FanMaxRPM",
-			description: [
-				{language: "english", text: "Fan Maximum RPM (hundreds) -- for display purposes only.",},
-			],
+			description: {
+				eng: "Fan Maximum RPM (hundreds) -- for display purposes only.",
+			},
 		}, {
 			access: "bios->Reserved",
 			name: "Reserved",
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
-			description: [
-				{language: "english", text: "to be defined",},
-			],
+			description: {
+				eng: "to be defined",
+			},
 		},
 	],
 }, {
@@ -93,18 +93,18 @@ global_defaults: {
 				access: "powerplay",
 			}, {
 				access: "sbios_powersource",
-				description: [
-					{language: "english", text: "if power source notificaiton is done by SBIOS directly.",},
-				],
+				description: {
+					eng: "if power source notificaiton is done by SBIOS directly.",
+				},
 			}, {
 				access: "ASPM_L0S",
 			}, {
 				access: "ASPM_L1",
 			}, {
 				access: "hardware_DC",
-				description: [
-					{language: "english", text: "if power source notificaiton is done by GPIO directly.",},
-				],
+				description: {
+					eng: "if power source notificaiton is done by GPIO directly.",
+				},
 			}, {
 				access: "gemini_primary",
 			}, {
@@ -119,73 +119,73 @@ global_defaults: {
 				access: "ht_link_control",
 			}, {
 				access: "MVDD_control",
-				description: [
-					{language: "english", text: "if dynamic MVDD is required. Uncheck to disable it.",},
-				],
+				description: {
+					eng: "if dynamic MVDD is required. Uncheck to disable it.",
+				},
 			}, {
 				access: "goto_boot_on_alert",
-				description: [
-					{language: "english", text: "Go to boot state on alerts, e.g. on an AC->DC transition.",},
-				],
+				description: {
+					eng: "Go to boot state on alerts, e.g. on an AC->DC transition.",
+				},
 			}, {
 				access: "dont_wait_for_vblank",
-				description: [
-					{language: "english", text: "Do NOT wait for VBLANK during an alert (e.g. AC->DC transition).",},
-				],
+				description: {
+					eng: "Do NOT wait for VBLANK during an alert (e.g. AC->DC transition).",
+				},
 			}, {
 				access: "VDDCI_control",
-				description: [
-					{language: "english", text: "Does the driver control VDDCI independently from VDDC.",},
-				],
+				description: {
+					eng: "Does the driver control VDDCI independently from VDDC.",
+				},
 			}, {
 				access: "regulator_hot",
-				description: [
-					{language: "english", text: "Enable the 'regulator hot' feature.",},
-				],
+				description: {
+					eng: "Enable the 'regulator hot' feature.",
+				},
 			}, {
 				access: "BACO",
-				description: [
-					{language: "english", text: "Does the driver supports BACO state.",},
-				],
+				description: {
+					eng: "Does the driver supports BACO state.",
+				},
 			}, {
 				access: "new_CAC_voltage",
-				description: [
-					{language: "english", text: "Does the driver supports new CAC voltage table.",},
-				],
+				description: {
+					eng: "Does the driver supports new CAC voltage table.",
+				},
 			}, {
 				access: "revert_GPIO5_polarity",
-				description: [
-					{language: "english", text: "Does the driver supports revert GPIO5 polarity.",},
-				],
+				description: {
+					eng: "Does the driver supports revert GPIO5 polarity.",
+				},
 			}, {
 				access: "output_thermal2GPIO17",
-				description: [
-					{language: "english", text: "Does the driver supports thermal2GPIO17.",},
-				],
+				description: {
+					eng: "Does the driver supports thermal2GPIO17.",
+				},
 			}, {
 				access: "vrhot_gpio_configurable",
-				description: [
-					{language: "english", text: "Does the driver supports VR HOT GPIO Configurable.",},
-				],
+				description: {
+					eng: "Does the driver supports VR HOT GPIO Configurable.",
+				},
 			}, {
 				access: "temp_inversion",
-				description: [
-					{language: "english", text: "Does the driver supports Temp Inversion feature.",},
-				],
+				description: {
+					eng: "Does the driver supports Temp Inversion feature.",
+				},
 			}, {
 				access: "EVV",
 			}, {
 				access: "PCC_shares_thermal_GPIO",
-				description: [
-					{language: "english", text: "Enable to indicate if thermal and PCC are sharing the same GPIO",},
-				],
+				description: {
+					eng: "Enable to indicate if thermal and PCC are sharing the same GPIO",
+				},
 			}, {
 				access: "load_post_production_FW",
 			}, {
 				access: "no_temp_in_power_calc",
-				description: [
-					{language: "english", text: "disable using actual temperature for power calc",},
-				],
+				description: {
+					eng: "disable using actual temperature for power calc",
+				},
 			}, {
 				access: "VRHOT_polarity_high",
 			}, {
@@ -233,21 +233,21 @@ global_defaults: {
 		}, {
 			access: "bios->BackbiasTime",
 			name: "BackbiasTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->TableSize",
 			name: "TableSize",
-			description: [
-				{language: "english", text: "the size of this structure, or the extended structure",},
-			],
+			description: {
+				eng: "the size of this structure, or the extended structure",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -306,21 +306,21 @@ global_defaults: {
 		}, {
 			access: "bios->BackbiasTime",
 			name: "BackbiasTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->TableSize",
 			name: "TableSize",
-			description: [
-				{language: "english", text: "the size of this structure, or the extended structure",},
-			],
+			description: {
+				eng: "the size of this structure, or the extended structure",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -386,21 +386,21 @@ global_defaults: {
 		}, {
 			access: "bios->BackbiasTime",
 			name: "BackbiasTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->TableSize",
 			name: "TableSize",
-			description: [
-				{language: "english", text: "the size of this structure, or the extended structure",},
-			],
+			description: {
+				eng: "the size of this structure, or the extended structure",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -429,9 +429,9 @@ global_defaults: {
 		}, {
 			access: "bios->FormatID",
 			name: "FormatID",
-			description: [
-				{language: "english", text: "To be used ONLY by PPGen.",},
-			],
+			description: {
+				eng: "To be used ONLY by PPGen.",
+			},
 		}, {
 			access: "bios->FanTableOffset",
 			name: "FanTableOffset",
@@ -480,21 +480,21 @@ global_defaults: {
 		}, {
 			access: "bios->BackbiasTime",
 			name: "BackbiasTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->TableSize",
 			name: "TableSize",
-			description: [
-				{language: "english", text: "the size of this structure, or the extended structure",},
-			],
+			description: {
+				eng: "the size of this structure, or the extended structure",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -523,9 +523,9 @@ global_defaults: {
 		}, {
 			access: "bios->FormatID",
 			name: "FormatID",
-			description: [
-				{language: "english", text: "To be used ONLY by PPGen.",},
-			],
+			description: {
+				eng: "To be used ONLY by PPGen.",
+			},
 		}, {
 			access: "bios->FanTableOffset",
 			name: "FanTableOffset",
@@ -537,15 +537,15 @@ global_defaults: {
 		}, {
 			access: "bios->GoldenPPID",
 			name: "GoldenPPID",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
+			description: {
+				eng: "PPGen use only",
+			},
 		}, {
 			access: "bios->GoldenRevision",
 			name: "GoldenRevision",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
+			description: {
+				eng: "PPGen use only",
+			},
 		}, {
 			access: "bios->VddcDependencyOnSCLKOffset",
 			name: "VddcDependencyOnSCLKOffset",
@@ -610,21 +610,21 @@ global_defaults: {
 		}, {
 			access: "bios->BackbiasTime",
 			name: "BackbiasTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->VoltageTime",
 			name: "VoltageTime",
-			description: [
-				{language: "english", text: "in microseconds",},
-			],
+			description: {
+				eng: "in microseconds",
+			},
 		}, {
 			access: "bios->TableSize",
 			name: "TableSize",
-			description: [
-				{language: "english", text: "the size of this structure, or the extended structure",},
-			],
+			description: {
+				eng: "the size of this structure, or the extended structure",
+			},
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
@@ -653,9 +653,9 @@ global_defaults: {
 		}, {
 			access: "bios->FormatID",
 			name: "FormatID",
-			description: [
-				{language: "english", text: "To be used ONLY by PPGen.",},
-			],
+			description: {
+				eng: "To be used ONLY by PPGen.",
+			},
 		}, {
 			access: "bios->FanTableOffset",
 			name: "FanTableOffset",
@@ -667,15 +667,15 @@ global_defaults: {
 		}, {
 			access: "bios->GoldenPPID",
 			name: "GoldenPPID",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
+			description: {
+				eng: "PPGen use only",
+			},
 		}, {
 			access: "bios->GoldenRevision",
 			name: "GoldenRevision",
-			description: [
-				{language: "english", text: "PPGen use only",},
-			],
+			description: {
+				eng: "PPGen use only",
+			},
 		}, {
 			access: "bios->VddcDependencyOnSCLKOffset",
 			name: "VddcDependencyOnSCLKOffset",
@@ -716,18 +716,18 @@ global_defaults: {
 		}, {
 			access: "bios->CACLeakage",
 			name: "CACLeakage",
-			description: [
-				{language: "english", text: "The iLeakage for driver calculated CAC leakage table",},
-			],
+			description: {
+				eng: "The iLeakage for driver calculated CAC leakage table",
+			},
 		}, {
 			access: "bios->TDPODLimit",
 			name: "TDPODLimit",
 		}, {
 			access: "bios->LoadLineSlope",
 			name: "LoadLineSlope",
-			description: [
-				{language: "english", text: "in milliOhms * 100",},
-			],
+			description: {
+				eng: "in milliOhms * 100",
+			},
 		},
 	],
 },
@@ -818,9 +818,9 @@ global_defaults: {
 				access: "memory_dll_off",
 			}, {
 				access: "lowpower",
-				description: [
-					{language: "english", text: "On the RV770 use 'low power' setting (sequencer S0).",},
-				],
+				description: {
+					eng: "On the RV770 use 'low power' setting (sequencer S0).",
+				},
 			}, {
 				access: "reserved",
 			},
@@ -878,15 +878,15 @@ global_defaults: {
 		{
 			access: "bios->LowEngineClock",
 			name: "LowEngineClock",
-			description: [
-				{language: "english", text: "Low Engine clock in MHz",},
-			],
+			description: {
+				eng: "Low Engine clock in MHz",
+			},
 		}, {
 			access: "bios->HighEngineClock",
 			name: "HighEngineClock",
-			description: [
-				{language: "english", text: "High Engine clock in MHz.",},
-			],
+			description: {
+				eng: "High Engine clock in MHz.",
+			},
 		}, {
 			access: "bios->MemoryClock_Lo",
 			name: "MemoryClock_Lo",
@@ -894,15 +894,15 @@ global_defaults: {
 		}, {
 			access: "bios->MemoryClock_Hi",
 			name: "MemoryClock_Hi",
-			description: [
-				{language: "english", text: "Currently unused.",},
-			],
+			description: {
+				eng: "Currently unused.",
+			},
 		}, {
 			access: "bios->Padding",
 			name: "Padding",
-			description: [
-				{language: "english", text: "For proper alignment and size.",},
-			],
+			description: {
+				eng: "For proper alignment and size.",
+			},
 		}, {
 			access: "bios->VDDC",
 			name: "VDDC",
@@ -910,22 +910,22 @@ global_defaults: {
 		}, {
 			access: "bios->MaxHTLinkWidth",
 			name: "MaxHTLinkWidth",
-			description: [
-				{language: "english", text: "From SBIOS - {2, 4, 8, 16}",},
-			],
+			description: {
+				eng: "From SBIOS - {2, 4, 8, 16}",
+			},
 		}, {
 			access: "bios->MinHTLinkWidth",
 			name: "MinHTLinkWidth",
-			description: [
-				{language: "english", text: "From SBIOS - {2, 4, 8, 16}. Effective only if CDLW enabled. Minimum down stream width could",},
-			],
+			description: {
+				eng: "From SBIOS - {2, 4, 8, 16}. Effective only if CDLW enabled. Minimum down stream width could",
+			},
 		}, {
 			access: "bios->HTLinkFreq",
 			name: "HTLinkFreq",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "See definition ATOM_PPLIB_RS780_HTLINKFREQ_xxx or in MHz(>=200).",},
-			],
+			description: {
+				eng: "See definition ATOM_PPLIB_RS780_HTLINKFREQ_xxx or in MHz(>=200).",
+			},
 		}, {
 			access: "bios->Flags",
 			name: "Flags",
@@ -1116,9 +1116,9 @@ global_defaults: {
 		}, {
 			access: "bios->vddcIndex",
 			name: "vddcIndex",
-			description: [
-				{language: "english", text: "2-bit vddc index",},
-			],
+			description: {
+				eng: "2-bit vddc index",
+			},
 		}, {
 			access: "bios->tdpLimit",
 			name: "tdpLimit",
@@ -1373,51 +1373,51 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->THyst",
 			name: "THyst",
-			description: [
-				{language: "english", text: "Temperature hysteresis. Integer.",},
-			],
+			description: {
+				eng: "Temperature hysteresis. Integer.",
+			},
 		}, {
 			access: "bios->TMin",
 			name: "TMin",
-			description: [
-				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
-			],
+			description: {
+				eng: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",
+			},
 		}, {
 			access: "bios->TMed",
 			name: "TMed",
-			description: [
-				{language: "english", text: "The middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "The middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->THigh",
 			name: "THigh",
-			description: [
-				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "The high point above TMed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->PWMMin",
 			name: "PWMMin",
-			description: [
-				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "The minimum PWM value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->PWMMed",
 			name: "PWMMed",
-			description: [
-				{language: "english", text: "The PWM value (in percent) at TMed.",},
-			],
+			description: {
+				eng: "The PWM value (in percent) at TMed.",
+			},
 		}, {
 			access: "bios->PWMHigh",
 			name: "PWMHigh",
-			description: [
-				{language: "english", text: "The PWM value at THigh.",},
-			],
+			description: {
+				eng: "The PWM value at THigh.",
+			},
 		},
 	],
 },
@@ -1428,57 +1428,57 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->THyst",
 			name: "THyst",
-			description: [
-				{language: "english", text: "Temperature hysteresis. Integer.",},
-			],
+			description: {
+				eng: "Temperature hysteresis. Integer.",
+			},
 		}, {
 			access: "bios->TMin",
 			name: "TMin",
-			description: [
-				{language: "english", text: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",},
-			],
+			description: {
+				eng: "The temperature, in 0.01 centigrades, below which we just run at a minimal PWM.",
+			},
 		}, {
 			access: "bios->TMed",
 			name: "TMed",
-			description: [
-				{language: "english", text: "The middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "The middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->THigh",
 			name: "THigh",
-			description: [
-				{language: "english", text: "The high point above TMed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "The high point above TMed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->PWMMin",
 			name: "PWMMin",
-			description: [
-				{language: "english", text: "The minimum PWM value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "The minimum PWM value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->PWMMed",
 			name: "PWMMed",
-			description: [
-				{language: "english", text: "The PWM value (in percent) at TMed.",},
-			],
+			description: {
+				eng: "The PWM value (in percent) at TMed.",
+			},
 		}, {
 			access: "bios->PWMHigh",
 			name: "PWMHigh",
-			description: [
-				{language: "english", text: "The PWM value at THigh.",},
-			],
+			description: {
+				eng: "The PWM value at THigh.",
+			},
 		}, {
 			access: "bios->TMax",
 			name: "TMax",
-			description: [
-				{language: "english", text: "The max temperature",},
-			],
+			description: {
+				eng: "The max temperature",
+			},
 		},
 	],
 },
@@ -1489,57 +1489,57 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->thyst",
 			name: "thyst",
-			description: [
-				{language: "english", text: "temperature hysteresis. integer.",},
-			],
+			description: {
+				eng: "temperature hysteresis. integer.",
+			},
 		}, {
 			access: "bios->tmin",
 			name: "tmin",
-			description: [
-				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
-			],
+			description: {
+				eng: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",
+			},
 		}, {
 			access: "bios->tmed",
 			name: "tmed",
-			description: [
-				{language: "english", text: "the middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "the middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->thigh",
 			name: "thigh",
-			description: [
-				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "the high point above tmed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->pwmmin",
 			name: "pwmmin",
-			description: [
-				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "the minimum pwm value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->pwmmed",
 			name: "pwmmed",
-			description: [
-				{language: "english", text: "the pwm value (in percent) at tmed.",},
-			],
+			description: {
+				eng: "the pwm value (in percent) at tmed.",
+			},
 		}, {
 			access: "bios->pwmhigh",
 			name: "pwmhigh",
-			description: [
-				{language: "english", text: "the pwm value at thigh.",},
-			],
+			description: {
+				eng: "the pwm value at thigh.",
+			},
 		}, {
 			access: "bios->tmax",
 			name: "tmax",
-			description: [
-				{language: "english", text: "the max temperature",},
-			],
+			description: {
+				eng: "the max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
@@ -1559,57 +1559,57 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->thyst",
 			name: "thyst",
-			description: [
-				{language: "english", text: "temperature hysteresis. integer.",},
-			],
+			description: {
+				eng: "temperature hysteresis. integer.",
+			},
 		}, {
 			access: "bios->tmin",
 			name: "tmin",
-			description: [
-				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
-			],
+			description: {
+				eng: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",
+			},
 		}, {
 			access: "bios->tmed",
 			name: "tmed",
-			description: [
-				{language: "english", text: "the middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "the middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->thigh",
 			name: "thigh",
-			description: [
-				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "the high point above tmed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->pwmmin",
 			name: "pwmmin",
-			description: [
-				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "the minimum pwm value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->pwmmed",
 			name: "pwmmed",
-			description: [
-				{language: "english", text: "the pwm value (in percent) at tmed.",},
-			],
+			description: {
+				eng: "the pwm value (in percent) at tmed.",
+			},
 		}, {
 			access: "bios->pwmhigh",
 			name: "pwmhigh",
-			description: [
-				{language: "english", text: "the pwm value at thigh.",},
-			],
+			description: {
+				eng: "the pwm value at thigh.",
+			},
 		}, {
 			access: "bios->tmax",
 			name: "tmax",
-			description: [
-				{language: "english", text: "the max temperature",},
-			],
+			description: {
+				eng: "the max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
@@ -1632,57 +1632,57 @@ global_defaults: {
 		{
 			access: "bios->RevId",
 			name: "RevId",
-			description: [
-				{language: "english", text: "Change this if the table format changes or version changes so that the other fields are not the same.",},
-			],
+			description: {
+				eng: "Change this if the table format changes or version changes so that the other fields are not the same.",
+			},
 		}, {
 			access: "bios->thyst",
 			name: "thyst",
-			description: [
-				{language: "english", text: "temperature hysteresis. integer.",},
-			],
+			description: {
+				eng: "temperature hysteresis. integer.",
+			},
 		}, {
 			access: "bios->tmin",
 			name: "tmin",
-			description: [
-				{language: "english", text: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",},
-			],
+			description: {
+				eng: "the temperature, in 0.01 centigrades, below which we just run at a minimal pwm.",
+			},
 		}, {
 			access: "bios->tmed",
 			name: "tmed",
-			description: [
-				{language: "english", text: "the middle temperature where we change slopes.",},
-			],
+			description: {
+				eng: "the middle temperature where we change slopes.",
+			},
 		}, {
 			access: "bios->thigh",
 			name: "thigh",
-			description: [
-				{language: "english", text: "the high point above tmed for adjusting the second slope.",},
-			],
+			description: {
+				eng: "the high point above tmed for adjusting the second slope.",
+			},
 		}, {
 			access: "bios->pwmmin",
 			name: "pwmmin",
-			description: [
-				{language: "english", text: "the minimum pwm value in percent (0.01% increments).",},
-			],
+			description: {
+				eng: "the minimum pwm value in percent (0.01% increments).",
+			},
 		}, {
 			access: "bios->pwmmed",
 			name: "pwmmed",
-			description: [
-				{language: "english", text: "the pwm value (in percent) at tmed.",},
-			],
+			description: {
+				eng: "the pwm value (in percent) at tmed.",
+			},
 		}, {
 			access: "bios->pwmhigh",
 			name: "pwmhigh",
-			description: [
-				{language: "english", text: "the pwm value at thigh.",},
-			],
+			description: {
+				eng: "the pwm value at thigh.",
+			},
 		}, {
 			access: "bios->tmax",
 			name: "tmax",
-			description: [
-				{language: "english", text: "the max temperature",},
-			],
+			description: {
+				eng: "the max temperature",
+			},
 		}, {
 			access: "bios->FanControlMode",
 			name: "FanControlMode",
@@ -1721,15 +1721,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		},
 	],
 }, {
@@ -1741,15 +1741,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1765,15 +1765,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1793,15 +1793,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1825,15 +1825,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1861,15 +1861,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1901,15 +1901,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1945,15 +1945,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -1993,15 +1993,15 @@ global_defaults: {
 		}, {
 			access: "bios->MaxEngineClock",
 			name: "MaxEngineClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->MaxMemoryClock",
 			name: "MaxMemoryClock",
-			description: [
-				{language: "english", text: "For Overdrive.",},
-			],
+			description: {
+				eng: "For Overdrive.",
+			},
 		}, {
 			access: "bios->VCETableOffset",
 			name: "VCETableOffset",
@@ -2459,15 +2459,15 @@ global_defaults: {
 		}, {
 			access: "bios->SustainableSOCPowerLimitLow",
 			name: "SustainableSOCPowerLimitLow",
-			description: [
-				{language: "english", text: "in mW",},
-			],
+			description: {
+				eng: "in mW",
+			},
 		}, {
 			access: "bios->SustainableSOCPowerLimitHigh",
 			name: "SustainableSOCPowerLimitHigh",
-			description: [
-				{language: "english", text: "in mW",},
-			],
+			description: {
+				eng: "in mW",
+			},
 		}, {
 			access: "bios->DClk",
 			name: "DClk",
@@ -2630,15 +2630,15 @@ global_defaults: {
 		{
 			access: "bios->Vddc",
 			name: "Vddc",
-			description: [
-				{language: "english", text: "We use this field for the \"fake\" standardized VDDC for power calculations; For CI and newer, we use this as the real VDDC value. in CI we read it as StdVoltageHiSidd",},
-			],
+			description: {
+				eng: "We use this field for the \"fake\" standardized VDDC for power calculations; For CI and newer, we use this as the real VDDC value. in CI we read it as StdVoltageHiSidd",
+			},
 		}, {
 			access: "bios->LeakageValue",
 			name: "LeakageValue",
-			description: [
-				{language: "english", text: "For CI and newer we use this as the \"fake\" standard VDDC value. in CI we read it as StdVoltageLoSidd",},
-			],
+			description: {
+				eng: "For CI and newer we use this as the \"fake\" standard VDDC value. in CI we read it as StdVoltageLoSidd",
+			},
 		},
 	],
 }, {

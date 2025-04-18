@@ -8,24 +8,24 @@ Enums for ATUI_ENUM
 // pci.h
 
 {name: "efi_pci_driver_subsystem_value",
-	description: [
-		{language: "english", text: "values other than these are from PE/COFF header",},
-	],
+	description: {
+		eng: "values other than these are from PE/COFF header",
+	},
 	constants: [
 		{name: "EFI_PCI_DRIVER_SUBSYSTEM_BOOT_SERVICE",},
 		{name: "EFI_PCI_DRIVER_SUBSYSTEM_RUNTIME",},
 ]},
 {name: "efi_pci_driver_machine_type",
-	description: [
-		{language: "english", text: "values other than these are from PE/COFF header",},
-	],
+	description: {
+		eng: "values other than these are from PE/COFF header",
+	},
 	constants: [
 		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_IA32",},
 		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_ITANIUM",},
 		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_EBC",
-			description: [
-				{language: "english", text: "EFI byte code",},
-			],
+			description: {
+				eng: "EFI byte code",
+			},
 		},
 		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_X64",},
 		{name: "EFI_PCI_DRIVER_MACHINE_TYPE_ARM32",},
@@ -40,74 +40,74 @@ Enums for ATUI_ENUM
 {name: "psp_entry_type",
 	constants: [
 		{name: "AMD_PUBLIC_KEY",
-			description: [
-				{language: "english", text: "AMD public key",},
-			],
+			description: {
+				eng: "AMD public key",
+			},
 		},
 		{name: "PSP_FW_BOOT_LOADER",
-			description: [
-				{language: "english", text: "PSP boot loader in SPI space",},
-			],
+			description: {
+				eng: "PSP boot loader in SPI space",
+			},
 		},
 		{name: "PSP_FW_TRUSTED_OS",
-			description: [
-				{language: "english", text: "PSP Firmware region in SPI space",},
-			],
+			description: {
+				eng: "PSP Firmware region in SPI space",
+			},
 		},
 		{name: "PSP_FW_RECOVERY_BOOT_LOADER",
-			description: [
-				{language: "english", text: "PSP recovery region.",},
-			],
+			description: {
+				eng: "PSP recovery region.",
+			},
 		},
 		{name: "PSP_NV_DATA",
-			description: [
-				{language: "english", text: "PSP data region in SPI space",},
-			],
+			description: {
+				eng: "PSP data region in SPI space",
+			},
 		},
 		{name: "BIOS_PUBLIC_KEY",
-			description: [
-				{language: "english", text: "BIOS public key stored in SPI space",},
-			],
+			description: {
+				eng: "BIOS public key stored in SPI space",
+			},
 		},
 		{name: "BIOS_RTM_FIRMWARE",
-			description: [
-				{language: "english", text: "BIOS RTM code (PEI volume) in SPI space",},
-			],
+			description: {
+				eng: "BIOS RTM code (PEI volume) in SPI space",
+			},
 		},
 		{name: "BIOS_RTM_SIGNATURE",
-			description: [
-				{language: "english", text: "signed BIOS RTM hash stored  in SPI space",},
-			],
+			description: {
+				eng: "signed BIOS RTM hash stored  in SPI space",
+			},
 		},
 		{name: "SMU_OFFCHIP_FW",
-			description: [
-				{language: "english", text: "SMU image",},
-			],
+			description: {
+				eng: "SMU image",
+			},
 		},
 		{name: "PSP_AMD_SECURE_DEBUG_KEY",
-			description: [
-				{language: "english", text: "AMD Secure Debug key",},
-			],
+			description: {
+				eng: "AMD Secure Debug key",
+			},
 		},
 		{name: "PSP_SECURE_OS_SIGNING_KEY",
-			description: [
-				{language: "english", text: "PSP Secure OS OEM signing key",},
-			],
+			description: {
+				eng: "PSP Secure OS OEM signing key",
+			},
 		},
 		{name: "AMD_SOFT_FUSE_CHAIN_01",
-			description: [
-				{language: "english", text: "64bit PSP Soft Fuse Chain",},
-			],
+			description: {
+				eng: "64bit PSP Soft Fuse Chain",
+			},
 		},
 		{name: "PSP_BOOT_TIME_TRUSTLETS",
-			description: [
-				{language: "english", text: "boot-loaded trustlet binaries",},
-			],
+			description: {
+				eng: "boot-loaded trustlet binaries",
+			},
 		},
 		{name: "PSP_BOOT_TIME_TRUSTLETS_KEY",
-			description: [
-				{language: "english", text: "key of the boot-loaded trustlet binaries",},
-			],
+			description: {
+				eng: "key of the boot-loaded trustlet binaries",
+			},
 		},
 		{name: "AMD_FW_PSP_SMU_FIRMWARE2",},
 		{name: "AMD_DEBUG_UNLOCK",},
@@ -156,14 +156,14 @@ Enums for ATUI_ENUM
 		{name: "AMD_FW_SPIROM_CFG",},
 		{name: "AMD_FW_MPIO",},
 		{name: "AMD_FW_TPMLITE",
-			description: [
-				{language: "english", text: "family 17h & 19h",},
-			],
+			description: {
+				eng: "family 17h & 19h",
+			},
 		},
 		{name: "AMD_FW_PSP_SMUSCS",
-			description: [
-				{language: "english", text: "family 15h & 16h",},
-			],
+			description: {
+				eng: "family 15h & 16h",
+			},
 		},
 		{name: "AMD_FW_DMCUB",},
 		{name: "AMD_FW_PSP_BOOTLOADER_AB",},
@@ -289,9 +289,9 @@ Enums for ATUI_ENUM
 // atombios.h
 
 {name: "DRAM_DENSITY_e",
-	description: [
-		{language: "english", text: "wordcount x wordwidth in bits. A 8Gbit GDDR6 has two 16-bit channels; 16 bit words and 4Gbits per channel. 4Gbit/16 = 256Mwords; _256Mx16.",},
-	],
+	description: {
+		eng: "wordcount x wordwidth in bits. A 8Gbit GDDR6 has two 16-bit channels; 16 bit words and 4Gbits per channel. 4Gbit/16 = 256Mwords; _256Mx16.",
+	},
 	constants: [
 		{name: "_4_MEGAWORD_x16",},
 		{name: "_4_MEGAWORD_x32",},
@@ -360,19 +360,19 @@ Enums for ATUI_ENUM
 {name: "atom_lcd_info_dptolvds_rx_id",
 	constants: [
 		{name: "eDP_TO_LVDS_RX_DISABLE",
-			description: [
-				{language: "english", text: "no eDP->LVDS translator chip",},
-			],
+			description: {
+				eng: "no eDP->LVDS translator chip",
+			},
 		},
 		{name: "eDP_TO_LVDS_COMMON_ID",
-			description: [
-				{language: "english", text: "common eDP->LVDS translator chip without AMD SW init",},
-			],
+			description: {
+				eng: "common eDP->LVDS translator chip without AMD SW init",
+			},
 		},
 		{name: "eDP_TO_LVDS_REALTEK_ID",
-			description: [
-				{language: "english", text: "Realtek tansaltor which require AMD SW init",},
-			],
+			description: {
+				eng: "Realtek tansaltor which require AMD SW init",
+			},
 		},
 ]},
 
@@ -426,35 +426,35 @@ Enums for ATUI_ENUM
 		{name: "ENCODER_ID_INTERNAL_TMDS2",},
 		{name: "ENCODER_ID_INTERNAL_DAC1",},
 		{name: "ENCODER_ID_INTERNAL_DAC2",
-			description: [
-				{language: "english", text: "TV/CV DAC",},
-			],
+			description: {
+				eng: "TV/CV DAC",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_LVTM1",
-			description: [
-				{language: "english", text: "not used for Radeon",},
-			],
+			description: {
+				eng: "not used for Radeon",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_HDMI",},
 		{name: "ENCODER_ID_INTERNAL_KLDSCP_TMDS1",
-			description: [
-				{language: "english", text: "Kaledisope",},
-			],
+			description: {
+				eng: "Kaledisope",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_KLDSCP_DAC1",
-			description: [
-				{language: "english", text: "Kaledisope",},
-			],
+			description: {
+				eng: "Kaledisope",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_KLDSCP_DAC2",
-			description: [
-				{language: "english", text: "Kaledisope; shared with CV/TV and CRT",},
-			],
+			description: {
+				eng: "Kaledisope; shared with CV/TV and CRT",
+			},
 		},
 		{name: "ENCODER_ID_EXTERNAL_MVPU_FPGA",
-			description: [
-				{language: "english", text: "MVPU FPGA chip",},
-			],
+			description: {
+				eng: "MVPU FPGA chip",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_DDI",},
 		{name: "ENCODER_ID_INTERNAL_UNIPHY",},
@@ -464,9 +464,9 @@ Enums for ATUI_ENUM
 		{name: "ENCODER_ID_EXTERNAL_NUTMEG",},
 		{name: "ENCODER_ID_EXTERNAL_TRAVIS",},
 		{name: "ENCODER_ID_INTERNAL_WIRELESS",
-			description: [
-				{language: "english", text: "Internal wireless display encoder",},
-			],
+			description: {
+				eng: "Internal wireless display encoder",
+			},
 		},
 		{name: "ENCODER_ID_INTERNAL_UNIPHY3",},
 		{name: "ENCODER_ID_INTERNAL_VIRTUAL",},
@@ -477,17 +477,17 @@ Enums for ATUI_ENUM
 		{name: "ENCODER_OBJECT_ID_CH7303",},
 		{name: "ENCODER_OBJECT_ID_CH7301",},
 		{name: "ENCODER_OBJECT_ID_INTERNAL_DVO1",
-			description: [
-				{language: "english", text: "This belongs to Radeon Class Display Hardware",},
-			],
+			description: {
+				eng: "This belongs to Radeon Class Display Hardware",
+			},
 		},
 		{name: "ENCODER_OBJECT_ID_EXTERNAL_SDVOA",},
 		{name: "ENCODER_OBJECT_ID_EXTERNAL_SDVOB",},
 		{name: "ENCODER_OBJECT_ID_TITFP513",},
 		{name: "ENCODER_OBJECT_ID_INTERNAL_LVTM1",
-			description: [
-				{language: "english", text: "not used for Radeon",},
-			],
+			description: {
+				eng: "not used for Radeon",
+			},
 		},
 		{name: "ENCODER_OBJECT_ID_VT1623",},
 		{name: "ENCODER_OBJECT_ID_HDMI_SI1930",},
@@ -501,19 +501,19 @@ Enums for ATUI_ENUM
 		{name: "ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DVO1",},
 		{name: "ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC1",},
 		{name: "ENCODER_OBJECT_ID_INTERNAL_KLDSCP_DAC2",
-			description: [
-				{language: "english", text: "Shared with CV/TV and CRT",},
-			],
+			description: {
+				eng: "Shared with CV/TV and CRT",
+			},
 		},
 		{name: "ENCODER_OBJECT_ID_SI178",
-			description: [
-				{language: "english", text: "External TMDS (dual link, no HDCP.)",},
-			],
+			description: {
+				eng: "External TMDS (dual link, no HDCP.)",
+			},
 		},
 		{name: "ENCODER_OBJECT_ID_MVPU_FPGA",
-			description: [
-				{language: "english", text: "MVPU FPGA chip",},
-			],
+			description: {
+				eng: "MVPU FPGA chip",
+			},
 		},
 		{name: "ENCODER_OBJECT_ID_INTERNAL_DDI",},
 		{name: "ENCODER_OBJECT_ID_VT1625",},
@@ -544,9 +544,9 @@ Enums for ATUI_ENUM
 		{name: "CONNECTOR_OBJECT_ID_YPbPr",},
 		{name: "CONNECTOR_OBJECT_ID_D_CONNECTOR",},
 		{name: "CONNECTOR_OBJECT_ID_9PIN_DIN",
-			description: [
-				{language: "english", text: "Supports both CV & TV",},
-			],
+			description: {
+				eng: "Supports both CV & TV",
+			},
 		},
 		{name: "CONNECTOR_OBJECT_ID_SCART",},
 		{name: "CONNECTOR_ID_HDMI_TYPE_A",},
@@ -591,30 +591,30 @@ Enums for ATUI_ENUM
 		{name: "CLOCK_SOURCE_ID_PLL1",},
 		{name: "CLOCK_SOURCE_ID_PLL2",},
 		{name: "CLOCK_SOURCE_ID_EXTERNAL",
-			description: [
-				{language: "english", text: "ID (Phy) ref. clk. for DP",},
-			],
+			description: {
+				eng: "ID (Phy) ref. clk. for DP",
+			},
 		},
 		{name: "CLOCK_SOURCE_ID_DCPLL",},
 		{name: "CLOCK_SOURCE_ID_DFS",
-			description: [
-				{language: "english", text: "DENTIST",},
-			],
+			description: {
+				eng: "DENTIST",
+			},
 		},
 		{name: "CLOCK_SOURCE_ID_VCE",
-			description: [
-				{language: "english", text: "VCE does not need a real PLL",},
-			],
+			description: {
+				eng: "VCE does not need a real PLL",
+			},
 		},
 		{name: "CLOCK_SOURCE_ID_DP_DTO",
-			description: [
-				{language: "english", text: "Used to distinguish between programming pixel clock and ID (Phy) clock",},
-			],
+			description: {
+				eng: "Used to distinguish between programming pixel clock and ID (Phy) clock",
+			},
 		},
 		{name: "CLOCK_SOURCE_COMBO_PHY_PLL0",
-			description: [
-				{language: "english", text: "combo PHY PLL defines (DC 11.2 and up)",},
-			],
+			description: {
+				eng: "combo PHY PLL defines (DC 11.2 and up)",
+			},
 		},
 		{name: "CLOCK_SOURCE_COMBO_PHY_PLL1",},
 		{name: "CLOCK_SOURCE_COMBO_PHY_PLL2",},
@@ -635,9 +635,9 @@ Enums for ATUI_ENUM
 		{name: "ENGINE_ID_DACA",},
 		{name: "ENGINE_ID_DACB",},
 		{name: "ENGINE_ID_VCE",
-			description: [
-				{language: "english", text: "wireless display pseudo-encoder",},
-			],
+			description: {
+				eng: "wireless display pseudo-encoder",
+			},
 		},
 		{name: "ENGINE_ID_HPO_0",},
 		{name: "ENGINE_ID_HPO_1",},
@@ -657,35 +657,35 @@ Enums for ATUI_ENUM
 		{name: "ATOM_HPD_INT_RECORD_TYPE",},
 		{name: "ATOM_CONNECTOR_CAP_RECORD_TYPE",},
 		{name: "ATOM_OUTPUT_PROTECTION_RECORD_TYPE",
-			description: [
-				{language: "english", text: "unused",},
-			],
+			description: {
+				eng: "unused",
+			},
 		},
 		{name: "ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE",
-			description: [
-				{language: "english", text: "older hardware; object info/header <=v1.3",},
-			],
+			description: {
+				eng: "older hardware; object info/header <=v1.3",
+			},
 		},
 		{name: "ATOM_CONNECTOR_SPEED_UPTO",
-			description: [
-				{language: "english", text: "newer hardware; object info/header >=v1.4",},
-			],
+			description: {
+				eng: "newer hardware; object info/header >=v1.4",
+			},
 		},
 		{name: "ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE",
-			description: [
-				{language: "english", text: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",},
-			],
+			description: {
+				eng: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",
+			},
 		},
 		{name: "ATOM_ENCODER_FPGA_CONTROL_RECORD_TYPE",
-			description: [
-				{language: "english", text: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",},
-			],
+			description: {
+				eng: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",
+			},
 		},
 		{name: "ATOM_CONNECTOR_CVTV_SHARE_DIN_RECORD_TYPE",},
 		{name: "ATOM_JTAG_RECORD_TYPE",
-			description: [
-				{language: "english", text: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",},
-			],
+			description: {
+				eng: "Obsolete, switch to use GPIO_CNTL_RECORD_TYPE",
+			},
 		},
 		{name: "ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE",},
 		{name: "ATOM_ENCODER_DVO_CF_RECORD_TYPE",},
@@ -697,9 +697,9 @@ Enums for ATUI_ENUM
 		{name: "ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE",},
 		{name: "ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE",},
 		{name: "ATOM_OBJECT_LINK_RECORD_TYPE",
-			description: [
-				{language: "english", text: "Once this record is present under one object, it indicats the oobject is linked to another obj described by the record",},
-			],
+			description: {
+				eng: "Once this record is present under one object, it indicats the oobject is linked to another obj described by the record",
+			},
 		},
 		{name: "ATOM_CONNECTOR_REMOTE_CAP_RECORD_TYPE",},
 		{name: "ATOM_ENCODER_CAPS_RECORD_TYPE",},
@@ -754,41 +754,41 @@ Enums for ATUI_ENUM
 {name: "atom_voltage_object_mode",
 	constants: [
 		{name: "VOLTAGE_OBJ_GPIO_LUT",
-			description: [
-				{language: "english", text: "VOLTAGE and GPIO Lookup table",},
-			],
+			description: {
+				eng: "VOLTAGE and GPIO Lookup table",
+			},
 		},
 		{name: "VOLTAGE_OBJ_VR_I2C_INIT_SEQ",
-			description: [
-				{language: "english", text: "VOLTAGE REGULATOR INIT sequece through I2C",},
-			],
+			description: {
+				eng: "VOLTAGE REGULATOR INIT sequece through I2C",
+			},
 		},
 		{name: "VOLTAGE_OBJ_PHASE_LUT",
-			description: [
-				{language: "english", text: "Set Vregulator Phase lookup table",},
-			],
+			description: {
+				eng: "Set Vregulator Phase lookup table",
+			},
 		},
 		{name: "VOLTAGE_OBJ_SVID2",
-			description: [
-				{language: "english", text: "Indicate voltage control by SVID2",},
-			],
+			description: {
+				eng: "Indicate voltage control by SVID2",
+			},
 		},
 		{name: "VOLTAGE_OBJ_EVV",},
 		{name: "VOLTAGE_OBJ_MERGED_POWER",},
 		{name: "VOLTAGE_OBJ_PWRBOOST_LEAKAGE_LUT",
-			description: [
-				{language: "english", text: "Powerboost Voltage and LeakageId lookup table",},
-			],
+			description: {
+				eng: "Powerboost Voltage and LeakageId lookup table",
+			},
 		},
 		{name: "VOLTAGE_OBJ_HIGH_STATE_LEAKAGE_LUT",
-			description: [
-				{language: "english", text: "High voltage state Voltage and LeakageId lookup table",},
-			],
+			description: {
+				eng: "High voltage state Voltage and LeakageId lookup table",
+			},
 		},
 		{name: "VOLTAGE_OBJ_HIGH1_STATE_LEAKAGE_LUT",
-			description: [
-				{language: "english", text: "High1 voltage state Voltage and LeakageId lookup table",},
-			],
+			description: {
+				eng: "High1 voltage state Voltage and LeakageId lookup table",
+			},
 		},
 ]},
 
@@ -796,19 +796,19 @@ Enums for ATUI_ENUM
 	constants: [
 		{name: "VOLTAGE_CONTROLLED_BY_HW",},
 		{name: "VOLTAGE_CONTROL_ID_LM64",
-			description: [
-				{language: "english", text: "I2C control, used for R5xx Core Voltage",},
-			],
+			description: {
+				eng: "I2C control, used for R5xx Core Voltage",
+			},
 		},
 		{name: "VOLTAGE_CONTROL_ID_DAC",
-			description: [
-				{language: "english", text: "I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI",},
-			],
+			description: {
+				eng: "I2C control, used for R5xx/R6xx MVDDC,MVDDQ or VDDCI",
+			},
 		},
 		{name: "VOLTAGE_CONTROL_ID_VT116xM",
-			description: [
-				{language: "english", text: "I2C control, used for R6xx Core Voltage",},
-			],
+			description: {
+				eng: "I2C control, used for R6xx Core Voltage",
+			},
 		},
 		{name: "VOLTAGE_CONTROL_ID_DS4402",},
 		{name: "VOLTAGE_CONTROL_ID_UP6266",},
@@ -843,14 +843,14 @@ Enums for ATUI_ENUM
 	aliases: ["I2cControllerPort_u8", "I2cControllerPort_u32"],
 	constants: [
 		{name: "I2C_CONTROLLER_PORT_0",
-			description: [
-				{language: "english", text: "CKSVII2C0",},
-			],
+			description: {
+				eng: "CKSVII2C0",
+			},
 		},
 		{name: "I2C_CONTROLLER_PORT_1",
-			description: [
-				{language: "english", text: "CKSVII2C1",},
-			],
+			description: {
+				eng: "CKSVII2C1",
+			},
 		},
 ]},
 {name: "I2cControllerName_e",
@@ -859,27 +859,27 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
 		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
 		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",
-			description: [
-				{language: "english", text: "VMEMP; PHY? Pump as in wordline?",},
-			],
+			description: {
+				eng: "VMEMP; PHY? Pump as in wordline?",
+			},
 		},
 		{name: "I2C_CONTROLLER_NAME_VR_MVDD",
-			description: [
-				{language: "english", text: "HBM; VDDIO",},
-			],
+			description: {
+				eng: "HBM; VDDIO",
+			},
 		},
 		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
 		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
 		{name: "I2C_CONTROLLER_NAME_PLX",},
 		{name: "I2C_CONTROLLER_NAME_SPARE",
-			description: [
-				{language: "english", text: "Navi10, Navi21",},
-			],
+			description: {
+				eng: "Navi10, Navi21",
+			},
 		},
 		{name: "I2C_CONTROLLER_NAME_FAN_INTAKE",
-			description: [
-				{language: "english", text: "SMU13",},
-			],
+			description: {
+				eng: "SMU13",
+			},
 		},
 
 		{name: "I2C_CONTROLLER_NAME_COUNT",},
@@ -895,14 +895,14 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_THROTTLER_VR_GFX",},
 		{name: "I2C_CONTROLLER_THROTTLER_VR_SOC",},
 		{name: "I2C_CONTROLLER_THROTTLER_VR_VDDCI",
-			description: [
-				{language: "english", text: "VMEMP",},
-			],
+			description: {
+				eng: "VMEMP",
+			},
 		},
 		{name: "I2C_CONTROLLER_THROTTLER_VR_MVDD",
-			description: [
-				{language: "english", text: "HBM",},
-			],
+			description: {
+				eng: "HBM",
+			},
 		},
 		{name: "I2C_CONTROLLER_THROTTLER_LIQUID_0",},
 		{name: "I2C_CONTROLLER_THROTTLER_LIQUID_1",},
@@ -924,9 +924,9 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_PROTOCOL_TMP_MAX6604",},
 
 		{name: "I2C_CONTROLLER_PROTOCOL_SPARE_0",
-			description: [
-				{language: "english", text: "TMP",},
-			],
+			description: {
+				eng: "TMP",
+			},
 		},
 		{name: "I2C_CONTROLLER_PROTOCOL_SPARE_1",},
 		{name: "I2C_CONTROLLER_PROTOCOL_SPARE_2",},
@@ -940,41 +940,41 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_SPEED_FAST",},
 
 		{name: "I2C_SPEED_FAST_50K",
-			description: [
-				{language: "english", text: "50  Kbits/s",},
-			],
+			description: {
+				eng: "50  Kbits/s",
+			},
 		},
 		{name: "I2C_SPEED_FAST_100K",
-			description: [
-				{language: "english", text: "100 Kbits/s",},
-			],
+			description: {
+				eng: "100 Kbits/s",
+			},
 		},
 		{name: "I2C_SPEED_FAST_400K",
-			description: [
-				{language: "english", text: "400 Kbits/s",},
-			],
+			description: {
+				eng: "400 Kbits/s",
+			},
 		},
 		{name: "I2C_SPEED_FAST_PLUS_1M",
-			description: [
-				{language: "english", text: "1 Mbits/s (in fast mode)",},
-			],
+			description: {
+				eng: "1 Mbits/s (in fast mode)",
+			},
 		},
 		{name: "I2C_SPEED_HIGH_1M",
-			description: [
-				{language: "english", text: "1 Mbits/s (in high speed mode)",},
-			],
+			description: {
+				eng: "1 Mbits/s (in high speed mode)",
+			},
 		},
 		{name: "I2C_SPEED_HIGH_2M",
-			description: [
-				{language: "english", text: "2.3 Mbits/s",},
-			],
+			description: {
+				eng: "2.3 Mbits/s",
+			},
 		},
 ]},
 
 {name: "XGMI_LINK_RATE_e",
-	description: [
-		{language: "english", text: "rate x Gbps",},
-	],
+	description: {
+		eng: "rate x Gbps",
+	},
 	constants: [
 		{name: "XGMI_LINK_RATE_2",},
 		{name: "XGMI_LINK_RATE_4",},
@@ -1035,30 +1035,30 @@ Enums for ATUI_ENUM
 	constants: [
 		{name: "ATOM_PP_THERMALCONTROLLER_NONE",},
 		{name: "ATOM_PP_THERMALCONTROLLER_LM63",
-			description: [
-				{language: "english", text: "Not used by PPLib",},
-			],
+			description: {
+				eng: "Not used by PPLib",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_ADM1032",
-			description: [
-				{language: "english", text: "Not used by PPLib",},
-			],
+			description: {
+				eng: "Not used by PPLib",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_ADM1030",
-			description: [
-				{language: "english", text: "Not used by PPLib",},
-			],
+			description: {
+				eng: "Not used by PPLib",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_MUA6649",
-			description: [
-				{language: "english", text: "Not used by PPLib",},
-			],
+			description: {
+				eng: "Not used by PPLib",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_LM64",},
 		{name: "ATOM_PP_THERMALCONTROLLER_F75375",
-			description: [
-				{language: "english", text: "Not used by PPLib",},
-			],
+			description: {
+				eng: "Not used by PPLib",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_ASC7512_RV6xx",},
 		{name: "ATOM_PP_THERMALCONTROLLER_RV770",},
@@ -1067,14 +1067,14 @@ Enums for ATUI_ENUM
 		{name: "ATOM_PP_THERMALCONTROLLER_EXTERNAL_GPIO",},
 		{name: "ATOM_PP_THERMALCONTROLLER_EVERGREEN",},
 		{name: "ATOM_PP_THERMALCONTROLLER_EMC2103",
-			description: [
-				{language: "english", text: "Only fan control will be implemented, do NOT show this in PPGen.",},
-			],
+			description: {
+				eng: "Only fan control will be implemented, do NOT show this in PPGen.",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_SUMO",
-			description: [
-				{language: "english", text: "Sumo type, used internally",},
-			],
+			description: {
+				eng: "Sumo type, used internally",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_NISLANDS",},
 		{name: "ATOM_PP_THERMALCONTROLLER_SISLANDS",},
@@ -1091,14 +1091,14 @@ Enums for ATUI_ENUM
 		{name: "ATOM_PP_THERMALCONTROLLER_NAVI10",},
 		{name: "ATOM_PP_THERMALCONTROLLER_SIENNA_CICHLID",},
 		{name: "ATOM_PP_THERMALCONTROLLER_ADT7473_WITH_INTERNAL",
-			description: [
-				{language: "english", text: "ADT7473 Fan Control + Internal Thermal Controller",},
-			],
+			description: {
+				eng: "ADT7473 Fan Control + Internal Thermal Controller",
+			},
 		},
 		{name: "ATOM_PP_THERMALCONTROLLER_EMC2103_WITH_INTERNAL",
-			description: [
-				{language: "english", text: "EMC2103 Fan Control + Internal Thermal Controller",},
-			],
+			description: {
+				eng: "EMC2103 Fan Control + Internal Thermal Controller",
+			},
 		},
 ]},
 
@@ -1224,9 +1224,9 @@ Enums for ATUI_ENUM
 {name: "ATOM_PPLIB_RS780_SPMCLK",
 	constants: [
 		{name: "ATOM_PPLIB_RS780_SPMCLK_NONE",
-			description: [
-				{language: "english", text: "We cannot change the side port memory clock, leave it as it is.",},
-			],
+			description: {
+				eng: "We cannot change the side port memory clock, leave it as it is.",
+			},
 		},
 		{name: "ATOM_PPLIB_RS780_SPMCLK_LOW",},
 		{name: "ATOM_PPLIB_RS780_SPMCLK_HIGH",},

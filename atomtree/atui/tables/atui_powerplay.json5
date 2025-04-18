@@ -41,27 +41,27 @@ global_defaults: {
 		}, {
 			access: "bios->table_size",
 			name: "table_size",
-			description: [
-				{language: "english", text: "Driver portion table size. The offset to smc_pptable including header size",},
-			],
+			description: {
+				eng: "Driver portion table size. The offset to smc_pptable including header size",
+			},
 		}, {
 			access: "bios->golden_pp_id",
 			name: "golden_pp_id",
-			description: [
-				{language: "english", text: "PPGen use only: PP Table ID on the Golden Data Base",},
-			],
+			description: {
+				eng: "PPGen use only: PP Table ID on the Golden Data Base",
+			},
 		}, {
 			access: "bios->golden_revision",
 			name: "golden_revision",
-			description: [
-				{language: "english", text: "PPGen use only: PP Table Revision on the Golden Data Base",},
-			],
+			description: {
+				eng: "PPGen use only: PP Table Revision on the Golden Data Base",
+			},
 		}, {
 			access: "bios->format_id",
 			name: "format_id",
-			description: [
-				{language: "english", text: "PPGen use only: PPTable for different ASICs.",},
-			],
+			description: {
+				eng: "PPGen use only: PPTable for different ASICs.",
+			},
 		},
 	],
 },
@@ -94,9 +94,9 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "ui_label",
-				description: [
-					{language: "english", text: "enum atom_pplib_classification_ui",},
-				],
+				description: {
+					eng: "enum atom_pplib_classification_ui",
+				},
 			}, {
 				access: "boot",
 			}, {
@@ -139,9 +139,9 @@ global_defaults: {
 				access: "ULV",
 			}, {
 				access: "multi_view_codec",
-				description: [
-					{language: "english", text: "BD-3D",},
-				],
+				description: {
+					eng: "BD-3D",
+				},
 			}, {
 				access: "rsvd0",
 			},
@@ -160,24 +160,24 @@ global_defaults: {
 				access: "supports_video_playback",
 			}, {
 				access: "pcie_link_speed",
-				description: [
-					{language: "english", text: "0=PCIe1, 1=PCIe2",},
-				],
+				description: {
+					eng: "0=PCIe1, 1=PCIe2",
+				},
 			}, {
 				access: "pcie_link_width",
-				description: [
-					{language: "english", text: "lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x",},
-				],
+				description: {
+					eng: "lanes - 1: 1, 2, 4, 8, 12, 16 permitted by PCIE spec ; however it might be that 0=1x .. 15=16x",
+				},
 			}, {
 				access: "limited_refreshrate",
-				description: [
-					{language: "english", text: "1=50Hz, all else = TBD",},
-				],
+				description: {
+					eng: "1=50Hz, all else = TBD",
+				},
 			}, {
 				access: "disable_loadbalancing",
-				description: [
-					{language: "english", text: "software side",},
-				],
+				description: {
+					eng: "software side",
+				},
 			}, {
 				access: "enable_timestamp_sleep",
 			}, {
@@ -249,34 +249,34 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "powerplay",
-				description: [
-					{language: "english", text: "whether CCC needs to show Powerplay page.",},
-				],
+				description: {
+					eng: "whether CCC needs to show Powerplay page.",
+				},
 			}, {
 				access: "sbios_powersource",
-				description: [
-					{language: "english", text: "whether power source notificaiton is done by SBIOS instead of OS.",},
-				],
+				description: {
+					eng: "whether power source notificaiton is done by SBIOS instead of OS.",
+				},
 			}, {
 				access: "hardware_dc",
-				description: [
-					{language: "english", text: "whether DC mode notificaiton is done by GPIO pin directly.",},
-				],
+				description: {
+					eng: "whether DC mode notificaiton is done by GPIO pin directly.",
+				},
 			}, {
 				access: "BACO",
-				description: [
-					{language: "english", text: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",},
-				],
+				description: {
+					eng: "whether board supports the BACO circuitry. BACO is Bus Active, Chip Off. A low-power mode whereby most of the GPU is shut-off during idle periods in order to drastically cut the power consumption of the graphics card. BACO is also known as AMD ZeroCore Power mode.",
+				},
 			}, {
 				access: "MACO",
-				description: [
-					{language: "english", text: "whether board supports the MACO circuitry.",},
-				],
+				description: {
+					eng: "whether board supports the MACO circuitry.",
+				},
 			}, {
 				access: "shadow_pstate",
-				description: [
-					{language: "english", text: "whether board supports the Shadow Pstate.",},
-				],
+				description: {
+					eng: "whether board supports the Shadow Pstate.",
+				},
 			}, {
 				access: "reserved",
 			},

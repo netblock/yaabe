@@ -36,9 +36,9 @@ global_defaults: {
 			access: "bios->checksum",
 			name: "checksum",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Byte sum of the table",},
-			],
+			description: {
+				eng: "Byte sum of the table",
+			},
 		}, {
 			access: "bios->size",
 			name: "size",
@@ -66,9 +66,9 @@ global_defaults: {
 			access: "bios->binary_checksum",
 			name: "binary_checksum",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "Byte sum of the binary after this field",},
-			],
+			description: {
+				eng: "Byte sum of the binary after this field",
+			},
 		}, {
 			access: "bios->binary_size",
 			name: "binary_size",
@@ -121,9 +121,9 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "ip_discovery_header_flags_v4",
-	description: [
-		{language: "english", text: "reserved in v3 and older",},
-	],
+	description: {
+		eng: "reserved in v3 and older",
+	},
 	leaves: [{
 		access: "bios->flags",
 		name: "flags",
@@ -131,9 +131,9 @@ global_defaults: {
 		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
 			{
 				access: "base_addr_64_bit",
-				description: [
-					{language: "english", text: "ip structures are using 64 bit base address",},
-				],
+				description: {
+					eng: "ip structures are using 64 bit base address",
+				},
 			}, {
 				access: "reserved",
 				display: "ATUI_HEX",
@@ -148,9 +148,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "IPDS",},
-			],
+			description: {
+				eng: "IPDS",
+			},
 		}, {
 			access: "bios->version",
 			name: "version",
@@ -183,9 +183,9 @@ global_defaults: {
 			name: "flags",
 			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "ip_discovery_header_flags_v4",
-			description: [
-				{language: "english", text: "reserved in v3 and older",},
-			],
+			description: {
+				eng: "reserved in v3 and older",
+			},
 		},
 	],
 }, {
@@ -209,9 +209,9 @@ global_defaults: {
 		}, {
 			access: "bios->instance_number",
 			name: "instance_number",
-			description: [
-				{language: "english", text: "max: HWIP_MAX_INSTANCE",},
-			],
+			description: {
+				eng: "max: HWIP_MAX_INSTANCE",
+			},
 		}, {
 			access: "bios->num_base_address",
 			name: "num_base_address",
@@ -353,9 +353,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "GC",},
-			],
+			description: {
+				eng: "GC",
+			},
 		}, {
 			access: "bios->version_major",
 			name: "version_major",
@@ -887,9 +887,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "HARV",},
-			],
+			description: {
+				eng: "HARV",
+			},
 		}, {
 			access: "bios->version",
 			name: "version",
@@ -945,9 +945,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "VCN",},
-			],
+			description: {
+				eng: "VCN",
+			},
 		}, {
 			access: "bios->version_major",
 			name: "version_major",
@@ -986,9 +986,9 @@ global_defaults: {
 		{
 			access: "bios->instance_num",
 			name: "instance_num",
-			description: [
-				{language: "english", text: "VCN IP instance number. 0 - VCN0; 1 - VCN1 etc",},
-			],
+			description: {
+				eng: "VCN IP instance number. 0 - VCN0; 1 - VCN1 etc",
+			},
 		}, {
 			access: "bios->fuse_data",
 			name: "fuse_data",
@@ -1012,9 +1012,9 @@ global_defaults: {
 		}, {
 			access: "bios->num_of_instances",
 			name: "num_of_instances",
-			description: [
-				{language: "english", text: "number of entries used in instance_info below",},
-			],
+			description: {
+				eng: "number of entries used in instance_info below",
+			},
 		}, {
 			access: "bios->instance_info",
 			name: "instance_info",
@@ -1049,9 +1049,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "MALL",},
-			],
+			description: {
+				eng: "MALL",
+			},
 		}, {
 			access: "bios->version_major",
 			name: "version_major",
@@ -1118,9 +1118,9 @@ global_defaults: {
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "NPS",},
-			],
+			description: {
+				eng: "NPS",
+			},
 		}, {
 			access: "bios->version_major",
 			name: "version_major",

@@ -214,9 +214,9 @@ def struct_to_atui(
 
 	# descriptions
 	descriptions:str = """\
-\\g<1>description: [
-\\g<1>	{language: "english", text: "\\g<2>",},
-\\g<1>],\
+\\g<1>description: {
+\\g<1>	eng: "\\g<2>",
+\\g<1>},\
 """
 	text = re.sub(
 		s.tabs + s.flagged_comment,
@@ -342,9 +342,9 @@ def bitfield_to_atui(
 
 	# descriptions
 	descriptions:str = """\
-\\g<1>description: [
-\\g<1>	{language: "english", text: "\\g<2>",},
-\\g<1>],\
+\\g<1>description: {
+\\g<1>	eng: "\\g<2>",
+\\g<1>},\
 """
 	text = re.sub(
 		s.tabs + s.flagged_comment,
@@ -385,7 +385,7 @@ def enum_to_atui(
 	constants: [\
 """
 	text = re.sub(
-		s.c_enum + s.name + "(?::\\s*("+s.c_num_types+"))\\s*{" + s.comments,
+		s.c_enum + s.name + "(?::\\s*("+s.c_num_types+"))?\\s*{" + s.comments,
 		enum_text,
 		text
 	)
@@ -406,9 +406,9 @@ def enum_to_atui(
 
 	# descriptions
 	descriptions:str = """\
-\\g<1>description: [
-\\g<1>	{language: "english", text: "\\g<2>",},
-\\g<1>],\
+\\g<1>description: {
+\\g<1>	eng: "\\g<2>",
+\\g<1>},\
 """
 	text = re.sub(
 		s.tabs + s.flagged_comment,
@@ -417,8 +417,11 @@ def enum_to_atui(
 	)
 	text = re.sub(s.no_comment, "", text)
 
-	# (?<!...) is, matches if not preceeded by ...
-	text = re.sub("(?<!\\],)\n" +s.tabs+ "},\n", "},\n", text)
+	text = re.sub(
+		"(name: \""+s.name+"\",)\n" +s.tabs+ "},\n",
+		"\\g<1>},\n",
+		text
+	)
 
 	if print_text:
 		pass

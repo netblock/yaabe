@@ -53,16 +53,16 @@ global_defaults: {
 			name: "pspcookie",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "\"$PSP\"",},
-			],
+			description: {
+				eng: "\"$PSP\"",
+			},
 		}, {
 			access: "bios->checksum",
 			name: "checksum",
 			display: "ATUI_HEX",
-			description: [
-				{language: "english", text: "32 bit CRC of header items below and the entire table",},
-			],
+			description: {
+				eng: "32 bit CRC of header items below and the entire table",
+			},
 		}, {
 			access: "bios->totalentries",
 			name: "totalentries",
@@ -103,9 +103,9 @@ global_defaults: {
 				display: "ATUI_HEX",
 			}, {
 				access: "mode",
-				description: [
-					{language: "english", text: "0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset",},
-				],
+				description: {
+					eng: "0=physical address; 1=bios offset; 2=dir header offset; 3=partition offset",
+				},
 			},
 		],},
 	},],
@@ -127,9 +127,9 @@ global_defaults: {
 		}, {
 			access: "bios->size",
 			name: "size",
-			description: [
-				{language: "english", text: "Size of PSP Entry in bytes",},
-			],
+			description: {
+				eng: "Size of PSP Entry in bytes",
+			},
 		}, {
 			access: "bios->address",
 			name: "address",
@@ -149,9 +149,9 @@ global_defaults: {
 		}, {
 			access: "bios->pspentry",
 			name: "pspentry",
-			description: [
-				{language: "english", text: "Array of PSP entries each pointing to a binary in SPI flash",},
-			],
+			description: {
+				eng: "Array of PSP entries each pointing to a binary in SPI flash",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -191,9 +191,9 @@ global_defaults: {
 		}, {
 			access: "bios->sig_opt",
 			name: "sig_opt",
-			description: [
-				{language: "english", text: "1 if the image is signed, 0 otherwise",},
-			],
+			description: {
+				eng: "1 if the image is signed, 0 otherwise",
+			},
 		}, {
 			access: "bios->sig_id",
 			name: "sig_id",
@@ -246,9 +246,9 @@ global_defaults: {
 			access: "bios->fw_type",
 			name: "fw_type",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "Starting MDN fw_id is populated instead of fw_type. fw_type will still be around for backwards compatibility.",},
-			],
+			description: {
+				eng: "Starting MDN fw_id is populated instead of fw_type. fw_type will still be around for backwards compatibility.",
+			},
 		}, {
 			access: "bios->fw_subtype",
 			name: "fw_subtype",

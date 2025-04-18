@@ -32,34 +32,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "burst_length",
-				description: [
-					{language: "english", text: "1=BL2, 2=BL4, 3=BL8; all else reserved",},
-				],
+				description: {
+					eng: "1=BL2, 2=BL4, 3=BL8; all else reserved",
+				},
 			}, {
 				access: "burst_type",
-				description: [
-					{language: "english", text: "0=sequential, 1=interleave",},
-				],
+				description: {
+					eng: "0=sequential, 1=interleave",
+				},
 			}, {
 				access: "tCL",
-				description: [
-					{language: "english", text: "2=2,3=3, 5=1.5,6=2.5, all else reseved",},
-				],
+				description: {
+					eng: "2=2,3=3, 5=1.5,6=2.5, all else reseved",
+				},
 			}, {
 				access: "test_mode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "operating_rsvd",
-				description: [
-					{language: "english", text: "operation_mode reserved",},
-				],
+				description: {
+					eng: "operation_mode reserved",
+				},
 			}, {
 				access: "ID",
 			},
@@ -74,19 +74,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "drive_strength",
-				description: [
-					{language: "english", text: "0=full, 1=reduced; (see SSTL_2, Class II)",},
-				],
+				description: {
+					eng: "0=full, 1=reduced; (see SSTL_2, Class II)",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "compatibility with early DDR1",},
-				],
+				description: {
+					eng: "compatibility with early DDR1",
+				},
 			}, {
 				access: "operating_rsvd",
 			}, {
@@ -103,39 +103,39 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "burst_length",
-				description: [
-					{language: "english", text: "2=BL4, 3=BL8; all else reserved",},
-				],
+				description: {
+					eng: "2=BL4, 3=BL8; all else reserved",
+				},
 			}, {
 				access: "burst_type",
-				description: [
-					{language: "english", text: "0=sequential, 1=interleave",},
-				],
+				description: {
+					eng: "0=sequential, 1=interleave",
+				},
 			}, {
 				access: "tCL",
-				description: [
-					{language: "english", text: "tCL=n; 0,1,7=reserved",},
-				],
+				description: {
+					eng: "tCL=n; 0,1,7=reserved",
+				},
 			}, {
 				access: "test_mode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "WR",
-				description: [
-					{language: "english", text: "tWR = n+1",},
-				],
+				description: {
+					eng: "tWR = n+1",
+				},
 			}, {
 				access: "PD_exit_time",
-				description: [
-					{language: "english", text: "0=fast, 1=slow",},
-				],
+				description: {
+					eng: "0=fast, 1=slow",
+				},
 			}, {
 				access: "rsvd_15_13",
 				display: "ATUI_HEX",
@@ -151,49 +151,49 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "drive_strength",
-				description: [
-					{language: "english", text: "0=full, 1=reduced",},
-				],
+				description: {
+					eng: "0=full, 1=reduced",
+				},
 			}, {
 				access: "RTT_Nom_lo_bit",
-				description: [
-					{language: "english", text: "A[6,2] -> Nom[1:0]",},
-				],
+				description: {
+					eng: "A[6,2] -> Nom[1:0]",
+				},
 			}, {
 				access: "Additive_Latency",
-				description: [
-					{language: "english", text: "0=0...  6+=reserved",},
-				],
+				description: {
+					eng: "0=0...  6+=reserved",
+				},
 			}, {
 				access: "RTT_Nom_hi_bit",
-				description: [
-					{language: "english", text: "0=disabled, 1=75 ohms, 2=150, 3=50",},
-				],
+				description: {
+					eng: "0=disabled, 1=75 ohms, 2=150, 3=50",
+				},
 			}, {
 				access: "OCD_calibration",
-				description: [
-					{language: "english", text: "0=exit,1=drive1,2=drive2,4=adjust,7=default",},
-				],
+				description: {
+					eng: "0=exit,1=drive1,2=drive2,4=adjust,7=default",
+				},
 			}, {
 				access: "DQS",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "RDQS",
-				description: [
-					{language: "english", text: "0=disable",},
-				],
+				description: {
+					eng: "0=disable",
+				},
 			}, {
 				access: "output_disable",
-				description: [
-					{language: "english", text: "1=turn off drivers for DQ, DQS, RDQS",},
-				],
+				description: {
+					eng: "1=turn off drivers for DQ, DQS, RDQS",
+				},
 			}, {
 				access: "rsvd_15_13",
 				display: "ATUI_HEX",
@@ -209,31 +209,31 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PASR",
-				description: [
-					{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",},
-				],
+				description: {
+					eng: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",
+				},
 			}, {
 				access: "DCC",
-				description: [
-					{language: "english", text: "0=disable; Duty Cycle Correction",},
-				],
+				description: {
+					eng: "0=disable; Duty Cycle Correction",
+				},
 			}, {
 				access: "rsvd_6_4",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "HT_SRF",
-				description: [
-					{language: "english", text: "0=disable; hi-temp self-refresh mode",},
-				],
+				description: {
+					eng: "0=disable; hi-temp self-refresh mode",
+				},
 			}, {
 				access: "rsvd_12_8",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "rsvd_15_13",
 				display: "ATUI_HEX",
@@ -250,9 +250,9 @@ global_defaults: {
 			{
 				access: "rsvd_15_0",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "all reserved",},
-				],
+				description: {
+					eng: "all reserved",
+				},
 			},
 		],},
 		},
@@ -265,44 +265,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "burst_length",
-				description: [
-					{language: "english", text: "0=BL8, 1=OTF 4/8, 2=BC4, 3=reserved",},
-				],
+				description: {
+					eng: "0=BL8, 1=OTF 4/8, 2=BC4, 3=reserved",
+				},
 			}, {
 				access: "CL_hi_bit",
-				description: [
-					{language: "english", text: "A[2,6,5,4] -> CL[4:0]",},
-				],
+				description: {
+					eng: "A[2,6,5,4] -> CL[4:0]",
+				},
 			}, {
 				access: "read_burst_type",
-				description: [
-					{language: "english", text: "0=nibble sequential, 1=interleave",},
-				],
+				description: {
+					eng: "0=nibble sequential, 1=interleave",
+				},
 			}, {
 				access: "CL_lo_bits",
-				description: [
-					{language: "english", text: "tCL = 4+n",},
-				],
+				description: {
+					eng: "tCL = 4+n",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "WR",
-				description: [
-					{language: "english", text: "tWR; 16,5,6,7,8,10,12,14",},
-				],
+				description: {
+					eng: "tWR; 16,5,6,7,8,10,12,14",
+				},
 			}, {
 				access: "DLL_PPD",
-				description: [
-					{language: "english", text: "0=slow exit (DLL off), 1=fast (DLL on)",},
-				],
+				description: {
+					eng: "0=slow exit (DLL off), 1=fast (DLL on)",
+				},
 			}, {
 				access: "RFU_15_13",
 			},
@@ -317,64 +317,64 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "DrvStr_lo_bit",
-				description: [
-					{language: "english", text: "0=RZQ/6, 1=RZQ/7",},
-				],
+				description: {
+					eng: "0=RZQ/6, 1=RZQ/7",
+				},
 			}, {
 				access: "RTTNom_lo_bit",
-				description: [
-					{language: "english", text: "A[9,6,2] -> RTT_Nom[2:0]",},
-				],
+				description: {
+					eng: "A[9,6,2] -> RTT_Nom[2:0]",
+				},
 			}, {
 				access: "Additive_Latency",
-				description: [
-					{language: "english", text: "0=0, 1=tCL-1, 2=tCL-2, 3=reserved",},
-				],
+				description: {
+					eng: "0=0, 1=tCL-1, 2=tCL-2, 3=reserved",
+				},
 			}, {
 				access: "DrvStr_hi_bit",
-				description: [
-					{language: "english", text: "A[5,1] -> DrvStr[1:0]; 2,3=reserved",},
-				],
+				description: {
+					eng: "A[5,1] -> DrvStr[1:0]; 2,3=reserved",
+				},
 			}, {
 				access: "RTTNom_mid_bit",
-				description: [
-					{language: "english", text: "0=dis, RZQ/4, /2, /6, /12, /8,  6,7=rsvd",},
-				],
+				description: {
+					eng: "0=dis, RZQ/4, /2, /6, /12, /8,  6,7=rsvd",
+				},
 			}, {
 				access: "write_leveling",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "RFU_8",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "RTTNom_hi_bit",
-				description: [
-					{language: "english", text: "2,4,6 only if writelevel on and drivers on",},
-				],
+				description: {
+					eng: "2,4,6 only if writelevel on and drivers on",
+				},
 			}, {
 				access: "RFU_10",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "TDQS",
-				description: [
-					{language: "english", text: "0=disabled; Termination Data Strobe pins",},
-				],
+				description: {
+					eng: "0=disabled; Termination Data Strobe pins",
+				},
 			}, {
 				access: "output_disable",
-				description: [
-					{language: "english", text: "1=turn off drivers for DQ, DQS, DQS#",},
-				],
+				description: {
+					eng: "1=turn off drivers for DQ, DQS, DQS#",
+				},
 			}, {
 				access: "RFU_15_13",
 			},
@@ -389,34 +389,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PASR",
-				description: [
-					{language: "english", text: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",},
-				],
+				description: {
+					eng: "0=full (BA[2:0]=xxx), 0xx, 00x, 000, 3/4 (>1), 1xx, 11x, 111",
+				},
 			}, {
 				access: "CWL",
-				description: [
-					{language: "english", text: "tCWl = 5+n",},
-				],
+				description: {
+					eng: "tCWl = 5+n",
+				},
 			}, {
 				access: "ASR",
-				description: [
-					{language: "english", text: "0=manual; auto self refresh",},
-				],
+				description: {
+					eng: "0=manual; auto self refresh",
+				},
 			}, {
 				access: "SRT",
-				description: [
-					{language: "english", text: "0=normal, 1=extended; self refresh temp range",},
-				],
+				description: {
+					eng: "0=normal, 1=extended; self refresh temp range",
+				},
 			}, {
 				access: "RFU_8",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "RTT_WR",
-				description: [
-					{language: "english", text: "0=off, RZQ/4, /2, reserved",},
-				],
+				description: {
+					eng: "0=off, RZQ/4, /2, reserved",
+				},
 			}, {
 				access: "RFU_15_11",
 			},
@@ -431,14 +431,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "MPR_location",
-				description: [
-					{language: "english", text: "0=predefined pattern for read sync, 1,2,3=RFU",},
-				],
+				description: {
+					eng: "0=predefined pattern for read sync, 1,2,3=RFU",
+				},
 			}, {
 				access: "MPR_operation",
-				description: [
-					{language: "english", text: "0=normal, 1=dataflow from MPR",},
-				],
+				description: {
+					eng: "0=normal, 1=dataflow from MPR",
+				},
 			}, {
 				access: "RFU_15_3",
 			},
@@ -453,43 +453,43 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "BL",
-				description: [
-					{language: "english", text: "0=BL8; 1=OTF BC4/BC8; 2=BC4",},
-				],
+				description: {
+					eng: "0=BL8; 1=OTF BC4/BC8; 2=BC4",
+				},
 			}, {
 				access: "tCL_lo",
-				description: [
-					{language: "english", text: "MR0[12,6:4,2] -> tCL[5:0]",},
-				],
+				description: {
+					eng: "MR0[12,6:4,2] -> tCL[5:0]",
+				},
 			}, {
 				access: "burst_type",
-				description: [
-					{language: "english", text: "0=nibble sequential; 1=interleave",},
-				],
+				description: {
+					eng: "0=nibble sequential; 1=interleave",
+				},
 			}, {
 				access: "tCL_mid",
-				description: [
-					{language: "english", text: "0..7=9+n; 8=18 9=20 10=22 11=24 12=23 13=17 14=19 15=21 16=25 17=26 19=28 20=29 21=30 22=31 23=32",},
-				],
+				description: {
+					eng: "0..7=9+n; 8=18 9=20 10=22 11=24 12=23 13=17 14=19 15=21 16=25 17=26 19=28 20=29 21=30 22=31 23=32",
+				},
 			}, {
 				access: "test_mode",
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "1=reset",},
-				],
+				description: {
+					eng: "1=reset",
+				},
 			}, {
 				access: "tWRtRTP_lo",
-				description: [
-					{language: "english", text: "auto-pre; MR0[13,11:9] -> tWRtRTP[3:0]",},
-				],
+				description: {
+					eng: "auto-pre; MR0[13,11:9] -> tWRtRTP[3:0]",
+				},
 			}, {
 				access: "tCL_hi",
 			}, {
 				access: "tWRtRTP_hi",
-				description: [
-					{language: "english", text: "tWR is 2x; tRTP: 0..5=5+n; 6=12 7=11 8=13 9=14",},
-				],
+				description: {
+					eng: "tWR is 2x; tRTP: 0..5=5+n; 6=12 7=11 8=13 9=14",
+				},
 			}, {
 				access: "mr_zero",
 			},
@@ -504,49 +504,49 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DLL",
-				description: [
-					{language: "english", text: "1=enabled",},
-				],
+				description: {
+					eng: "1=enabled",
+				},
 			}, {
 				access: "ODI",
-				description: [
-					{language: "english", text: "drive strength; 0=RZQ/7; 1=/5; (2: micron: /6)",},
-				],
+				description: {
+					eng: "drive strength; 0=RZQ/7; 1=/5; (2: micron: /6)",
+				},
 			}, {
 				access: "AL",
-				description: [
-					{language: "english", text: "additive latency; 0=0;  1=CL-1; 2=CL-2",},
-				],
+				description: {
+					eng: "additive latency; 0=0;  1=CL-1; 2=CL-2",
+				},
 			}, {
 				access: "RXCTLE_lo",
-				description: [
-					{language: "english", text: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",},
-				],
+				description: {
+					eng: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",
+				},
 			}, {
 				access: "WL",
-				description: [
-					{language: "english", text: "write leveling; 0=disabled; 1=enabled",},
-				],
+				description: {
+					eng: "write leveling; 0=disabled; 1=enabled",
+				},
 			}, {
 				access: "RTT_NOM",
-				description: [
-					{language: "english", text: "0=off; 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",},
-				],
+				description: {
+					eng: "0=off; 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",
+				},
 			}, {
 				access: "TDQS",
-				description: [
-					{language: "english", text: "DQS termination (x8 only); 0=disabled; 1=enabled",},
-				],
+				description: {
+					eng: "DQS termination (x8 only); 0=disabled; 1=enabled",
+				},
 			}, {
 				access: "Qoff",
-				description: [
-					{language: "english", text: "output buffer disabled; 0=normal; 1=ODI/RTT off",},
-				],
+				description: {
+					eng: "output buffer disabled; 0=normal; 1=ODI/RTT off",
+				},
 			}, {
 				access: "RXCTLE_hi",
-				description: [
-					{language: "english", text: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",},
-				],
+				description: {
+					eng: "MR1[13,6:5] -> RX_CTLE_CTRL[2:0]",
+				},
 			}, {
 				access: "mr_zero",
 			},
@@ -563,26 +563,26 @@ global_defaults: {
 				access: "RFU_2_0",
 			}, {
 				access: "tCWL",
-				description: [
-					{language: "english", text: "1t preamble: 0=9 1=10 2=11 3=12 4=14 5=16 6=18 7=20; 2t pramble: 14..20",},
-				],
+				description: {
+					eng: "1t preamble: 0=9 1=10 2=11 3=12 4=14 5=16 6=18 7=20; 2t pramble: 14..20",
+				},
 			}, {
 				access: "LPASR",
-				description: [
-					{language: "english", text: "auto refresh; 0=normal 1=reduced 1=extended 3=auto",},
-				],
+				description: {
+					eng: "auto refresh; 0=normal 1=reduced 1=extended 3=auto",
+				},
 			}, {
 				access: "RFU_8",
 			}, {
 				access: "RTT_WR",
-				description: [
-					{language: "english", text: "0=disabled 1=RZQ/2 2=/1 3=HiZ 4=/3",},
-				],
+				description: {
+					eng: "0=disabled 1=RZQ/2 2=/1 3=HiZ 4=/3",
+				},
 			}, {
 				access: "WRCRC",
-				description: [
-					{language: "english", text: "write CRC; 0=disabled",},
-				],
+				description: {
+					eng: "write CRC; 0=disabled",
+				},
 			}, {
 				access: "RFU_13",
 			}, {
@@ -599,44 +599,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "MPR_page",
-				description: [
-					{language: "english", text: "multi-purpose register; 0=0..3=3",},
-				],
+				description: {
+					eng: "multi-purpose register; 0=0..3=3",
+				},
 			}, {
 				access: "MPR_access",
-				description: [
-					{language: "english", text: "0=normal; 1=data from MPR",},
-				],
+				description: {
+					eng: "0=normal; 1=data from MPR",
+				},
 			}, {
 				access: "GDM",
-				description: [
-					{language: "english", text: "0=normal; 1=geared",},
-				],
+				description: {
+					eng: "0=normal; 1=geared",
+				},
 			}, {
 				access: "PDA",
-				description: [
-					{language: "english", text: "per-dram addressability; 0=normal; 1=enable",},
-				],
+				description: {
+					eng: "per-dram addressability; 0=normal; 1=enable",
+				},
 			}, {
 				access: "temp_sensor",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "FGR",
-				description: [
-					{language: "english", text: "0=1x 1=2x 3=4x; 5=OTF 1x/2x; 6=OTF 1x/4x",},
-				],
+				description: {
+					eng: "0=1x 1=2x 3=4x; 5=OTF 1x/2x; 6=OTF 1x/4x",
+				},
 			}, {
 				access: "tWCL",
-				description: [
-					{language: "english", text: "when CRC, DM are both enabled; 0..2=4+n",},
-				],
+				description: {
+					eng: "when CRC, DM are both enabled; 0..2=4+n",
+				},
 			}, {
 				access: "MPR_format",
-				description: [
-					{language: "english", text: "read format; 0=serial 1=parallell 2=staggered",},
-				],
+				description: {
+					eng: "read format; 0=serial 1=parallell 2=staggered",
+				},
 			}, {
 				access: "RFU_13",
 			}, {
@@ -653,64 +653,64 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "MBIST_PPR",
-				description: [
-					{language: "english", text: "self-contained PPR; 0=disabled",},
-				],
+				description: {
+					eng: "self-contained PPR; 0=disabled",
+				},
 			}, {
 				access: "max_power_savings",
-				description: [
-					{language: "english", text: "lossy powersave; 0=normal; 1=enabled",},
-				],
+				description: {
+					eng: "lossy powersave; 0=normal; 1=enabled",
+				},
 			}, {
 				access: "TCR_range",
-				description: [
-					{language: "english", text: "0=normal; 1=extended",},
-				],
+				description: {
+					eng: "0=normal; 1=extended",
+				},
 			}, {
 				access: "TCR",
-				description: [
-					{language: "english", text: "temp controlled refresh; 0=disabled",},
-				],
+				description: {
+					eng: "temp controlled refresh; 0=disabled",
+				},
 			}, {
 				access: "internal_vref",
-				description: [
-					{language: "english", text: "for Vrefdq training; 0=disabled",},
-				],
+				description: {
+					eng: "for Vrefdq training; 0=disabled",
+				},
 			}, {
 				access: "soft_PPR",
-				description: [
-					{language: "english", text: "soft post-package-repair; 0=disabled",},
-				],
+				description: {
+					eng: "soft post-package-repair; 0=disabled",
+				},
 			}, {
 				access: "command_address_lat",
-				description: [
-					{language: "english", text: "power savings;  0=0 1=3 2=4 3=5 4=6 5=8",},
-				],
+				description: {
+					eng: "power savings;  0=0 1=3 2=4 3=5 4=6 5=8",
+				},
 			}, {
 				access: "refresh_abort_mode",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "read_preamble_train",
-				description: [
-					{language: "english", text: "o=disabled",},
-				],
+				description: {
+					eng: "o=disabled",
+				},
 			}, {
 				access: "read_preamble",
-				description: [
-					{language: "english", text: "0=1tCK 1=2tCK",},
-				],
+				description: {
+					eng: "0=1tCK 1=2tCK",
+				},
 			}, {
 				access: "write_preamble",
-				description: [
-					{language: "english", text: "0=1tCK; 1=2tCK, tCWL must be >9",},
-				],
+				description: {
+					eng: "0=1tCK; 1=2tCK, tCWL must be >9",
+				},
 			}, {
 				access: "hard_PPR",
-				description: [
-					{language: "english", text: "hard post-package-repair; 0=disabled",},
-				],
+				description: {
+					eng: "hard post-package-repair; 0=disabled",
+				},
 			}, {
 				access: "mr_zero",
 			},
@@ -725,49 +725,49 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CA_parity",
-				description: [
-					{language: "english", text: "0=off; n-clocks: 1=4 2=5 3=6",},
-				],
+				description: {
+					eng: "0=off; n-clocks: 1=4 2=5 3=6",
+				},
 			}, {
 				access: "CRC_error",
-				description: [
-					{language: "english", text: "0=clear; 1=error",},
-				],
+				description: {
+					eng: "0=clear; 1=error",
+				},
 			}, {
 				access: "CA_parity_error",
-				description: [
-					{language: "english", text: "0=clear; 1=error",},
-				],
+				description: {
+					eng: "0=clear; 1=error",
+				},
 			}, {
 				access: "ODT_powerdown",
-				description: [
-					{language: "english", text: "0=buffer enabled; 1=disabled",},
-				],
+				description: {
+					eng: "0=buffer enabled; 1=disabled",
+				},
 			}, {
 				access: "RTT_Park",
-				description: [
-					{language: "english", text: "0=disabled 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",},
-				],
+				description: {
+					eng: "0=disabled 1=RZQ/4 2=/2 3=/6 4=/1 5=/5 6=/3 7=/7",
+				},
 			}, {
 				access: "CA_parity_stop",
-				description: [
-					{language: "english", text: "CA parity stops on error; 0=stop 1=continue",},
-				],
+				description: {
+					eng: "CA parity stops on error; 0=stop 1=continue",
+				},
 			}, {
 				access: "data_maask",
-				description: [
-					{language: "english", text: "write data mask (x8/x16 only); 0=disabled",},
-				],
+				description: {
+					eng: "write data mask (x8/x16 only); 0=disabled",
+				},
 			}, {
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "data bus inversion; 0=disabled",},
-				],
+				description: {
+					eng: "data bus inversion; 0=disabled",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "data bus inversion; 0=disabled",},
-				],
+				description: {
+					eng: "data bus inversion; 0=disabled",
+				},
 			}, {
 				access: "RFU_13",
 			}, {
@@ -784,26 +784,26 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vref_cal_val",
-				description: [
-					{language: "english", text: "0..50 = (n/154 + range) x Vddq",},
-				],
+				description: {
+					eng: "0..50 = (n/154 + range) x Vddq",
+				},
 			}, {
 				access: "vref_cal_range",
-				description: [
-					{language: "english", text: "0=0.6 (range 1); 1=0.45 (range 2)",},
-				],
+				description: {
+					eng: "0=0.6 (range 1); 1=0.45 (range 2)",
+				},
 			}, {
 				access: "vref_cal",
-				description: [
-					{language: "english", text: "internal Vrefdq gen; 0=disable; 1=enable",},
-				],
+				description: {
+					eng: "internal Vrefdq gen; 0=disable; 1=enable",
+				},
 			}, {
 				access: "RFU_9_8",
 			}, {
 				access: "data_rate",
-				description: [
-					{language: "english", text: "0:<=1333; 1:<=1866; 2:<=2400; 3:<=2666; 4:<=3200",},
-				],
+				description: {
+					eng: "0:<=1333; 1:<=1866; 2:<=2400; 3:<=2666; 4:<=3200",
+				},
 			}, {
 				access: "RFU_13",
 			}, {
@@ -822,34 +822,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "burst_length",
-				description: [
-					{language: "english", text: "0=4, 1=reserved",},
-				],
+				description: {
+					eng: "0=4, 1=reserved",
+				},
 			}, {
 				access: "WL",
-				description: [
-					{language: "english", text: "1=1..7=7; 0=reserved",},
-				],
+				description: {
+					eng: "1=1..7=7; 0=reserved",
+				},
 			}, {
 				access: "RL",
-				description: [
-					{language: "english", text: "8,9,10,rsvd,4,5,6,7",},
-				],
+				description: {
+					eng: "8,9,10,rsvd,4,5,6,7",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "WR",
-				description: [
-					{language: "english", text: "tWR=n+1; 0,1,7=reserved",},
-				],
+				description: {
+					eng: "tWR=n+1; 0,1,7=reserved",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -865,44 +865,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "addrcmd_ODT",
-				description: [
-					{language: "english", text: "0=off 1=1xDQ, 2=2x, 3=4xDQ",},
-				],
+				description: {
+					eng: "0=off 1=1xDQ, 2=2x, 3=4xDQ",
+				},
 			}, {
 				access: "data_ck_ODT",
-				description: [
-					{language: "english", text: "0=off, 1=auto cal., 2=60ohms, 3=120",},
-				],
+				description: {
+					eng: "0=off, 1=auto cal., 2=60ohms, 3=120",
+				},
 			}, {
 				access: "additive_latency",
-				description: [
-					{language: "english", text: "0=0, 1=1",},
-				],
+				description: {
+					eng: "0=0, 1=1",
+				},
 			}, {
 				access: "DQS",
-				description: [
-					{language: "english", text: "0=differential, 1=single",},
-				],
+				description: {
+					eng: "0=differential, 1=single",
+				},
 			}, {
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=off, 1=on",},
-				],
+				description: {
+					eng: "0=off, 1=on",
+				},
 			}, {
 				access: "driver_Ron",
-				description: [
-					{language: "english", text: "0=60, 1=55 ... 7=25",},
-				],
+				description: {
+					eng: "0=60, 1=55 ... 7=25",
+				},
 			}, {
 				access: "rankness",
-				description: [
-					{language: "english", text: "0=single 1=multi",},
-				],
+				description: {
+					eng: "0=single 1=multi",
+				},
 			}, {
 				access: "vendor_id",
-				description: [
-					{language: "english", text: "0=disabled 1=enabled",},
-				],
+				description: {
+					eng: "0=disabled 1=enabled",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -921,34 +921,34 @@ global_defaults: {
 				display: "ATUI_HEX",
 			}, {
 				access: "ODT_at_powerdown",
-				description: [
-					{language: "english", text: "0=all off except CK, CKE, 1=EMRS/EMRS2",},
-				],
+				description: {
+					eng: "0=all off except CK, CKE, 1=EMRS/EMRS2",
+				},
 			}, {
 				access: "low_power_mode",
-				description: [
-					{language: "english", text: "0=self-refresh, 1=fast wakeup",},
-				],
+				description: {
+					eng: "0=self-refresh, 1=fast wakeup",
+				},
 			}, {
 				access: "CK_ODT",
-				description: [
-					{language: "english", text: "0=off, 1=1xDQ, 2=2x, 3=4xDQ",},
-				],
+				description: {
+					eng: "0=off, 1=1xDQ, 2=2x, 3=4xDQ",
+				},
 			}, {
 				access: "CS_ODT",
-				description: [
-					{language: "english", text: "0=off, 1=0.5x addrcmd, 2=1x, 3=reserved",},
-				],
+				description: {
+					eng: "0=off, 1=0.5x addrcmd, 2=1x, 3=reserved",
+				},
 			}, {
 				access: "CKE_ODT",
-				description: [
-					{language: "english", text: "0=off, 1=addrcmd",},
-				],
+				description: {
+					eng: "0=off, 1=addrcmd",
+				},
 			}, {
 				access: "ODT_W_mode",
-				description: [
-					{language: "english", text: "0=enable 1=disable. \"W\" mode??",},
-				],
+				description: {
+					eng: "0=enable 1=disable. \"W\" mode??",
+				},
 			}, {
 				access: "rsvd_11_10",
 				display: "ATUI_HEX",
@@ -967,39 +967,39 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "burst_length",
-				description: [
-					{language: "english", text: "0,1=RFU, 2=BL4, 3=BL8",},
-				],
+				description: {
+					eng: "0,1=RFU, 2=BL4, 3=BL8",
+				},
 			}, {
 				access: "CL_hi_bit",
-				description: [
-					{language: "english", text: "A[2,6,5,4]->tCL[3:0] | JEDEC says A[3] is for BL; BL[2:0]",},
-				],
+				description: {
+					eng: "A[2,6,5,4]->tCL[3:0] | JEDEC says A[3] is for BL; BL[2:0]",
+				},
 			}, {
 				access: "burst_type",
-				description: [
-					{language: "english", text: "0=sequential 1=RFU",},
-				],
+				description: {
+					eng: "0=sequential 1=RFU",
+				},
 			}, {
 				access: "CL_lo_bits",
-				description: [
-					{language: "english", text: "8,9,10,11,rsvd,5,6,7,12,13,14,15, rsvd...",},
-				],
+				description: {
+					eng: "8,9,10,11,rsvd,5,6,7,12,13,14,15, rsvd...",
+				},
 			}, {
 				access: "test_mode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "tWL",
-				description: [
-					{language: "english", text: "0=reserved; tCWL",},
-				],
+				description: {
+					eng: "0=reserved; tCWL",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1015,47 +1015,47 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "drive_strength",
-				description: [
-					{language: "english", text: "0=auto cal. 1=30ohms, 2=40, 3=50",},
-				],
+				description: {
+					eng: "0=auto cal. 1=30ohms, 2=40, 3=50",
+				},
 			}, {
 				access: "data_terminaton",
-				description: [
-					{language: "english", text: "0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2",},
-				],
+				description: {
+					eng: "0=ALL ODT disabled, 1=rsvd, 2=ZQ/4, 3=ZQ/2",
+				},
 			}, {
 				access: "WR_lo_bits",
-				description: [
-					{language: "english", text: "A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10",},
-				],
+				description: {
+					eng: "A[7,5,4] -> WR[2:0]; 11,13,5,6,7,8,9,10",
+				},
 			}, {
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "tWR_hi_bit",
 			}, {
 				access: "rsvd_8_8",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "R_on",
-				description: [
-					{language: "english", text: "0=40 ohms, 1=60 ohms; pull-up",},
-				],
+				description: {
+					eng: "0=40 ohms, 1=60 ohms; pull-up",
+				},
 			}, {
 				access: "vendor_ID",
-				description: [
-					{language: "english", text: "0=off",},
-				],
+				description: {
+					eng: "0=off",
+				},
 			}, {
 				access: "AddrCmd_term",
-				description: [
-					{language: "english", text: "0=inherit CKE, 1=CKE/2",},
-				],
+				description: {
+					eng: "0=inherit CKE, 1=CKE/2",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1071,39 +1071,39 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WR",
-				description: [
-					{language: "english", text: "Write recovery; 16,18,20, 6,8,10,12,14",},
-				],
+				description: {
+					eng: "Write recovery; 16,18,20, 6,8,10,12,14",
+				},
 			}, {
 				access: "tCL",
-				description: [
-					{language: "english", text: "16,17..21,22, 7,8,9..15",},
-				],
+				description: {
+					eng: "16,17..21,22, 7,8,9..15",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "behaviour is vendor specific",},
-				],
+				description: {
+					eng: "behaviour is vendor specific",
+				},
 			}, {
 				access: "DLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "WL",
-				description: [
-					{language: "english", text: "write latency; 0=RFU, 1=1..7=7",},
-				],
+				description: {
+					eng: "write latency; 0=RFU, 1=1..7=7",
+				},
 			}, {
 				access: "RFU_12",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 0",},
-				],
+				description: {
+					eng: "MR 0",
+				},
 			},
 		],},
 		},
@@ -1116,54 +1116,54 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "Drive_Term",
-				description: [
-					{language: "english", text: "0=auto cal., 2=nominal (no compensation), 1,3=RFU. (drive: 40 down/60 up ; termination: 60/120; CA 60/120/240)",},
-				],
+				description: {
+					eng: "0=auto cal., 2=nominal (no compensation), 1,3=RFU. (drive: 40 down/60 up ; termination: 60/120; CA 60/120/240)",
+				},
 			}, {
 				access: "DQ_term",
-				description: [
-					{language: "english", text: "0=all off, 1=DQ off, 2=1/4, 3=1/2",},
-				],
+				description: {
+					eng: "0=all off, 1=DQ off, 2=1/4, 3=1/2",
+				},
 			}, {
 				access: "tPreamble",
-				description: [
-					{language: "english", text: "0=1..  5..7=RFU. read/write preamble in tCK",},
-				],
+				description: {
+					eng: "0=1..  5..7=RFU. read/write preamble in tCK",
+				},
 			}, {
 				access: "DLL",
-				description: [
-					{language: "english", text: "0=enable",},
-				],
+				description: {
+					eng: "0=enable",
+				},
 			}, {
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "0=disable. data bus iversion",},
-				],
+				description: {
+					eng: "0=disable. data bus iversion",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "0=disable",},
-				],
+				description: {
+					eng: "0=disable",
+				},
 			}, {
 				access: "DBI_mode",
-				description: [
-					{language: "english", text: "0=DC, 1=AC. optimise for DC/AC power reduction",},
-				],
+				description: {
+					eng: "0=DC, 1=AC. optimise for DC/AC power reduction",
+				},
 			}, {
 				access: "Vendor_ID",
-				description: [
-					{language: "english", text: "0=disable",},
-				],
+				description: {
+					eng: "0=disable",
+				},
 			}, {
 				access: "RFU_12",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "EMR 1",},
-				],
+				description: {
+					eng: "EMR 1",
+				},
 			},
 		],},
 		},
@@ -1177,30 +1177,30 @@ global_defaults: {
 			{
 				access: "OCD_down_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. Driver/term pulldown offset",},
-				],
+				description: {
+					eng: "Two's Compl. Driver/term pulldown offset",
+				},
 			}, {
 				access: "OCD_up_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. Driver/terminator pullup offset",},
-				],
+				description: {
+					eng: "Two's Compl. Driver/terminator pullup offset",
+				},
 			}, {
 				access: "tRAS",
-				description: [
-					{language: "english", text: "tRAS latency; 0=RFU, 1=1..63=63",},
-				],
+				description: {
+					eng: "tRAS latency; 0=RFU, 1=1..63=63",
+				},
 			}, {
 				access: "RFU_12",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "EMR 2",},
-				],
+				description: {
+					eng: "EMR 2",
+				},
 			},
 		],},
 		},
@@ -1213,44 +1213,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "RFU",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "LP_term",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "DRAM_info",
-				description: [
-					{language: "english", text: "0=vendor ID, 1=PERR_Info, 2,3=vendor specific",},
-				],
+				description: {
+					eng: "0=vendor ID, 1=PERR_Info, 2,3=vendor specific",
+				},
 			}, {
 				access: "parity_reset",
-				description: [
-					{language: "english", text: "0=store, 1=reset; clear PERR_Info",},
-				],
+				description: {
+					eng: "0=store, 1=reset; clear PERR_Info",
+				},
 			}, {
 				access: "parity_enable",
-				description: [
-					{language: "english", text: "0=disable",},
-				],
+				description: {
+					eng: "0=disable",
+				},
 			}, {
 				access: "parity_mask",
-				description: [
-					{language: "english", text: "0=DQ[7:0], 1=[15:8], 2=[23:16], 3=[31:24]",},
-				],
+				description: {
+					eng: "0=DQ[7:0], 1=[15:8], 2=[23:16], 3=[31:24]",
+				},
 			}, {
 				access: "RFU_12",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "EMR 3",},
-				],
+				description: {
+					eng: "EMR 3",
+				},
 			},
 		],},
 		},
@@ -1263,24 +1263,24 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WLmrs",
-				description: [
-					{language: "english", text: "0=RFU 1=1..7=7",},
-				],
+				description: {
+					eng: "0=RFU 1=1..7=7",
+				},
 			}, {
 				access: "CLmrs_lo",
-				description: [
-					{language: "english", text: "tCL = 5+n. [MR8[0], MR0[6:3]] -> tCL[4:0]",},
-				],
+				description: {
+					eng: "tCL = 5+n. [MR8[0], MR0[6:3]] -> tCL[4:0]",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "behavior is vendor specific",},
-				],
+				description: {
+					eng: "behavior is vendor specific",
+				},
 			}, {
 				access: "WR",
-				description: [
-					{language: "english", text: "tWR = 4+n. [MR8[1], MR0[11:8]] -> tWR[4:0]",},
-				],
+				description: {
+					eng: "tWR = 4+n. [MR8[1], MR0[11:8]] -> tWR[4:0]",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1296,49 +1296,49 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "drive_strength",
-				description: [
-					{language: "english", text: "0=auto cal., 1,3=vendor, 2=nom (60/40)",},
-				],
+				description: {
+					eng: "0=auto cal., 1,3=vendor, 2=nom (60/40)",
+				},
 			}, {
 				access: "data_termination",
-				description: [
-					{language: "english", text: "0=disabled, 1=ZQ, 2=ZQ/2, 3=RFU",},
-				],
+				description: {
+					eng: "0=disabled, 1=ZQ, 2=ZQ/2, 3=RFU",
+				},
 			}, {
 				access: "addrcmd_term",
-				description: [
-					{language: "english", text: "0=inherit CKE_n, 1=ZQ, 2=ZQ/2, 3=disabled",},
-				],
+				description: {
+					eng: "0=inherit CKE_n, 1=ZQ, 2=ZQ/2, 3=disabled",
+				},
 			}, {
 				access: "calibration_update",
-				description: [
-					{language: "english", text: "0=on; impedance calibration engine",},
-				],
+				description: {
+					eng: "0=on; impedance calibration engine",
+				},
 			}, {
 				access: "PLL_DLL",
-				description: [
-					{language: "english", text: "0=off",},
-				],
+				description: {
+					eng: "0=off",
+				},
 			}, {
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "0=on; data bus inversion",},
-				],
+				description: {
+					eng: "0=on; data bus inversion",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "0=on; data bus inversion",},
-				],
+				description: {
+					eng: "0=on; data bus inversion",
+				},
 			}, {
 				access: "address_BI",
-				description: [
-					{language: "english", text: "0=on; address bus inversion",},
-				],
+				description: {
+					eng: "0=on; address bus inversion",
+				},
 			}, {
 				access: "PLLDLL_reset",
-				description: [
-					{language: "english", text: "self clearing",},
-				],
+				description: {
+					eng: "self clearing",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1355,27 +1355,27 @@ global_defaults: {
 			{
 				access: "drive_pulldown_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. vendor specific",},
-				],
+				description: {
+					eng: "Two's Compl. vendor specific",
+				},
 			}, {
 				access: "drive_pullup_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. vendor specific",},
-				],
+				description: {
+					eng: "Two's Compl. vendor specific",
+				},
 			}, {
 				access: "data_wck_term_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. vendor specific",},
-				],
+				description: {
+					eng: "Two's Compl. vendor specific",
+				},
 			}, {
 				access: "AddrCmd_term_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "Two's Compl. vendor specific",},
-				],
+				description: {
+					eng: "Two's Compl. vendor specific",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1391,44 +1391,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "self_refresh",
-				description: [
-					{language: "english", text: "0=32ms 1,2=vendor, 3=temp controlled",},
-				],
+				description: {
+					eng: "0=32ms 1,2=vendor, 3=temp controlled",
+				},
 			}, {
 				access: "WCK01_invert",
-				description: [
-					{language: "english", text: "phase invert",},
-				],
+				description: {
+					eng: "phase invert",
+				},
 			}, {
 				access: "WCK23_invert",
-				description: [
-					{language: "english", text: "phase invert",},
-				],
+				description: {
+					eng: "phase invert",
+				},
 			}, {
 				access: "WCK2CK_training",
-				description: [
-					{language: "english", text: "0=off; WCK to CK alignment training",},
-				],
+				description: {
+					eng: "0=off; WCK to CK alignment training",
+				},
 			}, {
 				access: "RDQS_mode",
-				description: [
-					{language: "english", text: "0=off; EDC becomes RDQS",},
-				],
+				description: {
+					eng: "0=off; EDC becomes RDQS",
+				},
 			}, {
 				access: "DRAM_info",
-				description: [
-					{language: "english", text: "0=off, 1=vendor ID, 2=temp, 3=vemdor spec.",},
-				],
+				description: {
+					eng: "0=off, 1=vendor ID, 2=temp, 3=vemdor spec.",
+				},
 			}, {
 				access: "WCK_termination",
-				description: [
-					{language: "english", text: "0=dis, 1=ZQ/2, 2=ZQ, 3=RFU",},
-				],
+				description: {
+					eng: "0=dis, 1=ZQ/2, 2=ZQ, 3=RFU",
+				},
 			}, {
 				access: "bank_groups",
-				description: [
-					{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCL=3",},
-				],
+				description: {
+					eng: "0,1=off, 2=on tCCDL=4, 3=on tCCL=3",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1444,34 +1444,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "EDC_pattern",
-				description: [
-					{language: "english", text: "little-endian-based burst position",},
-				],
+				description: {
+					eng: "little-endian-based burst position",
+				},
 			}, {
 				access: "CRCWL",
-				description: [
-					{language: "english", text: "7+n; CRC write latency",},
-				],
+				description: {
+					eng: "7+n; CRC write latency",
+				},
 			}, {
 				access: "CRCRL",
-				description: [
-					{language: "english", text: "4,1,2,3; CRC read laency",},
-				],
+				description: {
+					eng: "4,1,2,3; CRC read laency",
+				},
 			}, {
 				access: "read_CRC",
-				description: [
-					{language: "english", text: "0=on",},
-				],
+				description: {
+					eng: "0=on",
+				},
 			}, {
 				access: "write_crc",
-				description: [
-					{language: "english", text: "0=on",},
-				],
+				description: {
+					eng: "0=on",
+				},
 			}, {
 				access: "hold_invert",
-				description: [
-					{language: "english", text: "1=inverted; EDC hold pattern inversion",},
-				],
+				description: {
+					eng: "1=inverted; EDC hold pattern inversion",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1487,29 +1487,29 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "LP1",
-				description: [
-					{language: "english", text: "0=off; power saving, relaxed core",},
-				],
+				description: {
+					eng: "0=off; power saving, relaxed core",
+				},
 			}, {
 				access: "LP2",
-				description: [
-					{language: "english", text: "0=off; power saving, WCK off during powerdown",},
-				],
+				description: {
+					eng: "0=off; power saving, WCK off during powerdown",
+				},
 			}, {
 				access: "LP3",
-				description: [
-					{language: "english", text: "0=off; training during refresh disabled",},
-				],
+				description: {
+					eng: "0=off; training during refresh disabled",
+				},
 			}, {
 				access: "PLLDLL_BW",
-				description: [
-					{language: "english", text: "vendor specific; PLL bandwidth",},
-				],
+				description: {
+					eng: "vendor specific; PLL bandwidth",
+				},
 			}, {
 				access: "tRAS",
-				description: [
-					{language: "english", text: "0=RFU, 1=1..63=63",},
-				],
+				description: {
+					eng: "0=RFU, 1=1..63=63",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1525,36 +1525,36 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WCK2CK_alignment",
-				description: [
-					{language: "english", text: "0=inside DRAM, 1=at balls",},
-				],
+				description: {
+					eng: "0=inside DRAM, 1=at balls",
+				},
 			}, {
 				access: "VREFD_merge",
-				description: [
-					{language: "english", text: "0=off 1=average VREFD and internal vref",},
-				],
+				description: {
+					eng: "0=off 1=average VREFD and internal vref",
+				},
 			}, {
 				access: "VREFD_training",
-				description: [
-					{language: "english", text: "0=ff 1=train; self clearing",},
-				],
+				description: {
+					eng: "0=ff 1=train; self clearing",
+				},
 			}, {
 				access: "VREFD_source",
-				description: [
-					{language: "english", text: "0=VREFD pins, 1=internally generated",},
-				],
+				description: {
+					eng: "0=VREFD pins, 1=internally generated",
+				},
 			}, {
 				access: "VREFD_offset_MU",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
-				],
+				description: {
+					eng: "semi Two's Compl. -8 = 0/auto",
+				},
 			}, {
 				access: "VREFD_offset_AF",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "semi Two's Compl. -8 = 0/auto",},
-				],
+				description: {
+					eng: "semi Two's Compl. -8 = 0/auto",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1570,54 +1570,54 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PLL_standby",
-				description: [
-					{language: "english", text: "0=off 1=standby when self-refresh",},
-				],
+				description: {
+					eng: "0=off 1=standby when self-refresh",
+				},
 			}, {
 				access: "PLL_fast_lock",
-				description: [
-					{language: "english", text: "1=faster lock but higher power; self clears",},
-				],
+				description: {
+					eng: "1=faster lock but higher power; self clears",
+				},
 			}, {
 				access: "PLL_delay_comp",
-				description: [
-					{language: "english", text: "1=PLL feedback = WCK clock tree delay",},
-				],
+				description: {
+					eng: "1=PLL feedback = WCK clock tree delay",
+				},
 			}, {
 				access: "low_freq_mode",
-				description: [
-					{language: "english", text: "1=reduced power for low freq",},
-				],
+				description: {
+					eng: "1=reduced power for low freq",
+				},
 			}, {
 				access: "WCK2CK_autosync",
-				description: [
-					{language: "english", text: "1=auto WCK2CK after PD exit",},
-				],
+				description: {
+					eng: "1=auto WCK2CK after PD exit",
+				},
 			}, {
 				access: "DQ_preamble",
-				description: [
-					{language: "english", text: "1=non-gapped READs will have 4UI preamble",},
-				],
+				description: {
+					eng: "1=non-gapped READs will have 4UI preamble",
+				},
 			}, {
 				access: "temp_sensor",
-				description: [
-					{language: "english", text: "1=enable temperature sense",},
-				],
+				description: {
+					eng: "1=enable temperature sense",
+				},
 			}, {
 				access: "half_VREFD",
-				description: [
-					{language: "english", text: "0=0.7x 1=0.5x VDDQ",},
-				],
+				description: {
+					eng: "0=0.7x 1=0.5x VDDQ",
+				},
 			}, {
 				access: "VDD_range",
-				description: [
-					{language: "english", text: "0=1.5V 1,2,3=vendor; adapt to different VDD",},
-				],
+				description: {
+					eng: "0=1.5V 1,2,3=vendor; adapt to different VDD",
+				},
 			}, {
 				access: "DCC",
-				description: [
-					{language: "english", text: "0=off, 1=start, 2=reset, 3=RFU; Duty Cycle Correction",},
-				],
+				description: {
+					eng: "0=off, 1=start, 2=reset, 3=RFU; Duty Cycle Correction",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1633,30 +1633,30 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CL_EHF",
-				description: [
-					{language: "english", text: "tCL range extension; see MR0",},
-				],
+				description: {
+					eng: "tCL range extension; see MR0",
+				},
 			}, {
 				access: "WR_EHF",
-				description: [
-					{language: "english", text: "tWR range extension; see MR0",},
-				],
+				description: {
+					eng: "tWR range extension; see MR0",
+				},
 			}, {
 				access: "EDC_HiZ",
-				description: [
-					{language: "english", text: "1=Hi-Z state; precedence over all other states",},
-				],
+				description: {
+					eng: "1=Hi-Z state; precedence over all other states",
+				},
 			}, {
 				access: "REFPB",
-				description: [
-					{language: "english", text: "1=per-bank refresh feature enable",},
-				],
+				description: {
+					eng: "1=per-bank refresh feature enable",
+				},
 			}, {
 				access: "rsvd_11_4",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1672,9 +1672,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1690,9 +1690,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1708,77 +1708,77 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PASR_banks_01",
-				description: [
-					{language: "english", text: "exclude banks 0, 1",},
-				],
+				description: {
+					eng: "exclude banks 0, 1",
+				},
 			}, {
 				access: "PASR_banks_23",
-				description: [
-					{language: "english", text: "exclude banks 2, 3",},
-				],
+				description: {
+					eng: "exclude banks 2, 3",
+				},
 			}, {
 				access: "PASR_banks_45",
-				description: [
-					{language: "english", text: "exclude banks 4, 5",},
-				],
+				description: {
+					eng: "exclude banks 4, 5",
+				},
 			}, {
 				access: "PASR_banks_67",
-				description: [
-					{language: "english", text: "exclude banks 6, 7",},
-				],
+				description: {
+					eng: "exclude banks 6, 7",
+				},
 			}, {
 				access: "PASR_banks_89",
-				description: [
-					{language: "english", text: "exclude banks 8, 9",},
-				],
+				description: {
+					eng: "exclude banks 8, 9",
+				},
 			}, {
 				access: "PASR_banks_1011",
-				description: [
-					{language: "english", text: "exclude banks 10, 11",},
-				],
+				description: {
+					eng: "exclude banks 10, 11",
+				},
 			}, {
 				access: "PASR_banks_1213",
-				description: [
-					{language: "english", text: "exclude banks 12, 13",},
-				],
+				description: {
+					eng: "exclude banks 12, 13",
+				},
 			}, {
 				access: "PASR_banks_1415",
-				description: [
-					{language: "english", text: "exclude banks 14, 15",},
-				],
+				description: {
+					eng: "exclude banks 14, 15",
+				},
 			}, {
 				access: "PASR_row_00",
-				description: [
-					{language: "english", text: "exclude row segment A[13:12]=00 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment A[13:12]=00 (MSB)",
+				},
 			}, {
 				access: "PASR_row_01",
-				description: [
-					{language: "english", text: "exclude row segment A[13:12]=01 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment A[13:12]=01 (MSB)",
+				},
 			}, {
 				access: "PASR_row_10",
-				description: [
-					{language: "english", text: "exclude row segment A[13:12]=10 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment A[13:12]=10 (MSB)",
+				},
 			}, {
 				access: "PASR_row_11",
-				description: [
-					{language: "english", text: "exclude row segment A[13:12]=11 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment A[13:12]=11 (MSB)",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
 			}, {
 				access: "PASR_bank_mask",
-				description: [
-					{language: "english", text: "bank exclusion mask",},
-				],
+				description: {
+					eng: "bank exclusion mask",
+				},
 			}, {
 				access: "PASR_row_segment_mask",
-				description: [
-					{language: "english", text: "row exclusion mask",},
-				],
+				description: {
+					eng: "row exclusion mask",
+				},
 			}, {
 				access: "rsvd_15_12__2",
 				display: "ATUI_HEX",
@@ -1794,9 +1794,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1812,9 +1812,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1830,9 +1830,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1851,24 +1851,24 @@ global_defaults: {
 				display: "ATUI_HEX",
 			}, {
 				access: "MRE_0_disable",
-				description: [
-					{language: "english", text: "1=disable MRS commands on channel 0",},
-				],
+				description: {
+					eng: "1=disable MRS commands on channel 0",
+				},
 			}, {
 				access: "MRE_1_disable",
-				description: [
-					{language: "english", text: "1=disable MRS commands on channel 1",},
-				],
+				description: {
+					eng: "1=disable MRS commands on channel 1",
+				},
 			}, {
 				access: "address_training",
-				description: [
-					{language: "english", text: "1=address training mode",},
-				],
+				description: {
+					eng: "1=address training mode",
+				},
 			}, {
 				access: "RFU",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "rsvd_15_12",
 				display: "ATUI_HEX",
@@ -1884,29 +1884,29 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WLmrs",
-				description: [
-					{language: "english", text: "tCWL, 8,9,10,11,12,5,6,7.",},
-				],
+				description: {
+					eng: "tCWL, 8,9,10,11,12,5,6,7.",
+				},
 			}, {
 				access: "RLmrs_lo",
-				description: [
-					{language: "english", text: "tCL = 5+n. [MR12[3], MR8[8], MR0[6:3]] -> tCL[5:0]",},
-				],
+				description: {
+					eng: "tCL = 5+n. [MR12[3], MR8[8], MR0[6:3]] -> tCL[5:0]",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "Test mode; behavior is vendor specific",},
-				],
+				description: {
+					eng: "Test mode; behavior is vendor specific",
+				},
 			}, {
 				access: "WRmrs",
-				description: [
-					{language: "english", text: "tWR for auto-pre, 0=4,1=5..47=51. See MR8, MR12",},
-				],
+				description: {
+					eng: "tWR for auto-pre, 0=4,1=5..47=51. See MR8, MR12",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 0",},
-				],
+				description: {
+					eng: "MR 0",
+				},
 			},
 		],},
 		},
@@ -1919,54 +1919,54 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "drive_stren",
-				description: [
-					{language: "english", text: "0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec",},
-				],
+				description: {
+					eng: "0=Auto Cal.(60/40), 1=AC(48/40). 2,3 vndr spec",
+				},
 			}, {
 				access: "data_term",
-				description: [
-					{language: "english", text: "0=disabled 1=60ohm 2=120ohm 3=48ohm",},
-				],
+				description: {
+					eng: "0=disabled 1=60ohm 2=120ohm 3=48ohm",
+				},
 			}, {
 				access: "PLLDLL_range",
-				description: [
-					{language: "english", text: "min-to-max WCK freq, vendor specific",},
-				],
+				description: {
+					eng: "min-to-max WCK freq, vendor specific",
+				},
 			}, {
 				access: "Cal_Upd",
-				description: [
-					{language: "english", text: "Auto Calibration Engine, 0=enabled.",},
-				],
+				description: {
+					eng: "Auto Calibration Engine, 0=enabled.",
+				},
 			}, {
 				access: "PLL_DLL",
-				description: [
-					{language: "english", text: "0=disabled 1=enabled",},
-				],
+				description: {
+					eng: "0=disabled 1=enabled",
+				},
 			}, {
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "Data Bus Inversion, for reads.   0=enabled",},
-				],
+				description: {
+					eng: "Data Bus Inversion, for reads.   0=enabled",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "Data Bus Inversion, for writes.  1=disabled",},
-				],
+				description: {
+					eng: "Data Bus Inversion, for writes.  1=disabled",
+				},
 			}, {
 				access: "addrcmd_BI",
-				description: [
-					{language: "english", text: "Command-address bus inversion.  0=enabled",},
-				],
+				description: {
+					eng: "Command-address bus inversion.  0=enabled",
+				},
 			}, {
 				access: "PLLDLL_reset",
-				description: [
-					{language: "english", text: "1 = reset. self-clears after reset.",},
-				],
+				description: {
+					eng: "1 = reset. self-clears after reset.",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 1",},
-				],
+				description: {
+					eng: "MR 1",
+				},
 			},
 		],},
 		},
@@ -1980,45 +1980,45 @@ global_defaults: {
 			{
 				access: "OCD_up",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "output driver pullup offset. 0=0, Two's Compl.",},
-				],
+				description: {
+					eng: "output driver pullup offset. 0=0, Two's Compl.",
+				},
 			}, {
 				access: "OCD_down",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "pulldown. See JES250D Figure 33.",},
-				],
+				description: {
+					eng: "pulldown. See JES250D Figure 33.",
+				},
 			}, {
 				access: "self_refresh",
-				description: [
-					{language: "english", text: "0=32ms, 1-2 vendor specific, 3=temp controlled",},
-				],
+				description: {
+					eng: "0=32ms, 1-2 vendor specific, 3=temp controlled",
+				},
 			}, {
 				access: "EDC_mode",
-				description: [
-					{language: "english", text: "0=full data rate, 1=half",},
-				],
+				description: {
+					eng: "0=full data rate, 1=half",
+				},
 			}, {
 				access: "RDQS",
-				description: [
-					{language: "english", text: "1 = EDC pins will act as RDQS; no CRC.",},
-				],
+				description: {
+					eng: "1 = EDC pins will act as RDQS; no CRC.",
+				},
 			}, {
 				access: "CADT_SRF",
-				description: [
-					{language: "english", text: "Self refesh while CA training",},
-				],
+				description: {
+					eng: "Self refesh while CA training",
+				},
 			}, {
 				access: "EDC_HR",
-				description: [
-					{language: "english", text: "EDC hold data rate 0=full, 1=half",},
-				],
+				description: {
+					eng: "EDC hold data rate 0=full, 1=half",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 2",},
-				],
+				description: {
+					eng: "MR 2",
+				},
 			},
 		],},
 		},
@@ -2032,35 +2032,35 @@ global_defaults: {
 			{
 				access: "dataWCK_term_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "DQ, DBI & WCK termination offset. Two's",},
-				],
+				description: {
+					eng: "DQ, DBI & WCK termination offset. Two's",
+				},
 			}, {
 				access: "CA_term_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "command address. See MR2.",},
-				],
+				description: {
+					eng: "command address. See MR2.",
+				},
 			}, {
 				access: "DRAM_info",
-				description: [
-					{language: "english", text: "0=off 1=vndr ID1 2=temp 3=vndr ID2",},
-				],
+				description: {
+					eng: "0=off 1=vndr ID1 2=temp 3=vndr ID2",
+				},
 			}, {
 				access: "WR_scaling",
-				description: [
-					{language: "english", text: "1x 2x 3x value of tWR in MR8 and MR0",},
-				],
+				description: {
+					eng: "1x 2x 3x value of tWR in MR8 and MR0",
+				},
 			}, {
 				access: "bank_groups",
-				description: [
-					{language: "english", text: "0,1=off, 2=on tCCDL=4, 3=on tCCDL=3",},
-				],
+				description: {
+					eng: "0,1=off, 2=on tCCDL=4, 3=on tCCDL=3",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 3",},
-				],
+				description: {
+					eng: "MR 3",
+				},
 			},
 		],},
 		},
@@ -2073,39 +2073,39 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "EDC_hold_pattern",
-				description: [
-					{language: "english", text: "little-endian. pattern during EDC idle",},
-				],
+				description: {
+					eng: "little-endian. pattern during EDC idle",
+				},
 			}, {
 				access: "CRCWL",
-				description: [
-					{language: "english", text: "15,16,RFU,10,11..21,RFU. See MR12 OP4",},
-				],
+				description: {
+					eng: "15,16,RFU,10,11..21,RFU. See MR12 OP4",
+				},
 			}, {
 				access: "CRCRL",
-				description: [
-					{language: "english", text: "CRC latency for reads. 4,1,2,3.",},
-				],
+				description: {
+					eng: "CRC latency for reads. 4,1,2,3.",
+				},
 			}, {
 				access: "RDCRC",
-				description: [
-					{language: "english", text: "read CRC 0=enable",},
-				],
+				description: {
+					eng: "read CRC 0=enable",
+				},
 			}, {
 				access: "WRCRC",
-				description: [
-					{language: "english", text: "write CRC 0=enable",},
-				],
+				description: {
+					eng: "write CRC 0=enable",
+				},
 			}, {
 				access: "EDC_hold_invert",
-				description: [
-					{language: "english", text: "0 = EDC hold pattern not inverted",},
-				],
+				description: {
+					eng: "0 = EDC hold pattern not inverted",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 4",},
-				],
+				description: {
+					eng: "MR 4",
+				},
 			},
 		],},
 		},
@@ -2118,34 +2118,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "LP1",
-				description: [
-					{language: "english", text: "0=off, Low Power Mode 1, relax several core params",},
-				],
+				description: {
+					eng: "0=off, Low Power Mode 1, relax several core params",
+				},
 			}, {
 				access: "LP2",
-				description: [
-					{language: "english", text: "WCK recievers turned off during powerdown.",},
-				],
+				description: {
+					eng: "WCK recievers turned off during powerdown.",
+				},
 			}, {
 				access: "LP3",
-				description: [
-					{language: "english", text: "no read/write training and temp reads during REFab",},
-				],
+				description: {
+					eng: "no read/write training and temp reads during REFab",
+				},
 			}, {
 				access: "PLLDLL_BW",
-				description: [
-					{language: "english", text: "PLL/DLL bandwidth. All except 0 vendor specific",},
-				],
+				description: {
+					eng: "PLL/DLL bandwidth. All except 0 vendor specific",
+				},
 			}, {
 				access: "RAS",
-				description: [
-					{language: "english", text: "0,1,2...63. tRAS for auto precharge",},
-				],
+				description: {
+					eng: "0,1,2...63. tRAS for auto precharge",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 5",},
-				],
+				description: {
+					eng: "MR 5",
+				},
 			},
 		],},
 		},
@@ -2158,19 +2158,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VREFD_level",
-				description: [
-					{language: "english", text: "0.005x steps of VDDQ, from 0=0.49x to 95=0.965x",},
-				],
+				description: {
+					eng: "0.005x steps of VDDQ, from 0=0.49x to 95=0.965x",
+				},
 			}, {
 				access: "pin_subaddr",
-				description: [
-					{language: "english", text: "pin to configure the VREFD for. See JESD250",},
-				],
+				description: {
+					eng: "pin to configure the VREFD for. See JESD250",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 6",},
-				],
+				description: {
+					eng: "MR 6",
+				},
 			},
 		],},
 		},
@@ -2183,59 +2183,59 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WCK2CK_AP",
-				description: [
-					{language: "english", text: "WCK alignment point. 0=inside 1=at balls",},
-				],
+				description: {
+					eng: "WCK alignment point. 0=inside 1=at balls",
+				},
 			}, {
 				access: "hibernate",
-				description: [
-					{language: "english", text: "1=Hibernate Self Refresh mode. self clearing",},
-				],
+				description: {
+					eng: "1=Hibernate Self Refresh mode. self clearing",
+				},
 			}, {
 				access: "PLL_delay_comp",
-				description: [
-					{language: "english", text: "1=(PLL feedback delay == WCK clock tree)",},
-				],
+				description: {
+					eng: "1=(PLL feedback delay == WCK clock tree)",
+				},
 			}, {
 				access: "low_freq_mode",
-				description: [
-					{language: "english", text: "1=reduce power of input RX, clock trees",},
-				],
+				description: {
+					eng: "1=reduce power of input RX, clock trees",
+				},
 			}, {
 				access: "WCK2CK_autosync",
-				description: [
-					{language: "english", text: "1=auto sync, reduces WCK2CK MRS to 2.",},
-				],
+				description: {
+					eng: "1=auto sync, reduces WCK2CK MRS to 2.",
+				},
 			}, {
 				access: "DQ_preamble",
-				description: [
-					{language: "english", text: "1=preamble on DQ, DBI_n for gapped reads.",},
-				],
+				description: {
+					eng: "1=preamble on DQ, DBI_n for gapped reads.",
+				},
 			}, {
 				access: "half_VREFC",
-				description: [
-					{language: "english", text: "0=0.7x VDDQ, 1=0.5x See MR6, MR9",},
-				],
+				description: {
+					eng: "0=0.7x VDDQ, 1=0.5x See MR6, MR9",
+				},
 			}, {
 				access: "half_VREFD",
-				description: [
-					{language: "english", text: "0=prog'd VREFD,DFE. 1=0.5x VDDQ. See MR6,MR9",},
-				],
+				description: {
+					eng: "0=prog'd VREFD,DFE. 1=0.5x VDDQ. See MR6,MR9",
+				},
 			}, {
 				access: "VDD_range",
-				description: [
-					{language: "english", text: "0>1>2>3. Adapt to lower VDD voltages",},
-				],
+				description: {
+					eng: "0>1>2>3. Adapt to lower VDD voltages",
+				},
 			}, {
 				access: "WCK_DCC",
-				description: [
-					{language: "english", text: "Duty Cycle Corr. 0=off,1=start,2=RFU,3=hold",},
-				],
+				description: {
+					eng: "Duty Cycle Corr. 0=off,1=start,2=RFU,3=hold",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 7",},
-				],
+				description: {
+					eng: "MR 7",
+				},
 			},
 		],},
 		},
@@ -2248,54 +2248,54 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CA_low_term",
-				description: [
-					{language: "english", text: "0=disable, 1=60ohm, 2=120, 3=rsvd. For CA[3:0]",},
-				],
+				description: {
+					eng: "0=disable, 1=60ohm, 2=120, 3=rsvd. For CA[3:0]",
+				},
 			}, {
 				access: "CA_high_term",
-				description: [
-					{language: "english", text: "For CA[10:4]",},
-				],
+				description: {
+					eng: "For CA[10:4]",
+				},
 			}, {
 				access: "CA_TO",
-				description: [
-					{language: "english", text: "Command Address Termin. Override 1=use CAL,CAH",},
-				],
+				description: {
+					eng: "Command Address Termin. Override 1=use CAL,CAH",
+				},
 			}, {
 				access: "EDC_hiZ",
-				description: [
-					{language: "english", text: "1=Hi-Z state. Precidence over all other states.",},
-				],
+				description: {
+					eng: "1=Hi-Z state. Precidence over all other states.",
+				},
 			}, {
 				access: "CK_auto_cal",
-				description: [
-					{language: "english", text: "0=auto calib. during REFab disabled, 1=enabled",},
-				],
+				description: {
+					eng: "0=auto calib. during REFab disabled, 1=enabled",
+				},
 			}, {
 				access: "REFpb",
-				description: [
-					{language: "english", text: "0=per-bank, 1=per-2-bank",},
-				],
+				description: {
+					eng: "0=per-bank, 1=per-2-bank",
+				},
 			}, {
 				access: "RL_EHF",
-				description: [
-					{language: "english", text: "Extends RLmrs of MR0 from 4 to 5 bits.",},
-				],
+				description: {
+					eng: "Extends RLmrs of MR0 from 4 to 5 bits.",
+				},
 			}, {
 				access: "WR_EHF",
-				description: [
-					{language: "english", text: "Extends WRmrs of MR0 from 4 to 5 bits.",},
-				],
+				description: {
+					eng: "Extends WRmrs of MR0 from 4 to 5 bits.",
+				},
 			}, {
 				access: "CK_term",
-				description: [
-					{language: "english", text: "0=reset, 1=60ohm,2=120-ohm, 3=disabled",},
-				],
+				description: {
+					eng: "0=reset, 1=60ohm,2=120-ohm, 3=disabled",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 8",},
-				],
+				description: {
+					eng: "MR 8",
+				},
 			},
 		],},
 		},
@@ -2308,24 +2308,24 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DFE",
-				description: [
-					{language: "english", text: "0=off, in steps of +-0.5% VDDQ or 7mV",},
-				],
+				description: {
+					eng: "0=off, in steps of +-0.5% VDDQ or 7mV",
+				},
 			}, {
 				access: "RFU",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "pin_subaddr",
-				description: [
-					{language: "english", text: "see JESD250",},
-				],
+				description: {
+					eng: "see JESD250",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 9",},
-				],
+				description: {
+					eng: "MR 9",
+				},
 			},
 		],},
 		},
@@ -2339,39 +2339,39 @@ global_defaults: {
 			{
 				access: "VREFC_offset",
 				display: ["ATUI_DEC", "ATUI_SIGNED"],
-				description: [
-					{language: "english", text: "CA bus. semi Two's Complement: -8=0",},
-				],
+				description: {
+					eng: "CA bus. semi Two's Complement: -8=0",
+				},
 			}, {
 				access: "WCK_inv_byte0",
-				description: [
-					{language: "english", text: "for WCK2CK training 0=0;1=90 degr;2=180;3=270",},
-				],
+				description: {
+					eng: "for WCK2CK training 0=0;1=90 degr;2=180;3=270",
+				},
 			}, {
 				access: "WCK_inv_byte1",
-				description: [
-					{language: "english", text: "B1 on chan A, B0 on chan B ignored if WCK/word",},
-				],
+				description: {
+					eng: "B1 on chan A, B0 on chan B ignored if WCK/word",
+				},
 			}, {
 				access: "WCK2CK",
-				description: [
-					{language: "english", text: "1=enable WCK2CK alignment training",},
-				],
+				description: {
+					eng: "1=enable WCK2CK alignment training",
+				},
 			}, {
 				access: "WCK_ratio",
-				description: [
-					{language: "english", text: "0=half data rate, 1=full data rate",},
-				],
+				description: {
+					eng: "0=half data rate, 1=full data rate",
+				},
 			}, {
 				access: "WCK_term",
-				description: [
-					{language: "english", text: "0=disabled, 1=60 ohm, 2=120, 3=reserved",},
-				],
+				description: {
+					eng: "0=disabled, 1=60 ohm, 2=120, 3=reserved",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 10",},
-				],
+				description: {
+					eng: "MR 10",
+				},
 			},
 		],},
 		},
@@ -2384,84 +2384,84 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PASR_banks_01",
-				description: [
-					{language: "english", text: "exclude banks 0, 1",},
-				],
+				description: {
+					eng: "exclude banks 0, 1",
+				},
 			}, {
 				access: "PASR_banks_23",
-				description: [
-					{language: "english", text: "exclude banks 2, 3",},
-				],
+				description: {
+					eng: "exclude banks 2, 3",
+				},
 			}, {
 				access: "PASR_banks_45",
-				description: [
-					{language: "english", text: "exclude banks 4, 5",},
-				],
+				description: {
+					eng: "exclude banks 4, 5",
+				},
 			}, {
 				access: "PASR_banks_67",
-				description: [
-					{language: "english", text: "exclude banks 6, 7",},
-				],
+				description: {
+					eng: "exclude banks 6, 7",
+				},
 			}, {
 				access: "PASR_banks_89",
-				description: [
-					{language: "english", text: "exclude banks 8, 9",},
-				],
+				description: {
+					eng: "exclude banks 8, 9",
+				},
 			}, {
 				access: "PASR_banks_1011",
-				description: [
-					{language: "english", text: "exclude banks 10, 11",},
-				],
+				description: {
+					eng: "exclude banks 10, 11",
+				},
 			}, {
 				access: "PASR_banks_1213",
-				description: [
-					{language: "english", text: "exclude banks 12, 13",},
-				],
+				description: {
+					eng: "exclude banks 12, 13",
+				},
 			}, {
 				access: "PASR_banks_1415",
-				description: [
-					{language: "english", text: "exclude banks 14, 15",},
-				],
+				description: {
+					eng: "exclude banks 14, 15",
+				},
 			}, {
 				access: "PASR_row_00",
-				description: [
-					{language: "english", text: "exclude row segment R[13:12]=00 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment R[13:12]=00 (MSB)",
+				},
 			}, {
 				access: "PASR_row_01",
-				description: [
-					{language: "english", text: "exclude row segment R[13:12]=01 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment R[13:12]=01 (MSB)",
+				},
 			}, {
 				access: "PASR_row_10",
-				description: [
-					{language: "english", text: "exclude row segment R[13:12]=10 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment R[13:12]=10 (MSB)",
+				},
 			}, {
 				access: "PASR_row_11",
-				description: [
-					{language: "english", text: "exclude row segment R[13:12]=11 (MSB)",},
-				],
+				description: {
+					eng: "exclude row segment R[13:12]=11 (MSB)",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 11",},
-				],
+				description: {
+					eng: "MR 11",
+				},
 			}, {
 				access: "PASR_bank_mask",
-				description: [
-					{language: "english", text: "bank exclusion mask",},
-				],
+				description: {
+					eng: "bank exclusion mask",
+				},
 			}, {
 				access: "PASR_row_segment_mask",
-				description: [
-					{language: "english", text: "row exclusion mask",},
-				],
+				description: {
+					eng: "row exclusion mask",
+				},
 			}, {
 				access: "ID__2",
-				description: [
-					{language: "english", text: "MR 11",},
-				],
+				description: {
+					eng: "MR 11",
+				},
 			},
 		],},
 		},
@@ -2474,44 +2474,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VDDQ_off",
-				description: [
-					{language: "english", text: "0=disabled. For Hibernate Self Refresh",},
-				],
+				description: {
+					eng: "0=disabled. For Hibernate Self Refresh",
+				},
 			}, {
 				access: "P2BR_addr",
-				description: [
-					{language: "english", text: "0=LSB/BA0 1=MSB/BA3. Select \"Dont Care\" for REFp2b",},
-				],
+				description: {
+					eng: "0=LSB/BA0 1=MSB/BA3. Select \"Dont Care\" for REFp2b",
+				},
 			}, {
 				access: "PRBS",
-				description: [
-					{language: "english", text: "1=Psudorandom bit stream instead of EDC hold",},
-				],
+				description: {
+					eng: "1=Psudorandom bit stream instead of EDC hold",
+				},
 			}, {
 				access: "RL_EHF2",
-				description: [
-					{language: "english", text: "Extends RLmrs from 5 bits to 6 bits. See MR0, MR8",},
-				],
+				description: {
+					eng: "Extends RLmrs from 5 bits to 6 bits. See MR0, MR8",
+				},
 			}, {
 				access: "CRCWL_EHF",
-				description: [
-					{language: "english", text: "Extends CRCWL from 3 bits to 4 bits. See MR4.",},
-				],
+				description: {
+					eng: "Extends CRCWL from 3 bits to 4 bits. See MR4.",
+				},
 			}, {
 				access: "WR_EHF2",
-				description: [
-					{language: "english", text: "Extends WRmrs from 5 bits to 6 bits. See MR0, MR8",},
-				],
+				description: {
+					eng: "Extends WRmrs from 5 bits to 6 bits. See MR0, MR8",
+				},
 			}, {
 				access: "RFU",
-				description: [
-					{language: "english", text: "reserved.",},
-				],
+				description: {
+					eng: "reserved.",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 12",},
-				],
+				description: {
+					eng: "MR 12",
+				},
 			},
 		],},
 		},
@@ -2524,14 +2524,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 13",},
-				],
+				description: {
+					eng: "MR 13",
+				},
 			},
 		],},
 		},
@@ -2544,14 +2544,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "vendor_specific",
-				description: [
-					{language: "english", text: "vendor specific features.",},
-				],
+				description: {
+					eng: "vendor specific features.",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 14",},
-				],
+				description: {
+					eng: "MR 14",
+				},
 			},
 		],},
 		},
@@ -2564,29 +2564,29 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "MRS_to_chan_A",
-				description: [
-					{language: "english", text: "MRS to the two channels for individual config",},
-				],
+				description: {
+					eng: "MRS to the two channels for individual config",
+				},
 			}, {
 				access: "MRS_to_chan_B",
-				description: [
-					{language: "english", text: "0=unblocked 1=blocked",},
-				],
+				description: {
+					eng: "0=unblocked 1=blocked",
+				},
 			}, {
 				access: "CA_training",
-				description: [
-					{language: "english", text: "0=off 1=rising of CK, 2=falling, 3=CABI_n,CA10",},
-				],
+				description: {
+					eng: "0=off 1=rising of CK, 2=falling, 3=CABI_n,CA10",
+				},
 			}, {
 				access: "unused",
-				description: [
-					{language: "english", text: "defined to be absent",},
-				],
+				description: {
+					eng: "defined to be absent",
+				},
 			}, {
 				access: "ID",
-				description: [
-					{language: "english", text: "MR 15",},
-				],
+				description: {
+					eng: "MR 15",
+				},
 			},
 		],},
 		},
@@ -2599,62 +2599,62 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CABI",
-				description: [
-					{language: "english", text: "CA bus inversion; 0=enable",},
-				],
+				description: {
+					eng: "CA bus inversion; 0=enable",
+				},
 			}, {
 				access: "rsvd_2_1",
 				display: "ATUI_HEX",
 			}, {
 				access: "RDCRC",
-				description: [
-					{language: "english", text: "Read CRC; 0=disable",},
-				],
+				description: {
+					eng: "Read CRC; 0=disable",
+				},
 			}, {
 				access: "WRCRC",
-				description: [
-					{language: "english", text: "Write CRC; 0=disable",},
-				],
+				description: {
+					eng: "Write CRC; 0=disable",
+				},
 			}, {
 				access: "SLX2CAT",
-				description: [
-					{language: "english", text: "auto CA training after sleepmode exit; 0=enable",},
-				],
+				description: {
+					eng: "auto CA training after sleepmode exit; 0=enable",
+				},
 			}, {
 				access: "SRSLX2CAT",
-				description: [
-					{language: "english", text: "same idea but for self-refresh sleepmode",},
-				],
+				description: {
+					eng: "same idea but for self-refresh sleepmode",
+				},
 			}, {
 				access: "testmode",
-				description: [
-					{language: "english", text: "Test mode; behavior is vendor specific",},
-				],
+				description: {
+					eng: "Test mode; behavior is vendor specific",
+				},
 			}, {
 				access: "PAM3",
-				description: [
-					{language: "english", text: "PAM3 for DQ/DQE; 0=NRZ 1=PAM3",},
-				],
+				description: {
+					eng: "PAM3 for DQ/DQE; 0=NRZ 1=PAM3",
+				},
 			}, {
 				access: "severity",
-				description: [
-					{language: "english", text: "ECC reporting; 0=disable",},
-				],
+				description: {
+					eng: "ECC reporting; 0=disable",
+				},
 			}, {
 				access: "poison",
-				description: [
-					{language: "english", text: "ECC poisoning; 0=disable",},
-				],
+				description: {
+					eng: "ECC poisoning; 0=disable",
+				},
 			}, {
 				access: "FD_flag",
-				description: [
-					{language: "english", text: "postpone MR10~15 until sleep-mode entry; 0=enable",},
-				],
+				description: {
+					eng: "postpone MR10~15 until sleep-mode entry; 0=enable",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 0. low bits",},
-				],
+				description: {
+					eng: "MR 0. low bits",
+				},
 			},
 		],},
 		},
@@ -2667,21 +2667,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "RL",
-				description: [
-					{language: "english", text: "tCL; 10=10..47=47",},
-				],
+				description: {
+					eng: "tCL; 10=10..47=47",
+				},
 			}, {
 				access: "RFU_7_6",
 			}, {
 				access: "DQERL",
-				description: [
-					{language: "english", text: "additionl latency; 0=0..12=12",},
-				],
+				description: {
+					eng: "additionl latency; 0=0..12=12",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 1. low bits",},
-				],
+				description: {
+					eng: "MR 1. low bits",
+				},
 			},
 		],},
 		},
@@ -2694,21 +2694,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WL",
-				description: [
-					{language: "english", text: "tCWL; 6=6..31=31",},
-				],
+				description: {
+					eng: "tCWL; 6=6..31=31",
+				},
 			}, {
 				access: "RFU_6_5",
 			}, {
 				access: "WRCRC2ERR",
-				description: [
-					{language: "english", text: "write error latency; 10=10..31=31",},
-				],
+				description: {
+					eng: "write error latency; 10=10..31=31",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 2. low bits",},
-				],
+				description: {
+					eng: "MR 2. low bits",
+				},
 			},
 		],},
 		},
@@ -2721,16 +2721,16 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tRAS",
-				description: [
-					{language: "english", text: "4=4..80=80",},
-				],
+				description: {
+					eng: "4=4..80=80",
+				},
 			}, {
 				access: "RFU_11_7",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 3. low bits",},
-				],
+				description: {
+					eng: "MR 3. low bits",
+				},
 			},
 		],},
 		},
@@ -2743,21 +2743,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WR",
-				description: [
-					{language: "english", text: "write recovery for autopre; 4=4..80=80",},
-				],
+				description: {
+					eng: "write recovery for autopre; 4=4..80=80",
+				},
 			}, {
 				access: "RFU_7",
 			}, {
 				access: "RTPSB",
-				description: [
-					{language: "english", text: "tRTP for autopre; 4=4..15=15",},
-				],
+				description: {
+					eng: "tRTP for autopre; 4=4..15=15",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 4. low bits",},
-				],
+				description: {
+					eng: "MR 4. low bits",
+				},
 			},
 		],},
 		},
@@ -2770,45 +2770,45 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_drvstr",
-				description: [
-					{language: "english", text: "DQ/E/RCK; 0=40,1=80; 2,3=vendor",},
-				],
+				description: {
+					eng: "DQ/E/RCK; 0=40,1=80; 2,3=vendor",
+				},
 			}, {
 				access: "DQ_term",
-				description: [
-					{language: "english", text: "DQ/E; 0=off; 1=40,2=48,3=80",},
-				],
+				description: {
+					eng: "DQ/E; 0=off; 1=40,2=48,3=80",
+				},
 			}, {
 				access: "RFU_4",
 			}, {
 				access: "ERR_drvstr",
-				description: [
-					{language: "english", text: "ERR pin; 0=40,1=80",},
-				],
+				description: {
+					eng: "ERR pin; 0=40,1=80",
+				},
 			}, {
 				access: "RFU_6",
 			}, {
 				access: "CAL_UPD",
-				description: [
-					{language: "english", text: "0=all; 1=dis for WCK; 2=rsvd; 3=disable all",},
-				],
+				description: {
+					eng: "0=all; 1=dis for WCK; 2=rsvd; 3=disable all",
+				},
 			}, {
 				access: "SEV2ERR",
-				description: [
-					{language: "english", text: "error signaling; 0=disable",},
-				],
+				description: {
+					eng: "error signaling; 0=disable",
+				},
 			}, {
 				access: "DQE_HZ",
-				description: [
-					{language: "english", text: "DQE in high-Z; 0=disable",},
-				],
+				description: {
+					eng: "DQE in high-Z; 0=disable",
+				},
 			}, {
 				access: "RFU_11",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 5. low bits",},
-				],
+				description: {
+					eng: "MR 5. low bits",
+				},
 			},
 		],},
 		},
@@ -2821,21 +2821,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_pulldown_leg1_offset",
-				description: [
-					{language: "english", text: "DQ/E/RCK; Two's Complement",},
-				],
+				description: {
+					eng: "DQ/E/RCK; Two's Complement",
+				},
 			}, {
 				access: "DQ_pulldown_leg2_offset",
-				description: [
-					{language: "english", text: "DQ/E/RCK; Two's Complement",},
-				],
+				description: {
+					eng: "DQ/E/RCK; Two's Complement",
+				},
 			}, {
 				access: "RFU_11_8",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 6. low bits",},
-				],
+				description: {
+					eng: "MR 6. low bits",
+				},
 			},
 		],},
 		},
@@ -2848,24 +2848,24 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_pullup_leg1_offset",
-				description: [
-					{language: "english", text: "DQ/E/RCK; Two's Complement",},
-				],
+				description: {
+					eng: "DQ/E/RCK; Two's Complement",
+				},
 			}, {
 				access: "DQ_pullup_leg2_offset",
-				description: [
-					{language: "english", text: "DQ/E/RCK; Two's Complement",},
-				],
+				description: {
+					eng: "DQ/E/RCK; Two's Complement",
+				},
 			}, {
 				access: "DQ_termination_offset",
-				description: [
-					{language: "english", text: "DQ/E; Two's Complement",},
-				],
+				description: {
+					eng: "DQ/E; Two's Complement",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 7. low bits",},
-				],
+				description: {
+					eng: "MR 7. low bits",
+				},
 			},
 		],},
 		},
@@ -2878,39 +2878,39 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "ARFM",
-				description: [
-					{language: "english", text: "management level; 0=default; 1=A,2=B,3=C",},
-				],
+				description: {
+					eng: "management level; 0=default; 1=A,2=B,3=C",
+				},
 			}, {
 				access: "DRFM",
-				description: [
-					{language: "english", text: "directed management; 0=disable",},
-				],
+				description: {
+					eng: "directed management; 0=disable",
+				},
 			}, {
 				access: "BRC",
-				description: [
-					{language: "english", text: "bounded config; 0=1,2; 1=12,3; 2=123,4; 3=rsvd",},
-				],
+				description: {
+					eng: "bounded config; 0=1,2; 1=12,3; 2=123,4; 3=rsvd",
+				},
 			}, {
 				access: "DCC",
-				description: [
-					{language: "english", text: "duty cycle; 0=disable;1=start;2=rsvd;3=hold",},
-				],
+				description: {
+					eng: "duty cycle; 0=disable;1=start;2=rsvd;3=hold",
+				},
 			}, {
 				access: "self_refresh",
-				description: [
-					{language: "english", text: "0=fixed; 1,2=vendor; 3=temp-controlled",},
-				],
+				description: {
+					eng: "0=fixed; 1,2=vendor; 3=temp-controlled",
+				},
 			}, {
 				access: "hibernate",
-				description: [
-					{language: "english", text: "hibernate refresh sleep; 0=disable",},
-				],
+				description: {
+					eng: "hibernate refresh sleep; 0=disable",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 8. low bits",},
-				],
+				description: {
+					eng: "MR 8. low bits",
+				},
 			},
 		],},
 		},
@@ -2923,31 +2923,31 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "RCKMODE",
-				description: [
-					{language: "english", text: "0=disable; 1=with read; 2=with RCKSTRT; 3=always on",},
-				],
+				description: {
+					eng: "0=disable; 1=with read; 2=with RCKSTRT; 3=always on",
+				},
 			}, {
 				access: "RCK_LS",
-				description: [
-					{language: "english", text: "pramble; 0=0,1=2 half-freq RCK cycles",},
-				],
+				description: {
+					eng: "pramble; 0=0,1=2 half-freq RCK cycles",
+				},
 			}, {
 				access: "RCKEN",
-				description: [
-					{language: "english", text: "enable latency; n+6; 0=6..31=37",},
-				],
+				description: {
+					eng: "enable latency; n+6; 0=6..31=37",
+				},
 			}, {
 				access: "RFU_8",
 			}, {
 				access: "RCKSTOP",
-				description: [
-					{language: "english", text: "stop latency; n*2+10; 0=10,1=12..7=24",},
-				],
+				description: {
+					eng: "stop latency; n*2+10; 0=10,1=12..7=24",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 9. low bits",},
-				],
+				description: {
+					eng: "MR 9. low bits",
+				},
 			},
 		],},
 		},
@@ -2962,9 +2962,9 @@ global_defaults: {
 				access: "RFU_11_0",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 10. low bits",},
-				],
+				description: {
+					eng: "MR 10. low bits",
+				},
 			},
 		],},
 		},
@@ -2979,9 +2979,9 @@ global_defaults: {
 				access: "RFU_11_0",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 11. low bits",},
-				],
+				description: {
+					eng: "MR 11. low bits",
+				},
 			},
 		],},
 		},
@@ -2994,36 +2994,36 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VDD_range",
-				description: [
-					{language: "english", text: "progressively lowers, 0>1>2>3",},
-				],
+				description: {
+					eng: "progressively lowers, 0>1>2>3",
+				},
 			}, {
 				access: "VDDQ_range",
-				description: [
-					{language: "english", text: "progressively lowers, 0>1>2>3",},
-				],
+				description: {
+					eng: "progressively lowers, 0>1>2>3",
+				},
 			}, {
 				access: "WCK_range",
-				description: [
-					{language: "english", text: "0:(Fwck<=Fwcknrz); 1..24: (n-1)/2 <=f< n/2 GHz",},
-				],
+				description: {
+					eng: "0:(Fwck<=Fwcknrz); 1..24: (n-1)/2 <=f< n/2 GHz",
+				},
 			}, {
 				access: "RFU_9",
 			}, {
 				access: "RCKTYPE",
-				description: [
-					{language: "english", text: "0=single (RCK_c is HiZ), 1=differential",},
-				],
+				description: {
+					eng: "0=single (RCK_c is HiZ), 1=differential",
+				},
 			}, {
 				access: "RCKLEVEL",
-				description: [
-					{language: "english", text: "PAM3 level; 0=full swing (+-1); 1=half (+1/0)",},
-				],
+				description: {
+					eng: "PAM3 level; 0=full swing (+-1); 1=half (+1/0)",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 12. low bits",},
-				],
+				description: {
+					eng: "MR 12. low bits",
+				},
 			},
 		],},
 		},
@@ -3036,29 +3036,29 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CA_termination",
-				description: [
-					{language: "english", text: "0=CA1 latch; 1=48; 2=60, 3=96, 5=80, 7=off",},
-				],
+				description: {
+					eng: "0=CA1 latch; 1=48; 2=60, 3=96, 5=80, 7=off",
+				},
 			}, {
 				access: "CA_term_offset",
-				description: [
-					{language: "english", text: "Two's Complement",},
-				],
+				description: {
+					eng: "Two's Complement",
+				},
 			}, {
 				access: "WCK_termination",
-				description: [
-					{language: "english", text: "0=CA2 latch; 1=48; 2=60, 3=96, 5=80, 7=off",},
-				],
+				description: {
+					eng: "0=CA2 latch; 1=48; 2=60, 3=96, 5=80, 7=off",
+				},
 			}, {
 				access: "WCK_term_offset",
-				description: [
-					{language: "english", text: "Two's Complement",},
-				],
+				description: {
+					eng: "Two's Complement",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 13. low bits",},
-				],
+				description: {
+					eng: "MR 13. low bits",
+				},
 			},
 		],},
 		},
@@ -3071,24 +3071,24 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VREFCA",
-				description: [
-					{language: "english", text: "0..95: (98+n)/200 x VDDQ; default=47=.725",},
-				],
+				description: {
+					eng: "0..95: (98+n)/200 x VDDQ; default=47=.725",
+				},
 			}, {
 				access: "DFE_CA",
-				description: [
-					{language: "english", text: "DFE; 0=+-0..15=+-15 VREFCA steps",},
-				],
+				description: {
+					eng: "DFE; 0=+-0..15=+-15 VREFCA steps",
+				},
 			}, {
 				access: "half_VREFCA",
-				description: [
-					{language: "english", text: "0=programmed; 1=0.5",},
-				],
+				description: {
+					eng: "0=programmed; 1=0.5",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 14. low bits",},
-				],
+				description: {
+					eng: "MR 14. low bits",
+				},
 			},
 		],},
 		},
@@ -3101,41 +3101,41 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "CAPAR",
-				description: [
-					{language: "english", text: "CA parity; 0=disable",},
-				],
+				description: {
+					eng: "CA parity; 0=disable",
+				},
 			}, {
 				access: "CAPARBLK",
-				description: [
-					{language: "english", text: "parity blocking; 0=dis; must be 0 if CAPAR==0",},
-				],
+				description: {
+					eng: "parity blocking; 0=dis; must be 0 if CAPAR==0",
+				},
 			}, {
 				access: "CSP_FB",
-				description: [
-					{language: "english", text: "CSP command feedback; 0=default",},
-				],
+				description: {
+					eng: "CSP command feedback; 0=default",
+				},
 			}, {
 				access: "CAPARBLK_LAT",
-				description: [
-					{language: "english", text: "parity error latency; 0=0..4=4",},
-				],
+				description: {
+					eng: "parity error latency; 0=0..4=4",
+				},
 			}, {
 				access: "CAPARBLK_ctrl",
-				description: [
-					{language: "english", text: "0=implicit CAPARBLK_LAT",},
-				],
+				description: {
+					eng: "0=implicit CAPARBLK_LAT",
+				},
 			}, {
 				access: "RFU_7",
 			}, {
 				access: "CAPAR2ERR",
-				description: [
-					{language: "english", text: "parity error latency; 0=variable; 1=1..15=15",},
-				],
+				description: {
+					eng: "parity error latency; 0=variable; 1=1..15=15",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 15. low bits",},
-				],
+				description: {
+					eng: "MR 15. low bits",
+				},
 			},
 		],},
 		},
@@ -3148,21 +3148,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VREFD_L_2",
-				description: [
-					{language: "english", text: "PAM3 low; NRZ ref; (158+n)/360 * VDDQ; default=67",},
-				],
+				description: {
+					eng: "PAM3 low; NRZ ref; (158+n)/360 * VDDQ; default=67",
+				},
 			}, {
 				access: "RFU_7",
 			}, {
 				access: "L_2_addr",
-				description: [
-					{language: "english", text: "0..9=DQ,10=DQE (PAM3); 12=DQ[7:0]/E (NRZ); 14=offset all; 15=all",},
-				],
+				description: {
+					eng: "0..9=DQ,10=DQE (PAM3); 12=DQ[7:0]/E (NRZ); 14=offset all; 15=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 16. low bits",},
-				],
+				description: {
+					eng: "MR 16. low bits",
+				},
 			},
 		],},
 		},
@@ -3175,21 +3175,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "VREFD_H",
-				description: [
-					{language: "english", text: "PAM3 low; (230+n)/360 * VDDQ; default=85",},
-				],
+				description: {
+					eng: "PAM3 low; (230+n)/360 * VDDQ; default=85",
+				},
 			}, {
 				access: "RFU_7",
 			}, {
 				access: "H_addr",
-				description: [
-					{language: "english", text: "0..9=DQ,10=DQE (PAM3); 14=offset all; 15=all",},
-				],
+				description: {
+					eng: "0..9=DQ,10=DQE (PAM3); 14=offset all; 15=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 17. low bits",},
-				],
+				description: {
+					eng: "MR 17. low bits",
+				},
 			},
 		],},
 		},
@@ -3202,26 +3202,26 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_DQE_CTLE",
-				description: [
-					{language: "english", text: "0=off; 1=1..15=15 or max",},
-				],
+				description: {
+					eng: "0=off; 1=1..15=15 or max",
+				},
 			}, {
 				access: "RFU_5_4",
 			}, {
 				access: "CTLE_RX_addr",
-				description: [
-					{language: "english", text: "0=both; 1=upper; 2=lower",},
-				],
+				description: {
+					eng: "0=both; 1=upper; 2=lower",
+				},
 			}, {
 				access: "CTLE_IO_addr",
-				description: [
-					{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
-				],
+				description: {
+					eng: "0..9=DQ; 10=DQE; 15=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 18. low bits",},
-				],
+				description: {
+					eng: "MR 18. low bits",
+				},
 			},
 		],},
 		},
@@ -3234,26 +3234,26 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_DQE_DFE",
-				description: [
-					{language: "english", text: "0=off; 1=1..15=15 or max (1-tap)",},
-				],
+				description: {
+					eng: "0=off; 1=1..15=15 or max (1-tap)",
+				},
 			}, {
 				access: "RFU_5_4",
 			}, {
 				access: "DFE_RX_addr",
-				description: [
-					{language: "english", text: "0=both; 1=upper; 2=lower",},
-				],
+				description: {
+					eng: "0=both; 1=upper; 2=lower",
+				},
 			}, {
 				access: "DFE_IO_addr",
-				description: [
-					{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
-				],
+				description: {
+					eng: "0..9=DQ; 10=DQE; 15=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 19. low bits",},
-				],
+				description: {
+					eng: "MR 19. low bits",
+				},
 			},
 		],},
 		},
@@ -3266,21 +3266,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "scramble_code",
-				description: [
-					{language: "english", text: "8-bit or 32-bit; 32UI x 8",},
-				],
+				description: {
+					eng: "8-bit or 32-bit; 32UI x 8",
+				},
 			}, {
 				access: "RFU_8",
 			}, {
 				access: "byte_address",
-				description: [
-					{language: "english", text: "0..3=byte; 7=all",},
-				],
+				description: {
+					eng: "0..3=byte; 7=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 20. low bits",},
-				],
+				description: {
+					eng: "MR 20. low bits",
+				},
 			},
 		],},
 		},
@@ -3293,21 +3293,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_DQE_TX_EQ",
-				description: [
-					{language: "english", text: "0=off; 1=1..15=15 or max",},
-				],
+				description: {
+					eng: "0=off; 1=1..15=15 or max",
+				},
 			}, {
 				access: "RFU_5_4",
 			}, {
 				access: "TX_EQ_addr",
-				description: [
-					{language: "english", text: "0..9=DQ; 10=DQE; 15=all",},
-				],
+				description: {
+					eng: "0..9=DQ; 10=DQE; 15=all",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 21. low bits",},
-				],
+				description: {
+					eng: "MR 21. low bits",
+				},
 			},
 		],},
 		},
@@ -3322,29 +3322,29 @@ global_defaults: {
 				access: "RFU_7_0",
 			}, {
 				access: "ECS_LOG_RULES",
-				description: [
-					{language: "english", text: "0=maintain; 1=overwrite",},
-				],
+				description: {
+					eng: "0=maintain; 1=overwrite",
+				},
 			}, {
 				access: "ECS_FLAG_RESET",
-				description: [
-					{language: "english", text: "0=disable; 1=reset (self-clear)",},
-				],
+				description: {
+					eng: "0=disable; 1=reset (self-clear)",
+				},
 			}, {
 				access: "ECS_RESET",
-				description: [
-					{language: "english", text: "0=disable; 1=reset (self-clear)",},
-				],
+				description: {
+					eng: "0=disable; 1=reset (self-clear)",
+				},
 			}, {
 				access: "ECS_ON",
-				description: [
-					{language: "english", text: "0=disable",},
-				],
+				description: {
+					eng: "0=disable",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 22. low bits",},
-				],
+				description: {
+					eng: "MR 22. low bits",
+				},
 			},
 		],},
 		},
@@ -3357,54 +3357,54 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DT_LFSR",
-				description: [
-					{language: "english", text: "data training mode; 0=read fifo; 1=LFSR",},
-				],
+				description: {
+					eng: "data training mode; 0=read fifo; 1=LFSR",
+				},
 			}, {
 				access: "LFSR_TYPE",
-				description: [
-					{language: "english", text: "polynomial selection; 0=PRBS15; 1=PRBS11",},
-				],
+				description: {
+					eng: "polynomial selection; 0=PRBS15; 1=PRBS11",
+				},
 			}, {
 				access: "LFSTR_CNT_RESET",
-				description: [
-					{language: "english", text: "per-lane error counter; 1=reset",},
-				],
+				description: {
+					eng: "per-lane error counter; 1=reset",
+				},
 			}, {
 				access: "LFSTR_RST_MODE",
-				description: [
-					{language: "english", text: "0=auto after RDWTEC; 1=manual",},
-				],
+				description: {
+					eng: "0=auto after RDWTEC; 1=manual",
+				},
 			}, {
 				access: "DT_EYE_MASK",
-				description: [
-					{language: "english", text: "0=no masking; 1=upper; 2=lower",},
-				],
+				description: {
+					eng: "0=no masking; 1=upper; 2=lower",
+				},
 			}, {
 				access: "CAOSC",
-				description: [
-					{language: "english", text: "CA bus oscillator; 0=disaable",},
-				],
+				description: {
+					eng: "CA bus oscillator; 0=disaable",
+				},
 			}, {
 				access: "LFSR_CNT_MODE",
-				description: [
-					{language: "english", text: "0=12-bit combined; 1=two 6-bit",},
-				],
+				description: {
+					eng: "0=12-bit combined; 1=two 6-bit",
+				},
 			}, {
 				access: "FIFO_PTR_RST",
-				description: [
-					{language: "english", text: "1=reset",},
-				],
+				description: {
+					eng: "1=reset",
+				},
 			}, {
 				access: "DT_ERR_PATTERN",
-				description: [
-					{language: "english", text: "0=normal 1=HiZ 2=1 3=0 4=-1 5=CK4 6=half CK4",},
-				],
+				description: {
+					eng: "0=normal 1=HiZ 2=1 3=0 4=-1 5=CK4 6=half CK4",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 23. low bits",},
-				],
+				description: {
+					eng: "MR 23. low bits",
+				},
 			},
 		],},
 		},
@@ -3417,19 +3417,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "LFSR_seed_lo",
-				description: [
-					{language: "english", text: "lower 10 of 15-bit start value; see MR25[4:0]",},
-				],
+				description: {
+					eng: "lower 10 of 15-bit start value; see MR25[4:0]",
+				},
 			}, {
 				access: "LFSR_address",
-				description: [
-					{language: "english", text: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",},
-				],
+				description: {
+					eng: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 24. low bits",},
-				],
+				description: {
+					eng: "MR 24. low bits",
+				},
 			},
 		],},
 		},
@@ -3442,21 +3442,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "LFSR_seed_hi",
-				description: [
-					{language: "english", text: "lower 10 of 15-bit start value; see MR24[9:0]",},
-				],
+				description: {
+					eng: "lower 10 of 15-bit start value; see MR24[9:0]",
+				},
 			}, {
 				access: "RFU_9_5",
 			}, {
 				access: "LFSR_address",
-				description: [
-					{language: "english", text: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",},
-				],
+				description: {
+					eng: "0=DQ[3:0]; 1=DQ[7:4]; 2=DQ[9:8]/E",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 25. low bits",},
-				],
+				description: {
+					eng: "MR 25. low bits",
+				},
 			},
 		],},
 		},
@@ -3469,31 +3469,31 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "LFSR_SHIFT_SEL",
-				description: [
-					{language: "english", text: "symbol offset; n*4 symbols",},
-				],
+				description: {
+					eng: "symbol offset; n*4 symbols",
+				},
 			}, {
 				access: "LFSR_INV",
-				description: [
-					{language: "english", text: "symbol inversion; 0=not inverted",},
-				],
+				description: {
+					eng: "symbol inversion; 0=not inverted",
+				},
 			}, {
 				access: "DT_LANE_MASK",
-				description: [
-					{language: "english", text: "0 no masking",},
-				],
+				description: {
+					eng: "0 no masking",
+				},
 			}, {
 				access: "RFU_7_4",
 			}, {
 				access: "IO_ADDRESS",
-				description: [
-					{language: "english", text: "0..9=DQ; 10=DQE",},
-				],
+				description: {
+					eng: "0..9=DQ; 10=DQE",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 26. low bits",},
-				],
+				description: {
+					eng: "MR 26. low bits",
+				},
 			},
 		],},
 		},
@@ -3506,21 +3506,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "err_pulldown_offset",
-				description: [
-					{language: "english", text: "Two's Complement",},
-				],
+				description: {
+					eng: "Two's Complement",
+				},
 			}, {
 				access: "err_pullup_offset",
-				description: [
-					{language: "english", text: "Two's Complement",},
-				],
+				description: {
+					eng: "Two's Complement",
+				},
 			}, {
 				access: "RFU_11_8",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 27. low bits",},
-				],
+				description: {
+					eng: "MR 27. low bits",
+				},
 			},
 		],},
 		},
@@ -3535,9 +3535,9 @@ global_defaults: {
 				access: "RFU_11_0",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 28. low bits",},
-				],
+				description: {
+					eng: "MR 28. low bits",
+				},
 			},
 		],},
 		},
@@ -3550,16 +3550,16 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DQ_map_mode",
-				description: [
-					{language: "english", text: "logical-to-physical; 0=disabled 16..25=DQ",},
-				],
+				description: {
+					eng: "logical-to-physical; 0=disabled 16..25=DQ",
+				},
 			}, {
 				access: "RFU_11_5",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 29. low bits",},
-				],
+				description: {
+					eng: "MR 29. low bits",
+				},
 			},
 		],},
 		},
@@ -3572,41 +3572,41 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "ECC_TM",
-				description: [
-					{language: "english", text: "ECC test mode; 0=disable",},
-				],
+				description: {
+					eng: "ECC test mode; 0=disable",
+				},
 			}, {
 				access: "ECC_VEC",
-				description: [
-					{language: "english", text: "ecc test vector; 0=codeword 0; 1=codeword 1",},
-				],
+				description: {
+					eng: "ecc test vector; 0=codeword 0; 1=codeword 1",
+				},
 			}, {
 				access: "ECC_PAR_SEL",
-				description: [
-					{language: "english", text: "inject on parity bit 0=0..15=15",},
-				],
+				description: {
+					eng: "inject on parity bit 0=0..15=15",
+				},
 			}, {
 				access: "ECC_PAR_EN",
-				description: [
-					{language: "english", text: "0=error injection disable",},
-				],
+				description: {
+					eng: "0=error injection disable",
+				},
 			}, {
 				access: "ECC_PAR_RSVD",
-				description: [
-					{language: "english", text: "ECC_PAR_SEL is technically[7:2]",},
-				],
+				description: {
+					eng: "ECC_PAR_SEL is technically[7:2]",
+				},
 			}, {
 				access: "ECC_2CH",
-				description: [
-					{language: "english", text: "ECC in 2ch mode; 0=first pass; 1=second",},
-				],
+				description: {
+					eng: "ECC in 2ch mode; 0=first pass; 1=second",
+				},
 			}, {
 				access: "RFU_11_9",
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 30. low bits",},
-				],
+				description: {
+					eng: "MR 30. low bits",
+				},
 			},
 		],},
 		},
@@ -3619,21 +3619,21 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "PPR_guard_key",
-				description: [
-					{language: "english", text: "Post Package Repair; 0xCF; 0x73; 0xBB; 0x3B",},
-				],
+				description: {
+					eng: "Post Package Repair; 0xCF; 0x73; 0xBB; 0x3B",
+				},
 			}, {
 				access: "RFU_10_8",
 			}, {
 				access: "hPPR",
-				description: [
-					{language: "english", text: "hard PPR; 0=disable",},
-				],
+				description: {
+					eng: "hard PPR; 0=disable",
+				},
 			}, {
 				access: "ID_lo",
-				description: [
-					{language: "english", text: "MR 31. low bits",},
-				],
+				description: {
+					eng: "MR 31. low bits",
+				},
 			},
 		],},
 		},
@@ -3649,45 +3649,45 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "1=enable; data bus inversion, AC.",},
-				],
+				description: {
+					eng: "1=enable; data bus inversion, AC.",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "1=enable; data bus inversion, AC.",},
-				],
+				description: {
+					eng: "1=enable; data bus inversion, AC.",
+				},
 			}, {
 				access: "TCSR",
-				description: [
-					{language: "english", text: "1=enable; temperature-controlled self-refresh",},
-				],
+				description: {
+					eng: "1=enable; temperature-controlled self-refresh",
+				},
 			}, {
 				access: "rsvd_3_3",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "read_parity",
-				description: [
-					{language: "english", text: "0=disable; DQ parity",},
-				],
+				description: {
+					eng: "0=disable; DQ parity",
+				},
 			}, {
 				access: "write_parity",
-				description: [
-					{language: "english", text: "0=disable; DQ parity",},
-				],
+				description: {
+					eng: "0=disable; DQ parity",
+				},
 			}, {
 				access: "addrcmd_parity",
-				description: [
-					{language: "english", text: "0=disable; command-address parity",},
-				],
+				description: {
+					eng: "0=disable; command-address parity",
+				},
 			}, {
 				access: "test_mode",
-				description: [
-					{language: "english", text: "1=Test mode; behavior is vendor specific",},
-				],
+				description: {
+					eng: "1=Test mode; behavior is vendor specific",
+				},
 			},
 		],},
 		},
@@ -3700,14 +3700,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tWR",
-				description: [
-					{language: "english", text: "3=3,4=4...31=31. 0..2=reserved",},
-				],
+				description: {
+					eng: "3=3,4=4...31=31. 0..2=reserved",
+				},
 			}, {
 				access: "nom_drive",
-				description: [
-					{language: "english", text: "6mA,9,12,15,18, 5..7=reserved",},
-				],
+				description: {
+					eng: "6mA,9,12,15,18, 5..7=reserved",
+				},
 			},
 		],},
 		},
@@ -3720,14 +3720,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "WL",
-				description: [
-					{language: "english", text: "[MR4[4], MR2[2:0]] -> WL[3:0]; tWL=1+n",},
-				],
+				description: {
+					eng: "[MR4[4], MR2[2:0]] -> WL[3:0]; tWL=1+n",
+				},
 			}, {
 				access: "RL",
-				description: [
-					{language: "english", text: "[MR4[5], MR2[7:3]] -> RL[5:0]; tRL=2+n",},
-				],
+				description: {
+					eng: "[MR4[5], MR2[7:3]] -> RL[5:0]; tRL=2+n",
+				},
 			},
 		],},
 		},
@@ -3740,19 +3740,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tRAS",
-				description: [
-					{language: "english", text: "3=3... 63=63; 0,1,2=reserved",},
-				],
+				description: {
+					eng: "3=3... 63=63; 0,1,2=reserved",
+				},
 			}, {
 				access: "bank_groups",
-				description: [
-					{language: "english", text: "1=enable",},
-				],
+				description: {
+					eng: "1=enable",
+				},
 			}, {
 				access: "burst_length",
-				description: [
-					{language: "english", text: "0=BL2, 1=BL4",},
-				],
+				description: {
+					eng: "0=BL2, 1=BL4",
+				},
 			},
 		],},
 		},
@@ -3765,34 +3765,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "ECC",
-				description: [
-					{language: "english", text: "0=disabled; ECC and WDM are mutually exlusive.",},
-				],
+				description: {
+					eng: "0=disabled; ECC and WDM are mutually exlusive.",
+				},
 			}, {
 				access: "WDM",
-				description: [
-					{language: "english", text: "0=enabled; write data mask",},
-				],
+				description: {
+					eng: "0=enabled; write data mask",
+				},
 			}, {
 				access: "PL",
-				description: [
-					{language: "english", text: "0=0..3=3; parity latency",},
-				],
+				description: {
+					eng: "0=0..3=3; parity latency",
+				},
 			}, {
 				access: "EWL",
-				description: [
-					{language: "english", text: "extended write latency; see MR0",},
-				],
+				description: {
+					eng: "extended write latency; see MR0",
+				},
 			}, {
 				access: "ERL",
-				description: [
-					{language: "english", text: "extended read latency; see MR0",},
-				],
+				description: {
+					eng: "extended read latency; see MR0",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3805,24 +3805,24 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "TRR_bank_address",
-				description: [
-					{language: "english", text: "0=0; target bank of target row",},
-				],
+				description: {
+					eng: "0=0; target bank of target row",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "TRR_peudochannel",
-				description: [
-					{language: "english", text: "0=PC0, 1=PC1",},
-				],
+				description: {
+					eng: "0=PC0, 1=PC1",
+				},
 			}, {
 				access: "TRR_mode",
-				description: [
-					{language: "english", text: "0=disable; Target Row Refresh for rowhammer",},
-				],
+				description: {
+					eng: "0=disable; Target Row Refresh for rowhammer",
+				},
 			},
 		],},
 		},
@@ -3837,9 +3837,9 @@ global_defaults: {
 				access: "reserved",
 			}, {
 				access: "implicit_RP",
-				description: [
-					{language: "english", text: "tRP=n+2; imPRE has PRE implied with ACT.",},
-				],
+				description: {
+					eng: "tRP=n+2; imPRE has PRE implied with ACT.",
+				},
 			},
 		],},
 		},
@@ -3852,29 +3852,29 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DWORD_loopback",
-				description: [
-					{language: "english", text: "0=disable; 1=link test (MISR) mode",},
-				],
+				description: {
+					eng: "0=disable; 1=link test (MISR) mode",
+				},
 			}, {
 				access: "DWORD_read_mux",
-				description: [
-					{language: "english", text: "1=MISR regs, 2=Rx path, 3=LFSR sticky",},
-				],
+				description: {
+					eng: "1=MISR regs, 2=Rx path, 3=LFSR sticky",
+				},
 			}, {
 				access: "DWORD_MISR",
-				description: [
-					{language: "english", text: "0=preset 0xAAAAA/0x00000, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",},
-				],
+				description: {
+					eng: "0=preset 0xAAAAA/0x00000, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "CATTRIP",
-				description: [
-					{language: "english", text: "0=clear pin, 1=assert to 1.",},
-				],
+				description: {
+					eng: "0=clear pin, 1=assert to 1.",
+				},
 			},
 		],},
 		},
@@ -3887,14 +3887,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DA28_lockout",
-				description: [
-					{language: "english", text: "1=if on chan A or E, hardlock DA port",},
-				],
+				description: {
+					eng: "1=if on chan A or E, hardlock DA port",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3907,9 +3907,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3922,9 +3922,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3937,9 +3937,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3952,9 +3952,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3967,9 +3967,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3982,9 +3982,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -3997,14 +3997,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "internal_vref",
-				description: [
-					{language: "english", text: "Two's: 0.50 - 0.04*n; 0=.50, 1=.46, 4=.54",},
-				],
+				description: {
+					eng: "Two's: 0.50 - 0.04*n; 0=.50, 1=.46, 4=.54",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -4017,45 +4017,45 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "read_DBI",
-				description: [
-					{language: "english", text: "1=enable; data bus inversion, AC.",},
-				],
+				description: {
+					eng: "1=enable; data bus inversion, AC.",
+				},
 			}, {
 				access: "write_DBI",
-				description: [
-					{language: "english", text: "1=enable; data bus inversion, AC.",},
-				],
+				description: {
+					eng: "1=enable; data bus inversion, AC.",
+				},
 			}, {
 				access: "TCSR",
-				description: [
-					{language: "english", text: "1=enable; temperature-controlled self-refresh",},
-				],
+				description: {
+					eng: "1=enable; temperature-controlled self-refresh",
+				},
 			}, {
 				access: "rsvd_3_3",
 				display: "ATUI_HEX",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "read_parity",
-				description: [
-					{language: "english", text: "0=disable; DQ parity",},
-				],
+				description: {
+					eng: "0=disable; DQ parity",
+				},
 			}, {
 				access: "write_parity",
-				description: [
-					{language: "english", text: "0=disable; DQ parity",},
-				],
+				description: {
+					eng: "0=disable; DQ parity",
+				},
 			}, {
 				access: "addrcmd_parity",
-				description: [
-					{language: "english", text: "0=disable; command-address parity",},
-				],
+				description: {
+					eng: "0=disable; command-address parity",
+				},
 			}, {
 				access: "test_mode",
-				description: [
-					{language: "english", text: "1=Test mode; behavior is vendor specific",},
-				],
+				description: {
+					eng: "1=Test mode; behavior is vendor specific",
+				},
 			},
 		],},
 		},
@@ -4068,14 +4068,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tWL",
-				description: [
-					{language: "english", text: "4=4..16=16,  0..3,17+ reserved",},
-				],
+				description: {
+					eng: "4=4..16=16,  0..3,17+ reserved",
+				},
 			}, {
 				access: "tPL",
-				description: [
-					{language: "english", text: "0=0..4=4, 5+ reserved",},
-				],
+				description: {
+					eng: "0=0..4=4, 5+ reserved",
+				},
 			},
 		],},
 		},
@@ -4088,9 +4088,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tRL",
-				description: [
-					{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
-				],
+				description: {
+					eng: "4=4..63=63,  0..3,64+ reserved",
+				},
 			},
 		],},
 		},
@@ -4103,9 +4103,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tWR",
-				description: [
-					{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
-				],
+				description: {
+					eng: "4=4..63=63,  0..3,64+ reserved",
+				},
 			},
 		],},
 		},
@@ -4118,9 +4118,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tRAS",
-				description: [
-					{language: "english", text: "4=4..63=63,  0..3,64+ reserved",},
-				],
+				description: {
+					eng: "4=4..63=63,  0..3,64+ reserved",
+				},
 			},
 		],},
 		},
@@ -4133,9 +4133,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "tRTP",
-				description: [
-					{language: "english", text: "2=2..15=15,  0,1 reserved",},
-				],
+				description: {
+					eng: "2=2..15=15,  0,1 reserved",
+				},
 			},
 		],},
 		},
@@ -4148,19 +4148,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "drive_down_strength",
-				description: [
-					{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",},
-				],
+				description: {
+					eng: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",
+				},
 			}, {
 				access: "drive_up_strength",
-				description: [
-					{language: "english", text: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",},
-				],
+				description: {
+					eng: "0=8mA, 1=10, *2=12, 3=14, 4+ reserved",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -4173,34 +4173,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DWORD_loopback",
-				description: [
-					{language: "english", text: "0=disable; 1=link test (MISR) mode",},
-				],
+				description: {
+					eng: "0=disable; 1=link test (MISR) mode",
+				},
 			}, {
 				access: "DWORD_read_mux",
-				description: [
-					{language: "english", text: "0=MISR regs, 3=LFSR sticky",},
-				],
+				description: {
+					eng: "0=MISR regs, 3=LFSR sticky",
+				},
 			}, {
 				access: "reserved_2_2",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "DWORD_MISR",
-				description: [
-					{language: "english", text: "0=preset, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",},
-				],
+				description: {
+					eng: "0=preset, 1=LFSR read, 2=register (R/W), 3=MISR write, 4=LFSR write",
+				},
 			}, {
 				access: "reserved_6_6",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "CATTRIP",
-				description: [
-					{language: "english", text: "0=auto, 1=assert to 1.",},
-				],
+				description: {
+					eng: "0=auto, 1=assert to 1.",
+				},
 			},
 		],},
 		},
@@ -4213,34 +4213,34 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DA_lockout",
-				description: [
-					{language: "english", text: "1=if on chan A or E, hardlock DA port",},
-				],
+				description: {
+					eng: "1=if on chan A or E, hardlock DA port",
+				},
 			}, {
 				access: "duty_cycle_monitor",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "ECS_log_auto_clear",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "WDQS2CK_training",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "RFM_levels",
-				description: [
-					{language: "english", text: "0=default, 1=A,2=B,3=C (1+ RFM required)",},
-				],
+				description: {
+					eng: "0=default, 1=A,2=B,3=C (1+ RFM required)",
+				},
 			}, {
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -4253,44 +4253,44 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "metadata",
-				description: [
-					{language: "english", text: "1=read/writes have metadata",},
-				],
+				description: {
+					eng: "1=read/writes have metadata",
+				},
 			}, {
 				access: "severity_reporting",
-				description: [
-					{language: "english", text: "1=repoting",},
-				],
+				description: {
+					eng: "1=repoting",
+				},
 			}, {
 				access: "ECC_testmode",
-				description: [
-					{language: "english", text: "0=disable ECC engine test mode",},
-				],
+				description: {
+					eng: "0=disable ECC engine test mode",
+				},
 			}, {
 				access: "ECC_test_pattern",
-				description: [
-					{language: "english", text: "0=CW0 (1's are errors), 1=CW1 (0=error)",},
-				],
+				description: {
+					eng: "0=CW0 (1's are errors), 1=CW1 (0=error)",
+				},
 			}, {
 				access: "ECS_via_REFab",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "ECS_during_SRF",
-				description: [
-					{language: "english", text: "0=disabled",},
-				],
+				description: {
+					eng: "0=disabled",
+				},
 			}, {
 				access: "ECS_multibit",
-				description: [
-					{language: "english", text: "0=correction of multibit errors disabled",},
-				],
+				description: {
+					eng: "0=correction of multibit errors disabled",
+				},
 			}, {
 				access: "ECS_logging",
-				description: [
-					{language: "english", text: "0=maintain, 1=reset",},
-				],
+				description: {
+					eng: "0=maintain, 1=reset",
+				},
 			},
 		],},
 		},
@@ -4315,14 +4315,14 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "DCA_WDQS0",
-				description: [
-					{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",},
-				],
+				description: {
+					eng: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",
+				},
 			}, {
 				access: "DCA_WDQS1",
-				description: [
-					{language: "english", text: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",},
-				],
+				description: {
+					eng: "broken Two's: 0=0, 7=-7, 8=reserved, 9=+1 15=+7",
+				},
 			},
 		],},
 		},
@@ -4347,9 +4347,9 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -4362,19 +4362,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved_0_0",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "VrefCA",
-				description: [
-					{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",},
-				],
+				description: {
+					eng: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",
+				},
 			}, {
 				access: "reserved_7_7",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},
@@ -4387,19 +4387,19 @@ global_defaults: {
 		fancy_data: { fields: [
 			{
 				access: "reserved_0_0",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			}, {
 				access: "VrefD",
-				description: [
-					{language: "english", text: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",},
-				],
+				description: {
+					eng: "0.18 + 0.01*n; 1=0.19, 63=.81. (32=.50)",
+				},
 			}, {
 				access: "reserved_7_7",
-				description: [
-					{language: "english", text: "reserved",},
-				],
+				description: {
+					eng: "reserved",
+				},
 			},
 		],},
 		},

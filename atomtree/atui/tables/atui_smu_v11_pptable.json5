@@ -31,29 +31,29 @@ global_defaults: {
 		{
 			access: "bios->revision",
 			name: "revision",
-			description: [
-				{language: "english", text: "Revision = SMU_11_0_PP_OVERDRIVE_VERSION",},
-			],
+			description: {
+				eng: "Revision = SMU_11_0_PP_OVERDRIVE_VERSION",
+			},
 		}, {
 			access: "bios->reserve",
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->feature_count",
 			name: "feature_count",
-			description: [
-				{language: "english", text: "Total number of supported features",},
-			],
+			description: {
+				eng: "Total number of supported features",
+			},
 		}, {
 			access: "bios->setting_count",
 			name: "setting_count",
-			description: [
-				{language: "english", text: "Total number of supported settings",},
-			],
+			description: {
+				eng: "Total number of supported settings",
+			},
 		}, {
 			name: "Supported OD feature support flags",
 			display: "ATUI_DISPLAY",
@@ -61,9 +61,9 @@ global_defaults: {
 				access: "bios->cap",
 				name: "Supported OD feature support flags",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "support flag",},
-				],
+				description: {
+					eng: "support flag",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_ODCAP_COUNT",
@@ -80,9 +80,9 @@ global_defaults: {
 				access: "(&(bios->cap[SMU_11_0_ODCAP_COUNT]))",
 				name: "Undefined OD feature support flags",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "support flag",},
-				],
+				description: {
+					eng: "support flag",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT)",
@@ -173,9 +173,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->ODFeatureCapabilities",
 				name: "ODFeatureCapabilities",
-				description: [
-					{language: "english", text: "OD feature support flags",},
-				],
+				description: {
+					eng: "OD feature support flags",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -195,9 +195,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->ODSettingsMax",
 				name: "ODSettingsMax",
-				description: [
-					{language: "english", text: "Upper Limit for each OD Setting",},
-				],
+				description: {
+					eng: "Upper Limit for each OD Setting",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -214,9 +214,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->ODSettingsMin",
 				name: "ODSettingsMin",
-				description: [
-					{language: "english", text: "Lower Limit for each OD Setting",},
-				],
+				description: {
+					eng: "Lower Limit for each OD Setting",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -233,9 +233,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "(&(bios->ODFeatureCapabilities[ATOM_VEGA20_ODFEATURE_COUNT]))",
 				name: "Undefined OD feature support flags",
-				description: [
-					{language: "english", text: "OD feature support flags",},
-				],
+				description: {
+					eng: "OD feature support flags",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -252,9 +252,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "(&(bios->ODSettingsMax[ATOM_VEGA20_ODSETTING_COUNT]))",
 				name: "Undefined Overdrive settings (max)",
-				description: [
-					{language: "english", text: "Upper Limit for each OD Setting",},
-				],
+				description: {
+					eng: "Upper Limit for each OD Setting",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -271,9 +271,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "(&(bios->ODSettingsMin[ATOM_VEGA20_ODSETTING_COUNT]))",
 				name: "Undefined Overdrive settings (min)",
-				description: [
-					{language: "english", text: "Lower Limit for each OD Setting",},
-				],
+				description: {
+					eng: "Lower Limit for each OD Setting",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -292,29 +292,29 @@ global_defaults: {
 		{
 			access: "bios->revision",
 			name: "revision",
-			description: [
-				{language: "english", text: "Revision = SMU_11_0_7_PP_OVERDRIVE_VERSION",},
-			],
+			description: {
+				eng: "Revision = SMU_11_0_7_PP_OVERDRIVE_VERSION",
+			},
 		}, {
 			access: "bios->reserve",
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->feature_count",
 			name: "feature_count",
-			description: [
-				{language: "english", text: "Total number of supported features",},
-			],
+			description: {
+				eng: "Total number of supported features",
+			},
 		}, {
 			access: "bios->setting_count",
 			name: "setting_count",
-			description: [
-				{language: "english", text: "Total number of supported settings",},
-			],
+			description: {
+				eng: "Total number of supported settings",
+			},
 		}, {
 			name: "Supported OD feature support flags",
 			display: "ATUI_DISPLAY",
@@ -322,9 +322,9 @@ global_defaults: {
 				access: "bios->cap",
 				name: "Supported OD feature support flags",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "OD feature support flags",},
-				],
+				description: {
+					eng: "OD feature support flags",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_ODCAP_COUNT",
@@ -341,9 +341,9 @@ global_defaults: {
 				access: "bios->max",
 				name: "Supported Overdrive settings (max)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "default maximum settings",},
-				],
+				description: {
+					eng: "default maximum settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_ODSETTING_COUNT",
@@ -360,9 +360,9 @@ global_defaults: {
 				access: "bios->min",
 				name: "Supported Overdrive settings (min)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "default minimum settings",},
-				],
+				description: {
+					eng: "default minimum settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_ODSETTING_COUNT",
@@ -379,9 +379,9 @@ global_defaults: {
 				access: "bios->pm_setting",
 				name: "Supported Power Mode settings",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "Optimized power mode feature settings",},
-				],
+				description: {
+					eng: "Optimized power mode feature settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_PMSETTING_COUNT",
@@ -398,9 +398,9 @@ global_defaults: {
 				access: "(&(bios->cap[SMU_11_0_7_ODCAP_COUNT]))",
 				name: "Undefined OD feature support flags",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "OD feature support flags",},
-				],
+				description: {
+					eng: "OD feature support flags",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODFEATURE - SMU_11_0_7_ODCAP_COUNT)",
@@ -417,9 +417,9 @@ global_defaults: {
 				access: "(&(bios->max[SMU_11_0_7_ODSETTING_COUNT]))",
 				name: "Undefined Overdrive settings (max)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "default maximum settings",},
-				],
+				description: {
+					eng: "default maximum settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
@@ -436,9 +436,9 @@ global_defaults: {
 				access: "(&(bios->min[SMU_11_0_7_ODSETTING_COUNT]))",
 				name: "Undefined Overdrive settings (min)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "default minimum settings",},
-				],
+				description: {
+					eng: "default minimum settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
@@ -455,9 +455,9 @@ global_defaults: {
 				access: "(&(bios->pm_setting[SMU_11_0_7_PMSETTING_COUNT]))",
 				name: "Undefined Power Mode settings",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "Optimized power mode feature settings",},
-				],
+				description: {
+					eng: "Optimized power mode feature settings",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PMSETTING - SMU_11_0_7_PMSETTING_COUNT)",
@@ -475,23 +475,23 @@ global_defaults: {
 		{
 			access: "bios->revision",
 			name: "revision",
-			description: [
-				{language: "english", text: "Revision = SMU_11_0_PP_POWERSAVINGCLOCK_VERSION",},
-			],
+			description: {
+				eng: "Revision = SMU_11_0_PP_POWERSAVINGCLOCK_VERSION",
+			},
 		}, {
 			access: "bios->reserve",
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->count",
 			name: "count",
-			description: [
-				{language: "english", text: "power_saving_clock_count = SMU_11_0_PPCLOCK_COUNT",},
-			],
+			description: {
+				eng: "power_saving_clock_count = SMU_11_0_PPCLOCK_COUNT",
+			},
 		}, {
 			name: "PowerSavingClock modes (max)",
 			display: "ATUI_DISPLAY",
@@ -567,18 +567,18 @@ global_defaults: {
 		}, {
 			access: "bios->PowerSavingClockCount",
 			name: "PowerSavingClockCount",
-			description: [
-				{language: "english", text: "Count of PowerSavingClock Mode",},
-			],
+			description: {
+				eng: "Count of PowerSavingClock Mode",
+			},
 		}, {
 			name: "PowerSavingClockMax",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->PowerSavingClockMax",
 				name: "PowerSavingClockMax",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Maximum array In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -595,9 +595,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->PowerSavingClockMin",
 				name: "PowerSavingClockMin",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Minimum array In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -614,9 +614,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "(&(bios->PowerSavingClockMax[ATOM_VEGA20_PPCLOCK_COUNT]))",
 				name: "Undefined PowerSavingClock Modes (max)",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Maximum array In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -633,9 +633,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "(&(bios->PowerSavingClockMin[ATOM_VEGA20_PPCLOCK_COUNT]))",
 				name: "Undefined PowerSavingClock Modes (min)",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Minimum array In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -654,23 +654,23 @@ global_defaults: {
 		{
 			access: "bios->revision",
 			name: "revision",
-			description: [
-				{language: "english", text: "Revision = SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION",},
-			],
+			description: {
+				eng: "Revision = SMU_11_0_7_PP_POWERSAVINGCLOCK_VERSION",
+			},
 		}, {
 			access: "bios->reserve",
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->count",
 			name: "count",
-			description: [
-				{language: "english", text: "power_saving_clock_count = SMU_11_0_7_PPCLOCK_COUNT",},
-			],
+			description: {
+				eng: "power_saving_clock_count = SMU_11_0_7_PPCLOCK_COUNT",
+			},
 		}, {
 			name: "PowerSavingClock modes (max)",
 			display: "ATUI_DISPLAY",
@@ -678,9 +678,9 @@ global_defaults: {
 				access: "bios->max",
 				name: "PowerSavingClock modes (max)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Maximum array In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_PPCLOCK_COUNT",
@@ -697,9 +697,9 @@ global_defaults: {
 				access: "bios->min",
 				name: "PowerSavingClock modes (min)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Minimum array In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU_11_0_7_PPCLOCK_COUNT",
@@ -716,9 +716,9 @@ global_defaults: {
 				access: "(&(bios->max[SMU_11_0_7_PPCLOCK_COUNT]))",
 				name: "Undefined PowerSavingClock Modes (max)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Maximum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Maximum array In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
@@ -735,9 +735,9 @@ global_defaults: {
 				access: "(&(bios->min[SMU_11_0_7_PPCLOCK_COUNT]))",
 				name: "Undefined PowerSavingClock Modes (min)",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "PowerSavingClock Mode Clock Minimum array In MHz",},
-				],
+				description: {
+					eng: "PowerSavingClock Mode Clock Minimum array In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
@@ -1544,9 +1544,9 @@ global_defaults: {
 			access: "bios->Fset",
 			name: "Fset",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "in GHz",},
-			],
+			description: {
+				eng: "in GHz",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
@@ -1559,9 +1559,9 @@ global_defaults: {
 			access: "bios->Vdroop",
 			name: "Vdroop",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "in V",},
-			],
+			description: {
+				eng: "in V",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
@@ -1582,15 +1582,15 @@ global_defaults: {
 		}, {
 			access: "bios->SnapToDiscrete",
 			name: "SnapToDiscrete",
-			description: [
-				{language: "english", text: "0 - Fine grained DPM, 1 - Discrete DPM",},
-			],
+			description: {
+				eng: "0 - Fine grained DPM, 1 - Discrete DPM",
+			},
 		}, {
 			access: "bios->NumDiscreteLevels",
 			name: "NumDiscreteLevels",
-			description: [
-				{language: "english", text: "Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to num of discrete levels used",},
-			],
+			description: {
+				eng: "Set to 2 (Fmin, Fmax) when using fine grained  DPM, otherwise set to num of discrete levels used",
+			},
 		}, {
 			access: "bios->padding",
 			name: "padding",
@@ -1600,17 +1600,17 @@ global_defaults: {
 			name: "ConversionToAvfsClk",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-			description: [
-				{language: "english", text: "Transfer function to AVFS Clock (GHz->GHz)",},
-			],
+			description: {
+				eng: "Transfer function to AVFS Clock (GHz->GHz)",
+			},
 		}, {
 			access: "bios->slowslow_curve",
 			name: "slowslow_curve",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "Slow-slow curve (GHz->V)",},
-			],
+			description: {
+				eng: "Slow-slow curve (GHz->V)",
+			},
 		},
 	],
 }, {
@@ -1623,15 +1623,15 @@ global_defaults: {
 		}, {
 			access: "bios->SnapToDiscrete",
 			name: "SnapToDiscrete",
-			description: [
-				{language: "english", text: "0 - Fine grained DPM, 1 - Discrete DPM",},
-			],
+			description: {
+				eng: "0 - Fine grained DPM, 1 - Discrete DPM",
+			},
 		}, {
 			access: "bios->NumDiscreteLevels",
 			name: "NumDiscreteLevels",
-			description: [
-				{language: "english", text: "Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to num of discrete levels used",},
-			],
+			description: {
+				eng: "Set to 2 (Fmin, Fmax) when using fine grained DPM, otherwise set to num of discrete levels used",
+			},
 		}, {
 			access: "bios->Padding",
 			name: "Padding",
@@ -1641,23 +1641,23 @@ global_defaults: {
 			name: "ConversionToAvfsClk",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-			description: [
-				{language: "english", text: "Transfer function to AVFS Clock (GHz->GHz)",},
-			],
+			description: {
+				eng: "Transfer function to AVFS Clock (GHz->GHz)",
+			},
 		}, {
 			access: "bios->SsCurve",
 			name: "SsCurve",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "Slow-slow curve (GHz->V)",},
-			],
+			description: {
+				eng: "Slow-slow curve (GHz->V)",
+			},
 		}, {
 			access: "bios->SsFmin",
 			name: "SsFmin",
-			description: [
-				{language: "english", text: "Fmin for SS curve. If SS curve is selected, will use V@SSFmin for F <= Fmin",},
-			],
+			description: {
+				eng: "Fmin for SS curve. If SS curve is selected, will use V@SSFmin for F <= Fmin",
+			},
 		}, {
 			access: "bios->Padding16",
 			name: "Padding16",
@@ -1684,9 +1684,9 @@ global_defaults: {
 		}, {
 			access: "bios->tau",
 			name: "tau",
-			description: [
-				{language: "english", text: "Time constant of LPF in ms",},
-			],
+			description: {
+				eng: "Time constant of LPF in ms",
+			},
 		},
 	],
 }, {
@@ -1698,9 +1698,9 @@ global_defaults: {
 		}, {
 			access: "bios->tau",
 			name: "tau",
-			description: [
-				{language: "english", text: "Time constant of LPF in ms",},
-			],
+			description: {
+				eng: "Time constant of LPF in ms",
+			},
 		},
 	],
 }, {
@@ -1709,41 +1709,41 @@ global_defaults: {
 		{
 			access: "bios->MinVoltageGfx",
 			name: "MinVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",},
-			],
+			description: {
+				eng: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_GFX",
+			},
 		}, {
 			access: "bios->MinVoltageSoc",
 			name: "MinVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",},
-			],
+			description: {
+				eng: "In mV(Q2) Minimum Voltage (\"Vmin\") of VDD_SOC",
+			},
 		}, {
 			access: "bios->MaxVoltageGfx",
 			name: "MaxVoltageGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",},
-			],
+			description: {
+				eng: "In mV(Q2) Maximum Voltage allowable of VDD_GFX",
+			},
 		}, {
 			access: "bios->MaxVoltageSoc",
 			name: "MaxVoltageSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",},
-			],
+			description: {
+				eng: "In mV(Q2) Maximum Voltage allowable of VDD_SOC",
+			},
 		},
 
 		{
 			access: "bios->LoadLineResistanceGfx",
 			name: "LoadLineResistanceGfx",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
+			description: {
+				eng: "In mOhms with 8 fractional bits",
+			},
 		}, {
 			access: "bios->LoadLineResistanceSoc",
 			name: "LoadLineResistanceSoc",
-			description: [
-				{language: "english", text: "In mOhms with 8 fractional bits",},
-			],
+			description: {
+				eng: "In mOhms with 8 fractional bits",
+			},
 		},
 	],
 }, {
@@ -1753,9 +1753,9 @@ global_defaults: {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
@@ -1768,9 +1768,9 @@ global_defaults: {
 			access: "bios->MemVddciVoltage",
 			name: "MemVddciVoltage",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -1783,9 +1783,9 @@ global_defaults: {
 			access: "bios->MemMvddVoltage",
 			name: "MemMvddVoltage",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -1854,9 +1854,9 @@ global_defaults: {
 		}, {
 			access: "bios->GfxclkFreqHighTempLimit",
 			name: "GfxclkFreqHighTempLimit",
-			description: [
-				{language: "english", text: "High limit on GFXCLK when temperature is high, for reliability.",},
-			],
+			description: {
+				eng: "High limit on GFXCLK when temperature is high, for reliability.",
+			},
 		},
 	],
 }, {
@@ -1865,51 +1865,51 @@ global_defaults: {
 		{
 			access: "bios->VDDGFX_TVmin",
 			name: "VDDGFX_TVmin",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->VDDSOC_TVmin",
 			name: "VDDSOC_TVmin",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->VDDGFX_Vmin_HiTemp",
 			name: "VDDGFX_Vmin_HiTemp",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 		}, {
 			access: "bios->VDDGFX_Vmin_LoTemp",
 			name: "VDDGFX_Vmin_LoTemp",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 		}, {
 			access: "bios->VDDSOC_Vmin_HiTemp",
 			name: "VDDSOC_Vmin_HiTemp",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 		}, {
 			access: "bios->VDDSOC_Vmin_LoTemp",
 			name: "VDDSOC_Vmin_LoTemp",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 		}, {
 			access: "bios->VDDGFX_TVminHystersis",
 			name: "VDDGFX_TVminHystersis",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->VDDSOC_TVminHystersis",
 			name: "VDDSOC_TVminHystersis",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		},
 	],
 }, {
@@ -1943,15 +1943,15 @@ global_defaults: {
 		{
 			access: "bios->MaxVoltageStepGfx",
 			name: "MaxVoltageStepGfx",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->MaxVoltageStepSoc",
 			name: "MaxVoltageStepSoc",
-			description: [
-				{language: "english", text: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",},
-			],
+			description: {
+				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
+			},
 		}, {
 			access: "bios->vr_mapping",
 			name: "vr_mapping",
@@ -1962,23 +1962,23 @@ global_defaults: {
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->ExternalSensorPresent",
 			name: "ExternalSensorPresent",
-			description: [
-				{language: "english", text: "External RDI connected to TMON (aka TEMP IN)",},
-			],
+			description: {
+				eng: "External RDI connected to TMON (aka TEMP IN)",
+			},
 		}, {
 			access: "bios->Padding8_V",
 			name: "Padding8_V",
@@ -1990,15 +1990,15 @@ global_defaults: {
 		{
 			access: "bios->GfxMaxCurrent",
 			name: "GfxMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->GfxOffset",
 			name: "GfxOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryGfx",
 			name: "Padding_TelemetryGfx",
@@ -2006,15 +2006,15 @@ global_defaults: {
 		}, {
 			access: "bios->SocMaxCurrent",
 			name: "SocMaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->SocOffset",
 			name: "SocOffset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetrySoc",
 			name: "Padding_TelemetrySoc",
@@ -2022,15 +2022,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem0MaxCurrent",
 			name: "Mem0MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem0Offset",
 			name: "Mem0Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem0",
 			name: "Padding_TelemetryMem0",
@@ -2038,15 +2038,15 @@ global_defaults: {
 		}, {
 			access: "bios->Mem1MaxCurrent",
 			name: "Mem1MaxCurrent",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Mem1Offset",
 			name: "Mem1Offset",
-			description: [
-				{language: "english", text: "in Amps",},
-			],
+			description: {
+				eng: "in Amps",
+			},
 		}, {
 			access: "bios->Padding_TelemetryMem1",
 			name: "Padding_TelemetryMem1",
@@ -2059,51 +2059,51 @@ global_defaults: {
 		{
 			access: "bios->AcDcGpio",
 			name: "AcDcGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO pin configured for AC/DC switching",
+			},
 		}, {
 			access: "bios->AcDcPolarity",
 			name: "AcDcPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for AC/DC switching",},
-			],
+			description: {
+				eng: "GPIO polarity for AC/DC switching",
+			},
 		}, {
 			access: "bios->VR0HotGpio",
 			name: "VR0HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR0HotPolarity",
 			name: "VR0HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR0 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR0 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotGpio",
 			name: "VR1HotGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO pin configured for VR1 HOT event",
+			},
 		}, {
 			access: "bios->VR1HotPolarity",
 			name: "VR1HotPolarity",
-			description: [
-				{language: "english", text: "GPIO polarity for VR1 HOT event",},
-			],
+			description: {
+				eng: "GPIO polarity for VR1 HOT event",
+			},
 		}, {
 			access: "bios->GthrGpio",
 			name: "GthrGpio",
-			description: [
-				{language: "english", text: "GPIO pin configured for GTHR Event",},
-			],
+			description: {
+				eng: "GPIO pin configured for GTHR Event",
+			},
 		}, {
 			access: "bios->GthrPolarity",
 			name: "GthrPolarity",
-			description: [
-				{language: "english", text: "replace GPIO polarity for GTHR",},
-			],
+			description: {
+				eng: "replace GPIO polarity for GTHR",
+			},
 		},
 	],
 }, {
@@ -2118,9 +2118,9 @@ global_defaults: {
 		}, {
 			access: "bios->frequency",
 			name: "frequency",
-			description: [
-				{language: "english", text: "kHz",},
-			],
+			description: {
+				eng: "kHz",
+			},
 		},
 	],
 },
@@ -2163,63 +2163,63 @@ global_defaults: {
 		}, {
 			access: "bios->TedgeLimit",
 			name: "TedgeLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->ThotspotLimit",
 			name: "ThotspotLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->ThbmLimit",
 			name: "ThbmLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->Tvr_gfxLimit",
 			name: "Tvr_gfxLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->Tvr_memLimit",
 			name: "Tvr_memLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->Tliquid1Limit",
 			name: "Tliquid1Limit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->Tliquid2Limit",
 			name: "Tliquid2Limit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->TplxLimit",
 			name: "TplxLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FitLimit",
 			name: "FitLimit",
-			description: [
-				{language: "english", text: "Failures in time (failures per million parts over the defined lifetime)",},
-			],
+			description: {
+				eng: "Failures in time (failures per million parts over the defined lifetime)",
+			},
 		}, {
 			access: "bios->PpmPowerLimit",
 			name: "PpmPowerLimit",
-			description: [
-				{language: "english", text: "Switch this this power limit when temperature is above PpmTempThreshold",},
-			],
+			description: {
+				eng: "Switch this this power limit when temperature is above PpmTempThreshold",
+			},
 		}, {
 			access: "bios->PpmTemperatureThreshold",
 			name: "PpmTemperatureThreshold",
@@ -2232,9 +2232,9 @@ global_defaults: {
 		}, {
 			access: "bios->Tvr_SocLimit",
 			name: "Tvr_SocLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		},
 	],
 }, {
@@ -2243,33 +2243,33 @@ global_defaults: {
 		{
 			access: "bios->UlvVoltageOffsetSoc",
 			name: "UlvVoltageOffsetSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		}, {
 			access: "bios->UlvVoltageOffsetGfx",
 			name: "UlvVoltageOffsetGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		}, {
 			access: "bios->UlvSmnclkDid",
 			name: "UlvSmnclkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
+			description: {
+				eng: "DID for ULV mode. 0 means CLK will not be modified in ULV.",
+			},
 		}, {
 			access: "bios->UlvMp1clkDid",
 			name: "UlvMp1clkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
+			description: {
+				eng: "DID for ULV mode. 0 means CLK will not be modified in ULV.",
+			},
 		}, {
 			access: "bios->UlvGfxclkBypass",
 			name: "UlvGfxclkBypass",
-			description: [
-				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
-			],
+			description: {
+				eng: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",
+			},
 		}, {
 			access: "bios->Padding234",
 			name: "Padding234",
@@ -2299,9 +2299,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableGfx",
 				name: "FreqTableGfx",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2319,9 +2319,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableVclk",
 				name: "FreqTableVclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2339,9 +2339,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableDclk",
 				name: "FreqTableDclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2359,9 +2359,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableEclk",
 				name: "FreqTableEclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2379,9 +2379,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableSocclk",
 				name: "FreqTableSocclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2399,9 +2399,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableUclk",
 				name: "FreqTableUclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2419,9 +2419,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableFclk",
 				name: "FreqTableFclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2439,9 +2439,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableDcefclk",
 				name: "FreqTableDcefclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2459,9 +2459,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableDispclk",
 				name: "FreqTableDispclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2479,9 +2479,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTablePixclk",
 				name: "FreqTablePixclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2499,9 +2499,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTablePhyclk",
 				name: "FreqTablePhyclk",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2519,9 +2519,9 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->DcModeMaxFreq",
 				name: "DcModeMaxFreq",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
@@ -2544,9 +2544,9 @@ global_defaults: {
 				access: "bios->Mp0clkFreq",
 				name: "Mp0clkFreq",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
@@ -2564,15 +2564,15 @@ global_defaults: {
 		{
 			access: "bios->GfxclkFidle",
 			name: "GfxclkFidle",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 		}, {
 			access: "bios->GfxclkSlewRate",
 			name: "GfxclkSlewRate",
-			description: [
-				{language: "english", text: "for PLL babystepping???",},
-			],
+			description: {
+				eng: "for PLL babystepping???",
+			},
 		}, {
 			access: "bios->CksEnableFreq",
 			name: "CksEnableFreq",
@@ -2592,9 +2592,9 @@ global_defaults: {
 		}, {
 			access: "bios->GfxclkDsMaxFreq",
 			name: "GfxclkDsMaxFreq",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
@@ -2629,9 +2629,9 @@ global_defaults: {
 			access: "bios->Mp0DpmVoltage",
 			name: "Mp0DpmVoltage",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
@@ -2648,9 +2648,9 @@ global_defaults: {
 		}, {
 			access: "bios->LowestUclkReservedForUlv",
 			name: "LowestUclkReservedForUlv",
-			description: [
-				{language: "english", text: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",},
-			],
+			description: {
+				eng: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",
+			},
 		}, {
 			access: "bios->Padding8_Uclk",
 			name: "Padding8_Uclk",
@@ -2674,15 +2674,15 @@ global_defaults: {
 		{
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanStartTemp",
 			name: "FanStartTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanGain",
 			name: "FanGain",
@@ -2815,9 +2815,9 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v3_avfs",
-	description: [
-		{language: "english", text: "Overrides",},
-	],
+	description: {
+		eng: "Overrides",
+	},
 	leaves: [
 		{
 			access: "bios->OverrideAvfsGb",
@@ -2839,9 +2839,9 @@ global_defaults: {
 		}, {
 			access: "bios->AvfsGb",
 			name: "AvfsGb",
-			description: [
-				{language: "english", text: "GHz->V Override of fused curve",},
-			],
+			description: {
+				eng: "GHz->V Override of fused curve",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -2868,23 +2868,23 @@ global_defaults: {
 			name: "BtcGbGfxAfll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "dfll?",},
-			],
+			description: {
+				eng: "dfll?",
+			},
 		}, {
 			access: "bios->BtcGbSoc",
 			name: "BtcGbSoc",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->AgingGb",
 			name: "AgingGb",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -2899,9 +2899,9 @@ global_defaults: {
 		}, {
 			access: "bios->qStaticVoltageOffset",
 			name: "qStaticVoltageOffset",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -2916,9 +2916,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcTol",
 			name: "DcTol",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -2960,9 +2960,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcBtcMax",
 			name: "DcBtcMax",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -3066,15 +3066,15 @@ global_defaults: {
 		}, {
 			access: "bios->MinVoltageUlvGfx",
 			name: "MinVoltageUlvGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",
+			},
 		}, {
 			access: "bios->MinVoltageUlvSoc",
 			name: "MinVoltageUlvSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",
+			},
 		}, {
 			access: "bios->MGpuFanBoostLimitRpm",
 			name: "MGpuFanBoostLimitRpm",
@@ -3130,9 +3130,9 @@ global_defaults: {
 			name: "LedPin",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "GPIO numbers",},
-			],
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
@@ -3238,9 +3238,9 @@ global_defaults: {
 		}, {
 			access: "bios->TemperatureLimit",
 			name: "TemperatureLimit",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -3253,15 +3253,15 @@ global_defaults: {
 		}, {
 			access: "bios->FitLimit",
 			name: "FitLimit",
-			description: [
-				{language: "english", text: "Failures in time (failures per million parts over the defined lifetime)",},
-			],
+			description: {
+				eng: "Failures in time (failures per million parts over the defined lifetime)",
+			},
 		}, {
 			access: "bios->PpmPowerLimit",
 			name: "PpmPowerLimit",
-			description: [
-				{language: "english", text: "Switch this this power limit when temperature is above PpmTempThreshold",},
-			],
+			description: {
+				eng: "Switch this this power limit when temperature is above PpmTempThreshold",
+			},
 		}, {
 			access: "bios->PpmTemperatureThreshold",
 			name: "PpmTemperatureThreshold",
@@ -3273,23 +3273,23 @@ global_defaults: {
 		{
 			access: "bios->UlvVoltageOffsetSoc",
 			name: "UlvVoltageOffsetSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		}, {
 			access: "bios->UlvVoltageOffsetGfx",
 			name: "UlvVoltageOffsetGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		},
 
 		{
 			access: "bios->GceaLinkMgrIdleThreshold",
 			name: "GceaLinkMgrIdleThreshold",
-			description: [
-				{language: "english", text: "Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events",},
-			],
+			description: {
+				eng: "Set by SMU FW during enablment of SOC_ULV. Controls delay for GFX SDP port disconnection during idle events",
+			},
 		}, {
 			access: "bios->paddingRlcUlvParams",
 			name: "paddingRlcUlvParams",
@@ -3300,21 +3300,21 @@ global_defaults: {
 		{
 			access: "bios->UlvSmnclkDid",
 			name: "UlvSmnclkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
+			description: {
+				eng: "DID for ULV mode. 0 means CLK will not be modified in ULV.",
+			},
 		}, {
 			access: "bios->UlvMp1clkDid",
 			name: "UlvMp1clkDid",
-			description: [
-				{language: "english", text: "DID for ULV mode. 0 means CLK will not be modified in ULV.",},
-			],
+			description: {
+				eng: "DID for ULV mode. 0 means CLK will not be modified in ULV.",
+			},
 		}, {
 			access: "bios->UlvGfxclkBypass",
 			name: "UlvGfxclkBypass",
-			description: [
-				{language: "english", text: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",},
-			],
+			description: {
+				eng: "1 to turn off/bypass Gfxclk during ULV, 0 to leave Gfxclk on during ULV",
+			},
 		}, {
 			access: "bios->Padding234",
 			name: "Padding234",
@@ -3323,15 +3323,15 @@ global_defaults: {
 		{
 			access: "bios->MinVoltageUlvGfx",
 			name: "MinVoltageUlvGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",
+			},
 		}, {
 			access: "bios->MinVoltageUlvSoc",
 			name: "MinVoltageUlvSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",
+			},
 		},
 	],
 }, {
@@ -3359,9 +3359,9 @@ global_defaults: {
 				access: "bios->FreqTableGfx",
 				name: "FreqTableGfx",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
@@ -3378,9 +3378,9 @@ global_defaults: {
 				access: "bios->FreqTableVclk",
 				name: "FreqTableVclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_VCLK_DPM_LEVELS_SMU11",
@@ -3397,9 +3397,9 @@ global_defaults: {
 				access: "bios->FreqTableDclk",
 				name: "FreqTableDclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCLK_DPM_LEVELS_SMU11",
@@ -3416,9 +3416,9 @@ global_defaults: {
 				access: "bios->FreqTableSocclk",
 				name: "FreqTableSocclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
@@ -3435,9 +3435,9 @@ global_defaults: {
 				access: "bios->FreqTableUclk",
 				name: "FreqTableUclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -3454,9 +3454,9 @@ global_defaults: {
 				access: "bios->FreqTableDcefclk",
 				name: "FreqTableDcefclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
@@ -3473,9 +3473,9 @@ global_defaults: {
 				access: "bios->FreqTableDispclk",
 				name: "FreqTableDispclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
@@ -3492,9 +3492,9 @@ global_defaults: {
 				access: "bios->FreqTablePixclk",
 				name: "FreqTablePixclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
@@ -3511,9 +3511,9 @@ global_defaults: {
 				access: "bios->FreqTablePhyclk",
 				name: "FreqTablePhyclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
@@ -3535,9 +3535,9 @@ global_defaults: {
 				access: "bios->DcModeMaxFreq",
 				name: "DcModeMaxFreq",
 				display: "ATUI_DISPLAY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU11_PPT8_PPCLK_COUNT",
@@ -3575,9 +3575,9 @@ global_defaults: {
 				access: "bios->Mp0clkFreq",
 				name: "Mp0clkFreq",
 				display: "ATUI_DISPLAY",
-				description: [
-					{language: "english", text: "in MHz",},
-				],
+				description: {
+					eng: "in MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
@@ -3595,33 +3595,33 @@ global_defaults: {
 		{
 			access: "bios->GfxclkFgfxoffEntry",
 			name: "GfxclkFgfxoffEntry",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->GfxclkFinit",
 			name: "GfxclkFinit",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->GfxclkFidle",
 			name: "GfxclkFidle",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 		}, {
 			access: "bios->GfxclkSlewRate",
 			name: "GfxclkSlewRate",
-			description: [
-				{language: "english", text: "for PLL babystepping???",},
-			],
+			description: {
+				eng: "for PLL babystepping???",
+			},
 		}, {
 			access: "bios->GfxclkFopt",
 			name: "GfxclkFopt",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->Padding567",
 			name: "Padding567",
@@ -3630,9 +3630,9 @@ global_defaults: {
 		}, {
 			access: "bios->GfxclkDsMaxFreq",
 			name: "GfxclkDsMaxFreq",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
@@ -3648,9 +3648,9 @@ global_defaults: {
 		{
 			access: "bios->LowestUclkReservedForUlv",
 			name: "LowestUclkReservedForUlv",
-			description: [
-				{language: "english", text: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",},
-			],
+			description: {
+				eng: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",
+			},
 		}, {
 			access: "bios->paddingUclk",
 			name: "paddingUclk",
@@ -3659,9 +3659,9 @@ global_defaults: {
 		}, {
 			access: "bios->MemoryType",
 			name: "MemoryType",
-			description: [
-				{language: "english", text: "0-GDDR6, 1-HBM",},
-			],
+			description: {
+				eng: "0-GDDR6, 1-HBM",
+			},
 		}, {
 			access: "bios->MemoryChannels",
 			name: "MemoryChannels",
@@ -3727,21 +3727,21 @@ global_defaults: {
 		{
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanStartTemp",
 			name: "FanStartTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanGain",
 			name: "FanGain",
-			description: [
-				{language: "english", text: "does not follow TEMP_SMU11_0_7_e for some reason",},
-			],
+			description: {
+				eng: "does not follow TEMP_SMU11_0_7_e for some reason",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -3818,85 +3818,85 @@ global_defaults: {
 			name: "AvfsGb (GFX)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "GHz->V Override of fused curve",},
-			],
+			description: {
+				eng: "GHz->V Override of fused curve",
+			},
 		}, {
 			access: "bios->AvfsGb[AVFS_VOLTAGE_SOC]",
 			name: "AvfsGb (SOC)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "GHz->V Override of fused curve",},
-			],
+			description: {
+				eng: "GHz->V Override of fused curve",
+			},
 		}, {
 			access: "bios->BtcGbGfxPll",
 			name: "BtcGbGfxPll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->BtcGbGfxDfll",
 			name: "BtcGbGfxDfll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->BtcGbSoc",
 			name: "BtcGbSoc",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->AgingGb[AVFS_VOLTAGE_GFX]",
 			name: "AgingGb (GFX)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 		}, {
 			access: "bios->AgingGb[AVFS_VOLTAGE_SOC]",
 			name: "AgingGb (SOC)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 		}, {
 			access: "bios->qStaticVoltageOffset[AVFS_VOLTAGE_GFX]",
 			name: "qStaticVoltageOffset (GFX)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 		}, {
 			access: "bios->qStaticVoltageOffset[AVFS_VOLTAGE_SOC]",
 			name: "qStaticVoltageOffset (SOC)",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 		}, {
 			access: "bios->DcTol[AVFS_VOLTAGE_GFX]",
 			name: "DcTol (GFX)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		}, {
 			access: "bios->DcTol[AVFS_VOLTAGE_SOC]",
 			name: "DcTol (SOC)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		}, {
 			access: "bios->DcBtcEnabled[AVFS_VOLTAGE_GFX]",
 			name: "DcBtcEnabled (GFX)",
@@ -3913,27 +3913,27 @@ global_defaults: {
 		}, {
 			access: "bios->DcBtcMin[AVFS_VOLTAGE_GFX]",
 			name: "DcBtcMin (GFX)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		}, {
 			access: "bios->DcBtcMin[AVFS_VOLTAGE_SOC]",
 			name: "DcBtcMin (SOC)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		}, {
 			access: "bios->DcBtcMax[AVFS_VOLTAGE_GFX]",
 			name: "DcBtcMax (GFX)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		}, {
 			access: "bios->DcBtcMax[AVFS_VOLTAGE_SOC]",
 			name: "DcBtcMax (SOC)",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 		},
 	],
 }, {
@@ -3945,9 +3945,9 @@ global_defaults: {
 		}, {
 			access: "bios->SsFmin",
 			name: "SsFmin",
-			description: [
-				{language: "english", text: "PPtable value to function similar to VFTFmin for SS Curve",},
-			],
+			description: {
+				eng: "PPtable value to function similar to VFTFmin for SS Curve",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -4146,9 +4146,9 @@ global_defaults: {
 			name: "LedPin",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "GPIO numbers",},
-			],
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
@@ -4161,9 +4161,9 @@ global_defaults: {
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
@@ -4171,9 +4171,9 @@ global_defaults: {
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
-			description: [
-				{language: "english", text: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",},
-			],
+			description: {
+				eng: "This is used for MVDD Vid workaround. It has 16 fractional bits (Q16.16)",
+			},
 		}, {
 			access: "bios->RenesesLoadLineEnabled",
 			name: "RenesesLoadLineEnabled",
@@ -4197,9 +4197,9 @@ global_defaults: {
 			name: "MmHubPadding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "SMU internal use",},
-			],
+			description: {
+				eng: "SMU internal use",
+			},
 		},
 	],
 }, {
@@ -4209,9 +4209,9 @@ global_defaults: {
 			access: "bios->SocketPowerLimitAc",
 			name: "SocketPowerLimitAc",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Watts",},
-			],
+			description: {
+				eng: "Watts",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
@@ -4224,9 +4224,9 @@ global_defaults: {
 			access: "bios->SocketPowerLimitAcTau",
 			name: "SocketPowerLimitAcTau",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Time constant of LPF in ms",},
-			],
+			description: {
+				eng: "Time constant of LPF in ms",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
@@ -4239,9 +4239,9 @@ global_defaults: {
 			access: "bios->SocketPowerLimitDc",
 			name: "SocketPowerLimitDc",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Watts",},
-			],
+			description: {
+				eng: "Watts",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
@@ -4254,9 +4254,9 @@ global_defaults: {
 			access: "bios->SocketPowerLimitDcTau",
 			name: "SocketPowerLimitDcTau",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Time constant of LPF in ms",},
-			],
+			description: {
+				eng: "Time constant of LPF in ms",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
@@ -4269,9 +4269,9 @@ global_defaults: {
 			access: "bios->TdcLimit",
 			name: "TdcLimit",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Amps",},
-			],
+			description: {
+				eng: "Amps",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
@@ -4284,9 +4284,9 @@ global_defaults: {
 			access: "bios->TdcLimitTau",
 			name: "TdcLimitTau",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Time constant of LPF in ms",},
-			],
+			description: {
+				eng: "Time constant of LPF in ms",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
@@ -4299,9 +4299,9 @@ global_defaults: {
 			access: "bios->TemperatureLimit",
 			name: "TemperatureLimit",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TEMP_SMU_11_0_7_COUNT",
@@ -4313,9 +4313,9 @@ global_defaults: {
 		}, {
 			access: "bios->FitLimit",
 			name: "FitLimit",
-			description: [
-				{language: "english", text: "Failures in time (failures per million parts over the defined lifetime)",},
-			],
+			description: {
+				eng: "Failures in time (failures per million parts over the defined lifetime)",
+			},
 		},
 	],
 }, {
@@ -4325,9 +4325,9 @@ global_defaults: {
 			access: "bios->SmnclkDpmFreq",
 			name: "SmnclkDpmFreq",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
@@ -4340,9 +4340,9 @@ global_defaults: {
 			access: "bios->SmnclkDpmVoltage",
 			name: "SmnclkDpmVoltage",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "mV(Q2)",},
-			],
+			description: {
+				eng: "mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
@@ -4358,9 +4358,9 @@ global_defaults: {
 			access: "bios->PerPartDroopVsetGfxDfll",
 			name: "PerPartDroopVsetGfxDfll",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
@@ -4380,42 +4380,42 @@ global_defaults: {
 		{
 			access: "bios->UlvVoltageOffsetSoc",
 			name: "UlvVoltageOffsetSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		}, {
 			access: "bios->UlvVoltageOffsetGfx",
 			name: "UlvVoltageOffsetGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)",},
-			],
+			description: {
+				eng: "In mV(Q2)",
+			},
 		}, {
 			access: "bios->MinVoltageUlvGfx",
 			name: "MinVoltageUlvGfx",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_GFX in ULV mode",
+			},
 		}, {
 			access: "bios->MinVoltageUlvSoc",
 			name: "MinVoltageUlvSoc",
-			description: [
-				{language: "english", text: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",},
-			],
+			description: {
+				eng: "In mV(Q2)  Minimum Voltage (\"Vmin\") of VDD_SOC in ULV mode",
+			},
 		}, {
 			access: "bios->SocLIVmin",
 			name: "SocLIVmin",
-			description: [
-				{language: "english", text: "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC",},
-			],
+			description: {
+				eng: "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC",
+			},
 		}, {
 			access: "bios->PaddingLIVmin",
 			name: "PaddingLIVmin",
 		}, {
 			access: "bios->GceaLinkMgrIdleThreshold",
 			name: "GceaLinkMgrIdleThreshold",
-			description: [
-				{language: "english", text: "Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events",},
-			],
+			description: {
+				eng: "Set by SMU FW during enablment of GFXOFF. Controls delay for GFX SDP port disconnection during idle events",
+			},
 		}, {
 			access: "bios->paddingRlcUlvParams",
 			name: "paddingRlcUlvParams",
@@ -4453,9 +4453,9 @@ global_defaults: {
 				access: "bios->FreqTableGfx",
 				name: "FreqTableGfx",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
@@ -4472,9 +4472,9 @@ global_defaults: {
 				access: "bios->FreqTableVclk",
 				name: "FreqTableVclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_VCLK_DPM_LEVELS_SMU11",
@@ -4491,9 +4491,9 @@ global_defaults: {
 				access: "bios->FreqTableDclk",
 				name: "FreqTableDclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCLK_DPM_LEVELS_SMU11",
@@ -4510,9 +4510,9 @@ global_defaults: {
 				access: "bios->FreqTableSocclk",
 				name: "FreqTableSocclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
@@ -4529,9 +4529,9 @@ global_defaults: {
 				access: "bios->FreqTableUclk",
 				name: "FreqTableUclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -4548,9 +4548,9 @@ global_defaults: {
 				access: "bios->FreqTableDcefclk",
 				name: "FreqTableDcefclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
@@ -4567,9 +4567,9 @@ global_defaults: {
 				access: "bios->FreqTableDispclk",
 				name: "FreqTableDispclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
@@ -4586,9 +4586,9 @@ global_defaults: {
 				access: "bios->FreqTablePixclk",
 				name: "FreqTablePixclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
@@ -4605,9 +4605,9 @@ global_defaults: {
 				access: "bios->FreqTablePhyclk",
 				name: "FreqTablePhyclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
@@ -4624,9 +4624,9 @@ global_defaults: {
 				access: "bios->FreqTableDtbclk",
 				name: "FreqTableDtbclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DTBCLK_DPM_LEVELS_SMU11",
@@ -4643,9 +4643,9 @@ global_defaults: {
 				access: "bios->FreqTableFclk",
 				name: "FreqTableFclk",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_FCLK_DPM_LEVELS_SMU11",
@@ -4665,9 +4665,9 @@ global_defaults: {
 				access: "bios->PerPartDroopModelGfxDfll",
 				name: "PerPartDroopModelGfxDfll",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "GHz ->V",},
-				],
+				description: {
+					eng: "GHz ->V",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
@@ -4686,9 +4686,9 @@ global_defaults: {
 				access: "bios->DcModeMaxFreq",
 				name: "DcModeMaxFreq",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "In MHz",},
-				],
+				description: {
+					eng: "In MHz",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU11_PPT7_PPCLK_COUNT",
@@ -4714,9 +4714,9 @@ global_defaults: {
 		}, {
 			access: "bios->FclkBoostFreq",
 			name: "FclkBoostFreq",
-			description: [
-				{language: "english", text: "In Mhz",},
-			],
+			description: {
+				eng: "In Mhz",
+			},
 		}, {
 			access: "bios->FclkParamPadding",
 			name: "FclkParamPadding",
@@ -4724,9 +4724,9 @@ global_defaults: {
 			access: "bios->Mp0clkFreq",
 			name: "Mp0clkFreq",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
@@ -4743,28 +4743,28 @@ global_defaults: {
 		{
 			access: "bios->GfxclkFgfxoffEntry",
 			name: "GfxclkFgfxoffEntry",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->GfxclkFinit",
 			name: "GfxclkFinit",
-			description: [
-				{language: "english", text: "in Mhz",},
-			],
+			description: {
+				eng: "in Mhz",
+			},
 		}, {
 			access: "bios->GfxclkFidle",
 			name: "GfxclkFidle",
-			description: [
-				{language: "english", text: "in MHz",},
-			],
+			description: {
+				eng: "in MHz",
+			},
 		}, {
 			access: "bios->GfxclkSource",
 			name: "GfxclkSource",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "0 = PLL, 1 = DFLL",},
-			],
+			description: {
+				eng: "0 = PLL, 1 = DFLL",
+			},
 		}, {
 			access: "bios->GfxclkPadding",
 			name: "GfxclkPadding",
@@ -4783,17 +4783,17 @@ global_defaults: {
 			name: "GfxGpoEnabledWorkPolicyMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "gfx_gpo_features",
-			description: [
-				{language: "english", text: "Any policy that GPO can be enabled",},
-			],
+			description: {
+				eng: "Any policy that GPO can be enabled",
+			},
 		}, {
 			access: "bios->GfxGpoDisabledWorkPolicyMask",
 			name: "GfxGpoDisabledWorkPolicyMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "gfx_gpo_features",
-			description: [
-				{language: "english", text: "Any policy that GPO can be disabled",},
-			],
+			description: {
+				eng: "Any policy that GPO can be disabled",
+			},
 		}, {
 			access: "bios->GfxGpoPadding",
 			name: "GfxGpoPadding",
@@ -4802,9 +4802,9 @@ global_defaults: {
 		}, {
 			access: "bios->GfxGpoVotingAllow",
 			name: "GfxGpoVotingAllow",
-			description: [
-				{language: "english", text: "For indicating which feature changes should result in a GPO table recalculation",},
-			],
+			description: {
+				eng: "For indicating which feature changes should result in a GPO table recalculation",
+			},
 		}, {
 			access: "bios->GfxGpoPadding32",
 			name: "GfxGpoPadding32",
@@ -4818,57 +4818,57 @@ global_defaults: {
 		{
 			access: "bios->GfxDcsFopt",
 			name: "GfxDcsFopt",
-			description: [
-				{language: "english", text: "Optimal GFXCLK for DCS in Mhz",},
-			],
+			description: {
+				eng: "Optimal GFXCLK for DCS in Mhz",
+			},
 		}, {
 			access: "bios->GfxDcsFclkFopt",
 			name: "GfxDcsFclkFopt",
-			description: [
-				{language: "english", text: "Optimal FCLK for DCS in Mhz",},
-			],
+			description: {
+				eng: "Optimal FCLK for DCS in Mhz",
+			},
 		}, {
 			access: "bios->GfxDcsUclkFopt",
 			name: "GfxDcsUclkFopt",
-			description: [
-				{language: "english", text: "Optimal UCLK for DCS in Mhz",},
-			],
+			description: {
+				eng: "Optimal UCLK for DCS in Mhz",
+			},
 		}, {
 			access: "bios->DcsGfxOffVoltage",
 			name: "DcsGfxOffVoltage",
-			description: [
-				{language: "english", text: "Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase",},
-			],
+			description: {
+				eng: "Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase",
+			},
 		}, {
 			access: "bios->DcsMinGfxOffTime",
 			name: "DcsMinGfxOffTime",
-			description: [
-				{language: "english", text: "Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase",},
-			],
+			description: {
+				eng: "Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase",
+			},
 		}, {
 			access: "bios->DcsMaxGfxOffTime",
 			name: "DcsMaxGfxOffTime",
-			description: [
-				{language: "english", text: "Maximum amount of time PMFW can shut GFX OFF as part of GFX DCS phase at a stretch.",},
-			],
+			description: {
+				eng: "Maximum amount of time PMFW can shut GFX OFF as part of GFX DCS phase at a stretch.",
+			},
 		}, {
 			access: "bios->DcsMinCreditAccum",
 			name: "DcsMinCreditAccum",
-			description: [
-				{language: "english", text: "Min amount of positive credit accumulation before waking GFX up as part of DCS.",},
-			],
+			description: {
+				eng: "Min amount of positive credit accumulation before waking GFX up as part of DCS.",
+			},
 		}, {
 			access: "bios->DcsExitHysteresis",
 			name: "DcsExitHysteresis",
-			description: [
-				{language: "english", text: "The min amount of time power credit accumulator should have a value > 0 before SMU exits the DCS throttling phase.",},
-			],
+			description: {
+				eng: "The min amount of time power credit accumulator should have a value > 0 before SMU exits the DCS throttling phase.",
+			},
 		}, {
 			access: "bios->DcsTimeout",
 			name: "DcsTimeout",
-			description: [
-				{language: "english", text: "This is the amount of time SMU FW waits for RLC to put GFX into GFXOFF before reverting to the fallback mechanism of throttling GFXCLK to Fmin.",},
-			],
+			description: {
+				eng: "This is the amount of time SMU FW waits for RLC to put GFX into GFXOFF before reverting to the fallback mechanism of throttling GFXCLK to Fmin.",
+			},
 		}, {
 			access: "bios->DcsParamPadding",
 			name: "DcsParamPadding",
@@ -4882,9 +4882,9 @@ global_defaults: {
 		{
 			access: "bios->LowestUclkReservedForUlv",
 			name: "LowestUclkReservedForUlv",
-			description: [
-				{language: "english", text: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",},
-			],
+			description: {
+				eng: "Set this to 1 if UCLK DPM0 is reserved for ULV-mode only",
+			},
 		}, {
 			access: "bios->PaddingMem",
 			name: "PaddingMem",
@@ -4894,9 +4894,9 @@ global_defaults: {
 			access: "bios->UclkDpmPstates",
 			name: "UclkDpmPstates",
 			display: "ATUI_DISPLAY",
-			description: [
-				{language: "english", text: "4 DPM states.",},
-			],
+			description: {
+				eng: "4 DPM states.",
+			},
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -4911,23 +4911,23 @@ global_defaults: {
 			name: "UclkDpmSrcFreqRange",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "UclkDpmChangeRange_t",
-			description: [
-				{language: "english", text: "In Mhz",},
-			],
+			description: {
+				eng: "In Mhz",
+			},
 		}, {
 			access: "bios->UclkDpmTargFreqRange",
 			name: "UclkDpmTargFreqRange",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "UclkDpmChangeRange_t",
-			description: [
-				{language: "english", text: "In Mhz",},
-			],
+			description: {
+				eng: "In Mhz",
+			},
 		}, {
 			access: "bios->UclkDpmMidstepFreq",
 			name: "UclkDpmMidstepFreq",
-			description: [
-				{language: "english", text: "In Mhz",},
-			],
+			description: {
+				eng: "In Mhz",
+			},
 		}, {
 			access: "bios->UclkMidstepPadding",
 			name: "UclkMidstepPadding",
@@ -4987,9 +4987,9 @@ global_defaults: {
 				access: "bios->FlopsPerByteTable",
 				name: "FlopsPerByteTable",
 				display: "ATUI_SUBONLY",
-				description: [
-					{language: "english", text: "Q8.8",},
-				],
+				description: {
+					eng: "Q8.8",
+				},
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "RLC_PACE_TABLE_NUM_LEVELS_SMU11",
@@ -5018,15 +5018,15 @@ global_defaults: {
 		{
 			access: "bios->FanStopTemp",
 			name: "FanStopTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanStartTemp",
 			name: "FanStartTemp",
-			description: [
-				{language: "english", text: "Celcius",},
-			],
+			description: {
+				eng: "Celcius",
+			},
 		}, {
 			access: "bios->FanGain",
 			name: "FanGain",
@@ -5115,9 +5115,9 @@ global_defaults: {
 		}, {
 			access: "bios->AvfsGb",
 			name: "AvfsGb",
-			description: [
-				{language: "english", text: "GHz->V Override of fused curve",},
-			],
+			description: {
+				eng: "GHz->V Override of fused curve",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5134,31 +5134,31 @@ global_defaults: {
 			name: "BtcGbGfxPll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->BtcGbGfxDfll",
 			name: "BtcGbGfxDfll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->BtcGbSoc",
 			name: "BtcGbSoc",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-			description: [
-				{language: "english", text: "GHz->V BtcGb",},
-			],
+			description: {
+				eng: "GHz->V BtcGb",
+			},
 		}, {
 			access: "bios->AgingGb",
 			name: "AgingGb",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5175,15 +5175,15 @@ global_defaults: {
 			name: "PiecewiseLinearDroopIntGfxDfll",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "PiecewiseLinearDroopInt_t",
-			description: [
-				{language: "english", text: "GHz ->V",},
-			],
+			description: {
+				eng: "GHz ->V",
+			},
 		}, {
 			access: "bios->qStaticVoltageOffset",
 			name: "qStaticVoltageOffset",
-			description: [
-				{language: "english", text: "GHz->V",},
-			],
+			description: {
+				eng: "GHz->V",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5198,9 +5198,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcTol",
 			name: "DcTol",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5230,9 +5230,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcBtcMin",
 			name: "DcBtcMin",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5245,9 +5245,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcBtcMax",
 			name: "DcBtcMax",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5260,9 +5260,9 @@ global_defaults: {
 		}, {
 			access: "bios->DcBtcGb",
 			name: "DcBtcGb",
-			description: [
-				{language: "english", text: "mV Q2",},
-			],
+			description: {
+				eng: "mV Q2",
+			},
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
@@ -5276,9 +5276,9 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v7_vc_btc",
-	description: [
-		{language: "english", text: "VC BTC parameters are only applicable to VDD_GFX domain",},
-	],
+	description: {
+		eng: "VC BTC parameters are only applicable to VDD_GFX domain",
+	},
 	leaves: [
 		{
 			access: "bios->VcBtcEnabled",
@@ -5286,45 +5286,45 @@ global_defaults: {
 		}, {
 			access: "bios->VcBtcVminT0",
 			name: "VcBtcVminT0",
-			description: [
-				{language: "english", text: "T0_VMIN",},
-			],
+			description: {
+				eng: "T0_VMIN",
+			},
 		}, {
 			access: "bios->VcBtcFixedVminAgingOffset",
 			name: "VcBtcFixedVminAgingOffset",
-			description: [
-				{language: "english", text: "FIXED_VMIN_AGING_OFFSET",},
-			],
+			description: {
+				eng: "FIXED_VMIN_AGING_OFFSET",
+			},
 		}, {
 			access: "bios->VcBtcVmin2PsmDegrationGb",
 			name: "VcBtcVmin2PsmDegrationGb",
-			description: [
-				{language: "english", text: "VMIN_TO_PSM_DEGRADATION_GB",},
-			],
+			description: {
+				eng: "VMIN_TO_PSM_DEGRADATION_GB",
+			},
 		}, {
 			access: "bios->VcBtcPsmA",
 			name: "VcBtcPsmA",
-			description: [
-				{language: "english", text: "A_PSM",},
-			],
+			description: {
+				eng: "A_PSM",
+			},
 		}, {
 			access: "bios->VcBtcPsmB",
 			name: "VcBtcPsmB",
-			description: [
-				{language: "english", text: "B_PSM",},
-			],
+			description: {
+				eng: "B_PSM",
+			},
 		}, {
 			access: "bios->VcBtcVminA",
 			name: "VcBtcVminA",
-			description: [
-				{language: "english", text: "A_VMIN",},
-			],
+			description: {
+				eng: "A_VMIN",
+			},
 		}, {
 			access: "bios->VcBtcVminB",
 			name: "VcBtcVminB",
-			description: [
-				{language: "english", text: "B_VMIN",},
-			],
+			description: {
+				eng: "B_VMIN",
+			},
 		},
 	],
 }, {
@@ -5365,21 +5365,21 @@ global_defaults: {
 		}, {
 			access: "bios->GpioScl",
 			name: "GpioScl",
-			description: [
-				{language: "english", text: "GPIO Number for SCL Line, used only for CKSVII2C1",},
-			],
+			description: {
+				eng: "GPIO Number for SCL Line, used only for CKSVII2C1",
+			},
 		}, {
 			access: "bios->GpioSda",
 			name: "GpioSda",
-			description: [
-				{language: "english", text: "GPIO Number for SDA Line, used only for CKSVII2C1",},
-			],
+			description: {
+				eng: "GPIO Number for SDA Line, used only for CKSVII2C1",
+			},
 		}, {
 			access: "bios->FchUsbPdSlaveAddr",
 			name: "FchUsbPdSlaveAddr",
-			description: [
-				{language: "english", text: "For requesting USB PD controller S-states via FCH I2C when entering PME turn off",},
-			],
+			description: {
+				eng: "For requesting USB PD controller S-states via FCH I2C when entering PME turn off",
+			},
 		}, {
 			access: "bios->I2cSpare",
 			name: "I2cSpare",
@@ -5400,33 +5400,33 @@ global_defaults: {
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->SocUlvPhaseSheddingMask",
 			name: "SocUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->VddciUlvPhaseSheddingMask",
 			name: "VddciUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: [
-				{language: "english", text: "set this to 1 to set PSI0/1 to 1 in ULV mode",},
-			],
+			description: {
+				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
+			},
 		},
 	],
 }, {
@@ -5440,9 +5440,9 @@ global_defaults: {
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
-			description: [
-				{language: "english", text: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",},
-			],
+			description: {
+				eng: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",
+			},
 		},
 	],
 }, {
@@ -5453,9 +5453,9 @@ global_defaults: {
 			name: "LedPin",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "GPIO numbers",},
-			],
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
@@ -5464,15 +5464,15 @@ global_defaults: {
 		}, {
 			access: "bios->LedPcie",
 			name: "LedPcie",
-			description: [
-				{language: "english", text: "GPIO number for PCIE results",},
-			],
+			description: {
+				eng: "GPIO number for PCIE results",
+			},
 		}, {
 			access: "bios->LedError",
 			name: "LedError",
-			description: [
-				{language: "english", text: "GPIO number for Error Cases",},
-			],
+			description: {
+				eng: "GPIO number for Error Cases",
+			},
 		}, {
 			access: "bios->LedSpare1",
 			name: "LedSpare1",
@@ -5482,9 +5482,9 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu11_smcpptable_v7_spread_spectrum",
-	description: [
-		{language: "english", text: "uclk is in main smcpptable",},
-	],
+	description: {
+		eng: "uclk is in main smcpptable",
+	},
 	leaves: [
 		{
 			access: "bios->PllGfxclk",
@@ -5501,9 +5501,9 @@ global_defaults: {
 			name: "Uclk",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "smu11_smcpptable_spread_spectrum",
-			description: [
-				{language: "english", text: "uclk is in main smcpptable",},
-			],
+			description: {
+				eng: "uclk is in main smcpptable",
+			},
 		}, {
 			access: "bios->Fclk",
 			name: "Fclk",
@@ -5587,9 +5587,9 @@ global_defaults: {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "Determines how PMFW calculates the power.",},
-			],
+			description: {
+				eng: "Determines how PMFW calculates the power.",
+			},
 		}, {
 			access: "bios->TotalPowerPadding",
 			name: "TotalPowerPadding",
@@ -5686,15 +5686,15 @@ global_defaults: {
 		}, {
 			access: "bios->LedGpio",
 			name: "LedGpio",
-			description: [
-				{language: "english", text: "GeneriA GPIO flag used to control the radeon LEDs",},
-			],
+			description: {
+				eng: "GeneriA GPIO flag used to control the radeon LEDs",
+			},
 		}, {
 			access: "bios->GfxPowerStagesGpio",
 			name: "GfxPowerStagesGpio",
-			description: [
-				{language: "english", text: "Genlk_vsync GPIO flag used to control gfx power stages",},
-			],
+			description: {
+				eng: "Genlk_vsync GPIO flag used to control gfx power stages",
+			},
 		}, {
 			access: "bios->SkuReserved",
 			name: "SkuReserved",
@@ -5738,15 +5738,15 @@ global_defaults: {
 		}, {
 			access: "bios->MemoryChannelEnabled",
 			name: "MemoryChannelEnabled",
-			description: [
-				{language: "english", text: "For DRAM use only, Max 32 channels enabled bit mask.",},
-			],
+			description: {
+				eng: "For DRAM use only, Max 32 channels enabled bit mask.",
+			},
 		}, {
 			access: "bios->DramBitWidth",
 			name: "DramBitWidth",
-			description: [
-				{language: "english", text: "For DRAM use only.  See Dram Bit width type defines",},
-			],
+			description: {
+				eng: "For DRAM use only.  See Dram Bit width type defines",
+			},
 		}, {
 			access: "bios->PaddingMem1",
 			name: "PaddingMem1",
@@ -5755,9 +5755,9 @@ global_defaults: {
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPowerPadding",
 			name: "BoardPowerPadding",
@@ -5803,9 +5803,9 @@ global_defaults: {
 			name: "MmHubPadding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "SMU internal use",},
-			],
+			description: {
+				eng: "SMU internal use",
+			},
 		},
 	],
 }, {
@@ -5828,9 +5828,9 @@ global_defaults: {
 			access: "bios->TotalPowerConfig",
 			name: "TotalPowerConfig",
 			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: [
-				{language: "english", text: "Determines how PMFW calculates the power.",},
-			],
+			description: {
+				eng: "Determines how PMFW calculates the power.",
+			},
 		}, {
 			access: "bios->TotalPowerPadding",
 			name: "TotalPowerPadding",
@@ -5927,15 +5927,15 @@ global_defaults: {
 		}, {
 			access: "bios->LedGpio",
 			name: "LedGpio",
-			description: [
-				{language: "english", text: "GeneriA GPIO flag used to control the radeon LEDs",},
-			],
+			description: {
+				eng: "GeneriA GPIO flag used to control the radeon LEDs",
+			},
 		}, {
 			access: "bios->GfxPowerStagesGpio",
 			name: "GfxPowerStagesGpio",
-			description: [
-				{language: "english", text: "Genlk_vsync GPIO flag used to control gfx power stages",},
-			],
+			description: {
+				eng: "Genlk_vsync GPIO flag used to control gfx power stages",
+			},
 		}, {
 			access: "bios->SkuReserved",
 			name: "SkuReserved",
@@ -5979,15 +5979,15 @@ global_defaults: {
 		}, {
 			access: "bios->MemoryChannelEnabled",
 			name: "MemoryChannelEnabled",
-			description: [
-				{language: "english", text: "For DRAM use only, Max 32 channels enabled bit mask.",},
-			],
+			description: {
+				eng: "For DRAM use only, Max 32 channels enabled bit mask.",
+			},
 		}, {
 			access: "bios->DramBitWidth",
 			name: "DramBitWidth",
-			description: [
-				{language: "english", text: "For DRAM use only.  See Dram Bit width type defines",},
-			],
+			description: {
+				eng: "For DRAM use only.  See Dram Bit width type defines",
+			},
 		}, {
 			access: "bios->PaddingMem1",
 			name: "PaddingMem1",
@@ -5996,9 +5996,9 @@ global_defaults: {
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
-			description: [
-				{language: "english", text: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",},
-			],
+			description: {
+				eng: "Only needed for TCP Estimated case, where TCP = TGP+Total Board Power",
+			},
 		}, {
 			access: "bios->BoardPowerPadding",
 			name: "BoardPowerPadding",
@@ -6044,9 +6044,9 @@ global_defaults: {
 			name: "MmHubPadding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "SMU internal use",},
-			],
+			description: {
+				eng: "SMU internal use",
+			},
 		},
 	],
 }, {
@@ -6079,15 +6079,15 @@ global_defaults: {
 		}, {
 			access: "bios->od_turbo_power_limit",
 			name: "od_turbo_power_limit",
-			description: [
-				{language: "english", text: "Power limit setting for Turbo mode in Performance UI Tuning.",},
-			],
+			description: {
+				eng: "Power limit setting for Turbo mode in Performance UI Tuning.",
+			},
 		}, {
 			access: "bios->od_power_save_power_limit",
 			name: "od_power_save_power_limit",
-			description: [
-				{language: "english", text: "Power limit setting for PowerSave/Optimal mode in Performance UI Tuning.",},
-			],
+			description: {
+				eng: "Power limit setting for PowerSave/Optimal mode in Performance UI Tuning.",
+			},
 		}, {
 			access: "bios->software_shutdown_temp",
 			name: "software_shutdown_temp",
@@ -6096,9 +6096,9 @@ global_defaults: {
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->power_saving_clock",
 			name: "power_saving_clock",
@@ -6152,17 +6152,17 @@ global_defaults: {
 			name: "PowerSavingClockTable",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_vega20_power_saving_clock_record",
-			description: [
-				{language: "english", text: "PowerSavingClock Mode Clock Min/Max array",},
-			],
+			description: {
+				eng: "PowerSavingClock Mode Clock Min/Max array",
+			},
 		}, {
 			access: "bios->OverDrive8Table",
 			name: "OverDrive8Table",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "atom_vega20_overdrive8_record",
-			description: [
-				{language: "english", text: "OverDrive8 Feature capabilities and Settings Range (Max and Min)",},
-			],
+			description: {
+				eng: "OverDrive8 Feature capabilities and Settings Range (Max and Min)",
+			},
 		}, {
 			access: "bios->Reserve",
 			name: "Reserve",
@@ -6184,9 +6184,9 @@ global_defaults: {
 			name: "platform_caps",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "powerplay_platform_caps",
-			description: [
-				{language: "english", text: "POWERPLAYABLE::ulPlatformCaps",},
-			],
+			description: {
+				eng: "POWERPLAYABLE::ulPlatformCaps",
+			},
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",
@@ -6200,9 +6200,9 @@ global_defaults: {
 		}, {
 			access: "bios->boost_power_limit",
 			name: "boost_power_limit",
-			description: [
-				{language: "english", text: "For Gemini Board, when the slave adapter is in BACO mode, the master adapter will use this boost power limit instead of the default power limit to boost the power limit.",},
-			],
+			description: {
+				eng: "For Gemini Board, when the slave adapter is in BACO mode, the master adapter will use this boost power limit instead of the default power limit to boost the power limit.",
+			},
 		}, {
 			access: "bios->software_shutdown_temp",
 			name: "software_shutdown_temp",
@@ -6211,9 +6211,9 @@ global_defaults: {
 			name: "reserve",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: [
-				{language: "english", text: "Zero filled field reserved for future use",},
-			],
+			description: {
+				eng: "Zero filled field reserved for future use",
+			},
 		}, {
 			access: "bios->power_saving_clock",
 			name: "power_saving_clock",

@@ -110,20 +110,21 @@ def description_to_text(
 		description:dict,
 		indent:str
 		) -> str:
+	# language codes follow ISO 639-3
 	# description segment meant for a segment of a c file
 	#indended to be used like
 	# ".description = {%s}" % description_to_text(...)
 	if (description is None):
 		return ""
 	lang_type:str = ""
-	languages:tuple = ("english",)
-	descriptions:list = [None,]
+	languages:tuple = ("eng",)
+	descriptions:list = [None,] * len(languages)
 	descr_index:int = 0
-	trans:dict
+	trans:dict 
 	for trans in description:
-		descr_index:int = languages.index(trans["language"])
-		descriptions[descr_index]:str = trans["text"]
-
+		descr_index:int = languages.index(trans)
+		descriptions[descr_index]:str = description[trans]
+ 
 	child_indent:str = indent + "\t"
 	descr_template:str = "\n%s" + indent
 

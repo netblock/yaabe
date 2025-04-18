@@ -99,9 +99,9 @@ declaration pseudo example:
 	table_start: "bios",
 	table_size: "sizeof(*bios)",
 
-	description: [
-		{language: "english", text "..."},
-	],
+	description: { // ISO 639-3 codes
+		eng: "...",
+	},
 	leaves: [
 		{
 			access: "bios->bios_element", // will automatically reference
@@ -109,16 +109,16 @@ declaration pseudo example:
 			display: "ATUI_HEX",  // radix
 			fancy: "ATUI_NOFANCY",
 			description: [ // optional
-				{language: "english", text "..."},
+				{language: "english", text: "..."},
 			],
 		}, {
 			access: "bios->bios_subtable",
 			name: "subtable",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "bios_subtable_v1",
-			description: [
-				{language: "english", text "..."},
-			],
+			description: {
+				eng: "...",
+			},
 		},
 	],
 },
@@ -191,9 +191,9 @@ is not an enum, you must specify the enum name through `enum` keyword.
 	access: "bios->bios_element",
 	name: "bios element",
 	display: ["ATUI_HEX", "ATUI_ENUM",]
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	enum: "optional_enum_type_override",
 },
 
@@ -232,17 +232,17 @@ fancy type; as a result, the children can't have a fancy type.
 	access: "bios->bios_element",
 	name: "bios element",
 	display: "ATUI_HEX",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_BITFIELD", fancy_data: {
 		union: "bitfield_union_name", fields: [
 		{
 			name: "bitfield entry name 0",
 			display: "ATUI_DEC",
-			description: [
-				{language: "english", text "..."},
-			],
+			description: {
+				eng: "...",
+			},
 		}, {
 			name: "bitfield entry name 1",
 			display: ["ATUI_DEC", "ATUI_SIGNED"], // order doesn't matter
@@ -262,9 +262,9 @@ If the element should embed a `atui_branch` to take/graft their leaves,
 	access: "bios->bios_element",
 	name: "bios element",
 	display: "ATUI_DISPLAY",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_GRAFT", fancy_data: "table_to_inline"
 },
 ```
@@ -286,9 +286,9 @@ Working much the same way as `ATUI_GRAFT`, if the element should reference a
 	access: "bios->bios_element",
 	name: "bios element",
 	display: "ATUI_DISPLAY",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_SHOOT", fancy_data: "table_to_install"
 },
 ```
@@ -319,9 +319,9 @@ If `ATUI_PETIOLE` leaves are contiguous in memory, the branch will represent it.
 		access: "bios->bios_element",
 		name: "bios element",
 		display: "ATUI_DISPLAY",
-		description: [
-			{language: "english", text "..."},
-		],
+		description: {
+			eng: "...",
+		},
 		fancy: "ATUI_SHOOT", fancy_data: "table_to_install"
 	},].
 },
@@ -347,18 +347,18 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 	access: "bios->bios_element",
 	name: "bios element",
 	display: "ATUI_NAN",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_STRING"
 },
 {
 	access: "bios->bios_element2",
 	name: "bios element2",
 	display: "ATUI_HEX",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_ARRAY"
 },
 ```
@@ -371,9 +371,9 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 	access: "bios->array_start_pointer",
 	name: "bios tables",
 	display: "ATUI_DISPLAY",
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	fancy: "ATUI_DYNARRAY", fancy_data: {
 		deferred: "source->deferred_pointers",
 		count: "source->dynarray_number_of_elements"
@@ -382,9 +382,9 @@ fancy to `ATUI_ARRAY` and radix to `ATUI_NAN`.
 			name: "bios element",
 			display: "ATUI_HEX",
 			fancy: "ATUI_NOFANCY",
-			description: [
-				{language: "english", text "..."},
-			],
+			description: {
+				eng: "...",
+			},
 		},],
 	},
 },
@@ -440,15 +440,15 @@ enum set, atui enum supports aliases.
 ``` json5
 {name: "the_c_enum_struct_name",
 	aliases: ["alt_name1", "alt_name2"],
-	description: [
-		{language: "english", text "..."},
-	],
+	description: {
+		eng: "...",
+	},
 	constants: [
 		{name: "a_constant_of_that_enum",},
 		{name: "a_constant_of_that_enum2",
-			description: [
-				{language: "english", text "..."},
-			],
+			description: {
+				eng: "...",
+			},
 		},
 ]},
 ```
