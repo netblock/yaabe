@@ -559,8 +559,8 @@ Considers %s versions: %s
 */
 
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "union",
 		atomtree: "atui_nullstruct",
 		table_start: "bios",

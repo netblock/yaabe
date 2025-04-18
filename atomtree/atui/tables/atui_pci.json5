@@ -1,8 +1,8 @@
 /* For pci.h */
 
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "struct",
 		atomtree: "pci_rom_tables",
 		table_start: "bios",

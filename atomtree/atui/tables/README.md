@@ -41,7 +41,7 @@ Array name is `ids`.
 
 ## global\_default
 
-`global_default` is currently only for the `branch` class. It holds branch and
+`global_defaults` is currently only for the `branch` class. It holds branch and
 leaf data that will be used to infer missing fields.
 
 For `leaf_defaults`, the `generic` is for all leaves, except for bitfield
@@ -49,8 +49,8 @@ children and dynarray patterns, which are what `bitchild` and `dynpattern` are
 for respectively.
 
 ``` json5
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct", // nullstruct is an empty struct
 		table_start: "bios",

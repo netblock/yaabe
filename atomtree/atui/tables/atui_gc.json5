@@ -9,8 +9,8 @@ py ../asic_reg.py 1 ../atui_gc.json5 gc_9_4_3_sh_mask.h gc_9_4_3_offset.h gc_9_4
 */
 
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "union",
 		atomtree: "atui_nullstruct",
 		table_start: "bios",

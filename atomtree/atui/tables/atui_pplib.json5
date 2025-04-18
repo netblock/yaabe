@@ -1,6 +1,6 @@
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table_v4_1",
 		table_start: "bios",

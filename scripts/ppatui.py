@@ -748,57 +748,57 @@ class atui_branch:
 			defaults:dict,
 			populate_leaves:bool=True
 			):
-		branch_defaults:dict = defaults["branch_defaults"]
+		branch_default:dict = defaults["branch_default"]
 		if "c_prefix" in branch:
 			self.c_prefix = branch["c_prefix"]
 		else:
-			self.c_prefix = branch_defaults["c_prefix"]
+			self.c_prefix = branch_default["c_prefix"]
 
 		if "c_type" in branch:
 			self.c_type = branch["c_type"]
 		else:
-			self.c_type = branch_defaults["c_type"]
+			self.c_type = branch_default["c_type"]
 
 		if "atomtree" in branch:
 			self.atomtree = branch["atomtree"]
-		elif "atomtree" in branch_defaults:
-			self.atomtree = branch_defaults["atomtree"]
+		elif "atomtree" in branch_default:
+			self.atomtree = branch_default["atomtree"]
 		else:
 			self.atomtree = "atui_nullstruct"
 
 		if "name" in branch:
 			self.name = branch["name"]
-		elif "name" in branch_defaults:
-			self.name = branch_defaults["name"]
+		elif "name" in branch_default:
+			self.name = branch_default["name"]
 		else:
 			self.name = self.c_type
 
 		if "description" in branch:
 			self.description = branch["description"]
-		elif "description" in branch_defaults:
-			self.description = branch_defaults["description"]
+		elif "description" in branch_default:
+			self.description = branch_default["description"]
 		else:
 			self.description = {}
 
 		if "table_start" in branch:
 			self.table_start = branch["table_start"]
-		elif "table_start" in branch_defaults:
-			self.table_start = branch_defaults["table_start"]
+		elif "table_start" in branch_default:
+			self.table_start = branch_default["table_start"]
 		else:
 			self.table_start = "NULL"
 
 
 		if "table_size" in branch:
 			self.table_size = branch["table_size"]
-		elif "table_size" in branch_defaults:
-			self.table_size = branch_defaults["table_size"]
+		elif "table_size" in branch_default:
+			self.table_size = branch_default["table_size"]
 		else:
 			self.table_size = "0"
 
 		if "expanded" in branch:
 			self.expanded = branch["expanded"]
-		elif "expanded" in branch_defaults:
-			self.expanded = branch_defaults["expanded"]
+		elif "expanded" in branch_default:
+			self.expanded = branch_default["expanded"]
 		else:
 			self.expanded = True
 
@@ -838,8 +838,8 @@ def branches_populate_defaults(
 	leaves["generic"]["parent_is_leaf"] = False
 	leaves["bitchild"]["fancy"] = "_ATUI_BITCHILD"
 	
-	if "branch_defaults" not in defaults:
-		defaults["branch_defaults"] = {}
+	if "branch_default" not in defaults:
+		defaults["branch_default"] = {}
 
 
 def leaf_to_subleaf(
@@ -1184,7 +1184,7 @@ def branches_to_c(
 
 	branches:list = []
 	branch:atui_branch = None
-	defaults:dict = atui_data["global_default"]
+	defaults:dict = atui_data["global_defaults"]
 	branches_populate_defaults(defaults)
 	for bd in atui_data["branches"]:
 		branches.append(atui_branch(bd, defaults))
@@ -1266,7 +1266,7 @@ _atui_%s(
 
 	out_text:str = header_header % (fname.upper(), fname.upper())
 	branch:atui_branch = None
-	defaults:dict = atui_data["global_default"]
+	defaults:dict = atui_data["global_defaults"]
 	branches_populate_defaults(defaults)
 	bd:dict
 	for bd in atui_data["branches"]:

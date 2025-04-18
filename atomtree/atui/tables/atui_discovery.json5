@@ -1,8 +1,8 @@
 /* For discovery.h */
 
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_discovery_table",
 		table_start: "bios",

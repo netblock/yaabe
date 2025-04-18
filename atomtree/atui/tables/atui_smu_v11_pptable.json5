@@ -1,8 +1,8 @@
 /* For smu_v11_pptable.h and smu11_driver_if.h -- navi1 PowerPlay tables */
 
 {class: "branch",
-global_default: {
-	branch_defaults: {
+global_defaults: {
+	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table",
 		table_start: "bios",
