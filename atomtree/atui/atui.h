@@ -1,7 +1,7 @@
 /*
 AtomTree iterable interface for UIs; chiefly for tree-view/directory interfaces.
 ATUI has two main components: branches and leaves. Branches describe the
-existence of structs and unions, and leaves describe the accessable elements of
+existence of structs and unions, and leaves describe the accessible elements of
 those structs/unions.
 
 Leaves contain extra details about how a paticular element should be

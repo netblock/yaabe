@@ -121,13 +121,13 @@ union atom_pplib_caps_and_settings {
 	};
 };
 
-enum atom_ppm:uint8_t {
+enum atom_platform_power_management:uint8_t {
 	ATOM_PPM_A_A = 1,
 	ATOM_PPM_A_I = 2,
 };
-struct atom_pplib_ppm_table {
+struct atom_pplib_platform_power_management_table {
 	uint8_t  RevId;
-	enum atom_ppm PpmDesign;
+	enum atom_platform_power_management PpmDesign;
 	uint16_t CpuCoreNumber;
 	uint32_t PlatformTDP;
 	uint32_t SmallACPlatformTDP;

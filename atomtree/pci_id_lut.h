@@ -5,9 +5,9 @@ such context to be correctly decoded.
 
 Sorta starting with navi10, AMD moved to a tell-me-what-you-have discovery
 system.
-See AMD's include/discovery.h and amdgpu/amdgpu_discovery.c for more info
-Getting to the discovery table might be through pspdirtable
-https://doc.coreboot.org/soc/amd/psp_integration.html#psp-directory-table
+See amdgpu/include/discovery.h and amdgpu/amdgpu/amdgpu_discovery.c and
+yaabe/atom/psp.h and yaae/atom/discovery.h for more info.
+The driver uses the table placed VRAM on boottime, placed by SMU.
 */
 
 #ifndef PCI_ID_LUT_H

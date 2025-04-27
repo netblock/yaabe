@@ -20,9 +20,8 @@ bunch of smaller things to figure out, which can be be found through
 
 ## Compiling
 
-YAABE is compiled with the Meson build system, and uses the (upcoming)
-C standard ISO/IEC 9899:2024 (c2x) with GNU extensions (gnu2x),
-GTK 4.12 UI toolkit, and json5 for python.
+YAABE is compiled with the Meson build system, and uses C23 (c2x) with
+GNU extensions (gnu23/gnu2x), GTK 4.12 UI toolkit, and json5 for python.
 
 ### Linux
 
@@ -84,7 +83,11 @@ cd build && meson compile nsis_installer
 
 ## Useful Resources
 
+<details><summary>online reference material</summary>
+
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd
+
+https://docs.amd.com
 
 https://github.com/alterapraxisptyltd/openatom
 
@@ -111,3 +114,5 @@ https://github.com/cyring/CoreFreq
 https://www.jedec.org/standards-documents/docs/jesd250d
 
 https://doc.coreboot.org/soc/amd/psp_integration.html
+
+</details>

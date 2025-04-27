@@ -1202,7 +1202,7 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // pplib.h / pptable_v1_0.h / vega10_pptable.h
 
-{name: "atom_ppm",
+{name: "atom_platform_power_management",
 	constants: [
 		{name: "ATOM_PPM_A_A",},
 		{name: "ATOM_PPM_A_I",},

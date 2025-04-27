@@ -196,7 +196,7 @@ global_defaults: {
 		],},
 	},],
 }, {
-	c_type: "atom_pplib_ppm_table",
+	c_type: "atom_pplib_platform_power_management_table",
 	leaves: [
 		{
 			access: "bios->RevId",

@@ -415,7 +415,7 @@ grow_pplib_ppt_extended_header(
 
 	atui_branch* ppm = NULL;
 	if (ppt41->ppm) {
-		ppm = ATUI_MAKE_BRANCH(atom_pplib_ppm_table, NULL,
+		ppm = ATUI_MAKE_BRANCH(atom_pplib_platform_power_management_table, NULL,
 			ppt41,ppt41->ppm,  0,NULL
 		);
 	}
@@ -759,8 +759,8 @@ atui_generate_pptablev1_ppt(
 
 	atui_branch* ppm_table = NULL;
 	if (ppt71->ppm_table) {
-		ppm_table = ATUI_MAKE_BRANCH(atom_pplib_ppm_table, NULL,
-			ppt71,ppt71->ppm_table,  0,NULL
+		ppm_table = ATUI_MAKE_BRANCH(atom_pplib_platform_power_management_table,
+			NULL,  ppt71,ppt71->ppm_table,  0,NULL
 		);
 	}
 
