@@ -1849,40 +1849,8 @@ struct atom_smu_info_v4_0 {
 /******************************************************************************/
 // Data Table smc_dpm_info  structure
 /******************************************************************************/
-union psi_sel_mask { // from *driver_if*.h
-	uint8_t sel_mask;
-	struct { uint8_t
-		VR0_PLANE0_PSI0 :0-0 +1,
-		VR0_PLANE0_PSI1 :1-1 +1,
-		VR0_PLANE1_PSI0 :2-2 +1,
-		VR0_PLANE1_PSI1 :3-3 +1,
-		VR1_PLANE0_PSI0 :4-4 +1,
-		VR1_PLANE0_PSI1 :5-5 +1,
-		VR1_PLANE1_PSI0 :6-6 +1,
-		VR1_PLANE1_PSI1 :7-7 +1;
-	};
-};
-union vr_mapping { // from *driver_if*.h
-	uint8_t vr_mapping;
-	struct { uint8_t
-		vr_select    :0-0 +1,
-		plane_select :1-1 +1,
-		reserved     :7-2 +1;
-	};
-};
 
-union led_display_control { // from *driver_if*.h
-	uint8_t  LedEnableMask;
-	struct { uint8_t
-		GFX_DPM  :0-0 +1,
-		PCIE     :1-1 +1,
-		ERROR    :2-2 +1,
-		reserved :7-3 +1;
-	};
-};
-
-struct atom_smc_dpm_info_v4_1 {
-	struct atom_common_table_header  table_header;
+struct atom_smc_dpm_info_i2c {
 	uint8_t  liquid1_i2c_address;
 	uint8_t  liquid2_i2c_address;
 	uint8_t  vr_i2c_address;
@@ -1897,65 +1865,22 @@ struct atom_smc_dpm_info_v4_1 {
 	uint8_t  plx_i2c_linesda;
 	uint8_t  vrsensorpresent;
 	uint8_t  liquidsensorpresent;
+};
 
-	uint16_t maxvoltagestepgfx;
-	uint16_t maxvoltagestepsoc;
+struct atom_smc_dpm_info_v4_1 {
+	struct atom_common_table_header            table_header;
+	struct atom_smc_dpm_info_i2c               i2c;
+	struct smu11_smcpptable_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings      gpio;
 
-	uint8_t  vddgfxvrmapping;
-	uint8_t  vddsocvrmapping;
-	uint8_t  vddmem0vrmapping;
-	uint8_t  vddmem1vrmapping;
-
-	union psi_sel_mask  gfxulvphasesheddingmask;
-	union psi_sel_mask  soculvphasesheddingmask;
-	uint8_t  padding8_v[2];
-
-	uint16_t gfxmaxcurrent;
-	uint8_t  gfxoffset;
-	uint8_t  padding_telemetrygfx;
-
-	uint16_t socmaxcurrent;
-	uint8_t  socoffset;
-	uint8_t  padding_telemetrysoc;
-
-	uint16_t mem0maxcurrent;
-	uint8_t  mem0offset;
-	uint8_t  padding_telemetrymem0;
-
-	uint16_t mem1maxcurrent;
-	uint8_t  mem1offset;
-	uint8_t  padding_telemetrymem1;
-
-	uint8_t  acdcgpio;
-	uint8_t  acdcpolarity;
-	uint8_t  vr0hotgpio;
-	uint8_t  vr0hotpolarity;
-
-	uint8_t  vr1hotgpio;
-	uint8_t  vr1hotpolarity;
-	uint8_t  padding1;
-	uint8_t  padding2;
-
-	uint8_t  ledpin0;
-	uint8_t  ledpin1;
-	uint8_t  ledpin2;
+	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-	uint8_t  pllgfxclkspreadenabled;
-	uint8_t  pllgfxclkspreadpercent;
-	uint16_t pllgfxclkspreadfreq;
-
-	uint8_t  uclkspreadenabled;
-	uint8_t  uclkspreadpercent;
-	uint16_t uclkspreadfreq;
-
-	uint8_t  socclkspreadenabled;
-	uint8_t  socclkspreadpercent;
-	uint16_t socclkspreadfreq;
-
-	uint8_t  acggfxclkspreadenabled;
-	uint8_t  acggfxclkspreadpercent;
-	uint16_t acggfxclkspreadfreq;
+	struct smu11_smcpptable_spread_spectrum PllGfxclk;                          
+	struct smu11_smcpptable_spread_spectrum Uclk;
+	struct smu11_smcpptable_spread_spectrum Socclk;
+	struct smu11_smcpptable_spread_spectrum acggfxclk;
 
 	uint8_t  Vr2_I2C_address;
 	uint8_t  padding_vr2[3];
@@ -1963,385 +1888,54 @@ struct atom_smc_dpm_info_v4_1 {
 	uint32_t boardreserved[9];
 };
 
-/******************************************************************************/
-// Data Table smc_dpm_info  structure
-/******************************************************************************/
 struct atom_smc_dpm_info_v4_3 {
-	struct atom_common_table_header  table_header;
-	uint8_t  liquid1_i2c_address;
-	uint8_t  liquid2_i2c_address;
-	uint8_t  vr_i2c_address;
-	uint8_t  plx_i2c_address;
+	struct atom_common_table_header            table_header;
+	struct atom_smc_dpm_info_i2c               i2c;
+	struct smu11_smcpptable_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings      gpio;
 
-	uint8_t  liquid_i2c_linescl;
-	uint8_t  liquid_i2c_linesda;
-	uint8_t  vr_i2c_linescl;
-	uint8_t  vr_i2c_linesda;
-
-	uint8_t  plx_i2c_linescl;
-	uint8_t  plx_i2c_linesda;
-	uint8_t  vrsensorpresent;
-	uint8_t  liquidsensorpresent;
-
-	uint16_t maxvoltagestepgfx;
-	uint16_t maxvoltagestepsoc;
-
-	uint8_t  vddgfxvrmapping;
-	uint8_t  vddsocvrmapping;
-	uint8_t  vddmem0vrmapping;
-	uint8_t  vddmem1vrmapping;
-
-	union psi_sel_mask  gfxulvphasesheddingmask;
-	union psi_sel_mask  soculvphasesheddingmask;
-	uint8_t  externalsensorpresent;
-	uint8_t  padding8_v;
-
-	uint16_t gfxmaxcurrent;
-	uint8_t  gfxoffset;
-	uint8_t  padding_telemetrygfx;
-
-	uint16_t socmaxcurrent;
-	uint8_t  socoffset;
-	uint8_t  padding_telemetrysoc;
-
-	uint16_t mem0maxcurrent;
-	uint8_t  mem0offset;
-	uint8_t  padding_telemetrymem0;
-
-	uint16_t mem1maxcurrent;
-	uint8_t  mem1offset;
-	uint8_t  padding_telemetrymem1;
-
-	uint8_t  acdcgpio;
-	uint8_t  acdcpolarity;
-	uint8_t  vr0hotgpio;
-	uint8_t  vr0hotpolarity;
-
-	uint8_t  vr1hotgpio;
-	uint8_t  vr1hotpolarity;
-	uint8_t  padding1;
-	uint8_t  padding2;
-
-	uint8_t  ledpin0;
-	uint8_t  ledpin1;
-	uint8_t  ledpin2;
+	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-	uint8_t  pllgfxclkspreadenabled;
-	uint8_t  pllgfxclkspreadpercent;
-	uint16_t pllgfxclkspreadfreq;
-
-	uint8_t  uclkspreadenabled;
-	uint8_t  uclkspreadpercent;
-	uint16_t uclkspreadfreq;
-
-	uint8_t  fclkspreadenabled;
-	uint8_t  fclkspreadpercent;
-	uint16_t fclkspreadfreq;
-
-	uint8_t  fllgfxclkspreadenabled;
-	uint8_t  fllgfxclkspreadpercent;
-	uint16_t fllgfxclkspreadfreq;
+	struct smu11_smcpptable_v3_spread_spectrum  spread_spectrum;
 
 	uint32_t boardreserved[10];
 };
-
-
-enum I2cControllerPort_u8:uint8_t;
-enum I2cControllerPort_u32:uint32_t;
-enum I2cControllerPort_e {
-	I2C_CONTROLLER_PORT_0 = 0, // CKSVII2C0
-	I2C_CONTROLLER_PORT_1 = 1, // CKSVII2C1
-};
-
-enum I2cControllerName_u8:uint8_t;
-enum I2cControllerName_u32:uint32_t;
-enum I2cControllerName_SMU_11_0_0_e:uint8_t;
-enum I2cControllerName_SMU_11_0_7_e:uint8_t;
-enum I2cControllerName_SMU_13_0_7_e:uint8_t;
-enum I2cControllerName_e {
-	I2C_CONTROLLER_NAME_VR_GFX     = 0,
-	I2C_CONTROLLER_NAME_VR_SOC     = 1,
-	I2C_CONTROLLER_NAME_VR_VDDCI   = 2, // VMEMP; PHY? Pump as in wordline?
-	I2C_CONTROLLER_NAME_VR_MVDD    = 3, // HBM; VDDIO
-	I2C_CONTROLLER_NAME_LIQUID_0   = 4,
-	I2C_CONTROLLER_NAME_LIQUID_1   = 5,
-	I2C_CONTROLLER_NAME_PLX        = 6,
-	I2C_CONTROLLER_NAME_SPARE      = 7, // Navi10, Navi21
-    I2C_CONTROLLER_NAME_FAN_INTAKE = 7, // SMU13
-
-	I2C_CONTROLLER_NAME_COUNT = 8,
-	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3 = 7,
-	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8 = 8,
-	I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 = 8,
-	I2C_CONTROLLER_NAME_COUNT_SMU13  = 8,
-};
-
-enum I2cControllerThrottler_u8:uint8_t;
-enum I2cControllerThrottler_u32:uint32_t;
-enum I2cControllerThrottler_e {
-	I2C_CONTROLLER_THROTTLER_TYPE_NONE  = 0,
-	I2C_CONTROLLER_THROTTLER_VR_GFX     = 1,
-	I2C_CONTROLLER_THROTTLER_VR_SOC     = 2,
-	I2C_CONTROLLER_THROTTLER_VR_VDDCI   = 3, // VMEMP
-	I2C_CONTROLLER_THROTTLER_VR_MVDD    = 4, // HBM
-	I2C_CONTROLLER_THROTTLER_LIQUID_0   = 5,
-	I2C_CONTROLLER_THROTTLER_LIQUID_1   = 6,
-	I2C_CONTROLLER_THROTTLER_PLX        = 7,
-    I2C_CONTROLLER_THROTTLER_FAN_INTAKE = 8,
-    I2C_CONTROLLER_THROTTLER_INA3221    = 9,
-
-    I2C_CONTROLLER_THROTTLER_INA3221_SMU11_0x40 = 8,
-};
-
-enum I2cControllerProtocol_u8:uint8_t;
-enum I2cControllerProtocol_u32:uint32_t;
-enum I2cControllerProtocol_e {
-	I2C_CONTROLLER_PROTOCOL_VR_XPDE132G5 = 0,
-	I2C_CONTROLLER_PROTOCOL_VR_IR35217   = 1,
-	I2C_CONTROLLER_PROTOCOL_TMP_TMP102A  = 2,
-	I2C_CONTROLLER_PROTOCOL_TMP_MAX31875 = 2,
-    I2C_CONTROLLER_PROTOCOL_INA3221      = 3,
-    I2C_CONTROLLER_PROTOCOL_TMP_MAX6604  = 4,
-
-	I2C_CONTROLLER_PROTOCOL_SPARE_0 = 3, // TMP
-	I2C_CONTROLLER_PROTOCOL_SPARE_1 = 4,
-	I2C_CONTROLLER_PROTOCOL_SPARE_2 = 5,
-
-    I2C_CONTROLLER_PROTOCOL_INA3221_SMU_11_0x40 = 3,
-};
-
-enum I2cControllerSpeed_u8:uint8_t;
-enum I2cControllerSpeed_u32:uint32_t;
-enum I2cControllerSpeed_e {
-	I2C_CONTROLLER_SPEED_SLOW = 0,
-	I2C_CONTROLLER_SPEED_FAST = 1,
-
-    I2C_SPEED_FAST_50K     = 0, // 50  Kbits/s
-    I2C_SPEED_FAST_100K    = 1, // 100 Kbits/s
-    I2C_SPEED_FAST_400K    = 2, // 400 Kbits/s
-    I2C_SPEED_FAST_PLUS_1M = 3, // 1 Mbits/s (in fast mode)
-    I2C_SPEED_HIGH_1M      = 4, // 1 Mbits/s (in high speed mode)
-    I2C_SPEED_HIGH_2M      = 5, // 2.3 Mbits/s
-};
-
-enum I2cPort_u8:uint8_t;
-enum I2cPort_u32:uint32_t;
-enum I2cPort_e {
-    I2C_PORT_SVD_SCL = 0,
-    I2C_PORT_GPIO    = 1,
-};
-
-enum I2cCmdType_u8:uint8_t;
-enum I2cCmdType_u32:uint32_t;
-enum I2cCmdType_e {
-    I2C_CMD_READ  = 0,
-    I2C_CMD_WRITE = 1,
-};
-
-
-struct i2ccontrollerconfig_u32 {
-	uint32_t enabled;
-	uint32_t slaveaddress;
-	enum  I2cControllerPort_u32  controllerport;
-	enum  I2cControllerName_u32  controllername;
-	enum  I2cControllerThrottler_u32  thermalthrottler;
-	enum  I2cControllerProtocol_u32  i2cprotocol;
-	enum  I2cControllerSpeed_u32  i2cspeed;
-};
-struct i2ccontrollerconfig_u8 {
-	uint8_t  enabled;
-	enum  I2cControllerSpeed_u8  speed;
-	uint8_t  slaveaddress;
-	enum  I2cControllerPort_u8  controllerport;
-	enum  I2cControllerName_u8  controllername;
-	enum  I2cControllerThrottler_u8  thermalthrottler;
-	enum  I2cControllerProtocol_u8  i2cprotocol;
-	uint8_t  padding;
-};
-struct i2ccontrollerconfig_u8_mixed {
-	uint8_t  enabled;
-	enum  I2cControllerSpeed_u8  speed;
-	uint8_t  padding[2];
-	uint32_t slaveaddress;
-	enum  I2cControllerPort_u8  controllerport;
-	enum  I2cControllerName_u8  controllername;
-	enum  I2cControllerThrottler_u8  thermalthrottler;
-	enum  I2cControllerProtocol_u8  i2cprotocol;
-};
-
-/*struct smudpm_i2c_controller_config_v3 {
-	uint8_t  Enabled;
-	uint8_t  Speed;
-	uint8_t  SlaveAddress;
-	uint8_t  ControllerPort;
-	uint8_t  ControllerName;
-	uint8_t  ThermalThrotter;
-	uint8_t  I2cProtocol;
-	uint8_t  PaddingConfig;
-};*/
 
 struct atom_smc_dpm_info_v4_4 {
 	struct atom_common_table_header  table_header;
 	uint32_t i2c_padding[3];
 
-	uint16_t maxvoltagestepgfx;
-	uint16_t maxvoltagestepsoc;
+	struct smu11_smcpptable_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings      gpio;
 
-	uint8_t  vddgfxvrmapping;
-	uint8_t  vddsocvrmapping;
-	uint8_t  vddmem0vrmapping;
-	uint8_t  vddmem1vrmapping;
-
-	union psi_sel_mask  gfxulvphasesheddingmask;
-	union psi_sel_mask  soculvphasesheddingmask;
-	uint8_t  externalsensorpresent;
-	uint8_t  padding8_v;
-
-	uint16_t gfxmaxcurrent;
-	uint8_t  gfxoffset;
-	uint8_t  padding_telemetrygfx;
-
-	uint16_t socmaxcurrent;
-	uint8_t  socoffset;
-	uint8_t  padding_telemetrysoc;
-
-	uint16_t mem0maxcurrent;
-	uint8_t  mem0offset;
-	uint8_t  padding_telemetrymem0;
-
-	uint16_t mem1maxcurrent;
-	uint8_t  mem1offset;
-	uint8_t  padding_telemetrymem1;
-
-
-	uint8_t  acdcgpio;
-	uint8_t  acdcpolarity;
-	uint8_t  vr0hotgpio;
-	uint8_t  vr0hotpolarity;
-
-	uint8_t  vr1hotgpio;
-	uint8_t  vr1hotpolarity;
-	uint8_t  padding1;
-	uint8_t  padding2;
-
-
-	uint8_t  ledpin0;
-	uint8_t  ledpin1;
-	uint8_t  ledpin2;
+	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-
-	uint8_t  pllgfxclkspreadenabled;
-	uint8_t  pllgfxclkspreadpercent;
-	uint16_t pllgfxclkspreadfreq;
-
-
-	uint8_t  uclkspreadenabled;
-	uint8_t  uclkspreadpercent;
-	uint16_t uclkspreadfreq;
-
-
-	uint8_t  fclkspreadenabled;
-	uint8_t  fclkspreadpercent;
-	uint16_t fclkspreadfreq;
-
-
-	uint8_t  fllgfxclkspreadenabled;
-	uint8_t  fllgfxclkspreadpercent;
-	uint16_t fllgfxclkspreadfreq;
-
-
-	struct i2ccontrollerconfig_u32  i2ccontrollers[7];
-
+	struct smu11_smcpptable_v3_spread_spectrum  spread_spectrum;
+	struct i2ccontrollerconfig_u32  I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3
+	];
 
 	uint32_t boardreserved[10];
 };
 
-/*
-struct smudpm_i2c_controller_config_v2 {
-	uint8_t  Enabled;
-	enum  I2cControllerSpeed_u8  Speed;
-	uint8_t  Padding[2];
-	uint32_t SlaveAddress;
-	enum  I2cControllerPort_u8  ControllerPort;
-	enum  I2cControllerName_u8  ControllerName;
-	enum  I2cControllerThrottler_u8  Throttler;
-	enum  I2cControllerProtocol_u8  I2cProtocol;
-};*/
-
 struct atom_smc_dpm_info_v4_5 {
 	struct atom_common_table_header  table_header;
-	// SECTION: BOARD PARAMETERS
-	// I2C Control
-	struct i2ccontrollerconfig_u8_mixed  I2cControllers[8];
 
-	// SVI2 Board Parameters
-	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
+	struct i2ccontrollerconfig_u8_mixed  I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+	];
+	struct smu11_smcpptable_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings      gpio;
 
-	uint8_t  VddGfxVrMapping;   // Use VR_MAPPING* bitfields
-	uint8_t  VddSocVrMapping;   // Use VR_MAPPING* bitfields
-	uint8_t  VddMem0VrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddMem1VrMapping;  // Use VR_MAPPING* bitfields
-
-	union psi_sel_mask  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
-	uint8_t  Padding8_V;
-
-	// Telemetry Settings
-	uint16_t GfxMaxCurrent; // in Amps
-	uint8_t  GfxOffset;     // in Amps
-	uint8_t  Padding_TelemetryGfx;
-	uint16_t SocMaxCurrent; // in Amps
-	uint8_t  SocOffset;     // in Amps
-	uint8_t  Padding_TelemetrySoc;
-
-	uint16_t Mem0MaxCurrent; // in Amps
-	uint8_t  Mem0Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem0;
-
-	uint16_t Mem1MaxCurrent; // in Amps
-	uint8_t  Mem1Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem1;
-
-	// GPIO Settings
-	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
-	uint8_t  AcDcPolarity;   // GPIO polarity for AC/DC switching
-	uint8_t  VR0HotGpio;     // GPIO pin configured for VR0 HOT event
-	uint8_t  VR0HotPolarity; // GPIO polarity for VR0 HOT event
-
-	uint8_t  VR1HotGpio;     // GPIO pin configured for VR1 HOT event
-	uint8_t  VR1HotPolarity; // GPIO polarity for VR1 HOT event
-	uint8_t  GthrGpio;       // GPIO pin configured for GTHR Event
-	uint8_t  GthrPolarity;   // replace GPIO polarity for GTHR
-
-	// LED Display Settings
-	uint8_t  LedPin0; // GPIO number for LedPin[0]
-	uint8_t  LedPin1; // GPIO number for LedPin[1]
-	uint8_t  LedPin2; // GPIO number for LedPin[2]
+	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-	// GFXCLK PLL Spread Spectrum
-	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
-	uint16_t PllGfxclkSpreadFreq;    // kHz
-
-	// GFXCLK DFLL Spread Spectrum
-	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
-	uint16_t DfllGfxclkSpreadFreq;    // kHz
-
-	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadEnabled; // on or off
-	uq4_4_t  UclkSpreadPercent; // Q4.4
-	uint16_t UclkSpreadFreq;    // kHz
-
-	// SOCCLK Spread Spectrum
-	uint8_t  SoclkSpreadEnabled;  // on or off
-	uq4_4_t  SocclkSpreadPercent; // Q4.4
-	uint16_t SocclkSpreadFreq;    // kHz
+	struct smu11_smcpptable_v3_spread_spectrum  spread_spectrum;
 
 	// Total board power
 	uint16_t TotalBoardPower; // Only needed for TCP Estimated case, where TCP = TGP+Total Board Power
@@ -2354,98 +1948,45 @@ struct atom_smc_dpm_info_v4_5 {
 
 };
 
-
-enum XGMI_LINK_RATE_e:uint8_t { // rate x Gbps
-	XGMI_LINK_RATE_2  = 2,
-	XGMI_LINK_RATE_4  = 4,
-	XGMI_LINK_RATE_8  = 8,
-	XGMI_LINK_RATE_12 = 12,
-	XGMI_LINK_RATE_16 = 16,
-	XGMI_LINK_RATE_17 = 17,
-	XGMI_LINK_RATE_18 = 18,
-	XGMI_LINK_RATE_19 = 19,
-	XGMI_LINK_RATE_20 = 20,
-	XGMI_LINK_RATE_21 = 21,
-	XGMI_LINK_RATE_22 = 22,
-	XGMI_LINK_RATE_23 = 23,
-	XGMI_LINK_RATE_24 = 24,
-	XGMI_LINK_RATE_25 = 25,
-	XGMI_LINK_RATE_COUNT = 26,
-};
-enum XGMI_LINK_WIDTH_e:uint8_t {
-	XGMI_LINK_WIDTH_1  = 0,
-	XGMI_LINK_WIDTH_2  = 2,
-	XGMI_LINK_WIDTH_4  = 3,
-	XGMI_LINK_WIDTH_8  = 4,
-	XGMI_LINK_WIDTH_9  = 5,
-	XGMI_LINK_WIDTH_16 = 6,
-	XGMI_LINK_WIDTH_COUNT = 7,
-};
-
-
-struct atom_smc_dpm_info_v4_6 {
-	struct atom_common_table_header  table_header;
-	// section: board parameters
-	uint32_t i2c_padding[3]; // old i2c control are moved to new area
-
+struct atom_smc_dpm_info_v4_6_svi2_parameters {
 	uq14_2_t maxvoltagestepgfx; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
 	uq14_2_t maxvoltagestepsoc; // in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.
 
-	uint8_t  vddgfxvrmapping; // use vr_mapping* bitfields
-	uint8_t  vddsocvrmapping; // use vr_mapping* bitfields
-	uint8_t  vddmemvrmapping; // use vr_mapping* bitfields
-	uint8_t  boardvrmapping;  // use vr_mapping* bitfields
+	union vr_mapping vddgfx;
+	union vr_mapping vddsoc;
+	union vr_mapping vddmem;
+	union vr_mapping board;
 
 	union psi_sel_mask  gfxulvphasesheddingmask; // set this to 1 to set psi0/1 to 1 in ulv mode
 	uint8_t  externalsensorpresent; // external rdi connected to tmon (aka temp in)
 	uint8_t  padding8_v[2];
-
-	// telemetry settings
-	uint16_t gfxmaxcurrent; // in amps
-	uint8_t  gfxoffset;     // in amps
-	uint8_t  padding_telemetrygfx;
-
-	uint16_t socmaxcurrent; // in amps
-	uint8_t  socoffset;     // in amps
-	uint8_t  padding_telemetrysoc;
-
-	uint16_t memmaxcurrent; // in amps
-	uint8_t  memoffset;     // in amps
-	uint8_t  padding_telemetrymem;
-
-	uint16_t boardmaxcurrent; // in amps
-	uint8_t  boardoffset;     // in amps
-	uint8_t  padding_telemetryboardinput;
-
-	// gpio settings
+};
+struct atom_smc_dpm_info_v4_6_telemetry {
+	struct smu11_smcpptable_telemetry gfx;
+	struct smu11_smcpptable_telemetry soc;
+	struct smu11_smcpptable_telemetry mem;
+	struct smu11_smcpptable_telemetry board_input;
+};
+struct atom_smc_dpm_info_v4_6_gpio_settings {
 	uint8_t  vr0hotgpio;     // gpio pin configured for vr0 hot event
 	uint8_t  vr0hotpolarity; // gpio polarity for vr0 hot event
 	uint8_t  vr1hotgpio;     // gpio pin configured for vr1 hot event
 	uint8_t  vr1hotpolarity; // gpio polarity for vr1 hot event
+};
+struct atom_smc_dpm_info_v4_6 {
+	struct atom_common_table_header  table_header;
 
-	// gfxclk pll spread spectrum
-	uint8_t  pllgfxclkspreadenabled; // on or off
-	uq4_4_t  pllgfxclkspreadpercent; // q4.4
-	uint16_t pllgfxclkspreadfreq;    // khz
+	uint32_t i2c_padding[3]; // old i2c control are moved to new area
 
-	// uclk spread spectrum
-	uint8_t  uclkspreadenabled; // on or off
-	uq4_4_t  uclkspreadpercent; // q4.4
-	uint16_t uclkspreadfreq;    // khz
-
-	// fclk spread spectrum
-	uint8_t  fclkspreadenabled; // on or off
-	uq4_4_t  fclkspreadpercent; // q4.4
-	uint16_t fclkspreadfreq;    // khz
-
-
-	// gfxclk fll spread spectrum
-	uint8_t  fllgfxclkspreadenabled; // on or off
-	uq4_4_t  fllgfxclkspreadpercent; // q4.4
-	uint16_t fllgfxclkspreadfreq;    // khz
+	struct atom_smc_dpm_info_v4_6_svi2_parameters svi2_parameters;
+	struct atom_smc_dpm_info_v4_6_telemetry       telemetry;
+	struct atom_smc_dpm_info_v4_6_gpio_settings   gpio;
+	struct smu11_smcpptable_v3_spread_spectrum    spread_spectrum;
 
 	// i2c controller structure
-	struct i2ccontrollerconfig_u8_mixed  i2ccontrollers[8];
+	struct i2ccontrollerconfig_u8_mixed  I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+	];
 
 	// memory section
 	uint32_t memorychannelenabled; // for dram use only, max 32 channels enabled bit mask.
@@ -2457,89 +1998,24 @@ struct atom_smc_dpm_info_v4_6 {
 	uint16_t totalboardpower; // only needed for tcp estimated case, where tcp = tgp+total board power
 	uint16_t boardpadding;
 
-	// section: xgmi training
-	enum  XGMI_LINK_RATE_e  xgmilinkspeed[4];
-	enum  XGMI_LINK_WIDTH_e  xgmilinkwidth[4];
+	struct smu11_smcpptable_v7_xgmi_training xgmi_training;
 
-	uint16_t xgmifclkfreq[4];
-	uint16_t xgmisocvoltage[4];
-
-	// reserved
 	uint32_t boardreserved[10];
 };
 
 struct atom_smc_dpm_info_v4_7 {
-	struct atom_common_table_header  table_header;
-	// SECTION: BOARD PARAMETERS
-	// I2C Control
-	struct i2ccontrollerconfig_u8_mixed  I2cControllers[8];
+	struct atom_common_table_header     table_header;
+	struct i2ccontrollerconfig_u8_mixed I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8
+	];
+	struct smu11_smcpptable_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings      gpio;
 
-	// SVI2 Board Parameters
-	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
-
-	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
-	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
-
-	union psi_sel_mask  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
-	uint8_t  Padding8_V;
-
-	// Telemetry Settings
-	uint16_t GfxMaxCurrent; // in Amps
-	uint8_t  GfxOffset;     // in Amps
-	uint8_t  Padding_TelemetryGfx;
-	uint16_t SocMaxCurrent; // in Amps
-	uint8_t  SocOffset;     // in Amps
-	uint8_t  Padding_TelemetrySoc;
-
-	uint16_t Mem0MaxCurrent; // in Amps
-	uint8_t  Mem0Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem0;
-
-	uint16_t Mem1MaxCurrent; // in Amps
-	uint8_t  Mem1Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem1;
-
-	// GPIO Settings
-	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
-	uint8_t  AcDcPolarity;   // GPIO polarity for AC/DC switching
-	uint8_t  VR0HotGpio;     // GPIO pin configured for VR0 HOT event
-	uint8_t  VR0HotPolarity; // GPIO polarity for VR0 HOT event
-
-	uint8_t  VR1HotGpio;     // GPIO pin configured for VR1 HOT event
-	uint8_t  VR1HotPolarity; // GPIO polarity for VR1 HOT event
-	uint8_t  GthrGpio;       // GPIO pin configured for GTHR Event
-	uint8_t  GthrPolarity;   // replace GPIO polarity for GTHR
-
-	// LED Display Settings
-	uint8_t  LedPin0; // GPIO number for LedPin[0]
-	uint8_t  LedPin1; // GPIO number for LedPin[1]
-	uint8_t  LedPin2; // GPIO number for LedPin[2]
+	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-	// GFXCLK PLL Spread Spectrum
-	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
-	uint16_t PllGfxclkSpreadFreq;    // kHz
-
-	// GFXCLK DFLL Spread Spectrum
-	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
-	uint16_t DfllGfxclkSpreadFreq;    // kHz
-
-	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadEnabled; // on or off
-	uq4_4_t  UclkSpreadPercent; // Q4.4
-	uint16_t UclkSpreadFreq;    // kHz
-
-	// SOCCLK Spread Spectrum
-	uint8_t  SoclkSpreadEnabled;  // on or off
-	uq4_4_t  SocclkSpreadPercent; // Q4.4
-	uint16_t SocclkSpreadFreq;    // kHz
+	struct smu11_smcpptable_v8_spread_spectrum spread_spectrum;
 
 	// Total board power
 	uint16_t TotalBoardPower; // Only needed for TCP Estimated case, where TCP = TGP+Total Board Power
@@ -2556,10 +2032,11 @@ struct atom_smc_dpm_info_v4_7 {
 	// Additional LED Display Settings
 	uint8_t  LedPin3; // GPIO number for LedPin[3] - PCIE GEN Speed
 	uint8_t  LedPin4; // GPIO number for LedPin[4] - PMFW Error Status
-	uint16_t LedEnableMask; // TODO union led_display_control
+	union led_display_control  LedEnableMask;
+	uint8_t LedEnableMask_Padding;
 
 	// Power Limit Scalars
-	uint8_t  PowerLimitScalar[4]; // [PPT_THROTTLER_COUNT]
+	uint8_t  PowerLimitScalar[PPT_THROTTLER_COUNT];
 
 	union psi_sel_mask  MvddUlvPhaseSheddingMask;
 	union psi_sel_mask  VddciUlvPhaseSheddingMask;
@@ -2571,94 +2048,16 @@ struct atom_smc_dpm_info_v4_7 {
 
 
 struct atom_smc_dpm_info_v4_9 {
-	struct atom_common_table_header  table_header;
-
-	// SECTION: Gaming Clocks
-
-	// SECTION: I2C Control
-	struct i2ccontrollerconfig_u8  I2cControllers[16];
-
-	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
-	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
-	uint8_t  FchUsbPdSlaveAddr; // For requesting USB PD controller S-states via FCH I2C when entering PME turn off
-	uint8_t  I2cSpare;
-
-	// SECTION: SVI2 Board Parameters
-	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
-	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
-
-	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask  VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	union psi_sel_mask  MvddUlvPhaseSheddingMask;  // set this to 1 to set PSI0/1 to 1 in ULV mode
-
-	// SECTION: Telemetry Settings
-	uint16_t GfxMaxCurrent; // in Amps
-	uint8_t  GfxOffset;     // in Amps
-	uint8_t  Padding_TelemetryGfx;
-
-	uint16_t SocMaxCurrent; // in Amps
-	uint8_t  SocOffset;     // in Amps
-	uint8_t  Padding_TelemetrySoc;
-
-	uint16_t Mem0MaxCurrent; // in Amps
-	uint8_t  Mem0Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem0;
-
-	uint16_t Mem1MaxCurrent; // in Amps
-	uint8_t  Mem1Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem1;
-
-	uq16_16_t MvddRatio; // This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
-
-	// SECTION: GPIO Settings
-	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
-	uint8_t  AcDcPolarity;   // GPIO polarity for AC/DC switching
-	uint8_t  VR0HotGpio;     // GPIO pin configured for VR0 HOT event
-	uint8_t  VR0HotPolarity; // GPIO polarity for VR0 HOT event
-
-	uint8_t  VR1HotGpio;     // GPIO pin configured for VR1 HOT event
-	uint8_t  VR1HotPolarity; // GPIO polarity for VR1 HOT event
-	uint8_t  GthrGpio;       // GPIO pin configured for GTHR Event
-	uint8_t  GthrPolarity;   // replace GPIO polarity for GTHR
-
-	// LED Display Settings
-	uint8_t  LedPin0; // GPIO number for LedPin[0]
-	uint8_t  LedPin1; // GPIO number for LedPin[1]
-	uint8_t  LedPin2; // GPIO number for LedPin[2]
-	union led_display_control  LedEnableMask;
-
-	uint8_t  LedPcie;  // GPIO number for PCIE results
-	uint8_t  LedError; // GPIO number for Error Cases
-	uint8_t  LedSpare1[2];
-
-	// SECTION: Clock Spread Spectrum
-
-	// GFXCLK PLL Spread Spectrum
-	uint8_t  PllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  PllGfxclkSpreadPercent; // Q4.4
-	uint16_t PllGfxclkSpreadFreq;    // kHz
-
-	// GFXCLK DFLL Spread Spectrum
-	uint8_t  DfllGfxclkSpreadEnabled; // on or off
-	uq4_4_t  DfllGfxclkSpreadPercent; // Q4.4
-	uint16_t DfllGfxclkSpreadFreq;    // kHz
-
-	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadEnabled; // on or off
-	uq4_4_t  UclkSpreadPercent; // Q4.4
-	uint16_t UclkSpreadFreq;    // kHz
-
-	// FCLK Spread Spectrum
-	uint8_t  FclkSpreadEnabled; // on or off
-	uq4_4_t  FclkSpreadPercent; // Q4.4
-	uint16_t FclkSpreadFreq;    // kHz
+	struct atom_common_table_header               table_header;
+	struct smu11_smcpptable_v7_i2c_control        i2c_control;
+	struct smu11_smcpptable_v7_svi2_parameters    svi2_parameters;
+	struct smu11_smcpptable_v7_telemetry_settings telemetry;
+	struct smu11_smcpptable_gpio_settings         gpio;
+	struct smu11_smcpptable_v7_led_settings       led;
+	struct smu11_smcpptable_v7_spread_spectrum    spread_spectrum;
 
 	// Section: Memory Config
 	uint32_t MemoryChannelEnabled; // For DRAM use only, Max 32 channels enabled bit mask.
-
 	uint8_t  DramBitWidth; // For DRAM use only. See Dram Bit width type defines
 	uint8_t  PaddingMem1[3];
 
@@ -2666,65 +2065,31 @@ struct atom_smc_dpm_info_v4_9 {
 	uint16_t TotalBoardPower; // Only needed for TCP Estimated case, where TCP = TGP+Total Board Power
 	uint16_t BoardPowerPadding;
 
-	// SECTION: XGMI Training
-	enum  XGMI_LINK_RATE_e  xgmilinkspeed[4];
-	enum  XGMI_LINK_WIDTH_e  xgmilinkwidth[4];
-
-	uint16_t XgmiFclkFreq[4];
-	uint16_t XgmiSocVoltage[4];
+	struct smu11_smcpptable_v7_xgmi_training xgmi_training;
 
 	// SECTION: Board Reserved
 	uint32_t BoardReserved[16];
 };
 
 struct atom_smc_dpm_info_v4_10 {
-	struct atom_common_table_header  table_header;
-
-	// SECTION: BOARD PARAMETERS
-	// Telemetry Settings
-	uint16_t GfxMaxCurrent; // in Amps
-	uint8_t  GfxOffset;     // in Amps
-	uint8_t  Padding_TelemetryGfx;
-
-	uint16_t SocMaxCurrent; // in Amps
-	uint8_t  SocOffset;     // in Amps
-	uint8_t  Padding_TelemetrySoc;
-
-	uint16_t MemMaxCurrent; // in Amps
-	uint8_t  MemOffset;     // in Amps
-	uint8_t  Padding_TelemetryMem;
-
-	uint16_t BoardMaxCurrent; // in Amps
-	uint8_t  BoardOffset;     // in Amps
-	uint8_t  Padding_TelemetryBoardInput;
+	struct atom_common_table_header         table_header;
+	struct atom_smc_dpm_info_v4_6_telemetry telemetry;
 
 	// Platform input telemetry voltage coefficient
 	uint32_t BoardVoltageCoeffA; // decode by /1000
 	uint32_t BoardVoltageCoeffB; // decode by /1000
 
-	// GPIO Settings
-	uint8_t  VR0HotGpio;     // GPIO pin configured for VR0 HOT event
-	uint8_t  VR0HotPolarity; // GPIO polarity for VR0 HOT event
-	uint8_t  VR1HotGpio;     // GPIO pin configured for VR1 HOT event
-	uint8_t  VR1HotPolarity; // GPIO polarity for VR1 HOT event
+	struct atom_smc_dpm_info_v4_6_gpio_settings   gpio;
 
-	// UCLK Spread Spectrum
-	uint8_t  UclkSpreadEnabled; // on or off
-	uq4_4_t  UclkSpreadPercent; // Q4.4
-	uint16_t UclkSpreadFreq;    // kHz
+	struct smu11_smcpptable_spread_spectrum uclk;
+	struct smu11_smcpptable_spread_spectrum fclk;
 
-	// FCLK Spread Spectrum
-	uint8_t  FclkSpreadEnabled; // on or off
-	uq4_4_t  FclkSpreadPercent; // Q4.4
-	uint16_t FclkSpreadFreq;    // kHz
-
-	// I2C Controller Structure
 	struct i2ccontrollerconfig_u8  I2cControllers[8];
 
 	// GPIO pins for I2C communications with 2nd controller for Input Telemetry Sequence
 	uint8_t  GpioI2cScl; // Serial Clock
 	uint8_t  GpioI2cSda; // Serial Data
-	uint16_t spare5;
+	uint16_t GpioPadding;
 
 	uint32_t reserved[16];
 };

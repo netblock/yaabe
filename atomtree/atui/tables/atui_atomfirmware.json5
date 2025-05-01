@@ -306,81 +306,13 @@ global_defaults: {
 			display: "ATUI_HEX",
 		},
 	],
-}, {
-	c_prefix: "union", c_type: "psi_sel_mask",
+},
+
+{
+	c_type: "atom_smc_dpm_info_i2c",
 	table_size: "sizeof(*bios)",
-	leaves: [{
-		access: "bios->sel_mask",
-		name: "sel_mask",
-		display: "ATUI_SUBONLY",
-		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
-			{
-				access: "VR0_PLANE0_PSI0",
-			}, {
-				access: "VR0_PLANE0_PSI1",
-			}, {
-				access: "VR0_PLANE1_PSI0",
-			}, {
-				access: "VR0_PLANE1_PSI1",
-			}, {
-				access: "VR1_PLANE0_PSI0",
-			}, {
-				access: "VR1_PLANE0_PSI1",
-			}, {
-				access: "VR1_PLANE1_PSI0",
-			}, {
-				access: "VR1_PLANE1_PSI1",
-			},
-		],},
-	},],
-}, {
-	c_prefix: "union", c_type: "vr_mapping",
-	table_size: "sizeof(*bios)",
-	leaves: [{
-		access: "bios->vr_mapping",
-		name: "vr_mapping",
-		display: "ATUI_BIN",
-		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
-			{
-				access: "vr_select",
-			}, {
-				access: "plane_select",
-			}, {
-				access: "reserved",
-				display: "ATUI_HEX",
-			},
-		],},
-	},],
-}, {
-	c_prefix: "union", c_type: "led_display_control",
-	table_size: "sizeof(*bios)",
-	leaves: [{
-		access: "bios->LedEnableMask",
-		name: "LedEnableMask",
-		display: "ATUI_BIN",
-		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
-			{
-				access: "GFX_DPM",
-			}, {
-				access: "PCIE",
-			}, {
-				access: "ERROR",
-			}, {
-				access: "reserved",
-				display: "ATUI_HEX",
-			},
-		],},
-	},],
-}, {
-	c_type: "atom_smc_dpm_info_v4_1",
-	atomtree: "atomtree_smc_dpm_info",
 	leaves: [
 		{
-			access: "bios->table_header",
-			name: "table_header",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
-		}, {
 			access: "bios->liquid1_i2c_address",
 			name: "liquid1_i2c_address",
 			display: "ATUI_HEX",
@@ -420,154 +352,68 @@ global_defaults: {
 		}, {
 			access: "bios->liquidsensorpresent",
 			name: "liquidsensorpresent",
-		}, {
-			access: "bios->maxvoltagestepgfx",
-			name: "maxvoltagestepgfx",
-		}, {
-			access: "bios->maxvoltagestepsoc",
-			name: "maxvoltagestepsoc",
-		}, {
-			access: "bios->vddgfxvrmapping",
-			name: "vddgfxvrmapping",
-		}, {
-			access: "bios->vddsocvrmapping",
-			name: "vddsocvrmapping",
-		}, {
-			access: "bios->vddmem0vrmapping",
-			name: "vddmem0vrmapping",
-		}, {
-			access: "bios->vddmem1vrmapping",
-			name: "vddmem1vrmapping",
-		}, {
-			access: "bios->gfxulvphasesheddingmask",
-			name: "gfxulvphasesheddingmask",
+		},
+	],
+}, {
+	c_type: "atom_smc_dpm_info_v4_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->soculvphasesheddingmask",
-			name: "soculvphasesheddingmask",
+			access: "bios->i2c",
+			name: "i2c",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_i2c",
 		}, {
-			access: "bios->padding8_v",
-			name: "padding8_v",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_svi2_parameters",
+		}, {
+			access: "bios->telemetry",
+			name: "telemetry",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry_settings",
+		}, {
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
+		}, {
+			access: "bios->LedPin",
+			name: "LedPin",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->gfxmaxcurrent",
-			name: "gfxmaxcurrent",
-		}, {
-			access: "bios->gfxoffset",
-			name: "gfxoffset",
-		}, {
-			access: "bios->padding_telemetrygfx",
-			name: "padding_telemetrygfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->socmaxcurrent",
-			name: "socmaxcurrent",
-		}, {
-			access: "bios->socoffset",
-			name: "socoffset",
-		}, {
-			access: "bios->padding_telemetrysoc",
-			name: "padding_telemetrysoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem0maxcurrent",
-			name: "mem0maxcurrent",
-		}, {
-			access: "bios->mem0offset",
-			name: "mem0offset",
-		}, {
-			access: "bios->padding_telemetrymem0",
-			name: "padding_telemetrymem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem1maxcurrent",
-			name: "mem1maxcurrent",
-		}, {
-			access: "bios->mem1offset",
-			name: "mem1offset",
-		}, {
-			access: "bios->padding_telemetrymem1",
-			name: "padding_telemetrymem1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->acdcgpio",
-			name: "acdcgpio",
-		}, {
-			access: "bios->acdcpolarity",
-			name: "acdcpolarity",
-		}, {
-			access: "bios->vr0hotgpio",
-			name: "vr0hotgpio",
-		}, {
-			access: "bios->vr0hotpolarity",
-			name: "vr0hotpolarity",
-		}, {
-			access: "bios->vr1hotgpio",
-			name: "vr1hotgpio",
-		}, {
-			access: "bios->vr1hotpolarity",
-			name: "vr1hotpolarity",
-		}, {
-			access: "bios->padding1",
-			name: "padding1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->padding2",
-			name: "padding2",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->ledpin0",
-			name: "ledpin0",
-		}, {
-			access: "bios->ledpin1",
-			name: "ledpin1",
-		}, {
-			access: "bios->ledpin2",
-			name: "ledpin2",
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
 		}, {
-			access: "bios->pllgfxclkspreadenabled",
-			name: "pllgfxclkspreadenabled",
+			access: "bios->PllGfxclk",
+			name: "PllGfxclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
-			access: "bios->pllgfxclkspreadpercent",
-			name: "pllgfxclkspreadpercent",
+			access: "bios->Uclk",
+			name: "Uclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
-			access: "bios->pllgfxclkspreadfreq",
-			name: "pllgfxclkspreadfreq",
+			access: "bios->Socclk",
+			name: "Socclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
-			access: "bios->uclkspreadenabled",
-			name: "uclkspreadenabled",
-		}, {
-			access: "bios->uclkspreadpercent",
-			name: "uclkspreadpercent",
-		}, {
-			access: "bios->uclkspreadfreq",
-			name: "uclkspreadfreq",
-		}, {
-			access: "bios->socclkspreadenabled",
-			name: "socclkspreadenabled",
-		}, {
-			access: "bios->socclkspreadpercent",
-			name: "socclkspreadpercent",
-		}, {
-			access: "bios->socclkspreadfreq",
-			name: "socclkspreadfreq",
-		}, {
-			access: "bios->acggfxclkspreadenabled",
-			name: "acggfxclkspreadenabled",
-		}, {
-			access: "bios->acggfxclkspreadpercent",
-			name: "acggfxclkspreadpercent",
-		}, {
-			access: "bios->acggfxclkspreadfreq",
-			name: "acggfxclkspreadfreq",
+			access: "bios->acggfxclk",
+			name: "acggfxclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
 			access: "bios->Vr2_I2C_address",
 			name: "Vr2_I2C_address",
@@ -586,203 +432,49 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_v4_3",
-	atomtree: "atomtree_smc_dpm_info",
 	leaves: [
 		{
 			access: "bios->table_header",
 			name: "table_header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->liquid1_i2c_address",
-			name: "liquid1_i2c_address",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->liquid2_i2c_address",
-			name: "liquid2_i2c_address",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->vr_i2c_address",
-			name: "vr_i2c_address",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->plx_i2c_address",
-			name: "plx_i2c_address",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->liquid_i2c_linescl",
-			name: "liquid_i2c_linescl",
-		}, {
-			access: "bios->liquid_i2c_linesda",
-			name: "liquid_i2c_linesda",
-		}, {
-			access: "bios->vr_i2c_linescl",
-			name: "vr_i2c_linescl",
-		}, {
-			access: "bios->vr_i2c_linesda",
-			name: "vr_i2c_linesda",
-		}, {
-			access: "bios->plx_i2c_linescl",
-			name: "plx_i2c_linescl",
-		}, {
-			access: "bios->plx_i2c_linesda",
-			name: "plx_i2c_linesda",
-		}, {
-			access: "bios->vrsensorpresent",
-			name: "vrsensorpresent",
-		}, {
-			access: "bios->liquidsensorpresent",
-			name: "liquidsensorpresent",
-		}, {
-			access: "bios->maxvoltagestepgfx",
-			name: "maxvoltagestepgfx",
-		}, {
-			access: "bios->maxvoltagestepsoc",
-			name: "maxvoltagestepsoc",
-		}, {
-			access: "bios->vddgfxvrmapping",
-			name: "vddgfxvrmapping",
-		}, {
-			access: "bios->vddsocvrmapping",
-			name: "vddsocvrmapping",
-		}, {
-			access: "bios->vddmem0vrmapping",
-			name: "vddmem0vrmapping",
-		}, {
-			access: "bios->vddmem1vrmapping",
-			name: "vddmem1vrmapping",
-		}, {
-			access: "bios->gfxulvphasesheddingmask",
-			name: "gfxulvphasesheddingmask",
+			access: "bios->i2c",
+			name: "i2c",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_i2c",
 		}, {
-			access: "bios->soculvphasesheddingmask",
-			name: "soculvphasesheddingmask",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_svi2_parameters",
 		}, {
-			access: "bios->externalsensorpresent",
-			name: "externalsensorpresent",
+			access: "bios->telemetry",
+			name: "telemetry",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry_settings",
 		}, {
-			access: "bios->padding8_v",
-			name: "padding8_v",
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
+		}, {
+			access: "bios->LedPin",
+			name: "LedPin",
 			display: "ATUI_HEX",
-		}, {
-			access: "bios->gfxmaxcurrent",
-			name: "gfxmaxcurrent",
-		}, {
-			access: "bios->gfxoffset",
-			name: "gfxoffset",
-		}, {
-			access: "bios->padding_telemetrygfx",
-			name: "padding_telemetrygfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->socmaxcurrent",
-			name: "socmaxcurrent",
-		}, {
-			access: "bios->socoffset",
-			name: "socoffset",
-		}, {
-			access: "bios->padding_telemetrysoc",
-			name: "padding_telemetrysoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem0maxcurrent",
-			name: "mem0maxcurrent",
-		}, {
-			access: "bios->mem0offset",
-			name: "mem0offset",
-		}, {
-			access: "bios->padding_telemetrymem0",
-			name: "padding_telemetrymem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem1maxcurrent",
-			name: "mem1maxcurrent",
-		}, {
-			access: "bios->mem1offset",
-			name: "mem1offset",
-		}, {
-			access: "bios->padding_telemetrymem1",
-			name: "padding_telemetrymem1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->acdcgpio",
-			name: "acdcgpio",
-		}, {
-			access: "bios->acdcpolarity",
-			name: "acdcpolarity",
-		}, {
-			access: "bios->vr0hotgpio",
-			name: "vr0hotgpio",
-		}, {
-			access: "bios->vr0hotpolarity",
-			name: "vr0hotpolarity",
-		}, {
-			access: "bios->vr1hotgpio",
-			name: "vr1hotgpio",
-		}, {
-			access: "bios->vr1hotpolarity",
-			name: "vr1hotpolarity",
-		}, {
-			access: "bios->padding1",
-			name: "padding1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->padding2",
-			name: "padding2",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->ledpin0",
-			name: "ledpin0",
-		}, {
-			access: "bios->ledpin1",
-			name: "ledpin1",
-		}, {
-			access: "bios->ledpin2",
-			name: "ledpin2",
+			fancy: "ATUI_ARRAY",
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
 		}, {
-			access: "bios->pllgfxclkspreadenabled",
-			name: "pllgfxclkspreadenabled",
-		}, {
-			access: "bios->pllgfxclkspreadpercent",
-			name: "pllgfxclkspreadpercent",
-		}, {
-			access: "bios->pllgfxclkspreadfreq",
-			name: "pllgfxclkspreadfreq",
-		}, {
-			access: "bios->uclkspreadenabled",
-			name: "uclkspreadenabled",
-		}, {
-			access: "bios->uclkspreadpercent",
-			name: "uclkspreadpercent",
-		}, {
-			access: "bios->uclkspreadfreq",
-			name: "uclkspreadfreq",
-		}, {
-			access: "bios->fclkspreadenabled",
-			name: "fclkspreadenabled",
-		}, {
-			access: "bios->fclkspreadpercent",
-			name: "fclkspreadpercent",
-		}, {
-			access: "bios->fclkspreadfreq",
-			name: "fclkspreadfreq",
-		}, {
-			access: "bios->fllgfxclkspreadenabled",
-			name: "fllgfxclkspreadenabled",
-		}, {
-			access: "bios->fllgfxclkspreadpercent",
-			name: "fllgfxclkspreadpercent",
-		}, {
-			access: "bios->fllgfxclkspreadfreq",
-			name: "fllgfxclkspreadfreq",
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_spread_spectrum",
 		}, {
 			access: "bios->boardreserved",
 			name: "boardreserved",
@@ -791,288 +483,69 @@ global_defaults: {
 		},
 	],
 }, {
-	c_type: "i2ccontrollerconfig_u32",
-	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->enabled",
-			name: "enabled",
-		}, {
-			access: "bios->slaveaddress",
-			name: "slaveaddress",
-		}, {
-			access: "bios->controllerport",
-			name: "controllerport",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->controllername",
-			name: "controllername",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->thermalthrottler",
-			name: "thermalthrottler",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->i2cprotocol",
-			name: "i2cprotocol",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->i2cspeed",
-			name: "i2cspeed",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		},
-	],
-}, {
-	c_type: "i2ccontrollerconfig_u8",
-	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->enabled",
-			name: "enabled",
-		}, {
-			access: "bios->speed",
-			name: "speed",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->slaveaddress",
-			name: "slaveaddress",
-		}, {
-			access: "bios->controllerport",
-			name: "controllerport",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->controllername",
-			name: "controllername",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->thermalthrottler",
-			name: "thermalthrottler",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->i2cprotocol",
-			name: "i2cprotocol",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->padding",
-			name: "padding",
-			display: "ATUI_HEX",
-		},
-	],
-}, {
-	c_type: "i2ccontrollerconfig_u8_mixed",
-	table_size: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->enabled",
-			name: "enabled",
-		}, {
-			access: "bios->speed",
-			name: "speed",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->padding",
-			name: "padding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->slaveaddress",
-			name: "slaveaddress",
-		}, {
-			access: "bios->controllerport",
-			name: "controllerport",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->controllername",
-			name: "controllername",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->thermalthrottler",
-			name: "thermalthrottler",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->i2cprotocol",
-			name: "i2cprotocol",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		},
-	],
-}, {
 	c_type: "atom_smc_dpm_info_v4_4",
-	atomtree: "atomtree_smc_dpm_info",
 	leaves: [
 		{
 			access: "bios->table_header",
 			name: "table_header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->i2c_padding",
 			name: "i2c_padding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->maxvoltagestepgfx",
-			name: "maxvoltagestepgfx",
-		}, {
-			access: "bios->maxvoltagestepsoc",
-			name: "maxvoltagestepsoc",
-		}, {
-			access: "bios->vddgfxvrmapping",
-			name: "vddgfxvrmapping",
-		}, {
-			access: "bios->vddsocvrmapping",
-			name: "vddsocvrmapping",
-		}, {
-			access: "bios->vddmem0vrmapping",
-			name: "vddmem0vrmapping",
-		}, {
-			access: "bios->vddmem1vrmapping",
-			name: "vddmem1vrmapping",
-		}, {
-			access: "bios->gfxulvphasesheddingmask",
-			name: "gfxulvphasesheddingmask",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_svi2_parameters",
 		}, {
-			access: "bios->soculvphasesheddingmask",
-			name: "soculvphasesheddingmask",
+			access: "bios->telemetry",
+			name: "telemetry",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry_settings",
 		}, {
-			access: "bios->externalsensorpresent",
-			name: "externalsensorpresent",
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
 		}, {
-			access: "bios->padding8_v",
-			name: "padding8_v",
+			access: "bios->LedPin",
+			name: "LedPin",
 			display: "ATUI_HEX",
-		}, {
-			access: "bios->gfxmaxcurrent",
-			name: "gfxmaxcurrent",
-		}, {
-			access: "bios->gfxoffset",
-			name: "gfxoffset",
-		}, {
-			access: "bios->padding_telemetrygfx",
-			name: "padding_telemetrygfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->socmaxcurrent",
-			name: "socmaxcurrent",
-		}, {
-			access: "bios->socoffset",
-			name: "socoffset",
-		}, {
-			access: "bios->padding_telemetrysoc",
-			name: "padding_telemetrysoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem0maxcurrent",
-			name: "mem0maxcurrent",
-		}, {
-			access: "bios->mem0offset",
-			name: "mem0offset",
-		}, {
-			access: "bios->padding_telemetrymem0",
-			name: "padding_telemetrymem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->mem1maxcurrent",
-			name: "mem1maxcurrent",
-		}, {
-			access: "bios->mem1offset",
-			name: "mem1offset",
-		}, {
-			access: "bios->padding_telemetrymem1",
-			name: "padding_telemetrymem1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->acdcgpio",
-			name: "acdcgpio",
-		}, {
-			access: "bios->acdcpolarity",
-			name: "acdcpolarity",
-		}, {
-			access: "bios->vr0hotgpio",
-			name: "vr0hotgpio",
-		}, {
-			access: "bios->vr0hotpolarity",
-			name: "vr0hotpolarity",
-		}, {
-			access: "bios->vr1hotgpio",
-			name: "vr1hotgpio",
-		}, {
-			access: "bios->vr1hotpolarity",
-			name: "vr1hotpolarity",
-		}, {
-			access: "bios->padding1",
-			name: "padding1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->padding2",
-			name: "padding2",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->ledpin0",
-			name: "ledpin0",
-		}, {
-			access: "bios->ledpin1",
-			name: "ledpin1",
-		}, {
-			access: "bios->ledpin2",
-			name: "ledpin2",
+			fancy: "ATUI_ARRAY",
+			description: {
+				eng: "GPIO numbers",
+			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
 		}, {
-			access: "bios->pllgfxclkspreadenabled",
-			name: "pllgfxclkspreadenabled",
-		}, {
-			access: "bios->pllgfxclkspreadpercent",
-			name: "pllgfxclkspreadpercent",
-		}, {
-			access: "bios->pllgfxclkspreadfreq",
-			name: "pllgfxclkspreadfreq",
-		}, {
-			access: "bios->uclkspreadenabled",
-			name: "uclkspreadenabled",
-		}, {
-			access: "bios->uclkspreadpercent",
-			name: "uclkspreadpercent",
-		}, {
-			access: "bios->uclkspreadfreq",
-			name: "uclkspreadfreq",
-		}, {
-			access: "bios->fclkspreadenabled",
-			name: "fclkspreadenabled",
-		}, {
-			access: "bios->fclkspreadpercent",
-			name: "fclkspreadpercent",
-		}, {
-			access: "bios->fclkspreadfreq",
-			name: "fclkspreadfreq",
-		}, {
-			access: "bios->fllgfxclkspreadenabled",
-			name: "fllgfxclkspreadenabled",
-		}, {
-			access: "bios->fllgfxclkspreadpercent",
-			name: "fllgfxclkspreadpercent",
-		}, {
-			access: "bios->fllgfxclkspreadfreq",
-			name: "fllgfxclkspreadfreq",
-		}, {
-			access: "bios->i2ccontrollers",
-			name: "I2C Controllers",
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->i2ccontrollers)",
-				enum: "I2cControllerName_SMU_11_0_0_e",
-				pattern: [{
-					name: "i2ccontrollers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u32",
-				},],
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_spread_spectrum",
+		}, {
+			name: "I2cControllers",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->I2cControllers",
+				name: "I2cControllers",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3",
+					enum: "I2cControllerName_e",
+					pattern: [{
+						name: "I2cControllers [%02u]: %s",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT",
+						fancy_data: "i2ccontrollerconfig_u32",
+					},],
+				},
+			},],
 		}, {
 			access: "bios->boardreserved",
 			name: "boardreserved",
@@ -1082,7 +555,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_v4_5",
-	atomtree: "atomtree_smc_dpm_info",
 	leaves: [
 		{
 			access: "bios->table_header",
@@ -1090,293 +562,56 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->I2cControllers",
-			name: "I2C Controllers",
+			name: "I2cControllers",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->I2cControllers)",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-				},],
-			},
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->I2cControllers",
+				name: "I2cControllers",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
+					enum: "I2cControllerName_e",
+					pattern: [{
+						name: "I2cControllers [%02u]: %s",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT",
+						fancy_data: "i2ccontrollerconfig_u8_mixed",
+					},],
+				},
+			},],
 		}, {
-			access: "bios->MaxVoltageStepGfx",
-			name: "MaxVoltageStepGfx",
-			description: {
-				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
-			},
-		}, {
-			access: "bios->MaxVoltageStepSoc",
-			name: "MaxVoltageStepSoc",
-			description: {
-				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
-			},
-		}, {
-			access: "bios->VddGfxVrMapping",
-			name: "VddGfxVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddSocVrMapping",
-			name: "VddSocVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem0VrMapping",
-			name: "VddMem0VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem1VrMapping",
-			name: "VddMem1VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->GfxUlvPhaseSheddingMask",
-			name: "GfxUlvPhaseSheddingMask",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_svi2_parameters",
 		}, {
-			access: "bios->SocUlvPhaseSheddingMask",
-			name: "SocUlvPhaseSheddingMask",
+			access: "bios->telemetry",
+			name: "telemetry",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry_settings",
 		}, {
-			access: "bios->ExternalSensorPresent",
-			name: "ExternalSensorPresent",
-			description: {
-				eng: "External RDI connected to TMON (aka TEMP IN)",
-			},
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
 		}, {
-			access: "bios->Padding8_V",
-			name: "Padding8_V",
+			access: "bios->LedPin",
+			name: "LedPin",
 			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 			description: {
-				eng: "Telemetry Settings",
-			},
-		}, {
-			access: "bios->GfxMaxCurrent",
-			name: "GfxMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->GfxOffset",
-			name: "GfxOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryGfx",
-			name: "Padding_TelemetryGfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->SocMaxCurrent",
-			name: "SocMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->SocOffset",
-			name: "SocOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetrySoc",
-			name: "Padding_TelemetrySoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem0MaxCurrent",
-			name: "Mem0MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem0Offset",
-			name: "Mem0Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem0",
-			name: "Padding_TelemetryMem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem1MaxCurrent",
-			name: "Mem1MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem1Offset",
-			name: "Mem1Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem1",
-			name: "Padding_TelemetryMem1",
-			display: "ATUI_HEX",
-			description: {
-				eng: "GPIO Settings",
-			},
-		}, {
-			access: "bios->AcDcGpio",
-			name: "AcDcGpio",
-			description: {
-				eng: "GPIO pin configured for AC/DC switching",
-			},
-		}, {
-			access: "bios->AcDcPolarity",
-			name: "AcDcPolarity",
-			description: {
-				eng: "GPIO polarity for AC/DC switching",
-			},
-		}, {
-			access: "bios->VR0HotGpio",
-			name: "VR0HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR0HotPolarity",
-			name: "VR0HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotGpio",
-			name: "VR1HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR1 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotPolarity",
-			name: "VR1HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR1 HOT event",
-			},
-		}, {
-			access: "bios->GthrGpio",
-			name: "GthrGpio",
-			description: {
-				eng: "GPIO pin configured for GTHR Event",
-			},
-		}, {
-			access: "bios->GthrPolarity",
-			name: "GthrPolarity",
-			description: {
-				eng: "replace GPIO polarity for GTHR",
-			},
-		}, {
-			access: "bios->LedPin0",
-			name: "LedPin0",
-			description: {
-				eng: "LED Display Settings GPIO number for LedPin[0]",
-			},
-		}, {
-			access: "bios->LedPin1",
-			name: "LedPin1",
-			description: {
-				eng: "GPIO number for LedPin[1]",
-			},
-		}, {
-			access: "bios->LedPin2",
-			name: "LedPin2",
-			description: {
-				eng: "GPIO number for LedPin[2]",
+				eng: "GPIO numbers",
 			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
 		}, {
-			access: "bios->PllGfxclkSpreadEnabled",
-			name: "PllGfxclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadPercent",
-			name: "PllGfxclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadFreq",
-			name: "PllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadEnabled",
-			name: "DfllGfxclkSpreadEnabled",
-			description: {
-				eng: "GFXCLK DFLL Spread Spectrum on or off",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadPercent",
-			name: "DfllGfxclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadFreq",
-			name: "DfllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->UclkSpreadEnabled",
-			name: "UclkSpreadEnabled",
-			description: {
-				eng: "UCLK Spread Spectrum  on or off",
-			},
-		}, {
-			access: "bios->UclkSpreadPercent",
-			name: "UclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->UclkSpreadFreq",
-			name: "UclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->SoclkSpreadEnabled",
-			name: "SoclkSpreadEnabled",
-			description: {
-				eng: "SOCCLK Spread Spectrum on or off",
-			},
-		}, {
-			access: "bios->SocclkSpreadPercent",
-			name: "SocclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->SocclkSpreadFreq",
-			name: "SocclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_spread_spectrum",
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
@@ -1387,9 +622,6 @@ global_defaults: {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
 			display: "ATUI_HEX",
-			description: {
-				eng: "Mvdd Svi2 Div Ratio Setting",
-			},
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
@@ -1402,24 +634,13 @@ global_defaults: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		},
+
 	],
 }, {
-	c_type: "atom_smc_dpm_info_v4_6",
+	c_type: "atom_smc_dpm_info_v4_6_svi2_parameters",
+	table_size: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->table_header",
-			name: "table_header",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
-		}, {
-			access: "bios->i2c_padding",
-			name: "i2c_padding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "old i2c control are moved to new area",
-			},
-		}, {
 			access: "bios->maxvoltagestepgfx",
 			name: "maxvoltagestepgfx",
 			description: {
@@ -1432,34 +653,30 @@ global_defaults: {
 				eng: "in mv(q2) max voltage step that smu will request. multiple steps are taken if voltage change exceeds this value.",
 			},
 		}, {
-			access: "bios->vddgfxvrmapping",
-			name: "vddgfxvrmapping",
-			description: {
-				eng: "use vr_mapping* bitfields",
-			},
+			access: "bios->vddgfx",
+			name: "vddgfx",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->vddsocvrmapping",
-			name: "vddsocvrmapping",
-			description: {
-				eng: "use vr_mapping* bitfields",
-			},
+			access: "bios->vddsoc",
+			name: "vddsoc",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->vddmemvrmapping",
-			name: "vddmemvrmapping",
-			description: {
-				eng: "use vr_mapping* bitfields",
-			},
+			access: "bios->vddmem",
+			name: "vddmem",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->boardvrmapping",
-			name: "boardvrmapping",
-			description: {
-				eng: "use vr_mapping* bitfields",
-			},
+			access: "bios->board",
+			name: "board",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "vr_mapping",
 		}, {
 			access: "bios->gfxulvphasesheddingmask",
 			name: "gfxulvphasesheddingmask",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "psi_sel_mask",
 			description: {
 				eng: "set this to 1 to set psi0/1 to 1 in ulv mode",
 			},
@@ -1474,77 +691,39 @@ global_defaults: {
 			name: "padding8_v",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "telemetry settings",
-			},
+		},
+	],
+}, {
+	c_type: "atom_smc_dpm_info_v4_6_telemetry",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->gfx",
+			name: "gfx",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->gfxmaxcurrent",
-			name: "gfxmaxcurrent",
-			description: {
-				eng: "in amps",
-			},
+			access: "bios->soc",
+			name: "soc",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->gfxoffset",
-			name: "gfxoffset",
-			description: {
-				eng: "in amps",
-			},
+			access: "bios->mem",
+			name: "mem",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->padding_telemetrygfx",
-			name: "padding_telemetrygfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->socmaxcurrent",
-			name: "socmaxcurrent",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->socoffset",
-			name: "socoffset",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->padding_telemetrysoc",
-			name: "padding_telemetrysoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->memmaxcurrent",
-			name: "memmaxcurrent",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->memoffset",
-			name: "memoffset",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->padding_telemetrymem",
-			name: "padding_telemetrymem",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->boardmaxcurrent",
-			name: "boardmaxcurrent",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->boardoffset",
-			name: "boardoffset",
-			description: {
-				eng: "in amps",
-			},
-		}, {
-			access: "bios->padding_telemetryboardinput",
-			name: "padding_telemetryboardinput",
-			display: "ATUI_HEX",
-			description: {
-				eng: "gpio settings",
-			},
-		}, {
+			access: "bios->board_input",
+			name: "board_input",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry",
+		},
+	],
+}, {
+	c_type: "atom_smc_dpm_info_v4_6_gpio_settings",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
 			access: "bios->vr0hotgpio",
 			name: "vr0hotgpio",
 			description: {
@@ -1568,80 +747,63 @@ global_defaults: {
 			description: {
 				eng: "gpio polarity for vr1 hot event",
 			},
-		}, {
-			access: "bios->pllgfxclkspreadenabled",
-			name: "pllgfxclkspreadenabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->pllgfxclkspreadpercent",
-			name: "pllgfxclkspreadpercent",
-		}, {
-			access: "bios->pllgfxclkspreadfreq",
-			name: "pllgfxclkspreadfreq",
-			description: {
-				eng: "khz",
-			},
-		}, {
-			access: "bios->uclkspreadenabled",
-			name: "uclkspreadenabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->uclkspreadpercent",
-			name: "uclkspreadpercent",
-		}, {
-			access: "bios->uclkspreadfreq",
-			name: "uclkspreadfreq",
-			description: {
-				eng: "khz",
-			},
-		}, {
-			access: "bios->fclkspreadenabled",
-			name: "fclkspreadenabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->fclkspreadpercent",
-			name: "fclkspreadpercent",
-		}, {
-			access: "bios->fclkspreadfreq",
-			name: "fclkspreadfreq",
-			description: {
-				eng: "khz",
-			},
-		}, {
-			access: "bios->fllgfxclkspreadenabled",
-			name: "fllgfxclkspreadenabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->fllgfxclkspreadpercent",
-			name: "fllgfxclkspreadpercent",
-		}, {
-			access: "bios->fllgfxclkspreadfreq",
-			name: "fllgfxclkspreadfreq",
-			description: {
-				eng: "khz",
-			},
-		}, {
-			access: "bios->i2ccontrollers",
-			name: "i2ccontrollers",
+		},
+	],
+}, {
+	c_type: "atom_smc_dpm_info_v4_6",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->i2ccontrollers)",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					name: "i2ccontrollers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-				},],
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->i2c_padding",
+			name: "i2c_padding",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+			description: {
+				eng: "old i2c control are moved to new area",
 			},
+		}, {
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_v4_6_svi2_parameters",
+		}, {
+			access: "bios->telemetry",
+			name: "telemetry",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_v4_6_telemetry",
+		}, {
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_v4_6_gpio_settings",
+		}, {
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v3_spread_spectrum",
+		}, {
+			name: "I2cControllers",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->I2cControllers",
+				name: "I2cControllers",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
+					enum: "I2cControllerName_e",
+					pattern: [{
+						name: "I2cControllers [%02u]: %s",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT",
+						fancy_data: "i2ccontrollerconfig_u8_mixed",
+					},],
+				},
+			},],
 		}, {
 			access: "bios->memorychannelenabled",
 			name: "memorychannelenabled",
@@ -1659,9 +821,6 @@ global_defaults: {
 			name: "paddingmem",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "total board power",
-			},
 		}, {
 			access: "bios->totalboardpower",
 			name: "totalboardpower",
@@ -1672,48 +831,11 @@ global_defaults: {
 			access: "bios->boardpadding",
 			name: "boardpadding",
 			display: "ATUI_HEX",
-			description: {
-				eng: "section: xgmi training",
-			},
 		}, {
-			access: "bios->xgmilinkspeed",
-			name: "xgmilinkspeed",
+			access: "bios->xgmi_training",
+			name: "xgmi_training",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->xgmilinkspeed)",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "xgmilinkspeed [%u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->xgmilinkwidth",
-			name: "xgmilinkwidth",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->xgmilinkwidth)",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "xgmilinkwidth [%u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->xgmifclkfreq",
-			name: "xgmifclkfreq",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->xgmisocvoltage",
-			name: "xgmisocvoltage",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "reserved",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_xgmi_training",
 		}, {
 			access: "bios->boardreserved",
 			name: "boardreserved",
@@ -1730,283 +852,58 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->I2cControllers",
 			name: "I2cControllers",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->I2cControllers)",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8_mixed",
-				},],
-			},
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->I2cControllers",
+				name: "I2cControllers",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT8",
+					enum: "I2cControllerName_e",
+					pattern: [{
+						name: "I2cControllers [%02u]: %s",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT",
+						fancy_data: "i2ccontrollerconfig_u8_mixed",
+					},],
+				},
+			},],
 		}, {
-			access: "bios->MaxVoltageStepGfx",
-			name: "MaxVoltageStepGfx",
-			description: {
-				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
-			},
-		}, {
-			access: "bios->MaxVoltageStepSoc",
-			name: "MaxVoltageStepSoc",
-			description: {
-				eng: "In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.",
-			},
-		}, {
-			access: "bios->VddGfxVrMapping",
-			name: "VddGfxVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddSocVrMapping",
-			name: "VddSocVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem0VrMapping",
-			name: "VddMem0VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem1VrMapping",
-			name: "VddMem1VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->GfxUlvPhaseSheddingMask",
-			name: "GfxUlvPhaseSheddingMask",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_svi2_parameters",
 		}, {
-			access: "bios->SocUlvPhaseSheddingMask",
-			name: "SocUlvPhaseSheddingMask",
+			access: "bios->telemetry",
+			name: "telemetry",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_telemetry_settings",
 		}, {
-			access: "bios->ExternalSensorPresent",
-			name: "ExternalSensorPresent",
-			description: {
-				eng: "External RDI connected to TMON (aka TEMP IN)",
-			},
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
 		}, {
-			access: "bios->Padding8_V",
-			name: "Padding8_V",
+			access: "bios->LedPin",
+			name: "LedPin",
 			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 			description: {
-				eng: "Telemetry Settings",
-			},
-		}, {
-			access: "bios->GfxMaxCurrent",
-			name: "GfxMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->GfxOffset",
-			name: "GfxOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryGfx",
-			name: "Padding_TelemetryGfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->SocMaxCurrent",
-			name: "SocMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->SocOffset",
-			name: "SocOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetrySoc",
-			name: "Padding_TelemetrySoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem0MaxCurrent",
-			name: "Mem0MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem0Offset",
-			name: "Mem0Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem0",
-			name: "Padding_TelemetryMem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem1MaxCurrent",
-			name: "Mem1MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem1Offset",
-			name: "Mem1Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem1",
-			name: "Padding_TelemetryMem1",
-			display: "ATUI_HEX",
-			description: {
-				eng: "GPIO Settings",
-			},
-		}, {
-			access: "bios->AcDcGpio",
-			name: "AcDcGpio",
-			description: {
-				eng: "GPIO pin configured for AC/DC switching",
-			},
-		}, {
-			access: "bios->AcDcPolarity",
-			name: "AcDcPolarity",
-			description: {
-				eng: "GPIO polarity for AC/DC switching",
-			},
-		}, {
-			access: "bios->VR0HotGpio",
-			name: "VR0HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR0HotPolarity",
-			name: "VR0HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotGpio",
-			name: "VR1HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR1 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotPolarity",
-			name: "VR1HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR1 HOT event",
-			},
-		}, {
-			access: "bios->GthrGpio",
-			name: "GthrGpio",
-			description: {
-				eng: "GPIO pin configured for GTHR Event",
-			},
-		}, {
-			access: "bios->GthrPolarity",
-			name: "GthrPolarity",
-			description: {
-				eng: "replace GPIO polarity for GTHR",
-			},
-		}, {
-			access: "bios->LedPin0",
-			name: "LedPin0",
-			description: {
-				eng: "GPIO number for LedPin[0]",
-			},
-		}, {
-			access: "bios->LedPin1",
-			name: "LedPin1",
-			description: {
-				eng: "GPIO number for LedPin[1]",
-			},
-		}, {
-			access: "bios->LedPin2",
-			name: "LedPin2",
-			description: {
-				eng: "GPIO number for LedPin[2]",
+				eng: "GPIO numbers",
 			},
 		}, {
 			access: "bios->padding8_4",
 			name: "padding8_4",
 			display: "ATUI_HEX",
+		}, {
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v8_spread_spectrum",
 			description: {
-				eng: "GFXCLK PLL Spread Spectrum",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadEnabled",
-			name: "PllGfxclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadPercent",
-			name: "PllGfxclkSpreadPercent",
-		}, {
-			access: "bios->PllGfxclkSpreadFreq",
-			name: "PllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadEnabled",
-			name: "DfllGfxclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadPercent",
-			name: "DfllGfxclkSpreadPercent",
-		}, {
-			access: "bios->DfllGfxclkSpreadFreq",
-			name: "DfllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->UclkSpreadEnabled",
-			name: "UclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->UclkSpreadPercent",
-			name: "UclkSpreadPercent",
-		}, {
-			access: "bios->UclkSpreadFreq",
-			name: "UclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->SoclkSpreadEnabled",
-			name: "SoclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->SocclkSpreadPercent",
-			name: "SocclkSpreadPercent",
-		}, {
-			access: "bios->SocclkSpreadFreq",
-			name: "SocclkSpreadFreq",
-			description: {
-				eng: "kHz",
+				eng: "Total board power",
 			},
 		}, {
 			access: "bios->TotalBoardPower",
@@ -2018,9 +915,6 @@ global_defaults: {
 			access: "bios->BoardPadding",
 			name: "BoardPadding",
 			display: "ATUI_HEX",
-			description: {
-				eng: "Mvdd Svi2 Div Ratio Setting",
-			},
 		}, {
 			access: "bios->MvddRatio",
 			name: "MvddRatio",
@@ -2043,9 +937,6 @@ global_defaults: {
 			access: "bios->GpioPadding",
 			name: "GpioPadding",
 			display: "ATUI_HEX",
-			description: {
-				eng: "Additional LED Display Settings",
-			},
 		}, {
 			access: "bios->LedPin3",
 			name: "LedPin3",
@@ -2061,24 +952,34 @@ global_defaults: {
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "led_display_control",
+		}, {
+			access: "bios->LedEnableMask_Padding",
+			name: "LedEnableMask_Padding",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->PowerLimitScalar",
 			name: "PowerLimitScalar",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "[PPT_THROTTLER_COUNT]",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "PPT_THROTTLER_COUNT",
+				enum: "ATUI_NULL",
+				pattern: [{
+					name: "PPT %u",
+				},],
 			},
 		}, {
 			access: "bios->MvddUlvPhaseSheddingMask",
 			name: "MvddUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->VddciUlvPhaseSheddingMask",
 			name: "VddciUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
+			fancy: "ATUI_SHOOT", fancy_data: "psi_sel_mask",
 		}, {
 			access: "bios->Padding8_Psi1",
 			name: "Padding8_Psi1",
@@ -2103,346 +1004,35 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->I2cControllers",
-			name: "I2cControllers",
+			access: "bios->i2c_control",
+			name: "i2c_control",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-				},],
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_i2c_control",
 		}, {
-			access: "(&bios->I2cControllers[I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7])",
-			name: "Undefined I2cControllers",
+			access: "bios->svi2_parameters",
+			name: "svi2_parameters",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "((lengthof(bios->I2cControllers)) - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "I2cControllers [8 + %02u]",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "i2ccontrollerconfig_u8",
-				},],
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_svi2_parameters",
 		}, {
-			access: "bios->GpioScl",
-			name: "GpioScl",
-			description: {
-				eng: "GPIO Number for SCL Line, used only for CKSVII2C1",
-			},
-		}, {
-			access: "bios->GpioSda",
-			name: "GpioSda",
-			description: {
-				eng: "GPIO Number for SDA Line, used only for CKSVII2C1",
-			},
-		}, {
-			access: "bios->FchUsbPdSlaveAddr",
-			name: "FchUsbPdSlaveAddr",
-			description: {
-				eng: "For requesting USB PD controller S-states via FCH I2C when entering PME turn off",
-			},
-		}, {
-			access: "bios->I2cSpare",
-			name: "I2cSpare",
-			description: {
-				eng: "SECTION: SVI2 Board Parameters",
-			},
-		}, {
-			access: "bios->VddGfxVrMapping",
-			name: "VddGfxVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddSocVrMapping",
-			name: "VddSocVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem0VrMapping",
-			name: "VddMem0VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem1VrMapping",
-			name: "VddMem1VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->GfxUlvPhaseSheddingMask",
-			name: "GfxUlvPhaseSheddingMask",
+			access: "bios->telemetry",
+			name: "telemetry",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_telemetry_settings",
 		}, {
-			access: "bios->SocUlvPhaseSheddingMask",
-			name: "SocUlvPhaseSheddingMask",
+			access: "bios->gpio",
+			name: "gpio",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_gpio_settings",
 		}, {
-			access: "bios->VddciUlvPhaseSheddingMask",
-			name: "VddciUlvPhaseSheddingMask",
+			access: "bios->led",
+			name: "led",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_led_settings",
 		}, {
-			access: "bios->MvddUlvPhaseSheddingMask",
-			name: "MvddUlvPhaseSheddingMask",
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "psi_sel_mask",
-			description: {
-				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
-			},
-		}, {
-			access: "bios->GfxMaxCurrent",
-			name: "GfxMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->GfxOffset",
-			name: "GfxOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryGfx",
-			name: "Padding_TelemetryGfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->SocMaxCurrent",
-			name: "SocMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->SocOffset",
-			name: "SocOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetrySoc",
-			name: "Padding_TelemetrySoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem0MaxCurrent",
-			name: "Mem0MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem0Offset",
-			name: "Mem0Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem0",
-			name: "Padding_TelemetryMem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem1MaxCurrent",
-			name: "Mem1MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem1Offset",
-			name: "Mem1Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem1",
-			name: "Padding_TelemetryMem1",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->MvddRatio",
-			name: "MvddRatio",
-			description: {
-				eng: "This is used for MVDD  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",
-			},
-		}, {
-			access: "bios->AcDcGpio",
-			name: "AcDcGpio",
-			description: {
-				eng: "GPIO pin configured for AC/DC switching",
-			},
-		}, {
-			access: "bios->AcDcPolarity",
-			name: "AcDcPolarity",
-			description: {
-				eng: "GPIO polarity for AC/DC switching",
-			},
-		}, {
-			access: "bios->VR0HotGpio",
-			name: "VR0HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR0HotPolarity",
-			name: "VR0HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR0 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotGpio",
-			name: "VR1HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR1 HOT event",
-			},
-		}, {
-			access: "bios->VR1HotPolarity",
-			name: "VR1HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR1 HOT event",
-			},
-		}, {
-			access: "bios->GthrGpio",
-			name: "GthrGpio",
-			description: {
-				eng: "GPIO pin configured for GTHR Event",
-			},
-		}, {
-			access: "bios->GthrPolarity",
-			name: "GthrPolarity",
-			description: {
-				eng: "replace GPIO polarity for GTHR",
-			},
-		}, {
-			access: "bios->LedPin0",
-			name: "LedPin0",
-			description: {
-				eng: "GPIO number for LedPin[0]",
-			},
-		}, {
-			access: "bios->LedPin1",
-			name: "LedPin1",
-			description: {
-				eng: "GPIO number for LedPin[1]",
-			},
-		}, {
-			access: "bios->LedPin2",
-			name: "LedPin2",
-			description: {
-				eng: "GPIO number for LedPin[2]",
-			},
-		}, {
-			access: "bios->LedEnableMask",
-			name: "LedEnableMask",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
-		}, {
-			access: "bios->LedPcie",
-			name: "LedPcie",
-			description: {
-				eng: "GPIO number for PCIE results",
-			},
-		}, {
-			access: "bios->LedError",
-			name: "LedError",
-			description: {
-				eng: "GPIO number for Error Cases",
-			},
-		}, {
-			access: "bios->LedSpare1",
-			name: "LedSpare1",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "SECTION: Clock Spread Spectrum",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadEnabled",
-			name: "PllGfxclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadPercent",
-			name: "PllGfxclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->PllGfxclkSpreadFreq",
-			name: "PllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadEnabled",
-			name: "DfllGfxclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadPercent",
-			name: "DfllGfxclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->DfllGfxclkSpreadFreq",
-			name: "DfllGfxclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->UclkSpreadEnabled",
-			name: "UclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->UclkSpreadPercent",
-			name: "UclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->UclkSpreadFreq",
-			name: "UclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->FclkSpreadEnabled",
-			name: "FclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->FclkSpreadPercent",
-			name: "FclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->FclkSpreadFreq",
-			name: "FclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_spread_spectrum",
 		}, {
 			access: "bios->MemoryChannelEnabled",
 			name: "MemoryChannelEnabled",
@@ -2460,9 +1050,6 @@ global_defaults: {
 			name: "PaddingMem1",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "Section: Total Board Power",
-			},
 		}, {
 			access: "bios->TotalBoardPower",
 			name: "TotalBoardPower",
@@ -2472,48 +1059,12 @@ global_defaults: {
 		}, {
 			access: "bios->BoardPowerPadding",
 			name: "BoardPowerPadding",
-			description: {
-				eng: "SECTION: XGMI Training",
-			},
-		}, {
-			access: "bios->xgmilinkspeed",
-			name: "xgmilinkspeed",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->xgmilinkspeed)",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "xgmilinkspeed [%u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->xgmilinkwidth",
-			name: "xgmilinkwidth",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->xgmilinkwidth)",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "xgmilinkwidth [%u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->XgmiFclkFreq",
-			name: "XgmiFclkFreq",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->XgmiSocVoltage",
-			name: "XgmiSocVoltage",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "SECTION: Board Reserved",
-			},
+			access: "bios->xgmi_training",
+			name: "xgmi_training",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_v7_xgmi_training",
 		}, {
 			access: "bios->BoardReserved",
 			name: "BoardReserved",
@@ -2530,72 +1081,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->GfxMaxCurrent",
-			name: "GfxMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->GfxOffset",
-			name: "GfxOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryGfx",
-			name: "Padding_TelemetryGfx",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->SocMaxCurrent",
-			name: "SocMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->SocOffset",
-			name: "SocOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetrySoc",
-			name: "Padding_TelemetrySoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->MemMaxCurrent",
-			name: "MemMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->MemOffset",
-			name: "MemOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem",
-			name: "Padding_TelemetryMem",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->BoardMaxCurrent",
-			name: "BoardMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->BoardOffset",
-			name: "BoardOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryBoardInput",
-			name: "Padding_TelemetryBoardInput",
-			display: "ATUI_HEX",
-			description: {
-				eng: "Platform input telemetry voltage coefficient",
-			},
+			access: "bios->telemetry",
+			name: "telemetry",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_v4_6_telemetry",
 		}, {
 			access: "bios->BoardVoltageCoeffA",
 			name: "BoardVoltageCoeffA",
@@ -2609,79 +1098,39 @@ global_defaults: {
 				eng: "decode by /1000",
 			},
 		}, {
-			access: "bios->VR0HotGpio",
-			name: "VR0HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR0 HOT event",
-			},
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_smc_dpm_info_v4_6_gpio_settings",
 		}, {
-			access: "bios->VR0HotPolarity",
-			name: "VR0HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR0 HOT event",
-			},
+			access: "bios->uclk",
+			name: "uclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
-			access: "bios->VR1HotGpio",
-			name: "VR1HotGpio",
-			description: {
-				eng: "GPIO pin configured for VR1 HOT event",
-			},
+			access: "bios->fclk",
+			name: "fclk",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu11_smcpptable_spread_spectrum",
 		}, {
-			access: "bios->VR1HotPolarity",
-			name: "VR1HotPolarity",
-			description: {
-				eng: "GPIO polarity for VR1 HOT event",
-			},
-		}, {
-			access: "bios->UclkSpreadEnabled",
-			name: "UclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->UclkSpreadPercent",
-			name: "UclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->UclkSpreadFreq",
-			name: "UclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->FclkSpreadEnabled",
-			name: "FclkSpreadEnabled",
-			description: {
-				eng: "on or off",
-			},
-		}, {
-			access: "bios->FclkSpreadPercent",
-			name: "FclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
-		}, {
-			access: "bios->FclkSpreadFreq",
-			name: "FclkSpreadFreq",
-			description: {
-				eng: "kHz",
-			},
-		}, {
-			access: "bios->I2cControllers",
 			name: "I2cControllers",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",
-				enum: "I2cControllerName_SMU_11_0_7_e",
-				pattern: [{
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-				},],
-			},
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->I2cControllers",
+				name: "I2cControllers",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "lengthof(bios->I2cControllers)",
+					enum: "ATUI_NULL",
+					pattern: [{
+						name: "I2cControllers [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_SHOOT",
+						fancy_data: "i2ccontrollerconfig_u8",
+					},],
+				},
+			},],
 		}, {
 			access: "bios->GpioI2cScl",
 			name: "GpioI2cScl",
@@ -2695,8 +1144,9 @@ global_defaults: {
 				eng: "Serial Data",
 			},
 		}, {
-			access: "bios->spare5",
-			name: "spare5",
+			access: "bios->GpioPadding",
+			name: "GpioPadding",
+			display: "ATUI_HEX",
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -2704,7 +1154,9 @@ global_defaults: {
 			fancy: "ATUI_ARRAY",
 		},
 	],
-}, {
+},
+
+{
 	c_prefix: "union", c_type: "atombios_firmware_capability_v3",
 	table_size: "sizeof(*bios)",
 	leaves: [{

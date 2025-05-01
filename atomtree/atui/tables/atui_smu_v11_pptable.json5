@@ -1916,23 +1916,23 @@ global_defaults: {
 	c_type: "smu11_smcpptable_vr_mapping",
 	leaves: [
 		{
-			access: "bios->VddGfxVrMapping",
-			name: "VddGfxVrMapping",
+			access: "bios->VddGfx",
+			name: "VddGfx",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->VddSocVrMapping",
-			name: "VddSocVrMapping",
+			access: "bios->VddSoc",
+			name: "VddSoc",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->VddMem0VrMapping",
-			name: "VddMem0VrMapping",
+			access: "bios->VddMem0",
+			name: "VddMem0",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
 		}, {
-			access: "bios->VddMem1VrMapping",
-			name: "VddMem1VrMapping",
+			access: "bios->VddMem1",
+			name: "VddMem1",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
 		},
@@ -1985,72 +1985,49 @@ global_defaults: {
 		},
 	],
 }, {
+	c_type: "smu11_smcpptable_telemetry",
+	leaves: [
+		{
+			access: "bios->current",
+			name: "current",
+			description: {
+				eng: "in Amps",
+			},
+		}, {
+			access: "bios->offset",
+			name: "offset",
+			description: {
+				eng: "in Amps",
+			},
+		}, {
+			access: "bios->padding",
+			name: "padding",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
 	c_type: "smu11_smcpptable_telemetry_settings",
 	leaves: [
 		{
-			access: "bios->GfxMaxCurrent",
-			name: "GfxMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
+			access: "bios->gfx",
+			name: "gfx",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->GfxOffset",
-			name: "GfxOffset",
-			description: {
-				eng: "in Amps",
-			},
+			access: "bios->soc",
+			name: "soc",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->Padding_TelemetryGfx",
-			name: "Padding_TelemetryGfx",
-			display: "ATUI_HEX",
+			access: "bios->mem0",
+			name: "mem0",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "smu11_smcpptable_telemetry",
 		}, {
-			access: "bios->SocMaxCurrent",
-			name: "SocMaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->SocOffset",
-			name: "SocOffset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetrySoc",
-			name: "Padding_TelemetrySoc",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem0MaxCurrent",
-			name: "Mem0MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem0Offset",
-			name: "Mem0Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem0",
-			name: "Padding_TelemetryMem0",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->Mem1MaxCurrent",
-			name: "Mem1MaxCurrent",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Mem1Offset",
-			name: "Mem1Offset",
-			description: {
-				eng: "in Amps",
-			},
-		}, {
-			access: "bios->Padding_TelemetryMem1",
-			name: "Padding_TelemetryMem1",
-			display: "ATUI_HEX",
+			access: "bios->mem1",
+			name: "mem1",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "smu11_smcpptable_telemetry",
 		},
 	],
 }, {
@@ -5384,7 +5361,6 @@ global_defaults: {
 			access: "bios->I2cSpare",
 			name: "I2cSpare",
 			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
 		},
 	],
 }, {

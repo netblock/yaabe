@@ -642,10 +642,10 @@ struct smu11_smcpptable_temp_dependent_vmin {
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 };
 struct smu11_smcpptable_vr_mapping {
-	union vr_mapping VddGfxVrMapping;
-	union vr_mapping VddSocVrMapping;
-	union vr_mapping VddMem0VrMapping;
-	union vr_mapping VddMem1VrMapping;
+	union vr_mapping VddGfx;
+	union vr_mapping VddSoc;
+	union vr_mapping VddMem0;
+	union vr_mapping VddMem1;
 };
 struct smu11_smcpptable_svi2_parameters {
 	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
@@ -658,22 +658,17 @@ struct smu11_smcpptable_svi2_parameters {
 	uint8_t  ExternalSensorPresent; // External RDI connected to TMON (aka TEMP IN)
 	uint8_t  Padding8_V;
 };
+
+struct smu11_smcpptable_telemetry {
+	uint16_t current; // in Amps
+	int8_t offset; // in Amps
+	uint8_t padding;
+};
 struct smu11_smcpptable_telemetry_settings {
-	uint16_t GfxMaxCurrent; // in Amps
-	int8_t   GfxOffset;     // in Amps
-	uint8_t  Padding_TelemetryGfx;
-
-	uint16_t SocMaxCurrent; // in Amps
-	int8_t   SocOffset;     // in Amps
-	uint8_t  Padding_TelemetrySoc;
-
-	uint16_t Mem0MaxCurrent; // in Amps
-	int8_t   Mem0Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem0;
-
-	uint16_t Mem1MaxCurrent; // in Amps
-	int8_t   Mem1Offset;     // in Amps
-	uint8_t  Padding_TelemetryMem1;
+	struct smu11_smcpptable_telemetry gfx;
+	struct smu11_smcpptable_telemetry soc;
+	struct smu11_smcpptable_telemetry mem0;
+	struct smu11_smcpptable_telemetry mem1;
 };
 struct smu11_smcpptable_gpio_settings {
 	uint8_t  AcDcGpio;       // GPIO pin configured for AC/DC switching
@@ -1273,7 +1268,7 @@ struct smu11_smcpptable_v7_i2c_control {
 	uint8_t  GpioScl; // GPIO Number for SCL Line, used only for CKSVII2C1
 	uint8_t  GpioSda; // GPIO Number for SDA Line, used only for CKSVII2C1
 	uint8_t  FchUsbPdSlaveAddr; // For requesting USB PD controller S-states via FCH I2C when entering PME turn off
-	uint8_t  I2cSpare[1];
+	uint8_t  I2cSpare;
 };
 struct smu11_smcpptable_v7_svi2_parameters {
 	struct smu11_smcpptable_vr_mapping vr_mapping;

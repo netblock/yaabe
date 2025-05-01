@@ -839,6 +839,33 @@ Enums for ATUI_ENUM
 /******************************************************************************/
 // atomfirmware.h
 
+{name: "atom_lcd_info_panel_misc",
+	constants: [
+		{name: "ATOM_PANEL_MISC_FPDI",},
+]},
+
+{name: "atom_connector_layout_info_mini_type",
+	constants: [
+		{name: "MINI_TYPE_NORMAL",},
+		{name: "MINI_TYPE_MINI",},
+]},
+
+
+{name: "atom_spread_spectrum_mode",
+	constants: [
+		{name: "ATOM_SS_CENTER_OR_DOWN_MODE_MASK",},
+		{name: "ATOM_SS_DOWN_SPREAD_MODE",},
+		{name: "ATOM_SS_CENTRE_SPREAD_MODE",},
+		{name: "ATOM_INT_OR_EXT_SS_MASK",},
+		{name: "ATOM_INTERNAL_SS_MASK",},
+		{name: "ATOM_EXTERNAL_SS_MASK",},
+]},
+
+
+
+/******************************************************************************/
+// powerplay.h / SMU 11,13 stuff
+
 {name: "I2cControllerPort_e",
 	aliases: ["I2cControllerPort_u8", "I2cControllerPort_u32"],
 	constants: [
@@ -971,65 +998,6 @@ Enums for ATUI_ENUM
 		},
 ]},
 
-{name: "XGMI_LINK_RATE_e",
-	description: {
-		eng: "rate x Gbps",
-	},
-	constants: [
-		{name: "XGMI_LINK_RATE_2",},
-		{name: "XGMI_LINK_RATE_4",},
-		{name: "XGMI_LINK_RATE_8",},
-		{name: "XGMI_LINK_RATE_12",},
-		{name: "XGMI_LINK_RATE_16",},
-		{name: "XGMI_LINK_RATE_17",},
-		{name: "XGMI_LINK_RATE_18",},
-		{name: "XGMI_LINK_RATE_19",},
-		{name: "XGMI_LINK_RATE_20",},
-		{name: "XGMI_LINK_RATE_21",},
-		{name: "XGMI_LINK_RATE_22",},
-		{name: "XGMI_LINK_RATE_23",},
-		{name: "XGMI_LINK_RATE_24",},
-		{name: "XGMI_LINK_RATE_25",},
-		{name: "XGMI_LINK_RATE_COUNT",},
-]},
-{name: "XGMI_LINK_WIDTH_e",
-	constants: [
-		{name: "XGMI_LINK_WIDTH_1",},
-		{name: "XGMI_LINK_WIDTH_2",},
-		{name: "XGMI_LINK_WIDTH_4",},
-		{name: "XGMI_LINK_WIDTH_8",},
-		{name: "XGMI_LINK_WIDTH_9",},
-		{name: "XGMI_LINK_WIDTH_16",},
-		{name: "XGMI_LINK_WIDTH_COUNT",},
-]},
-
-
-{name: "atom_lcd_info_panel_misc",
-	constants: [
-		{name: "ATOM_PANEL_MISC_FPDI",},
-]},
-
-{name: "atom_connector_layout_info_mini_type",
-	constants: [
-		{name: "MINI_TYPE_NORMAL",},
-		{name: "MINI_TYPE_MINI",},
-]},
-
-
-{name: "atom_spread_spectrum_mode",
-	constants: [
-		{name: "ATOM_SS_CENTER_OR_DOWN_MODE_MASK",},
-		{name: "ATOM_SS_DOWN_SPREAD_MODE",},
-		{name: "ATOM_SS_CENTRE_SPREAD_MODE",},
-		{name: "ATOM_INT_OR_EXT_SS_MASK",},
-		{name: "ATOM_INTERNAL_SS_MASK",},
-		{name: "ATOM_EXTERNAL_SS_MASK",},
-]},
-
-
-
-/******************************************************************************/
-// powerplay.h / SMU 11,13 stuff
 
 {name: "ATOM_PP_THERMALCONTROLLER",
 	constants: [
@@ -1195,6 +1163,38 @@ Enums for ATUI_ENUM
 	constants: [
 		{name: "GFXCLK_SOURCE_PLL",},
 		{name: "GFXCLK_SOURCE_DFLL",},
+]},
+
+{name: "XGMI_LINK_RATE_e",
+	description: {
+		eng: "rate x Gbps",
+	},
+	constants: [
+		{name: "XGMI_LINK_RATE_2",},
+		{name: "XGMI_LINK_RATE_4",},
+		{name: "XGMI_LINK_RATE_8",},
+		{name: "XGMI_LINK_RATE_12",},
+		{name: "XGMI_LINK_RATE_16",},
+		{name: "XGMI_LINK_RATE_17",},
+		{name: "XGMI_LINK_RATE_18",},
+		{name: "XGMI_LINK_RATE_19",},
+		{name: "XGMI_LINK_RATE_20",},
+		{name: "XGMI_LINK_RATE_21",},
+		{name: "XGMI_LINK_RATE_22",},
+		{name: "XGMI_LINK_RATE_23",},
+		{name: "XGMI_LINK_RATE_24",},
+		{name: "XGMI_LINK_RATE_25",},
+		{name: "XGMI_LINK_RATE_COUNT",},
+]},
+{name: "XGMI_LINK_WIDTH_e",
+	constants: [
+		{name: "XGMI_LINK_WIDTH_1",},
+		{name: "XGMI_LINK_WIDTH_2",},
+		{name: "XGMI_LINK_WIDTH_4",},
+		{name: "XGMI_LINK_WIDTH_8",},
+		{name: "XGMI_LINK_WIDTH_9",},
+		{name: "XGMI_LINK_WIDTH_16",},
+		{name: "XGMI_LINK_WIDTH_COUNT",},
 ]},
 
 

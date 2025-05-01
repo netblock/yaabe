@@ -240,6 +240,176 @@ global_defaults: {
 
 
 {
+	c_type: "i2ccontrollerconfig_u32",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->enabled",
+			name: "enabled",
+		}, {
+			access: "bios->slaveaddress",
+			name: "slaveaddress",
+		}, {
+			access: "bios->controllerport",
+			name: "controllerport",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->controllername",
+			name: "controllername",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->thermalthrottler",
+			name: "thermalthrottler",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->i2cprotocol",
+			name: "i2cprotocol",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->i2cspeed",
+			name: "i2cspeed",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		},
+	],
+}, {
+	c_type: "i2ccontrollerconfig_u8",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->enabled",
+			name: "enabled",
+		}, {
+			access: "bios->speed",
+			name: "speed",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->slaveaddress",
+			name: "slaveaddress",
+		}, {
+			access: "bios->controllerport",
+			name: "controllerport",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->controllername",
+			name: "controllername",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->thermalthrottler",
+			name: "thermalthrottler",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->i2cprotocol",
+			name: "i2cprotocol",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->padding",
+			name: "padding",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "i2ccontrollerconfig_u8_mixed",
+	table_size: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->enabled",
+			name: "enabled",
+		}, {
+			access: "bios->speed",
+			name: "speed",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->padding",
+			name: "padding",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->slaveaddress",
+			name: "slaveaddress",
+		}, {
+			access: "bios->controllerport",
+			name: "controllerport",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->controllername",
+			name: "controllername",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->thermalthrottler",
+			name: "thermalthrottler",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->i2cprotocol",
+			name: "i2cprotocol",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		},
+	],
+}, {
+	c_prefix: "union", c_type: "psi_sel_mask",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->sel_mask",
+		name: "sel_mask",
+		display: "ATUI_SUBONLY",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "VR0_PLANE0_PSI0",
+			}, {
+				access: "VR0_PLANE0_PSI1",
+			}, {
+				access: "VR0_PLANE1_PSI0",
+			}, {
+				access: "VR0_PLANE1_PSI1",
+			}, {
+				access: "VR1_PLANE0_PSI0",
+			}, {
+				access: "VR1_PLANE0_PSI1",
+			}, {
+				access: "VR1_PLANE1_PSI0",
+			}, {
+				access: "VR1_PLANE1_PSI1",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "vr_mapping",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->vr_mapping",
+		name: "vr_mapping",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "vr_select",
+			}, {
+				access: "plane_select",
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "led_display_control",
+	table_size: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->LedEnableMask",
+		name: "LedEnableMask",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "GFX_DPM",
+			}, {
+				access: "PCIE",
+			}, {
+				access: "ERROR",
+			}, {
+				access: "reserved",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
 	c_prefix: "union", c_type: "powerplay_platform_caps",
 	atomtree: "atomtree_powerplaytable",
 	leaves: [{
