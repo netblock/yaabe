@@ -3486,7 +3486,7 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->DcModeMaxFreq",
 				name: "DcModeMaxFreq",
-				display: "ATUI_DISPLAY",
+				display: "ATUI_SUBONLY",
 				description: {
 					eng: "In MHz",
 				},
@@ -3509,7 +3509,7 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->FreqTableUclkDiv",
 				name: "FreqTableUclkDiv",
-				display: "ATUI_DISPLAY",
+				display: "ATUI_SUBONLY",
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
@@ -3526,7 +3526,7 @@ global_defaults: {
 			fancy: "ATUI_PETIOLE", fancy_data: [{
 				access: "bios->Mp0clkFreq",
 				name: "Mp0clkFreq",
-				display: "ATUI_DISPLAY",
+				display: "ATUI_SUBONLY",
 				description: {
 					eng: "in MHz",
 				},

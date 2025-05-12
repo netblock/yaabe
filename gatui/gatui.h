@@ -17,7 +17,7 @@ struct b64_header;
 #pragma pack(push, 1)
 #define GATUI_TYPESTR_LEN 3
 #define B64_HEADER_VER_CURRENT 1
-enum gatui_b64_target:uint16_t {
+enum gatui_b64_target:uint64_t {
 	B64_BRANCH_CONTIGUOUS,
 	B64_BRANCH_LEAVES,
 	B64_LEAF
