@@ -286,6 +286,12 @@ union vr_mapping {
 		reserved     :7-2 +1;
 	};
 };
+struct smu_smcpptable_vr_mapping {
+	union vr_mapping VddGfx;
+	union vr_mapping VddSoc;
+	union vr_mapping VddMem0;
+	union vr_mapping VddMem1;
+};
 
 union led_display_control {
 	uint8_t  LedEnableMask;

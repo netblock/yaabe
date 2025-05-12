@@ -390,6 +390,31 @@ global_defaults: {
 		],},
 	},],
 }, {
+	c_type: "smu_smcpptable_vr_mapping",
+	leaves: [
+		{
+			access: "bios->VddGfx",
+			name: "VddGfx",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
+		}, {
+			access: "bios->VddSoc",
+			name: "VddSoc",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
+		}, {
+			access: "bios->VddMem0",
+			name: "VddMem0",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
+		}, {
+			access: "bios->VddMem1",
+			name: "VddMem1",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vr_mapping",
+		},
+	],
+}, {
 	c_prefix: "union", c_type: "led_display_control",
 	table_size: "sizeof(*bios)",
 	leaves: [{

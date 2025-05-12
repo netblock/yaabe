@@ -880,6 +880,7 @@ Enums for ATUI_ENUM
 			},
 		},
 ]},
+
 {name: "I2cControllerName_e",
 	aliases: ["I2cControllerName_u8", "I2cControllerName_u32"],
 	constants: [
@@ -915,6 +916,76 @@ Enums for ATUI_ENUM
 		{name: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",},
 		{name: "I2C_CONTROLLER_NAME_COUNT_SMU13",},
 ]},
+{name: "I2cControllerName_SMU_11_0_0_e", // see I2cControllerName_e
+	constants: [
+		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
+		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
+		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",
+			description: {
+				eng: "VMEMP; PHY? Pump as in wordline?",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_VR_MVDD",
+			description: {
+				eng: "HBM; VDDIO",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
+		{name: "I2C_CONTROLLER_NAME_PLX",},
+
+		{name: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3",},
+]},
+{name: "I2cControllerName_SMU_11_0_7_e", // see I2cControllerName_e
+	constants: [
+		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
+		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
+		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",
+			description: {
+				eng: "VMEMP; PHY? Pump as in wordline?",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_VR_MVDD",
+			description: {
+				eng: "HBM; VDDIO",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
+		{name: "I2C_CONTROLLER_NAME_PLX",},
+		{name: "I2C_CONTROLLER_NAME_SPARE",
+			description: {
+				eng: "Navi10, Navi21",
+			},
+		},
+
+		{name: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",},
+]},
+{name: "I2cControllerName_SMU_13_0_7_e",
+	constants: [
+		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
+		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
+		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",
+			description: {
+				eng: "VMEMP; PHY? Pump as in wordline?",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_VR_MVDD",
+			description: {
+				eng: "HBM; VDDIO",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
+		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
+		{name: "I2C_CONTROLLER_NAME_PLX",},
+		{name: "I2C_CONTROLLER_NAME_FAN_INTAKE",
+			description: {
+				eng: "SMU13",
+			},
+		},
+		{name: "I2C_CONTROLLER_NAME_COUNT_SMU13",},
+]},
+
 {name: "I2cControllerThrottler_e",
 	aliases: ["I2cControllerThrottler_u8", "I2cControllerThrottler_u32"],
 	constants: [
@@ -1540,31 +1611,6 @@ Enums for ATUI_ENUM
 		{name: "SMU_11_0_7_PPCLOCK_DTBCLK",},
 		{name: "SMU_11_0_7_PPCLOCK_COUNT",},
 ]},
-{name: "I2cControllerName_SMU_11_0_0_e", // see I2cControllerName_e
-	constants: [
-		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
-		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
-		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",},
-		{name: "I2C_CONTROLLER_NAME_VR_MVDD",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
-		{name: "I2C_CONTROLLER_NAME_PLX",},
-
-		{name: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT3",},
-]},
-{name: "I2cControllerName_SMU_11_0_7_e", // see I2cControllerName_e
-	constants: [
-		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
-		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
-		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",},
-		{name: "I2C_CONTROLLER_NAME_VR_MVDD",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
-		{name: "I2C_CONTROLLER_NAME_PLX",},
-		{name: "I2C_CONTROLLER_NAME_SPARE",},
-
-		{name: "I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7",},
-]},
 
 
 
@@ -1833,18 +1879,6 @@ Enums for ATUI_ENUM
 		{name: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",},
 ]},
 
-{name: "I2cControllerName_SMU_13_0_7_e", // see I2cControllerName_e
-	constants: [
-		{name: "I2C_CONTROLLER_NAME_VR_GFX",},
-		{name: "I2C_CONTROLLER_NAME_VR_SOC",},
-		{name: "I2C_CONTROLLER_NAME_VR_VDDCI",},
-		{name: "I2C_CONTROLLER_NAME_VR_MVDD",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_0",},
-		{name: "I2C_CONTROLLER_NAME_LIQUID_1",},
-		{name: "I2C_CONTROLLER_NAME_PLX",},
-		{name: "I2C_CONTROLLER_NAME_FAN_INTAKE",},
-		{name: "I2C_CONTROLLER_NAME_COUNT_SMU13",},
-]},
 
 
 

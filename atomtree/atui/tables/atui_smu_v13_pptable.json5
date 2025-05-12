@@ -1130,1667 +1130,12 @@ global_defaults: {
 			fancy: "ATUI_ARRAY",
 		},
 	],
-}, {
-	c_type: "smu13_skutable_v39",
-	atomtree: "atomtree_powerplay_table",
+},
+
+{
+	c_type: "smu13_boardtable_v39_phase_shedding",
 	leaves: [
 		{
-			access: "bios->Version",
-			name: "Version",
-			description: {
-				eng: "should be unique to each SKU(i.e if any value changes in below structure then this value must be different)",
-			},
-		}, {
-			access: "bios->features",
-			name: "features",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "powerplay_feature_control_smu13",
-		}, {
-			access: "bios->TotalPowerConfig",
-			name: "TotalPowerConfig",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: {
-				eng: "Determines how PMFW calculates the power.",
-			},
-		}, {
-			access: "bios->CustomerVariant",
-			name: "CustomerVariant",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: {
-				eng: "To specify if this PPTable is intended for a particular customer. Use defines from CUSTOMER_VARIANT_e",
-			},
-		}, {
-			access: "bios->MemoryTemperatureTypeMask",
-			name: "MemoryTemperatureTypeMask",
-			description: {
-				eng: "Bit mapping indicating which methods of memory temperature reading are enabled. Use defines from MEM_TEMP_*BIT",
-			},
-		}, {
-			access: "bios->SmartShiftVersion",
-			name: "SmartShiftVersion",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-			description: {
-				eng: "Determine what SmartShift feature version is supported",
-			},
-		}, {
-			access: "bios->SocketPowerLimitAc",
-			name: "SocketPowerLimitAc",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In Watts. Power limit that PMFW attempts to control to in AC mode. Multiple limits supported",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PPT %u",
-				},],
-			},
-		}, {
-			access: "bios->SocketPowerLimitDc",
-			name: "SocketPowerLimitDc",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In Watts. Power limit that PMFW attempts to control to in DC mode. Multiple limits supported",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PPT %u",
-				},],
-			},
-		}, {
-			access: "bios->SocketPowerLimitSmartShift2",
-			name: "SocketPowerLimitSmartShift2",
-			description: {
-				eng: "In Watts. Power limit used SmartShift",
-			},
-		}, {
-			access: "bios->EnableLegacyPptLimit",
-			name: "EnableLegacyPptLimit",
-			description: {
-				eng: "if set to 1, SocketPowerLimitAc and SocketPowerLimitDc will be interpreted as legacy programs(i.e absolute power). If 0, all except index 0 will be scalars. Relative index 0.",
-			},
-		}, {
-			access: "bios->UseInputTelemetry",
-			name: "UseInputTelemetry",
-			description: {
-				eng: "applicable to SVI3 only and only to be set if VRs support",
-			},
-		}, {
-			access: "bios->SmartShiftMinReportedPptinDcs",
-			name: "SmartShiftMinReportedPptinDcs",
-			description: {
-				eng: "minimum possible active power consumption for this SKU. Used for SmartShift power reporting",
-			},
-		}, {
-			access: "bios->PaddingPpt",
-			name: "PaddingPpt",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->VrTdcLimit",
-			name: "VrTdcLimit",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In Amperes. Current limit associated with VR regulator maximum temperature",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "TDC_THROTTLER_COUNT_SMU13",
-				enum: "TDC_THROTTLER_e",
-				pattern: [{
-					name: "VrTdcLimit [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->PlatformTdcLimit",
-			name: "PlatformTdcLimit",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In Amperes. Current limit associated with platform maximum temperature per VR current rail",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "TDC_THROTTLER_COUNT_SMU13",
-				enum: "TDC_THROTTLER_e",
-				pattern: [{
-					name: "PlatformTdcLimit [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->TemperatureLimit",
-			name: "TemperatureLimit",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In degrees Celsius. Temperature limit associated with each input",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "TemperatureLimit [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->HwCtfTempLimit",
-			name: "HwCtfTempLimit",
-			description: {
-				eng: "In degrees Celsius. Temperature above which HW will trigger CTF. Consumed by VBIOS only",
-			},
-		}, {
-			access: "bios->PaddingInfra",
-			name: "PaddingInfra",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->FitControllerFailureRateLimit",
-			name: "FitControllerFailureRateLimit",
-			description: {
-				eng: "Expected GFX Duty Cycle at Vmax.",
-			},
-		}, {
-			access: "bios->FitControllerGfxDutyCycle",
-			name: "FitControllerGfxDutyCycle",
-			description: {
-				eng: "Expected SOC Duty Cycle at Vmax.",
-			},
-		}, {
-			access: "bios->FitControllerSocDutyCycle",
-			name: "FitControllerSocDutyCycle",
-		}, {
-			access: "bios->FitControllerSocOffset",
-			name: "FitControllerSocOffset",
-		}, {
-			access: "bios->GfxApccPlusResidencyLimit",
-			name: "GfxApccPlusResidencyLimit",
-			description: {
-				eng: "Percentage value. Used by APCC+ controller to control PCC residency to some value",
-			},
-		}, {
-			access: "bios->ThrottlerControlMask",
-			name: "ThrottlerControlMask",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "throttler_control_smu13_0x35",
-		}, {
-			access: "bios->FwDStateMask",
-			name: "FwDStateMask",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "fw_dstate_features_smu13_0x35",
-		}, {
-			access: "bios->UlvVoltageOffset",
-			name: "UlvVoltageOffset",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2). ULV offset used in either GFX_ULV or SOC_ULV(part of FW_DSTATE)",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "UlvVoltageOffset [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->UlvVoltageOffsetU",
-			name: "UlvVoltageOffsetU",
-			description: {
-				eng: "In mV(Q2). ULV offset used in either U_ULV(part of FW_DSTATE)",
-			},
-		}, {
-			access: "bios->DeepUlvVoltageOffsetSoc",
-			name: "DeepUlvVoltageOffsetSoc",
-			description: {
-				eng: "In mV(Q2)  Long Idle Vmin (deep ULV), for VDD_SOC as part of FW_DSTATE",
-			},
-		}, {
-			access: "bios->DefaultMaxVoltage",
-			name: "DefaultMaxVoltage",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Maximum voltage without FIT controller enabled",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "DefaultMaxVoltage [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->BoostMaxVoltage",
-			name: "BoostMaxVoltage",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Maximum voltage with FIT controller enabled",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "BoostMaxVoltage [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VminTempHystersis",
-			name: "VminTempHystersis",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Celsius Temperature hysteresis for switching between low/high temperature values for Vmin",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VminTempHystersis [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VminTempThreshold",
-			name: "VminTempThreshold",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Celsius Temperature threshold for switching between low/high temperature values for Vmin",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VminTempThreshold [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_Hot_T0",
-			name: "Vmin_Hot_T0",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Initial (pre-aging) Vset to be used at hot.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Vmin_Hot_T0 [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_Cold_T0",
-			name: "Vmin_Cold_T0",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Initial (pre-aging) Vset to be used at cold.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Vmin_Cold_T0 [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_Hot_Eol",
-			name: "Vmin_Hot_Eol",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) End-of-life Vset to be used at hot.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Vmin_Hot_Eol [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_Cold_Eol",
-			name: "Vmin_Cold_Eol",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) End-of-life Vset to be used at cold.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Vmin_Cold_Eol [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_Aging_Offset",
-			name: "Vmin_Aging_Offset",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Worst-case aging margin",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Vmin_Aging_Offset [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Spare_Vmin_Plat_Offset_Hot",
-			name: "Spare_Vmin_Plat_Offset_Hot",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Platform offset apply to T0 Hot",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Spare_Vmin_Plat_Offset_Hot [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Spare_Vmin_Plat_Offset_Cold",
-			name: "Spare_Vmin_Plat_Offset_Cold",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In mV(Q2) Platform offset apply to T0 Cold",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "Spare_Vmin_Plat_Offset_Cold [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcFixedVminAgingOffset",
-			name: "VcBtcFixedVminAgingOffset",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Linear offset or GB term to account for mis-correlation between PSM and Vmin shift trends across parts.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcFixedVminAgingOffset [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcVmin2PsmDegrationGb",
-			name: "VcBtcVmin2PsmDegrationGb",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Scalar coefficient of the PSM aging degradation function",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcVmin2PsmDegrationGb [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcPsmA",
-			name: "VcBtcPsmA",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "A_PSM  // Exponential coefficient of the PSM aging degradation function",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcPsmA [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcPsmB",
-			name: "VcBtcPsmB",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "B_PSM  // Scalar coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcPsmB [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcVminA",
-			name: "VcBtcVminA",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "A_VMIN // Exponential coefficient of the VMIN aging degradation function. Specified as worst case between hot and cold.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcVminA [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcVminB",
-			name: "VcBtcVminB",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "B_VMIN",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcVminB [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->PerPartVminEnabled",
-			name: "PerPartVminEnabled",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "PerPartVminEnabled [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->VcBtcEnabled",
-			name: "VcBtcEnabled",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PMFW_VOLT_PLANE_COUNT",
-				enum: "PMFW_VOLT_PLANE_e",
-				pattern: [{
-					name: "VcBtcEnabled [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->SocketPowerLimitAcTau",
-			name: "SocketPowerLimitAcTau",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Time constant of LPF in ms",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PPT %u",
-				},],
-			},
-		}, {
-			access: "bios->SocketPowerLimitDcTau",
-			name: "SocketPowerLimitDcTau",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Time constant of LPF in ms",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PPT %u",
-				},],
-			},
-		}, {
-			access: "bios->Vmin_droop",
-			name: "Vmin_droop",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-		}, {
-			access: "bios->SpareVmin",
-			name: "SpareVmin",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->DpmDescriptor",
-			name: "DpmDescriptor",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU13_PPCLK_COUNT",
-				enum: "SMU13_PPCLK_e",
-				pattern: [{
-					name: "DpmDescriptor [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "DpmDescriptor_t",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableGfx",
-			name: "FreqTableGfx",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_GFXCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableGfx [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableVclk",
-			name: "FreqTableVclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_VCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableVclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDclk",
-			name: "FreqTableDclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableSocclk",
-			name: "FreqTableSocclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_SOCCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableSocclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableUclk",
-			name: "FreqTableUclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableUclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDispclk",
-			name: "FreqTableDispclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DISPCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDispclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDppClk",
-			name: "FreqTableDppClk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DPPCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDppClk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDprefclk",
-			name: "FreqTableDprefclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DPREFCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDprefclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDcfclk",
-			name: "FreqTableDcfclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DCFCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDcfclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableDtbclk",
-			name: "FreqTableDtbclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_DTBCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableDtbclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FreqTableFclk",
-			name: "FreqTableFclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_FCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableFclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->DcModeMaxFreq",
-			name: "DcModeMaxFreq",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU13_PPCLK_COUNT",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "DcModeMaxFreq [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->Mp0clkFreq",
-			name: "Mp0clkFreq",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "in MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_MP0CLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Mp0clkFreq [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->Mp0DpmVoltage",
-			name: "Mp0DpmVoltage",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "mV(Q2)",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_MP0CLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Mp0DpmVoltage [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->GfxclkSpare",
-			name: "GfxclkSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->GfxclkFreqCap",
-			name: "GfxclkFreqCap",
-		}, {
-			access: "bios->GfxclkFgfxoffEntry",
-			name: "GfxclkFgfxoffEntry",
-			description: {
-				eng: "in Mhz",
-			},
-		}, {
-			access: "bios->GfxclkFgfxoffExitImu",
-			name: "GfxclkFgfxoffExitImu",
-			description: {
-				eng: "in Mhz",
-			},
-		}, {
-			access: "bios->GfxclkFgfxoffExitRlc",
-			name: "GfxclkFgfxoffExitRlc",
-			description: {
-				eng: "in Mhz",
-			},
-		}, {
-			access: "bios->GfxclkThrottleClock",
-			name: "GfxclkThrottleClock",
-			description: {
-				eng: "Used primarily in DCS",
-			},
-		}, {
-			access: "bios->EnableGfxPowerStagesGpio",
-			name: "EnableGfxPowerStagesGpio",
-			description: {
-				eng: "Genlk_vsync GPIO flag used to control gfx power stages",
-			},
-		}, {
-			access: "bios->GfxIdlePadding",
-			name: "GfxIdlePadding",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->SmsRepairWRCKClkDivEn",
-			name: "SmsRepairWRCKClkDivEn",
-		}, {
-			access: "bios->SmsRepairWRCKClkDivVal",
-			name: "SmsRepairWRCKClkDivVal",
-		}, {
-			access: "bios->GfxOffEntryEarlyMGCGEn",
-			name: "GfxOffEntryEarlyMGCGEn",
-		}, {
-			access: "bios->GfxOffEntryForceCGCGEn",
-			name: "GfxOffEntryForceCGCGEn",
-		}, {
-			access: "bios->GfxOffEntryForceCGCGDelayEn",
-			name: "GfxOffEntryForceCGCGDelayEn",
-		}, {
-			access: "bios->GfxOffEntryForceCGCGDelayVal",
-			name: "GfxOffEntryForceCGCGDelayVal",
-			description: {
-				eng: "in microseconds",
-			},
-		}, {
-			access: "bios->GfxclkFreqGfxUlv",
-			name: "GfxclkFreqGfxUlv",
-			description: {
-				eng: "in MHz",
-			},
-		}, {
-			access: "bios->GfxIdlePadding2",
-			name: "GfxIdlePadding2",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->GfxOffEntryHysteresis",
-			name: "GfxOffEntryHysteresis",
-			description: {
-				eng: "For RLC to count after it enters CGCG, and before triggers GFXOFF entry",
-			},
-		}, {
-			access: "bios->GfxoffSpare",
-			name: "GfxoffSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->DfllBtcMasterScalerM",
-			name: "DfllBtcMasterScalerM",
-		}, {
-			access: "bios->DfllBtcMasterScalerB",
-			name: "DfllBtcMasterScalerB",
-		}, {
-			access: "bios->DfllBtcSlaveScalerM",
-			name: "DfllBtcSlaveScalerM",
-		}, {
-			access: "bios->DfllBtcSlaveScalerB",
-			name: "DfllBtcSlaveScalerB",
-		}, {
-			access: "bios->DfllPccAsWaitCtrl",
-			name: "DfllPccAsWaitCtrl",
-			description: {
-				eng: "GDFLL_AS_WAIT_CTRL_PCC register value to be passed to RLC msg",
-			},
-		}, {
-			access: "bios->DfllPccAsStepCtrl",
-			name: "DfllPccAsStepCtrl",
-			description: {
-				eng: "GDFLL_AS_STEP_CTRL_PCC register value to be passed to RLC msg",
-			},
-		}, {
-			access: "bios->GfxGpoSpare",
-			name: "GfxGpoSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->DcsGfxOffVoltage",
-			name: "DcsGfxOffVoltage",
-			description: {
-				eng: "Voltage in mV(Q2) applied to VDDGFX when entering DCS GFXOFF phase",
-			},
-		}, {
-			access: "bios->PaddingDcs",
-			name: "PaddingDcs",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->DcsMinGfxOffTime",
-			name: "DcsMinGfxOffTime",
-			description: {
-				eng: "Minimum amount of time PMFW shuts GFX OFF as part of GFX DCS phase",
-			},
-		}, {
-			access: "bios->DcsMaxGfxOffTime",
-			name: "DcsMaxGfxOffTime",
-			description: {
-				eng: "Maximum amount of time PMFW can shut GFX OFF as part of GFX DCS phase at a stretch.",
-			},
-		}, {
-			access: "bios->DcsMinCreditAccum",
-			name: "DcsMinCreditAccum",
-			description: {
-				eng: "Min amount of positive credit accumulation before waking GFX up as part of DCS.",
-			},
-		}, {
-			access: "bios->DcsExitHysteresis",
-			name: "DcsExitHysteresis",
-			description: {
-				eng: "The min amount of time power credit accumulator should have a value > 0 before SMU exits the DCS throttling phase.",
-			},
-		}, {
-			access: "bios->DcsTimeout",
-			name: "DcsTimeout",
-			description: {
-				eng: "This is the amount of time SMU FW waits for RLC to put GFX into GFXOFF before reverting to the fallback mechanism of throttling GFXCLK to Fmin.",
-			},
-		}, {
-			access: "bios->DcsSpare",
-			name: "DcsSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->ShadowFreqTableUclk",
-			name: "ShadowFreqTableUclk",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "In MHz",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "ShadowFreqTableUclk [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->UseStrobeModeOptimizations",
-			name: "UseStrobeModeOptimizations",
-			description: {
-				eng: "Set to indicate that FW should use strobe mode optimizations",
-			},
-		}, {
-			access: "bios->PaddingMem",
-			name: "PaddingMem",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->UclkDpmPstates",
-			name: "UclkDpmPstates",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "4 DPM states.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "UclkDpmPstates [%02u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->FreqTableUclkDiv",
-			name: "FreqTableUclkDiv",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FreqTableUclkDiv [%02u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->MemVmempVoltage",
-			name: "MemVmempVoltage",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "mV(Q2)",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "MemVmempVoltage [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->MemVddioVoltage",
-			name: "MemVddioVoltage",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "mV(Q2)",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_UCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "MemVddioVoltage [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FclkDpmUPstates",
-			name: "FclkDpmUPstates",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "U P-state ID associated with each FCLK DPM state.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_FCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FclkDpmUPstates [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FclkDpmVddU",
-			name: "FclkDpmVddU",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "mV(Q2) Vset U voltage associated with each FCLK DPM state.",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_FCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FclkDpmVddU [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FclkDpmUSpeed",
-			name: "FclkDpmUSpeed",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "U speed associated with each FCLK DPM state",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_FCLK_DPM_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "FclkDpmUSpeed [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FclkDpmDisallowPstateFreq",
-			name: "FclkDpmDisallowPstateFreq",
-			description: {
-				eng: "Frequency which FW will target when indicated that display config cannot support P-state. Set to 0 use FW calculated value",
-			},
-		}, {
-			access: "bios->PaddingFclk",
-			name: "PaddingFclk",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->PcieGenSpeed",
-			name: "PcieGenSpeed",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_LINK_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PcieGenSpeed [%02u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->PcieLaneCount",
-			name: "PcieLaneCount",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_LINK_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "PcieLaneCount [%02u]",
-					display: ["ATUI_DEC", "ATUI_ENUM",],
-				},],
-			},
-		}, {
-			access: "bios->LclkFreq",
-			name: "LclkFreq",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "NUM_LINK_LEVELS_SMU13",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "LclkFreq [%02u]",
-				},],
-			},
-		}, {
-			access: "bios->FanStopTemp",
-			name: "FanStopTemp",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Celsius",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "FanStopTemp [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->FanStartTemp",
-			name: "FanStartTemp",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "Celsius",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "FanStartTemp [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->FanGain",
-			name: "FanGain",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "FanGain [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->FanGainPadding",
-			name: "FanGainPadding",
-			display: "ATUI_HEX",
-		}, {
-			access: "bios->FanPwmMin",
-			name: "FanPwmMin",
-		}, {
-			access: "bios->AcousticTargetRpmThreshold",
-			name: "AcousticTargetRpmThreshold",
-		}, {
-			access: "bios->AcousticLimitRpmThreshold",
-			name: "AcousticLimitRpmThreshold",
-		}, {
-			access: "bios->FanMaximumRpm",
-			name: "FanMaximumRpm",
-		}, {
-			access: "bios->MGpuAcousticLimitRpmThreshold",
-			name: "MGpuAcousticLimitRpmThreshold",
-		}, {
-			access: "bios->FanTargetGfxclk",
-			name: "FanTargetGfxclk",
-		}, {
-			access: "bios->TempInputSelectMask",
-			name: "TempInputSelectMask",
-		}, {
-			access: "bios->FanZeroRpmEnable",
-			name: "FanZeroRpmEnable",
-		}, {
-			access: "bios->FanTachEdgePerRev",
-			name: "FanTachEdgePerRev",
-		}, {
-			access: "bios->FanTargetTemperature",
-			name: "FanTargetTemperature",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "FanTargetTemperature [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->FuzzyFan_ErrorSetDelta",
-			name: "FuzzyFan_ErrorSetDelta",
-		}, {
-			access: "bios->FuzzyFan_ErrorRateSetDelta",
-			name: "FuzzyFan_ErrorRateSetDelta",
-		}, {
-			access: "bios->FuzzyFan_PwmSetDelta",
-			name: "FuzzyFan_PwmSetDelta",
-		}, {
-			access: "bios->FuzzyFan_Reserved",
-			name: "FuzzyFan_Reserved",
-		}, {
-			access: "bios->FwCtfLimit",
-			name: "FwCtfLimit",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SMU_13_0_7_TEMP_COUNT",
-				enum: "SMU_13_0_7_TEMP_e",
-				pattern: [{
-					name: "FwCtfLimit [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->IntakeTempEnableRPM",
-			name: "IntakeTempEnableRPM",
-		}, {
-			access: "bios->IntakeTempOffsetTemp",
-			name: "IntakeTempOffsetTemp",
-		}, {
-			access: "bios->IntakeTempReleaseTemp",
-			name: "IntakeTempReleaseTemp",
-		}, {
-			access: "bios->IntakeTempHighIntakeAcousticLimit",
-			name: "IntakeTempHighIntakeAcousticLimit",
-		}, {
-			access: "bios->IntakeTempAcouticLimitReleaseRate",
-			name: "IntakeTempAcouticLimitReleaseRate",
-		}, {
-			access: "bios->FanAbnormalTempLimitOffset",
-			name: "FanAbnormalTempLimitOffset",
-		}, {
-			access: "bios->FanStalledTriggerRpm",
-			name: "FanStalledTriggerRpm",
-		}, {
-			access: "bios->FanAbnormalTriggerRpmCoeff",
-			name: "FanAbnormalTriggerRpmCoeff",
-		}, {
-			access: "bios->FanAbnormalDetectionEnable",
-			name: "FanAbnormalDetectionEnable",
-		}, {
-			access: "bios->FanIntakeSensorSupport",
-			name: "FanIntakeSensorSupport",
-		}, {
-			access: "bios->FanIntakePadding",
-			name: "FanIntakePadding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->FanSpare",
-			name: "FanSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "SECTION: VDD_GFX AVFS",
-			},
-		}, {
-			access: "bios->OverrideGfxAvfsFuses",
-			name: "OverrideGfxAvfsFuses",
-		}, {
-			access: "bios->GfxAvfsPadding",
-			name: "GfxAvfsPadding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->L2HwRtAvfsFuses",
-			name: "L2HwRtAvfsFuses",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "see fusedoc for encoding",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_GRTAVFS_HW_FUSE_COUNT",
-				enum: "PP_GRTAVFS_HW_FUSE_e",
-				pattern: [{
-					name: "L2HwRtAvfsFuses [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->SeHwRtAvfsFuses",
-			name: "SeHwRtAvfsFuses",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_GRTAVFS_HW_FUSE_COUNT",
-				enum: "PP_GRTAVFS_HW_FUSE_e",
-				pattern: [{
-					name: "SeHwRtAvfsFuses [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->CommonRtAvfs",
-			name: "CommonRtAvfs",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_GRTAVFS_FW_COMMON_FUSE_COUNT",
-				enum: "PP_GRTAVFS_FW_COMMON_FUSE_e",
-				pattern: [{
-					name: "CommonRtAvfs [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->L2FwRtAvfsFuses",
-			name: "L2FwRtAvfsFuses",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
-				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
-				pattern: [{
-					name: "L2FwRtAvfsFuses [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->SeFwRtAvfsFuses",
-			name: "SeFwRtAvfsFuses",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_GRTAVFS_FW_SEP_FUSE_COUNT",
-				enum: "PP_GRTAVFS_FW_SEP_FUSE_e",
-				pattern: [{
-					name: "SeFwRtAvfsFuses [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->Droop_PWL_F",
-			name: "Droop_PWL_F",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_NUM_RTAVFS_PWL_ZONES",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Droop_PWL_F [%u]",
-				},],
-			},
-		}, {
-			access: "bios->Droop_PWL_a",
-			name: "Droop_PWL_a",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_NUM_RTAVFS_PWL_ZONES",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Droop_PWL_a [%u]",
-				},],
-			},
-		}, {
-			access: "bios->Droop_PWL_b",
-			name: "Droop_PWL_b",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_NUM_RTAVFS_PWL_ZONES",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Droop_PWL_b [%u]",
-				},],
-			},
-		}, {
-			access: "bios->Droop_PWL_c",
-			name: "Droop_PWL_c",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_NUM_RTAVFS_PWL_ZONES",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Droop_PWL_c [%u]",
-				},],
-			},
-		}, {
-			access: "bios->Static_PWL_Offset",
-			name: "Static_PWL_Offset",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "PP_NUM_RTAVFS_PWL_ZONES",
-				enum: "ATUI_NULL",
-				pattern: [{
-					name: "Static_PWL_Offset [%u]",
-				},],
-			},
-		}, {
-			access: "bios->dGbV_dT_vmin",
-			name: "dGbV_dT_vmin",
-		}, {
-			access: "bios->dGbV_dT_vmax",
-			name: "dGbV_dT_vmax",
-		}, {
-			access: "bios->V2F_vmin_range_low",
-			name: "V2F_vmin_range_low",
-		}, {
-			access: "bios->V2F_vmin_range_high",
-			name: "V2F_vmin_range_high",
-		}, {
-			access: "bios->V2F_vmax_range_low",
-			name: "V2F_vmax_range_low",
-		}, {
-			access: "bios->V2F_vmax_range_high",
-			name: "V2F_vmax_range_high",
-		}, {
-			access: "bios->DcBtcGfxParams",
-			name: "DcBtcGfxParams",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
-		}, {
-			access: "bios->GfxAvfsSpare",
-			name: "GfxAvfsSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->OverrideSocAvfsFuses",
-			name: "OverrideSocAvfsFuses",
-		}, {
-			access: "bios->MinSocAvfsRevision",
-			name: "MinSocAvfsRevision",
-		}, {
-			access: "bios->SocAvfsPadding",
-			name: "SocAvfsPadding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->SocAvfsFuseOverride",
-			name: "SocAvfsFuseOverride",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_D_COUNT",
-				enum: "AVFS_D_e",
-				pattern: [{
-					name: "SocAvfsFuseOverride [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "AvfsFuseOverride_smu13",
-				},],
-			},
-		}, {
-			access: "bios->dBtcGbSoc",
-			name: "dBtcGbSoc",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "GHz->V BtcGb",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_D_COUNT",
-				enum: "AVFS_D_e",
-				pattern: [{
-					name: "dBtcGbSoc [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "droop_f32",
-				},],
-			},
-		}, {
-			access: "bios->qAgingGb",
-			name: "qAgingGb",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "GHz->V",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_D_COUNT",
-				enum: "AVFS_D_e",
-				pattern: [{
-					name: "qAgingGb [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "linear_f32",
-				},],
-			},
-		}, {
-			access: "bios->qStaticVoltageOffset",
-			name: "qStaticVoltageOffset",
-			display: "ATUI_DISPLAY",
-			description: {
-				eng: "GHz->V",
-			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_D_COUNT",
-				enum: "AVFS_D_e",
-				pattern: [{
-					name: "qStaticVoltageOffset [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->DcBtcSocParams",
-			name: "DcBtcSocParams",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "AVFS_D_COUNT",
-				enum: "AVFS_D_e",
-				pattern: [{
-					name: "DcBtcSocParams [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "AvfsDcBtcParams_smu13",
-				},],
-			},
-		}, {
-			access: "bios->SocAvfsSpare",
-			name: "SocAvfsSpare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->BootValues",
-			name: "BootValues",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "BootValues_t",
-		}, {
-			access: "bios->DriverReportedClocks",
-			name: "DriverReportedClocks",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "DriverReportedClocks_t",
-		}, {
-			access: "bios->MsgLimits",
-			name: "MsgLimits",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "MsgLimits_t",
-		}, {
-			access: "bios->OverDriveLimitsMin",
-			name: "OverDriveLimitsMin",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
-		}, {
-			access: "bios->OverDriveLimitsBasicMax",
-			name: "OverDriveLimitsBasicMax",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
-		}, {
-			access: "bios->OverDriveLimitsAdvancedMax",
-			name: "OverDriveLimitsAdvancedMax",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "overdrivelimits_smu13",
-		}, {
-			access: "bios->DebugOverrides",
-			name: "DebugOverrides",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu13",
-		}, {
-			access: "bios->TotalBoardPowerSupport",
-			name: "TotalBoardPowerSupport",
-		}, {
-			access: "bios->TotalBoardPowerPadding",
-			name: "TotalBoardPowerPadding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->TotalIdleBoardPowerM",
-			name: "TotalIdleBoardPowerM",
-		}, {
-			access: "bios->TotalIdleBoardPowerB",
-			name: "TotalIdleBoardPowerB",
-		}, {
-			access: "bios->TotalBoardPowerM",
-			name: "TotalBoardPowerM",
-		}, {
-			access: "bios->TotalBoardPowerB",
-			name: "TotalBoardPowerB",
-		}, {
-			access: "bios->qFeffCoeffGameClock",
-			name: "qFeffCoeffGameClock",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "POWER_SOURCE_COUNT",
-				enum: "POWER_SOURCE_e",
-				pattern: [{
-					name: "qFeffCoeffGameClock [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->qFeffCoeffBaseClock",
-			name: "qFeffCoeffBaseClock",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "POWER_SOURCE_COUNT",
-				enum: "POWER_SOURCE_e",
-				pattern: [{
-					name: "qFeffCoeffBaseClock [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->qFeffCoeffBoostClock",
-			name: "qFeffCoeffBoostClock",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "POWER_SOURCE_COUNT",
-				enum: "POWER_SOURCE_e",
-				pattern: [{
-					name: "qFeffCoeffBoostClock [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "quadratic_f32",
-				},],
-			},
-		}, {
-			access: "bios->Spare",
-			name: "Spare",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		}, {
-			access: "bios->MmHubPadding",
-			name: "MmHubPadding",
-			display: "ATUI_HEX",
-			fancy: "ATUI_ARRAY",
-		},
-	],
-}, {
-	c_type: "smu13_boardtable_v39",
-	atomtree: "atomtree_powerplay_table",
-	leaves: [
-		{
-			access: "bios->Version",
-			name: "Version",
-			description: {
-				eng: "should be unique to each board type",
-			},
-		}, {
-			access: "bios->I2cControllers",
-			name: "I2cControllers",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "lengthof(bios->I2cControllers)",
-				enum: "I2cControllerName_SMU_13_0_7_e",
-				pattern: [{
-					name: "I2cControllers [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
-				},],
-			},
-		}, {
-			access: "bios->VddGfxVrMapping",
-			name: "VddGfxVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddSocVrMapping",
-			name: "VddSocVrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem0VrMapping",
-			name: "VddMem0VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
-			access: "bios->VddMem1VrMapping",
-			name: "VddMem1VrMapping",
-			description: {
-				eng: "Use VR_MAPPING* bitfields",
-			},
-		}, {
 			access: "bios->GfxUlvPhaseSheddingMask",
 			name: "GfxUlvPhaseSheddingMask",
 			display: "ATUI_DISPLAY",
@@ -2822,6 +1167,21 @@ global_defaults: {
 			description: {
 				eng: "set this to 1 to set PSI0/1 to 1 in ULV mode",
 			},
+		},
+	],
+}, {
+	c_type: "smu13_boardtable_v39_voltage_regulator",
+	leaves: [
+		{
+			access: "bios->vr_mapping",
+			name: "vr_mapping",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu_smcpptable_vr_mapping",
+		}, {
+			access: "bios->shedding",
+			name: "shedding",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39_phase_shedding",
 		}, {
 			access: "bios->SlaveAddrMapping",
 			name: "SlaveAddrMapping",
@@ -2831,7 +1191,7 @@ global_defaults: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "SlaveAddrMapping [%02u]: %s",
+					name: "[%u]: %s",
 				},],
 			},
 		}, {
@@ -2843,7 +1203,7 @@ global_defaults: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "VrPsiSupport [%02u]: %s",
+					name: "[%u]: %s",
 				},],
 			},
 		}, {
@@ -2855,51 +1215,55 @@ global_defaults: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "PaddingPsi [%02u]: %s",
+					name: "[%u]: %s",
 				},],
 			},
 		}, {
 			access: "bios->EnablePsi6",
 			name: "EnablePsi6",
-			display: "ATUI_DISPLAY",
 			description: {
 				eng: "only applicable in SVI3",
 			},
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "NULL",
-				count: "SVI_PLANE_COUNT",
-				enum: "SVI_PLANE_e",
-				pattern: [{
-					name: "EnablePsi6 [%02u]: %s",
-				},],
-			},
-		}, {
-			access: "bios->SviTelemetryScale",
-			name: "SviTelemetryScale",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "SviTelemetryScale [%02u]: %s",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
+					name: "[%u]: %s",
 				},],
 			},
+		}, {
+			name: "SviTelemetryScale",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "bios->SviTelemetryScale",
+				name: "SviTelemetryScale",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "NULL",
+					count: "SVI_PLANE_COUNT",
+					enum: "SVI_PLANE_e",
+					pattern: [{
+						name: "[%u]: %s",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_GRAFT", fancy_data: "SviTelemetryScale_t",
+					},],
+				},
+			},],
 		}, {
 			access: "bios->VoltageTelemetryRatio",
 			name: "VoltageTelemetryRatio",
-			display: "ATUI_DISPLAY",
 			description: {
-				eng: "This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)",
+				eng: "This is used for VDDIO  Svi2 Div Ratio workaround.",
 			},
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "VoltageTelemetryRatio [%02u]: %s",
+					name: "[%u]: %s",
 				},],
 			},
 		}, {
@@ -2911,10 +1275,15 @@ global_defaults: {
 				count: "SVI_PLANE_COUNT",
 				enum: "SVI_PLANE_e",
 				pattern: [{
-					name: "DownSlewRateVr [%02u]: %s",
+					name: "[%u]: %s",
 				},],
 			},
-		}, {
+		},
+	],
+}, {
+	c_type: "smu13_boardtable_v39_gpio",
+	leaves: [
+		{
 			access: "bios->LedOffGpio",
 			name: "LedOffGpio",
 		}, {
@@ -2959,28 +1328,23 @@ global_defaults: {
 			description: {
 				eng: "replace GPIO polarity for GTHR",
 			},
-		}, {
-			access: "bios->LedPin0",
-			name: "LedPin0",
+		},
+	],
+}, {
+	c_type: "smu13_boardtable_v39_led_display",
+	leaves: [
+		{
+			access: "bios->LedPin",
+			name: "LedPin",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 			description: {
-				eng: "GPIO number for LedPin[0]",
-			},
-		}, {
-			access: "bios->LedPin1",
-			name: "LedPin1",
-			description: {
-				eng: "GPIO number for LedPin[1]",
-			},
-		}, {
-			access: "bios->LedPin2",
-			name: "LedPin2",
-			description: {
-				eng: "GPIO number for LedPin[2]",
+				eng: "GPIO numbers",
 			},
 		}, {
 			access: "bios->LedEnableMask",
 			name: "LedEnableMask",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "led_display_control",
 		}, {
 			access: "bios->LedPcie",
@@ -2994,12 +1358,14 @@ global_defaults: {
 			description: {
 				eng: "GPIO number for Error Cases",
 			},
-		}, {
+		},
+	],
+}, {
+	c_type: "smu13_boardtable_v39_memory_config",
+	leaves: [
+		{
 			access: "bios->UclkTrainingModeSpreadPercent",
 			name: "UclkTrainingModeSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
 		}, {
 			access: "bios->UclkSpreadPadding",
 			name: "UclkSpreadPadding",
@@ -3017,9 +1383,9 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "MEM_VENDOR_COUNT",
-				enum: "MEM_VENDOR_e",
+				enum: "ATUI_NULL",
 				pattern: [{
-					name: "UclkSpreadPercent [%02u]: %s",
+					name: "UclkSpreadPercent [%02u]",
 				},],
 			},
 		}, {
@@ -3029,9 +1395,6 @@ global_defaults: {
 		}, {
 			access: "bios->FclkSpreadPercent",
 			name: "FclkSpreadPercent",
-			description: {
-				eng: "Q4.4",
-			},
 		}, {
 			access: "bios->FclkSpreadFreq",
 			name: "FclkSpreadFreq",
@@ -3049,6 +1412,9 @@ global_defaults: {
 			name: "PaddingMem1",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
+			description: {
+				eng: "SECTION: UMC feature flags",
+			},
 		}, {
 			access: "bios->HsrEnabled",
 			name: "HsrEnabled",
@@ -3060,6 +1426,54 @@ global_defaults: {
 			name: "PaddingUmcFlags",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "smu13_boardtable_v39",
+	description: {
+		eng: "SECTION: Version",
+	},
+	leaves: [
+		{
+			access: "bios->Version",
+			name: "Version",
+			description: {
+				eng: "should be unique to each board type",
+			},
+		}, {
+			access: "bios->I2cControllers",
+			name: "Supported I2cControllers",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "I2C_CONTROLLER_NAME_COUNT_SMU13",
+				enum: "I2cControllerName_SMU_13_0_7_e",
+				pattern: [{
+					name: "I2cControllers [%02u]: %s",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_SHOOT", fancy_data: "i2ccontrollerconfig_u8",
+				},],
+			},
+		}, {
+			access: "bios->vr",
+			name: "vr",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39_voltage_regulator",
+		}, {
+			access: "bios->gpio",
+			name: "gpio",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39_gpio",
+		}, {
+			access: "bios->led",
+			name: "led",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39_led_display",
+		}, {
+			access: "bios->memory",
+			name: "memory",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39_memory_config",
 		}, {
 			access: "bios->PostVoltageSetBacoDelay",
 			name: "PostVoltageSetBacoDelay",
@@ -3090,22 +1504,6 @@ global_defaults: {
 			name: "MmHubPadding",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-		},
-	],
-}, {
-	c_type: "smu13_smcpptable_v39",
-	atomtree: "atomtree_powerplay_table",
-	leaves: [
-		{
-			access: "bios->SkuTable",
-			name: "SkuTable",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "smu13_skutable_v39",
-		}, {
-			access: "bios->BoardTable",
-			name: "BoardTable",
-			display: "ATUI_DISPLAY",
-			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39",
 		},
 	],
 }, {

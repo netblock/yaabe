@@ -1003,37 +1003,30 @@ struct smu13_skutable_v39 { // SECTION: Version
 
 };
 
-struct smu13_boardtable_v39 {
-	// SECTION: Version
-	uint32_t Version; // should be unique to each board type
 
-	// SECTION: I2C Control
-	struct i2ccontrollerconfig_u8 I2cControllers[
-		I2C_CONTROLLER_NAME_COUNT_SMU13 // 8
-	];
-	// SECTION: SVI2 Board Parameters
-	uint8_t  VddGfxVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddSocVrMapping;  // Use VR_MAPPING* bitfields
-	uint8_t  VddMem0VrMapping; // Use VR_MAPPING* bitfields
-	uint8_t  VddMem1VrMapping; // Use VR_MAPPING* bitfields
-
+struct smu13_boardtable_v39_phase_shedding {
 	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  VmempUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  VddioUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
-	// SECTION SVI3 Board Parameters
+};
+
+struct smu13_boardtable_v39_voltage_regulator {
+	struct smu_smcpptable_vr_mapping           vr_mapping;
+	struct smu13_boardtable_v39_phase_shedding shedding;
+
 	uint8_t  SlaveAddrMapping[SVI_PLANE_COUNT];
 	uint8_t  VrPsiSupport[SVI_PLANE_COUNT];
 
 	uint8_t  PaddingPsi[SVI_PLANE_COUNT];
 	uint8_t  EnablePsi6[SVI_PLANE_COUNT]; // only applicable in SVI3
-	// SECTION: Voltage Regulator Settings
+
 	struct SviTelemetryScale_t  SviTelemetryScale[SVI_PLANE_COUNT];
-	uq16_16_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround. It has 16 fractional bits (Q16.16)
+	uq16_16_t VoltageTelemetryRatio[SVI_PLANE_COUNT]; // This is used for VDDIO  Svi2 Div Ratio workaround.
 
 	uint8_t  DownSlewRateVr[SVI_PLANE_COUNT];
-	// SECTION: GPIO Settings
-
+};
+struct smu13_boardtable_v39_gpio {
 	uint8_t  LedOffGpio;
 	uint8_t  FanOffGpio;
 	uint8_t  GfxVrPowerStageOffGpio;
@@ -1045,53 +1038,63 @@ struct smu13_boardtable_v39 {
 
 	uint8_t  GthrGpio;       // GPIO pin configured for GTHR Event
 	uint8_t  GthrPolarity;   // replace GPIO polarity for GTHR
-	// LED Display Settings
-	uint8_t  LedPin0;        // GPIO number for LedPin[0]
-	uint8_t  LedPin1;        // GPIO number for LedPin[1]
-	uint8_t  LedPin2;        // GPIO number for LedPin[2]
+};
+struct smu13_boardtable_v39_led_display {
+	uint8_t  LedPin[3]; // GPIO numbers
 	union led_display_control  LedEnableMask;
 
-	uint8_t  LedPcie;        // GPIO number for PCIE results
-	uint8_t  LedError;       // GPIO number for Error Cases
-	// SECTION: Clock Spread Spectrum
-	// UCLK Spread Spectrum
-	uq4_4_t  UclkTrainingModeSpreadPercent; // Q4.4
+	uint8_t  LedPcie;  // GPIO number for PCIE results
+	uint8_t  LedError; // GPIO number for Error Cases
+};
+
+struct smu13_boardtable_v39_memory_config {
+	uq4_4_t  UclkTrainingModeSpreadPercent;
 	uint8_t  UclkSpreadPadding;
 	uint16_t UclkSpreadFreq; // kHz
-	// UCLK Spread Spectrum
 	uq4_4_t  UclkSpreadPercent[MEM_VENDOR_COUNT];
-	// FCLK Spread Spectrum
+
 	uint8_t  FclkSpreadPadding;
-	uq4_4_t  FclkSpreadPercent;  // Q4.4
-	uint16_t FclkSpreadFreq;     // kHz
-	// Section: Memory Config
+	uq4_4_t  FclkSpreadPercent;
+	uint16_t FclkSpreadFreq; // kHz
+
 	uint8_t  DramWidth; // Width of interface to the channel for each DRAM module. See DRAM_BIT_WIDTH_TYPE_e
 	uint8_t  PaddingMem1[7];
 	// SECTION: UMC feature flags
 	uint8_t  HsrEnabled;
 	uint8_t  VddqOffEnabled;
 	uint8_t  PaddingUmcFlags[2];
+};
+
+struct smu13_boardtable_v39 {
+	// SECTION: Version
+	uint32_t Version; // should be unique to each board type
+
+	struct i2ccontrollerconfig_u8 I2cControllers[
+		I2C_CONTROLLER_NAME_COUNT_SMU13
+	];
+	struct smu13_boardtable_v39_voltage_regulator vr;
+	struct smu13_boardtable_v39_gpio              gpio;
+	struct smu13_boardtable_v39_led_display       led;
+	struct smu13_boardtable_v39_memory_config     memory;
 
 	uint32_t PostVoltageSetBacoDelay; // in microseconds. Amount of time FW will wait after power good is established or PSI0 command is issued
 	uint32_t BacoEntryDelay; // in milliseconds. Amount of time FW will wait to trigger BACO entry after receiving entry notification from OS
 
 	uint8_t  FuseWritePowerMuxPresent;
 	uint8_t  FuseWritePadding[3];
-	// SECTION: Board Reserved
+
 	uint32_t BoardSpare[63];
-	// SECTION: Structure Padding
-	// Padding for MMHUB - do not modify this
 	uint32_t MmHubPadding[8];
 };
 
 struct smu13_smcpptable_v39 {
-	struct smu13_skutable_v39  SkuTable;
-	struct smu13_boardtable_v39  BoardTable;
+	struct smu13_skutable_v39   SkuTable;
+	struct smu13_boardtable_v39 BoardTable;
 };
 
 struct atom_smc_dpm_info_table_13_0_7 {
-	struct atom_common_table_header  table_header;
-	struct smu13_boardtable_v39  BoardTable;
+	struct atom_common_table_header table_header;
+	struct smu13_boardtable_v39     BoardTable;
 };
 
 #pragma pack(pop) // restore old packing

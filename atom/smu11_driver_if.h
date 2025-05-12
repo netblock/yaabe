@@ -641,17 +641,11 @@ struct smu11_smcpptable_temp_dependent_vmin {
 	uint16_t VDDGFX_TVminHystersis; // Celcius
 	uint16_t VDDSOC_TVminHystersis; // Celcius
 };
-struct smu11_smcpptable_vr_mapping {
-	union vr_mapping VddGfx;
-	union vr_mapping VddSoc;
-	union vr_mapping VddMem0;
-	union vr_mapping VddMem1;
-};
 struct smu11_smcpptable_svi2_parameters {
 	uq14_2_t MaxVoltageStepGfx; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 	uq14_2_t MaxVoltageStepSoc; // In mV(Q2) Max voltage step that SMU will request. Multiple steps are taken if voltage change exceeds this value.
 
-	struct smu11_smcpptable_vr_mapping vr_mapping;
+	struct smu_smcpptable_vr_mapping vr_mapping;
 
 	union psi_sel_mask  GfxUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  SocUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode
@@ -1271,7 +1265,7 @@ struct smu11_smcpptable_v7_i2c_control {
 	uint8_t  I2cSpare;
 };
 struct smu11_smcpptable_v7_svi2_parameters {
-	struct smu11_smcpptable_vr_mapping vr_mapping;
+	struct smu_smcpptable_vr_mapping vr_mapping;
 	
 	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
