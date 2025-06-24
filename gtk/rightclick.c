@@ -539,6 +539,198 @@ create_leaves_rightclick_menu(
 	);
 }
 
+
+
+static void
+search_right_click_goto(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	yaabe_gtk_scroll_to_object(pack->commons, node->gatui);
+}
+static void
+search_right_click_copy_name(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	char const* text;
+	if (node->is_leaf) {
+		text = gatui_leaf_get_atui(GATUI_LEAF(node->gatui))->name;
+	} else {
+		text = gatui_branch_get_atui(GATUI_BRANCH(node->gatui))->name;
+	}
+	clipboard_set_text(text);
+}
+static void
+search_right_click_copy_path(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	char* text;
+	if (node->is_leaf) {
+		text = gatui_leaf_to_path(GATUI_LEAF(node->gatui));
+	} else {
+		text = gatui_branch_to_path(GATUI_BRANCH(node->gatui));
+	}
+	clipboard_set_text(text);
+	free(text);
+}
+static void
+search_right_click_copy_data(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	char* text;
+	if (node->is_leaf) {
+		text = gatui_leaf_value_to_base64(GATUI_LEAF(node->gatui));
+	} else {
+		text = gatui_branch_to_base64(GATUI_BRANCH(node->gatui), false);
+	}
+	clipboard_set_text(text);
+	free(text);
+}
+static void
+search_right_click_paste_data_set_data(
+		GObject* const clipboard,
+		GAsyncResult* const async_data,
+		gpointer const pack_ptr
+		) {
+// AsyncReadyCallback
+	struct rightclick_pack const* const pack = pack_ptr;
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	right_click_paste_data(clipboard, async_data, node->gatui, pack->commons);
+}
+static void
+search_right_click_paste_data(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	gdk_clipboard_read_text_async(
+		gdk_display_get_clipboard(
+			gdk_display_get_default()
+		),
+		NULL,
+		search_right_click_paste_data_set_data,
+		pack_ptr
+	);
+}
+static void
+search_rightclick_popup(
+		GtkGesture* const click_sense,
+		gint const num_presses,
+		gdouble const x,
+		gdouble const y,
+		struct rightclick_pack* const pack
+		) {
+	if (num_presses != 1) {
+		return;
+	}
+	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
+
+	pack->node = gtk_column_view_row_get_item(pack->row);
+
+	// see also create_leaves_rightclick_menu
+	GActionEntry actions[5] = {
+		{.name = "goto", .activate = search_right_click_goto},
+		{.name = "name", .activate = search_right_click_copy_name},
+		{.name = "path", .activate = search_right_click_copy_path},
+	};
+	uint8_t act_i = 3;
+
+	struct atui_regex_node const* const node = gatui_regex_node_peek(
+		pack->node
+	);
+	bool has_data = false;
+	if (node->is_leaf) {
+		atui_leaf const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(
+			node->gatui
+		));
+		has_data = (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->type.fancy);
+	} else {
+		atui_branch const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
+			node->gatui
+		));
+		has_data = (0 < a_branch->table_size);
+	}
+	if (has_data) {
+		actions[act_i].name = "copy_data";
+		actions[act_i].activate = search_right_click_copy_data;
+		act_i++;
+		actions[act_i].name = "paste_data";
+		actions[act_i].activate = search_right_click_paste_data;
+		act_i++;
+	}
+	assert(act_i <= lengthof(actions));
+
+	struct pane_context const* const pane = &(pack->commons->search.pane);
+
+	// disconnect the selection blocker, and then select
+	// the reconnection gets handled with rightclick_selection_sterilise
+	g_signal_handlers_disconnect_matched(
+		gtk_column_view_get_model(pane->view), // SelectionModel
+		G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL,
+		gtk_selection_model_unselect_item,
+		NULL
+	);
+	attach_actions_and_popup(actions,act_i,  pane,pack,  x,y);
+}
+
+void
+search_rightclick_row_bind(
+		yaabegtk_commons const* const commons,
+		GtkColumnViewRow* const view_row
+		) {
+	if (NULL == g_object_get_data(G_OBJECT(view_row), "atui")) {
+		columnview_row_bind_attach_gesture(
+			commons, view_row, search_rightclick_popup
+		);
+	}
+}
+void
+create_search_rightclick_menu(
+		yaabegtk_commons* const commons
+		) {
+	GMenu* const menu_model = g_menu_new();
+	g_menu_append(menu_model, "Go To", "context.goto");
+	g_menu_append(menu_model, "Copy Name", "context.name");
+	g_menu_append(menu_model, "Copy Path", "context.path");
+	g_menu_append(menu_model, "Copy Data", "context.copy_data");
+	g_menu_append(menu_model, "Paste Data", "context.paste_data");
+	// see also search_rightclick_popup
+
+	columnview_create_rightclick_popup(
+		G_MENU_MODEL(menu_model), &commons->search.pane
+	);
+
+	g_signal_connect_swapped(commons->search.pane.rightclick, "closed",
+		G_CALLBACK(rightclick_selection_sterilise), commons->search.pane.view
+	);
+}
+
 /*
 static void
 leaves_row_setup(

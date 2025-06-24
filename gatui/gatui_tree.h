@@ -6,7 +6,6 @@ G_BEGIN_DECLS
 #define GATUI_TYPE_TREE gatui_tree_get_type()
 G_DECLARE_FINAL_TYPE(GATUITree, gatui_tree, GATUI, TREE, GObject)
 
-
 GATUITree*
 gatui_tree_new_from_path(
 		char const* path,
@@ -54,6 +53,13 @@ gatui_tree_select_in_model_by_path( // model must be already created
 		struct atui_path_goto** map_error
 		// if there's a navigation error, must be freed
 		);
+bool // success
+gatui_tree_select_in_model_by_object(
+		GATUITree* self,
+		GObject* target,
+		int16_t* branch_index,
+		int16_t* leaf_index
+		);
 
 // creates a new tree based off of the raw bios data buffer, and GFile.
 // useful when a new atomtree crawl is wanted.
@@ -72,6 +78,13 @@ void const*
 gatui_tree_get_bios_pointer(
 		GATUITree* self,
 		size_t* size // optional
+		);
+
+GtkSelectionModel* // new noselection model
+gatui_tree_regex_search(
+		GATUITree* self,
+		GRegex* pattern,
+		struct gatui_search_flags const* flags
 		);
 
 G_END_DECLS

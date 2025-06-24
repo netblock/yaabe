@@ -60,8 +60,30 @@ pathbar_editable_reset(
 
 
 void
+yaabe_gtk_scroll_to_object(
+		yaabegtk_commons const* const commons,
+		GObject* const gatui
+		) {
+	int16_t branch_index;
+	int16_t leaf_index;
+	bool const success __unused = gatui_tree_select_in_model_by_object(
+		commons->root, gatui, &branch_index, &leaf_index
+	);
+	assert(success);
+	if (-1 < branch_index) {
+		gtk_column_view_scroll_to(commons->branches.view,
+			branch_index, NULL, GTK_LIST_SCROLL_FOCUS, NULL
+		);
+	}
+	if (-1 < leaf_index) {
+		gtk_column_view_scroll_to(commons->leaves.view,
+			leaf_index, NULL, GTK_LIST_SCROLL_FOCUS, NULL
+		);
+	}
+}
+void
 yaabe_gtk_scroll_to_path(
-		yaabegtk_commons* const commons,
+		yaabegtk_commons const* const commons,
 		char const* const path,
 		struct atui_path_goto** const map_error
 		) {
@@ -276,16 +298,14 @@ set_editor_titlebar(
 	);
 	sprintf(window_title, formatstr, yaabe_name, filename);
 
-	GtkWindow* const editor_window = gtk_application_get_active_window(
-		commons->yaabe_gtk
-	);
-	gtk_window_set_title(editor_window, window_title);
+	gtk_window_set_title(commons->yaabe_primary, window_title);
 
 	free(window_title);
 	if (filename_length) {
 		g_free(filename);
 	}
 }
+
 
 static void
 yaabe_gtk_activate(
@@ -319,6 +339,7 @@ yaabe_gtk_activate(
 	);
 
 	GtkWindow* const window = GTK_WINDOW(app_window);
+	commons->yaabe_primary = window;
 	gtk_window_set_default_size(window, 1400,700); // 2:1
 	gtk_window_set_child(window, GTK_WIDGET(main_box));
 
@@ -346,8 +367,14 @@ int8_t
 yaabe_gtk(
 		GATUITree** const root
 		) {
-	yaabegtk_commons commons = {0};
-	commons.root = *root;
+	yaabegtk_commons commons = {
+		.root = *root,
+		.search.flags = {
+			.domain = GATUI_SEARCH_NAMES,
+			.leaves = true,
+			.branches = true,
+		},
+	};
 
 	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
 	g_object_connect(commons.yaabe_gtk,

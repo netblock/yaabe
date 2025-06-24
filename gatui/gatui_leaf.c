@@ -33,6 +33,7 @@ struct _GATUILeaf {
 	// non-null
 	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
+	bool has_textable_value;
 
 	GtkSelectionModel* enum_model;
 };
@@ -240,8 +241,20 @@ gatui_leaf_new(
 	}
 
 	self->capsule_type = get_capsule_type(self);
+	struct atui_type const* const type = &(leaf->type);
+	self->has_textable_value = (
+		type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy
+	);
 
 	return self;
+}
+
+GATUITree*
+gatui_leaf_get_root(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	return self->root;
 }
 
 GListModel*
@@ -507,12 +520,22 @@ gatui_leaf_value_from_base64(
 	return false;
 }
 
+
+bool
+gatui_leaf_has_textable_value(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	return self->has_textable_value;
+}
+
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* const self,
 		char const* text
 		) {
 	g_return_if_fail(GATUI_IS_LEAF(self));
+	g_return_if_fail(self->has_textable_value);
 	atui_leaf_from_text(self->atui, text);
 	gatui_leaf_emit_val_changed(self);
 }
@@ -522,6 +545,8 @@ gatui_leaf_value_to_text(
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
+	g_return_val_if_fail(self->has_textable_value, NULL);
+
 	return atui_leaf_to_text(self->atui);
 }
 
@@ -617,4 +642,50 @@ gatui_leaf_get_atui(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->atui;
+}
+
+
+void
+gatui_regex_search_recurse_leaf(
+		GATUILeaf* const leaf,
+		GListStore* const model,
+		GRegex* const pattern,
+		struct gatui_search_flags const* const flags
+		) {
+	atui_leaf* const atui = leaf->atui;
+	struct atui_type const* const type = &(leaf->atui->type);
+	GATUIRegexNode* node;
+	GMatchInfo* match_info;
+	bool matched;
+	char* text = NULL; // may be freed
+
+	if (GATUI_SEARCH_VALUES == flags->domain) {
+		if (type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy){
+			text = gatui_leaf_value_to_text(leaf);
+		}
+	} else {
+		text = atui->name;
+	}
+	if (text) {
+		matched = g_regex_match(
+			pattern, text, G_REGEX_MATCH_DEFAULT, &match_info
+		);
+		if (matched) {
+			node = gatui_regex_node_new(
+				G_OBJECT(leaf), match_info, text, true, flags
+			);
+			g_list_store_append(model, node);
+			g_object_unref(node);
+		}
+		if (GATUI_SEARCH_VALUES == flags->domain) {
+			free(text);
+		}
+		g_match_info_unref(match_info);
+	}
+
+	for (uint16_t i=0; i < atui->num_child_leaves; i++) {
+		gatui_regex_search_recurse_leaf(
+			leaf->child_leaves[i], model, pattern, flags
+		);
+	}
 }

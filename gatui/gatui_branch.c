@@ -15,6 +15,7 @@ struct _GATUIBranch {
 	atui_branch* atui;
 	GATUIBranch** child_branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
+	GATUILeaf** leaves; // weak reference; only for quick access.
 
 	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
@@ -39,6 +40,8 @@ gatui_branch_dispose(
 	}
 	if (self->leaves_model) {
 		g_object_unref(self->leaves_model);
+		free(self->leaves);
+		self->leaves = NULL;
 		self->leaves_model = NULL;
 	}
 	self->atui->self = NULL; // weak reference
@@ -113,10 +116,15 @@ gatui_branch_new(
 	}
 
 	if (branch->leaf_count) { // generate leaves_model
+		GATUILeaf** const leaves_array = cralloc(
+			branch->leaf_count * sizeof(GATUILeaf*)
+		);
+		self->leaves = leaves_array;
 		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
 
 		for (uint16_t i=0; i < branch->leaf_count; i++) {
 			GATUILeaf* leaf = gatui_leaf_new(&(branch->leaves[i]), root);
+			leaves_array[i] = leaf;
 			g_list_store_append(leaf_list, leaf);
 			g_signal_connect_swapped(self, "value-changed",
 				G_CALLBACK(gatui_leaf_emit_val_changed), leaf
@@ -145,6 +153,14 @@ gatui_branch_new(
 	self->capsule_type = g_variant_type_new(self->typestr);
 
 	return self;
+}
+
+GATUITree*
+gatui_branch_get_root(
+		GATUIBranch* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	return self->root;
 }
 
 
@@ -495,3 +511,41 @@ gatui_branch_right_click_expand_family(
 	}
 }
 
+void
+gatui_regex_search_recurse_branch(
+		GATUIBranch* const branch,
+		GListStore* const model,
+		GRegex* const pattern,
+		struct gatui_search_flags const* const flags
+		) {
+	atui_branch const* const atui = branch->atui;
+
+	if ((flags->domain == GATUI_SEARCH_NAMES) && flags->branches) {
+		GMatchInfo* match_info;
+		bool matched = g_regex_match(
+			pattern, atui->name, G_REGEX_MATCH_DEFAULT, &match_info
+		);
+		if (matched) {
+			GATUIRegexNode* node = gatui_regex_node_new(
+				G_OBJECT(branch), match_info, atui->name, false, flags
+			);
+			g_list_store_append(model, node);
+			g_object_unref(node);
+		}
+		g_match_info_unref(match_info);
+	}
+
+	if (flags->leaves) {
+		for (uint16_t i=0; i < atui->leaf_count; i++) {
+			gatui_regex_search_recurse_leaf(
+				branch->leaves[i], model, pattern, flags
+			);
+		}
+	}
+
+	for (uint16_t i=0; i < atui->num_branches; i++) {
+		gatui_regex_search_recurse_branch(
+			branch->child_branches[i], model, pattern, flags
+		);
+	}
+}

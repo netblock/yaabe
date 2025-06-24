@@ -6,4 +6,5 @@ yaabe_src += files(
 	'config_options.c',
 	'panes.c',
 	'rightclick.c',
+	'search.c',
 )

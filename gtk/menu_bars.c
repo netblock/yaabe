@@ -40,6 +40,8 @@ yaabegtk_load_enable_save_buttons(
 	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
 	action = g_action_map_lookup_action(app_action_map, "reload");
 	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+	action = g_action_map_lookup_action(app_action_map, "search");
+	g_object_set_property(G_OBJECT(action), "enabled", &enabled);
 }
 static void
 yaabegtk_load_bios(
@@ -394,6 +396,20 @@ yaabe_action_apply_changes(
 		) {
 	yaabe_apply_changes(commons_ptr);
 }
+static void
+yaabe_action_search(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabegtk_commons const* const commons = commons_ptr;
+	if (commons->search.window) {
+		gtk_window_set_focus(commons->search.window, commons->search.entry);
+		gtk_window_present(commons->search.window);
+	} else {
+		create_search_window(commons_ptr);
+	}
+}
 
 
 void
@@ -412,12 +428,16 @@ construct_menu_bar(
 	g_menu_append(edit_menu, "Discard Changes", "app.discard");
 	g_menu_append(edit_menu, "Apply Changes", "app.reload");
 
+	GMenu* const tools_menu = g_menu_new();
+	g_menu_append(tools_menu, "Search", "app.search");
+
 	//GMenu* const magic_menu = g_menu_new();
 	//g_menu_append(magic_menu, "Insert UEFI GOP", "app.uefi_gop");
 
 	GMenu* const main_menu = g_menu_new();
 	g_menu_append_submenu(main_menu, "File", G_MENU_MODEL(file_menu));
 	g_menu_append_submenu(main_menu, "Edit", G_MENU_MODEL(edit_menu));
+	g_menu_append_submenu(main_menu, "Tools", G_MENU_MODEL(tools_menu));
 	//g_menu_append_submenu(main_menu, "Magic", G_MENU_MODEL(magic_menu));
 	gtk_application_set_menubar(gtkapp, G_MENU_MODEL(main_menu));
 
@@ -432,10 +452,14 @@ construct_menu_bar(
 	gtk_application_set_accels_for_action(gtkapp, "app.save", accel);
 	accel[0] = "<shift><ctrl>s";
 	gtk_application_set_accels_for_action(gtkapp, "app.saveas", accel);
+
 	accel[0] = "<ctrl>d";
 	gtk_application_set_accels_for_action(gtkapp, "app.discard", accel);
 	accel[0] = "<ctrl>r";
 	gtk_application_set_accels_for_action(gtkapp, "app.reload", accel);
+
+	accel[0] = "<ctrl>f";
+	gtk_application_set_accels_for_action(gtkapp, "app.search", accel);
 
 
 	// construct the actions of the menus; function portion
@@ -448,6 +472,8 @@ construct_menu_bar(
 
 		{.name = "discard", .activate = yaabe_action_discard_changes},
 		{.name = "reload",  .activate = yaabe_action_apply_changes},
+
+		{.name = "search",  .activate = yaabe_action_search},
 	};
 	g_action_map_add_action_entries(app_action_map,
 		actions, lengthof(actions),
@@ -467,6 +493,8 @@ construct_menu_bar(
 		action = g_action_map_lookup_action(app_action_map, "discard");
 		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
 		action = g_action_map_lookup_action(app_action_map, "reload");
+		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
+		action = g_action_map_lookup_action(app_action_map, "search");
 		g_object_set_property(G_OBJECT(action), "enabled", &enabled);
 	}
 }

@@ -59,7 +59,7 @@ widget_cache_destroy(
 }
 
 
-static void
+void
 label_column_setup(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
@@ -67,6 +67,7 @@ label_column_setup(
 //TODO use https://docs.gtk.org/gtk4/class.Inscription.html
 	GtkWidget* const label = gtk_label_new(NULL);
 	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_use_markup(GTK_LABEL(label), true);
 	gtk_column_view_cell_set_child(column_cell, label);
 }
 static void
@@ -538,8 +539,9 @@ leaves_val_column_bind(
 	);
 
 	struct atui_type const* const type = &(gatui_leaf_get_atui(g_leaf)->type);
-	if (type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy) {
-		gtk_widget_set_visible(GTK_WIDGET(widget_bag), true);
+	bool const has_value = gatui_leaf_has_textable_value(g_leaf);
+	gtk_widget_set_visible(GTK_WIDGET(widget_bag), has_value);
+	if (has_value) {
 		GtkWidget* editable;
 		if (type->has_enum) {
 			gtk_stack_set_visible_child_name(widget_bag, "enum");
@@ -565,8 +567,6 @@ leaves_val_column_bind(
 		g_signal_connect(g_leaf, "value-changed",
 			G_CALLBACK(leaf_sets_editable), GTK_EDITABLE(editable)
 		);
-	} else {
-		gtk_widget_set_visible(GTK_WIDGET(widget_bag), false);
 	}
 	g_object_unref(g_leaf);
 }

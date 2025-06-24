@@ -26,5 +26,29 @@ void
 gatui_leaf_emit_val_changed( // single-signal multi-user alert network
 		GATUILeaf* self
 		);
+
+
+GATUIRegexNode*
+gatui_regex_node_new(
+		GObject* gatui, // branch or leaf
+		GMatchInfo* match_info, // regex match info
+		char const* text, // matching text
+		bool is_leaf,
+		struct gatui_search_flags const* flags
+		);
+void
+gatui_regex_search_recurse_leaf(
+		GATUILeaf* leaf,
+		GListStore* model, // destination model
+		GRegex* pattern,
+		struct gatui_search_flags const* flags
+		);
+void
+gatui_regex_search_recurse_branch(
+		GATUIBranch* branch,
+		GListStore* model, // destination model
+		GRegex* pattern,
+		struct gatui_search_flags const* flags
+		);
 #endif
 

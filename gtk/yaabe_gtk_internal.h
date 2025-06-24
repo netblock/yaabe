@@ -9,9 +9,17 @@ struct pane_context {
 	GtkColumnView* view; // so branches can set leaves, and loading bios
 	GtkPopover* rightclick;
 };
+struct yaabe_gtk_search {
+	GtkWindow* window;
+	GtkWidget* entry;
+	GtkWidget* branches_checkbox;
+	struct pane_context pane;
+	struct gatui_search_flags flags;
+};
 typedef struct yaabegtk_commons { // global state tracker
 	GATUITree* root;
 	GtkApplication* yaabe_gtk;
+	GtkWindow* yaabe_primary;
 
 	GtkEditable* pathbar;
 
@@ -28,15 +36,22 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* reload_buttons;
 
 	char* pathbar_string;
+
+	struct yaabe_gtk_search search;
 } yaabegtk_commons;
 
 void
+yaabe_gtk_scroll_to_object( // scroll to based on a branch/leaf object
+		yaabegtk_commons const* commons,
+		GObject* gatui
+		);
+void
 yaabe_gtk_scroll_to_path( // /scroll/to/based/on/path
-		yaabegtk_commons* commons,
+		yaabegtk_commons const* commons,
 		char const* path,
 		struct atui_path_goto** map_error // optional
 		);
-                                                                                
+
 void
 first_load_restore_path( // from config file
         yaabegtk_commons* commons
@@ -77,6 +92,12 @@ dropped_file_open_bios( // callback for drag-n'-drop open file
 
 
 // panes
+void
+label_column_setup(
+		void const* _null, // swapped-signal:: with factory
+		GtkColumnViewCell* column_cell
+		);
+
 GtkWidget*
 construct_tree_panes(
 	yaabegtk_commons* commons
@@ -93,6 +114,7 @@ void
 create_branches_rightclick_menu(
 		yaabegtk_commons* commons
 		);
+
 void
 leaves_rightclick_row_bind( // responsible for rightclick context
 		yaabegtk_commons const* commons,
@@ -103,6 +125,15 @@ create_leaves_rightclick_menu(
 		yaabegtk_commons* commons
 		);
 
+void
+search_rightclick_row_bind( // responsible for rightclick context
+		yaabegtk_commons const* commons,
+		GtkColumnViewRow* view_row
+		);
+void
+create_search_rightclick_menu(
+		yaabegtk_commons* commons
+		);
 
 // config file
 GFile*
@@ -121,5 +152,13 @@ set_cached_scroll_path(
 char* // needs to be freed.
 get_cached_scroll_path(
 		);
+
+// search
+
+void
+create_search_window(
+		yaabegtk_commons* commons
+		);
+
 
 #endif

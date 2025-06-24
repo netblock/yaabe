@@ -12,6 +12,11 @@ gatui_leaf_new( // including all of is subleaves
 		GATUITree* root
 		);
 
+GATUITree* // does not ref
+gatui_leaf_get_root(
+		GATUILeaf* self
+		);
+
 // GtkTreeListModelCreateModelFunc for leaves
 GListModel*
 leaves_treelist_generate_children(
@@ -52,6 +57,10 @@ gatui_leaf_value_from_base64(
 		struct b64_header** error_out
 		);
 
+bool // if value to/from text does anything
+gatui_leaf_has_textable_value(
+		GATUILeaf* self
+		);
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* self,
