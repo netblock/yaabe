@@ -396,6 +396,7 @@ yaabe_action_apply_changes(
 		) {
 	yaabe_apply_changes(commons_ptr);
 }
+
 static void
 yaabe_action_search(
 		GSimpleAction* const action __unused,
@@ -411,6 +412,14 @@ yaabe_action_search(
 	}
 }
 
+static void
+yaabe_action_about(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	create_about_window(commons_ptr);
+}
 
 void
 construct_menu_bar(
@@ -431,6 +440,9 @@ construct_menu_bar(
 	GMenu* const tools_menu = g_menu_new();
 	g_menu_append(tools_menu, "Search", "app.search");
 
+	GMenu* const help_menu = g_menu_new();
+	g_menu_append(help_menu, "About", "app.about");
+
 	//GMenu* const magic_menu = g_menu_new();
 	//g_menu_append(magic_menu, "Insert UEFI GOP", "app.uefi_gop");
 
@@ -438,6 +450,7 @@ construct_menu_bar(
 	g_menu_append_submenu(main_menu, "File", G_MENU_MODEL(file_menu));
 	g_menu_append_submenu(main_menu, "Edit", G_MENU_MODEL(edit_menu));
 	g_menu_append_submenu(main_menu, "Tools", G_MENU_MODEL(tools_menu));
+	g_menu_append_submenu(main_menu, "Help", G_MENU_MODEL(help_menu));
 	//g_menu_append_submenu(main_menu, "Magic", G_MENU_MODEL(magic_menu));
 	gtk_application_set_menubar(gtkapp, G_MENU_MODEL(main_menu));
 
@@ -474,6 +487,8 @@ construct_menu_bar(
 		{.name = "reload",  .activate = yaabe_action_apply_changes},
 
 		{.name = "search",  .activate = yaabe_action_search},
+
+		{.name = "about",  .activate = yaabe_action_about},
 	};
 	g_action_map_add_action_entries(app_action_map,
 		actions, lengthof(actions),

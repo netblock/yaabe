@@ -1,6 +1,8 @@
 #include "yaabe_gtk_internal.h"
 
 static constexpr char yaabe_name[] = "YAABE BIOS Editor";
+static constexpr char yaabe_dbus_name[] = "yaabe.editor";
+static constexpr char yaabe_url[] = "https://github.com/netblock/yaabe";
 
 void
 free_closure(
@@ -26,6 +28,21 @@ generic_error_popup(
 	g_object_unref(alert);
 }
 
+void
+create_about_window(
+		yaabegtk_commons* const commons
+		) {
+	GtkAboutDialog* const about = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+	gtk_about_dialog_set_version(about, YAABE_VER);
+	gtk_about_dialog_set_website(about, yaabe_url);
+	gtk_about_dialog_set_website_label(about, yaabe_url);
+	gtk_about_dialog_set_license_type(about, GTK_LICENSE_AGPL_3_0);
+
+	GtkWindow* const about_window = GTK_WINDOW(about);
+	gtk_window_set_destroy_with_parent(about_window, true);
+	gtk_window_set_transient_for(about_window, commons->yaabe_primary);
+	gtk_window_present(about_window);
+}
 
 static void
 pathbar_update_path(
@@ -376,7 +393,10 @@ yaabe_gtk(
 		},
 	};
 
-	commons.yaabe_gtk = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
+	commons.yaabe_gtk = gtk_application_new(
+		yaabe_dbus_name,
+		(G_APPLICATION_HANDLES_OPEN|G_APPLICATION_NON_UNIQUE)
+	);
 	g_object_connect(commons.yaabe_gtk,
 		"signal::activate", G_CALLBACK(yaabe_gtk_activate), &commons,
 		"swapped-signal::shutdown", G_CALLBACK(yaabe_gtk_save_path), &commons,

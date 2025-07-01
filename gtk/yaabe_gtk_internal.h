@@ -41,6 +41,11 @@ typedef struct yaabegtk_commons { // global state tracker
 } yaabegtk_commons;
 
 void
+create_about_window(
+		yaabegtk_commons* commons
+		);
+
+void
 yaabe_gtk_scroll_to_object( // scroll to based on a branch/leaf object
 		yaabegtk_commons const* commons,
 		GObject* gatui
