@@ -214,15 +214,15 @@ select_changes_leaves(
 			gtk_single_selection_get_selected_item(model)
 		)
 	);
-	atui_branch const* const a_branch_new = gatui_branch_get_atui(
+	atui_node const* const a_branch_new = gatui_branch_get_atui(
 		new_selection
 	);
-	atui_branch const* const a_branch_old = gatui_branch_get_atui(
+	atui_node const* const a_branch_old = gatui_branch_get_atui(
 		commons->previous_selection
 	);
 
 	bool const similar_branches = (
-		(a_branch_new->leaf_count == a_branch_old->leaf_count)
+		(a_branch_new->leaves.count == a_branch_old->leaves.count)
 		&& (0 == strcmp(a_branch_new->origname, a_branch_old->origname))
 	);
 	if (similar_branches) { // restore scroll if compatible

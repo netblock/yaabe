@@ -96,7 +96,7 @@ branch_name_column_bind(
 // bind data to the UI skeleton
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
-	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
+	atui_node const* const a_branch = gatui_branch_get_atui(g_branch);
 
 
 	/* TODO
@@ -213,7 +213,7 @@ leaves_name_column_bind(
 // bind data to the UI skeleton
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(tree_row);
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
+	atui_node const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 	g_object_unref(g_leaf);
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
@@ -538,7 +538,7 @@ leaves_val_column_bind(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 
-	struct atui_type const* const type = &(gatui_leaf_get_atui(g_leaf)->type);
+	struct atui_leaf_type const* const type = &(gatui_leaf_get_atui(g_leaf)->leaf.type);
 	bool const has_value = gatui_leaf_has_textable_value(g_leaf);
 	gtk_widget_set_visible(GTK_WIDGET(widget_bag), has_value);
 	if (has_value) {
@@ -603,14 +603,14 @@ leaves_offset_column_bind(
 	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
+	atui_node const* const a_leaf = gatui_leaf_get_atui(g_leaf);
 
 	size_t start;
 	size_t end;
 	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
-	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
+	if (a_leaf->leaf.type.fancy == _ATUI_BITCHILD) {
 		sprintf(buffer, "[%u:%u]",
-			a_leaf->bitfield_hi, a_leaf->bitfield_lo
+			a_leaf->leaf.bitfield_hi, a_leaf->leaf.bitfield_lo
 		);
 	} else if (gatui_leaf_get_region_bounds(g_leaf, &start, &end)) {
 		sprintf(buffer, "[%06zX - %06zX]", start, end);

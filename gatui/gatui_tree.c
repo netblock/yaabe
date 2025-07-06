@@ -329,15 +329,15 @@ select_in_model_by_map(
 	);
 
 	// these two depth blocks, branch and leaf should look identical, with the
-	// difference being the atui_branch/atui_leaf get parent thing.
+	// difference being the atui_node/atui_node get parent thing.
 	int16_t branch_i = -1;
 	if (map->branch_depth) {
-		atui_branch const* branch = map->branch;
+		atui_node const* branch = map->branch;
 		uint8_t i = map->branch_depth;
 		do {
 			i--;
 			object_path[i] = G_OBJECT(branch->self);
-			branch = branch->parent_branch;
+			branch = branch->parent;
 		} while (i);
 		assert(NULL == branch);
 		branch_i = expand_model_with_object_path(
@@ -355,12 +355,12 @@ select_in_model_by_map(
 
 	int16_t leaf_i = -1;
 	if (map->leaf_depth) {
-		atui_leaf const* leaf = map->leaf;
+		atui_node const* leaf = map->leaf;
 		uint8_t i = map->leaf_depth;
 		do {
 			i--;
 			object_path[i] = G_OBJECT(leaf->self);
-			leaf = leaf->parent_leaf;
+			leaf = leaf->parent;
 		} while (i);
 		leaf_i = expand_model_with_object_path(
 			G_LIST_MODEL(gatui_branch_get_leaves_model(map->branch->self)),
@@ -430,11 +430,11 @@ gatui_tree_select_in_model_by_object(
 	if (GATUI_IS_LEAF(target)) {
 		GATUILeaf* leaf = GATUI_LEAF(target);
 		mirror = gatui_leaf_get_root(leaf);
-		map.leaf = (atui_leaf*) gatui_leaf_get_atui(leaf);
+		map.leaf = (atui_node*) gatui_leaf_get_atui(leaf);
 	} else if (GATUI_IS_BRANCH(target)) {
 		GATUIBranch* branch = GATUI_BRANCH(target);
 		mirror = gatui_branch_get_root(branch);
-		map.branch = (atui_branch*) gatui_branch_get_atui(branch);
+		map.branch = (atui_node*) gatui_branch_get_atui(branch);
 	} else {
 		return false;
 	}
@@ -444,17 +444,17 @@ gatui_tree_select_in_model_by_object(
 
 	if (map.leaf) {
 		bool parent_is_leaf;
-		atui_leaf const* parent = map.leaf;
+		atui_node const* parent = map.leaf;
 		do {
-			parent_is_leaf = parent->parent_is_leaf;
-			parent = parent->parent_leaf;
+			//parent_is_leaf = parent->parent_is_leaf;
+			parent = parent->parent;
 			map.leaf_depth++;
 		} while (parent_is_leaf);
 		map.branch = (void*) parent;
 	}
-	atui_branch const* parent = map.branch;
+	atui_node const* parent = map.branch;
 	do {
-		parent = parent->parent_branch;
+		parent = parent->parent;
 		map.branch_depth++;
 	} while (parent);
 

@@ -8,7 +8,7 @@ G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GObject)
 
 GATUIBranch*
 gatui_branch_new( // including all of its descendants and leaves
-		atui_branch* branch,
+		atui_node* branch,
 		GATUITree* root
 		);
 
@@ -79,8 +79,8 @@ gatui_branch_to_path(
 		GATUIBranch* self
 		);
 
-atui_branch const*
-gatui_branch_get_atui( // for the trivial atui_branch data
+atui_node const*
+gatui_branch_get_atui( // for the trivial atui_node data
 		GATUIBranch* self
 		);
 

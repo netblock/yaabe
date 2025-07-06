@@ -12,16 +12,16 @@ See scripts/ppatui.py for what the JSON5 tables compile to
 
 // The leaves and branches arrays will be walked through via pointer math
 struct leaf_array {
-	atui_leaf* pos; // position
-	atui_leaf* end;
+	atui_node* pos; // position
+	atui_node* end;
 };
 struct leaf_array_const {
-	atui_leaf const* pos;
-	atui_leaf const* end;
+	atui_node const* pos;
+	atui_node const* end;
 };
 struct branch_array {
-	atui_branch** pos;
-	atui_branch** end;
+	atui_node** pos;
+	atui_node** end;
 };
 struct global_tracker {
 	struct branch_array grafters;
@@ -64,14 +64,14 @@ print_atui_nofancy_leaf(
 		) {
 	assert(level->target.pos < level->target.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_leaf* const leaf = level->target.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node* const leaf = level->target.pos;
 	level->target.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
 	if (level->bios) {
-		leaf->val = level->bios;
+		leaf->data.input = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 }
@@ -92,30 +92,30 @@ print_atui_bitfield_leaf(
 		) {
 	assert(level->target.pos < level->target.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_leaf* const leaf = level->target.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node* const leaf = level->target.pos;
 	level->target.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
 	if (level->bios) {
-		leaf->val = level->bios;
+		leaf->data.input = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
-	uint16_t const num_leaves = leaf_src->template_leaves->numleaves;
+	uint16_t const num_leaves = leaf_src->leaf.vestige.template_leaves->numleaves;
 	if (num_leaves) {
-		assert(leaf->num_child_leaves == num_leaves); // ppatui.py sets
-		leaf->child_leaves = cralloc(num_leaves * sizeof(atui_leaf));
+		assert(leaf->leaves.count == num_leaves); // ppatui.py sets
+		leaf->leaves.nodes = cralloc(num_leaves * sizeof(atui_node));
 
 		struct level_data sub_leaves = {
 			.parent = leaf, // ppatui.py sets parent_is_leaf
-			.bios = leaf->val,
+			.bios = leaf->data.input,
 
-			.feed.pos = leaf_src->template_leaves->sub_leaves,
-			.feed.end = leaf_src->template_leaves->sub_leaves + num_leaves,
-			.target.pos = leaf->child_leaves,
-			.target.end = leaf->child_leaves + num_leaves,
+			.feed.pos = leaf_src->leaf.vestige.template_leaves->sub_leaves,
+			.feed.end = leaf_src->leaf.vestige.template_leaves->sub_leaves + num_leaves,
+			.target.pos = leaf->leaves.nodes,
+			.target.end = leaf->leaves.nodes + num_leaves,
 		};
 
 		atui_leaves_printer(global, &sub_leaves);
@@ -129,19 +129,19 @@ print_atui_string_leaf(
 		) {
 	assert(level->target.pos < level->target.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_leaf* const leaf = level->target.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node* const leaf = level->target.pos;
 	level->target.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
 	if (level->bios) {
-		leaf->val = level->bios;
+		leaf->data.input = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
-	leaf->array_size = 1 + strlen(leaf->c8); // +1 is NULL
-	leaf->num_bytes = leaf->array_size;
+	leaf->leaf.array_size = 1 + strlen(leaf->data.c8); // +1 is NULL
+	leaf->num_bytes = leaf->leaf.array_size;
 }
 
 inline static void
@@ -152,35 +152,35 @@ print_atui_graft_leaf(
 	assert(level->target.pos < level->target.end);
 	assert(global->grafters.pos < global->grafters.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_leaf* const leaf = level->target.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node* const leaf = level->target.pos;
 	level->target.pos++;
-	atui_branch** const grafter = global->grafters.pos;
+	atui_node** const grafter = global->grafters.pos;
 	global->grafters.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
 	if (level->bios) {
-		leaf->val = level->bios;
+		leaf->data.input = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
 	atuiargs branch_args = {
 		.atomtree = global->atomtree,
 		.rename = leaf->name,
-		.bios = leaf->val,
+		.bios = leaf->data.input,
 	};
-	*grafter = leaf->branch_bud(&branch_args);
+	*grafter = leaf->leaf.vestige.branch_bud(&branch_args);
 
-	uint16_t const num_child_leaves = (*grafter)->leaf_count;
-	atui_leaf* const child_leaves = (*grafter)->leaves;
+	uint16_t const num_child_leaves = (*grafter)->leaves.count;
+	atui_node* const child_leaves = (*grafter)->leaves.nodes;
 	for (uint16_t i = 0; i < num_child_leaves; i++) {
-		child_leaves[i].parent_leaf = leaf;
-		child_leaves[i].parent_is_leaf = true;
+		child_leaves[i].parent = leaf;
+		//child_leaves[i].parent_is_leaf = true;
 	}
 
-	leaf->child_leaves = child_leaves;
-	leaf->num_child_leaves = num_child_leaves;
+	leaf->leaves.nodes = child_leaves;
+	leaf->leaves.count = num_child_leaves;
 }
 
 inline static void
@@ -190,8 +190,8 @@ print_atui_shoot_leaf(
 		) {
 	assert(global->branches.pos < global->branches.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_branch** const brancher = global->branches.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node** const brancher = global->branches.pos;
 	global->branches.pos++;
 
 	atuiargs branch_args = {
@@ -200,10 +200,10 @@ print_atui_shoot_leaf(
 	if (level->bios) {
 		branch_args.bios = level->bios;
 	} else {
-		branch_args.bios = leaf_src->val;
+		branch_args.bios = leaf_src->data.input;
 	}
 
-	*brancher = leaf_src->branch_bud(&branch_args);
+	*brancher = leaf_src->leaf.vestige.branch_bud(&branch_args);
 
 	sprintf((*brancher)->name, leaf_src->origname,
 		level->name_num, level->nametag
@@ -215,38 +215,38 @@ print_atui_petiole_leaf(
 		struct global_tracker* const global,
 		struct level_data* const level
 		) {
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_branch** const brancher = global->branches.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node** const brancher = global->branches.pos;
 	global->branches.pos++;
 
 	atuiargs branch_args = {};
 	if (level->bios) {
 		branch_args.bios = level->bios;
 	} else {
-		branch_args.bios = leaf_src->val;
+		branch_args.bios = leaf_src->data.input;
 	}
-	*brancher = atui_branch_allocator(leaf_src->template_branch, &branch_args);
-	atui_branch* const branch = *brancher;
+	*brancher = atui_branch_allocator(leaf_src->leaf.vestige.template_branch, &branch_args);
+	atui_node* const branch = *brancher;
 	// handle branch->parent later
 
-	if (branch->leaf_count) { // calculate bytes
+	if (branch->leaves.count) { // calculate bytes
 		// feed the loop
-		atui_leaf const* const leaves = branch->leaves;
+		atui_node const* const leaves = branch->leaves.nodes;
 		bool is_contiguous;
-		void const* val_end = leaves[0].val;
+		void const* val_end = leaves[0].data.input;
 		uint16_t i=0;
 		do {
 			is_contiguous = (
-				(leaves[i].val == val_end)
+				(leaves[i].data.input == val_end)
 				&& (leaves[i].num_bytes)
 			);
-			val_end = leaves[i].val + leaves[i].num_bytes;
+			val_end = leaves[i].data.input + leaves[i].num_bytes;
 			i++;
-		} while ((i < branch->leaf_count) && is_contiguous);
+		} while ((i < branch->leaves.count) && is_contiguous);
 		if (is_contiguous) {
-			branch->prefer_contiguous = true;
-			branch->table_start = (void*) leaves[0].val;
-			branch->table_size = val_end - leaves[0].val;
+			branch->branch.prefer_contiguous = true;
+			branch->data.input = (void*) leaves[0].data.input;
+			branch->num_bytes = val_end - leaves[0].data.input;
 		}
 	}
 }
@@ -257,26 +257,26 @@ print_atui_dynarray_leaf(
 		) {
 	assert(level->target.pos < level->target.end);
 
-	atui_leaf const* const leaf_src = level->feed.pos;
-	atui_leaf* const leaf = level->target.pos;
+	atui_node const* const leaf_src = level->feed.pos;
+	atui_node* const leaf = level->target.pos;
 	level->target.pos++;
 
 	*leaf = *leaf_src;
 	leaf->parent = level->parent;
 	if (level->bios) {
-		leaf->val = level->bios;
+		leaf->data.input = level->bios;
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
-	struct subleaf_meta const* const sub_meta = leaf_src->template_leaves;
+	struct subleaf_meta const* const sub_meta = leaf_src->leaf.vestige.template_leaves;
 	uint16_t const num_leaves = sub_meta->numleaves * sub_meta->dynarray_length;
 	if (num_leaves) {
-		atui_leaf const* const feed_start = sub_meta->sub_leaves;
-		leaf->child_leaves = cralloc(num_leaves * sizeof(atui_leaf));
+		atui_node const* const feed_start = sub_meta->sub_leaves;
+		leaf->leaves.nodes = cralloc(num_leaves * sizeof(atui_node));
 
 		struct dynarray_position dynpos = { // direct/diferred positioner
-			.pos.ptr = leaf_src->val,
-			.end.ptr = leaf_src->val,
+			.pos.ptr = leaf_src->data.input,
+			.end.ptr = leaf_src->data.input,
 		};
 
 		struct level_data sub_leaves = {
@@ -284,8 +284,8 @@ print_atui_dynarray_leaf(
 
 			.feed.pos = feed_start,
 			.feed.end = feed_start + sub_meta->numleaves,
-			.target.pos = leaf->child_leaves,
-			.target.end = leaf->child_leaves + num_leaves,
+			.target.pos = leaf->leaves.nodes,
+			.target.end = leaf->leaves.nodes + num_leaves,
 		};
 
 		struct atui_enum_entry const* enum_array = NULL;
@@ -325,32 +325,32 @@ print_atui_dynarray_leaf(
 		}
 
 		// shoot doesn't get counted
-		leaf->num_child_leaves = sub_leaves.target.pos - leaf->child_leaves;
-		if (0 == leaf->num_child_leaves) {
-			free(leaf->child_leaves);
-			leaf->child_leaves = NULL;
+		leaf->leaves.count = sub_leaves.target.pos - leaf->leaves.nodes;
+		if (0 == leaf->leaves.count) {
+			free(leaf->leaves.nodes);
+			leaf->leaves.nodes = NULL;
 		}
 	}
 
 	// calculate num_bytes 
 	if (sub_meta->deferred_start_array) { // num_bytes
-		if (leaf->num_child_leaves) {
-			leaf->val = *(void const* const*)(leaf->val);
-			atui_leaf const* const last_child = &(
-				leaf->child_leaves[leaf->num_child_leaves - 1]
+		if (leaf->leaves.count) {
+			leaf->data.input = *(void const* const*)(leaf->data.input);
+			atui_node const* const last_child = &(
+				leaf->leaves.nodes[leaf->leaves.count - 1]
 			);
 			if (last_child->num_bytes) {
-				assert(last_child->val >= leaf->val);
+				assert(last_child->data.input >= leaf->data.input);
 				leaf->num_bytes = (
-					last_child->val + last_child->num_bytes
-					- leaf->val
+					last_child->data.input + last_child->num_bytes
+					- leaf->data.input
 				);
 			} else {
 				goto dynarray_deferred_num_bytes_failure;
 			}
 		} else { // TODO consider shoot only?
 			dynarray_deferred_num_bytes_failure:
-			leaf->val = NULL;
+			leaf->data.input = NULL;
 			leaf->num_bytes = 0;
 		}
 	} else {
@@ -382,15 +382,15 @@ atui_leaves_printer(
 		) {
 	struct leaf_array_const* const active = &(level->feed);
 	for (; active->pos < active->end; active->pos++) {
-		assert(active->pos->type.fancy < ATUI_NUM_FANCY);
-		print_fancy[active->pos->type.fancy](global, level);
+		assert(active->pos->leaf.type.fancy < ATUI_NUM_FANCY);
+		print_fancy[active->pos->leaf.type.fancy](global, level);
 	}
 }
 
 
 static void
 atui_subonly_pullin(
-		atui_leaf** parent_leaves, 
+		atui_node** parent_leaves, 
 		uint16_t* num_child_leaves,
 		void* parent
 		) {
@@ -400,9 +400,9 @@ atui_subonly_pullin(
 		return;
 	}
 	struct {
-		atui_leaf* start;
-		atui_leaf* pos;
-		atui_leaf* end;
+		atui_node* start;
+		atui_node* pos;
+		atui_node* end;
 	} stack[ATUI_STACK_DEPTH];
 
 	uint8_t stack_i = 0;
@@ -417,11 +417,11 @@ atui_subonly_pullin(
 		stack_i--;
 		counter_loop_entry:
 		while (stack[stack_i].pos < stack[stack_i].end) {
-			if (ATUI_SUBONLY == stack[stack_i].pos->type.disable) {
-				stack[stack_i+1].pos = stack[stack_i].pos->child_leaves;
+			if (ATUI_SUBONLY == stack[stack_i].pos->leaf.type.disable) {
+				stack[stack_i+1].pos = stack[stack_i].pos->leaves.nodes;
 				stack[stack_i+1].end = (
-					stack[stack_i].pos->child_leaves
-					+ stack[stack_i].pos->num_child_leaves
+					stack[stack_i].pos->leaves.nodes
+					+ stack[stack_i].pos->leaves.count
 				);
 				stack[stack_i].pos++;
 				stack_i++;
@@ -438,8 +438,8 @@ atui_subonly_pullin(
 		goto handle_subonly_on_grandchildren;
 	}
 
-	atui_leaf* const newleaves = cralloc(sizeof(atui_leaf) * num_new_leaves);
-	atui_leaf* walker = newleaves;
+	atui_node* const newleaves = cralloc(sizeof(atui_node) * num_new_leaves);
+	atui_node* walker = newleaves;
 
 	stack[0].start = *parent_leaves;
 	stack[0].pos = *parent_leaves;
@@ -448,12 +448,12 @@ atui_subonly_pullin(
 		stack_i--;
 		puller_loop_entry:
 		while (stack[stack_i].pos < stack[stack_i].end) {
-			if (ATUI_SUBONLY == stack[stack_i].pos->type.disable) {
-				stack[stack_i+1].start = stack[stack_i].pos->child_leaves;
-				stack[stack_i+1].pos = stack[stack_i].pos->child_leaves;
+			if (ATUI_SUBONLY == stack[stack_i].pos->leaf.type.disable) {
+				stack[stack_i+1].start = stack[stack_i].pos->leaves.nodes;
+				stack[stack_i+1].pos = stack[stack_i].pos->leaves.nodes;
 				stack[stack_i+1].end = (
-					stack[stack_i].pos->child_leaves
-					+ stack[stack_i].pos->num_child_leaves
+					stack[stack_i].pos->leaves.nodes
+					+ stack[stack_i].pos->leaves.count
 				);
 				stack[stack_i].pos++;
 				stack_i++;
@@ -477,19 +477,19 @@ atui_subonly_pullin(
 	//              ^<-------------------<v
 	uint16_t const num_leaves = *num_child_leaves;
 	for (uint16_t i=0; i < num_leaves; i++) {
-		atui_leaf* leaf = &((*parent_leaves)[i]);
-		assert(ATUI_DISPLAY == leaf->type.disable);
+		atui_node* leaf = &((*parent_leaves)[i]);
+		assert(ATUI_DISPLAY == leaf->leaf.type.disable);
 		// setting parent_is_leaf should not be necessary for leaves <- leaves
 		leaf->parent = parent;
-		if (leaf->num_child_leaves) {
+		if (leaf->leaves.count) {
 			atui_subonly_pullin(
-				&(leaf->child_leaves), &(leaf->num_child_leaves),  leaf
+				&(leaf->leaves.nodes), &(leaf->leaves.count),  leaf
 			);
 		}
 	}
 }
 
-atui_branch*
+atui_node*
 atui_branch_allocator(
 		struct atui_branch_data const* const embryo,
 		atuiargs const* const args
@@ -498,29 +498,29 @@ atui_branch_allocator(
 		.atomtree = args->atomtree,
 	};
 
-	atui_branch* const table = cralloc(sizeof(atui_branch));
+	atui_node* const table = cralloc(sizeof(atui_node));
 	*table = embryo->seed;
 
-	atui_branch** branches = NULL;
-	atui_branch** grafters = NULL;
+	atui_node** branches = NULL;
+	atui_node** grafters = NULL;
 	uint8_t const num_direct_branches = (
 		embryo->computed_num_shoot + args->num_import_branches
 	);
 	uint8_t max_num_branches = num_direct_branches;
 	if (num_direct_branches) {
-		branches = cralloc(num_direct_branches * sizeof(atui_branch*));
+		branches = cralloc(num_direct_branches * sizeof(atui_node*));
 		tracker.branches.pos = branches;
 		tracker.branches.end = branches + embryo->computed_num_shoot;
 	}
 	if (embryo->computed_num_graft) {
-		grafters = cralloc(embryo->computed_num_graft * sizeof(atui_branch*));
+		grafters = cralloc(embryo->computed_num_graft * sizeof(atui_node*));
 		tracker.grafters.pos = grafters;
 		tracker.grafters.end = grafters + embryo->computed_num_graft;
 	}
 
 	if (embryo->computed_num_leaves) {
-		table->leaves = cralloc(
-			embryo->computed_num_leaves * sizeof(atui_leaf)
+		table->leaves.nodes = cralloc(
+			embryo->computed_num_leaves * sizeof(atui_node)
 		);
 
 		struct level_data first_leaves = {
@@ -528,23 +528,23 @@ atui_branch_allocator(
 
 			.feed.pos = embryo->leaves_init,
 			.feed.end = embryo->leaves_init + embryo->num_leaves_init,
-			.target.pos = table->leaves,
-			.target.end = table->leaves + embryo->num_leaves_init,
+			.target.pos = table->leaves.nodes,
+			.target.end = table->leaves.nodes + embryo->num_leaves_init,
 		};
 		atui_leaves_printer(&tracker, &first_leaves);
 
 		// shoot doesn't get counted
-		table->leaf_count = first_leaves.target.pos - table->leaves;
+		table->leaves.count = first_leaves.target.pos - table->leaves.nodes;
 
-		atui_subonly_pullin(&(table->leaves), &(table->leaf_count), table);
+		atui_subonly_pullin(&(table->leaves.nodes), &(table->leaves.count), table);
 
-		for (uint16_t i=0; i < table->leaf_count; i++) {
-			if (table->leaves[i].num_bytes) { // if it maps the bios
-				table->num_copyable_leaves++;
+		for (uint16_t i=0; i < table->leaves.count; i++) {
+			if (table->leaves.nodes[i].num_bytes) { // if it maps the bios
+				table->branch.num_copyable_leaves++;
 			}
 
 			// see atui_subonly_pullin
-			table->leaves[i].parent_is_leaf = false;
+			//table->leaves.nodes[i].parent_is_leaf = false;
 		}
 	}
 	assert(tracker.branches.pos == tracker.branches.end);
@@ -554,21 +554,21 @@ atui_branch_allocator(
 		// pull in branches from all the graft branches, and free the trunks
 		uint16_t num_indirect_branches = 0;
 		for (uint8_t i=0; i < embryo->computed_num_graft; i++) {
-			num_indirect_branches += grafters[i]->num_branches;
+			num_indirect_branches += grafters[i]->branch.branches.count;
 		}
 		if (num_indirect_branches) {
 			max_num_branches += num_indirect_branches;
 			branches = crealloc(
-				branches, max_num_branches*sizeof(atui_branch*)
+				branches, max_num_branches*sizeof(atui_node*)
 			);
 
 			tracker.branches.pos = branches + embryo->computed_num_shoot;
 			tracker.branches.end = tracker.branches.pos + num_indirect_branches;
 			for (uint8_t i=0; i < embryo->computed_num_graft; i++) {
-				uint16_t const num_child_branches = grafters[i]->num_branches;
+				uint16_t const num_child_branches = grafters[i]->branch.branches.count;
 				if (num_child_branches) {
-					atui_branch** const child_branches = (
-						grafters[i]->child_branches
+					atui_node** const child_branches = (
+						grafters[i]->branch.branches.nodes
 					);
 					uint16_t child_i = 0;
 					do {
@@ -603,15 +603,15 @@ atui_branch_allocator(
 		}
 	}
 
-	table->child_branches = branches;
-	table->max_num_branches = max_num_branches;
-	table->num_branches = tracker.branches.pos - branches;
-	for (uint8_t i=0; i < table->num_branches; i++) {
-		branches[i]->parent_branch = table;
+	table->branch.branches.nodes = branches;
+	table->branch.branches.max_count = max_num_branches;
+	table->branch.branches.count = tracker.branches.pos - branches;
+	for (uint8_t i=0; i < table->branch.branches.count; i++) {
+		branches[i]->parent = table;
 	}
 
 	if (args->rename) {
-		assert(strlen(args->rename) < sizeof((atui_branch){}.name));
+		assert(strlen(args->rename) < sizeof((atui_node){}.name));
 		strcpy(table->name, args->rename);
 	}
 
@@ -622,66 +622,66 @@ atui_branch_allocator(
 
 static void
 _atui_destroy_leaves(
-		atui_leaf* const leaves,
+		atui_node* const leaves,
 		uint16_t const num_leaves
 		) {
 	for (uint16_t i = 0; i < num_leaves; i++) {
-		if (leaves[i].num_child_leaves) {
+		if (leaves[i].leaves.count) {
 			_atui_destroy_leaves(
-				leaves[i].child_leaves, leaves[i].num_child_leaves
+				leaves[i].leaves.nodes, leaves[i].leaves.count
 			);
-			free(leaves[i].child_leaves);
+			free(leaves[i].leaves.nodes);
 		}
 	}
 }
 void
 atui_destroy_tree(
-		atui_branch* const tree
+		atui_node* const tree
 		) {
 	// a reference implementation. deallocates the data set up by
 	// atui_branch_allocator
-	if (tree->leaf_count) {
-		_atui_destroy_leaves(tree->leaves, tree->leaf_count);
-		free(tree->leaves);
+	if (tree->leaves.count) {
+		_atui_destroy_leaves(tree->leaves.nodes, tree->leaves.count);
+		free(tree->leaves.nodes);
 	}
-	while (tree->num_branches) {
-		tree->num_branches--;
-		atui_destroy_tree(tree->child_branches[tree->num_branches]);
+	while (tree->branch.branches.count) {
+		tree->branch.branches.count--;
+		atui_destroy_tree(tree->branch.branches.nodes[tree->branch.branches.count]);
 	}
-	free(tree->child_branches);
+	free(tree->branch.branches.nodes);
 	free(tree);
 }
 
 
 static void
 atui_assimilate_leaves(
-		atui_branch* const dest,
-		atui_branch* const* const src_array,
+		atui_node* const dest,
+		atui_node* const* const src_array,
 		uint16_t const src_array_len
 		) {
-	uint16_t const old_leaf_count = dest->leaf_count;
-	uint16_t new_leaf_count = dest->leaf_count;
+	uint16_t const old_leaf_count = dest->leaves.count;
+	uint16_t new_leaf_count = dest->leaves.count;
 	for (uint16_t i=0; i < src_array_len; i++) {
-		new_leaf_count += src_array[i]->leaf_count;
+		new_leaf_count += src_array[i]->leaves.count;
 	}
 
 	if (old_leaf_count == new_leaf_count) {
 		return;
 	}
 
-	atui_leaf* const leaves = crealloc(
-		dest->leaves,  (new_leaf_count * sizeof(atui_leaf))
+	atui_node* const leaves = crealloc(
+		dest->leaves.nodes,  (new_leaf_count * sizeof(atui_node))
 	);
-	dest->leaves = leaves;
-	dest->leaf_count = new_leaf_count;
+	dest->leaves.nodes = leaves;
+	dest->leaves.count = new_leaf_count;
 
 	uint16_t dest_leaf_i = old_leaf_count;
 	for (uint16_t src_branch_i=0; src_branch_i < src_array_len; src_branch_i++){
-		atui_branch const* src = src_array[src_branch_i];
+		atui_node const* src = src_array[src_branch_i];
 		uint16_t src_leaf_i = 0;
-		while (src_leaf_i < src->leaf_count) {
-			leaves[dest_leaf_i] = src->leaves[src_leaf_i];
-			leaves[dest_leaf_i].parent_branch = dest;
+		while (src_leaf_i < src->leaves.count) {
+			leaves[dest_leaf_i] = src->leaves.nodes[src_leaf_i];
+			leaves[dest_leaf_i].parent = dest;
 			src_leaf_i++;
 			dest_leaf_i++;
 		}
@@ -690,43 +690,43 @@ atui_assimilate_leaves(
 
 	while (dest_leaf_i) { // the realloc may change parent leaf address
 		dest_leaf_i--;
-		atui_leaf* grandchildren = leaves[dest_leaf_i].child_leaves;
-		uint16_t num_grandchildren = leaves[dest_leaf_i].num_child_leaves;
+		atui_node* grandchildren = leaves[dest_leaf_i].leaves.nodes;
+		uint16_t num_grandchildren = leaves[dest_leaf_i].leaves.count;
 		int16_t grand_child_i = 0;
 		for (; grand_child_i < num_grandchildren; grand_child_i++) {
-			grandchildren[grand_child_i].parent_leaf = &(leaves[dest_leaf_i]);
+			grandchildren[grand_child_i].parent = &(leaves[dest_leaf_i]);
 		}
 	}
 }
 static void
 atui_assimilate_branches(
-		atui_branch* const dest,
-		atui_branch* const* const src_array,
+		atui_node* const dest,
+		atui_node* const* const src_array,
 		uint16_t const src_array_len
 		) {
-	uint16_t const old_num_branches = dest->num_branches;
-	uint16_t new_num_branches = dest->num_branches;
+	uint16_t const old_num_branches = dest->branch.branches.count;
+	uint16_t new_num_branches = dest->branch.branches.count;
 	for (uint16_t i=0; i < src_array_len; i++) {
-		new_num_branches += src_array[i]->num_branches;
+		new_num_branches += src_array[i]->branch.branches.count;
 	}
 
 	if (old_num_branches == new_num_branches) {
 		return;
 	}
 
-	atui_branch** const branches = crealloc(
-		dest->child_branches,  (new_num_branches * sizeof(atui_branch*))
+	atui_node** const branches = crealloc(
+		dest->branch.branches.nodes,  (new_num_branches * sizeof(atui_node*))
 	);
-	dest->child_branches = branches;
-	dest->num_branches = new_num_branches;
+	dest->branch.branches.nodes = branches;
+	dest->branch.branches.count = new_num_branches;
 
-	uint16_t dest_branch_i = dest->num_branches;
+	uint16_t dest_branch_i = dest->branch.branches.count;
 	for (uint16_t i=0; i < src_array_len; i++) {
-		atui_branch const* src = src_array[i];
+		atui_node const* src = src_array[i];
 		uint16_t src_branch_i = 0;
-		while (src_branch_i < src->num_branches) {
-			branches[dest_branch_i] = src->child_branches[src_branch_i];
-			branches[dest_branch_i]->parent_branch = dest;
+		while (src_branch_i < src->branch.branches.count) {
+			branches[dest_branch_i] = src->branch.branches.nodes[src_branch_i];
+			branches[dest_branch_i]->parent = dest;
 			src_branch_i++;
 			dest_branch_i++;
 		}
@@ -735,11 +735,11 @@ atui_assimilate_branches(
 
 	while (dest_branch_i) { // the realloc may change parent branch address
 		dest_branch_i--;
-		atui_branch** grandchildren = branches[dest_branch_i]->child_branches;
-		uint16_t num_grandchildren = branches[dest_branch_i]->num_branches;
+		atui_node** grandchildren = branches[dest_branch_i]->branch.branches.nodes;
+		uint16_t num_grandchildren = branches[dest_branch_i]->branch.branches.count;
 		int16_t grand_child_i = 0;
 		for (; grand_child_i < num_grandchildren; grand_child_i++) {
-			grandchildren[grand_child_i]->parent_branch = (
+			grandchildren[grand_child_i]->parent = (
 				branches[dest_branch_i]
 			);
 		}
@@ -747,17 +747,16 @@ atui_assimilate_branches(
 }
 void
 atui_assimilate(
-		atui_branch* const dest,
-		atui_branch* const* const src_array,
+		atui_node* const dest,
+		atui_node* const* const src_array,
 		uint16_t const src_array_len
 		) {
 	atui_assimilate_leaves(dest, src_array, src_array_len);
 	atui_assimilate_branches(dest, src_array, src_array_len);
 
 	for (uint16_t i=0; i < src_array_len; i++) {
-		free(src_array[i]->leaves);
-		free(src_array[i]->child_branches);
+		free(src_array[i]->leaves.nodes);
+		free(src_array[i]->branch.branches.nodes);
 		free(src_array[i]);
 	}	
 }
-

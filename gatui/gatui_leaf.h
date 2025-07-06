@@ -8,7 +8,7 @@ G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GObject)
 
 GATUILeaf*
 gatui_leaf_new( // including all of is subleaves
-		atui_leaf* leaf,
+		atui_node* leaf,
 		GATUITree* root
 		);
 
@@ -102,7 +102,7 @@ gatui_leaf_to_path(
 		);
 
 
-atui_leaf const*
+atui_node const*
 gatui_leaf_get_atui(
 		GATUILeaf* self
 		);

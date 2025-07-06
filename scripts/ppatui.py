@@ -856,7 +856,7 @@ def leaf_to_subleaf(
 + child_indent + ".deferred_start_array = %s,\n"
 + child_indent + ".numleaves = %u,\n"
 + child_indent + ".enum_taglist = %s,\n"
-+ child_indent + ".sub_leaves = (atui_leaf const[%u]) {\n"
++ child_indent + ".sub_leaves = (atui_node const[%u]) {\n"
 + "%s"
 + child_indent + "},\n"
 + indent + "},"
@@ -932,10 +932,11 @@ def leaves_to_text(
 	child_indent:str = indent + "\t"
 	leaf_template:str = (
 indent + "{\n"
++ child_indent + ".is_leaf = true,\n"
 + child_indent + ".name = \"%s\",\n"
 + child_indent + ".origname = \"%s\",\n"
 
-+ child_indent + ".type = {\n"
++ child_indent + ".leaf.type = {\n"
 + child_indent + "	.fancy = %s,\n"
 + child_indent + "	.radix = %s,\n"
 + child_indent + "	.disable = %s,\n"
@@ -943,15 +944,15 @@ indent + "{\n"
 + child_indent + "	.fraction = %s,\n"
 + child_indent + "	.has_enum = %s,\n"
 + child_indent + "},\n"
-+ child_indent + ".enum_options = %s,\n"
++ child_indent + ".leaf.enum_options = %s,\n"
 
 + child_indent + ".num_bytes = _PPATUI_NULLPTR_SIZE(%s),\n"
-+ child_indent + ".array_size = 1,\n"
-+ child_indent + ".fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
-+ child_indent + ".total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
-+ child_indent + ".bitfield_hi = _PPATUI_LEAF_BITNESS(%s) - 1,\n"
++ child_indent + ".leaf.array_size = 1,\n"
++ child_indent + ".leaf.fractional_bits = _PPATUI_LEAF_FIXED_FRACTION_BITS(%s),\n"
++ child_indent + ".leaf.total_bits = _PPATUI_LEAF_BITNESS(%s),\n"
++ child_indent + ".leaf.bitfield_hi = _PPATUI_LEAF_BITNESS(%s) - 1,\n"
 
-+ child_indent + ".val = %s,\n"
++ child_indent + ".data.input = %s,\n"
 + child_indent + ".description = {%s},\n"
 + "%s" # extra
 + indent + "},\n"
@@ -982,15 +983,16 @@ indent + "{\n"
 				if leaf.access:
 					var_access = leaf.access
 				leaf_text_extra = (
-					child_indent + ".array_size = lengthof(%s),\n"
+					child_indent + ".leaf.array_size = lengthof(%s),\n"
 					+ child_indent + ".num_bytes = sizeof(%s),\n"
 				)
 				leaf_text_extra %= (leaf.access, leaf.access)
 			case atui_type.ATUI_BITFIELD:
 				leaf_text_extra = (
-					child_indent + ".num_child_leaves = %u,\n"
-					+ child_indent +
-						".template_leaves = & (struct subleaf_meta const) %s\n"
+					child_indent + ".leaves.count = %u,\n"
+					+ child_indent
+						+ ".leaf.vestige.template_leaves = "
+						+ "& (struct subleaf_meta const) %s\n"
 				)
 				leaf_text_extra %= (
 					len(leaf.fancy_data["fields"]),
@@ -998,8 +1000,10 @@ indent + "{\n"
 				)
 			case atui_type._ATUI_BITCHILD:
 				leaf_text_extra = (
-					child_indent   + ".bitfield_hi = _PPATUI_BIT_HI(%s, %s),\n"
-					+ child_indent + ".bitfield_lo = _PPATUI_BIT_LO(%s, %s),\n"
+					child_indent
+					+ ".leaf.bitfield_hi = _PPATUI_BIT_HI(%s, %s),\n"
+					+ child_indent
+					+ ".leaf.bitfield_lo = _PPATUI_BIT_LO(%s, %s),\n"
 				)
 				leaf_text_extra %= (
 					leaf.union, leaf.access,
@@ -1008,7 +1012,7 @@ indent + "{\n"
 				var_access = "&(%s)" % leaf.access_meta
 			case atui_type.ATUI_SHOOT | atui_type.ATUI_GRAFT: # fallthrough
 				leaf_text_extra = (
-					child_indent + ".branch_bud = _atui_%s,\n"
+					child_indent + ".leaf.vestige.branch_bud = _atui_%s,\n"
 				)
 				leaf_text_extra %= (leaf.fancy_data,)
 			case atui_type.ATUI_DYNARRAY:
@@ -1019,13 +1023,15 @@ indent + "{\n"
 					var_access = leaf.fancy_data["deferred"]
 				leaf_text_extra = (
 					child_indent +
-						".template_leaves = & (struct subleaf_meta const) %s\n"
+						".leaf.vestige.template_leaves = "
+						+ "& (struct subleaf_meta const) %s\n"
 				)
 				leaf_text_extra %= (leaf_to_subleaf(leaf, child_indent),)
 			case atui_type.ATUI_PETIOLE:
 				leaf_text_extra = (
 					child_indent
-					+ ".template_branch = & (struct atui_branch_data const) {\n"
+					+ ".leaf.vestige.template_branch = "
+					+ "& (struct atui_branch_data const) {\n"
 					+ "%s"
 					+ child_indent + "},\n"
 				)
@@ -1035,8 +1041,8 @@ indent + "{\n"
 			case _:
 				assert 0, (leaf.name, leaf.fancy)
 
-		if leaf.parent_is_leaf:
-			leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
+		#if leaf.parent_is_leaf:
+		#	leaf_text_extra += child_indent + ".parent_is_leaf = true,\n"
 		leaf.name:str = leaf.name.replace("\"","\\\"")
 
 		type_text = leaf_type_to_text(leaf, var_meta)
@@ -1137,26 +1143,27 @@ def branch_embryo_to_text(
 	child_indent:str = indent + "\t"
 	embryo_template:str = (
 indent + ".seed = {\n"
++ indent + "	.is_leaf = false,\n"
 + indent + "	.name = \"%s\",\n"
 + indent + "	.origname = \"%s\",\n"
 + indent + "	.structname = \"%s\",\n"
 + indent + "	.description = {%s},\n"
-+ indent + "	.table_start = (void*) (%s),\n"
-+ indent + "	.table_size = (%s),\n"
-+ indent + "	.prefer_contiguous = (\n"
++ indent + "	.data.input = (%s),\n"
++ indent + "	.num_bytes = (%s),\n"
++ indent + "	.branch.prefer_contiguous = (\n"
 + indent + "		(0 < _PPATUI_NULLPTR_SIZE(*bios))\n"
 + indent + "		&& (\n"
 + indent + "			%s\n"
 + indent + "			<= _PPATUI_NULLPTR_SIZE(*bios)\n"
 + indent + "		)\n"
 + indent + "	),\n"
-+ indent + "	.expanded = %s,\n"
++ indent + "	.branch.branches.expanded = %s,\n"
 + indent + "},\n"
 + indent + ".computed_num_leaves = %s,\n"
 + indent + ".computed_num_graft = %s,\n"
 + indent + ".computed_num_shoot = %s,\n"
 + indent + ".num_leaves_init = %u,\n"
-+ indent + ".leaves_init = (atui_leaf const[]) {\n"
++ indent + ".leaves_init = (atui_node const[]) {\n"
 + "%s"
 + indent + "},\n"
 )
@@ -1201,7 +1208,7 @@ def branches_to_c(
 # These arrays need to be in a function to handle the bios-> and atomtree->
 # everywhere. trying to globalise the vars gets annoying real fast.
 	branch_template:str = """
-atui_branch* 
+atui_node* 
 _atui_%s(
 		atuifunc_args const* const args
 		) {
@@ -1258,7 +1265,7 @@ def branches_to_h(
 
 """
 	header_entry:str = """\
-atui_branch*
+atui_node*
 _atui_%s(
 		atuifunc_args const* args
 		);

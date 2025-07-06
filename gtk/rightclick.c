@@ -235,7 +235,7 @@ branch_right_click_copy_name(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+	atui_node const* const a_branch = gatui_branch_get_atui(pack->branch);
 	clipboard_set_text(a_branch->name);
 }
 static void
@@ -245,7 +245,7 @@ branch_right_click_copy_struct_name(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+	atui_node const* const a_branch = gatui_branch_get_atui(pack->branch);
 	clipboard_set_text(a_branch->origname);
 }
 static void
@@ -293,9 +293,9 @@ branch_right_click_collapse_children(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
+	atui_node const* const a_branch = gatui_branch_get_atui(pack->branch);
 
-	for (uint16_t i=0; i < a_branch->num_branches; i++) {
+	for (uint16_t i=0; i < a_branch->branch.branches.count; i++) {
 		GtkTreeListRow* child = gtk_tree_list_row_get_child_row(tree_row, i);
 		gtk_tree_list_row_set_expanded(child, false);
 		g_object_unref(child);
@@ -340,14 +340,14 @@ branches_rightclick_popup(
 		{.name = "path",   .activate = branch_right_click_copy_path},
 	};
 	uint8_t act_i = 3;
-	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
-	if (a_branch->num_copyable_leaves || a_branch->table_size) {
-		if (a_branch->num_copyable_leaves && ! a_branch->prefer_contiguous) {
+	atui_node const* const a_branch = gatui_branch_get_atui(g_branch);
+	if (a_branch->branch.num_copyable_leaves || a_branch->num_bytes) {
+		if (a_branch->branch.num_copyable_leaves && ! a_branch->branch.prefer_contiguous) {
 			actions[act_i].name = "copy_leaves";
 			actions[act_i].activate = branch_right_click_copy_leaves;
 			act_i++;
 		}
-		if (a_branch->table_size) {
+		if (a_branch->num_bytes) {
 			actions[act_i].name = "copy_contiguous";
 			actions[act_i].activate = branch_right_click_copy_contiguous;
 			act_i++;
@@ -356,7 +356,7 @@ branches_rightclick_popup(
 		actions[act_i].activate = branchleaf_right_click_paste_data;
 		act_i++;
 	};
-	if (a_branch->num_branches) {
+	if (a_branch->branch.branches.count) {
 		if (gtk_tree_list_row_get_expanded(tree_row)) {
 			actions[act_i].name = "collapse_children";
 			actions[act_i].activate = branch_right_click_collapse_children;
@@ -412,7 +412,7 @@ leaf_right_click_copy_name(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
+	atui_node const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
 	clipboard_set_text(a_leaf->name);
 }
 static void
@@ -483,8 +483,8 @@ leaves_rightclick_popup(
 		{.name = "path", .activate = leaf_right_click_copy_path},
 	};
 	uint8_t act_i = 2;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
-	if (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->type.fancy) {
+	atui_node const* const a_leaf = gatui_leaf_get_atui(g_leaf);
+	if (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->leaf.type.fancy) {
 		actions[act_i].name = "copy_data";
 		actions[act_i].activate = leaf_right_click_copy_data;
 		act_i++;
@@ -665,15 +665,15 @@ search_rightclick_popup(
 	);
 	bool has_data = false;
 	if (node->is_leaf) {
-		atui_leaf const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(
+		atui_node const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(
 			node->gatui
 		));
-		has_data = (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->type.fancy);
+		has_data = (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->leaf.type.fancy);
 	} else {
-		atui_branch const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
+		atui_node const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
 			node->gatui
 		));
-		has_data = (0 < a_branch->table_size);
+		has_data = (0 < a_branch->num_bytes);
 	}
 	if (has_data) {
 		actions[act_i].name = "copy_data";

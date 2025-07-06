@@ -16,10 +16,10 @@ static void
 gatui_leaf_test_get_set_memory(
 		GATUILeaf* const leaf
 		) {
-	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
+	atui_node const* const atui = gatui_leaf_get_atui(leaf);
 	bool success;
 	GVariant* val; 
-	if (atui->num_bytes || _ATUI_BITCHILD == atui->type.fancy) {
+	if (atui->num_bytes || _ATUI_BITCHILD == atui->leaf.type.fancy) {
 		val = gatui_leaf_get_value(leaf, true);
 		success = gatui_leaf_set_value(leaf, val);
 		error_assert(&error, ERROR_CRASH, NULL,
@@ -97,16 +97,16 @@ gatui_leaf_test(
 		GATUITree* const root
 		) {
 	// TODO actually test stuff
-	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
+	atui_node const* const atui = gatui_leaf_get_atui(leaf);
 	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
 	//bool success;
 
-	if (atui->val) {
+	if (atui->data.input) {
 		error_assert(&error, ERROR_CRASH, NULL,
-			a_root->bios <= atui->val
+			a_root->bios <= atui->data.input
 		);
 		error_assert(&error, ERROR_CRASH, NULL,
-			(atui->val + atui->num_bytes - 1)
+			(atui->data.input + atui->num_bytes - 1)
 			<= (a_root->bios + a_root->biosfile_size)
 		);
 	}
@@ -123,11 +123,11 @@ gatui_leaf_test(
 		leaf, NULL
 	);
 	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == child_leaves) ^ (0 < atui->num_child_leaves)
+		(NULL == child_leaves) ^ (0 < atui->leaves.count)
 	);
 	if (child_leaves) {
-		for (uint16_t i=0; i < atui->num_child_leaves; i++) {
-			gatui_leaf_test(atui->child_leaves[i].self, root);
+		for (uint16_t i=0; i < atui->leaves.count; i++) {
+			gatui_leaf_test(atui->leaves.nodes[i].self, root);
 		}
 		g_object_unref(child_leaves);
 	}
@@ -140,12 +140,12 @@ static void
 gatui_branch_test_get_set_memory(
 		GATUIBranch* const branch
 		) {
-	atui_branch const* const atui = gatui_branch_get_atui(branch);
+	atui_node const* const atui = gatui_branch_get_atui(branch);
 	bool success;
 	char* b64_text;
-	if (atui->num_copyable_leaves || atui->table_size) {
+	if (atui->branch.num_copyable_leaves || atui->num_bytes) {
 		GVariant* val = NULL;
-		if (atui->num_copyable_leaves && ! atui->prefer_contiguous) {
+		if (atui->branch.num_copyable_leaves && ! atui->branch.prefer_contiguous) {
 			uint16_t num_copyable_leaves;
 			success = gatui_branch_get_leaves_memory_package(
 				branch, &val, &num_copyable_leaves
@@ -170,7 +170,7 @@ gatui_branch_test_get_set_memory(
 			);
 			free(b64_text);
 		}
-		if (atui->table_size) {
+		if (atui->num_bytes) {
 			val = gatui_branch_get_contiguous_memory(branch);
 			success = gatui_branch_set_contiguous_memory(branch, val);
 			error_assert(&error, ERROR_CRASH, NULL,
@@ -198,16 +198,16 @@ gatui_branch_test(
 		GATUITree* const root
 		) {
 	// TODO actually test stuff
-	atui_branch const* const atui = gatui_branch_get_atui(branch);
+	atui_node const* const atui = gatui_branch_get_atui(branch);
 	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
 	bool success;
 
-	if (atui->table_start) {
+	if (atui->data.input) {
 		error_assert(&error, ERROR_CRASH, NULL,
-			a_root->bios <= atui->table_start
+			a_root->bios <= atui->data.input
 		);
 		error_assert(&error, ERROR_CRASH, NULL,
-			(atui->table_start + atui->table_size - 1)
+			(atui->data.input + atui->num_bytes - 1)
 			<= (a_root->bios + a_root->biosfile_size)
 		);
 	}
@@ -226,11 +226,11 @@ gatui_branch_test(
 
 	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);
 	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == leaves) ^ (0 < atui->leaf_count)
+		(NULL == leaves) ^ (0 < atui->leaves.count)
 	);
-	if (atui->leaf_count) {
-		for (uint16_t i=0; i < atui->leaf_count; i++) {
-			gatui_leaf_test(atui->leaves[i].self, root);
+	if (atui->leaves.count) {
+		for (uint16_t i=0; i < atui->leaves.count; i++) {
+			gatui_leaf_test(atui->leaves.nodes[i].self, root);
 		}
 	}
 
@@ -239,11 +239,11 @@ gatui_branch_test(
 		branch, NULL
 	);
 	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == child_branches) ^ (0 < atui->num_branches)
+		(NULL == child_branches) ^ (0 < atui->branch.branches.count)
 	);
 	if (child_branches) {
-		for (uint16_t i=0; i < atui->num_branches; i++) {
-			gatui_branch_test(atui->child_branches[i]->self, root);
+		for (uint16_t i=0; i < atui->branch.branches.count; i++) {
+			gatui_branch_test(atui->branch.branches.nodes[i]->self, root);
 		}
 		g_object_unref(child_branches);
 	}

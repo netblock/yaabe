@@ -145,7 +145,7 @@ struct atom_tree {
 
 	struct atomtree_psp_directory psp_directory;
 
-	atui_branch* atui_root;
+	atui_node* atui_root;
 };
 
 
