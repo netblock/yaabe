@@ -443,14 +443,12 @@ gatui_tree_select_in_model_by_object(
 	}
 
 	if (map.leaf) {
-		bool parent_is_leaf;
 		atui_node const* parent = map.leaf;
 		do {
-			//parent_is_leaf = parent->parent_is_leaf;
 			parent = parent->parent;
 			map.leaf_depth++;
-		} while (parent_is_leaf);
-		map.branch = (void*) parent;
+		} while (parent->is_leaf);
+		map.branch = (atui_node*) parent;
 	}
 	atui_node const* parent = map.branch;
 	do {

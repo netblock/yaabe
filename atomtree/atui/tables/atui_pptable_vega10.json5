@@ -3,8 +3,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -60,7 +60,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "atom_vega10_powerplaytable",
-	table_size: "bios->header.header.structuresize",
+	num_bytes: "bios->header.header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -256,7 +256,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_state_array",
-	table_size: "sizeof_flex(bios, states, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, states, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -271,7 +271,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "states [%02u]",
 					fancy: "ATUI_SHOOT", fancy_data: "atom_vega10_state",
@@ -594,7 +594,7 @@ global_defaults: {
 
 {
 	c_type: "atom_vega10_clk_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -609,7 +609,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_clk_dependency_record",
 				},],
@@ -642,7 +642,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_mclk_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -657,7 +657,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_mclk_dependency_record",
 				},],
@@ -706,7 +706,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_gfxclk_dependency_table_v1",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -721,7 +721,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_gfxclk_dependency_record",
 				},],
@@ -759,7 +759,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_gfxclk_dependency_table_v2",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -774,7 +774,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_gfxclk_dependency_record_v2",
 				},],
@@ -785,7 +785,7 @@ global_defaults: {
 
 {
 	c_type: "atom_vega10_voltage_lookup_table",
-	table_size: "sizeof_flex(bios, vdd_entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, vdd_entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -800,7 +800,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "vdd_entries [%02u]",
 					display: "ATUI_DEC",
@@ -848,7 +848,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_mm_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -863,7 +863,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_mm_dependency_record",
 				},],
@@ -903,7 +903,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_vce_state_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -918,7 +918,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_vce_state_record",
 				},],
@@ -1200,7 +1200,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_hard_limit_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1215,7 +1215,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_hard_limit_record",
 				},],
@@ -1249,7 +1249,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega10_pcie_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1264,7 +1264,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_vega10_pcie_record",
 				},],

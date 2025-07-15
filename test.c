@@ -243,7 +243,7 @@ gatui_branch_test(
 	);
 	if (child_branches) {
 		for (uint16_t i=0; i < atui->branch.branches.count; i++) {
-			gatui_branch_test(atui->branch.branches.nodes[i]->self, root);
+			gatui_branch_test(atui->branch.branches.addresses[i]->self, root);
 		}
 		g_object_unref(child_branches);
 	}

@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -86,7 +86,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_ODFEATURE - SMU_11_0_ODCAP_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 14
 						name: "OD feature [14 + %02u]",
 					},],
@@ -134,7 +134,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 19
 						name: "max: [19 + %02u]",
 					},],
@@ -150,7 +150,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_ODSETTING - SMU_11_0_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "min: [19 + %02u]",
 					},],
@@ -240,7 +240,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(ATOM_VEGA20_ODFEATURE_MAX_COUNT - ATOM_VEGA20_ODFEATURE_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // 10 is ATOM_VEGA20_ODFEATURE_COUNT
 						name: "OD feature [10 + %02u]",
 					},],
@@ -259,7 +259,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
 						name: "max: [14 + %02u]",
 					},],
@@ -278,7 +278,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(ATOM_VEGA20_ODSETTING_MAX_COUNT - ATOM_VEGA20_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // 14 is ATOM_VEGA20_ODSETTING_COUNT
 						name: "min: [14 + %02u]",
 					},],
@@ -404,7 +404,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODFEATURE - SMU_11_0_7_ODCAP_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 16
 						name: "OD feature [16 + %02u]",
 					},],
@@ -423,7 +423,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 30
 						name: "max: [30 + %02u]",
 					},],
@@ -442,7 +442,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_ODSETTING - SMU_11_0_7_ODSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 30
 						name: "min: [30 + %02u]",
 					},],
@@ -461,7 +461,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PMSETTING - SMU_11_0_7_PMSETTING_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 16
 						name: "pm_setting: [16 + %02u]",
 					},],
@@ -534,7 +534,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 10
 						name: "max: [10 + %02u]",
 					},],
@@ -550,7 +550,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_MAX_PPCLOCK - SMU_11_0_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 10
 						name: "min: [10 + %02u]",
 					},],
@@ -621,7 +621,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(ATOM_VEGA20_PPCLOCK_MAX_COUNT - ATOM_VEGA20_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "max: [11 + %02u]",
 					},],
@@ -640,7 +640,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(ATOM_VEGA20_PPCLOCK_MAX_COUNT - ATOM_VEGA20_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "min: [11 + %02u]",
 					},],
@@ -722,7 +722,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 13
 						name: "max: [13 + %02u]",
 					},],
@@ -741,7 +741,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(SMU_11_0_7_MAX_PPCLOCK - SMU_11_0_7_PPCLOCK_COUNT)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{ // if COUNT changes, please change this 13
 						name: "min: [13 + %02u]",
 					},],
@@ -1550,7 +1550,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "Fset [%02u]",
 				},],
@@ -1565,7 +1565,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "Vdroop [%02u]",
 				},],
@@ -1759,7 +1759,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "Mp0DpmVoltage [%02u]",
 				},],
@@ -1774,7 +1774,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "MemVddciVoltage [%02u]",
 				},],
@@ -1789,7 +1789,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "MemMvddVoltage [%02u]",
 				},],
@@ -1806,7 +1806,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PcieGenSpeed [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -1819,7 +1819,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PcieLaneCount [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -1832,7 +1832,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_LINK_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "LclkFreq [%02u]",
 				},],
@@ -2090,7 +2090,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 					display: "ATUI_DISPLAY",
@@ -2258,7 +2258,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableGfx",
 						name: "FreqTableGfx",
@@ -2278,7 +2278,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_VCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableVclk",
 						name: "FreqTableVclk",
@@ -2298,7 +2298,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableDclk",
 						name: "FreqTableDclk",
@@ -2318,7 +2318,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_ECLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableEclk",
 						name: "FreqTableEclk",
@@ -2338,7 +2338,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableSocclk",
 						name: "FreqTableSocclk",
@@ -2358,7 +2358,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableUclk",
 						name: "FreqTableUclk",
@@ -2378,7 +2378,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_FCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableFclk",
 						name: "FreqTableFclk",
@@ -2398,7 +2398,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableDcefclk",
 						name: "FreqTableDcefclk",
@@ -2418,7 +2418,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTableDispclk",
 						name: "FreqTableDispclk",
@@ -2438,7 +2438,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTablePixclk",
 						name: "FreqTablePixclk",
@@ -2458,7 +2458,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->FreqTablePhyclk",
 						name: "FreqTablePhyclk",
@@ -2478,7 +2478,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "SMU11_PPT3_PPCLK_COUNT",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						access: "bios->DcModeMaxFreq",
 						name: "DcModeMaxFreq",
@@ -2502,7 +2502,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "Mp0clkFreq [%02u]",
 					},],
@@ -2587,7 +2587,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "Mp0DpmVoltage [%02u]",
 				},],
@@ -2696,7 +2696,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiLinkSpeed [%u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -2709,7 +2709,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiLinkWidth [%u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -2722,7 +2722,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiFclkFreq [%u]",
 				},],
@@ -2734,7 +2734,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiUclkFreq [%u]",
 				},],
@@ -2746,7 +2746,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiSocclkFreq [%u]",
 				},],
@@ -2758,7 +2758,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiSocVoltage [%u]",
 				},],
@@ -3007,7 +3007,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->ReservedEquation)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "ReservedEquation [%u]",
 						display: "ATUI_DISPLAY",
@@ -3136,7 +3136,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -3148,7 +3148,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -3160,7 +3160,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -3172,7 +3172,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -3317,7 +3317,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableGfx [%02u]",
 					},],
@@ -3336,7 +3336,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_VCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableVclk [%02u]",
 					},],
@@ -3355,7 +3355,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDclk [%02u]",
 					},],
@@ -3374,7 +3374,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableSocclk [%02u]",
 					},],
@@ -3393,7 +3393,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableUclk [%02u]",
 					},],
@@ -3412,7 +3412,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDcefclk [%02u]",
 					},],
@@ -3431,7 +3431,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDispclk [%02u]",
 					},],
@@ -3450,7 +3450,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTablePixclk [%02u]",
 					},],
@@ -3469,7 +3469,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTablePhyclk [%02u]",
 					},],
@@ -3513,7 +3513,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableUclkDiv [%02u]",
 						display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -3533,7 +3533,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "Mp0clkFreq [%02u]",
 					},],
@@ -4013,7 +4013,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->ReservedEquation)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "ReservedEquation [%u]",
 						display: "ATUI_DISPLAY",
@@ -4167,7 +4167,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -4182,7 +4182,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -4197,7 +4197,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -4212,7 +4212,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -4227,7 +4227,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "TdcLimit [%02u]",
 				},],
@@ -4242,7 +4242,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "TDC_THROTTLER_COUNT_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "TdcLimitTau [%02u]",
 				},],
@@ -4283,7 +4283,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "SmnclkDpmFreq [%02u]",
 				},],
@@ -4298,7 +4298,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_SMNCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "SmnclkDpmVoltage [%02u]",
 				},],
@@ -4316,7 +4316,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PerPartDroopVsetGfxDfll [%02u]",
 				},],
@@ -4411,7 +4411,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_GFXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableGfx [%02u]",
 					},],
@@ -4430,7 +4430,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_VCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableVclk [%02u]",
 					},],
@@ -4449,7 +4449,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDclk [%02u]",
 					},],
@@ -4468,7 +4468,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_SOCCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableSocclk [%02u]",
 					},],
@@ -4487,7 +4487,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_UCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableUclk [%02u]",
 					},],
@@ -4506,7 +4506,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DCEFCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDcefclk [%02u]",
 					},],
@@ -4525,7 +4525,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DISPCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDispclk [%02u]",
 					},],
@@ -4544,7 +4544,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIXCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTablePixclk [%02u]",
 					},],
@@ -4563,7 +4563,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PHYCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTablePhyclk [%02u]",
 					},],
@@ -4582,7 +4582,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_DTBCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableDtbclk [%02u]",
 					},],
@@ -4601,7 +4601,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_FCLK_DPM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "FreqTableFclk [%02u]",
 					},],
@@ -4623,7 +4623,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "NUM_PIECE_WISE_LINEAR_DROOP_MODEL_VF_POINTS",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "PerPartDroopModelGfxDfll [%02u]",
 						display: "ATUI_DISPLAY",
@@ -4657,7 +4657,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "FreqTableUclkDiv [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -4682,7 +4682,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_MP0CLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "Mp0clkFreq [%02u]",
 				},],
@@ -4852,7 +4852,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_UCLK_DPM_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "UclkDpmPstates [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -4945,7 +4945,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "RLC_PACE_TABLE_NUM_LEVELS_SMU11",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					expanded: true,
 					pattern: [{
 						name: "FlopsPerByteTable [%02u]",
@@ -5306,7 +5306,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "(NUM_I2C_CONTROLLERS_SMU11_0_7 - I2C_CONTROLLER_NAME_COUNT_SMU11_PPT7 )",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{  // if COUNT changes, please change this 8
 						name: "I2cControllers [8 + %02u]",
 						display: "ATUI_DISPLAY",
@@ -5472,7 +5472,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiLinkSpeed [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -5485,7 +5485,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiLinkWidth [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -5498,7 +5498,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiFclkFreq [%02u]",
 				},],
@@ -5510,7 +5510,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_PSTATE_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiSocVoltage [%02u]",
 				},],
@@ -5591,7 +5591,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiDpmPstates [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -5617,7 +5617,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->ReservedEquation)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "ReservedEquation [%u]",
 						display: "ATUI_DISPLAY",
@@ -5738,7 +5738,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->UclkSpreadPercent)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "UclkSpreadPercent [%02u]",
 					},],
@@ -5832,7 +5832,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "NUM_XGMI_LEVELS_SMU11",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "XgmiDpmPstates [%02u]",
 					display: ["ATUI_DEC", "ATUI_ENUM",],
@@ -5858,7 +5858,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->ReservedEquation)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "ReservedEquation [%u]",
 						display: "ATUI_DISPLAY",
@@ -5979,7 +5979,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->UclkSpreadPercent)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "UclkSpreadPercent [%02u]",
 					},],
@@ -6002,7 +6002,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu_11_0_powerplay_table",
-	table_size: "bios->header.header.structuresize",
+	num_bytes: "bios->header.header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -6064,7 +6064,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vega20_powerplay_table",
-	table_size: "bios->header.header.structuresize",
+	num_bytes: "bios->header.header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -6123,7 +6123,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu_11_0_7_powerplay_table",
-	table_size: "bios->header.header.structuresize",
+	num_bytes: "bios->header.header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",

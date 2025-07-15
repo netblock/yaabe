@@ -27,10 +27,15 @@ C preprocessor side of ATUI table generation
 	atui_node* const restrict parent = parentptr;\
 	atui_node* const restrict child = childptr;\
 	assert(parent != child);\
-	assert(parent->branch.branches.count < parent->branch.branches.max_count);\
-	parent->branch.branches.nodes[parent->branch.branches.count] = child;\
+\
+	struct atui_children* const parents_book = &(parent->branch.branches);\
+	assert(parents_book->indirect);\
+	assert(false == child->bundled);\
+\
+	assert(parents_book->count < parents_book->max_count);\
+	parents_book->addresses[parents_book->count] = child;\
 	child->parent = parent;\
-	parent->branch.branches.count++;\
+	parents_book->count++;\
 } while(0)
 
 // enum access

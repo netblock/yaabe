@@ -107,9 +107,9 @@ gatui_branch_new(
 		self->child_branches = cralloc(num_branches * sizeof(GATUIBranch*));
 
 		for (uint16_t i = 0; i < num_branches; i++) {
-			assert(branch->branch.branches.nodes[i]);
+			assert(branch->branch.branches.addresses[i]);
 			self->child_branches[i] = gatui_branch_new(
-				branch->branch.branches.nodes[i], root
+				branch->branch.branches.addresses[i], root
 			);
 			assert(self->child_branches[i]);
 		}
@@ -424,7 +424,7 @@ gatui_branch_to_path(
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return atui_branch_to_path(self->atui);
+	return atui_node_to_path(self->atui);
 }
 
 atui_node const*

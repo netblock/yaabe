@@ -632,7 +632,7 @@ gatui_leaf_to_path(
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return atui_leaf_to_path(self->atui);
+	return atui_node_to_path(self->atui);
 }
 
 atui_node const*

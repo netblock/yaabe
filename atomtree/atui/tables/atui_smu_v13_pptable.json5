@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -73,7 +73,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODFEATURE - SMU_13_0_7_ODCAP_COUNT)",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{ // if COUNT changes, please change this 16
 					name: "OD feature [16 + %02u]",
 				},],
@@ -109,7 +109,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{ // if COUNT changes, please change this 32
 					name: "max: [32 + %02u]",
 				},],
@@ -122,7 +122,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_ODSETTING - SMU_13_0_7_ODSETTING_COUNT)",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{ // if COUNT changes, please change this 32
 					name: "min: [32 + %02u]",
 				},],
@@ -153,7 +153,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "(SMU_13_0_7_MAX_PMSETTING - SMU_13_0_7_PMSETTING_COUNT)",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{ // if COUNT changes, please change this 16
 					name: "pm_setting [16 + %02u]",
 				},],
@@ -163,7 +163,7 @@ global_defaults: {
 }, {
 	c_type: "smu_13_0_7_powerplay_table",
 	atomtree: "atomtree_powerplay_table",
-	table_size: "bios->header.structuresize",
+	num_bytes: "bios->header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -1383,7 +1383,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "MEM_VENDOR_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "UclkSpreadPercent [%02u]",
 				},],
@@ -1508,7 +1508,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_table_13_0_7",
-	table_size: "bios->table_header.structuresize",
+	num_bytes: "bios->table_header.structuresize",
 	leaves: [
 		{
 			access: "bios->table_header",

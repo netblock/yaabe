@@ -3,8 +3,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -102,7 +102,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "atom_pptable_powerplaytable_v1",
-	table_size: "bios->header.header.structuresize",
+	num_bytes: "bios->header.header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -276,7 +276,7 @@ global_defaults: {
 
 {
 	c_type: "atom_pptable_state_array",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -291,7 +291,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy: "ATUI_SHOOT", fancy_data: "atom_pptable_state",
 				},],
@@ -750,7 +750,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_mclk_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -765,7 +765,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_mclk_dependency_record",
 				},],
@@ -824,7 +824,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_sclk_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -839,7 +839,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_sclk_dependency_record",
 				},],
@@ -881,7 +881,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_polaris_sclk_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -896,7 +896,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_polaris_sclk_dependency_record",
 				},],
@@ -927,7 +927,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_voltage_lookup_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -942,7 +942,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_voltage_lookup_record",
 				},],
@@ -1000,7 +1000,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_mm_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1015,7 +1015,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_mm_dependency_record",
 				},],
@@ -1055,7 +1055,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_vce_state_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1070,7 +1070,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_vce_state_record",
 				},],
@@ -1376,7 +1376,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_hard_limit_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1391,7 +1391,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_hard_limit_record",
 				},],
@@ -1418,7 +1418,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pptable_pcie_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1433,7 +1433,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pptable_pcie_record",
 				},],
@@ -1461,7 +1461,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_polaris_pcie_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -1476,7 +1476,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_polaris_pcie_record",
 				},],

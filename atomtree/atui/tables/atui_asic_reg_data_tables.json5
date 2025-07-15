@@ -7,7 +7,7 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
-		table_start: "bios", table_size: "sizeof(*bios)",
+		access: "bios", num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {

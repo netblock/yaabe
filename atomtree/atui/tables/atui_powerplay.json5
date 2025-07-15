@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -28,7 +28,7 @@ global_defaults: {
 	c_prefix: "struct",
 	c_type: "smu_powerplay_table_header",
 	atomtree: "atomtree_powerplaytable",
-	table_size: "bios->header.structuresize",
+	num_bytes: "bios->header.structuresize",
 	leaves: [
 		{
 			access: "bios->header",
@@ -241,7 +241,7 @@ global_defaults: {
 
 {
 	c_type: "i2ccontrollerconfig_u32",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -273,7 +273,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "i2ccontrollerconfig_u8",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -309,7 +309,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "i2ccontrollerconfig_u8_mixed",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->enabled",
@@ -346,7 +346,7 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "psi_sel_mask",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->sel_mask",
 		name: "sel_mask",
@@ -373,7 +373,7 @@ global_defaults: {
 	},],
 }, {
 	c_prefix: "union", c_type: "vr_mapping",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->vr_mapping",
 		name: "vr_mapping",
@@ -416,7 +416,7 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "led_display_control",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->LedEnableMask",
 		name: "LedEnableMask",

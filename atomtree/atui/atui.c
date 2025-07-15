@@ -32,6 +32,7 @@ atui_leaf_from_text(
 	assert(leaf->is_leaf);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	uint32_t const array_size = leaf->leaf.array_size;
 	enum atui_leaf_type_radix const radix = leaf->leaf.type.radix;
 	enum atui_leaf_type_fancy const fancy = leaf->leaf.type.fancy;
@@ -43,23 +44,23 @@ atui_leaf_from_text(
 		char* walker = token_buffer;
 		switch (leaf->leaf.total_bits) {
 			case  8:
-				for (size_t i=0; i < array_size; i++) {
-					leaf->data.u8[i] = strtoul(walker, &walker, base);
+				for (uint32_t i=0; i < array_size; i++) {
+					data.u8[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 16:
-				for (size_t i=0; i < array_size; i++) {
-					leaf->data.u16[i] = strtoul(walker, &walker, base);
+				for (uint32_t i=0; i < array_size; i++) {
+					data.u16[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 32:
-				for (size_t i=0; i < array_size; i++) {
-					leaf->data.u32[i] = strtoul(walker, &walker, base);
+				for (uint32_t i=0; i < array_size; i++) {
+					data.u32[i] = strtoul(walker, &walker, base);
 				}
 				break;
 			case 64:
-				for (size_t i=0; i < array_size; i++) {
-					leaf->data.u64[i] = strtoull(walker, &walker, base);
+				for (uint32_t i=0; i < array_size; i++) {
+					data.u64[i] = strtoull(walker, &walker, base);
 				}
 				break;
 			default:
@@ -68,7 +69,7 @@ atui_leaf_from_text(
 		free(token_buffer);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		char* const null_exit = memccpy(leaf->data.c8, text, '\0', array_size);
+		char* const null_exit = memccpy(data.c8, text, '\0', array_size);
 		if (fancy == ATUI_STRING) {
 			/* ATUI_STRING's length is implicitly defined by the null
 			termination. If the input buffer 0-terminates before array_size,
@@ -78,11 +79,11 @@ atui_leaf_from_text(
 			*/
 			if (null_exit) {
 				uint16_t const bytes_left = (
-					leaf->data.c8 + array_size - null_exit
+					data.c8 + array_size - null_exit
 				);
 				memset(null_exit-1, ' ', bytes_left); // -1 eats memccpy's 0.
 			}
-			leaf->data.c8[array_size-1] = '\0';
+			data.c8[array_size-1] = '\0';
 		}
 	} else if (radix) {
 		if (leaf->leaf.type.has_enum) {
@@ -204,14 +205,15 @@ atui_leaf_to_text(
 	assert(leaf->is_leaf);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	size_t buffer_size;
 	char* buffer = NULL;
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
-	size_t const array_size = leaf->leaf.array_size;
+	uint32_t const array_size = leaf->leaf.array_size;
 	enum atui_leaf_type_radix const radix = leaf->leaf.type.radix;
 	enum atui_leaf_type_fancy const fancy = leaf->leaf.type.fancy;
-	size_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
+	uint32_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		assert(!(leaf->leaf.type.fraction));
@@ -225,23 +227,23 @@ atui_leaf_to_text(
 		char* buffer_walk = buffer;
 		switch (leaf->leaf.total_bits) {
 			case  8:
-				for (size_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, leaf->data.u8[i]);
+				for (uint32_t i=0; i < array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, data.u8[i]);
 				}
 				break;
 			case 16:
-				for (size_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, leaf->data.u16[i]);
+				for (uint32_t i=0; i < array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, data.u16[i]);
 				}
 				break;
 			case 32:
-				for (size_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, leaf->data.u32[i]);
+				for (uint32_t i=0; i < array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, data.u32[i]);
 				}
 				break;
 			case 64:
-				for (size_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, leaf->data.u64[i]);
+				for (uint32_t i=0; i < array_size; i++) {
+					buffer_walk += sprintf(buffer_walk, format, data.u64[i]);
 				}
 				break;
 			default:
@@ -254,7 +256,7 @@ atui_leaf_to_text(
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		buffer_size = array_size + 1;
 		buffer = cralloc(buffer_size);
-		memcpy(buffer, leaf->data.c8, array_size);
+		memcpy(buffer, data.c8, array_size);
 		buffer[array_size] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		assert(num_digits);
@@ -315,6 +317,7 @@ atui_leaf_set_val_unsigned(
 	assert(leaf->leaf.type.radix);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	uint8_t const num_bits = (leaf->leaf.bitfield_hi - leaf->leaf.bitfield_lo) +1;
 	uint64_t max_val;
 	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
@@ -330,14 +333,14 @@ atui_leaf_set_val_unsigned(
 	uint64_t const tokeep_mask = ~(max_val << leaf->leaf.bitfield_lo);
 	val <<= leaf->leaf.bitfield_lo;
 	switch (leaf->leaf.total_bits) {
-		case  8: *(leaf->data.u8)  = ( *(leaf->data.u8) & tokeep_mask) | val; break;
-		case 16: *(leaf->data.u16) = (*(leaf->data.u16) & tokeep_mask) | val; break;
+		case  8: *(data.u8)  = ( *(data.u8) & tokeep_mask) | val; break;
+		case 16: *(data.u16) = (*(data.u16) & tokeep_mask) | val; break;
 		case 24:
 			uint32_t val_temp = val;
-			*(leaf->data.u24) = pt_to_npt_downgrade(&val_temp);
+			*(data.u24) = pt_to_npt_downgrade(&val_temp);
 			break;
-		case 32: *(leaf->data.u32) = (*(leaf->data.u32) & tokeep_mask) | val; break;
-		case 64: *(leaf->data.u64) = (*(leaf->data.u64) & tokeep_mask) | val; break;
+		case 32: *(data.u32) = (*(data.u32) & tokeep_mask) | val; break;
+		case 64: *(data.u64) = (*(data.u64) & tokeep_mask) | val; break;
 		default: assert(0); break;
 	}
 
@@ -349,13 +352,14 @@ atui_leaf_get_val_unsigned(
 	assert(leaf->leaf.type.radix);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	uint64_t val;
 	switch (leaf->leaf.total_bits) {
-		case  8: val =  *(leaf->data.u8); break;
-		case 16: val = *(leaf->data.u16); break;
-		case 24: val = npt_to_pt_upgrade(leaf->data.u24); break;
-		case 32: val = *(leaf->data.u32); break;
-		case 64: val = *(leaf->data.u64); break;
+		case  8: val =  *(data.u8); break;
+		case 16: val = *(data.u16); break;
+		case 24: val = npt_to_pt_upgrade(data.u24); break;
+		case 32: val = *(data.u32); break;
+		case 64: val = *(data.u64); break;
 		default: assert(0); break;
 	}
 
@@ -379,6 +383,7 @@ atui_leaf_set_val_signed(
 	assert(leaf->leaf.type.radix);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
 	uint8_t const num_bits = (leaf->leaf.bitfield_hi - leaf->leaf.bitfield_lo) +1;
@@ -403,14 +408,14 @@ atui_leaf_set_val_signed(
 	raw_val <<= leaf->leaf.bitfield_lo;
 
 	switch (leaf->leaf.total_bits) {
-		case  8:  *(leaf->data.u8) = ( *(leaf->data.u8) & tokeep_mask) | raw_val;  break;
-		case 16: *(leaf->data.u16) = (*(leaf->data.u16) & tokeep_mask) | raw_val;  break;
+		case  8:  *(data.u8) = ( *(data.u8) & tokeep_mask) | raw_val;  break;
+		case 16: *(data.u16) = (*(data.u16) & tokeep_mask) | raw_val;  break;
 		case 24:
 			int32_t val_temp = raw_val;
-			*(leaf->data.s24) = pt_to_npt_downgrade(&val_temp);
+			*(data.s24) = pt_to_npt_downgrade(&val_temp);
 			break;
-		case 32: *(leaf->data.u32) = (*(leaf->data.u32) & tokeep_mask) | raw_val;  break;
-		case 64: *(leaf->data.u64) = (*(leaf->data.u64) & tokeep_mask) | raw_val;  break;
+		case 32: *(data.u32) = (*(data.u32) & tokeep_mask) | raw_val;  break;
+		case 64: *(data.u64) = (*(data.u64) & tokeep_mask) | raw_val;  break;
 		default: assert(0); break;
 	}
 }
@@ -423,13 +428,14 @@ atui_leaf_get_val_signed(
 	assert(leaf->leaf.type.radix);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
 	int64_t val;
 	switch (leaf->leaf.total_bits) {
-		case  8: val =  *(leaf->data.s8); break;
-		case 16: val = *(leaf->data.s16); break;
-		case 24: val = npt_to_pt_upgrade(leaf->data.s24); break;
-		case 32: val = *(leaf->data.s32); break;
-		case 64: val = *(leaf->data.s64); break;
+		case  8: val =  *(data.s8); break;
+		case 16: val = *(data.s16); break;
+		case 24: val = npt_to_pt_upgrade(data.s24); break;
+		case 32: val = *(data.s32); break;
+		case 64: val = *(data.s64); break;
 		default: assert(0); break;
 	}
 
@@ -452,6 +458,8 @@ atui_leaf_set_val_fraction(
 	assert(leaf->leaf.type.fraction);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
+
 	if (leaf->leaf.fractional_bits) {
 		float64_t const max_val = (
 			(float64_t)(1<<(leaf->leaf.total_bits - leaf->leaf.fractional_bits))
@@ -469,18 +477,18 @@ atui_leaf_set_val_fraction(
 			fixed_val += frac;
 		}
 		switch (leaf->leaf.total_bits) {
-			case  8:  *(leaf->data.u8) = fixed_val; return;
-			case 16: *(leaf->data.u16) = fixed_val; return;
-			case 32: *(leaf->data.u32) = fixed_val; return;
-			case 64: *(leaf->data.u64) = fixed_val; return;
+			case  8:  *(data.u8) = fixed_val; return;
+			case 16: *(data.u16) = fixed_val; return;
+			case 32: *(data.u32) = fixed_val; return;
+			case 64: *(data.u64) = fixed_val; return;
 			default: assert(0); break;
 		}
 	}
 
 	switch (leaf->leaf.total_bits) { // else float
-		case 16: *(leaf->data.f16) = val; return;
-		case 32: *(leaf->data.f32) = val; return;
-		case 64: *(leaf->data.f64) = val; return;
+		case 16: *(data.f16) = val; return;
+		case 32: *(data.f32) = val; return;
+		case 64: *(data.f64) = val; return;
 		default: assert(0); break;
 	}
 
@@ -494,15 +502,17 @@ atui_leaf_get_val_fraction(
 	assert(leaf->leaf.type.fraction);
 	assert(leaf->data.input);
 
+	union bios_data const data = leaf->data;
+
 	if (leaf->leaf.fractional_bits) { // fixed-point
 		// f64 can represent represent ints up to 2**53 without rounding.
 		assert((leaf->leaf.total_bits - leaf->leaf.fractional_bits) < 53);
 		float64_t val;
 		switch (leaf->leaf.total_bits) {
-			case  8: val =  *(leaf->data.u8); break;
-			case 16: val = *(leaf->data.u16); break;
-			case 32: val = *(leaf->data.u32); break;
-			case 64: val = *(leaf->data.u64); break;
+			case  8: val =  *(data.u8); break;
+			case 16: val = *(data.u16); break;
+			case 32: val = *(data.u32); break;
+			case 64: val = *(data.u64); break;
 			default: assert(0); break;
 		};
 		val /= (1 << leaf->leaf.fractional_bits);
@@ -511,9 +521,9 @@ atui_leaf_get_val_fraction(
 
 	// else native float
 	switch (leaf->leaf.total_bits) {
-		case 16: return *(leaf->data.f16);
-		case 32: return *(leaf->data.f32);
-		case 64: return *(leaf->data.f64);
+		case 16: return *(data.f16);
+		case 32: return *(data.f32);
+		case 64: return *(data.f64);
 		default: assert(0); break;
 	}
 
@@ -521,217 +531,134 @@ atui_leaf_get_val_fraction(
 	return NAN;
 }
 
-struct path_meta {
-	size_t path_len;
-	union {
-		void const* node;
-		atui_node const* branch;
-		atui_node const* leaf;
-	} stack[ATUI_STACK_DEPTH];
-	uint8_t n_leaves;
-	uint8_t n_branches;
-};
-
-
-inline static void
-atui_path_populate_branch_stack(
-		atui_node const** const branchstack,
-		uint8_t* const i,
-		size_t* const string_length
-		) {
-	do {
-		(*string_length) += strlen(branchstack[*i]->name) + 1; // +1 for /
-		branchstack[(*i)+1] = branchstack[*i]->parent;
-		(*i)++;
-	} while (branchstack[*i]);
-}
-inline static char*
-_print_branch_path(
-		atui_node const* const* const branchstack,
-		uint8_t* const i,
-		char* path_walk
-		) {
-	path_walk[0] = '/';
-	path_walk++;
-	while (*i) {
-		(*i)--;
-		path_walk = stopcopy(path_walk, branchstack[*i]->name);
-		*path_walk = '/'; // eats the previous \0
-		path_walk++;
-	}
-	return path_walk;
-}
 char*
-atui_branch_to_path(
+atui_node_to_path(
 		atui_node const* const tip
 		) {
 	assert(tip);
 
-	atui_node const* branchstack[ATUI_STACK_DEPTH];
-	branchstack[0] = tip;
-	uint8_t i = 0;
-	size_t string_length = 1+1; // +1 for the initial / and +1 for \0
-	atui_path_populate_branch_stack(branchstack, &i, &string_length);
-	char* const pathstring = cralloc(string_length);
-	pathstring[string_length-1] = '\0';
-	char* path_walk __unused = _print_branch_path(branchstack, &i, pathstring);
+	bool const final_slash = (false == tip->is_leaf);
+	size_t string_length = 1 + final_slash; // +1 for inital /
+	atui_node const* stack[ATUI_STACK_DEPTH];
+	uint8_t stack_i = 0;
 
+	stack[0] = tip;
+	do {
+		string_length += strlen(stack[stack_i]->name) + 1; // +1 for /
+		stack[stack_i+1] = stack[stack_i]->parent;
+		stack_i++;
+	} while (stack[stack_i]);
+	assert(stack_i < lengthof(stack));
+
+	char* const pathstring = cralloc(string_length);
+	char* path_walk = pathstring;
+	path_walk[0] = '/';
+	path_walk++;
+	do {
+		stack_i--;
+		path_walk = stopcopy(path_walk, stack[stack_i]->name);
+		*path_walk = '/'; // eats the previous \0
+		path_walk++;
+	} while (stack_i);
+	path_walk -= ! final_slash; // eat the final / if leaf
+	*path_walk = '\0';
 	assert(path_walk == (pathstring+string_length-1));
 	assert(strlen(pathstring) == (string_length-1));
 
 	return pathstring;
 }
-inline static void
-atui_path_populate_leaf_stack(
-		atui_node const** const leafstack,
-		uint8_t* const i,
-		size_t* const string_length
+
+
+inline static uint8_t
+path_to_atui_has_branch(
+		atui_node const* node,
+		atui_node const** const target,
+		char const** const path_token_io,
+		char** const token_save
 		) {
-	bool parent_is_leaf;
+	char const* path_token = *path_token_io;
+	uint8_t depth = 0;
+	uint16_t i=1;
+	atui_node const* const* branch_nodes = &node;
 	do {
-		(*string_length) += 1 + strlen(leafstack[*i]->name); // +1 is /
-		leafstack[(*i)+1] = leafstack[*i]->parent;
-		parent_is_leaf = leafstack[*i+1]->is_leaf;
-		(*i)++;
-	} while (parent_is_leaf);
+		do {
+			if (0 == i) {
+				goto not_found; // no dir found; could be a leaf?
+			}
+			i--;
+		} while (strcmp(path_token, branch_nodes[i]->name));
+		node = branch_nodes[i];
+		assert(true == node->branch.branches.indirect);
+		branch_nodes = node->branch.branches.addresses_ro;
+		i = node->branch.branches.count;
+		depth++;
+		path_token = strtok_r(NULL, "/", token_save);
+	} while (path_token);
+
+	not_found:
+	*target = node;
+	*path_token_io = path_token;
+
+	return depth;
 }
-inline static char*
-_print_leaf_path(
-		atui_node const* const* const leafstack,
-		uint8_t* const i,
-		char* path_walk
+inline static uint8_t
+path_to_atui_has_leaf(
+		atui_node const* node,
+		atui_node const** const target,
+		char const** const path_token_io,
+		char** const token_save
 		) {
+	char const* path_token = *path_token_io;
+	uint8_t depth = 0;
 	do {
-		(*i)--;
-		if (leafstack[*i]->leaf.type.disable == ATUI_SUBONLY) {
-			continue;
-		}
-		*path_walk = '/'; // eats the previous \0
-		path_walk++;
-		path_walk = stopcopy(path_walk, leafstack[*i]->name);
-	} while (*i);
-	return path_walk;
-}
-char*
-atui_leaf_to_path(
-		atui_node const* const tip
-		) {
-	assert(tip);
-	assert(tip->is_leaf);
-
-	size_t string_length = 1; // +1 for \0; no final /
-
-	atui_node const* leafstack[ATUI_STACK_DEPTH];
-	atui_node const* branchstack[ATUI_STACK_DEPTH];
-	uint8_t leaves_i = 0;
-	uint8_t branches_i = 0;
-
-	leafstack[0] = tip;
-	atui_path_populate_leaf_stack(leafstack, &leaves_i, &string_length);
-	assert(leaves_i < lengthof(leafstack));
-
-	branchstack[0] = (const void*) leafstack[leaves_i];
-	atui_path_populate_branch_stack(branchstack, &branches_i, &string_length);
-	assert(branches_i < lengthof(branchstack));
-
-	char* const pathstring = cralloc(string_length);
-	// pathstring[string_length-1] = '\0'; // print_leaf_path does the \0
-
-	char* path_walk = pathstring;
-
-	path_walk = _print_branch_path(branchstack, &branches_i, path_walk);
-	path_walk = _print_leaf_path(leafstack, &leaves_i, path_walk-1);
-
-	assert(path_walk <= (pathstring+string_length-1));
-	assert(strlen(pathstring) <= (string_length-1));
-
-	return pathstring;
-}
-
-static uint8_t
-_path_to_atui_has_leaf(
-		atui_node const* const leaves,
-		uint16_t const num_leaves,
-		char const** const path_token,
-		char** const token_save,
-		atui_node const** const target
-		) {
-	for (uint16_t i = 0; i < num_leaves; i++) {
-		if (leaves[i].leaf.type.disable == ATUI_NODISPLAY) {
-			continue;
-		} else if (leaves[i].leaves.count) {
-			// has child leaves
-			if (leaves[i].leaf.type.disable == ATUI_DISPLAY) {
-				// ATUI_SUBONLY pseudo-orphans their children
-				if (strcmp(*path_token, leaves[i].name)) { // 0 is equal
-					continue;
-				}
-				*path_token = strtok_r(NULL, "/", token_save);
-				if (NULL == *path_token) {
-					*target = &(leaves[i]);
-					return 1;
-				}
+		assert(false == node->leaves.indirect);
+		uint16_t i = node->leaves.count;
+		atui_node const* leaf_nodes = node->leaves.nodes;
+		do {
+			if (0 == i) {
+				goto not_found;
 			}
-			uint8_t depth = _path_to_atui_has_leaf(
-				leaves[i].leaves.nodes, leaves[i].leaves.count,
-				path_token, token_save,
-				target
-			);
-			if (depth) { // can be NULL if no match against a child/grand-child
-				return depth + (leaves[i].leaf.type.disable == ATUI_DISPLAY);
-			}
-		} else if (0 == strcmp(*path_token, leaves[i].name)) {
-			*path_token = strtok_r(NULL, "/", token_save);
-			*target = &(leaves[i]);
-			return 1;
-		}
-	}
+			i--;
+		} while (strcmp(path_token, leaf_nodes[i].name));
+		node = &(leaf_nodes[i]);
+		depth++;
+		path_token = strtok_r(NULL, "/", token_save);
+	} while (path_token);
 
-	return 0;
+	*target = node;
+
+	not_found:
+	*path_token_io = path_token;
+	return depth;
 }
 struct atui_path_goto*
 path_to_atui(
 		atui_node const* const root,
 		char const* const path
 		) {
-	char* const token_buffer = strdup(path);
-	char* token_save;
-	char const* path_token = strtok_r(token_buffer, "/", &token_save);
 	size_t not_found_arraylen = 0; // for an error message
 
 	atui_node const* file = NULL;
 	atui_node const* dir = NULL;
 	uint8_t leaf_depth = 0;
 	uint8_t branch_depth = 0;
+	char* const token_buffer = strdup(path);
+	char* token_save;
+	char const* path_token = strtok_r(token_buffer, "/", &token_save);
 
-	atui_node const* const* child_dirs = &root;
-	uint16_t i = 1;
-	// this method of latching allows us to enter the loop with a named root
-	// while also saving the last-known-good dir
-
-	while (path_token) { // go through branches and verify path
-		do {
-			if (0 == i) {
-				goto find_leaves; // no dir found; could be a leaf?
-			}
-			i--;
-		} while (strcmp(path_token, child_dirs[i]->name)); // 0 means ==
-		dir = child_dirs[i];
-		child_dirs = (atui_node const* const*) dir->branch.branches.nodes;
-		i = dir->branch.branches.count;
-		branch_depth++; // the previously poped token is a branch
-		path_token = strtok_r(NULL, "/", &token_save);
-	}
 	if (path_token) {
-		find_leaves:
-		if (dir) {
-			leaf_depth = _path_to_atui_has_leaf(
-				dir->leaves.nodes, dir->leaves.count,
-				&path_token, &token_save,
-				&file
+		branch_depth = path_to_atui_has_branch(
+			root, &dir,
+			&path_token, &token_save
+		);
+		if (path_token && dir) {
+			leaf_depth = path_to_atui_has_leaf(
+				dir, &file,
+				&path_token, &token_save
 			);
 		}
 	}
+
 	if (path_token) {
 		not_found_arraylen = 1 + strlen(path_token);
 	} else if (NULL == dir) { // if there's no path to parse, error
@@ -762,8 +689,6 @@ path_to_atui(
 	free(token_buffer);
 	return map;
 }
-
-
 
 
 

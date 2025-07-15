@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "pci_rom_tables",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -194,7 +194,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atui_nullstruct", name: "pci_rom_tables",
-	table_size: "0",
+	num_bytes: "0",
 	leaves: [
 		{
 			access: "*(atomtree->header)",

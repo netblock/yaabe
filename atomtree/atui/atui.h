@@ -126,25 +126,32 @@ union bios_data {
 	float32_t* f32;
 	float64_t* f64;
 };
-struct atui_children_direct {
-	atui_node* nodes;
+struct atui_children { 
+	/*
+	Two ways to allocate a node: alone, or an in array. For memory management
+	purposes (freeing), a node allocated in an array cannot be added through its
+	address, and must be attached through its array.
+	Generally speakingonly 'leaves' are allocated to be in an array; branches
+	are individual.
+	*/
+	union {
+		atui_node* nodes;
+		atui_node** addresses;
+		atui_node const* nodes_ro; // read-only
+		atui_node const* const* addresses_ro; // read-only
+	};
 	uint16_t count;
 	uint16_t max_count;
-	bool expanded;
-};
-struct atui_children_indirect {
-	atui_node** nodes;
-	uint16_t count;
-	uint16_t max_count;
+	bool indirect; // indirect means to use addresses; the nodes are floating.
 	bool expanded;
 };
 
 union atui_vestige { // atui_branch_allocator() use only
 	atuifunc branch_bud;
-	struct subleaf_meta const* template_leaves;
-	struct atui_branch_data const* template_branch;
+	struct atui_subleaf_meta const* leaves_meta;
+	struct atui_branch_meta const* branch_meta;
 };
-struct leaf { // 4*8 = 32
+struct atui_leaf {
 	struct atui_leaf_type type; // directives on how to display text
 
 	uint32_t array_size;
@@ -154,12 +161,10 @@ struct leaf { // 4*8 = 32
 	uint8_t bitfield_lo; // bitfield range start
 
 	struct atui_enum const* enum_options; // if it has an associated enum
-
-	union atui_vestige vestige;
 };
 
-struct branch {
-	struct atui_children_indirect branches; // considers shoot + import
+struct atui_branch {
+	struct atui_children branches; // considers shoot + import
 
 	// the C struct that the branches represent may be larger than
 	// table_size; if this is the case, a simple copy/paste of the leaves
@@ -179,17 +184,23 @@ struct _atui_node {
 	void* self;
 	atui_node* parent; // don't need parent_is_leaf
 
-	struct atui_children_direct leaves; // if branch, always expanded
+	struct atui_children leaves; // if branch, always expanded
+
+	// If true, this node is not alone but in an array. See struct atui_children
+	// for more info.
+	bool bundled;
 
 	bool is_leaf;
 	union {
-		struct leaf leaf;
-		struct branch branch;
+		struct atui_leaf leaf;
+		struct atui_branch branch;
 	};
 	// if the node represents a struct, the num_bytes may be following
 	// programmed bios metadata 
 	union bios_data data;
 	size_t num_bytes;
+
+	union atui_vestige vestige;
 };
 
 atui_node*
@@ -197,6 +208,10 @@ generate_atui(
 		struct atom_tree const* atree
 		);
 
+char*
+atui_node_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
+		atui_node const* tip
+		);
 
 void
 atui_leaf_from_text( // set the value from a string or array of 8-bit
@@ -240,14 +255,6 @@ atui_leaf_get_val_fraction(
 		);
 
 
-char* // needs to be freed
-atui_branch_to_path( // get a full /directory/like/path/of/the/branches/
-		atui_node const* tip
-		);
-char* // needs to be freed
-atui_leaf_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
-		atui_node const* tip
-		);
 
 struct atui_path_goto { // final branch and leaf
 	char* not_found; // non-NULL if error; name of the not-found branch/leaf
