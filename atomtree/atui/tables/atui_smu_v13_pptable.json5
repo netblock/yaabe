@@ -1518,7 +1518,7 @@ global_defaults: {
 		}, {
 			access: "bios->BoardTable",
 			name: "BoardTable",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "smu13_boardtable_v39",
 		},
 	],

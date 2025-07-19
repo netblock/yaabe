@@ -2995,7 +2995,7 @@ global_defaults: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu11_0x13",
 		}, {
 			name: "ReservedEquation",
@@ -3976,7 +3976,7 @@ global_defaults: {
 		}, {
 			access: "bios->FwDStateMask",
 			name: "FwDStateMask",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "fw_dstate_features_smu11_0x33",
 		}, {
 			access: "bios->voltage_control",
@@ -4001,7 +4001,7 @@ global_defaults: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu11_0x33",
 		}, {
 			name: "ReservedEquation",
@@ -5605,7 +5605,7 @@ global_defaults: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu11_0x40",
 		}, {
 			name: "ReservedEquation",
@@ -5846,7 +5846,7 @@ global_defaults: {
 		}, {
 			access: "bios->DebugOverrides",
 			name: "DebugOverrides",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_SHOOT", fancy_data: "dpm_debug_override_smu11_0x40",
 		}, {
 			name: "ReservedEquation",
