@@ -29,6 +29,8 @@ struct atui_subleaf_meta {
 	uint32_t element_size;   // Size of bios element. For pointer math.
 	uint8_t dynarray_length; // The number of elements in the bios array
 	bool deferred_start_array;
+	uint32_t computed_num_leaves; // the "computed" is the final amount of X
+	uint32_t computed_num_graft;
 
 	// optional enum for name sprintf'ing
 	struct atui_enum const* enum_taglist;
@@ -38,7 +40,10 @@ struct atui_branch_meta {
 	atui_node seed;
 
 	uint32_t computed_num_leaves; // the "computed" is the final amount of X
-	uint32_t computed_num_graft;
+	uint32_t computed_num_shallow_graft;
+	// shallow considers atui_leaf_type_disable for leaf accounting, while
+	// deep penetrates considering all graft nodes for branch accounting
+	uint32_t computed_num_deep_graft;
 	uint32_t computed_num_shoot;
 };
 

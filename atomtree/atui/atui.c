@@ -537,7 +537,7 @@ atui_node_to_path(
 		) {
 	assert(tip);
 
-	bool const final_slash = (false == tip->is_leaf);
+	bool const final_slash = ! tip->is_leaf;
 	size_t string_length = 1 + final_slash; // +1 for inital /
 	atui_node const* stack[ATUI_STACK_DEPTH];
 	uint8_t stack_i = 0;

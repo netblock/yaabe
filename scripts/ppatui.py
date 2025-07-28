@@ -435,6 +435,82 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 class atui_node: pass
 class atui_leaf: pass
 class atui_branch: pass
+class atui_leaf_type:
+	# atomtree/atui/atui.h has a copy
+
+	# fancy
+	ATUI_NOFANCY:int   = 0
+	ATUI_BITFIELD:int  = 1
+	ATUI_STRING:int    = 2
+	ATUI_ARRAY:int     = 3
+	ATUI_GRAFT:int     = 4
+	ATUI_SHOOT:int     = 5
+	ATUI_PETIOLE:int   = 6
+	ATUI_DYNARRAY:int  = 7
+	_ATUI_BITCHILD:int = 8
+	ATUI_FANCY:tuple = (
+		"ATUI_NOFANCY",
+		"ATUI_BITFIELD",
+		"ATUI_STRING",
+		"ATUI_ARRAY",
+		"ATUI_GRAFT",
+		"ATUI_SHOOT",
+		"ATUI_PETIOLE",
+		"ATUI_DYNARRAY",
+		"_ATUI_BITCHILD",
+	)
+	FANCIES_THAT_TAKE_RADIX:tuple = (
+		ATUI_NOFANCY, ATUI_BITFIELD, ATUI_ARRAY, _ATUI_BITCHILD
+	)
+	FANCIES_THAT_TAKE_FANCYDATA:tuple = (
+		ATUI_BITFIELD, ATUI_GRAFT, ATUI_SHOOT, ATUI_PETIOLE, ATUI_DYNARRAY
+	)
+	FANCIES_THAT_TAKE_ENUM:tuple = (
+		ATUI_NOFANCY, ATUI_BITFIELD, _ATUI_BITCHILD,
+	)
+	FANCIES_THAT_TAKE_A_BRANCH:tuple = (ATUI_GRAFT, ATUI_SHOOT)
+	FANCIES_THAT_HAVE_TRIVIAL_SUBLEAVES:tuple = ( # straightforward
+		ATUI_BITFIELD,
+	)
+	FANCIES_THAT_HAVE_NONTRIVIAL_SUBLEAVES:tuple = ( # requires context
+		ATUI_GRAFT, ATUI_PETIOLE, ATUI_DYNARRAY
+	)
+	FANCIES_THAT_CAN_SUBONLY:tuple = ( # is both a leaf and has subleaves
+		ATUI_BITFIELD, ATUI_GRAFT, ATUI_DYNARRAY
+	)
+
+	# radix
+	ATUI_NAN:int = 0
+	ATUI_DEC:int = 1
+	ATUI_HEX:int = 2
+	ATUI_OCT:int = 3
+	ATUI_BIN:int = 4
+	ATUI_ANY:int = 7
+	ATUI_RADIX:tuple = (
+		"ATUI_NAN",
+		"ATUI_DEC",
+		"ATUI_HEX",
+		"ATUI_OCT",
+		"ATUI_BIN",
+	)
+
+	# disable
+	ATUI_DISPLAY:int   = 0
+	ATUI_SUBONLY:int   = 1
+	ATUI_NODISPLAY:int = 2
+	ATUI_DISABLE:tuple = (
+		"ATUI_DISPLAY",
+		"ATUI_SUBONLY",
+		"ATUI_NODISPLAY",
+	)
+
+	fancy:int = None
+	radix:int = None
+	disable:int = None
+	# signed ~ enum may be handled through C generics so usually False
+	signed_num:str = None
+	fraction:str = None
+	has_enum:str = None
 
 class atui_children:
 	nodes:list # of atui_leaf
@@ -505,75 +581,31 @@ class atui_node:
 
 	def copy(self):
 		return copy.deepcopy(self)
+	def compile_display_flags(self):
+		# handle the concequences of ATUI_NODISPLAY and ATUI_SUBONLY
+		leaves:list = self.leaves.nodes
+		i:int = 0
+		while (i < len(leaves)):
+			leaf:atui_leaf = leaves[i]
+			match (leaf.type.disable):
+				case atui_leaf_type.ATUI_DISPLAY:
+					if leaf.leaves.nodes:
+						leaf.compile_display_flags()
+					i += 1
+				case atui_leaf_type.ATUI_SUBONLY:
+					is_trivial:bool = (
+						leaf.type.fancy
+						in atui_leaf_type.FANCIES_THAT_HAVE_TRIVIAL_SUBLEAVES
+					)
+					if is_trivial:
+						leaves.pop(i)
+						leaves = leaves[:i] + leaf.leaves.nodes + leaves[i:]
+					else:
+						i += 1
+				case atui_leaf_type.ATUI_NODISPLAY:
+					leaves.pop(i)
+		self.leaves.nodes = leaves
 
-
-class atui_leaf_type:
-	# atomtree/atui/atui.h has a copy
-
-	# fancy
-	ATUI_NOFANCY:int   = 0
-	ATUI_BITFIELD:int  = 1
-	ATUI_STRING:int    = 2
-	ATUI_ARRAY:int     = 3
-	ATUI_GRAFT:int     = 4
-	ATUI_SHOOT:int     = 5
-	ATUI_PETIOLE:int   = 6
-	ATUI_DYNARRAY:int  = 7
-	_ATUI_BITCHILD:int = 8
-	ATUI_FANCY:tuple = (
-		"ATUI_NOFANCY",
-		"ATUI_BITFIELD",
-		"ATUI_STRING",
-		"ATUI_ARRAY",
-		"ATUI_GRAFT",
-		"ATUI_SHOOT",
-		"ATUI_PETIOLE",
-		"ATUI_DYNARRAY",
-		"_ATUI_BITCHILD",
-	)
-	FANCIES_THAT_TAKE_RADIX:tuple = (
-		ATUI_NOFANCY, ATUI_BITFIELD, ATUI_ARRAY, _ATUI_BITCHILD
-	)
-	FANCIES_THAT_TAKE_FANCYDATA:tuple = (
-		ATUI_BITFIELD, ATUI_GRAFT, ATUI_SHOOT, ATUI_PETIOLE, ATUI_DYNARRAY
-	)
-	FANCIES_THAT_TAKE_ENUM:tuple = (
-		ATUI_NOFANCY, ATUI_BITFIELD, _ATUI_BITCHILD,
-	)
-	FANCIES_THAT_TAKE_A_BRANCH:tuple = (ATUI_GRAFT, ATUI_SHOOT)
-
-	# radix
-	ATUI_NAN:int = 0
-	ATUI_DEC:int = 1
-	ATUI_HEX:int = 2
-	ATUI_OCT:int = 3
-	ATUI_BIN:int = 4
-	ATUI_ANY:int = 7
-	ATUI_RADIX:tuple = (
-		"ATUI_NAN",
-		"ATUI_DEC",
-		"ATUI_HEX",
-		"ATUI_OCT",
-		"ATUI_BIN",
-	)
-
-	# disable
-	ATUI_DISPLAY:int   = 0
-	ATUI_SUBONLY:int   = 1
-	ATUI_NODISPLAY:int = 2
-	ATUI_DISABLE:tuple = (
-		"ATUI_DISPLAY",
-		"ATUI_SUBONLY",
-		"ATUI_NODISPLAY",
-	)
-
-	fancy:int = None
-	radix:int = None
-	disable:int = None
-	# signed ~ enum may be handled through C generics so usually False
-	signed_num:str = None
-	fraction:str = None
-	has_enum:str = None
 
 class atui_leaf_type_text:
 	fancy:str = None
@@ -689,7 +721,12 @@ class atui_leaf(atui_node):
 				self.type.disable = atui_leaf_type.ATUI_DISPLAY
 		else:
 			assert(0), (self.to_path(), display)
-		assert(None is not self.type.disable), self.to_path() 
+		assert(None is not self.type.disable), self.to_path()
+		subonly_sanity_check:bool = (
+			(atui_leaf_type.ATUI_SUBONLY != self.type.disable)
+			or (self.type.fancy in atui_leaf_type.FANCIES_THAT_CAN_SUBONLY)
+		)
+		assert(subonly_sanity_check), self.to_path()
 		enum_sanity_check:bool = (
 			(not self.type.has_enum)
 			or (
@@ -737,10 +774,10 @@ class atui_leaf(atui_node):
 				bitchild_default["access_meta"] = self.access_meta # c generics
 				bitchild_default["union"] = self.union
 				fields:list = self.leaves.nodes
-				l:dict
-				for l in fancy_data["fields"]:
+				ld:dict
+				for ld in fancy_data["fields"]:
 					fields.append(atui_leaf(
-					 	l, defaults, bitchild_default, self
+						ld, defaults, bitchild_default, self
 					))
 			case atui_leaf_type._ATUI_BITCHILD:
 				if None is self.name:
@@ -816,10 +853,10 @@ class atui_leaf(atui_node):
 				dynpattern_default["access_meta"] = self.access_meta
 				# branches_populate_defaults
 				pattern:list = self.leaves.nodes
-				l:dict
-				for l in fancy_data["pattern"]:
+				ld:dict
+				for ld in fancy_data["pattern"]:
 					pattern.append(atui_leaf(
-					 	l, defaults, dynpattern_default, self
+						ld, defaults, dynpattern_default, self
 					))
 
 				if ("enum" in fancy_data) and ("NULL" != fancy_data["enum"]):
@@ -867,7 +904,7 @@ class atui_branch(atui_node):
 			branch:dict,
 			defaults:dict,
 			parent:atui_node,
-			populate_leaves:bool=True
+			populate_leaves:bool
 			):
 		branch_default:dict = defaults["branch_default"]
 		atui_node.__init__(self, branch, branch_default, parent)
@@ -902,11 +939,12 @@ class atui_branch(atui_node):
 		else:
 			self.branches.expanded = True
 
-		leaves:list = self.leaves.nodes
 		if "leaves" in branch and populate_leaves:
+			leaves:list = self.leaves.nodes
 			leaf_default:dict = defaults["leaf_defaults"]["generic"]#.copy()
-			for leaf in branch["leaves"]:
-				leaves.append(atui_leaf(leaf, defaults, leaf_default, self))
+			ld:dict
+			for ld in branch["leaves"]:
+				leaves.append(atui_leaf(ld, defaults, leaf_default, self))
 
 def branches_populate_defaults(
 		defaults:dict
@@ -1083,6 +1121,75 @@ def atui_node_to_text(
 	)
 	return node_text
 
+class deep_count_leaves:
+	num_leaves:int = 0
+	shallow_num_graft:int = 0
+	deep_num_graft:int = 0
+	num_shoot:int = 0
+
+	dyn_leaves:str = "0"
+	deep_dyn_graft:str = "0" # all graft at all, penetrating type.disable
+	shallow_dyn_graft:str = "0" # consdiering type.disable
+	dyn_shoot:str = "0"
+
+	leaves_str:str = ""
+	deep_graft_str:str = ""
+	shallow_graft_str:str = ""
+	shoot_str:str = ""
+
+	nest_dynarray:str = " + (%s * (%u + %s))"
+	final_nest:str = "(%u + %s)"
+
+	def __init__(self,
+			leaves:list
+			):
+		# go through all the leaves, recursively, to develop a string
+		l:atui_leaf
+		self.num_leaves = len(leaves)
+		for l in leaves:
+			subonly:bool = (atui_leaf_type.ATUI_SUBONLY == l.type.disable)
+			self.num_leaves -= subonly
+
+			match (l.type.fancy):
+				case atui_leaf_type.ATUI_BITFIELD:
+					# FANCIES_THAT_HAVE_TRIVIAL_SUBLEAVES
+					if subonly:
+						self.num_leaves += len(l.leaves.nodes)
+				case atui_leaf_type.ATUI_GRAFT:
+					self.deep_num_graft += 1
+					self.shallow_num_graft += subonly
+				case atui_leaf_type.ATUI_SHOOT | atui_leaf_type.ATUI_PETIOLE:
+					self.num_shoot += 1
+					self.num_leaves -= 1
+				case atui_leaf_type.ATUI_DYNARRAY:
+					# We're in dynarray. The dynarray segments of subcounters
+					# will be non-'0' if there is a nested dynarray.
+					dynlength:str = l.fancy_data["count"]
+					sub = deep_count_leaves(l.leaves.nodes)
+					self.deep_dyn_graft += self.nest_dynarray % (
+						dynlength, sub.deep_num_graft, sub.deep_dyn_graft
+					)
+					self.dyn_shoot += self.nest_dynarray % (
+						dynlength, sub.num_shoot, sub.dyn_shoot
+					)
+					if subonly:
+						self.dyn_leaves += self.nest_dynarray % (
+							dynlength, sub.num_leaves, sub.dyn_leaves
+						)
+						self.shallow_dyn_graft += self.nest_dynarray % (
+							dynlength,
+							sub.shallow_num_graft, sub.shallow_dyn_graft
+						)
+	def to_text(self):
+		self.leaves_str = self.final_nest % (self.num_leaves, self.dyn_leaves)
+		self.deep_graft_str = self.final_nest % (
+			self.deep_num_graft, self.deep_dyn_graft
+		)
+		self.shallow_graft_str = self.final_nest % (
+			self.shallow_num_graft, self.shallow_dyn_graft
+		)
+		self.shoot_str = self.final_nest % (self.num_shoot, self.dyn_shoot)
+
 def leaf_to_subleaf(
 		leaf:atui_leaf,
 		parent_indent:str
@@ -1094,17 +1201,23 @@ def leaf_to_subleaf(
 		+ indent + ".element_size = %s,\n"
 		+ indent + ".dynarray_length = %s,\n"
 		+ indent + ".deferred_start_array = %s,\n"
+		+ indent + ".computed_num_leaves = %s * %s,\n"
+		+ indent + ".computed_num_graft = %s * %s,\n"
 		+ indent + ".enum_taglist = %s,\n"
 	+ parent_indent
 	)
 	bounds_vals:tuple
+	counters = deep_count_leaves(leaf.leaves.nodes)
+	counters.to_text()
 	match (leaf.type.fancy):
 		case atui_leaf_type.ATUI_DYNARRAY:
 			bounds_vals = (
 				"sizeof(%s)" % leaf.access_meta,
 				leaf.fancy_data["count"],
 				str(leaf.dynarray_deferred).lower(),
-				leaf.fancy_data["enum"]
+				leaf.fancy_data["count"], counters.leaves_str,
+				leaf.fancy_data["count"], counters.shallow_graft_str,
+				leaf.fancy_data["enum"],
 			)
 		case _:
 			assert(0), (leaf.to_path(), leaf.type.fancy)
@@ -1133,40 +1246,6 @@ def leaves_asserts_to_text(
 				)
 	return assert_text
 
-class deep_count_leaves:
-	leaves:int = 0
-	graft:int = 0
-	shoot:int = 0
-	dyn_leaves:str = "0"
-	dyn_graft:str = "0"
-	dyn_shoot:str = "0"
-
-	nest_dynarray:str = "+ (%s * (%u + %s))"
-	def __init__(self,
-			leaves
-			):
-		# go through all the leaves, recursively, to develop a string
-		self.leaves += len(leaves)
-		for leaf in leaves:
-			match (leaf.type.fancy):
-				case atui_leaf_type.ATUI_GRAFT:
-					self.graft += 1
-				case atui_leaf_type.ATUI_SHOOT | atui_leaf_type.ATUI_PETIOLE:
-					self.shoot += 1
-				case atui_leaf_type.ATUI_DYNARRAY:
-					# We're in dynarray. The dynarray segments of subcounters
-					# will be non-'0' if there is a nested dynarray.
-					dynlength:str = leaf.fancy_data["count"]
-					sub_counters = deep_count_leaves(leaf.leaves.nodes)
-					self.dyn_leaves += self.nest_dynarray % (
-						dynlength, sub_counters.leaves, sub_counters.dyn_leaves
-					)
-					self.dyn_graft += self.nest_dynarray % (
-						dynlength, sub_counters.graft, sub_counters.dyn_graft
-					)
-					self.dyn_shoot += self.nest_dynarray % (
-						dynlength, sub_counters.shoot, sub_counters.dyn_shoot
-					)
 
 def branch_embryo_to_text(
 		branch:atui_branch,
@@ -1177,16 +1256,18 @@ def branch_embryo_to_text(
 		"\n"
 		+ indent + ".seed = {%s},\n"
 		+ indent + ".computed_num_leaves = %s,\n"
-		+ indent + ".computed_num_graft = %s,\n"
+		+ indent + ".computed_num_shallow_graft = %s,\n"
+		+ indent + ".computed_num_deep_graft = %s,\n"
 		+ indent + ".computed_num_shoot = %s,\n"
 	+ parent_indent
 	)
 	counters = deep_count_leaves(branch.leaves.nodes)
+	counters.to_text()
 	embryo_text:str = embryo_template % (
 		atui_node_to_text(branch, indent),
-		"(%u + %s)" % (counters.leaves, counters.dyn_leaves), # 'computed'
-		"(%u + %s)" % (counters.graft, counters.dyn_graft),
-		"(%u + %s)" % (counters.shoot, counters.dyn_shoot),
+		counters.leaves_str,
+		counters.shallow_graft_str, counters.deep_graft_str,
+		counters.shoot_str
 	)
 	return embryo_text
 
@@ -1203,7 +1284,9 @@ def branches_to_c(
 	defaults:dict = atui_data["global_defaults"]
 	branches_populate_defaults(defaults)
 	for bd in atui_data["branches"]:
-		branches.append(atui_branch(bd, defaults, None))
+		branch = atui_branch(bd, defaults, None, True)
+		branch.compile_display_flags()
+		branches.append(branch)
 
 	cfile_header:str = """\
 /* Autogenerated with ppatui.py. Do not edit. */
@@ -1228,7 +1311,7 @@ _atui_%s(
 %s\
 
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
-	assert(branch_embryo.computed_num_graft < UINT8_MAX);
+	assert(branch_embryo.computed_num_deep_graft < UINT8_MAX);
 	assert(branch_embryo.computed_num_shoot < UINT8_MAX);
 
 	return atui_branch_allocator(&branch_embryo, args);

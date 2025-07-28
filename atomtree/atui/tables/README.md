@@ -396,7 +396,7 @@ the boundaries.
 
 The leaf pattern follows regular syntax and takes assumptions from the
 `dynpattern` section in `global_defaults`.
-Nested `ATUI_DYNARRAY` should be possible but is untested.
+Nested `ATUI_DYNARRAY` should be possible but is completely untested.
 Multiple leaves in the pattern should be possible but is intested
 
 <br>
