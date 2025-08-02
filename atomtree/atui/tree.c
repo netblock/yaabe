@@ -1105,9 +1105,7 @@ grow_ppt(
 			atui_ppt = _atui_smu_11_0_7_powerplay_table(&atui_args);
 			break;
 		default:
-			atui_args.rename = (
-				"smu_powerplay_table_header (header only stub)"
-			);
+			atui_args.rename = "smu_powerplay_table_header (header only stub)";
 			atui_ppt = _atui_smu_powerplay_table_header(&atui_args);
 			break;
 	}

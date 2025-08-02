@@ -33,16 +33,17 @@ atui_leaf_from_text(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
-	uint32_t const array_size = leaf->leaf.array_size;
-	enum atui_leaf_type_radix const radix = leaf->leaf.type.radix;
-	enum atui_leaf_type_fancy const fancy = leaf->leaf.type.fancy;
+	struct atui_leaf const* const meta = &(leaf->leaf);
+	uint32_t const array_size = meta->array_size;
+	enum atui_leaf_type_radix const radix = meta->type.radix;
+	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 
 	if ((fancy == ATUI_ARRAY) && radix) {
 		uint8_t const base = bases[radix];
 		// strto* doesn't guarantee const in endptr
 		char* const token_buffer = strdup(text);
 		char* walker = token_buffer;
-		switch (leaf->leaf.total_bits) {
+		switch (meta->total_bits) {
 			case  8:
 				for (uint32_t i=0; i < array_size; i++) {
 					data.u8[i] = strtoul(walker, &walker, base);
@@ -86,8 +87,8 @@ atui_leaf_from_text(
 			data.c8[array_size-1] = '\0';
 		}
 	} else if (radix) {
-		if (leaf->leaf.type.has_enum) {
-			struct atui_enum const* const enum_set = leaf->leaf.enum_options;
+		if (meta->type.has_enum) {
+			struct atui_enum const* const enum_set = meta->enum_options;
 			struct atui_enum_entry const* entry;
 			int16_t str_diff;
 			for (uint16_t i=0; i < enum_set->num_entries; i++) {
@@ -98,7 +99,7 @@ atui_leaf_from_text(
 				}
 			}
 			if (0 == str_diff) {
-				if (leaf->leaf.type.signed_num) {
+				if (meta->type.signed_num) {
 					atui_leaf_set_val_signed(leaf, entry->val);
 				} else {
 					atui_leaf_set_val_unsigned(leaf, entry->val);
@@ -106,9 +107,9 @@ atui_leaf_from_text(
 				return;
 			}
 		}
-		if (leaf->leaf.type.fraction) {
+		if (meta->type.fraction) {
 			atui_leaf_set_val_fraction(leaf, strtod(text, NULL));
-		} else if (leaf->leaf.type.signed_num) {
+		} else if (meta->type.signed_num) {
 			atui_leaf_set_val_signed(leaf, strtoll_2(text));
 		} else {
 			atui_leaf_set_val_unsigned(leaf, strtoull_2(text));
@@ -128,8 +129,9 @@ get_sprintf_format_from_leaf(
 
 // get reccomended sprintf format based on radix and other factors
 	size_t print_alloc_width; // caller handles the counting of \0
-	enum atui_leaf_type_radix const radix = leaf->leaf.type.radix;
-	enum atui_leaf_type_fancy const fancy = leaf->leaf.type.fancy;
+	struct atui_leaf const* const meta = &(leaf->leaf);
+	enum atui_leaf_type_radix const radix = meta->type.radix;
+	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 
 	if (radix) {
 		char const* const metaformat = "%s%u%s"; // amogus
@@ -137,11 +139,11 @@ get_sprintf_format_from_leaf(
 		uint8_t num_print_digits = 0;
 		uint8_t num_digits;
 
-		if (leaf->leaf.type.fraction) {
+		if (meta->type.fraction) {
 			num_digits = 32; // we're using %G anyway
 		} else {
 			uint64_t max_val;
-			uint8_t const num_bits = leaf->leaf.total_bits;
+			uint8_t const num_bits = meta->total_bits;
 			if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
 				max_val = UINT64_MAX;
 			} else {
@@ -162,18 +164,18 @@ get_sprintf_format_from_leaf(
 			print_alloc_width += 2; // 0x / 0b
 		}
 
-		if (leaf->leaf.type.fancy == ATUI_ARRAY) {
-			assert(!(leaf->leaf.type.fraction)); // TODO %G ?
+		if (meta->type.fancy == ATUI_ARRAY) {
+			assert(!(meta->type.fraction)); // TODO %G ?
 			sprintf(format, "%s%u%s ",
 				"%0", num_print_digits, suffixes_uint[radix]
 			);
 			print_alloc_width += 1-2;
 			// 1 for the space in between segments ; -2 to undo 0x/0b
-		} else if (leaf->leaf.type.fraction) {
+		} else if (meta->type.fraction) {
 			// %G format can have agressive rounding:
 			// Q14.2 16383.75 -> 16383.8
 			strcpy(format, "%G");
-		} else if (leaf->leaf.type.signed_num) {
+		} else if (meta->type.signed_num) {
 			print_alloc_width += 1; // sign
 			sprintf(format, metaformat,
 				prefixes_int[radix], num_print_digits, suffixes_int[radix]
@@ -185,7 +187,7 @@ get_sprintf_format_from_leaf(
 		}
 	} else if ((fancy==ATUI_ARRAY) || (fancy==ATUI_STRING)) {
 		strcpy(format, "%s");
-		print_alloc_width = leaf->leaf.array_size;
+		print_alloc_width = meta->array_size;
 	} else {
 		format[0] = '\0';
 		print_alloc_width = 0;
@@ -206,18 +208,19 @@ atui_leaf_to_text(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
 	size_t buffer_size;
 	char* buffer = NULL;
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
-	uint32_t const array_size = leaf->leaf.array_size;
-	enum atui_leaf_type_radix const radix = leaf->leaf.type.radix;
-	enum atui_leaf_type_fancy const fancy = leaf->leaf.type.fancy;
+	uint32_t const array_size = meta->array_size;
+	enum atui_leaf_type_radix const radix = meta->type.radix;
+	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 	uint32_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
 
 	if ((fancy == ATUI_ARRAY) && radix) {
-		assert(!(leaf->leaf.type.fraction));
-		if (leaf->leaf.total_bits == -1) {
+		assert(!(meta->type.fraction));
+		if (meta->total_bits == -1) {
 			return NULL;
 			assert(0);
 		}
@@ -225,7 +228,7 @@ atui_leaf_to_text(
 		buffer_size = (num_digits * array_size) + 1;
 		buffer = cralloc(buffer_size);
 		char* buffer_walk = buffer;
-		switch (leaf->leaf.total_bits) {
+		switch (meta->total_bits) {
 			case  8:
 				for (uint32_t i=0; i < array_size; i++) {
 					buffer_walk += sprintf(buffer_walk, format, data.u8[i]);
@@ -261,18 +264,18 @@ atui_leaf_to_text(
 	} else if (radix) {
 		assert(num_digits);
 		buffer_size = num_digits+1; // +1 is \0
-		if (leaf->leaf.type.has_enum) {
+		if (meta->type.has_enum) {
 			int64_t val;
-			if (leaf->leaf.type.signed_num) {
+			if (meta->type.signed_num) {
 				val = atui_leaf_get_val_signed(leaf);
 			} else {
 				val = atui_leaf_get_val_unsigned(leaf);
 			}
 
-			int16_t index = atui_enum_lsearch(leaf->leaf.enum_options, val);
+			int16_t index = atui_enum_lsearch(meta->enum_options, val);
 			if (-1 < index) {
 				struct atui_enum_entry const* const entry = &(
-					leaf->leaf.enum_options->enum_array[index]
+					meta->enum_options->enum_array[index]
 				);
 				buffer_size += entry->name_length + sizeof(" : ");
 				buffer = cralloc(buffer_size);
@@ -289,11 +292,11 @@ atui_leaf_to_text(
 			}
 		} else {
 			buffer = cralloc(buffer_size);
-			if (leaf->leaf.type.fraction) {
+			if (meta->type.fraction) {
 				// %G format can have agressive rounding:
 				// Q14.2 16383.75 -> 16383.8
 				sprintf(buffer, "%G", atui_leaf_get_val_fraction(leaf));
-			} else if (leaf->leaf.type.signed_num) {
+			} else if (meta->type.signed_num) {
 				sprintf(buffer, format, atui_leaf_get_val_signed(leaf));
 			} else {
 				sprintf(buffer, format, atui_leaf_get_val_unsigned(leaf));
@@ -318,7 +321,8 @@ atui_leaf_set_val_unsigned(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
-	uint8_t const num_bits = (leaf->leaf.bitfield_hi - leaf->leaf.bitfield_lo) +1;
+	struct atui_leaf const* const meta = &(leaf->leaf);
+	uint8_t const num_bits = (meta->bitfield_hi - meta->bitfield_lo) +1;
 	uint64_t max_val;
 	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
 		max_val = UINT64_MAX;
@@ -330,9 +334,9 @@ atui_leaf_set_val_unsigned(
 	}
 
 	// ...11111 000.. 1111...
-	uint64_t const tokeep_mask = ~(max_val << leaf->leaf.bitfield_lo);
-	val <<= leaf->leaf.bitfield_lo;
-	switch (leaf->leaf.total_bits) {
+	uint64_t const tokeep_mask = ~(max_val << meta->bitfield_lo);
+	val <<= meta->bitfield_lo;
+	switch (meta->total_bits) {
 		case  8: *(data.u8)  = ( *(data.u8) & tokeep_mask) | val; break;
 		case 16: *(data.u16) = (*(data.u16) & tokeep_mask) | val; break;
 		case 24:
@@ -353,8 +357,9 @@ atui_leaf_get_val_unsigned(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
 	uint64_t val;
-	switch (leaf->leaf.total_bits) {
+	switch (meta->total_bits) {
 		case  8: val =  *(data.u8); break;
 		case 16: val = *(data.u16); break;
 		case 24: val = npt_to_pt_upgrade(data.u24); break;
@@ -365,11 +370,11 @@ atui_leaf_get_val_unsigned(
 
 	uint8_t const num_unused_bits_hi = (
 		(sizeof(val) * CHAR_BIT)
-		 - leaf->leaf.bitfield_hi
+		 - meta->bitfield_hi
 		 -1
 	 );
 	val <<= num_unused_bits_hi; // delete unused upper
-	val >>= (num_unused_bits_hi + leaf->leaf.bitfield_lo); // delete lower
+	val >>= (num_unused_bits_hi + meta->bitfield_lo); // delete lower
 
 	return val;
 }
@@ -384,9 +389,10 @@ atui_leaf_set_val_signed(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
-	uint8_t const num_bits = (leaf->leaf.bitfield_hi - leaf->leaf.bitfield_lo) +1;
+	uint8_t const num_bits = (meta->bitfield_hi - meta->bitfield_lo) +1;
 	uint64_t mask;
 	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
 		mask = UINT64_MAX;
@@ -404,10 +410,10 @@ atui_leaf_set_val_signed(
 	}
 
 	// ...11111 000.. 1111...
-	uint64_t const tokeep_mask = ~(mask << leaf->leaf.bitfield_lo);
-	raw_val <<= leaf->leaf.bitfield_lo;
+	uint64_t const tokeep_mask = ~(mask << meta->bitfield_lo);
+	raw_val <<= meta->bitfield_lo;
 
-	switch (leaf->leaf.total_bits) {
+	switch (meta->total_bits) {
 		case  8:  *(data.u8) = ( *(data.u8) & tokeep_mask) | raw_val;  break;
 		case 16: *(data.u16) = (*(data.u16) & tokeep_mask) | raw_val;  break;
 		case 24:
@@ -429,8 +435,9 @@ atui_leaf_get_val_signed(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
 	int64_t val;
-	switch (leaf->leaf.total_bits) {
+	switch (meta->total_bits) {
 		case  8: val =  *(data.s8); break;
 		case 16: val = *(data.s16); break;
 		case 24: val = npt_to_pt_upgrade(data.s24); break;
@@ -441,12 +448,12 @@ atui_leaf_get_val_signed(
 
 	uint8_t const num_unused_bits_hi = (
 		(sizeof(val) * CHAR_BIT)
-		- leaf->leaf.bitfield_hi
+		- meta->bitfield_hi
 		- 1
 	);
 	val <<= num_unused_bits_hi; // delete unused upper
 	// rightshift on signed repeats sign
-	val >>= (num_unused_bits_hi + leaf->leaf.bitfield_lo); // delete lower
+	val >>= (num_unused_bits_hi + meta->bitfield_lo); // delete lower
 	return val;
 }
 
@@ -459,24 +466,25 @@ atui_leaf_set_val_fraction(
 	assert(leaf->data.input);
 
 	union bios_data const data = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
 
-	if (leaf->leaf.fractional_bits) {
+	if (meta->fractional_bits) {
 		float64_t const max_val = (
-			(float64_t)(1<<(leaf->leaf.total_bits - leaf->leaf.fractional_bits))
-			- ( (float64_t)(1) / (float64_t)(1<<leaf->leaf.fractional_bits))
+			(float64_t)(1<<(meta->total_bits - meta->fractional_bits))
+			- ( (float64_t)(1) / (float64_t)(1<<meta->fractional_bits))
 		);
 		uint64_t fixed_val;
 		if (val > max_val) {
-			fixed_val = (1<<leaf->leaf.total_bits)-1;
+			fixed_val = (1<<meta->total_bits)-1;
 		} else {
 			fixed_val = floor(val);
 			float64_t const frac = (
-				(val - floor(val)) * (1<<leaf->leaf.fractional_bits)
+				(val - floor(val)) * (1<<meta->fractional_bits)
 			);
-			fixed_val <<= leaf->leaf.fractional_bits;
+			fixed_val <<= meta->fractional_bits;
 			fixed_val += frac;
 		}
-		switch (leaf->leaf.total_bits) {
+		switch (meta->total_bits) {
 			case  8:  *(data.u8) = fixed_val; return;
 			case 16: *(data.u16) = fixed_val; return;
 			case 32: *(data.u32) = fixed_val; return;
@@ -485,7 +493,7 @@ atui_leaf_set_val_fraction(
 		}
 	}
 
-	switch (leaf->leaf.total_bits) { // else float
+	switch (meta->total_bits) { // else float
 		case 16: *(data.f16) = val; return;
 		case 32: *(data.f32) = val; return;
 		case 64: *(data.f64) = val; return;
@@ -502,25 +510,26 @@ atui_leaf_get_val_fraction(
 	assert(leaf->leaf.type.fraction);
 	assert(leaf->data.input);
 
+	struct atui_leaf const* const meta = &(leaf->leaf);
 	union bios_data const data = leaf->data;
 
-	if (leaf->leaf.fractional_bits) { // fixed-point
+	if (meta->fractional_bits) { // fixed-point
 		// f64 can represent represent ints up to 2**53 without rounding.
-		assert((leaf->leaf.total_bits - leaf->leaf.fractional_bits) < 53);
+		assert((meta->total_bits - meta->fractional_bits) < 53);
 		float64_t val;
-		switch (leaf->leaf.total_bits) {
+		switch (meta->total_bits) {
 			case  8: val =  *(data.u8); break;
 			case 16: val = *(data.u16); break;
 			case 32: val = *(data.u32); break;
 			case 64: val = *(data.u64); break;
 			default: assert(0); break;
 		};
-		val /= (1 << leaf->leaf.fractional_bits);
+		val /= (1 << meta->fractional_bits);
 		return val;
 	};
 
 	// else native float
-	switch (leaf->leaf.total_bits) {
+	switch (meta->total_bits) {
 		case 16: return *(data.f16);
 		case 32: return *(data.f32);
 		case 64: return *(data.f64);
@@ -581,6 +590,7 @@ path_to_atui_has_branch(
 	uint16_t i=1;
 	atui_node const* const* branch_nodes = &node;
 	do {
+		assert(true == node->branch.branches.indirect);
 		do {
 			if (0 == i) {
 				goto not_found; // no dir found; could be a leaf?
@@ -588,7 +598,6 @@ path_to_atui_has_branch(
 			i--;
 		} while (strcmp(path_token, branch_nodes[i]->name));
 		node = branch_nodes[i];
-		assert(true == node->branch.branches.indirect);
 		branch_nodes = node->branch.branches.addresses_ro;
 		i = node->branch.branches.count;
 		depth++;

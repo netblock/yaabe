@@ -139,6 +139,8 @@ struct atui_children {
 		atui_node** addresses;
 		atui_node const* nodes_ro; // read-only
 		atui_node const* const* addresses_ro; // read-only
+		void* array; // indiscriminate
+		void* array_ro;
 	};
 	uint16_t count;
 	uint16_t max_count;
