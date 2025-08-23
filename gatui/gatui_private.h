@@ -5,11 +5,13 @@
 #include "atui_allocator.h"
 #include "yaabe_gtk4.h"
 
+// amalgam of various private methods
 
 char* // needs to be freed
 b64_packet_encode(
-		struct b64_header const* config,
-		void const* payload
+		GVariant* val,
+		enum gatui_b64_target target,
+		uint16_t num_segments
 		);
 struct b64_header* // NULL on error
 b64_packet_decode(
@@ -20,6 +22,12 @@ b64_packet_decode(
 GtkSelectionModel* const*
 gatui_tree_get_enum_models_cache( // for GATUILeaves generation
 		GATUITree* self
+		);
+
+
+GATUILeaf**
+_gatui_node_get_leaf_array(
+		GATUINode* self
 		);
 
 void

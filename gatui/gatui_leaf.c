@@ -462,14 +462,7 @@ gatui_leaf_value_to_base64(
 	g_return_val_if_fail(self->capsule_type, NULL);
 
 	GVariant* const val = gatui_leaf_get_value(self, false);
-	struct b64_header config = {
-		.version = B64_HEADER_VER_CURRENT,
-		.target = B64_LEAF,
-		.num_segments = 1,
-		.num_bytes = g_variant_get_size(val),
-	};
-	memcpy(config.typestr,   self->typestr,   sizeof(self->typestr));
-	char* const b64_text = b64_packet_encode(&config, g_variant_get_data(val));
+	char* const b64_text = b64_packet_encode(val, B64_LEAF, 1);
 	g_variant_unref(val);
 	return b64_text;
 }

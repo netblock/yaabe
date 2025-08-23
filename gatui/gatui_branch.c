@@ -334,31 +334,26 @@ gatui_branch_to_base64(
 
 	atui_node const* const branch = self->atui;
 
-	struct b64_header config = {
-		.version = B64_HEADER_VER_CURRENT,
-	};
 	GVariant* val;
+	uint16_t num_segments;
+	enum gatui_b64_target target;
 
 	if (leaves_package) {
 		if (branch->branch.prefer_contiguous || !branch->branch.num_copyable_leaves) {
 			return NULL;
 		}
-		uint16_t num_segments;
 		gatui_branch_get_leaves_memory_package(self, &val, &num_segments);
-		config.target = B64_BRANCH_LEAVES;
-		config.num_segments = num_segments;
+		target = B64_BRANCH_LEAVES;
 	} else { // contiguous
 		if (!branch->num_bytes) {
 			return NULL;
 		}
 		val = gatui_branch_get_contiguous_memory(self);
-		config.target = B64_BRANCH_CONTIGUOUS;
-		config.num_segments = 1;
+		target = B64_BRANCH_CONTIGUOUS;
+		num_segments = 1;
 	}
 
-	config.num_bytes = g_variant_get_size(val);
-	memcpy(config.typestr,   self->typestr,   sizeof(self->typestr));
-	char* const b64_text = b64_packet_encode(&config, g_variant_get_data(val));
+	char* const b64_text = b64_packet_encode(val, target, num_segments);
 	g_variant_unref(val);
 	return b64_text;
 }

@@ -62,6 +62,7 @@ gatui_regex_node_peek(
 		GATUIRegexNode* self
 		);
 
+#include "gatui_node.h"
 #include "gatui_branch.h"
 #include "gatui_leaf.h"
 #include "gatui_tree.h"

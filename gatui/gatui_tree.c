@@ -222,7 +222,9 @@ gatui_tree_get_trunk(
 		self->enum_models_cache = enum_models_cache;
 		generate_enum_models_cache(enum_models_cache);
 
-		trunk = G_OBJECT(gatui_branch_new(self->atomtree->atui_root, self));
+		trunk = G_OBJECT(gatui_branch_new(
+			self->atomtree->atui_root, self
+		));
 		g_weak_ref_set(&(self->trunk), trunk);
 
 		self->enum_models_cache = NULL;

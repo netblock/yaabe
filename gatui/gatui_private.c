@@ -9,14 +9,23 @@ union b64_header_raw {
 
 char*
 b64_packet_encode(
-		struct b64_header const* const config,
-		void const* const payload
+		GVariant* const val,
+		enum gatui_b64_target const target,
+		uint16_t const num_segments
 		) {
-	size_t const packet_size = sizeof(struct b64_header) + config->num_bytes;
+	size_t const payload_size = g_variant_get_size(val);
+	size_t const packet_size = sizeof(struct b64_header) + payload_size;
+
 	union b64_header_raw const h = {.header = cralloc(packet_size)};
 
-	memcpy(h.header, config, sizeof_flex(config, bytes, 0));
-	memcpy(h.header->bytes, payload, config->num_bytes);
+	*h.header = (struct b64_header) {
+		.version = B64_HEADER_VER_CURRENT,
+		.target = target,
+		.num_segments = num_segments,
+		.num_bytes = payload_size,
+	};
+	memcpy(h.header->typestr,g_variant_get_type_string(val), GATUI_TYPESTR_LEN);
+	memcpy(h.header->bytes, g_variant_get_data(val), payload_size);
 	h.header->crc = crc32(
 		0,
 		(h.raw + sizeof(h.header->crc)), // exclude crc
