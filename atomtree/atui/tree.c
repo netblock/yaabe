@@ -703,9 +703,6 @@ atui_generate_pptablev1_ppt(
 
 	atui_node* sclk_dependency = NULL;
 	if (ppt71->sclk_dependency) {
-		sclk_dependency = ATUI_MAKE_BRANCH(atom_pptable_mclk_dependency_table,
-			NULL,  ppt71,ppt71->sclk_dependency,  0,NULL
-		);
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
@@ -793,9 +790,6 @@ atui_generate_pptablev1_ppt(
 
 	atui_node* pcie_table = NULL;
 	if (ppt71->pcie_table) {
-		pcie_table = ATUI_MAKE_BRANCH(atom_pptable_pcie_table, NULL,
-			ppt71,ppt71->pcie_table,  0,NULL
-		);
 		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
