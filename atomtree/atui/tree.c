@@ -87,7 +87,7 @@ grow_lcd_info_record_table(
 		"record table",  NULL,NULL,  lcd_info->num_records,NULL
 	);
 	// set size metadata for copy/paste
-	record_table->branch.prefer_contiguous = true;
+	record_table->prefer_contiguous = true;
 	record_table->data.input = records[0].record;
 	record_table->num_bytes = lcd_info->record_table_size;
 
@@ -1126,7 +1126,7 @@ grow_display_info_records_set(
 	atui_node* const atui_records = ATUI_MAKE_BRANCH(atui_nullstruct,
 		set_name,  NULL,NULL,  set->num_records,NULL
 	);
-	atui_records->branch.prefer_contiguous = true;
+	atui_records->prefer_contiguous = true;
 	atui_records->data.input = set->records[0];
 	atui_records->num_bytes = set->records_size;
 
@@ -1326,7 +1326,7 @@ grow_display_object_path_table(
 		graphic_objs = ATUI_MAKE_BRANCH(atui_nullstruct,  "GraphicObjIds",
 			NULL,NULL,  0,NULL
 		);
-		graphic_objs->branch.prefer_contiguous = true;
+		graphic_objs->prefer_contiguous = true;
 		graphic_objs->data.input = paths[paths_i].path->GraphicObjIds;
 		graphic_objs->num_bytes = ( // multiple ways to get this
 			paths[paths_i].num_graphic_ids
@@ -1521,7 +1521,7 @@ autogen_regblock_register_sequence(
 		NULL,NULL,  0,NULL
 	);
 	// set size metadata for copy/paste
-	auto_sequence->branch.prefer_contiguous = true;
+	auto_sequence->prefer_contiguous = true;
 	auto_sequence->data.input = (void*) data_block;
 	auto_sequence->num_bytes = at_regblock->data_block_element_size;
 
@@ -1702,7 +1702,7 @@ grow_init_reg_block(
 			);
 			free(func_playlist);
 		}
-		atui_strap_set->branch.prefer_contiguous = true;
+		atui_strap_set->prefer_contiguous = true;
 		atui_strap_set->data.input = at_regblock->data_blocks[0];
 		atui_strap_set->num_bytes = at_regblock->data_block_table_size;
 	}
@@ -1799,7 +1799,7 @@ grow_atom_memory_timing_format(
 	atui_node* const atui_straps = ATUI_MAKE_BRANCH(atui_nullstruct,  NULL,
 		NULL,NULL,  count,NULL
 	);
-	atui_straps->branch.prefer_contiguous = true;
+	atui_straps->prefer_contiguous = true;
 	atui_straps->data.input = (void*) timing_format_start;
 	atui_straps->num_bytes = vram_module->memory_timing_format_total_size;
 
@@ -1993,7 +1993,7 @@ grow_vram_module(
 	);
 
 	if (count) {
-		atui_vram_modules->branch.prefer_contiguous = true;
+		atui_vram_modules->prefer_contiguous = true;
 		atui_vram_modules->data.input = vram_modules[0].leaves;
 		atui_vram_modules->num_bytes = (
 			vram_modules[count-1].leaves
@@ -2484,7 +2484,7 @@ grow_vram_info_v2_3(
 		}
 		if (mem_clk_patch->num_data_blocks) {
 			strcpy(atui_mem_timings->name, atui_strap->origname);
-			atui_mem_timings->branch.prefer_contiguous = true;
+			atui_mem_timings->prefer_contiguous = true;
 			atui_mem_timings->data.input = mem_clk_patch->data_blocks[0];
 			atui_mem_timings->num_bytes = mem_clk_patch->data_block_table_size;
 		}
@@ -2595,7 +2595,7 @@ grow_vram_info_v2_4(
 		}
 		if (mem_clk_patch->num_data_blocks) {
 			strcpy(atui_mem_timings->name, atui_strap->origname);
-			atui_mem_timings->branch.prefer_contiguous = true;
+			atui_mem_timings->prefer_contiguous = true;
 			atui_mem_timings->data.input = mem_clk_patch->data_blocks[0];
 			atui_mem_timings->num_bytes = mem_clk_patch->data_block_table_size;
 		}
@@ -2668,7 +2668,7 @@ grow_vram_info_v2_5(
 			"atom_gddr6_ac_timing_v2_5",
 			NULL,NULL,  count,NULL
 		);
-		atui_gddr6_ac_timings->branch.prefer_contiguous = true;
+		atui_gddr6_ac_timings->prefer_contiguous = true;
 		atui_gddr6_ac_timings->data.input = (void*) timings;
 		atui_gddr6_ac_timings->num_bytes = count * sizeof(timings[0]);
 
@@ -3670,7 +3670,7 @@ grow_psp_directory_fw_blob(
 			blob = generic_entry(&blob_args); break;
 	}
 	rename_psp_blob_with_type(blob, dir_entry->type);
-	blob->branch.prefer_contiguous = true;
+	blob->prefer_contiguous = true;
 	blob->num_bytes = dir_entry->size;
 
 	return blob;

@@ -143,9 +143,9 @@ gatui_branch_test_get_set_memory(
 	atui_node const* const atui = gatui_branch_get_atui(branch);
 	bool success;
 	char* b64_text;
-	if (atui->branch.num_copyable_leaves || atui->num_bytes) {
+	if (atui->num_copyable_leaves || atui->num_bytes) {
 		GVariant* val = NULL;
-		if (atui->branch.num_copyable_leaves && ! atui->branch.prefer_contiguous) {
+		if (atui->num_copyable_leaves && ! atui->prefer_contiguous) {
 			uint16_t num_copyable_leaves;
 			success = gatui_branch_get_leaves_memory_package(
 				branch, &val, &num_copyable_leaves

@@ -167,13 +167,6 @@ struct atui_leaf {
 
 struct atui_branch {
 	struct atui_children branches; // considers shoot + import
-
-	// the C struct that the branches represent may be larger than
-	// table_size; if this is the case, a simple copy/paste of the leaves
-	// themselves might be atom out-of-bounds.
-	// subleaves of leaves are guaranteed to be contiguous.
-	bool prefer_contiguous;
-	uint16_t num_copyable_leaves; // num_leaves that maps the bios
 };
 
 struct _atui_node {
@@ -187,6 +180,17 @@ struct _atui_node {
 	atui_node* parent; // don't need parent_is_leaf
 
 	struct atui_children leaves; // if branch, always expanded
+
+	/*
+	The C struct that the node may represent may be sizeof()'d larger than an
+	explicit size declared in the bios, possibly due to padding or flex arrays.
+	(eg sizeof() > struct atom_common_table_header.structuresize)
+	If this is the case, a simple copy/paste of the leaves themselves might be
+	out-of-bounds.
+	Subleaves of leaves are guaranteed to be contiguous.
+	*/
+	uint16_t num_copyable_leaves; // num_leaves that maps the bios
+	bool prefer_contiguous;
 
 	// If true, this node is not alone but in an array. See struct atui_children
 	// for more info.

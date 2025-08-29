@@ -341,8 +341,8 @@ branches_rightclick_popup(
 	};
 	uint8_t act_i = 3;
 	atui_node const* const a_branch = gatui_branch_get_atui(g_branch);
-	if (a_branch->branch.num_copyable_leaves || a_branch->num_bytes) {
-		if (a_branch->branch.num_copyable_leaves && ! a_branch->branch.prefer_contiguous) {
+	if (a_branch->num_copyable_leaves || a_branch->num_bytes) {
+		if (a_branch->num_copyable_leaves && ! a_branch->prefer_contiguous) {
 			actions[act_i].name = "copy_leaves";
 			actions[act_i].activate = branch_right_click_copy_leaves;
 			act_i++;

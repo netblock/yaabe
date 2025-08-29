@@ -256,8 +256,8 @@ gatui_branch_get_leaves_memory_package(
 	g_return_val_if_fail((NULL != value), false);
 	g_return_val_if_fail((NULL != num_copyable_leaves), false);
 
-	g_return_val_if_fail((0 < self->atui->branch.num_copyable_leaves), false);
-	*num_copyable_leaves = self->atui->branch.num_copyable_leaves;
+	g_return_val_if_fail((0 < self->atui->num_copyable_leaves), false);
+	*num_copyable_leaves = self->atui->num_copyable_leaves;
 	atui_node const* const leaves = self->atui->leaves.nodes;
 	uint16_t const leaf_count = self->atui->leaves.count;
 
@@ -292,7 +292,7 @@ gatui_branch_set_leaves_memory_package(
 	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail((NULL != value), false);
 
-	if (num_copyable_leaves != self->atui->branch.num_copyable_leaves) {
+	if (num_copyable_leaves != self->atui->num_copyable_leaves) {
 		return false;
 	}
 
@@ -339,7 +339,7 @@ gatui_branch_to_base64(
 	enum gatui_b64_target target;
 
 	if (leaves_package) {
-		if (branch->branch.prefer_contiguous || !branch->branch.num_copyable_leaves) {
+		if (branch->prefer_contiguous || !branch->num_copyable_leaves) {
 			return NULL;
 		}
 		gatui_branch_get_leaves_memory_package(self, &val, &num_segments);

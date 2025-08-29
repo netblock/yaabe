@@ -59,6 +59,13 @@ C preprocessor side of ATUI table generation
 	atui_nullstruct: 0,\
 	default: sizeof(var)\
 )
+#define _PPATUI_PREFER_CONTIGUOUS(bios, num_bytes) (\
+	(0 < _PPATUI_NULLPTR_SIZE(*(bios)))\
+	&& (\
+		(num_bytes)\
+		<= _PPATUI_NULLPTR_SIZE(*(bios))\
+	)\
+)
 
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
 	uint8_t:8, uint8_t*:8, uint8_t const*:8,\
@@ -143,7 +150,7 @@ C preprocessor side of ATUI table generation
 
 
 // bitfield tools to extract various details of a little-endian bitfield
-// -O1 and higher compiles to a static number
+// -O1 and higher compiles to a constexpr number
 #define _PPATUI_BIT_SIZEOF(bios, f) _BIT_SIZEOF(typeof(bios), f)
 #define _BIT_SIZEOF(un, f) (\
 	stdc_count_ones((un) {.f = -1}.f)\

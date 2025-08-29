@@ -530,6 +530,9 @@ class atui_node:
 	num_bytes:str = None
 	fancy_data:any = None # "vestige" stuff; atui_branch, dict, str
 
+	prefer_contiguous:str = None
+	num_copyable_leaves:int = None
+
 	def __init__(self,
 			node:dict,
 			default:dict,
@@ -742,19 +745,23 @@ class atui_leaf(atui_node):
 			defaults:dict,
 			leaf_default:dict
 			):
+		fancy:int = self.type.fancy
 		# __expand_leaf_fancy requires 3 stages to fully churn out the
 		# appropriate strings
 		# stage 0; easy stuff that will get replaced
 		self.array_size = "1"
+		self.prefer_contiguous = str(
+			fancy not in atui_leaf_type.FANCIES_THAT_HAVE_NONTRIVIAL_SUBLEAVES
+		).lower()
 
 		# stage 1; fancy-dependent 
 		fancy_data:dict = None
-		if self.type.fancy in atui_leaf_type.FANCIES_THAT_TAKE_FANCYDATA:
+		if fancy in atui_leaf_type.FANCIES_THAT_TAKE_FANCYDATA:
 			if "fancy_data" in leaf:
 				fancy_data = leaf["fancy_data"]
 			else:
 				fancy_data = leaf_default["fancy_data"]
-		match (self.type.fancy): # TODO hoist each block into its own func?
+		match (fancy): # TODO hoist each block into its own func?
 			case atui_leaf_type.ATUI_NOFANCY:
 				if self.access:
 					self.access = "&(%s)" % self.access
@@ -811,6 +818,7 @@ class atui_leaf(atui_node):
 					},
 					defaults, self, True
 				)
+				self.fancy_data.prefer_contiguous = self.prefer_contiguous
 				subleaves:list = self.fancy_data.leaves.nodes
 				if (1 == len(subleaves)):
 					# copy c_struct of subleaf
@@ -847,11 +855,17 @@ class atui_leaf(atui_node):
 					self.access_meta = self.access
 				self.access_meta += "[0]"
 
+				if self.dynarray_deferred:
+					self.num_bytes = "0" # handle in atui_branch_allocator
+				else:
+					self.num_bytes = "(sizeof(%s) * (%s))" % (
+						self.access_meta, fancy_data["count"]
+					)
+
 				dynpattern_default:dict = (
 					defaults["leaf_defaults"]["dynpattern"].copy()
 				)
 				dynpattern_default["access_meta"] = self.access_meta
-				# branches_populate_defaults
 				pattern:list = self.leaves.nodes
 				ld:dict
 				for ld in fancy_data["pattern"]:
@@ -863,8 +877,12 @@ class atui_leaf(atui_node):
 					fancy_data["enum"] = "&(ATUI_ENUM(%s))" % fancy_data["enum"]
 				else:
 					fancy_data["enum"] = "NULL"
-				self.num_bytes = "0" # handle in atui_branch_allocator
 		# stage 2; leftovers
+		if fancy in atui_leaf_type.FANCIES_THAT_HAVE_TRIVIAL_SUBLEAVES:
+			self.num_copyable_leaves = len(self.leaves.nodes)
+		else:
+			self.num_copyable_leaves = 0 # handle in actual allocation
+
 		if None is self.access:
 			self.access = "NULL"
 		if None is self.access_meta:
@@ -909,6 +927,11 @@ class atui_branch(atui_node):
 		branch_default:dict = defaults["branch_default"]
 		atui_node.__init__(self, branch, branch_default, parent)
 		self.branches:atui_children = atui_children()
+	
+		self.prefer_contiguous = "_PPATUI_PREFER_CONTIGUOUS(bios, %s)" % (
+			self.num_bytes
+		)
+		self.num_copyable_leaves = 0 # handle in actual allocation
 
 		if "c_prefix" in branch:
 			self.c_prefix = branch["c_prefix"]
@@ -1056,13 +1079,6 @@ def atui_branch_to_text(
 		+ indent + ".branches.indirect = true,\n"
 		+ indent + ".branches.expanded = "
 			+ str(branch.branches.expanded).lower() + ",\n"
-		+ indent + ".prefer_contiguous = (\n"
-		+ indent + "	(0 < _PPATUI_NULLPTR_SIZE(*bios))\n"
-		+ indent + "	&& (\n"
-		+ indent + "		" + branch.num_bytes + "\n"
-		+ indent + "		<= _PPATUI_NULLPTR_SIZE(*bios)\n"
-		+ indent + "	)\n"
-		+ indent + "),\n"
 	+ parent_indent
 	)
 	return branch_text
@@ -1109,6 +1125,8 @@ def atui_node_to_text(
 		+ indent + ".description = {"
 			+ description_to_text(node.description, indent)
 		+ "},\n"
+		+ indent + ".num_copyable_leaves = "+str(node.num_copyable_leaves)+",\n"
+		+ indent + ".prefer_contiguous = " + node.prefer_contiguous + ",\n"
 		+ indent + ".bundled = " + is_leaf_str + ",\n"
 		+ indent + ".is_leaf = " + is_leaf_str + ",\n"
 		+ indent + ".data.input = " + node.access + ",\n"
