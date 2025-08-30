@@ -23,6 +23,10 @@ GtkSelectionModel* const*
 gatui_tree_get_enum_models_cache( // for GATUILeaves generation
 		GATUITree* self
 		);
+GVariantType const*
+gatui_tree_get_contiguous_type(
+		GATUITree* self
+		);
 
 
 GATUILeaf**

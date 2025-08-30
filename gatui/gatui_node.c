@@ -28,6 +28,7 @@ typedef struct _GATUINodePrivate {
 
 	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
+	GVariantType const* contiguous_type; // type string of "ay"
 } GATUINodePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GATUINode, gatui_node, G_TYPE_OBJECT)
@@ -110,32 +111,14 @@ gatui_node_dispose(
 	priv->atui->self = NULL;
 
 	if (priv->capsule_type) {
-		g_free(priv->capsule_type);
+		free(priv->capsule_type);
 		priv->capsule_type = NULL;
+
+		priv->contiguous_type = NULL; // owned by GATUITree
 	}
 
 	G_OBJECT_CLASS(gatui_node_parent_class)->dispose(object);
 }
-
-/*
-void* 
-gatui_node_new(
-		GType const object_type,
-		atui_node* const atui,
-		GATUITree* const root,
-		char const* const typestr
-		) {
-	char const* const prop_names[] = {"atui", "root", "typestr"};
-	GValue prop_vals[lengthof(prop_names)] = {};
-	g_value_set_pointer(g_value_init(&(prop_vals[0]), G_TYPE_POINTER), atui);
-	g_value_set_pointer(g_value_init(&(prop_vals[2]), G_TYPE_POINTER), root);
-	g_value_set_pointer(g_value_init(&(prop_vals[2]), G_TYPE_POINTER), typestr);
-	return g_object_new_with_properties(
-		object_type,  lengthof(prop_names), (char const**)prop_names, prop_vals
-	);
-}
-*/
-
 static void 
 gatui_node_constructed(
 		GObject* const object
@@ -158,6 +141,7 @@ gatui_node_constructed(
 	} 
 
 	priv->capsule_type = g_variant_type_new(priv->typestr);
+	priv->contiguous_type = gatui_tree_get_contiguous_type(priv->root);
 
 	struct atui_children const* const children = &(atui->leaves);
 	if (children->count) { // generate leaves_model
@@ -176,7 +160,6 @@ gatui_node_constructed(
 		}
 	}
 }
-
 static void
 gatui_node_class_init(
 		GATUINodeClass* const node_class
@@ -215,6 +198,7 @@ gatui_node_class_init(
 	);
 
 	node_class->get_value = NULL;
+	node_class->set_value = NULL;
 }
 static void
 gatui_node_init(
@@ -223,24 +207,6 @@ gatui_node_init(
 	//GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
 }
 
-
-GATUITree*
-gatui_node_get_root(
-		GATUINode* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
-	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
-	return priv->root;
-}
-
-char*
-gatui_node_to_path(
-		GATUINode* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
-	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
-	return atui_node_to_path(priv->atui);
-}
 
 GVariantType const*
 gatui_node_get_gvariant_type(
@@ -257,55 +223,252 @@ gatui_node_get_value(
 		) {
 	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
 
-	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
 	GATUINodeClass* const nodeclass = GATUI_NODE_GET_CLASS(self);
-	return nodeclass->get_value(self, priv->capsule_type);
+	return nodeclass->get_value(self);
+}
+bool
+gatui_node_set_value(
+		GATUINode* const self,
+		GVariant* const value
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+
+	GATUINodeClass* const nodeclass = GATUI_NODE_GET_CLASS(self);
+	return nodeclass->set_value(self, value);
+}
+
+
+GVariant*
+gatui_node_get_contiguous_data(
+		GATUINode* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+
+	GATUINodePrivate const* const priv = gatui_node_get_instance_private(self);
+	atui_node const* const atui = priv->atui;
+
+	GVariant* contiguous = NULL;
+
+	if (atui->num_bytes) {
+		void* const valcopy = cralloc(atui->num_bytes);
+		memcpy(valcopy, atui->data.input, atui->num_bytes);
+		contiguous = g_variant_new_from_data(
+			priv->contiguous_type,
+			valcopy, atui->num_bytes,
+			false,
+			free, valcopy
+		);
+	}
+	return contiguous;
+}
+bool
+gatui_node_set_contiguous_data(
+		GATUINode* const self,
+		GVariant* const value
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+
+	g_return_val_if_fail((NULL != value), false);
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+	atui_node const* const node = priv->atui;
+
+	if (! g_variant_is_of_type(value, priv->contiguous_type)) {
+		return false;
+	}
+
+	size_t const num_bytes = g_variant_get_size(value);
+	void const* const input_data = g_variant_get_data(value);
+	if ((node->num_bytes == num_bytes) && input_data) {
+		memcpy(node->data.data, input_data, num_bytes);
+		g_signal_emit(priv, gatui_signals[VALUE_CHANGED], 0);
+		return true;
+	}
+
+	return false;
+}
+
+
+bool
+gatui_node_get_leaves_package(
+		GATUINode* const self,
+		GVariant** const value,
+		uint16_t* const num_copyable_leaves
+		) {
+// copy the data of all direct child leaves that maps data into the bios,
+// and pack it a byte array.
+
+	g_return_val_if_fail(GATUI_IS_NODE(self), false);
+	g_return_val_if_fail(value, false);
+	g_return_val_if_fail(num_copyable_leaves, false);
+
+	GATUINodePrivate const* const priv = gatui_node_get_instance_private(self);
+	atui_node const* const atui = priv->atui;
+	struct atui_children const* const leaves = &(atui->leaves);
+
+	if (0 == atui->num_copyable_leaves) {
+		return false;
+	}
+
+	size_t num_bytes = 0;
+	for (uint16_t i=0; i < leaves->count; i++) {
+		num_bytes += leaves->nodes[i].num_bytes;
+	}
+	void* const bytepack = cralloc(num_bytes);
+	void* walker = bytepack;
+	for (uint16_t i=0; i < leaves->count; i++) {
+		walker = mempcpy(
+			walker, leaves->nodes[i].data.input, leaves->nodes[i].num_bytes
+		);
+	}
+	assert(num_bytes == (size_t)(walker - bytepack));
+
+	*num_copyable_leaves = atui->num_copyable_leaves;
+	*value = g_variant_new_from_data(
+		priv->contiguous_type,
+		bytepack, num_bytes,
+		false,
+		free, bytepack
+	);
+	return true;
+}
+bool
+gatui_node_set_leaves_memory_package(
+		GATUINode* const self,
+		GVariant* const value,
+		uint16_t const num_copyable_leaves
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	g_return_val_if_fail(value, false);
+
+	GATUINodePrivate const* const priv = gatui_node_get_instance_private(self);
+	atui_node const* const atui = priv->atui;
+	struct atui_children const* const leaves = &(atui->leaves);
+
+	if (num_copyable_leaves != atui->num_copyable_leaves) {
+		return false;
+	}
+	if (! g_variant_is_of_type(value, priv->contiguous_type)) {
+		return false;
+	}
+
+	size_t num_bytes = 0;
+	for (uint16_t i=0; i < leaves->count; i++) {
+		num_bytes += leaves->nodes[i].num_bytes;
+	}
+	if (num_bytes != g_variant_get_size(value)) {
+		return false;
+	}
+
+	void const* const input_data = g_variant_get_data(value);
+	void const* walker = input_data;
+	for (uint16_t i=0; i < leaves->count; i++) {
+		memcpy(leaves->nodes[i].data.data, walker, leaves->nodes[i].num_bytes);
+		walker += leaves->nodes[i].num_bytes;
+	}
+	assert(num_bytes == (size_t)(walker - input_data));
+
+	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
+	return true;
 }
 
 
 char*
 gatui_node_to_base64(
 		GATUINode* const self,
-		bool const leaves_package
+		enum gatui_node_b64_target const format
 		) {
-	// TODO take enum gatui_b64_target instead of bool leaves_package
-	// contig; leaves_package; value
 	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
-
-	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
-	GATUINodeClass* const nodeclass = GATUI_NODE_GET_CLASS(self);
+	GATUINodePrivate const* const priv = gatui_node_get_instance_private(self);
 	atui_node const* const atui = priv->atui;
 
-	GVariant* val;
-	uint16_t num_segments;
-	enum gatui_b64_target target;
-
-	if (leaves_package) {
+	if (!(atui->num_bytes || atui->leaves.count)) {
 		return NULL;
-		/* TODO: pull prefer_contiguous and num_copyable_leaves into node
-		if (atui->branch.prefer_contiguous
-				|| !atui->branch.num_copyable_leaves
-				) {
-			return NULL;
-		}
-		gatui_node_get_leaves_memory_package(self, &val, &num_segments);
-		target = B64_BRANCH_LEAVES;
-		*/
-	} else { // contiguous
-		if (!atui->num_bytes) {
-			return NULL;
-		}
-		target = B64_BRANCH_CONTIGUOUS;
-		num_segments = 1;
-		GVariantType* const contiguous_type = g_variant_type_new("ay");
-		val = nodeclass->get_value(self, contiguous_type);
-		free(contiguous_type);
 	}
+
+	GVariant* val = NULL;
+	uint16_t num_segments = 0;
+	enum gatui_b64_target target = 0;
+
+	switch (format) {
+		case GATUI_NODE_B64_CONTIGUOUS:
+			num_segments = 1;
+			val = gatui_node_get_contiguous_data(self);
+			break;
+		case GATUI_NODE_B64_LEAVES_PACKAGE:
+			gatui_node_get_leaves_package(self, &val, &num_segments);
+			break;
+		case GATUI_NODE_B64_VALUE:
+			num_segments = 1;
+			val = gatui_node_get_value(self);
+			break;
+		default: assert(0); break;
+	}
+
 	char* const b64_text = b64_packet_encode(val, target, num_segments);
 
 	g_variant_unref(val);
 	return b64_text;
 }
+bool
+gatui_node_from_base64(
+		GATUINode* const self,
+		char const* const b64_text,
+		struct gatui_node_b64_header** const error_out
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	g_return_val_if_fail(b64_text, false);
+
+	// TODO
+	struct gatui_node_b64_header* const header = (void*) b64_packet_decode(b64_text);
+	if (NULL == header) {
+		goto error_exit;
+	}
+	if (GATUI_NODE_B64_HEADER_VER_CURRENT != header->version) {
+		goto error_exit;
+	}
+
+	GVariantType* const header_type = g_variant_type_new(header->typestr);
+	GVariant* const new_val = g_variant_new_from_data(
+		header_type,
+		header->bytes, header->num_bytes,
+		false,
+		NULL, NULL // manually free header for error_out
+	);
+	free(header_type);
+
+	bool success = false;
+	switch (header->target) {
+		case GATUI_NODE_B64_CONTIGUOUS:
+			success = gatui_node_set_contiguous_data(self, new_val);
+			break;
+		case GATUI_NODE_B64_LEAVES_PACKAGE:
+			success = gatui_node_set_leaves_memory_package(
+				self, new_val, header->num_segments
+			);
+			break;
+		case GATUI_NODE_B64_VALUE:
+			success = gatui_node_set_value(self, new_val);
+			break;
+		default: break;
+	}
+	g_variant_unref(new_val);
+	if (!success) {
+		goto error_exit;
+	}
+
+	//success_exit:
+	free(header);
+	return true;
+
+	error_exit:
+	if (error_out) {
+		*error_out = header;
+	} else {
+		free(header);
+	}
+	return false;
+}
+
 
 GListModel*
 leaves_treelist_generate_children_2(
@@ -327,6 +490,22 @@ leaves_treelist_generate_children_2(
 	}
 }
 
+GATUITree*
+gatui_node_get_root(
+		GATUINode* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+	return priv->root;
+}
+char*
+gatui_node_to_path(
+		GATUINode* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+	return atui_node_to_path(priv->atui);
+}
 char const*
 gatui_node_get_name(
 		GATUINode* const self
@@ -374,7 +553,6 @@ gatui_node_get_region_bounds(
 
 	return atui->num_bytes;
 }
-
 
 
 GATUILeaf**

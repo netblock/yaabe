@@ -19,6 +19,7 @@ struct _GATUITree {
 	GFile* biosfile;
 
 	GtkSelectionModel** enum_models_cache; // only for tree building
+	GVariantType* contiguous_type; // type string of "ay"
 };
 G_DEFINE_TYPE(GATUITree, gatui_tree, G_TYPE_OBJECT)
 
@@ -44,6 +45,9 @@ gatui_tree_finalize(
 		GObject* const object
 		) {
 	GATUITree* const self = GATUI_TREE(object);
+
+	free(self->contiguous_type);
+
 	atui_destroy_tree(self->atomtree->atui_root);
 	atomtree_destroy(self->atomtree);
 }
@@ -62,7 +66,8 @@ gatui_tree_init(
 	) {
 	g_weak_ref_init(&self->trunk, NULL);
 	g_weak_ref_init(&self->trunk_model, NULL);
-	self->enum_models_cache = NULL;
+
+	self->contiguous_type = g_variant_type_new("ay");
 }
 
 
@@ -112,6 +117,14 @@ gatui_tree_get_enum_models_cache(
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 	return (GtkSelectionModel* const*) self->enum_models_cache;
 };
+
+GVariantType const*
+gatui_tree_get_contiguous_type(
+		GATUITree* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return self->contiguous_type;
+}
 
 
 GATUITree*
