@@ -510,7 +510,7 @@ atui_branch_allocator(
 			atui_assimilate_subonly(table, num_leaves);
 		}
 
-		//atui_set_copyability(table, &(embryo->seed.leaves));
+		atui_set_copyability(table, &(embryo->seed.leaves));
 	}
 	assert(tracker.branches.pos == tracker.branches.end);
 	assert(tracker.grafters.pos == tracker.grafters.end);
@@ -556,35 +556,35 @@ atui_set_copyability(
 		struct atui_children const* const feed
 		) {
 // figure out is_contiguous and num_copyable_leaves, and consequences
-	atui_node const* const nodes_ro = feed->nodes_ro;
 
-	uint16_t num_copyable_leaves = 0;
-	for (uint16_t i=0; i < feed->count; i++) { // if it maps the bios
-		node->num_copyable_leaves += (0 != nodes_ro[i].num_bytes);
+	for (uint16_t i=0; i < node->leaves.count; i++) { // if it maps the bios
+		node->num_copyable_leaves += (0 != node->leaves.nodes[i].num_bytes);
 	}
-	node->num_copyable_leaves = num_copyable_leaves;
 
+	assert(feed->count);
 	if (false == node->prefer_contiguous) {
-		void const* val_end = nodes_ro[0].data.input;
+		void const* val_end = feed->nodes_ro[0].data.input;
 		uint16_t i = 0;
 		bool is_contiguous;
 		do {
 			is_contiguous = (
 				(
-					(nodes_ro[i].data.input == val_end)
-					&& (nodes_ro[i].num_bytes)
+					(feed->nodes_ro[i].data.input == val_end)
+					&& (feed->nodes_ro[i].num_bytes)
 				) || (
-					_ATUI_BITCHILD == nodes_ro[i].leaf.type.fancy
+					_ATUI_BITCHILD == feed->nodes_ro[i].leaf.type.fancy
 				)
 			);
-			val_end = nodes_ro[i].data.input + nodes_ro[i].num_bytes;
+			val_end = (
+				feed->nodes_ro[i].data.input + feed->nodes_ro[i].num_bytes
+			);
 			i++;
 		} while ((i < feed->count) && is_contiguous);
 
 		if (is_contiguous) {
 			node->prefer_contiguous = true;
-			node->data.input = nodes_ro[0].data.input;
-			node->num_bytes = val_end - nodes_ro[0].data.input;
+			node->data.input = feed->nodes_ro[0].data.input;
+			node->num_bytes = val_end - feed->nodes_ro[0].data.input;
 		}
 	}
 }
