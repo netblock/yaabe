@@ -1,43 +1,37 @@
 #include "standard.h"
 #include "gatui_private.h"
 
+
+static GVariant*
+_gatui_leaf_get_value(
+		GATUINode* self
+		);
+static bool
+_gatui_leaf_set_value(
+		GATUINode* self,
+		GVariant* value
+		);
+
 union variant_dock { // g_variant loading/unloading dock
 	uint64_t  u64;
 	int64_t   s64;
 	float64_t f64;
 };
 
-enum {
-	VALUE_CHANGED,
-	LAST_SIGNAL
-};
-static guint gatui_signals[LAST_SIGNAL] = {0};
-
 struct _GATUILeaf {
-	GObject parent_instance;
-
-	GATUITree* root;
+	GATUINode parent_instance;
 
 	atui_node* atui;
-	GATUILeaf* parent_leaf;
 
 	// for inter-family signal propagation
 	gulong parent_number;
 	gulong* phone_book;
 
-	GATUILeaf** child_leaves;
-	uint16_t num_child_leaves;
-	// may be different from atui_node.num_child_leaves due to ATUI_SUBONLY
-
-	// if the leaf can support getting/setting data, capsule_type will be
-	// non-null
-	char typestr[GATUI_TYPESTR_LEN];
-	GVariantType* capsule_type;
 	bool has_textable_value;
 
 	GtkSelectionModel* enum_model;
 };
-G_DEFINE_TYPE(GATUILeaf, gatui_leaf, G_TYPE_OBJECT)
+G_DEFINE_TYPE(GATUILeaf, gatui_leaf, GATUI_TYPE_NODE)
 
 
 static void
@@ -46,9 +40,7 @@ gatui_leaf_dispose(
 		) {
 	GATUILeaf* const self = GATUI_LEAF(object);
 
-	// no need to kill the val-changed connection with parent leaf because
-	// parent holds ref; we wouldn't be here if parent is alive.
-
+	/*
 	if (self->child_leaves) {
 		GATUILeaf** const child_leaves = self->child_leaves;
 		self->child_leaves = NULL;
@@ -62,20 +54,10 @@ gatui_leaf_dispose(
 		free(self->phone_book);
 		self->phone_book = NULL;
 	}
+	*/
 	if (self->enum_model) {
 		g_object_unref(self->enum_model);
 		self->enum_model = NULL;
-	}
-	if (self->capsule_type) {
-		g_free(self->capsule_type);
-		self->capsule_type = NULL;
-	}
-
-	self->atui->self = NULL; // weak reference
-
-	if (self->root) {
-		g_object_unref(self->root);
-		self->root = NULL;
 	}
 
 	G_OBJECT_CLASS(gatui_leaf_parent_class)->dispose(object);
@@ -89,66 +71,46 @@ gatui_leaf_class_init(
 	GObjectClass* const object_class = G_OBJECT_CLASS(leaf_class);
 	object_class->dispose = gatui_leaf_dispose;
 
-	gatui_signals[VALUE_CHANGED] = g_signal_new(
-		"value-changed",
-		G_TYPE_FROM_CLASS(leaf_class),
-		(G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE),
-		0,
-		NULL, NULL,
-		NULL,
-		G_TYPE_NONE, 0
-	);
+	GATUINodeClass* const node_class = GATUI_NODE_CLASS(leaf_class);
+	node_class->get_value = _gatui_leaf_get_value;
+	node_class->set_value = _gatui_leaf_set_value;
 }
 static void
 gatui_leaf_init(
-		GATUILeaf* const self
+		GATUILeaf* const self __unused
 		) {
-	self->parent_leaf = NULL;
-
-	self->parent_number = 0;
-	self->phone_book = NULL;
-
-	self->child_leaves = NULL;
-	self->num_child_leaves = 0;
-
-	memset(self->typestr, 0, sizeof(self->typestr));
-	self->capsule_type = NULL;
-	self->enum_model = NULL;
 }
 
-inline static GVariantType*
-get_capsule_type(
-		GATUILeaf* const self
+inline static void
+set_typestr(
+		atui_node const* const leaf,
+		char* typestr
 		) {
-	atui_node const* const leaf = self->atui;
-	char* const typestr = self->typestr;
-	char* typestrptr = typestr;
-
 	struct atui_leaf_type const* const type = &(leaf->leaf.type);
 	if (type->radix) {
 		if (type->fraction) {
-			 typestr[0] = 'd';
+			 *typestr = 'd';
 		} else {
 			if (type->fancy == ATUI_ARRAY) {
-				typestr[0] = 'a';
-				typestrptr++;
+				*typestr = 'a';
+				typestr++;
 			}
 			if (type->signed_num) {
 				switch (leaf->leaf.total_bits) {
-					case  8: *typestrptr = 'y'; break;
-					case 16: *typestrptr = 'n'; break;
-					case 32: *typestrptr = 'i'; break;
-					case 64: *typestrptr = 'x'; break;
+					case  8: *typestr = 'y'; break;
+					case 16: *typestr = 'n'; break;
+					case 32: *typestr = 'i'; break;
+					case 64: *typestr = 'x'; break;
 					case 48:
 					case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
 					default: assert(0); break;
 				}
 			} else  {
 				switch (leaf->leaf.total_bits) {
-					case  8: *typestrptr = 'y'; break;
-					case 16: *typestrptr = 'q'; break;
-					case 32: *typestrptr = 'u'; break;
-					case 64: *typestrptr = 't'; break;
+					case  8: *typestr = 'y'; break;
+					case 16: *typestr = 'q'; break;
+					case 32: *typestr = 'u'; break;
+					case 64: *typestr = 't'; break;
 					case 48:
 					case 24: typestr[0] = 'a'; typestr[1] = 'y'; break;
 					default: assert(0); break;
@@ -156,15 +118,13 @@ get_capsule_type(
 			}
 		}
 	} else if ((type->fancy==ATUI_STRING) || (ATUI_ARRAY==type->fancy)) {
-		typestr[0] = 's';
+		*typestr = 's';
 	} else if (leaf->num_bytes) { // raw data
 		typestr[0] = 'a';
 		typestr[1] = 'y';
 	} else {
-		return NULL;
+		// no type
 	}
-	assert(sizeof(self->typestr) > strlen(typestr));
-	return g_variant_type_new(typestr);
 }
 
 void
@@ -176,6 +136,7 @@ gatui_leaf_emit_val_changed(
 	// (which happens to be self) made a change.
 
 	// opt out of everyone's mailing lists
+	/*
 	if (self->parent_leaf) {
 		g_signal_handler_block(self->parent_leaf, self->parent_number);
 	}
@@ -192,6 +153,7 @@ gatui_leaf_emit_val_changed(
 	for (uint16_t i=0; i < self->num_child_leaves; i++) {
 		g_signal_handler_unblock(self->child_leaves[i], self->phone_book[i]);
 	}
+	*/
 }
 
 GATUILeaf*
@@ -199,13 +161,17 @@ gatui_leaf_new(
 		atui_node* const leaf,
 		GATUITree* const root
 		) {
-	g_return_val_if_fail(leaf->self == NULL, NULL);
-	GATUILeaf* const self = g_object_new(GATUI_TYPE_LEAF, NULL);
-	self->atui = leaf;
-	leaf->self = self;
+	g_return_val_if_fail(NULL == leaf->self, NULL);
 
-	g_object_ref(root);
-	self->root = root;
+	char typestr[GATUI_TYPESTR_LEN] = {};
+	set_typestr(leaf, typestr);
+	GATUILeaf* const self = g_object_new(GATUI_TYPE_LEAF,
+		"atui", leaf,
+		"typestr", typestr,
+		NULL // get parent from atui; and root from parent
+	);
+
+	self->atui = leaf;
 
 	if (leaf->leaf.enum_options) {
 		GtkSelectionModel* const* const enum_models_cache =
@@ -216,6 +182,7 @@ gatui_leaf_new(
 		g_object_ref(self->enum_model);
 	}
 
+	/*
 	if (leaf->leaves.count) {
 		uint16_t const num_child_leaves = leaf->leaves.count;
 
@@ -239,8 +206,8 @@ gatui_leaf_new(
 			);
 		}
 	}
+	*/
 
-	self->capsule_type = get_capsule_type(self);
 	struct atui_leaf_type const* const type = &(leaf->leaf.type);
 	self->has_textable_value = (
 		type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy
@@ -249,33 +216,15 @@ gatui_leaf_new(
 	return self;
 }
 
+
+
 GATUITree*
 gatui_leaf_get_root(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return self->root;
+	return gatui_node_get_root(GATUI_NODE(self));
 }
-
-GListModel*
-leaves_treelist_generate_children(
-		gpointer const parent_leaf,
-		gpointer const user_data __unused
-		) {
-// GtkTreeListModelCreateModelFunc for leaves
-	GATUILeaf* const self = parent_leaf;
-	if (self->num_child_leaves) {
-		GListStore* const children = g_list_store_new(GATUI_TYPE_LEAF);
-		g_list_store_splice(children, 0,0,
-			(void**)self->child_leaves, self->num_child_leaves
-		);
-		return G_LIST_MODEL(children);
-	} else {
-		return NULL;
-	}
-}
-
-
 size_t
 gatui_leaf_get_region_bounds(
 		GATUILeaf* const self,
@@ -283,61 +232,82 @@ gatui_leaf_get_region_bounds(
 		size_t* end
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
-
-	atui_node const* const leaf = self->atui;
-	if (leaf->num_bytes) {
-		size_t bios_size;
-		void const* const bios = gatui_tree_get_bios_pointer(
-			self->root, &bios_size
-		);
-		ptrdiff_t const offset_start = leaf->data.data - bios;
-		size_t const offset_end = offset_start + leaf->num_bytes - 1;
-		assert(0 <= offset_start);
-		assert(offset_end < bios_size);
-		if (start) {
-			*start = offset_start;
-		}
-		if (end) {
-			*end = offset_end;
-		}
-	}
-
-	return leaf->num_bytes;
+	return gatui_node_get_region_bounds(GATUI_NODE(self), start, end);
 }
-
-
 GVariantType const*
 gatui_leaf_get_gvariant_type(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return self->capsule_type;
+	return gatui_node_get_capsule_type(GATUI_NODE(self));
+}
+bool
+gatui_leaf_set_value(
+		GATUILeaf* const self,
+		GVariant* const value
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	return gatui_node_set_value(GATUI_NODE(self), value);
 }
 
 GVariant*
 gatui_leaf_get_value(
 		GATUILeaf* const self,
-		bool const raw_data
+		bool const raw_data __unused
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	g_return_val_if_fail(self->capsule_type, NULL);
+	return gatui_node_get_value(GATUI_NODE(self));
+}
+char*
+gatui_leaf_to_path(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	return atui_node_to_path(self->atui);
+}
+atui_node const*
+gatui_leaf_get_atui(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	return self->atui;
+}
+char*
+gatui_leaf_value_to_base64(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	assert(0);
+	return gatui_node_to_base64(GATUI_NODE(self), GATUI_NODE_B64_VALUE);
+}
+bool
+gatui_leaf_value_from_base64(
+		GATUILeaf* const self,
+		char const* const b64_text,
+		struct b64_header** const error_out
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
+	return gatui_node_from_base64(
+		GATUI_NODE(self), b64_text, (void*) error_out
+	);
+}
 
+
+
+static GVariant*
+_gatui_leaf_get_value(
+		GATUINode* const nodeself
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(nodeself), NULL);
+
+	GATUILeaf* const self = GATUI_LEAF(nodeself);
 	atui_node const* const leaf = self->atui;
 	struct atui_leaf_type const* const type = &(leaf->leaf.type);
 
-	
-	GVariantType* capsule_type = self->capsule_type;
 	size_t num_bytes;
 	void* valcopy;
 
-	if (raw_data) {
-		num_bytes = leaf->num_bytes;
-		valcopy = cralloc(num_bytes);
-		memcpy(valcopy, leaf->data.data, num_bytes);
-		capsule_type = g_variant_type_new("ay");
-	} else if ((ATUI_STRING==type->fancy)
+	if ((ATUI_STRING==type->fancy)
 		|| ((ATUI_ARRAY==type->fancy) && (ATUI_NAN==type->radix))
 		) {
 		valcopy = gatui_leaf_value_to_text(self);
@@ -366,31 +336,27 @@ gatui_leaf_get_value(
 	// need to duplicate the data and free on notify
 	GVariant* const value = g_variant_new_from_data(
 		// won't work on big-endian, but I'm not supporting BE.
-		capsule_type,
+		gatui_node_get_capsule_type(nodeself),
 		valcopy, num_bytes,
 		false,
-		(GDestroyNotify) free, valcopy
+		free, valcopy
 	);
-
-	if (raw_data) {
-		free(capsule_type);
-	}
 
 	return value;
 }
 
-bool
-gatui_leaf_set_value(
-		GATUILeaf* const self,
+
+static bool
+_gatui_leaf_set_value(
+		GATUINode* const nodeself,
 		GVariant* const value
 		) {
 	// generalise the g_variant_type_new stuff in get_value to be a part of the
 	// object instance
-	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail(NULL != value, false);
-	g_return_val_if_fail(self->capsule_type, false);
+	g_return_val_if_fail(GATUI_IS_LEAF(nodeself), false);
+	g_return_val_if_fail(value, false);
 
+	GATUILeaf* const self = GATUI_LEAF(nodeself);
 	atui_node const* const leaf = self->atui;
 	struct atui_leaf_type const* const type = &(leaf->leaf.type);
 
@@ -403,6 +369,9 @@ gatui_leaf_set_value(
 	bool const both_are_integers = (
 		char_in_string(typestr[0], "ynqiuxt")
 		&& type->radix && (! type->fraction) && (1 == leaf->leaf.array_size)
+	);
+	bool const is_same_type = g_variant_is_of_type(
+		value,  gatui_node_get_capsule_type(nodeself)
 	);
 	if (both_are_integers) {
 		switch (typestr[0]) {
@@ -421,7 +390,7 @@ gatui_leaf_set_value(
 			atui_leaf_set_val_unsigned(leaf, val.u64);
 		}
 		goto success_exit;
-	} else if (0 == strcmp(typestr, self->typestr)) { // same type
+	} else if (is_same_type) {
 		if ('s' == typestr[0]) { // string
 			atui_leaf_from_text(leaf, input_data); // has special bounds checks
 			goto success_exit;
@@ -449,70 +418,9 @@ gatui_leaf_set_value(
 	return false;
 
 	success_exit:
-	gatui_leaf_emit_val_changed(self);
+	//gatui_leaf_emit_val_changed(self);
 	return true;
 }
-
-char*
-gatui_leaf_value_to_base64(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	g_return_val_if_fail(self->capsule_type, NULL);
-
-	GVariant* const val = gatui_leaf_get_value(self, false);
-	char* const b64_text = b64_packet_encode(val, B64_LEAF, 1);
-	g_variant_unref(val);
-	return b64_text;
-}
-bool
-gatui_leaf_value_from_base64(
-		GATUILeaf* const self,
-		char const* const b64_text,
-		struct b64_header** const error_out
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail(b64_text, false);
-	g_return_val_if_fail(self->capsule_type, false);
-
-	struct b64_header* const header = b64_packet_decode(b64_text);
-	if (NULL == header) {
-		goto error_exit;
-	}
-
-	if (B64_LEAF != header->target) {
-		goto error_exit;
-	}
-
-	GVariantType* const header_type = g_variant_type_new(header->typestr);
-	GVariant* const new_val = g_variant_new_from_data(
-		header_type,
-		header->bytes, header->num_bytes,
-		false,
-		NULL, NULL
-	);
-	bool const success = gatui_leaf_set_value(self, new_val);
-	free(header_type);
-	g_variant_unref(new_val);
-	if (!success) {
-		goto error_exit;
-	}
-
-	//success_exit:
-	free(header);
-	return true;
-
-	error_exit:
-	if (error_out) {
-		*error_out = header;
-	} else {
-		free(header);
-	}
-	return false;
-}
-
 
 bool
 gatui_leaf_has_textable_value(
@@ -530,14 +438,13 @@ gatui_leaf_set_value_from_text(
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	g_return_if_fail(self->has_textable_value);
 	atui_leaf_from_text(self->atui, text);
-	gatui_leaf_emit_val_changed(self);
+	//gatui_leaf_emit_val_changed(self);
 }
 char*
 gatui_leaf_value_to_text(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	g_return_val_if_fail(self->has_textable_value, NULL);
 
 	return atui_leaf_to_text(self->atui);
@@ -549,7 +456,6 @@ gatui_leaf_get_enum_menu_selection_model(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	atui_node* const leaf = self->atui;
 	g_return_val_if_fail(NULL != leaf->leaf.enum_options, NULL);
 
@@ -561,7 +467,6 @@ gatui_leaf_enum_entry_to_text(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return atui_enum_entry_to_text(self->atui, enum_entry);
 }
 char*
@@ -570,7 +475,6 @@ gatui_leaf_enum_val_to_text(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	assert(self->atui->leaf.type.has_enum);
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
@@ -585,7 +489,6 @@ gatui_leaf_enum_entry_sets_value(
 		struct atui_enum_entry const* const enum_entry
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
 	g_return_val_if_fail(NULL != self->atui->leaf.enum_options, false);
 
 	struct atui_enum const* const enum_set = self->atui->leaf.enum_options;
@@ -598,7 +501,7 @@ gatui_leaf_enum_entry_sets_value(
 		} else {
 			atui_leaf_set_val_unsigned(self->atui, enum_entry->val);
 		}
-		gatui_leaf_emit_val_changed(self);
+		//gatui_leaf_emit_val_changed(self);
 		return true;
 	}
 	return false;
@@ -609,7 +512,6 @@ gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), -1);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), -1);
 	int64_t val;
 	if (self->atui->leaf.type.signed_num) {
 		val = atui_leaf_get_val_signed(self->atui);
@@ -619,23 +521,6 @@ gatui_leaf_enum_entry_get_possible_index(
 	return atui_enum_lsearch(self->atui->leaf.enum_options, val);
 }
 
-char*
-gatui_leaf_to_path(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return atui_node_to_path(self->atui);
-}
-
-atui_node const*
-gatui_leaf_get_atui(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return self->atui;
-}
 
 
 void
@@ -645,6 +530,7 @@ gatui_regex_search_recurse_leaf(
 		GRegex* const pattern,
 		struct gatui_search_flags const* const flags
 		) {
+	/*
 	atui_node* const atui = leaf->atui;
 	struct atui_leaf_type const* const type = &(leaf->atui->leaf.type);
 	GATUIRegexNode* node;
@@ -681,4 +567,5 @@ gatui_regex_search_recurse_leaf(
 			leaf->child_leaves[i], model, pattern, flags
 		);
 	}
+	*/
 }

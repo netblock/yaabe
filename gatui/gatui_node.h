@@ -31,7 +31,7 @@ gatui_node_new( // convenience function
 */
 
 GVariantType const*
-gatui_node_get_gvariant_type(
+gatui_node_get_capsule_type(
 		GATUINode* const self
 		);
 
@@ -103,7 +103,7 @@ gatui_node_from_base64(
 		);
 
 GListModel*
-leaves_treelist_generate_children_2(
+leaves_treelist_generate_children(
         gpointer parent,
         gpointer data // unused
 		);

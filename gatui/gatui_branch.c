@@ -86,7 +86,7 @@ gatui_branch_new(
 	if (branch->leaves.count) { // generate leaves_model
 		GtkSingleSelection* const single_model = gtk_single_selection_new(
 			G_LIST_MODEL(gtk_tree_list_model_new(
-				leaves_treelist_generate_children_2(self, NULL),
+				leaves_treelist_generate_children(self, NULL),
 				false, true,
 				leaves_treelist_generate_children, NULL,NULL
 			))

@@ -4,7 +4,7 @@
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_LEAF gatui_leaf_get_type()
-G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GObject)
+G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GATUINode)
 
 GATUILeaf*
 gatui_leaf_new( // including all of is subleaves
@@ -17,12 +17,6 @@ gatui_leaf_get_root(
 		GATUILeaf* self
 		);
 
-// GtkTreeListModelCreateModelFunc for leaves
-GListModel*
-leaves_treelist_generate_children(
-        gpointer parent_leaf,
-        gpointer data // unused
-        );
 size_t
 gatui_leaf_get_region_bounds(
 		GATUILeaf* self,

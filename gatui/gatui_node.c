@@ -209,7 +209,7 @@ gatui_node_init(
 
 
 GVariantType const*
-gatui_node_get_gvariant_type(
+gatui_node_get_capsule_type(
 		GATUINode* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
@@ -471,7 +471,7 @@ gatui_node_from_base64(
 
 
 GListModel*
-leaves_treelist_generate_children_2(
+leaves_treelist_generate_children(
 		gpointer const selfptr,
 		gpointer const user_data __unused
 		) {
