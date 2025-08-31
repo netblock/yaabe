@@ -4,7 +4,7 @@
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_BRANCH gatui_branch_get_type()
-G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GObject)
+G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GATUINode)
 
 GATUIBranch*
 gatui_branch_new( // including all of its descendants and leaves
