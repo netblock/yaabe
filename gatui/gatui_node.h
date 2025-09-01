@@ -19,6 +19,10 @@ struct _GATUINodeClass {
 			GVariant* value
 			);
 };
+void
+gatui_node_emit_value_changed(
+		GATUINode* self
+		);
 
 /*
 void* 

@@ -1,6 +1,12 @@
 #include "standard.h"
 #include "gatui_private.h"
 
+
+static void
+gatui_node_value_changed_alert_family(
+		GATUINode* self
+		);
+
 enum GATUINodeSignal {
 	VALUE_CHANGED,
 	LAST_SIGNAL
@@ -23,8 +29,12 @@ typedef struct _GATUINodePrivate {
 	GATUINode* parent; // weak ref
 	atui_node* atui;
 
-	uint16_t num_leaves; // same as atui_node.leaves.count
+	// for inter-family signal propagation
+	gulong parent_number;
+	gulong* phone_book;
+
 	GATUILeaf** leaves;
+	uint16_t num_leaves; // same as atui_node.leaves.count
 
 	char typestr[GATUI_TYPESTR_LEN];
 	GVariantType* capsule_type;
@@ -99,11 +109,13 @@ gatui_node_dispose(
 
 	if (priv->leaves) {
 		for (uint16_t i=0; i < priv->num_leaves; i++) {
-			//leaves[i]->parent_leaf = NULL;
+			g_signal_handler_disconnect(priv->leaves[i], priv->phone_book[i]);
 			g_object_unref(priv->leaves[i]);
 		}
 		free(priv->leaves);
+		free(priv->phone_book);
 		priv->leaves = NULL;
+		priv->phone_book = NULL;
 	}
 
 	// weak references
@@ -145,18 +157,28 @@ gatui_node_constructed(
 
 	struct atui_children const* const children = &(atui->leaves);
 	if (children->count) { // generate leaves_model
-		priv->leaves = cralloc(atui->leaves.count * sizeof(GATUILeaf*));
+		priv->leaves = cralloc(children->count * sizeof(GATUILeaf*));
+		priv->phone_book = cralloc(children->count * sizeof(gulong));
 		priv->num_leaves = children->count;
 		for (uint16_t i=0; i < children->count; i++) {
-			GATUILeaf* leaf = gatui_leaf_new(
-				//&(children->nodes[i]), self, priv->root
+			GATUILeaf* child = gatui_leaf_new(
 				&(children->nodes[i]), priv->root
 			);
-			// TODO
-			g_signal_connect_swapped(self, "value-changed",
-				G_CALLBACK(gatui_leaf_emit_val_changed), leaf
+			GATUINodePrivate* child_priv = gatui_node_get_instance_private(
+				GATUI_NODE(child)
 			);
-			priv->leaves[i] = leaf; // keep the ref
+			
+			priv->phone_book[i] = g_signal_connect_data(child, "value-changed",
+				G_CALLBACK(gatui_node_value_changed_alert_family), self,
+				NULL, G_CONNECT_SWAPPED
+			);
+			child_priv->parent_number = g_signal_connect_data(self,
+				"value-changed",
+				G_CALLBACK(gatui_node_value_changed_alert_family), child,
+				NULL, G_CONNECT_SWAPPED
+			);
+
+			priv->leaves[i] = child; // keep the ref
 		}
 	}
 }
@@ -174,7 +196,7 @@ gatui_node_class_init(
 	gatui_signals[VALUE_CHANGED] = g_signal_new(
 		"value-changed",
 		G_TYPE_FROM_CLASS(node_class),
-		(G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE),
+		0,
 		0,
 		NULL, NULL,
 		NULL,
@@ -207,6 +229,39 @@ gatui_node_init(
 	//GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
 }
 
+static void
+gatui_node_value_changed_alert_family(
+		GATUINode* const self
+		) {
+	// make sure everyone in the family tree understands there exists a change,
+	// but don't allow the parent or child to tell self that a family member
+	// (which happens to be self) made a change.
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+
+	// opt out of everyone's mailing lists
+	if (priv->parent_number) {
+		g_signal_handler_block(priv->parent, priv->parent_number);
+	}
+	for (uint16_t i=0; i < priv->num_leaves; i++) {
+		g_signal_handler_block(priv->leaves[i], priv->phone_book[i]);
+	}
+
+	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0); // spread a rumour
+
+	// opt back in
+	if (priv->parent_number) {
+		g_signal_handler_unblock(priv->parent, priv->parent_number);
+	}
+	for (uint16_t i=0; i < priv->num_leaves; i++) {
+		g_signal_handler_unblock(priv->leaves[i], priv->phone_book[i]);
+	}
+}
+void
+gatui_node_emit_value_changed(
+		GATUINode* const self
+		) {
+	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
+}
 
 GVariantType const*
 gatui_node_get_capsule_type(
@@ -232,6 +287,7 @@ gatui_node_set_value(
 		GVariant* const value
 		) {
 	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	// value-changed emission will be handled by the implementation
 
 	GATUINodeClass* const nodeclass = GATUI_NODE_GET_CLASS(self);
 	return nodeclass->set_value(self, value);
@@ -280,7 +336,7 @@ gatui_node_set_contiguous_data(
 	void const* const input_data = g_variant_get_data(value);
 	if ((node->num_bytes == num_bytes) && input_data) {
 		memcpy(node->data.data, input_data, num_bytes);
-		g_signal_emit(priv, gatui_signals[VALUE_CHANGED], 0);
+		gatui_node_emit_value_changed(self);
 		return true;
 	}
 
@@ -367,7 +423,7 @@ gatui_node_set_leaves_memory_package(
 	}
 	assert(num_bytes == (size_t)(walker - input_data));
 
-	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
+	gatui_node_emit_value_changed(self);
 	return true;
 }
 
@@ -458,6 +514,7 @@ gatui_node_from_base64(
 
 	//success_exit:
 	free(header);
+	// value-changed emission will be handled by the indivudal mode functions
 	return true;
 
 	error_exit:

@@ -34,12 +34,6 @@ _gatui_node_get_leaf_array(
 		GATUINode* self
 		);
 
-void
-gatui_leaf_emit_val_changed( // single-signal multi-user alert network
-		GATUILeaf* self
-		);
-
-
 GATUIRegexNode*
 gatui_regex_node_new(
 		GObject* gatui, // branch or leaf

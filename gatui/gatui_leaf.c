@@ -22,13 +22,7 @@ struct _GATUILeaf {
 	GATUINode parent_instance;
 
 	atui_node* atui;
-
-	// for inter-family signal propagation
-	gulong parent_number;
-	gulong* phone_book;
-
 	bool has_textable_value;
-
 	GtkSelectionModel* enum_model;
 };
 G_DEFINE_TYPE(GATUILeaf, gatui_leaf, GATUI_TYPE_NODE)
@@ -40,21 +34,6 @@ gatui_leaf_dispose(
 		) {
 	GATUILeaf* const self = GATUI_LEAF(object);
 
-	/*
-	if (self->child_leaves) {
-		GATUILeaf** const child_leaves = self->child_leaves;
-		self->child_leaves = NULL;
-		uint16_t const num_leaves = self->num_child_leaves;
-		for (uint16_t i = 0; i < num_leaves; i++) {
-			child_leaves[i]->parent_leaf = NULL;
-			g_signal_handler_disconnect(child_leaves[i], self->phone_book[i]);
-			g_object_unref(child_leaves[i]);
-		}
-		free(child_leaves);
-		free(self->phone_book);
-		self->phone_book = NULL;
-	}
-	*/
 	if (self->enum_model) {
 		g_object_unref(self->enum_model);
 		self->enum_model = NULL;
@@ -127,34 +106,6 @@ set_typestr(
 	}
 }
 
-void
-gatui_leaf_emit_val_changed(
-		GATUILeaf* const self
-		) {
-	// make sure everyone in the family tree understands there exists a change,
-	// but don't allow the parent or child to tell self that a family member
-	// (which happens to be self) made a change.
-
-	// opt out of everyone's mailing lists
-	/*
-	if (self->parent_leaf) {
-		g_signal_handler_block(self->parent_leaf, self->parent_number);
-	}
-	for (uint16_t i=0; i < self->num_child_leaves; i++) {
-		g_signal_handler_block(self->child_leaves[i], self->phone_book[i]);
-	}
-
-	g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0); // spread a rumour
-
-	// opt back in
-	if (self->parent_leaf) {
-		g_signal_handler_unblock(self->parent_leaf, self->parent_number);
-	}
-	for (uint16_t i=0; i < self->num_child_leaves; i++) {
-		g_signal_handler_unblock(self->child_leaves[i], self->phone_book[i]);
-	}
-	*/
-}
 
 GATUILeaf*
 gatui_leaf_new(
@@ -181,32 +132,6 @@ gatui_leaf_new(
 		);
 		g_object_ref(self->enum_model);
 	}
-
-	/*
-	if (leaf->leaves.count) {
-		uint16_t const num_child_leaves = leaf->leaves.count;
-
-		self->num_child_leaves = num_child_leaves;
-		self->child_leaves = cralloc(num_child_leaves * sizeof(GATUILeaf*));
-		self->phone_book = cralloc(num_child_leaves * sizeof(gulong));
-
-		for (uint16_t i = 0; i < num_child_leaves; i++) {
-			GATUILeaf* child = gatui_leaf_new(&(leaf->leaves.nodes[i]), root);
-			self->child_leaves[i] = child;
-
-			self->phone_book[i] = g_signal_connect_data(child, "value-changed",
-				G_CALLBACK(gatui_leaf_emit_val_changed), self,
-				NULL, G_CONNECT_SWAPPED
-			);
-
-			child->parent_leaf = self;
-			child->parent_number = g_signal_connect_data(self, "value-changed",
-				G_CALLBACK(gatui_leaf_emit_val_changed), child,
-				NULL, G_CONNECT_SWAPPED
-			);
-		}
-	}
-	*/
 
 	struct atui_leaf_type const* const type = &(leaf->leaf.type);
 	self->has_textable_value = (
@@ -418,7 +343,7 @@ _gatui_leaf_set_value(
 	return false;
 
 	success_exit:
-	//gatui_leaf_emit_val_changed(self);
+	gatui_node_emit_value_changed(GATUI_NODE(self));
 	return true;
 }
 
@@ -438,7 +363,7 @@ gatui_leaf_set_value_from_text(
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	g_return_if_fail(self->has_textable_value);
 	atui_leaf_from_text(self->atui, text);
-	//gatui_leaf_emit_val_changed(self);
+	gatui_node_emit_value_changed(GATUI_NODE(self));
 }
 char*
 gatui_leaf_value_to_text(
@@ -501,7 +426,7 @@ gatui_leaf_enum_entry_sets_value(
 		} else {
 			atui_leaf_set_val_unsigned(self->atui, enum_entry->val);
 		}
-		//gatui_leaf_emit_val_changed(self);
+		gatui_node_emit_value_changed(GATUI_NODE(self));
 		return true;
 	}
 	return false;
