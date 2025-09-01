@@ -171,14 +171,18 @@ gatui_branch_to_base64(
 		bool const leaves_package
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	assert(0);
-	return gatui_node_to_base64(GATUI_NODE(self), GATUI_NODE_B64_LEAVES_PACKAGE);
+	return gatui_node_to_base64(
+		GATUI_NODE(self),
+		(enum gatui_node_b64_target const[2]) {
+			GATUI_NODE_B64_CONTIGUOUS, GATUI_NODE_B64_LEAVES_PACKAGE
+		} [leaves_package]
+	);
 }
 bool
 gatui_branch_from_base64(
 		GATUIBranch* const self,
 		char const* const b64_text,
-		struct b64_header** const error_out
+		struct gatui_node_b64_header** const error_out
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
 	return gatui_node_from_base64(

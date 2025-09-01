@@ -1,6 +1,6 @@
 #include "standard.h"
 #include "gatui_private.h"
-
+#include <zlib.h> 
 
 static void
 gatui_node_value_changed_alert_family(
@@ -428,6 +428,93 @@ gatui_node_set_leaves_memory_package(
 }
 
 
+
+union b64_header_raw {
+	void* raw;
+	struct gatui_node_b64_header* header;
+};
+
+static inline char*
+b64_packet_encode(
+		GVariant* const val,
+		enum gatui_node_b64_target const target,
+		uint16_t const num_segments
+		) {
+	size_t const payload_size = g_variant_get_size(val);
+	size_t const packet_size = sizeof(struct gatui_node_b64_header) + payload_size;
+
+	union b64_header_raw const h = {.header = cralloc(packet_size)};
+
+	*h.header = (struct gatui_node_b64_header) {
+		.version = GATUI_NODE_B64_HEADER_VER_CURRENT,
+		.target = target,
+		.num_segments = num_segments,
+		.num_bytes = payload_size,
+	};
+	memcpy(h.header->typestr,g_variant_get_type_string(val), GATUI_TYPESTR_LEN);
+	memcpy(h.header->bytes, g_variant_get_data(val), payload_size);
+	h.header->crc = crc32(
+		0,
+		(h.raw + sizeof(h.header->crc)), // exclude crc
+		(packet_size - sizeof(h.header->crc))
+	);
+
+	gchar* const b64_text = g_base64_encode(h.raw, packet_size);
+	free(h.header);
+	return b64_text;
+}
+static inline struct gatui_node_b64_header*
+b64_packet_decode(
+		char const* const b64_text
+		) {
+	size_t b64_num_bytes = 0;
+	union b64_header_raw const h = {
+		.raw = g_base64_decode(b64_text, &b64_num_bytes)
+	};
+
+	if (0 == b64_num_bytes) {
+		goto error_exit;
+	}
+	if (b64_num_bytes < sizeof(*h.header)) {
+		goto error_exit;
+	}
+	if (b64_num_bytes < (h.header->num_bytes + sizeof(*h.header))) {
+		goto error_exit;
+	}
+	uint32_t const crc = crc32(
+		0,
+		(h.raw + sizeof(h.header->crc)),
+		(sizeof(*h.header)-sizeof(h.header->crc)  +  h.header->num_bytes)
+	);
+	if (crc != h.header->crc) {
+		goto error_exit;
+	}
+
+	if (GATUI_NODE_B64_HEADER_VER_CURRENT != h.header->version) {
+		goto error_exit;
+	}
+
+	if (GATUI_TYPESTR_LEN <= strnlen(h.header->typestr, GATUI_TYPESTR_LEN)) {
+		goto error_exit;
+	}
+
+	// strict compliance
+	if (1 != h.header->num_segments) {
+		switch (h.header->target) {
+			case GATUI_NODE_B64_CONTIGUOUS:
+			case GATUI_NODE_B64_VALUE:
+				goto error_exit;
+			default: break;
+		}
+	}
+
+	return h.header;
+
+	error_exit:
+	free(h.header);
+	return NULL;
+}
+
 char*
 gatui_node_to_base64(
 		GATUINode* const self,
@@ -443,7 +530,6 @@ gatui_node_to_base64(
 
 	GVariant* val = NULL;
 	uint16_t num_segments = 0;
-	enum gatui_b64_target target = 0;
 
 	switch (format) {
 		case GATUI_NODE_B64_CONTIGUOUS:
@@ -460,7 +546,7 @@ gatui_node_to_base64(
 		default: assert(0); break;
 	}
 
-	char* const b64_text = b64_packet_encode(val, target, num_segments);
+	char* const b64_text = b64_packet_encode(val, format, num_segments);
 
 	g_variant_unref(val);
 	return b64_text;
@@ -475,11 +561,8 @@ gatui_node_from_base64(
 	g_return_val_if_fail(b64_text, false);
 
 	// TODO
-	struct gatui_node_b64_header* const header = (void*) b64_packet_decode(b64_text);
+	struct gatui_node_b64_header* const header = b64_packet_decode(b64_text);
 	if (NULL == header) {
-		goto error_exit;
-	}
-	if (GATUI_NODE_B64_HEADER_VER_CURRENT != header->version) {
 		goto error_exit;
 	}
 

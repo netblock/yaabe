@@ -158,7 +158,7 @@ right_click_paste_data(
 		return;
 	}
 
-	struct b64_header* b64_error = NULL;
+	struct gatui_node_b64_header* b64_error = NULL;
 	bool success;
 	if (is_leaf) {
 		success = gatui_leaf_value_from_base64(

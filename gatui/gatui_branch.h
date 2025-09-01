@@ -71,7 +71,7 @@ gatui_branch_from_base64(
 		GATUIBranch* self,
 		char const* b64_text,
 		// error diagnostics; optional; needs to be freed:
-		struct b64_header** error_out
+		struct gatui_node_b64_header** error_out
 		);
 
 char* // needs to be freed

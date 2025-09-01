@@ -202,14 +202,13 @@ gatui_leaf_value_to_base64(
 		GATUILeaf* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	assert(0);
 	return gatui_node_to_base64(GATUI_NODE(self), GATUI_NODE_B64_VALUE);
 }
 bool
 gatui_leaf_value_from_base64(
 		GATUILeaf* const self,
 		char const* const b64_text,
-		struct b64_header** const error_out
+		struct gatui_node_b64_header** const error_out
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
 	return gatui_node_from_base64(

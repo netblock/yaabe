@@ -7,18 +7,6 @@
 
 // amalgam of various private methods
 
-char* // needs to be freed
-b64_packet_encode(
-		GVariant* val,
-		enum gatui_b64_target target,
-		uint16_t num_segments
-		);
-struct b64_header* // NULL on error
-b64_packet_decode(
-		char const* b64_text
-		);
-
-
 GtkSelectionModel* const*
 gatui_tree_get_enum_models_cache( // for GATUILeaves generation
 		GATUITree* self
@@ -57,4 +45,3 @@ gatui_regex_search_recurse_branch(
 		struct gatui_search_flags const* flags
 		);
 #endif
-

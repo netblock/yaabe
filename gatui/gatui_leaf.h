@@ -48,7 +48,7 @@ gatui_leaf_value_from_base64(
 		GATUILeaf* self,
 		char const* b64_text,
 		// error diagnostics; optional; needs to be freed:
-		struct b64_header** error_out
+		struct gatui_node_b64_header** error_out
 		);
 
 bool // if value to/from text does anything
