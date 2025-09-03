@@ -24,7 +24,7 @@ _gatui_node_get_leaf_array(
 
 GATUIRegexNode*
 gatui_regex_node_new(
-		GObject* gatui, // branch or leaf
+		GATUINode* tree_node,
 		GMatchInfo* match_info, // regex match info
 		char const* text, // matching text
 		bool is_leaf,

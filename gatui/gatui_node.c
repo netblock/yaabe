@@ -655,6 +655,22 @@ gatui_node_get_name(
 	return priv->atui->name;
 }
 char const*
+gatui_node_get_origname(
+		GATUINode* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+	return priv->atui->origname;
+}
+char const*
+gatui_node_get_structname(
+		GATUINode* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_NODE(self), NULL);
+	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
+	return priv->atui->origname;
+}
+char const*
 gatui_node_get_description(
 		GATUINode* const self,
 		enum i18n_languages const lang

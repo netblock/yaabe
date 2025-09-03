@@ -378,7 +378,9 @@ select_in_model_by_map(
 			leaf = leaf->parent;
 		} while (i);
 		leaf_i = expand_model_with_object_path(
-			G_LIST_MODEL(gatui_branch_get_leaves_model(map->branch->self)),
+			G_LIST_MODEL(gatui_branch_get_leaves_model(GATUI_BRANCH(
+				map->branch->self
+			))),
 			object_path, map->leaf_depth
 		);
 	}
@@ -433,7 +435,7 @@ gatui_tree_select_in_model_by_path(
 bool
 gatui_tree_select_in_model_by_object(
 		GATUITree* const self,
-		GObject* const target,
+		GATUINode* const target,
 		int16_t* const branch_index,
 		int16_t* const leaf_index
 		) {

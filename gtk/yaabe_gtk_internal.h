@@ -48,7 +48,7 @@ create_about_window(
 void
 yaabe_gtk_scroll_to_object( // scroll to based on a branch/leaf object
 		yaabegtk_commons const* commons,
-		GObject* gatui
+		GATUINode* tree_node
 		);
 void
 yaabe_gtk_scroll_to_path( // /scroll/to/based/on/path

@@ -175,8 +175,7 @@ struct _atui_node {
 	char const* structname;
 	char const* description[LANG_TOTALLANGS];
 
-	//GATUINode* self; // weak reference
-	void* self;
+	GATUINode* self; // weak reference
 	atui_node* parent; // don't need parent_is_leaf
 
 	struct atui_children leaves; // if branch, always expanded

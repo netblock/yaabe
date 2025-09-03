@@ -26,7 +26,7 @@ struct gatui_search_flags {
 	bool branches; // gets ignored if domain is value
 };
 struct atui_regex_node {
-	GObject* gatui;
+	GATUINode* tree_node;
 	GMatchInfo* match_info;
 	char* text; // literal matching text
 	char* markup_text; // matching text but with markup

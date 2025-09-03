@@ -52,15 +52,15 @@ pathbar_update_path(
 		yaabegtk_commons* const commons
 		) {
 // callback; sets path based on branches selection
-	GATUIBranch* const g_branch = GATUI_BRANCH(
+	GATUINode* const node = GATUI_NODE(
 		gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
 			gtk_single_selection_get_selected_item(model)
 		))
 	);
 	assert(commons->pathbar_string);
 	free(commons->pathbar_string);
-	commons->pathbar_string = gatui_branch_to_path(g_branch);
-	g_object_unref(g_branch);
+	commons->pathbar_string = gatui_node_to_path(node);
+	g_object_unref(node);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 }
 static gboolean
@@ -79,12 +79,12 @@ pathbar_editable_reset(
 void
 yaabe_gtk_scroll_to_object(
 		yaabegtk_commons const* const commons,
-		GObject* const gatui
+		GATUINode* const tree_node
 		) {
 	int16_t branch_index;
 	int16_t leaf_index;
 	bool const success __unused = gatui_tree_select_in_model_by_object(
-		commons->root, gatui, &branch_index, &leaf_index
+		commons->root, tree_node, &branch_index, &leaf_index
 	);
 	assert(success);
 	if (-1 < branch_index) {
@@ -276,7 +276,7 @@ create_and_set_active_gatui_model(
 	if (commons->pathbar_string) {
 		free(commons->pathbar_string);
 	}
-	commons->pathbar_string = gatui_branch_to_path(trunk);
+	commons->pathbar_string = gatui_node_to_path(GATUI_NODE(trunk));
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
 	g_object_unref(trunk);

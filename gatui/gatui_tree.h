@@ -56,7 +56,7 @@ gatui_tree_select_in_model_by_path( // model must be already created
 bool // success
 gatui_tree_select_in_model_by_object(
 		GATUITree* self,
-		GObject* target,
+		GATUINode* target,
 		int16_t* branch_index,
 		int16_t* leaf_index
 		);

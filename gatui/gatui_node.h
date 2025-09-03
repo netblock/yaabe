@@ -125,6 +125,14 @@ gatui_node_get_name(
 		GATUINode* self
 		);
 char const*
+gatui_node_get_origname(
+		GATUINode* self
+		);
+char const*
+gatui_node_get_structname(
+		GATUINode* self
+		);
+char const*
 gatui_node_get_description(
 		GATUINode* self,
 		enum i18n_languages lang

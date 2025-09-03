@@ -13,13 +13,13 @@ gatui_regex_node_dispose(
 		GObject* const object
 		) {
 	GATUIRegexNode* const self = GATUI_REGEX_NODE(object);
-	if (self->node.gatui) {
-		g_object_unref(self->node.gatui);
+	if (self->node.tree_node) {
+		g_object_unref(self->node.tree_node);
 		g_match_info_unref(self->node.match_info);
 		free(self->node.text);
 		free(self->node.markup_text);
 
-		self->node.gatui = NULL;
+		self->node.tree_node = NULL;
 		self->node.match_info = NULL;
 		self->node.text = NULL;
 		self->node.markup_text = NULL;
@@ -40,17 +40,17 @@ gatui_regex_node_init(
 }
 GATUIRegexNode*
 gatui_regex_node_new(
-		GObject* const gatui,
+		GATUINode* const tree_node,
 		GMatchInfo* const match_info,
 		char const* const text,
 		bool const is_leaf,
 		struct gatui_search_flags const* const flags
 		) {
 	GATUIRegexNode* const self = g_object_new(GATUI_TYPE_REGEX_NODE, NULL);
-	g_object_ref(gatui);
+	g_object_ref(tree_node);
 	g_match_info_ref(match_info);
 
-	self->node.gatui = gatui;
+	self->node.tree_node = tree_node;
 	self->node.match_info = match_info;
 	self->node.is_leaf = is_leaf;
 	self->node.flags = *flags;
