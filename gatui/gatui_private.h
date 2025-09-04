@@ -16,9 +16,16 @@ gatui_tree_get_contiguous_type(
 		GATUITree* self
 		);
 
-
+void
+_gatui_node_emit_value_changed(
+		GATUINode* self
+		);
 GATUILeaf**
 _gatui_node_get_leaf_array(
+		GATUINode* self
+		);
+atui_node*
+_gatui_node_get_atui(
 		GATUINode* self
 		);
 

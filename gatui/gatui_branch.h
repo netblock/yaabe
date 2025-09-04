@@ -17,6 +17,10 @@ gatui_branch_get_root(
 		GATUIBranch* self
 		);
 
+uint16_t
+gatui_branch_get_num_branches(
+		GATUIBranch* self
+		);
 GtkSelectionModel* // no-selection of a tree-model; does not ref
 gatui_branch_get_leaves_model(
 		GATUIBranch* self
@@ -28,61 +32,6 @@ branches_treelist_generate_children(
         gpointer parent_branch,
         gpointer data // unused
         );
-
-size_t
-gatui_branch_get_region_bounds(
-		GATUIBranch* self,
-		size_t* start, // can be NULL
-		size_t* end // can be NULL; -1 last byte within 
-		);
-
-
-// contiguous memory in the bios
-GVariant*
-gatui_branch_get_contiguous_memory(
-		GATUIBranch* self
-		);
-bool // success
-gatui_branch_set_contiguous_memory(
-		GATUIBranch* self,
-		GVariant* data
-		);
-// the leaves of the branch, which may have arbitrary positions in the bios
-bool // success
-gatui_branch_get_leaves_memory_package(
-		GATUIBranch* self,
-		GVariant** value, // data package out
-		uint16_t* num_copyable_leaves
-		);
-bool // success
-gatui_branch_set_leaves_memory_package(
-		GATUIBranch* self,
-		GVariant* value,
-		uint16_t num_copyable_leaves
-		);
-
-char* // needs to be freed
-gatui_branch_to_base64(
-		GATUIBranch* self,
-		bool leaves_package // if leaves package; else contiguous
-		);
-bool // success
-gatui_branch_from_base64(
-		GATUIBranch* self,
-		char const* b64_text,
-		// error diagnostics; optional; needs to be freed:
-		struct gatui_node_b64_header** error_out
-		);
-
-char* // needs to be freed
-gatui_branch_to_path(
-		GATUIBranch* self
-		);
-
-atui_node const*
-gatui_branch_get_atui( // for the trivial atui_node data
-		GATUIBranch* self
-		);
 
 void
 gatui_branch_right_click_expand_family( // recursively expand all sub branches
@@ -101,11 +50,6 @@ void
 gatui_branch_load_expand_state(
 		GATUIBranch* self,
 		GtkTreeListRow* row
-		);
-void
-gatui_branch_load_expand_state(
-		GATUIBranch* self,
-		GtkTreeListRow* tree_row
 		);
 
 G_END_DECLS

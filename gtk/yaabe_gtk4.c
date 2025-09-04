@@ -146,11 +146,11 @@ pathbar_sets_branch_selection(
 			commons->yaabe_gtk
 		);
 		GtkAlertDialog* alert;
-		if (map_error->branch_depth) {
+		if (map_error->branch.depth) {
 			alert = gtk_alert_dialog_new(
 				"\n%s\n not found in:\n %s\n",
 				map_error->not_found,
-				map_error->branch->name
+				map_error->branch.node->name
 			);
 		} else {
 			alert = gtk_alert_dialog_new("bad root");
@@ -214,17 +214,19 @@ select_changes_leaves(
 			gtk_single_selection_get_selected_item(model)
 		)
 	);
-	atui_node const* const a_branch_new = gatui_branch_get_atui(
-		new_selection
-	);
-	atui_node const* const a_branch_old = gatui_branch_get_atui(
-		commons->previous_selection
+
+	GATUINode* const new_node = GATUI_NODE(new_selection);
+	GATUINode* const old_node = GATUI_NODE(commons->previous_selection);
+	bool const similar_branches = (
+		(
+			gatui_node_get_num_leaves(new_node)
+			== gatui_node_get_num_leaves(old_node)
+		) && (0 == strcmp(
+			gatui_node_get_origname(new_node),
+			gatui_node_get_origname(old_node)
+		))
 	);
 
-	bool const similar_branches = (
-		(a_branch_new->leaves.count == a_branch_old->leaves.count)
-		&& (0 == strcmp(a_branch_new->origname, a_branch_old->origname))
-	);
 	if (similar_branches) { // restore scroll if compatible
 		GtkAdjustment* const adj = gtk_scrollable_get_vadjustment(
 			GTK_SCROLLABLE(commons->leaves.view)

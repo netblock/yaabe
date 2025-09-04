@@ -681,10 +681,10 @@ path_to_atui(
 	);
 
 	struct atui_path_goto* const map = partition;
-	map->branch = (atui_node*) dir;
-	map->branch_depth = branch_depth;
-	map->leaf = (atui_node*) file;
-	map->leaf_depth = leaf_depth;
+	map->branch.node = (atui_node*) dir;
+	map->branch.depth = branch_depth;
+	map->leaf.node = (atui_node*) file;
+	map->leaf.depth = leaf_depth;
 
 	partition += sizeof(struct atui_path_goto);
 	if (not_found_arraylen) {

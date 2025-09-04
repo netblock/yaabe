@@ -301,11 +301,11 @@ branch_right_click_collapse_children(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
-	atui_node const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
+
+	uint16_t const num_branches = gatui_branch_get_num_branches(GATUI_BRANCH(
 		pack->node
 	));
-
-	for (uint16_t i=0; i < a_branch->branch.branches.count; i++) {
+	for (uint16_t i=0; i < num_branches; i++) {
 		GtkTreeListRow* child = gtk_tree_list_row_get_child_row(tree_row, i);
 		gtk_tree_list_row_set_expanded(child, false);
 		g_object_unref(child);
@@ -350,14 +350,17 @@ branches_rightclick_popup(
 		{.name = "path",   .activate = branchleaf_right_click_copy_path},
 	};
 	uint8_t act_i = 3;
-	atui_node const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(node));
-	if (a_branch->num_copyable_leaves || a_branch->num_bytes) {
-		if (a_branch->num_copyable_leaves && ! a_branch->prefer_contiguous) {
+
+	union gatui_node_copyability const copyability = gatui_node_get_copyability(
+		node
+	);
+	if (copyability.is_copyable) {
+		if (! copyability.prefer_contiguous) {
 			actions[act_i].name = "copy_leaves";
 			actions[act_i].activate = branchleaf_right_click_copy_leaves;
 			act_i++;
 		}
-		if (a_branch->num_bytes) {
+		if (copyability.copyable_data) {
 			actions[act_i].name = "copy_contiguous";
 			actions[act_i].activate = branchleaf_right_click_copy_value;
 			act_i++;
@@ -366,7 +369,7 @@ branches_rightclick_popup(
 		actions[act_i].activate = branchleaf_right_click_paste_data;
 		act_i++;
 	};
-	if (a_branch->branch.branches.count) {
+	if (gatui_branch_get_num_branches(GATUI_BRANCH(node))) {
 		if (gtk_tree_list_row_get_expanded(tree_row)) {
 			actions[act_i].name = "collapse_children";
 			actions[act_i].activate = branch_right_click_collapse_children;
@@ -457,8 +460,7 @@ leaves_rightclick_popup(
 		{.name = "path", .activate = branchleaf_right_click_copy_path},
 	};
 	uint8_t act_i = 2;
-	atui_node const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(node));
-	if (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->leaf.type.fancy) {
+	if (gatui_node_get_region_bounds(node, NULL, NULL)) {
 		actions[act_i].name = "copy_data";
 		actions[act_i].activate = branchleaf_right_click_copy_value;
 		act_i++;
@@ -625,19 +627,7 @@ search_rightclick_popup(
 	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
 		pack->regex_node
 	);
-	bool has_data = false;
-	if (atui_regex->is_leaf) {
-		atui_node const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(
-			atui_regex->tree_node
-		));
-		has_data = (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->leaf.type.fancy);
-	} else {
-		atui_node const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
-			atui_regex->tree_node
-		));
-		has_data = (0 < a_branch->num_bytes);
-	}
-	if (has_data) {
+	if (gatui_node_get_region_bounds(atui_regex->tree_node, NULL, NULL)) {
 		actions[act_i].name = "copy_data";
 		actions[act_i].activate = search_right_click_copy_data;
 		act_i++;

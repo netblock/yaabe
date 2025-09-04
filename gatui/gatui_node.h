@@ -19,20 +19,6 @@ struct _GATUINodeClass {
 			GVariant* value
 			);
 };
-void
-gatui_node_emit_value_changed(
-		GATUINode* self
-		);
-
-/*
-void* 
-gatui_node_new( // convenience function
-		GType object_type, // derived type
-		atui_node* atui,
-		GATUITree* root,
-		char const* const typestr
-		);
-*/
 
 GVariantType const*
 gatui_node_get_capsule_type(
@@ -72,6 +58,7 @@ gatui_node_set_leaves_memory_package( // set leaves based on a byte array
 		uint16_t num_copyable_leaves // num segments
 		);
 
+
 #pragma pack(push, 1)
 #define GATUI_TYPESTR_LEN 3
 #define GATUI_NODE_B64_HEADER_VER_CURRENT 1
@@ -92,8 +79,8 @@ struct gatui_node_b64_header { // paste header
 	char typestr[GATUI_TYPESTR_LEN];
 	uint8_t bytes[] __counted_by(num_bytes);
 };
-#pragma pack(pop)
 
+#pragma pack(pop)
 char* // must be freed
 gatui_node_to_base64(
 		GATUINode* const self,
@@ -105,6 +92,7 @@ gatui_node_from_base64(
 		char const* b64_text,
 		struct gatui_node_b64_header** error_out // optional
 		);
+
 
 GListModel*
 leaves_treelist_generate_children(
@@ -136,6 +124,25 @@ char const*
 gatui_node_get_description(
 		GATUINode* self,
 		enum i18n_languages lang
+		);
+uint16_t
+gatui_node_get_num_leaves(
+		GATUINode* self
+		);
+
+union gatui_node_copyability {
+	uint8_t raw;
+	struct { uint8_t
+		is_copyable       :0-0 +1,
+		prefer_contiguous :1-1 +1,
+		copyable_leaves   :2-2 +1,
+		copyable_data     :3-3 +1,
+		reserved          :7-4 +1;
+	};
+};
+union gatui_node_copyability
+gatui_node_get_copyability(
+		GATUINode* self
 		);
 
 size_t

@@ -12,43 +12,9 @@ gatui_leaf_new( // including all of is subleaves
 		GATUITree* root
 		);
 
-GATUITree* // does not ref
-gatui_leaf_get_root(
+struct atui_leaf_type const*
+gatui_leaf_get_atui_type(
 		GATUILeaf* self
-		);
-
-size_t
-gatui_leaf_get_region_bounds(
-		GATUILeaf* self,
-		size_t* start, // can be NULL
-		size_t* end // can be NULL; -1 last byte within 
-		);
-
-GVariantType const*
-gatui_leaf_get_gvariant_type(
-		GATUILeaf* const self
-		);
-GVariant*
-gatui_leaf_get_value(
-		GATUILeaf* self,
-		bool raw_data // as a byte array without any type conversion
-		);
-bool // true if successful
-gatui_leaf_set_value(
-		GATUILeaf* self,
-		GVariant* value
-		);
-
-char* // needs to be freed
-gatui_leaf_value_to_base64( // base64 string contains metadata
-		GATUILeaf* self
-		);
-bool // success
-gatui_leaf_value_from_base64(
-		GATUILeaf* self,
-		char const* b64_text,
-		// error diagnostics; optional; needs to be freed:
-		struct gatui_node_b64_header** error_out
 		);
 
 bool // if value to/from text does anything
@@ -90,10 +56,13 @@ gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* self
 		);
 
-char* // must be freed
-gatui_leaf_to_path(
-		GATUILeaf* self
+size_t // total bits
+gatui_leaf_get_bitfield_size(
+		GATUILeaf* self,
+		size_t* start, // optional; bitfield lo
+		size_t* end // optiona; bitfield hi
 		);
+
 
 
 atui_node const*

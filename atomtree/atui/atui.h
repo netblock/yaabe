@@ -260,13 +260,14 @@ atui_leaf_get_val_fraction(
 		);
 
 
-
+struct atui_path_vector {
+	atui_node* node;
+	uint8_t depth;
+};
 struct atui_path_goto { // final branch and leaf
 	char* not_found; // non-NULL if error; name of the not-found branch/leaf
-	atui_node* branch;
-	atui_node* leaf;
-	uint8_t branch_depth; // guaranteed to be non-0 if NULL==not_found
-	uint8_t leaf_depth;
+	struct atui_path_vector leaf;
+	struct atui_path_vector branch;
 };
 struct atui_path_goto* // needs to be freed
 path_to_atui( // crawls path and makes a map of that path

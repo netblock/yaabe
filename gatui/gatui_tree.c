@@ -300,95 +300,77 @@ gatui_tree_create_trunk_model(
 static int16_t
 expand_model_with_object_path(
 		GListModel* const model,
-		GObject const* const* const path,
-		uint8_t const path_depth
+		struct atui_path_vector const* const vector
 		) {
-	int16_t model_i = -1; // -1 for loop entry
-	uint8_t depth_i = 0;
+	GATUINode const* path[ATUI_STACK_DEPTH];
+
+	assert(vector->depth);
+	uint8_t depth_i = vector->depth;
+
+	atui_node const* node = vector->node;
+	do {
+		depth_i--;
+		path[depth_i] = node->self;
+		node = node->parent;
+	} while (depth_i);
+
+	int16_t model_i = 0;
 	do {
 		GtkTreeListRow* tree_item;
 		while (true) {
-			model_i++;
 			tree_item = GTK_TREE_LIST_ROW(
 				g_list_model_get_object(model, model_i)
 			);
-			GObject* questioned = G_OBJECT(
+			GATUINode* questioned = GATUI_NODE(
 				gtk_tree_list_row_get_item(tree_item)
 			);
 			g_object_unref(questioned); // we don't need a 2nd reference
 			if (path[depth_i] == questioned) {
 				break;
 			}
+			model_i++;
 			g_object_unref(tree_item);
 		};
 		gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
 		g_object_unref(tree_item);
 		depth_i++;
-	} while (depth_i < path_depth);
+	} while (depth_i < vector->depth);
 
 	return model_i;
 };
-
 static void
 select_in_model_by_map(
-		struct atui_path_goto* const map,
+		struct atui_path_goto const* const map,
 		GListModel* const trunk_model,
 		int16_t* const branch_index,
 		int16_t* const leaf_index
 		) {
-	// build a GOBject array of the path
-	GObject const** const object_path = cralloc(
-		// technically only need the larger of the two
-		(map->branch_depth + map->leaf_depth)
-		* sizeof(GObject*)
+	assert(NULL == map->not_found);
+	assert(map->branch.depth);
+
+	// branches
+	int16_t model_i;
+	model_i = expand_model_with_object_path(trunk_model, &(map->branch));
+	gtk_single_selection_set_selected(
+		GTK_SINGLE_SELECTION(trunk_model),
+		model_i
 	);
-
-	// these two depth blocks, branch and leaf should look identical, with the
-	// difference being the atui_node/atui_node get parent thing.
-	int16_t branch_i = -1;
-	if (map->branch_depth) {
-		atui_node const* branch = map->branch;
-		uint8_t i = map->branch_depth;
-		do {
-			i--;
-			object_path[i] = G_OBJECT(branch->self);
-			branch = branch->parent;
-		} while (i);
-		assert(NULL == branch);
-		branch_i = expand_model_with_object_path(
-			trunk_model, object_path, map->branch_depth
-		);
-		if (-1 < branch_i) {
-			gtk_single_selection_set_selected(GTK_SINGLE_SELECTION(trunk_model),
-				branch_i
-			);
-		}
-	}
 	if (branch_index) {
-		*branch_index = branch_i;
+		*branch_index = model_i;
 	}
 
-	int16_t leaf_i = -1;
-	if (map->leaf_depth) {
-		atui_node const* leaf = map->leaf;
-		uint8_t i = map->leaf_depth;
-		do {
-			i--;
-			object_path[i] = G_OBJECT(leaf->self);
-			leaf = leaf->parent;
-		} while (i);
-		leaf_i = expand_model_with_object_path(
-			G_LIST_MODEL(gatui_branch_get_leaves_model(GATUI_BRANCH(
-				map->branch->self
-			))),
-			object_path, map->leaf_depth
+	model_i = -1;
+	if (map->leaf.depth) {
+		model_i = expand_model_with_object_path(
+			G_LIST_MODEL(gatui_branch_get_leaves_model(
+				GATUI_BRANCH(map->branch.node->self)
+			)),
+			&(map->leaf)
 		);
 	}
 	if (leaf_index) {
-		*leaf_index = leaf_i;
+		*leaf_index = model_i;
 	}
-
-	free(object_path);
 }
 
 bool
@@ -440,37 +422,21 @@ gatui_tree_select_in_model_by_object(
 		int16_t* const leaf_index
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), false);
+	g_return_val_if_fail(gatui_node_get_root(target) == self, false);
 
-	GATUITree* mirror;
 	struct atui_path_goto map = {};
-
-	if (GATUI_IS_LEAF(target)) {
-		GATUILeaf* leaf = GATUI_LEAF(target);
-		mirror = gatui_leaf_get_root(leaf);
-		map.leaf = (atui_node*) gatui_leaf_get_atui(leaf);
-	} else if (GATUI_IS_BRANCH(target)) {
-		GATUIBranch* branch = GATUI_BRANCH(target);
-		mirror = gatui_branch_get_root(branch);
-		map.branch = (atui_node*) gatui_branch_get_atui(branch);
-	} else {
-		return false;
-	}
-	if (mirror != self) {
-		return false;
-	}
-
-	if (map.leaf) {
-		atui_node const* parent = map.leaf;
+	atui_node* parent = _gatui_node_get_atui(target);
+	if (parent->is_leaf) {
+		map.leaf.node = parent;
 		do {
 			parent = parent->parent;
-			map.leaf_depth++;
+			map.leaf.depth++;
 		} while (parent->is_leaf);
-		map.branch = (atui_node*) parent;
 	}
-	atui_node const* parent = map.branch;
+	map.branch.node = parent;
 	do {
 		parent = parent->parent;
-		map.branch_depth++;
+		map.branch.depth++;
 	} while (parent);
 
 	// g_weak_ref_get refs for us
@@ -486,9 +452,7 @@ gatui_tree_select_in_model_by_object(
 	g_object_unref(trunk_model);
 
 	return true;
-
 }
-
 
 
 GATUITree*

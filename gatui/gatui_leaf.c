@@ -141,55 +141,6 @@ gatui_leaf_new(
 	return self;
 }
 
-
-
-GATUITree*
-gatui_leaf_get_root(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return gatui_node_get_root(GATUI_NODE(self));
-}
-size_t
-gatui_leaf_get_region_bounds(
-		GATUILeaf* const self,
-		size_t* start,
-		size_t* end
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
-	return gatui_node_get_region_bounds(GATUI_NODE(self), start, end);
-}
-GVariantType const*
-gatui_leaf_get_gvariant_type(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return gatui_node_get_capsule_type(GATUI_NODE(self));
-}
-bool
-gatui_leaf_set_value(
-		GATUILeaf* const self,
-		GVariant* const value
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
-	return gatui_node_set_value(GATUI_NODE(self), value);
-}
-
-GVariant*
-gatui_leaf_get_value(
-		GATUILeaf* const self,
-		bool const raw_data __unused
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return gatui_node_get_value(GATUI_NODE(self));
-}
-char*
-gatui_leaf_to_path(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return atui_node_to_path(self->atui);
-}
 atui_node const*
 gatui_leaf_get_atui(
 		GATUILeaf* const self
@@ -197,25 +148,6 @@ gatui_leaf_get_atui(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	return self->atui;
 }
-char*
-gatui_leaf_value_to_base64(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return gatui_node_to_base64(GATUI_NODE(self), GATUI_NODE_B64_VALUE);
-}
-bool
-gatui_leaf_value_from_base64(
-		GATUILeaf* const self,
-		char const* const b64_text,
-		struct gatui_node_b64_header** const error_out
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
-	return gatui_node_from_base64(
-		GATUI_NODE(self), b64_text, (void*) error_out
-	);
-}
-
 
 
 static GVariant*
@@ -268,8 +200,6 @@ _gatui_leaf_get_value(
 
 	return value;
 }
-
-
 static bool
 _gatui_leaf_set_value(
 		GATUINode* const nodeself,
@@ -342,10 +272,17 @@ _gatui_leaf_set_value(
 	return false;
 
 	success_exit:
-	gatui_node_emit_value_changed(GATUI_NODE(self));
+	_gatui_node_emit_value_changed(GATUI_NODE(self));
 	return true;
 }
 
+struct atui_leaf_type const*
+gatui_leaf_get_atui_type(
+		GATUILeaf* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
+	return &(self->atui->leaf.type);
+}
 bool
 gatui_leaf_has_textable_value(
 		GATUILeaf* const self
@@ -362,7 +299,7 @@ gatui_leaf_set_value_from_text(
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	g_return_if_fail(self->has_textable_value);
 	atui_leaf_from_text(self->atui, text);
-	gatui_node_emit_value_changed(GATUI_NODE(self));
+	_gatui_node_emit_value_changed(GATUI_NODE(self));
 }
 char*
 gatui_leaf_value_to_text(
@@ -425,7 +362,7 @@ gatui_leaf_enum_entry_sets_value(
 		} else {
 			atui_leaf_set_val_unsigned(self->atui, enum_entry->val);
 		}
-		gatui_node_emit_value_changed(GATUI_NODE(self));
+		_gatui_node_emit_value_changed(GATUI_NODE(self));
 		return true;
 	}
 	return false;
@@ -445,6 +382,25 @@ gatui_leaf_enum_entry_get_possible_index(
 	return atui_enum_lsearch(self->atui->leaf.enum_options, val);
 }
 
+size_t
+gatui_leaf_get_bitfield_size(
+		GATUILeaf* const self,
+		size_t* const start,
+		size_t* const end
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
+	struct atui_leaf const* const meta = &(self->atui->leaf);
+	g_return_val_if_fail(_ATUI_BITCHILD == meta->type.fancy, 0);
+
+	if (start) {
+		*start = meta->bitfield_lo;
+	}
+	if (end) {
+		*end = meta->bitfield_hi;
+	}
+
+	return (meta->bitfield_hi - meta->bitfield_lo) +1;
+}
 
 
 void
