@@ -7,7 +7,7 @@ struct _GATUIBranch {
 	atui_node* atui;
 
 	uint16_t num_branches; // same as atui_node.branch.branches.count
-	GATUIBranch** child_branches;
+	GATUIBranch** branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
 };
 G_DEFINE_TYPE(GATUIBranch, gatui_branch, GATUI_TYPE_NODE)
@@ -19,13 +19,13 @@ gatui_branch_dispose(
 		) {
 	GATUIBranch* const self = GATUI_BRANCH(object);
 
-	if (self->child_branches) {
-		GATUIBranch** const child_branches = self->child_branches;
-		self->child_branches = NULL;
+	if (self->branches) {
+		GATUIBranch** const branches = self->branches;
+		self->branches = NULL;
 		for (uint16_t i = 0; i < self->num_branches; i++) {
-			g_object_unref(child_branches[i]);
+			g_object_unref(branches[i]);
 		}
-		free(child_branches);
+		free(branches);
 	}
 	if (self->leaves_model) {
 		g_object_unref(self->leaves_model);
@@ -73,14 +73,14 @@ gatui_branch_new(
 	struct atui_children const* const branches = &(branch->branch.branches);
 	self->num_branches = branches->count;
 	if (branches->count) {
-		self->child_branches = cralloc(branches->count * sizeof(GATUIBranch*));
+		self->branches = cralloc(branches->count * sizeof(GATUIBranch*));
 
 		for (uint16_t i = 0; i < branches->count; i++) {
 			assert(branches->addresses[i]);
-			self->child_branches[i] = gatui_branch_new(
+			self->branches[i] = gatui_branch_new(
 				branches->addresses[i], root
 			);
-			assert(self->child_branches[i]);
+			assert(self->branches[i]);
 		}
 	}
 
@@ -122,6 +122,14 @@ gatui_branch_get_leaves_model(
 	return self->leaves_model;
 }
 
+GATUIBranch**
+_gatui_branch_get_branches_array(
+		GATUIBranch* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
+	return self->branches;
+}
+
 GListModel*
 branches_treelist_generate_children(
 		gpointer const parent_branch,
@@ -132,7 +140,7 @@ branches_treelist_generate_children(
 	if (self->num_branches) {
 		GListStore* const children = g_list_store_new(GATUI_TYPE_BRANCH);
 		g_list_store_splice(children,0,0,
-			(void**)self->child_branches, self->num_branches
+			(void**)self->branches, self->num_branches
 		);
 		return G_LIST_MODEL(children);
 	} else {
@@ -163,7 +171,7 @@ branches_track_expand_state(
 	branches->expanded = gtk_tree_list_row_get_expanded(tree_row);
 	if (branches->expanded) {
 		uint16_t const num_branches = branches->count;
-		GATUIBranch* const* const child_branches = branch->child_branches;
+		GATUIBranch* const* const branches = branch->branches;
 		for (uint16_t i=0; i < num_branches; i++) {
 			GtkTreeListRow* child_row = gtk_tree_list_row_get_child_row(
 				tree_row, i
@@ -178,7 +186,7 @@ branches_track_expand_state(
 				);
 			}
 			gtk_tree_list_row_set_expanded(
-				child_row, child_branches[i]->atui->branch.branches.expanded
+				child_row, branches[i]->atui->branch.branches.expanded
 			);
 
 			g_object_unref(child_row);
@@ -193,9 +201,9 @@ gatui_branch_right_click_expand_family(
 		) {
 	self->atui->branch.branches.expanded = true;
 	uint16_t const num_branches = self->num_branches;
-	GATUIBranch* const* const child_branches = self->child_branches;
+	GATUIBranch* const* const branches = self->branches;
 	for (uint16_t i=0; i < num_branches; i++) {
-		gatui_branch_right_click_expand_family(child_branches[i]);
+		gatui_branch_right_click_expand_family(branches[i]);
 	}
 }
 
@@ -234,7 +242,7 @@ gatui_regex_search_recurse_branch(
 
 	for (uint16_t i=0; i < atui->branch.branches.count; i++) {
 		gatui_regex_search_recurse_branch(
-			branch->child_branches[i], model, pattern, flags
+			branch->branches[i], model, pattern, flags
 		);
 	}
 */

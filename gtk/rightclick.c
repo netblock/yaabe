@@ -184,7 +184,7 @@ right_click_paste_data(
 	g_object_unref(error_popup);
 }
 static void
-branchleaf_right_click_paste_data_set_data(
+node_right_click_paste_data_set_data(
 		GObject* const clipboard,
 		GAsyncResult* const async_data,
 		gpointer const pack_ptr
@@ -194,7 +194,7 @@ branchleaf_right_click_paste_data_set_data(
 	right_click_paste_data(clipboard, async_data, pack->node, pack->commons);
 }
 static void
-branchleaf_right_click_paste_data(
+node_right_click_paste_data(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -204,14 +204,14 @@ branchleaf_right_click_paste_data(
 			gdk_display_get_default()
 		),
 		NULL,
-		branchleaf_right_click_paste_data_set_data,
+		node_right_click_paste_data_set_data,
 		pack_ptr
 	);
 }
 
 
 static void
-branchleaf_right_click_copy_name(
+node_right_click_copy_name(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -222,7 +222,7 @@ branchleaf_right_click_copy_name(
 	);
 }
 static void
-branchleaf_right_click_copy_structname(
+node_right_click_copy_structname(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -233,7 +233,7 @@ branchleaf_right_click_copy_structname(
 	);
 }
 static void
-branchleaf_right_click_copy_path(
+node_right_click_copy_path(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -245,7 +245,7 @@ branchleaf_right_click_copy_path(
 }
 /*
 static void
-branchleaf_right_click_copy_contiguous(
+node_right_click_copy_contiguous(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -261,7 +261,7 @@ branchleaf_right_click_copy_contiguous(
 }
 */
 static void
-branchleaf_right_click_copy_value(
+node_right_click_copy_value(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -276,7 +276,7 @@ branchleaf_right_click_copy_value(
 	}
 }
 static void
-branchleaf_right_click_copy_leaves(
+node_right_click_copy_leaves(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -345,9 +345,9 @@ branches_rightclick_popup(
 
 	// see also create_branches_rightclick_menu
 	GActionEntry actions[8] = {
-		{.name = "name",   .activate = branchleaf_right_click_copy_name},
-		{.name = "struct", .activate = branchleaf_right_click_copy_structname},
-		{.name = "path",   .activate = branchleaf_right_click_copy_path},
+		{.name = "name",   .activate = node_right_click_copy_name},
+		{.name = "struct", .activate = node_right_click_copy_structname},
+		{.name = "path",   .activate = node_right_click_copy_path},
 	};
 	uint8_t act_i = 3;
 
@@ -357,16 +357,16 @@ branches_rightclick_popup(
 	if (copyability.is_copyable) {
 		if (! copyability.prefer_contiguous) {
 			actions[act_i].name = "copy_leaves";
-			actions[act_i].activate = branchleaf_right_click_copy_leaves;
+			actions[act_i].activate = node_right_click_copy_leaves;
 			act_i++;
 		}
 		if (copyability.copyable_data) {
 			actions[act_i].name = "copy_contiguous";
-			actions[act_i].activate = branchleaf_right_click_copy_value;
+			actions[act_i].activate = node_right_click_copy_value;
 			act_i++;
 		}
 		actions[act_i].name = "paste_data";
-		actions[act_i].activate = branchleaf_right_click_paste_data;
+		actions[act_i].activate = node_right_click_paste_data;
 		act_i++;
 	};
 	if (gatui_branch_get_num_branches(GATUI_BRANCH(node))) {
@@ -456,16 +456,16 @@ leaves_rightclick_popup(
 
 	// see also create_leaves_rightclick_menu
 	GActionEntry actions[4] = {
-		{.name = "name", .activate = branchleaf_right_click_copy_name},
-		{.name = "path", .activate = branchleaf_right_click_copy_path},
+		{.name = "name", .activate = node_right_click_copy_name},
+		{.name = "path", .activate = node_right_click_copy_path},
 	};
 	uint8_t act_i = 2;
 	if (gatui_node_get_region_bounds(node, NULL, NULL)) {
 		actions[act_i].name = "copy_data";
-		actions[act_i].activate = branchleaf_right_click_copy_value;
+		actions[act_i].activate = node_right_click_copy_value;
 		act_i++;
 		actions[act_i].name = "paste_data";
-		actions[act_i].activate = branchleaf_right_click_paste_data;
+		actions[act_i].activate = node_right_click_paste_data;
 		act_i++;
 	}
 	assert(act_i <= lengthof(actions));

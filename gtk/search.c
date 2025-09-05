@@ -147,7 +147,7 @@ goto_column_setup(
 }
 
 static void
-branchleaf_type_column_bind(
+node_type_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
@@ -215,7 +215,7 @@ highlight_value_column_bind(
 }
 
 static void
-offset_column_bind(
+regex_offset_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
@@ -271,7 +271,7 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branchleaf_type_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_type_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("Type", factory);
@@ -302,7 +302,7 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(regex_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);

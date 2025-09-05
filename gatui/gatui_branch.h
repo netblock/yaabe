@@ -12,11 +12,6 @@ gatui_branch_new( // including all of its descendants and leaves
 		GATUITree* root
 		);
 
-GATUITree* // does not ref
-gatui_branch_get_root(
-		GATUIBranch* self
-		);
-
 uint16_t
 gatui_branch_get_num_branches(
 		GATUIBranch* self

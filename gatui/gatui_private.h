@@ -29,6 +29,11 @@ _gatui_node_get_atui(
 		GATUINode* self
 		);
 
+GATUIBranch**
+_gatui_branch_get_branches_array(
+		GATUIBranch* self
+		);
+
 GATUIRegexNode*
 gatui_regex_node_new(
 		GATUINode* tree_node,
