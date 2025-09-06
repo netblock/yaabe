@@ -86,12 +86,15 @@ atui_leaf_from_text(
 		if (leaf->type.has_enum) {
 			struct atui_enum const* const enum_set = leaf->enum_options;
 			struct atui_enum_entry const* entry;
-			int16_t str_diff;
+			int16_t str_diff = 1;
+			size_t const word_length = length_of_word(text);
 			for (uint16_t i=0; i < enum_set->num_entries; i++) {
 				entry = &(enum_set->enum_array[i]);
-				str_diff = strncmp(entry->name, text, entry->name_length);
-				if (0 == str_diff) {
-					break;
+				if (word_length == entry->name_length) {
+					str_diff = strcmp(entry->name, text);
+					if (0 == str_diff) {
+						break;
+					}
 				}
 			}
 			if (0 == str_diff) {

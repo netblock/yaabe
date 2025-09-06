@@ -120,6 +120,10 @@ char_in_string( // test if character ch appears anywhere in string
 		char ch,
 		char const* str
 		);
+size_t
+length_of_word(
+	char const* str
+	);
 
 
 enum error_severity:uint8_t {

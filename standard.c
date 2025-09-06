@@ -72,6 +72,26 @@ char_in_string(
 	return false;
 }
 
+size_t
+length_of_word(
+	char const* const str
+	) {
+	constexpr uint8_t uppercase_mask = 0xDF;
+	char const* c = str;
+	bool is_word;
+	do {
+		uint8_t num = *c - '0';
+		uint8_t alpha = (*c & uppercase_mask) - 'A';
+		is_word = ( // probably a faster way to do this.
+			(alpha <= 25)
+			|| ('_' == *c)
+			|| (num <= 9)
+		);
+		c++;
+	} while (is_word);
+	return c-str-1;
+}
+
 void
 error_emit(
 		struct error* const err,
