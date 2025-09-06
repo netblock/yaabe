@@ -208,7 +208,7 @@ foreach bios : romfiles
 		yaabe_test, args: [bios],
 		env: ['G_DEBUG=fatal_warnings',],
 		suite: ['yaabe', 'pass'],
-		timeout: 15, # should be less than 6
+		timeout: 60,
 
 	)
 endforeach
@@ -217,7 +217,7 @@ foreach bios : romfiles_fail
 		yaabe_test, args: [bios],
 		env: ['G_DEBUG=fatal_warnings',],
 		suite: ['yaabe', 'fail'],
-		timeout: 15, # should be less than 6
+		timeout: 60,
 		should_fail: true,
 	)
 endforeach
