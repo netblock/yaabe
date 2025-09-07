@@ -398,24 +398,26 @@ gatui_leaf_set_value(
 	size_t const input_size = g_variant_get_size(value);
 	char const* const typestr = g_variant_get_type_string(value);
 
-	union variant_dock val;
 
 	bool const both_are_integers = (
 		char_in_string(typestr[0], "ynqiuxt")
 		&& type->radix && (! type->fraction) && (1 == leaf->array_size)
 	);
 	if (both_are_integers) {
-		switch (typestr[0]) {
-			case 'y': val.u64 = g_variant_get_byte(value);   break;
-			case 'n': val.s64 = g_variant_get_int16(value);  break;
-			case 'q': val.u64 = g_variant_get_uint16(value); break;
-			case 'i': val.s64 = g_variant_get_int32(value);  break;
-			case 'u': val.u64 = g_variant_get_uint32(value); break;
-			case 'x': val.s64 = g_variant_get_int64(value);  break;
-			case 't': val.u64 = g_variant_get_uint64(value); break;
+		uint8_t shift;
+		union variant_dock val;
+		switch (typestr[0]) { // add more? use selection enum?
+			case 'y': shift = 56; val.u64 = g_variant_get_byte(value);   break;
+			case 'n': shift = 48; val.s64 = g_variant_get_int16(value);  break;
+			case 'q': shift = 48; val.u64 = g_variant_get_uint16(value); break;
+			case 'i': shift = 32; val.s64 = g_variant_get_int32(value);  break;
+			case 'u': shift = 32; val.u64 = g_variant_get_uint32(value); break;
+			case 'x': shift =  0; val.s64 = g_variant_get_int64(value);  break;
+			case 't': shift =  0; val.u64 = g_variant_get_uint64(value); break;
 			default: goto fail_exit;
 		}
 		if (type->signed_num) {
+			val.s64 = (val.s64<<shift) >> shift; // get the sign to stick
 			atui_leaf_set_val_signed(leaf, val.s64);
 		} else {
 			atui_leaf_set_val_unsigned(leaf, val.u64);
