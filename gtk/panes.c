@@ -549,7 +549,7 @@ leaves_val_column_bind(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 
-	struct atui_leaf_type const* const type = &(gatui_leaf_get_atui(leaf)->leaf.type);
+	struct atui_leaf_type const* const type = gatui_leaf_get_atui_type(leaf);
 	bool const has_value = gatui_leaf_has_textable_value(leaf);
 	gtk_widget_set_visible(GTK_WIDGET(widget_bag), has_value);
 	if (has_value) {

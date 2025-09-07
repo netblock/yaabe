@@ -199,6 +199,7 @@ void
 gatui_branch_right_click_expand_family(
 		GATUIBranch* const self
 		) {
+	g_return_if_fail(GATUI_IS_BRANCH(self));
 	self->atui->branch.branches.expanded = true;
 	uint16_t const num_branches = self->num_branches;
 	GATUIBranch* const* const branches = self->branches;

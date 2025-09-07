@@ -317,20 +317,19 @@ expand_model_with_object_path(
 	int16_t model_i = 0;
 	do {
 		GtkTreeListRow* tree_item;
-		while (true) {
+		GATUINode* questioned;
+		goto question_loop_entry;
+		do {
+			model_i++;
+			g_object_unref(tree_item);
+			question_loop_entry:
+
 			tree_item = GTK_TREE_LIST_ROW(
 				g_list_model_get_object(model, model_i)
 			);
-			GATUINode* questioned = GATUI_NODE(
-				gtk_tree_list_row_get_item(tree_item)
-			);
+			questioned = GATUI_NODE(gtk_tree_list_row_get_item(tree_item));
 			g_object_unref(questioned); // we don't need a 2nd reference
-			if (path[depth_i] == questioned) {
-				break;
-			}
-			model_i++;
-			g_object_unref(tree_item);
-		};
+		} while (path[depth_i] != questioned);
 		gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
 		g_object_unref(tree_item);
 		depth_i++;

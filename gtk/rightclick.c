@@ -256,7 +256,7 @@ node_right_click_copy_contiguous(
 	);
 	if (b64_text) {
 		clipboard_set_text(b64_text);
-		g_free(b64_text);
+		free(b64_text);
 	}
 }
 */
@@ -272,7 +272,7 @@ node_right_click_copy_value(
 	);
 	if (b64_text) {
 		clipboard_set_text(b64_text);
-		g_free(b64_text);
+		free(b64_text);
 	}
 }
 static void
@@ -287,7 +287,7 @@ node_right_click_copy_leaves(
 	);
 	if (b64_text) {
 		clipboard_set_text(b64_text);
-		g_free(b64_text);
+		free(b64_text);
 	}
 }
 
@@ -553,7 +553,7 @@ search_right_click_copy_path(
 	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
 		pack->regex_node
 	);
-	char* text = gatui_node_to_path(atui_regex->tree_node);
+	char* const text = gatui_node_to_path(atui_regex->tree_node);
 	clipboard_set_text(text);
 	free(text);
 }
@@ -567,7 +567,9 @@ search_right_click_copy_data(
 	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
 		pack->regex_node
 	);
-	char* text = gatui_node_to_base64(atui_regex->tree_node, GATUI_NODE_B64_VALUE);
+	char* const text = gatui_node_to_base64(
+		atui_regex->tree_node, GATUI_NODE_B64_VALUE
+	);
 	clipboard_set_text(text);
 	free(text);
 }

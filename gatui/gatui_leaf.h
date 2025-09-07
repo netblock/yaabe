@@ -63,12 +63,5 @@ gatui_leaf_get_bitfield_size(
 		size_t* end // optiona; bitfield hi
 		);
 
-
-
-atui_node const*
-gatui_leaf_get_atui(
-		GATUILeaf* self
-		);
-
 G_END_DECLS
 #endif

@@ -141,15 +141,6 @@ gatui_leaf_new(
 	return self;
 }
 
-atui_node const*
-gatui_leaf_get_atui(
-		GATUILeaf* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
-	return self->atui;
-}
-
-
 static GVariant*
 _gatui_leaf_get_value(
 		GATUINode* const nodeself
