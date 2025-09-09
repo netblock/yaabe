@@ -215,36 +215,41 @@ gatui_regex_search_recurse_branch(
 		GRegex* const pattern,
 		struct gatui_search_flags const* const flags
 		) {
-/*
-	atui_node const* const atui = branch->atui;
-
-	if ((flags->domain == GATUI_SEARCH_NAMES) && flags->branches) {
+	// very similar to gatui_regex_search_recurse_leaf
+	// possible way to deduplicate is to virtual func:  get_text(flags)
+	// where search_recurse is also a virtual func so branch can append its
+	// child branch loop.
+	char const* text = NULL;
+	if ((GATUI_SEARCH_NAMES == flags->domain) && flags->branches) {
+		text = branch->atui->name;
+	}
+	if (text) {
 		GMatchInfo* match_info;
-		bool matched = g_regex_match(
-			pattern, atui->name, G_REGEX_MATCH_DEFAULT, &match_info
+		bool const matched = g_regex_match(
+			pattern, text, G_REGEX_MATCH_DEFAULT, &match_info
 		);
 		if (matched) {
-			GATUIRegexNode* node = gatui_regex_node_new(
-				G_OBJECT(branch), match_info, atui->name, false, flags
+			GATUIRegexNode* const regex_node = gatui_regex_node_new(
+				GATUI_NODE(branch), match_info, text, flags
 			);
-			g_list_store_append(model, node);
-			g_object_unref(node);
+			g_list_store_append(model, regex_node);
+			g_object_unref(regex_node);
 		}
 		g_match_info_unref(match_info);
 	}
 
 	if (flags->leaves) {
-		for (uint16_t i=0; i < atui->leaves.count; i++) {
-			gatui_regex_search_recurse_leaf(
-				branch->leaves[i], model, pattern, flags
-			);
+		GATUILeaf* const* const leaves = _gatui_node_get_leaf_array(GATUI_NODE(
+			branch
+		));
+		uint16_t const count = branch->atui->leaves.count;
+		for (uint16_t i=0; i < count; i++) {
+			gatui_regex_search_recurse_leaf(leaves[i], model, pattern, flags);
 		}
 	}
 
-	for (uint16_t i=0; i < atui->branch.branches.count; i++) {
-		gatui_regex_search_recurse_branch(
-			branch->branches[i], model, pattern, flags
-		);
+	GATUIBranch* const* const branches = branch->branches;
+	for (uint16_t i=0; i < branch->num_branches; i++) {
+		gatui_regex_search_recurse_branch(branches[i], model, pattern, flags);
 	}
-*/
 }

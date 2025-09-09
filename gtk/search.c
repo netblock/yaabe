@@ -158,7 +158,7 @@ node_type_column_bind(
 	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
 	gtk_label_set_text(
 		GTK_LABEL(label),
-		(char* const[2]){"Branch", "Leaf"}[regex->is_leaf]
+		(char* const[2]){"Branch", "Leaf"}[GATUI_IS_LEAF(regex->tree_node)]
 	);
 }
 
@@ -197,7 +197,7 @@ highlight_value_column_bind(
 		column_cell
 	));
 
-	if (regex->is_leaf) {
+	if (GATUI_IS_LEAF(regex->tree_node)) {
 		if (GATUI_SEARCH_VALUES == regex->flags.domain) {
 			gtk_label_set_markup(label, regex->markup_text);
 		} else {

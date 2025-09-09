@@ -43,7 +43,6 @@ gatui_regex_node_new(
 		GATUINode* const tree_node,
 		GMatchInfo* const match_info,
 		char const* const text,
-		bool const is_leaf,
 		struct gatui_search_flags const* const flags
 		) {
 	GATUIRegexNode* const self = g_object_new(GATUI_TYPE_REGEX_NODE, NULL);
@@ -52,7 +51,6 @@ gatui_regex_node_new(
 
 	self->node.tree_node = tree_node;
 	self->node.match_info = match_info;
-	self->node.is_leaf = is_leaf;
 	self->node.flags = *flags;
 
 	size_t const text_len = strlen(text) + 1;

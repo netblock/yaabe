@@ -34,12 +34,13 @@ _gatui_branch_get_branches_array(
 		GATUIBranch* self
 		);
 
+
+
 GATUIRegexNode*
 gatui_regex_node_new(
 		GATUINode* tree_node,
 		GMatchInfo* match_info, // regex match info
 		char const* text, // matching text
-		bool is_leaf,
 		struct gatui_search_flags const* flags
 		);
 void

@@ -401,42 +401,42 @@ gatui_regex_search_recurse_leaf(
 		GRegex* const pattern,
 		struct gatui_search_flags const* const flags
 		) {
-	/*
-	atui_node* const atui = leaf->atui;
-	struct atui_leaf_type const* const type = &(leaf->atui->leaf.type);
-	GATUIRegexNode* node;
-	GMatchInfo* match_info;
-	bool matched;
-	char* text = NULL; // may be freed
+	// very similar to gatui_regex_search_recurse_branch
+	// possible way to deduplicate is to virtual func:  get_text(flags)
+	// where search_recurse is also a virtual func so branch can append its
+	// child branch loop.
+	char* text = NULL; // may or may not be freed
 
 	if (GATUI_SEARCH_VALUES == flags->domain) {
-		if (type->radix || ATUI_STRING==type->fancy || ATUI_ARRAY==type->fancy){
+		if (leaf->has_textable_value) {
 			text = gatui_leaf_value_to_text(leaf);
 		}
 	} else {
-		text = atui->name;
+		text = leaf->atui->name;
 	}
 	if (text) {
-		matched = g_regex_match(
+		GMatchInfo* match_info;
+		bool const matched = g_regex_match(
 			pattern, text, G_REGEX_MATCH_DEFAULT, &match_info
 		);
 		if (matched) {
-			node = gatui_regex_node_new(
-				G_OBJECT(leaf), match_info, text, true, flags
+			GATUIRegexNode* const regex_node = gatui_regex_node_new(
+				GATUI_NODE(leaf), match_info, text, flags
 			);
-			g_list_store_append(model, node);
-			g_object_unref(node);
+			g_list_store_append(model, regex_node);
+			g_object_unref(regex_node);
 		}
+		g_match_info_unref(match_info);
 		if (GATUI_SEARCH_VALUES == flags->domain) {
 			free(text);
 		}
-		g_match_info_unref(match_info);
 	}
 
-	for (uint16_t i=0; i < atui->leaves.count; i++) {
-		gatui_regex_search_recurse_leaf(
-			leaf->child_leaves[i], model, pattern, flags
-		);
+	GATUILeaf* const* const leaves = _gatui_node_get_leaf_array(GATUI_NODE(
+		leaf
+	));
+	uint16_t const count = leaf->atui->leaves.count;
+	for (uint16_t i=0; i < count; i++) {
+		gatui_regex_search_recurse_leaf(leaves[i], model, pattern, flags);
 	}
-	*/
 }
