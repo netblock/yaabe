@@ -14,7 +14,6 @@ struct rightclick_pack { // see columnview_row_bind_attach_gesture
 		struct _GtkColumnViewRow_hack* row_hack;
 	};
 	union { // obtainable from row anyway; for convenience
-		GObject* obj;
 		GATUINode* node;
 		GATUIRegexNode* regex_node;
 	};

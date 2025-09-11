@@ -434,7 +434,6 @@ atui_leaves_printer(
 }
 
 
-
 atui_node*
 atui_branch_allocator(
 		struct atui_branch_meta const* const embryo,
@@ -738,7 +737,6 @@ atui_assimilate_nodes(
 	dest->count = new_count;
 	dest->max_count = max_count;
 }
-
 void
 atui_assimilate(
 		atui_node* const dest,

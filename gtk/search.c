@@ -155,9 +155,8 @@ node_type_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
 	gtk_label_set_text(
-		GTK_LABEL(label),
+		GTK_LABEL(gtk_column_view_cell_get_child(column_cell)),
 		(char* const[2]){"Branch", "Leaf"}[GATUI_IS_LEAF(regex->tree_node)]
 	);
 }
@@ -229,9 +228,9 @@ regex_offset_column_bind(
 
 	size_t start;
 	size_t end;
-	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
+	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
 	if (gatui_node_get_region_bounds(regex->tree_node, &start, &end)) {
-		sprintf(buffer, "[%06zX - %06zX]", start, end);
+		sprintf(buffer, BYTE_ARRAY_FORMAT, start, end);
 	}
 
 	assert(strlen(buffer) < sizeof(buffer));

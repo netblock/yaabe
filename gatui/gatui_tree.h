@@ -1,6 +1,5 @@
 #ifndef GATUI_TREE_H
 #define GATUI_TREE_H
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_TREE gatui_tree_get_type()
@@ -42,6 +41,11 @@ GtkSelectionModel*
 gatui_tree_create_trunk_model( // generate a TreeListModel for use in a ListView
         GATUITree* self
         );
+void
+branches_expand_row_fixer( // hack to make expand state tracking work
+		void const* _null __unused, // swapped-signal:: with factory
+		GtkColumnViewRow* column_row
+		);
 
 
 bool // success
@@ -67,7 +71,6 @@ GATUITree*
 gatui_tree_copy_core(
 		GATUITree* src
 		);
-
 
 struct atom_tree*
 gatui_tree_get_atom_tree(

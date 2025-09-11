@@ -622,7 +622,7 @@ path_to_atui_has_leaf(
 	do {
 		assert(false == node->leaves.indirect);
 		uint16_t i = node->leaves.count;
-		atui_node const* leaf_nodes = node->leaves.nodes;
+		atui_node const* leaf_nodes = node->leaves.nodes_ro;
 		do {
 			if (0 == i) {
 				goto not_found;

@@ -34,7 +34,6 @@ gatui_branch_dispose(
 
 	G_OBJECT_CLASS(gatui_branch_parent_class)->dispose(object);
 }
-
 static void
 gatui_branch_class_init(
 		GATUIBranchClass* const branch_class
@@ -67,14 +66,13 @@ gatui_branch_new(
 		"typestr", "ay",
 		NULL
 	);
-
+	assert((void*)GATUI_BRANCH(self) == (void*)GATUI_NODE(self));
 	self->atui = branch;
 
 	struct atui_children const* const branches = &(branch->branch.branches);
 	self->num_branches = branches->count;
 	if (branches->count) {
 		self->branches = cralloc(branches->count * sizeof(GATUIBranch*));
-
 		for (uint16_t i = 0; i < branches->count; i++) {
 			assert(branches->addresses[i]);
 			self->branches[i] = gatui_branch_new(
@@ -149,10 +147,8 @@ branches_treelist_generate_children(
 }
 
 void
-branches_track_expand_state(
-		GtkTreeListRow* const tree_row,
-		GParamFlags* const param __unused,
-		gpointer const data __unused
+_branches_track_expand_state(
+		GtkTreeListRow* const tree_row
 		) {
 	if (false == gtk_tree_list_row_is_expandable(tree_row)) {
 		return;
@@ -178,11 +174,11 @@ branches_track_expand_state(
 			);
 			uint32_t handler_id = g_signal_handler_find(child_row,
 				G_SIGNAL_MATCH_FUNC,  0,0,NULL,
-				branches_track_expand_state,  NULL
+				_branches_track_expand_state,  NULL
 			);
 			if (0 == handler_id) {
 				g_signal_connect(child_row, "notify::expanded",
-					G_CALLBACK(branches_track_expand_state), NULL
+					G_CALLBACK(_branches_track_expand_state), NULL
 				);
 			}
 			gtk_tree_list_row_set_expanded(
@@ -207,6 +203,7 @@ gatui_branch_right_click_expand_family(
 		gatui_branch_right_click_expand_family(branches[i]);
 	}
 }
+
 
 void
 gatui_regex_search_recurse_branch(

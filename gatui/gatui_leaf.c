@@ -1,7 +1,6 @@
 #include "standard.h"
 #include "gatui_private.h"
 
-
 static GVariant*
 _gatui_leaf_get_value(
 		GATUINode* self
@@ -11,7 +10,6 @@ _gatui_leaf_set_value(
 		GATUINode* self,
 		GVariant* value
 		);
-
 union variant_dock { // g_variant loading/unloading dock
 	uint64_t  u64;
 	int64_t   s64;
@@ -27,7 +25,6 @@ struct _GATUILeaf {
 };
 G_DEFINE_TYPE(GATUILeaf, gatui_leaf, GATUI_TYPE_NODE)
 
-
 static void
 gatui_leaf_dispose(
 		GObject* const object
@@ -41,8 +38,6 @@ gatui_leaf_dispose(
 
 	G_OBJECT_CLASS(gatui_leaf_parent_class)->dispose(object);
 }
-
-
 static void
 gatui_leaf_class_init(
 		GATUILeafClass* const leaf_class
@@ -121,6 +116,7 @@ gatui_leaf_new(
 		"typestr", typestr,
 		NULL // get parent from atui; and root from parent
 	);
+	assert((void*)GATUI_LEAF(self) == (void*)GATUI_NODE(self));
 
 	self->atui = leaf;
 
@@ -267,6 +263,7 @@ _gatui_leaf_set_value(
 	return true;
 }
 
+
 struct atui_leaf_type const*
 gatui_leaf_get_atui_type(
 		GATUILeaf* const self
@@ -274,6 +271,26 @@ gatui_leaf_get_atui_type(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	return &(self->atui->leaf.type);
 }
+size_t
+gatui_leaf_get_bitfield_size(
+		GATUILeaf* const self,
+		size_t* const start,
+		size_t* const end
+		) {
+	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
+	struct atui_leaf const* const meta = &(self->atui->leaf);
+	g_return_val_if_fail(_ATUI_BITCHILD == meta->type.fancy, 0);
+
+	if (start) {
+		*start = meta->bitfield_lo;
+	}
+	if (end) {
+		*end = meta->bitfield_hi;
+	}
+
+	return (meta->bitfield_hi - meta->bitfield_lo) +1;
+}
+
 bool
 gatui_leaf_has_textable_value(
 		GATUILeaf* const self
@@ -281,7 +298,6 @@ gatui_leaf_has_textable_value(
 	g_return_val_if_fail(GATUI_IS_LEAF(self), false);
 	return self->has_textable_value;
 }
-
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* const self,
@@ -371,26 +387,6 @@ gatui_leaf_enum_entry_get_possible_index(
 		val = atui_leaf_get_val_unsigned(self->atui);
 	}
 	return atui_enum_lsearch(self->atui->leaf.enum_options, val);
-}
-
-size_t
-gatui_leaf_get_bitfield_size(
-		GATUILeaf* const self,
-		size_t* const start,
-		size_t* const end
-		) {
-	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
-	struct atui_leaf const* const meta = &(self->atui->leaf);
-	g_return_val_if_fail(_ATUI_BITCHILD == meta->type.fancy, 0);
-
-	if (start) {
-		*start = meta->bitfield_lo;
-	}
-	if (end) {
-		*end = meta->bitfield_hi;
-	}
-
-	return (meta->bitfield_hi - meta->bitfield_lo) +1;
 }
 
 

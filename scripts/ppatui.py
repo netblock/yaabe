@@ -435,8 +435,14 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 class atui_node: pass
 class atui_leaf: pass
 class atui_branch: pass
-class atui_leaf_type:
-	# atomtree/atui/atui.h has a copy
+class atui_leaf_type: # atomtree/atui/atui.h has a copy
+	fancy:int = None
+	radix:int = None
+	disable:int = None
+	# signed ~ enum may be handled through C generics so usually False
+	signed_num:str = None
+	fraction:str = None
+	has_enum:str = None
 
 	# fancy
 	ATUI_NOFANCY:int   = 0
@@ -504,14 +510,6 @@ class atui_leaf_type:
 		"ATUI_NODISPLAY",
 	)
 
-	fancy:int = None
-	radix:int = None
-	disable:int = None
-	# signed ~ enum may be handled through C generics so usually False
-	signed_num:str = None
-	fraction:str = None
-	has_enum:str = None
-
 class atui_children:
 	nodes:list # of atui_leaf
 	indirect:bool = None
@@ -574,6 +572,7 @@ class atui_node:
 			self.num_bytes = "sizeof(%s)" % self.access_meta
 		else:
 			self.num_bytes = "0"
+
 	def to_path(self):
 		node = self
 		path = ""
@@ -581,9 +580,9 @@ class atui_node:
 			path = "/" + node.name + path
 			node = node.parent
 		return path
-
 	def copy(self):
 		return copy.deepcopy(self)
+
 	def compile_display_flags(self):
 		# handle the concequences of ATUI_NODISPLAY and ATUI_SUBONLY
 		leaves:list = self.leaves.nodes
@@ -608,7 +607,6 @@ class atui_node:
 				case atui_leaf_type.ATUI_NODISPLAY:
 					leaves.pop(i)
 		self.leaves.nodes = leaves
-
 
 class atui_leaf_type_text:
 	fancy:str = None
@@ -665,7 +663,6 @@ class atui_leaf(atui_node):
 		atui_node.__init__(self, leaf, leaf_default, parent)
 		self.__expand_leaf_type(leaf, leaf_default)
 		self.__expand_leaf_fancy(leaf, defaults, leaf_default)
-
 		assert(None is not self.name), (
 			self.to_path(),
 			self.access,
@@ -673,6 +670,7 @@ class atui_leaf(atui_node):
 			atui_leaf_type.ATUI_RADIX[self.type.radix],
 			atui_leaf_type.ATUI_DISABLE[self.type.disable]
 		)
+
 	def __expand_leaf_type(self,
 			leaf:dict,
 			leaf_default:dict
@@ -761,122 +759,19 @@ class atui_leaf(atui_node):
 				fancy_data = leaf["fancy_data"]
 			else:
 				fancy_data = leaf_default["fancy_data"]
-		match (fancy): # TODO hoist each block into its own func?
-			case atui_leaf_type.ATUI_NOFANCY:
-				if self.access:
-					self.access = "&(%s)" % self.access
-			case atui_leaf_type.ATUI_BITFIELD:
-				if self.access:
-					self.access = "&(%s)" % self.access
-				if "union" in fancy_data:
-					self.union = fancy_data["union"]
-				else:
-					self.union = "typeof(*bios)"
 
-				bitchild_default:dict = (
-					defaults["leaf_defaults"]["bitchild"].copy()
-				)
-				# _ATUI_BITCHILD should be set automatically by
-				# branches_populate_defaults
-				bitchild_default["access_meta"] = self.access_meta # c generics
-				bitchild_default["union"] = self.union
-				fields:list = self.leaves.nodes
-				ld:dict
-				for ld in fancy_data["fields"]:
-					fields.append(atui_leaf(
-						ld, defaults, bitchild_default, self
-					))
-			case atui_leaf_type._ATUI_BITCHILD:
-				if None is self.name:
-					self.name = self.access
-				self.bitchild_access:str = self.access
-				# bitchild access_meta is incomplete; take parent/bitfield's
-				self.access_meta = leaf_default["access_meta"]
-				self.access = "&(%s)" % self.access_meta
-				self.union = leaf_default["union"]
-				bf_hilo:tuple = (self.union, self.bitchild_access)
-				self.bitfield_hi = "_PPATUI_BIT_HI(%s, %s)" % bf_hilo
-				self.bitfield_lo = "_PPATUI_BIT_LO(%s, %s)" % bf_hilo
-			case atui_leaf_type.ATUI_STRING:
-				self.access_meta += "[0]"
-			case atui_leaf_type.ATUI_ARRAY:
-				self.access_meta += "[0]"
-				self.array_size = "lengthof(%s)" % self.access
-			case atui_leaf_type.ATUI_GRAFT | atui_leaf_type.ATUI_SHOOT:
-				if self.access:
-					self.access = "&(%s)" % self.access
-				self.fancy_data = "_atui_" + fancy_data
-			case atui_leaf_type.ATUI_PETIOLE:
-				self.fancy_data = atui_branch( # query after atui'ifying
-					{
-						"c_type": "atui_nullstruct",
-						"name": self.name,
-						"description": self.description,
-						"num_bytes": "0",
-						# start and size is handled by C-side branch allocator.
-						"leaves": fancy_data
-					},
-					defaults, self, True
-				)
-				self.fancy_data.prefer_contiguous = self.prefer_contiguous
-				subleaves:list = self.fancy_data.leaves.nodes
-				if (1 == len(subleaves)):
-					# copy c_struct of subleaf
-					c_type:str = None
-					subleaf:atui_leaf = subleaves[0]
-					match (subleaf.type.fancy):
-						case atui_leaf_type.ATUI_BITFIELD:
-							if subleaf.union:
-								c_type = subleaf.union
-							else:
-								c_type = parent_branch.c_type
-						case atui_leaf_type.ATUI_GRAFT | atui_leaf_type.ATUI_SHOOT:
-							c_type = subleaf.facy_data[len("_atui_"):]
-						case atui_leaf_type.ATUI_DYNARRAY:
-							pattern = subleaf.leaves.nodes
-							copyable_c_type:bool = (
-								(1 == len(pattern))
-								and (
-									pattern[0].type.fancy
-									in atui_leaf_type.FANCIES_THAT_TAKE_A_BRANCH
-								)
-							)
-							if copyable_c_type:
-								c_type = pattern[0].fancy_data[len("_atui_"):]
-						case _:
-							pass
-					if c_type:
-						self.fancy_data.c_type = c_type
-			case atui_leaf_type.ATUI_DYNARRAY:
-				self.fancy_data = fancy_data
-				self.dynarray_deferred = (not self.access) # array of pointers
-				if self.dynarray_deferred:
-					self.access = fancy_data["deferred"]
-					self.access_meta = self.access
-				self.access_meta += "[0]"
+		( # jump table
+			atui_leaf.__expand_atui_nofancy,
+			atui_leaf.__expand_atui_bitfield,
+			atui_leaf.__expand_atui_string,
+			atui_leaf.__expand_atui_array,
+			atui_leaf.__expand_atui_graftshoot,
+			atui_leaf.__expand_atui_graftshoot,
+			atui_leaf.__expand_atui_petiole,
+			atui_leaf.__expand_atui_dynarray,
+			atui_leaf.__expand_atui_bitchild,
+		)[fancy](self, fancy_data, defaults, leaf_default)
 
-				if self.dynarray_deferred:
-					self.num_bytes = "0" # handle in atui_branch_allocator
-				else:
-					self.num_bytes = "(sizeof(%s) * (%s))" % (
-						self.access_meta, fancy_data["count"]
-					)
-
-				dynpattern_default:dict = (
-					defaults["leaf_defaults"]["dynpattern"].copy()
-				)
-				dynpattern_default["access_meta"] = self.access_meta
-				pattern:list = self.leaves.nodes
-				ld:dict
-				for ld in fancy_data["pattern"]:
-					pattern.append(atui_leaf(
-						ld, defaults, dynpattern_default, self
-					))
-
-				if ("enum" in fancy_data) and ("NULL" != fancy_data["enum"]):
-					fancy_data["enum"] = "&(ATUI_ENUM(%s))" % fancy_data["enum"]
-				else:
-					fancy_data["enum"] = "NULL"
 		# stage 2; leftovers
 		if fancy in atui_leaf_type.FANCIES_THAT_HAVE_TRIVIAL_SUBLEAVES:
 			self.num_copyable_leaves = len(self.leaves.nodes)
@@ -906,6 +801,156 @@ class atui_leaf(atui_node):
 				self.enum = "ATUI_ENUM_INFER(%s)" % self.access_meta
 		else:
 			self.enum = "NULL"
+	def __expand_atui_nofancy(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_NOFANCY == self.type.fancy)
+		if self.access:
+			self.access = "&(%s)" % self.access
+	def __expand_atui_bitfield(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_BITFIELD == self.type.fancy)
+		if self.access:
+			self.access = "&(%s)" % self.access
+		if "union" in fancy_data:
+			self.union = fancy_data["union"]
+		else:
+			self.union = "typeof(*bios)"
+
+		bitchild_default:dict = defaults["leaf_defaults"]["bitchild"].copy()
+		# _ATUI_BITCHILD should be set automatically by
+		# branches_populate_defaults
+		bitchild_default["access_meta"] = self.access_meta # c generics
+		bitchild_default["union"] = self.union
+		fields:list = self.leaves.nodes
+		ld:dict
+		for ld in fancy_data["fields"]:
+			fields.append(atui_leaf(ld, defaults, bitchild_default, self))
+	def __expand_atui_bitchild(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type._ATUI_BITCHILD == self.type.fancy)
+		if None is self.name:
+			self.name = self.access
+		self.bitchild_access:str = self.access
+		# bitchild access_meta is incomplete; take parent/bitfield's
+		self.access_meta = leaf_default["access_meta"]
+		self.access = "&(%s)" % self.access_meta
+		self.union = leaf_default["union"]
+		bf_hilo:tuple = (self.union, self.bitchild_access)
+		self.bitfield_hi = "_PPATUI_BIT_HI(%s, %s)" % bf_hilo
+		self.bitfield_lo = "_PPATUI_BIT_LO(%s, %s)" % bf_hilo
+	def __expand_atui_string(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_STRING == self.type.fancy)
+		self.access_meta += "[0]"
+	def __expand_atui_array(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_ARRAY == self.type.fancy)
+		self.access_meta += "[0]"
+		self.array_size = "lengthof(%s)" % self.access
+	def __expand_atui_graftshoot(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(self.type.fancy in atui_leaf_type.FANCIES_THAT_TAKE_A_BRANCH)
+		if self.access:
+			self.access = "&(%s)" % self.access
+		self.fancy_data = "_atui_" + fancy_data
+	def __expand_atui_petiole(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_PETIOLE == self.type.fancy)
+		self.fancy_data = atui_branch( # query after atui'ifying
+			{
+				"c_type": "atui_nullstruct",
+				"name": self.name,
+				"description": self.description,
+				"num_bytes": "0",
+				# start and size is handled by C-side branch allocator.
+				"leaves": fancy_data
+			},
+			defaults, self, True
+		)
+		self.fancy_data.prefer_contiguous = self.prefer_contiguous
+		subleaves:list = self.fancy_data.leaves.nodes
+		if (1 == len(subleaves)):
+			# copy c_struct of subleaf
+			c_type:str = None
+			subleaf:atui_leaf = subleaves[0]
+			match (subleaf.type.fancy):
+				case atui_leaf_type.ATUI_BITFIELD:
+					if subleaf.union:
+						c_type = subleaf.union
+					else:
+						c_type = parent_branch.c_type
+				case atui_leaf_type.ATUI_GRAFT | atui_leaf_type.ATUI_SHOOT:
+					c_type = subleaf.facy_data[len("_atui_"):]
+				case atui_leaf_type.ATUI_DYNARRAY:
+					pattern = subleaf.leaves.nodes
+					copyable_c_type:bool = (
+						(1 == len(pattern))
+						and (
+							pattern[0].type.fancy
+							in atui_leaf_type.FANCIES_THAT_TAKE_A_BRANCH
+						)
+					)
+					if copyable_c_type:
+						c_type = pattern[0].fancy_data[len("_atui_"):]
+				case _:
+					pass
+			if c_type:
+				self.fancy_data.c_type = c_type
+	def __expand_atui_dynarray(self,
+			fancy_data:dict,
+			defaults:dict,
+			leaf_default:dict
+			):
+		assert(atui_leaf_type.ATUI_DYNARRAY == self.type.fancy)
+		self.fancy_data = fancy_data
+		self.dynarray_deferred = (not self.access) # array of pointers
+		if self.dynarray_deferred:
+			self.access = fancy_data["deferred"]
+			self.access_meta = self.access
+		self.access_meta += "[0]"
+
+		if self.dynarray_deferred:
+			self.num_bytes = "0" # handle in atui_branch_allocator
+		else:
+			self.num_bytes = "(sizeof(%s) * (%s))" % (
+				self.access_meta, fancy_data["count"]
+			)
+
+		dynpattern_default:dict = (
+			defaults["leaf_defaults"]["dynpattern"].copy()
+		)
+		dynpattern_default["access_meta"] = self.access_meta
+		pattern:list = self.leaves.nodes
+		ld:dict
+		for ld in fancy_data["pattern"]:
+			pattern.append(atui_leaf(ld, defaults, dynpattern_default, self))
+
+		if ("enum" in fancy_data) and ("NULL" != fancy_data["enum"]):
+			fancy_data["enum"] = "&(ATUI_ENUM(%s))" % fancy_data["enum"]
+		else:
+			fancy_data["enum"] = "NULL"
+	
 	def type_to_text(self,
 			):
 		return atui_leaf_type_text(self) 

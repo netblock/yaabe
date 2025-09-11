@@ -29,15 +29,11 @@ atui.h is about the core atui interface
 #include "atui_types.h"
 // see bottom for more includes
 
-// https://open-std.org/JTC1/SC22/WG14/www/docs/n3042.htm
-static constexpr nullptr_t ATUI_NULL = nullptr; // to satisfy _Generics
-
 enum i18n_languages:int8_t {
-	LANG_NOLANG = -1,
-
 	LANG_ENGLISH = 0,
 
-	LANG_TOTALLANGS
+	LANG_TOTALLANGS,
+	LANG_NOLANG = -1,
 };
 
 struct atui_enum_entry {
@@ -63,10 +59,7 @@ enum atui_leaf_type_fancy:uint8_t { // ppatui.py has a copy
 	ATUI_SHOOT    = 5, // hard-attach a child branch
 	ATUI_PETIOLE  = 6, // ejects off given leaves into a branch
 	ATUI_DYNARRAY = 7, // For runtime array lengths
-
-
 	_ATUI_BITCHILD = 8, // Internally set. If it's a bitfield child.
-
 
 	ATUI_NUM_FANCY
 };
@@ -140,7 +133,7 @@ struct atui_children {
 		atui_node const* nodes_ro; // read-only
 		atui_node const* const* addresses_ro; // read-only
 		void* array; // indiscriminate
-		void* array_ro;
+		void const* array_ro;
 	};
 	uint16_t count;
 	uint16_t max_count;

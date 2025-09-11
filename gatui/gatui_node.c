@@ -35,9 +35,7 @@ typedef struct _GATUINodePrivate {
 	GVariantType* capsule_type;
 	GVariantType const* contiguous_type; // type string of "ay"
 } GATUINodePrivate;
-
 G_DEFINE_TYPE_WITH_PRIVATE(GATUINode, gatui_node, G_TYPE_OBJECT)
-
 
 static void
 gatui_node_set_property(
@@ -696,7 +694,6 @@ gatui_node_get_region_bounds(
 
 	return atui->num_bytes;
 }
-
 
 
 void

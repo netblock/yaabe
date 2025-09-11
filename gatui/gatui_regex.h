@@ -1,7 +1,5 @@
-
 #ifndef GATUI_REGEX_H
 #define GATUI_REGEX_H
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_REGEX_NODE gatui_regex_node_get_type()

@@ -124,16 +124,14 @@ node_offset_column_bind(
 
 	size_t start;
 	size_t end;
-	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
-	constexpr char byte_array_format[] = "[%06zX - %06zX]";
-	constexpr char bit_array_format[] = "[%u:%u]";
-	char const* format = byte_array_format;
+	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
+	char const* format = BYTE_ARRAY_FORMAT;
 	size_t success;
 
 	if (GATUI_IS_LEAF(node)) {
 		GATUILeaf* const leaf = GATUI_LEAF(node);
 		if (_ATUI_BITCHILD == gatui_leaf_get_atui_type(leaf)->fancy) {
-			format = bit_array_format;
+			format = BIT_ARRAY_FORMAT;
 			success = gatui_leaf_get_bitfield_size(leaf, &start, &end);
 		} else {
 			success = gatui_node_get_region_bounds(node, &start, &end);
@@ -143,44 +141,13 @@ node_offset_column_bind(
 	}
 
 	if (success) {
-		assert(strlen(buffer) < sizeof(buffer));
 		sprintf(buffer, format, start, end);
+		assert(strlen(buffer) < sizeof(buffer));
 	}
 	gtk_label_set_text(GTK_LABEL(label), buffer);
 	g_object_unref(node);
 }
 
-
-
-
-static void
-branch_name_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
-		GtkColumnViewCell* const column_cell
-		) {
-// bind data to the UI skeleton
-	node_name_column_bind(_null, column_cell);
-
-	/* TODO
-	This should be tucked away in the model creation, but for some reason 
-	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
-	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
-
-	If it weren't for this issue, node_name_column_bind should be used instead.
-	*/
-	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
-	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
-	gulong const handler_id = g_signal_handler_find(tree_row,
-		G_SIGNAL_MATCH_FUNC,    0,0,NULL,
-		branches_track_expand_state,  NULL
-	);
-	if (0 == handler_id) { // usually passes
-		g_signal_connect(tree_row, "notify::expanded",
-			G_CALLBACK(branches_track_expand_state), node
-		);
-	}
-	g_object_unref(node);
-}
 
 inline static GtkWidget*
 create_branches_pane(
@@ -201,13 +168,14 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::bind",G_CALLBACK(branches_rightclick_row_bind),commons,
+		"swapped-signal::bind",G_CALLBACK(branches_expand_row_fixer), NULL,
 		NULL
 	);
 	gtk_column_view_set_row_factory(branches_view, factory);
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(tree_label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branch_name_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_name_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("Table", factory);
@@ -487,7 +455,7 @@ branch's leaves into view, slow. So, cache them with a stack.
 		g_object_ref_sink(widget_bag); // ref parity with cached alternative
 		cell_cache = cralloc(sizeof(column_cell));
 		g_object_set_data_full(G_OBJECT(widget_bag),
-			"cell_cache", cell_cache, (GDestroyNotify) free
+			"cell_cache", cell_cache, free
 		);
 
 		GtkEventController* const focus_sense = (

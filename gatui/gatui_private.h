@@ -1,5 +1,6 @@
 #ifndef GATUI_PRIVATE_H
 #define GATUI_PRIVATE_H
+G_BEGIN_DECLS
 
 #include "gatui.h"
 #include "atui_allocator.h"
@@ -33,7 +34,10 @@ GATUIBranch**
 _gatui_branch_get_branches_array(
 		GATUIBranch* self
 		);
-
+void
+_branches_track_expand_state( // branch expand/collapse state managment
+        GtkTreeListRow* tree_row
+        );
 
 
 GATUIRegexNode*
@@ -57,4 +61,6 @@ gatui_regex_search_recurse_branch(
 		GRegex* pattern,
 		struct gatui_search_flags const* flags
 		);
+
+G_END_DECLS
 #endif

@@ -1,6 +1,5 @@
 #ifndef GATUI_LEAF_H
 #define GATUI_LEAF_H
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_LEAF gatui_leaf_get_type()
@@ -15,6 +14,12 @@ gatui_leaf_new( // including all of is subleaves
 struct atui_leaf_type const*
 gatui_leaf_get_atui_type(
 		GATUILeaf* self
+		);
+size_t // total bits
+gatui_leaf_get_bitfield_size(
+		GATUILeaf* self,
+		size_t* start, // optional; bitfield lo
+		size_t* end // optiona; bitfield hi
 		);
 
 bool // if value to/from text does anything
@@ -55,13 +60,5 @@ int16_t // -1 if error, otherwise index
 gatui_leaf_enum_entry_get_possible_index(
 		GATUILeaf* self
 		);
-
-size_t // total bits
-gatui_leaf_get_bitfield_size(
-		GATUILeaf* self,
-		size_t* start, // optional; bitfield lo
-		size_t* end // optiona; bitfield hi
-		);
-
 G_END_DECLS
 #endif

@@ -46,8 +46,6 @@ C preprocessor side of ATUI table generation
 
 /***************************** PREPROCESSOR TOOLS *****************************/
 
-#define _atui_enum_ATUI_NULL ATUI_NULL
-#define _atui_enum_NULL NULL ATUI_NULL
 #define _atui_enum_index_NULL ATUI_ENUM_ARRAY_LENGTH
 
 #define _PPATUI_NULLPTR(var) _Generic((var),\

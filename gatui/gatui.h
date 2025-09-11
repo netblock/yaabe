@@ -6,6 +6,7 @@ However bios-data IO is not thread-safe (spinlock? mode-based lock?).
 
 #ifndef GATUI_H
 #define GATUI_H
+G_BEGIN_DECLS
 
 #include "atui.h"
 
@@ -22,4 +23,5 @@ typedef struct _GATUIRegexTree GATUIRegexTree;
 #include "gatui_regex.h"
 #include "gatui_tree.h"
 
+G_END_DECLS
 #endif

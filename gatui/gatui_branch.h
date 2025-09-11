@@ -1,6 +1,5 @@
 #ifndef GATUI_BRANCH_H
 #define GATUI_BRANCH_H
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_BRANCH gatui_branch_get_type()
@@ -32,14 +31,6 @@ void
 gatui_branch_right_click_expand_family( // recursively expand all sub branches
 		GATUIBranch* self
 		);
-
-// should be moved into private if the notify problem gets solved.
-void
-branches_track_expand_state( // branch expand/collapse state managment
-        GtkTreeListRow* tree_row,
-        GParamFlags* param,
-        gpointer data // unused
-        );
 
 void
 gatui_branch_load_expand_state(

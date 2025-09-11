@@ -1,6 +1,5 @@
 #ifndef GATUI_NODE_H
 #define GATUI_NODE_H
-
 G_BEGIN_DECLS
 
 #define GATUI_TYPE_NODE gatui_node_get_type()
@@ -129,6 +128,7 @@ uint16_t
 gatui_node_get_num_leaves(
 		GATUINode* self
 		);
+
 
 union gatui_node_copyability {
 	uint8_t raw;

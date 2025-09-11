@@ -23,7 +23,6 @@ struct _GATUITree {
 };
 G_DEFINE_TYPE(GATUITree, gatui_tree, G_TYPE_OBJECT)
 
-
 static void
 gatui_tree_dispose(
 		GObject* const object
@@ -281,18 +280,43 @@ gatui_tree_create_trunk_model(
 		putting a notify connect in the ColumnView bind not only all-1 connects,
 		but reliably works.
 		It seems like the rows get stolen/copied?
+	
+		see branches_expand_row_fixer for more info
 		*/
 		GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
 			g_list_model_get_item(G_LIST_MODEL(trunk_model), 0)
 		);
 		g_signal_connect(root_row,
-			"notify::expanded", G_CALLBACK(branches_track_expand_state), NULL
+			"notify::expanded", G_CALLBACK(_branches_track_expand_state), NULL
 		);
 		gtk_tree_list_row_set_expanded(root_row, true);
 		g_object_unref(root_row);
 	}
 
 	return trunk_model;
+}
+void
+branches_expand_row_fixer(
+		void const* const _null __unused, // swapped-signal:: with factory
+		GtkColumnViewRow* const column_row
+		) {
+	/* TODO
+	This should be tucked away in the model creation, but for some reason 
+	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
+	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
+	*/
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(column_row);
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
+	gulong const handler_id = g_signal_handler_find(tree_row,
+		G_SIGNAL_MATCH_FUNC,    0,0,NULL,
+		_branches_track_expand_state,  NULL
+	);
+	if (0 == handler_id) { // usually passes
+		g_signal_connect(tree_row, "notify::expanded",
+			G_CALLBACK(_branches_track_expand_state), node
+		);
+	}
+	g_object_unref(node);
 }
 
 
@@ -303,7 +327,6 @@ expand_model_with_object_path(
 		struct atui_path_vector const* const vector
 		) {
 	GATUINode const* path[ATUI_STACK_DEPTH];
-
 	assert(vector->depth);
 	uint8_t depth_i = vector->depth;
 
