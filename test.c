@@ -6,57 +6,129 @@
 
 #include "atomtree.h"
 #include "atui.h"
-#include "gatui.h"
+#include "gatui_private.h"
 #include "yaabe_gtk4.h"
 
 // landing is in main
 static struct error error = {}; // error handling
 
-static void
-gatui_leaf_test_get_set_memory(
+inline static void
+gatui_leaf_test_memory(
 		GATUILeaf* const leaf
 		) {
-	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
-	bool success;
-	GVariant* val; 
-	if (atui->num_bytes || _ATUI_BITCHILD == atui->type.fancy) {
-		val = gatui_leaf_get_value(leaf, true);
-		success = gatui_leaf_set_value(leaf, val);
-		error_assert(&error, ERROR_CRASH, NULL,
-			success
-		);
-		g_variant_unref(val);
-		val = gatui_leaf_get_value(leaf, false);
-		success = gatui_leaf_set_value(leaf, val);
-		error_assert(&error, ERROR_CRASH, NULL,
-			success
-		);
-		char* const b64_text = gatui_leaf_value_to_base64(leaf);
-		success = gatui_leaf_value_from_base64(leaf, b64_text, NULL);
-		error_assert(&error, ERROR_CRASH, NULL,
-			success
-		);
-		free(b64_text);
-		g_variant_unref(val);
-	};
+	if (gatui_leaf_has_textable_value(leaf)) {
+		char* value_text = NULL;
+		value_text = gatui_leaf_value_to_text(leaf);
+		gatui_leaf_set_value_from_text(leaf, value_text);
+		free(value_text);
+	}
 }
 
-static char*
-gatui_leaf_test_path(
-		GATUILeaf* const leaf,
+inline static void
+gatui_node_test_memory(
+		GATUINode* const node,
 		GATUITree* const root
 		) {
-	char* const path = gatui_leaf_to_path(leaf);
+	size_t bios_size = 0;
+	void const* const bios = gatui_tree_get_bios_pointer(root, &bios_size);
+	atui_node const* const atui = _gatui_node_get_atui(node);
+
+	bool success = false;
+	char* b64_text = NULL;
+	GVariant* val = NULL;
+	void* oldmem = NULL;
+
+	if (atui->num_bytes) {
+		oldmem = cralloc(atui->num_bytes);
+		memcpy(oldmem, atui->data.input, atui->num_bytes);
+
+		error_assert(&error, ERROR_CRASH, NULL,
+			bios <= atui->data.input
+		);
+		error_assert(&error, ERROR_CRASH, NULL,
+			(atui->data.input + atui->num_bytes - 1)
+			<= (bios + bios_size)
+		);
+
+		val = gatui_node_get_contiguous_data(node);
+		success = gatui_node_set_contiguous_data(node, val);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		success = gatui_node_set_value(node, val);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		g_variant_unref(val);
+		val = NULL;
+		
+		val = gatui_node_get_value(node);
+		success = gatui_node_set_value(node, val);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		g_variant_unref(val);
+		val = NULL;
+
+
+		b64_text = gatui_node_to_base64(node, GATUI_NODE_B64_CONTIGUOUS);
+		success = gatui_node_from_base64(node, b64_text, NULL);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		free(b64_text);
+		b64_text = NULL;
+
+		b64_text = gatui_node_to_base64(node, GATUI_NODE_B64_VALUE);
+		success = gatui_node_from_base64(node, b64_text, NULL);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		free(b64_text);
+		b64_text = NULL;
+
+		success = 0 == memcmp(oldmem, atui->data.input, atui->num_bytes);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+	}
+	if (atui->num_copyable_leaves) {
+		uint16_t num_copyable_leaves = 0;
+		val = NULL;
+		gatui_node_get_leaves_package(node, &val, &num_copyable_leaves);
+		success = gatui_node_set_leaves_memory_package(
+			node, val, num_copyable_leaves
+		);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		g_variant_unref(val);
+		val = NULL;
+
+		b64_text = gatui_node_to_base64(node, GATUI_NODE_B64_LEAVES_PACKAGE);
+		success = gatui_node_from_base64(node, b64_text, NULL);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+		free(b64_text);
+		b64_text = NULL;
+
+		success = 0 == memcmp(oldmem, atui->data.input, atui->num_bytes);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+	}
+
+	if (GATUI_IS_LEAF(node)) {
+		gatui_leaf_test_memory(GATUI_LEAF(node));
+
+		success = 0 == memcmp(oldmem, atui->data.input, atui->num_bytes);
+		error_assert(&error, ERROR_CRASH, NULL, success);
+	}
+
+	free(oldmem);
+}
+
+inline static char*
+gatui_node_test_path(
+		GATUINode* const node,
+		GATUITree* const root
+		) {
+	char* const path = gatui_node_to_path(node);
 	bool success;
 
-	int16_t branch_index;
-	int16_t leaf_index;
-	success = gatui_tree_select_in_model_by_path(root,
-		path, &branch_index, &leaf_index, NULL
+	int16_t branch_index = -1;
+	int16_t leaf_index = -1;
+	success = gatui_tree_select_in_model_by_path(
+		root,  path, &branch_index, &leaf_index, NULL
 	);
 	error_assert(&error, ERROR_CRASH, NULL,
 		success
 	);
+
+	GATUINode* node_via_roundabout = NULL;
 
 	GListModel* const branch_model = G_LIST_MODEL(
 		gatui_tree_create_trunk_model(root)
@@ -67,189 +139,79 @@ gatui_leaf_test_path(
 	GATUIBranch* const owning_branch = GATUI_BRANCH(
 		gtk_tree_list_row_get_item(branch_row)
 	);
-
-	GListModel* const leaves_model = G_LIST_MODEL(
-		gatui_branch_get_leaves_model(owning_branch)
-	);
-	GtkTreeListRow* const leaf_row = GTK_TREE_LIST_ROW(
-		g_list_model_get_item(leaves_model, leaf_index)
-	);
-	GATUILeaf* const self = GATUI_LEAF(gtk_tree_list_row_get_item(leaf_row));
-
-	error_assert(&error, ERROR_CRASH, NULL,
-		leaf == self // path uniqueness
-	);
-
-	g_object_unref(self);
-	g_object_unref(leaf_row);
-	//g_object_unref(leaves_model); // does not get ref'd
-
-	g_object_unref(owning_branch);
 	g_object_unref(branch_row);
 	g_object_unref(branch_model);
 
+	if (GATUI_IS_LEAF(node)) {
+		GListModel* const leaves_model = G_LIST_MODEL(
+			gatui_branch_get_leaves_model(owning_branch)
+		);
+		GtkTreeListRow* const leaf_row = GTK_TREE_LIST_ROW(
+			g_list_model_get_item(leaves_model, leaf_index)
+		);
+		node_via_roundabout = GATUI_NODE(gtk_tree_list_row_get_item(leaf_row));
+		g_object_unref(leaf_row);
+		//g_object_unref(leaves_model); // does not get ref'd
+		g_object_unref(owning_branch);
+	} else {
+		node_via_roundabout = GATUI_NODE(owning_branch);
+	}
+
+	error_assert(&error, ERROR_CRASH, NULL,
+		node == node_via_roundabout // test uniqueness
+	);
+	g_object_unref(node_via_roundabout);
 	return path;
 }
 
 static void
-gatui_leaf_test(
-		GATUILeaf* const leaf,
-		GATUITree* const root
-		) {
-	// TODO actually test stuff
-	atui_leaf const* const atui = gatui_leaf_get_atui(leaf);
-	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
-	//bool success;
+gatui_node_test(
+	GATUINode* const node
+	) {
+	atui_node const* const atui = _gatui_node_get_atui(node);
+	GATUITree* const root = gatui_node_get_root(node);
 
-	if (atui->val) {
-		error_assert(&error, ERROR_CRASH, NULL,
-			a_root->bios <= atui->val
-		);
-		error_assert(&error, ERROR_CRASH, NULL,
-			(atui->val + atui->num_bytes - 1)
-			<= (a_root->bios + a_root->biosfile_size)
-		);
-	}
+	bool success;
 
+	bool const is_leaf = GATUI_IS_LEAF(node);
+	error_assert(&error, ERROR_CRASH, NULL,
+		is_leaf == atui->is_leaf
+	);
 	error_assert(&error, ERROR_CRASH, NULL,
 		strlen(atui->name) < sizeof(atui->name)
 	);
 
-	gatui_leaf_test_get_set_memory(leaf);
+	char* const path = gatui_node_test_path(node, root); // free later for debug
 
-	char* const path = gatui_leaf_test_path(leaf, root); // free later for debug
-
-	GListModel* const child_leaves = leaves_treelist_generate_children(
-		leaf, NULL
-	);
-	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == child_leaves) ^ (0 < atui->num_child_leaves)
-	);
-	if (child_leaves) {
-		for (uint16_t i=0; i < atui->num_child_leaves; i++) {
-			gatui_leaf_test(atui->child_leaves[i].self, root);
-		}
-		g_object_unref(child_leaves);
-	}
-
-	free(path);
-}
-
-
-static void
-gatui_branch_test_get_set_memory(
-		GATUIBranch* const branch
-		) {
-	atui_branch const* const atui = gatui_branch_get_atui(branch);
-	bool success;
-	char* b64_text;
-	if (atui->num_copyable_leaves || atui->table_size) {
-		GVariant* val = NULL;
-		if (atui->num_copyable_leaves && ! atui->prefer_contiguous) {
-			uint16_t num_copyable_leaves;
-			success = gatui_branch_get_leaves_memory_package(
-				branch, &val, &num_copyable_leaves
-			);
-			error_assert(&error, ERROR_CRASH, NULL,
-				success
-			);
-			success = gatui_branch_set_leaves_memory_package(
-				branch, val, num_copyable_leaves
-			);
-			error_assert(&error, ERROR_CRASH, NULL,
-				success
-			);
-			g_variant_unref(val);
-			b64_text = gatui_branch_to_base64(branch, true);
-			error_assert(&error, ERROR_CRASH, NULL,
-				b64_text
-			);
-			success = gatui_branch_from_base64(branch, b64_text, NULL);
-			error_assert(&error, ERROR_CRASH, NULL,
-				success
-			);
-			free(b64_text);
-		}
-		if (atui->table_size) {
-			val = gatui_branch_get_contiguous_memory(branch);
-			success = gatui_branch_set_contiguous_memory(branch, val);
-			error_assert(&error, ERROR_CRASH, NULL,
-				success
-			);
-			g_variant_unref(val);
-
-			b64_text = gatui_branch_to_base64(branch, false);
-			error_assert(&error, ERROR_CRASH, NULL,
-				b64_text
-			);
-
-			success = gatui_branch_from_base64(branch, b64_text, NULL);
-			error_assert(&error, ERROR_CRASH, NULL,
-				success
-			);
-			free(b64_text);
-		}
-	};
-}
-
-static void
-gatui_branch_test(
-		GATUIBranch* const branch,
-		GATUITree* const root
-		) {
-	// TODO actually test stuff
-	atui_branch const* const atui = gatui_branch_get_atui(branch);
-	struct atom_tree const* const a_root = gatui_tree_get_atom_tree(root);
-	bool success;
-
-	if (atui->table_start) {
-		error_assert(&error, ERROR_CRASH, NULL,
-			a_root->bios <= atui->table_start
-		);
-		error_assert(&error, ERROR_CRASH, NULL,
-			(atui->table_start + atui->table_size - 1)
-			<= (a_root->bios + a_root->biosfile_size)
-		);
-	}
-
-	error_assert(&error, ERROR_CRASH, NULL,
-		strlen(atui->name) < sizeof(atui->name)
-	);
-
-	gatui_branch_test_get_set_memory(branch);
-
-	char* const path = gatui_branch_to_path(branch); // free later for debug
 	success = gatui_tree_select_in_model_by_path(root, path, NULL,NULL,NULL);
 	error_assert(&error, ERROR_CRASH, NULL,
 		success
 	);
 
-	GtkSelectionModel* const leaves = gatui_branch_get_leaves_model(branch);
-	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == leaves) ^ (0 < atui->leaf_count)
-	);
-	if (atui->leaf_count) {
-		for (uint16_t i=0; i < atui->leaf_count; i++) {
-			gatui_leaf_test(atui->leaves[i].self, root);
+	gatui_node_test_memory(node, root);
+
+	if (atui->leaves.count) {
+		struct atui_children const* const leaves = &(atui->leaves);
+		GATUILeaf* const* const leaves_array = _gatui_node_get_leaf_array(node);
+		for (uint16_t i=0; i < leaves->count; i++) {
+			gatui_node_test(GATUI_NODE(leaves_array[i]));
 		}
 	}
 
-
-	GListModel* const child_branches = branches_treelist_generate_children(
-		branch, NULL
-	);
-	error_assert(&error, ERROR_CRASH, NULL,
-		(NULL == child_branches) ^ (0 < atui->num_branches)
-	);
-	if (child_branches) {
-		for (uint16_t i=0; i < atui->num_branches; i++) {
-			gatui_branch_test(atui->child_branches[i]->self, root);
+	if (! is_leaf) {
+		struct atui_children const* const branches = &(atui->branch.branches);
+		GATUIBranch* const* const branches_array = (
+			_gatui_branch_get_branches_array(GATUI_BRANCH(node))
+		);
+		for (uint16_t i=0; i < branches->count; i++) {
+			gatui_node_test(GATUI_NODE(branches_array[i]));
 		}
-		g_object_unref(child_branches);
+
 	}
 
 	free(path);
 }
+
 
 int
 main(
@@ -280,10 +242,10 @@ main(
 			gatui_tree_get_atom_tree(root)
 		);
 
-		GATUIBranch* const trunk = gatui_tree_get_trunk(root);
+		GATUINode* const trunk = GATUI_NODE(gatui_tree_get_trunk(root));
 		GtkSelectionModel* const model = gatui_tree_create_trunk_model(root);
 
-		gatui_branch_test(trunk, root);
+		gatui_node_test(trunk);
 
 		g_assert_finalize_object(model);
 		g_assert_finalize_object(trunk);

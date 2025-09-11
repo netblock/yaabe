@@ -14,10 +14,8 @@ struct rightclick_pack { // see columnview_row_bind_attach_gesture
 		struct _GtkColumnViewRow_hack* row_hack;
 	};
 	union { // obtainable from row anyway; for convenience
-		GObject* obj;
-		GATUIBranch* branch;
-		GATUILeaf* leaf;
-		GATUIRegexNode* node;
+		GATUINode* node;
+		GATUIRegexNode* regex_node;
 	};
 };
 
@@ -141,11 +139,11 @@ static void
 right_click_paste_data(
 		GObject* const clipboard,
 		GAsyncResult* const async_data,
-		GObject* const gatui,
+		GATUINode* const node,
 		struct yaabegtk_commons const* commons
 		) {
-	bool const is_leaf = GATUI_IS_LEAF(gatui);
-	assert(GATUI_IS_LEAF(gatui) || GATUI_IS_BRANCH(gatui));
+	bool const is_leaf = GATUI_IS_LEAF(node);
+	assert(GATUI_IS_LEAF(node) || GATUI_IS_BRANCH(node));
 
 	GError* err = NULL;
 	char* const b64_text = gdk_clipboard_read_text_finish(
@@ -158,35 +156,20 @@ right_click_paste_data(
 		return;
 	}
 
-	struct b64_header* b64_error = NULL;
-	bool success;
-	if (is_leaf) {
-		success = gatui_leaf_value_from_base64(
-			GATUI_LEAF(gatui), b64_text, &b64_error
-		);
-	} else {
-		success = gatui_branch_from_base64(
-			GATUI_BRANCH(gatui), b64_text, &b64_error
-		);
-	}
+	struct gatui_node_b64_header* b64_error = NULL;
+	bool const success = gatui_node_from_base64(node,b64_text, &b64_error);
 	if (success) {
 		return;
 	}
 
 	GtkAlertDialog* error_popup;
 	if (b64_error) {
-		char const* name;
-		if (is_leaf) {
-			name = gatui_leaf_get_atui(GATUI_LEAF(gatui))->name;
-		} else {
-			name = gatui_branch_get_atui(GATUI_BRANCH(gatui))->name;
-		}
 		error_popup = gtk_alert_dialog_new(
 			(char const* const[2]) {
 				"Incompatible data for branch %s.",
 				"Incompatible data for leaf %s.",
-			}[is_leaf],
-			name
+			} [is_leaf],
+			gatui_node_get_name(node)
 		);
 		free(b64_error);
 	} else {
@@ -200,17 +183,17 @@ right_click_paste_data(
 	g_object_unref(error_popup);
 }
 static void
-branchleaf_right_click_paste_data_set_data(
+node_right_click_paste_data_set_data(
 		GObject* const clipboard,
 		GAsyncResult* const async_data,
 		gpointer const pack_ptr
 		) {
 // AsyncReadyCallback
 	struct rightclick_pack const* const pack = pack_ptr;
-	right_click_paste_data(clipboard, async_data, pack->obj, pack->commons);
+	right_click_paste_data(clipboard, async_data, pack->node, pack->commons);
 }
 static void
-branchleaf_right_click_paste_data(
+node_right_click_paste_data(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
@@ -220,71 +203,95 @@ branchleaf_right_click_paste_data(
 			gdk_display_get_default()
 		),
 		NULL,
-		branchleaf_right_click_paste_data_set_data,
+		node_right_click_paste_data_set_data,
 		pack_ptr
 	);
 }
 
 
-
-
 static void
-branch_right_click_copy_name(
+node_right_click_copy_name(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
-	clipboard_set_text(a_branch->name);
+	clipboard_set_text(
+		gatui_node_get_name(pack->node)
+	);
 }
 static void
-branch_right_click_copy_struct_name(
+node_right_click_copy_structname(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
-	clipboard_set_text(a_branch->origname);
+	clipboard_set_text(
+		gatui_node_get_structname(pack->node)
+	);
 }
 static void
-branch_right_click_copy_path(
+node_right_click_copy_path(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	char* const pathstring = gatui_branch_to_path(pack->branch);
+	char* const pathstring = gatui_node_to_path(pack->node);
 	clipboard_set_text(pathstring);
 	free(pathstring);
 }
+/*
 static void
-branch_right_click_copy_contiguous(
+node_right_click_copy_contiguous(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	char* const b64_text = gatui_branch_to_base64(pack->branch, false);
+	char* const b64_text = gatui_node_to_base64(
+		pack->node, GATUI_NODE_B64_CONTIGUOUS
+	);
 	if (b64_text) {
 		clipboard_set_text(b64_text);
-		g_free(b64_text);
+		free(b64_text);
 	}
 }
+*/
 static void
-branch_right_click_copy_leaves(
+node_right_click_copy_value(
 		GSimpleAction* const action __unused,
 		GVariant* const parameter __unused,
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	char* const b64_text = gatui_branch_to_base64(pack->branch, true);
+	char* const b64_text = gatui_node_to_base64(
+		pack->node, GATUI_NODE_B64_VALUE
+	);
 	if (b64_text) {
 		clipboard_set_text(b64_text);
-		g_free(b64_text);
+		free(b64_text);
 	}
 }
+static void
+node_right_click_copy_leaves(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const pack_ptr
+		) {
+	struct rightclick_pack const* const pack = pack_ptr;
+	char* const b64_text = gatui_node_to_base64(
+		pack->node, GATUI_NODE_B64_LEAVES_PACKAGE
+	);
+	if (b64_text) {
+		clipboard_set_text(b64_text);
+		free(b64_text);
+	}
+}
+
+
+
 static void
 branch_right_click_collapse_children(
 		GSimpleAction* const action __unused,
@@ -293,9 +300,11 @@ branch_right_click_collapse_children(
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
-	atui_branch const* const a_branch = gatui_branch_get_atui(pack->branch);
 
-	for (uint16_t i=0; i < a_branch->num_branches; i++) {
+	uint16_t const num_branches = gatui_branch_get_num_branches(GATUI_BRANCH(
+		pack->node
+	));
+	for (uint16_t i=0; i < num_branches; i++) {
 		GtkTreeListRow* child = gtk_tree_list_row_get_child_row(tree_row, i);
 		gtk_tree_list_row_set_expanded(child, false);
 		g_object_unref(child);
@@ -311,7 +320,7 @@ branch_right_click_expand_family(
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
 
 	gtk_tree_list_row_set_expanded(tree_row, false);
-	gatui_branch_right_click_expand_family(pack->branch);
+	gatui_branch_right_click_expand_family(GATUI_BRANCH(pack->node));
 	gtk_tree_list_row_set_expanded(tree_row, true);
 }
 
@@ -329,34 +338,37 @@ branches_rightclick_popup(
 	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
 
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
-	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
-	g_object_unref(g_branch); // we don't need a second reference.
-	pack->branch = g_branch;
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
+	g_object_unref(node); // we don't need a second reference.
+	pack->node = node;
 
 	// see also create_branches_rightclick_menu
 	GActionEntry actions[8] = {
-		{.name = "name",   .activate = branch_right_click_copy_name},
-		{.name = "struct", .activate = branch_right_click_copy_struct_name},
-		{.name = "path",   .activate = branch_right_click_copy_path},
+		{.name = "name",   .activate = node_right_click_copy_name},
+		{.name = "struct", .activate = node_right_click_copy_structname},
+		{.name = "path",   .activate = node_right_click_copy_path},
 	};
 	uint8_t act_i = 3;
-	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
-	if (a_branch->num_copyable_leaves || a_branch->table_size) {
-		if (a_branch->num_copyable_leaves && ! a_branch->prefer_contiguous) {
+
+	union gatui_node_copyability const copyability = gatui_node_get_copyability(
+		node
+	);
+	if (copyability.is_copyable) {
+		if (! copyability.prefer_contiguous) {
 			actions[act_i].name = "copy_leaves";
-			actions[act_i].activate = branch_right_click_copy_leaves;
+			actions[act_i].activate = node_right_click_copy_leaves;
 			act_i++;
 		}
-		if (a_branch->table_size) {
+		if (copyability.copyable_data) {
 			actions[act_i].name = "copy_contiguous";
-			actions[act_i].activate = branch_right_click_copy_contiguous;
+			actions[act_i].activate = node_right_click_copy_value;
 			act_i++;
 		}
 		actions[act_i].name = "paste_data";
-		actions[act_i].activate = branchleaf_right_click_paste_data;
+		actions[act_i].activate = node_right_click_paste_data;
 		act_i++;
 	};
-	if (a_branch->num_branches) {
+	if (gatui_branch_get_num_branches(GATUI_BRANCH(node))) {
 		if (gtk_tree_list_row_get_expanded(tree_row)) {
 			actions[act_i].name = "collapse_children";
 			actions[act_i].activate = branch_right_click_collapse_children;
@@ -394,7 +406,7 @@ create_branches_rightclick_menu(
 	g_menu_append(menu_model, "Copy Leaves", "context.copy_leaves");
 	g_menu_append(menu_model,"Copy Contiguous Data", "context.copy_contiguous");
 	g_menu_append(menu_model, "Paste Data", "context.paste_data");
-	g_menu_append(menu_model,"Collapse Children", "context.collapse_children");
+	g_menu_append(menu_model, "Collapse Children", "context.collapse_children");
 	g_menu_append(menu_model, "Expand Family", "context.expand_family");
 	// see also branches_rightclick_popup
 
@@ -404,42 +416,6 @@ create_branches_rightclick_menu(
 }
 
 
-
-static void
-leaf_right_click_copy_name(
-		GSimpleAction* const action __unused,
-		GVariant* const parameter __unused,
-		gpointer const pack_ptr
-		) {
-	struct rightclick_pack const* const pack = pack_ptr;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(pack->leaf);
-	clipboard_set_text(a_leaf->name);
-}
-static void
-leaf_right_click_copy_path(
-		GSimpleAction* const action __unused,
-		GVariant* const parameter __unused,
-		gpointer const pack_ptr
-		) {
-	struct rightclick_pack const* const pack = pack_ptr;
-	char* const pathstring = gatui_leaf_to_path(pack->leaf);
-	clipboard_set_text(pathstring);
-	free(pathstring);
-}
-
-static void
-leaf_right_click_copy_data(
-		GSimpleAction* const action __unused,
-		GVariant* const parameter __unused,
-		gpointer const pack_ptr
-		) {
-	struct rightclick_pack const* const pack = pack_ptr;
-	char* const b64_text = gatui_leaf_value_to_base64(pack->leaf);
-	if (b64_text) {
-		clipboard_set_text(b64_text);
-		free(b64_text);
-	}
-}
 
 static void
 rightclick_selection_sterilise(
@@ -473,23 +449,22 @@ leaves_rightclick_popup(
 	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
 
 	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(pack->row);
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(tree_row);
-	g_object_unref(g_leaf); // we don't need a second reference
-	pack->leaf = g_leaf;
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
+	g_object_unref(node); // we don't need a second reference
+	pack->node = node;
 
 	// see also create_leaves_rightclick_menu
 	GActionEntry actions[4] = {
-		{.name = "name", .activate = leaf_right_click_copy_name},
-		{.name = "path", .activate = leaf_right_click_copy_path},
+		{.name = "name", .activate = node_right_click_copy_name},
+		{.name = "path", .activate = node_right_click_copy_path},
 	};
 	uint8_t act_i = 2;
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
-	if (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->type.fancy) {
+	if (gatui_node_get_region_bounds(node, NULL, NULL)) {
 		actions[act_i].name = "copy_data";
-		actions[act_i].activate = leaf_right_click_copy_data;
+		actions[act_i].activate = node_right_click_copy_value;
 		act_i++;
 		actions[act_i].name = "paste_data";
-		actions[act_i].activate = branchleaf_right_click_paste_data;
+		actions[act_i].activate = node_right_click_paste_data;
 		act_i++;
 	}
 	assert(act_i <= lengthof(actions));
@@ -548,10 +523,10 @@ search_right_click_goto(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	yaabe_gtk_scroll_to_object(pack->commons, node->gatui);
+	yaabe_gtk_scroll_to_object(pack->commons, atui_regex->tree_node);
 }
 static void
 search_right_click_copy_name(
@@ -560,16 +535,12 @@ search_right_click_copy_name(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	char const* text;
-	if (node->is_leaf) {
-		text = gatui_leaf_get_atui(GATUI_LEAF(node->gatui))->name;
-	} else {
-		text = gatui_branch_get_atui(GATUI_BRANCH(node->gatui))->name;
-	}
-	clipboard_set_text(text);
+	clipboard_set_text(
+		gatui_node_get_name(atui_regex->tree_node)
+	);
 }
 static void
 search_right_click_copy_path(
@@ -578,15 +549,10 @@ search_right_click_copy_path(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	char* text;
-	if (node->is_leaf) {
-		text = gatui_leaf_to_path(GATUI_LEAF(node->gatui));
-	} else {
-		text = gatui_branch_to_path(GATUI_BRANCH(node->gatui));
-	}
+	char* const text = gatui_node_to_path(atui_regex->tree_node);
 	clipboard_set_text(text);
 	free(text);
 }
@@ -597,15 +563,12 @@ search_right_click_copy_data(
 		gpointer const pack_ptr
 		) {
 	struct rightclick_pack const* const pack = pack_ptr;
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	char* text;
-	if (node->is_leaf) {
-		text = gatui_leaf_value_to_base64(GATUI_LEAF(node->gatui));
-	} else {
-		text = gatui_branch_to_base64(GATUI_BRANCH(node->gatui), false);
-	}
+	char* const text = gatui_node_to_base64(
+		atui_regex->tree_node, GATUI_NODE_B64_VALUE
+	);
 	clipboard_set_text(text);
 	free(text);
 }
@@ -617,10 +580,12 @@ search_right_click_paste_data_set_data(
 		) {
 // AsyncReadyCallback
 	struct rightclick_pack const* const pack = pack_ptr;
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	right_click_paste_data(clipboard, async_data, node->gatui, pack->commons);
+	right_click_paste_data(
+		clipboard, async_data, atui_regex->tree_node, pack->commons
+	);
 }
 static void
 search_right_click_paste_data(
@@ -650,7 +615,7 @@ search_rightclick_popup(
 	}
 	gtk_gesture_set_state(click_sense, GTK_EVENT_SEQUENCE_CLAIMED);
 
-	pack->node = gtk_column_view_row_get_item(pack->row);
+	pack->regex_node = gtk_column_view_row_get_item(pack->row);
 
 	// see also create_leaves_rightclick_menu
 	GActionEntry actions[5] = {
@@ -660,22 +625,10 @@ search_rightclick_popup(
 	};
 	uint8_t act_i = 3;
 
-	struct atui_regex_node const* const node = gatui_regex_node_peek(
-		pack->node
+	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
+		pack->regex_node
 	);
-	bool has_data = false;
-	if (node->is_leaf) {
-		atui_leaf const* const a_leaf = gatui_leaf_get_atui(GATUI_LEAF(
-			node->gatui
-		));
-		has_data = (a_leaf->num_bytes || _ATUI_BITCHILD == a_leaf->type.fancy);
-	} else {
-		atui_branch const* const a_branch = gatui_branch_get_atui(GATUI_BRANCH(
-			node->gatui
-		));
-		has_data = (0 < a_branch->table_size);
-	}
-	if (has_data) {
+	if (gatui_node_get_region_bounds(atui_regex->tree_node, NULL, NULL)) {
 		actions[act_i].name = "copy_data";
 		actions[act_i].activate = search_right_click_copy_data;
 		act_i++;

@@ -1,85 +1,5 @@
 #include "standard.h"
-#include <zlib.h> 
 #include "gatui_private.h"
-
-union b64_header_raw {
-	void* raw;
-	struct b64_header* header;
-};
-
-char*
-b64_packet_encode(
-		struct b64_header const* const config,
-		void const* const payload
-		) {
-	size_t const packet_size = sizeof(struct b64_header) + config->num_bytes;
-	union b64_header_raw const h = {.header = cralloc(packet_size)};
-
-	memcpy(h.header, config, sizeof_flex(config, bytes, 0));
-	memcpy(h.header->bytes, payload, config->num_bytes);
-	h.header->crc = crc32(
-		0,
-		(h.raw + sizeof(h.header->crc)), // exclude crc
-		(packet_size - sizeof(h.header->crc))
-	);
-
-	gchar* const b64_text = g_base64_encode(h.raw, packet_size);
-	free(h.header);
-	return b64_text;
-}
-
-struct b64_header*
-b64_packet_decode(
-		char const* const b64_text
-		) {
-	size_t b64_num_bytes = 0;
-	union b64_header_raw const h = {
-		.raw = g_base64_decode(b64_text, &b64_num_bytes)
-	};
-
-	if (0 == b64_num_bytes) {
-		goto error_exit;
-	}
-	if (b64_num_bytes < sizeof(*h.header)) {
-		goto error_exit;
-	}
-	if (b64_num_bytes < (h.header->num_bytes + sizeof(*h.header))) {
-		goto error_exit;
-	}
-	uint32_t const crc = crc32(
-		0,
-		(h.raw + sizeof(h.header->crc)),
-		(sizeof(*h.header)-sizeof(h.header->crc)  +  h.header->num_bytes)
-	);
-	if (crc != h.header->crc) {
-		goto error_exit;
-	}
-
-	if (B64_HEADER_VER_CURRENT != h.header->version) {
-		goto error_exit;
-	}
-
-	if (GATUI_TYPESTR_LEN <= strnlen(h.header->typestr, GATUI_TYPESTR_LEN)) {
-		goto error_exit;
-	}
-
-	// strict compliance
-	if ((B64_BRANCH_CONTIGUOUS == h.header->target)
-			&& (1 != h.header->num_segments)
-			) {
-		goto error_exit;
-	}
-	if ((B64_LEAF==h.header->target) && (1!=h.header->num_segments)) {
-		goto error_exit;
-	}
-
-	return h.header;
-
-	error_exit:
-	free(h.header);
-	return NULL;
-}
-
 
 struct _GATUIRegexNode {
 	GObject parent_instance;
@@ -93,13 +13,13 @@ gatui_regex_node_dispose(
 		GObject* const object
 		) {
 	GATUIRegexNode* const self = GATUI_REGEX_NODE(object);
-	if (self->node.gatui) {
-		g_object_unref(self->node.gatui);
+	if (self->node.tree_node) {
+		g_object_unref(self->node.tree_node);
 		g_match_info_unref(self->node.match_info);
 		free(self->node.text);
 		free(self->node.markup_text);
 
-		self->node.gatui = NULL;
+		self->node.tree_node = NULL;
 		self->node.match_info = NULL;
 		self->node.text = NULL;
 		self->node.markup_text = NULL;
@@ -120,19 +40,17 @@ gatui_regex_node_init(
 }
 GATUIRegexNode*
 gatui_regex_node_new(
-		GObject* const gatui,
+		GATUINode* const tree_node,
 		GMatchInfo* const match_info,
 		char const* const text,
-		bool const is_leaf,
 		struct gatui_search_flags const* const flags
 		) {
 	GATUIRegexNode* const self = g_object_new(GATUI_TYPE_REGEX_NODE, NULL);
-	g_object_ref(gatui);
+	g_object_ref(tree_node);
 	g_match_info_ref(match_info);
 
-	self->node.gatui = gatui;
+	self->node.tree_node = tree_node;
 	self->node.match_info = match_info;
-	self->node.is_leaf = is_leaf;
 	self->node.flags = *flags;
 
 	size_t const text_len = strlen(text) + 1;

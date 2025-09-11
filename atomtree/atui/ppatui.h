@@ -7,7 +7,7 @@ C preprocessor side of ATUI table generation
 
 /******************************* MAIN FUNCTIONS *******************************/
 
-// Thing to call to instanciate an atui_branch
+// Thing to call to instanciate an atui_node
 #define ATUI_MAKE_BRANCH(\
 		atom_struct_name,  new_name,\
 		atomtree_pointer, bios_pointer,\
@@ -24,13 +24,18 @@ C preprocessor side of ATUI table generation
 
 // Add a child branch to a parent branch
 #define ATUI_ADD_BRANCH(parentptr, childptr) do {\
-	atui_branch* const restrict parent = parentptr;\
-	atui_branch* const restrict child = childptr;\
+	atui_node* const restrict parent = parentptr;\
+	atui_node* const restrict child = childptr;\
 	assert(parent != child);\
-	assert(parent->num_branches < parent->max_num_branches);\
-	parent->child_branches[parent->num_branches] = child;\
-	child->parent_branch = parent;\
-	parent->num_branches++;\
+\
+	struct atui_children* const parents_book = &(parent->branch.branches);\
+	assert(parents_book->indirect);\
+	assert(false == child->bundled);\
+\
+	assert(parents_book->count < parents_book->max_count);\
+	parents_book->addresses[parents_book->count] = child;\
+	child->parent = parent;\
+	parents_book->count++;\
 } while(0)
 
 // enum access
@@ -41,8 +46,6 @@ C preprocessor side of ATUI table generation
 
 /***************************** PREPROCESSOR TOOLS *****************************/
 
-#define _atui_enum_ATUI_NULL ATUI_NULL
-#define _atui_enum_NULL NULL ATUI_NULL
 #define _atui_enum_index_NULL ATUI_ENUM_ARRAY_LENGTH
 
 #define _PPATUI_NULLPTR(var) _Generic((var),\
@@ -53,6 +56,13 @@ C preprocessor side of ATUI table generation
 	nullptr_t: 0,\
 	atui_nullstruct: 0,\
 	default: sizeof(var)\
+)
+#define _PPATUI_PREFER_CONTIGUOUS(bios, num_bytes) (\
+	(0 < _PPATUI_NULLPTR_SIZE(*(bios)))\
+	&& (\
+		(num_bytes)\
+		<= _PPATUI_NULLPTR_SIZE(*(bios))\
+	)\
 )
 
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\
@@ -138,7 +148,7 @@ C preprocessor side of ATUI table generation
 
 
 // bitfield tools to extract various details of a little-endian bitfield
-// -O1 and higher compiles to a static number
+// -O1 and higher compiles to a constexpr number
 #define _PPATUI_BIT_SIZEOF(bios, f) _BIT_SIZEOF(typeof(bios), f)
 #define _BIT_SIZEOF(un, f) (\
 	stdc_count_ones((un) {.f = -1}.f)\

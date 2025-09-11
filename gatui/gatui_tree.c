@@ -19,9 +19,9 @@ struct _GATUITree {
 	GFile* biosfile;
 
 	GtkSelectionModel** enum_models_cache; // only for tree building
+	GVariantType* contiguous_type; // type string of "ay"
 };
 G_DEFINE_TYPE(GATUITree, gatui_tree, G_TYPE_OBJECT)
-
 
 static void
 gatui_tree_dispose(
@@ -44,6 +44,9 @@ gatui_tree_finalize(
 		GObject* const object
 		) {
 	GATUITree* const self = GATUI_TREE(object);
+
+	free(self->contiguous_type);
+
 	atui_destroy_tree(self->atomtree->atui_root);
 	atomtree_destroy(self->atomtree);
 }
@@ -62,7 +65,8 @@ gatui_tree_init(
 	) {
 	g_weak_ref_init(&self->trunk, NULL);
 	g_weak_ref_init(&self->trunk_model, NULL);
-	self->enum_models_cache = NULL;
+
+	self->contiguous_type = g_variant_type_new("ay");
 }
 
 
@@ -112,6 +116,14 @@ gatui_tree_get_enum_models_cache(
 	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
 	return (GtkSelectionModel* const*) self->enum_models_cache;
 };
+
+GVariantType const*
+gatui_tree_get_contiguous_type(
+		GATUITree* const self
+		) {
+	g_return_val_if_fail(GATUI_IS_TREE(self), NULL);
+	return self->contiguous_type;
+}
 
 
 GATUITree*
@@ -222,7 +234,9 @@ gatui_tree_get_trunk(
 		self->enum_models_cache = enum_models_cache;
 		generate_enum_models_cache(enum_models_cache);
 
-		trunk = G_OBJECT(gatui_branch_new(self->atomtree->atui_root, self));
+		trunk = G_OBJECT(gatui_branch_new(
+			self->atomtree->atui_root, self
+		));
 		g_weak_ref_set(&(self->trunk), trunk);
 
 		self->enum_models_cache = NULL;
@@ -266,12 +280,14 @@ gatui_tree_create_trunk_model(
 		putting a notify connect in the ColumnView bind not only all-1 connects,
 		but reliably works.
 		It seems like the rows get stolen/copied?
+	
+		see branches_expand_row_fixer for more info
 		*/
 		GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
 			g_list_model_get_item(G_LIST_MODEL(trunk_model), 0)
 		);
 		g_signal_connect(root_row,
-			"notify::expanded", G_CALLBACK(branches_track_expand_state), NULL
+			"notify::expanded", G_CALLBACK(_branches_track_expand_state), NULL
 		);
 		gtk_tree_list_row_set_expanded(root_row, true);
 		g_object_unref(root_row);
@@ -279,99 +295,104 @@ gatui_tree_create_trunk_model(
 
 	return trunk_model;
 }
+void
+branches_expand_row_fixer(
+		void const* const _null __unused, // swapped-signal:: with factory
+		GtkColumnViewRow* const column_row
+		) {
+	/* TODO
+	This should be tucked away in the model creation, but for some reason 
+	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
+	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
+	*/
+	GtkTreeListRow* const tree_row = gtk_column_view_row_get_item(column_row);
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
+	gulong const handler_id = g_signal_handler_find(tree_row,
+		G_SIGNAL_MATCH_FUNC,    0,0,NULL,
+		_branches_track_expand_state,  NULL
+	);
+	if (0 == handler_id) { // usually passes
+		g_signal_connect(tree_row, "notify::expanded",
+			G_CALLBACK(_branches_track_expand_state), node
+		);
+	}
+	g_object_unref(node);
+}
 
 
 
 static int16_t
 expand_model_with_object_path(
 		GListModel* const model,
-		GObject const* const* const path,
-		uint8_t const path_depth
+		struct atui_path_vector const* const vector
 		) {
-	int16_t model_i = -1; // -1 for loop entry
-	uint8_t depth_i = 0;
+	GATUINode const* path[ATUI_STACK_DEPTH];
+	assert(vector->depth);
+	uint8_t depth_i = vector->depth;
+
+	atui_node const* node = vector->node;
+	do {
+		depth_i--;
+		path[depth_i] = node->self;
+		node = node->parent;
+	} while (depth_i);
+
+	int16_t model_i = 0;
 	do {
 		GtkTreeListRow* tree_item;
-		while (true) {
+		GATUINode* questioned;
+		goto question_loop_entry;
+		do {
 			model_i++;
+			g_object_unref(tree_item);
+			question_loop_entry:
+
 			tree_item = GTK_TREE_LIST_ROW(
 				g_list_model_get_object(model, model_i)
 			);
-			GObject* questioned = G_OBJECT(
-				gtk_tree_list_row_get_item(tree_item)
-			);
+			questioned = GATUI_NODE(gtk_tree_list_row_get_item(tree_item));
 			g_object_unref(questioned); // we don't need a 2nd reference
-			if (path[depth_i] == questioned) {
-				break;
-			}
-			g_object_unref(tree_item);
-		};
+		} while (path[depth_i] != questioned);
 		gtk_tree_list_row_set_expanded(tree_item, true); // may be collapsed
 		g_object_unref(tree_item);
 		depth_i++;
-	} while (depth_i < path_depth);
+	} while (depth_i < vector->depth);
 
 	return model_i;
 };
-
 static void
 select_in_model_by_map(
-		struct atui_path_goto* const map,
+		struct atui_path_goto const* const map,
 		GListModel* const trunk_model,
 		int16_t* const branch_index,
 		int16_t* const leaf_index
 		) {
-	// build a GOBject array of the path
-	GObject const** const object_path = cralloc(
-		// technically only need the larger of the two
-		(map->branch_depth + map->leaf_depth)
-		* sizeof(GObject*)
+	assert(NULL == map->not_found);
+	assert(map->branch.depth);
+
+	// branches
+	int16_t model_i;
+	model_i = expand_model_with_object_path(trunk_model, &(map->branch));
+	gtk_single_selection_set_selected(
+		GTK_SINGLE_SELECTION(trunk_model),
+		model_i
 	);
-
-	// these two depth blocks, branch and leaf should look identical, with the
-	// difference being the atui_branch/atui_leaf get parent thing.
-	int16_t branch_i = -1;
-	if (map->branch_depth) {
-		atui_branch const* branch = map->branch;
-		uint8_t i = map->branch_depth;
-		do {
-			i--;
-			object_path[i] = G_OBJECT(branch->self);
-			branch = branch->parent_branch;
-		} while (i);
-		assert(NULL == branch);
-		branch_i = expand_model_with_object_path(
-			trunk_model, object_path, map->branch_depth
-		);
-		if (-1 < branch_i) {
-			gtk_single_selection_set_selected(GTK_SINGLE_SELECTION(trunk_model),
-				branch_i
-			);
-		}
-	}
 	if (branch_index) {
-		*branch_index = branch_i;
+		*branch_index = model_i;
 	}
 
-	int16_t leaf_i = -1;
-	if (map->leaf_depth) {
-		atui_leaf const* leaf = map->leaf;
-		uint8_t i = map->leaf_depth;
-		do {
-			i--;
-			object_path[i] = G_OBJECT(leaf->self);
-			leaf = leaf->parent_leaf;
-		} while (i);
-		leaf_i = expand_model_with_object_path(
-			G_LIST_MODEL(gatui_branch_get_leaves_model(map->branch->self)),
-			object_path, map->leaf_depth
+	model_i = -1;
+	if (map->leaf.depth) {
+		model_i = expand_model_with_object_path(
+			G_LIST_MODEL(gatui_branch_get_leaves_model(
+				GATUI_BRANCH(map->branch.node->self)
+			)),
+			&(map->leaf)
 		);
 	}
 	if (leaf_index) {
-		*leaf_index = leaf_i;
+		*leaf_index = model_i;
 	}
-
-	free(object_path);
 }
 
 bool
@@ -418,44 +439,26 @@ gatui_tree_select_in_model_by_path(
 bool
 gatui_tree_select_in_model_by_object(
 		GATUITree* const self,
-		GObject* const target,
+		GATUINode* const target,
 		int16_t* const branch_index,
 		int16_t* const leaf_index
 		) {
 	g_return_val_if_fail(GATUI_IS_TREE(self), false);
+	g_return_val_if_fail(gatui_node_get_root(target) == self, false);
 
-	GATUITree* mirror;
 	struct atui_path_goto map = {};
-
-	if (GATUI_IS_LEAF(target)) {
-		GATUILeaf* leaf = GATUI_LEAF(target);
-		mirror = gatui_leaf_get_root(leaf);
-		map.leaf = (atui_leaf*) gatui_leaf_get_atui(leaf);
-	} else if (GATUI_IS_BRANCH(target)) {
-		GATUIBranch* branch = GATUI_BRANCH(target);
-		mirror = gatui_branch_get_root(branch);
-		map.branch = (atui_branch*) gatui_branch_get_atui(branch);
-	} else {
-		return false;
-	}
-	if (mirror != self) {
-		return false;
-	}
-
-	if (map.leaf) {
-		bool parent_is_leaf;
-		atui_leaf const* parent = map.leaf;
+	atui_node* parent = _gatui_node_get_atui(target);
+	if (parent->is_leaf) {
+		map.leaf.node = parent;
 		do {
-			parent_is_leaf = parent->parent_is_leaf;
-			parent = parent->parent_leaf;
-			map.leaf_depth++;
-		} while (parent_is_leaf);
-		map.branch = (void*) parent;
+			parent = parent->parent;
+			map.leaf.depth++;
+		} while (parent->is_leaf);
 	}
-	atui_branch const* parent = map.branch;
+	map.branch.node = parent;
 	do {
-		parent = parent->parent_branch;
-		map.branch_depth++;
+		parent = parent->parent;
+		map.branch.depth++;
 	} while (parent);
 
 	// g_weak_ref_get refs for us
@@ -471,9 +474,7 @@ gatui_tree_select_in_model_by_object(
 	g_object_unref(trunk_model);
 
 	return true;
-
 }
-
 
 
 GATUITree*

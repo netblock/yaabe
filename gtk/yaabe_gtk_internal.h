@@ -5,6 +5,10 @@
 #include "gatui.h"
 #include "yaabe_gtk4.h"
 
+static constexpr uint8_t OFFSET_BUFFER_SIZE = sizeof("[123456 - 123456]");
+static constexpr char BYTE_ARRAY_FORMAT[] = "[%06zX - %06zX]";
+static constexpr char BIT_ARRAY_FORMAT[] = "[%u:%u]";
+
 struct pane_context {
 	GtkColumnView* view; // so branches can set leaves, and loading bios
 	GtkPopover* rightclick;
@@ -48,7 +52,7 @@ create_about_window(
 void
 yaabe_gtk_scroll_to_object( // scroll to based on a branch/leaf object
 		yaabegtk_commons const* commons,
-		GObject* gatui
+		GATUINode* tree_node
 		);
 void
 yaabe_gtk_scroll_to_path( // /scroll/to/based/on/path
@@ -76,6 +80,7 @@ void
 set_editor_titlebar(
 		yaabegtk_commons* commons
 		);
+
 
 // menus
 void
@@ -140,6 +145,7 @@ create_search_rightclick_menu(
 		yaabegtk_commons* commons
 		);
 
+
 // config file
 GFile*
 get_cached_working_dir(
@@ -158,12 +164,11 @@ char* // needs to be freed.
 get_cached_scroll_path(
 		);
 
-// search
 
+// search
 void
 create_search_window(
 		yaabegtk_commons* commons
 		);
-
 
 #endif

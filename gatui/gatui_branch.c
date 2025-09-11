@@ -1,26 +1,16 @@
 #include "standard.h"
 #include "gatui_private.h"
 
-enum {
-	VALUE_CHANGED,
-	LAST_SIGNAL
-};
-static guint gatui_signals[LAST_SIGNAL] = {0};
-
 struct _GATUIBranch {
-	GObject parent_instance;
+	GATUINode parent_instance;
 
-	GATUITree* root;
+	atui_node* atui;
 
-	atui_branch* atui;
-	GATUIBranch** child_branches;
+	uint16_t num_branches; // same as atui_node.branch.branches.count
+	GATUIBranch** branches;
 	GtkSelectionModel* leaves_model; // noselection of a treelist
-	GATUILeaf** leaves; // weak reference; only for quick access.
-
-	char typestr[GATUI_TYPESTR_LEN];
-	GVariantType* capsule_type;
 };
-G_DEFINE_TYPE(GATUIBranch, gatui_branch, G_TYPE_OBJECT)
+G_DEFINE_TYPE(GATUIBranch, gatui_branch, GATUI_TYPE_NODE)
 
 
 static void
@@ -29,112 +19,74 @@ gatui_branch_dispose(
 		) {
 	GATUIBranch* const self = GATUI_BRANCH(object);
 
-	if (self->child_branches) {
-		GATUIBranch** const child_branches = self->child_branches;
-		self->child_branches = NULL;
-		uint16_t const num_branches = self->atui->num_branches;
-		for (uint16_t i = 0; i < num_branches; i++) {
-			g_object_unref(child_branches[i]);
+	if (self->branches) {
+		GATUIBranch** const branches = self->branches;
+		self->branches = NULL;
+		for (uint16_t i = 0; i < self->num_branches; i++) {
+			g_object_unref(branches[i]);
 		}
-		free(child_branches);
+		free(branches);
 	}
 	if (self->leaves_model) {
 		g_object_unref(self->leaves_model);
-		free(self->leaves);
-		self->leaves = NULL;
 		self->leaves_model = NULL;
-	}
-	self->atui->self = NULL; // weak reference
-
-	if (self->capsule_type) {
-		g_free(self->capsule_type);
-		self->capsule_type = NULL;
-	}
-
-	if (self->root) {
-		g_object_unref(self->root);
-		self->root = NULL;
 	}
 
 	G_OBJECT_CLASS(gatui_branch_parent_class)->dispose(object);
 }
-
 static void
 gatui_branch_class_init(
 		GATUIBranchClass* const branch_class
 		) {
 	GObjectClass* const object_class = G_OBJECT_CLASS(branch_class);
-
 	object_class->dispose = gatui_branch_dispose;
 
-	gatui_signals[VALUE_CHANGED] = g_signal_new(
-		"value-changed",
-		G_TYPE_FROM_CLASS(branch_class),
-		(G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE),
-		0,
-		NULL, NULL,
-		NULL,
-		G_TYPE_NONE, 0
-	);
+	GATUINodeClass* const node_class = GATUI_NODE_CLASS(branch_class);
+	node_class->get_value = gatui_node_get_contiguous_data;
+	node_class->set_value = gatui_node_set_contiguous_data;
 }
 static void
 gatui_branch_init(
-		GATUIBranch* const self
+		GATUIBranch* const self __unused
 		) {
-	self->child_branches = NULL;
-	self->leaves_model = NULL;
 }
 
 GATUIBranch*
 gatui_branch_new(
-		atui_branch* const branch,
+		atui_node* const branch,
 		GATUITree* const root
 		) {
-	assert(branch);
-	assert(NULL == branch->self);
-	g_return_val_if_fail(branch != NULL, NULL);
-	g_return_val_if_fail(branch->self == NULL, NULL);
+	g_return_val_if_fail(branch, NULL);
+	g_return_val_if_fail(NULL == branch->self, NULL);
+	g_return_val_if_fail(false == branch->is_leaf, NULL);
 
-	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH, NULL);
+	GATUIBranch* const self = g_object_new(GATUI_TYPE_BRANCH,
+		"atui", branch,
+		"root", root,
+		"typestr", "ay",
+		NULL
+	);
+	assert((void*)GATUI_BRANCH(self) == (void*)GATUI_NODE(self));
 	self->atui = branch;
-	branch->self = self;
 
-	g_object_ref(root);
-	self->root = root;
-
-	uint16_t const num_branches = branch->num_branches;
-	if (num_branches) {
-		self->child_branches = cralloc(num_branches * sizeof(GATUIBranch*));
-
-		for (uint16_t i = 0; i < num_branches; i++) {
-			assert(branch->child_branches[i]);
-			self->child_branches[i] = gatui_branch_new(
-				branch->child_branches[i], root
+	struct atui_children const* const branches = &(branch->branch.branches);
+	self->num_branches = branches->count;
+	if (branches->count) {
+		self->branches = cralloc(branches->count * sizeof(GATUIBranch*));
+		for (uint16_t i = 0; i < branches->count; i++) {
+			assert(branches->addresses[i]);
+			self->branches[i] = gatui_branch_new(
+				branches->addresses[i], root
 			);
-			assert(self->child_branches[i]);
+			assert(self->branches[i]);
 		}
 	}
 
-	if (branch->leaf_count) { // generate leaves_model
-		GATUILeaf** const leaves_array = cralloc(
-			branch->leaf_count * sizeof(GATUILeaf*)
-		);
-		self->leaves = leaves_array;
-		GListStore* const leaf_list = g_list_store_new(GATUI_TYPE_LEAF);
-
-		for (uint16_t i=0; i < branch->leaf_count; i++) {
-			GATUILeaf* leaf = gatui_leaf_new(&(branch->leaves[i]), root);
-			leaves_array[i] = leaf;
-			g_list_store_append(leaf_list, leaf);
-			g_signal_connect_swapped(self, "value-changed",
-				G_CALLBACK(gatui_leaf_emit_val_changed), leaf
-			);
-			g_object_unref(leaf);
-		}
-
+	if (branch->leaves.count) { // generate leaves_model
 		GtkSingleSelection* const single_model = gtk_single_selection_new(
 			G_LIST_MODEL(gtk_tree_list_model_new(
-				G_LIST_MODEL(leaf_list),  false, true,
+				leaves_treelist_generate_children(self, NULL),
+				false, true,
 				leaves_treelist_generate_children, NULL,NULL
 			))
 		); // the later models take ownership of the earlier
@@ -149,291 +101,31 @@ gatui_branch_new(
 		self->leaves_model = GTK_SELECTION_MODEL(single_model);
 	}
 
-	strcpy(self->typestr, "ay");
-	self->capsule_type = g_variant_type_new(self->typestr);
-
 	return self;
 }
 
-GATUITree*
-gatui_branch_get_root(
+uint16_t
+gatui_branch_get_num_branches(
 		GATUIBranch* const self
 		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	return self->root;
+	g_return_val_if_fail(GATUI_IS_BRANCH(self), 0);
+	return self->num_branches;
 }
-
 
 GtkSelectionModel*
 gatui_branch_get_leaves_model(
 		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
 	return self->leaves_model;
 }
 
-size_t
-gatui_branch_get_region_bounds(
-		GATUIBranch* const self,
-		size_t* start,
-		size_t* end
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), 0);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), 0);
-
-	atui_branch const* const branch = self->atui;
-	if (branch->table_size) {
-		size_t bios_size;
-		void const* const bios = gatui_tree_get_bios_pointer(
-			self->root, &bios_size
-		);
-		ptrdiff_t const offset_start = branch->table_start - bios;
-		size_t const offset_end = offset_start + branch->table_size - 1;
-		assert(0 <= offset_start);
-		assert(offset_end < bios_size);
-		if (start) {
-			*start = offset_start;
-		}
-		if (end) {
-			*end = offset_end;
-		}
-	}
-
-	return branch->table_size;
-}
-
-GVariant*
-gatui_branch_get_contiguous_memory(
+GATUIBranch**
+_gatui_branch_get_branches_array(
 		GATUIBranch* const self
 		) {
 	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	atui_branch const* const atui = self->atui;
-	if (atui->table_size) {
-		void* const valcopy = cralloc(atui->table_size);
-		memcpy(valcopy, atui->table_start, atui->table_size);
-		return g_variant_new_from_data(
-			self->capsule_type,
-			valcopy, atui->table_size,
-			false,
-			(GDestroyNotify) free, valcopy
-		);
-	}
-	return NULL;
-}
-bool
-gatui_branch_set_contiguous_memory(
-		GATUIBranch* const self,
-		GVariant* const value
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail((NULL != value), false);
-	atui_branch const* const branch = self->atui;
-
-	size_t const num_bytes = g_variant_get_size(value);
-	void const* const input_data = g_variant_get_data(value);
-	assert(input_data);
-	if ((branch->table_size == num_bytes) && input_data) {
-		memcpy(branch->table_start, input_data, num_bytes);
-		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
-		return true;
-	}
-	return false;
-}
-bool
-gatui_branch_get_leaves_memory_package(
-		GATUIBranch* const self,
-		GVariant** const value,
-		uint16_t* num_copyable_leaves
-		) {
-// copy the data of all direct child leaves that maps data into the bios,
-// and pack it a contiguous byte array.
-
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail((NULL != value), false);
-	g_return_val_if_fail((NULL != num_copyable_leaves), false);
-
-	g_return_val_if_fail((0 < self->atui->num_copyable_leaves), false);
-	*num_copyable_leaves = self->atui->num_copyable_leaves;
-	atui_leaf const* const leaves = self->atui->leaves;
-	uint16_t const leaf_count = self->atui->leaf_count;
-
-	size_t num_bytes = 0;
-	for (uint16_t i=0; i < leaf_count; i++) {
-		num_bytes += leaves[i].num_bytes;
-	}
-	void* const bytepack = cralloc(num_bytes);
-	void* walker = bytepack;
-	for (uint16_t i=0; i < leaf_count; i++) {
-		if (leaves[i].num_bytes) {
-			walker = mempcpy(walker, leaves[i].val, leaves[i].num_bytes);
-		}
-	}
-	assert(num_bytes == (size_t)(walker - bytepack));
-
-	*value = g_variant_new_from_data(
-		self->capsule_type,
-		bytepack, num_bytes,
-		false,
-		(GDestroyNotify) free, bytepack
-	);
-	return true;
-}
-bool
-gatui_branch_set_leaves_memory_package(
-		GATUIBranch* const self,
-		GVariant* const value,
-		uint16_t num_copyable_leaves
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail((NULL != value), false);
-
-	if (num_copyable_leaves != self->atui->num_copyable_leaves) {
-		return false;
-	}
-
-	atui_leaf const* const leaves = self->atui->leaves;
-	uint16_t const leaf_count = self->atui->leaf_count;
-	size_t num_bytes = 0;
-
-	for (uint16_t i=0; i < leaf_count; i++) {
-		num_bytes += leaves[i].num_bytes;
-	}
-	if (num_bytes != g_variant_get_size(value)) {
-		return false;
-	}
-
-	void const* const input_data = g_variant_get_data(value);
-	void const* walker = input_data;
-	assert(input_data);
-	if (input_data) {
-		for (uint16_t i=0; i < leaf_count; i++) {
-			if (leaves[i].num_bytes) {
-				memcpy(leaves[i].u8, walker, leaves[i].num_bytes);
-			}
-			walker += leaves[i].num_bytes;
-		}
-		assert(num_bytes == (size_t)(walker - input_data));
-		g_signal_emit(self, gatui_signals[VALUE_CHANGED], 0);
-		return true;
-	}
-	return false;
-}
-
-char*
-gatui_branch_to_base64(
-		GATUIBranch* const self,
-		bool const leaves_package
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-
-	atui_branch const* const branch = self->atui;
-
-	struct b64_header config = {
-		.version = B64_HEADER_VER_CURRENT,
-	};
-	GVariant* val;
-
-	if (leaves_package) {
-		if (branch->prefer_contiguous || !branch->num_copyable_leaves) {
-			return NULL;
-		}
-		uint16_t num_segments;
-		gatui_branch_get_leaves_memory_package(self, &val, &num_segments);
-		config.target = B64_BRANCH_LEAVES;
-		config.num_segments = num_segments;
-	} else { // contiguous
-		if (!branch->table_size) {
-			return NULL;
-		}
-		val = gatui_branch_get_contiguous_memory(self);
-		config.target = B64_BRANCH_CONTIGUOUS;
-		config.num_segments = 1;
-	}
-
-	config.num_bytes = g_variant_get_size(val);
-	memcpy(config.typestr,   self->typestr,   sizeof(self->typestr));
-	char* const b64_text = b64_packet_encode(&config, g_variant_get_data(val));
-	g_variant_unref(val);
-	return b64_text;
-}
-bool
-gatui_branch_from_base64(
-		GATUIBranch* const self,
-		char const* const b64_text,
-		struct b64_header** const error_out
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), false);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), false);
-	g_return_val_if_fail(b64_text, false);
-
-	struct b64_header* const header = b64_packet_decode(b64_text);
-	if (NULL == header) {
-		goto error_exit;
-	}
-
-	if ((B64_BRANCH_CONTIGUOUS != header->target)
-			&& (B64_BRANCH_LEAVES != header->target)
-			) {
-		goto error_exit;
-	}
-
-	GVariantType* const header_type = g_variant_type_new(header->typestr);
-	GVariant* const new_val = g_variant_new_from_data(
-		header_type,
-		header->bytes, header->num_bytes,
-		false,
-		NULL, NULL
-	);
-	bool success;
-	if (B64_BRANCH_CONTIGUOUS == header->target) {
-		success = gatui_branch_set_contiguous_memory(self, new_val);
-	} else {
-		success = gatui_branch_set_leaves_memory_package(self,
-			new_val, header->num_segments
-		);
-	}
-	free(header_type);
-	g_variant_unref(new_val);
-	if (!success) {
-		goto error_exit;
-	}
-	
-	//success_exit:
-	free(header);
-	return true;
-
-	error_exit:
-	if (error_out) {
-		*error_out = header;
-	} else {
-		free(header);
-	}
-	return false;
-}
-
-
-char*
-gatui_branch_to_path(
-		GATUIBranch* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return atui_branch_to_path(self->atui);
-}
-
-atui_branch const*
-gatui_branch_get_atui(
-		GATUIBranch* const self
-		) {
-	g_return_val_if_fail(GATUI_IS_BRANCH(self), NULL);
-	g_return_val_if_fail(GATUI_IS_TREE(self->root), NULL);
-	return self->atui;
+	return self->branches;
 }
 
 GListModel*
@@ -443,10 +135,10 @@ branches_treelist_generate_children(
 		) {
 // GtkTreeListModelCreateModelFunc for branches
 	GATUIBranch* const self = parent_branch;
-	if (self->atui->num_branches) {
+	if (self->num_branches) {
 		GListStore* const children = g_list_store_new(GATUI_TYPE_BRANCH);
 		g_list_store_splice(children,0,0,
-			(void**)self->child_branches, self->atui->num_branches
+			(void**)self->branches, self->num_branches
 		);
 		return G_LIST_MODEL(children);
 	} else {
@@ -455,10 +147,8 @@ branches_treelist_generate_children(
 }
 
 void
-branches_track_expand_state(
-		GtkTreeListRow* const tree_row,
-		GParamFlags* const param __unused,
-		gpointer const data __unused
+_branches_track_expand_state(
+		GtkTreeListRow* const tree_row
 		) {
 	if (false == gtk_tree_list_row_is_expandable(tree_row)) {
 		return;
@@ -472,25 +162,27 @@ branches_track_expand_state(
 	GATUIBranch* const branch = GATUI_BRANCH(gtk_tree_list_row_get_item(
 		tree_row
 	));
-	branch->atui->expanded = gtk_tree_list_row_get_expanded(tree_row);
-	if (branch->atui->expanded) {
-		uint16_t const num_branches = branch->atui->num_branches;
-		GATUIBranch* const* const child_branches = branch->child_branches;
+	struct atui_children* const branches = &(branch->atui->branch.branches);
+
+	branches->expanded = gtk_tree_list_row_get_expanded(tree_row);
+	if (branches->expanded) {
+		uint16_t const num_branches = branches->count;
+		GATUIBranch* const* const branches = branch->branches;
 		for (uint16_t i=0; i < num_branches; i++) {
 			GtkTreeListRow* child_row = gtk_tree_list_row_get_child_row(
 				tree_row, i
 			);
 			uint32_t handler_id = g_signal_handler_find(child_row,
 				G_SIGNAL_MATCH_FUNC,  0,0,NULL,
-				branches_track_expand_state,  NULL
+				_branches_track_expand_state,  NULL
 			);
 			if (0 == handler_id) {
 				g_signal_connect(child_row, "notify::expanded",
-					G_CALLBACK(branches_track_expand_state), NULL
+					G_CALLBACK(_branches_track_expand_state), NULL
 				);
 			}
 			gtk_tree_list_row_set_expanded(
-				child_row, child_branches[i]->atui->expanded
+				child_row, branches[i]->atui->branch.branches.expanded
 			);
 
 			g_object_unref(child_row);
@@ -503,13 +195,15 @@ void
 gatui_branch_right_click_expand_family(
 		GATUIBranch* const self
 		) {
-	self->atui->expanded = true;
-	uint16_t const num_branches = self->atui->num_branches;
-	GATUIBranch* const* const child_branches = self->child_branches;
+	g_return_if_fail(GATUI_IS_BRANCH(self));
+	self->atui->branch.branches.expanded = true;
+	uint16_t const num_branches = self->num_branches;
+	GATUIBranch* const* const branches = self->branches;
 	for (uint16_t i=0; i < num_branches; i++) {
-		gatui_branch_right_click_expand_family(child_branches[i]);
+		gatui_branch_right_click_expand_family(branches[i]);
 	}
 }
+
 
 void
 gatui_regex_search_recurse_branch(
@@ -518,34 +212,41 @@ gatui_regex_search_recurse_branch(
 		GRegex* const pattern,
 		struct gatui_search_flags const* const flags
 		) {
-	atui_branch const* const atui = branch->atui;
-
-	if ((flags->domain == GATUI_SEARCH_NAMES) && flags->branches) {
+	// very similar to gatui_regex_search_recurse_leaf
+	// possible way to deduplicate is to virtual func:  get_text(flags)
+	// where search_recurse is also a virtual func so branch can append its
+	// child branch loop.
+	char const* text = NULL;
+	if ((GATUI_SEARCH_NAMES == flags->domain) && flags->branches) {
+		text = branch->atui->name;
+	}
+	if (text) {
 		GMatchInfo* match_info;
-		bool matched = g_regex_match(
-			pattern, atui->name, G_REGEX_MATCH_DEFAULT, &match_info
+		bool const matched = g_regex_match(
+			pattern, text, G_REGEX_MATCH_DEFAULT, &match_info
 		);
 		if (matched) {
-			GATUIRegexNode* node = gatui_regex_node_new(
-				G_OBJECT(branch), match_info, atui->name, false, flags
+			GATUIRegexNode* const regex_node = gatui_regex_node_new(
+				GATUI_NODE(branch), match_info, text, flags
 			);
-			g_list_store_append(model, node);
-			g_object_unref(node);
+			g_list_store_append(model, regex_node);
+			g_object_unref(regex_node);
 		}
 		g_match_info_unref(match_info);
 	}
 
 	if (flags->leaves) {
-		for (uint16_t i=0; i < atui->leaf_count; i++) {
-			gatui_regex_search_recurse_leaf(
-				branch->leaves[i], model, pattern, flags
-			);
+		GATUILeaf* const* const leaves = _gatui_node_get_leaf_array(GATUI_NODE(
+			branch
+		));
+		uint16_t const count = branch->atui->leaves.count;
+		for (uint16_t i=0; i < count; i++) {
+			gatui_regex_search_recurse_leaf(leaves[i], model, pattern, flags);
 		}
 	}
 
-	for (uint16_t i=0; i < atui->num_branches; i++) {
-		gatui_regex_search_recurse_branch(
-			branch->child_branches[i], model, pattern, flags
-		);
+	GATUIBranch* const* const branches = branch->branches;
+	for (uint16_t i=0; i < branch->num_branches; i++) {
+		gatui_regex_search_recurse_branch(branches[i], model, pattern, flags);
 	}
 }

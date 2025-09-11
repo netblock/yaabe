@@ -124,7 +124,7 @@ scroll_to_in_main_window_button(
 		pack->commons,
 		gatui_regex_node_peek(
 			gtk_column_view_cell_get_item(pack->column_cell)
-		)->gatui
+		)->tree_node
 	);
 }
 static void
@@ -138,7 +138,7 @@ goto_column_setup(
 	pack->commons = commons;
 	pack->column_cell = column_cell;
 
-	GtkWidget* const goto_button = gtk_button_new_with_label("go to");
+	GtkWidget* const goto_button = gtk_button_new_with_label("Go To");
 	g_signal_connect_data(goto_button, "clicked",
 		G_CALLBACK(scroll_to_in_main_window_button), pack,
 		free_closure, G_CONNECT_SWAPPED
@@ -147,17 +147,18 @@ goto_column_setup(
 }
 
 static void
-branchleaf_type_column_bind(
+node_type_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-	struct atui_regex_node const* node = gatui_regex_node_peek(
+	struct atui_regex_node const* regex = gatui_regex_node_peek(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	assert(node);
-	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
-	char const* const text[] = {"Branch", "Leaf"};
-	gtk_label_set_text(GTK_LABEL(label), text[node->is_leaf]);
+	assert(regex);
+	gtk_label_set_text(
+		GTK_LABEL(gtk_column_view_cell_get_child(column_cell)),
+		(char* const[2]){"Branch", "Leaf"}[GATUI_IS_LEAF(regex->tree_node)]
+	);
 }
 
 static void
@@ -165,24 +166,21 @@ highlight_name_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-	struct atui_regex_node const* node = gatui_regex_node_peek(
+	struct atui_regex_node const* regex = gatui_regex_node_peek(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	assert(node);
+	assert(regex);
 	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
 		column_cell
 	));
 
-	if (GATUI_SEARCH_NAMES == node->flags.domain) {
-		gtk_label_set_markup(label, node->markup_text);
+	if (GATUI_SEARCH_NAMES == regex->flags.domain) {
+		gtk_label_set_markup(label, regex->markup_text);
 	} else {
-		char const* text;
-		if (node->is_leaf) {
-			text = gatui_leaf_get_atui(GATUI_LEAF(node->gatui))->name;
-		} else {
-			text = gatui_branch_get_atui(GATUI_BRANCH(node->gatui))->name;
-		}
-		gtk_label_set_text(label, text);
+		gtk_label_set_text(
+			label,
+			gatui_node_get_name(regex->tree_node)
+		);
 	}
 }
 static void
@@ -190,19 +188,19 @@ highlight_value_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-	struct atui_regex_node const* node = gatui_regex_node_peek(
+	struct atui_regex_node const* regex = gatui_regex_node_peek(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	assert(node);
+	assert(regex);
 	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
 		column_cell
 	));
 
-	if (node->is_leaf) {
-		if (GATUI_SEARCH_VALUES == node->flags.domain) {
-			gtk_label_set_markup(label, node->markup_text);
+	if (GATUI_IS_LEAF(regex->tree_node)) {
+		if (GATUI_SEARCH_VALUES == regex->flags.domain) {
+			gtk_label_set_markup(label, regex->markup_text);
 		} else {
-			GATUILeaf* const leaf = GATUI_LEAF(node->gatui);
+			GATUILeaf* const leaf = GATUI_LEAF(regex->tree_node);
 			char* text = NULL;
 			if (gatui_leaf_has_textable_value(leaf)) {
 				text = gatui_leaf_value_to_text(leaf);
@@ -216,34 +214,23 @@ highlight_value_column_bind(
 }
 
 static void
-offset_column_bind(
+regex_offset_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-	struct atui_regex_node const* node = gatui_regex_node_peek(
+	struct atui_regex_node const* regex = gatui_regex_node_peek(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	assert(node);
+	assert(regex);
 	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
 		column_cell
 	));
 
 	size_t start;
 	size_t end;
-	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
-	bool success = false;
-
-	if (node->is_leaf) {
-		success = gatui_leaf_get_region_bounds(
-			GATUI_LEAF(node->gatui), &start, &end
-		);
-	} else {
-		success = gatui_branch_get_region_bounds(
-			GATUI_BRANCH(node->gatui), &start, &end
-		);
-	}
-	if (success) {
-		sprintf(buffer, "[%06zX - %06zX]", start, end);
+	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
+	if (gatui_node_get_region_bounds(regex->tree_node, &start, &end)) {
+		sprintf(buffer, BYTE_ARRAY_FORMAT, start, end);
 	}
 
 	assert(strlen(buffer) < sizeof(buffer));
@@ -283,7 +270,7 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branchleaf_type_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_type_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("Type", factory);
@@ -314,7 +301,7 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(regex_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);

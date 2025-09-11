@@ -86,33 +86,14 @@ tree_label_column_setup(
 }
 
 
-
-
 static void
-branch_name_column_bind(
+node_name_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind data to the UI skeleton
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
-	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
-	atui_branch const* const a_branch = gatui_branch_get_atui(g_branch);
-
-
-	/* TODO
-	This should be tucked away in the model creation, but for some reason 
-	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
-	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
-	*/
-	gulong const handler_id = g_signal_handler_find(tree_row,
-		G_SIGNAL_MATCH_FUNC,    0,0,NULL,
-		branches_track_expand_state,  NULL
-	);
-	if (0 == handler_id) { // usually passes
-		g_signal_connect(tree_row, "notify::expanded",
-			G_CALLBACK(branches_track_expand_state), g_branch
-		);
-	}
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_column_view_cell_get_child(column_cell)
@@ -120,33 +101,54 @@ branch_name_column_bind(
 	gtk_tree_expander_set_list_row(expander, tree_row);
 
 	GtkWidget* const label = gtk_tree_expander_get_child(expander);
-	gtk_label_set_text(GTK_LABEL(label), a_branch->name);
-	enum i18n_languages const current_lang = LANG_ENGLISH;
-	gtk_widget_set_tooltip_text(label, a_branch->description[current_lang]);
+	gtk_label_set_text(GTK_LABEL(label), gatui_node_get_name(node));
+	constexpr enum i18n_languages current_lang = LANG_ENGLISH; // TODO
+	gtk_widget_set_tooltip_text(
+		label,
+		gatui_node_get_description(node, current_lang)
+	);
 
-	g_object_unref(g_branch);
+	g_object_unref(node);
 }
 static void
-branch_offset_column_bind(
+node_offset_column_bind(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-// bind
+// bind data to the UI skeleton
 	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
 
-	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
-	GATUIBranch* const g_branch = gtk_tree_list_row_get_item(tree_row);
+	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(
+		gtk_column_view_cell_get_item(column_cell)
+	));
 
 	size_t start;
 	size_t end;
-	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
-	if (gatui_branch_get_region_bounds(g_branch, &start, &end)) {
-		sprintf(buffer, "[%06zX - %06zX]", start, end);
+	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
+	char const* format = BYTE_ARRAY_FORMAT;
+	size_t success;
+
+	if (GATUI_IS_LEAF(node)) {
+		GATUILeaf* const leaf = GATUI_LEAF(node);
+		if (_ATUI_BITCHILD == gatui_leaf_get_atui_type(leaf)->fancy) {
+			format = BIT_ARRAY_FORMAT;
+			success = gatui_leaf_get_bitfield_size(leaf, &start, &end);
+		} else {
+			success = gatui_node_get_region_bounds(node, &start, &end);
+		}
+	} else {
+		success = gatui_node_get_region_bounds(node, &start, &end);
 	}
-	assert(strlen(buffer) < sizeof(buffer));
+
+	if (success) {
+		sprintf(buffer, format, start, end);
+		assert(strlen(buffer) < sizeof(buffer));
+	}
 	gtk_label_set_text(GTK_LABEL(label), buffer);
-	g_object_unref(g_branch);
+	g_object_unref(node);
 }
+
+
 inline static GtkWidget*
 create_branches_pane(
 		yaabegtk_commons* const commons
@@ -166,13 +168,14 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::bind",G_CALLBACK(branches_rightclick_row_bind),commons,
+		"swapped-signal::bind",G_CALLBACK(branches_expand_row_fixer), NULL,
 		NULL
 	);
 	gtk_column_view_set_row_factory(branches_view, factory);
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(tree_label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branch_name_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_name_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("Table", factory);
@@ -183,7 +186,7 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(branch_offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -204,39 +207,15 @@ create_branches_pane(
 
 
 
-
-static void
-leaves_name_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
-		GtkColumnViewCell* const column_cell
-		) {
-// bind data to the UI skeleton
-	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(tree_row);
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
-	g_object_unref(g_leaf);
-
-	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
-		gtk_column_view_cell_get_child(column_cell)
-	);
-	gtk_tree_expander_set_list_row(expander, tree_row);
-
-	GtkWidget* const label = gtk_tree_expander_get_child(expander);
-	gtk_label_set_text(GTK_LABEL(label), a_leaf->name);
-	uint8_t const current_lang = LANG_ENGLISH;
-	gtk_widget_set_tooltip_text(label, a_leaf->description[current_lang]);
-}
-
 static void
 leaf_sets_editable(
-	GATUILeaf* const g_leaf,
+	GATUILeaf* const leaf,
 	GtkEditable* const editable
 	) {
-	char* const text = gatui_leaf_value_to_text(g_leaf);
-	if (text) {
-		gtk_editable_set_text(editable, text);
-		free(text);
-	}
+	char* const text = gatui_leaf_value_to_text(leaf);
+	assert(text);
+	gtk_editable_set_text(editable, text);
+	free(text);
 }
 static void
 leaves_editable_stray_reset(
@@ -252,11 +231,11 @@ leaves_editable_stray_reset(
 		)
 	); // enum and text share same EntryBuffer
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	leaf_sets_editable(g_leaf, editable);
-	g_object_unref(g_leaf);
+	leaf_sets_editable(leaf, editable);
+	g_object_unref(leaf);
 }
 static void
 editable_sets_leaf(
@@ -265,14 +244,14 @@ editable_sets_leaf(
 		) {
 // Only way to apply the value is to hit enter
 	GtkColumnViewCell* const column_cell = *cell_cache;
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	gatui_leaf_set_value_from_text(
-		g_leaf,
+		leaf,
 		gtk_editable_get_text(editable)
 	);
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 }
 
 static void
@@ -311,14 +290,14 @@ enum_val_column_bind(
 		"enum"
 	); // no need to unref from list_item_get_item
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(leaves_column_cell)
 	);
 
-	char* const text = gatui_leaf_enum_val_to_text(g_leaf, enum_entry);
+	char* const text = gatui_leaf_enum_val_to_text(leaf, enum_entry);
 	gtk_label_set_text(label, text);
 	free(text);
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 
 	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(
@@ -340,16 +319,16 @@ enum_list_sets_leaf(
 		"enum"
 	);
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(leaves_column_cell)
 	);
 
 	bool const has_set __unused = gatui_leaf_enum_entry_sets_value(
-		g_leaf, enum_entry
+		leaf, enum_entry
 	);
 	assert(has_set);
 
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 }
 static void
 enummenu_sets_selection(
@@ -362,10 +341,10 @@ enummenu_sets_selection(
 		gtk_column_view_get_model(GTK_COLUMN_VIEW(enum_list))
 	);
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(leaves_column_cell)
 	);
-	int16_t index = gatui_leaf_enum_entry_get_possible_index(g_leaf);
+	int16_t index = gatui_leaf_enum_entry_get_possible_index(leaf);
 	if (-1 < index) {
 		gtk_single_selection_set_selected(enum_model, index);
 	} else {
@@ -373,7 +352,7 @@ enummenu_sets_selection(
 			enum_model, GTK_INVALID_LIST_POSITION
 		);
 	}
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 }
 inline static GtkWidget*
 construct_enum_columnview(
@@ -476,7 +455,7 @@ branch's leaves into view, slow. So, cache them with a stack.
 		g_object_ref_sink(widget_bag); // ref parity with cached alternative
 		cell_cache = cralloc(sizeof(column_cell));
 		g_object_set_data_full(G_OBJECT(widget_bag),
-			"cell_cache", cell_cache, (GDestroyNotify) free
+			"cell_cache", cell_cache, free
 		);
 
 		GtkEventController* const focus_sense = (
@@ -531,15 +510,15 @@ leaves_val_column_bind(
 		GtkColumnViewCell* const column_cell
 		) {
 // bind
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	GtkStack* const widget_bag = GTK_STACK(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 
-	struct atui_type const* const type = &(gatui_leaf_get_atui(g_leaf)->type);
-	bool const has_value = gatui_leaf_has_textable_value(g_leaf);
+	struct atui_leaf_type const* const type = gatui_leaf_get_atui_type(leaf);
+	bool const has_value = gatui_leaf_has_textable_value(leaf);
 	gtk_widget_set_visible(GTK_WIDGET(widget_bag), has_value);
 	if (has_value) {
 		GtkWidget* editable;
@@ -550,7 +529,7 @@ leaves_val_column_bind(
 				G_OBJECT(widget_bag), "enum_list"
 			);
 			GtkSelectionModel* const enum_model = (
-				gatui_leaf_get_enum_menu_selection_model(g_leaf)
+				gatui_leaf_get_enum_menu_selection_model(leaf)
 			);
 
 			gtk_column_view_set_model(enum_list, enum_model);
@@ -563,12 +542,12 @@ leaves_val_column_bind(
 			editable = gtk_stack_get_visible_child(widget_bag);
 		}
 
-		leaf_sets_editable(g_leaf, GTK_EDITABLE(editable));
-		g_signal_connect(g_leaf, "value-changed",
+		leaf_sets_editable(leaf, GTK_EDITABLE(editable));
+		g_signal_connect(leaf, "value-changed",
 			G_CALLBACK(leaf_sets_editable), GTK_EDITABLE(editable)
 		);
 	}
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 }
 static void
 leaves_val_column_unbind(
@@ -582,43 +561,17 @@ leaves_val_column_unbind(
 		),
 		NULL
 	);
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
+	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	g_signal_handlers_disconnect_matched(
-		g_leaf,  G_SIGNAL_MATCH_FUNC,
+		leaf,  G_SIGNAL_MATCH_FUNC,
 		0,0, NULL,   G_CALLBACK(leaf_sets_editable),   NULL
 
 	);
-	g_object_unref(g_leaf);
+	g_object_unref(leaf);
 }
-static void
-leaves_offset_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
-		GtkColumnViewCell* const column_cell
-		) {
-// bind data to the UI skeleton
-	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
 
-	GATUILeaf* const g_leaf = gtk_tree_list_row_get_item(
-		gtk_column_view_cell_get_item(column_cell)
-	);
-	atui_leaf const* const a_leaf = gatui_leaf_get_atui(g_leaf);
-
-	size_t start;
-	size_t end;
-	char buffer[sizeof("[123456 - 123456]")] = {[0]='\0'};
-	if (a_leaf->type.fancy == _ATUI_BITCHILD) {
-		sprintf(buffer, "[%u:%u]",
-			a_leaf->bitfield_hi, a_leaf->bitfield_lo
-		);
-	} else if (gatui_leaf_get_region_bounds(g_leaf, &start, &end)) {
-		sprintf(buffer, "[%06zX - %06zX]", start, end);
-	}
-	assert(strlen(buffer) < sizeof(buffer));
-	gtk_label_set_text(GTK_LABEL(label), buffer);
-	g_object_unref(g_leaf);
-}
 inline static GtkWidget*
 create_leaves_pane(
 		yaabegtk_commons* const commons
@@ -644,7 +597,7 @@ create_leaves_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(tree_label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(leaves_name_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_name_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("names", factory);
@@ -676,7 +629,7 @@ create_leaves_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(leaves_offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind), NULL,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);

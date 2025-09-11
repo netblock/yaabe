@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
-		table_start: "bios",
-		table_size: "bios->table_header.structuresize",
+		access: "bios",
+		num_bytes: "bios->table_header.structuresize",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -25,7 +25,7 @@ global_defaults: {
 	},
 }, branches: [
 { // basic empty branch mainly to have collapsables
-	c_type: "atui_nullstruct", table_size: "0", leaves: [],
+	c_type: "atui_nullstruct", num_bytes: "0", leaves: [],
 },
 
 {
@@ -310,7 +310,7 @@ global_defaults: {
 
 {
 	c_type: "atom_smc_dpm_info_i2c",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->liquid1_i2c_address",
@@ -638,7 +638,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_v4_6_svi2_parameters",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->maxvoltagestepgfx",
@@ -695,7 +695,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_v4_6_telemetry",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->gfx",
@@ -721,7 +721,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_smc_dpm_info_v4_6_gpio_settings",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->vr0hotgpio",
@@ -965,7 +965,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "PPT_THROTTLER_COUNT",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "PPT %u",
 				},],
@@ -1122,7 +1122,7 @@ global_defaults: {
 				fancy: "ATUI_DYNARRAY", fancy_data: {
 					deferred: "NULL",
 					count: "lengthof(bios->I2cControllers)",
-					enum: "ATUI_NULL",
+					enum: "NULL",
 					pattern: [{
 						name: "I2cControllers [%02u]",
 						display: "ATUI_DISPLAY",
@@ -1158,7 +1158,7 @@ global_defaults: {
 
 {
 	c_prefix: "union", c_type: "atombios_firmware_capability_v3",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->firmware_capability",
 		name: "firmware_capability",
@@ -2856,7 +2856,7 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "atom_i2c_id_config",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->i2c_id",
 		name: "i2c_id",
@@ -2883,7 +2883,7 @@ global_defaults: {
 }, {
 	c_prefix: "union", c_type: "atom_gpioi2c_pin_id",
 	atomtree: "atomtree_gpio_pin_lut",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->gpio_id",
 		name: "gpio_id",
@@ -2922,7 +2922,7 @@ global_defaults: {
 }, {
 	c_type: "atom_gpio_pin_assignment_v2_1",
 	atomtree: "atomtree_gpio_pin_lut",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->data_a_reg_index",
@@ -2960,7 +2960,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_gpio_pins",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					access: "bios->gpio_pin",
 					name: "gpio_pin [%02u]",
@@ -2975,7 +2975,7 @@ global_defaults: {
 
 {
 	c_type: "atom_connector_speed_record",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->record_header",
@@ -2996,7 +2996,7 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "disp_connector_caps",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->connectcaps",
 		name: "connectcaps",
@@ -3020,7 +3020,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "atom_disp_connector_caps_record",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->record_header",
@@ -3036,7 +3036,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_bracket_layout_record_v2",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->record_header",
@@ -3080,7 +3080,7 @@ global_defaults: {
 
 {
 	c_type: "atom_display_object_path_v2",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->display",
@@ -3131,7 +3131,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_display_object_path_v3",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->display",
@@ -3208,7 +3208,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->number_of_path",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "display_path [%02u]",
 					display: "ATUI_DISPLAY",
@@ -3245,7 +3245,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->number_of_path",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "display_path [%02u]",
 					display: "ATUI_DISPLAY",
@@ -3906,7 +3906,7 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "dphy_bitremap0",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->raw_data",
 		name: "dphy_bitremap",
@@ -3933,7 +3933,7 @@ global_defaults: {
 	},],
 }, {
 	c_prefix: "union", c_type: "dphy_byteremap0",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->raw_data",
 		name: "dphy_byteremap",
@@ -3960,7 +3960,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "atom_gddr6_bit_byte_remap",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->dphy_byteremap",
@@ -4004,7 +4004,7 @@ global_defaults: {
 }, {
 	c_type: "atom_gddr6_dram_data_remap",
 	atomtree: "atomtree_gddr6_dram_data_remap",
-	table_size: "bios->table_size",
+	num_bytes: "bios->table_size",
 	leaves: [
 		{
 			access: "bios->table_size",
@@ -4025,7 +4025,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->bit_byte_remap_count",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "bit_byte_remap [%02u]",
 					display: "ATUI_DISPLAY",
@@ -4039,8 +4039,8 @@ global_defaults: {
 {
 	c_prefix: "union", c_type: "atom_umc_register_addr_info_access",
 	atomtree: "atomtree_umc_init_reg_block",
-	table_start: "atomtree->register_info",
-	table_size: "atomtree->info_table_size",
+	access: "atomtree->register_info",
+	num_bytes: "atomtree->info_table_size",
 	leaves: [{
 			access: "(&(atomtree->register_info[0].umc_reg_addr))",
 			name: "umc_reg_list",
@@ -4048,7 +4048,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_info",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "umc_reg_addr [%03u]",
 					display: "ATUI_HEX",
@@ -4070,7 +4070,7 @@ global_defaults: {
 	},],
 }, {
 	c_prefix: "union", c_type: "atom_mc_register_setting_id",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [{
 		access: "bios->id_access",
 		name: "id_access",
@@ -4086,7 +4086,7 @@ global_defaults: {
 }, {
 	c_type: "atom_umc_reg_setting_data_block",
 	atomtree: "atomtree_umc_init_reg_block",
-	table_size: "atomtree->data_block_element_size",
+	num_bytes: "atomtree->data_block_element_size",
 	leaves: [
 		{
 			access: "bios->block_id",
@@ -4100,7 +4100,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_data_entries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "umc_reg_data [%03u]",
 					display: "ATUI_HEX",
@@ -4111,8 +4111,8 @@ global_defaults: {
 }, {
 	c_type: "umc_reg_settings_dummy",
 	atomtree: "atomtree_umc_init_reg_block",
-	table_size: "atomtree->data_block_table_size",
-	table_start: "atomtree->data_blocks[0]",
+	num_bytes: "atomtree->data_block_table_size",
+	access: "atomtree->data_blocks[0]",
 	expanded: false,
 	leaves: [
 		{
@@ -4121,7 +4121,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "atomtree->data_blocks",
 				count: "atomtree->num_data_blocks",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "umc_reg_setting_list [%02u]",
 					display: "ATUI_DISPLAY",
@@ -4133,7 +4133,7 @@ global_defaults: {
 }, {
 	c_type: "atom_umc_init_reg_block",
 	atomtree: "atomtree_umc_init_reg_block",
-	table_size: "atomtree->total_size",
+	num_bytes: "atomtree->total_size",
 	leaves: [
 		{
 			access: "bios->umc_reg_num",
@@ -4153,7 +4153,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_vram_module_v9",
-	table_size: "bios->vram_module_size",
+	num_bytes: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -4345,7 +4345,7 @@ global_defaults: {
 }, {
 	c_type: "atom_vram_module_v10",
 	atomtree: "atomtree_vram_info_header_v2_4",
-	table_size: "bios->vram_module_size",
+	num_bytes: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -4557,7 +4557,7 @@ global_defaults: {
 }, {
 	c_type: "atom_vram_module_v11",
 	atomtree: "atomtree_vram_info_header_v2_5",
-	table_size: "bios->vram_module_size",
+	num_bytes: "bios->vram_module_size",
 	leaves: [
 		{
 			access: "bios->memory_size",
@@ -4700,7 +4700,7 @@ global_defaults: {
 }, {
 	c_type: "atom_gddr6_ac_timing_v2_5",
 	atomtree: "atomtree_vram_info_header_v2_5",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->block_id",
@@ -4998,7 +4998,7 @@ global_defaults: {
 }, {
 	c_type: "atom_vram_module_v3_0",
 	atomtree: "atomtree_vram_info_header_v3_0",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
 			access: "bios->density",
@@ -5138,7 +5138,7 @@ global_defaults: {
 {
 	c_type: "atom_svid2_voltage_object_v2",
 	atomtree: "atomtree_voltage_object",
-	table_size: "bios->header.object_size",
+	num_bytes: "bios->header.object_size",
 	leaves: [
 		{
 			access: "bios->header",

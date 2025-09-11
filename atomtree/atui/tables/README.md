@@ -53,8 +53,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct", // nullstruct is an empty struct
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true, // expand state for child branches
 	},
 	leaf_defaults: {
@@ -96,8 +96,8 @@ declaration pseudo example:
 	name: "alternative_name", // optional; affects display name and call name
 
 	// pointer and the size of the contiguous memory the branch represents
-	table_start: "bios",
-	table_size: "sizeof(*bios)",
+	access: "bios",
+	num_bytes: "sizeof(*bios)",
 
 	description: { // ISO 639-3 codes
 		eng: "...",
@@ -149,8 +149,8 @@ ATUI_ADD_BRANCH(parent_branch, child_branch);
 
 The display and fancy will appropriately set `atui_type` within the leaf.
 
-`union atui_type.signed_num` and `union atui_type.fraction` are usually set
-automatically based on the C data type.
+`struct atui_leaf_type.signed_num` and `struct atui_leaf_type.fraction` are
+usually set automatically based on the C data type.
 
 ### Display / Radix
 
@@ -396,7 +396,7 @@ the boundaries.
 
 The leaf pattern follows regular syntax and takes assumptions from the
 `dynpattern` section in `global_defaults`.
-Nested `ATUI_DYNARRAY` should be possible but is untested.
+Nested `ATUI_DYNARRAY` should be possible but is completely untested.
 Multiple leaves in the pattern should be possible but is intested
 
 <br>
@@ -423,8 +423,8 @@ size will be automatically determined based on the C type.
 <br>
 
 If an enum should tag along for UI/naming purposes, state an enum; otherwise
-state the enum name as `ATUI_NULL` . The enum will be walked through
-sequentially in the order as it is defined with `PPATUI_ENUMER()`.
+state the enum name as `NULL` . The enum will be walked through sequentially in
+the order as it is defined with `PPATUI_ENUMER()`.
 Furthermore, make sure the enum has an associated `PPATUI_ENUMER()` definition.
 
 The dynarray leaf can follow `ATUI_SUBONLY` and `ATUI_NODISPLAY`.

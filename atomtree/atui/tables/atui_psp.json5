@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atui_nullstruct",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -139,7 +139,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "psp_directory",
-	table_size: "sizeof_flex(bios, pspentry, bios->header.totalentries)",
+	num_bytes: "sizeof_flex(bios, pspentry, bios->header.totalentries)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -156,7 +156,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->header.totalentries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "pspentry [%02u]",
 					display: "ATUI_DISPLAY",

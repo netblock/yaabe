@@ -5,8 +5,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_discovery_table",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -50,7 +50,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "discovery_binary_header",
-	table_size: "bios->binary_size",
+	num_bytes: "bios->binary_size",
 	leaves: [
 		{
 			access: "bios->signature",
@@ -171,7 +171,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "IP_DISCOVERY_MAX_NUM_DIES",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "die_info [%02u]",
 					display: "ATUI_DISPLAY",
@@ -243,7 +243,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "discovery_ip_entry_v1",
-	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
+	num_bytes: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -262,7 +262,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->header.num_base_address",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					display: "ATUI_HEX",
 					name: "base_address [%02u]",
@@ -286,7 +286,7 @@ global_defaults: {
 	},],
 }, {
 	c_type: "discovery_ip_entry_v3",
-	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
+	num_bytes: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -305,7 +305,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->header.num_base_address",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					display: "ATUI_HEX",
 					name: "base_address",
@@ -315,7 +315,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "discovery_ip_entry_v4_64",
-	table_size: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
+	num_bytes: "sizeof_flex(bios, base_address, bios->header.num_base_address)",
 	leaves: [
 		{
 			access: "bios->header",
@@ -334,7 +334,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->header.num_base_address",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					display: "ATUI_HEX",
 					name: "base_address",
@@ -926,7 +926,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "lengthof(bios->list)",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "list [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1022,7 +1022,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					access: "bios->instance_info",
 					name: "instance_info",
@@ -1166,7 +1166,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "DISCOVERY_NPS_INFO_TABLE_MAX_NUM_INSTANCES",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "instance_info [%u]",
 					display: "ATUI_DISPLAY",

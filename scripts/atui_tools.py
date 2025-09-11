@@ -109,7 +109,7 @@ def struct_to_atui(
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "\\g<3>\\g<4>",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [\
 			\\g<1> \\g<2>;],
 			},
@@ -255,14 +255,14 @@ def bitfield_to_atui(
 	union_text:str = """\
 {
 	c_prefix: "\\g<1>", c_type: "\\g<2>",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 """
 	if explicit_attributes:
 		union_text = """\
 {
 	c_prefix: "\\g<1>", c_type: "\\g<2>",
 	atomtree: "atui_nullstruct",
-	table_size: "sizeof(*bios)",
+	num_bytes: "sizeof(*bios)",
 """
 	union_text += """\
 	__ATUIDESCR\\g<3>

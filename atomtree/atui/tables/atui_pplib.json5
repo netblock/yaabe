@@ -3,8 +3,8 @@ global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
 		atomtree: "atomtree_powerplay_table_v4_1",
-		table_start: "bios",
-		table_size: "sizeof(*bios)",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
 		expanded: true,
 	},
 	leaf_defaults: {
@@ -735,7 +735,7 @@ global_defaults: {
 {
 	c_type: "atom_pplib_state_v1",
 	atomtree: "atomtree_pplib_state",
-	table_size: "atomtree->size",
+	num_bytes: "atomtree->size",
 	leaves: [
 		{
 			access: "bios->NonClockStateIndex",
@@ -747,7 +747,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_levels",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "ClockStateIndices [%02u]",
 					display: "ATUI_DEC",
@@ -759,12 +759,12 @@ global_defaults: {
 }, {
 	c_type: "atui_nullstruct",
 	name: "atom_pplib_state_v1_array",
-	table_size: "atomtree->state_array_size",
+	num_bytes: "atomtree->state_array_size",
 	leaves: [],
 }, {
 	c_type: "atom_pplib_state_v2",
 	atomtree: "atomtree_pplib_state",
-	table_size: "atomtree->size",
+	num_bytes: "atomtree->size",
 	leaves: [
 		{
 			access: "bios->NumDPMLevels",
@@ -779,7 +779,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_levels",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfoIndex [%02u]",
 					display: "ATUI_DEC",
@@ -790,7 +790,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_state_array_v2",
-	table_size: "atomtree->state_array_size",
+	num_bytes: "atomtree->state_array_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -854,7 +854,7 @@ global_defaults: {
 }, {
 	c_type: "atui_nullstruct",
 	name: "atom_pplib_r600_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "atomtree->clock_info->r600",
@@ -863,7 +863,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -934,7 +934,7 @@ global_defaults: {
 }, {
 	c_type: "atui_nullstruct",
 	name: "atom_pplib_rs780_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "atomtree->clock_info->rs780",
@@ -943,7 +943,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -980,7 +980,7 @@ global_defaults: {
 }, {
 	c_type: "atui_nullstruct",
 	name: "atom_pplib_evergreen_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "atomtree->clock_info->green",
@@ -989,7 +989,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->num_clock_info_entries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1032,7 +1032,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_si_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1047,7 +1047,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1081,7 +1081,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_ci_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1096,7 +1096,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1134,7 +1134,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_sumo_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1149,7 +1149,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1173,7 +1173,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_cz_clock_info_array",
-	table_size: "atomtree->clock_info_size",
+	num_bytes: "atomtree->clock_info_size",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1188,7 +1188,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "clockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1236,7 +1236,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_nonclock_info_array_v1",
-	table_size: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1251,7 +1251,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "nonClockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1302,7 +1302,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_nonclock_info_array_v2",
-	table_size: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, nonClockInfo, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -1317,7 +1317,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "nonClockInfo [%02u]",
 					display: "ATUI_DISPLAY",
@@ -1346,7 +1346,7 @@ global_defaults: {
 }, {
 	c_type: "atui_nullstruct",
 	name: "atom_pplib_custom_thermal_policy_array",
-	table_size: "sizeof_flex_array(atomtree->thermal_policy, atomtree->leaves->v2.NumCustomThermalPolicy)",
+	num_bytes: "sizeof_flex_array(atomtree->thermal_policy, atomtree->leaves->v2.NumCustomThermalPolicy)",
 	leaves: [
 		{
 			access: "atomtree->thermal_policy",
@@ -1355,7 +1355,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "atomtree->leaves->v2.NumCustomThermalPolicy",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					name: "thermal_state [%02u]",
 					display: "ATUI_DISPLAY",
@@ -2053,7 +2053,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_vce_clock_info_array",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2065,7 +2065,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_vce_clock_info",
 				},],
@@ -2085,7 +2085,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_vce_clock_voltage_limit_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2097,7 +2097,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_vce_clock_voltage_limit_record",
 				},],
@@ -2135,7 +2135,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_vce_state_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2147,7 +2147,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_vce_state_record",
 				},],
@@ -2156,7 +2156,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_vce_table",
-	table_size: "atomtree->vce_table_size",
+	num_bytes: "atomtree->vce_table_size",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -2194,7 +2194,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_uvd_clock_info_array",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2206,7 +2206,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_uvd_clock_info",
 				},],
@@ -2226,7 +2226,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_uvd_clock_voltage_limit_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2238,7 +2238,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_uvd_clock_voltage_limit_record",
 				},],
@@ -2247,7 +2247,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_uvd_table",
-	table_size: "atomtree->uvd_table_size",
+	num_bytes: "atomtree->uvd_table_size",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -2280,7 +2280,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_samu_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -2295,7 +2295,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_samclk_voltage_limit_record",
 				},],
@@ -2318,7 +2318,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_acp_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -2333,7 +2333,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_acpclk_voltage_limit_record",
 				},],
@@ -2428,7 +2428,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_clock_voltage_dependency_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2440,7 +2440,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_clock_voltage_dependency_record",
 				},],
@@ -2485,7 +2485,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_vq_budgeting_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->RevId",
@@ -2500,7 +2500,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_vq_budgeting_record",
 				},],
@@ -2529,7 +2529,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_clock_voltage_limit_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2541,7 +2541,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_clock_voltage_limit_record",
 				},],
@@ -2567,7 +2567,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_phasesheddinglimits_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2579,7 +2579,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_phaseshedding_limits_record",
 				},],
@@ -2605,7 +2605,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_cac_leakage_table_evv",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2617,7 +2617,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_cac_leakage_record_evv",
 				},],
@@ -2643,7 +2643,7 @@ global_defaults: {
 	],
 }, {
 	c_type: "atom_pplib_cac_leakage_table",
-	table_size: "sizeof_flex(bios, entries, bios->NumEntries)",
+	num_bytes: "sizeof_flex(bios, entries, bios->NumEntries)",
 	leaves: [
 		{
 			access: "bios->NumEntries",
@@ -2655,7 +2655,7 @@ global_defaults: {
 			fancy: "ATUI_DYNARRAY", fancy_data: {
 				deferred: "NULL",
 				count: "bios->NumEntries",
-				enum: "ATUI_NULL",
+				enum: "NULL",
 				pattern: [{
 					fancy_data: "atom_pplib_cac_leakage_record",
 				},],

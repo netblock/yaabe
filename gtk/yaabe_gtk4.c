@@ -52,15 +52,15 @@ pathbar_update_path(
 		yaabegtk_commons* const commons
 		) {
 // callback; sets path based on branches selection
-	GATUIBranch* const g_branch = GATUI_BRANCH(
+	GATUINode* const node = GATUI_NODE(
 		gtk_tree_list_row_get_item(GTK_TREE_LIST_ROW(
 			gtk_single_selection_get_selected_item(model)
 		))
 	);
 	assert(commons->pathbar_string);
 	free(commons->pathbar_string);
-	commons->pathbar_string = gatui_branch_to_path(g_branch);
-	g_object_unref(g_branch);
+	commons->pathbar_string = gatui_node_to_path(node);
+	g_object_unref(node);
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 }
 static gboolean
@@ -79,12 +79,12 @@ pathbar_editable_reset(
 void
 yaabe_gtk_scroll_to_object(
 		yaabegtk_commons const* const commons,
-		GObject* const gatui
+		GATUINode* const tree_node
 		) {
 	int16_t branch_index;
 	int16_t leaf_index;
 	bool const success __unused = gatui_tree_select_in_model_by_object(
-		commons->root, gatui, &branch_index, &leaf_index
+		commons->root, tree_node, &branch_index, &leaf_index
 	);
 	assert(success);
 	if (-1 < branch_index) {
@@ -146,11 +146,11 @@ pathbar_sets_branch_selection(
 			commons->yaabe_gtk
 		);
 		GtkAlertDialog* alert;
-		if (map_error->branch_depth) {
+		if (map_error->branch.depth) {
 			alert = gtk_alert_dialog_new(
 				"\n%s\n not found in:\n %s\n",
 				map_error->not_found,
-				map_error->branch->name
+				map_error->branch.node->name
 			);
 		} else {
 			alert = gtk_alert_dialog_new("bad root");
@@ -214,17 +214,19 @@ select_changes_leaves(
 			gtk_single_selection_get_selected_item(model)
 		)
 	);
-	atui_branch const* const a_branch_new = gatui_branch_get_atui(
-		new_selection
-	);
-	atui_branch const* const a_branch_old = gatui_branch_get_atui(
-		commons->previous_selection
+
+	GATUINode* const new_node = GATUI_NODE(new_selection);
+	GATUINode* const old_node = GATUI_NODE(commons->previous_selection);
+	bool const similar_branches = (
+		(
+			gatui_node_get_num_leaves(new_node)
+			== gatui_node_get_num_leaves(old_node)
+		) && (0 == strcmp(
+			gatui_node_get_origname(new_node),
+			gatui_node_get_origname(old_node)
+		))
 	);
 
-	bool const similar_branches = (
-		(a_branch_new->leaf_count == a_branch_old->leaf_count)
-		&& (0 == strcmp(a_branch_new->origname, a_branch_old->origname))
-	);
 	if (similar_branches) { // restore scroll if compatible
 		GtkAdjustment* const adj = gtk_scrollable_get_vadjustment(
 			GTK_SCROLLABLE(commons->leaves.view)
@@ -276,7 +278,7 @@ create_and_set_active_gatui_model(
 	if (commons->pathbar_string) {
 		free(commons->pathbar_string);
 	}
-	commons->pathbar_string = gatui_branch_to_path(trunk);
+	commons->pathbar_string = gatui_node_to_path(GATUI_NODE(trunk));
 	gtk_editable_set_text(commons->pathbar, commons->pathbar_string);
 
 	g_object_unref(trunk);
