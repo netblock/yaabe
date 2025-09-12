@@ -22,6 +22,17 @@ static constexpr uint8_t bases[] = {0, 10, 16, 8, 2};
 #endif
 
 
+inline static uint64_t
+max_val_of_bits(
+		uint8_t const num_bits
+		) {
+	if (UINT64_WIDTH == num_bits) { // (UINT64_C(1)<<64) == 1
+		return UINT64_MAX;
+	} else {
+		return (UINT64_C(1) << num_bits) - 1;
+	}
+}
+
 void
 atui_leaf_from_text(
 		atui_node const* const leaf,
@@ -95,7 +106,7 @@ atui_leaf_from_text(
 			for (uint16_t i=0; i < enum_set->num_entries; i++) {
 				entry = &(enum_set->enum_array[i]);
 				if (word_length == entry->name_length) {
-					str_diff = strcmp(entry->name, text);
+					str_diff = strncmp(entry->name, text, word_length);
 					if (0 == str_diff) {
 						break;
 					}
@@ -147,11 +158,7 @@ get_sprintf_format_from_leaf(
 		} else {
 			uint64_t max_val;
 			uint8_t const num_bits = meta->total_bits;
-			if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
-				max_val = UINT64_MAX;
-			} else {
-				max_val = (UINT64_C(1) << num_bits) - 1;
-			}
+			max_val = max_val_of_bits(num_bits);
 			num_digits = ceil( // round up because it's gonna be like x.9999
 				log(max_val) / log(bases[radix])
 			);
@@ -325,13 +332,9 @@ atui_leaf_set_val_unsigned(
 
 	union bios_data const data = leaf->data;
 	struct atui_leaf const* const meta = &(leaf->leaf);
-	uint8_t const num_bits = (meta->bitfield_hi - meta->bitfield_lo) +1;
-	uint64_t max_val;
-	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
-		max_val = UINT64_MAX;
-	} else {
-		max_val = (UINT64_C(1) << num_bits) - 1;
-	}
+	uint64_t const max_val = max_val_of_bits(
+		(meta->bitfield_hi - meta->bitfield_lo) + 1
+	);
 	if (val > max_val) {
 		val = max_val;
 	}
@@ -395,13 +398,9 @@ atui_leaf_set_val_signed(
 	struct atui_leaf const* const meta = &(leaf->leaf);
 	// handle Two's Complement on arbitrarily-sized ints
 	uint64_t raw_val; // some bit math preserves the sign
-	uint8_t const num_bits = (meta->bitfield_hi - meta->bitfield_lo) +1;
-	uint64_t mask;
-	if (num_bits == UINT64_WIDTH) { // (UINT64_C(1)<<64) == 1
-		mask = UINT64_MAX;
-	} else {
-		mask = (UINT64_C(1) << num_bits) - 1;
-	}
+	uint64_t const mask = max_val_of_bits(
+		(meta->bitfield_hi - meta->bitfield_lo) + 1
+	);
 	int64_t const max_val = mask>>1; // max positive val 0111...
 	if (val > max_val) {
 		raw_val = max_val;
@@ -463,7 +462,8 @@ atui_leaf_get_val_signed(
 void
 atui_leaf_set_val_fraction(
 		atui_node const* const leaf,
-		float64_t const val) {
+		float64_t const val
+		) {
 	assert(leaf->is_leaf);
 	assert(leaf->leaf.type.fraction);
 	assert(leaf->data.input);
@@ -472,20 +472,26 @@ atui_leaf_set_val_fraction(
 	struct atui_leaf const* const meta = &(leaf->leaf);
 
 	if (meta->fractional_bits) {
+		assert(UINT64_WIDTH > meta->fractional_bits);
+		uint64_t const frac_base = UINT64_C(1) << meta->fractional_bits;
 		float64_t const max_val = (
-			(float64_t)(1<<(meta->total_bits - meta->fractional_bits))
-			- ( (float64_t)(1) / (float64_t)(1<<meta->fractional_bits))
+			(float64_t)(
+				UINT64_C(1) << (meta->total_bits - meta->fractional_bits)
+			) - (
+				(float64_t)(1) / (float64_t)(frac_base)
+			)
 		);
 		uint64_t fixed_val;
 		if (val > max_val) {
-			fixed_val = (1<<meta->total_bits)-1;
+			fixed_val = max_val_of_bits(meta->total_bits);
 		} else {
-			fixed_val = floor(val);
-			float64_t const frac = (
-				(val - floor(val)) * (1<<meta->fractional_bits)
+			uint64_t const floored = floor(val);
+			fixed_val = (
+				(floored << meta->fractional_bits)
+				+ round(
+					(val - floored) * frac_base
+				)
 			);
-			fixed_val <<= meta->fractional_bits;
-			fixed_val += frac;
 		}
 		switch (meta->total_bits) {
 			case  8:  *(data.u8) = fixed_val; return;
