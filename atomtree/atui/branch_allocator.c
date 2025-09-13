@@ -374,7 +374,7 @@ print_atui_dynarray_leaf(
 			leaf->leaves.nodes = NULL;
 		}
 
-		// calculate num_bytes 
+		// calculate num_bytes
 		leaf->data.input = bios;
 		if (sub_meta->deferred_start_array) {
 			if (leaf->leaves.count) {
@@ -663,7 +663,7 @@ atui_assimilate_subonly(
 		assert(0); // unnecessary call?
 		return;
 	}
-	
+
 	atui_node* const new_start = cralloc(new_count * sizeof(atui_node));
 	atui_node const* const new_end = new_start + new_count;
 	atui_node* new_walker = new_start;
@@ -776,5 +776,5 @@ atui_assimilate(
 		free(src_array[i]->leaves.nodes);
 		free(src_array[i]->branch.branches.addresses);
 		free(src_array[i]);
-	}	
+	}
 }

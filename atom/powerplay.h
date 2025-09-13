@@ -134,7 +134,7 @@ struct atom_pplib_platform_power_management_table {
 	uint32_t PlatformTDC;
 	uint32_t SmallACPlatformTDC;
 	uint32_t ApuTDP;
-	uint32_t DGpuTDP;  
+	uint32_t DGpuTDP;
 	uint32_t DGpuUlvPower;
 	uint32_t Tjmax;
 };

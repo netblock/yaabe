@@ -119,7 +119,7 @@ union bios_data {
 	float32_t* f32;
 	float64_t* f64;
 };
-struct atui_children { 
+struct atui_children {
 	/*
 	Two ways to allocate a node: alone, or an in array. For memory management
 	purposes (freeing), a node allocated in an array cannot be added through its
@@ -194,7 +194,7 @@ struct _atui_node {
 		struct atui_branch branch;
 	};
 	// if the node represents a struct, the num_bytes may be following
-	// programmed bios metadata 
+	// programmed bios metadata
 	union bios_data data;
 	size_t num_bytes;
 

@@ -1266,7 +1266,7 @@ struct smu11_smcpptable_v7_i2c_control {
 };
 struct smu11_smcpptable_v7_svi2_parameters {
 	struct smu_smcpptable_vr_mapping vr_mapping;
-	
+
 	union psi_sel_mask  GfxUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  SocUlvPhaseSheddingMask;   // set this to 1 to set PSI0/1 to 1 in ULV mode
 	union psi_sel_mask  VddciUlvPhaseSheddingMask; // set this to 1 to set PSI0/1 to 1 in ULV mode

@@ -88,7 +88,7 @@ create_search_options(
 
 	GtkWidget* const leaves = gtk_check_button_new_with_label("Search leaves");
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(leaves), flags->leaves);
-	g_signal_connect_swapped(leaves, "toggled", 
+	g_signal_connect_swapped(leaves, "toggled",
 		G_CALLBACK(search_options_toggle_check), &(flags->leaves)
 	);
 
@@ -96,7 +96,7 @@ create_search_options(
 		"Search branches"
 	);
 	gtk_check_button_set_active(GTK_CHECK_BUTTON(branches), flags->branches);
-	g_signal_connect_swapped(branches, "toggled", 
+	g_signal_connect_swapped(branches, "toggled",
 		G_CALLBACK(search_options_toggle_check), &(flags->branches)
 	);
 	commons->search.branches_checkbox = branches;
@@ -331,7 +331,7 @@ create_search_window(
 		yaabegtk_commons* const commons
 		) {
 	// TODO:
-	// right-click: copy path; data? 
+	// right-click: copy path; data?
 	// static name/value
 
 	GtkWidget* const search_entry = create_search_entry(commons);

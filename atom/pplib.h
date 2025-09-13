@@ -37,7 +37,7 @@ union pplib_powerplay_platform_caps {
 	uint32_t platform_caps;
 	struct { uint32_t
 		back_bias                :0-0 +1,
-		powerplay                :1-1 +1, 
+		powerplay                :1-1 +1,
 		sbios_powersource        :2-2 +1, // if power source notificaiton is done by SBIOS directly.
 		ASPM_L0S                 :3-3 +1,
 		ASPM_L1                  :4-4 +1,
@@ -190,14 +190,14 @@ struct atom_pplib_powerplaytable_v4 {
 	uint16_t FormatID; // To be used ONLY by PPGen.
 	uint16_t FanTableOffset;
 	uint16_t ExtendedHeaderOffset;
-	uint32_t GoldenPPID;     // PPGen use only     
+	uint32_t GoldenPPID;     // PPGen use only
 	uint32_t GoldenRevision; // PPGen use only
 	uint16_t VddcDependencyOnSCLKOffset;
 	uint16_t VddciDependencyOnMCLKOffset;
 	uint16_t VddcDependencyOnMCLKOffset;
 	uint16_t MaxClockVoltageOnDCOffset;
 	uint16_t VddcPhaseShedLimitsTableOffset;
-	uint16_t MvddDependencyOnMCLKOffset;  
+	uint16_t MvddDependencyOnMCLKOffset;
 };
 
 struct atom_pplib_powerplaytable_v5 {
@@ -231,14 +231,14 @@ struct atom_pplib_powerplaytable_v5 {
 	uint16_t FormatID; // To be used ONLY by PPGen.
 	uint16_t FanTableOffset;
 	uint16_t ExtendedHeaderOffset;
-	uint32_t GoldenPPID;     // PPGen use only     
+	uint32_t GoldenPPID;     // PPGen use only
 	uint32_t GoldenRevision; // PPGen use only
 	uint16_t VddcDependencyOnSCLKOffset;
 	uint16_t VddciDependencyOnMCLKOffset;
 	uint16_t VddcDependencyOnMCLKOffset;
 	uint16_t MaxClockVoltageOnDCOffset;
 	uint16_t VddcPhaseShedLimitsTableOffset;
-	uint16_t MvddDependencyOnMCLKOffset;  
+	uint16_t MvddDependencyOnMCLKOffset;
 	uint32_t TDPLimit;
 	uint32_t NearTDPLimit;
 	uint32_t SQRampingThreshold;
@@ -264,9 +264,9 @@ struct atom_pplib_state_v1 {
 };
 struct atom_pplib_state_v2 {
 	uint8_t  NumDPMLevels;
-	
+
 	uint8_t  nonClockInfoIndex;
-	uint8_t  clockInfoIndex[] __counted_by(NumDPMLevels); 
+	uint8_t  clockInfoIndex[] __counted_by(NumDPMLevels);
 };
 struct atom_pplib_state_array_v2 {
 	uint8_t  NumEntries;
@@ -309,10 +309,10 @@ struct atom_pplib_r600_clock_info {
 
 
 enum ATOM_PPLIB_RS780_VOLTAGE:uint16_t {
-	ATOM_PPLIB_RS780_VOLTAGE_NONE     = 0, 
-	ATOM_PPLIB_RS780_VOLTAGE_LOW      = 1, 
-	ATOM_PPLIB_RS780_VOLTAGE_HIGH     = 2, 
-	ATOM_PPLIB_RS780_VOLTAGE_VARIABLE = 3, 
+	ATOM_PPLIB_RS780_VOLTAGE_NONE     = 0,
+	ATOM_PPLIB_RS780_VOLTAGE_LOW      = 1,
+	ATOM_PPLIB_RS780_VOLTAGE_HIGH     = 2,
+	ATOM_PPLIB_RS780_VOLTAGE_VARIABLE = 3,
 };
 enum ATOM_PPLIB_RS780_SPMCLK:uint16_t {
 	ATOM_PPLIB_RS780_SPMCLK_NONE = 0,   // We cannot change the side port memory clock, leave it as it is.
@@ -320,9 +320,9 @@ enum ATOM_PPLIB_RS780_SPMCLK:uint16_t {
 	ATOM_PPLIB_RS780_SPMCLK_HIGH = 2,
 };
 enum ATOM_PPLIB_RS780_HTLINKFREQ:uint16_t {
-	ATOM_PPLIB_RS780_HTLINKFREQ_NONE = 0, 
-	ATOM_PPLIB_RS780_HTLINKFREQ_LOW  = 1, 
-	ATOM_PPLIB_RS780_HTLINKFREQ_HIGH = 2, 
+	ATOM_PPLIB_RS780_HTLINKFREQ_NONE = 0,
+	ATOM_PPLIB_RS780_HTLINKFREQ_LOW  = 1,
+	ATOM_PPLIB_RS780_HTLINKFREQ_HIGH = 2,
 };
 struct atom_pplib_rs780_clock_info {
 	uint24_t LowEngineClock;  // Low Engine clock in MHz
@@ -332,9 +332,9 @@ struct atom_pplib_rs780_clock_info {
 	uint8_t  Padding;            // For proper alignment and size.
 	enum ATOM_PPLIB_RS780_VOLTAGE  VDDC;
 	uint8_t  MaxHTLinkWidth;     // From SBIOS - {2, 4, 8, 16}
-	uint8_t  MinHTLinkWidth;     // From SBIOS - {2, 4, 8, 16}. Effective only if CDLW enabled. Minimum down stream width could 
+	uint8_t  MinHTLinkWidth;     // From SBIOS - {2, 4, 8, 16}. Effective only if CDLW enabled. Minimum down stream width could
 	enum ATOM_PPLIB_RS780_HTLINKFREQ  HTLinkFreq; // See definition ATOM_PPLIB_RS780_HTLINKFREQ_xxx or in MHz(>=200).
-	uint32_t Flags; 
+	uint32_t Flags;
 };
 
 struct atom_pplib_evergreen_clock_info {

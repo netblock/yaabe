@@ -150,7 +150,7 @@ struct atom_tree {
 
 
 
-semver 
+semver
 atom_get_ver(
 		struct atom_common_table_header const* header
 		);

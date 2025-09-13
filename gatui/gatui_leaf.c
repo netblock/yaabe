@@ -256,7 +256,7 @@ _gatui_leaf_set_value(
 		memcpy(leaf->data.data, input_data, input_size);
 		goto success_exit;
 	}
-	
+
 	fail_exit:
 	return false;
 

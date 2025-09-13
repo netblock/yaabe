@@ -38,7 +38,7 @@ union npt_pt_pun {
     uint48_t u48;
     int64_t  s64;
     int48_t  s48;
-}; 
+};
 
 // convert a power-of-two integer into its lesser non-power-of-two counterpart
 // bits: lower 3/4

@@ -101,8 +101,8 @@ enum soc15_hwid:uint16_t {
 #pragma pack(push, 1) // bios data must use byte alignment
 
 struct discovery_table_info {
-	uint16_t offset; 
-	uint16_t checksum; // Byte sum of the table 
+	uint16_t offset;
+	uint16_t checksum; // Byte sum of the table
 	uint16_t size;
 	uint16_t padding;
 };
@@ -112,7 +112,7 @@ struct discovery_binary_header {
 	uint32_t signature;
 	uint16_t version_major;
 	uint16_t version_minor;
-	uint16_t binary_checksum; // Byte sum of the binary after this field 
+	uint16_t binary_checksum; // Byte sum of the binary after this field
 	uint16_t binary_size;
 	struct discovery_table_info table_list[DISCOVERY_TOTAL_TABLES];
 };
@@ -156,7 +156,7 @@ union ip_harvest {
 	uint8_t raw;
 	struct { uint8_t
 		harvest  :3-0 +1,
-		reserved :7-4 +1; 
+		reserved :7-4 +1;
 	};
 };
 
@@ -440,7 +440,7 @@ union vcn_fuse_data {
 		hevc_disabled :2-2 +1,
 		h264_disabled :3-3 +1,
 		reserved     :31-4 +1;
-	};	
+	};
 };
 struct discovery_vcn_instance_info_v1_0 {
 	uint32_t instance_num; // VCN IP instance number. 0 - VCN0; 1 - VCN1 etc

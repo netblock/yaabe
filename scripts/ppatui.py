@@ -120,11 +120,11 @@ def description_to_text(
 	languages:tuple = ("eng",)
 	descriptions:list = [None,] * len(languages)
 	descr_index:int = 0
-	trans:dict 
+	trans:dict
 	for trans in description:
 		descr_index:int = languages.index(trans)
 		descriptions[descr_index]:str = description[trans]
- 
+
 	indent:str = parent_indent + "\t"
 	descr_template:str = "\n%s" + parent_indent
 
@@ -517,7 +517,7 @@ class atui_children:
 	def __init__(self
 			):
 		self.nodes = []
-	
+
 class atui_node:
 	parent:atui_node = None
 
@@ -752,7 +752,7 @@ class atui_leaf(atui_node):
 			fancy not in atui_leaf_type.FANCIES_THAT_HAVE_NONTRIVIAL_SUBLEAVES
 		).lower()
 
-		# stage 1; fancy-dependent 
+		# stage 1; fancy-dependent
 		fancy_data:dict = None
 		if fancy in atui_leaf_type.FANCIES_THAT_TAKE_FANCYDATA:
 			if "fancy_data" in leaf:
@@ -950,10 +950,10 @@ class atui_leaf(atui_node):
 			fancy_data["enum"] = "&(ATUI_ENUM(%s))" % fancy_data["enum"]
 		else:
 			fancy_data["enum"] = "NULL"
-	
+
 	def type_to_text(self,
 			):
-		return atui_leaf_type_text(self) 
+		return atui_leaf_type_text(self)
 
 
 class atui_branch(atui_node):
@@ -972,7 +972,7 @@ class atui_branch(atui_node):
 		branch_default:dict = defaults["branch_default"]
 		atui_node.__init__(self, branch, branch_default, parent)
 		self.branches:atui_children = atui_children()
-	
+
 		self.prefer_contiguous = "_PPATUI_PREFER_CONTIGUOUS(bios, %s)" % (
 			self.num_bytes
 		)
@@ -1033,13 +1033,13 @@ def branches_populate_defaults(
 	name:str
 	for name in default_leaf_types:
 		leaves[name]:dict = {}
-	
+
 	for leaf_type in leaves:
 		leaf = leaves[leaf_type]
 		if "display" not in leaf:
 			leaf["display"] = "ATUI_DISPLAY"
 	leaves["bitchild"]["fancy"] = "_ATUI_BITCHILD"
-	
+
 	if "branch_default" not in defaults:
 		defaults["branch_default"] = {}
 
@@ -1071,7 +1071,7 @@ def atui_leaf_to_text( # vestige is handled in atui_leaf_vestige_to_text
 	leaf_text:str = (
 		"\n"
 		+ indent + ".type = {"
-			+ atui_leaf_type_to_text(leaf, indent) 
+			+ atui_leaf_type_to_text(leaf, indent)
 		+ "},\n"
 		+ indent + ".array_size = " + leaf.array_size + ",\n"
 		+ indent + ".fractional_bits = " + leaf.fractional_bits + ",\n"
@@ -1362,7 +1362,7 @@ def branches_to_c(
 # These arrays need to be in a function to handle the bios-> and atomtree->
 # everywhere. trying to globalise the vars gets annoying real fast.
 	branch_template:str = """
-atui_node* 
+atui_node*
 _atui_%s(
 		atuifunc_args const* const args
 		) {

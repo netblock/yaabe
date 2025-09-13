@@ -1,6 +1,6 @@
 #include "standard.h"
 #include "gatui_private.h"
-#include <zlib.h> 
+#include <zlib.h>
 
 enum GATUINodeSignal {
 	VALUE_CHANGED,
@@ -124,7 +124,7 @@ gatui_node_dispose(
 
 	G_OBJECT_CLASS(gatui_node_parent_class)->dispose(object);
 }
-static void 
+static void
 gatui_node_constructed(
 		GObject* const object
 		) {
@@ -143,7 +143,7 @@ gatui_node_constructed(
 		assert(priv->parent);
 		priv->root = gatui_node_get_root(priv->parent);
 		g_object_ref(priv->root);
-	} 
+	}
 
 	priv->copyability = (union gatui_node_copyability) {
 		.prefer_contiguous = atui->prefer_contiguous,
@@ -167,7 +167,7 @@ gatui_node_constructed(
 			GATUINodePrivate* child_priv = gatui_node_get_instance_private(
 				GATUI_NODE(child)
 			);
-			
+
 			priv->phone_book[i] = g_signal_connect_data(child, "value-changed",
 				G_CALLBACK(_gatui_node_emit_value_changed), self,
 				NULL, G_CONNECT_SWAPPED

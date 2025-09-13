@@ -678,7 +678,7 @@ Considers %s versions: %s
 				indexname:str  = indexname + "_" + bf.addr_ver[addr][1]
 				fieldname:str = bf.name + "_" + tuple(bf.ver_addr)[0]
 				indexname_fieldname:tuple = (indexname, fieldname)
-				if addr in reg_list: 
+				if addr in reg_list:
 					assert (indexname_fieldname not in reg_list[addr])
 					reg_list[addr].append(indexname_fieldname)
 				else:

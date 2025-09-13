@@ -57,7 +57,7 @@ gatui_node_test_memory(
 		error_assert(&error, ERROR_CRASH, NULL, success);
 		g_variant_unref(val);
 		val = NULL;
-		
+
 		val = gatui_node_get_value(node);
 		success = gatui_node_set_value(node, val);
 		error_assert(&error, ERROR_CRASH, NULL, success);

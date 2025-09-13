@@ -522,6 +522,6 @@ global_defaults: {
 			name: "c",
 		},
 	],
-}, 
+},
 
 ], }

@@ -64,7 +64,7 @@ get_config_file(
 	if (kf_success) {
 		goto all_success;
 	}
-	
+
 	ftype = g_file_query_file_type(conffile, G_FILE_QUERY_INFO_NONE, NULL);
 	if ((G_FILE_TYPE_UNKNOWN != ftype) && (G_FILE_TYPE_REGULAR != ftype)) {
 		goto conffile_err;
@@ -153,7 +153,7 @@ get_cached_working_dir_old( // TODO delete eventually
 		g_object_unref(cached_history_path);
 		cached_history_path = NULL;
 	}
-	
+
 	free(history_contents);
 
 	history_file_err:

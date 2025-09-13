@@ -49,7 +49,7 @@ gatui_node_get_leaves_package( // get byte array of all leaves that have data
 		GATUINode* self,
 		GVariant** value, // required
 		uint16_t* num_copyable_leaves // num segments
-		); 
+		);
 bool // success
 gatui_node_set_leaves_memory_package( // set leaves based on a byte array
 		GATUINode* self,
@@ -149,7 +149,7 @@ size_t
 gatui_node_get_region_bounds(
 		GATUINode* self,
 		size_t* start, // can be NULL
-		size_t* end // can be NULL; -1 last byte within 
+		size_t* end // can be NULL; -1 last byte within
 		);
 
 G_END_DECLS

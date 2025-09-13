@@ -196,7 +196,7 @@ struct atomtree_powerplay_table_v4_1 {
 	// atom_pplib_nonclock_info_array_v2 to not have EntrySize doesn't look
 	// right eithr
 	//union atom_pplib_clock_info_arrays*    boot_clock_info;
-	//union atom_pplib_nonclock_info_arrays* boot_nonclock_info; 
+	//union atom_pplib_nonclock_info_arrays* boot_nonclock_info;
 	void* boot_clock_info;
 	void* boot_nonclock_info;
 
@@ -224,7 +224,7 @@ struct atomtree_powerplay_table_v4_1 {
 	struct atom_pplib_vce_clock_voltage_limit_table*  vce_limits;
 	struct atom_pplib_vce_state_table*                vce_states;
 	struct atom_pplib_uvd_table*                      uvd_root;
-	struct atom_pplib_uvd_clock_info_array*           uvd_info; 
+	struct atom_pplib_uvd_clock_info_array*           uvd_info;
 	struct atom_pplib_uvd_clock_voltage_limit_table*  uvd_limits;
 	struct atom_pplib_samu_table*       samu;
 	struct atom_pplib_ppm_table*        ppm;

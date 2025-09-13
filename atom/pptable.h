@@ -92,7 +92,7 @@ struct atom_pptable_state {
 	uint8_t  PCIELaneHigh;
 
     union atom_pplib_classification    Classification;
-    union atom_pplib_caps_and_settings CapsAndSettings;                         
+    union atom_pplib_caps_and_settings CapsAndSettings;
     union atom_pplib_classification2   Classification2;
 
 	uint8_t  Unused[4];
@@ -136,7 +136,7 @@ struct atom_pptable_sclk_dependency_record {
 };
 struct atom_pptable_sclk_dependency_table {
 	uint8_t  RevId;
-	uint8_t  NumEntries; 
+	uint8_t  NumEntries;
 	struct atom_pptable_sclk_dependency_record  entries[];
 };
 

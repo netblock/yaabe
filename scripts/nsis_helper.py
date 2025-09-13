@@ -8,7 +8,7 @@ import subprocess
 
 # environment assumes msys2
 MSYS2_ENVIRONMENTS:tuple = (
-	"usr", 
+	"usr",
 	"ucrt64",
 	"msys64", "msys32",
 	"clang64", "clangarm64", "clang32",

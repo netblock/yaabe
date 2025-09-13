@@ -740,7 +740,7 @@ populate_pplib_ppt(
 			}
 			if (b.v5->NonClockInfoArrayOffset) {
 				ppt41->nonclock_info = b.raw + b.v5->NonClockInfoArrayOffset;
-				
+
 				switch (ppt41->nonclock_info->header.EntrySize) {
 					case sizeof(ppt41->nonclock_info->v1.nonClockInfo[0]):
 						 ppt41->nonclock_info_ver = SET_VER(1);
@@ -1145,7 +1145,7 @@ populate_display_object(
 		case V(1,1):
 		case V(1,2):
 		case V(1,3): populate_atom_object_header(commons, disp); break;
-		case V(1,4): 
+		case V(1,4):
 		case V(1,5): populate_display_object_info_table(commons, disp); break;
 	}
 }
@@ -3092,7 +3092,7 @@ populate_atom_rom_header_v1_1(
 	struct atom_tree* const atree = commons->atree;
 	struct atom_rom_header_v1_1* const leaves = rom->v1_1;
 	void* const bios = commons->bios;
-	
+
 	assert(ATOM_SIGNATURE == rom->v1_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
@@ -3147,7 +3147,7 @@ populate_atom_rom_header_v2_1(
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
 	}
-	
+
 	populate_psp_directory_table(
 		commons, &(atree->psp_directory), leaves->PSPDirTableOffset
 	);

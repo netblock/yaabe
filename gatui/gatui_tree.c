@@ -280,7 +280,7 @@ gatui_tree_create_trunk_model(
 		putting a notify connect in the ColumnView bind not only all-1 connects,
 		but reliably works.
 		It seems like the rows get stolen/copied?
-	
+
 		see branches_expand_row_fixer for more info
 		*/
 		GtkTreeListRow* const root_row = GTK_TREE_LIST_ROW(
@@ -301,7 +301,7 @@ branches_expand_row_fixer(
 		GtkColumnViewRow* const column_row
 		) {
 	/* TODO
-	This should be tucked away in the model creation, but for some reason 
+	This should be tucked away in the model creation, but for some reason
 	GtkColumnView (or deeper) makes GtkTreeListRow's lose their notify signals,
 	or makes them unreliable. See gatui_tree_create_trunk_model for more info.
 	*/

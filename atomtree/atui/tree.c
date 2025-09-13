@@ -361,7 +361,7 @@ grow_pplib_ppt_clock_info(
 		struct atomtree_powerplay_table_v4_1 const* const ppt41,
 		union atom_pplib_clock_info_arrays* const clock_info
 		) {
-	
+
 	atuifunc_args atui_args = {
 		.atomtree = ppt41,
 		.bios = clock_info,
@@ -385,7 +385,7 @@ grow_pplib_ppt_clock_info(
 			atui_args.rename = "clock_info (header only stub)";
 			return _atui_atom_pplib_sized_array_header(&atui_args);
 	}
-	
+
 	return NULL;
 }
 inline static atui_node*
@@ -1842,7 +1842,7 @@ grow_atom_memory_timing_format(
 			assert(0);
 			break;
 	};
-	
+
 
 	atui_node* atui_timings;
 	atuifunc_args atui_args = {
@@ -3696,7 +3696,7 @@ grow_psp_directory(
 	atui_node* const dir_header = ATUI_MAKE_BRANCH(psp_directory_header, NULL,
 		pspdir, &(pspdir->directory->header), totalentries,NULL
 	);
-	
+
 	atui_node* blob;
 	atui_node* entry;
 	atuifunc_args entry_args = {

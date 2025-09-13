@@ -68,7 +68,7 @@ yaabegtk_load_bios(
 		} else {
 			create_and_set_active_gatui_model(commons, new_tree);
 			first_load_restore_path(commons);
-			yaabegtk_load_enable_save_buttons(commons);		
+			yaabegtk_load_enable_save_buttons(commons);
 		}
 
 		set_editor_titlebar(commons);
@@ -373,7 +373,7 @@ yaabe_action_quit(
 	yaabegtk_commons const* const commons = commons_ptr;
 	g_application_quit(G_APPLICATION(commons->yaabe_gtk));
 	assert(0);
-	exit(0); 
+	exit(0);
 	/*
 	g_application_quit doesn't correctly unref stuff so just exit.
 	A proper solution would probably involve closing all open ApplicationWindows

@@ -1877,7 +1877,7 @@ struct atom_smc_dpm_info_v4_1 {
 	uint8_t  LedPin[3]; // GPIO numbers
 	uint8_t  padding8_4;
 
-	struct smu11_smcpptable_spread_spectrum PllGfxclk;                          
+	struct smu11_smcpptable_spread_spectrum PllGfxclk;
 	struct smu11_smcpptable_spread_spectrum Uclk;
 	struct smu11_smcpptable_spread_spectrum Socclk;
 	struct smu11_smcpptable_spread_spectrum acggfxclk;
