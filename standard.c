@@ -128,6 +128,9 @@ void*
 cralloc(
 	size_t const size
 	) {
+	if (0 == size) {
+		return NULL;
+	}
 	void* const ptr = malloc(size);
 	if (ptr) {
 		return ptr;
@@ -143,7 +146,7 @@ crealloc(
 	size_t const size
 	) {
 	void* const ptr = realloc(old, size);
-	if (ptr) {
+	if (ptr || 0 == size) {
 		return ptr;
 	}
 	fprintf(stderr,
@@ -155,6 +158,9 @@ void*
 cralloc0(
 	size_t const size
 	) {
+	if (0 == size) {
+		return NULL;
+	}
 	void* const ptr = calloc(1,size);
 	if (ptr) {
 		return ptr;

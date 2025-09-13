@@ -487,16 +487,16 @@ atui_branch_allocator(
 	if (embryo->seed.leaves.count) {
 		uint8_t const num_subonly_graft = embryo->computed_num_shallow_graft;
 		uint16_t const num_leaves = embryo->computed_num_leaves;
+		uint16_t const num_alloc_leaves = num_leaves + num_subonly_graft;
 		struct atui_children* const leaves = &(table->leaves);
+
 		struct level_data first_leaves = {
 			.parent = table,
 
 			.feed.nodes = embryo->seed.leaves.nodes_ro,
 			.feed.end = embryo->seed.leaves.count,
-			.target.nodes = cralloc(
-				(num_leaves + num_subonly_graft) * sizeof(atui_node)
-			),
-			.target.end = num_leaves + num_subonly_graft,
+			.target.nodes = cralloc(num_alloc_leaves * sizeof(atui_node)),
+			.target.end = num_alloc_leaves,
 		};
 		atui_leaves_printer(&tracker, &first_leaves);
 		assert(first_leaves.target.i == first_leaves.target.end);
