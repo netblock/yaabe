@@ -372,7 +372,17 @@ struct atomtree_display_object {
 	struct atomtree_display_path_records* records;
 };
 
-
+struct atomtree_umc_info {
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct atom_umc_info_v3_1* v3_1;
+		struct atom_umc_info_v3_2* v3_2;
+		struct atom_umc_info_v3_3* v3_3;
+		struct atom_umc_info_v4_0* v4_0;
+	};
+	semver ver;
+};
 
 enum register_block_type:uint8_t {
 	REG_BLOCK_UNKNOWN,
@@ -772,6 +782,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_powerplay_table      powerplayinfo;
 	struct atomtree_display_object       display_object;
 
+	struct atomtree_umc_info             umc_info;
 	struct atomtree_vram_info            vram_info;
 	struct atomtree_voltageobject_info   voltageobject_info;
 

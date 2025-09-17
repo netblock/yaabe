@@ -354,6 +354,7 @@ Enums for ATUI_ENUM
 		{name: "ATOM_DGPU_VRAM_TYPE_HBM2E",},
 		{name: "ATOM_DGPU_VRAM_TYPE_GDDR6",},
 		{name: "ATOM_DGPU_VRAM_TYPE_HBM3",},
+		{name: "ATOM_DGPU_VRAM_TYPE_HBM3E",},
 		{name: "ATOM_DGPU_VRAM_TYPE_DDR3",},
 ]},
 

@@ -4036,6 +4036,347 @@ global_defaults: {
 	],
 },
 
+
+{
+	c_prefix: "union", c_type: "atom_umc_config",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->umc_config",
+		name: "umc_config",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "enable_1kb_interleave_mode",
+			}, {
+				access: "default_mem_ecc_enable",
+			}, {
+				access: "enable_hbm_lane_repair",
+			}, {
+				access: "enable_bank_harvesting",
+			}, {
+				access: "enable_phy_reinit",
+			}, {
+				access: "disable_ucode_chkstatus",
+			}, {
+				access: "reserved0",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "atom_umc_config1",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->umc_config1",
+		name: "umc_config1",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "enable_pstate_phase_store_train",
+			}, {
+				access: "enable_auto_framing",
+			}, {
+				access: "enable_restore_bist_data",
+			}, {
+				access: "disable_strobe_mode",
+			}, {
+				access: "debug_data_parity_en",
+			}, {
+				access: "reserved0",
+				display: "ATUI_HEX",
+			}, {
+				access: "enable_ecc_capable",
+			}, {
+				access: "reserved1",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
+	c_type: "atom_umc_info_v3_1",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->ucode_version",
+			name: "ucode_version",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_rom_startaddr",
+			name: "ucode_rom_startaddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_length",
+			name: "ucode_length",
+		}, {
+			access: "bios->umc_reg_init_offset",
+			name: "umc_reg_init_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->customer_ucode_name_offset",
+			name: "customer_ucode_name_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->mclk_ss_percentage",
+			name: "mclk_ss_percentage",
+		}, {
+			access: "bios->mclk_ss_rate_10hz",
+			name: "mclk_ss_rate_10hz",
+		}, {
+			access: "bios->umcip_min_ver",
+			name: "umcip_min_ver",
+		}, {
+			access: "bios->umcip_max_ver",
+			name: "umcip_max_ver",
+		}, {
+			access: "bios->vram_type",
+			name: "vram_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->umc_config",
+			name: "umc_config",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config",
+		}, {
+			access: "bios->mem_refclk_10khz",
+			name: "mem_refclk_10khz",
+		},
+	],
+}, {
+	c_type: "atom_umc_info_v3_2",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->ucode_version",
+			name: "ucode_version",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_rom_startaddr",
+			name: "ucode_rom_startaddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_length",
+			name: "ucode_length",
+		}, {
+			access: "bios->umc_reg_init_offset",
+			name: "umc_reg_init_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->customer_ucode_name_offset",
+			name: "customer_ucode_name_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->mclk_ss_percentage",
+			name: "mclk_ss_percentage",
+		}, {
+			access: "bios->mclk_ss_rate_10hz",
+			name: "mclk_ss_rate_10hz",
+		}, {
+			access: "bios->umcip_min_ver",
+			name: "umcip_min_ver",
+		}, {
+			access: "bios->umcip_max_ver",
+			name: "umcip_max_ver",
+		}, {
+			access: "bios->vram_type",
+			name: "vram_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->umc_config",
+			name: "umc_config",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config",
+		}, {
+			access: "bios->mem_refclk_10khz",
+			name: "mem_refclk_10khz",
+		}, {
+			access: "bios->pstate_uclk_10khz",
+			name: "pstate_uclk_10khz",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->pstate_uclk_10khz)",
+				enum: "NULL",
+				pattern: [{
+					name: "pstate_uclk_10khz [%u]",
+				},],
+			},
+		}, {
+			access: "bios->umcgoldenoffset",
+			name: "umcgoldenoffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->densitygoldenoffset",
+			name: "densitygoldenoffset",
+			display: "ATUI_HEX",
+		},
+	],
+}, {
+	c_type: "atom_umc_info_v3_3",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->ucode_reserved",
+			name: "ucode_reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_rom_startaddr",
+			name: "ucode_rom_startaddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ucode_length",
+			name: "ucode_length",
+		}, {
+			access: "bios->umc_reg_init_offset",
+			name: "umc_reg_init_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->customer_ucode_name_offset",
+			name: "customer_ucode_name_offset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->mclk_ss_percentage",
+			name: "mclk_ss_percentage",
+		}, {
+			access: "bios->mclk_ss_rate_10hz",
+			name: "mclk_ss_rate_10hz",
+		}, {
+			access: "bios->umcip_min_ver",
+			name: "umcip_min_ver",
+		}, {
+			access: "bios->umcip_max_ver",
+			name: "umcip_max_ver",
+		}, {
+			access: "bios->vram_type",
+			name: "vram_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->umc_config",
+			name: "umc_config",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config",
+		}, {
+			access: "bios->mem_refclk_10khz",
+			name: "mem_refclk_10khz",
+		}, {
+			access: "bios->pstate_uclk_10khz",
+			name: "pstate_uclk_10khz",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "lengthof(bios->pstate_uclk_10khz)",
+				enum: "NULL",
+				pattern: [{
+					name: "pstate_uclk_10khz [%u]",
+				},],
+			},
+		}, {
+			access: "bios->umcgoldenoffset",
+			name: "umcgoldenoffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->densitygoldenoffset",
+			name: "densitygoldenoffset",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->umc_config1",
+			name: "umc_config1",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config1",
+		}, {
+			access: "bios->bist_data_startaddr",
+			name: "bist_data_startaddr",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_umc_info_v4_0",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->ucode_reserved",
+			name: "ucode_reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->umcip_min_ver",
+			name: "umcip_min_ver",
+		}, {
+			access: "bios->umcip_max_ver",
+			name: "umcip_max_ver",
+		}, {
+			access: "bios->vram_type",
+			name: "vram_type",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->umc_config",
+			name: "umc_config",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config",
+		}, {
+			access: "bios->mem_refclk_10khz",
+			name: "mem_refclk_10khz",
+		}, {
+			access: "bios->clk_reserved",
+			name: "clk_reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->golden_reserved",
+			name: "golden_reserved",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->umc_config1",
+			name: "umc_config1",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_umc_config1",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->channel_num",
+			name: "channel_num",
+		}, {
+			access: "bios->channel_width",
+			name: "channel_width",
+		}, {
+			access: "bios->channel_reserve",
+			name: "channel_reserve",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->umc_info_reserved",
+			name: "umc_info_reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+
 {
 	c_prefix: "union", c_type: "atom_umc_register_addr_info_access",
 	atomtree: "atomtree_umc_init_reg_block",

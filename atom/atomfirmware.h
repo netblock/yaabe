@@ -2227,30 +2227,32 @@ struct atom_multimedia_info_v2_1 {
 // Data Table umc_info  structure
 /******************************************************************************/
 
-
-
-
-// umc_info.umc_config
-enum atom_umc_config_def_old {
-	UMC_CONFIG__ENABLE_1KB_INTERLEAVE_MODE = 0x00000001,
-	UMC_CONFIG__DEFAULT_MEM_ECC_ENABLE     = 0x00000002,
-	UMC_CONFIG__ENABLE_HBM_LANE_REPAIR     = 0x00000004,
-	UMC_CONFIG__ENABLE_BANK_HARVESTING     = 0x00000008,
-	UMC_CONFIG__ENABLE_PHY_REINIT          = 0x00000010,
-	UMC_CONFIG__DISABLE_UCODE_CHKSTATUS    = 0x00000020,
-};
-union atom_umc_config_def {
+union atom_umc_config {
 	uint8_t  umc_config;
 	struct { uint8_t
-		ENABLE_1KB_INTERLEAVE_MODE :0-0 +1,
-		DEFAULT_MEM_ECC_ENABLE     :1-1 +1,
-		ENABLE_HBM_LANE_REPAIR     :2-2 +1,
-		ENABLE_BANK_HARVESTING     :3-3 +1,
-		ENABLE_PHY_REINIT          :4-4 +1,
-		DISABLE_UCODE_CHKSTATUS    :5-5 +1,
+		enable_1kb_interleave_mode :0-0 +1,
+		default_mem_ecc_enable     :1-1 +1,
+		enable_hbm_lane_repair     :2-2 +1,
+		enable_bank_harvesting     :3-3 +1,
+		enable_phy_reinit          :4-4 +1,
+		disable_ucode_chkstatus    :5-5 +1,
 		reserved0                  :7-6 +1;
 	};
 };
+union atom_umc_config1 {
+	uint32_t umc_config1;
+	struct { uint32_t
+		enable_pstate_phase_store_train :0-0 +1,
+		enable_auto_framing             :1-1 +1,
+		enable_restore_bist_data        :2-2 +1,
+		disable_strobe_mode             :3-3 +1,
+		debug_data_parity_en            :4-4 +1,
+		reserved0                      :15-5 +1,
+		enable_ecc_capable             :16-16 +1,
+		reserved1                      :31-17 +1;
+	};
+};
+
 struct atom_umc_info_v3_1 {
 	struct atom_common_table_header  table_header;
 	uint32_t ucode_version;
@@ -2263,10 +2265,9 @@ struct atom_umc_info_v3_1 {
 	uint8_t  umcip_min_ver;
 	uint8_t  umcip_max_ver;
 	enum  atom_dgpu_vram_type  vram_type;
-	union atom_umc_config_def  umc_config;
+	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
 };
-
 
 struct atom_umc_info_v3_2 {
 	struct atom_common_table_header  table_header;
@@ -2280,34 +2281,13 @@ struct atom_umc_info_v3_2 {
 	uint8_t  umcip_min_ver;
 	uint8_t  umcip_max_ver;
 	enum  atom_dgpu_vram_type  vram_type;
-	union atom_umc_config_def  umc_config;
+	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
 	uint32_t pstate_uclk_10khz[4];
 	uint16_t umcgoldenoffset;
 	uint16_t densitygoldenoffset;
 };
 
-enum atom_umc_config1_def_old {
-	UMC_CONFIG1__ENABLE_PSTATE_PHASE_STORE_TRAIN = 0x00000001,
-	UMC_CONFIG1__ENABLE_AUTO_FRAMING = 0x00000002,
-	UMC_CONFIG1__ENABLE_RESTORE_BIST_DATA = 0x00000004,
-	UMC_CONFIG1__DISABLE_STROBE_MODE = 0x00000008,
-	UMC_CONFIG1__DEBUG_DATA_PARITY_EN = 0x00000010,
-	UMC_CONFIG1__ENABLE_ECC_CAPABLE = 0x00010000,
-};
-union atom_umc_config1_def {
-	uint32_t umc_config1;
-	struct { uint32_t
-		ENABLE_PSTATE_PHASE_STORE_TRAIN :0-0 +1,
-		ENABLE_AUTO_FRAMING      :1-1 +1,
-		ENABLE_RESTORE_BIST_DATA :2-2 +1,
-		DISABLE_STROBE_MODE      :3-3 +1,
-		DEBUG_DATA_PARITY_EN     :4-4 +1,
-		reserved0               :15-5 +1,
-		ENABLE_ECC_CAPABLE      :16-16 +1,
-		reserved1               :31-17 +1;
-	};
-};
 struct atom_umc_info_v3_3 {
 	struct atom_common_table_header  table_header;
 	uint32_t ucode_reserved;
@@ -2320,12 +2300,12 @@ struct atom_umc_info_v3_3 {
 	uint8_t  umcip_min_ver;
 	uint8_t  umcip_max_ver;
 	enum  atom_dgpu_vram_type  vram_type;
-	union atom_umc_config_def  umc_config;
+	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
-	uint32_t pstate_uclk_10khz[4];
+	uint32_t pstate_uclk_10khz[NUM_UCLK_DPM_LEVELS_SMU11];
 	uint16_t umcgoldenoffset;
 	uint16_t densitygoldenoffset;
-	union atom_umc_config1_def  umc_config1;
+	union atom_umc_config1  umc_config1;
 	uint32_t bist_data_startaddr;
 	uint32_t reserved[2];
 };
@@ -2336,11 +2316,11 @@ struct atom_umc_info_v4_0 {
 	uint8_t  umcip_min_ver;
 	uint8_t  umcip_max_ver;
 	enum  atom_dgpu_vram_type  vram_type;
-	union atom_umc_config_def  umc_config;
+	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
 	uint32_t clk_reserved[4];
 	uint32_t golden_reserved;
-	union atom_umc_config1_def  umc_config1;
+	union atom_umc_config1  umc_config1;
 	uint32_t reserved[2];
 	uint8_t  channel_num;
 	uint8_t  channel_width;

@@ -1150,6 +1150,19 @@ populate_display_object(
 	}
 }
 
+inline static void
+populate_umc_info(
+		struct atomtree_commons* const commons,
+		struct atomtree_umc_info* const umc,
+		uint16_t const bios_offset
+		) {
+	if (0 == bios_offset) {
+		return;
+	}
+	umc->leaves = commons->bios + bios_offset;
+	umc->ver = atom_get_ver(umc->table_header);
+}
+
 
 static void
 populate_init_reg_block(
@@ -2806,10 +2819,11 @@ populate_datatable_v2_1(
 		commons, &(dt21->display_object), leaves->displayobjectinfo
 	);
 
-
-	//displayobjectinfo
 	//indirectioaccess
+
 	//umc_info
+	populate_umc_info(commons, &(dt21->umc_info), leaves->umc_info);
+
 	//dce_info
 
 	populate_vram_info(commons, &(dt21->vram_info), leaves->vram_info);

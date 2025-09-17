@@ -1484,6 +1484,30 @@ grow_display_info(
 }
 
 
+inline static atui_node*
+grow_umc_info(
+		struct atom_tree const* const atree __unused,
+		struct atomtree_umc_info const* const umc
+		) {
+	atuifunc atui_func;
+	atuifunc_args atui_args = {
+		.atomtree = umc,
+		.bios = umc->leaves,
+	};
+	switch (umc->ver.ver) {
+		case V(3,1): atui_func = _atui_atom_umc_info_v3_1; break;
+		case V(3,2): atui_func = _atui_atom_umc_info_v3_2; break;
+		case V(3,3): atui_func = _atui_atom_umc_info_v3_3; break;
+		case V(4,0): atui_func = _atui_atom_umc_info_v4_0; break;
+		default:
+			atui_args.rename = "umc_info (header only stub)";
+			atui_func = _atui_atom_common_table_header;
+			break;
+	}
+	return atui_func(&atui_args);
+}
+
+
 static atui_node*
 autogen_regblock_register_sequence(
 		struct register_set_entry const* const func_playlist,
@@ -3410,8 +3434,9 @@ grow_master_datatable_v2_1(
 	 atui_node* const atui_display = grow_display_info(
 	 	atree, &(dt21->display_object)
 	);
+
 	//indirectioaccess
-	//umc_info
+	atui_node* const umc_info = grow_umc_info(atree, &(dt21->umc_info));
 	//dce_info
 
 	atui_node* const atui_vram_info = grow_vram_info(
@@ -3432,7 +3457,9 @@ grow_master_datatable_v2_1(
 		atui_utilitypipeline, atui_multimedia_info,
 		atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
 		atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt, atui_display,
-		// indirect, umc, dce,
+		// indirect,
+		umc_info,
+		//dce,
 		atui_vram_info,
 		// integrated, asic
 		atui_voltageobject_info,
