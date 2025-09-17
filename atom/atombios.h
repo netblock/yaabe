@@ -159,7 +159,7 @@
 #define BIOS_VERSION_PREFIX "ATOMBIOSBK-AMD"
 #define BIOS_STRING_LENGTH 43
 
-enum atom_string_def {
+enum atom_string {
 asic_bus_type_pcie_string = "PCI_EXPRESS",
 atom_fire_gl_string       = "FGL",
 atom_bios_string          = "ATOM"
@@ -1560,7 +1560,7 @@ struct lvtma_output_control_parameters_v2 {
 };
 
 
-enum atom_crtc_def:uint8_t {
+enum atom_crtc:uint8_t {
 	ATOM_CRTC1 = 0,
 	ATOM_CRTC2 = 1,
 	ATOM_CRTC3 = 2,
@@ -1591,7 +1591,7 @@ enum atom_blank_crtc_command:uint8_t {
 };
 
 struct blank_crtc_parameters {
-    enum atom_crtc_def  crtc_id;
+    enum atom_crtc  crtc_id;
 	enum  atom_blank_crtc_command  blanking;
 	uint16_t BlackColorRCr;
     uint16_t BlackColorGY;
@@ -1613,7 +1613,7 @@ struct enable_crtc_parameters {
 // Structures used by enablecrtc
 /******************************************************************************/
 struct enable_crtc_parameters {
-    enum atom_crtc_def  crtc_id;
+    enum atom_crtc  crtc_id;
 	uint8_t  enable; // ATOM_ENABLE or ATOM_DISABLE
 	uint8_t  padding[2];
 };
@@ -7905,7 +7905,7 @@ union atom_memory_timing_format {
 
 struct atom_vram_module_v3 {
 	union mc_shared_chremap_6_0  ChannelMapCfg; // board dependent paramenter:Channel combination
-	uint16_t ModuleSize;    // size of ATOM_VRAM_MODULE_V3
+	uint16_t ModuleSize;
 	uint16_t DefaultMVDDQ;  // board dependent parameter:Default Memory Core Voltage
 	uint16_t DefaultMVDDC;  // board dependent parameter:Default Memory IO Voltage
 	uint8_t  ExtMemoryID;   // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
@@ -7937,7 +7937,7 @@ struct atom_vram_module_v3 {
 
 struct atom_vram_module_v4 {
 	union mc_shared_chremap_6_0  ChannelMapCfg;   // board dependent parameter: Channel combination
-	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
+	uint16_t ModuleSize;
 	union mc_arb_ramcfg_7_0_o  mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 
 	uint16_t Reserved;
@@ -7967,7 +7967,7 @@ struct atom_vram_module_v4 {
 
 struct atom_vram_module_v5 {
 	union mc_shared_chremap_6_0  ChannelMapCfg;   // board dependent parameter: Channel combination
-	uint16_t ModuleSize;      // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
+	uint16_t ModuleSize;
 	union mc_arb_ramcfg_7_0_o  mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 
 	uint16_t Reserved;
@@ -7997,7 +7997,7 @@ struct atom_vram_module_v5 {
 
 struct atom_vram_module_v6 {
 	union mc_shared_chremap_6_0  ChannelMapCfg;     // board dependent parameter: Channel combination
-	uint16_t ModuleSize;        // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
+	uint16_t ModuleSize;
 	union mc_arb_ramcfg_7_0_o  mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t Reserved;
 	uint8_t  ExtMemoryID;       // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
@@ -8030,7 +8030,7 @@ struct atom_vram_module_v7 {
 		union mc_shared_chremap_6_0  ChannelMapCfg_gmc6_0;
 		union mc_shared_chremap_7_1  ChannelMapCfg_gmc7_1;
 	};
-	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
+	uint16_t ModuleSize;
 	union mc_arb_ramcfg_7_0_o  mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
@@ -8060,7 +8060,7 @@ struct atom_vram_module_v7 {
 struct atom_vram_module_v8 {
 // Design Specific Values
 	union mc_shared_chremap_7_1  ChannelMapCfg;
-	uint16_t ModuleSize;         // Size of ATOM_VRAM_MODULE_V7
+	uint16_t ModuleSize;
 	union mc_arb_ramcfg_7_0_o  mc_arb_ramcfg; // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!! MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
 	uint16_t EnableChannels;     // bit vector which indicate which channels are enabled
 	uint8_t  ExtMemoryID;        // Current memory module ID

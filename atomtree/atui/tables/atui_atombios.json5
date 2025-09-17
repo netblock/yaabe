@@ -5607,9 +5607,6 @@ global_defaults: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "size of ATOM_VRAM_MODULE_V3",
-			},
 		}, {
 			access: "bios->DefaultMVDDQ",
 			name: "DefaultMVDDQ",
@@ -5752,9 +5749,6 @@ global_defaults: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",
-			},
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
@@ -5876,9 +5870,6 @@ global_defaults: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",
-			},
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
@@ -6005,9 +5996,6 @@ global_defaults: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE",
-			},
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
@@ -6129,9 +6117,6 @@ global_defaults: {
 		{
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "Size of ATOM_VRAM_MODULE_V7",
-			},
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",
@@ -6273,9 +6258,6 @@ global_defaults: {
 		}, {
 			access: "bios->ModuleSize",
 			name: "ModuleSize",
-			description: {
-				eng: "Size of ATOM_VRAM_MODULE_V7",
-			},
 		}, {
 			access: "bios->mc_arb_ramcfg",
 			name: "mc_arb_ramcfg",

@@ -8,13 +8,13 @@
 #define ATOMFIRMWARE_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
-enum  atom_bios_header_version_def {
+enum  atom_bios_header_version {
   ATOM_MAJOR_VERSION = 0x0003,
   ATOM_MINOR_VERSION = 0x0003,
 };
 
 // might be related to amdgpu_atombios_encoder_setup_dig_transmitter()
-enum atom_encoder_refclk_src_def {
+enum atom_encoder_refclk_src {
 	ENCODER_REFCLK_SRC_P1PLL   = 0,
 	ENCODER_REFCLK_SRC_P2PLL   = 1,
 	ENCODER_REFCLK_SRC_P3PLL   = 2,
@@ -22,13 +22,13 @@ enum atom_encoder_refclk_src_def {
 	ENCODER_REFCLK_SRC_INVALID = 0xFF,
 };
 
-enum atom_scaler_def {
+enum atom_scaler {
 	ATOM_SCALER_DISABLE   = 0, // scaler bypass mode, auto-center & no replication
 	ATOM_SCALER_CENTER    = 1, // For Fudo, it's bypass and auto-center & auto replication
 	ATOM_SCALER_EXPANSION = 2, // scaler expansion by 2 tap alpha blending mode
 };
 
-enum atom_operation_def {
+enum atom_operation {
 	ATOM_DISABLE    = 0,
 	ATOM_ENABLE     = 1,
 	ATOM_INIT       = 7,
@@ -572,7 +572,7 @@ struct vram_usagebyfirmware_v2_2 {
 /*
 // Indexes to GPIO array in GLSync record
 // GLSync record is for Frame Lock/Gen Lock feature.
-enum atom_glsync_record_gpio_index_def {
+enum atom_glsync_record_gpio_index {
 	ATOM_GPIO_INDEX_GLSYNC_REFCLK    = 0,
 	ATOM_GPIO_INDEX_GLSYNC_HSYNC     = 1,
 	ATOM_GPIO_INDEX_GLSYNC_VSYNC     = 2,
@@ -937,7 +937,7 @@ struct atom_display_controller_info_v4_5 {
 /******************************************************************************/
 
 // usCaps
-enum ext_display_path_cap_def {
+enum ext_display_path_cap {
 	EXT_DISPLAY_PATH_CAPS__HBR2_DISABLE           = 0x0001,
 	EXT_DISPLAY_PATH_CAPS__DP_FIXED_VS_EN         = 0x0002,
 	EXT_DISPLAY_PATH_CAPS__EXT_CHIP_MASK          = 0x007C,
@@ -953,7 +953,7 @@ enum ext_display_path_cap_def {
 // used by APUs/iGPUs; see igp_info of linux's amdgpu_atomfirmware.c
 
 // ucEncoderMode
-enum atom_encode_mode_def:uint8_t {
+enum atom_encode_mode:uint8_t {
 	ATOM_ENCODER_MODE_DP       = 0,
 	ATOM_ENCODER_MODE_DP_SST   = 0,
 	ATOM_ENCODER_MODE_LVDS     = 1,
@@ -993,7 +993,7 @@ struct atom_camera_data {
 	uint32_t crc_val; // CRC
 };
 
-enum atom_dp_vs_preemph_def:uint8_t {
+enum atom_dp_vs_preemph:uint8_t {
 	DP_VS_LEVEL0_PREEMPH_LEVEL0 = 0x00,
 	DP_VS_LEVEL1_PREEMPH_LEVEL0 = 0x01,
 	DP_VS_LEVEL2_PREEMPH_LEVEL0 = 0x02,
@@ -1008,7 +1008,7 @@ enum atom_dp_vs_preemph_def:uint8_t {
 
 struct atom_14nm_dpphy_dvihdmi_tuningset {
 	uint32_t max_symclk_in10khz;
-	enum  atom_encode_mode_def  encoder_mode;
+	enum  atom_encode_mode  encoder_mode;
 	uint8_t  phy_sel;              // bit vector of phy, bit0= phya, bit1=phyb, ....bit5 = phyf
 	uint16_t margindeemph;         // COMMON_MAR_DEEMPH_NOM[7:0]tx_margin_nom [15:8]deemph_gen1_nom
 	uint8_t  deemph_6db_4;         // COMMON_SELDEEMPH60[31:24]deemph_6db_4
@@ -1018,7 +1018,7 @@ struct atom_14nm_dpphy_dvihdmi_tuningset {
 };
 
 struct atom_14nm_dpphy_dp_setting {
-	enum  atom_dp_vs_preemph_def  dp_vs_pemph_level;
+	enum  atom_dp_vs_preemph  dp_vs_pemph_level;
 	uint16_t margindeemph; // COMMON_MAR_DEEMPH_NOM[7:0]tx_margin_nom [15:8]deemph_gen1_nom
 	uint8_t  deemph_6db_4; // COMMON_SELDEEMPH60[31:24]deemph_6db_4
 	uint8_t  boostadj;     // CMD_BUS_GLOBAL_FOR_TX_LANE0 [19:16]tx_boost_adj  [20]tx_boost_en  [23:22]tx_binary_ron_code_offset
@@ -1052,7 +1052,7 @@ struct atom_14nm_combphy_tmds_vs_set {
 
 struct atom_DCN_dpphy_dvihdmi_tuningset {
 	uint32_t max_symclk_in10khz;
-	enum  atom_encode_mode_def  encoder_mode;
+	enum  atom_encode_mode  encoder_mode;
 	uint8_t  phy_sel;       // bit vector of phy, bit0= phya, bit1=phyb, ....bit5 = phyf
 	uint8_t  tx_eq_main;    // map to RDPCSTX_PHY_FUSE0/1/2/3[5:0](EQ_MAIN)
 	uint8_t  tx_eq_pre;     // map to RDPCSTX_PHY_FUSE0/1/2/3[11:6](EQ_PRE)
@@ -1063,7 +1063,7 @@ struct atom_DCN_dpphy_dvihdmi_tuningset {
 };
 
 struct atom_DCN_dpphy_dp_setting {
-	enum  atom_dp_vs_preemph_def  dp_vs_pemph_level;
+	enum  atom_dp_vs_preemph  dp_vs_pemph_level;
 	uint8_t  tx_eq_main;    // map to RDPCSTX_PHY_FUSE0/1/2/3[5:0](EQ_MAIN)
 	uint8_t  tx_eq_pre;     // map to RDPCSTX_PHY_FUSE0/1/2/3[11:6](EQ_PRE)
 	uint8_t  tx_eq_post;    // map to RDPCSTX_PHY_FUSE0/1/2/3[17:12](EQ_POST)
@@ -1107,13 +1107,13 @@ union atom_sysinfo_dpphy_override_def {
 };
 
 // lvds_misc
-enum atom_sys_info_lvds_misc_def:uint16_t {
+enum atom_sys_info_lvds_misc:uint16_t {
 	SYS_INFO_LVDS_MISC_888_FPDI_MODE = 0x01,
 	SYS_INFO_LVDS_MISC_888_BPC_MODE  = 0x04,
 	SYS_INFO_LVDS_MISC_OVERRIDE_EN   = 0x08,
 };
 // memorytype DMI Type 17 offset 12h - Memory Type
-enum atom_dmi_t17_mem_type_def:uint8_t {
+enum atom_dmi_t17_mem_type:uint8_t {
 	OTHER_MEMTYPE       = 1,
 	UNKNOWN_MEMTYPE     = 2,
 	DRAM_MEMTYPE        = 3,
@@ -1148,13 +1148,13 @@ enum atom_dmi_t17_mem_type_def:uint8_t {
 	LPDDR5_MEMTYPE     = 35,
 };
 // system_config
-enum atom_system_vbiosmisc_def:uint32_t {
+enum atom_system_vbiosmisc:uint32_t {
 	INTEGRATED_SYSTEM_INFO__GET_EDID_CALLBACK_FUNC_SUPPORT = 0x01,
 };
 
 
 // gpucapinfo
-enum atom_system_gpucapinf_def:uint32_t {
+enum atom_system_gpucapinf:uint32_t {
 	SYS_INFO_GPUCAPS__ENABEL_DFS_BYPASS = 0x10,
 };
 struct atom_integrated_system_info_v1_11 {
@@ -1172,9 +1172,9 @@ struct atom_integrated_system_info_v1_11 {
 	uint16_t dvi_ss_percentage;    // unit of 0.001%,   1000 mean 1%
 	uint16_t dvi_ss_rate_10hz;
 	union atom_sysinfo_dpphy_override_def  dpphy_override; // bit vector
-	enum  atom_sys_info_lvds_misc_def  lvds_misc;
+	enum  atom_sys_info_lvds_misc  lvds_misc;
 	uint16_t backlight_pwm_hz;     // pwm frequency in hz
-	enum  atom_dmi_t17_mem_type_def  memorytype; // APU memory type indication.
+	enum  atom_dmi_t17_mem_type  memorytype; // APU memory type indication.
 	uint8_t  umachannelnumber;     // number of memory channels
 	uint8_t  pwr_on_digon_to_de;   // all pwr sequence numbers below are in uint of 4ms
 	uint8_t  pwr_on_de_to_vary_bl;
@@ -1220,9 +1220,9 @@ struct atom_integrated_system_info_v1_12 {
 	uint16_t dvi_ss_percentage;    // unit of 0.001%,   1000 mean 1%
 	uint16_t dvi_ss_rate_10hz;
 	union atom_sysinfo_dpphy_override_def  dpphy_override; // bit vector
-	enum  atom_sys_info_lvds_misc_def  lvds_misc;
+	enum  atom_sys_info_lvds_misc  lvds_misc;
 	uint16_t backlight_pwm_hz;     // pwm frequency in hz
-	enum  atom_dmi_t17_mem_type_def  memorytype; // APU memory type indication.
+	enum  atom_dmi_t17_mem_type  memorytype; // APU memory type indication.
 	uint8_t  umachannelnumber;     // number of memory channels
 	uint8_t  pwr_on_digon_to_de;   // all pwr sequence numbers below are in uint of 4ms //
 	uint8_t  pwr_on_de_to_vary_bl;
@@ -1278,7 +1278,7 @@ struct atom_integrated_system_info_v2_1 {
 	uint16_t gpuclk_ss_percentage; // unit of 0.001%,   1000 mean 1%
 	uint16_t gpuclk_ss_type;
 	union atom_sysinfo_dpphy_override_def  dpphy_override; // bit vector
-	enum  atom_dmi_t17_mem_type_def  memorytype; // APU memory type indication.
+	enum  atom_dmi_t17_mem_type  memorytype; // APU memory type indication.
 	uint8_t  umachannelnumber; // number of memory channels
 	uint8_t  htc_hyst_limit;
 	uint8_t  htc_tmp_limit;
@@ -1346,7 +1346,7 @@ struct atom_integrated_system_info_v2_2 {
 	uint16_t gpuclk_ss_percentage; // unit of 0.001%,   1000 mean 1%
 	uint16_t gpuclk_ss_type;
 	union atom_sysinfo_dpphy_override_def  dpphy_override; // bit vector
-	enum  atom_dmi_t17_mem_type_def  memorytype; // APU memory type indication.
+	enum  atom_dmi_t17_mem_type  memorytype; // APU memory type indication.
 	uint8_t  umachannelnumber; // number of memory channels
 	uint8_t  htc_hyst_limit;
 	uint8_t  htc_tmp_limit;
@@ -2421,8 +2421,8 @@ struct atom_vram_module_v9 {
 	uint32_t channel_enable;   // bit vector, each bit indicate specific channel enable or not
 	uint32_t max_mem_clk;      // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
 	uint16_t reserved[3];
-	uint16_t mem_voltage;      // mem_voltage
-	uint16_t vram_module_size; // Size of atom_vram_module_v9
+	uint16_t mem_voltage;
+	uint16_t vram_module_size;
 	uint8_t  ext_memory_id;    // Current memory module ID
 	enum  atom_dgpu_vram_type  memory_type;
 	uint8_t  channel_num;      // Number of mem. channels supported in this module
@@ -2460,8 +2460,8 @@ struct atom_vram_module_v10 {
 	uint32_t channel_enable;   // bit vector, each bit indicate specific channel enable or not
 	uint32_t max_mem_clk;      // max memory clock of this memory in unit of 10kHz, =0 means it is not defined
 	uint16_t reserved[3];
-	uint16_t mem_voltage;      // mem_voltage
-	uint16_t vram_module_size; // Size of atom_vram_module_v9
+	uint16_t mem_voltage;
+	uint16_t vram_module_size;
 	uint8_t  ext_memory_id;    // Current memory module ID
 	enum  atom_dgpu_vram_type  memory_type;
 	uint8_t  channel_num;      // Number of mem. channels supported in this module
@@ -2502,8 +2502,8 @@ struct atom_vram_module_v11 {
 	// Design Specific Values
 	uint32_t memory_size;      // Total memory size in unit of MB for CONFIG_MEMSIZE zeros
 	uint32_t channel_enable;   // bit vector, each bit indicate specific channel enable or not
-	uint16_t mem_voltage;      // mem_voltage
-	uint16_t vram_module_size; // Size of atom_vram_module_v9
+	uint16_t mem_voltage;
+	uint16_t vram_module_size;
 	uint8_t  ext_memory_id;    // Current memory module ID
 	enum  atom_dgpu_vram_type  memory_type;
 	uint8_t  channel_num;      // Number of mem. channels supported in this module
@@ -3109,9 +3109,9 @@ struct set_pixel_clock_parameter_v1_7 {
 	uint8_t  pll_id;       // ATOM_PHY_PLL0/ATOM_PHY_PLL1/ATOM_PPLL0
 	uint8_t  encoderobjid; // ASIC encoder id defined in objectId.h,
 	                       // indicate which graphic encoder will be used.
-	enum  atom_encode_mode_def  encoder_mode;
+	enum  atom_encode_mode  encoder_mode;
 	enum  atom_set_pixel_clock_v1_7_misc_info  miscinfo;
-	enum  atom_crtc_def  crtc_id;
+	enum  atom_crtc  crtc_id;
 	enum  atom_set_pixel_clock_v1_7_deepcolor_ratio  deep_color_ratio; // HDMI panel bit depth
 	uint8_t  reserved1[2];
 	uint32_t reserved2;
@@ -3121,7 +3121,7 @@ struct set_pixel_clock_parameter_v1_7 {
 /******************************************************************************/
 // Structures used by setdceclock
 /******************************************************************************/
-enum atom_ppll_def:uint8_t {
+enum atom_ppll:uint8_t {
 	ATOM_PPLL0         = 2,
 	ATOM_GCK_DFS       = 8,
 	ATOM_FCH_CLK       = 9,
@@ -3168,9 +3168,9 @@ union dce_clock_flag {
 struct set_dce_clock_parameters_v2_1 {
 	uint32_t dceclk_10khz; // target DCE frequency in unit of 10KHZ, return real DISPCLK/DPREFCLK frequency.
 	enum  atom_set_dce_clock_clock_type  dceclktype;
-	enum  atom_ppll_def  dceclksrc;
+	enum  atom_ppll  dceclksrc;
 	union dce_clock_flag  dceclkflag; // Bit [1:0] = PPLL ref clock source ( when ucDCEClkSrc= ATOM_PPLL0 )
-	enum  atom_crtc_def  crtc_id;      // ucDisp Pipe Id, use only when ucDCEClkType = PIXCLK
+	enum  atom_crtc  crtc_id;      // ucDisp Pipe Id, use only when ucDCEClkType = PIXCLK
 };
 
 
@@ -3184,7 +3184,7 @@ struct set_dce_clock_ps_allocation_v2_1 {
 // Structure used by EnableDispPowerGating
 /******************************************************************************/
 struct enable_disp_power_gating_parameters_v2_1 {
-	enum  atom_crtc_def  disp_pipe_id;
+	enum  atom_crtc  disp_pipe_id;
 	uint8_t  enable;       // ATOM_ENABLE or ATOM_DISABLE
 	uint8_t  padding[2];
 };
@@ -3209,8 +3209,8 @@ struct set_crtc_using_dtd_timing_parameters {
 	union atom_dtd_format_modemiscinfo  miscinfo;
 	uint8_t  h_border;
 	uint8_t  v_border;
-    enum atom_crtc_def  crtc_id;
-	enum  atom_encode_mode_def  encoder_mode;
+    enum atom_crtc  crtc_id;
+	enum  atom_encode_mode  encoder_mode;
 	uint8_t  padding[2];
 };
 
@@ -3239,7 +3239,7 @@ struct process_aux_channel_transaction_parameters_v1_2 {
 /******************************************************************************/
 
 // define ASIC internal encoder id ( bit vector ), used for CRTC_SourceSel
-enum atom_dig_def:uint8_t {
+enum atom_dig:uint8_t {
 	ASIC_INT_DIG1_ENCODER_ID = 0x03,
 	ASIC_INT_DIG2_ENCODER_ID = 0x09,
 	ASIC_INT_DIG3_ENCODER_ID = 0x0a,
@@ -3259,9 +3259,9 @@ enum atom_panel_bit_per_color:uint8_t {
 };
 
 struct select_crtc_source_parameters_v2_3 {
-    enum atom_crtc_def  crtc_id;
-	enum  atom_dig_def   encoder_id;
-	enum  atom_encode_mode_def     encoder_mode;
+    enum atom_crtc  crtc_id;
+	enum  atom_dig   encoder_id;
+	enum  atom_encode_mode     encoder_mode;
 	enum  atom_panel_bit_per_color dst_bpc;
 };
 
@@ -3354,7 +3354,7 @@ union dig_encoder_control_parameters_v1_5 {
 /******************************************************************************/
 // Structures used by dig1transmittercontrol
 /******************************************************************************/
-enum atom_embedded_display_op_def {
+enum atom_embedded_display_op {
 	ATOM_LCD_BL_OFF                = 2,
 	ATOM_LCD_BL_OM                 = 3,
 	ATOM_LCD_BL_BRIGHTNESS_CONTROL = 4,
@@ -3432,8 +3432,8 @@ struct dig_transmitter_control_parameters_v1_6 {
 	uint8_t  phyid;         // 0=UNIPHYA, 1=UNIPHYB, 2=UNIPHYC, 3=UNIPHYD, 4= UNIPHYE 5=UNIPHYF
 	enum  atom_dig_transmitter_control_action  action;
 	union {
-		uint8_t  digmode;   // enum atom_encode_mode_def
-		enum  atom_encode_mode_def  encoder_mode;
+		uint8_t  digmode;   // enum atom_encode_mode
+		enum  atom_encode_mode  encoder_mode;
 		uint8_t  dplaneset; // DP voltage swing and pre-emphasis value defined in DPCD DP_LANE_SET, "DP_LANE_SET__xDB_y_zV"
 		enum  atom_dig_transmitter_control_dplaneset  laneset;
 	} mode_laneset;
@@ -3458,7 +3458,7 @@ struct dig_transmitter_control_ps_allocation_v1_6 {
 /******************************************************************************/
 
 // Action
-enum external_encoder_control_action_def:uint8_t {
+enum external_encoder_control_action:uint8_t {
 	EXTERNAL_ENCODER_ACTION_V3_DISABLE_OUTPUT       = 0x00,
 	EXTERNAL_ENCODER_ACTION_V3_ENABLE_OUTPUT        = 0x01,
 	EXTERNAL_ENCODER_ACTION_V3_ENCODER_INIT         = 0x07,
@@ -3470,7 +3470,7 @@ enum external_encoder_control_action_def:uint8_t {
 };
 
 // Config
-enum external_encoder_control_v2_4_config_def:uint8_t {
+enum external_encoder_control_v2_4_config:uint8_t {
 	EXTERNAL_ENCODER_CONFIG_V3_DPLINKRATE_MASK    = 0x03,
 	EXTERNAL_ENCODER_CONFIG_V3_DPLINKRATE_1_62GHZ = 0x00,
 	EXTERNAL_ENCODER_CONFIG_V3_DPLINKRATE_2_70GHZ = 0x01,
@@ -3484,8 +3484,8 @@ enum external_encoder_control_v2_4_config_def:uint8_t {
 
 struct external_encoder_control_parameters_v2_4 {
 	uint16_t pixelclock_10khz; // pixel clock in 10Khz, valid when ucAction=SETUP/ENABLE_OUTPUT
-	enum  external_encoder_control_v2_4_config_def  config; // indicate which encoder, and DP link rate when ucAction = SETUP/ENABLE_OUTPUT
-	enum  external_encoder_control_action_def  action;
+	enum  external_encoder_control_v2_4_config  config; // indicate which encoder, and DP link rate when ucAction = SETUP/ENABLE_OUTPUT
+	enum  external_encoder_control_action  action;
 	uint8_t  encodermode; // encoder mode, only used when Action = SETUP/ENABLE_OUTPUT
 	uint8_t  lanenum;     // lane number, only used when Action = SETUP/ENABLE_OUTPUT
 	uint8_t  bitpercolor; // output bit per color, only valid when ucAction = SETUP/ENABLE_OUTPUT and ucEncodeMode= DP
@@ -3553,7 +3553,7 @@ struct gop_lib1_content {
 // Connect all share the same definitions as display_device_tag defines
 /******************************************************************************/
 
-enum scratch_register_def {
+enum scratch_register {
 	ATOM_DEVICE_CONNECT_INFO_DEF = 0,
 	ATOM_BL_BRI_LEVEL_INFO_DEF   = 2,
 	ATOM_ACTIVE_INFO_DEF         = 3,
@@ -3565,7 +3565,7 @@ enum scratch_register_def {
 	ATOM_INTERNAL_TIMER_INFO_DEF =10,
 };
 
-enum scratch_device_connect_info_bit_def {
+enum scratch_device_connect_info_bit {
 	ATOM_DISPLAY_LCD1_CONNECT     = 0x0002,
 	ATOM_DISPLAY_DFP1_CONNECT     = 0x0008,
 	ATOM_DISPLAY_DFP2_CONNECT     = 0x0080,
@@ -3577,7 +3577,7 @@ enum scratch_device_connect_info_bit_def {
 	ATOM_CONNECT_INFO_DEVICE_MASK = 0x0fff,
 };
 
-enum scratch_bl_bri_level_info_bit_def {
+enum scratch_bl_bri_level_info_bit {
 	ATOM_CURRENT_BL_LEVEL_SHIFT = 0x8,
 #ifndef _H2INC
 	ATOM_CURRENT_BL_LEVEL_MASK  = 0x0000ff00,
@@ -3585,7 +3585,7 @@ enum scratch_bl_bri_level_info_bit_def {
 #endif
 };
 
-enum scratch_active_info_bits_def {
+enum scratch_active_info_bits {
 	ATOM_DISPLAY_LCD1_ACTIVE     = 0x0002,
 	ATOM_DISPLAY_DFP1_ACTIVE     = 0x0008,
 	ATOM_DISPLAY_DFP2_ACTIVE     = 0x0080,
@@ -3596,7 +3596,7 @@ enum scratch_active_info_bits_def {
 	ATOM_ACTIVE_INFO_DEVICE_MASK = 0x0fff,
 };
 
-enum scratch_device_req_info_bits_def {
+enum scratch_device_req_info_bits {
 	ATOM_DISPLAY_LCD1_REQ     = 0x0002,
 	ATOM_DISPLAY_DFP1_REQ     = 0x0008,
 	ATOM_DISPLAY_DFP2_REQ     = 0x0080,
@@ -3607,17 +3607,17 @@ enum scratch_device_req_info_bits_def {
 	ATOM_REQ_INFO_DEVICE_MASK = 0x0fff,
 };
 
-enum scratch_acc_change_info_bitshift_def {
+enum scratch_acc_change_info_bitshift {
 	ATOM_ACC_CHANGE_ACC_MODE_SHIFT   = 4,
 	ATOM_ACC_CHANGE_LID_STATUS_SHIFT = 6,
 };
 
-enum scratch_acc_change_info_bits_def {
+enum scratch_acc_change_info_bits {
 	ATOM_ACC_CHANGE_ACC_MODE   = 0x00000010,
 	ATOM_ACC_CHANGE_LID_STATUS = 0x00000040,
 };
 
-enum scratch_pre_os_mode_info_bits_def {
+enum scratch_pre_os_mode_info_bits {
 	ATOM_PRE_OS_MODE_MASK              = 0x00000003,
 	ATOM_PRE_OS_MODE_VGA               = 0x00000000,
 	ATOM_PRE_OS_MODE_VESA              = 0x00000001,

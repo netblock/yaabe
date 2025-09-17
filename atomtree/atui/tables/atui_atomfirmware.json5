@@ -1349,7 +1349,7 @@ global_defaults: {
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
 			description: {
-				eng: "enum of atom_board_i2c_feature_id_def",
+				eng: "enum of atom_board_i2c_feature_id",
 			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
@@ -1459,7 +1459,7 @@ global_defaults: {
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
 			description: {
-				eng: "enum of atom_board_i2c_feature_id_def",
+				eng: "enum of atom_board_i2c_feature_id",
 			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
@@ -1576,7 +1576,7 @@ global_defaults: {
 			name: "board_i2c_feature_id",
 			display: "ATUI_HEX",
 			description: {
-				eng: "enum of atom_board_i2c_feature_id_def",
+				eng: "enum of atom_board_i2c_feature_id",
 			},
 		}, {
 			access: "bios->board_i2c_feature_gpio_id",
@@ -4134,7 +4134,7 @@ global_defaults: {
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->umc_config",
 			name: "umc_config",
@@ -4187,7 +4187,7 @@ global_defaults: {
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->umc_config",
 			name: "umc_config",
@@ -4260,7 +4260,7 @@ global_defaults: {
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->umc_config",
 			name: "umc_config",
@@ -4327,7 +4327,7 @@ global_defaults: {
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: ["ATUI_HEX", "ATUI_ENUM",],
 		}, {
 			access: "bios->umc_config",
 			name: "umc_config",
@@ -4523,15 +4523,9 @@ global_defaults: {
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: {
-				eng: "mem_voltage",
-			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: {
-				eng: "Size of atom_vram_module_v9",
-			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
@@ -4542,9 +4536,6 @@ global_defaults: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: {
-				eng: "enum of atom_dgpu_vram_type",
-			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
@@ -4715,15 +4706,9 @@ global_defaults: {
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: {
-				eng: "mem_voltage",
-			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: {
-				eng: "Size of atom_vram_module_v9",
-			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
@@ -4734,9 +4719,6 @@ global_defaults: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: {
-				eng: "enum of atom_dgpu_vram_type",
-			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
@@ -4915,15 +4897,9 @@ global_defaults: {
 		}, {
 			access: "bios->mem_voltage",
 			name: "mem_voltage",
-			description: {
-				eng: "mem_voltage",
-			},
 		}, {
 			access: "bios->vram_module_size",
 			name: "vram_module_size",
-			description: {
-				eng: "Size of atom_vram_module_v9",
-			},
 		}, {
 			access: "bios->ext_memory_id",
 			name: "ext_memory_id",
@@ -4934,9 +4910,6 @@ global_defaults: {
 			access: "bios->memory_type",
 			name: "memory_type",
 			display: ["ATUI_HEX", "ATUI_ENUM",],
-			description: {
-				eng: "enum of atom_dgpu_vram_type",
-			},
 		}, {
 			access: "bios->channel_num",
 			name: "channel_num",
