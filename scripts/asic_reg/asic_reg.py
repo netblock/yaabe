@@ -34,7 +34,6 @@
 
 # gc/{gc_9_4_3_sh_mask.h,gc_9_4_3_offset.h,gc_9_4_2_sh_mask.h,gc_9_4_2_offset.h,gc_9_4_1_sh_mask.h,gc_9_4_1_offset.h,gc_9_2_1_sh_mask.h,gc_9_2_1_offset.h,gc_9_1_sh_mask.h,gc_9_1_offset.h,gc_9_0_sh_mask.h,gc_9_0_offset.h,gc_11_5_0_sh_mask.h,gc_11_5_0_offset.h,gc_11_0_3_sh_mask.h,gc_11_0_3_offset.h,gc_11_0_0_sh_mask.h,gc_11_0_0_offset.h,gc_10_3_0_sh_mask.h,gc_10_3_0_offset.h,gc_10_1_0_sh_mask.h,gc_10_1_0_offset.h}
 
-
 import re
 from gmpy2 import popcount
 from sys import argv
@@ -190,6 +189,7 @@ def text_to_dict(
 				pp_dict[parts[1]] = parts[2]
 		else:
 			i+=1
+	
 	return pp_dict
 
 
@@ -222,7 +222,11 @@ def shmask_filetext_to_bitfields(
 	# adjacent within the header file, so do a primitive preprocessor parse for
 	# a basic namespace (the python dict).
 	pp_dict:dict = text_to_dict(version, file_text)
-	assert(0 == (len(pp_dict) % 2))
+	if (len(pp_dict) & 1):
+		print(
+			"WARNING: %s: shmask is odd valued, which means a shift or mask is"
+			" orphaned!" % version
+		)
 
 	bitfields:list = []
 	bf_i:int = -1
@@ -240,19 +244,21 @@ def shmask_filetext_to_bitfields(
 			continue
 		mask_key:str = k
 		shift_key:str = k[:-4] + "_shift"
-		name_parts:str = shift_key.split("__")
+		if shift_key in keys:
+			name_parts:str = shift_key.split("__")
 
-		if (name_parts[0] != current_bf_name):
-			assert(name_parts[0] not in old_bf_names), name_parts
-			old_bf_names.append(current_bf_name)
-			current_bf_name = name_parts[0]
-			bitfields.append(bitfield(name_parts[0]))
-			bf_i += 1
+			if (name_parts[0] != current_bf_name):
+				assert(name_parts[0] not in old_bf_names), name_parts
+				old_bf_names.append(current_bf_name)
+				current_bf_name = name_parts[0]
+				bitfields.append(bitfield(name_parts[0]))
+				bf_i += 1
+			mask = c_literal_to_int(pp_dict[mask_key])
+			shift = c_literal_to_int(pp_dict[shift_key])
 
-		mask = c_literal_to_int(pp_dict[mask_key])
-		shift = c_literal_to_int(pp_dict[shift_key])
-
-		bitfields[bf_i].add_maskshift(name_parts[1], mask, shift)
+			bitfields[bf_i].add_maskshift(name_parts[1], mask, shift)
+		else:
+			print("WARNING: %s: mask %s has no shift!" % (version, k))
 
 	bitfields_dict:dict = {}
 	for b in bitfields:
