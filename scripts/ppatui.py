@@ -1053,12 +1053,12 @@ def atui_leaf_type_to_text(
 	type_strings:atui_leaf_type_text = leaf.type_to_text()
 	type_text:str = (
 		"\n"
-		+ indent + ".fancy = " + type_strings.fancy + ",\n"
-		+ indent + ".radix = " + type_strings.radix + ",\n"
-		+ indent + ".disable = " + type_strings.disable + ",\n"
-		+ indent + ".signed_num = " + type_strings.signed_num + ",\n"
-		+ indent + ".fraction = " + type_strings.fraction + ",\n"
-		+ indent + ".has_enum = " + type_strings.has_enum + ",\n"
+		+ indent + ".fancy = %s,\n" % type_strings.fancy
+		+ indent + ".radix = %s,\n" % type_strings.radix
+		+ indent + ".disable = %s,\n" % type_strings.disable
+		+ indent + ".signed_num = %s,\n" % type_strings.signed_num
+		+ indent + ".fraction = %s,\n" % type_strings.fraction
+		+ indent + ".has_enum = %s,\n" % type_strings.has_enum
 	+ parent_indent
 	)
 	return type_text
@@ -1070,15 +1070,13 @@ def atui_leaf_to_text( # vestige is handled in atui_leaf_vestige_to_text
 	indent:str = parent_indent + "\t"
 	leaf_text:str = (
 		"\n"
-		+ indent + ".type = {"
-			+ atui_leaf_type_to_text(leaf, indent)
-		+ "},\n"
-		+ indent + ".array_size = " + leaf.array_size + ",\n"
-		+ indent + ".fractional_bits = " + leaf.fractional_bits + ",\n"
-		+ indent + ".total_bits = " + leaf.total_bits + ",\n"
-		+ indent + ".bitfield_hi = " + leaf.bitfield_hi + ",\n"
-		+ indent + ".bitfield_lo = " + leaf.bitfield_lo + ",\n"
-		+ indent + ".enum_options = " + leaf.enum + ",\n"
+		+ indent + ".type = {%s},\n" % atui_leaf_type_to_text(leaf, indent)
+		+ indent + ".array_size = %s,\n" % leaf.array_size
+		+ indent + ".fractional_bits = %s,\n" % leaf.fractional_bits
+		+ indent + ".total_bits = %s,\n" % leaf.total_bits
+		+ indent + ".bitfield_hi = %s,\n" % leaf.bitfield_hi
+		+ indent + ".bitfield_lo = %s,\n" % leaf.bitfield_lo
+		+ indent + ".enum_options = %s,\n" % leaf.enum
 	+ parent_indent
 	)
 	return leaf_text
@@ -1122,8 +1120,9 @@ def atui_branch_to_text(
 	branch_text:str = (
 		"\n"
 		+ indent + ".branches.indirect = true,\n"
-		+ indent + ".branches.expanded = "
-			+ str(branch.branches.expanded).lower() + ",\n"
+		+ indent + ".branches.expanded = %s,\n" % (
+			str(branch.branches.expanded).lower()
+		)
 	+ parent_indent
 	)
 	return branch_text
@@ -1171,22 +1170,22 @@ def atui_node_to_text(
 	is_leaf_str:str = str(type(node) is atui_leaf).lower()
 	node_text:str = (
 		"\n"
-		+ indent + ".name = \"" + node.name + "\",\n"
-		+ indent + ".origname = \"" + node.name + "\",\n"
-		+ indent + ".structname = " + c_type + ",\n"
-		+ indent + ".description = {"
-			+ description_to_text(node.description, indent)
-		+ "},\n"
-		+ indent + ".num_copyable_leaves = "+str(node.num_copyable_leaves)+",\n"
-		+ indent + ".prefer_contiguous = " + node.prefer_contiguous + ",\n"
-		+ indent + ".bundled = " + is_leaf_str + ",\n"
-		+ indent + ".is_leaf = " + is_leaf_str + ",\n"
-		+ indent + ".data.input = " + node.access + ",\n"
-		+ indent + ".num_bytes = " + node.num_bytes + ",\n"
+		+ indent + ".name = \"%s\",\n" % node.name
+		+ indent + ".origname = \"%s\",\n" % node.name
+		+ indent + ".structname = %s,\n" % c_type 
+		+ indent + ".description = {%s},\n" % (
+			description_to_text(node.description, indent)
+		)
+		+ indent + ".num_copyable_leaves = %u,\n" % node.num_copyable_leaves
+		+ indent + ".prefer_contiguous = %s,\n" % node.prefer_contiguous
+		+ indent + ".bundled = %s,\n" % is_leaf_str
+		+ indent + ".is_leaf = %s,\n" % is_leaf_str
+		+ indent + ".data.input = %s,\n" % node.access
+		+ indent + ".num_bytes = %s,\n" % node.num_bytes
 		+ node_text_extra
 		+ indent + ".leaves.expanded = true,\n"
-		+ indent + ".leaves.count = " + str(len(node.leaves.nodes)) + ",\n"
-		+ indent + ".leaves.nodes_ro = " + leaves_text + ",\n"
+		+ indent + ".leaves.count = %u,\n" % len(node.leaves.nodes)
+		+ indent + ".leaves.nodes_ro = %s,\n" % leaves_text
 	+ parent_indent
 	)
 	return node_text
