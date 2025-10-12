@@ -371,6 +371,16 @@ struct atomtree_display_object {
 	// v1.4, 1.5
 	struct atomtree_display_path_records* records;
 };
+struct atomtree_iio_access {
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct indirect_io_access_v1_1*  v1_1;
+	};
+	semver ver;
+
+	uint16_t num_entries;
+};
 
 struct atomtree_umc_info {
 	union {
@@ -744,8 +754,8 @@ struct atomtree_master_datatable_v1_1 {
 	void*  mclk_ss_info;          // ??  atom_asic_mvdd_info ?
 
 	struct atomtree_display_object       display_object;
+	struct atomtree_iio_access           iio;
 
-	void*  indirect_io_access;    // struct indirect_io_access ?
 	void*  mc_init_parameter;     // atom_mc_init_param_table ?
 	void*  asic_vddc_info;        // unsure
 	void*  asic_internal_ss_info; // atom_asic_internal_ss_info
@@ -782,6 +792,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atomtree_powerplay_table      powerplayinfo;
 	struct atomtree_display_object       display_object;
 
+	struct atomtree_iio_access           iio;
 	struct atomtree_umc_info             umc_info;
 	struct atomtree_vram_info            vram_info;
 	struct atomtree_voltageobject_info   voltageobject_info;

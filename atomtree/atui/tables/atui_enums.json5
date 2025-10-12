@@ -835,7 +835,21 @@ Enums for ATUI_ENUM
 		{name: "VOLTAGE_CONTROLLED_BY_GPIO",},
 ]},
 
-
+{name: "indirect_io_mode",
+	constants: [
+		{name: "INDIRECT_IO_MM",},
+		{name: "INDIRECT_IO_PLL",},
+		{name: "INDIRECT_IO_MC",},
+		{name: "INDIRECT_IO_PCIE",},
+		{name: "INDIRECT_IO_PCIEP",},
+		{name: "INDIRECT_IO_NBMISC",},
+		{name: "INDIRECT_IO_SMU",},
+]},
+{name: "indirect_io_rw",
+	constants: [
+		{name: "INDIRECT_IO_READ",},
+		{name: "INDIRECT_IO_WRITE",},
+]},
 
 /******************************************************************************/
 // atomfirmware.h

@@ -1149,6 +1149,25 @@ populate_display_object(
 		case V(1,5): populate_display_object_info_table(commons, disp); break;
 	}
 }
+inline static void
+populate_iio(
+		struct atomtree_commons* const commons,
+		struct atomtree_iio_access* const iio,
+		uint16_t const bios_offset
+		) {
+	if (0 == bios_offset) {
+		return;
+	}
+	iio->leaves = commons->bios + bios_offset;
+	iio->ver = atom_get_ver(iio->table_header);
+
+	assert(V(1,1) == iio->ver.ver);
+
+	iio->num_entries = (
+		(iio->table_header->structuresize - sizeof(*iio->table_header))
+		/ sizeof(iio->v1_1->IOAccessSequence[0])
+	);
+}
 
 inline static void
 populate_umc_info(
@@ -2639,9 +2658,8 @@ populate_datatable_v1_1(
 		commons, &(dt11->display_object), leaves->Object_Header
 	);
 
-	if (leaves->IndirectIOAccess) {
-		dt11->indirect_io_access = bios + leaves->IndirectIOAccess;
-	}
+
+	populate_iio(commons, &(dt11->iio), leaves->IndirectIOAccess);
 
 	if (leaves->MC_InitParameter) {
 		dt11->mc_init_parameter = bios + leaves->MC_InitParameter;
@@ -2819,9 +2837,8 @@ populate_datatable_v2_1(
 		commons, &(dt21->display_object), leaves->displayobjectinfo
 	);
 
-	//indirectioaccess
+	populate_iio(commons, &(dt21->iio), leaves->indirectioaccess);
 
-	//umc_info
 	populate_umc_info(commons, &(dt21->umc_info), leaves->umc_info);
 
 	//dce_info

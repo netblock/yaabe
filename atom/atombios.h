@@ -7456,34 +7456,31 @@ union read_efuse_value_parameter {
 	uint32_t EfuseValue;
 };
 
-struct indirect_io_access {
-	struct atom_common_table_header  table_header;
-	uint8_t  IOAccessSequence[256];
+enum indirect_io_mode:uint8_t {
+	INDIRECT_IO_MM     = 0,
+	INDIRECT_IO_PLL    = 1,
+	INDIRECT_IO_MC     = 2,
+	INDIRECT_IO_PCIE   = 3,
+	INDIRECT_IO_PCIEP  = 4,
+	INDIRECT_IO_NBMISC = 5,
+	INDIRECT_IO_SMU    = 5,
 };
-
-#define INDIRECT_READ      0x00
-#define INDIRECT_WRITE     0x80
-
-#define INDIRECT_IO_MM     0
-#define INDIRECT_IO_PLL    1
-#define INDIRECT_IO_MC     2
-#define INDIRECT_IO_PCIE   3
-#define INDIRECT_IO_PCIEP  4
-#define INDIRECT_IO_NBMISC 5
-#define INDIRECT_IO_SMU    5
-
-#define INDIRECT_IO_PLL_READ     INDIRECT_IO_PLL   | INDIRECT_READ
-#define INDIRECT_IO_PLL_WRITE    INDIRECT_IO_PLL   | INDIRECT_WRITE
-#define INDIRECT_IO_MC_READ      INDIRECT_IO_MC    | INDIRECT_READ
-#define INDIRECT_IO_MC_WRITE     INDIRECT_IO_MC    | INDIRECT_WRITE
-#define INDIRECT_IO_PCIE_READ    INDIRECT_IO_PCIE  | INDIRECT_READ
-#define INDIRECT_IO_PCIE_WRITE   INDIRECT_IO_PCIE  | INDIRECT_WRITE
-#define INDIRECT_IO_PCIEP_READ   INDIRECT_IO_PCIEP | INDIRECT_READ
-#define INDIRECT_IO_PCIEP_WRITE  INDIRECT_IO_PCIEP | INDIRECT_WRITE
-#define INDIRECT_IO_NBMISC_READ  INDIRECT_IO_NBMISC | INDIRECT_READ
-#define INDIRECT_IO_NBMISC_WRITE INDIRECT_IO_NBMISC | INDIRECT_WRITE
-#define INDIRECT_IO_SMU_READ     INDIRECT_IO_SMU | INDIRECT_READ
-#define INDIRECT_IO_SMU_WRITE    INDIRECT_IO_SMU | INDIRECT_WRITE
+enum indirect_io_rw:uint8_t {
+	INDIRECT_IO_READ  = 0,
+	INDIRECT_IO_WRITE = 1,
+};
+union indirect_io {
+	uint8_t indirect_io;
+	struct {
+		enum indirect_io_mode mode :3-0 +1;
+		uint8_t reserved           :6-4 +1;
+		enum indirect_io_rw rw     :7-7 +1;
+	};
+};
+struct indirect_io_access_v1_1 {
+	struct atom_common_table_header  table_header;
+	union indirect_io IOAccessSequence[];
+};
 
 
 struct atom_oem_info {

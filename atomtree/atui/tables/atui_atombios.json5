@@ -4795,6 +4795,54 @@ global_defaults: {
 	],
 },
 
+{
+	c_prefix: "union", c_type: "indirect_io",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->indirect_io",
+		name: "indirect_io",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "mode",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "indirect_io_mode",
+			}, {
+				access: "reserved",
+			}, {
+				access: "rw",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "indirect_io_rw",
+			},
+		],},
+	},],
+}, {
+	c_type: "indirect_io_access_v1_1",
+	atomtree: "atomtree_iio_access",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->IOAccessSequence",
+			name: "IOAccessSequence",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_DYNARRAY", fancy_data: {
+				deferred: "NULL",
+				count: "atomtree->num_entries",
+				enum: "NULL",
+				pattern: [{
+					name: "IOAccessSequence [%03u]",
+					display: "ATUI_DISPLAY",
+					fancy: "ATUI_GRAFT", fancy_data: "indirect_io",
+				},],
+			},
+
+		},
+	],
+},
 
 
 

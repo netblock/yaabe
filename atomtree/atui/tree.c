@@ -1482,6 +1482,28 @@ grow_display_info(
 	}
 	return atui_disp;
 }
+inline static atui_node*
+grow_iio(
+		struct atom_tree const* const atree __unused,
+		struct atomtree_iio_access const* const iio
+		) {
+	if (NULL == iio->leaves) {
+		return NULL;
+	}
+	atuifunc atui_func;
+	atuifunc_args atui_args = {
+		.atomtree = iio,
+		.bios = iio->leaves,
+	};
+	switch (iio->ver.ver) {
+		case V(1,1): atui_func = _atui_indirect_io_access_v1_1; break;
+		default:
+			atui_args.rename = "indirect_io_access (header only stub)";
+			atui_func = _atui_atom_common_table_header;
+			break;
+	}
+	return atui_func(&atui_args);
+}
 
 
 inline static atui_node*
@@ -3217,7 +3239,7 @@ grow_master_datatable_v1_1(
 	 	atree, &(dt11->display_object)
 	);
 
-	atui_node* const atui_indirect_io_access = NULL;
+	atui_node* const atui_iio = grow_iio(atree, &(dt11->iio));
 	atui_node* const atui_mc_init_parameter = NULL;
 	atui_node* const atui_asic_vddc_info = NULL;
 	atui_node* const atui_asic_internal_ss_info = NULL;
@@ -3247,7 +3269,7 @@ grow_master_datatable_v1_1(
 		atui_gfx_info, atui_ppt, atui_gpu_virtualization_info,
 		atui_save_restore_info, atui_ppll_ss_info, atui_oem_info,
 		atui_xtmds_info, atui_mclk_ss_info, atui_object_header,
-		atui_indirect_io_access, atui_mc_init_parameter, atui_asic_vddc_info,
+		atui_iio, atui_mc_init_parameter, atui_asic_vddc_info,
 		atui_asic_internal_ss_info, atui_tv_video_mode, atui_vram_info,
 		atui_memory_training_info, atui_integrated_system_info,
 		atui_asic_profiling_info, atui_voltageobject_info,
@@ -3431,11 +3453,11 @@ grow_master_datatable_v2_1(
 
 	atui_node* const atui_ppt = grow_ppt(atree, &(dt21->powerplayinfo));
 
-	 atui_node* const atui_display = grow_display_info(
+	atui_node* const atui_display = grow_display_info(
 	 	atree, &(dt21->display_object)
 	);
 
-	//indirectioaccess
+	atui_node* const atui_iio = grow_iio(atree, &(dt21->iio));
 	atui_node* const umc_info = grow_umc_info(atree, &(dt21->umc_info));
 	//dce_info
 
@@ -3457,8 +3479,7 @@ grow_master_datatable_v2_1(
 		atui_utilitypipeline, atui_multimedia_info,
 		atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
 		atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt, atui_display,
-		// indirect,
-		umc_info,
+		atui_iio, umc_info,
 		//dce,
 		atui_vram_info,
 		// integrated, asic
