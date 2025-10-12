@@ -522,6 +522,7 @@ class atui_node:
 	parent:atui_node = None
 
 	name:str = None
+	c_type:str = None
 	description:dict = None
 	access:str = None # a pointer to the data/var
 	access_meta:str = None # for c preprocessor stuff
@@ -544,6 +545,13 @@ class atui_node:
 			self.name = node["name"]
 		elif "name" in default:
 			self.name = default["name"]
+
+		if "c_type" in node:
+			self.c_type = node["c_type"]
+		elif "c_type" in default:
+			self.c_type = default["c_type"]
+		if None is self.name:
+			self.name = self.c_type
 
 		if "description" in node:
 			self.description = node["description"]
@@ -960,7 +968,6 @@ class atui_branch(atui_node):
 	# the python atui_leaf/atui_branch employs ternary logic: true/false/unknown
 	# None is unknown
 	c_prefix:str = None
-	c_type:str = None
 	atomtree:str = None
 
 	def __init__(self,
@@ -982,13 +989,6 @@ class atui_branch(atui_node):
 			self.c_prefix = branch["c_prefix"]
 		else:
 			self.c_prefix = branch_default["c_prefix"]
-
-		if "c_type" in branch:
-			self.c_type = branch["c_type"]
-		else:
-			self.c_type = branch_default["c_type"]
-		if None is self.name:
-			self.name = self.c_type
 
 		if None is self.access:
 			self.access = "NULL"
@@ -1135,6 +1135,11 @@ def atui_node_to_text(
 	assert(isinstance(node, atui_node)), node
 	indent:str = parent_indent + "\t"
 	child_indent:str = parent_indent + "\t\t"
+
+	c_type:str = "NULL"
+	if node.c_type:
+		c_type = "\"%s\"" % node.c_type
+
 	node_text_extra:str = ""
 	match (node):
 		case atui_leaf():
@@ -1152,6 +1157,7 @@ def atui_node_to_text(
 			)
 		case _:
 			assert(0)
+
 	leaves_text:str = "NULL"
 	leaf_template:str = "\n" + child_indent + "{%s},"
 	if len(node.leaves.nodes):
@@ -1167,6 +1173,7 @@ def atui_node_to_text(
 		"\n"
 		+ indent + ".name = \"" + node.name + "\",\n"
 		+ indent + ".origname = \"" + node.name + "\",\n"
+		+ indent + ".structname = " + c_type + ",\n"
 		+ indent + ".description = {"
 			+ description_to_text(node.description, indent)
 		+ "},\n"
