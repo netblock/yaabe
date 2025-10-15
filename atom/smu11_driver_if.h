@@ -602,7 +602,7 @@ struct smu11_smcpptable_power_limit {
 	uint16_t tau; // Time constant of LPF in ms
 };
 struct smu11_smcpptable_current_limit {
-	uint16_t watts;
+	uint16_t amps;
 	uint16_t tau; // Time constant of LPF in ms
 };
 

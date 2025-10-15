@@ -1693,8 +1693,8 @@ global_defaults: {
 	c_type: "smu11_smcpptable_current_limit",
 	leaves: [
 		{
-			access: "bios->watts",
-			name: "watts",
+			access: "bios->amps",
+			name: "amps",
 		}, {
 			access: "bios->tau",
 			name: "tau",
