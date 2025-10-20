@@ -2877,6 +2877,18 @@ populate_datatables(
 	}
 }
 
+inline static void
+populate_psp_rsa(
+		struct atomtree_commons* const commons __unused,
+		struct atomtree_psp_rsa* const rsa
+		) {
+	assert(rsa->header->modulus_size == rsa->header->public_exponent_size);
+	void* walker = rsa->raw + sizeof(struct psp_rsa_key_header);
+	rsa->public_exponent = walker;
+	walker += rsa->header->public_exponent_size;
+	rsa->modulus = walker;
+}
+
 inline static bool
 verify_discovery_binary_header_checksum(
 		struct discovery_fw_blob const* const dis
@@ -3029,20 +3041,45 @@ populate_psp_fw_payload_type(
 		struct psp_directory_entry const* const pspentry,
 		struct atomtree_psp_directory_entries* const fw_entry
 		) {
-	fw_entry->has_fw_header = (
-		(sizeof(*fw_entry->header) <= pspentry->size)
-		&& (fw_entry->header->fw_type == pspentry->type)
-	);
+	bool heuristic = false;
+	switch (pspentry->type) {
+		case BIOS_RTM_SIGNATURE:
+		case AMD_PUBLIC_KEY:
+			fw_entry->has_fw_header = false;
+			fw_entry->type = PSPFW_RSA;
+			break;
+		default:
+			heuristic = true;
+			break;
+	}
 
-	if (fw_entry->has_fw_header) {
-		if ((sizeof(*fw_entry->discovery.blob) <= pspentry->size
-				) && (
+	if (heuristic) {
+		fw_entry->has_fw_header = (
+			(sizeof(struct amd_fw_header) <= pspentry->size)
+			&& (fw_entry->header->fw_type == pspentry->type)
+		);
+		if (fw_entry->has_fw_header) {
+			bool const is_discovery = (
+				(sizeof(struct discovery_fw_blob) <= pspentry->size)
+				&& (
 					DISCOVERY_BINARY_SIGNATURE
 					== fw_entry->discovery.blob->binary_header.signature
-				)) {
-			fw_entry->type = PSPFW_DISCOVERY;
-			populate_discovery_table(commons, &(fw_entry->discovery));
+				)
+				
+			);
+			if (is_discovery) {
+				fw_entry->type = PSPFW_DISCOVERY;
+			}
 		}
+	}
+
+	switch (fw_entry->type) {
+		case PSPFW_RSA:
+			populate_psp_rsa(commons, &(fw_entry->rsa));
+			break;
+		case PSPFW_DISCOVERY: 
+			populate_discovery_table(commons, &(fw_entry->discovery));
+			break;
 	}
 }
 inline static void

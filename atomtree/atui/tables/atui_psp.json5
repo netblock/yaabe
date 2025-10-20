@@ -267,4 +267,85 @@ global_defaults: {
 	],
 },
 
+{
+	c_type: "psp_rsa_key_header",
+	leaves: [
+		{
+			access: "bios->version",
+			name: "version",
+		}, {
+			access: "bios->this_key_id",
+			name: "this_key_id",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->certifying_key_id",
+			name: "certifying_key_id",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->usage",
+			name: "usage",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->public_exponent_size",
+			name: "public_exponent_size",
+			description: {
+				eng: "bits",
+			},
+		}, {
+			access: "bios->modulus_size",
+			name: "modulus_size",
+			description: {
+				eng: "bits",
+			},
+		},
+	],
+}, {
+	c_type: "psp_rsa_key_2048",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_rsa_key_header",
+		}, {
+			access: "bios->public_exponent",
+			name: "public_exponent",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->modulus",
+			name: "modulus",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "psp_rsa_key_4096",
+	leaves: [
+		{
+			access: "bios->header",
+			name: "header",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "psp_rsa_key_header",
+		}, {
+			access: "bios->public_exponent",
+			name: "public_exponent",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->modulus",
+			name: "modulus",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
 ], }

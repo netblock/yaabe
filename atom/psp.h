@@ -248,5 +248,33 @@ struct embedded_firmware {
 	uint32_t reserved_4Ch;
 } __attribute__((aligned(16)));
 
+enum psp_rsa_key_usage:uint32_t {
+	PSP_RSA_AMD_ROOT = 0, // sign PSP bootloader, PSP FW, SMU FW
+	PSP_RSA_BIOS     = 1,
+	PSP_RSA_PSP_FW   = 2, // both AMD and OEM
+	PSP_RSA_SEV     = 19,
+};
+struct psp_rsa_key_header {
+	uint32_t version;
+	uint8_t this_key_id[16];
+	uint8_t certifying_key_id[16];
+	enum psp_rsa_key_usage usage;
+	uint8_t reserved[16];
+	uint32_t public_exponent_size; // bits
+	uint32_t modulus_size; // bits
+};
+struct psp_rsa_key_2048 {
+	struct psp_rsa_key_header header;
+	uint8_t public_exponent[256]; // 0x010001
+	uint8_t modulus[256];
+};
+struct psp_rsa_key_4096 {
+	struct psp_rsa_key_header header;
+	uint8_t public_exponent[512]; // 0x010001
+	uint8_t modulus[512];
+};
+
+
+
 #pragma pack(pop)
 #endif

@@ -3512,6 +3512,22 @@ grow_datatables(
 			);
 	}
 }
+inline static atui_node*
+grow_psp_rsa(
+		struct atomtree_psp_rsa const* const rsa
+		) {
+	atuifunc_args const rsa_args = {
+		.atomtree = rsa,
+		.bios = rsa->raw,
+	};
+	atuifunc rsa_func;
+	switch (rsa->header->public_exponent_size) {
+		case 2048: rsa_func = _atui_psp_rsa_key_2048;   break;
+		case 4096: rsa_func = _atui_psp_rsa_key_4096;   break;
+		default:   rsa_func = _atui_psp_rsa_key_header; break;
+	}
+	return rsa_func(&rsa_args);
+}
 
 inline static atui_node*
 grow_discovery_tables(
@@ -3704,16 +3720,14 @@ grow_psp_directory_fw_blob(
 		.atomtree = fw_entry,
 		.bios = fw_entry->raw,
 	};
-	switch (dir_entry->type) {
-		case AMD_ABL7:
-			switch (fw_entry->type) {
-				case PSPFW_DISCOVERY:
-					blob = grow_discovery_tables(&(fw_entry->discovery));
-					break;
-				default:
-					blob = generic_entry(&blob_args); break;
-			}
+	switch (fw_entry->type) {
+		case PSPFW_RSA:
+			blob = grow_psp_rsa(&(fw_entry->rsa));
 			break;
+		case PSPFW_DISCOVERY:
+			blob = grow_discovery_tables(&(fw_entry->discovery));
+			break;
+		//case AMD_SEV_DATA: // TODO
 		default:
 			blob = generic_entry(&blob_args); break;
 	}

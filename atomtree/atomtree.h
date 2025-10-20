@@ -32,6 +32,17 @@ struct atomtree_pci_tables {
 };
 
 
+struct atomtree_psp_rsa {
+	union {
+		void* raw;
+		struct psp_rsa_key_header* header;
+		struct psp_rsa_key_2048* b2048;
+		struct psp_rsa_key_4096* b4096;
+	};
+	uint8_t* public_exponent;
+	uint8_t* modulus;
+};
+
 struct atomtree_discovery_ip_entry {
 	union {
 		void* raw;
@@ -48,7 +59,6 @@ struct atomtree_discovery_ip_die {
 	 struct ip_discovery_die_header* header;
 	 struct atomtree_discovery_ip_entry* entries;
 };
-
 struct atomtree_discovery_table {
 	struct discovery_fw_blob* blob;
 
@@ -74,7 +84,9 @@ enum atomtree_psp_fw_payload_type:uint8_t {
 // This enum may not be technically necessary given
 // struct amd_fw_header.fw_type and .fw_id
 // but there's not much info about it and seems generic
-	PSPFW_DISCOVERY = AMD_ABL7,
+	PSPFW_UNKNOWN = 0,
+	PSPFW_RSA, // AMD_PUBLIC_KEY
+	PSPFW_DISCOVERY, // AMD_ABL7
 };
 struct atomtree_psp_directory_entries {
 	union {
@@ -84,6 +96,7 @@ struct atomtree_psp_directory_entries {
 		void* raw;
 		struct amd_fw_header* header;
 
+		struct atomtree_psp_rsa         rsa;
 		struct atomtree_discovery_table discovery;
 	};
 

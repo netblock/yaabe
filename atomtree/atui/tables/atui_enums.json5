@@ -185,7 +185,21 @@ Enums for ATUI_ENUM
 		{name: "AMD_FW_UMSMU",},
 ]},
 
-
+{name: "psp_rsa_key_usage",
+	constants: [
+		{name: "PSP_RSA_AMD_ROOT",
+			description: {
+				eng: "sign PSP bootloader, PSP FW, SMU FW",
+			},
+		},
+		{name: "PSP_RSA_BIOS",},
+		{name: "PSP_RSA_PSP_FW",
+			description: {
+				eng: "both AMD and OEM",
+			},
+		},
+		{name: "PSP_RSA_SEV",},
+]},
 
 /******************************************************************************/
 // discovery.h
