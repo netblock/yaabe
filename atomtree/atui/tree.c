@@ -3678,26 +3678,6 @@ grow_discovery_tables(
 	);
 }
 
-inline static void
-rename_psp_blob_with_type(
-		atui_node* const atui_psp_blob,
-		enum  psp_entry_type const fw_type
-		) {
-	struct atui_enum const* const fw_types = & ATUI_ENUM(psp_entry_type);
-	int16_t const naming_enum_i = atui_enum_bsearch(fw_types, fw_type);
-	if (0 <= naming_enum_i) {
-		sprintf(atui_psp_blob->name, "%s: %s",
-			atui_psp_blob->origname,
-			fw_types->enum_array[naming_enum_i].name
-		);
-	} else {
-		sprintf(atui_psp_blob->name, "%s:fw_type: %u",
-			atui_psp_blob->origname,
-			fw_type
-		);
-	}
-	assert(strlen(atui_psp_blob->name) < sizeof(atui_psp_blob->name));
-}
 
 inline static atui_node*
 grow_psp_directory_fw_blob(
@@ -3731,13 +3711,33 @@ grow_psp_directory_fw_blob(
 		default:
 			blob = generic_entry(&blob_args); break;
 	}
-	rename_psp_blob_with_type(blob, dir_entry->type);
 	blob->prefer_contiguous = true;
 	blob->num_bytes = dir_entry->size;
 
 	return blob;
 }
 
+inline static void
+rename_pspentry_with_type(
+		atui_node* const atui_pspentry,
+		uint16_t const index_i,
+		enum  psp_entry_type const fw_type
+		) {
+	struct atui_enum const* const fw_types = & ATUI_ENUM(psp_entry_type);
+	int16_t const naming_enum_i = atui_enum_bsearch(fw_types, fw_type);
+	if (0 <= naming_enum_i) {
+		sprintf(atui_pspentry->name, "pspentry [%02u]: %s",
+			index_i,
+			fw_types->enum_array[naming_enum_i].name
+		);
+	} else {
+		sprintf(atui_pspentry->name, "pspentry [%02u]: type %u",
+			index_i,
+			fw_type
+		);
+		assert(strlen(atui_pspentry->name) < sizeof(atui_pspentry->name));
+	}
+}
 inline static atui_node*
 grow_psp_directory(
 		struct atom_tree const* const atree __unused,
@@ -3771,7 +3771,7 @@ grow_psp_directory(
 
 		entry_args.bios = &(dir_entries[i]);
 		entry = _atui_psp_directory_entry(&entry_args);
-		sprintf(entry->name, "pspentry [%02u]", i);
+		rename_pspentry_with_type(entry, i, dir_entries[i].type);
 		ATUI_ADD_BRANCH(dir_header, entry);
 	}
 
