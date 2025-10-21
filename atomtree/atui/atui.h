@@ -37,17 +37,17 @@ enum i18n_languages:int8_t {
 };
 
 struct atui_enum_entry {
-	char const name[64];
-	char const* const description[LANG_TOTALLANGS];
-	int64_t const val;
+	char const name[58];
 	uint16_t const name_length;
+	int64_t const val;
+	char const* const description[LANG_TOTALLANGS];
 };
 struct atui_enum {
-	char const name[40];
-	char const* const description[LANG_TOTALLANGS];
-	struct atui_enum_entry const* const enum_array;
-	uint8_t const num_entries;
+	char const name[38];
 	uint16_t const name_length;
+	uint8_t const num_entries;
+	struct atui_enum_entry const* const enum_array;
+	char const* const description[LANG_TOTALLANGS];
 };
 
 enum atui_leaf_type_fancy:uint8_t { // ppatui.py has a copy
