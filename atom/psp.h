@@ -175,7 +175,7 @@ struct psp_directory_entry {
 // Structure for PSP directory
 struct psp_directory {
 	struct psp_directory_header  header;
-	struct psp_directory_entry   pspentry[] __counted_by(header.totalentries); // Array of PSP entries each pointing to a binary in SPI flash
+	struct psp_directory_entry   pspentry[] __counted_by_indir(header.totalentries); // Array of PSP entries each pointing to a binary in SPI flash
 };
 
 //            little-endian: 3 2 1 0

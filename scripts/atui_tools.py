@@ -40,8 +40,8 @@ class __regexvar:
 	array_num:str =     "\\["+white_0+ "(\\d*)"         +white_0+"\\]" +white_0
 	array_vlaflex:str = "\\["+white_0+ "("+name_nc+")?" +white_0+"\\]" +white_0
 	#array_countedby_nc:str = "(?:__counted_by\\([\\w\\.]*\\))?" +white_0
-	array_countedby_var:str = "(__counted_by\\(([\\w\\.]*)\\))" +white_0
-	array_countedby_whole_q:str = "(__counted_by\\([\\w\\.]*\\))?" +white_0
+	array_countedby_var:str = "(__counted_by(?:_indir)?\\(([\\w\\.]*)\\))" +white_0
+	array_countedby_whole_q:str = "(__counted_by(?:_indir)?\\([\\w\\.]*\\))?" +white_0
 	nonstring_nc:str = "(?:__nonstring)?" +white_0
 	c_enum_nc:str = "(?:enum)"
 	c_enum:str = "("+c_enum_nc+")" + white_1

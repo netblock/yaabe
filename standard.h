@@ -84,15 +84,14 @@ static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
 #define __unused __attribute__((unused))
 #define __nonstring __attribute__((nonstring))
 
-#undef __counted_by // TODO fix GCC 15 errors/warnings
-#define __counted_by(member)
-/*
+
+#define __counted_by_indir(member) // substruct.member doesn't work; ignore
 #if __has_attribute(counted_by)
-	#define __counted_by(member) __attribute__((counted_by__(member)))
-#else
+	#undef  __counted_by
+	#define __counted_by(member) __attribute__((counted_by(member)))
+#elifndef  __counted_by
 	#define __counted_by(member)
 #endif
-*/
 
 
 // TODO stroll that considers 0b prefix?

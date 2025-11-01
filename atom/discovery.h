@@ -172,7 +172,7 @@ struct discovery_ip_entry_header {
 struct discovery_ip_entry_v1 {
 	struct discovery_ip_entry_header header;
 	union ip_harvest harvest;
-	uint32_t base_address[] __counted_by(header.num_base_address);
+	uint32_t base_address[] __counted_by_indir(header.num_base_address);
 };
 union ip_hcid_sub {
 	uint8_t raw;
@@ -184,12 +184,12 @@ union ip_hcid_sub {
 struct discovery_ip_entry_v3 {
 	struct discovery_ip_entry_header header;
 	union ip_hcid_sub sub;
-	uint32_t base_address[] __counted_by(header.num_base_address);
+	uint32_t base_address[] __counted_by_indir(header.num_base_address);
 };
 struct discovery_ip_entry_v4_64 {
 	struct discovery_ip_entry_header header;
 	union ip_hcid_sub sub;
-	uint64_t base_address[] __counted_by(header.num_base_address);
+	uint64_t base_address[] __counted_by_indir(header.num_base_address);
 };
 
 union discovery_ip_entry {
@@ -201,7 +201,7 @@ union discovery_ip_entry {
 };
 struct discovery_ip_die {
 	struct ip_discovery_die_header header;
-	union discovery_ip_entry entries[] __counted_by(header.num_ips);
+	union discovery_ip_entry entries[] __counted_by_indir(header.num_ips);
 };
 
 // GPU core info
