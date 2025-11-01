@@ -7571,21 +7571,18 @@ union atom_reg_setting_id_config_access {
 */
 struct atom_reg_setting_data_block {
 	union atom_mc_register_setting_id  block_id;
-	uint32_t reg_data[1];
+	uint32_t reg_data[];
 };
 
 struct atom_init_reg_index_format {
 	uint16_t RegIndex;         // MC register index
 	uint8_t  PreRegDataLength; // offset in ATOM_INIT_REG_DATA_BLOCK.saRegDataBuf
 };
-struct reg_settings_dummy { // dummy table for ATUI
-	struct atom_reg_setting_data_block  RegDataBuf[1];
-};
 struct atom_init_reg_block {  // like atom_umc_init_reg_block
 	uint16_t RegIndexTblSize; // size of RegIndexBuf
 	uint16_t RegDataBlkSize;  // size of each atom_memory_setting_data_block for RegDataBuf
-	struct atom_init_reg_index_format  RegIndexBuf[1];
-	struct atom_reg_setting_data_block RegDataBuf[1];
+	struct atom_init_reg_index_format  RegIndexBuf[];
+	//struct atom_reg_setting_data_block RegDataBuf[];
 };
 //#define VBIOS_MC_REGISTER_ARRAY_SIZE 32 // max
 //#define VBIOS_MAX_AC_TIMING_ENTRIES  20 // max

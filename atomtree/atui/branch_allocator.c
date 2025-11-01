@@ -283,7 +283,7 @@ print_atui_dynarray_leaf(
 		bios = leaf_src->data.input;
 	}
 
-	atui_node** const graft_start = global->grafters.pos;
+	atui_node* const* const graft_start __unused = global->grafters.pos;
 	uint8_t const num_graft = sub_meta->computed_num_graft;
 	uint16_t const num_leaves = sub_meta->computed_num_leaves;
 	struct level_data sub_leaves = {
@@ -665,7 +665,7 @@ atui_assimilate_subonly(
 	}
 
 	atui_node* const new_start = cralloc(new_count * sizeof(atui_node));
-	atui_node const* const new_end = new_start + new_count;
+	atui_node const* const new_end __unused = new_start + new_count;
 	atui_node* new_walker = new_start;
 
 	for (old_walker = old_start; old_walker < old_end; old_walker++) {
@@ -721,7 +721,7 @@ atui_assimilate_nodes(
 
 	uint32_t const max_count = new_count + (dest->max_count - dest->count);
 	void* const new_start = crealloc(dest->array,  max_count * entry_size);
-	void const* const new_end = new_start + (new_count * entry_size);
+	void const* const new_end __unused = new_start + (new_count * entry_size);
 	void* new_walker = new_start + (old_count * entry_size);
 
 	for (uint16_t i = 0; i < src_array_len; i++) {

@@ -4892,7 +4892,8 @@ global_defaults: {
 		},
 	],
 }, {
-	c_type: "reg_settings_dummy",
+	c_type: "atui_nullstruct",
+	name: "reg_settings_dummy",
 	atomtree: "atomtree_init_reg_block",
 	access: "atomtree->data_blocks[0]",
 	num_bytes: "atomtree->data_block_table_size",

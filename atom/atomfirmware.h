@@ -2358,19 +2358,15 @@ union atom_umc_register_addr_info_access {
 
 struct atom_umc_reg_setting_data_block {
 	union atom_mc_register_setting_id  block_id;
-	uint32_t umc_reg_data[1]; // umc_reg_num wide as well
+	uint32_t umc_reg_data[]; // umc_reg_num wide as well
 };
 
-struct umc_reg_settings_dummy { // dummy table for ATUI
-	struct atom_umc_reg_setting_data_block  umc_reg_setting_list[1];
-};
 struct atom_umc_init_reg_block { // not literal, topological only
 	uint16_t umc_reg_num;
 	uint16_t reserved; // RegDataBlkSize; likely umc_reg_setting_list as a whole
 
-	// for allocation purpose, the real number come from umc_reg_num;
-	union atom_umc_register_addr_info_access  umc_reg_list[1];
-	struct atom_umc_reg_setting_data_block  umc_reg_setting_list[1];
+	union atom_umc_register_addr_info_access  umc_reg_list[] __counted_by(umc_reg_num);
+	//struct atom_umc_reg_setting_data_block  umc_reg_setting_list[]; // 0-terminated
 };
 
 
