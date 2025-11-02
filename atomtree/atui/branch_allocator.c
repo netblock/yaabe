@@ -549,42 +549,63 @@ atui_branch_allocator(
 	return table;
 }
 
+
+inline static size_t
+atui_copyability_is_contiguous(
+		struct atui_children const* const feed
+		) {
+	void const* const val_start = feed->nodes_ro[0].data.input;
+	void const* val_end = val_start;
+	uint16_t i = 0;
+	bool is_contiguous;
+	do {
+		is_contiguous = (
+			(
+				(feed->nodes_ro[i].data.input == val_end)
+				&& (feed->nodes_ro[i].num_bytes)
+			) || (
+				_ATUI_BITCHILD == feed->nodes_ro[i].leaf.type.fancy
+			)
+		);
+		val_end = (
+			feed->nodes_ro[i].data.input + feed->nodes_ro[i].num_bytes
+		);
+		i++;
+	} while ((i < feed->count) && is_contiguous);
+
+	if (is_contiguous) {
+		return val_end - val_start;
+	} else {
+		return 0;
+	}
+}
+
+
 static void
 atui_set_copyability(
 		atui_node* const node,
 		struct atui_children const* const feed
 		) {
 // figure out is_contiguous and num_copyable_leaves, and consequences
+	assert(node);
+	assert(feed);
 
 	for (uint16_t i=0; i < node->leaves.count; i++) { // if it maps the bios
 		node->num_copyable_leaves += (0 != node->leaves.nodes[i].num_bytes);
 	}
 
-	assert(feed->count);
-	if (false == node->prefer_contiguous) {
-		void const* val_end = feed->nodes_ro[0].data.input;
+	if (0 == node->num_bytes) {
+		struct atui_children const* const era[] = {
+			feed, &(node->leaves) // undeveloped, developed
+		};
 		uint16_t i = 0;
-		bool is_contiguous;
 		do {
-			is_contiguous = (
-				(
-					(feed->nodes_ro[i].data.input == val_end)
-					&& (feed->nodes_ro[i].num_bytes)
-				) || (
-					_ATUI_BITCHILD == feed->nodes_ro[i].leaf.type.fancy
-				)
-			);
-			val_end = (
-				feed->nodes_ro[i].data.input + feed->nodes_ro[i].num_bytes
-			);
+			if (era[i]->count) {
+				node->data.input = era[i]->nodes_ro[0].data.input;
+				node->num_bytes = atui_copyability_is_contiguous(era[i]);
+			}
 			i++;
-		} while ((i < feed->count) && is_contiguous);
-
-		if (is_contiguous) {
-			node->prefer_contiguous = true;
-			node->data.input = feed->nodes_ro[0].data.input;
-			node->num_bytes = val_end - feed->nodes_ro[0].data.input;
-		}
+		} while ((i < lengthof(era)) && (0 == node->num_bytes));
 	}
 }
 

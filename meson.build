@@ -106,6 +106,7 @@ libyaabe_autogen = static_library('libyaabe_autogen',
 	c_args: [ # autogen'd code is noisy; mute
 		'-Wno-unused-variable',
 		'-Wno-override-init',
+		'-Wno-type-limits',
 	],
 	name_prefix: '',
 )

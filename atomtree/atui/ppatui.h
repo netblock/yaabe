@@ -59,10 +59,7 @@ C preprocessor side of ATUI table generation
 )
 #define _PPATUI_PREFER_CONTIGUOUS(bios, num_bytes) (\
 	(0 < _PPATUI_NULLPTR_SIZE(*(bios)))\
-	&& (\
-		(num_bytes)\
-		<= _PPATUI_NULLPTR_SIZE(*(bios))\
-	)\
+	&& ( (num_bytes) < _PPATUI_NULLPTR_SIZE(*(bios)) )\
 )
 
 #define _PPATUI_LEAF_BITNESS(var) _Generic((var),\

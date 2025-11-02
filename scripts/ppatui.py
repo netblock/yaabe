@@ -756,9 +756,7 @@ class atui_leaf(atui_node):
 		# appropriate strings
 		# stage 0; easy stuff that will get replaced
 		self.array_size = "1"
-		self.prefer_contiguous = str(
-			fancy not in atui_leaf_type.FANCIES_THAT_HAVE_NONTRIVIAL_SUBLEAVES
-		).lower()
+		self.prefer_contiguous = "false"
 
 		# stage 1; fancy-dependent
 		fancy_data:dict = None
