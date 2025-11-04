@@ -292,4 +292,10 @@ atui_enum_lsearch( // linear; left
 		struct atui_enum const* enum_array,
 		int64_t val
 		);
+
+char const*
+atui_enum_get_name_of_value( // simple debugging tool
+		struct atui_enum const* const enum_set,
+		int64_t const val
+		);
 #endif

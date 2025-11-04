@@ -777,3 +777,16 @@ atui_enum_lsearch(
 	}
 	return -1;
 }
+
+char const*
+atui_enum_get_name_of_value( // simple debugging tool
+		struct atui_enum const* const enum_set,
+		int64_t const val
+		) {
+	int16_t const i = atui_enum_lsearch(enum_set, val);
+	if (-1 < i) {
+		return enum_set->enum_array[i].name;
+	} else {
+		return NULL;
+	}
+}
