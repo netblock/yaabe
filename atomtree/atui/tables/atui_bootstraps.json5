@@ -1,0 +1,182 @@
+/* For bootstraps.h */
+
+{class: "branch",
+global_defaults: {
+	branch_default: {
+		c_prefix: "struct",
+		atomtree: "atui_nullstruct",
+		access: "bios",
+		num_bytes: "sizeof(*bios)",
+		expanded: true,
+	},
+	leaf_defaults: {
+		generic: {
+			access: "bios->raw_data",
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		bitchild: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+		dynpattern: {
+			display: "ATUI_DEC",
+			fancy: "ATUI_NOFANCY",
+		},
+	},
+}, branches: [
+
+{
+	c_prefix: "union", c_type: "STRAP_BIF_STRAP_64BAR_DIS_DEV0_F0",
+	leaves: [{
+		name: "STRAP_BIF_STRAP_64BAR_DIS_DEV0_F0",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_25_0",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_64BAR_DIS_DEV0_F0",
+				description: {
+					eng: "Disable 64-bit Base Address Register for Device 0 Function 0 (1 = disable). Affects bit 2 of BLOCK_MEM_TYPE for each BAR register in the PCI configuration space.",
+				},
+			}, {
+				access: "rsvd_31_27",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+},
+
+{
+	c_prefix: "union", c_type: "BIF_STRAP_SUBSYS_ID_DEV0_F0",
+	leaves: [{
+		name: "BIF_STRAP_SUBSYS_ID_DEV0_F0",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_3_0",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_SUBSYS_ID_DEV0_F0",
+				display: "ATUI_HEX",
+				description: {
+					eng: "Subsystem ID (SSID) for the PCI configuration space for Function 0. If enabled, the SSID for the secondary display function (F1) is the set to the same value as the primary display function (F0) with bit 0 inverted.",
+				},
+			}, {
+				access: "rsvd_31_20",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+},
+
+{
+	c_prefix: "union", c_type: "bif_strap_pci_func",
+	leaves: [{
+		name: "bif_strap_pci_func",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_11_0",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_FUNC_EN_DEV0_F1",
+				description: {
+					eng: "Multi-function device select. Affects bit 7 of the Header register in PCI configuration space. 0 = no audio.",
+				},
+			}, {
+				access: "rsvd_28_13",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_SUBSYS_VEN_ID_DEV0_F0",
+				display: "ATUI_HEX",
+				description: {
+					eng: "Subsystem Vendor ID (SSVID) in the PCI configuration space. If the VBIOS ROM is not used, then the SBIOS is permitted to overwrite this register for each PCI function on the device before the enumeration cycle is initiated, otherwise the default value is used.",
+				},
+			}, {
+				access: "rsvd_63_45",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+},
+
+{
+	c_prefix: "union", c_type: "BIF_STRAP_MEM_AP_SIZE_DEV0_F0",
+	leaves: [{
+		name: "BIF_STRAP_MEM_AP_SIZE_DEV0_F0",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_6_0",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_MEM_AP_SIZE_DEV0_F0",
+				display: ["ATUI_DEC", "ATUI_ENUM",],
+				enum: "MEM_AP_SIZE",
+			}, {
+				access: "rsvd_21_10",
+				display: "ATUI_HEX",
+			}, {
+				access: "BIF_STRAP_VGA_DIS_DEV0_F0",
+				description: {
+					eng: "VGA Disable determines whether or not the card will be recognized as the system's VGA controller (via the SUBCLASS field in the PCI configuration space). 1 = disable VGA",
+				},
+			}, {
+				access: "rsvd_31_23",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+},
+
+
+
+{
+	c_type: "vega_boot_straps",
+	leaves: [
+		{
+			access: "bios->unknown0",
+			name: "unknown0",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		}, {
+			access: "bios->bar_disable",
+			name: "bar_disable",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "STRAP_BIF_STRAP_64BAR_DIS_DEV0_F0",
+		}, {
+			access: "bios->unknown1",
+			name: "unknown1",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ssid",
+			name: "ssid",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "BIF_STRAP_SUBSYS_ID_DEV0_F0",
+		}, {
+			access: "bios->unknown2",
+			name: "unknown2",
+			display: "ATUI_HEX",
+		}, {
+			access: "bios->ssvid",
+			name: "ssvid",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "bif_strap_pci_func",
+		}, {
+			access: "bios->mem_ap_size",
+			name: "mem_ap_size",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "BIF_STRAP_MEM_AP_SIZE_DEV0_F0",
+		}, {
+			access: "bios->unknown3",
+			name: "unknown3",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+], }

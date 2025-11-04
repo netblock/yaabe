@@ -6,6 +6,7 @@ atui_branches = files(
 	'atui_ddrmoderegisters.json5',
 	'atui_bitfield_overrides.json5',
 	'atui_asic_reg_data_tables.json5',
+	'atui_bootstraps.json5',
 	'atui_pci.json5',
 	'atui_psp.json5',
 	'atui_discovery.json5',

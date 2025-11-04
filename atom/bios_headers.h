@@ -30,6 +30,7 @@ union magic_64 {
 #include "ddrmoderegisters.h"
 #include "bitfield_overrides.h"
 #include "asic_reg_data_tables.h"
+#include "bootstraps.h"
 #include "pci.h"
 #include "psp.h"
 #include "discovery.h"

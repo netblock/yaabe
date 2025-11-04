@@ -3,6 +3,21 @@ Enums for ATUI_ENUM
 */
 
 {class:"enum", enums: [
+/******************************************************************************/
+// bootstraps.h
+
+
+{name: "MEM_AP_SIZE",
+	constants: [
+		{name: "MEM_AP_SIZE_256MB",},
+		{name: "MEM_AP_SIZE_512MB",},
+		{name: "MEM_AP_SIZE_1GB",},
+		{name: "MEM_AP_SIZE_2GB",},
+		{name: "MEM_AP_SIZE_4GB",},
+		{name: "MEM_AP_SIZE_8GB",},
+		{name: "MEM_AP_SIZE_16GB",},
+		{name: "MEM_AP_SIZE_32GB",},
+]},
 
 /******************************************************************************/
 // pci.h

@@ -3840,16 +3840,32 @@ grow_pci_tables(
 }
 
 atui_node*
+grow_boot_straps(
+		struct atom_tree const* const atree
+		) {
+	atui_node* strap;
+	atuifunc_args const atui_args = {
+		.bios = atree->image->rom_based_boot_straps,
+	};
+	switch (atree->chip_type) {
+		case CHIP_VEGA10: strap = _atui_vega_boot_straps(&atui_args); break;
+		default: strap = NULL;
+	}
+	return strap;
+}
+
+atui_node*
 generate_atui(
 		struct atom_tree const* const atree
 		) {
+	atui_node* rom_based_straps = grow_boot_straps(atree);
 	atui_node* const atui_atom_rom_header = grow_atom_rom_header(
 		atree, &(atree->rom_header)
 	);
 	atui_node* const atui_pci_tables = grow_pci_tables(&(atree->pci_tables));
 
 	atui_node* const child_branches[] = {
-		atui_pci_tables, atui_atom_rom_header
+		rom_based_straps, atui_pci_tables, atui_atom_rom_header
 	};
 	return ATUI_MAKE_BRANCH(vbios_rom_header, NULL,
 		atree, atree->image,  lengthof(child_branches), child_branches

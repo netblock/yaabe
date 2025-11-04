@@ -131,19 +131,28 @@ global_defaults: {
 			name: "atom_bios_message_offset",
 			display: "ATUI_HEX",
 		}, {
-			access: "NULL",
 			name: "atombios strings",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_DYNARRAY", fancy_data: {
-				deferred: "atomtree->atombios_strings",
-				count: "atomtree->num_of_crawled_strings",
-				enum: "NULL",
-				pattern: [{
-					name: "string [%02u]",
-					display: "ATUI_DISPLAY",
-					fancy: "ATUI_STRING",
-				},],
-			},
+			fancy: "ATUI_PETIOLE", fancy_data: [{
+				access: "NULL",
+				name: "atombios strings",
+				display: "ATUI_SUBONLY",
+				fancy: "ATUI_DYNARRAY", fancy_data: {
+					deferred: "atomtree->atombios_strings",
+					count: "atomtree->num_of_crawled_strings",
+					enum: "NULL",
+					pattern: [{
+						name: "string [%02u]",
+						display: "ATUI_DISPLAY",
+						fancy: "ATUI_STRING",
+					},],
+				},
+			},],
+		}, {
+			access: "bios->rom_based_boot_straps",
+			name: "rom_based_boot_straps",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
 		},
 	],
 },

@@ -201,8 +201,11 @@ struct vbios_rom_header {
 	uint16_t corev_func_far_handler_offset;
 	uint8_t  rsvd_6d_6b[3];
 	uint16_t atom_bios_message_offset;
+	uint32_t rom_based_boot_straps[33]; // See bootsraps.h for info
 };
-
+/*
+I don't know how to decode rom_based_boot_straps. See bootsraps.h for info
+*/
 
 
 /******************************************************************************/
