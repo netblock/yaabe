@@ -254,6 +254,8 @@ enum psp_rsa_key_usage:uint32_t {
 	PSP_RSA_PSP_FW   = 2, // both AMD and OEM
 	PSP_RSA_SEV     = 19,
 };
+
+// the expected version is 1
 struct psp_rsa_key_header {
 	uint32_t version;
 	uint8_t this_key_id[16];
@@ -274,6 +276,76 @@ struct psp_rsa_key_4096 {
 	uint8_t modulus[512];
 };
 
+
+enum amd_sev_cert_usage:uint32_t {
+	AMD_SEV_ARK      = 0x00,
+	AMD_SEV_ASK      = 0x13,
+	AMD_SEV_IGNORE = 0x1000,
+	AMD_SEV_OCA    = 0x1001,
+	AMD_SEV_PEK    = 0x1002,
+	AMD_SEV_PDH    = 0x1003,
+	AMD_SEV_CEK    = 0x1004,
+};
+enum amd_sev_algo:uint32_t {
+	AMD_SEV_ALGO_INVALID = 0x000,
+	AMD_SEV_RSA_SHA256   = 0x001,
+	AMD_SEV_ECDSA_SHA256 = 0x002,
+	AMD_SEV_ECDH_SHA256  = 0x003,
+	AMD_SEV_RSA_SHA384   = 0x101,
+	AMD_SEV_ECDSA_SHA384 = 0x102,
+	AMD_SEV_ECDH_SHA384  = 0x103,
+};
+
+struct amd_sev_key_rsa {
+	uint32_t modulus_size; // bits
+	uint8_t public_exponent[512];
+	uint8_t modulus[512];
+};
+enum amd_sev_ecc_id:uint32_t {
+	AMD_SEV_ECC_INVALID = 0,
+	AMD_SEV_ECC_P256    = 1,
+	AMD_SEV_ECC_P384    = 2,
+};
+struct amd_sev_key_ecc {
+	enum amd_sev_ecc_id curve_id;
+	uint8_t qx[72];
+	uint8_t qy[72];
+	uint64_t reserved[110];
+};
+union amd_sev_pubkey_types {
+	struct amd_sev_key_rsa rsa;
+	struct amd_sev_key_ecc ecc;
+};
+
+struct amd_sev_sig_rsa {
+	uint8_t sig[512];
+};
+struct amd_sev_sig_ecc {
+	uint8_t r[72];
+	uint8_t s[72];
+	uint64_t reserved[46];
+};
+union amd_sev_sig_types {
+	struct amd_sev_sig_rsa rsa;
+	struct amd_sev_sig_ecc ecc;
+};
+
+struct amd_sev_signature {
+	enum amd_sev_cert_usage usage;
+	enum amd_sev_algo       algo;
+	union amd_sev_sig_types sig;
+};
+
+struct amd_sev_certificate {
+	uint32_t version;
+	uint8_t api_major;
+	uint8_t api_minor;
+	uint16_t reserved;
+	enum amd_sev_cert_usage pubkey_usage;
+	enum amd_sev_algo pubkey_algo;
+	union amd_sev_pubkey_types pubkey;
+	struct amd_sev_signature sigs[2];
+};
 
 
 /*

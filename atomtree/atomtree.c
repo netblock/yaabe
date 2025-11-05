@@ -3043,8 +3043,9 @@ populate_psp_fw_payload_type(
 		) {
 	bool heuristic = false;
 	switch (pspentry->type) {
-		case BIOS_RTM_SIGNATURE:
 		case AMD_PUBLIC_KEY:
+		case BIOS_RTM_SIGNATURE:
+		case AMD_SEV_DATA:
 			fw_entry->has_fw_header = false;
 			fw_entry->type = PSPFW_RSA;
 			break;
