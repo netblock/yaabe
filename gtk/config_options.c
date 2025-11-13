@@ -7,7 +7,9 @@ static constexpr char basic_config_file[] = (
 "# https://docs.gtk.org/glib/struct.KeyFile.html\n"
 "\n"
 "[main]\n"
-"config_version=1\n"
+"config_version=2\n"
+"# big_endian makes the bios offsets left-to-right"
+"big_endian=false\n"
 "\n"
 "[history]\n"
 "# cwd is the last saved-to directory\n"
@@ -267,4 +269,32 @@ get_cached_scroll_path(
 	g_object_unref(conffile);
 
 	return path;
+}
+
+bool
+get_big_endianness(
+		) {
+	GFile* conffile;
+	GKeyFile* conf;
+	GError* error = NULL;
+	get_config_file(&conffile, &conf, &error);
+	if (error) {
+		g_error_free(error);
+		return NULL;
+	}
+
+	bool big_endian;
+	big_endian = g_key_file_get_boolean(conf, "main", "big_endian", &error);
+
+	if (error) { // does not exist
+		g_error_free(error);
+		big_endian = false;
+		g_key_file_set_boolean(conf, "main", "big_endian", big_endian);
+		write_config_file(conffile, conf, NULL);
+	}
+
+	g_key_file_unref(conf);
+	g_object_unref(conffile);
+
+	return big_endian;
 }

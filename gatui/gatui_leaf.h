@@ -18,8 +18,8 @@ gatui_leaf_get_atui_type(
 size_t // total bits
 gatui_leaf_get_bitfield_size(
 		GATUILeaf* self,
-		size_t* start, // optional; bitfield lo
-		size_t* end // optiona; bitfield hi
+		size_t* end, // optiona; bitfield hi
+		size_t* start // optional; bitfield lo
 		);
 
 bool // if value to/from text does anything
@@ -29,11 +29,13 @@ gatui_leaf_has_textable_value(
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* self,
-		char const* text
+		char const* text,
+		bool big_endian // for arrays
 		);
 char* // must be freed
 gatui_leaf_value_to_text(
-		GATUILeaf* self
+		GATUILeaf* self,
+		bool big_endian // for arrays
 		);
 
 

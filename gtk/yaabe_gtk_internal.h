@@ -5,9 +5,16 @@
 #include "gatui.h"
 #include "yaabe_gtk4.h"
 
-static constexpr uint8_t OFFSET_BUFFER_SIZE = sizeof("[123456 - 123456]");
 static constexpr char BYTE_ARRAY_FORMAT[] = "[%06zX - %06zX]";
 static constexpr char BIT_ARRAY_FORMAT[] = "[%u:%u]";
+static constexpr uint8_t OFFSET_BUFFER_SIZE = sizeof("[123456 - 123456]");
+typedef char offset_buffer[OFFSET_BUFFER_SIZE];
+typedef typeof(void (*)(
+		offset_buffer buffer,
+		char const* restrict format,
+		size_t end,
+		size_t start
+)) offset_sprintf;
 
 struct pane_context {
 	GtkColumnView* view; // so branches can set leaves, and loading bios
@@ -26,6 +33,7 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWindow* yaabe_primary;
 
 	GtkEditable* pathbar;
+	char* pathbar_string;
 
 	// preserve scroll position of the leaves pane if the previous branch is
 	// compatible with new selected branch
@@ -39,10 +47,28 @@ typedef struct yaabegtk_commons { // global state tracker
 	GtkWidget* save_buttons;
 	GtkWidget* reload_buttons;
 
-	char* pathbar_string;
+	bool big_endian;
+	offset_sprintf endian_sprintf;
 
 	struct yaabe_gtk_search search;
 } yaabegtk_commons;
+
+
+void
+offset_sprintf_big( // big-endian: 0 1 2 3 4 5
+		offset_buffer buffer,
+		char const* restrict format,
+		size_t end,
+		size_t start
+		);
+void
+offset_sprintf_little(// little-endian: 5 4 3 2 1 0
+		offset_buffer buffer,
+		char const* restrict format,
+		size_t end,
+		size_t start
+		);
+
 
 void
 create_about_window(
@@ -162,6 +188,10 @@ set_cached_scroll_path(
 
 char* // needs to be freed.
 get_cached_scroll_path(
+		);
+
+bool
+get_big_endianness(
 		);
 
 

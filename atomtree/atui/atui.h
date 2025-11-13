@@ -212,13 +212,15 @@ atui_node_to_path( // get a full /directory/like/path/of/the/branches/and/leaf
 		);
 
 void
-atui_leaf_from_text( // set the value from a string or array of 8-bit
+atui_leaf_from_text( // set the value from a string
 		atui_node const* leaf,
-		char const* buffer
+		char const* buffer,
+		bool big_endian // for arrays
 		);
 char* // returns an alloc
 atui_leaf_to_text(
-		atui_node const* leaf
+		atui_node const* leaf,
+		bool big_endian // for arrays
 		);
 
 // set or get the number value from the leaf

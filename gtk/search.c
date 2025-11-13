@@ -185,7 +185,7 @@ highlight_name_column_bind(
 }
 static void
 highlight_value_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
+		yaabegtk_commons const* const commons, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 	struct atui_regex_node const* regex = gatui_regex_node_peek(
@@ -203,7 +203,7 @@ highlight_value_column_bind(
 			GATUILeaf* const leaf = GATUI_LEAF(regex->tree_node);
 			char* text = NULL;
 			if (gatui_leaf_has_textable_value(leaf)) {
-				text = gatui_leaf_value_to_text(leaf);
+				text = gatui_leaf_value_to_text(leaf, commons->big_endian);
 			}
 			gtk_label_set_text(label, text);
 			free(text);
@@ -215,7 +215,7 @@ highlight_value_column_bind(
 
 static void
 regex_offset_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
+		offset_sprintf const endian_sprintf, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 	struct atui_regex_node const* regex = gatui_regex_node_peek(
@@ -226,11 +226,11 @@ regex_offset_column_bind(
 		column_cell
 	));
 
-	size_t start;
 	size_t end;
-	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
-	if (gatui_node_get_region_bounds(regex->tree_node, &start, &end)) {
-		sprintf(buffer, BYTE_ARRAY_FORMAT, start, end);
+	size_t start;
+	offset_buffer buffer = {[0]='\0'};
+	if (gatui_node_get_region_bounds(regex->tree_node, &end, &start)) {
+		endian_sprintf(buffer, BYTE_ARRAY_FORMAT, end, start);
 	}
 
 	assert(strlen(buffer) < sizeof(buffer));
@@ -287,9 +287,10 @@ create_results_view(
 	gtk_column_view_append_column(search_view, column);
 	g_object_unref(column);
 
+	// label_column_setup attaches common? nah
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(highlight_value_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(highlight_value_column_bind),commons,
 		NULL
 	);
 	column = gtk_column_view_column_new("Value", factory);
@@ -301,7 +302,8 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(regex_offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(regex_offset_column_bind),
+			commons->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);

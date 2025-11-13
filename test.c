@@ -18,8 +18,12 @@ gatui_leaf_test_memory(
 		) {
 	if (gatui_leaf_has_textable_value(leaf)) {
 		char* value_text = NULL;
-		value_text = gatui_leaf_value_to_text(leaf);
-		gatui_leaf_set_value_from_text(leaf, value_text);
+		value_text = gatui_leaf_value_to_text(leaf, false);
+		gatui_leaf_set_value_from_text(leaf, value_text, false);
+		free(value_text);
+		value_text = NULL;
+		value_text = gatui_leaf_value_to_text(leaf, true);
+		gatui_leaf_set_value_from_text(leaf, value_text, true);
 		free(value_text);
 	}
 }

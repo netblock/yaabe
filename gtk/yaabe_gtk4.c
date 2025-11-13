@@ -29,6 +29,25 @@ generic_error_popup(
 }
 
 void
+offset_sprintf_big(
+		offset_buffer buffer,
+		char const* const restrict format,
+		size_t const end,
+		size_t const start
+		) {
+	sprintf(buffer, format, start, end);
+}
+void
+offset_sprintf_little(
+		offset_buffer buffer,
+		char const* const restrict format,
+		size_t const end,
+		size_t const start
+		) {
+	sprintf(buffer, format, end, start);
+}
+
+void
 create_about_window(
 		yaabegtk_commons* const commons
 		) {
@@ -386,8 +405,15 @@ int8_t
 yaabe_gtk(
 		GATUITree** const root
 		) {
+	bool const big_endian = get_big_endianness();
+
 	yaabegtk_commons commons = {
 		.root = *root,
+		.big_endian = big_endian,
+		.endian_sprintf = (offset_sprintf const[]) {
+			offset_sprintf_little,
+			offset_sprintf_big,
+		}[big_endian],
 		.search.flags = {
 			.domain = GATUI_SEARCH_NAMES,
 			.leaves = true,

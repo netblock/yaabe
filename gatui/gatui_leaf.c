@@ -153,7 +153,7 @@ _gatui_leaf_get_value(
 	if ((ATUI_STRING==type->fancy)
 		|| ((ATUI_ARRAY==type->fancy) && (ATUI_NAN==type->radix))
 		) {
-		valcopy = gatui_leaf_value_to_text(self);
+		valcopy = gatui_leaf_value_to_text(self, false);
 		num_bytes = leaf->leaf.array_size + 1;
 	} else {
 		union variant_dock conv_val;
@@ -235,7 +235,7 @@ _gatui_leaf_set_value(
 		goto success_exit;
 	} else if (is_same_type) {
 		if ('s' == typestr[0]) { // string
-			atui_leaf_from_text(leaf, input_data); // has special bounds checks
+			atui_leaf_from_text(leaf, input_data, false); 
 			goto success_exit;
 		} else if ('a' == typestr[0]) {
 			if (input_size != leaf->num_bytes) {
@@ -276,18 +276,18 @@ gatui_leaf_get_atui_type(
 size_t
 gatui_leaf_get_bitfield_size(
 		GATUILeaf* const self,
-		size_t* const start,
-		size_t* const end
+		size_t* const end,
+		size_t* const start
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), 0);
 	struct atui_leaf const* const meta = &(self->atui->leaf);
 	g_return_val_if_fail(_ATUI_BITCHILD == meta->type.fancy, 0);
 
-	if (start) {
-		*start = meta->bitfield_lo;
-	}
 	if (end) {
 		*end = meta->bitfield_hi;
+	}
+	if (start) {
+		*start = meta->bitfield_lo;
 	}
 
 	return (meta->bitfield_hi - meta->bitfield_lo) +1;
@@ -303,21 +303,23 @@ gatui_leaf_has_textable_value(
 void
 gatui_leaf_set_value_from_text(
 		GATUILeaf* const self,
-		char const* text
+		char const* text,
+		bool const big_endian
 		) {
 	g_return_if_fail(GATUI_IS_LEAF(self));
 	g_return_if_fail(self->has_textable_value);
-	atui_leaf_from_text(self->atui, text);
+	atui_leaf_from_text(self->atui, text, big_endian);
 	_gatui_node_emit_value_changed(GATUI_NODE(self));
 }
 char*
 gatui_leaf_value_to_text(
-		GATUILeaf* const self
+		GATUILeaf* const self,
+		bool const big_endian
 		) {
 	g_return_val_if_fail(GATUI_IS_LEAF(self), NULL);
 	g_return_val_if_fail(self->has_textable_value, NULL);
 
-	return atui_leaf_to_text(self->atui);
+	return atui_leaf_to_text(self->atui, big_endian);
 }
 
 
@@ -407,7 +409,7 @@ gatui_regex_search_recurse_leaf(
 
 	if (GATUI_SEARCH_VALUES == flags->domain) {
 		if (leaf->has_textable_value) {
-			text = gatui_leaf_value_to_text(leaf);
+			text = gatui_leaf_value_to_text(leaf, false);
 		}
 	} else {
 		text = leaf->atui->name;

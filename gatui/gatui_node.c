@@ -666,15 +666,15 @@ gatui_node_get_copyability(
 size_t
 gatui_node_get_region_bounds(
 		GATUINode* const self,
-		size_t* const start,
-		size_t* const end
+		size_t* const end,
+		size_t* const start
 		) {
 	g_return_val_if_fail(GATUI_IS_NODE(self), 0);
 	GATUINodePrivate* const priv = gatui_node_get_instance_private(self);
 	atui_node const* const atui = priv->atui;
 
-	size_t offset_start = 0;
 	size_t offset_end = 0;
+	size_t offset_start = 0;
 	if (atui->num_bytes) {
 		size_t bios_size;
 		void const* const bios = gatui_tree_get_bios_pointer(
@@ -682,14 +682,14 @@ gatui_node_get_region_bounds(
 		);
 		offset_start = atui->data.data - bios;
 		offset_end = offset_start + atui->num_bytes - 1;
-		assert(offset_start <= offset_end);
+		assert(offset_end >= offset_start);
 		assert(offset_end < bios_size);
-	}
-	if (start) {
-		*start = offset_start;
 	}
 	if (end) {
 		*end = offset_end;
+	}
+	if (start) {
+		*start = offset_start;
 	}
 
 	return atui->num_bytes;

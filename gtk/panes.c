@@ -6,17 +6,21 @@ struct widget_cache {
 	uint32_t n_widgets;
 	uint32_t max_widgets;
 	GtkWidget** widget_stack;
+
+	yaabegtk_commons* commons; // only for passthrough
 };
 static struct widget_cache*
 widget_cache_new(
+		yaabegtk_commons* const commons
 		) {
 	struct widget_cache* const cache = cralloc(sizeof(*cache));
+	cache->commons = commons;
+
 	cache->n_widgets = 0;
 	cache->max_widgets = 256; // seems to be more than enough
-	void* wha = cralloc(
+	cache->widget_stack = cralloc(
 		cache->max_widgets * sizeof(cache->widget_stack[0])
 	);
-	cache->widget_stack = wha;
 	return cache;
 }
 static void
@@ -112,7 +116,7 @@ node_name_column_bind(
 }
 static void
 node_offset_column_bind(
-		void const* const _null __unused, // swapped-signal:: with factory
+		offset_sprintf const endian_sprintf, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 // bind data to the UI skeleton
@@ -122,9 +126,9 @@ node_offset_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	));
 
-	size_t start;
 	size_t end;
-	char buffer[OFFSET_BUFFER_SIZE] = {[0]='\0'};
+	size_t start;
+	offset_buffer buffer = {[0]='\0'};
 	char const* format = BYTE_ARRAY_FORMAT;
 	size_t success;
 
@@ -132,16 +136,16 @@ node_offset_column_bind(
 		GATUILeaf* const leaf = GATUI_LEAF(node);
 		if (_ATUI_BITCHILD == gatui_leaf_get_atui_type(leaf)->fancy) {
 			format = BIT_ARRAY_FORMAT;
-			success = gatui_leaf_get_bitfield_size(leaf, &start, &end);
+			success = gatui_leaf_get_bitfield_size(leaf, &end, &start);
 		} else {
-			success = gatui_node_get_region_bounds(node, &start, &end);
+			success = gatui_node_get_region_bounds(node, &end, &start);
 		}
 	} else {
-		success = gatui_node_get_region_bounds(node, &start, &end);
+		success = gatui_node_get_region_bounds(node, &end, &start);
 	}
 
 	if (success) {
-		sprintf(buffer, format, start, end);
+		endian_sprintf(buffer, format, end, start);
 		assert(strlen(buffer) < sizeof(buffer));
 	}
 	gtk_label_set_text(GTK_LABEL(label), buffer);
@@ -186,7 +190,8 @@ create_branches_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind),
+			commons->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -212,7 +217,8 @@ leaf_sets_editable(
 	GATUILeaf* const leaf,
 	GtkEditable* const editable
 	) {
-	char* const text = gatui_leaf_value_to_text(leaf);
+	bool const* const endian = g_object_get_data(G_OBJECT(editable), "endian");
+	char* const text = gatui_leaf_value_to_text(leaf, *endian);
 	assert(text);
 	gtk_editable_set_text(editable, text);
 	free(text);
@@ -247,10 +253,9 @@ editable_sets_leaf(
 	GATUILeaf* const leaf = gtk_tree_list_row_get_item(
 		gtk_column_view_cell_get_item(column_cell)
 	);
-	gatui_leaf_set_value_from_text(
-		leaf,
-		gtk_editable_get_text(editable)
-	);
+	char const* const text = gtk_editable_get_text(editable);
+	bool const* const endian = g_object_get_data(G_OBJECT(editable), "endian");
+	gatui_leaf_set_value_from_text(leaf, text, *endian);
 	g_object_unref(leaf);
 }
 
@@ -384,19 +389,33 @@ construct_enum_columnview(
 
 	return GTK_WIDGET(enum_list);
 }
+
 inline static GtkWidget*
-construct_enum_dropdown(
-		GObject* const widget_bag,
-		GtkEntryBuffer* const entry_buffer,
+construct_leaf_entry(
+		yaabegtk_commons* const commons,
+		GtkEntryBuffer* const buffer,
 		GtkColumnViewCell** const leaves_cell_cache
 		) {
-	GtkEditable* const enumentry = GTK_EDITABLE(gtk_entry_new_with_buffer(
-		entry_buffer
-	));
-	g_signal_connect(enumentry, "activate",
+	GtkWidget* const entry = gtk_entry_new_with_buffer(buffer);
+	gtk_widget_set_hexpand(entry, true);
+	g_signal_connect(GTK_EDITABLE(entry), "activate",
 		G_CALLBACK(editable_sets_leaf), leaves_cell_cache
 	);
-	gtk_widget_set_hexpand(GTK_WIDGET(enumentry), true);
+	g_object_set_data(G_OBJECT(entry), "endian", &(commons->big_endian));
+
+	return entry;
+}
+
+inline static GtkWidget*
+construct_enum_dropdown(
+		yaabegtk_commons* const commons,
+		GObject* const widget_bag,
+		GtkEntryBuffer* const buffer,
+		GtkColumnViewCell** const leaves_cell_cache
+		) {
+	GtkWidget* const enumentry = construct_leaf_entry(
+		commons, buffer, leaves_cell_cache
+	);
 
 	GtkWidget* const enum_list = construct_enum_columnview(leaves_cell_cache);
 
@@ -416,7 +435,7 @@ construct_enum_dropdown(
 
 	// shortcut way
 	g_object_set_data(widget_bag, "enum_list", GTK_COLUMN_VIEW(enum_list));
-	g_object_set_data(widget_bag, "enum_editable", GTK_WIDGET(enumentry));
+	g_object_set_data(widget_bag, "enum_editable", enumentry);
 
 	g_object_connect(enum_list,
 		"signal::map", G_CALLBACK(enummenu_sets_selection), leaves_cell_cache,
@@ -431,7 +450,7 @@ construct_enum_dropdown(
 
 	GtkWidget* const enumdropdown = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_append(GTK_BOX(enumdropdown), GTK_WIDGET(enummenu));
-	gtk_box_append(GTK_BOX(enumdropdown), GTK_WIDGET(enumentry));
+	gtk_box_append(GTK_BOX(enumdropdown), enumentry);
 	return enumdropdown;
 }
 
@@ -466,23 +485,21 @@ branch's leaves into view, slow. So, cache them with a stack.
 		gtk_widget_add_controller(widget_bag, focus_sense);
 		// widget takes ownership of the controller, no need to unref.
 
-		GtkEntryBuffer* const entry_buffer = gtk_entry_buffer_new(NULL,0);
+		GtkEntryBuffer* const buffer = gtk_entry_buffer_new(NULL,0);
 
 		// numbers, strings
-		//sub_widget = gtk_text_new();
-		GtkWidget* const regular = gtk_entry_new_with_buffer(entry_buffer);
-		gtk_stack_add_named(GTK_STACK(widget_bag), regular, "text");
-		g_signal_connect(GTK_EDITABLE(regular), "activate",
-			G_CALLBACK(editable_sets_leaf), cell_cache
+		GtkWidget* const regular = construct_leaf_entry(
+			cache->commons, buffer, cell_cache
 		);
+		gtk_stack_add_named(GTK_STACK(widget_bag), regular, "text");
 
 		// enums
 		GtkWidget* const enumdropdown = construct_enum_dropdown(
-			G_OBJECT(widget_bag), entry_buffer, cell_cache
+			cache->commons, G_OBJECT(widget_bag), buffer, cell_cache
 		);
 		gtk_stack_add_named(GTK_STACK(widget_bag), enumdropdown, "enum");
 
-		g_object_unref(entry_buffer);
+		g_object_unref(buffer);
 	}
 
 	*cell_cache = column_cell;
@@ -609,7 +626,7 @@ create_leaves_pane(
 	factory = gtk_signal_list_item_factory_new();
 	// see leaves_val_column_setup for more info.
 	// queue could technically be allocated on commons.
-	struct widget_cache* const cache = widget_cache_new();
+	struct widget_cache* const cache = widget_cache_new(commons);
 	g_object_set_data_full(G_OBJECT(factory),
 		"widget_cache", cache, (GDestroyNotify) widget_cache_destroy
 	);
@@ -626,10 +643,10 @@ create_leaves_pane(
 	gtk_column_view_append_column(leaves_view, column);
 	g_object_unref(column);
 
-
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind), NULL,
+		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind),
+			commons->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);

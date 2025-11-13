@@ -148,8 +148,8 @@ gatui_node_get_copyability(
 size_t
 gatui_node_get_region_bounds(
 		GATUINode* self,
-		size_t* start, // can be NULL
-		size_t* end // can be NULL; -1 last byte within
+		size_t* end, // can be NULL; -1 last byte within
+		size_t* start // can be NULL
 		);
 
 G_END_DECLS

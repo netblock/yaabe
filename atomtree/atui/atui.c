@@ -33,10 +33,59 @@ max_val_of_bits(
 	}
 }
 
+
+#define from_text_array_be(size, array_size, walker, basae) do {\
+	for (uint32_t i=0; i < array_size; i++) {\
+		size[i] = strtoull(walker, &walker, base);\
+	}\
+} while(0)
+#define from_text_array_le(size, array_size, walker, basae) do {\
+	uint32_t i = array_size;\
+	while (i) {\
+		i--;\
+		size[i] = strtoull(walker, &walker, base);\
+	}\
+} while(0)
+
+inline static void
+atui_leaf_from_text_array(
+		atui_node const* const leaf,
+		char const* const text,
+		bool const big_endian
+		) {
+	union bios_data const d = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
+	uint32_t const array_size = meta->array_size;
+	uint8_t const base = bases[meta->type.radix];
+	// strto* doesn't guarantee const in endptr
+	char* const token_buffer = strdup(text);
+	char* walker = token_buffer;
+
+	if (big_endian) {
+		switch (meta->total_bits) {
+			case  8: from_text_array_be(d.u8,  array_size, walker, base); break;
+			case 16: from_text_array_be(d.u16, array_size, walker, base); break;
+			case 32: from_text_array_be(d.u32, array_size, walker, base); break;
+			case 64: from_text_array_be(d.u64, array_size, walker, base); break;
+			default: assert(0);
+		}
+	} else {
+		switch (meta->total_bits) {
+			case  8: from_text_array_le(d.u8,  array_size, walker, base); break;
+			case 16: from_text_array_le(d.u16, array_size, walker, base); break;
+			case 32: from_text_array_le(d.u32, array_size, walker, base); break;
+			case 64: from_text_array_le(d.u64, array_size, walker, base); break;
+			default: assert(0);
+		}
+	}
+	free(token_buffer);
+}
+
 void
 atui_leaf_from_text(
 		atui_node const* const leaf,
-		char const* const text
+		char const* const text,
+		bool const big_endian
 		) {
 // set the value of the leaf based on input text. Currently only support for
 // numbers (including bitfields) and strings.
@@ -50,35 +99,7 @@ atui_leaf_from_text(
 	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 
 	if ((fancy == ATUI_ARRAY) && radix) {
-		uint8_t const base = bases[radix];
-		// strto* doesn't guarantee const in endptr
-		char* const token_buffer = strdup(text);
-		char* walker = token_buffer;
-		switch (meta->total_bits) {
-			case  8:
-				for (uint32_t i=0; i < array_size; i++) {
-					data.u8[i] = strtoul(walker, &walker, base);
-				}
-				break;
-			case 16:
-				for (uint32_t i=0; i < array_size; i++) {
-					data.u16[i] = strtoul(walker, &walker, base);
-				}
-				break;
-			case 32:
-				for (uint32_t i=0; i < array_size; i++) {
-					data.u32[i] = strtoul(walker, &walker, base);
-				}
-				break;
-			case 64:
-				for (uint32_t i=0; i < array_size; i++) {
-					data.u64[i] = strtoull(walker, &walker, base);
-				}
-				break;
-			default:
-				assert(0);
-		}
-		free(token_buffer);
+		atui_leaf_from_text_array(leaf, text, big_endian);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		char* const null_exit = memccpy(data.c8, text, '\0', array_size);
@@ -207,9 +228,54 @@ get_sprintf_format_from_leaf(
 	return print_alloc_width;
 }
 
+
+#define to_text_array_be(size, array_size, walker, format) do {\
+	for (uint32_t i=0; i < array_size; i++) {\
+		walker += sprintf(walker, format, size[i]);\
+	}\
+} while(0)
+#define to_text_array_le(size, array_size, walker, format) do {\
+	uint32_t i = array_size;\
+	while (i) {\
+		i--;\
+		walker += sprintf(walker, format, size[i]);\
+	}\
+} while(0)
+inline static void
+atui_leaf_to_text_array(
+		atui_node const* const leaf,
+		char* buffer,
+		char const* const format,
+		bool const big_endian
+		) {
+	union bios_data const d = leaf->data;
+	struct atui_leaf const* const meta = &(leaf->leaf);
+	uint32_t const array_size = meta->array_size;
+
+	if (big_endian) {
+		switch (meta->total_bits) {
+			case  8: to_text_array_be(d.u8,  array_size, buffer, format); break;
+			case 16: to_text_array_be(d.u16, array_size, buffer, format); break;
+			case 32: to_text_array_be(d.u32, array_size, buffer, format); break;
+			case 64: to_text_array_be(d.u64, array_size, buffer, format); break;
+			default: assert(0);
+		}
+	} else {
+		switch (meta->total_bits) {
+			case  8: to_text_array_le(d.u8,  array_size, buffer, format); break;
+			case 16: to_text_array_le(d.u16, array_size, buffer, format); break;
+			case 32: to_text_array_le(d.u32, array_size, buffer, format); break;
+			case 64: to_text_array_le(d.u64, array_size, buffer, format); break;
+			default: assert(0);
+		}
+	}
+	*(buffer-1) = '\0'; // eat the final space
+}
+
 char*
 atui_leaf_to_text(
-		atui_node const* const leaf
+		atui_node const* const leaf,
+		bool const big_endian
 		) {
 // Convert the value of a leaf to text. Currently only support for numbers,
 // and strings.
@@ -231,40 +297,13 @@ atui_leaf_to_text(
 	if ((fancy == ATUI_ARRAY) && radix) {
 		assert(!(meta->type.fraction));
 		if (meta->total_bits == -1) {
-			return NULL;
 			assert(0);
+			return NULL;
 		}
 
 		buffer_size = (num_digits * array_size) + 1;
 		buffer = cralloc(buffer_size);
-		char* buffer_walk = buffer;
-		switch (meta->total_bits) {
-			case  8:
-				for (uint32_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, data.u8[i]);
-				}
-				break;
-			case 16:
-				for (uint32_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, data.u16[i]);
-				}
-				break;
-			case 32:
-				for (uint32_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, data.u32[i]);
-				}
-				break;
-			case 64:
-				for (uint32_t i=0; i < array_size; i++) {
-					buffer_walk += sprintf(buffer_walk, format, data.u64[i]);
-				}
-				break;
-			default:
-				assert(0); // why are we here? perhaps _PPATUI_LEAF_BITNESS()?
-				free(buffer);
-				return NULL;
-		}
-		*(buffer_walk-1) = '\0'; // eat the final space
+		atui_leaf_to_text_array(leaf, buffer, format, big_endian);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
 		buffer_size = array_size + 1;
