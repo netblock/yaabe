@@ -648,7 +648,7 @@ class atui_leaf(atui_node):
 
 	type:atui_leaf_type = None
 
-	array_size:str = None
+	array_length:str = None
 	fractional_bits:str = None
 	total_bits:str = None
 	enum:str = None # if it has an associated enum
@@ -755,7 +755,7 @@ class atui_leaf(atui_node):
 		# __expand_leaf_fancy requires 3 stages to fully churn out the
 		# appropriate strings
 		# stage 0; easy stuff that will get replaced
-		self.array_size = "1"
+		self.array_length = "1"
 		self.prefer_contiguous = "false"
 
 		# stage 1; fancy-dependent
@@ -867,7 +867,7 @@ class atui_leaf(atui_node):
 			):
 		assert(atui_leaf_type.ATUI_ARRAY == self.type.fancy)
 		self.access_meta += "[0]"
-		self.array_size = "lengthof(%s)" % self.access
+		self.array_length = "lengthof(%s)" % self.access
 	def __expand_atui_graftshoot(self,
 			fancy_data:dict,
 			defaults:dict,
@@ -1069,7 +1069,7 @@ def atui_leaf_to_text( # vestige is handled in atui_leaf_vestige_to_text
 	leaf_text:str = (
 		"\n"
 		+ indent + ".type = {%s},\n" % atui_leaf_type_to_text(leaf, indent)
-		+ indent + ".array_size = %s,\n" % leaf.array_size
+		+ indent + ".array_length = %s,\n" % leaf.array_length
 		+ indent + ".fractional_bits = %s,\n" % leaf.fractional_bits
 		+ indent + ".total_bits = %s,\n" % leaf.total_bits
 		+ indent + ".bitfield_hi = %s,\n" % leaf.bitfield_hi

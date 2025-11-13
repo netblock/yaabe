@@ -34,13 +34,13 @@ max_val_of_bits(
 }
 
 
-#define from_text_array_be(size, array_size, walker, basae) do {\
-	for (uint32_t i=0; i < array_size; i++) {\
+#define from_text_array_be(size, length, walker, basae) do {\
+	for (uint32_t i=0; i < length; i++) {\
 		size[i] = strtoull(walker, &walker, base);\
 	}\
 } while(0)
-#define from_text_array_le(size, array_size, walker, basae) do {\
-	uint32_t i = array_size;\
+#define from_text_array_le(size, length, walker, basae) do {\
+	uint32_t i = length;\
 	while (i) {\
 		i--;\
 		size[i] = strtoull(walker, &walker, base);\
@@ -55,7 +55,7 @@ atui_leaf_from_text_array(
 		) {
 	union bios_data const d = leaf->data;
 	struct atui_leaf const* const meta = &(leaf->leaf);
-	uint32_t const array_size = meta->array_size;
+	uint32_t const length = meta->array_length;
 	uint8_t const base = bases[meta->type.radix];
 	// strto* doesn't guarantee const in endptr
 	char* const token_buffer = strdup(text);
@@ -63,18 +63,18 @@ atui_leaf_from_text_array(
 
 	if (big_endian) {
 		switch (meta->total_bits) {
-			case  8: from_text_array_be(d.u8,  array_size, walker, base); break;
-			case 16: from_text_array_be(d.u16, array_size, walker, base); break;
-			case 32: from_text_array_be(d.u32, array_size, walker, base); break;
-			case 64: from_text_array_be(d.u64, array_size, walker, base); break;
+			case  8: from_text_array_be(d.u8,  length, walker, base); break;
+			case 16: from_text_array_be(d.u16, length, walker, base); break;
+			case 32: from_text_array_be(d.u32, length, walker, base); break;
+			case 64: from_text_array_be(d.u64, length, walker, base); break;
 			default: assert(0);
 		}
 	} else {
 		switch (meta->total_bits) {
-			case  8: from_text_array_le(d.u8,  array_size, walker, base); break;
-			case 16: from_text_array_le(d.u16, array_size, walker, base); break;
-			case 32: from_text_array_le(d.u32, array_size, walker, base); break;
-			case 64: from_text_array_le(d.u64, array_size, walker, base); break;
+			case  8: from_text_array_le(d.u8,  length, walker, base); break;
+			case 16: from_text_array_le(d.u16, length, walker, base); break;
+			case 32: from_text_array_le(d.u32, length, walker, base); break;
+			case 64: from_text_array_le(d.u64, length, walker, base); break;
 			default: assert(0);
 		}
 	}
@@ -94,7 +94,7 @@ atui_leaf_from_text(
 
 	union bios_data const data = leaf->data;
 	struct atui_leaf const* const meta = &(leaf->leaf);
-	uint32_t const array_size = meta->array_size;
+	uint32_t const array_length = meta->array_length;
 	enum atui_leaf_type_radix const radix = meta->type.radix;
 	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 
@@ -102,21 +102,21 @@ atui_leaf_from_text(
 		atui_leaf_from_text_array(leaf, text, big_endian);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		char* const null_exit = memccpy(data.c8, text, '\0', array_size);
+		char* const null_exit = memccpy(data.c8, text, '\0', array_length);
 		if (fancy == ATUI_STRING) {
 			/* ATUI_STRING's length is implicitly defined by the null
-			termination. If the input buffer 0-terminates before array_size,
+			termination. If the input buffer 0-terminates before array_length,
 			then we will lose the intended allocation size in the bios. So fill
 			the remaining bytes with spaces to push the null back to its
 			original position.
 			*/
 			if (null_exit) {
 				uint16_t const bytes_left = (
-					data.c8 + array_size - null_exit
+					data.c8 + array_length - null_exit
 				);
 				memset(null_exit-1, ' ', bytes_left); // -1 eats memccpy's 0.
 			}
-			data.c8[array_size-1] = '\0';
+			data.c8[array_length-1] = '\0';
 		}
 	} else if (radix) {
 		if (meta->type.has_enum) {
@@ -218,7 +218,7 @@ get_sprintf_format_from_leaf(
 		}
 	} else if ((fancy==ATUI_ARRAY) || (fancy==ATUI_STRING)) {
 		strcpy(format, "%s");
-		print_alloc_width = meta->array_size;
+		print_alloc_width = meta->array_length;
 	} else {
 		format[0] = '\0';
 		print_alloc_width = 0;
@@ -229,13 +229,13 @@ get_sprintf_format_from_leaf(
 }
 
 
-#define to_text_array_be(size, array_size, walker, format) do {\
-	for (uint32_t i=0; i < array_size; i++) {\
+#define to_text_array_be(size, length, walker, format) do {\
+	for (uint32_t i=0; i < length; i++) {\
 		walker += sprintf(walker, format, size[i]);\
 	}\
 } while(0)
-#define to_text_array_le(size, array_size, walker, format) do {\
-	uint32_t i = array_size;\
+#define to_text_array_le(size, length, walker, format) do {\
+	uint32_t i = length;\
 	while (i) {\
 		i--;\
 		walker += sprintf(walker, format, size[i]);\
@@ -250,22 +250,22 @@ atui_leaf_to_text_array(
 		) {
 	union bios_data const d = leaf->data;
 	struct atui_leaf const* const meta = &(leaf->leaf);
-	uint32_t const array_size = meta->array_size;
+	uint32_t const length = meta->array_length;
 
 	if (big_endian) {
 		switch (meta->total_bits) {
-			case  8: to_text_array_be(d.u8,  array_size, buffer, format); break;
-			case 16: to_text_array_be(d.u16, array_size, buffer, format); break;
-			case 32: to_text_array_be(d.u32, array_size, buffer, format); break;
-			case 64: to_text_array_be(d.u64, array_size, buffer, format); break;
+			case  8: to_text_array_be(d.u8,  length, buffer, format); break;
+			case 16: to_text_array_be(d.u16, length, buffer, format); break;
+			case 32: to_text_array_be(d.u32, length, buffer, format); break;
+			case 64: to_text_array_be(d.u64, length, buffer, format); break;
 			default: assert(0);
 		}
 	} else {
 		switch (meta->total_bits) {
-			case  8: to_text_array_le(d.u8,  array_size, buffer, format); break;
-			case 16: to_text_array_le(d.u16, array_size, buffer, format); break;
-			case 32: to_text_array_le(d.u32, array_size, buffer, format); break;
-			case 64: to_text_array_le(d.u64, array_size, buffer, format); break;
+			case  8: to_text_array_le(d.u8,  length, buffer, format); break;
+			case 16: to_text_array_le(d.u16, length, buffer, format); break;
+			case 32: to_text_array_le(d.u32, length, buffer, format); break;
+			case 64: to_text_array_le(d.u64, length, buffer, format); break;
 			default: assert(0);
 		}
 	}
@@ -289,7 +289,7 @@ atui_leaf_to_text(
 	char* buffer = NULL;
 
 	char format[LEAF_SPRINTF_FORMAT_SIZE];
-	uint32_t const array_size = meta->array_size;
+	uint32_t const array_length = meta->array_length;
 	enum atui_leaf_type_radix const radix = meta->type.radix;
 	enum atui_leaf_type_fancy const fancy = meta->type.fancy;
 	uint32_t const num_digits = get_sprintf_format_from_leaf(format, leaf);
@@ -301,15 +301,15 @@ atui_leaf_to_text(
 			return NULL;
 		}
 
-		buffer_size = (num_digits * array_size) + 1;
+		buffer_size = (num_digits * array_length) + 1;
 		buffer = cralloc(buffer_size);
 		atui_leaf_to_text_array(leaf, buffer, format, big_endian);
 	} else if ((fancy==ATUI_STRING) || (fancy==ATUI_ARRAY)) {
 		assert(radix == ATUI_NAN); // mainly for ATUI_ARRAY && ATUI_NAN
-		buffer_size = array_size + 1;
+		buffer_size = array_length + 1;
 		buffer = cralloc(buffer_size);
-		memcpy(buffer, data.c8, array_size);
-		buffer[array_size] = '\0'; // if array is not null-terminated
+		memcpy(buffer, data.c8, array_length);
+		buffer[array_length] = '\0'; // if array is not null-terminated
 	} else if (radix) {
 		assert(num_digits);
 		buffer_size = num_digits+1; // +1 is \0

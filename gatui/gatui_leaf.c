@@ -154,7 +154,7 @@ _gatui_leaf_get_value(
 		|| ((ATUI_ARRAY==type->fancy) && (ATUI_NAN==type->radix))
 		) {
 		valcopy = gatui_leaf_value_to_text(self, false);
-		num_bytes = leaf->leaf.array_size + 1;
+		num_bytes = leaf->leaf.array_length + 1;
 	} else {
 		union variant_dock conv_val;
 		const void* valptr = &conv_val;
@@ -208,7 +208,7 @@ _gatui_leaf_set_value(
 
 	bool const both_are_integers = (
 		char_in_string(typestr[0], "ynqiuxt")
-		&& type->radix && (! type->fraction) && (1 == leaf->leaf.array_size)
+		&& type->radix && (! type->fraction) && (1 == leaf->leaf.array_length)
 	);
 	bool const is_same_type = g_variant_is_of_type(
 		value,  gatui_node_get_capsule_type(nodeself)

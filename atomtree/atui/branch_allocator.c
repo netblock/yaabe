@@ -167,8 +167,8 @@ print_atui_string_leaf(
 	}
 	sprintf(leaf->name, leaf->origname, level->name_num, level->nametag);
 
-	leaf->leaf.array_size = 1 + strlen(leaf->data.c8); // +1 is NULL
-	leaf->num_bytes = leaf->leaf.array_size;
+	leaf->leaf.array_length = 1 + strlen(leaf->data.c8); // +1 is NULL
+	leaf->num_bytes = leaf->leaf.array_length;
 }
 
 inline static void

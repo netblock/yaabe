@@ -149,7 +149,7 @@ union atui_vestige { // atui_branch_allocator() use only
 struct atui_leaf {
 	struct atui_leaf_type type; // directives on how to display text
 
-	uint32_t array_size;
+	uint32_t array_length;
 	uint8_t fractional_bits; // if fixed-point
 	int8_t total_bits;   // number of bits for the leaf
 	uint8_t bitfield_hi; // bitfield range end
