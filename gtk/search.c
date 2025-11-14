@@ -155,10 +155,14 @@ node_type_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	gtk_label_set_text(
-		GTK_LABEL(gtk_column_view_cell_get_child(column_cell)),
-		(char* const[2]){"Branch", "Leaf"}[GATUI_IS_LEAF(regex->tree_node)]
+	GtkInscription* const label = GTK_INSCRIPTION(
+		gtk_column_view_cell_get_child(column_cell)
 	);
+	char const* const branchleaf = (char const* const[]) {
+		"Branch", "Leaf"
+	} [GATUI_IS_LEAF(regex->tree_node)];
+	gtk_inscription_set_text(label, branchleaf);
+	gtk_inscription_set_nat_chars(label, sizeof("Branch"));
 }
 
 static void
@@ -170,18 +174,19 @@ highlight_name_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
-		column_cell
-	));
+	char const* const name = gatui_node_get_name(regex->tree_node);
+
+	GtkInscription* const label = GTK_INSCRIPTION(
+		gtk_column_view_cell_get_child(column_cell)
+	);
 
 	if (GATUI_SEARCH_NAMES == regex->flags.domain) {
-		gtk_label_set_markup(label, regex->markup_text);
+		gtk_inscription_set_markup(label, regex->markup_text);
 	} else {
-		gtk_label_set_text(
-			label,
-			gatui_node_get_name(regex->tree_node)
-		);
+		gtk_inscription_set_text(label, name);
 	}
+	gtk_inscription_set_nat_chars(label, strlen(name) +2);
+
 }
 static void
 highlight_value_column_bind(
@@ -192,25 +197,29 @@ highlight_value_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
-		column_cell
-	));
+	GtkInscription* const label = GTK_INSCRIPTION(
+		gtk_column_view_cell_get_child(column_cell)
+	);
 
+	size_t string_length = 0;
 	if (GATUI_IS_LEAF(regex->tree_node)) {
 		if (GATUI_SEARCH_VALUES == regex->flags.domain) {
-			gtk_label_set_markup(label, regex->markup_text);
+			gtk_inscription_set_markup(label, regex->markup_text);
+			string_length = strlen(regex->text);
 		} else {
 			GATUILeaf* const leaf = GATUI_LEAF(regex->tree_node);
 			char* text = NULL;
 			if (gatui_leaf_has_textable_value(leaf)) {
 				text = gatui_leaf_value_to_text(leaf, commons->big_endian);
+				string_length = strlen(text);
 			}
-			gtk_label_set_text(label, text);
+			gtk_inscription_set_text(label, text);
 			free(text);
 		}
 	} else {
-		gtk_label_set_text(label, NULL);
+		gtk_inscription_set_text(label, NULL);
 	}
+	gtk_inscription_set_nat_chars(label, string_length);
 }
 
 static void
@@ -222,9 +231,9 @@ regex_offset_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
-		column_cell
-	));
+	GtkInscription* const label = GTK_INSCRIPTION(
+		gtk_column_view_cell_get_child(column_cell)
+	);
 
 	size_t end;
 	size_t start;
@@ -234,7 +243,7 @@ regex_offset_column_bind(
 	}
 
 	assert(strlen(buffer) < sizeof(buffer));
-	gtk_label_set_text(label, buffer);
+	gtk_inscription_set_text(label, buffer);
 }
 
 inline static GtkWidget*
@@ -287,7 +296,6 @@ create_results_view(
 	gtk_column_view_append_column(search_view, column);
 	g_object_unref(column);
 
-	// label_column_setup attaches common? nah
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(highlight_value_column_bind),commons,

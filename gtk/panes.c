@@ -62,16 +62,28 @@ widget_cache_destroy(
 	free(cache);
 }
 
+inline static GtkWidget*
+construct_inscription_box(
+		 ) {
+	GtkWidget* const label_widget = gtk_inscription_new(NULL);
+	GtkInscription* const label = GTK_INSCRIPTION(label_widget);
+
+	gtk_inscription_set_xalign(label, 0);
+	gtk_inscription_set_text_overflow(
+		label, GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END
+	);
+	gtk_inscription_set_wrap_mode(label, PANGO_WRAP_CHAR);
+	gtk_inscription_set_nat_chars(label, OFFSET_BUFFER_SIZE); // heuristic
+
+	return label_widget;
+}
 
 void
 label_column_setup(
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
-//TODO use https://docs.gtk.org/gtk4/class.Inscription.html
-	GtkWidget* const label = gtk_label_new(NULL);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
-	gtk_label_set_use_markup(GTK_LABEL(label), true);
+	GtkWidget* const label = construct_inscription_box();
 	gtk_column_view_cell_set_child(column_cell, label);
 }
 static void
@@ -80,8 +92,7 @@ tree_label_column_setup(
 		GtkColumnViewCell* const column_cell
 		) {
 // setup to spawn a UI skeleton
-	GtkWidget* const label = gtk_label_new(NULL);
-	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	GtkWidget* const label = construct_inscription_box();
 
 	GtkWidget* const expander = gtk_tree_expander_new();
 	gtk_tree_expander_set_indent_for_icon(GTK_TREE_EXPANDER(expander), true);
@@ -98,17 +109,23 @@ node_name_column_bind(
 // bind data to the UI skeleton
 	GtkTreeListRow* const tree_row = gtk_column_view_cell_get_item(column_cell);
 	GATUINode* const node = GATUI_NODE(gtk_tree_list_row_get_item(tree_row));
+	char const* const name = gatui_node_get_name(node);
 
 	GtkTreeExpander* const expander = GTK_TREE_EXPANDER(
 		gtk_column_view_cell_get_child(column_cell)
 	);
 	gtk_tree_expander_set_list_row(expander, tree_row);
 
-	GtkWidget* const label = gtk_tree_expander_get_child(expander);
-	gtk_label_set_text(GTK_LABEL(label), gatui_node_get_name(node));
+	GtkInscription* const label = GTK_INSCRIPTION(gtk_tree_expander_get_child(
+		expander
+	));
+	// +2 because the inscription sometimes ellipsises too early.
+	gtk_inscription_set_nat_chars(label, strlen(name) +2);
+	gtk_inscription_set_text(label, name);
+
 	constexpr enum i18n_languages current_lang = LANG_ENGLISH; // TODO
 	gtk_widget_set_tooltip_text(
-		label,
+		GTK_WIDGET(label),
 		gatui_node_get_description(node, current_lang)
 	);
 
@@ -148,7 +165,7 @@ node_offset_column_bind(
 		endian_sprintf(buffer, format, end, start);
 		assert(strlen(buffer) < sizeof(buffer));
 	}
-	gtk_label_set_text(GTK_LABEL(label), buffer);
+	gtk_inscription_set_text(GTK_INSCRIPTION(label), buffer);
 	g_object_unref(node);
 }
 
@@ -265,7 +282,7 @@ enum_name_column_bind(
 		GtkColumnViewCell* const enum_column_cell
 		) {
 // bind
-	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
+	GtkInscription* const label = GTK_INSCRIPTION(gtk_column_view_cell_get_child(
 		enum_column_cell
 	));
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
@@ -273,7 +290,7 @@ enum_name_column_bind(
 		"enum"
 	); // no need to unref from list_item_get_item
 
-	gtk_label_set_text(label, enum_entry->name);
+	gtk_inscription_set_text(label, enum_entry->name);
 	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(
 		GTK_WIDGET(label), enum_entry->description[current_lang]
@@ -287,7 +304,7 @@ enum_val_column_bind(
 // bind
 	GtkColumnViewCell* const leaves_column_cell = *leaves_cell_cache;
 
-	GtkLabel* const label = GTK_LABEL(gtk_column_view_cell_get_child(
+	GtkInscription* const label = GTK_INSCRIPTION(gtk_column_view_cell_get_child(
 		enum_column_cell
 	));
 	struct atui_enum_entry const* const enum_entry = g_object_get_data(
@@ -300,7 +317,7 @@ enum_val_column_bind(
 	);
 
 	char* const text = gatui_leaf_enum_val_to_text(leaf, enum_entry);
-	gtk_label_set_text(label, text);
+	gtk_inscription_set_text(label, text);
 	free(text);
 	g_object_unref(leaf);
 
