@@ -105,7 +105,17 @@ extern struct atomtree_pci_id const %s[%u];
 	)
 	return out_text
 
-
+def sort_descriptions(
+		description:dict,
+		) -> list:
+	languages:tuple = ("eng",)
+	descriptions:list = [None,] * len(languages)
+	descr_index:int = 0
+	trans:dict
+	for trans in description:
+		descr_index:int = languages.index(trans)
+		descriptions[descr_index]:str = description[trans]
+	return descriptions
 def description_to_text(
 		description:dict,
 		parent_indent:str
@@ -116,14 +126,7 @@ def description_to_text(
 	# ".description = {%s}" % description_to_text(...)
 	if (description is None):
 		return ""
-	lang_type:str = ""
-	languages:tuple = ("eng",)
-	descriptions:list = [None,] * len(languages)
-	descr_index:int = 0
-	trans:dict
-	for trans in description:
-		descr_index:int = languages.index(trans)
-		descriptions[descr_index]:str = description[trans]
+	descriptions:list = sort_descriptions(description)
 
 	indent:str = parent_indent + "\t"
 	descr_template:str = "\n%s" + parent_indent
@@ -132,13 +135,32 @@ def description_to_text(
 	des_null_entry_template:str = indent + "NULL,\n"
 
 	descr_texts:str = ""
-	d:str
-	for d in descriptions:
-		if d:
-			descr_texts += des_entry_template % d.replace("\"","\\\"")
+	l:str
+	for l in descriptions:
+		if l:
+			descr_texts += des_entry_template % l.replace("\"","\\\"")
 		else:
 			descr_texts += des_null_entry_template
 	return descr_template % descr_texts
+
+def description_assert_to_text(
+		name:str,
+		description:dict,
+		parent_indent:str
+		) -> str:
+	# c static_assert with regard to ATUI_MAX_DESCRIPTION_LENGTH
+	if (description is None):
+		return ""
+	descriptions:list = sort_descriptions(description)
+
+	assert_template:str = parent_indent + "static_assert(true%s); // %s\n"
+	lang_template:str = " && (%u < ATUI_MAX_DESCRIPTION_LENGTH)"
+	lang_text:str = ""
+	l:str
+	for l in descriptions:
+		if l:
+			lang_text += lang_template % len(l)
+	return assert_template % (lang_text, name)
 
 
 def searchfield_to_h(
@@ -382,7 +404,6 @@ struct atui_enum const _atui_enumarray[%u] = {
 	enum_entry_assert_template:str = """\
 """
 	enum_assert_template:str = """\
-static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 """
 
 	# main meat
@@ -421,9 +442,18 @@ static_assert(UINT8_MAX >= ATUI_ENUM(%s).num_entries);
 
 	#asserts
 	enum_asserts:str = ""
-	enum_entries_asserts:str = ""
-	#for enum in atui_data["enums"]:
-	#	enum_asserts += enum_assert_template % enum["name"]
+	for enum in atui_data["enums"]:
+		#enum_asserts += enum_assert_template % ()
+		if "description" in enum:
+			enum_asserts += description_assert_to_text(
+				enum["name"], enum["description"], "\t"
+			)
+		for entry in enum["constants"]:
+			#enum_asserts += enum_entry_assert_templat % ()
+			if "description" in entry:
+				enum_asserts += description_assert_to_text(
+					entry["name"], entry["description"], "\t"
+				)
 
 	out_text:str = (
 		cfile_header
@@ -1296,14 +1326,17 @@ def leaves_asserts_to_text(
 		) -> str:
 	# various asserts and static_asserts over the leaves
 
-	bitfield_assert:str = ("""\
-	static_assert(sizeof(*(%s)) == sizeof(%s)); // too big
-	assert(((sizeof(*(%s))*CHAR_BIT) - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out
-""")
+	bitfield_assert:str = (
+parent_indent + "static_assert(sizeof(*(%s)) == sizeof(%s)); // too big"
++ parent_indent + "assert(((sizeof(*(%s))*CHAR_BIT) - 1) == _PPATUI_BIT_HI(%s, %s)); // not filled out"
+)
 	assert_text:str = ""
 	var_meta:str = ""
 	leaf:atui_leaf
 	for leaf in leaves:
+		assert_text += description_assert_to_text(
+			leaf.name, leaf.description, "\t"
+		)
 		match (leaf.type.fancy):
 			case atui_leaf_type.ATUI_BITFIELD:
 				highest_field:atui_leaf = leaf.leaves.nodes[-1]
@@ -1311,6 +1344,8 @@ def leaves_asserts_to_text(
 					leaf.access, leaf.union,
 					leaf.access, leaf.union, highest_field.bitchild_access
 				)
+		if leaf.leaves.nodes:
+			leaves_asserts_to_text(leaf.leaves.nodes, parent_indent)
 	return assert_text
 
 
@@ -1380,6 +1415,7 @@ _atui_%s(
 	assert(branch_embryo.computed_num_leaves < UINT16_MAX);
 	assert(branch_embryo.computed_num_deep_graft < UINT8_MAX);
 	assert(branch_embryo.computed_num_shoot < UINT8_MAX);
+%s\
 
 	return atui_branch_allocator(&branch_embryo, args);
 }
@@ -1397,6 +1433,7 @@ _atui_%s(
 			branch.name, branch.c_prefix, branch.c_type, branch.atomtree,
 			branch_embryo_to_text(branch, "\t"),
 			leaves_asserts_to_text(branch.leaves.nodes, "\t"),
+			description_assert_to_text(branch.name, branch.description, "\t")
 		)
 	return out_text
 

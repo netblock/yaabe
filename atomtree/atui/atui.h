@@ -29,6 +29,7 @@ atui.h is about the core atui interface
 #include "atui_types.h"
 // see bottom for more includes
 
+static constexpr uint16_t ATUI_MAX_DESCRIPTION_LENGTH = 384;
 enum i18n_languages:int8_t {
 	LANG_ENGLISH = 0,
 
