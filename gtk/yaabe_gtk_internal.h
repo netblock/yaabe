@@ -5,6 +5,9 @@
 #include "gatui.h"
 #include "yaabe_gtk4.h"
 
+// TODO; probably should be tucked into commons
+static constexpr enum i18n_languages current_lang = LANG_ENGLISH;
+
 static constexpr char BYTE_ARRAY_FORMAT[] = "[%06zX - %06zX]";
 static constexpr char BIT_ARRAY_FORMAT[] = "[%u:%u]";
 static constexpr uint8_t OFFSET_BUFFER_SIZE = sizeof("[123456 - 123456]");
@@ -69,6 +72,12 @@ offset_sprintf_little(// little-endian: 5 4 3 2 1 0
 		size_t start
 		);
 
+void
+set_tooltip_to_description( // sets a pretty tooltip
+		GtkWidget* const widget,
+		char const* const name,
+		char const* const description
+		);
 
 void
 create_about_window(

@@ -48,6 +48,23 @@ offset_sprintf_little(
 }
 
 void
+set_tooltip_to_description(
+		GtkWidget* const widget,
+		char const* const name,
+		char const* const description
+		) {
+	char buffer[lengthof((atui_node){}.name) + 2 + ATUI_MAX_DESCRIPTION_LENGTH];
+	char* walker = buffer;
+	walker = stopcopy(walker, name);
+	if (description) {
+		walker = stopcopy(walker, "\n\n");
+		walker = stopcopy(walker, description);
+	}
+	assert((size_t)(walker - buffer) < lengthof(buffer));
+	gtk_widget_set_tooltip_text(widget, buffer);
+}
+
+void
 create_about_window(
 		yaabegtk_commons* const commons
 		) {

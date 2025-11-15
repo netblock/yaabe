@@ -123,9 +123,9 @@ node_name_column_bind(
 	gtk_inscription_set_nat_chars(label, strlen(name) +2);
 	gtk_inscription_set_text(label, name);
 
-	constexpr enum i18n_languages current_lang = LANG_ENGLISH; // TODO
-	gtk_widget_set_tooltip_text(
+	set_tooltip_to_description(
 		GTK_WIDGET(label),
+		name,
 		gatui_node_get_description(node, current_lang)
 	);
 
@@ -166,6 +166,7 @@ node_offset_column_bind(
 		assert(strlen(buffer) < sizeof(buffer));
 	}
 	gtk_inscription_set_text(GTK_INSCRIPTION(label), buffer);
+	gtk_widget_set_tooltip_text(label, buffer);
 	g_object_unref(node);
 }
 

@@ -187,6 +187,11 @@ highlight_name_column_bind(
 	}
 	gtk_inscription_set_nat_chars(label, strlen(name) +2);
 
+	set_tooltip_to_description(
+		GTK_WIDGET(label),
+		name,
+		gatui_node_get_description(regex->tree_node, current_lang)
+	);
 }
 static void
 highlight_value_column_bind(
@@ -197,14 +202,15 @@ highlight_value_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkInscription* const label = GTK_INSCRIPTION(
-		gtk_column_view_cell_get_child(column_cell)
-	);
+	GtkWidget* const label_widget = gtk_column_view_cell_get_child(column_cell);
+	GtkInscription* const label = GTK_INSCRIPTION(label_widget);
+
 
 	size_t string_length = 0;
 	if (GATUI_IS_LEAF(regex->tree_node)) {
 		if (GATUI_SEARCH_VALUES == regex->flags.domain) {
 			gtk_inscription_set_markup(label, regex->markup_text);
+			gtk_widget_set_tooltip_markup(label_widget, regex->markup_text);
 			string_length = strlen(regex->text);
 		} else {
 			GATUILeaf* const leaf = GATUI_LEAF(regex->tree_node);
@@ -214,10 +220,12 @@ highlight_value_column_bind(
 				string_length = strlen(text);
 			}
 			gtk_inscription_set_text(label, text);
+			gtk_widget_set_tooltip_text(label_widget, text);
 			free(text);
 		}
 	} else {
 		gtk_inscription_set_text(label, NULL);
+		gtk_widget_set_tooltip_text(label_widget, NULL);
 	}
 	gtk_inscription_set_nat_chars(label, string_length);
 }
@@ -231,9 +239,7 @@ regex_offset_column_bind(
 		gtk_column_view_cell_get_item(column_cell)
 	);
 	assert(regex);
-	GtkInscription* const label = GTK_INSCRIPTION(
-		gtk_column_view_cell_get_child(column_cell)
-	);
+	GtkWidget* const label = gtk_column_view_cell_get_child(column_cell);
 
 	size_t end;
 	size_t start;
@@ -243,14 +249,14 @@ regex_offset_column_bind(
 	}
 
 	assert(strlen(buffer) < sizeof(buffer));
-	gtk_inscription_set_text(label, buffer);
+	gtk_inscription_set_text(GTK_INSCRIPTION(label), buffer);
+	gtk_widget_set_tooltip_text(label, buffer);
 }
 
 inline static GtkWidget*
 create_results_view(
 		yaabegtk_commons* const commons
 		) {
-	// type result_text goto
 	GtkColumnView* const search_view = GTK_COLUMN_VIEW(
 		gtk_column_view_new(NULL)
 	);
