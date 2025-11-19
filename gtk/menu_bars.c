@@ -420,6 +420,33 @@ yaabe_action_about(
 		) {
 	create_about_window(commons_ptr);
 }
+static void
+yaabe_action_config_dir(
+		GSimpleAction* const action __unused,
+		GVariant* const parameter __unused,
+		gpointer const commons_ptr
+		) {
+	yaabegtk_commons const* const commons = commons_ptr;
+
+	GError* err = NULL;
+	GFile* const confdir = get_yaabe_config_dir(&err);
+	if (err) {
+		goto exit;
+	}
+	char* const path = g_file_get_uri(confdir);
+	g_app_info_launch_default_for_uri(path, NULL, &err);
+
+	exit:
+	if (err) {
+		generic_error_popup(
+			"Error opening config directory",
+			err->message,
+			commons->yaabe_gtk
+		);
+		g_error_free(err);
+	}
+	free(path);
+}
 
 void
 construct_menu_bar(
@@ -442,6 +469,7 @@ construct_menu_bar(
 
 	GMenu* const help_menu = g_menu_new();
 	g_menu_append(help_menu, "About", "app.about");
+	g_menu_append(help_menu, "Config", "app.config");
 
 	//GMenu* const magic_menu = g_menu_new();
 	//g_menu_append(magic_menu, "Insert UEFI GOP", "app.uefi_gop");
@@ -489,6 +517,7 @@ construct_menu_bar(
 		{.name = "search",  .activate = yaabe_action_search},
 
 		{.name = "about",  .activate = yaabe_action_about},
+		{.name = "config", .activate = yaabe_action_config_dir},
 	};
 	g_action_map_add_action_entries(app_action_map,
 		actions, lengthof(actions),

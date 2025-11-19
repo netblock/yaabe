@@ -1,112 +1,118 @@
 #include "yaabe_gtk_internal.h"
 
-// TODO do the #embed thing when GCC 15 comes out
-static constexpr char basic_config_file[] = (
-"# syntax is described in:\n"
-"# https://freedesktop.org/wiki/Specifications/desktop-entry-spec/\n"
-"# https://docs.gtk.org/glib/struct.KeyFile.html\n"
-"\n"
-"[main]\n"
-"config_version=2\n"
-"# big_endian makes the bios offsets left-to-right"
-"big_endian=false\n"
-"\n"
-"[history]\n"
-"# cwd is the last saved-to directory\n"
-"cwd=\n"
-"# path is about restoring the scroll position,"
-" based on the last selected structure path\n"
-"path=\n"
-);
+constexpr char basic_config_file[] = {
+#embed "yaabe.conf"
+};
+
+struct yaabe_config {
+	GFile* file;
+	GKeyFile* conf;
+};
+inline static void
+free_yaabe_config(
+		struct yaabe_config* const conf
+		) {
+	g_key_file_unref(conf->conf);
+	g_object_unref(conf->file);
+}
+
+
+GFile*
+get_yaabe_config_dir(
+		GError** const ferror_out
+		) {
+	char const* const yaabe_dir_path[] = { // $XDG_CONFIG_HOME/yaabe/
+		g_get_user_config_dir(), "yaabe",
+		NULL
+	};
+
+	GFile* const yaabe_dir = g_file_new_build_filenamev(yaabe_dir_path);
+	GFileType const ftype = g_file_query_file_type(
+		yaabe_dir, G_FILE_QUERY_INFO_NONE, NULL
+	);
+	if (G_FILE_TYPE_DIRECTORY != ftype) {
+		g_file_make_directory_with_parents(yaabe_dir, NULL, ferror_out);
+	}
+
+	return yaabe_dir;
+}
+
+static GFile*
+get_yaabe_config_file(
+		GError** const ferror_out
+		) {
+	GError* err = NULL;
+	GFile* conffile = NULL;
+
+	GFile* const yaabe_dir = get_yaabe_config_dir(&err);
+	if (err) {
+		goto yaabe_dir_err;
+	}
+
+	char const* const yaabe_conf_path[] = { // $XDG_CONFIG_HOME/yaabe/yaabe.conf
+		g_file_peek_path(yaabe_dir), "yaabe.conf",
+		NULL
+	};
+	conffile = g_file_new_build_filenamev(yaabe_conf_path);
+
+	yaabe_dir_err:
+	g_object_unref(yaabe_dir);
+
+	*ferror_out = err;
+	return conffile;
+}
 
 static void
-get_config_file(
-		GFile** const gf_out,
-		GKeyFile** const kf_out,
+get_yaabe_config(
+		struct yaabe_config* const conf,
 		GError** const ferror_out
 		) {
 	// gf_out, kf_out, ferror_out are all required.
 	// gf_out and kf_out may be set with bogus data if there's an error.
 
-	const char* const xdg_home = g_get_user_config_dir(); // XDG_CONFIG_HOME
-	GFileType ftype;
 	GError* err = NULL;
 
-	// $XDG_CONFIG_HOME/yaabe/
-	GPathBuf yaabe_dir_builder;
-	g_path_buf_init_from_path(&yaabe_dir_builder, xdg_home);
-	g_path_buf_push(&yaabe_dir_builder, "yaabe");
-	char* yaabe_dir_path = g_path_buf_to_path(&yaabe_dir_builder);
-
-	GFile* const yaabe_dir = g_file_new_for_path(yaabe_dir_path);
-	ftype = g_file_query_file_type(yaabe_dir, G_FILE_QUERY_INFO_NONE, NULL);
-	if (G_FILE_TYPE_DIRECTORY != ftype) {
-		g_file_make_directory_with_parents(yaabe_dir, NULL, &err);
-		if (err) {
-			goto yaabe_dir_err;
-		}
+	conf->file = get_yaabe_config_file(&err);
+	if (err) {
+		goto exit;
 	}
-
-	// $XDG_CONFIG_HOME/yaabe/yaabe.conf
-	GPathBuf config_file_builder;
-	g_path_buf_init_from_path(&config_file_builder, xdg_home);
-	g_path_buf_push(&config_file_builder, "yaabe/yaabe.conf");
-	char* const config_file_path = g_path_buf_to_path(&config_file_builder);
-
-	GFile* const conffile = g_file_new_for_path(config_file_path);
-	GKeyFile* const conf = g_key_file_new();
-	*gf_out = conffile;
-	*kf_out = conf;
+	conf->conf = g_key_file_new();
 
 	bool const kf_success = g_key_file_load_from_file(
-		conf, config_file_path,
+		conf->conf, g_file_peek_path(conf->file),
 		(G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS),
 		NULL // not necessary
 	);
 	if (kf_success) {
-		goto all_success;
+		goto exit;
 	}
 
-	ftype = g_file_query_file_type(conffile, G_FILE_QUERY_INFO_NONE, NULL);
+	GFileType const ftype = g_file_query_file_type(
+		conf->file, G_FILE_QUERY_INFO_NONE, NULL
+	);
 	if ((G_FILE_TYPE_UNKNOWN != ftype) && (G_FILE_TYPE_REGULAR != ftype)) {
-		goto conffile_err;
+		goto exit;
 	}
 	// file does not exist, or fails parse. Create a new config.
 
 	g_key_file_load_from_data(
-		conf, basic_config_file, lengthof(basic_config_file)-1,
+		conf->conf, basic_config_file, lengthof(basic_config_file)-1,
 		(G_KEY_FILE_KEEP_COMMENTS|G_KEY_FILE_KEEP_TRANSLATIONS),
 		&err
 	);
-	if (NULL == err) {
-		goto all_success;
-	}
 
-	conffile_err:
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
-
-	all_success:
-	free(config_file_path);
-	g_path_buf_clear(&config_file_builder);
-
-	yaabe_dir_err:
-	g_object_unref(yaabe_dir);
-	free(yaabe_dir_path);
-	g_path_buf_clear(&yaabe_dir_builder);
-
+	exit:
 	*ferror_out = err;
 }
 static void
 write_config_file(
-		GFile* const conffile,
-		GKeyFile* const conf,
+		struct yaabe_config* const conf,
 		GError** const ferror_out
 		) {
 	size_t num_bytes;
-	char* const conf_data = g_key_file_to_data(conf, &num_bytes, NULL);
+	char* const conf_data = g_key_file_to_data(conf->conf, &num_bytes, NULL);
 	g_file_replace_contents(
-		conffile, conf_data, num_bytes,
+		conf->file, conf_data, num_bytes,
 		NULL, false, G_FILE_CREATE_NONE, NULL,NULL, ferror_out
 	);
 	free(conf_data);
@@ -170,22 +176,21 @@ get_cached_working_dir(
 		) {
 	GFile* working_dir = get_cached_working_dir_old();
 
-	GFile* conffile;
-	GKeyFile* conf;
-	GError* error = NULL;
-	get_config_file(&conffile, &conf, &error);
-	if (error) {
-		g_error_free(error);
+	GError* err = NULL;
+	struct yaabe_config conf = {};
+	get_yaabe_config(&conf, &err);
+	if (err) {
+		g_error_free(err);
 		return working_dir;
 	}
 
 	char* dir_path;
-	if (working_dir) { // merge old history into config
+	if (working_dir) { // merge old history into conf
 		dir_path = g_file_get_path(working_dir);
-		g_key_file_set_string(conf, "history", "cwd", dir_path);
-		write_config_file(conffile, conf, NULL);
+		g_key_file_set_string(conf.conf, "history", "cwd", dir_path);
+		write_config_file(&conf, NULL);
 	} else {
-		dir_path = g_key_file_get_string(conf, "history", "cwd", NULL);
+		dir_path = g_key_file_get_string(conf.conf, "history", "cwd", NULL);
 		if (dir_path) {
 			working_dir = g_file_new_for_path(dir_path);
 			GFileType const ftype = g_file_query_file_type(
@@ -199,20 +204,18 @@ get_cached_working_dir(
 	}
 
 	free(dir_path);
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
+	free_yaabe_config(&conf);
 	return working_dir;
 }
 void
 set_cached_working_dir(
 		GFile* const biosfile
 		) {
-	GFile* conffile;
-	GKeyFile* conf;
-	GError* error = NULL;
-	get_config_file(&conffile, &conf, &error);
-	if (error) {
-		g_error_free(error);
+	GError* err = NULL;
+	struct yaabe_config conf = {};
+	get_yaabe_config(&conf, &err);
+	if (err) {
+		g_error_free(err);
 		return;
 	}
 	GFile* const parent_dir = g_file_get_parent(biosfile);
@@ -222,12 +225,11 @@ set_cached_working_dir(
 		return;
 	}
 
-	g_key_file_set_string(conf, "history", "cwd", parent_dir_path);
-	write_config_file(conffile, conf, NULL);
+	g_key_file_set_string(conf.conf, "history", "cwd", parent_dir_path);
+	write_config_file(&conf, NULL);
 
 	free(parent_dir_path);
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
+	free_yaabe_config(&conf);
 }
 
 
@@ -235,66 +237,57 @@ void
 set_cached_scroll_path(
 		char const* path
 		) {
-	GFile* conffile;
-	GKeyFile* conf;
-	GError* error = NULL;
-	get_config_file(&conffile, &conf, &error);
-	if (error) {
-		g_error_free(error);
+	GError* err = NULL;
+	struct yaabe_config conf = {};
+	get_yaabe_config(&conf, &err);
+	if (err) {
+		g_error_free(err);
 		return;
 	}
 
-	g_key_file_set_string(conf, "history", "path", path);
-	write_config_file(conffile, conf, NULL);
+	g_key_file_set_string(conf.conf, "history", "path", path);
+	write_config_file(&conf, NULL);
 
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
+	free_yaabe_config(&conf);
 }
 
 char*
 get_cached_scroll_path(
 		) {
-	GFile* conffile;
-	GKeyFile* conf;
-	GError* error = NULL;
-	get_config_file(&conffile, &conf, &error);
-	if (error) {
-		g_error_free(error);
+	GError* err = NULL;
+	struct yaabe_config conf = {};
+	get_yaabe_config(&conf, &err);
+	if (err) {
+		g_error_free(err);
 		return NULL;
 	}
 
-	char* const path = g_key_file_get_string(conf, "history", "path", NULL);
-
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
-
+	char* const path = g_key_file_get_string(conf.conf, "history","path", NULL);
+	free_yaabe_config(&conf);
 	return path;
 }
 
 bool
 get_big_endianness(
 		) {
-	GFile* conffile;
-	GKeyFile* conf;
-	GError* error = NULL;
-	get_config_file(&conffile, &conf, &error);
-	if (error) {
-		g_error_free(error);
+	GError* err = NULL;
+	struct yaabe_config conf = {};
+	get_yaabe_config(&conf, &err);
+	if (err) {
+		g_error_free(err);
 		return NULL;
 	}
 
 	bool big_endian;
-	big_endian = g_key_file_get_boolean(conf, "main", "big_endian", &error);
+	big_endian = g_key_file_get_boolean(conf.conf, "main", "big_endian", &err);
 
-	if (error) { // does not exist
-		g_error_free(error);
+	if (err) { // does not exist
+		g_error_free(err);
 		big_endian = false;
-		g_key_file_set_boolean(conf, "main", "big_endian", big_endian);
-		write_config_file(conffile, conf, NULL);
+		g_key_file_set_boolean(conf.conf, "main", "big_endian", big_endian);
+		write_config_file(&conf, NULL);
 	}
 
-	g_key_file_unref(conf);
-	g_object_unref(conffile);
-
+	free_yaabe_config(&conf);
 	return big_endian;
 }

@@ -183,6 +183,11 @@ create_search_rightclick_menu(
 
 // config file
 GFile*
+get_yaabe_config_dir(
+		GError** ferror_out // optional
+		);
+
+GFile*
 get_cached_working_dir(
 		);
 void
