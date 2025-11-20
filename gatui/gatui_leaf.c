@@ -104,8 +104,7 @@ set_typestr(
 
 GATUILeaf*
 gatui_leaf_new(
-		atui_node* const leaf,
-		GATUITree* const root
+		atui_node* const leaf
 		) {
 	g_return_val_if_fail(NULL == leaf->self, NULL);
 
@@ -114,18 +113,21 @@ gatui_leaf_new(
 	GATUILeaf* const self = g_object_new(GATUI_TYPE_LEAF,
 		"atui", leaf,
 		"typestr", typestr,
-		NULL // get parent from atui; and root from parent
+		NULL
 	);
 	assert((void*)GATUI_LEAF(self) == (void*)GATUI_NODE(self));
 
 	self->atui = leaf;
 
 	if (leaf->leaf.enum_options) {
-		GtkSelectionModel* const* const enum_models_cache =
-			gatui_tree_get_enum_models_cache(root);
-		self->enum_model = ( // the index is the same in both arrays
-			enum_models_cache[leaf->leaf.enum_options - ATUI_ENUM_ARRAY]
+		GtkSelectionModel* const* const cache = (
+			gatui_tree_get_enum_models_cache(
+				gatui_node_get_root(GATUI_NODE(self))
+			)
 		);
+		self->enum_model = cache[ // the index is the same in both arrays
+			leaf->leaf.enum_options - ATUI_ENUM_ARRAY
+		];
 		g_object_ref(self->enum_model);
 	}
 

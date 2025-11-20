@@ -18,5 +18,6 @@ typedef struct atui_nullstruct {} atui_nullstruct;
 typedef struct _GATUINode GATUINode;
 typedef struct _GATUILeaf GATUILeaf;
 typedef struct _GATUIBranch GATUIBranch;
+typedef struct _GATUITree GATUITree;
 
 #endif

@@ -17,6 +17,11 @@ gatui_tree_get_contiguous_type(
 		GATUITree* self
 		);
 
+GATUITree*
+_gatui_tree_ref_self(
+	struct atom_tree const* atree
+	);
+
 void
 _gatui_node_emit_value_changed(
 		GATUINode* self

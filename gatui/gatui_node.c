@@ -10,7 +10,6 @@ static guint gatui_signals[LAST_SIGNAL] = {};
 
 enum GATUINodeProperty:uint32_t {
 	PROP_ATUI = 1,
-	PROP_ROOT,
 	PROP_TYPESTR,
 	N_PROPERTIES
 };
@@ -52,14 +51,6 @@ gatui_node_set_property(
 			assert(NULL == priv->atui);
 			priv->atui = g_value_get_pointer(value);
 			assert(priv->atui);
-			break;
-		case PROP_ROOT:
-			GATUITree* const root = g_value_get_pointer(value);
-			assert(NULL == priv->root);
-			if (root) {
-				priv->root = g_value_get_pointer(value);
-				g_object_ref(priv->root);
-			}
 			break;
 		case PROP_TYPESTR:
 			char const* typestr = g_value_get_pointer(value);
@@ -139,11 +130,7 @@ gatui_node_constructed(
 		priv->parent = atui->parent->self; // soft-ref to not ref-loop
 	}
 
-	if (NULL == priv->root) {
-		assert(priv->parent);
-		priv->root = gatui_node_get_root(priv->parent);
-		g_object_ref(priv->root);
-	}
+	priv->root = _gatui_tree_ref_self(atui->tree);
 
 	priv->copyability = (union gatui_node_copyability) {
 		.prefer_contiguous = atui->prefer_contiguous,
@@ -161,9 +148,7 @@ gatui_node_constructed(
 		priv->phone_book = cralloc(children->count * sizeof(gulong));
 		priv->num_leaves = children->count;
 		for (uint16_t i=0; i < children->count; i++) {
-			GATUILeaf* child = gatui_leaf_new(
-				&(children->nodes[i]), priv->root
-			);
+			GATUILeaf* child = gatui_leaf_new(&(children->nodes[i]));
 			GATUINodePrivate* child_priv = gatui_node_get_instance_private(
 				GATUI_NODE(child)
 			);
@@ -205,10 +190,6 @@ gatui_node_class_init(
 
 	obj_properties[PROP_ATUI] = g_param_spec_pointer(
 		"atui",  NULL, NULL,
-		(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)
-	);
-	obj_properties[PROP_ROOT] = g_param_spec_pointer(
-		"root",  NULL, NULL,
 		(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)
 	);
 	obj_properties[PROP_TYPESTR] = g_param_spec_pointer(

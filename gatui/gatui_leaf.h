@@ -7,8 +7,7 @@ G_DECLARE_FINAL_TYPE(GATUILeaf, gatui_leaf, GATUI, LEAF, GATUINode)
 
 GATUILeaf*
 gatui_leaf_new( // including all of is subleaves
-		atui_node* leaf,
-		GATUITree* root
+		atui_node* leaf
 		);
 
 struct atui_leaf_type const*

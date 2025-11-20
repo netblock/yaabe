@@ -53,6 +53,12 @@ atui_branch_allocator(
 	atuifunc_args const* args
 	);
 
+void
+atui_set_tree( // attach tree to all nodes
+	struct atom_tree* const tree,
+	atui_node* const root
+	);
+
 // atui has auxiliary pointers to hang extra data off of and this deallocator
 // doesn't consider.
 void

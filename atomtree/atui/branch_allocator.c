@@ -799,3 +799,24 @@ atui_assimilate(
 		free(src_array[i]);
 	}
 }
+
+void
+atui_set_tree(
+	struct atom_tree* const tree,
+	atui_node* const node
+	) {
+	node->tree = tree;
+	struct atui_children const* const leaves = &(node->leaves);
+	assert(false == leaves->indirect);
+	for (uint16_t i=0; i < leaves->count; i++) {
+		atui_set_tree(tree, &(leaves->nodes[i]));
+	}
+
+	if (false == node->is_leaf) {
+		struct atui_children const* const branches = &(node->branch.branches);
+		assert(branches->indirect);
+		for (uint16_t i=0; i < branches->count; i++) {
+			atui_set_tree(tree,	branches->addresses[i]);
+		}
+	}
+}

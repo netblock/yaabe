@@ -199,12 +199,13 @@ struct _atui_node {
 	union bios_data data;
 	size_t num_bytes;
 
+	struct atom_tree* tree;
 	union atui_vestige vestige;
 };
 
 atui_node*
 generate_atui(
-		struct atom_tree const* atree
+		struct atom_tree* atree
 		);
 
 char*

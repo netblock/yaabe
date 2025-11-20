@@ -7,8 +7,7 @@ G_DECLARE_FINAL_TYPE(GATUIBranch, gatui_branch, GATUI, BRANCH, GATUINode)
 
 GATUIBranch*
 gatui_branch_new( // including all of its descendants and leaves
-		atui_node* branch,
-		GATUITree* root
+		atui_node* branch
 		);
 
 uint16_t

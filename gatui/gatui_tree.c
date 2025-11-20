@@ -151,11 +151,12 @@ gatui_tree_new_from_gfile(
 	if (NULL == atree) {
 		goto bios_parse_err;
 	}
-	atree->atui_root = generate_atui(atree);
 
 	GATUITree* const self = g_object_new(GATUI_TYPE_TREE, NULL);
 	self->atomtree = atree;
 	self->biosfile = biosfile;
+	atree->self = self;
+	generate_atui(atree);
 
 	// it's possible to leak if we boot the trunk now
 	//gatui_tree_boot_gatui_trunk(self);
@@ -234,9 +235,7 @@ gatui_tree_get_trunk(
 		self->enum_models_cache = enum_models_cache;
 		generate_enum_models_cache(enum_models_cache);
 
-		trunk = G_OBJECT(gatui_branch_new(
-			self->atomtree->atui_root, self
-		));
+		trunk = G_OBJECT(gatui_branch_new(self->atomtree->atui_root));
 		g_weak_ref_set(&(self->trunk), trunk);
 
 		self->enum_models_cache = NULL;
@@ -492,7 +491,7 @@ gatui_tree_copy_core(
 		free(alloced_bios);
 		return NULL;
 	}
-	atree->atui_root = generate_atui(atree);
+	generate_atui(atree);
 
 	GATUITree* const self = g_object_new(GATUI_TYPE_TREE, NULL);
 	self->atomtree = atree;
@@ -550,4 +549,11 @@ gatui_tree_regex_search(
 	);
 
 	return GTK_SELECTION_MODEL(single_model);
+}
+
+GATUITree*
+_gatui_tree_ref_self(
+	struct atom_tree const* const atree
+	) {
+	return g_object_ref(atree->self);
 }

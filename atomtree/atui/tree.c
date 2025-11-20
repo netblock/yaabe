@@ -3856,7 +3856,7 @@ grow_boot_straps(
 
 atui_node*
 generate_atui(
-		struct atom_tree const* const atree
+		struct atom_tree* const atree
 		) {
 	atui_node* rom_based_straps = grow_boot_straps(atree);
 	atui_node* const atui_atom_rom_header = grow_atom_rom_header(
@@ -3867,7 +3867,11 @@ generate_atui(
 	atui_node* const child_branches[] = {
 		rom_based_straps, atui_pci_tables, atui_atom_rom_header
 	};
-	return ATUI_MAKE_BRANCH(vbios_rom_header, NULL,
+	atui_node* const root = ATUI_MAKE_BRANCH(vbios_rom_header, NULL,
 		atree, atree->image,  lengthof(child_branches), child_branches
 	);
+
+	atree->atui_root = root;
+	atui_set_tree(atree, root);
+	return root;
 }
