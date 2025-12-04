@@ -1791,7 +1791,8 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -1881,7 +1882,8 @@ global_defaults: {
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -2014,11 +2016,13 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -2175,11 +2179,13 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -2379,11 +2385,13 @@ global_defaults: {
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->gpuclk_ss_mode",
 			name: "gpuclk_ss_mode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
 		}, {
 			access: "bios->sclk_ss_percentage",
 			name: "sclk_ss_percentage",
@@ -3256,6 +3264,443 @@ global_defaults: {
 		},
 	],
 },
+
+{
+	c_prefix: "union", c_type: "atom_spread_spectrum_mode",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->spread_spectrum",
+		name: "spread_spectrum",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "centre",
+				description: {
+					eng: "0=down, 1=centre",
+				},
+			}, {
+				access: "external",
+				description: {
+					eng: "0=internal, 1=external",
+				},
+			}, {
+				access: "rsvd_7_2",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
+	c_prefix: "union", c_type: "dce_info_caps",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->display_caps",
+		name: "display_caps",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "rsvd_0_0",
+			}, {
+				access: "force_dispdev_connected",
+			}, {
+				access: "disable_dfp_dp_hbr2",
+			}, {
+				access: "enable_interlac_timing",
+			}, {
+				access: "lttpr_support",
+			}, {
+				access: "vbios_lttpr_transparent",
+			}, {
+				access: "rsvd_31_6",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+}, {
+	c_type: "dce_connector_spread_spectrum",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->dvi_ss",
+			name: "dvi_ss",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum",
+		}, {
+			access: "bios->hdmi_ss",
+			name: "hdmi_ss",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum",
+		}, {
+			access: "bios->dp_ss",
+			name: "dp_ss",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum",
+		}, {
+			access: "bios->dvi_ss_mode",
+			name: "dvi_ss_mode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
+		}, {
+			access: "bios->hdmi_ss_mode",
+			name: "hdmi_ss_mode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
+		}, {
+			access: "bios->dp_ss_mode",
+			name: "dp_ss_mode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_spread_spectrum_mode",
+		}, {
+			access: "bios->ss_reserved",
+			name: "ss_reserved",
+		},
+	],
+}, {
+	c_type: "vesa_hardcode",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->mode_num",
+			name: "mode_num",
+			description: {
+				eng: "hardcode mode number defined in StandardVESA_TimingTable when EDID is not available",
+			},
+		}, {
+			access: "bios->refresh_rate",
+			name: "refresh_rate",
+		},
+	],
+}, {
+	c_type: "atom_display_controller_info_v4_3",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->display_caps",
+			name: "display_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "dce_info_caps",
+		}, {
+			access: "bios->bootup_dispclk_10khz",
+			name: "bootup_dispclk_10khz",
+		}, {
+			access: "bios->dce_refclk_10khz",
+			name: "dce_refclk_10khz",
+		}, {
+			access: "bios->i2c_engine_refclk_10khz",
+			name: "i2c_engine_refclk_10khz",
+		}, {
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "dce_connector_spread_spectrum",
+		}, {
+			access: "bios->dfp",
+			name: "dfp",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->vga",
+			name: "vga",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->dpphy_refclk_10khz",
+			name: "dpphy_refclk_10khz",
+		}, {
+			access: "bios->reserved2",
+			name: "reserved2",
+		}, {
+			access: "bios->dce_ip_ver",
+			name: "dce_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
+			description: {
+				eng: "dcn on v4.3",
+			},
+		}, {
+			access: "bios->max_disp_pipe_num",
+			name: "max_disp_pipe_num",
+		}, {
+			access: "bios->max_vbios_active_disp_pipe_num",
+			name: "max_vbios_active_disp_pipe_num",
+		}, {
+			access: "bios->max_ppll_num",
+			name: "max_ppll_num",
+		}, {
+			access: "bios->max_disp_phy_num",
+			name: "max_disp_phy_num",
+		}, {
+			access: "bios->max_aux_pairs",
+			name: "max_aux_pairs",
+		}, {
+			access: "bios->remotedisplayconfig",
+			name: "remotedisplayconfig",
+		}, {
+			access: "bios->reserved3",
+			name: "reserved3",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_dc_golden_table_v1",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->aux_dphy_rx_control0_val",
+			name: "aux_dphy_rx_control0_val",
+		}, {
+			access: "bios->aux_dphy_tx_control_val",
+			name: "aux_dphy_tx_control_val",
+		}, {
+			access: "bios->aux_dphy_rx_control1_val",
+			name: "aux_dphy_rx_control1_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_0_val",
+			name: "dc_gpio_aux_ctrl_0_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_1_val",
+			name: "dc_gpio_aux_ctrl_1_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_2_val",
+			name: "dc_gpio_aux_ctrl_2_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_3_val",
+			name: "dc_gpio_aux_ctrl_3_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_4_val",
+			name: "dc_gpio_aux_ctrl_4_val",
+		}, {
+			access: "bios->dc_gpio_aux_ctrl_5_val",
+			name: "dc_gpio_aux_ctrl_5_val",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_display_controller_info_v4_4",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->display_caps",
+			name: "display_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "dce_info_caps",
+		}, {
+			access: "bios->bootup_dispclk_10khz",
+			name: "bootup_dispclk_10khz",
+		}, {
+			access: "bios->dce_refclk_10khz",
+			name: "dce_refclk_10khz",
+		}, {
+			access: "bios->i2c_engine_refclk_10khz",
+			name: "i2c_engine_refclk_10khz",
+		}, {
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "dce_connector_spread_spectrum",
+		}, {
+			access: "bios->dfp",
+			name: "dfp",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->vga",
+			name: "vga",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->dpphy_refclk_10khz",
+			name: "dpphy_refclk_10khz",
+		}, {
+			access: "bios->hw_chip_id",
+			name: "hw_chip_id",
+		}, {
+			access: "bios->dce_ip_ver",
+			name: "dce_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
+		}, {
+			access: "bios->max_disp_pipe_num",
+			name: "max_disp_pipe_num",
+		}, {
+			access: "bios->max_vbios_active_disp_pipe_num",
+			name: "max_vbios_active_disp_pipe_num",
+		}, {
+			access: "bios->max_ppll_num",
+			name: "max_ppll_num",
+		}, {
+			access: "bios->max_disp_phy_num",
+			name: "max_disp_phy_num",
+		}, {
+			access: "bios->max_aux_pairs",
+			name: "max_aux_pairs",
+		}, {
+			access: "bios->remotedisplayconfig",
+			name: "remotedisplayconfig",
+		}, {
+			access: "bios->dispclk_pll_vco_freq",
+			name: "dispclk_pll_vco_freq",
+		}, {
+			access: "bios->dp_ref_clk_freq",
+			name: "dp_ref_clk_freq",
+		}, {
+			access: "bios->max_mclk_chg_lat",
+			name: "max_mclk_chg_lat",
+			description: {
+				eng: "Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)",
+			},
+		}, {
+			access: "bios->max_sr_exit_lat",
+			name: "max_sr_exit_lat",
+			description: {
+				eng: "Worst case memory self refresh exit time, units of 100ns of ns (0.1us)",
+			},
+		}, {
+			access: "bios->max_sr_enter_exit_lat",
+			name: "max_sr_enter_exit_lat",
+			description: {
+				eng: "Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)",
+			},
+		}, {
+			access: "bios->dc_golden_table_offset",
+			name: "dc_golden_table_offset",
+			display: "ATUI_HEX",
+			description: {
+				eng: "point of struct of atom_dc_golden_table_vxx",
+			},
+		}, {
+			access: "bios->dc_golden_table_ver",
+			name: "dc_golden_table_ver",
+		}, {
+			access: "bios->reserved3",
+			name: "reserved3",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+}, {
+	c_type: "atom_display_controller_info_v4_5",
+	leaves: [
+		{
+			access: "bios->table_header",
+			name: "table_header",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
+		}, {
+			access: "bios->display_caps",
+			name: "display_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "dce_info_caps",
+		}, {
+			access: "bios->bootup_dispclk_10khz",
+			name: "bootup_dispclk_10khz",
+		}, {
+			access: "bios->dce_refclk_10khz",
+			name: "dce_refclk_10khz",
+		}, {
+			access: "bios->i2c_engine_refclk_10khz",
+			name: "i2c_engine_refclk_10khz",
+		}, {
+			access: "bios->spread_spectrum",
+			name: "spread_spectrum",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "dce_connector_spread_spectrum",
+		}, {
+			access: "bios->dfp",
+			name: "dfp",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->vga",
+			name: "vga",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
+		}, {
+			access: "bios->dpphy_refclk_10khz",
+			name: "dpphy_refclk_10khz",
+		}, {
+			access: "bios->hw_chip_id",
+			name: "hw_chip_id",
+		}, {
+			access: "bios->dce_ip_ver",
+			name: "dce_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
+		}, {
+			access: "bios->max_disp_pipe_num",
+			name: "max_disp_pipe_num",
+		}, {
+			access: "bios->max_vbios_active_disp_pipe_num",
+			name: "max_vbios_active_disp_pipe_num",
+		}, {
+			access: "bios->max_ppll_num",
+			name: "max_ppll_num",
+		}, {
+			access: "bios->max_disp_phy_num",
+			name: "max_disp_phy_num",
+		}, {
+			access: "bios->max_aux_pairs",
+			name: "max_aux_pairs",
+		}, {
+			access: "bios->remotedisplayconfig",
+			name: "remotedisplayconfig",
+		}, {
+			access: "bios->dispclk_pll_vco_freq",
+			name: "dispclk_pll_vco_freq",
+		}, {
+			access: "bios->dp_ref_clk_freq",
+			name: "dp_ref_clk_freq",
+			description: {
+				eng: "Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)",
+			},
+		}, {
+			access: "bios->max_mclk_chg_lat",
+			name: "max_mclk_chg_lat",
+			description: {
+				eng: "Worst case memory self refresh exit time, units of 100ns of ns (0.1us)",
+			},
+		}, {
+			access: "bios->max_sr_exit_lat",
+			name: "max_sr_exit_lat",
+			description: {
+				eng: "Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)",
+			},
+		}, {
+			access: "bios->max_sr_enter_exit_lat",
+			name: "max_sr_enter_exit_lat",
+		}, {
+			access: "bios->dc_golden_table_offset",
+			display: "ATUI_HEX",
+			name: "dc_golden_table_offset",
+			description: {
+				eng: "point of struct of atom_dc_golden_table_vxx",
+			},
+		}, {
+			access: "bios->dc_golden_table_ver",
+			name: "dc_golden_table_ver",
+		}, {
+			access: "bios->reserved",
+			name: "reserved",
+			display: "ATUI_HEX",
+			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+
+
 
 {
 	c_type: "atom_gfx_info_v2_2",

@@ -683,70 +683,61 @@ struct display_object_info_table_v1_5 {
 	union atom_display_device_tag supporteddevices;
 	uint8_t  number_of_path;
 	uint8_t  reservd;
-	struct atom_display_object_path_v3  display_path[]__counted_by(number_of_path);
+	struct atom_display_object_path_v3  display_path[] __counted_by(number_of_path);
 };
 
 /******************************************************************************/
 // Data Table dce_info  structure
 /******************************************************************************/
-enum atom_spread_spectrum_mode:uint8_t {
-	ATOM_SS_CENTER_OR_DOWN_MODE_MASK = 0x01,
-	ATOM_SS_DOWN_SPREAD_MODE         = 0x00,
-	ATOM_SS_CENTRE_SPREAD_MODE       = 0x01,
-	ATOM_INT_OR_EXT_SS_MASK          = 0x02,
-	ATOM_INTERNAL_SS_MASK            = 0x00,
-	ATOM_EXTERNAL_SS_MASK            = 0x02,
-};
-union dce_info_caps {
-	uint32_t display_caps;
-	struct { uint32_t
-		reserved1               :0-0 +1,
-		// only for VBIOS
-		FORCE_DISPDEV_CONNECTED :1-1 +1,
-		// only for VBIOS
-		DISABLE_DFP_DP_HBR2     :2-2 +1,
-		// only for VBIOS
-		ENABLE_INTERLAC_TIMING  :3-3 +1,
-		// only for VBIOS
-		LTTPR_SUPPORT_ENABLE    :4-4 +1,
-		VBIOS_LTTPR_TRANSPARENT_ENABLE :5-5 +1,
-		reserved2              :31-6 +1;
+union atom_spread_spectrum_mode {
+	uint8_t spread_spectrum;
+	struct { uint8_t
+		centre   :0-0 +1, // 0=down, 1=centre
+		external :1-1 +1, // 0=internal, 1=external
+		rsvd_7_2 :7-2 +1;
 	};
 };
 
-enum dce_info_caps_def_old:uint32_t {
-	// only for VBIOS
-	DCE_INFO_CAPS_FORCE_DISPDEV_CONNECTED = 0x02,
-	// only for VBIOS
-	DCE_INFO_CAPS_DISABLE_DFP_DP_HBR2 = 0x04,
-	// only for VBIOS
-	DCE_INFO_CAPS_ENABLE_INTERLAC_TIMING = 0x08,
-	// only for VBIOS
-	DCE_INFO_CAPS_LTTPR_SUPPORT_ENABLE = 0x20,
-	DCE_INFO_CAPS_VBIOS_LTTPR_TRANSPARENT_ENABLE = 0x40,
+union dce_info_caps {
+	uint32_t display_caps;
+	struct { uint32_t
+		rsvd_0_0                :0-0 +1,
+		force_dispdev_connected :1-1 +1,
+		disable_dfp_dp_hbr2     :2-2 +1,
+		enable_interlac_timing  :3-3 +1,
+		lttpr_support           :4-4 +1,
+		vbios_lttpr_transparent :5-5 +1,
+		rsvd_31_6              :31-6 +1;
+	};
 };
-struct atom_displaycontroller_info_v4_1 {
+
+struct dce_connector_spread_spectrum {
+	struct atom_spread_spectrum dvi_ss;
+	struct atom_spread_spectrum hdmi_ss;
+	struct atom_spread_spectrum dp_ss;
+	union atom_spread_spectrum_mode dvi_ss_mode;
+	union atom_spread_spectrum_mode hdmi_ss_mode;
+	union atom_spread_spectrum_mode dp_ss_mode;
+	uint8_t  ss_reserved;
+};
+
+struct vesa_hardcode {
+	uint8_t  mode_num; // hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
+	uint8_t  refresh_rate;
+};
+
+struct atom_display_controller_info_v4_3 { // fits v4.1 and v4.2
 	struct atom_common_table_header  table_header;
 	union dce_info_caps  display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
-	uint16_t dvi_ss_percentage;  // in unit of 0.001%
-	uint16_t dvi_ss_rate_10hz;
-	uint16_t hdmi_ss_percentage; // in unit of 0.001%
-	uint16_t hdmi_ss_rate_10hz;
-	uint16_t dp_ss_percentage;   // in unit of 0.001%
-	uint16_t dp_ss_rate_10hz;
-	enum  atom_spread_spectrum_mode  dvi_ss_mode;
-	enum  atom_spread_spectrum_mode  hdmi_ss_mode;
-	enum  atom_spread_spectrum_mode  dp_ss_mode;
-	uint8_t  ss_reserved;
-	uint8_t  hardcode_mode_num; // a hardcode mode number defined in StandardVESA_TimingTable when a CRT or DFP EDID is not available
-	uint8_t  reserved1[3];
+	struct dce_connector_spread_spectrum spread_spectrum;
+	struct vesa_hardcode dfp;
+	struct vesa_hardcode vga;
 	uint16_t dpphy_refclk_10khz;
 	uint16_t reserved2;
-	uint8_t  dceip_min_ver;
-	uint8_t  dceip_max_ver;
+	struct atom_ip_ver dce_ip_ver; // dcn on v4.3
 	uint8_t  max_disp_pipe_num;
 	uint8_t  max_vbios_active_disp_pipe_num;
 	uint8_t  max_ppll_num;
@@ -754,112 +745,6 @@ struct atom_displaycontroller_info_v4_1 {
 	uint8_t  max_aux_pairs;
 	uint8_t  remotedisplayconfig;
 	uint8_t  reserved3[8];
-};
-
-struct atom_display_controller_info_v4_2 {
-	struct atom_common_table_header  table_header;
-	union dce_info_caps  display_caps;
-	uint32_t bootup_dispclk_10khz;
-	uint16_t dce_refclk_10khz;
-	uint16_t i2c_engine_refclk_10khz;
-	uint16_t dvi_ss_percentage;  // in unit of 0.001%
-	uint16_t dvi_ss_rate_10hz;
-	uint16_t hdmi_ss_percentage; // in unit of 0.001%
-	uint16_t hdmi_ss_rate_10hz;
-	uint16_t dp_ss_percentage;   // in unit of 0.001%
-	uint16_t dp_ss_rate_10hz;
-	enum  atom_spread_spectrum_mode  dvi_ss_mode;
-	enum  atom_spread_spectrum_mode  hdmi_ss_mode;
-	enum  atom_spread_spectrum_mode  dp_ss_mode;
-	uint8_t  ss_reserved;
-	uint8_t  dfp_hardcode_mode_num;   // DFP hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  dfp_hardcode_refreshrate;// DFP hardcode mode refreshrate defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  vga_hardcode_mode_num;   // VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint8_t  vga_hardcode_refreshrate;// VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint16_t dpphy_refclk_10khz;
-	uint16_t reserved2;
-	uint8_t  dcnip_min_ver;
-	uint8_t  dcnip_max_ver;
-	uint8_t  max_disp_pipe_num;
-	uint8_t  max_vbios_active_disp_pipe_num;
-	uint8_t  max_ppll_num;
-	uint8_t  max_disp_phy_num;
-	uint8_t  max_aux_pairs;
-	uint8_t  remotedisplayconfig;
-	uint8_t  reserved3[8];
-};
-
-struct atom_display_controller_info_v4_3 {
-	struct atom_common_table_header  table_header;
-	union dce_info_caps  display_caps;
-	uint32_t bootup_dispclk_10khz;
-	uint16_t dce_refclk_10khz;
-	uint16_t i2c_engine_refclk_10khz;
-	uint16_t dvi_ss_percentage;  // in unit of 0.001%
-	uint16_t dvi_ss_rate_10hz;
-	uint16_t hdmi_ss_percentage; // in unit of 0.001%
-	uint16_t hdmi_ss_rate_10hz;
-	uint16_t dp_ss_percentage;   // in unit of 0.001%
-	uint16_t dp_ss_rate_10hz;
-	enum  atom_spread_spectrum_mode  dvi_ss_mode;
-	enum  atom_spread_spectrum_mode  hdmi_ss_mode;
-	enum  atom_spread_spectrum_mode  dp_ss_mode;
-	uint8_t  ss_reserved;
-	uint8_t  dfp_hardcode_mode_num;   // DFP hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  dfp_hardcode_refreshrate;// DFP hardcode mode refreshrate defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  vga_hardcode_mode_num;   // VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint8_t  vga_hardcode_refreshrate;// VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint16_t dpphy_refclk_10khz;
-	uint16_t reserved2;
-	uint8_t  dcnip_min_ver;
-	uint8_t  dcnip_max_ver;
-	uint8_t  max_disp_pipe_num;
-	uint8_t  max_vbios_active_disp_pipe_num;
-	uint8_t  max_ppll_num;
-	uint8_t  max_disp_phy_num;
-	uint8_t  max_aux_pairs;
-	uint8_t  remotedisplayconfig;
-	uint8_t  reserved3[8];
-};
-
-struct atom_display_controller_info_v4_4 {
-	struct atom_common_table_header  table_header;
-	union dce_info_caps  display_caps;
-	uint32_t bootup_dispclk_10khz;
-	uint16_t dce_refclk_10khz;
-	uint16_t i2c_engine_refclk_10khz;
-	uint16_t dvi_ss_percentage;  // in unit of 0.001%
-	uint16_t dvi_ss_rate_10hz;
-	uint16_t hdmi_ss_percentage; // in unit of 0.001%
-	uint16_t hdmi_ss_rate_10hz;
-	uint16_t dp_ss_percentage;   // in unit of 0.001%
-	uint16_t dp_ss_rate_10hz;
-	enum  atom_spread_spectrum_mode  dvi_ss_mode;
-	enum  atom_spread_spectrum_mode  hdmi_ss_mode;
-	enum  atom_spread_spectrum_mode  dp_ss_mode;
-	uint8_t  ss_reserved;
-	uint8_t  dfp_hardcode_mode_num;    // DFP hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  dfp_hardcode_refreshrate; // DFP hardcode mode refreshrate defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  vga_hardcode_mode_num;    // VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint8_t  vga_hardcode_refreshrate; // VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint16_t dpphy_refclk_10khz;
-	uint16_t hw_chip_id;
-	uint8_t  dcnip_min_ver;
-	uint8_t  dcnip_max_ver;
-	uint8_t  max_disp_pipe_num;
-	uint8_t  max_vbios_active_disp_pipum;
-	uint8_t  max_ppll_num;
-	uint8_t  max_disp_phy_num;
-	uint8_t  max_aux_pairs;
-	uint8_t  remotedisplayconfig;
-	uint32_t dispclk_pll_vco_freq;
-	uint32_t dp_ref_clk_freq;
-	uint32_t max_mclk_chg_lat;       // Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)
-	uint32_t max_sr_exit_lat;        // Worst case memory self refresh exit time, units of 100ns of ns (0.1us)
-	uint32_t max_sr_enter_exit_lat;  // Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)
-	uint16_t dc_golden_table_offset; // point of struct of atom_dc_golden_table_vxx
-	uint16_t dc_golden_table_ver;
-	uint32_t reserved3[3];
 };
 
 struct atom_dc_golden_table_v1 {
@@ -875,35 +760,18 @@ struct atom_dc_golden_table_v1 {
 	uint32_t reserved[23];
 };
 
-
-struct atom_display_controller_info_v4_5 {
+struct atom_display_controller_info_v4_4 {
 	struct atom_common_table_header  table_header;
 	union dce_info_caps  display_caps;
 	uint32_t bootup_dispclk_10khz;
 	uint16_t dce_refclk_10khz;
 	uint16_t i2c_engine_refclk_10khz;
-	uint16_t dvi_ss_percentage;  // in unit of 0.001%
-	uint16_t dvi_ss_rate_10hz;
-	uint16_t hdmi_ss_percentage; // in unit of 0.001%
-	uint16_t hdmi_ss_rate_10hz;
-	uint16_t dp_ss_percentage;   // in unit of 0.001%
-	uint16_t dp_ss_rate_10hz;
-	enum  atom_spread_spectrum_mode  dvi_ss_mode;
-	enum  atom_spread_spectrum_mode  hdmi_ss_mode;
-	enum  atom_spread_spectrum_mode  dp_ss_mode;
-	uint8_t  ss_reserved;
-	// DFP hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  dfp_hardcode_mode_num;
-	// DFP hardcode mode refreshrate defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  dfp_hardcode_refreshrate;
-	// VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint8_t  vga_hardcode_mode_num;
-	// VGA hardcode mode number defined in StandardVESA_TimingTable when EDID is not avablable
-	uint8_t  vga_hardcode_refreshrate;
+	struct dce_connector_spread_spectrum spread_spectrum;
+	struct vesa_hardcode dfp;
+	struct vesa_hardcode vga;
 	uint16_t dpphy_refclk_10khz;
 	uint16_t hw_chip_id;
-	uint8_t  dcnip_min_ver;
-	uint8_t  dcnip_max_ver;
+	struct atom_ip_ver dce_ip_ver;
 	uint8_t  max_disp_pipe_num;
 	uint8_t  max_vbios_active_disp_pipe_num;
 	uint8_t  max_ppll_num;
@@ -912,24 +780,41 @@ struct atom_display_controller_info_v4_5 {
 	uint8_t  remotedisplayconfig;
 	uint32_t dispclk_pll_vco_freq;
 	uint32_t dp_ref_clk_freq;
-	// Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)
-	uint32_t max_mclk_chg_lat;
-	// Worst case memory self refresh exit time, units of 100ns of ns (0.1us)
-	uint32_t max_sr_exit_lat;
-	// Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)
+	uint32_t max_mclk_chg_lat;       // Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)
+	uint32_t max_sr_exit_lat;        // Worst case memory self refresh exit time, units of 100ns of ns (0.1us)
+	uint32_t max_sr_enter_exit_lat;  // Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)
+	uint16_t dc_golden_table_offset; // point of struct of atom_dc_golden_table_vxx
+	uint16_t dc_golden_table_ver;
+	uint32_t reserved3[3];
+};
+
+struct atom_display_controller_info_v4_5 {
+	struct atom_common_table_header  table_header;
+	union dce_info_caps  display_caps;
+	uint32_t bootup_dispclk_10khz;
+	uint16_t dce_refclk_10khz;
+	uint16_t i2c_engine_refclk_10khz;
+	struct dce_connector_spread_spectrum spread_spectrum;
+	struct vesa_hardcode dfp;
+	struct vesa_hardcode vga;
+	uint16_t dpphy_refclk_10khz;
+	uint16_t hw_chip_id;
+	struct atom_ip_ver dce_ip_ver;
+	uint8_t  max_disp_pipe_num;
+	uint8_t  max_vbios_active_disp_pipe_num;
+	uint8_t  max_ppll_num;
+	uint8_t  max_disp_phy_num;
+	uint8_t  max_aux_pairs;
+	uint8_t  remotedisplayconfig;
+	uint32_t dispclk_pll_vco_freq;
+	uint32_t dp_ref_clk_freq; // Worst case blackout duration for a memory clock frequency (p-state) change, units of 100s of ns (0.1 us)
+	uint32_t max_mclk_chg_lat; // Worst case memory self refresh exit time, units of 100ns of ns (0.1us)
+	uint32_t max_sr_exit_lat; // Worst case memory self refresh entry followed by immediate exit time, units of 100ns of ns (0.1us)
 	uint32_t max_sr_enter_exit_lat;
 	uint16_t dc_golden_table_offset; // point of struct of atom_dc_golden_table_vxx
 	uint16_t dc_golden_table_ver;
-	uint32_t aux_dphy_rx_control0_val;
-	uint32_t aux_dphy_tx_control_val;
-	uint32_t aux_dphy_rx_control1_val;
-	uint32_t dc_gpio_aux_ctrl_0_val;
-	uint32_t dc_gpio_aux_ctrl_1_val;
-	uint32_t dc_gpio_aux_ctrl_2_val;
-	uint32_t dc_gpio_aux_ctrl_3_val;
-	uint32_t dc_gpio_aux_ctrl_4_val;
-	uint32_t dc_gpio_aux_ctrl_5_val;
-	uint32_t reserved[26];
+	struct atom_dc_golden_table_v1 golden_table;
+	uint32_t reserved[3];
 };
 
 /******************************************************************************/
@@ -1578,7 +1463,7 @@ struct atom_smu_info_v3_1 {
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
 	uint8_t  smu_rsd1;
-	enum  atom_spread_spectrum_mode  gpuclk_ss_mode;
+	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1599,7 +1484,7 @@ struct atom_smu_info_v3_2 {
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
 	uint8_t  smu_rsd1;
-	enum  atom_spread_spectrum_mode  gpuclk_ss_mode;
+	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1631,8 +1516,8 @@ struct atom_smu_info_v3_3 {
 	struct atom_common_table_header  table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	enum  atom_spread_spectrum_mode  waflclk_ss_mode;
-	enum  atom_spread_spectrum_mode  gpuclk_ss_mode;
+	union atom_spread_spectrum_mode  waflclk_ss_mode;
+	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1671,8 +1556,8 @@ struct atom_smu_info_v3_5 {
 	struct atom_common_table_header  table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	enum  atom_spread_spectrum_mode  waflclk_ss_mode;
-	enum  atom_spread_spectrum_mode  gpuclk_ss_mode;
+	union atom_spread_spectrum_mode  waflclk_ss_mode;
+	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage; // in unit of 0.001%
@@ -1727,8 +1612,8 @@ struct atom_smu_info_v3_6 {
 	struct atom_common_table_header  table_header;
 	uint8_t  smuip_min_ver;
 	uint8_t  smuip_max_ver;
-	enum  atom_spread_spectrum_mode  waflclk_ss_mode;
-	enum  atom_spread_spectrum_mode  gpuclk_ss_mode;
+	union atom_spread_spectrum_mode  waflclk_ss_mode;
+	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
 	uint16_t sclk_ss_rate_10hz;
 	uint16_t gpuclk_ss_percentage;

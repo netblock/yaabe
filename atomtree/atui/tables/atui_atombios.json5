@@ -178,7 +178,20 @@ global_defaults: {
 			},
 		},
 	],
+}, {
+	c_type: "atom_ip_ver",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->min",
+			name: "min",
+		}, {
+			access: "bios->max",
+			name: "max",
+		},
+	],
 },
+
 
 {
 	c_type: "atom_rom_header_v1_1",
@@ -4800,6 +4813,26 @@ global_defaults: {
 			name: "Reserverd",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
+		},
+	],
+},
+
+{
+	c_type: "atom_spread_spectrum",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->percentage",
+			name: "percentage",
+			description: {
+				eng: "in units of 0.001%",
+			},
+		}, {
+			access: "bios->rate",
+			name: "rate",
+			description: {
+				eng: "in units of 10Hz",
+			},
 		},
 	],
 },

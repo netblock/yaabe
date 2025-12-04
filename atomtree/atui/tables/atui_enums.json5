@@ -894,19 +894,6 @@ Enums for ATUI_ENUM
 		{name: "MINI_TYPE_MINI",},
 ]},
 
-
-{name: "atom_spread_spectrum_mode",
-	constants: [
-		{name: "ATOM_SS_CENTER_OR_DOWN_MODE_MASK",},
-		{name: "ATOM_SS_DOWN_SPREAD_MODE",},
-		{name: "ATOM_SS_CENTRE_SPREAD_MODE",},
-		{name: "ATOM_INT_OR_EXT_SS_MASK",},
-		{name: "ATOM_INTERNAL_SS_MASK",},
-		{name: "ATOM_EXTERNAL_SS_MASK",},
-]},
-
-
-
 /******************************************************************************/
 // powerplay.h / SMU 11,13 stuff
 

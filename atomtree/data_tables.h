@@ -394,6 +394,22 @@ struct atomtree_umc_info {
 	semver ver;
 };
 
+struct atomtree_dce_info {
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct atom_display_controller_info_v4_3* v4_1;
+		struct atom_display_controller_info_v4_3* v4_2;
+		struct atom_display_controller_info_v4_3* v4_3;
+		struct atom_display_controller_info_v4_4* v4_4;
+		struct atom_display_controller_info_v4_5* v4_5;
+	};
+	semver ver;
+	semver golden_ver;
+
+	struct atom_dc_golden_table_v1* golden;
+};
+
 enum register_block_type:uint8_t {
 	REG_BLOCK_UNKNOWN,
 	REG_BLOCK_MEM_ADJUST,
@@ -794,6 +810,7 @@ struct atomtree_master_datatable_v2_1 {
 
 	struct atomtree_iio_access           iio;
 	struct atomtree_umc_info             umc_info;
+	struct atomtree_dce_info             dce_info;
 	struct atomtree_vram_info            vram_info;
 	struct atomtree_voltageobject_info   voltageobject_info;
 

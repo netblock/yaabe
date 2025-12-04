@@ -220,6 +220,11 @@ struct atom_common_table_header {
 	uint8_t  content_revision; // change it when a data table has a structure change, or a hw function has a input/output parameter change
 };
 
+struct atom_ip_ver {
+	uint8_t min;
+	uint8_t max;
+};
+
 /******************************************************************************/
 // Structure stores the ROM header.
 /******************************************************************************/
@@ -5828,6 +5833,11 @@ struct atom_gfx_info_v2_3 {
 	uint16_t Reserverd[3];
 };
 
+struct atom_spread_spectrum {
+    uint16_t percentage; // in units of 0.001%
+    uint16_t rate; // in units of 10Hz
+};
+
 struct atom_power_source_object {
 	uint8_t  PwrSrcId;           // Power source
 	uint8_t  PwrSensorType;      // GPIO, I2C or none
@@ -5845,7 +5855,6 @@ struct atom_power_source_info {
 	uint8_t  asPwrbehave[16];
 	struct atom_power_source_object  PwrObj[1];
 };
-
 
 // Define ucPwrSrcId
 #define POWERSOURCE_PCIE_ID1           0x00

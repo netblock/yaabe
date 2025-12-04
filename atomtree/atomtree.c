@@ -1182,6 +1182,32 @@ populate_umc_info(
 	umc->ver = atom_get_ver(umc->table_header);
 }
 
+inline static void
+populate_dce_info(
+		struct atomtree_commons* const commons,
+		struct atomtree_dce_info* const dce,
+		uint16_t const bios_offset
+		) {
+	if (0 == bios_offset) {
+		return;
+	}
+	dce->leaves = commons->bios + bios_offset;
+	dce->ver = atom_get_ver(dce->table_header);
+
+	switch (dce->ver.ver) {
+		case V(4,4):
+			dce->golden_ver.major = dce->v4_4->dc_golden_table_ver;
+			if (dce->v4_4->dc_golden_table_offset) {
+				dce->golden = dce->leaves + dce->v4_4->dc_golden_table_offset;
+			}
+			break;
+		case V(4,5):
+			// dc_golden_table_ver == 4096
+			dce->golden_ver.ver = dce->v4_5->dc_golden_table_ver<<8;
+			dce->golden = &(dce->v4_5->golden_table);
+			break;
+	}
+}
 
 static void
 populate_init_reg_block(
@@ -2841,7 +2867,8 @@ populate_datatable_v2_1(
 
 	populate_umc_info(commons, &(dt21->umc_info), leaves->umc_info);
 
-	//dce_info
+	populate_dce_info(commons, &(dt21->dce_info), leaves->dce_info);
+
 
 	populate_vram_info(commons, &(dt21->vram_info), leaves->vram_info);
 

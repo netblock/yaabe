@@ -1529,6 +1529,41 @@ grow_umc_info(
 	return atui_func(&atui_args);
 }
 
+inline static atui_node*
+grow_dce_info(
+		struct atom_tree const* const atree __unused,
+		struct atomtree_dce_info const* const dce
+		) {
+	atui_node* golden = NULL;
+	if (dce->golden) {
+		golden = ATUI_MAKE_BRANCH(atom_dc_golden_table_v1, NULL,
+			dce, dce->golden,  0,NULL
+		);
+	}
+
+	atuifunc atui_func;
+	atuifunc_args atui_args = {
+		.num_import_branches = 1,
+		.import_branches = &golden,
+		.atomtree = dce,
+		.bios = dce->leaves,
+	};
+	switch (dce->ver.ver) {
+		case V(4,1):
+		case V(4,2):
+				atui_args.rename = "atom_display_controller_info_v4_3 (forced)";
+				fall;
+		case V(4,3): atui_func = _atui_atom_display_controller_info_v4_3; break;
+		case V(4,4): atui_func = _atui_atom_display_controller_info_v4_4; break;
+		case V(4,5): atui_func = _atui_atom_display_controller_info_v4_5; break;
+		default:
+			atui_args.rename = "dce_info (header only stub)";
+			atui_func = _atui_atom_common_table_header;
+			break;
+	}
+	return atui_func(&atui_args);
+}
+
 
 static atui_node*
 autogen_regblock_register_sequence(
@@ -3459,7 +3494,8 @@ grow_master_datatable_v2_1(
 
 	atui_node* const atui_iio = grow_iio(atree, &(dt21->iio));
 	atui_node* const umc_info = grow_umc_info(atree, &(dt21->umc_info));
-	//dce_info
+
+	atui_node* const dce_info = grow_dce_info(atree, &(dt21->dce_info));
 
 	atui_node* const atui_vram_info = grow_vram_info(
 		atree, &(dt21->vram_info)
@@ -3479,9 +3515,7 @@ grow_master_datatable_v2_1(
 		atui_utilitypipeline, atui_multimedia_info,
 		atui_smc_dpm_info, atui_firmwareinfo, atui_lcd_info, atui_smu_info,
 		atui_fw_vram, atui_gpio_pin_lut, atui_gfx_info, atui_ppt, atui_display,
-		atui_iio, umc_info,
-		//dce,
-		atui_vram_info,
+		atui_iio, umc_info, dce_info, atui_vram_info,
 		// integrated, asic
 		atui_voltageobject_info,
 		atui_sw_datatables,
