@@ -11,6 +11,7 @@
 # Many double backslash is to escape python for a literal \ to escape regex
 
 import re
+import pyperclip
 
 class __regexvar:
 	# https://docs.python.org/3/howto/regex.html
@@ -70,6 +71,12 @@ def __atui_regex_prepare(
 	text = re.sub("[ \t]+\n", "\n", text)
 	text = re.sub("\"","\\\"",text) # for comments
 	return text
+def print_and_copy(
+		text:str
+		):
+	pyperclip.copy(text)
+	print(text)
+
 
 def struct_to_atui(
 		text:str,
@@ -239,7 +246,7 @@ def struct_to_atui(
 	)
 
 	if print_text:
-		print(text)
+		print_and_copy(text)
 	else:
 		return text
 
@@ -365,7 +372,7 @@ def bitfield_to_atui(
 	)
 
 	if print_text:
-		print(text)
+		print_and_copy(text)
 	else:
 		return text
 
@@ -425,6 +432,6 @@ def enum_to_atui(
 
 	if print_text:
 		pass
-		print(text)
+		print_and_copy(text)
 	else:
 		return text
