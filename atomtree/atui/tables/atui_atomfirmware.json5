@@ -1780,11 +1780,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->smuip_min_ver",
-			name: "smuip_min_ver",
-		}, {
-			access: "bios->smuip_max_ver",
-			name: "smuip_max_ver",
+			access: "bios->smu_ip_ver",
+			name: "smu_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->smu_rsd1",
 			name: "smu_rsd1",
@@ -1871,11 +1870,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->smuip_min_ver",
-			name: "smuip_min_ver",
-		}, {
-			access: "bios->smuip_max_ver",
-			name: "smuip_max_ver",
+			access: "bios->smu_ip_ver",
+			name: "smu_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->smu_rsd1",
 			name: "smu_rsd1",
@@ -2008,11 +2006,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->smuip_min_ver",
-			name: "smuip_min_ver",
-		}, {
-			access: "bios->smuip_max_ver",
-			name: "smuip_max_ver",
+			access: "bios->smu_ip_ver",
+			name: "smu_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
@@ -2171,11 +2168,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->smuip_min_ver",
-			name: "smuip_min_ver",
-		}, {
-			access: "bios->smuip_max_ver",
-			name: "smuip_max_ver",
+			access: "bios->smu_ip_ver",
+			name: "smu_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
@@ -2377,11 +2373,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->smuip_min_ver",
-			name: "smuip_min_ver",
-		}, {
-			access: "bios->smuip_max_ver",
-			name: "smuip_max_ver",
+			access: "bios->smu_ip_ver",
+			name: "smu_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->waflclk_ss_mode",
 			name: "waflclk_ss_mode",
@@ -3265,31 +3260,8 @@ global_defaults: {
 	],
 },
 
+
 {
-	c_prefix: "union", c_type: "atom_spread_spectrum_mode",
-	num_bytes: "sizeof(*bios)",
-	leaves: [{
-		access: "bios->spread_spectrum",
-		name: "spread_spectrum",
-		display: "ATUI_BIN",
-		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
-			{
-				access: "centre",
-				description: {
-					eng: "0=down, 1=centre",
-				},
-			}, {
-				access: "external",
-				description: {
-					eng: "0=internal, 1=external",
-				},
-			}, {
-				access: "rsvd_7_2",
-				display: "ATUI_HEX",
-			},
-		],},
-	},],
-}, {
 	c_prefix: "union", c_type: "dce_info_caps",
 	num_bytes: "sizeof(*bios)",
 	leaves: [{
@@ -3352,21 +3324,6 @@ global_defaults: {
 		}, {
 			access: "bios->ss_reserved",
 			name: "ss_reserved",
-		},
-	],
-}, {
-	c_type: "vesa_hardcode",
-	num_bytes: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->mode_num",
-			name: "mode_num",
-			description: {
-				eng: "hardcode mode number defined in StandardVESA_TimingTable when EDID is not available",
-			},
-		}, {
-			access: "bios->refresh_rate",
-			name: "refresh_rate",
 		},
 	],
 }, {
@@ -3730,11 +3687,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -3796,11 +3752,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -3875,11 +3830,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -3990,11 +3944,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -4124,11 +4077,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -4263,11 +4215,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->gfxip_min_ver",
-			name: "gfxip_min_ver",
-		}, {
-			access: "bios->gfxip_max_ver",
-			name: "gfxip_max_ver",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -4589,11 +4540,10 @@ global_defaults: {
 			access: "bios->mclk_ss_rate_10hz",
 			name: "mclk_ss_rate_10hz",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
@@ -4642,11 +4592,10 @@ global_defaults: {
 			access: "bios->mclk_ss_rate_10hz",
 			name: "mclk_ss_rate_10hz",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
@@ -4715,11 +4664,10 @@ global_defaults: {
 			access: "bios->mclk_ss_rate_10hz",
 			name: "mclk_ss_rate_10hz",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
@@ -4782,11 +4730,10 @@ global_defaults: {
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->vram_type",
 			name: "vram_type",
@@ -5125,11 +5072,10 @@ global_defaults: {
 				eng: "indicate number of VRAM module",
 			},
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
@@ -5328,11 +5274,10 @@ global_defaults: {
 				eng: "indicate number of VRAM module",
 			},
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
@@ -5705,11 +5650,10 @@ global_defaults: {
 				eng: "indicate number of VRAM module",
 			},
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
@@ -5763,11 +5707,10 @@ global_defaults: {
 			access: "bios->vram_module_num",
 			name: "vram_module_num",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",
@@ -5866,11 +5809,10 @@ global_defaults: {
 			access: "bios->vram_module_num",
 			name: "vram_module_num",
 		}, {
-			access: "bios->umcip_min_ver",
-			name: "umcip_min_ver",
-		}, {
-			access: "bios->umcip_max_ver",
-			name: "umcip_max_ver",
+			access: "bios->umc_ip_ver",
+			name: "umc_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->mc_phy_tile_num",
 			name: "mc_phy_tile_num",

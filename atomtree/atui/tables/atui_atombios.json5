@@ -183,11 +183,11 @@ global_defaults: {
 	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->min",
-			name: "min",
+			access: "bios->minor",
+			name: "minor",
 		}, {
-			access: "bios->max",
-			name: "max",
+			access: "bios->major",
+			name: "major",
 		},
 	],
 },
@@ -617,7 +617,63 @@ global_defaults: {
 			display: "ATUI_HEX",
 		},
 	],
+},
+
+{
+	c_type: "atom_spread_spectrum",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->percentage",
+			name: "percentage",
+			description: {
+				eng: "in unit of 0.001% for Vega and newer; or 0.01% and see union atom_spread_spectrum_mode.div_by_1000",
+			},
+		}, {
+			access: "bios->rate",
+			name: "rate",
+			description: {
+				eng: "in units of 10Hz",
+			},
+		},
+	],
 }, {
+	c_prefix: "union", c_type: "atom_spread_spectrum_mode",
+	num_bytes: "sizeof(*bios)",
+	leaves: [{
+		access: "bios->spread_spectrum",
+		name: "spread_spectrum",
+		display: "ATUI_BIN",
+		fancy: "ATUI_BITFIELD", fancy_data: { fields: [
+			{
+				access: "centre",
+				description: {
+					eng: "0=down, 1=centre",
+				},
+			}, {
+				access: "external",
+				description: {
+					eng: "0=internal, 1=external",
+				},
+			}, {
+				access: "PLL",
+				description: {
+					eng: "may be reserved; 0=P1LL, 1=P2PLL, 2=DCPLL",
+				},
+			}, {
+				access: "div_by_1000",
+				description: {
+					eng: "for HW older than Vega; affects struct atom_spread_spectrum.percentage",
+				},
+			}, {
+				access: "rsvd_7_5",
+				display: "ATUI_HEX",
+			},
+		],},
+	},],
+},
+
+{
 	c_prefix: "union", c_type: "atombios_firmware_capability_v1",
 	atomtree: "atomtree_firmware_info",
 	num_bytes: "sizeof(*bios)",
@@ -1954,6 +2010,21 @@ global_defaults: {
 		],},
 	},],
 }, {
+	c_type: "vesa_hardcode",
+	num_bytes: "sizeof(*bios)",
+	leaves: [
+		{
+			access: "bios->mode_num",
+			name: "mode_num",
+			description: {
+				eng: "hardcode mode number defined in StandardVESA_TimingTable when EDID is not available",
+			},
+		}, {
+			access: "bios->refresh_rate",
+			name: "refresh_rate",
+		},
+	],
+}, {
 	c_type: "atom_mode_timing",
 	num_bytes: "sizeof(*bios)",
 	leaves: [
@@ -2008,11 +2079,10 @@ global_defaults: {
 			access: "bios->Reserve",
 			name: "Reserve",
 		}, {
-			access: "bios->InternalModeNumber",
-			name: "InternalModeNumber",
-		}, {
-			access: "bios->RefreshRate",
-			name: "RefreshRate",
+			access: "bios->mode",
+			name: "mode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
 		},
 	],
 }, {
@@ -2064,11 +2134,10 @@ global_defaults: {
 			display: "ATUI_SUBONLY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_dtd_format_modemiscinfo",
 		}, {
-			access: "bios->atom_mode_id",
-			name: "atom_mode_id",
-		}, {
-			access: "bios->refreshrate",
-			name: "refreshrate",
+			access: "bios->mode",
+			name: "mode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "vesa_hardcode",
 		},
 	],
 }, {
@@ -4734,11 +4803,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->GfxIpMinVer",
-			name: "GfxIpMinVer",
-	}, {
-			access: "bios->GfxIpMajVer",
-			name: "GfxIpMajVer",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -4768,11 +4836,10 @@ global_defaults: {
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
-			access: "bios->GfxIpMinVer",
-			name: "GfxIpMinVer",
-		}, {
-			access: "bios->GfxIpMajVer",
-			name: "GfxIpMajVer",
+			access: "bios->gfx_ip_ver",
+			name: "gfx_ip_ver",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
 			access: "bios->max_shader_engines",
 			name: "max_shader_engines",
@@ -4813,26 +4880,6 @@ global_defaults: {
 			name: "Reserverd",
 			display: "ATUI_HEX",
 			fancy: "ATUI_ARRAY",
-		},
-	],
-},
-
-{
-	c_type: "atom_spread_spectrum",
-	num_bytes: "sizeof(*bios)",
-	leaves: [
-		{
-			access: "bios->percentage",
-			name: "percentage",
-			description: {
-				eng: "in units of 0.001%",
-			},
-		}, {
-			access: "bios->rate",
-			name: "rate",
-			description: {
-				eng: "in units of 10Hz",
-			},
 		},
 	],
 },

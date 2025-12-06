@@ -221,8 +221,8 @@ struct atom_common_table_header {
 };
 
 struct atom_ip_ver {
-	uint8_t min;
-	uint8_t max;
+	uint8_t minor;
+	uint8_t major;
 };
 
 /******************************************************************************/
@@ -2161,9 +2161,25 @@ struct power_connector_detection_ps_allocation {
 /******************************************************************************/
 // Structures used by EnableSpreadSpectrumOnPPLLTable
 /******************************************************************************/
+struct atom_spread_spectrum {
+    uint16_t percentage; // in unit of 0.001% for Vega and newer; or 0.01% and see union atom_spread_spectrum_mode.div_by_1000
+    uint16_t rate; // in units of 10Hz
+};
+union atom_spread_spectrum_mode {
+	uint8_t spread_spectrum;
+	struct { uint8_t
+		centre      :0-0 +1, // 0=down, 1=centre
+		external    :1-1 +1, // 0=internal, 1=external
+		PLL         :3-2 +1, // may be reserved; 0=P1LL, 1=P2PLL, 2=DCPLL
+		div_by_1000 :4-4 +1, // for HW older than Vega; affects struct atom_spread_spectrum.percentage
+		rsvd_7_5 :7-5 +1;
+	};
+};
+
+
 struct enable_lvds_ss_parameters {
 	uint16_t SpreadSpectrumPercentage;
-	uint8_t  SpreadSpectrumType; // Bit1=0 Down Spread,=1 Center Spread. Bit1=1 Ext. =0 Int. Others:TBD
+	union atom_spread_spectrum_mode type;
 	uint8_t  SpreadSpectrumStepSize_Delay; // bits3:2 SS_STEP_SIZE; bit 6:4 SS_DELAY
 	uint8_t  Enable; // ATOM_ENABLE or ATOM_DISABLE
 	uint8_t  Padding[3];
@@ -2172,7 +2188,7 @@ struct enable_lvds_ss_parameters {
 // ucTableFormatRevision=1,ucTableContentRevision=2
 struct enable_lvds_ss_parameters_v2 {
 	uint16_t SpreadSpectrumPercentage;
-	uint8_t  SpreadSpectrumType; // Bit1=0 Down Spread,=1 Center Spread. Bit1=1 Ext. =0 Int. Others:TBD
+	union atom_spread_spectrum_mode type;
 	uint8_t  SpreadSpectrumStep;
 	uint8_t  Enable; // ATOM_ENABLE or ATOM_DISABLE
 	uint8_t  SpreadSpectrumDelay;
@@ -2183,7 +2199,7 @@ struct enable_lvds_ss_parameters_v2 {
 // This new structure is based on ENABLE_LVDS_SS_PARAMETERS but expands to SS on PPLL, so other devices can use SS.
 struct enable_spread_spectrum_on_ppll {
 	uint16_t SpreadSpectrumPercentage;
-	uint8_t  SpreadSpectrumType; // Bit1=0 Down Spread,=1 Center Spread. Bit1=1 Ext. =0 Int. Others:TBD
+	union atom_spread_spectrum_mode type;
 	uint8_t  SpreadSpectrumStep;
 	uint8_t  Enable; // ATOM_ENABLE or ATOM_DISABLE
 	uint8_t  SpreadSpectrumDelay;
@@ -2193,10 +2209,7 @@ struct enable_spread_spectrum_on_ppll {
 
  struct enable_spread_spectrum_on_ppll_v2 {
 	uint16_t SpreadSpectrumPercentage;
-	uint8_t  SpreadSpectrumType;   // Bit[0]: 0-Down Spread,1-Center Spread.
-                                   // Bit[1]: 1-Ext. 0-Int.
-                                   // Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
-                                   // Bits[7:4] reserved
+	union atom_spread_spectrum_mode type;
 	uint8_t  Enable;               // ATOM_ENABLE or ATOM_DISABLE
 	uint16_t SpreadSpectrumAmount; // Includes SS_AMOUNT_FBDIV[7:0] and SS_AMOUNT_NFRAC_SLIP[11:8]
 	uint16_t SpreadSpectrumStep;   // SS_STEP_SIZE_DSFRAC
@@ -2218,10 +2231,7 @@ struct enable_spread_spectrum_on_ppll {
 // Used by DCE5.0
  struct enable_spread_spectrum_on_ppll_v3 {
 	uint16_t SpreadSpectrumAmountFrac; // SS_AMOUNT_DSFRAC New in DCE5.0
-	uint8_t  SpreadSpectrumType;       // Bit[0]: 0-Down Spread,1-Center Spread.
-                                       // Bit[1]: 1-Ext. 0-Int.
-                                       // Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
-                                       // Bits[7:4] reserved
+	union atom_spread_spectrum_mode type;
 	uint8_t  Enable;                   // ATOM_ENABLE or ATOM_DISABLE
 	uint16_t SpreadSpectrumAmount;     // Includes SS_AMOUNT_FBDIV[7:0] and SS_AMOUNT_NFRAC_SLIP[11:8]
 	uint16_t SpreadSpectrumStep;       // SS_STEP_SIZE_DSFRAC
@@ -3595,43 +3605,6 @@ struct atom_gpio_i2c_info {
 /******************************************************************************/
 // Common Structure used in other structures
 /******************************************************************************/
-/* duplicate
-#ifndef _H2INC
-// Please don't add or expand this bitfield structure below, this one will retire soon.!
-struct atom_mode_misc_info {
-	uint16_t HorizontalCutOff:1;
-	uint16_t HSyncPolarity:1; // 0=Active High, 1=Active Low
-	uint16_t VSyncPolarity:1; // 0=Active High, 1=Active Low
-	uint16_t VerticalCutOff:1;
-	uint16_t H_ReplicationBy2:1;
-	uint16_t V_ReplicationBy2:1;
-	uint16_t CompositeSync:1;
-	uint16_t Interlace:1;
-	uint16_t DoubleClock:1;
-	uint16_t RGB888:1;
-	uint16_t Reserved:6;
-};
-union atom_dtd_format_modemiscinfo {
-	struct atom_mode_misc_info  Access;
-	uint16_t Access;
-};
-#else
-union atom_dtd_format_modemiscinfo {
-	uint16_t Access;
-};
-#endif
-// usModeMiscInfo-
-#define ATOM_H_CUTOFF           0x01
-#define ATOM_HSYNC_POLARITY     0x02 // 0=Active High, 1=Active Low
-#define ATOM_VSYNC_POLARITY     0x04 // 0=Active High, 1=Active Low
-#define ATOM_V_CUTOFF           0x08
-#define ATOM_H_REPLICATIONBY2   0x10
-#define ATOM_V_REPLICATIONBY2   0x20
-#define ATOM_COMPOSITESYNC      0x40
-#define ATOM_INTERLACE          0x80
-#define ATOM_DOUBLE_CLOCK_MODE 0x100
-#define ATOM_RGB888_MODE       0x200
-*/
 
 union atom_dtd_format_modemiscinfo {
 	uint16_t miscinfo;
@@ -3723,6 +3696,11 @@ struct set_crtc_timing_parameters {
 // ComponentVideoInfoTable
 /******************************************************************************/
 
+struct vesa_hardcode {
+	uint8_t  mode_num; // hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
+	uint8_t  refresh_rate;
+};
+
 struct atom_mode_timing {
 	uint16_t CRTC_H_Total;
 	uint16_t CRTC_H_Disp;
@@ -3739,8 +3717,7 @@ struct atom_mode_timing {
 	uint16_t CRTC_OverscanBottom;
 	uint16_t CRTC_OverscanTop;
 	uint16_t Reserve;
-	uint8_t  InternalModeNumber;
-	uint8_t  RefreshRate;
+	struct vesa_hardcode mode;
 };
 
 struct atom_dtd_format {
@@ -3758,8 +3735,7 @@ struct atom_dtd_format {
 	uint8_t  h_border;
 	uint8_t  v_border;
 	union atom_dtd_format_modemiscinfo  miscinfo;
-	uint8_t  atom_mode_id;
-	uint8_t  refreshrate;
+	struct vesa_hardcode mode;
 };
 
 /******************************************************************************/
@@ -4064,7 +4040,7 @@ union lcd_record {
 // ucTableContentRevision=2
 struct atom_spread_spectrum_assignment {
 	uint16_t SpreadSpectrumPercentage;
-	uint8_t  SpreadSpectrumType; // Bit1=0 Down Spread,=1 Center Spread. Bit1=1 Ext. =0 Int. Bit2=1: PCIE REFCLK SS =0 iternal PPLL SS  Others:TBD
+	union atom_spread_spectrum_mode type;
 	uint8_t  SS_Step;
 	uint8_t  SS_Delay;
 	uint8_t  SS_Id;
@@ -5806,8 +5782,7 @@ struct atom_smu_info_v2_1 {
 // GFX_InfoTable for Polaris10/Polaris11
 struct atom_gfx_info_v2_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  GfxIpMinVer;
-	uint8_t  GfxIpMajVer;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  max_tile_pipes;
 	uint8_t  max_cu_per_sh;
@@ -5819,8 +5794,7 @@ struct atom_gfx_info_v2_1 {
 
 struct atom_gfx_info_v2_3 {
 	struct atom_common_table_header  table_header;
-	uint8_t  GfxIpMinVer;
-	uint8_t  GfxIpMajVer;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  max_tile_pipes;
 	uint8_t  max_cu_per_sh;
@@ -5833,10 +5807,6 @@ struct atom_gfx_info_v2_3 {
 	uint16_t Reserverd[3];
 };
 
-struct atom_spread_spectrum {
-    uint16_t percentage; // in units of 0.001%
-    uint16_t rate; // in units of 10Hz
-};
 
 struct atom_power_source_object {
 	uint8_t  PwrSrcId;           // Power source
@@ -6768,7 +6738,7 @@ struct atom_asic_ss_assignment {
 	uint16_t SpreadSpectrumPercentage; // in unit of 0.01%
 	uint16_t SpreadRateInKhz;    // in unit of kHz, modulation freq
 	uint8_t  ClockIndication;    // Indicate which clock source needs SS
-	uint8_t  SpreadSpectrumMode; // Bit1=0 Down Spread,=1 Center Spread.
+	union atom_spread_spectrum_mode mode;
 	uint8_t  Reserved[2];
 };
 
@@ -6788,22 +6758,13 @@ struct atom_asic_ss_assignment {
 
 
 struct atom_asic_ss_assignment_v2 {
-	uint32_t TargetClockRange; // For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz
-                               // For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
-	uint16_t SpreadSpectrumPercentage; // in unit of 0.01%
-	uint16_t SpreadRateIn10Hz;   // in unit of 10Hz, modulation freq
+	uint32_t TargetClockRange; // For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz. For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
+	struct atom_spread_spectrum rate;
 	uint8_t  ClockIndication;    // Indicate which clock source needs SS
-	uint8_t  SpreadSpectrumMode; // Bit0=0 Down Spread,=1 Center Spread, bit1=0: internal SS bit1=1: external SS
+	union atom_spread_spectrum_mode mode;
+
 	uint8_t  Reserved[2];
 };
-
-// ucSpreadSpectrumMode
-// #define ATOM_SS_DOWN_SPREAD_MODE_MASK   0x00000000
-// #define ATOM_SS_DOWN_SPREAD_MODE        0x00000000
-// #define ATOM_SS_CENTRE_SPREAD_MODE_MASK 0x00000001
-// #define ATOM_SS_CENTRE_SPREAD_MODE      0x00000001
-// #define ATOM_INTERNAL_SS_MASK           0x00000000
-// #define ATOM_EXTERNAL_SS_MASK           0x00000002
 
 struct atom_asic_internal_ss_info {
 	struct atom_common_table_header  table_header;
@@ -6816,12 +6777,11 @@ struct atom_asic_internal_ss_info_v2 {
 };
 
 struct atom_asic_ss_assignment_v3 {
-	uint32_t TargetClockRange;// For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz
-      // For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
-	uint16_t SpreadSpectrumPercentage; // in unit of 0.01% or 0.001%, decided by ucSpreadSpectrumMode bit4
-	uint16_t SpreadRateIn10Hz;   // in unit of 10Hz, modulation freq
+	uint32_t TargetClockRange;// For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
+	struct atom_spread_spectrum rate;
+
 	uint8_t  ClockIndication;    // Indicate which clock source needs SS
-	uint8_t  SpreadSpectrumMode; // Bit0=0 Down Spread,=1 Center Spread, bit1=0: internal SS bit1=1: external SS
+	union atom_spread_spectrum_mode mode;
 	uint8_t  Reserved[2];
 };
 

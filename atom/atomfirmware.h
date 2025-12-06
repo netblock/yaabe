@@ -689,14 +689,6 @@ struct display_object_info_table_v1_5 {
 /******************************************************************************/
 // Data Table dce_info  structure
 /******************************************************************************/
-union atom_spread_spectrum_mode {
-	uint8_t spread_spectrum;
-	struct { uint8_t
-		centre   :0-0 +1, // 0=down, 1=centre
-		external :1-1 +1, // 0=internal, 1=external
-		rsvd_7_2 :7-2 +1;
-	};
-};
 
 union dce_info_caps {
 	uint32_t display_caps;
@@ -719,11 +711,6 @@ struct dce_connector_spread_spectrum {
 	union atom_spread_spectrum_mode hdmi_ss_mode;
 	union atom_spread_spectrum_mode dp_ss_mode;
 	uint8_t  ss_reserved;
-};
-
-struct vesa_hardcode {
-	uint8_t  mode_num; // hardcode mode number defined in StandardVESA_TimingTable when EDID is not available
-	uint8_t  refresh_rate;
 };
 
 struct atom_display_controller_info_v4_3 { // fits v4.1 and v4.2
@@ -1262,8 +1249,7 @@ struct atom_fusion_system_info_v4 {
 
 struct atom_gfx_info_v2_2 {
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  max_tile_pipes;
 	uint8_t  max_cu_per_sh;
@@ -1282,8 +1268,7 @@ struct atom_gfx_info_v2_2 {
 
 struct atom_gfx_info_v2_3_2 {
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  max_tile_pipes;
 	uint8_t  max_cu_per_sh;
@@ -1306,8 +1291,7 @@ struct atom_gfx_info_v2_3_2 {
 
 struct atom_gfx_info_v2_4 {
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  reserved;
 	uint8_t  max_cu_per_sh;
@@ -1342,8 +1326,7 @@ struct atom_gfx_info_v2_4 {
 struct atom_gfx_info_v2_5 {
 		// derived from v2.7. 2.6 has same byte count as 2.5
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  reserved;
 	uint8_t  max_cu_per_sh;
@@ -1382,8 +1365,7 @@ struct atom_gfx_info_v2_5 {
 
 struct atom_gfx_info_v2_7 {
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  reserved;
 	uint8_t  max_cu_per_sh;
@@ -1425,8 +1407,7 @@ struct atom_gfx_info_v2_7 {
 
 struct atom_gfx_info_v3_0 {
 	struct atom_common_table_header  table_header;
-	uint8_t  gfxip_min_ver;
-	uint8_t  gfxip_max_ver;
+	struct atom_ip_ver gfx_ip_ver;
 	uint8_t  max_shader_engines;
 	uint8_t  max_tile_pipes;
 	uint8_t  max_cu_per_sh;
@@ -1461,8 +1442,7 @@ struct atom_gfx_info_v3_0 {
 /******************************************************************************/
 struct atom_smu_info_v3_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  smuip_min_ver;
-	uint8_t  smuip_max_ver;
+	struct atom_ip_ver smu_ip_ver;
 	uint8_t  smu_rsd1;
 	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
@@ -1482,8 +1462,7 @@ struct atom_smu_info_v3_1 {
 
 struct atom_smu_info_v3_2 {
 	struct atom_common_table_header  table_header;
-	uint8_t  smuip_min_ver;
-	uint8_t  smuip_max_ver;
+	struct atom_ip_ver smu_ip_ver;
 	uint8_t  smu_rsd1;
 	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
@@ -1515,8 +1494,7 @@ struct atom_smu_info_v3_2 {
 
 struct atom_smu_info_v3_3 {
 	struct atom_common_table_header  table_header;
-	uint8_t  smuip_min_ver;
-	uint8_t  smuip_max_ver;
+	struct atom_ip_ver smu_ip_ver;
 	union atom_spread_spectrum_mode  waflclk_ss_mode;
 	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
@@ -1555,8 +1533,7 @@ struct atom_smu_info_v3_3 {
 
 struct atom_smu_info_v3_5 {
 	struct atom_common_table_header  table_header;
-	uint8_t  smuip_min_ver;
-	uint8_t  smuip_max_ver;
+	struct atom_ip_ver smu_ip_ver;
 	union atom_spread_spectrum_mode  waflclk_ss_mode;
 	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
@@ -1611,8 +1588,7 @@ struct atom_smu_info_v3_5 {
 
 struct atom_smu_info_v3_6 {
 	struct atom_common_table_header  table_header;
-	uint8_t  smuip_min_ver;
-	uint8_t  smuip_max_ver;
+	struct atom_ip_ver smu_ip_ver;
 	union atom_spread_spectrum_mode  waflclk_ss_mode;
 	union atom_spread_spectrum_mode  gpuclk_ss_mode;
 	uint16_t sclk_ss_percentage;
@@ -2096,10 +2072,8 @@ struct  atom_asic_profiling_info_v4_2 {
 /******************************************************************************/
 struct atom_multimedia_info_v2_1 {
 	struct atom_common_table_header  table_header;
-	uint8_t  uvdip_min_ver;
-	uint8_t  uvdip_max_ver;
-	uint8_t  vceip_min_ver;
-	uint8_t  vceip_max_ver;
+	struct atom_ip_ver uvd_ip_ver;
+	struct atom_ip_ver vce_ip_ver;
 	uint16_t uvd_enc_max_input_width_pixels;
 	uint16_t uvd_enc_max_input_height_pixels;
 	uint16_t vce_enc_max_input_width_pixels;
@@ -2148,8 +2122,7 @@ struct atom_umc_info_v3_1 {
 	uint16_t customer_ucode_name_offset;
 	uint16_t mclk_ss_percentage;
 	uint16_t mclk_ss_rate_10hz;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	enum  atom_dgpu_vram_type  vram_type;
 	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
@@ -2164,8 +2137,7 @@ struct atom_umc_info_v3_2 {
 	uint16_t customer_ucode_name_offset;
 	uint16_t mclk_ss_percentage;
 	uint16_t mclk_ss_rate_10hz;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	enum  atom_dgpu_vram_type  vram_type;
 	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
@@ -2183,8 +2155,7 @@ struct atom_umc_info_v3_3 {
 	uint16_t customer_ucode_name_offset;
 	uint16_t mclk_ss_percentage;
 	uint16_t mclk_ss_rate_10hz;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	enum  atom_dgpu_vram_type  vram_type;
 	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
@@ -2199,8 +2170,7 @@ struct atom_umc_info_v3_3 {
 struct atom_umc_info_v4_0 {
 	struct atom_common_table_header  table_header;
 	uint32_t ucode_reserved[5];
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	enum  atom_dgpu_vram_type  vram_type;
 	union atom_umc_config  umc_config;
 	uint32_t mem_refclk_10khz;
@@ -2329,8 +2299,7 @@ struct atom_vram_info_header_v2_3 {
 	uint16_t post_ucode_init_offset;      // offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init
 	uint16_t vram_rsd2;
 	uint8_t  vram_module_num;             // indicate number of VRAM module
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	uint8_t  mc_phy_tile_num;             // indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset
 	struct atom_vram_module_v9  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
@@ -2374,8 +2343,7 @@ struct atom_vram_info_header_v2_4 {
 	uint16_t post_ucode_init_offset;     // offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init
 	uint16_t vram_rsd2;
 	uint8_t  vram_module_num;            // indicate number of VRAM module
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	uint8_t  mc_phy_tile_num;            // indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset
 	struct atom_vram_module_v10  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
@@ -2484,8 +2452,7 @@ struct atom_vram_info_header_v2_5 {
 	uint16_t post_ucode_init_offset;      // offset of atom_umc_init_reg_block structure for MC phy init after MC uCode complete umc init
 	uint16_t strobe_mode_patch_tbloffset; // offset of atom_umc_init_reg_block structure for Strobe Mode memory clock specific UMC settings
 	uint8_t  vram_module_num;             // indicate number of VRAM module
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	uint8_t  mc_phy_tile_num;             // indicate the MCD tile number which use in DramDataRemapTbl and usMcAdjustPerTileTblOffset
 	struct atom_vram_module_v11  vram_module[16]; // just for allocation, real number of blocks is in ucNumOfVRAMModule;
 };
@@ -2501,8 +2468,7 @@ struct atom_vram_info_header_v2_6 {
 	uint16_t post_ucode_init_offset;
 	uint16_t vram_rsd2;
 	uint8_t  vram_module_num;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	uint8_t  mc_phy_tile_num;
 	struct atom_vram_module_v9  vram_module[16];
 };
@@ -2534,8 +2500,7 @@ struct atom_vram_info_header_v3_0 {
 	uint16_t umc_emuinit_table_offset;
 	uint16_t reserved_sub_table_offset[2];
 	uint8_t  vram_module_num;
-	uint8_t  umcip_min_ver;
-	uint8_t  umcip_max_ver;
+	struct atom_ip_ver umc_ip_ver;
 	uint8_t  mc_phy_tile_num;
 	enum  atom_dgpu_vram_type  memory_type;
 	uint8_t  channel_num;
