@@ -748,17 +748,18 @@ struct atom_display_controller_info_v4_3 { // fits v4.1 and v4.2
 };
 
 struct atom_dc_golden_table_v1 {
-	uint32_t aux_dphy_rx_control0_val;
-	uint32_t aux_dphy_tx_control_val;
-	uint32_t aux_dphy_rx_control1_val;
-	uint32_t dc_gpio_aux_ctrl_0_val;
-	uint32_t dc_gpio_aux_ctrl_1_val;
-	uint32_t dc_gpio_aux_ctrl_2_val;
-	uint32_t dc_gpio_aux_ctrl_3_val;
-	uint32_t dc_gpio_aux_ctrl_4_val;
-	uint32_t dc_gpio_aux_ctrl_5_val;
+	union dp_aux0_aux_dphy_rx_control0_1_0   aux_dphy_rx_control0;
+	union dp_aux0_aux_dphy_tx_control_2_0_0  aux_dphy_tx_control;
+	union dp_aux0_aux_dphy_rx_control1_2_0_0 aux_dphy_rx_control1;
+	union dc_gpio_aux_ctrl_0_1_0   dc_gpio_aux_ctrl_0;
+	union dc_gpio_aux_ctrl_1_1_0   dc_gpio_aux_ctrl_1;
+	union dc_gpio_aux_ctrl_2_1_0   dc_gpio_aux_ctrl_2;
+	union dc_gpio_aux_ctrl_3_2_0_0 dc_gpio_aux_ctrl_3;
+	union dc_gpio_aux_ctrl_4_2_0_0 dc_gpio_aux_ctrl_4;
+	union dc_gpio_aux_ctrl_5_2_0_0 dc_gpio_aux_ctrl_5;
 	uint32_t reserved[23];
 };
+
 
 struct atom_display_controller_info_v4_4 {
 	struct atom_common_table_header  table_header;
@@ -771,7 +772,7 @@ struct atom_display_controller_info_v4_4 {
 	struct vesa_hardcode vga;
 	uint16_t dpphy_refclk_10khz;
 	uint16_t hw_chip_id;
-	struct atom_ip_ver dce_ip_ver;
+	struct atom_ip_ver dcn_ip_ver;
 	uint8_t  max_disp_pipe_num;
 	uint8_t  max_vbios_active_disp_pipe_num;
 	uint8_t  max_ppll_num;
@@ -799,7 +800,7 @@ struct atom_display_controller_info_v4_5 {
 	struct vesa_hardcode vga;
 	uint16_t dpphy_refclk_10khz;
 	uint16_t hw_chip_id;
-	struct atom_ip_ver dce_ip_ver;
+	struct atom_ip_ver dcn_ip_ver;
 	uint8_t  max_disp_pipe_num;
 	uint8_t  max_vbios_active_disp_pipe_num;
 	uint8_t  max_ppll_num;

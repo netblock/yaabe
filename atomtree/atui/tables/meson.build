@@ -3,6 +3,8 @@
 atui_branches = files(
 	'atui_gmc.json5', # extra long
 	'atui_gc.json5',
+	'atui_dcn.json5',
+
 	'atui_ddrmoderegisters.json5',
 	'atui_bitfield_overrides.json5',
 	'atui_asic_reg_data_tables.json5',

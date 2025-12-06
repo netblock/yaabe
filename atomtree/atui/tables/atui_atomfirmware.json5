@@ -3450,32 +3450,50 @@ global_defaults: {
 	num_bytes: "sizeof(*bios)",
 	leaves: [
 		{
-			access: "bios->aux_dphy_rx_control0_val",
-			name: "aux_dphy_rx_control0_val",
+			access: "bios->aux_dphy_rx_control0",
+			name: "aux_dphy_rx_control0",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dp_aux0_aux_dphy_rx_control0_1_0",
 		}, {
-			access: "bios->aux_dphy_tx_control_val",
-			name: "aux_dphy_tx_control_val",
+			access: "bios->aux_dphy_tx_control",
+			name: "aux_dphy_tx_control",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dp_aux0_aux_dphy_tx_control_2_0_0",
 		}, {
-			access: "bios->aux_dphy_rx_control1_val",
-			name: "aux_dphy_rx_control1_val",
+			access: "bios->aux_dphy_rx_control1",
+			name: "aux_dphy_rx_control1",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dp_aux0_aux_dphy_rx_control1_2_0_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_0_val",
-			name: "dc_gpio_aux_ctrl_0_val",
+			access: "bios->dc_gpio_aux_ctrl_0",
+			name: "dc_gpio_aux_ctrl_0",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_0_1_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_1_val",
-			name: "dc_gpio_aux_ctrl_1_val",
+			access: "bios->dc_gpio_aux_ctrl_1",
+			name: "dc_gpio_aux_ctrl_1",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_1_1_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_2_val",
-			name: "dc_gpio_aux_ctrl_2_val",
+			access: "bios->dc_gpio_aux_ctrl_2",
+			name: "dc_gpio_aux_ctrl_2",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_2_1_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_3_val",
-			name: "dc_gpio_aux_ctrl_3_val",
+			access: "bios->dc_gpio_aux_ctrl_3",
+			name: "dc_gpio_aux_ctrl_3",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_3_2_0_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_4_val",
-			name: "dc_gpio_aux_ctrl_4_val",
+			access: "bios->dc_gpio_aux_ctrl_4",
+			name: "dc_gpio_aux_ctrl_4",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_4_2_0_0",
 		}, {
-			access: "bios->dc_gpio_aux_ctrl_5_val",
-			name: "dc_gpio_aux_ctrl_5_val",
+			access: "bios->dc_gpio_aux_ctrl_5",
+			name: "dc_gpio_aux_ctrl_5",
+			display: "ATUI_SUBONLY",
+			fancy: "ATUI_GRAFT", fancy_data: "dc_gpio_aux_ctrl_5_2_0_0",
 		}, {
 			access: "bios->reserved",
 			name: "reserved",
@@ -3527,8 +3545,8 @@ global_defaults: {
 			access: "bios->hw_chip_id",
 			name: "hw_chip_id",
 		}, {
-			access: "bios->dce_ip_ver",
-			name: "dce_ip_ver",
+			access: "bios->dcn_ip_ver",
+			name: "dcn_ip_ver",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {
@@ -3634,8 +3652,8 @@ global_defaults: {
 			access: "bios->hw_chip_id",
 			name: "hw_chip_id",
 		}, {
-			access: "bios->dce_ip_ver",
-			name: "dce_ip_ver",
+			access: "bios->dcn_ip_ver",
+			name: "dcn_ip_ver",
 			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_ip_ver",
 		}, {

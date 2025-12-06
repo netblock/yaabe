@@ -27,6 +27,7 @@ union magic_64 {
 
 #include "gmc.h"
 #include "gc.h"
+#include "dcn.h"
 #include "ddrmoderegisters.h"
 #include "bitfield_overrides.h"
 #include "asic_reg_data_tables.h"
