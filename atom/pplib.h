@@ -270,7 +270,7 @@ struct atom_pplib_state_v2 {
 };
 struct atom_pplib_state_array_v2 {
 	uint8_t  NumEntries;
-	struct atom_pplib_state_v2 states[] __counted_by(NumEntries);
+	struct atom_pplib_state_v2 states[] __counted_by_nest(NumEntries);
 };
 
 union atom_pplib_states {

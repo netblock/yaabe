@@ -85,6 +85,7 @@ static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
 #define __nonstring __attribute__((nonstring))
 
 
+#define __counted_by_nest(member) // nested flex is not supported; ignore
 #define __counted_by_indir(member) // substruct.member doesn't work; ignore
 #if __has_attribute(counted_by)
 	#undef  __counted_by
