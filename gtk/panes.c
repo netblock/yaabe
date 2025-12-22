@@ -119,8 +119,8 @@ node_name_column_bind(
 	GtkInscription* const label = GTK_INSCRIPTION(gtk_tree_expander_get_child(
 		expander
 	));
-	// +2 because the inscription sometimes ellipsises too early.
-	gtk_inscription_set_nat_chars(label, strlen(name) +2);
+	// +4 because the inscription sometimes ellipsises (...) too early.
+	gtk_inscription_set_nat_chars(label, strlen(name) +4);
 	gtk_inscription_set_text(label, name);
 
 	set_tooltip_to_description(
