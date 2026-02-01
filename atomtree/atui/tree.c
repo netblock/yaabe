@@ -627,11 +627,10 @@ grow_pplib_ppt(
 			.atomtree = ppt41,
 			.bios = ppt41->cac_leakage,
 		};
-		if (ppt41->leaves->v1.PlatformCaps.EVV) {
-			cac_leakage = _atui_atom_pplib_cac_leakage_record_evv(&atui_args);
-		} else {
-			cac_leakage = _atui_atom_pplib_cac_leakage_record(&atui_args);
-		}
+		cac_leakage = (atuifunc const[2]) {
+			[false] = _atui_atom_pplib_cac_leakage_record_evv,
+			[true]  = _atui_atom_pplib_cac_leakage_record
+		} [ppt41->leaves->v1.PlatformCaps.EVV] (&atui_args);
 	}
 
 	atui_node* const ppt41_children[] = {
@@ -669,22 +668,21 @@ atui_generate_pptablev1_ppt(
 
 	atui_node* fan_table = NULL;
 	if (ppt71->fan_table) {
+		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.bios = ppt71->fan_table,
 		};
 		uint8_t const RevId = ppt71->fan_table->RevId;
-		if (7 >= RevId) {
-			fan_table = _atui_atom_pptable_fan_table(&atui_args);
-		} else if (8 == RevId) {
-			fan_table = _atui_atom_fiji_fan_table(&atui_args);
-		} else if (9 == RevId) {
-			fan_table = _atui_atom_polaris_fan_table(&atui_args);
-		} else {
+		if (7 >= RevId)      atui_func = _atui_atom_pptable_fan_table;
+		else if (8 == RevId) atui_func = _atui_atom_fiji_fan_table;
+		else if (9 == RevId) atui_func = _atui_atom_polaris_fan_table;
+		else {
 			atui_args.rename = "fan_table (header only stub)";
-			fan_table = _atui_pplib_subtable_header(&atui_args);
+			atui_func = _atui_pplib_subtable_header;
 			assert(0);
 		}
+		fan_table = atui_func(&atui_args);
 	}
 
 	atui_node* thermal_controller = NULL;
@@ -709,12 +707,8 @@ atui_generate_pptablev1_ppt(
 			.bios = ppt71->sclk_dependency
 		};
 		switch (ppt71->sclk_dependency->RevId) {
-			case 0:
-				atui_func = _atui_atom_pptable_sclk_dependency_table;
-				break;
-			case 1:
-				atui_func = _atui_atom_polaris_sclk_dependency_table;
-				break;
+			case 0: atui_func = _atui_atom_pptable_sclk_dependency_table; break;
+			case 1: atui_func = _atui_atom_polaris_sclk_dependency_table; break;
 			default:
 				atui_args.rename = "sclk_dependency (header only stub)";
 				atui_func = _atui_pplib_subtable_header;
@@ -763,22 +757,21 @@ atui_generate_pptablev1_ppt(
 
 	atui_node* powertune = NULL;
 	if (ppt71->powertune) {
+		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt71,
 			.bios = ppt71->powertune,
 		};
 		uint8_t const RevId = ppt71->powertune->RevId;
-		if (2 >= RevId) {
-			powertune = _atui_atom_pptable_powertune_table(&atui_args);
-		} else if (3 == RevId) {
-			powertune = _atui_atom_fiji_powertune_table(&atui_args);
-		} else if (4 == RevId) {
-			powertune = _atui_atom_polaris_powertune_table(&atui_args);
-		} else {
+		if (2 >= RevId)      atui_func = _atui_atom_pptable_powertune_table;
+		else if (3 == RevId) atui_func = _atui_atom_fiji_powertune_table;
+		else if (4 == RevId) atui_func = _atui_atom_polaris_powertune_table;
+		else {
 			atui_args.rename = "powertune (header only stub)";
-			powertune = _atui_pplib_subtable_header(&atui_args);
+			atui_func = _atui_pplib_subtable_header;
 			assert(0);
 		}
+		powertune = atui_func(&atui_args);
 	}
 
 	atui_node* hard_limit = NULL;
@@ -836,22 +829,21 @@ atui_generate_vega10_ppt(
 
 	atui_node* fan_table = NULL;
 	if (ppt81->fan_table) {
+		atuifunc atui_func;
 		atuifunc_args atui_args = {
 			.atomtree = ppt81,
 			.bios = ppt81->fan_table,
 		};
 		uint8_t const RevId = ppt81->fan_table->RevId;
-		if (10 == RevId) {
-			fan_table = _atui_atom_vega10_fan_table_v1(&atui_args);
-		} else if (11 == RevId) {
-			fan_table = _atui_atom_vega10_fan_table_v2(&atui_args);
-		} else if (12 >= RevId) {
-			fan_table = _atui_atom_vega10_fan_table_v3(&atui_args);
-		} else {
+		if (10 == RevId)      atui_func = _atui_atom_vega10_fan_table_v1;
+		else if (11 == RevId) atui_func = _atui_atom_vega10_fan_table_v2;
+		else if (12 >= RevId) atui_func = _atui_atom_vega10_fan_table_v3;
+		else {
 			atui_args.rename = "fan_table (header only stub)";
-			fan_table = _atui_pplib_subtable_header(&atui_args);
+			atui_func = _atui_pplib_subtable_header;
 			assert(0);
 		}
+		fan_table = atui_func(&atui_args);
 	}
 
 	atui_node* thermal_controller = NULL;
@@ -945,9 +937,9 @@ atui_generate_vega10_ppt(
 			.bios = ppt81->powertune
 		};
 		switch (ppt81->powertune->RevId) {
-			case 5: atui_func = _atui_atom_vega10_powertune_table_v1;break;
-			case 6: atui_func = _atui_atom_vega10_powertune_table_v2;break;
-			default:atui_func = _atui_atom_vega10_powertune_table_v3;break;
+			case 5:  atui_func = _atui_atom_vega10_powertune_table_v1; break;
+			case 6:  atui_func = _atui_atom_vega10_powertune_table_v2; break;
+			default: atui_func = _atui_atom_vega10_powertune_table_v3; break;
 			/*
 			default:
 				atui_args.rename = "powertune (header only stub)";
