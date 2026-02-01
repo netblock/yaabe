@@ -702,6 +702,7 @@ struct atom_pplib_cac_leakage_table {
 };
 
 union atom_pplib_cac_leakage_tables {
+	uint8_t  NumEntries;
 	struct atom_pplib_cac_leakage_table_evv  evv;
 	struct atom_pplib_cac_leakage_table      non_evv;
 };

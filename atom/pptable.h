@@ -101,7 +101,7 @@ struct atom_pptable_state {
 struct atom_pptable_state_array {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_state  entries[];
+	struct atom_pptable_state  entries[] __counted_by(NumEntries);
 };
 
 struct atom_pptable_mclk_dependency_record {
@@ -115,7 +115,7 @@ struct atom_pptable_mclk_dependency_record {
 struct atom_pptable_mclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_mclk_dependency_record  entries[];
+	struct atom_pptable_mclk_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 union clock_stretch_config_u8 {
@@ -137,7 +137,7 @@ struct atom_pptable_sclk_dependency_record {
 struct atom_pptable_sclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_sclk_dependency_record  entries[];
+	struct atom_pptable_sclk_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_polaris_sclk_dependency_record {
@@ -152,7 +152,7 @@ struct atom_polaris_sclk_dependency_record {
 struct atom_polaris_sclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_polaris_sclk_dependency_record  entries[];
+	struct atom_polaris_sclk_dependency_record  entries[] __counted_by(NumEntries);
 };
 union atom_pptable_sclk_dependency_tables {
 	uint8_t  RevId;
@@ -168,7 +168,7 @@ struct atom_pptable_pcie_record {
 struct atom_pptable_pcie_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_pcie_record  entries[];
+	struct atom_pptable_pcie_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_polaris_pcie_record {
@@ -180,7 +180,7 @@ struct atom_polaris_pcie_record {
 struct atom_polaris_pcie_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_polaris_pcie_record  entries[];
+	struct atom_polaris_pcie_record  entries[] __counted_by(NumEntries);
 };
 union atom_pptable_pcie_tables {
 	uint8_t  RevId;
@@ -201,7 +201,7 @@ struct atom_pptable_mm_dependency_record {
 struct atom_pptable_mm_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_mm_dependency_record  entries[];
+	struct atom_pptable_mm_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_pptable_voltage_lookup_record {
@@ -213,7 +213,7 @@ struct atom_pptable_voltage_lookup_record {
 struct atom_pptable_voltage_lookup_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_voltage_lookup_record  entries[];
+	struct atom_pptable_voltage_lookup_record  entries[]__counted_by(NumEntries);
 };
 
 struct atom_pptable_fan_table {
@@ -321,7 +321,7 @@ struct atom_pptable_vce_state_record {
 struct atom_pptable_vce_state_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_vce_state_record  entries[];
+	struct atom_pptable_vce_state_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_pptable_powertune_table {
@@ -424,7 +424,7 @@ struct atom_pptable_hard_limit_record {
 struct atom_pptable_hard_limit_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_pptable_hard_limit_record  entries[];
+	struct atom_pptable_hard_limit_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_pptable_gpio_table {

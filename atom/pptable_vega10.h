@@ -91,7 +91,7 @@ struct atom_vega10_state {
 struct atom_vega10_state_array {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_state  states[1];
+	struct atom_vega10_state  states[] __counted_by(NumEntries);
 };
 
 struct atom_vega10_clk_dependency_record {
@@ -101,7 +101,7 @@ struct atom_vega10_clk_dependency_record {
 struct atom_vega10_clk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_clk_dependency_record  entries[1];
+	struct atom_vega10_clk_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 
@@ -120,7 +120,7 @@ struct atom_vega10_gfxclk_dependency_record {
 struct atom_vega10_gfxclk_dependency_table_v1 {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_gfxclk_dependency_record  entries[1];
+	struct atom_vega10_gfxclk_dependency_record  entries[] __counted_by(NumEntries);
 };
 struct atom_vega10_gfxclk_dependency_record_v2 {
 	struct atom_vega10_clk_dependency_record  base;
@@ -132,7 +132,7 @@ struct atom_vega10_gfxclk_dependency_record_v2 {
 struct atom_vega10_gfxclk_dependency_table_v2 {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_gfxclk_dependency_record_v2  entries[1];
+	struct atom_vega10_gfxclk_dependency_record_v2  entries[] __counted_by(NumEntries);
 };
 union atom_vega10_gfxclk_dependency_tables {
 	uint8_t  RevId;
@@ -148,7 +148,7 @@ struct atom_vega10_mclk_dependency_record {
 struct atom_vega10_mclk_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_mclk_dependency_record  entries[1];
+	struct atom_vega10_mclk_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 
@@ -165,7 +165,7 @@ struct atom_vega10_mm_dependency_record {
 struct atom_vega10_mm_dependency_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_mm_dependency_record  entries[1];
+	struct atom_vega10_mm_dependency_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_vega10_pcie_record {
@@ -177,7 +177,7 @@ struct atom_vega10_pcie_record {
 struct atom_vega10_pcie_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_pcie_record  entries[1];
+	struct atom_vega10_pcie_record  entries[] __counted_by(NumEntries);
 };
 
 /*struct atom_vega10_voltage_lookup_record {
@@ -186,7 +186,7 @@ struct atom_vega10_pcie_table {
 struct atom_vega10_voltage_lookup_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	uint16_t vdd_entries[1];
+	uint16_t vdd_entries[] __counted_by(NumEntries);
 };
 
 struct atom_vega10_fan_table_v1 {
@@ -282,7 +282,7 @@ struct atom_vega10_vce_state_record {
 struct atom_vega10_vce_state_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_vce_state_record  entries[1];
+	struct atom_vega10_vce_state_record  entries[] __counted_by(NumEntries);
 };
 
 struct atom_vega10_powertune_table_v1 {
@@ -386,7 +386,7 @@ struct atom_vega10_hard_limit_record {
 struct atom_vega10_hard_limit_table {
 	uint8_t  RevId;
 	uint8_t  NumEntries;
-	struct atom_vega10_hard_limit_record  entries[1];
+	struct atom_vega10_hard_limit_record  entries[] __counted_by(NumEntries);
 };
 
 #pragma pack(pop) // restore old packing
