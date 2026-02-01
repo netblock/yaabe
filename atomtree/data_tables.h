@@ -219,38 +219,38 @@ struct atomtree_powerplay_table_v4_1 {
 	union atom_pplib_cac_leakage_tables* cac_leakage;
 
 	// extended
-	struct atom_pplib_vce_table*                      vce_root;
-	struct atom_pplib_vce_clock_info_array*           vce_info;
-	struct atom_pplib_vce_clock_voltage_limit_table*  vce_limits;
-	struct atom_pplib_vce_state_table*                vce_states;
-	struct atom_pplib_uvd_table*                      uvd_root;
-	struct atom_pplib_uvd_clock_info_array*           uvd_info;
-	struct atom_pplib_uvd_clock_voltage_limit_table*  uvd_limits;
-	struct atom_pplib_samu_table*       samu;
-	struct atom_pplib_ppm_table*        ppm;
-	struct atom_pplib_acp_table*        acpclk;
-	union atom_pplib_powertune_tables*  powertune;
-	struct atom_pplib_clock_voltage_dependency_table* vddgfx_sclk;
-	struct atom_pplib_vq_budgeting_table*             vq_budgeting;
+	struct atom_pplib_vce_table*                       vce_root;
+	struct atom_pplib_vce_clock_info_array*            vce_info;
+	struct atom_pplib_vce_clock_voltage_limit_table*   vce_limits;
+	struct atom_pplib_vce_state_table*                 vce_states;
+	struct atom_pplib_uvd_table*                       uvd_root;
+	struct atom_pplib_uvd_clock_info_array*            uvd_info;
+	struct atom_pplib_uvd_clock_voltage_limit_table*   uvd_limits;
+	struct atom_pplib_samu_table*                      samu;
+	struct atom_pplib_platform_power_management_table* ppm;
+	struct atom_pplib_acp_table*                       acpclk;
+	union atom_pplib_powertune_tables*                 powertune; // powerchune
+	struct atom_pplib_clock_voltage_dependency_table*  vddgfx_sclk;
+	struct atom_pplib_vq_budgeting_table*              vq_budgeting;
 };
 
 struct atomtree_powerplay_table_v7_1 {
 	struct atom_pptable_powerplaytable* leaves;
 
-	struct atom_pptable_state_array*           state_array;
-	union atom_pptable_fan_tables*             fan_table;
-	struct atom_pptable_thermal_controller*    thermal_controller;
-	struct atom_pptable_mclk_dependency_table* mclk_dependency;
-	union atom_pptable_sclk_dependency_tables* sclk_dependency;
-	struct atom_pptable_voltage_lookup_table*  vddc_lut;
-	struct atom_pptable_voltage_lookup_table*  vddgfx_lut;
-	struct atom_pptable_mm_dependency_table*   mm_dependency;
-	struct atom_pptable_vce_state_table*       vce_state;
-	struct atom_pptable_ppm_table*             ppm_table;
-	union atom_pptable_powertune_tables*       powertune;
-	struct atom_pptable_hard_limit_table*      hard_limit;
-	union atom_pptable_pcie_tables*            pcie_table;
-	struct atom_pptable_gpio_table*            gpio_table;
+	struct atom_pptable_state_array*                   state_array;
+	union atom_pptable_fan_tables*                     fan_table;
+	struct atom_pptable_thermal_controller*            thermal_controller;
+	struct atom_pptable_mclk_dependency_table*         mclk_dependency;
+	union atom_pptable_sclk_dependency_tables*         sclk_dependency;
+	struct atom_pptable_voltage_lookup_table*          vddc_lut;
+	struct atom_pptable_voltage_lookup_table*          vddgfx_lut;
+	struct atom_pptable_mm_dependency_table*           mm_dependency;
+	struct atom_pptable_vce_state_table*               vce_state;
+	struct atom_pplib_platform_power_management_table* ppm_table;
+	union atom_pptable_powertune_tables*               powertune;
+	struct atom_pptable_hard_limit_table*              hard_limit;
+	union atom_pptable_pcie_tables*                    pcie_table;
+	struct atom_pptable_gpio_table*                    gpio_table;
 };
 
 struct atomtree_powerplay_table_v8_1 {
