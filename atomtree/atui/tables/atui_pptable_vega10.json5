@@ -59,6 +59,39 @@ global_defaults: {
 		],},
 	},],
 }, {
+	c_type: "atom_vega10_voltage_mode",
+	leaves: [
+		{
+			access: "bios->Gfx",
+			name: "Gfx",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Soc",
+			name: "Soc",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Uclk",
+			name: "Uclk",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Uvd",
+			name: "Uvd",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Vce",
+			name: "Vce",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Mp0",
+			name: "Mp0",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		}, {
+			access: "bios->Dcef",
+			name: "Dcef",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
+		},
+	],
+}, {
 	c_type: "atom_vega10_powerplaytable",
 	num_bytes: "bios->header.header.structuresize",
 	leaves: [
@@ -70,8 +103,8 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "vega10_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "vega10_powerplay_platform_caps",
 		}, {
 			access: "bios->MaxODEngineClock",
 			name: "MaxODEngineClock",
@@ -106,33 +139,10 @@ global_defaults: {
 			access: "bios->GfxclkSlewRate",
 			name: "GfxclkSlewRate",
 		}, {
-			access: "bios->GfxVoltageMode",
-			name: "GfxVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->SocVoltageMode",
-			name: "SocVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->UclkVoltageMode",
-			name: "UclkVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->UvdVoltageMode",
-			name: "UvdVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->VceVoltageMode",
-			name: "VceVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->Mp0VoltageMode",
-			name: "Mp0VoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
-		}, {
-			access: "bios->DcefVoltageMode",
-			name: "DcefVoltageMode",
-			display: ["ATUI_DEC", "ATUI_ENUM",],
+			access: "bios->VoltageMode",
+			name: "VoltageMode",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_vega10_voltage_mode",
 		}, {
 			access: "bios->StateArrayOffset",
 			name: "StateArrayOffset",

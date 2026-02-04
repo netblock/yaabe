@@ -37,6 +37,16 @@ enum atom_vega10_voltagemode:uint8_t {
 	ATOM_VEGA10_VOLTAGEMODE_STATIC           = 2,
 };
 
+struct atom_vega10_voltage_mode {
+	enum atom_vega10_voltagemode  Gfx;
+	enum atom_vega10_voltagemode  Soc;
+	enum atom_vega10_voltagemode  Uclk;
+	enum atom_vega10_voltagemode  Uvd;
+	enum atom_vega10_voltagemode  Vce;
+	enum atom_vega10_voltagemode  Mp0;
+	enum atom_vega10_voltagemode  Dcef;
+};
+
 struct atom_vega10_powerplaytable {
 	struct smu_powerplay_table_header header;
 	union vega10_powerplay_platform_caps PlatformCaps;
@@ -48,13 +58,7 @@ struct atom_vega10_powerplaytable {
 	uint16_t UlvMp1clkDid;
 	uint16_t UlvGfxclkBypass;
 	uint16_t GfxclkSlewRate;
-	enum atom_vega10_voltagemode  GfxVoltageMode;
-	enum atom_vega10_voltagemode  SocVoltageMode;
-	enum atom_vega10_voltagemode  UclkVoltageMode;
-	enum atom_vega10_voltagemode  UvdVoltageMode;
-	enum atom_vega10_voltagemode  VceVoltageMode;
-	enum atom_vega10_voltagemode  Mp0VoltageMode;
-	enum atom_vega10_voltagemode  DcefVoltageMode;
+	struct atom_vega10_voltage_mode VoltageMode;
 	uint16_t StateArrayOffset;
 	uint16_t FanTableOffset;
 	uint16_t ThermalControllerOffset;

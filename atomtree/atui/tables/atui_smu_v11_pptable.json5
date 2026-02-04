@@ -6012,8 +6012,8 @@ global_defaults: {
 		}, {
 			access: "bios->platform_caps.platform_caps",
 			name: "platform_caps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "powerplay_platform_caps",
 		}, {
 			access: "bios->thermal_controller_type",
 			name: "thermal_controller_type",

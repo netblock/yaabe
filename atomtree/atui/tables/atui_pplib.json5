@@ -201,7 +201,7 @@ global_defaults: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->DataRevision",
@@ -251,13 +251,13 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pplib_powerplay_platform_caps",
 		}, {
 			access: "bios->ThermalController",
 			name: "ThermalController",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_thermalcontroller",
 		}, {
 			access: "bios->BootClockInfoOffset",
 			name: "BootClockInfoOffset",
@@ -274,7 +274,7 @@ global_defaults: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->DataRevision",
@@ -324,13 +324,13 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pplib_powerplay_platform_caps",
 		}, {
 			access: "bios->ThermalController",
 			name: "ThermalController",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_thermalcontroller",
 		}, {
 			access: "bios->BootClockInfoOffset",
 			name: "BootClockInfoOffset",
@@ -354,7 +354,7 @@ global_defaults: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->DataRevision",
@@ -404,13 +404,13 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pplib_powerplay_platform_caps",
 		}, {
 			access: "bios->ThermalController",
 			name: "ThermalController",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_thermalcontroller",
 		}, {
 			access: "bios->BootClockInfoOffset",
 			name: "BootClockInfoOffset",
@@ -448,7 +448,7 @@ global_defaults: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->DataRevision",
@@ -498,13 +498,13 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pplib_powerplay_platform_caps",
 		}, {
 			access: "bios->ThermalController",
 			name: "ThermalController",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_thermalcontroller",
 		}, {
 			access: "bios->BootClockInfoOffset",
 			name: "BootClockInfoOffset",
@@ -578,7 +578,7 @@ global_defaults: {
 		{
 			access: "bios->header",
 			name: "header",
-			display: "ATUI_SUBONLY",
+			display: "ATUI_DISPLAY",
 			fancy: "ATUI_GRAFT", fancy_data: "atom_common_table_header",
 		}, {
 			access: "bios->DataRevision",
@@ -628,13 +628,13 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pplib_powerplay_platform_caps",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pplib_powerplay_platform_caps",
 		}, {
 			access: "bios->ThermalController",
 			name: "ThermalController",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "atom_pplib_thermalcontroller",
+			fancy: "ATUI_SHOOT", fancy_data: "atom_pplib_thermalcontroller",
 		}, {
 			access: "bios->BootClockInfoOffset",
 			name: "BootClockInfoOffset",

@@ -118,8 +118,8 @@ global_defaults: {
 		}, {
 			access: "bios->PlatformCaps",
 			name: "PlatformCaps",
-			display: "ATUI_SUBONLY",
-			fancy: "ATUI_GRAFT", fancy_data: "pptable_powerplay_platform_caps_v1",
+			display: "ATUI_DISPLAY",
+			fancy: "ATUI_SHOOT", fancy_data: "pptable_powerplay_platform_caps_v1",
 		}, {
 			access: "bios->MaxODEngineClock",
 			name: "MaxODEngineClock",
