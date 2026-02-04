@@ -79,10 +79,11 @@ construct_inscription_box(
 }
 
 void
-label_column_setup(
+label_column_setup( // may need touse gtk_inscription_set_nat_chars +4
 		void const* const _null __unused, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
+	// gtk_inscription_set_nat_chars(label, strlen(text) +4);
 	GtkWidget* const label = construct_inscription_box();
 	gtk_column_view_cell_set_child(column_cell, label);
 }
@@ -291,6 +292,7 @@ enum_name_column_bind(
 		"enum"
 	); // no need to unref from list_item_get_item
 
+	gtk_inscription_set_nat_chars(label, enum_entry->name_length +4);
 	gtk_inscription_set_text(label, enum_entry->name);
 	uint8_t const current_lang = LANG_ENGLISH;
 	gtk_widget_set_tooltip_text(
@@ -318,6 +320,7 @@ enum_val_column_bind(
 	);
 
 	char* const text = gatui_leaf_enum_val_to_text(leaf, enum_entry);
+	gtk_inscription_set_nat_chars(label, strlen(text) +4);
 	gtk_inscription_set_text(label, text);
 	free(text);
 	g_object_unref(leaf);
