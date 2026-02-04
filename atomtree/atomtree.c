@@ -13,6 +13,152 @@ struct atomtree_commons {
     struct mem_arena alloc_arena;
 };
 
+// TODO size too (com, bios, sz)
+static bool // error
+offchk( // check to see if the bios pointer math is within allocation bounds
+		struct atomtree_commons* const commons,
+		void const* const bios,
+		size_t const size
+		) {
+    struct atom_tree const* const atree = commons->atree;
+	void const* const end = atree->alloced_bios + atree->biosfile_size;
+
+	bool const safe = (
+		(
+			(atree->alloced_bios <= bios)
+			&& ((bios+size) < end)
+		) || (
+			(NULL == bios) || (0 == size)
+		)
+	);
+	// backtrace? line number?
+	error_assert(
+		&(commons->error), ERROR_WARNING,
+		"bad pointer math",
+		safe
+	);
+	return !safe;
+}
+// two-in-one combining offchk and sizeof_flex in a safe way
+// ({ gnu c statement expression }) returns error
+#define offchk_flex(commons, bios, array, count) ({\
+	struct atomtree_commons* const _c = (commons);\
+	auto const _ptr = (bios);\
+	\
+	bool err = false;\
+	if (_ptr) {\
+		err = offchk(_c, _ptr, sizeof(*_ptr));\
+		if (!err) {\
+			err = offchk(_c, _ptr, sizeof_flex(_ptr, array, count));\
+		}\
+	}\
+	err;\
+})
+static bool // error
+_offreset( // check to see if pointer targets bios, and if it isn't, NULL it.
+		struct atomtree_commons* const commons,
+		void const** const ptr, // atomtree element that points to bios
+		size_t const size // size of the bios structure
+		) {
+	bool const unsafe = offchk(commons, *ptr, size);
+	if (unsafe) {
+		*ptr = NULL;
+	}
+	return unsafe;
+}
+// casting wrapper for _offreset
+// if given two arguments, the size is assumed to be sizeof(*ptr)
+#define offrst(commons, ptr, ...) _offrst_helper(\
+	commons, ptr, __VA_ARGS__ __VA_OPT__(,) sizeof(*ptr)\
+)
+#define _offrst_helper(commons, ptr, size, ...) _offreset(\
+	(commons), (void const**) (ptr), (size)\
+)
+
+// two-in-one combining offrst and sizeof_flex in a safe way
+// ({ gnu c statement expression }) returns error
+#define offrst_flex(commons, ptr, array, count) ({\
+	auto _at_ptr = (ptr);\
+	bool const err = offchk_flex(commons, *_at_ptr, array, count);\
+	if (err) {\
+		*_at_ptr = NULL;\
+	}\
+	err;\
+})
+
+
+static bool // error
+populate_atom_table(
+		struct atomtree_commons* const commons,
+		void** const leaves,
+		uint16_t const bios_offset,
+		semver* const ver
+		) {
+	if (0 == bios_offset) {
+		return true;
+	}
+	struct atom_common_table_header* const header = commons->bios + bios_offset;
+	if (offchk(commons, header, sizeof(*header))) {
+		return true;
+	}
+	*leaves = header; // for diagnostic
+	if (offchk(commons, header, header->structuresize)) {
+		return true;
+	}
+
+	*ver = atom_get_ver(header);
+	return false;
+}
+
+/*
+current intended use:
+	bool const atom_err = populate_atom_table(
+		commons, &(smc_dpm_info->ver), bios_offset, &(smc_dpm_info->leaves)
+	);
+	if (atom_err) {
+		return;
+	}
+
+however:
+rework atomtree to use this api+abi? would work with atomtree puns
+typedef struct atomtree_atom {
+	struct atom_common_table_header* table_header;
+	semver ver;
+} atomtree_atom;
+
+// polymorphism; causes atomtree_atom's elements to be inherited.
+#define atomtree_atomise(punning_structs)\
+	union {\
+		atomtree_atom atom;\
+		struct {\
+			union {\
+				struct atom_common_table_header* table_header;\
+				punning_structs
+			};\
+			semver ver;\
+		};\
+	};
+
+struct atomtree_lcd_info {
+	atomtree_atomise(
+		struct atom_lvds_info_v1_1*  v1_1;
+		struct atom_lvds_info_v1_2*  v1_2;
+		struct atom_lcd_info_v1_3*   v1_3;
+		struct atom_lcd_info_v2_1*   v2_1;
+	) // lcd_info.ver lcd_info.v1_1 etc.
+
+
+	uint8_t num_records;
+	size_t record_table_size;
+	struct atomtree_lcd_record* record_table;
+};
+
+
+	if (populate_atom_table(commons, &(smc_dpm_info->atom), bios_offset)) {
+		return;
+	}
+*/
+
 
 inline static void
 populate_smc_dpm_info(
@@ -20,13 +166,12 @@ populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(smc_dpm_info->leaves), bios_offset, &(smc_dpm_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	// leaves is in a union with the structs.
-	smc_dpm_info->leaves = commons->bios + bios_offset;
-	smc_dpm_info->ver = atom_get_ver(smc_dpm_info->table_header);
 }
 
 
@@ -36,13 +181,12 @@ populate_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(firmwareinfo->leaves), bios_offset, &(firmwareinfo->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	// leaves is in a union with the structs.
-	firmwareinfo->leaves = commons->bios + bios_offset;
-	firmwareinfo->ver = atom_get_ver(firmwareinfo->table_header);
 }
 
 
@@ -63,7 +207,7 @@ populate_lcd_info_record_table(
 		.raw = record_start
 	};
 	uint8_t num_records = 0;
-	while (LCD_RECORD_END_TYPE != *r.RecordType) {
+	while (! offchk(commons, r.raw, sizeof(*r.RecordType))) {
 		switch (*r.RecordType) {
 			case LCD_MODE_PATCH_RECORD_MODE_TYPE:
 				r.raw += sizeof(r.records->patch_record);
@@ -92,6 +236,8 @@ populate_lcd_info_record_table(
 			case LCD_PANEL_RESOLUTION_RECORD_TYPE:
 				r.raw += sizeof(r.records->panel_resolution_patch_record);
 				break;
+			case LCD_RECORD_END_TYPE:
+				goto record_counter_loop_uberbreak;
 			case LCD_EDID_OFFSET_PATCH_RECORD_TYPE: // no idea
 			default:
 				assert(0);
@@ -99,6 +245,7 @@ populate_lcd_info_record_table(
 		}
 		num_records++;
 	}
+	num_records--; // fails offchk; only good way out is uberbreak
 	record_counter_loop_uberbreak:
 
 	lcd_info->record_table_size = r.raw - record_start;
@@ -156,20 +303,19 @@ populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(lcd_info->leaves), bios_offset, &(lcd_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	lcd_info->leaves = commons->bios + bios_offset;
-	lcd_info->ver = atom_get_ver(lcd_info->table_header);
 
 	void* record_start = NULL;
 
 	switch (lcd_info->ver.ver) {
 		case V(1,1):
 			if (lcd_info->v1_1->ModePatchTableOffset) {
-				// v1_1 uses an absolute position
-				record_start = (
+				record_start = ( // v1_1 uses an absolute position
 					commons->bios + lcd_info->v1_1->ModePatchTableOffset
 				);
 			}
@@ -199,12 +345,12 @@ populate_analog_tv_info(
 		struct atomtree_analog_tv_info* const atv,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(atv->leaves), bios_offset, &(atv->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	atv->leaves = commons->bios + bios_offset;
-	atv->ver = atom_get_ver(atv->table_header);
 }
 
 inline static void
@@ -213,14 +359,13 @@ populate_smu_info(
 		struct atomtree_smu_info* const smu_info,
 		uint16_t const bios_offset
 		) {
-	// leaves is in a union with the structs.
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(smu_info->leaves), bios_offset, &(smu_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	smu_info->leaves = commons->bios + bios_offset;
-	smu_info->ver = atom_get_ver(smu_info->table_header);
-	switch (smu_info->ver.ver) { // TODO if init,golden are 0, catch them.
+	switch (smu_info->ver.ver) {
 		case V(3,2):
 			if (smu_info->v3_2->smugoldenoffset) {
 				smu_info->smugolden =
@@ -267,6 +412,12 @@ populate_smu_info(
 		default:
 			break;
 	}
+	if (offchk(commons, smu_info->smugolden, 1)) {
+		 smu_info->smugolden = NULL;
+	}
+	if (offchk(commons, smu_info->smuinit, 1)) {
+		 smu_info->smuinit = NULL;
+	}
 }
 
 
@@ -275,13 +426,12 @@ populate_vram_usagebyfirmware(
 		struct atomtree_commons* const commons,
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
 		uint16_t const bios_offset) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(fw_vram->leaves), bios_offset, &(fw_vram->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	// leaves is in a union with the structs.
-	fw_vram->leaves = commons->bios + bios_offset;
-	fw_vram->ver = atom_get_ver(fw_vram->table_header);
 }
 
 
@@ -291,12 +441,12 @@ populate_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(gpio_pin_lut->leaves), bios_offset, &(gpio_pin_lut->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	gpio_pin_lut->leaves = commons->bios + bios_offset;
-	gpio_pin_lut->ver = atom_get_ver(gpio_pin_lut->table_header);
 	switch (gpio_pin_lut->ver.ver) {
 		case V(2,1):
 			gpio_pin_lut->num_gpio_pins = (
@@ -318,13 +468,12 @@ populate_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(gfx_info->leaves), bios_offset, &(gfx_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	// leaves is in a union with the structs.
-	gfx_info->leaves = commons->bios + bios_offset;
-	gfx_info->ver = atom_get_ver(gfx_info->table_header);
 	switch (gfx_info->ver.ver) {
 		case V(2,1):
 			break;
@@ -380,6 +529,9 @@ populate_gfx_info(
 		default:
 			break;
 	}
+	offrst(commons, &(gfx_info->gcgolden), 1);
+	offrst(commons, &(gfx_info->edc_didt_hi));
+	offrst(commons, &(gfx_info->edc_didt_lo));
 }
 
 
@@ -398,10 +550,12 @@ populate_pplib_ppt_state_array(
 		struct atom_pplib_state_v2* v2;
 		union atom_pplib_states*    states;
 	} walker;
+	bool oob = false; // out of bounds
+	uint8_t i = 0;
 
 
 	// driver gates with the atom ver
-	if (V(6,0) > atom_get_ver(&(pplibv1->header)).ver) {
+	if (V(6,0) > atom_get_ver(&(ppt41->leaves->header)).ver) {
 		ppt41->state_array_ver = SET_VER(1);
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
@@ -417,14 +571,15 @@ populate_pplib_ppt_state_array(
 				/ sizeof(base->v1.ClockStateIndices[0])
 			);
 			walker.raw = &(base->v1);
-			for (uint8_t i=0; i < pplibv1->NumStates; i++) {
+			for (i=0, oob=false; i < pplibv1->NumStates && !oob; i++) {
+				oob = offchk(commons, walker.raw, entry_size);
 				ppt41->state_array[i].num_levels = num_levels;
 				ppt41->state_array[i].state = walker.states;
 				ppt41->state_array[i].size = entry_size;
 				walker.raw += entry_size;
 			}
 			ppt41->state_array_size = (
-				pplibv1->NumStates * pplibv1->StateEntrySize
+				i * pplibv1->StateEntrySize
 			);
 		}
 	} else {
@@ -437,24 +592,29 @@ populate_pplib_ppt_state_array(
 				base->v2.NumEntries * sizeof(ppt41->state_array[0])
 			);
 
-			uint16_t entry_size;
+			uint16_t entry_size = sizeof(*walker.v2);
 			walker.v2 = base->v2.states;
-			for (uint8_t i=0; i < base->v2.NumEntries; i++) {
+			oob = offchk(commons, walker.raw, entry_size);
+			for (i=0; i < base->v2.NumEntries && !oob; i++) {
 				ppt41->state_array[i].num_levels = walker.v2->NumDPMLevels;
 				ppt41->state_array[i].state = walker.states;
 				entry_size = sizeof_flex(
 					walker.v2, clockInfoIndex, walker.v2->NumDPMLevels
 				);
 				ppt41->state_array[i].size = entry_size;
+				oob = offchk(commons, walker.raw, entry_size);
 				walker.raw += entry_size;
 			}
 			ppt41->state_array_size = walker.raw - (void*)base;
 		}
 	}
+	if (oob && ppt41->state_array_size) {
+		ppt41->num_state_array_entries = i - 1;
+	}
 }
-
 inline static void
 populate_pplib_ppt_extended_table(
+		struct atomtree_commons* const commons,
 		struct atomtree_powerplay_table_v4_1* const ppt41
 		) {
 	void* const raw = ppt41->leaves;
@@ -504,43 +664,116 @@ populate_pplib_ppt_extended_table(
 			}
 			fall;
 		case V(3):
-			if (ext->v9.UVDTableOffset) { // 2 flex subtables in the table
-				void* walker = raw + ext->v9.UVDTableOffset;
-				ppt41->uvd_root = walker;
-				walker += sizeof(*(ppt41->uvd_root));
-				ppt41->uvd_info = walker;
-				walker += sizeof_flex(
-					ppt41->uvd_info, entries, ppt41->uvd_info->NumEntries
-				);
-				ppt41->uvd_limits = walker;
-				walker += sizeof_flex(
-					ppt41->uvd_limits, entries, ppt41->uvd_limits->NumEntries
-				);
-				ppt41->uvd_table_size = walker - (void*)(ppt41->uvd_root);
-			};
+			if (ext->v9.UVDTableOffset) {
+				ppt41->uvd_root = raw + ext->v9.UVDTableOffset;
+			}
 			fall;
 		case V(2):
-			if (ext->v9.VCETableOffset) { // 3 flex subtables in the table
-				void* walker = raw + ext->v9.VCETableOffset;
-				ppt41->vce_root = walker;
-				walker += sizeof(*(ppt41->vce_root));
-				ppt41->vce_info = walker;
-				walker += sizeof_flex(
-					ppt41->vce_info, entries, ppt41->vce_info->NumEntries
-				);
-				ppt41->vce_limits = walker;
-				walker += sizeof_flex(
-					ppt41->vce_limits, entries, ppt41->vce_limits->NumEntries
-				);
-				ppt41->vce_states = walker;
-				walker += sizeof_flex(
-					ppt41->vce_states, entries, ppt41->vce_states->NumEntries
-				);
-				ppt41->vce_table_size = walker - (void*)(ppt41->vce_root);
-			};
+			if (ext->v9.VCETableOffset) {
+				ppt41->vce_root = raw + ext->v9.VCETableOffset;
+			}
 			fall;
 		case V(1): break;
 		default: assert(0); break;
+	}
+	offrst_flex(commons, &(ppt41->vq_budgeting),
+		entries, ppt41->vq_budgeting->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->vddgfx_sclk),
+		entries, ppt41->vddgfx_sclk->NumEntries
+	);
+	if (ppt41->powertune) {
+		size_t size = sizeof(ppt41->powertune->RevId);
+		switch (ppt41->powertune->RevId) {
+			case 0: size = sizeof(ppt41->powertune->v0); break;
+			case 1: size = sizeof(ppt41->powertune->v1); break;
+		}
+		offrst(commons, &(ppt41->powertune), size);
+	}
+	offrst_flex(commons, &(ppt41->acpclk),
+		entries, ppt41->acpclk->NumEntries
+	);
+	offrst(commons, &(ppt41->ppm));
+	offrst_flex(commons, &(ppt41->samu),
+		entries, ppt41->samu->NumEntries
+	);
+
+	if (ppt41->uvd_root) { // 2 flex subtables in the table
+		bool err = false;
+		void* walker = ppt41->uvd_root;
+		err = offrst(commons, &(ppt41->uvd_root));
+		if (err) {
+			goto uvd_err;
+		}
+
+		ppt41->uvd_info = walker + sizeof(*(ppt41->uvd_root));
+		err = offrst_flex(commons, &(ppt41->uvd_info),
+			entries, ppt41->uvd_info->NumEntries
+		);
+		if (err) {
+			goto uvd_err;
+		}
+
+		ppt41->uvd_limits = walker + sizeof_flex(
+			ppt41->uvd_info, entries, ppt41->uvd_info->NumEntries
+		);
+		err = offrst_flex(commons, &(ppt41->uvd_limits),
+			entries, ppt41->uvd_limits->NumEntries
+		);
+		if (err) {
+			goto uvd_err;
+		}
+
+		walker = ppt41->uvd_limits;
+		walker += sizeof_flex(
+			ppt41->uvd_limits, entries, ppt41->uvd_limits->NumEntries
+		);
+		uvd_err:
+		ppt41->uvd_table_size = walker - (void*)(ppt41->uvd_root);
+	}
+
+	if (ppt41->vce_root) { // 3 flex subtables in the table
+		bool err = false;
+		void* walker = ppt41->vce_root;
+		err = offrst(commons, &(ppt41->vce_root));
+		if (err) {
+			goto vce_err;
+		}
+
+		ppt41->vce_info = walker + sizeof(*(ppt41->vce_root));
+		err = offrst_flex(commons, &(ppt41->vce_info),
+			entries, ppt41->vce_info->NumEntries
+		);
+		if (err) {
+			goto vce_err;
+		}
+
+		ppt41->vce_limits = walker + sizeof_flex(
+			ppt41->vce_info, entries, ppt41->vce_info->NumEntries
+		);
+		err = offrst_flex(commons, &(ppt41->vce_limits),
+			entries, ppt41->vce_limits->NumEntries
+		);
+		if (err) {
+			goto vce_err;
+		}
+
+		ppt41->vce_states = walker + sizeof_flex(
+			ppt41->vce_limits, entries, ppt41->vce_info->NumEntries
+		);
+		err = offrst_flex(commons, &(ppt41->vce_states),
+			entries, ppt41->vce_states->NumEntries
+		);
+		if (err) {
+			goto vce_err;
+		}
+
+		walker = ppt41->vce_states;
+		walker += sizeof_flex(
+			ppt41->vce_states, entries, ppt41->vce_states->NumEntries
+		);
+		vce_err:
+		ppt41->vce_table_size = walker - (void*)(ppt41->vce_root);
 	}
 }
 
@@ -576,13 +809,13 @@ get_early_clock_info_length(
 }
 inline static void
 set_pplib_ppt_clock_info(
-		struct atomtree_powerplay_table_v4_1* const ppt41,
-		enum amd_asic_type const chip_type
+		struct atomtree_commons* const commons,
+		struct atomtree_powerplay_table_v4_1* const ppt41
 		) {
 	union atom_pplib_clock_info_arrays const* const ci = ppt41->clock_info;
 
 	// radeon driver's codepaths for r600, r7xxx, evergeeen is a tangled mess
-	switch (chip_type) {
+	switch (commons->atree->chip_type) {
 		case CHIP_R600:
 		case CHIP_RV610:
 		case CHIP_RV630:
@@ -663,12 +896,19 @@ set_pplib_ppt_clock_info(
 			break;
 		default: break;
 	}
+	if (offchk(commons, ppt41->clock_info, ppt41->clock_info_size)) {
+		ppt41->clock_info_ver = ATOM_PPLIB_CLOCK_INFO_UNKNOWN;
+		ppt41->clock_info_size = 0;
+		ppt41->num_clock_info_entries = 0;
+		ppt41->clock_info = NULL;
+	}
 }
-inline static void
+inline static bool // error
 populate_pplib_ppt(
 		struct atomtree_commons* const commons,
-		struct atomtree_powerplay_table_v4_1* const ppt41
+		struct atomtree_powerplay_table* const ppt
 		) {
+	struct atomtree_powerplay_table_v4_1* const ppt41 = &(ppt->v4_1);
 	union {
 		void* raw;
 		union atom_pplib_powerplaytables* all;
@@ -676,6 +916,11 @@ populate_pplib_ppt(
 	} const b = {
 		.raw = ppt41->leaves
 	};
+
+	if (offchk(commons, b.raw, sizeof(b.all->v1))) { // to access TableSize
+		return true;
+	}
+
 	switch (b.v5->TableSize) {
 		case sizeof(b.all->v5): ppt41->pplib_ver = SET_VER(5); break;
 		case sizeof(b.all->v4): ppt41->pplib_ver = SET_VER(4); break;
@@ -685,6 +930,20 @@ populate_pplib_ppt(
 		case sizeof(b.all->v1): ppt41->pplib_ver = SET_VER(1); break;
 		default: assert(0);
 	};
+
+	size_t size;
+	switch (ppt41->pplib_ver.ver) {
+		case V(5): size = sizeof(b.all->v5); break;
+		case V(4): size = sizeof(b.all->v4); break;
+		case V(3): size = sizeof(b.all->v3); break;
+		case V(2): size = sizeof(b.all->v2); break;
+		case V(1): size = sizeof(b.all->v1); break;
+		default:   size = 0; // tolerate unknown because we can
+	};
+	if (offchk(commons, b.raw, size)) {
+		return true;
+	}
+
 	switch (ppt41->pplib_ver.ver) {
 		case V(5):
 			if (b.v5->CACLeakageTableOffset) {
@@ -719,7 +978,6 @@ populate_pplib_ppt(
 			}
 			if (b.v5->ExtendedHeaderOffset) {
 				ppt41->extended_header = b.raw + b.v5->ExtendedHeaderOffset;
-				populate_pplib_ppt_extended_table(ppt41);
 			}
 			fall;
 		case V(2):
@@ -732,25 +990,12 @@ populate_pplib_ppt(
 		case V(1):
 			if (b.v5->StateArrayOffset) {
 				ppt41->state_array_base = b.raw + b.v5->StateArrayOffset;
-				populate_pplib_ppt_state_array(commons, ppt41);
 			}
 			if (b.v5->ClockInfoArrayOffset) {
 				ppt41->clock_info = b.raw + b.v5->ClockInfoArrayOffset;
-				set_pplib_ppt_clock_info(ppt41, commons->atree->chip_type);
 			}
 			if (b.v5->NonClockInfoArrayOffset) {
 				ppt41->nonclock_info = b.raw + b.v5->NonClockInfoArrayOffset;
-
-				switch (ppt41->nonclock_info->header.EntrySize) {
-					case sizeof(ppt41->nonclock_info->v1.nonClockInfo[0]):
-						 ppt41->nonclock_info_ver = SET_VER(1);
-						 break;
-					case sizeof(ppt41->nonclock_info->v2.nonClockInfo[0]):
-						 ppt41->nonclock_info_ver = SET_VER(2);
-						 break;
-					case 0: break;
-					default: assert(0); break;
-				}
 			}
 			if (b.v5->BootClockInfoOffset) {
 				ppt41->boot_clock_info = b.raw + b.v5->BootClockInfoOffset;
@@ -761,20 +1006,111 @@ populate_pplib_ppt(
 				);
 			}
 			break;
-		default: assert(0);
 	}
+	offrst(commons, &(ppt41->state_array_base));
+	offrst(commons, &(ppt41->clock_info),
+		sizeof(ppt41->clock_info->header)
+	);
+	offrst(commons, &(ppt41->nonclock_info),
+		sizeof(ppt41->nonclock_info->header)
+	);
+	offrst(commons, &(ppt41->boot_clock_info), 1);
+	offrst(commons, &(ppt41->boot_nonclock_info), 1);
+	offrst(commons, &(ppt41->thermal_policy));
+	offrst(commons, &(ppt41->fan_table),
+		sizeof(ppt41->fan_table->RevId)
+	);
+	offrst(commons, &(ppt41->extended_header),
+		sizeof(ppt41->extended_header->Size)
+	);
+	offrst_flex(commons, &(ppt41->vddc_sclk),
+		entries, ppt41->vddc_sclk->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->vddci_mclk),
+		entries, ppt41->vddci_mclk->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->vddc_mclk),
+		entries, ppt41->vddc_mclk->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->max_on_dc),
+		entries, ppt41->max_on_dc->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->phase_shed),
+		entries, ppt41->phase_shed->NumEntries
+	);
+	offrst_flex(commons, &(ppt41->mvdd_mclk),
+		entries, ppt41->mvdd_mclk->NumEntries
+	);
+	offrst(commons, &(ppt41->cac_leakage),
+		sizeof(ppt41->cac_leakage->NumEntries)
+	);
+
+	if (ppt41->state_array_base) {
+		populate_pplib_ppt_state_array(commons, ppt41);
+	};
+	if (ppt41->clock_info) {
+		set_pplib_ppt_clock_info(commons, ppt41);
+	};
+	if (ppt41->nonclock_info) {
+		switch (ppt41->nonclock_info->header.EntrySize) {
+			case sizeof(ppt41->nonclock_info->v1.nonClockInfo[0]):
+				 ppt41->nonclock_info_ver = SET_VER(1);
+				 break;
+			case sizeof(ppt41->nonclock_info->v2.nonClockInfo[0]):
+				 ppt41->nonclock_info_ver = SET_VER(2);
+				 break;
+			case 0: break;
+			default: assert(0); break;
+		}
+	};
+	if (ppt41->fan_table) {
+		switch (ppt41->fan_table->RevId) {
+			case 1:  size = sizeof(ppt41->fan_table->v1); break;
+			case 2:  size = sizeof(ppt41->fan_table->v2); break;
+			case 5: 
+			case 4: 
+			case 3:  size = sizeof(ppt41->fan_table->v3); break;
+			case 6:  size = sizeof(ppt41->fan_table->v6); break;
+			case 7:  size = sizeof(ppt41->fan_table->v7); break;
+			default: size = sizeof(ppt41->fan_table->RevId); break;
+		}
+		offrst(commons, &(ppt41->fan_table), size);
+	}
+	if (ppt41->extended_header) {
+		populate_pplib_ppt_extended_table(commons, ppt41);
+	}
+	if (ppt41->cac_leakage) {
+		union atom_pplib_cac_leakage_tables const* const cac = (
+			ppt41->cac_leakage
+		);
+		if (ppt41->leaves->v1.PlatformCaps.EVV) {
+			size = sizeof_flex(&(cac->evv), entries, cac->NumEntries);
+		} else {
+			size = sizeof_flex(&(cac->non_evv), entries, cac->NumEntries);
+		}
+		offrst(commons, &(ppt41->cac_leakage), size);
+	}
+
+	return false;
 }
 
-inline static void
+inline static bool // error
 populate_pptablev1_ppt(
-		struct atomtree_powerplay_table_v7_1* const ppt71
+		struct atomtree_commons* const commons,
+		struct atomtree_powerplay_table* const ppt
 		) {
+	struct atomtree_powerplay_table_v7_1* const ppt71 = &(ppt->v7_1);
 	union {
 		void* raw;
 		struct atom_pptable_powerplaytable_v1* ppt;
 	} const b = {
 		.raw = ppt71->leaves
 	};
+
+	if (offchk(commons, b.raw, sizeof(*b.ppt))) {
+		return true;
+	}
+
 	if (b.ppt->StateArrayOffset) {
 		ppt71->state_array = b.raw + b.ppt->StateArrayOffset;
 	}
@@ -814,18 +1150,104 @@ populate_pptablev1_ppt(
 	if (b.ppt->GPIOTableOffset) {
 		ppt71->gpio_table = b.raw + b.ppt->GPIOTableOffset;
 	}
+
+	offrst_flex(commons, &(ppt71->state_array),
+		entries, ppt71->state_array->NumEntries
+	);
+	offrst(commons, &(ppt71->fan_table),
+		sizeof(ppt71->fan_table->RevId)
+	);
+	offrst(commons, &(ppt71->thermal_controller));
+	offrst_flex(commons, &(ppt71->mclk_dependency),
+		entries, ppt71->mclk_dependency->NumEntries
+	);
+	offrst(commons, &(ppt71->sclk_dependency));
+	offrst_flex(commons, &(ppt71->vddc_lut),
+		entries, ppt71->vddc_lut->NumEntries
+	);
+	offrst_flex(commons, &(ppt71->vddgfx_lut),
+		entries, ppt71->vddgfx_lut->NumEntries
+	);
+	offrst_flex(commons, &(ppt71->mm_dependency),
+		entries, ppt71->mm_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt71->vce_state),
+		entries, ppt71->vce_state->NumEntries
+	);
+	offrst(commons, &(ppt71->powertune),
+		sizeof(ppt71->powertune->RevId)
+	);
+	offrst_flex(commons, &(ppt71->hard_limit),
+		entries, ppt71->hard_limit->NumEntries
+	);
+	offrst(commons, &(ppt71->pcie_table));
+	offrst(commons, &(ppt71->gpio_table));
+
+	if (ppt71->fan_table) {
+		uint8_t RevId = ppt71->fan_table->RevId;
+		size_t size = sizeof(RevId);
+		if (7 >= RevId)      size = sizeof(ppt71->fan_table->v0);
+		else if (8 == RevId) size = sizeof(ppt71->fan_table->v8);
+		else if (9 == RevId) size = sizeof(ppt71->fan_table->v9);
+		offrst(commons, &(ppt71->fan_table), size);
+	}
+	if (ppt71->sclk_dependency) {
+		union atom_pptable_sclk_dependency_tables const* const sclk = (
+			ppt71->sclk_dependency
+		);
+		size_t size = sizeof(sclk->RevId);
+		switch (sclk->RevId) {
+			case 0:
+				size = sizeof_flex(&(sclk->v0), entries, sclk->v0.NumEntries);
+				break;
+			case 1:
+				size = sizeof_flex(&(sclk->v1), entries, sclk->v1.NumEntries);
+				break;
+		}
+		offrst(commons, &(ppt71->sclk_dependency), size);
+	}
+	if (ppt71->powertune) {
+		uint8_t const RevId = ppt71->powertune->RevId;
+		size_t size = sizeof(RevId);
+		if (2 >= RevId)      size = sizeof(ppt71->powertune->v0);
+		else if (3 == RevId) size = sizeof(ppt71->powertune->v3);
+		else if (4 == RevId) size = sizeof(ppt71->powertune->v4);
+		offrst(commons, &(ppt71->powertune), size);
+	}
+	if (ppt71->pcie_table) {
+		union atom_pptable_pcie_tables const* const pcie = ppt71->pcie_table;
+		size_t size = sizeof(pcie->RevId);
+		switch (pcie->RevId) {
+			case 0:
+				size = sizeof_flex(&(pcie->v0), entries, pcie->v0.NumEntries);
+				break;
+			case 1:
+				size = sizeof_flex(&(pcie->v1), entries, pcie->v1.NumEntries);
+				break;
+		}
+		offrst(commons, &(ppt71->pcie_table), size);
+	}
+
+	return false;
 }
 
-inline static void
+inline static bool // error
 populate_vega10_ppt(
-		struct atomtree_powerplay_table_v8_1* const ppt81
+		struct atomtree_commons* const commons,
+		struct atomtree_powerplay_table* const ppt
 		) {
+	struct atomtree_powerplay_table_v8_1* const ppt81 = &(ppt->v8_1);
 	union {
 		void* raw;
 		struct atom_vega10_powerplaytable* ppt;
 	} const b = {
 		.raw = ppt81->leaves
 	};
+
+	if (offchk(commons, b.raw, sizeof(*b.ppt))) {
+		return true;
+	}
+
 	if (b.ppt->StateArrayOffset) {
 		ppt81->state_array = b.raw + b.ppt->StateArrayOffset;
 	}
@@ -880,36 +1302,149 @@ populate_vega10_ppt(
 	if (b.ppt->PhyClkDependencyTableOffset) {
 		ppt81->phyclk_dependency = b.raw + b.ppt->PhyClkDependencyTableOffset;
 	}
+
+	offrst_flex(commons, &(ppt81->state_array),
+		states, ppt81->state_array->NumEntries
+	);
+	offrst(commons, &(ppt81->fan_table),
+		sizeof(ppt81->fan_table->RevId)
+	);
+	offrst(commons, &(ppt81->thermal_controller));
+	offrst_flex(commons, &(ppt81->socclk_dependency),
+		entries, ppt81->socclk_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->mclk_dependency),
+		entries, ppt81->mclk_dependency->NumEntries
+	);
+	offrst(commons, &(ppt81->gfxclk_dependency));
+	offrst_flex(commons, &(ppt81->dcefclk_dependency),
+		entries, ppt81->dcefclk_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->vddc_lut),
+		vdd_entries, ppt81->vddc_lut->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->vdd_mem_lut),
+		vdd_entries, ppt81->vdd_mem_lut->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->mm_dependency),
+		entries, ppt81->mm_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->vce_state),
+		entries, ppt81->vce_state->NumEntries
+	);
+	offrst(commons, &(ppt81->powertune),
+		sizeof(ppt81->powertune->RevId)
+	);
+	offrst_flex(commons, &(ppt81->hard_limit),
+		entries, ppt81->hard_limit->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->vddci_lut),
+		vdd_entries, ppt81->vddci_lut->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->pcie_table),
+		entries, ppt81->pcie_table->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->pixclk_dependency),
+		entries, ppt81->pixclk_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->dispclk_dependency),
+		entries, ppt81->dispclk_dependency->NumEntries
+	);
+	offrst_flex(commons, &(ppt81->phyclk_dependency),
+		entries, ppt81->phyclk_dependency->NumEntries
+	);
+	if (ppt81->fan_table) {
+		uint8_t const RevId = ppt81->fan_table->RevId;
+		size_t size = sizeof(RevId);
+		if (10 == RevId)      size = sizeof(ppt81->fan_table->v1);
+		else if (11 == RevId) size = sizeof(ppt81->fan_table->v2);
+		else if (12 >= RevId) size = sizeof(ppt81->fan_table->v3);
+		offrst(commons, &(ppt81->fan_table), size);
+	}
+	if (ppt81->gfxclk_dependency) {
+		union atom_vega10_gfxclk_dependency_tables const* const gfx = (
+			ppt81->gfxclk_dependency
+		);
+		size_t size = sizeof(*gfx);
+		switch (ppt81->gfxclk_dependency->RevId) {
+			case 0:
+				size = sizeof_flex(&(gfx->v1), entries, gfx->v1.NumEntries);
+				break;
+			case 1:
+				size = sizeof_flex(&(gfx->v2), entries, gfx->v2.NumEntries);
+				break;
+		}
+		offrst(commons, &(ppt81->gfxclk_dependency), size);
+	}
+	if (ppt81->powertune) {
+		size_t size;
+		switch (ppt81->powertune->RevId) {
+			case 5:  size = sizeof(ppt81->powertune->v1); break;
+			case 6:  size = sizeof(ppt81->powertune->v2); break;
+			default: size = sizeof(ppt81->powertune->v3); break;
+		}
+		offrst(commons, &(ppt81->powertune), size);
+	}
+
+	return false;
 }
+inline static bool // error
+populate_powerplay_info(
+		struct atomtree_commons* const commons,
+		struct atomtree_powerplay_table* const ppt
+		) {
+	bool err;
+	switch (ppt->ver.ver) {
+		case V(1,1):
+			err = offchk_flex(commons, ppt->v1_1,
+				PowerPlayInfo, ppt->v1_1->NumOfPowerModeEntries
+			);
+			break;
+		case V(2,1):
+			err = offchk_flex(commons, ppt->v2_1,
+				PowerPlayInfo, ppt->v2_1->NumOfPowerModeEntries
+			);
+			break;
+		case V(3,1):
+			err = offchk_flex(commons, ppt->v3_1,
+				PowerPlayInfo, ppt->v3_1->NumOfPowerModeEntries
+			);
+			break;
+		default: assert(0);
+	}
+	return err;
+}
+
 inline static void
 populate_ppt(
 		struct atomtree_commons* const commons,
 		struct atomtree_powerplay_table* const ppt,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(ppt->leaves), bios_offset, &(ppt->ver)
+	);
+	if (atom_err) {
 		return;
 	}
 
-	ppt->leaves = commons->bios + bios_offset;
-	// leaves is in a union with the structs.
-	ppt->ver = atom_get_ver(ppt->table_header);
-
+	bool err = false;
 	switch (ppt->ver.ver) {
 		case V(1,1):
 		case V(2,1):
 		case V(3,1):
-			break; // absurdly simple powerplay.
+			err = populate_powerplay_info(commons, ppt);
+			break;
 		case V(6,1):
 		case V(5,1):
 		case V(4,1):
-			populate_pplib_ppt(commons, &(ppt->v4_1));
+			err = populate_pplib_ppt(commons, ppt);
 			break;
 		case V(7,1): // Tonga, Fiji, Polaris ; pptable and vega10 look similar
-			populate_pptablev1_ppt(&(ppt->v7_1));
+			err = populate_pptablev1_ppt(commons, ppt);
 			break;
 		case V(8,1):
-			populate_vega10_ppt(&(ppt->v8_1));
+			err = populate_vega10_ppt(commons, ppt);
 			break;
 		case V(11,0):
 			ppt->v11_0.smc_pptable_ver = SET_VER(
@@ -933,6 +1468,9 @@ populate_ppt(
 		default:
 			assert(0);
 			break;
+	}
+	if (err) { // partial crawl error, unable to get a basic table
+		ppt->ver.ver = V(0);
 	}
 }
 
@@ -1136,11 +1674,12 @@ populate_display_object(
 		struct atomtree_display_object* const disp,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(disp->leaves), bios_offset, &(disp->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-	disp->leaves = commons->bios + bios_offset;
-	disp->ver = atom_get_ver(disp->table_header);
 	switch (disp->ver.ver) {
 		case V(1,1):
 		case V(1,2):
@@ -1155,11 +1694,12 @@ populate_iio(
 		struct atomtree_iio_access* const iio,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(iio->leaves), bios_offset, &(iio->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-	iio->leaves = commons->bios + bios_offset;
-	iio->ver = atom_get_ver(iio->table_header);
 
 	assert(V(1,1) == iio->ver.ver);
 
@@ -1175,11 +1715,12 @@ populate_umc_info(
 		struct atomtree_umc_info* const umc,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(umc->leaves), bios_offset, &(umc->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-	umc->leaves = commons->bios + bios_offset;
-	umc->ver = atom_get_ver(umc->table_header);
 }
 
 inline static void
@@ -1188,11 +1729,12 @@ populate_dce_info(
 		struct atomtree_dce_info* const dce,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(dce->leaves), bios_offset, &(dce->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-	dce->leaves = commons->bios + bios_offset;
-	dce->ver = atom_get_ver(dce->table_header);
 
 	switch (dce->ver.ver) {
 		case V(4,4):
@@ -2236,12 +2778,12 @@ populate_vram_info(
 		struct atomtree_vram_info* const vram_info,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(vram_info->leaves), bios_offset, &(vram_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	vram_info->leaves = commons->bios + bios_offset;
-	vram_info->ver = atom_get_ver(vram_info->table_header);
 	switch (vram_info->ver.ver) { // TODO: earlier tables than 2.3?
 		case V(1,2): populate_vram_info_v1_2(commons, vram_info); break;
 		case V(1,3): populate_vram_info_v1_3(commons, vram_info); break;
@@ -2564,12 +3106,12 @@ populate_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
+	bool const atom_err = populate_atom_table(
+		commons, &(vo_info->leaves), bios_offset, &(vo_info->ver)
+	);
+	if (atom_err) {
 		return;
 	}
-
-	vo_info->leaves = commons->bios + bios_offset;
-	vo_info->ver = atom_get_ver(vo_info->table_header);
 	switch (vo_info->ver.ver) {
 		case V(1,1): populate_voltageobject_info_v1_1(commons, vo_info); break;
 		case V(1,2): populate_voltageobject_info_v1_2(commons, vo_info); break;
@@ -2888,15 +3430,15 @@ populate_datatables(
 		struct atomtree_commons* const commons,
 		uint16_t const bios_offset
 		) {
-	if (0 == bios_offset) {
-		return;
-	}
-
 	struct atomtree_master_datatable* const data_table = &(
 		commons->atree->data_table
 	);
-	data_table->leaves = commons->bios + bios_offset;
-	data_table->ver = atom_get_ver(data_table->table_header);
+	bool const atom_err = populate_atom_table(
+		commons, &(data_table->leaves), bios_offset, &(data_table->ver)
+	);
+	if (atom_err) {
+		return;
+	}
 	switch (data_table->ver.ver) {
 		case V(1,1): populate_datatable_v1_1(commons, data_table); break;
 		case V(2,1): populate_datatable_v2_1(commons, data_table); break;
