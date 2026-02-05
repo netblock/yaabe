@@ -447,14 +447,10 @@ enum XGMI_LINK_WIDTH_e:uint8_t {
 	XGMI_LINK_WIDTH_COUNT = 7,
 };
 
-#pragma pack(pop) // restore old packing
 
+#pragma pack(pop) // restore old packing
 #include "pplib.h"
 #include "pptable.h"
 #include "pptable_vega10.h"
-#include "smu11_driver_if.h"
-#include "smu_v11_0_pptable.h"
-#include "smu13_driver_if_v13_0_7.h"
-#include "smu_v13_0_7_pptable.h"
-
+#include "powerplay_smu.h"
 #endif

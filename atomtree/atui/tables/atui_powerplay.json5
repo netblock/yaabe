@@ -1,4 +1,7 @@
-/* For powerplay.h -- common powerplay definitions */
+/* For:
+powerplay.h -- common powerplay definitions 
+powerply_smu.h and smu_driver_if.h -- common smu-based powerplay
+*/
 
 {class: "branch",
 global_defaults: {
@@ -520,6 +523,21 @@ global_defaults: {
 		}, {
 			access: "bios->c",
 			name: "c",
+		},
+	],
+},
+
+{
+	c_type: "smc_pptables",
+	c_prefix: "union",
+	description: {
+		eng: "PPTable_t in driver_if.h in the kernel",
+	},
+	leaves: [
+		{
+			access: "bios->Version",
+			name: "Version",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		},
 	],
 },

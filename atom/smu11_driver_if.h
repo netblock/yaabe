@@ -2,20 +2,6 @@
 #define SMU11_DRIVER_IF_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
-// pptable
-#define PPTABLE_V20_SMU_VERSION  3 // Vega20
-#define PPTABLE_NV10_SMU_VERSION 8 // Navi10
-#define PPTABLE_Sienna_Cichlid_SMU_VERSION 7 // Navi21
-
-
-enum smu11_driver_if_version { //  #define SMU11_DRIVER_IF_VERSION
-// this number seems to grow fast
-	smu11_driver_if_version_vega20 = 0x13, // with pptable v3
-	smu11_driver_if_version_navi10 = 0x33, // with pptable v8
-	smu11_driver_if_version_navi21 = 0x40, // Sienna Cichlid; pptable v7
-};
-
-
 #define NUM_GFXCLK_DPM_LEVELS_SMU11  16
 #define NUM_SMNCLK_DPM_LEVELS_SMU11  2 // Navi10
 #define NUM_SOCCLK_DPM_LEVELS_SMU11  8
@@ -823,7 +809,7 @@ struct smu11_smcpptable_v3_spread_spectrum {
 	struct smu11_smcpptable_spread_spectrum FllGfxclk;
 };
 struct smu11_smcpptable_v3 { // Vega20
-	uint32_t Version;
+	enum smu_smc_pptable_version Version;
 
 	union powerplay_feature_control_smu11_0x13        features;
 	struct smu11_smcpptable_v3_infrastructure_limits  infrastructure_limits;
@@ -1004,7 +990,7 @@ struct smu11_smcpptable_v8_spread_spectrum {
 	struct smu11_smcpptable_spread_spectrum Socclk;
 };
 struct smu11_smcpptable_v8 { // Navi10
-	uint32_t Version;
+	enum smu_smc_pptable_version Version;
 
 	union powerplay_feature_control_smu11_0x33        features;
 	struct smu11_smcpptable_v8_infrastructure_limits  infrastructure_limits;
@@ -1300,7 +1286,7 @@ struct smu11_smcpptable_v7_xgmi_training {
 struct smu11_smcpptable_v7 { // Navi21
 	// MAJOR SECTION: SKU PARAMETERS
 
-	uint32_t Version;
+	enum smu_smc_pptable_version Version;
 
 	union powerplay_feature_control_smu11_0x40       features;
 	struct smu11_smcpptable_v7_infrastructure_limits infrastructure_limits;
@@ -1387,7 +1373,7 @@ struct smu11_smcpptable_v7 { // Navi21
 struct smu11_smcpptable_v5 {
 	// MAJOR SECTION: SKU PARAMETERS
 
-	uint32_t Version;
+	enum smu_smc_pptable_version Version;
 
 	union powerplay_feature_control_smu11_0x40       features;
 	struct smu11_smcpptable_v7_infrastructure_limits infrastructure_limits;

@@ -534,6 +534,33 @@ populate_gfx_info(
 	offrst(commons, &(gfx_info->edc_didt_lo));
 }
 
+inline static bool // error
+populate_powerplay_info(
+		struct atomtree_commons* const commons,
+		struct atomtree_powerplay_table* const ppt
+		) {
+	bool err;
+	switch (ppt->ver.ver) {
+		case V(1,1):
+			err = offchk_flex(commons, ppt->v1_1,
+				PowerPlayInfo, ppt->v1_1->NumOfPowerModeEntries
+			);
+			break;
+		case V(2,1):
+			err = offchk_flex(commons, ppt->v2_1,
+				PowerPlayInfo, ppt->v2_1->NumOfPowerModeEntries
+			);
+			break;
+		case V(3,1):
+			err = offchk_flex(commons, ppt->v3_1,
+				PowerPlayInfo, ppt->v3_1->NumOfPowerModeEntries
+			);
+			break;
+		default: assert(0);
+	}
+	return err;
+}
+
 
 inline static void
 populate_pplib_ppt_state_array(
@@ -1388,31 +1415,60 @@ populate_vega10_ppt(
 
 	return false;
 }
-inline static bool // error
-populate_powerplay_info(
+
+inline static bool
+populate_ppt_smu(
 		struct atomtree_commons* const commons,
 		struct atomtree_powerplay_table* const ppt
 		) {
-	bool err;
+	struct atomtree_powerplay_smu* const smu = &(ppt->smu);
+	union smu_powerplay* const leaves = ppt->smu.leaves;
+
+	union smc_pptables* smc;
+	size_t size;
 	switch (ppt->ver.ver) {
-		case V(1,1):
-			err = offchk_flex(commons, ppt->v1_1,
-				PowerPlayInfo, ppt->v1_1->NumOfPowerModeEntries
-			);
+		case V(11,0):
+			size = offsetof(typeof(leaves->v11_0), smc_pptable);
+			smc = &(leaves->v11_0.smc_pptable);
 			break;
-		case V(2,1):
-			err = offchk_flex(commons, ppt->v2_1,
-				PowerPlayInfo, ppt->v2_1->NumOfPowerModeEntries
-			);
+		case V(14,0):
+		case V(12,0):
+			size = offsetof(typeof(leaves->v12_0), smc_pptable);
+			smc = &(leaves->v12_0.smc_pptable);
 			break;
-		case V(3,1):
-			err = offchk_flex(commons, ppt->v3_1,
-				PowerPlayInfo, ppt->v3_1->NumOfPowerModeEntries
-			);
+		case V(19,0):
+		case V(18,0):
+		case V(16,0):
+		case V(15,0):
+			size = offsetof(typeof(leaves->v15_0), smc_pptable);
+			smc = &(leaves->v15_0.smc_pptable);
 			break;
-		default: assert(0);
+		default:
+			size = sizeof(leaves->pphead);
+			smc = NULL;
+			break;
 	}
-	return err;
+	if (offchk(commons, leaves, size)) {
+		return true;
+	}
+	smu->ver = ppt->ver;
+
+	if (! offchk(commons, smc, sizeof(smc->Version))) {
+		smu->smc_pptable = smc;
+		switch (smc->Version) {
+			case PPTABLE_VEGA20_SMU: size = sizeof(smc->v3); break;
+			case PPTABLE_NAVI24_SMU: size = sizeof(smc->v5); break;
+			case PPTABLE_NAVI22_SMU:
+			case PPTABLE_NAVI21_SMU: size = sizeof(smc->v7); break;
+			case PPTABLE_NAVI10_SMU: size = sizeof(smc->v8); break;
+			default: size = sizeof(smc->Version); break;
+		}
+		if (! offchk(commons, smc, size)) {
+			smu->smc_pptable_ver = smc->Version;
+		}
+	}
+
+	return false;
 }
 
 inline static void
@@ -1446,24 +1502,14 @@ populate_ppt(
 		case V(8,1):
 			err = populate_vega10_ppt(commons, ppt);
 			break;
-		case V(11,0):
-			ppt->v11_0.smc_pptable_ver = SET_VER(
-				ppt->v11_0.leaves->smc_pptable.ver
-			);
-			break;
+		case V(11,0): // Vega20
+		case V(12,0): // Navi10
 		case V(14,0):
-		case V(12,0):
-			ppt->v12_0.smc_pptable_ver = SET_VER(
-				ppt->v12_0.leaves->smc_pptable.ver
-			);
-			break;
-		case V(19,0): // 6400
-		case V(18,0): // navi2 xx50
-		case V(16,0): // 6700XT
 		case V(15,0):
-			ppt->v15_0.smc_pptable_ver = SET_VER(
-				ppt->v15_0.leaves->smc_pptable.ver
-			);
+		case V(16,0): // 6700XT
+		case V(18,0): // navi2 xx50
+		case V(19,0): // 6400
+			err = populate_ppt_smu(commons, ppt);
 			break;
 		default:
 			assert(0);

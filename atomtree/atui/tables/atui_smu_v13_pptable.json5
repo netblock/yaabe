@@ -4,7 +4,7 @@
 global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
-		atomtree: "atui_nullstruct",
+		atomtree: "atomtree_powerplay_smu",
 		access: "bios",
 		num_bytes: "sizeof(*bios)",
 		expanded: true,
@@ -26,7 +26,6 @@ global_defaults: {
 }, branches: [
 {
 	c_type: "smu_13_0_7_overdrive_table",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->revision",
@@ -162,7 +161,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "smu_13_0_7_powerplay_table",
-	atomtree: "atomtree_powerplay_table",
 	num_bytes: "bios->header.structuresize",
 	leaves: [
 		{
@@ -249,7 +247,6 @@ global_defaults: {
 	],
 }, {
 	c_prefix: "union", c_type: "powerplay_feature_control_smu13",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [{
 		access: "bios->feature_control",
 		name: "feature_control",
@@ -544,7 +541,6 @@ global_defaults: {
 	},],
 }, {
 	c_type: "DpmDescriptor_t",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Padding",
@@ -603,7 +599,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "BootValues_t",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->InitGfxclk_bypass",
@@ -790,7 +785,6 @@ global_defaults: {
 	// TODO unroll? dynarray inline?
 	// uint16_t Power[PPT_THROTTLER_COUNT][POWER_SOURCE_COUNT]; // Watts
 
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Tdc",
@@ -887,7 +881,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "DriverReportedClocks_t",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->BaseClockAc",
@@ -916,7 +909,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "AvfsDcBtcParams_smu13",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->DcBtcEnabled",
@@ -959,7 +951,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "AvfsFuseOverride_smu13",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->AvfsTemp",
@@ -1016,7 +1007,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "SviTelemetryScale_t",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->Offset",
@@ -1038,7 +1028,6 @@ global_defaults: {
 	],
 }, {
 	c_type: "overdrivelimits_smu13",
-	atomtree: "atomtree_powerplay_table",
 	leaves: [
 		{
 			access: "bios->FeatureCtrlMask",

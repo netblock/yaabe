@@ -278,17 +278,12 @@ struct atomtree_powerplay_table_v8_1 {
 	struct atom_vega10_clk_dependency_table*    dispclk_dependency;
 	struct atom_vega10_clk_dependency_table*    phyclk_dependency;
 };
-struct atomtree_powerplay_table_v11_0 {
-	struct atom_vega20_powerplay_table* leaves;
-	semver smc_pptable_ver;
-};
-struct atomtree_powerplay_table_v12_0 {
-	struct smu_11_0_powerplay_table* leaves; // v12 ~ v14
-	semver smc_pptable_ver;
-};
-struct atomtree_powerplay_table_v15_0 {
-	struct smu_11_0_7_powerplay_table* leaves; // v15 ~ v18
-	semver smc_pptable_ver;
+
+struct atomtree_powerplay_smu {
+	union smu_powerplay* leaves;
+	union smc_pptables* smc_pptable;
+	semver ver; // powerplay ver; TODO create a custom reduced version?
+	enum smu_smc_pptable_version smc_pptable_ver;
 };
 
 struct atomtree_powerplay_table {
@@ -301,17 +296,10 @@ struct atomtree_powerplay_table {
 		struct atom_powerplay_info_v2* v2_1;
 		struct atom_powerplay_info_v3* v3_1;
 
-		struct atomtree_powerplay_table_v4_1   v4_1;
-		struct atomtree_powerplay_table_v7_1   v7_1;
-		struct atomtree_powerplay_table_v8_1   v8_1;
-		struct atomtree_powerplay_table_v11_0 v11_0;
-		struct atomtree_powerplay_table_v12_0 v12_0;
-		struct atomtree_powerplay_table_v15_0 v15_0;
-
-		// struct smu_13_0_7_powerplay_table* v15_0; // navi3?
-		// 13_0 is different from 13_0_0, and 13_0 is only used in aldebaran
-		// 13_0 has more stuff than 13_0_0; I wonder if they can be spliced
-		//struct smu_13_0_powerplay_table* aldebaran;
+		struct atomtree_powerplay_table_v4_1 v4_1;
+		struct atomtree_powerplay_table_v7_1 v7_1;
+		struct atomtree_powerplay_table_v8_1 v8_1;
+		struct atomtree_powerplay_smu        smu; // v11 and newer
 	};
 	semver ver;
 };

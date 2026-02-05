@@ -487,7 +487,7 @@ grow_pplib_ppt_extended_header(
 	}
 }
 inline static atui_node*
-grow_pplib_ppt(
+grow_ppt_pplib(
 		struct atomtree_powerplay_table_v4_1 const* const ppt41
 		) {
 	// it's possible to reword this into a switch fallthrough system; worth it?
@@ -656,7 +656,7 @@ grow_pplib_ppt(
 	}
 }
 inline static atui_node*
-atui_generate_pptablev1_ppt(
+grow_ppt_pptablev1(
 		struct atomtree_powerplay_table_v7_1 const* const ppt71
 		) {
 	atui_node* state_array = NULL;
@@ -817,7 +817,7 @@ atui_generate_pptablev1_ppt(
 }
 
 inline static atui_node*
-atui_generate_vega10_ppt(
+grow_ppt_vega10(
 		struct atomtree_powerplay_table_v8_1 const* const ppt81
 		) {
 	atui_node* state_array = NULL;
@@ -1008,24 +1008,54 @@ atui_generate_vega10_ppt(
 }
 
 inline static atui_node*
-atui_generate_smc_pptable(
-		semver ver,
-		struct atomtree_powerplay_table const* const ppt,
-		void const* const smc_pptable
+grow_smc_pptable(
+		struct atomtree_powerplay_smu const* const smu
 		) {
+	if (NULL == smu->smc_pptable) {
+		return NULL;
+	}
+	atuifunc atui_func;
 	atuifunc_args atui_args = {
-		.atomtree = ppt,
-		.bios = smc_pptable,
+		.atomtree = smu,
+		.bios = smu->smc_pptable,
 	};
-	switch (ver.ver) {
-		case V(3): return _atui_smu11_smcpptable_v3(&atui_args);
-		case V(5): return _atui_smu11_smcpptable_v5(&atui_args);
-		case V(6): atui_args.rename = "smu11_smcpptable_v7 (forced)"; fall;
-		case V(7): return _atui_smu11_smcpptable_v7(&atui_args);
-		case V(8): return _atui_smu11_smcpptable_v8(&atui_args);
+	switch (smu->smc_pptable_ver) {
+		case PPTABLE_VEGA20_SMU: atui_func = _atui_smu11_smcpptable_v3; break;
+		case PPTABLE_NAVI24_SMU: atui_func = _atui_smu11_smcpptable_v5; break;
+		case PPTABLE_NAVI22_SMU:
+			atui_args.rename = "smu11_smcpptable_v7 (forced)";
+			fall;
+		case PPTABLE_NAVI21_SMU: atui_func = _atui_smu11_smcpptable_v7; break;
+		case PPTABLE_NAVI10_SMU: atui_func = _atui_smu11_smcpptable_v8; break;
+		default: atui_func = _atui_smc_pptables; break;
+	}
+	return atui_func(&atui_args);
+}
+
+inline static atui_node*
+grow_ppt_smu(
+		struct atomtree_powerplay_smu const* const smu
+		) {
+	atuifunc atui_func;
+	atui_node* const atui_smctable = grow_smc_pptable(smu);
+	atuifunc_args atui_args = {
+		.atomtree = smu,
+		.bios = smu->leaves,
+		.import_branches = &atui_smctable,
+		.num_import_branches = 1,
+	};
+	switch (smu->ver.ver) {
+		case V(11,0): atui_func = _atui_atom_vega20_powerplay_table; break;
+		case V(14,0):
+		case V(12,0): atui_func = _atui_smu_11_0_powerplay_table; break;
+		case V(19,0):
+		case V(18,0):
+		case V(16,0):
+		case V(15,0): atui_func = _atui_smu_11_0_7_powerplay_table; break;
 		default: assert(0);
 	}
-	return NULL;
+
+	return atui_func(&atui_args);
 }
 inline static atui_node*
 grow_ppt(
@@ -1037,59 +1067,26 @@ grow_ppt(
 	}
 
 	atui_node* atui_ppt;
-	atui_node* atui_smctable = NULL;
 	atuifunc_args atui_args = {
 		.atomtree = ppt,
 		.bios = ppt->leaves,
-		.import_branches = &atui_smctable,
-		.num_import_branches = 1,
 	};
 	switch (ppt->ver.ver) {
-		case V(1,1):
-			atui_ppt = _atui_atom_powerplay_info_v1(&atui_args);
-			break;
-		case V(2,1):
-			atui_ppt = _atui_atom_powerplay_info_v2(&atui_args);
-			break;
-		case V(3,1):
-			atui_ppt = _atui_atom_powerplay_info_v3(&atui_args);
-			break;
+		case V(1,1): atui_ppt = _atui_atom_powerplay_info_v1(&atui_args); break;
+		case V(2,1): atui_ppt = _atui_atom_powerplay_info_v2(&atui_args); break;
+		case V(3,1): atui_ppt = _atui_atom_powerplay_info_v3(&atui_args); break;
 		case V(6,1):
 		case V(5,1):
-		case V(4,1):
-			atui_ppt = grow_pplib_ppt(&(ppt->v4_1));
-			break;
-		case V(7,1): // Tonga, Fiji, Polaris
-			atui_ppt = atui_generate_pptablev1_ppt(&(ppt->v7_1));
-			break;
-		case V(8,1):
-			atui_ppt = atui_generate_vega10_ppt(&(ppt->v8_1));
-			break;
+		case V(4,1): atui_ppt = grow_ppt_pplib(&(ppt->v4_1));     break;
+		case V(7,1): atui_ppt = grow_ppt_pptablev1(&(ppt->v7_1)); break;
+		case V(8,1): atui_ppt = grow_ppt_vega10(&(ppt->v8_1));    break;
 		case V(11,0):
-			atui_smctable = atui_generate_smc_pptable(
-				ppt->v11_0.smc_pptable_ver,
-				ppt, &(ppt->v11_0.leaves->smc_pptable)
-			);
-			atui_ppt = _atui_atom_vega20_powerplay_table(&atui_args);
-			break;
-		case V(14,0):
 		case V(12,0):
-			atui_smctable = atui_generate_smc_pptable(
-				ppt->v12_0.smc_pptable_ver,
-				ppt, &(ppt->v12_0.leaves->smc_pptable)
-			);
-			atui_ppt = _atui_smu_11_0_powerplay_table(&atui_args);
-			break;
-		case V(19,0): // 6400
-		case V(18,0): // navi2 xx50
-		case V(16,0): // 6700XT
+		case V(14,0):
 		case V(15,0):
-			atui_smctable = atui_generate_smc_pptable(
-				ppt->v15_0.smc_pptable_ver,
-				ppt, &(ppt->v15_0.leaves->smc_pptable)
-			);
-			atui_ppt = _atui_smu_11_0_7_powerplay_table(&atui_args);
-			break;
+		case V(16,0):
+		case V(18,0):
+		case V(19,0): atui_ppt = grow_ppt_smu(&(ppt->smu)); break;
 		default:
 			atui_args.rename = "smu_powerplay_table_header (header only stub)";
 			atui_ppt = _atui_smu_powerplay_table_header(&atui_args);

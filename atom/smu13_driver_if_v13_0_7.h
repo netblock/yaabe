@@ -2,12 +2,6 @@
 #define SMU13_DRIVER_IF_SMU_13_0_7_H
 #pragma pack(push, 1) // bios data must use byte alignment
 
-// *** IMPORTANT ***
-#define SMU13_0_7_DRIVER_IF_VERSION  0x35
-
-// Increment this version if SkuTable_t or BoardTable_t change
-#define PPTABLE_VERSION 0x27
-
 #define NUM_GFXCLK_DPM_LEVELS_SMU13   16
 #define NUM_VCLK_DPM_LEVELS_SMU13     8
 #define NUM_DCLK_DPM_LEVELS_SMU13     8
@@ -722,8 +716,7 @@ struct AvfsFuseOverride_smu13 {
 };
 
 struct smu13_skutable_v39 { // SECTION: Version
-
-	uint32_t Version; // should be unique to each SKU(i.e if any value changes in below structure then this value must be different)
+	enum smu_smc_pptable_version Version;
 	// SECTION: Feature Control
 
 	union powerplay_feature_control_smu13  features;
@@ -1066,7 +1059,6 @@ struct smu13_boardtable_v39_memory_config {
 };
 
 struct smu13_boardtable_v39 {
-	// SECTION: Version
 	uint32_t Version; // should be unique to each board type
 
 	struct i2ccontrollerconfig_u8 I2cControllers[
@@ -1087,9 +1079,12 @@ struct smu13_boardtable_v39 {
 	uint32_t MmHubPadding[8];
 };
 
-struct smu13_smcpptable_v39 {
-	struct smu13_skutable_v39   SkuTable;
-	struct smu13_boardtable_v39 BoardTable;
+union smu13_smcpptable_v39 {
+	enum smu_smc_pptable_version Version;
+	struct {
+		struct smu13_skutable_v39   SkuTable;
+		struct smu13_boardtable_v39 BoardTable;
+	};
 };
 
 struct atom_smc_dpm_info_table_13_0_7 {

@@ -267,14 +267,6 @@ struct smu_11_0_7_power_saving_clock_table {
 };
 
 
-
-union smu11_smc_pptables {
-	uint32_t ver;
-	struct smu11_smcpptable_v3  v3;
-	struct smu11_smcpptable_v8  v8;
-	struct smu11_smcpptable_v7  v7;
-};
-
 struct smu_11_0_powerplay_table {
 	struct smu_powerplay_table_header  header;
 	union powerplay_platform_caps  platform_caps;
@@ -293,7 +285,7 @@ struct smu_11_0_powerplay_table {
 	struct smu_11_0_power_saving_clock_table  power_saving_clock;
 	struct smu_11_0_overdrive_table  overdrive_table;
 
-	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
+	union smc_pptables smc_pptable;
 };
 
 struct atom_vega20_powerplay_table {
@@ -316,7 +308,7 @@ struct atom_vega20_powerplay_table {
 
 	uint16_t Reserve[5];
 
-	union smu11_smc_pptables  smc_pptable; // PPTable_t in the driver_if.h
+	union smc_pptables smc_pptable;
 };
 
 struct smu_11_0_7_powerplay_table {
@@ -334,7 +326,7 @@ struct smu_11_0_7_powerplay_table {
 	struct smu_11_0_7_power_saving_clock_table  power_saving_clock;
 	struct smu_11_0_7_overdrive_table  overdrive_table;
 
-	union smu11_smc_pptables  smc_pptable; // PPTable_t in smu11_driver_if.h
+	union smc_pptables smc_pptable;
 };
 
 

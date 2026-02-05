@@ -1118,7 +1118,8 @@ Enums for ATUI_ENUM
 ]},
 
 /******************************************************************************/
-// powerplay.h / SMU 11,13 stuff
+// powerplay.h / smu_driver_if.h
+// SMU 11,13 common stuff
 
 {name: "I2cControllerPort_e",
 	aliases: ["I2cControllerPort_u8", "I2cControllerPort_u32"],
@@ -1570,6 +1571,27 @@ Enums for ATUI_ENUM
 		{name: "ATOM_VEGA10_VOLTAGEMODE_STATIC",},
 ]},
 
+{name: "smu_smc_pptable_version",
+	constants: [
+		{name: "PPTABLE_VEGA20_SMU",},
+		{name: "PPTABLE_NAVI24_SMU",
+			description: {
+				eng: "Beige Goby",
+			},
+		},
+		{name: "PPTABLE_NAVI22_SMU",
+			description: {
+				eng: "Navy Flounder",
+			},
+		},
+		{name: "PPTABLE_NAVI21_SMU",
+			description: {
+				eng: "Sienna Cichlid",
+			},
+		},
+		{name: "PPTABLE_NAVI10_SMU",},
+		{name: "PPTABLE_SMU13_0_7",},
+]},
 
 
 /******************************************************************************/

@@ -4,7 +4,7 @@
 global_defaults: {
 	branch_default: {
 		c_prefix: "struct",
-		atomtree: "atomtree_powerplay_table",
+		atomtree: "atomtree_powerplay_smu",
 		access: "bios",
 		num_bytes: "sizeof(*bios)",
 		expanded: true,
@@ -2962,6 +2962,7 @@ global_defaults: {
 		{
 			access: "bios->Version",
 			name: "Version",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->features",
 			name: "features",
@@ -3958,6 +3959,7 @@ global_defaults: {
 		{
 			access: "bios->Version",
 			name: "Version",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->features",
 			name: "features",
@@ -5524,6 +5526,7 @@ global_defaults: {
 		{
 			access: "bios->Version",
 			name: "Version",
+			display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->features",
 			name: "features",
@@ -5765,6 +5768,7 @@ global_defaults: {
 		{
 			access: "bios->Version",
 			name: "Version",
+			//display: ["ATUI_DEC", "ATUI_ENUM",],
 		}, {
 			access: "bios->features",
 			name: "features",
