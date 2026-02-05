@@ -1107,7 +1107,7 @@ grow_display_info_records_set(
 	}
 
 	// ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE vs ATOM_CONNECTOR_SPEED_UPTO
-	atuifunc const entry_val_4 = (atuifunc[2]) {
+	atuifunc const entry_val_4 = (atuifunc const[2]) {
 		[false] = _atui_atom_connector_device_tag_record,
 		[true]  = _atui_atom_connector_speed_record
 	}[is_v1_4_or_newer];
@@ -1119,7 +1119,7 @@ grow_display_info_records_set(
 	atui_records->data.input = set->records[0];
 	atui_records->num_bytes = set->records_size;
 
-	atui_node* rec;
+	atuifunc rec_func;
 	atuifunc_args rec_args = {
 		.atomtree = set,
 	};
@@ -1127,70 +1127,65 @@ grow_display_info_records_set(
 		rec_args.bios = set->records[i];
 		switch (set->records[i]->header.record_type) {
 			case ATOM_I2C_RECORD_TYPE:
-				rec = _atui_atom_i2c_record(&rec_args); break;
+				rec_func = _atui_atom_i2c_record; break;
 			case ATOM_HPD_INT_RECORD_TYPE:
-				rec = _atui_atom_hpd_int_record(&rec_args); break;
+				rec_func = _atui_atom_hpd_int_record; break;
 			case ATOM_CONNECTOR_CAP_RECORD_TYPE:
-				rec = _atui_atom_connector_caps_record(&rec_args); break;
+				rec_func = _atui_atom_connector_caps_record; break;
 			//case ATOM_CONNECTOR_DEVICE_TAG_RECORD_TYPE:
 			//case ATOM_CONNECTOR_SPEED_UPTO:
 			case 4:
-				rec = entry_val_4(&rec_args); break;
+				rec_func = entry_val_4; break;
 			case ATOM_CONNECTOR_DVI_EXT_INPUT_RECORD_TYPE:
-				rec = _atui_atom_connector_dvi_ext_input_record(&rec_args);
-				break;
+				rec_func = _atui_atom_connector_dvi_ext_input_record; break;
 			case ATOM_ENCODER_FPGA_CONTROL_RECORD_TYPE:
-				rec = _atui_atom_encoder_fpga_control_record(&rec_args); break;
+				rec_func = _atui_atom_encoder_fpga_control_record; break;
 			case ATOM_CONNECTOR_CVTV_SHARE_DIN_RECORD_TYPE:
-				rec = _atui_atom_connector_cvtv_share_din_record(&rec_args);
-				break;
+				rec_func = _atui_atom_connector_cvtv_share_din_record; break;
 			case ATOM_JTAG_RECORD_TYPE:
-				rec = _atui_atom_jtag_record(&rec_args); break;
+				rec_func = _atui_atom_jtag_record; break;
 			case ATOM_OBJECT_GPIO_CNTL_RECORD_TYPE:
-				rec = _atui_atom_object_gpio_cntl_record(&rec_args); break;
+				rec_func = _atui_atom_object_gpio_cntl_record; break;
 			case ATOM_ENCODER_DVO_CF_RECORD_TYPE:
-				rec = _atui_atom_encoder_dvo_cf_record(&rec_args); break;
+				rec_func = _atui_atom_encoder_dvo_cf_record; break;
 			case ATOM_CONNECTOR_CF_RECORD_TYPE:
-				rec = _atui_atom_connector_cf_record(&rec_args); break;
+				rec_func = _atui_atom_connector_cf_record; break;
 			case ATOM_CONNECTOR_HARDCODE_DTD_RECORD_TYPE:
-				rec = _atui_atom_connector_hardcode_dtd_record(&rec_args);break;
+				rec_func = _atui_atom_connector_hardcode_dtd_record; break;
 			case ATOM_PCIE_SUBCONNECTOR_RECORD_TYPE:
 				assert(0); // incomplete atui
-				rec = _atui_atom_pcie_subconnector_record(&rec_args); break;
+				rec_func = _atui_atom_pcie_subconnector_record; break;
 			case ATOM_ROUTER_DDC_PATH_SELECT_RECORD_TYPE:
 				assert(0); // incomplete atui
-				rec = _atui_atom_router_ddc_path_select_record(&rec_args);break;
+				rec_func = _atui_atom_router_ddc_path_select_record; break;
 			case ATOM_ROUTER_DATA_CLOCK_PATH_SELECT_RECORD_TYPE:
 				assert(0); // incomplete atui
-				rec = _atui_atom_router_data_clock_path_select_record(
-					&rec_args
-				);
-				break;
+				rec_func= _atui_atom_router_data_clock_path_select_record;break;
 			case ATOM_CONNECTOR_HPDPIN_LUT_RECORD_TYPE:
-				rec = _atui_atom_connector_hpdpin_lut_record(&rec_args); break;
+				rec_func = _atui_atom_connector_hpdpin_lut_record; break;
 			case ATOM_CONNECTOR_AUXDDC_LUT_RECORD_TYPE:
-				rec = _atui_atom_connector_auxddc_lut_record(&rec_args); break;
+				rec_func = _atui_atom_connector_auxddc_lut_record; break;
 			case ATOM_OBJECT_LINK_RECORD_TYPE:
 				assert(0); // incomplete atui. select object id union?
-				rec = _atui_atom_object_link_record(&rec_args); break;
+				rec_func = _atui_atom_object_link_record; break;
 			case ATOM_CONNECTOR_REMOTE_CAP_RECORD_TYPE:
 				assert(0); // incomplete atui
-				rec = _atui_atom_connector_remote_cap_record(&rec_args); break;
+				rec_func = _atui_atom_connector_remote_cap_record; break;
 			case ATOM_ENCODER_CAPS_RECORD_TYPE:
-				rec = _atui_atom_encoder_caps_record(&rec_args); break;
+				rec_func = _atui_atom_encoder_caps_record; break;
 			case ATOM_BRACKET_LAYOUT_V1_RECORD_TYPE:
-				rec = _atui_atom_bracket_layout_record_v1(&rec_args); break;
+				rec_func = _atui_atom_bracket_layout_record_v1; break;
 			case ATOM_FORCED_TMDS_CAP_RECORD_TYPE:
-				rec = _atui_atom_forced_tmds_cap_record(&rec_args); break;
+				rec_func = _atui_atom_forced_tmds_cap_record; break;
 			case ATOM_DISP_CONNECTOR_CAPS_RECORD_TYPE:
-				rec = _atui_atom_disp_connector_caps_record(&rec_args); break;
+				rec_func = _atui_atom_disp_connector_caps_record; break;
 			case ATOM_BRACKET_LAYOUT_V2_RECORD_TYPE:
-				rec = _atui_atom_bracket_layout_record_v2(&rec_args); break;
+				rec_func = _atui_atom_bracket_layout_record_v2; break;
 			default:
 				assert(0);
-				rec = _atui_atom_common_record_header(&rec_args); break;
+				rec_func = _atui_atom_common_record_header; break;
 		}
-		ATUI_ADD_BRANCH(atui_records, rec);
+		ATUI_ADD_BRANCH(atui_records, rec_func(&rec_args));
 	}
 	return atui_records;
 }
