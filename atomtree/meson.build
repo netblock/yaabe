@@ -4,6 +4,7 @@ include_dirs += include_directories('.')
 
 yaabe_src += files(
 	'atomtree.c',
+	'atomtree_internal.c',
 	'asic_reg_tools.c',
 	'pci_id_lut.c',
 )

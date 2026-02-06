@@ -833,4 +833,17 @@ struct atomtree_master_datatable {
 	semver ver;
 };
 
+struct atomtree_rom_header {
+	union {
+		void* leaves;
+		struct atom_common_table_header* table_header;
+		struct atom_rom_header_v1_1* v1_1;
+		struct atom_rom_header_v2_1* v2_1;
+		struct atom_rom_header_v2_2* v2_2;
+	};
+	semver ver;
+
+	// have rom_header children in main atom_tree.
+};
+
 #endif

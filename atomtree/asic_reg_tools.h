@@ -41,7 +41,6 @@ struct register_set {
 	struct register_set_entry entries[] __counted_by(num_reg_set_addresses);
 };
 
-typedef int16_t (* regset_bsearch_func)(struct register_set const* reg_set, uint16_t address);
 int16_t
 regset_bsearch_left(
 		struct register_set const* reg_set,
@@ -52,6 +51,7 @@ regset_bsearch_right(
 		struct register_set const* reg_set,
 		uint16_t address
 		);
+typedef typeof(&regset_bsearch_left) regset_bsearch_func;
 
 
 // build a list of atui branch function pointers based off of the regblock.
