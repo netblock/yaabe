@@ -3,7 +3,7 @@
 static void
 execute_regex_search(
 		GtkEntry* const search_entry,
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	char const* const regex_text = gtk_editable_get_text(GTK_EDITABLE(
 		search_entry
@@ -13,13 +13,13 @@ execute_regex_search(
 		regex_text, G_REGEX_OPTIMIZE, G_REGEX_MATCH_DEFAULT, &err
 	);
 	if (err) {
-		generic_error_popup("regex error", err->message, commons->yaabe_gtk);
+		generic_error_popup("regex error", err->message, com->yaabe_gtk);
 		g_error_free(err);
 	} else {
 		GtkSelectionModel* const results_model = gatui_tree_regex_search(
-			commons->root, regex, &(commons->search.flags)
+			com->root, regex, &(com->search.flags)
 		);
-		gtk_column_view_set_model(commons->search.pane.view, results_model);
+		gtk_column_view_set_model(com->search.pane.view, results_model);
 		g_object_unref(results_model);
 		g_regex_unref(regex);
 	}
@@ -27,10 +27,10 @@ execute_regex_search(
 
 inline static GtkWidget*
 create_search_entry(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GtkWidget* const search_entry = gtk_entry_new();
-	commons->search.entry = search_entry;
+	com->search.entry = search_entry;
 	gtk_widget_set_tooltip_text(
 		search_entry,
 		"PCRE2 Regex\n"
@@ -38,7 +38,7 @@ create_search_entry(
 	);
 
 	g_signal_connect(search_entry, "activate",
-		G_CALLBACK(execute_regex_search), commons
+		G_CALLBACK(execute_regex_search), com
 	);
 
 	return search_entry;
@@ -48,15 +48,15 @@ static void
 search_options_set_domain(
 		GtkDropDown* const domain_select,
 		GParamSpec* const pspec __unused,
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	commons->search.flags.domain = gtk_drop_down_get_selected(domain_select);
-	switch (commons->search.flags.domain) {
+	com->search.flags.domain = gtk_drop_down_get_selected(domain_select);
+	switch (com->search.flags.domain) {
 		case GATUI_SEARCH_NAMES:
-			gtk_widget_set_sensitive(commons->search.branches_checkbox, true);
+			gtk_widget_set_sensitive(com->search.branches_checkbox, true);
 			break;
 		case GATUI_SEARCH_VALUES:
-			gtk_widget_set_sensitive(commons->search.branches_checkbox, false);
+			gtk_widget_set_sensitive(com->search.branches_checkbox, false);
 			break;
 		default: assert(0);
 	}
@@ -69,9 +69,9 @@ search_options_toggle_check(
 }
 inline static GtkWidget*
 create_search_options(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	struct gatui_search_flags* const flags = &(commons->search.flags);
+	struct gatui_search_flags* const flags = &(com->search.flags);
 
 	GtkDropDown* const domain = GTK_DROP_DOWN(gtk_drop_down_new_from_strings(
 		(char const* const[]) {
@@ -82,7 +82,7 @@ create_search_options(
 	));
 	gtk_drop_down_set_show_arrow(domain, true);
 	g_signal_connect(domain, "notify::selected",
-		G_CALLBACK(search_options_set_domain), commons
+		G_CALLBACK(search_options_set_domain), com
 	);
 	gtk_drop_down_set_selected(domain, flags->domain);
 
@@ -99,7 +99,7 @@ create_search_options(
 	g_signal_connect_swapped(branches, "toggled",
 		G_CALLBACK(search_options_toggle_check), &(flags->branches)
 	);
-	commons->search.branches_checkbox = branches;
+	com->search.branches_checkbox = branches;
 	gtk_widget_set_sensitive(branches, GATUI_SEARCH_VALUES != flags->domain);
 
 	GtkGrid* const search_options = GTK_GRID(gtk_grid_new());
@@ -113,7 +113,7 @@ create_search_options(
 
 
 struct scroll_to_in_main_window_pack {
-	yaabegtk_commons* commons;
+	yaabegtk_commons* com;
 	GtkColumnViewCell* column_cell;
 };
 static void
@@ -121,7 +121,7 @@ scroll_to_in_main_window_button(
 		struct scroll_to_in_main_window_pack* const pack
 		) {
 	yaabe_gtk_scroll_to_object(
-		pack->commons,
+		pack->com,
 		gatui_regex_node_peek(
 			gtk_column_view_cell_get_item(pack->column_cell)
 		)->tree_node
@@ -129,13 +129,13 @@ scroll_to_in_main_window_button(
 }
 static void
 goto_column_setup(
-		yaabegtk_commons* const commons, // swapped-signal:: with factory
+		yaabegtk_commons* const com, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 	struct scroll_to_in_main_window_pack* const pack = cralloc(
 		sizeof(struct scroll_to_in_main_window_pack)
 	);
-	pack->commons = commons;
+	pack->com = com;
 	pack->column_cell = column_cell;
 
 	GtkWidget* const goto_button = gtk_button_new_with_label("Go To");
@@ -195,7 +195,7 @@ highlight_name_column_bind(
 }
 static void
 highlight_value_column_bind(
-		yaabegtk_commons const* const commons, // swapped-signal:: with factory
+		yaabegtk_commons const* const com, // swapped-signal:: with factory
 		GtkColumnViewCell* const column_cell
 		) {
 	struct atui_regex_node const* regex = gatui_regex_node_peek(
@@ -216,7 +216,7 @@ highlight_value_column_bind(
 			GATUILeaf* const leaf = GATUI_LEAF(regex->tree_node);
 			char* text = NULL;
 			if (gatui_leaf_has_textable_value(leaf)) {
-				text = gatui_leaf_value_to_text(leaf, commons->big_endian);
+				text = gatui_leaf_value_to_text(leaf, com->big_endian);
 				string_length = strlen(text);
 			}
 			gtk_inscription_set_text(label, text);
@@ -255,12 +255,12 @@ regex_offset_column_bind(
 
 inline static GtkWidget*
 create_results_view(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GtkColumnView* const search_view = GTK_COLUMN_VIEW(
 		gtk_column_view_new(NULL)
 	);
-	commons->search.pane.view = search_view;
+	com->search.pane.view = search_view;
 	gtk_column_view_set_reorderable(search_view, true);
 	gtk_column_view_set_show_row_separators(search_view, true);
 
@@ -270,13 +270,13 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		//"swapped-signal::setup", G_CALLBACK(search_row_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(search_rightclick_row_bind), commons,
+		"swapped-signal::bind", G_CALLBACK(search_rightclick_row_bind), com,
 		NULL
 	);
 	gtk_column_view_set_row_factory(search_view, factory);
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
-		"swapped-signal::setup", G_CALLBACK(goto_column_setup), commons,
+		"swapped-signal::setup", G_CALLBACK(goto_column_setup), com,
 		NULL
 	);
 	column = gtk_column_view_column_new("Go To", factory);
@@ -304,7 +304,7 @@ create_results_view(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(highlight_value_column_bind),commons,
+		"swapped-signal::bind", G_CALLBACK(highlight_value_column_bind),com,
 		NULL
 	);
 	column = gtk_column_view_column_new("Value", factory);
@@ -317,7 +317,7 @@ create_results_view(
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(regex_offset_column_bind),
-			commons->endian_sprintf,
+			com->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -330,29 +330,29 @@ create_results_view(
 	);
 	gtk_widget_set_vexpand(scrolled_search_view, true);
 
-	create_search_rightclick_menu(commons);
+	create_search_rightclick_menu(com);
 
 	return scrolled_search_view;
 }
 
 static void
 search_window_cleanup(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	commons->search.window = NULL;
+	com->search.window = NULL;
 }
 
 void
 create_search_window(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	// TODO:
 	// right-click: copy path; data?
 	// static name/value
 
-	GtkWidget* const search_entry = create_search_entry(commons);
-	GtkWidget* const search_options = create_search_options(commons);
-	GtkWidget* const search_results = create_results_view(commons);
+	GtkWidget* const search_entry = create_search_entry(com);
+	GtkWidget* const search_options = create_search_options(com);
+	GtkWidget* const search_results = create_results_view(com);
 
 	GtkBox* const main_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
 	gtk_box_append(main_box, search_entry);
@@ -360,17 +360,17 @@ create_search_window(
 	gtk_box_append(main_box, search_results);
 
 	GtkWindow* const search_window = GTK_WINDOW(gtk_application_window_new(
-		commons->yaabe_gtk // application window allows us to inherit keybinds
+		com->yaabe_gtk // application window allows us to inherit keybinds
 	));
 
-	commons->search.window = search_window;
+	com->search.window = search_window;
 	g_signal_connect_swapped(GTK_WIDGET(search_window), "destroy",
-		G_CALLBACK(search_window_cleanup), commons
+		G_CALLBACK(search_window_cleanup), com
 	);
 	gtk_window_set_default_size(search_window, 800,700);
 	gtk_window_set_title(search_window, "Regex Search");
 	gtk_window_set_destroy_with_parent(search_window, true);
-	gtk_window_set_transient_for(search_window, commons->yaabe_primary);
+	gtk_window_set_transient_for(search_window, com->yaabe_primary);
 	gtk_window_set_child(search_window, GTK_WIDGET(main_box));
 	gtk_window_present(search_window);
 }

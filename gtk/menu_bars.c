@@ -2,7 +2,7 @@
 
 inline static void
 filer_error_window(
-		yaabegtk_commons const* const commons,
+		yaabegtk_commons const* const com,
 		GError* const ferror,
 		char const* const title
 		) {
@@ -11,7 +11,7 @@ filer_error_window(
 	gtk_alert_dialog_set_detail(alert, ferror->message);
 	gtk_alert_dialog_show(
 		alert,
-		gtk_application_get_active_window(commons->yaabe_gtk)
+		gtk_application_get_active_window(com->yaabe_gtk)
 	);
 
 	g_object_unref(alert);
@@ -19,14 +19,14 @@ filer_error_window(
 
 inline static void
 yaabegtk_load_enable_save_buttons(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	gtk_widget_set_sensitive(commons->save_buttons, true);
-	gtk_widget_set_sensitive(commons->reload_buttons, true);
+	gtk_widget_set_sensitive(com->save_buttons, true);
+	gtk_widget_set_sensitive(com->reload_buttons, true);
 
 
 	// the main menu bar
-	GActionMap* const app_action_map = G_ACTION_MAP(commons->yaabe_gtk);
+	GActionMap* const app_action_map = G_ACTION_MAP(com->yaabe_gtk);
 	GValue enabled = G_VALUE_INIT;
 	g_value_init(&enabled, G_TYPE_BOOLEAN);
 	g_value_set_boolean(&enabled, true);
@@ -45,7 +45,7 @@ yaabegtk_load_enable_save_buttons(
 }
 static void
 yaabegtk_load_bios(
-		yaabegtk_commons* const commons,
+		yaabegtk_commons* const com,
 		GFile* const biosfile,
 		GError** const ferror_out
 		) {
@@ -58,20 +58,20 @@ yaabegtk_load_bios(
 	}
 
 	if (new_tree) {
-		if (commons->root) { // has loaded
-			g_object_unref(commons->root);
-			char* const old_path = commons->pathbar_string;
-			commons->pathbar_string = NULL; // steal it
-			create_and_set_active_gatui_model(commons, new_tree);
-			yaabe_gtk_scroll_to_path(commons, old_path, NULL);
+		if (com->root) { // has loaded
+			g_object_unref(com->root);
+			char* const old_path = com->pathbar_string;
+			com->pathbar_string = NULL; // steal it
+			create_and_set_active_gatui_model(com, new_tree);
+			yaabe_gtk_scroll_to_path(com, old_path, NULL);
 			free(old_path);
 		} else {
-			create_and_set_active_gatui_model(commons, new_tree);
-			first_load_restore_path(commons);
-			yaabegtk_load_enable_save_buttons(commons);
+			create_and_set_active_gatui_model(com, new_tree);
+			first_load_restore_path(com);
+			yaabegtk_load_enable_save_buttons(com);
 		}
 
-		set_editor_titlebar(commons);
+		set_editor_titlebar(com);
 	}
 
 	ferr:
@@ -89,7 +89,7 @@ filedialog_load_and_set_bios(
 		gpointer const commonsptr
 		) {
 // AsyncReadyCallback for the file dialog in the load button.
-	yaabegtk_commons* const commons = commonsptr;
+	yaabegtk_commons* const com = commonsptr;
 	GtkFileDialog* const filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
 
@@ -100,7 +100,7 @@ filedialog_load_and_set_bios(
 		goto ferr_nomsg;
 	}
 
-	yaabegtk_load_bios(commons, biosfile, &ferror);
+	yaabegtk_load_bios(com, biosfile, &ferror);
 	g_object_unref(biosfile);
 	if (ferror) {
 		goto ferr_msg;
@@ -108,7 +108,7 @@ filedialog_load_and_set_bios(
 	return;
 
 	ferr_msg:
-	filer_error_window(commons, ferror, "Load BIOS error");
+	filer_error_window(com, ferror, "Load BIOS error");
 	ferr_nomsg:
 	g_error_free(ferror);
 	return;
@@ -120,7 +120,7 @@ dropped_file_open_bios(
 		GValue const* const value,
 		gdouble const x __unused,
 		gdouble const y __unused,
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 // Load a bios from a drag-n'-drop
 // ???  https://gitlab.gnome.org/GNOME/gtk/-/issues/3755
@@ -128,9 +128,9 @@ dropped_file_open_bios(
 
 	if (G_VALUE_HOLDS(value, G_TYPE_FILE)) {
 		GFile* biosfile = g_value_get_object(value);
-		yaabegtk_load_bios(commons, biosfile, &ferror);
+		yaabegtk_load_bios(com, biosfile, &ferror);
 		if (ferror) {
-			filer_error_window(commons, ferror, "Load dropped BIOS error");
+			filer_error_window(com, ferror, "Load dropped BIOS error");
 			g_error_free(ferror);
 			return false;
 		}
@@ -142,17 +142,17 @@ dropped_file_open_bios(
 
 static void
 yaabe_open_bios(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GtkFileDialog* const filer = gtk_file_dialog_new();
 	GtkWindow* const active_window = gtk_application_get_active_window(
-		commons->yaabe_gtk
+		com->yaabe_gtk
 	);
 
 	GFile* working_dir;
-	if (commons->root) { // if commandline file
+	if (com->root) { // if commandline file
 		working_dir = g_file_get_parent(
-			gatui_tree_get_bios_file(commons->root)
+			gatui_tree_get_bios_file(com->root)
 		);
 	} else {
 		working_dir = get_cached_working_dir();
@@ -165,23 +165,23 @@ yaabe_open_bios(
 	g_object_unref(working_dir);
 
 	gtk_file_dialog_open(filer,
-		active_window, NULL, filedialog_load_and_set_bios, commons
+		active_window, NULL, filedialog_load_and_set_bios, com
 	);
 	g_object_unref(filer);
 }
 static void
 yaabe_save_same_file(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GError* ferror = NULL;
 
-	gatui_tree_save(commons->root, &ferror);
+	gatui_tree_save(com->root, &ferror);
 	if (ferror) {
-		filer_error_window(commons, ferror, "Save BIOS error");
+		filer_error_window(com, ferror, "Save BIOS error");
 		g_error_free(ferror);
 	}
 	set_cached_working_dir(
-		gatui_tree_get_bios_file(commons->root)
+		gatui_tree_get_bios_file(com->root)
 	);
 }
 static void
@@ -191,7 +191,7 @@ filedialog_saveas_bios(
 		gpointer const commonsptr
 		) {
 // AsyncReadyCallback for the file dialog in the Save As button.
-	yaabegtk_commons* const commons = commonsptr;
+	yaabegtk_commons* const com = commonsptr;
 
 	GtkFileDialog* const filer = GTK_FILE_DIALOG(gobj_filedialog);
 	GError* ferror = NULL;
@@ -203,96 +203,96 @@ filedialog_saveas_bios(
 		goto ferr_nomsg;
 	}
 
-	gatui_tree_saveas(commons->root, new_biosfile, &ferror);
+	gatui_tree_saveas(com->root, new_biosfile, &ferror);
 	if (ferror) {
 		g_object_unref(new_biosfile);
 		goto ferr_msg;
 	}
 
-	set_editor_titlebar(commons);
+	set_editor_titlebar(com);
 	set_cached_working_dir(new_biosfile);
 	return;
 
 	ferr_msg:
-	filer_error_window(commons, ferror, "Save BIOS As error");
+	filer_error_window(com, ferror, "Save BIOS As error");
 	ferr_nomsg:
 	g_error_free(ferror);
 	return;
 }
 static void
 yaabe_saveas_name_bios(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 // Signal callback
 	GtkFileDialog* const filer = gtk_file_dialog_new();
 	GtkWindow* const active_window = gtk_application_get_active_window(
-		commons->yaabe_gtk
+		com->yaabe_gtk
 	);
-	GFile* const current_biosfile = gatui_tree_get_bios_file(commons->root);
+	GFile* const current_biosfile = gatui_tree_get_bios_file(com->root);
 	GFile* const working_dir = g_file_get_parent(current_biosfile);
 	gtk_file_dialog_set_initial_file(filer, current_biosfile);
 	g_object_unref(working_dir);
 
 	gtk_file_dialog_save(filer,
-		active_window, NULL, filedialog_saveas_bios, commons
+		active_window, NULL, filedialog_saveas_bios, com
 	);
 	g_object_unref(filer);
 }
 static void
 yaabe_discard_changes(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GError* ferror = NULL;
 
-	GATUITree* const old_tree = commons->root;
+	GATUITree* const old_tree = com->root;
 	GFile* const biosfile = gatui_tree_get_bios_file(old_tree);
 	GATUITree* const new_tree = gatui_tree_new_from_gfile(biosfile, &ferror);
 	if (ferror) {
-		filer_error_window(commons, ferror, "Reload BIOS error");
+		filer_error_window(com, ferror, "Reload BIOS error");
 		g_error_free(ferror);
 		return;
 	}
 
-	create_and_set_active_gatui_model(commons, new_tree);
+	create_and_set_active_gatui_model(com, new_tree);
 	g_object_unref(old_tree);
 }
 static void
 yaabe_apply_changes(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	GATUITree* const old_tree = commons->root;
+	GATUITree* const old_tree = com->root;
 	GATUITree* const new_tree = gatui_tree_copy_core(old_tree);
 	assert(new_tree);
 	if (NULL == new_tree) {
 		return;
 	}
 
-	create_and_set_active_gatui_model(commons, new_tree);
+	create_and_set_active_gatui_model(com, new_tree);
 	g_object_unref(old_tree);
 }
 
 
 GtkWidget*
 construct_loadsave_buttons_box(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GtkWidget* const load_button = gtk_button_new_with_label("Load");
 	g_signal_connect_swapped(load_button, "clicked",
-		G_CALLBACK(yaabe_open_bios), commons
+		G_CALLBACK(yaabe_open_bios), com
 	);
 
 
 	GtkWidget* const discard_button = gtk_button_new_with_label("Discard");
 	gtk_widget_set_tooltip_text(discard_button, "Discard changes and reload");
 	g_signal_connect_swapped(discard_button, "clicked",
-		G_CALLBACK(yaabe_discard_changes), commons
+		G_CALLBACK(yaabe_discard_changes), com
 	);
 	GtkWidget* const apply_button = gtk_button_new_with_label("Apply");
 	gtk_widget_set_tooltip_text(apply_button,
 		"Recrawl bios based on changes"
 	);
 	g_signal_connect_swapped(apply_button, "clicked",
-		G_CALLBACK(yaabe_apply_changes), commons
+		G_CALLBACK(yaabe_apply_changes), com
 	);
 	GtkWidget* const reload_buttons = gtk_box_new(
 		GTK_ORIENTATION_HORIZONTAL, 5
@@ -304,11 +304,11 @@ construct_loadsave_buttons_box(
 
 	GtkWidget* const save_button = gtk_button_new_with_label("Save");
 	g_signal_connect_swapped(save_button, "clicked",
-		G_CALLBACK(yaabe_save_same_file), commons
+		G_CALLBACK(yaabe_save_same_file), com
 	);
 	GtkWidget* const saveas_button = gtk_button_new_with_label("Save As");
 	g_signal_connect_swapped(saveas_button, "clicked",
-		G_CALLBACK(yaabe_saveas_name_bios), commons
+		G_CALLBACK(yaabe_saveas_name_bios), com
 	);
 	GtkWidget* const save_buttons = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_append(GTK_BOX(save_buttons), save_button);
@@ -329,9 +329,9 @@ construct_loadsave_buttons_box(
 	gtk_box_append(GTK_BOX(buttonboxes), save_buttons);
 	gtk_box_append(GTK_BOX(buttonboxes), cf_button);
 
-	commons->reload_buttons = reload_buttons;
-	commons->save_buttons = save_buttons;
-	if (commons->root == NULL) {
+	com->reload_buttons = reload_buttons;
+	com->save_buttons = save_buttons;
+	if (com->root == NULL) {
 		gtk_widget_set_sensitive(save_buttons, false);
 		gtk_widget_set_sensitive(reload_buttons, false);
 	}
@@ -370,8 +370,8 @@ yaabe_action_quit(
 		GVariant* const parameter __unused,
 		gpointer const commons_ptr
 		) {
-	yaabegtk_commons const* const commons = commons_ptr;
-	g_application_quit(G_APPLICATION(commons->yaabe_gtk));
+	yaabegtk_commons const* const com = commons_ptr;
+	g_application_quit(G_APPLICATION(com->yaabe_gtk));
 	assert(0);
 	exit(0);
 	/*
@@ -403,10 +403,10 @@ yaabe_action_search(
 		GVariant* const parameter __unused,
 		gpointer const commons_ptr
 		) {
-	yaabegtk_commons const* const commons = commons_ptr;
-	if (commons->search.window) {
-		gtk_window_set_focus(commons->search.window, commons->search.entry);
-		gtk_window_present(commons->search.window);
+	yaabegtk_commons const* const com = commons_ptr;
+	if (com->search.window) {
+		gtk_window_set_focus(com->search.window, com->search.entry);
+		gtk_window_present(com->search.window);
 	} else {
 		create_search_window(commons_ptr);
 	}
@@ -426,7 +426,7 @@ yaabe_action_config_dir(
 		GVariant* const parameter __unused,
 		gpointer const commons_ptr
 		) {
-	yaabegtk_commons const* const commons = commons_ptr;
+	yaabegtk_commons const* const com = commons_ptr;
 
 	GError* err = NULL;
 	GFile* const confdir = get_yaabe_config_dir(&err);
@@ -441,7 +441,7 @@ yaabe_action_config_dir(
 		generic_error_popup(
 			"Error opening config directory",
 			err->message,
-			commons->yaabe_gtk
+			com->yaabe_gtk
 		);
 		g_error_free(err);
 	}
@@ -450,9 +450,9 @@ yaabe_action_config_dir(
 
 void
 construct_menu_bar(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	GtkApplication* const gtkapp = commons->yaabe_gtk;
+	GtkApplication* const gtkapp = com->yaabe_gtk;
 	// construct and attach menu model; UI portion
 	GMenu* const file_menu = g_menu_new();
 	g_menu_append(file_menu, "Load", "app.load");
@@ -521,9 +521,9 @@ construct_menu_bar(
 	};
 	g_action_map_add_action_entries(app_action_map,
 		actions, lengthof(actions),
-		commons
+		com
 	);
-	if (NULL == commons->root) {
+	if (NULL == com->root) {
 		// disable some menu entries if no bios is loaded
 		GAction* action;
 		GValue enabled = G_VALUE_INIT;

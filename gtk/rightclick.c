@@ -8,7 +8,7 @@ struct _GtkColumnViewRow_hack {
 	// unnecessary bits truncated; we're only after owner
 };
 struct rightclick_pack { // see columnview_row_bind_attach_gesture
-	struct yaabegtk_commons const* commons;
+	struct yaabegtk_commons const* com;
 	union {
 		GtkColumnViewRow* row;
 		struct _GtkColumnViewRow_hack* row_hack;
@@ -82,7 +82,7 @@ columnview_create_rightclick_popup(
 
 static void
 columnview_row_bind_attach_gesture(
-		yaabegtk_commons const* const commons,
+		yaabegtk_commons const* const com,
 		GtkColumnViewRow* const view_row,
 		void (*gesture_cb)( // function pointer
 			GtkGesture*, gint,gdouble,gdouble,
@@ -112,7 +112,7 @@ columnview_row_bind_attach_gesture(
 	struct rightclick_pack* const pack = cralloc(
 		sizeof(struct rightclick_pack)
 	);
-	pack->commons = commons;
+	pack->com = com;
 	pack->row = view_row;
 
 	g_signal_connect_data(click_sense, "pressed",
@@ -140,7 +140,7 @@ right_click_paste_data(
 		GObject* const clipboard,
 		GAsyncResult* const async_data,
 		GATUINode* const node,
-		struct yaabegtk_commons const* commons
+		struct yaabegtk_commons const* com
 		) {
 	bool const is_leaf = GATUI_IS_LEAF(node);
 	assert(GATUI_IS_LEAF(node) || GATUI_IS_BRANCH(node));
@@ -150,7 +150,7 @@ right_click_paste_data(
 		GDK_CLIPBOARD(clipboard), async_data, &err
 	);
 	if (err) {
-		generic_error_popup("clipboard error", err->message, commons->yaabe_gtk
+		generic_error_popup("clipboard error", err->message, com->yaabe_gtk
 		);
 		g_error_free(err);
 		return;
@@ -178,7 +178,7 @@ right_click_paste_data(
 
 	gtk_alert_dialog_show(
 		error_popup,
-		gtk_application_get_active_window(commons->yaabe_gtk)
+		gtk_application_get_active_window(com->yaabe_gtk)
 	);
 	g_object_unref(error_popup);
 }
@@ -190,7 +190,7 @@ node_right_click_paste_data_set_data(
 		) {
 // AsyncReadyCallback
 	struct rightclick_pack const* const pack = pack_ptr;
-	right_click_paste_data(clipboard, async_data, pack->node, pack->commons);
+	right_click_paste_data(clipboard, async_data, pack->node, pack->com);
 }
 static void
 node_right_click_paste_data(
@@ -380,24 +380,24 @@ branches_rightclick_popup(
 	}
 	assert(act_i <= lengthof(actions));
 
-	struct pane_context const* const pane = &(pack->commons->branches);
+	struct pane_context const* const pane = &(pack->com->branches);
 	attach_actions_and_popup(actions,act_i,  pane,pack,  x,y);
 }
 
 void
 branches_rightclick_row_bind(
-		yaabegtk_commons const* const commons,
+		yaabegtk_commons const* const com,
 		GtkColumnViewRow* const view_row
 		) {
 	if (NULL == g_object_get_data(G_OBJECT(view_row), "atui")) {
 		columnview_row_bind_attach_gesture(
-			commons, view_row, branches_rightclick_popup
+			com, view_row, branches_rightclick_popup
 		);
 	}
 }
 void
 create_branches_rightclick_menu(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GMenu* const menu_model = g_menu_new();
 	g_menu_append(menu_model, "Copy Name", "context.name");
@@ -411,7 +411,7 @@ create_branches_rightclick_menu(
 	// see also branches_rightclick_popup
 
 	columnview_create_rightclick_popup(
-		G_MENU_MODEL(menu_model), &commons->branches
+		G_MENU_MODEL(menu_model), &com->branches
 	);
 }
 
@@ -469,7 +469,7 @@ leaves_rightclick_popup(
 	}
 	assert(act_i <= lengthof(actions));
 
-	struct pane_context const* const pane = &(pack->commons->leaves);
+	struct pane_context const* const pane = &(pack->com->leaves);
 
 	// disconnect the selection blocker, and then select
 	// the reconnection gets handled with rightclick_selection_sterilise
@@ -485,18 +485,18 @@ leaves_rightclick_popup(
 }
 void
 leaves_rightclick_row_bind(
-		yaabegtk_commons const* const commons,
+		yaabegtk_commons const* const com,
 		GtkColumnViewRow* const view_row
 		) {
 	if (NULL == g_object_get_data(G_OBJECT(view_row), "atui")) {
 		columnview_row_bind_attach_gesture(
-			commons, view_row, leaves_rightclick_popup
+			com, view_row, leaves_rightclick_popup
 		);
 	}
 }
 void
 create_leaves_rightclick_menu(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GMenu* const menu_model = g_menu_new();
 	g_menu_append(menu_model, "Copy Name", "context.name");
@@ -506,11 +506,11 @@ create_leaves_rightclick_menu(
 	// see also leaves_rightclick_popup
 
 	columnview_create_rightclick_popup(
-		G_MENU_MODEL(menu_model), &commons->leaves
+		G_MENU_MODEL(menu_model), &com->leaves
 	);
 
-	g_signal_connect_swapped(commons->leaves.rightclick, "closed",
-		G_CALLBACK(rightclick_selection_sterilise), commons->leaves.view
+	g_signal_connect_swapped(com->leaves.rightclick, "closed",
+		G_CALLBACK(rightclick_selection_sterilise), com->leaves.view
 	);
 }
 
@@ -526,7 +526,7 @@ search_right_click_goto(
 	struct atui_regex_node const* const atui_regex = gatui_regex_node_peek(
 		pack->regex_node
 	);
-	yaabe_gtk_scroll_to_object(pack->commons, atui_regex->tree_node);
+	yaabe_gtk_scroll_to_object(pack->com, atui_regex->tree_node);
 }
 static void
 search_right_click_copy_name(
@@ -584,7 +584,7 @@ search_right_click_paste_data_set_data(
 		pack->regex_node
 	);
 	right_click_paste_data(
-		clipboard, async_data, atui_regex->tree_node, pack->commons
+		clipboard, async_data, atui_regex->tree_node, pack->com
 	);
 }
 static void
@@ -638,7 +638,7 @@ search_rightclick_popup(
 	}
 	assert(act_i <= lengthof(actions));
 
-	struct pane_context const* const pane = &(pack->commons->search.pane);
+	struct pane_context const* const pane = &(pack->com->search.pane);
 
 	// disconnect the selection blocker, and then select
 	// the reconnection gets handled with rightclick_selection_sterilise
@@ -654,18 +654,18 @@ search_rightclick_popup(
 
 void
 search_rightclick_row_bind(
-		yaabegtk_commons const* const commons,
+		yaabegtk_commons const* const com,
 		GtkColumnViewRow* const view_row
 		) {
 	if (NULL == g_object_get_data(G_OBJECT(view_row), "atui")) {
 		columnview_row_bind_attach_gesture(
-			commons, view_row, search_rightclick_popup
+			com, view_row, search_rightclick_popup
 		);
 	}
 }
 void
 create_search_rightclick_menu(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	GMenu* const menu_model = g_menu_new();
 	g_menu_append(menu_model, "Go To", "context.goto");
@@ -676,11 +676,11 @@ create_search_rightclick_menu(
 	// see also search_rightclick_popup
 
 	columnview_create_rightclick_popup(
-		G_MENU_MODEL(menu_model), &commons->search.pane
+		G_MENU_MODEL(menu_model), &com->search.pane
 	);
 
-	g_signal_connect_swapped(commons->search.pane.rightclick, "closed",
-		G_CALLBACK(rightclick_selection_sterilise), commons->search.pane.view
+	g_signal_connect_swapped(com->search.pane.rightclick, "closed",
+		G_CALLBACK(rightclick_selection_sterilise), com->search.pane.view
 	);
 }
 

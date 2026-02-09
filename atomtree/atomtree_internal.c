@@ -4,11 +4,11 @@
 
 bool // error
 offchk( // check to see if the bios pointer math is within allocation bounds
-		struct atomtree_commons* const commons,
+		struct atomtree_commons* const com,
 		void const* const bios,
 		size_t const size
 		) {
-    struct atom_tree const* const atree = commons->atree;
+    struct atom_tree const* const atree = com->atree;
 	void const* const end = atree->alloced_bios + atree->biosfile_size;
 
 	bool const safe = (
@@ -21,7 +21,7 @@ offchk( // check to see if the bios pointer math is within allocation bounds
 	);
 	// backtrace? line number?
 	error_assert(
-		&(commons->error), ERROR_WARNING,
+		&(com->error), ERROR_WARNING,
 		"bad pointer math",
 		safe
 	);
@@ -30,11 +30,11 @@ offchk( // check to see if the bios pointer math is within allocation bounds
 
 bool // error
 _offreset( // check to see if pointer targets bios, and if it isn't, NULL it.
-		struct atomtree_commons* const commons,
+		struct atomtree_commons* const com,
 		void const** const ptr, // atomtree element that points to bios
 		size_t const size // size of the bios structure
 		) {
-	bool const unsafe = offchk(commons, *ptr, size);
+	bool const unsafe = offchk(com, *ptr, size);
 	if (unsafe) {
 		*ptr = NULL;
 	}

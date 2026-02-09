@@ -7,14 +7,14 @@ struct widget_cache {
 	uint32_t max_widgets;
 	GtkWidget** widget_stack;
 
-	yaabegtk_commons* commons; // only for passthrough
+	yaabegtk_commons* com; // only for passthrough
 };
 static struct widget_cache*
 widget_cache_new(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	struct widget_cache* const cache = cralloc(sizeof(*cache));
-	cache->commons = commons;
+	cache->com = com;
 
 	cache->n_widgets = 0;
 	cache->max_widgets = 256; // seems to be more than enough
@@ -174,7 +174,7 @@ node_offset_column_bind(
 
 inline static GtkWidget*
 create_branches_pane(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	// Columnview abstract
 	GtkColumnView* const branches_view = GTK_COLUMN_VIEW(
@@ -183,14 +183,14 @@ create_branches_pane(
 	gtk_column_view_set_reorderable(branches_view, true);
 	//gtk_column_view_set_show_row_separators(branches_view, true);
 	gtk_column_view_set_show_column_separators(branches_view, true);
-	commons->branches.view = branches_view;
+	com->branches.view = branches_view;
 
 	// Create and attach columns
 	GtkListItemFactory* factory;
 	GtkColumnViewColumn* column;
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
-		"swapped-signal::bind",G_CALLBACK(branches_rightclick_row_bind),commons,
+		"swapped-signal::bind",G_CALLBACK(branches_rightclick_row_bind),com,
 		"swapped-signal::bind",G_CALLBACK(branches_expand_row_fixer), NULL,
 		NULL
 	);
@@ -210,7 +210,7 @@ create_branches_pane(
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind),
-			commons->endian_sprintf,
+			com->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -224,7 +224,7 @@ create_branches_pane(
 		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(branches_view)
 	);
 
-	create_branches_rightclick_menu(commons);
+	create_branches_rightclick_menu(com);
 
 	return scrolledlist;
 }
@@ -413,7 +413,7 @@ construct_enum_columnview(
 
 inline static GtkWidget*
 construct_leaf_entry(
-		yaabegtk_commons* const commons,
+		yaabegtk_commons* const com,
 		GtkEntryBuffer* const buffer,
 		GtkColumnViewCell** const leaves_cell_cache
 		) {
@@ -422,20 +422,20 @@ construct_leaf_entry(
 	g_signal_connect(GTK_EDITABLE(entry), "activate",
 		G_CALLBACK(editable_sets_leaf), leaves_cell_cache
 	);
-	g_object_set_data(G_OBJECT(entry), "endian", &(commons->big_endian));
+	g_object_set_data(G_OBJECT(entry), "endian", &(com->big_endian));
 
 	return entry;
 }
 
 inline static GtkWidget*
 construct_enum_dropdown(
-		yaabegtk_commons* const commons,
+		yaabegtk_commons* const com,
 		GObject* const widget_bag,
 		GtkEntryBuffer* const buffer,
 		GtkColumnViewCell** const leaves_cell_cache
 		) {
 	GtkWidget* const enumentry = construct_leaf_entry(
-		commons, buffer, leaves_cell_cache
+		com, buffer, leaves_cell_cache
 	);
 
 	GtkWidget* const enum_list = construct_enum_columnview(leaves_cell_cache);
@@ -510,13 +510,13 @@ branch's leaves into view, slow. So, cache them with a stack.
 
 		// numbers, strings
 		GtkWidget* const regular = construct_leaf_entry(
-			cache->commons, buffer, cell_cache
+			cache->com, buffer, cell_cache
 		);
 		gtk_stack_add_named(GTK_STACK(widget_bag), regular, "text");
 
 		// enums
 		GtkWidget* const enumdropdown = construct_enum_dropdown(
-			cache->commons, G_OBJECT(widget_bag), buffer, cell_cache
+			cache->com, G_OBJECT(widget_bag), buffer, cell_cache
 		);
 		gtk_stack_add_named(GTK_STACK(widget_bag), enumdropdown, "enum");
 
@@ -612,7 +612,7 @@ leaves_val_column_unbind(
 
 inline static GtkWidget*
 create_leaves_pane(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
 	// Columnview abstract
 	GtkColumnView* const leaves_view = GTK_COLUMN_VIEW(
@@ -620,7 +620,7 @@ create_leaves_pane(
 	);
 	gtk_column_view_set_reorderable(leaves_view, true);
 	gtk_column_view_set_show_row_separators(leaves_view, true);
-	commons->leaves.view = leaves_view;
+	com->leaves.view = leaves_view;
 
 	// Create and attach columns
 	GtkListItemFactory* factory;
@@ -628,7 +628,7 @@ create_leaves_pane(
 
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		//"swapped-signal::setup", G_CALLBACK(leaves_row_setup), NULL,
-		"swapped-signal::bind", G_CALLBACK(leaves_rightclick_row_bind), commons,
+		"swapped-signal::bind", G_CALLBACK(leaves_rightclick_row_bind), com,
 		NULL
 	);
 	gtk_column_view_set_row_factory(leaves_view, factory);
@@ -646,8 +646,8 @@ create_leaves_pane(
 
 	factory = gtk_signal_list_item_factory_new();
 	// see leaves_val_column_setup for more info.
-	// queue could technically be allocated on commons.
-	struct widget_cache* const cache = widget_cache_new(commons);
+	// queue could technically be allocated on com.
+	struct widget_cache* const cache = widget_cache_new(com);
 	g_object_set_data_full(G_OBJECT(factory),
 		"widget_cache", cache, (GDestroyNotify) widget_cache_destroy
 	);
@@ -667,7 +667,7 @@ create_leaves_pane(
 	factory = g_object_connect(gtk_signal_list_item_factory_new(),
 		"swapped-signal::setup", G_CALLBACK(label_column_setup), NULL,
 		"swapped-signal::bind", G_CALLBACK(node_offset_column_bind),
-			commons->endian_sprintf,
+			com->endian_sprintf,
 		NULL
 	);
 	column = gtk_column_view_column_new("BIOS Offset", factory);
@@ -681,7 +681,7 @@ create_leaves_pane(
 		GTK_SCROLLED_WINDOW(scrolledlist), GTK_WIDGET(leaves_view)
 	);
 
-	create_leaves_rightclick_menu(commons);
+	create_leaves_rightclick_menu(com);
 
 	return scrolledlist;
 }
@@ -689,10 +689,10 @@ create_leaves_pane(
 
 GtkWidget*
 construct_tree_panes(
-		yaabegtk_commons* const commons
+		yaabegtk_commons* const com
 		) {
-	GtkWidget* const branches_pane = create_branches_pane(commons);
-	GtkWidget* const leaves_pane = create_leaves_pane(commons);
+	GtkWidget* const branches_pane = create_branches_pane(com);
+	GtkWidget* const leaves_pane = create_leaves_pane(com);
 
 	GtkPaned* const tree_divider = GTK_PANED(
 		gtk_paned_new(GTK_ORIENTATION_HORIZONTAL)
