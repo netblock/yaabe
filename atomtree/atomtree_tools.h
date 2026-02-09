@@ -17,6 +17,7 @@ typedef struct atomtree_atom {
 		atomtree_atom atom;\
 		struct {\
 			union {\
+				void* leaves;\
 				struct atom_common_table_header* table_header;\
 				punning_structs\
 			};\

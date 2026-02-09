@@ -21,10 +21,7 @@ sanity passes like the CRC checksum.
 #define ATOMTREE_DATA_TABLES_H
 
 struct atomtree_smc_dpm_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_smc_dpm_info_v4_1*  v4_1;
 		struct atom_smc_dpm_info_v4_3*  v4_3;
 		struct atom_smc_dpm_info_v4_4*  v4_4;
@@ -35,15 +32,11 @@ struct atomtree_smc_dpm_info {
 		struct atom_smc_dpm_info_v4_9*  v4_9;
 		struct atom_smc_dpm_info_v4_10* v4_10;
 		struct atom_smc_dpm_info_table_13_0_7* v5_0;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_firmware_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_firmware_info_v1_0*  v1_0;
 		struct atom_firmware_info_v1_2*  v1_2;
 		struct atom_firmware_info_v1_3*  v1_3;
@@ -54,8 +47,7 @@ struct atomtree_firmware_info {
 		struct atom_firmware_info_v3_2*  v3_2;
 		struct atom_firmware_info_v3_3*  v3_3;
 		struct atom_firmware_info_v3_4*  v3_4;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_lcd_record {
@@ -63,16 +55,12 @@ struct atomtree_lcd_record {
 	uint16_t edid_length;
 };
 struct atomtree_lcd_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_lvds_info_v1_1*  v1_1;
 		struct atom_lvds_info_v1_2*  v1_2;
 		struct atom_lcd_info_v1_3*   v1_3;
 		struct atom_lcd_info_v2_1*   v2_1;
-	};
-	semver ver;
+	);
 
 	uint8_t num_records;
 	size_t record_table_size;
@@ -80,20 +68,14 @@ struct atomtree_lcd_info {
 };
 
 struct atomtree_analog_tv_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
+	atomtree_atomise(
 		struct atom_analog_tv_info_v1_1* v1_1;
 		struct atom_analog_tv_info_v1_2* v1_2;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_smu_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_smu_info_v3_1*  v3_1;
 		struct atom_smu_info_v3_2*  v3_2;
 		struct atom_smu_info_v3_3*  v3_3;
@@ -102,8 +84,7 @@ struct atomtree_smu_info {
 		struct atom_smu_info_v3_5*  v3_5;
 		struct atom_smu_info_v3_6*  v3_6;
 		struct atom_smu_info_v4_0*  v4_0;
-	};
-	semver ver;
+	);
 
 	// TODO explode the versions into their own atomtree entities?
 	void* smugolden; // not all smu_info versions have these
@@ -113,33 +94,22 @@ struct atomtree_smu_info {
 
 
 struct atomtree_vram_usagebyfirmware {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct vram_usagebyfirmware_v2_1*  v2_1;
 		struct vram_usagebyfirmware_v2_2*  v2_2;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_gpio_pin_lut {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_gpio_pin_lut_v2_1* v2_1;
-	};
-	semver ver;
+	);
 	uint16_t num_gpio_pins;
 };
 
 
 struct atomtree_gfx_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_gfx_info_v2_1*   v2_1;
 		struct atom_gfx_info_v2_2*   v2_2;
 		struct atom_gfx_info_v2_3*   v2_3;
@@ -149,8 +119,7 @@ struct atomtree_gfx_info {
 		struct atom_gfx_info_v2_5*   v2_6; // 2.6 has same byte count as 2.5
 		struct atom_gfx_info_v2_7*   v2_7;
 		struct atom_gfx_info_v3_0*   v3_0;
-	};
-	semver ver;
+	);
 
 	// TODO explode the versions into their own atomtree entities?
 	// not all gfx_info versions have these:
@@ -287,9 +256,7 @@ struct atomtree_powerplay_smu {
 };
 
 struct atomtree_powerplay_table {
-	union {
-		void* leaves;
-		struct atom_common_table_header*   table_header;
+	atomtree_atomise(
 		struct smu_powerplay_table_header* pphead;
 
 		struct atom_powerplay_info_v1* v1_1;
@@ -300,8 +267,7 @@ struct atomtree_powerplay_table {
 		struct atomtree_powerplay_table_v7_1 v7_1;
 		struct atomtree_powerplay_table_v8_1 v8_1;
 		struct atomtree_powerplay_smu        smu; // v11 and newer
-	};
-	semver ver;
+	);
 };
 
 
@@ -338,15 +304,12 @@ struct atomtree_display_path_records {
 	struct atomtree_display_path_record_set extern_encoder;
 };
 struct atomtree_display_object {
-	union {
-		void* leaves;
-		struct atom_common_table_header*       table_header;
+	atomtree_atomise(
 		struct atom_object_header_v1_1*        v1_1;
 		struct atom_object_header_v1_3*        v1_3;
 		struct display_object_info_table_v1_4* v1_4;
 		struct display_object_info_table_v1_5* v1_5;
-	};
-	semver ver;
+	);
 
 	// v1.1 .. v1.3
 	struct atomtree_object_table connector;
@@ -360,39 +323,30 @@ struct atomtree_display_object {
 	struct atomtree_display_path_records* records;
 };
 struct atomtree_iio_access {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
+	atomtree_atomise(
 		struct indirect_io_access_v1_1*  v1_1;
-	};
-	semver ver;
+	);
 
 	uint16_t num_entries;
 };
 
 struct atomtree_umc_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
+	atomtree_atomise(
 		struct atom_umc_info_v3_1* v3_1;
 		struct atom_umc_info_v3_2* v3_2;
 		struct atom_umc_info_v3_3* v3_3;
 		struct atom_umc_info_v4_0* v4_0;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_dce_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
+	atomtree_atomise(
 		struct atom_display_controller_info_v4_3* v4_1;
 		struct atom_display_controller_info_v4_3* v4_2;
 		struct atom_display_controller_info_v4_3* v4_3;
 		struct atom_display_controller_info_v4_4* v4_4;
 		struct atom_display_controller_info_v4_5* v4_5;
-	};
-	semver ver;
+	);
 	semver golden_ver;
 
 	struct atom_dc_golden_table_v1* golden;
@@ -667,10 +621,7 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 };
 
 struct atomtree_vram_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atomtree_vram_info_v1_2         v1_2;
 		struct atomtree_vram_info_v1_3         v1_3;
 		struct atomtree_vram_info_v1_4         v1_4;
@@ -681,8 +632,7 @@ struct atomtree_vram_info {
 		struct atomtree_vram_info_header_v2_5  v2_5;
 		struct atomtree_vram_info_header_v2_6  v2_6;
 		struct atomtree_vram_info_header_v3_0  v3_0;
-	};
-	semver ver;
+	);
 };
 
 
@@ -692,27 +642,20 @@ struct atomtree_voltage_object {
 	uint16_t lut_entries; // has entries if i2c or gpio
 };
 struct atomtree_voltageobject_info {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atom_voltage_object_info_v1_1*  v1_1;
 		struct atom_voltage_object_info_v1_2*  v1_2;
 		struct atom_voltage_objects_info_v3_1* v3_1;
 		struct atom_voltage_objects_info_v4_1* v4_1;
-	};
-	semver ver;
+	);
 
 	uint16_t num_voltage_objects;
 	struct atomtree_voltage_object* voltage_objects;
 };
 
 struct atomtree_sw_datatable {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-	};
-	semver ver; // meh
+	atomtree_atomise(
+	); // meh
 };
 struct atomtree_master_datatable_v1_1 {
 	struct atom_master_data_table_v1_1* leaves;
@@ -823,25 +766,18 @@ struct atomtree_master_datatable_v2_1 {
 };
 
 struct atomtree_master_datatable {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
-
+	atomtree_atomise(
 		struct atomtree_master_datatable_v1_1 v1_1;
 		struct atomtree_master_datatable_v2_1 v2_1;
-	};
-	semver ver;
+	);
 };
 
 struct atomtree_rom_header {
-	union {
-		void* leaves;
-		struct atom_common_table_header* table_header;
+	atomtree_atomise(
 		struct atom_rom_header_v1_1* v1_1;
 		struct atom_rom_header_v2_1* v2_1;
 		struct atom_rom_header_v2_2* v2_2;
-	};
-	semver ver;
+	);
 
 	// have rom_header children in main atom_tree.
 };

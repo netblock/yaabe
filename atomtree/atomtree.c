@@ -8,11 +8,10 @@ see atomtree.h and data_tables.h
 #include "atomtree_internal.h"
 
 static bool // error
-populate_atom_table(
+populate_atom(
 		struct atomtree_commons* const commons,
-		void** const leaves,
-		uint16_t const bios_offset,
-		semver* const ver
+		atomtree_atom* const atom,
+		uint16_t const bios_offset
 		) {
 	if (0 == bios_offset) {
 		return true;
@@ -21,64 +20,14 @@ populate_atom_table(
 	if (offchk(commons, header, sizeof(*header))) {
 		return true;
 	}
-	*leaves = header; // for diagnostic
+	atom->table_header = header; // set it anyway for diagnostic
 	if (offchk(commons, header, header->structuresize)) {
 		return true;
 	}
 
-	*ver = atom_get_ver(header);
+	atom->ver = atom_get_ver(header);
 	return false;
 }
-
-/*
-current intended use:
-	bool const atom_err = populate_atom_table(
-		commons, &(smc_dpm_info->ver), bios_offset, &(smc_dpm_info->leaves)
-	);
-	if (atom_err) {
-		return;
-	}
-
-however:
-rework atomtree to use this api+abi? would work with atomtree puns
-typedef struct atomtree_atom {
-	struct atom_common_table_header* table_header;
-	semver ver;
-} atomtree_atom;
-
-// polymorphism; causes atomtree_atom's elements to be inherited.
-#define atomtree_atomise(punning_structs)\
-	union {\
-		atomtree_atom atom;\
-		struct {\
-			union {\
-				struct atom_common_table_header* table_header;\
-				punning_structs
-			};\
-			semver ver;\
-		};\
-	};
-
-struct atomtree_lcd_info {
-	atomtree_atomise(
-		struct atom_lvds_info_v1_1*  v1_1;
-		struct atom_lvds_info_v1_2*  v1_2;
-		struct atom_lcd_info_v1_3*   v1_3;
-		struct atom_lcd_info_v2_1*   v2_1;
-	) // lcd_info.ver lcd_info.v1_1 etc.
-
-
-	uint8_t num_records;
-	size_t record_table_size;
-	struct atomtree_lcd_record* record_table;
-};
-
-
-	if (populate_atom_table(commons, &(smc_dpm_info->atom), bios_offset)) {
-		return;
-	}
-*/
-
 
 inline static void
 populate_smc_dpm_info(
@@ -86,10 +35,7 @@ populate_smc_dpm_info(
 		struct atomtree_smc_dpm_info* const smc_dpm_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(smc_dpm_info->leaves), bios_offset, &(smc_dpm_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(smc_dpm_info->atom), bios_offset)) {
 		return;
 	}
 }
@@ -101,10 +47,7 @@ populate_firmwareinfo(
 		struct atomtree_firmware_info* const firmwareinfo,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(firmwareinfo->leaves), bios_offset, &(firmwareinfo->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(firmwareinfo->atom), bios_offset)) {
 		return;
 	}
 }
@@ -223,10 +166,7 @@ populate_lcd_info(
 		struct atomtree_lcd_info* const lcd_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(lcd_info->leaves), bios_offset, &(lcd_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(lcd_info->atom), bios_offset)) {
 		return;
 	}
 
@@ -265,10 +205,7 @@ populate_analog_tv_info(
 		struct atomtree_analog_tv_info* const atv,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(atv->leaves), bios_offset, &(atv->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(atv->atom), bios_offset)) {
 		return;
 	}
 }
@@ -279,10 +216,7 @@ populate_smu_info(
 		struct atomtree_smu_info* const smu_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(smu_info->leaves), bios_offset, &(smu_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(smu_info->atom), bios_offset)) {
 		return;
 	}
 	switch (smu_info->ver.ver) {
@@ -346,10 +280,7 @@ populate_vram_usagebyfirmware(
 		struct atomtree_commons* const commons,
 		struct atomtree_vram_usagebyfirmware* const fw_vram,
 		uint16_t const bios_offset) {
-	bool const atom_err = populate_atom_table(
-		commons, &(fw_vram->leaves), bios_offset, &(fw_vram->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(fw_vram->atom), bios_offset)) {
 		return;
 	}
 }
@@ -361,10 +292,7 @@ populate_gpio_pin_lut(
 		struct atomtree_gpio_pin_lut* const gpio_pin_lut,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(gpio_pin_lut->leaves), bios_offset, &(gpio_pin_lut->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(gpio_pin_lut->atom), bios_offset)) {
 		return;
 	}
 	switch (gpio_pin_lut->ver.ver) {
@@ -388,10 +316,7 @@ populate_gfx_info(
 		struct atomtree_gfx_info* const gfx_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(gfx_info->leaves), bios_offset, &(gfx_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(gfx_info->atom), bios_offset)) {
 		return;
 	}
 	switch (gfx_info->ver.ver) {
@@ -1397,10 +1322,7 @@ populate_ppt(
 		struct atomtree_powerplay_table* const ppt,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(ppt->leaves), bios_offset, &(ppt->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(ppt->atom), bios_offset)) {
 		return;
 	}
 
@@ -1640,10 +1562,7 @@ populate_display_object(
 		struct atomtree_display_object* const disp,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(disp->leaves), bios_offset, &(disp->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(disp->atom), bios_offset)) {
 		return;
 	}
 	switch (disp->ver.ver) {
@@ -1660,10 +1579,7 @@ populate_iio(
 		struct atomtree_iio_access* const iio,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(iio->leaves), bios_offset, &(iio->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(iio->atom), bios_offset)) {
 		return;
 	}
 
@@ -1681,10 +1597,7 @@ populate_umc_info(
 		struct atomtree_umc_info* const umc,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(umc->leaves), bios_offset, &(umc->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(umc->atom), bios_offset)) {
 		return;
 	}
 }
@@ -1695,10 +1608,7 @@ populate_dce_info(
 		struct atomtree_dce_info* const dce,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(dce->leaves), bios_offset, &(dce->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(dce->atom), bios_offset)) {
 		return;
 	}
 
@@ -2744,10 +2654,7 @@ populate_vram_info(
 		struct atomtree_vram_info* const vram_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(vram_info->leaves), bios_offset, &(vram_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(vram_info->atom), bios_offset)) {
 		return;
 	}
 	switch (vram_info->ver.ver) { // TODO: earlier tables than 2.3?
@@ -3072,10 +2979,7 @@ populate_voltageobject_info(
 		struct atomtree_voltageobject_info* const vo_info,
 		uint16_t const bios_offset
 		) {
-	bool const atom_err = populate_atom_table(
-		commons, &(vo_info->leaves), bios_offset, &(vo_info->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(vo_info->atom), bios_offset)) {
 		return;
 	}
 	switch (vo_info->ver.ver) {
@@ -3244,92 +3148,24 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 		struct atomtree_master_datatable_v2_1* const dt21
 		) {
 	struct atom_master_data_table_v2_1* const leaves = dt21->leaves;
-	void* const bios = commons->bios;
 
-	if (leaves->sw_datatable3) {
-		dt21->sw_datatable3.leaves = bios + leaves->sw_datatable3;
-		dt21->sw_datatable3.ver = atom_get_ver(dt21->sw_datatable3.leaves);
-	}
-
-	if (leaves->sw_datatable5) {
-		dt21->sw_datatable5.leaves = bios + leaves->sw_datatable5;
-		dt21->sw_datatable5.ver = atom_get_ver(dt21->sw_datatable5.leaves);
-	}
-
-	if (leaves->sw_datatable7) {
-		dt21->sw_datatable7.leaves = bios + leaves->sw_datatable7;
-		dt21->sw_datatable7.ver = atom_get_ver(dt21->sw_datatable7.leaves);
-	}
-
-	if (leaves->sw_datatable9) {
-		dt21->sw_datatable9.leaves = bios + leaves->sw_datatable9;
-		dt21->sw_datatable9.ver = atom_get_ver(dt21->sw_datatable9.leaves);
-	}
-
-	if (leaves->sw_datatable10) {
-		dt21->sw_datatable10.leaves = bios + leaves->sw_datatable10;
-		dt21->sw_datatable10.ver = atom_get_ver(dt21->sw_datatable10.leaves);
-	}
-
-	if (leaves->sw_datatable13) {
-		dt21->sw_datatable13.leaves = bios + leaves->sw_datatable13;
-		dt21->sw_datatable13.ver = atom_get_ver(dt21->sw_datatable13.leaves);
-	}
-
-	if (leaves->sw_datatable16) {
-		dt21->sw_datatable16.leaves = bios + leaves->sw_datatable16;
-		dt21->sw_datatable16.ver = atom_get_ver(dt21->sw_datatable16.leaves);
-	}
-
-	if (leaves->sw_datatable17) {
-		dt21->sw_datatable17.leaves = bios + leaves->sw_datatable17;
-		dt21->sw_datatable17.ver = atom_get_ver(dt21->sw_datatable17.leaves);
-	}
-
-	if (leaves->sw_datatable18) {
-		dt21->sw_datatable18.leaves = bios + leaves->sw_datatable18;
-		dt21->sw_datatable18.ver = atom_get_ver(dt21->sw_datatable18.leaves);
-	}
-
-	if (leaves->sw_datatable19) {
-		dt21->sw_datatable19.leaves = bios + leaves->sw_datatable19;
-		dt21->sw_datatable19.ver = atom_get_ver(dt21->sw_datatable19.leaves);
-	}
-
-	if (leaves->sw_datatable20) {
-		dt21->sw_datatable20.leaves = bios + leaves->sw_datatable20;
-		dt21->sw_datatable20.ver = atom_get_ver(dt21->sw_datatable20.leaves);
-	}
-
-	if (leaves->sw_datatable21) {
-		dt21->sw_datatable21.leaves = bios + leaves->sw_datatable21;
-		dt21->sw_datatable21.ver = atom_get_ver(dt21->sw_datatable21.leaves);
-	}
-
-	if (leaves->sw_datatable25) {
-		dt21->sw_datatable25.leaves = bios + leaves->sw_datatable25;
-		dt21->sw_datatable25.ver = atom_get_ver(dt21->sw_datatable25.leaves);
-	}
-
-	if (leaves->sw_datatable26) {
-		dt21->sw_datatable26.leaves = bios + leaves->sw_datatable26;
-		dt21->sw_datatable26.ver = atom_get_ver(dt21->sw_datatable26.leaves);
-	}
-
-	if (leaves->sw_datatable29) {
-		dt21->sw_datatable29.leaves = bios + leaves->sw_datatable29;
-		dt21->sw_datatable29.ver = atom_get_ver(dt21->sw_datatable29.leaves);
-	}
-
-	if (leaves->sw_datatable33) {
-		dt21->sw_datatable33.leaves = bios + leaves->sw_datatable33;
-		dt21->sw_datatable33.ver = atom_get_ver(dt21->sw_datatable33.leaves);
-	}
-
-	if (leaves->sw_datatable34) {
-		dt21->sw_datatable34.leaves = bios + leaves->sw_datatable34;
-		dt21->sw_datatable34.ver = atom_get_ver(dt21->sw_datatable34.leaves);
-	}
+	populate_atom(commons, &(dt21->sw_datatable3.atom),  leaves->sw_datatable3);
+	populate_atom(commons, &(dt21->sw_datatable5.atom),  leaves->sw_datatable5);
+	populate_atom(commons, &(dt21->sw_datatable7.atom),  leaves->sw_datatable7);
+	populate_atom(commons, &(dt21->sw_datatable9.atom),  leaves->sw_datatable9);
+	populate_atom(commons, &(dt21->sw_datatable10.atom), leaves->sw_datatable10);
+	populate_atom(commons, &(dt21->sw_datatable13.atom), leaves->sw_datatable13);
+	populate_atom(commons, &(dt21->sw_datatable16.atom), leaves->sw_datatable16);
+	populate_atom(commons, &(dt21->sw_datatable17.atom), leaves->sw_datatable17);
+	populate_atom(commons, &(dt21->sw_datatable18.atom), leaves->sw_datatable18);
+	populate_atom(commons, &(dt21->sw_datatable19.atom), leaves->sw_datatable19);
+	populate_atom(commons, &(dt21->sw_datatable20.atom), leaves->sw_datatable20);
+	populate_atom(commons, &(dt21->sw_datatable21.atom), leaves->sw_datatable21);
+	populate_atom(commons, &(dt21->sw_datatable25.atom), leaves->sw_datatable25);
+	populate_atom(commons, &(dt21->sw_datatable26.atom), leaves->sw_datatable26);
+	populate_atom(commons, &(dt21->sw_datatable29.atom), leaves->sw_datatable29);
+	populate_atom(commons, &(dt21->sw_datatable33.atom), leaves->sw_datatable33);
+	populate_atom(commons, &(dt21->sw_datatable34.atom), leaves->sw_datatable34);
 }
 inline static void
 populate_datatable_v2_1(
@@ -3399,10 +3235,7 @@ populate_datatables(
 	struct atomtree_master_datatable* const data_table = &(
 		commons->atree->data_table
 	);
-	bool const atom_err = populate_atom_table(
-		commons, &(data_table->leaves), bios_offset, &(data_table->ver)
-	);
-	if (atom_err) {
+	if (populate_atom(commons, &(data_table->atom), bios_offset)) {
 		return;
 	}
 	switch (data_table->ver.ver) {
