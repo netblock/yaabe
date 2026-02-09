@@ -412,8 +412,9 @@ populate_powerplay_info(
 inline static void
 populate_pplib_ppt_state_array(
 		struct atomtree_commons* const com,
-		struct atomtree_powerplay_table_v4_1* const ppt41
+		struct atomtree_powerplay_table* const ppt
 		) {
+	struct atomtree_powerplay_table_v4_1* const ppt41 = &(ppt->v4_1);
 	struct atom_pplib_powerplaytable_v1 const* const pplibv1 = &(
 		ppt41->leaves->v1
 	);
@@ -429,7 +430,7 @@ populate_pplib_ppt_state_array(
 
 
 	// driver gates with the atom ver
-	if (V(6,0) > atom_get_ver(&(ppt41->leaves->header)).ver) {
+	if (V(6,0) > ppt->ver.ver) {
 		ppt41->state_array_ver = SET_VER(1);
 		ppt41->num_state_array_entries = pplibv1->NumStates;
 
@@ -920,7 +921,7 @@ populate_pplib_ppt(
 	);
 
 	if (ppt41->state_array_base) {
-		populate_pplib_ppt_state_array(com, ppt41);
+		populate_pplib_ppt_state_array(com, ppt);
 	};
 	if (ppt41->clock_info) {
 		set_pplib_ppt_clock_info(com, ppt41);
@@ -3671,18 +3672,17 @@ inline static void
 populate_atom_rom_header(
 		struct atomtree_commons* const com,
 		struct atomtree_rom_header* const rom,
-		uint16_t offset
+		uint16_t bios_offset
 		) {
-	if (offset) {
-		rom->leaves = com->bios + offset;
-		rom->ver = atom_get_ver(rom->table_header);
-		switch (rom->ver.ver) {
-			case V(1,1): populate_atom_rom_header_v1_1(com, rom); break;
-			case V(2,1): populate_atom_rom_header_v2_1(com, rom); break;
-			case V(2,3): // forced
-			case V(2,2): populate_atom_rom_header_v2_2(com, rom); break;
-			default: break;
-		}
+	if (populate_atom(com, &(rom->atom), bios_offset)) {
+		return;
+	}
+	switch (rom->ver.ver) {
+		case V(1,1): populate_atom_rom_header_v1_1(com, rom); break;
+		case V(2,1): populate_atom_rom_header_v2_1(com, rom); break;
+		case V(2,3): // forced
+		case V(2,2): populate_atom_rom_header_v2_2(com, rom); break;
+		default: break;
 	}
 }
 
