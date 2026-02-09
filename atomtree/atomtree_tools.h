@@ -9,19 +9,19 @@ struct atomtree_init_reg_block;
 
 
 typedef struct atomtree_atom {
-	struct atom_common_table_header* table_header;
 	semver ver;
+	struct atom_common_table_header* table_header;
 } atomtree_atom;
 #define atomtree_atomise(punning_structs)\
 	union {\
 		atomtree_atom atom;\
 		struct {\
+			semver ver;\
 			union {\
 				void* leaves;\
 				struct atom_common_table_header* table_header;\
 				punning_structs\
 			};\
-			semver ver;\
 		};\
 	};
 

@@ -29,6 +29,8 @@ populate_atom(
 	return false;
 }
 
+
+
 inline static void
 populate_smc_dpm_info(
 		struct atomtree_commons* const com,
