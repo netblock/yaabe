@@ -94,6 +94,10 @@ static_assert(sizeof(struct {int8_t a; uint64_t b; uint8_t c;}) == 10);
 	#define __counted_by(member)
 #endif
 
+// !!(x) is bool convert
+#define likely(x)   __builtin_expect(!!(x), true)
+#define unlikely(x) __builtin_expect(!!(x), false)
+
 
 // TODO stroll that considers 0b prefix?
 int64_t
@@ -146,7 +150,7 @@ error_emit( // severity and message must be set before calling
 // The intent is an error/warning message system that would replace assert()
 #define error_assert(err, sev, msg, test) do {\
 	struct error* const errptr = (err);\
-	if (!(test)) {\
+	if (unlikely(!(test))) {\
 		assert(0);\
 		errptr->severity = sev;\
 		error_emit(errptr, (msg));\

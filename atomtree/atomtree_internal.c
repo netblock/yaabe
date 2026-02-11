@@ -3,7 +3,7 @@
 #include "atomtree_internal.h"
 
 bool // error
-offchk( // check to see if the bios pointer math is within allocation bounds
+_offchk( // check to see if the bios pointer math is within allocation bounds
 		struct atomtree_commons* const com,
 		void const* const bios,
 		size_t const size

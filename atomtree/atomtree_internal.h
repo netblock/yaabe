@@ -9,8 +9,9 @@ struct atomtree_commons {
 };
 
 
+#define offchk(com, bios, size) unlikely(_offchk(com, bios, size))
 bool // error
-offchk( // check to see if the bios pointer math is within allocation bounds
+_offchk( // check to see if the bios pointer math is within allocation bounds
 		struct atomtree_commons* com,
 		void const* bios,
 		size_t size
@@ -18,7 +19,7 @@ offchk( // check to see if the bios pointer math is within allocation bounds
 
 // two-in-one combining offchk and sizeof_flex in a safe way
 // ({ gnu c statement expression }) returns error
-#define offchk_flex(com, bios, array, count) ({\
+#define offchk_flex(com, bios, array, count) unlikely(({\
 	struct atomtree_commons* const _c = (com);\
 	auto const _ptr = (bios);\
 	\
@@ -30,7 +31,7 @@ offchk( // check to see if the bios pointer math is within allocation bounds
 		}\
 	}\
 	err;\
-})
+}))
 
 bool // error
 _offreset( // check to see if pointer targets bios, and if it isn't, NULL it.
@@ -44,19 +45,19 @@ _offreset( // check to see if pointer targets bios, and if it isn't, NULL it.
 #define offrst(com, ptr, ...) _offrst_helper(\
 	com, ptr, __VA_ARGS__ __VA_OPT__(,) sizeof(*ptr)\
 )
-#define _offrst_helper(com, ptr, size, ...) _offreset(\
+#define _offrst_helper(com, ptr, size, ...) unlikely(_offreset(\
 	(com), (void const**) (ptr), (size)\
-)
+))
 
 // two-in-one combining offrst and sizeof_flex in a safe way
 // ({ gnu c statement expression }) returns error
-#define offrst_flex(com, ptr, array, count) ({\
+#define offrst_flex(com, ptr, array, count) unlikely(({\
 	auto _at_ptr = (ptr);\
 	bool const err = offchk_flex(com, *_at_ptr, array, count);\
 	if (err) {\
 		*_at_ptr = NULL;\
 	}\
 	err;\
-})
+}))
 
 #endif
