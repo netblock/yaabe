@@ -9,13 +9,22 @@ struct atomtree_commons {
 };
 
 
-#define offchk(com, bios, size) unlikely(_offchk(com, bios, size))
+#define _off_helper(offfunc, com, ptr, size, ...) unlikely(offfunc(\
+	(com), (ptr), (size)\
+))
+
+
 bool // error
 _offchk( // check to see if the bios pointer math is within allocation bounds
 		struct atomtree_commons* com,
 		void const* bios,
 		size_t size
 		);
+
+// if given two arguments, the size is assumed to be sizeof(*bios)
+#define offchk(com, bios, ...) _off_helper(_offchk,\
+	com, bios,  __VA_ARGS__ __VA_OPT__(,) sizeof(*bios)\
+)
 
 // two-in-one combining offchk and sizeof_flex in a safe way
 // ({ gnu c statement expression }) returns error
@@ -25,7 +34,7 @@ _offchk( // check to see if the bios pointer math is within allocation bounds
 	\
 	bool err = false;\
 	if (_ptr) {\
-		err = offchk(_c, _ptr, sizeof(*_ptr));\
+		err = offchk(_c, _ptr);\
 		if (!err) {\
 			err = offchk(_c, _ptr, sizeof_flex(_ptr, array, count));\
 		}\
@@ -41,13 +50,10 @@ _offreset( // check to see if pointer targets bios, and if it isn't, NULL it.
 		);
 
 // casting wrapper for _offreset
-// if given two arguments, the size is assumed to be sizeof(*ptr)
-#define offrst(com, ptr, ...) _offrst_helper(\
-	com, ptr, __VA_ARGS__ __VA_OPT__(,) sizeof(*ptr)\
+// if given two arguments, the size is assumed to be sizeof(**ptr)
+#define offrst(com, ptr, ...) _off_helper(_offreset,\
+	com, (void const**) ptr, __VA_ARGS__ __VA_OPT__(,) sizeof(**ptr)\
 )
-#define _offrst_helper(com, ptr, size, ...) unlikely(_offreset(\
-	(com), (void const**) (ptr), (size)\
-))
 
 // two-in-one combining offrst and sizeof_flex in a safe way
 // ({ gnu c statement expression }) returns error
