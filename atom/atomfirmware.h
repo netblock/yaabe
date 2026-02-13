@@ -497,7 +497,7 @@ struct atom_gpio_pin_assignment_v2_1 {
 struct atom_gpio_pin_lut_v2_1 {
 	struct atom_common_table_header  table_header;
 	// the real number of this included in the structure is calcualted by using the (whole structure size - the header size)/size of atom_gpio_pin_lut
-	struct atom_gpio_pin_assignment_v2_1  gpio_pin[8];
+	struct atom_gpio_pin_assignment_v2_1  gpio_pin[];
 };
 
 
@@ -670,7 +670,7 @@ struct atom_display_object_path_v3 {
 	uint16_t reserved4;
 };
 
-struct display_object_info_table_v1_4 {
+struct display_object_info_table_v1_4 { // TODO unify with v1_5 in some way?
 	struct atom_common_table_header  table_header;
 	union atom_display_device_tag supporteddevices;
 	uint8_t  number_of_path;

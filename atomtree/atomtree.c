@@ -17,7 +17,7 @@ populate_atom(
 		return true;
 	}
 	struct atom_common_table_header* const header = com->bios + bios_offset;
-	if (offchk(com, header, sizeof(*header))) {
+	if (offchk(com, header)) {
 		return true;
 	}
 	atom->table_header = header; // set it anyway for diagnostic
@@ -40,6 +40,23 @@ populate_smc_dpm_info(
 	if (populate_atom(com, &(smc_dpm_info->atom), bios_offset)) {
 		return;
 	}
+
+	size_t size = 0;
+	switch (smc_dpm_info->ver.ver) {
+		case V(4,1):  size = sizeof(*smc_dpm_info->v4_1);  break;
+		case V(4,3):  size = sizeof(*smc_dpm_info->v4_3);  break;
+		case V(4,4):  size = sizeof(*smc_dpm_info->v4_4);  break;
+		case V(4,5):  size = sizeof(*smc_dpm_info->v4_5);  break;
+		case V(4,6):  size = sizeof(*smc_dpm_info->v4_6);  break;
+		case V(4,7):  size = sizeof(*smc_dpm_info->v4_7);  break;
+		case V(4,9):  size = sizeof(*smc_dpm_info->v4_9);  break;
+		case V(4,10): size = sizeof(*smc_dpm_info->v4_10); break;
+		case V(5,0):  size = sizeof(*smc_dpm_info->v5_0);  break;
+	}
+	if (offchk(com, smc_dpm_info->leaves, size)) { // partial crawl error
+		smc_dpm_info->ver.ver = V(0);
+		return;
+	}
 }
 
 
@@ -50,6 +67,23 @@ populate_firmwareinfo(
 		uint16_t const bios_offset
 		) {
 	if (populate_atom(com, &(firmwareinfo->atom), bios_offset)) {
+		return;
+	}
+	size_t size = 0;
+	switch (firmwareinfo->ver.ver) {
+		case V(1,0):  size = sizeof(*firmwareinfo->v1_0);  break;
+		case V(1,2):  size = sizeof(*firmwareinfo->v1_2);  break;
+		case V(1,3):  size = sizeof(*firmwareinfo->v1_3);  break;
+		case V(1,4):  size = sizeof(*firmwareinfo->v1_4);  break;
+		case V(2,1):  size = sizeof(*firmwareinfo->v2_1);  break;
+		case V(2,2):  size = sizeof(*firmwareinfo->v2_2);  break;
+		case V(3,1):  size = sizeof(*firmwareinfo->v3_1);  break;
+		case V(3,2):  size = sizeof(*firmwareinfo->v3_2);  break;
+		case V(3,3):  size = sizeof(*firmwareinfo->v3_3);  break;
+		case V(3,4):  size = sizeof(*firmwareinfo->v3_4);  break;
+	}
+	if (offchk(com, firmwareinfo->leaves, size)) { // partial crawl error
+		firmwareinfo->ver.ver = V(0);
 		return;
 	}
 }
@@ -172,8 +206,19 @@ populate_lcd_info(
 		return;
 	}
 
-	void* record_start = NULL;
+	size_t size = 0;
+	switch (lcd_info->ver.ver) {
+		case V(1,1):  size = sizeof(*lcd_info->v1_1);  break;
+		case V(1,2):  size = sizeof(*lcd_info->v1_2);  break;
+		case V(1,3):  size = sizeof(*lcd_info->v1_3);  break;
+		case V(2,1):  size = sizeof(*lcd_info->v2_1);  break;
+	}
+	if (offchk(com, lcd_info->leaves, size)) { // partial crawl error
+		lcd_info->ver.ver = V(0);
+		return;
+	}
 
+	void* record_start = NULL;
 	switch (lcd_info->ver.ver) {
 		case V(1,1):
 			if (lcd_info->v1_1->ModePatchTableOffset) {
@@ -210,6 +255,16 @@ populate_analog_tv_info(
 	if (populate_atom(com, &(atv->atom), bios_offset)) {
 		return;
 	}
+
+	size_t size = 0;
+	switch (atv->ver.ver) {
+		case V(1,1):  size = sizeof(*atv->v1_1);  break;
+		case V(1,2):  size = sizeof(*atv->v1_2);  break;
+	}
+	if (offchk(com, atv->leaves, size)) { // partial crawl error
+		atv->ver.ver = V(0);
+		return;
+	}
 }
 
 inline static void
@@ -221,6 +276,22 @@ populate_smu_info(
 	if (populate_atom(com, &(smu_info->atom), bios_offset)) {
 		return;
 	}
+
+	size_t size = 0;
+	switch (smu_info->ver.ver) {
+		case V(3,1):  size = sizeof(*smu_info->v3_1);  break;
+		case V(3,2):  size = sizeof(*smu_info->v3_2);  break;
+		case V(3,3):  size = sizeof(*smu_info->v3_3);  break;
+		case V(3,4):  size = sizeof(*smu_info->v3_4);  break;
+		case V(3,5):  size = sizeof(*smu_info->v3_5);  break;
+		case V(3,6):  size = sizeof(*smu_info->v3_6);  break;
+		case V(4,0):  size = sizeof(*smu_info->v4_0);  break;
+	}
+	if (offchk(com, smu_info->leaves, size)) { // partial crawl error
+		smu_info->ver.ver = V(0);
+		return;
+	}
+
 	switch (smu_info->ver.ver) {
 		case V(3,2):
 			if (smu_info->v3_2->smugoldenoffset) {
@@ -285,6 +356,15 @@ populate_vram_usagebyfirmware(
 	if (populate_atom(com, &(fw_vram->atom), bios_offset)) {
 		return;
 	}
+	size_t size = 0;
+	switch (fw_vram->ver.ver) {
+		case V(2,1):  size = sizeof(*fw_vram->v2_1);  break;
+		case V(2,2):  size = sizeof(*fw_vram->v2_2);  break;
+	}
+	if (offchk(com, fw_vram->leaves, size)) { // partial crawl error
+		fw_vram->ver.ver = V(0);
+		return;
+	}
 }
 
 
@@ -300,7 +380,7 @@ populate_gpio_pin_lut(
 	switch (gpio_pin_lut->ver.ver) {
 		case V(2,1):
 			gpio_pin_lut->num_gpio_pins = (
-				//dynamic array length of nothing but pins after the header
+				// dynamic array length of nothing but pins after the header
 				(gpio_pin_lut->table_header->structuresize
 					- sizeof(struct atom_common_table_header)
 				) / sizeof(struct atom_gpio_pin_assignment_v2_1)
@@ -319,6 +399,22 @@ populate_gfx_info(
 		uint16_t const bios_offset
 		) {
 	if (populate_atom(com, &(gfx_info->atom), bios_offset)) {
+		return;
+	}
+	size_t size = 0;
+	switch (gfx_info->ver.ver) {
+		case V(2,1):  size = sizeof(*gfx_info->v2_1);  break;
+		case V(2,2):  size = sizeof(*gfx_info->v2_2);  break;
+		case V(2,3):  size = sizeof(*gfx_info->v2_3);  break;
+		//case V(2,3,2):size = sizeof(*gfx_info->v2_3_2);break;
+		case V(2,4):  size = sizeof(*gfx_info->v2_4);  break;
+		case V(2,5):  size = sizeof(*gfx_info->v2_5);  break;
+		case V(2,6):  size = sizeof(*gfx_info->v2_6);  break;
+		case V(2,7):  size = sizeof(*gfx_info->v2_7);  break;
+		case V(3,0):  size = sizeof(*gfx_info->v3_0);  break;
+	}
+	if (offchk(com, gfx_info->leaves, size)) { // partial crawl error
+		gfx_info->ver.ver = V(0);
 		return;
 	}
 	switch (gfx_info->ver.ver) {
@@ -982,7 +1078,7 @@ populate_pptablev1_ppt(
 		.raw = ppt71->leaves
 	};
 
-	if (offchk(com, b.raw, sizeof(*b.ppt))) {
+	if (offchk(com, b.ppt)) {
 		return true;
 	}
 
@@ -1119,7 +1215,7 @@ populate_vega10_ppt(
 		.raw = ppt81->leaves
 	};
 
-	if (offchk(com, b.raw, sizeof(*b.ppt))) {
+	if (offchk(com, b.ppt)) {
 		return true;
 	}
 
@@ -1360,7 +1456,7 @@ populate_ppt(
 			assert(0);
 			break;
 	}
-	if (err) { // partial crawl error, unable to get a basic table
+	if (err) { // partial crawl error
 		ppt->ver.ver = V(0);
 	}
 }
@@ -1374,30 +1470,59 @@ populate_display_object_records(
 		) {
 	union {
 		void* raw;
-		 union display_records* records;
+		struct atom_common_record_header* header;
+		union display_records* records;
 	} r = {
 		.records = start
 	};
 
-	while (ATOM_RECORD_END_TYPE != r.records->header.record_type) {
+	bool err = offchk(com, r.header);
+	bool end = false;
+	uint8_t size = 1;
+	while (!(err || end || 0 == size)) {
+		end = (ATOM_RECORD_END_TYPE == r.header->record_type);
 		set->num_records++;
-		r.raw += r.records->header.record_size;
-		assert(255 > set->num_records);
+		size = r.header->record_size;
+		r.raw += r.header->record_size;
+		err = offchk(com, r.header);
 	}
-	set->records_size = r.raw - start;
+	set->num_records -= end;
+
 	if (0 == set->num_records) {
 		return;
 	}
-
 	set->records = arena_alloc(
 		&(com->alloc_arena), &(com->error),
 		set->num_records * sizeof(set->records[0])
 	);
+
 	r.records = start;
 	for (uint8_t i=0; i < set->num_records; i++) {
 		set->records[i] = r.records;
-		r.raw += r.records->header.record_size;
+		r.raw += r.header->record_size;
 	}
+	set->records_size = r.raw - start;
+}
+
+inline static void
+populate_atom_object_table_srcdst(
+		struct atomtree_commons* const com,
+		struct atomtree_object_table_tables* const object,
+		void* const srcdst
+		) {
+	object->src = srcdst;
+	bool err = offrst_flex(com, &(object->src),
+		object_id, object->src->num_of_objs
+	);
+	if (err) {
+		return;
+	}
+	object->dst = srcdst + sizeof_flex(
+		object->src, object_id, object->src->num_of_objs
+	);
+	offrst_flex(com, &(object->dst),
+		object_id, object->dst->num_of_objs
+	);
 }
 static void
 populate_atom_object_table(
@@ -1407,6 +1532,10 @@ populate_atom_object_table(
 		uint16_t const offset
 		) {
 	struct atom_object_table* const header = bios + offset;
+	if (offchk_flex(com, header, Objects, header->NumberOfObjects)) {
+		return;
+	}
+
 	table->table = header;
 	uint8_t const num_objects = header->NumberOfObjects;
 	struct atomtree_object_table_tables* const objects = arena_alloc(
@@ -1417,10 +1546,9 @@ populate_atom_object_table(
 
 	for (uint8_t i=0; i < num_objects; i++) {
 		if (header->Objects[i].SrcDstTableOffset) {
-			void* srcdst = bios + header->Objects[i].SrcDstTableOffset;
-			objects[i].src = srcdst;
-			objects[i].dst = srcdst + sizeof_flex(
-				objects[i].src, object_id, objects[i].src->num_of_objs
+			populate_atom_object_table_srcdst(
+				com, &(objects[i]),
+				bios + header->Objects[i].SrcDstTableOffset
 			);
 		}
 		if (header->Objects[i].RecordOffset) {
@@ -1439,9 +1567,13 @@ populate_display_object_path_table(
 		uint16_t const offset
 		) {
 	struct atom_display_object_path_table* const header = bios + offset;
+	if (offchk_flex(com, header, DispPath, header->NumOfDispPath)) {
+		// heuristic; atom_display_object_path_table is flex 2D
+		return;
+	}
+
 	table->header = header;
 	uint8_t const num_paths = header->NumOfDispPath;
-
 	if (0 == num_paths) {
 		return;
 	}
@@ -1453,65 +1585,100 @@ populate_display_object_path_table(
 
 	void* pos = header->DispPath;
 
-	for (uint8_t i=0; i < num_paths; i++) {
+	uint8_t i = 0;
+	bool err;
+	do {
 		paths[i].path = pos;
 		paths[i].num_graphic_ids = (
 			(paths[i].path->Size - sizeof(*(paths[i].path)))
 			/ sizeof(paths[i].path->GraphicObjIds[0])
 		);
+		err = offchk(com, pos, paths[i].path->Size);
 		pos += paths[i].path->Size;
-	}
+		i++;
+	} while ((i < num_paths) && (! err));
+	i -= err;
+
+	table->num_paths = i;
 	table->total_size = pos - (void*) header;
+	if (err) {
+		table->total_size -= paths[i+err-1].path->Size; // 0 == err-1
+	}
 }
-inline static void
+inline static bool
 populate_atom_object_header(
 		struct atomtree_commons* const com,
 		struct atomtree_display_object* const disp
 		) {
 	// v1.1 .. 1.3
+	size_t size;
 	void* bios; // 1.1 is absolute; 1.2<= is relative
 	if (1 == disp->ver.minor) {
+		size = sizeof(*disp->v1_1);
 		bios = com->bios;
 	} else {
+		size = sizeof(*disp->v1_3);
 		bios = disp->leaves;
 	}
-	if (disp->v1_1->ConnectorObjectTableOffset) {
-		populate_atom_object_table(com, &(disp->connector),
-			bios, disp->v1_1->ConnectorObjectTableOffset
-		);
+	if (offchk(com, disp->leaves, size)) {
+		return true;
 	}
-	if (disp->v1_1->RouterObjectTableOffset) {
-		populate_atom_object_table(com, &(disp->router),
-			bios, disp->v1_1->RouterObjectTableOffset
-		);
+	switch (disp->ver.ver) {
+		case V(1,3):
+			if (disp->v1_3->MiscObjectTableOffset) {
+				populate_atom_object_table(com, &(disp->misc),
+					bios, disp->v1_3->MiscObjectTableOffset
+				);
+			}
+			fall;
+		case V(1,1):
+			if (disp->v1_1->ConnectorObjectTableOffset) {
+				populate_atom_object_table(com, &(disp->connector),
+					bios, disp->v1_1->ConnectorObjectTableOffset
+				);
+			}
+			if (disp->v1_1->RouterObjectTableOffset) {
+				populate_atom_object_table(com, &(disp->router),
+					bios, disp->v1_1->RouterObjectTableOffset
+				);
+			}
+			if (disp->v1_1->EncoderObjectTableOffset) {
+				populate_atom_object_table(com, &(disp->encoder),
+					bios, disp->v1_1->EncoderObjectTableOffset
+				);
+			}
+			if (disp->v1_1->ProtectionObjectTableOffset) {
+				populate_atom_object_table(com, &(disp->protection),
+					bios, disp->v1_1->ProtectionObjectTableOffset
+				);
+			}
+			if (disp->v1_1->DisplayPathTableOffset) {
+				populate_display_object_path_table(com, &(disp->path),
+					bios, disp->v1_1->DisplayPathTableOffset
+				);
+			}
 	}
-	if (disp->v1_1->EncoderObjectTableOffset) {
-		populate_atom_object_table(com, &(disp->encoder),
-			bios, disp->v1_1->EncoderObjectTableOffset
-		);
-	}
-	if (disp->v1_1->ProtectionObjectTableOffset) {
-		populate_atom_object_table(com, &(disp->protection),
-			bios, disp->v1_1->ProtectionObjectTableOffset
-		);
-	}
-	if (disp->v1_1->DisplayPathTableOffset) {
-		populate_display_object_path_table(com, &(disp->path),
-			bios, disp->v1_1->DisplayPathTableOffset
-		);
-	}
-	if ((3 == disp->ver.minor) && disp->v1_3->MiscObjectTableOffset) {
-		populate_atom_object_table(com, &(disp->misc),
-			bios, disp->v1_3->MiscObjectTableOffset
-		);
-	}
+	return false;
 }
-inline static void
-populate_display_object_info_table(
+inline static bool
+populate_display_object_info_table( // v1.4, 1.5
 		struct atomtree_commons* const com,
 		struct atomtree_display_object* const disp
 		) {
-	// v1.4, 1.5
+	bool err;
+	if (V(1,4) == disp->ver.ver) {
+		err = offchk_flex(com, disp->v1_4,
+			display_path, disp->v1_4->number_of_path
+		);
+	} else {
+		err = offchk_flex(com, disp->v1_5,
+			display_path, disp->v1_5->number_of_path
+		);
+	}
+	if (err) {
+		return true;
+	}
+
 	void* const leaves = disp->leaves;
 	uint8_t const number_of_path = disp->v1_4->number_of_path;
 	struct atomtree_display_path_records* const records = arena_alloc(
@@ -1557,6 +1724,7 @@ populate_display_object_info_table(
 			}
 		}
 	}
+	return false;
 }
 
 inline static void
@@ -1568,12 +1736,16 @@ populate_display_object(
 	if (populate_atom(com, &(disp->atom), bios_offset)) {
 		return;
 	}
+	bool err;
 	switch (disp->ver.ver) {
 		case V(1,1):
 		case V(1,2):
-		case V(1,3): populate_atom_object_header(com, disp); break;
+		case V(1,3): err = populate_atom_object_header(com, disp); break;
 		case V(1,4):
-		case V(1,5): populate_display_object_info_table(com, disp); break;
+		case V(1,5): err = populate_display_object_info_table(com, disp); break;
+	}
+	if (err) { // partial crawl error
+		disp->ver.ver = V(0);
 	}
 }
 inline static void
@@ -1586,6 +1758,7 @@ populate_iio(
 		return;
 	}
 
+	// iio size is wholly based off of atom_common_table_header
 	assert(V(1,1) == iio->ver.ver);
 
 	iio->num_entries = (
@@ -1603,6 +1776,17 @@ populate_umc_info(
 	if (populate_atom(com, &(umc->atom), bios_offset)) {
 		return;
 	}
+	size_t size = 0;
+	switch (umc->ver.ver) {
+		case V(3,1):  size = sizeof(*umc->v3_1);  break;
+		case V(3,2):  size = sizeof(*umc->v3_2);  break;
+		case V(3,3):  size = sizeof(*umc->v3_3);  break;
+		case V(4,0):  size = sizeof(*umc->v4_0);  break;
+	}
+	if (offchk(com, umc->leaves, size)) { // partial crawl error
+		umc->ver.ver = V(0);
+		return;
+	}
 }
 
 inline static void
@@ -1612,6 +1796,18 @@ populate_dce_info(
 		uint16_t const bios_offset
 		) {
 	if (populate_atom(com, &(dce->atom), bios_offset)) {
+		return;
+	}
+	size_t size = 0;
+	switch (dce->ver.ver) {
+		case V(4,1):  size = sizeof(*dce->v4_1);  break;
+		case V(4,2):  size = sizeof(*dce->v4_2);  break;
+		case V(4,3):  size = sizeof(*dce->v4_3);  break;
+		case V(4,4):  size = sizeof(*dce->v4_4);  break;
+		case V(4,5):  size = sizeof(*dce->v4_5);  break;
+	}
+	if (offchk(com, dce->leaves, size)) { // partial crawl error
+		dce->ver.ver = V(0);
 		return;
 	}
 
@@ -1628,9 +1824,10 @@ populate_dce_info(
 			dce->golden = &(dce->v4_5->golden_table);
 			break;
 	}
+	offrst(com, &(dce->golden));
 }
 
-static void
+static bool
 populate_init_reg_block(
 		struct atomtree_commons* const com,
 		struct atomtree_init_reg_block* const at_regblock
@@ -1645,8 +1842,14 @@ populate_init_reg_block(
 	struct atom_reg_setting_data_block's reg_data length is implied through
 	RegDataBlkSize.
 	*/
-
 	struct atom_init_reg_block* const leaves = at_regblock->leaves;
+
+	if (offrst(com, &(at_regblock->leaves))) {
+		return true;
+	}
+	if (offchk(com, leaves->RegIndexBuf, leaves->RegIndexTblSize)) {
+		return true;
+	}
 
 	at_regblock->num_index = // will include END_OF_REG_INDEX_BLOCK flag
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
@@ -1660,16 +1863,21 @@ populate_init_reg_block(
 	);
 
 	union {
-		struct atom_reg_setting_data_block* walker;
+		struct atom_reg_setting_data_block* block;
+		union atom_mc_register_setting_id* block_id;
 		void* raw;
 	} w;
 	struct atom_reg_setting_data_block* const block_start = (
 		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
 	);
-	w.walker = block_start;
-	while (w.walker->block_id.id_access) { // the datablock list ends with 0
-		at_regblock->num_data_blocks++;
+	w.block = block_start;
+	bool err = offchk(com, w.block_id);
+	bool not_end = false;
+	while ((!err) && not_end) {
+		not_end = (0 < w.block_id->id_access);
+		at_regblock->num_data_blocks += not_end;
 		w.raw += at_regblock->data_block_element_size;
+		err = offchk(com, w.block_id);
 	}
 
 	if (at_regblock->num_data_blocks) {
@@ -1677,13 +1885,13 @@ populate_init_reg_block(
 			&(com->alloc_arena), &(com->error),
 			at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
 		);
-		w.walker = block_start;
+		w.block = block_start;
 		uint8_t i = 0;
-		while (i < at_regblock->num_data_blocks) {
-			at_regblock->data_blocks[i] = w.walker;
+		do {
+			at_regblock->data_blocks[i] = w.block;
 			w.raw += at_regblock->data_block_element_size;
 			i++;
-		}
+		} while (i < at_regblock->num_data_blocks);
 		at_regblock->data_block_table_size = (
 			at_regblock->data_block_element_size * at_regblock->num_data_blocks
 		);
@@ -1695,6 +1903,8 @@ populate_init_reg_block(
 		+ at_regblock->index_table_size
 		+ at_regblock->data_block_table_size
 	);
+
+	return false;
 }
 static enum atom_dgpu_vram_type
 get_vram_type(
@@ -1718,13 +1928,15 @@ get_vram_type(
 	return ATOM_DGPU_VRAM_TYPE_NONE;
 }
 
-static void
+static bool
 populate_mem_adjust_table(
 		struct atomtree_commons* const com,
 		struct atomtree_init_reg_block* const mem_adjust_table,
 		struct atomtree_vram_module const* const vram_modules __unused
 		) {
-	populate_init_reg_block(com, mem_adjust_table);
+	if (populate_init_reg_block(com, mem_adjust_table)) {
+		return true;
+	}
 	mem_adjust_table->reg_type = REG_BLOCK_MEM_ADJUST;
 
 	/*
@@ -1754,15 +1966,18 @@ populate_mem_adjust_table(
 	}
 	#endif
 	*/
+	return false;
 }
 
-static void
+static bool
 populate_mem_clk_patch(
 		struct atomtree_commons* const com,
 		struct atomtree_init_reg_block* const mem_clk_patch,
 		struct atomtree_vram_module const* const vram_modules
 		) {
-	populate_init_reg_block(com, mem_clk_patch);
+	if (populate_init_reg_block(com, mem_clk_patch)) {
+		return true;
+	}
 	mem_clk_patch->reg_type = REG_BLOCK_MEM_CLK_PATCH;
 
 	enum atom_dgpu_vram_type const vram_type = get_vram_type(&vram_modules[0]);
@@ -1804,15 +2019,18 @@ populate_mem_clk_patch(
 		//assert(mem_clk_patch->reg_set); // unknown timings sequence
 	}
 	#endif
+	return false;
 }
 
-static void
+static bool
 populate_mc_tile_adjust(
 		struct atomtree_commons* const com,
 		struct atomtree_init_reg_block* const mc_tile_adjust,
 		struct atomtree_vram_module const* const vram_modules __unused
 		) {
-	populate_init_reg_block(com, mc_tile_adjust);
+	if (populate_init_reg_block(com, mc_tile_adjust)) {
+		return true;
+	}
 	mc_tile_adjust->reg_type = REG_BLOCK_MC_TILE_ADJUST;
 
 	/*
@@ -1843,15 +2061,18 @@ populate_mc_tile_adjust(
 	}
 	#endif
 	*/
+	return false;
 }
 
-static void
+static bool
 populate_init_mc_phy_init(
 		struct atomtree_commons* const com,
 		struct atomtree_init_reg_block* const mc_phy_init,
 		struct atomtree_vram_module const* const vram_modules __unused
 		) {
-	populate_init_reg_block(com, mc_phy_init);
+	if (populate_init_reg_block(com, mc_phy_init)) {
+		return true;
+	}
 	mc_phy_init->reg_type = REG_BLOCK_MC_PHY_INIT;
 
 	/*
@@ -1881,10 +2102,11 @@ populate_init_mc_phy_init(
 	}
 	#endif
 	*/
+	return false;
 }
 
 
-static void
+static bool
 populate_umc_init_reg_block(
 		struct atomtree_commons* const com,
 		struct atomtree_umc_init_reg_block* const at_regblock
@@ -1904,33 +2126,45 @@ populate_umc_init_reg_block(
 	and atom_umc_reg_setting_data_block's umc_reg_data follows
 	umc_reg_num.
 	*/
-
 	struct atom_umc_init_reg_block* const leaves = at_regblock->leaves;
+
+	if (offrst(com, &(at_regblock->leaves))) {
+		return true;
+	}
+
+	bool err = offchk_flex(com, at_regblock->leaves,
+		umc_reg_list, leaves->umc_reg_num
+	);
+	if (err) {
+		return true;
+	}
 
 	at_regblock->register_info = leaves->umc_reg_list;
 	at_regblock->num_info = leaves->umc_reg_num;
 
 	at_regblock->num_data_entries = leaves->umc_reg_num;
-	at_regblock->data_block_element_size = (
-		sizeof(((struct atom_umc_reg_setting_data_block*)0)->block_id)
-		+ (sizeof(((struct atom_umc_reg_setting_data_block*)0)->umc_reg_data[0])
-			* at_regblock->num_data_entries
-		)
+	at_regblock->data_block_element_size = sizeof_flex(
+		((struct atom_umc_reg_setting_data_block*)0), 
+		umc_reg_data, at_regblock->num_data_entries
+	);
+
+	struct atom_umc_reg_setting_data_block* const block_start = (
+		(void*)leaves
+		+ sizeof_flex(leaves, umc_reg_list, at_regblock->num_info)
 	);
 	union {
-		struct atom_umc_reg_setting_data_block* walker;
+		struct atom_umc_reg_setting_data_block* block;
+		union atom_mc_register_setting_id* block_id;
 		void* raw;
 	} w;
-	struct atom_umc_reg_setting_data_block* const block_start = (
-		(void*)leaves->umc_reg_list
-		+ (sizeof(union atom_umc_register_addr_info_access)
-			* leaves->umc_reg_num
-		) // size of umc_reg_list
-	);
-	w.walker = block_start;
-	while (w.walker->block_id.id_access) { // the datablock list ends with 0
-		at_regblock->num_data_blocks++;
+	w.block = block_start;
+	err = offchk(com, w.block_id);
+	bool not_end = false;
+	while ((!err) && not_end) {
+		not_end = (0 < w.block_id->id_access);
+		at_regblock->num_data_blocks += not_end;
 		w.raw += at_regblock->data_block_element_size;
+		err = offchk(com, w.block_id);
 	}
 
 	if (at_regblock->num_data_blocks) {
@@ -1938,10 +2172,10 @@ populate_umc_init_reg_block(
 			&(com->alloc_arena), &(com->error),
 			at_regblock->num_data_blocks * sizeof(at_regblock->data_blocks[0])
 		);
-		w.walker = block_start;
+		w.block = block_start;
 		uint8_t i = 0;
 		while (i < at_regblock->num_data_blocks) {
-			at_regblock->data_blocks[i] = w.walker;
+			at_regblock->data_blocks[i] = w.block;
 			w.raw += at_regblock->data_block_element_size;
 			i++;
 		}
@@ -1958,6 +2192,8 @@ populate_umc_init_reg_block(
 		+ at_regblock->info_table_size
 		+ at_regblock->data_block_table_size
 	);
+
+	return false;
 }
 
 
@@ -2354,18 +2590,19 @@ populate_vram_info_v2_3(
 	if (vi23->leaves->mem_clk_patch_tbloffset) {
 		vi23->mem_clk_patch.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
-		populate_umc_init_reg_block(com, &(vi23->mem_clk_patch));
+		if (! populate_umc_init_reg_block(com, &(vi23->mem_clk_patch))) {
 
-		vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
-		vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
-		if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct timings_set_vega10)) {
-			vi23->uses_vega20_timings = false;
-		} else if (vi23->mem_clk_patch.data_block_element_size
-			== sizeof(struct timings_set_vega20)) {
-			vi23->uses_vega20_timings = true;
-		} else {
-			assert(0);
+			vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
+			vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
+			if (vi23->mem_clk_patch.data_block_element_size
+				== sizeof(struct timings_set_vega10)) {
+				vi23->uses_vega20_timings = false;
+			} else if (vi23->mem_clk_patch.data_block_element_size
+				== sizeof(struct timings_set_vega20)) {
+				vi23->uses_vega20_timings = true;
+			} else {
+				assert(0);
+			}
 		}
 	}
 
@@ -2427,11 +2664,11 @@ populate_vram_info_v2_4(
 	if (leaves->mem_clk_patch_tbloffset) {
 		vi24->mem_clk_patch.leaves =
 			(void*)leaves + leaves->mem_clk_patch_tbloffset;
-		populate_umc_init_reg_block(com, &(vi24->mem_clk_patch));
-
-		vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
-		vi24->navi1_gddr6_timings =
-			(struct timings_set_navi1*) vi24->mem_clk_patch.data_blocks[0];
+		if (! populate_umc_init_reg_block(com, &(vi24->mem_clk_patch))) {
+			vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
+			vi24->navi1_gddr6_timings =
+				(struct timings_set_navi1*) vi24->mem_clk_patch.data_blocks[0];
+		}
 	}
 
 	if (leaves->mc_adjust_pertile_tbloffset) {

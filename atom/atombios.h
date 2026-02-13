@@ -4706,7 +4706,7 @@ struct atom_display_object_path_table {
 	uint8_t  NumOfDispPath;
 	uint8_t  Version;
 	uint8_t  Padding[2];
-	struct atom_display_object_path  DispPath[] __counted_by(NumOfDispPath);
+	struct atom_display_object_path  DispPath[] __counted_by_nest(NumOfDispPath);
 };
 
 // atom_object_generic atom_object_encoder atom_object_connector

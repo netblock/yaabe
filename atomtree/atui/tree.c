@@ -1298,7 +1298,7 @@ grow_display_object_path_table(
 	atui_node* objs[UINT8_MAX]; // cheaper than malloc
 	atui_node* path;
 
-	for (uint8_t paths_i=0; paths_i < table->header->NumOfDispPath; paths_i++) {
+	for (uint8_t paths_i=0; paths_i < table->num_paths; paths_i++) {
 		for (uint8_t obj_i=0; obj_i < paths[paths_i].num_graphic_ids; obj_i++) {
 			objs[obj_i] = grow_object_id(
 				&(paths[paths_i].path->GraphicObjIds[obj_i])

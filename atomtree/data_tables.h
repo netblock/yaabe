@@ -28,7 +28,6 @@ struct atomtree_smc_dpm_info {
 		struct atom_smc_dpm_info_v4_5*  v4_5;
 		struct atom_smc_dpm_info_v4_6*  v4_6;
 		struct atom_smc_dpm_info_v4_7*  v4_7;
-		struct atom_smc_dpm_info_v4_8*  v4_8;
 		struct atom_smc_dpm_info_v4_9*  v4_9;
 		struct atom_smc_dpm_info_v4_10* v4_10;
 		struct atom_smc_dpm_info_table_13_0_7* v5_0;
@@ -273,7 +272,7 @@ struct atomtree_powerplay_table {
 
 
 struct atomtree_display_path_record_set {
-	uint8_t num_records;
+	uint16_t num_records;
 	size_t  records_size;
 	union display_records**  records;
 };
@@ -295,6 +294,7 @@ struct atomtree_object_path_entry {
 struct atomtree_object_path {
 	struct atom_display_object_path_table* header;
 	size_t total_size; // table header + paths
+	uint8_t num_paths;
 	struct atomtree_object_path_entry* paths;
 };
 
