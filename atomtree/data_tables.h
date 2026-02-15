@@ -450,12 +450,12 @@ struct atomtree_vram_module {
 		struct atom_vram_module_v11*  v1_11;
 		struct atom_vram_module_v3_0* v3_0;
 	};
-	semver vram_module_ver;
 
 	semver gmc_bitfields_ver;
 
 	semver memory_timing_format_ver;
 	uint8_t num_memory_timing_format; // v1.3 ~ v1.6
+	union atom_memory_timing_format* timing_format;
 	size_t memory_timing_format_total_size;
 
 	// v3.0
@@ -471,9 +471,6 @@ struct atomtree_gddr6_dram_data_remap {
 
 struct atomtree_vram_info_v1_2 {
 	struct atom_vram_info_v1_2* leaves;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_v1_3 {
@@ -481,9 +478,6 @@ struct atomtree_vram_info_v1_3 {
 
 	struct atomtree_init_reg_block  mem_adjust_table;
 	struct atomtree_init_reg_block  mem_clk_patch;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_v1_4 {
@@ -491,9 +485,6 @@ struct atomtree_vram_info_v1_4 {
 
 	struct atomtree_init_reg_block  mem_adjust_table;
 	struct atomtree_init_reg_block  mem_clk_patch;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_1 {
@@ -502,9 +493,6 @@ struct atomtree_vram_info_header_v2_1 {
 	struct atomtree_init_reg_block  mem_adjust_table;
 	struct atomtree_init_reg_block  mem_clk_patch;
 	struct atomtree_init_reg_block  per_byte_preset;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_2 {
@@ -515,9 +503,6 @@ struct atomtree_vram_info_header_v2_2 {
 	struct atomtree_init_reg_block  mc_tile_adjust;
 	struct atomtree_init_reg_block  mc_phy_init;
 	struct mc_atom_dram_data_remap* dram_data_remap;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_3 {
@@ -541,9 +526,6 @@ struct atomtree_vram_info_header_v2_3 {
 	void* dram_data_remap;
 	void* hbm_tmrs; // TODO: what is this? HBM timings?
 	struct atomtree_umc_init_reg_block  post_ucode_init;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_4 {
@@ -566,9 +548,6 @@ struct atomtree_vram_info_header_v2_4 {
 	void* dram_data_remap;
 
 	struct atomtree_umc_init_reg_block  post_ucode_init;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 
@@ -585,9 +564,6 @@ struct atomtree_vram_info_header_v2_5 {
 	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 	struct atomtree_umc_init_reg_block    post_ucode_init;
 	struct atomtree_umc_init_reg_block    strobe_mode_patch;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v2_6 {
@@ -600,9 +576,6 @@ struct atomtree_vram_info_header_v2_6 {
 	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 	void* tmrs_seq;
 	struct atomtree_umc_init_reg_block    post_ucode_init;
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
@@ -615,9 +588,6 @@ struct atomtree_vram_info_header_v3_0 { // TODO figure out child tables
 	struct atomtree_gddr6_dram_data_remap dram_data_remap;
 	struct atomtree_umc_init_reg_block    umc_emuinit; //TODO this is a guess
 	void* rsvd_tables[2]; // reserved_sub_table_offset
-
-	semver vram_module_ver;
-	struct atomtree_vram_module*  vram_modules;
 };
 
 struct atomtree_vram_info {
@@ -633,6 +603,12 @@ struct atomtree_vram_info {
 		struct atomtree_vram_info_header_v2_6  v2_6;
 		struct atomtree_vram_info_header_v3_0  v3_0;
 	);
+
+	enum atom_dgpu_vram_type memory_type;
+
+	semver vram_module_ver;
+	uint8_t  vram_module_num;
+	struct atomtree_vram_module*  vram_modules;
 };
 
 
