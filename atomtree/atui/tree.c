@@ -2604,7 +2604,7 @@ grow_vram_info_v2_4(
 		atuifunc const atui_strap_func = _atui_timings_set_navi1;
 		atuifunc_args atui_args = {0};
 		char const* vendor_part[2];
-		for (uint16_t i=0; i < mem_clk_patch->num_data_blocks; i++) {
+		for (uint16_t i=0; i < vi24->num_timing_straps; i++) {
 			atui_args.bios = data_blocks[i];
 			atui_strap = atui_strap_func(&atui_args);
 			ATUI_ADD_BRANCH(atui_mem_timings, atui_strap);
@@ -3640,9 +3640,6 @@ grow_psp_directory_fw_blob(
 		) {
 	if (NULL == fw_entry->raw) {
 		return NULL;
-		// TODO this is a hack because "partition offset" type of the psp
-		// directory is unknown. See for more info,
-		// union psp_directory_entry_address
 	}
 
 	atui_node* blob;

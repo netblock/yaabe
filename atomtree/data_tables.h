@@ -516,10 +516,10 @@ struct atomtree_vram_info_header_v2_3 {
 	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
 	union {
 		void* mem_timings;
-		struct timings_set_vega10_timings*  vega10;
-		struct timings_set_vega20_timings*  vega20;
+		struct timings_set_vega10*  vega10;
+		struct timings_set_vega20*  vega20;
 	};
-	uint8_t* num_timing_straps;
+	uint8_t num_timing_straps;
 
 	struct atomtree_umc_init_reg_block  mc_tile_adjust;
 	struct atomtree_umc_init_reg_block  mc_phy_init;
@@ -537,7 +537,7 @@ struct atomtree_vram_info_header_v2_4 {
 	// TODO hoisted method stays until address sequence can be figured for
 	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
 	struct timings_set_navi1*           navi1_gddr6_timings;
-	uint8_t* num_timing_straps;
+	uint8_t num_timing_straps;
 
 	struct atomtree_umc_init_reg_block  mc_tile_adjust;
 	struct atomtree_umc_init_reg_block  mc_phy_init;
@@ -639,7 +639,7 @@ struct atomtree_master_datatable_v1_1 {
 	// TODO relate these uint16t stuff to their tables.
 	// a lot of the question associations are low effort.
 
-	struct atomtree_sw_datatable*           utilitypipeline; //??
+	struct atomtree_sw_datatable            utilitypipeline; //??
 	//struct atom_multimedia_info_v2_1*       multimedia_info;
 	struct atom_multimedia_capability_info* multimedia_capability_info;
 	struct atom_multimedia_config_info*     multimedia_config_info;
@@ -701,7 +701,7 @@ struct atomtree_master_datatable_v2_1 {
 	struct atom_master_data_table_v2_1* leaves;
 
 	// TODO relate these uint16t stuff to their tables.
-	struct atomtree_sw_datatable*        utilitypipeline; //??
+	struct atomtree_sw_datatable         utilitypipeline; //??
 
 	struct atom_multimedia_info_v2_1*    multimedia_info;
 	struct atomtree_smc_dpm_info         smc_dpm_info;

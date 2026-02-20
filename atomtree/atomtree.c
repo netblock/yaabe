@@ -7,6 +7,24 @@ see atomtree.h and data_tables.h
 #include "atomtree.h"
 #include "atomtree_internal.h"
 
+// for non-sophisticated atomtree bios pointers.
+// takes a double-pointer to an atombios struct that has 
+// struct atom_common_table_header table_header; 
+// in it. If it fails, it resets the pointer to NULL.
+#define offrst_atom_table(com, at_ptr) ({\
+	struct atomtree_commons* const _c = (com);\
+	auto const _at_ptr = (at_ptr);\
+	auto const bios = *_at_ptr;\
+	bool err = offchk(_c, bios);\
+	if (!err) {\
+		err = offchk(_c, bios, bios->table_header.structuresize);\
+	}\
+	if (err) {\
+		*at_ptr = NULL;\
+	}\
+	err;\
+})
+
 static bool // error
 populate_atom(
 		struct atomtree_commons* const com,
@@ -54,7 +72,7 @@ populate_smc_dpm_info(
 		case V(5,0):  size = sizeof(*smc_dpm_info->v5_0);  break;
 	}
 	if (offchk(com, smc_dpm_info->leaves, size)) { // partial crawl error
-		smc_dpm_info->ver.ver = V(0);
+		smc_dpm_info->ver = SET_VER(0);
 		return;
 	}
 }
@@ -83,7 +101,7 @@ populate_firmwareinfo(
 		case V(3,4):  size = sizeof(*firmwareinfo->v3_4);  break;
 	}
 	if (offchk(com, firmwareinfo->leaves, size)) { // partial crawl error
-		firmwareinfo->ver.ver = V(0);
+		firmwareinfo->ver = SET_VER(0);
 		return;
 	}
 }
@@ -214,7 +232,7 @@ populate_lcd_info(
 		case V(2,1):  size = sizeof(*lcd_info->v2_1);  break;
 	}
 	if (offchk(com, lcd_info->leaves, size)) { // partial crawl error
-		lcd_info->ver.ver = V(0);
+		lcd_info->ver = SET_VER(0);
 		return;
 	}
 
@@ -262,7 +280,7 @@ populate_analog_tv_info(
 		case V(1,2):  size = sizeof(*atv->v1_2);  break;
 	}
 	if (offchk(com, atv->leaves, size)) { // partial crawl error
-		atv->ver.ver = V(0);
+		atv->ver = SET_VER(0);
 		return;
 	}
 }
@@ -288,7 +306,7 @@ populate_smu_info(
 		case V(4,0):  size = sizeof(*smu_info->v4_0);  break;
 	}
 	if (offchk(com, smu_info->leaves, size)) { // partial crawl error
-		smu_info->ver.ver = V(0);
+		smu_info->ver = SET_VER(0);
 		return;
 	}
 
@@ -362,7 +380,7 @@ populate_vram_usagebyfirmware(
 		case V(2,2):  size = sizeof(*fw_vram->v2_2);  break;
 	}
 	if (offchk(com, fw_vram->leaves, size)) { // partial crawl error
-		fw_vram->ver.ver = V(0);
+		fw_vram->ver = SET_VER(0);
 		return;
 	}
 }
@@ -414,7 +432,7 @@ populate_gfx_info(
 		case V(3,0):  size = sizeof(*gfx_info->v3_0);  break;
 	}
 	if (offchk(com, gfx_info->leaves, size)) { // partial crawl error
-		gfx_info->ver.ver = V(0);
+		gfx_info->ver = SET_VER(0);
 		return;
 	}
 	switch (gfx_info->ver.ver) {
@@ -1457,7 +1475,7 @@ populate_ppt(
 			break;
 	}
 	if (err) { // partial crawl error
-		ppt->ver.ver = V(0);
+		ppt->ver = SET_VER(0);
 	}
 }
 
@@ -1504,7 +1522,7 @@ populate_display_object_records(
 	set->records_size = r.raw - start;
 }
 
-inline static void
+inline static bool
 populate_atom_object_table_srcdst(
 		struct atomtree_commons* const com,
 		struct atomtree_object_table_tables* const object,
@@ -1515,16 +1533,17 @@ populate_atom_object_table_srcdst(
 		object_id, object->src->num_of_objs
 	);
 	if (err) {
-		return;
+		return err;
 	}
 	object->dst = srcdst + sizeof_flex(
 		object->src, object_id, object->src->num_of_objs
 	);
-	offrst_flex(com, &(object->dst),
+	err = offrst_flex(com, &(object->dst),
 		object_id, object->dst->num_of_objs
 	);
+	return err;
 }
-static void
+static bool
 populate_atom_object_table(
 		struct atomtree_commons* const com,
 		struct atomtree_object_table* const table,
@@ -1533,7 +1552,7 @@ populate_atom_object_table(
 		) {
 	struct atom_object_table* const header = bios + offset;
 	if (offchk_flex(com, header, Objects, header->NumberOfObjects)) {
-		return;
+		return true;
 	}
 
 	table->table = header;
@@ -1558,6 +1577,7 @@ populate_atom_object_table(
 			);
 		}
 	}
+	return false;
 }
 inline static void
 populate_display_object_path_table(
@@ -1745,7 +1765,7 @@ populate_display_object(
 		case V(1,5): err = populate_display_object_info_table(com, disp); break;
 	}
 	if (err) { // partial crawl error
-		disp->ver.ver = V(0);
+		disp->ver = SET_VER(0);
 	}
 }
 inline static void
@@ -1784,7 +1804,7 @@ populate_umc_info(
 		case V(4,0):  size = sizeof(*umc->v4_0);  break;
 	}
 	if (offchk(com, umc->leaves, size)) { // partial crawl error
-		umc->ver.ver = V(0);
+		umc->ver = SET_VER(0);
 		return;
 	}
 }
@@ -1807,7 +1827,7 @@ populate_dce_info(
 		case V(4,5):  size = sizeof(*dce->v4_5);  break;
 	}
 	if (offchk(com, dce->leaves, size)) { // partial crawl error
-		dce->ver.ver = V(0);
+		dce->ver = SET_VER(0);
 		return;
 	}
 
@@ -1850,6 +1870,7 @@ populate_init_reg_block(
 	if (offchk(com, leaves->RegIndexBuf, leaves->RegIndexTblSize)) {
 		return true;
 	}
+	bool err = false;
 
 	at_regblock->num_index = // will include END_OF_REG_INDEX_BLOCK flag
 		leaves->RegIndexTblSize / sizeof(struct atom_init_reg_index_format);
@@ -1871,8 +1892,8 @@ populate_init_reg_block(
 		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
 	);
 	w.block = block_start;
-	bool err = offchk(com, w.block_id);
-	bool not_end = false;
+	err = offchk(com, w.block_id);
+	bool not_end = true;
 	while ((!err) && not_end) {
 		not_end = (0 < w.block_id->id_access);
 		at_regblock->num_data_blocks += not_end;
@@ -1904,7 +1925,7 @@ populate_init_reg_block(
 		+ at_regblock->data_block_table_size
 	);
 
-	return false;
+	return err;
 }
 
 static bool
@@ -1918,32 +1939,10 @@ populate_mem_adjust_table(
 	}
 	mem_adjust_table->reg_type = REG_BLOCK_MEM_ADJUST;
 
-	/*
-	struct atom_init_reg_index_format const* const index =
-		mem_adjust_table->register_index;
-
-	if (0 == mem_adjust_table->num_index) { // heuristic
-		if regcmp(index, ...) {
-			mem_adjust_table->reg_set = ...
-		}
-	}
-	*/
 	if (COMMON_SET_UNKNOWN != mem_adjust_table->reg_set) {
 		mem_adjust_table->data_sets = mem_adjust_table->data_blocks[0];
 	}
 
-	/*
-	#ifndef NDEBUG
-	if ((1 < mem_adjust_table->num_index)
-			&& (COMMON_SET_UNKNOWN == mem_adjust_table->reg_set)
-			) {
-		register_set_print_tables(
-			mem_adjust_table, &GMC_reg_set, true, "mem_adjust_set"
-		);
-		//assert(mem_adjust_table->reg_set); // unknown adjust sequence
-	}
-	#endif
-	*/
 	return false;
 }
 
@@ -1982,8 +1981,25 @@ populate_mem_clk_patch(
 		}
 	}
 
-	if (COMMON_SET_UNKNOWN != mem_clk_patch->reg_set) {
-		mem_clk_patch->data_sets = mem_clk_patch->data_blocks[0];
+	size_t size = mem_clk_patch->data_block_element_size;
+	switch (mem_clk_patch->reg_set) {
+		case TIMINGS_SET_ISLANDS_DDR3:
+			size = sizeof(*mem_clk_patch->timings_set_islands_ddr3); break;
+		case TIMINGS_SET_ISLANDS_GDDR5:
+			size = sizeof(*mem_clk_patch->timings_set_islands_gddr5); break;
+		case TIMINGS_SET_FIJI:
+			size = sizeof(*mem_clk_patch->timings_set_fiji); break;
+		case TIMINGS_SET_POLARIS:
+			size = sizeof(*mem_clk_patch->timings_set_polaris); break;
+	};
+
+	if (size != mem_clk_patch->data_block_element_size) {
+		error_assert(&(com->error), ERROR_WARNING,
+			"buggy atom_init_reg_block",
+			size == mem_clk_patch->data_block_element_size
+		);
+		mem_clk_patch->reg_set = COMMON_SET_UNKNOWN;
+		return true;
 	}
 
 	#ifndef NDEBUG
@@ -2010,32 +2026,10 @@ populate_mc_tile_adjust(
 	}
 	mc_tile_adjust->reg_type = REG_BLOCK_MC_TILE_ADJUST;
 
-	/*
-	struct atom_init_reg_index_format const* const index =
-		mc_tile_adjust->register_index;
-
-	if (0 == mc_tile_adjust->num_index) {
-		if regcmp(index, ...) {
-			mc_tile_adjust->reg_set = ...
-		}
-	}
-	*/
-
 	if (COMMON_SET_UNKNOWN != mc_tile_adjust->reg_set) {
 		mc_tile_adjust->data_sets = mc_tile_adjust->data_blocks[0];
 	}
 
-	/*
-	#ifndef NDEBUG
-	if ((1 < mc_tile_adjust->num_index)
-			&& (COMMON_SET_UNKNOWN == mc_tile_adjust->reg_set)
-			) {
-		register_set_print_tables(
-			mc_tile_adjust, &GMC_reg_set, true, "mc_tile_adjust_set"
-		);
-	}
-	#endif
-	*/
 	return false;
 }
 
@@ -2050,32 +2044,9 @@ populate_init_mc_phy_init(
 	}
 	mc_phy_init->reg_type = REG_BLOCK_MC_PHY_INIT;
 
-	/*
-	struct atom_init_reg_index_format const* const index =
-		mc_phy_init->register_index;
-
-	if (0 == mc_phy_init->num_index) {
-		if regcmp(index, ...) {
-			mc_phy_init->reg_set = ...
-		}
-	}
-	*/
-
 	if (COMMON_SET_UNKNOWN != mc_phy_init->reg_set) {
 		mc_phy_init->data_sets = mc_phy_init->data_blocks[0];
 	}
-
-	/*
-	#ifndef NDEBUG
-	if ((1 < mc_phy_init->num_index)
-			&& (COMMON_SET_UNKNOWN == mc_phy_init->reg_set)
-			) {
-		register_set_print_tables(
-			mc_phy_init, &GMC_reg_set, true, "mc_phy_init_set"
-		);
-	}
-	#endif
-	*/
 
 	return false;
 }
@@ -2134,7 +2105,7 @@ populate_umc_init_reg_block(
 	} w;
 	w.block = block_start;
 	err = offchk(com, w.block_id);
-	bool not_end = false;
+	bool not_end = true;
 	while ((!err) && not_end) {
 		not_end = (0 < w.block_id->id_access);
 		at_regblock->num_data_blocks += not_end;
@@ -2168,21 +2139,25 @@ populate_umc_init_reg_block(
 		+ at_regblock->data_block_table_size
 	);
 
-	return false;
+	return err;
 }
 
 
-inline static void
+static bool
 populate_atom_memory_timing_format(
+		struct atomtree_commons* const com,
 		struct atomtree_vram_info const* const vram_info,
 		struct atomtree_vram_module* const vram_module,
 		union atom_memory_timing_format* const timings,
 		uint16_t const straps_total_size
 		) {
 	uint8_t table_size;
-	if ((vram_info->memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5)
-			|| (vram_info->memory_type == ATOM_DGPU_VRAM_TYPE_GDDR5_2)
+	if ((ATOM_DGPU_VRAM_TYPE_GDDR5 == vram_info->memory_type)
+			|| (ATOM_DGPU_VRAM_TYPE_GDDR5_2 == vram_info->memory_type)
 			) {
+		if (offchk(com, &(timings->v1_1))) {
+			return true;
+		}
 		if (0xFF == timings->v1_1.Terminator) {
 			vram_module->memory_timing_format_ver = SET_VER(1,1);
 			table_size = sizeof(timings->v1_1);
@@ -2195,9 +2170,17 @@ populate_atom_memory_timing_format(
 		vram_module->memory_timing_format_ver = SET_VER(1,0);
 		table_size = sizeof(timings->v1_0);
 	}
+
 	vram_module->timing_format = timings;
 	vram_module->num_memory_timing_format = straps_total_size / table_size;
 	vram_module->memory_timing_format_total_size = straps_total_size;
+
+	error_assert(&(com->error), ERROR_WARNING,
+		"atom_memory_timing_format: buggy table sizes",
+		 (vram_module->num_memory_timing_format * table_size)
+		 == straps_total_size
+	);
+	return false;
 }
 
 
@@ -2212,164 +2195,223 @@ populate_vram_modules(
 		return;
 	}
 
-	vram_info->vram_module_num = vram_module_num;
 	vram_info->vram_modules = arena_alloc(
 		&(com->alloc_arena), &(com->error),
 		vram_module_num * sizeof(vram_info->vram_modules[0])
 	);
 
-	struct atomtree_vram_module* const vram_modules = vram_info->vram_modules;
-	struct atomtree_vram_module* vmod;
+	struct atomtree_vram_module* const vmods = vram_info->vram_modules;
+	uint8_t i = 0;
 	switch (vram_info->vram_module_ver.ver) {
-		case V(1,3): // atom_vram_module_v3. Will look very similar to v4
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_3->ModuleSize;
-
+		case V(1,3): // atom_vram_module_v3. Will look very similar to v1_4
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_3))) {
+				struct atom_vram_module_v3 const* const v1_3 = bios_offset;
+				vram_info->memory_type = v1_3->MemoryType;
+			}
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_3))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
 				populate_atom_memory_timing_format(
-					vram_info, vmod,  vmod->v1_3->MemTiming,
-					(vmod->v1_3->ModuleSize
-						- offsetof(typeof(*vmod->v1_3), MemTiming)
+					com, vram_info, &(vmods[i]),
+					vmods[i].v1_3->MemTiming,
+					(vmods[i].v1_3->ModuleSize
+						- offsetof(typeof(*vmods[i].v1_3), MemTiming)
 					)
 				);
-			}
-			vram_info->memory_type = vram_modules[0].v1_3->MemoryType;
+				bios_offset += vmods[i].v1_3->ModuleSize;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
-		case V(1,4): // atom_vram_module_v4. Will look very similar to v3
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_4->ModuleSize;
+		case V(1,4): // atom_vram_module_v4. Will look very similar to v1_3
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_4))) {
+				struct atom_vram_module_v4 const* const v1_4 = bios_offset;
+				vram_info->memory_type = v1_4->MemoryType;
+			}
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_4))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
 
 				populate_atom_memory_timing_format(
-					vram_info, vmod, vmod->v1_4->MemTiming,
-					(vmod->v1_4->ModuleSize
-						- offsetof(typeof(*vmod->v1_4), MemTiming)
+					com, vram_info, &(vmods[i]),
+					vmods[i].v1_4->MemTiming,
+					(vmods[i].v1_4->ModuleSize
+						- offsetof(typeof(*vmods[i].v1_4), MemTiming)
 					)
 				);
 
-			}
-			vram_info->memory_type = vram_modules[0].v1_4->MemoryType;
+				bios_offset += vmods[i].v1_4->ModuleSize;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(1,7):
-			semver gmc_bitfields_ver;
-			struct atom_vram_module_v7 const* const zero = bios_offset;
-			if (zero->ChannelMapCfg >> 24) { // infer
-				// TODO explicit way to find GMC?
-				// does it follow vram_module ver? doesn't seem so
-				gmc_bitfields_ver = SET_VER(7,1);
-			} else {
-				gmc_bitfields_ver = SET_VER(6,0);
+			semver gmc_bitfields_ver = SET_VER(0);
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_7))) {
+				struct atom_vram_module_v7 const* const v1_7 = bios_offset;
+				if (v1_7->ChannelMapCfg >> 24) { // infer
+					// TODO explicit way to find GMC?
+					// does it follow vram_module ver? doesn't seem so
+					gmc_bitfields_ver = SET_VER(7,1);
+				} else {
+					gmc_bitfields_ver = SET_VER(6,0);
+				}
+				vram_info->memory_type = v1_7->MemoryType;
 			}
-
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = gmc_bitfields_ver;
-				bios_offset += vmod->v1_7->ModuleSize;
-			}
-			vram_info->memory_type = vram_modules[0].v1_7->MemoryType;
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_7))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = gmc_bitfields_ver;
+				bios_offset += vmods[i].v1_7->ModuleSize;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(1,8):
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_8->ModuleSize;
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_8))) {
+				struct atom_vram_module_v8 const* const v1_8 = bios_offset;
+				vram_info->memory_type = v1_8->MemoryType;
 			}
-			vram_info->memory_type = vram_modules[0].v1_8->MemoryType;
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_8))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
+				bios_offset += vmods[i].v1_8->ModuleSize;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(1,9):
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_9->vram_module_size;
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_9))) {
+				struct atom_vram_module_v9 const* const v1_9 = bios_offset;
+				vram_info->memory_type = v1_9->memory_type;
 			}
-			vram_info->memory_type = vram_modules[0].v1_9->memory_type;
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_9))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
+				bios_offset += vmods[i].v1_9->vram_module_size;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(1,10):
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_10->vram_module_size;
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_10))) {
+				struct atom_vram_module_v10 const* const v1_10 = bios_offset;
+				vram_info->memory_type = v1_10->memory_type;
 			}
-			vram_info->memory_type = vram_modules[0].v1_10->memory_type;
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_10))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
+				bios_offset += vmods[i].v1_10->vram_module_size;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(1,11):
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				bios_offset += vmod->v1_11->vram_module_size;
+			if (! offchk(com, bios_offset, sizeof(*vmods[i].v1_11))) {
+				struct atom_vram_module_v11 const* const v1_11 = bios_offset;
+				vram_info->memory_type = v1_11->memory_type;
 			}
-			vram_info->memory_type = vram_modules[0].v1_11->memory_type;
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v1_11))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
+				bios_offset += vmods[i].v1_11->vram_module_size;
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		case V(3,0):
-			for (uint8_t i=0; i < vram_module_num; i++) {
-				vmod = &(vram_modules[i]);
-				vmod->leaves = bios_offset;
-				vmod->gmc_bitfields_ver = SET_VER(0); // TODO
-				//bios_offset += vmod->v3_0->vram_module_size;
-				bios_offset += sizeof(*vmod->v3_0);
-
-				if (vmod->v3_0->dram_info_offset) {
-					vmod->dram_info = (
-						vmod->leaves + vmod->v3_0->dram_info_offset
-					);
-				}
-				if (vmod->v3_0->mem_tuning_offset) {
-					vmod->mem_tuning = (
-						vmod->leaves
-						+ vmod->v3_0->mem_tuning_offset
-					);
-				}
-				if (vmod->v3_0->tmrs_seq_offset) {
-					vmod->tmrs_seq = (
-						vmod->leaves + vmod->v3_0->tmrs_seq_offset
-					);
-				}
-			}
 			// let populate_vram_info_* handle vram_info->memory_type
+			do {
+				if (offchk(com, bios_offset, sizeof(*vmods[i].v3_0))) {
+					break;
+				}
+				vmods[i].leaves = bios_offset;
+				vmods[i].gmc_bitfields_ver = SET_VER(0); // TODO
+
+				if (vmods[i].v3_0->dram_info_offset) {
+					vmods[i].dram_info = (
+						bios_offset + vmods[i].v3_0->dram_info_offset
+					);
+					offrst(com, &(vmods[i].dram_info), 1);
+				}
+				if (vmods[i].v3_0->mem_tuning_offset) {
+					vmods[i].mem_tuning = (
+						bios_offset
+						+ vmods[i].v3_0->mem_tuning_offset
+					);
+					offrst(com, &(vmods[i].mem_tuning), 1);
+				}
+				if (vmods[i].v3_0->tmrs_seq_offset) {
+					vmods[i].tmrs_seq = (
+						bios_offset + vmods[i].v3_0->tmrs_seq_offset
+					);
+					offrst(com, &(vmods[i].tmrs_seq), 1);
+				}
+				//bios_offset += vmods[i].v3_0->vram_module_size;
+				bios_offset += sizeof(*vmods[i].v3_0);
+				i++;
+			} while (i < vram_module_num);
 			break;
 
 		default:
 			assert(0); // TODO implement
 			break;
 	}
+	vram_info->vram_module_num = i;
 }
 
 
-inline static void
+inline static bool
 populate_gddr6_dram_data_remap(
+		struct atomtree_commons* const com,
 		struct atomtree_gddr6_dram_data_remap* const at_remap,
 		void* const remap_ptr
 		) {
 	struct atom_gddr6_dram_data_remap const* const dram_data_remap = remap_ptr;
+	if (offchk(com, dram_data_remap)) {
+		return true;
+	}
+	if (offchk(com, dram_data_remap, dram_data_remap->table_size)) {
+		return true;
+	}
 	at_remap->dram_data_remap = remap_ptr;
 	at_remap->bit_byte_remap_count = (
 		(dram_data_remap->table_size - sizeof(*dram_data_remap))
 		/ sizeof(dram_data_remap->bit_byte_remap[0])
 	);
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v1_2(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_2* const vi12 = &(vram_info->v1_2);
+	struct atom_vram_info_v1_2* const leaves = vi12->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi12->leaves->NumOfVRAMModule) {
 		vram_info->vram_module_ver = SET_VER(1,3);
@@ -2378,14 +2420,19 @@ populate_vram_info_v1_2(
 			vi12->leaves->vram_module,  vi12->leaves->NumOfVRAMModule
 		);
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v1_3(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_3* const vi13 = &(vram_info->v1_3);
+	struct atom_vram_info_v1_3* const leaves = vi13->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi13->leaves->NumOfVRAMModule) {
 		vram_info->vram_module_ver = SET_VER(1,3);
@@ -2408,14 +2455,19 @@ populate_vram_info_v1_3(
 			(void*)vi13->leaves + vi13->leaves->MemClkPatchTblOffset;
 		populate_init_reg_block(com, &(vi13->mem_clk_patch));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v1_4(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_v1_4* const vi14 = &(vram_info->v1_4);
+	struct atom_vram_info_v1_4* const leaves = vi14->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi14->leaves->NumOfVRAMModule) {
 		vram_info->vram_module_ver = SET_VER(1,4);
@@ -2437,14 +2489,19 @@ populate_vram_info_v1_4(
 			(void*)vi14->leaves + vi14->leaves->MemClkPatchTblOffset;
 		populate_init_reg_block(com, &(vi14->mem_clk_patch));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v2_1(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_1* const vi21 = &(vram_info->v2_1);
+	struct atom_vram_info_header_v2_1* const leaves = vi21->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi21->leaves->NumOfVRAMModule) {
 		vram_info->vram_module_ver = SET_VER(1,7);
@@ -2472,14 +2529,19 @@ populate_vram_info_v2_1(
 			(void*)vi21->leaves + vi21->leaves->PerBytePresetOffset;
 		populate_init_reg_block(com, &(vi21->per_byte_preset));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v2_2(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_2* const vi22 = &(vram_info->v2_2);
+	struct atom_vram_info_header_v2_2* const leaves = vi22->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi22->leaves->NumOfVRAMModule) {
 		vram_info->vram_module_ver = SET_VER(1,8);
@@ -2517,15 +2579,49 @@ populate_vram_info_v2_2(
 	if (vi22->leaves->DramDataRemapTblOffset) {
 		vi22->dram_data_remap =
 			(void*)vi22->leaves + vi22->leaves->DramDataRemapTblOffset;
+		offrst(com, &(vi22->dram_data_remap));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
+populate_vega_timings( // TODO collapse into UMC mem_clk_patch
+		struct atomtree_commons* const com,
+		struct atomtree_vram_info_header_v2_3* const vi23
+		) {
+	struct atomtree_umc_init_reg_block* const mem_clk_patch = &(
+		vi23->mem_clk_patch
+	);
+	if (populate_umc_init_reg_block(com, mem_clk_patch)) {
+		return true;
+	}
+
+	if (mem_clk_patch->num_data_blocks) {
+		vi23->num_timing_straps = mem_clk_patch->num_data_blocks;
+		vi23->mem_timings = mem_clk_patch->data_blocks[0];
+	}
+	switch (mem_clk_patch->data_block_element_size) {
+		case sizeof(*vi23->vega10): vi23->uses_vega20_timings = false; break;
+		case sizeof(*vi23->vega20): vi23->uses_vega20_timings = true;  break;
+		default:
+			assert(0); // don't know what else.
+			vi23->num_timing_straps = 0;
+			vi23->mem_timings = NULL;
+			break;
+	}
+	return false;
+}
+
+inline static bool
 populate_vram_info_v2_3(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_3* const vi23 = &(vram_info->v2_3);
+	struct atom_vram_info_header_v2_3* const leaves = vi23->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (vi23->leaves->vram_module_num) {
 		vram_info->vram_module_ver = SET_VER(1,9);
@@ -2544,20 +2640,7 @@ populate_vram_info_v2_3(
 	if (vi23->leaves->mem_clk_patch_tbloffset) {
 		vi23->mem_clk_patch.leaves =
 			(void*)vi23->leaves + vi23->leaves->mem_clk_patch_tbloffset;
-		if (! populate_umc_init_reg_block(com, &(vi23->mem_clk_patch))) {
-
-			vi23->num_timing_straps = &(vi23->mem_clk_patch.num_data_blocks);
-			vi23->mem_timings = vi23->mem_clk_patch.data_blocks[0];
-			if (vi23->mem_clk_patch.data_block_element_size
-				== sizeof(struct timings_set_vega10)) {
-				vi23->uses_vega20_timings = false;
-			} else if (vi23->mem_clk_patch.data_block_element_size
-				== sizeof(struct timings_set_vega20)) {
-				vi23->uses_vega20_timings = true;
-			} else {
-				assert(0);
-			}
-		}
+		populate_vega_timings(com, vi23);
 	}
 
 	if (vi23->leaves->mc_adjust_pertile_tbloffset) {
@@ -2577,11 +2660,13 @@ populate_vram_info_v2_3(
 	// TODO does vraminfo->mc_phy_tile_num significantly affect this?
 	vi23->dram_data_remap =
 		(void*)vi23->leaves + vi23->leaves->dram_data_remap_tbloffset;
+		offrst(com, &(vi23->dram_data_remap), 1);
 	}
 
 	if (vi23->leaves->tmrs_seq_offset) {
 		// TODO what is this?
 		vi23->hbm_tmrs = (void*)vi23->leaves + vi23->leaves->tmrs_seq_offset;
+		offrst(com, &(vi23->hbm_tmrs), 1);
 	}
 
 	if (vi23->leaves->post_ucode_init_offset) {
@@ -2589,15 +2674,43 @@ populate_vram_info_v2_3(
 			(void*)vi23->leaves + vi23->leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(com, &(vi23->post_ucode_init));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
+populate_navi_timings( // TODO collapse into UMC mem_clk_patch
+		struct atomtree_commons* const com,
+		struct atomtree_vram_info_header_v2_4* const vi24
+		) {
+	struct atomtree_umc_init_reg_block* const mem_clk_patch = &(
+		vi24->mem_clk_patch
+	);
+	if (populate_umc_init_reg_block(com, mem_clk_patch)) {
+		return true;
+	}
+
+	if (sizeof(*vi24->navi1_gddr6_timings) != mem_clk_patch->data_block_element_size) {
+		assert(0); // don't know what else.
+		return false;
+	}
+	if (mem_clk_patch->num_data_blocks) {
+		vi24->num_timing_straps = mem_clk_patch->num_data_blocks;
+		vi24->navi1_gddr6_timings = (void*) mem_clk_patch->data_blocks[0];
+	}
+
+	return false;
+}
+
+inline static bool
 populate_vram_info_v2_4(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_4* const vi24 = &(vram_info->v2_4);
 	struct atom_vram_info_header_v2_4* const leaves = vram_info->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (leaves->vram_module_num) {
 		vram_info->vram_module_ver = SET_VER(1,10);
@@ -2616,11 +2729,7 @@ populate_vram_info_v2_4(
 	if (leaves->mem_clk_patch_tbloffset) {
 		vi24->mem_clk_patch.leaves =
 			(void*)leaves + leaves->mem_clk_patch_tbloffset;
-		if (! populate_umc_init_reg_block(com, &(vi24->mem_clk_patch))) {
-			vi24->num_timing_straps = &(vi24->mem_clk_patch.num_data_blocks);
-			vi24->navi1_gddr6_timings =
-				(struct timings_set_navi1*) vi24->mem_clk_patch.data_blocks[0];
-		}
+		populate_navi_timings(com, vi24);
 	}
 
 	if (leaves->mc_adjust_pertile_tbloffset) {
@@ -2640,6 +2749,7 @@ populate_vram_info_v2_4(
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		vi24->dram_data_remap =
 			(void*)leaves + leaves->dram_data_remap_tbloffset;
+		offrst(com, &(vi24->dram_data_remap), 1);
 	}
 
 	if (leaves->post_ucode_init_offset) {
@@ -2647,15 +2757,19 @@ populate_vram_info_v2_4(
 			(void*)leaves + leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(com, &(vi24->post_ucode_init));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v2_5(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_5* const vi25 = &(vram_info->v2_5);
 	struct atom_vram_info_header_v2_5* const leaves = vram_info->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (leaves->vram_module_num) {
 		vram_info->vram_module_ver = SET_VER(1,11);
@@ -2695,7 +2809,7 @@ populate_vram_info_v2_5(
 	if (leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
-			&vi25->dram_data_remap,
+			com,  &vi25->dram_data_remap,
 			(void*)leaves + leaves->dram_data_remap_tbloffset
 		);
 	}
@@ -2711,15 +2825,19 @@ populate_vram_info_v2_5(
 			(void*)leaves + leaves->strobe_mode_patch_tbloffset;
 		populate_umc_init_reg_block(com, &(vi25->strobe_mode_patch));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v2_6(
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v2_6* const vi26 = &(vram_info->v2_6);
 	struct atom_vram_info_header_v2_6* const leaves = vram_info->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	if (leaves->vram_module_num) {
 		vram_info->vram_module_ver = SET_VER(1,9);
@@ -2757,12 +2875,13 @@ populate_vram_info_v2_6(
 	if (leaves->tmrs_seq_offset) {
 		// TODO what is this?
 		vi26->tmrs_seq = (void*)leaves + leaves->tmrs_seq_offset;
+		offrst(com, &(vi26->tmrs_seq), 1);
 	}
 
 	if (leaves->dram_data_remap_tbloffset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
-			&vi26->dram_data_remap,
+			com,  &vi26->dram_data_remap,
 			(void*)leaves + leaves->dram_data_remap_tbloffset
 		);
 	}
@@ -2772,15 +2891,19 @@ populate_vram_info_v2_6(
 			(void*)leaves + leaves->post_ucode_init_offset;
 		populate_umc_init_reg_block(com, &(vi26->post_ucode_init));
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_vram_info_v3_0( // TODO finish this
 		struct atomtree_commons* const com,
 		struct atomtree_vram_info* const vram_info
 		) {
 	struct atomtree_vram_info_header_v3_0* const vi30 = &(vram_info->v3_0);
 	struct atom_vram_info_header_v3_0* const leaves = vram_info->leaves;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	vram_info->memory_type = leaves->memory_type;
 
@@ -2795,15 +2918,18 @@ populate_vram_info_v3_0( // TODO finish this
 	if (leaves->mem_tuning_table_offset) {
 		vi30->mem_tuning =
 			(void*)leaves + leaves->mem_tuning_table_offset;
+		offrst(com, &(vi30->mem_tuning), 1);
 	}
 
 	if (leaves->dram_info_table_offset) {
 		vi30->dram_info =
 			(void*)leaves + leaves->dram_info_table_offset;
+		offrst(com, &(vi30->dram_info), 1);
 	}
 
 	if (leaves->tmrs_table_offset) {
 		vi30->tmrs_seq = (void*)leaves + leaves->tmrs_table_offset;
+		offrst(com, &(vi30->tmrs_seq), 1);
 	}
 
 	if (leaves->mc_init_table_offset) {
@@ -2815,7 +2941,7 @@ populate_vram_info_v3_0( // TODO finish this
 	if (leaves->dram_data_remap_table_offset) {
 		//TODO does vraminfo->mc_phy_tile_num significantly affect this?
 		populate_gddr6_dram_data_remap(
-			&vi30->dram_data_remap,
+			com,  &vi30->dram_data_remap,
 			(void*)leaves + leaves->dram_data_remap_table_offset
 		);
 	}
@@ -2829,11 +2955,14 @@ populate_vram_info_v3_0( // TODO finish this
 	if (leaves->reserved_sub_table_offset[0]) {
 		vi30->rsvd_tables[0] =
 			(void*)leaves + leaves->reserved_sub_table_offset[0];
+		offrst(com, &(vi30->rsvd_tables[0]), 1);
 	}
 	if (leaves->reserved_sub_table_offset[1]) {
 		vi30->rsvd_tables[1] =
 			(void*)leaves + leaves->reserved_sub_table_offset[1];
+		offrst(com, &(vi30->rsvd_tables[1]), 1);
 	}
+	return false;
 }
 
 inline static void
@@ -2845,22 +2974,26 @@ populate_vram_info(
 	if (populate_atom(com, &(vram_info->atom), bios_offset)) {
 		return;
 	}
-	switch (vram_info->ver.ver) { // TODO: earlier tables than 2.3?
-		case V(1,2): populate_vram_info_v1_2(com, vram_info); break;
-		case V(1,3): populate_vram_info_v1_3(com, vram_info); break;
-		case V(1,4): populate_vram_info_v1_4(com, vram_info); break;
-		case V(2,1): populate_vram_info_v2_1(com, vram_info); break;
-		case V(2,2): populate_vram_info_v2_2(com, vram_info); break;
-		case V(2,3): populate_vram_info_v2_3(com, vram_info); break;
-		case V(2,4): populate_vram_info_v2_4(com, vram_info); break;
-		case V(2,5): populate_vram_info_v2_5(com, vram_info); break;
-		case V(2,6): populate_vram_info_v2_6(com, vram_info); break;
-		case V(3,0): populate_vram_info_v3_0(com, vram_info); break;
+	bool err = false;
+	switch (vram_info->ver.ver) {
+		case V(1,2): err = populate_vram_info_v1_2(com, vram_info); break;
+		case V(1,3): err = populate_vram_info_v1_3(com, vram_info); break;
+		case V(1,4): err = populate_vram_info_v1_4(com, vram_info); break;
+		case V(2,1): err = populate_vram_info_v2_1(com, vram_info); break;
+		case V(2,2): err = populate_vram_info_v2_2(com, vram_info); break;
+		case V(2,3): err = populate_vram_info_v2_3(com, vram_info); break;
+		case V(2,4): err = populate_vram_info_v2_4(com, vram_info); break;
+		case V(2,5): err = populate_vram_info_v2_5(com, vram_info); break;
+		case V(2,6): err = populate_vram_info_v2_6(com, vram_info); break;
+		case V(3,0): err = populate_vram_info_v3_0(com, vram_info); break;
 		default: break;
+	}
+	if (err) { // partial crawl error
+		vram_info->ver = SET_VER(0);
 	}
 }
 
-inline static void
+inline static bool
 populate_voltageobject_info_v1_1(
 		struct atomtree_commons* const com,
 		struct atomtree_voltageobject_info* const vo_info
@@ -2886,9 +3019,7 @@ populate_voltageobject_info_v1_1(
 		"voltageobject_info_v1_1 buggy table sizes",
 		vobj.raw == end
 	);
-	if (vobj.raw != end) {
-		vo_info->num_voltage_objects--;
-	}
+	vo_info->num_voltage_objects -= (vobj.raw != end);
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2914,9 +3045,10 @@ populate_voltageobject_info_v1_1(
 			vobj.raw += vobj.vobj->volt_obj_v1.Size;
 		}
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_voltageobject_info_v1_2(
 		struct atomtree_commons* const com,
 		struct atomtree_voltageobject_info* const vo_info
@@ -2942,9 +3074,7 @@ populate_voltageobject_info_v1_2(
 		"voltageobject_info_v1_2 buggy table sizes",
 		vobj.raw == end
 	);
-	if (vobj.raw != end) {
-		vo_info->num_voltage_objects--;
-	}
+	vo_info->num_voltage_objects -= (vobj.raw != end);
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -2970,9 +3100,10 @@ populate_voltageobject_info_v1_2(
 			vobj.raw += vobj.vobj->volt_obj_v2.Size;
 		}
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_voltageobject_info_v3_1(
 		struct atomtree_commons* const com,
 		struct atomtree_voltageobject_info* const vo_info
@@ -2998,9 +3129,7 @@ populate_voltageobject_info_v3_1(
 		"voltageobject_info_v3_1 buggy table sizes",
 		vobj.raw == end
 	);
-	if (vobj.raw != end) {
-		vo_info->num_voltage_objects--;
-	}
+	vo_info->num_voltage_objects -= (vobj.raw != end);
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -3079,10 +3208,11 @@ populate_voltageobject_info_v3_1(
 			vobj.raw += vobj.vobj->header.object_size;
 		}
 	}
+	return false;
 }
 
 
-inline static void
+inline static bool
 populate_voltageobject_info_v4_1(
 		struct atomtree_commons* const com,
 		struct atomtree_voltageobject_info* const vo_info
@@ -3108,9 +3238,7 @@ populate_voltageobject_info_v4_1(
 		"voltageobject_info_v4_1 buggy table sizes",
 		vobj.raw == end
 	);
-	if (vobj.raw != end) { // buggy V620
-		vo_info->num_voltage_objects--;
-	}
+	vo_info->num_voltage_objects -= (vobj.raw != end); // buggy V620
 
 	if (vo_info->num_voltage_objects) {
 		struct atomtree_voltage_object* const voltage_objects = arena_alloc(
@@ -3158,6 +3286,7 @@ populate_voltageobject_info_v4_1(
 			vobj.raw += vobj.vobj->header.object_size;
 		}
 	}
+	return false;
 }
 
 
@@ -3170,55 +3299,67 @@ populate_voltageobject_info(
 	if (populate_atom(com, &(vo_info->atom), bios_offset)) {
 		return;
 	}
+	bool err = false;
 	switch (vo_info->ver.ver) {
-		case V(1,1): populate_voltageobject_info_v1_1(com, vo_info); break;
-		case V(1,2): populate_voltageobject_info_v1_2(com, vo_info); break;
-		case V(3,1): populate_voltageobject_info_v3_1(com, vo_info); break;
+		case V(1,1): err = populate_voltageobject_info_v1_1(com, vo_info);break;
+		case V(1,2): err = populate_voltageobject_info_v1_2(com, vo_info);break;
+		case V(3,1): err = populate_voltageobject_info_v3_1(com, vo_info);break;
 		case V(4,2): // hopefully v4_2 is the same
-		case V(4,1): populate_voltageobject_info_v4_1(com, vo_info); break;
+		case V(4,1): err = populate_voltageobject_info_v4_1(com, vo_info);break;
 		case V(1,0): assert(0);
 		default: break;
+	}
+	if (err) { // partial crawl error
+		vo_info->ver = SET_VER(0);
 	}
 }
 
 
-inline static void
+inline static bool
 populate_datatable_v1_1(
 		struct atomtree_commons* const com,
 		struct atomtree_master_datatable* const data_table
 		) {
 	void* const bios = com->bios;
 	struct atomtree_master_datatable_v1_1* const dt11 = &(data_table->v1_1);
-	dt11->leaves = data_table->leaves;
 	struct atom_master_data_table_v1_1* const leaves = data_table->leaves;
-
-	if (leaves->UtilityPipeLine) {
-		dt11->utilitypipeline = bios + leaves->UtilityPipeLine;
+	if (offchk(com, leaves)) {
+		return true;
 	}
+
+	populate_atom(com, &(dt11->utilitypipeline.atom), leaves->UtilityPipeLine);
 
 	if (leaves->MultimediaCapabilityInfo) {
-		dt11->multimedia_capability_info =
-			bios + leaves->MultimediaCapabilityInfo;
+		dt11->multimedia_capability_info = (
+			bios + leaves->MultimediaCapabilityInfo
+		);
+		offrst_atom_table(com, &(dt11->multimedia_capability_info));
+
 	}
+
 	if (leaves->MultimediaConfigInfo) {
 		dt11->multimedia_config_info =
 			bios + leaves->MultimediaConfigInfo;
+		offrst_atom_table(com, &(dt11->multimedia_config_info));
 	}
 
 	if (leaves->StandardVESA_Timing) {
 		dt11->vesa_timing = bios + leaves->StandardVESA_Timing;
+		offrst_atom_table(com, &(dt11->vesa_timing));
 	}
 
 	populate_firmwareinfo(com, &(dt11->firmwareinfo), leaves->FirmwareInfo);
 
 	if (leaves->PaletteData) {
 		dt11->palette_data = bios + leaves->PaletteData;
+		offrst(com, &(dt11->palette_data), 1);
 	}
 
 	populate_lcd_info(com, &(dt11->lcd_info), leaves->LCD_Info);
 
 	if (leaves->DIGTransmitterInfo) {
 		dt11->dig_transmitter_info = bios + leaves->DIGTransmitterInfo;
+		offrst(com, &(dt11->dig_transmitter_info), 1);
 	}
 
 	if (leaves->ATV_SMU_Info) {
@@ -3236,10 +3377,12 @@ populate_datatable_v1_1(
 
 	if (leaves->SupportedDevicesInfo) {
 		dt11->supported_devices_info = bios + leaves->SupportedDevicesInfo;
+		offrst(com, &(dt11->supported_devices_info), 1);
 	}
 
 	if (leaves->GPIO_I2C_Info) {
 		dt11->gpio_i2c_info = bios + leaves->GPIO_I2C_Info;
+		offrst(com, &(dt11->gpio_i2c_info), 1);
 	}
 
 	populate_vram_usagebyfirmware(
@@ -3250,6 +3393,7 @@ populate_datatable_v1_1(
 
 	if (leaves->VESA_ToInternalModeLUT) {
 		dt11->vesa_to_internal_mode = bios + leaves->VESA_ToInternalModeLUT;
+		offrst(com, &(dt11->vesa_to_internal_mode), 1);
 	}
 
 	populate_gfx_info(com, &(dt11->gfx_info), leaves->GFX_Info);
@@ -3258,26 +3402,32 @@ populate_datatable_v1_1(
 
 	if (leaves->GPUVirtualizationInfo) {
 		dt11->gpu_virtualization_info = bios + leaves->GPUVirtualizationInfo;
+		offrst(com, &(dt11->gpu_virtualization_info), 1);
 	}
 
 	if (leaves->SaveRestoreInfo) {
 		dt11->save_restore_info = bios + leaves->SaveRestoreInfo;
+		offrst(com, &(dt11->save_restore_info), 1);
 	}
 
 	if (leaves->PPLL_SS_Info) {
 		dt11->ppll_ss_info = bios + leaves->PPLL_SS_Info;
+		offrst(com, &(dt11->ppll_ss_info), 1);
 	}
 
 	if (leaves->OemInfo) {
 		dt11->oem_info = bios + leaves->OemInfo;
+		offrst(com, &(dt11->oem_info), 1);
 	}
 
 	if (leaves->XTMDS_Info) {
 		dt11->xtmds_info = bios + leaves->XTMDS_Info;
+		offrst(com, &(dt11->xtmds_info), 1);
 	}
 
 	if (leaves->MclkSS_Info) {
 		dt11->mclk_ss_info = bios + leaves->MclkSS_Info;
+		offrst(com, &(dt11->mclk_ss_info), 1);
 	}
 
 	populate_display_object(
@@ -3289,32 +3439,39 @@ populate_datatable_v1_1(
 
 	if (leaves->MC_InitParameter) {
 		dt11->mc_init_parameter = bios + leaves->MC_InitParameter;
+		offrst(com, &(dt11->mc_init_parameter), 1);
 	}
 
 	if (leaves->ASIC_VDDC_Info) {
 		dt11->asic_vddc_info = bios + leaves->ASIC_VDDC_Info;
+		offrst(com, &(dt11->asic_vddc_info), 1);
 	}
 
 	if (leaves->ASIC_InternalSS_Info) {
 		dt11->asic_internal_ss_info = bios + leaves->ASIC_InternalSS_Info;
+		offrst(com, &(dt11->asic_internal_ss_info), 1);
 	}
 
 	if (leaves->TV_VideoMode) {
 		dt11->tv_video_mode = bios + leaves->TV_VideoMode;
+		offrst(com, &(dt11->tv_video_mode), 1);
 	}
 
 	populate_vram_info(com, &(dt11->vram_info), leaves->VRAM_Info);
 
 	if (leaves->MemoryTrainingInfo) {
 		dt11->memory_training_info = bios + leaves->MemoryTrainingInfo;
+		offrst(com, &(dt11->memory_training_info), 1);
 	}
 
 	if (leaves->IntegratedSystemInfo) {
 		dt11->integrated_system_info = bios + leaves->IntegratedSystemInfo;
+		offrst(com, &(dt11->integrated_system_info), 1);
 	}
 
 	if (leaves->ASIC_ProfilingInfo) {
 		dt11->asic_profiling_info = bios + leaves->ASIC_ProfilingInfo;
+		offrst(com, &(dt11->asic_profiling_info), 1);
 	}
 
 	populate_voltageobject_info(
@@ -3323,11 +3480,14 @@ populate_datatable_v1_1(
 
 	if (leaves->PowerSourceInfo) {
 		dt11->power_source_info = bios + leaves->PowerSourceInfo;
+		offrst(com, &(dt11->power_source_info), 1);
 	}
 
 	if (leaves->ServiceInfo) {
 		dt11->service_info = bios + leaves->ServiceInfo;
+		offrst(com, &(dt11->service_info), 1);
 	}
+	return false;
 }
 
 inline static void
@@ -3355,22 +3515,23 @@ atomtree_datatable_v2_1_populate_sw_datatables(
 	populate_atom(com, &(dt21->sw_datatable33.atom), leaves->sw_datatable33);
 	populate_atom(com, &(dt21->sw_datatable34.atom), leaves->sw_datatable34);
 }
-inline static void
+inline static bool
 populate_datatable_v2_1(
 		struct atomtree_commons* const com,
 		struct atomtree_master_datatable* const data_table
 		) {
 	void* const bios = com->bios;
 	struct atomtree_master_datatable_v2_1* const dt21 = &(data_table->v2_1);
-	dt21->leaves = data_table->leaves;
 	struct atom_master_data_table_v2_1* const leaves = data_table->leaves;
-
-	if (leaves->utilitypipeline) {
-		dt21->utilitypipeline = bios + leaves->utilitypipeline;
+	if (offchk(com, leaves)) {
+		return true;
 	}
+
+	populate_atom(com, &(dt21->utilitypipeline.atom), leaves->utilitypipeline);
 
 	if (leaves->multimedia_info) {
 		dt21->multimedia_info = bios + leaves->multimedia_info;
+		offrst_atom_table(com, &(dt21->multimedia_info));
 	}
 
 	populate_smc_dpm_info(com, &(dt21->smc_dpm_info), leaves->smc_dpm_info);
@@ -3412,6 +3573,7 @@ populate_datatable_v2_1(
 	);
 
 	atomtree_datatable_v2_1_populate_sw_datatables(com, dt21);
+	return false;
 }
 
 inline static void
@@ -3426,23 +3588,40 @@ populate_datatables(
 	if (populate_atom(com, &(data_table->atom), bios_offset)) {
 		return;
 	}
+	bool err = false;
 	switch (data_table->ver.ver) {
-		case V(1,1): populate_datatable_v1_1(com, data_table); break;
-		case V(2,1): populate_datatable_v2_1(com, data_table); break;
+		case V(1,1): err = populate_datatable_v1_1(com, data_table); break;
+		case V(2,1): err = populate_datatable_v2_1(com, data_table); break;
 		default: assert(0); break;
+	}
+	if (err) { // partial crawl error
+		data_table->ver = SET_VER(0);
 	}
 }
 
-inline static void
+inline static bool
 populate_psp_rsa(
-		struct atomtree_commons* const com __unused,
+		struct atomtree_commons* const com,
 		struct atomtree_psp_rsa* const rsa
 		) {
+	if (offchk(com, rsa->header)) {
+		return true;
+	}
+	size_t const size = (
+		sizeof(*rsa->header)
+		+ rsa->header->public_exponent_size
+		+ rsa->header->modulus_size
+	);
+	if (offchk(com, rsa->header, size)) {
+		return true;
+	}
+
 	assert(rsa->header->modulus_size == rsa->header->public_exponent_size);
 	void* walker = rsa->raw + sizeof(struct psp_rsa_key_header);
 	rsa->public_exponent = walker;
 	walker += rsa->header->public_exponent_size;
 	rsa->modulus = walker;
+	return false;
 }
 
 inline static bool
@@ -3484,6 +3663,9 @@ populate_discovery_table_ip_dies(
 	}
 	for (uint8_t die_i=0; die_i < dis->num_dies; die_i++) {
 		dies[die_i].header = binary + die_offsets[die_i].die_offset;
+		if (offrst(com, &(dies[die_i].header))) {
+			continue;
+		}
 
 		uint16_t num_ips = dies[die_i].header->num_ips;
 		if (0 == num_ips) {
@@ -3535,11 +3717,14 @@ populate_discovery_table_ip_dies(
 		} while (ip_i < num_ips);
 	}
 }
-inline static void
+inline static bool
 populate_discovery_table(
 		struct atomtree_commons* const com,
 		struct atomtree_discovery_table* const dis
 		) {
+	if (offchk(com, dis->blob)) {
+		return true;
+	}
 	union {
 		void* raw;
 		struct discovery_binary_header* bin;
@@ -3550,53 +3735,72 @@ populate_discovery_table(
 
 	dis->binary_ver = SET_VER(b.bin->version_major, b.bin->version_minor);
 
+	// TODO finish offset checks
 	if (table_list[DISCOVERY_IP_DISCOVERY].offset) {
 		dis->ip_discovery = b.raw + table_list[DISCOVERY_IP_DISCOVERY].offset;
-		dis->ip_ver = SET_VER(dis->ip_discovery->version);
-
-		populate_discovery_table_ip_dies(com, dis, b.raw);
+		if (! offrst(com, &(dis->ip_discovery))) {
+			dis->ip_ver = SET_VER(dis->ip_discovery->version);
+			populate_discovery_table_ip_dies(com, dis, b.raw);
+		}
 	}
 
 	if (table_list[DISCOVERY_GC].offset) {
 		dis->gc_info = b.raw + table_list[DISCOVERY_GC].offset;
-		dis->gc_ver = SET_VER(
-			dis->gc_info->header.version_major,
-			dis->gc_info->header.version_minor
-		);
+		if (! offrst(com, &(dis->gc_info), sizeof(dis->gc_info->header))) {
+			dis->gc_ver = SET_VER(
+				dis->gc_info->header.version_major,
+				dis->gc_info->header.version_minor
+			);
+		}
 	}
 	if (table_list[DISCOVERY_HARVEST_INFO].offset) {
 		dis->harvest = b.raw + table_list[DISCOVERY_HARVEST_INFO].offset;
-		dis->harvest_ver = SET_VER(dis->harvest->header.version);
+		if (! offrst(com, &(dis->harvest))) {
+			dis->harvest_ver = SET_VER(dis->harvest->header.version);
+		}
 	}
 	if (table_list[DISCOVERY_VCN_INFO].offset) {
 		dis->vcn_info = b.raw + table_list[DISCOVERY_VCN_INFO].offset;
-		dis->vcn_ver = SET_VER(
-			dis->vcn_info->header.version_major,
-			dis->vcn_info->header.version_minor
-		);
+		if (! offrst(com, &(dis->vcn_info))) {
+			dis->vcn_ver = SET_VER(
+				dis->vcn_info->header.version_major,
+				dis->vcn_info->header.version_minor
+			);
+		}
 	}
 	if (table_list[DISCOVERY_MALL_INFO].offset) {
 		dis->mall_info = b.raw + table_list[DISCOVERY_MALL_INFO].offset;
-		dis->mall_ver = SET_VER(
-			dis->mall_info->header.version_major,
-			dis->mall_info->header.version_minor
-		);
+		if (! offrst(com, &(dis->mall_info), sizeof(dis->mall_info->header))) {
+			dis->mall_ver = SET_VER(
+				dis->mall_info->header.version_major,
+				dis->mall_info->header.version_minor
+			);
+		}
 	}
 	if (table_list[DISCOVERY_NPS_INFO].offset) {
 		dis->nps_info = b.raw + table_list[DISCOVERY_NPS_INFO].offset;
-		dis->nps_ver = SET_VER(
-			dis->nps_info->header.version_major,
-			dis->nps_info->header.version_minor
-		);
+		if (! offrst(com, &(dis->nps_info))) {
+			dis->nps_ver = SET_VER(
+				dis->nps_info->header.version_major,
+				dis->nps_info->header.version_minor
+			);
+		}
 	}
+	return false;
 }
 
-inline static void
+inline static bool
 populate_psp_fw_payload_type(
 		struct atomtree_commons* const com,
 		struct psp_directory_entry const* const pspentry,
-		struct atomtree_psp_directory_entries* const fw_entry
+		struct atomtree_psp_directory_entries* const fw_entry,
+		void* const bios
 		) {
+	if (offchk(com, bios, pspentry->size)) {
+		return true;
+	}
+	fw_entry->raw = bios;
+
 	bool heuristic = false;
 	switch (pspentry->type) {
 		case AMD_PUBLIC_KEY:
@@ -3610,7 +3814,7 @@ populate_psp_fw_payload_type(
 			break;
 	}
 
-	if (heuristic) {
+	if (heuristic) { // hack our way to something
 		fw_entry->has_fw_header = (
 			(sizeof(struct amd_fw_header) <= pspentry->size)
 			&& (fw_entry->header->fw_type == pspentry->type)
@@ -3630,14 +3834,19 @@ populate_psp_fw_payload_type(
 		}
 	}
 
+	bool err = false;
 	switch (fw_entry->type) {
 		case PSPFW_RSA:
-			populate_psp_rsa(com, &(fw_entry->rsa));
+			err = populate_psp_rsa(com, &(fw_entry->rsa));
 			break;
 		case PSPFW_DISCOVERY: 
-			populate_discovery_table(com, &(fw_entry->discovery));
+			err = populate_discovery_table(com, &(fw_entry->discovery));
 			break;
 	}
+	if (err) {
+		fw_entry->type = PSPFW_UNKNOWN;
+	}
+	return err;
 }
 inline static void
 pspdirectory_checksum(
@@ -3668,13 +3877,16 @@ populate_psp_directory_table(
 	} const d = {
 		.raw = bios + bios_offset
 	};
+	if (offchk_flex(com, d.dir, pspentry, d.dir->header.totalentries)) {
+		return;
+	}
 	if (PSP_COOKIE != d.dir->header.pspcookie.num) {
 		return;
 	};
 
 	pspdir->directory = d.dir;
 
-	uint8_t const totalentries = d.dir->header.totalentries;
+	uint32_t const totalentries = d.dir->header.totalentries;
 	if (0 == totalentries) {
 		return;
 
@@ -3683,6 +3895,7 @@ populate_psp_directory_table(
 		&(com->alloc_arena), &(com->error),
 		totalentries * sizeof(pspdir->fw_entries[0])
 	);
+	pspdir->fw_entries = fw_entries;
 	void* moded_start[4] = { // see union psp_directory_entry_address
 		com->atree->alloced_bios, // physical
 		bios, // bios; unsure, untested
@@ -3691,25 +3904,20 @@ populate_psp_directory_table(
 		com->atree->alloced_bios, // partition; incorrect
 		// partition seems per-entry ad-hoc; but relative to what?
 	};
-	union psp_directory_entry_address addr;
-	for (uint8_t i=0; i < totalentries; i++) {
-
-		addr = d.dir->pspentry[i].address;
+	for (uint32_t i=0; i < totalentries; i++) {
+		union psp_directory_entry_address addr = d.dir->pspentry[i].address;
 		if (3 == addr.mode) {
-			continue;
+			continue; // see moded_start
 		}
-
-		fw_entries[i].raw = moded_start[addr.mode] + addr.address;
 		populate_psp_fw_payload_type(
-			com, &(d.dir->pspentry[i]), &(fw_entries[i])
+			com, &(d.dir->pspentry[i]), &(fw_entries[i]),
+			moded_start[addr.mode] + addr.address
 		);
 	}
-
-	pspdir->fw_entries = fw_entries;
 }
 
 
-inline static void
+inline static bool
 populate_atom_rom_header_v1_1(
 		struct atomtree_commons* const com,
 		struct atomtree_rom_header* const rom
@@ -3717,33 +3925,44 @@ populate_atom_rom_header_v1_1(
 	struct atom_tree* const atree = com->atree;
 	struct atom_rom_header_v1_1* const leaves = rom->v1_1;
 	void* const bios = com->bios;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	assert(ATOM_SIGNATURE == rom->v1_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
+		offrst(com, &(atree->protected_mode), 1);
 	}
 	if (leaves->ConfigFilenameOffset) {
 		atree->config_filename = bios + leaves->ConfigFilenameOffset;
+		offrst(com, &(atree->config_filename), 1);
 	}
 	if (leaves->CRC_BlockOffset) {
 		atree->crc_block = bios + leaves->CRC_BlockOffset;
+		offrst(com, &(atree->crc_block));
 	}
 	if (leaves->BIOS_BootupMessageOffset) {
 		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
+		offrst(com, &(atree->bootup_mesage), 1);
 	}
 	if (leaves->Int10Offset) {
 		atree->int10 = bios + leaves->Int10Offset;
+		offrst(com, &(atree->int10), 1);
 	}
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
+		offrst(com, &(atree->pci_info), 1);
 	}
 
 	//rom->data_table = &(atree->data_table);
 	populate_datatables(com, leaves->MasterDataTableOffset);
+
+	return false;
 }
 
-inline static void
+inline static bool
 populate_atom_rom_header_v2_1(
 		struct atomtree_commons* const com,
 		struct atomtree_rom_header* const rom
@@ -3751,26 +3970,35 @@ populate_atom_rom_header_v2_1(
 	struct atom_tree* const atree = com->atree;
 	struct atom_rom_header_v2_1* const leaves = rom->v2_1;
 	void* const bios = com->bios;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	assert(ATOM_SIGNATURE == rom->v2_1->FirmWareSignature.num);
 
 	if (leaves->ProtectedModeInfoOffset) {
 		atree->protected_mode = bios + leaves->ProtectedModeInfoOffset;
+		offrst(com, &(atree->protected_mode), 1);
 	}
 	if (leaves->ConfigFilenameOffset) {
 		atree->config_filename = bios + leaves->ConfigFilenameOffset;
+		offrst(com, &(atree->config_filename), 1);
 	}
 	if (leaves->CRC_BlockOffset) {
 		atree->crc_block = bios + leaves->CRC_BlockOffset;
+		offrst(com, &(atree->crc_block));
 	}
 	if (leaves->BIOS_BootupMessageOffset) {
 		atree->bootup_mesage = bios + leaves->BIOS_BootupMessageOffset;
+		offrst(com, &(atree->bootup_mesage), 1);
 	}
 	if (leaves->Int10Offset) {
 		atree->int10 = bios + leaves->Int10Offset;
+		offrst(com, &(atree->int10), 1);
 	}
 	if (leaves->PCI_InfoOffset) {
 		atree->pci_info = bios + leaves->PCI_InfoOffset;
+		offrst(com, &(atree->pci_info), 1);
 	}
 
 	populate_psp_directory_table(
@@ -3779,8 +4007,10 @@ populate_atom_rom_header_v2_1(
 
 	//rom->data_table = &(atree->data_table);
 	populate_datatables(com, leaves->MasterDataTableOffset);
+
+	return false;
 }
-inline static void
+inline static bool
 populate_atom_rom_header_v2_2(
 		struct atomtree_commons* const com,
 		struct atomtree_rom_header* const rom
@@ -3788,26 +4018,35 @@ populate_atom_rom_header_v2_2(
 	struct atom_tree* const atree = com->atree;
 	struct atom_rom_header_v2_2* const leaves = rom->v2_2;
 	void* const bios = com->bios;
+	if (offchk(com, leaves)) {
+		return true;
+	}
 
 	assert(ATOM_SIGNATURE == rom->v2_2->signature.num);
 
 	if (leaves->protectedmodeoffset) {
 		atree->protected_mode = bios + leaves->protectedmodeoffset;
+		offrst(com, &(atree->protected_mode), 1);
 	}
 	if (leaves->configfilenameoffset) {
 		atree->config_filename = bios + leaves->configfilenameoffset;
+		offrst(com, &(atree->config_filename), 1);
 	}
 	if (leaves->crc_block_offset) {
 		atree->crc_block = bios + leaves->crc_block_offset;
+		offrst(com, &(atree->crc_block));
 	}
 	if (leaves->vbios_bootupmessageoffset) {
 		atree->bootup_mesage = bios + leaves->vbios_bootupmessageoffset;
+		offrst(com, &(atree->bootup_mesage), 1);
 	}
 	if (leaves->int10_offset) {
 		atree->int10 = bios + leaves->int10_offset;
+		offrst(com, &(atree->int10), 1);
 	}
 	if (leaves->pci_info_offset) {
 		atree->pci_info = bios + leaves->pci_info_offset;
+		offrst(com, &(atree->pci_info), 1);
 	}
 	populate_psp_directory_table(
 		com, &(atree->psp_directory), leaves->pspdirtableoffset
@@ -3815,6 +4054,8 @@ populate_atom_rom_header_v2_2(
 
 	//rom->data_table = &(atree->data_table);
 	populate_datatables(com, leaves->masterdatatable_offset);
+
+	return false;
 
 	/*
 	//atree->crc_block = bios + atree->leaves->crc_block_offset;
@@ -3862,12 +4103,17 @@ populate_atom_rom_header(
 	if (populate_atom(com, &(rom->atom), bios_offset)) {
 		return;
 	}
+	bool err = false;
 	switch (rom->ver.ver) {
-		case V(1,1): populate_atom_rom_header_v1_1(com, rom); break;
-		case V(2,1): populate_atom_rom_header_v2_1(com, rom); break;
+		case V(1,1): err = populate_atom_rom_header_v1_1(com, rom); break;
+		case V(2,1): err = populate_atom_rom_header_v2_1(com, rom); break;
 		case V(2,3): // forced
-		case V(2,2): populate_atom_rom_header_v2_2(com, rom); break;
+		case V(2,2): err = populate_atom_rom_header_v2_2(com, rom); break;
 		default: break;
+	}
+	if (err) { // partial crawl error
+		rom->ver = SET_VER(0);
+		return;
 	}
 }
 
