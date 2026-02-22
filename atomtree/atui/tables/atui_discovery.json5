@@ -346,16 +346,13 @@ global_defaults: {
 
 
 {
-	c_type: "discovery_gc_info_header",
+	c_type: "discovery_infotable_header",
 	leaves: [
 		{
 			access: "bios->signature.str",
 			name: "signature",
 			display: "ATUI_NAN",
 			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "GC",
-			},
 		}, {
 			access: "bios->version_major",
 			name: "version_major",
@@ -367,14 +364,17 @@ global_defaults: {
 			name: "size",
 		},
 	],
-}, {
+}, 
+
+
+{
 	c_type: "discovery_gc_info_v1_0",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -441,7 +441,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -517,7 +517,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -617,7 +617,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -741,7 +741,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -802,7 +802,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_gc_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -938,28 +938,6 @@ global_defaults: {
 },
 
 {
-	c_type: "discovery_vcn_info_header",
-	leaves: [
-		{
-			access: "bios->signature.str",
-			name: "signature",
-			display: "ATUI_NAN",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "VCN",
-			},
-		}, {
-			access: "bios->version_major",
-			name: "version_major",
-		}, {
-			access: "bios->version_minor",
-			name: "version_minor",
-		}, {
-			access: "bios->size_bytes",
-			name: "size_bytes",
-		},
-	],
-}, {
 	c_prefix: "union", c_type: "vcn_fuse_data",
 	leaves: [{
 		access: "bios->fuse_data",
@@ -1008,7 +986,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_vcn_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->num_of_instances",
 			name: "num_of_instances",
@@ -1042,35 +1020,13 @@ global_defaults: {
 
 
 {
-	c_type: "discovery_mall_info_header",
-	leaves: [
-		{
-			access: "bios->signature.str",
-			name: "signature",
-			display: "ATUI_NAN",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "MALL",
-			},
-		}, {
-			access: "bios->version_major",
-			name: "version_major",
-		}, {
-			access: "bios->version_minor",
-			name: "version_minor",
-		}, {
-			access: "bios->size_bytes",
-			name: "size_bytes",
-		},
-	],
-}, {
 	c_type: "discovery_mall_info_v1_0",
 	leaves: [
 		{
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_mall_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->mall_size_per_m",
 			name: "mall_size_per_m",
@@ -1097,7 +1053,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_mall_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->mall_size_per_umc",
 			name: "mall_size_per_umc",
@@ -1111,28 +1067,6 @@ global_defaults: {
 },
 
 {
-	c_type: "discovery_nps_info_header",
-	leaves: [
-		{
-			access: "bios->signature.str",
-			name: "signature",
-			display: "ATUI_NAN",
-			fancy: "ATUI_ARRAY",
-			description: {
-				eng: "NPS",
-			},
-		}, {
-			access: "bios->version_major",
-			name: "version_major",
-		}, {
-			access: "bios->version_minor",
-			name: "version_minor",
-		}, {
-			access: "bios->size_bytes",
-			name: "size_bytes",
-		},
-	],
-}, {
 	c_type: "discovery_nps_instance_info_v1_0",
 	leaves: [
 		{
@@ -1152,7 +1086,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_nps_info_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
 		}, {
 			access: "bios->nps_type",
 			name: "nps_type",

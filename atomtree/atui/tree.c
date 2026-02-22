@@ -3483,6 +3483,80 @@ grow_psp_rsa(
 	return rsa_func(&rsa_args);
 }
 
+
+inline static atui_node*
+grow_ip_discovery_die(
+		struct atomtree_discovery_table const* const dis,
+		struct atomtree_discovery_ip_die const* const die,
+		atuifunc const ip_func
+		) {
+	struct atui_enum const* const ip_enum = & ATUI_ENUM(soc15_hwid);
+	uint16_t const num_ips = die->header->num_ips;
+	atuifunc_args atui_args = {.atomtree=dis};
+
+	atui_node* const atui_die = ATUI_MAKE_BRANCH(ip_discovery_die_header,  NULL,
+		dis, die->header,  num_ips,NULL
+	);
+	for (uint16_t i=0; i < num_ips; i++) {
+		atui_args.bios = die->entries[i].raw;
+		atui_node* entry = ip_func(&atui_args);
+		ATUI_ADD_BRANCH(atui_die, entry);
+		enum soc15_hwid hwid = die->entries[i].header->hardware_id;
+		int16_t naming_enum_i = atui_enum_bsearch(ip_enum, hwid);
+		if (-1 < naming_enum_i) {
+			sprintf(entry->name, "%s [%02u]: %s (%u)",
+				entry->origname, i,
+				ip_enum->enum_array[naming_enum_i].name,
+				die->entries[i].header->instance_number
+			);
+		} else {
+			sprintf(entry->name, "%s [%02u]: hardware ID %u (%u)",
+				entry->origname, i,  hwid,
+				die->entries[i].header->instance_number
+			);
+		}
+	}
+	return atui_die;
+}
+inline static atui_node*
+grow_ip_discovery(
+		struct atomtree_discovery_table const* const dis
+		) {
+	struct ip_discovery_header const* const ip = dis->ip_discovery;
+
+	atui_node* ip_dies[IP_DISCOVERY_MAX_NUM_DIES] = {};
+	atuifunc ip_func;
+	switch (ip->version) {
+		case 1:
+		case 2:
+			ip_func = _atui_discovery_ip_entry_v1;
+			break;
+		case 3:
+		case 4:
+			if (ip->flags.base_addr_64_bit) {
+				ip_func = _atui_discovery_ip_entry_v4_64;
+			} else {
+				ip_func = _atui_discovery_ip_entry_v3;
+			}
+			break;
+		default:
+			ip_func = _atui_discovery_ip_entry_header;
+			break;
+	}
+	for (uint8_t i=0; i < dis->num_dies; i++) {
+		if (NULL == dis->dies[i].header) {
+			continue; // TODO blank branch?
+		}
+		ip_dies[i] = grow_ip_discovery_die(dis, &(dis->dies[i]), ip_func);
+		sprintf(ip_dies[i]->name, "%s [%02u]",
+			ip_dies[i]->origname, i
+		);
+	}
+
+	return ATUI_MAKE_BRANCH(ip_discovery_header,  NULL,
+		dis,dis->ip_discovery,  ip->num_dies,ip_dies
+	);
+}
 inline static atui_node*
 grow_discovery_tables(
 		struct atomtree_discovery_table const* const dis
@@ -3501,64 +3575,9 @@ grow_discovery_tables(
 	};
 
 	if (dis->ip_discovery) {
-		struct atui_enum const* const ip_enum = & ATUI_ENUM(soc15_hwid);
-		struct ip_discovery_header const* const ip = dis->ip_discovery;
-
-		atui_node* ip_dies[IP_DISCOVERY_MAX_NUM_DIES];
-		atuifunc_args atui_args = {.atomtree=dis};
-		atuifunc ip_func;
-		switch (ip->version) {
-			case 1:
-			case 2:
-				ip_func = _atui_discovery_ip_entry_v1;
-				break;
-			case 3:
-			case 4:
-				if (ip->flags.base_addr_64_bit) {
-					ip_func = _atui_discovery_ip_entry_v4_64;
-				} else {
-					ip_func = _atui_discovery_ip_entry_v3;
-				}
-				break;
-			default:
-				ip_func = _atui_discovery_ip_entry_header;
-				break;
-		}
-		for (uint8_t dies_i=0; dies_i < dis->num_dies; dies_i++) {
-			uint16_t num_ips = dis->dies[dies_i].header->num_ips;
-			ip_dies[dies_i] = ATUI_MAKE_BRANCH(ip_discovery_die_header,  NULL,
-				dis, dis->dies[dies_i].header,  num_ips,NULL
-			);
-			sprintf(ip_dies[dies_i]->name, "ip_discovery_die_header [%02u]",
-				dies_i
-			);
-			for (uint16_t ip_i=0; ip_i < num_ips; ip_i++) {
-				atui_args.bios = dis->dies[dies_i].entries[ip_i].raw;
-				atui_node* entry = ip_func(&atui_args);
-				ATUI_ADD_BRANCH(ip_dies[dies_i], entry);
-				enum soc15_hwid hwid = (
-					dis->dies[dies_i].entries[ip_i].header->hardware_id
-				);
-				int16_t naming_enum_i = atui_enum_bsearch(ip_enum, hwid);
-				if (-1 < naming_enum_i) {
-					sprintf(entry->name, "%s [%02u]: %s (%u)",
-						entry->origname, ip_i,
-						ip_enum->enum_array[naming_enum_i].name,
-						dis->dies[dies_i].entries[ip_i].header->instance_number
-					);
-				} else {
-					sprintf(entry->name, "%s [%02u]: hardware ID %u (%u)",
-						entry->origname, ip_i,  hwid,
-						dis->dies[dies_i].entries[ip_i].header->instance_number
-					);
-				}
-			}
-		}
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_IP_DISCOVERY],
-			ATUI_MAKE_BRANCH(ip_discovery_header,  NULL,
-				dis,dis->ip_discovery,  ip->num_dies,ip_dies
-			)
+			grow_ip_discovery(dis)
 		);
 	}
 
@@ -3575,12 +3594,13 @@ grow_discovery_tables(
 			case V(1,3): gc = _atui_discovery_gc_info_v1_3(&atui_args); break;
 			case V(2,0): gc = _atui_discovery_gc_info_v2_0(&atui_args); break;
 			case V(2,1): gc = _atui_discovery_gc_info_v2_1(&atui_args); break;
-			default:   gc = _atui_discovery_gc_info_header(&atui_args); break;
+			default: gc = _atui_discovery_infotable_header(&atui_args); break;
 		}
 		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_GC], gc);
 	}
 
 	if (dis->harvest) {
+		assert(0 == dis->harvest->header.version);
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_HARVEST_INFO],
 			ATUI_MAKE_BRANCH(discovery_harvest_table,  NULL,
@@ -3590,7 +3610,7 @@ grow_discovery_tables(
 	}
 
 	if (dis->vcn_info) {
-		assert(dis->vcn_ver.ver == V(1,0));
+		assert(V(1,0) == dis->vcn_ver.ver);
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_VCN_INFO],
 			ATUI_MAKE_BRANCH(discovery_vcn_info_v1_0,  NULL,
@@ -3608,13 +3628,13 @@ grow_discovery_tables(
 		switch (dis->mall_ver.ver) {
 			case V(1,0): mi = _atui_discovery_mall_info_v1_0(&atui_args); break;
 			case V(2,0): mi = _atui_discovery_mall_info_v2_0(&atui_args); break;
-			default:   mi = _atui_discovery_mall_info_header(&atui_args); break;
+			default:   mi = _atui_discovery_infotable_header(&atui_args); break;
 		}
 		ATUI_ADD_BRANCH(discovery_tables[DISCOVERY_MALL_INFO], mi);
 	}
 
 	if (dis->nps_info) {
-		assert(dis->nps_ver.ver == V(1,0));
+		assert(V(1,0) == dis->nps_ver.ver);
 		ATUI_ADD_BRANCH(
 			discovery_tables[DISCOVERY_NPS_INFO],
 			ATUI_MAKE_BRANCH(discovery_nps_info_v1_0,  NULL,

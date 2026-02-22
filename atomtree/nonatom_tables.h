@@ -39,8 +39,8 @@ struct atomtree_discovery_ip_entry {
 	semver ver;
 };
 struct atomtree_discovery_ip_die {
-	 struct ip_discovery_die_header* header;
-	 struct atomtree_discovery_ip_entry* entries;
+	struct ip_discovery_die_header* header;
+	struct atomtree_discovery_ip_entry* entries;
 };
 struct atomtree_discovery_table {
 	struct discovery_fw_blob* blob;
@@ -54,8 +54,8 @@ struct atomtree_discovery_table {
 	semver nps_ver;
 	uint8_t num_dies;
 
-	struct ip_discovery_header*       ip_discovery;
 	struct atomtree_discovery_ip_die  dies[IP_DISCOVERY_MAX_NUM_DIES];
+	struct ip_discovery_header*       ip_discovery;
 	union  discovery_gc_info*         gc_info;
 	struct discovery_harvest_table*   harvest;
 	struct discovery_vcn_info_v1_0*   vcn_info;
