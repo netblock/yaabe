@@ -26,11 +26,16 @@ static_assert(sizeof(semver) == sizeof((semver){}.ver));
 )
 
 #define V(...) SEMVER_VAL(__VA_ARGS__, 0,0,0)
-#define SEMVER_VAL(maj, min, pat, ...) (\
-	  (UINT32_C(maj) << (offsetof(semver, major) * CHAR_BIT))\
-	| (UINT32_C(min) << (offsetof(semver, minor) * CHAR_BIT))\
-	| (UINT32_C(pat) << (offsetof(semver, patch) * CHAR_BIT))\
+#define _SEMVER_SHIFT(val, field) (\
+	((uint32_t)(val & UINT8_MAX)) << (offsetof(semver, field) * CHAR_BIT)\
 )
+#define SEMVER_VAL(maj, min, pat, ...) (\
+	  _SEMVER_SHIFT(maj, major)\
+	| _SEMVER_SHIFT(min, minor)\
+	| _SEMVER_SHIFT(pat, patch)\
+)
+
+static semver const ALT_NOVER = {.ver=V(-1,-1,-1)};
 
 /* python dirtyscript for pretty format
 s=''
