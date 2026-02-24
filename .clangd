@@ -1,0 +1,10 @@
+CompileFlags:
+  # -Wno-pragma-pack: https://github.com/clangd/clangd/issues/1167
+  Add: [-Wno-pragma-pack, -include standard.h, -include atomtree.h, -include atui.h, -include gatui.h, -include yaabe_gtk4.h, -ferror-limit=65535]
+  Remove: [-fsanitize=*]
+  Compiler: gcc
+Diagnostics:
+  UnusedIncludes: None
+InlayHints:
+  Enabled: true
+  BlockEnd: true
