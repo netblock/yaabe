@@ -536,7 +536,7 @@ struct atomtree_vram_info_header_v2_4 {
 	struct atomtree_umc_init_reg_block  mem_clk_patch;
 	// TODO hoisted method stays until address sequence can be figured for
 	// atomtree_umc_init_reg_block (see atomtree_init_reg_block).
-	struct timings_set_navi1*           navi1_gddr6_timings;
+	struct timings_set_navi1*           navi1_timings;
 	uint8_t num_timing_straps;
 
 	struct atomtree_umc_init_reg_block  mc_tile_adjust;

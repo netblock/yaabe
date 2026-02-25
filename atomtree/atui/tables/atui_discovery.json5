@@ -346,7 +346,7 @@ global_defaults: {
 
 
 {
-	c_type: "discovery_infotable_header",
+	c_type: "discovery_info_header",
 	leaves: [
 		{
 			access: "bios->signature.str",
@@ -374,7 +374,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -441,7 +441,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -517,7 +517,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -617,7 +617,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -741,7 +741,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -802,7 +802,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_se",
 			name: "num_se",
@@ -986,7 +986,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->num_of_instances",
 			name: "num_of_instances",
@@ -1026,7 +1026,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->mall_size_per_m",
 			name: "mall_size_per_m",
@@ -1053,7 +1053,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->mall_size_per_umc",
 			name: "mall_size_per_umc",
@@ -1086,7 +1086,7 @@ global_defaults: {
 			access: "bios->header",
 			name: "header",
 			display: "ATUI_DISPLAY",
-			fancy: "ATUI_GRAFT", fancy_data: "discovery_infotable_header",
+			fancy: "ATUI_GRAFT", fancy_data: "discovery_info_header",
 		}, {
 			access: "bios->nps_type",
 			name: "nps_type",

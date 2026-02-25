@@ -209,7 +209,7 @@ struct discovery_ip_die {
 */
 
 // not used by all info tables, but most of them
-struct discovery_infotable_header {
+struct discovery_info_header {
 	union magic_32 signature;
 	uint16_t version_major;
 	uint16_t version_minor;
@@ -222,7 +222,7 @@ struct discovery_infotable_header {
 #define GC_TABLE_SIGNATURE            0x00004347
 #define GC_TABLE_SIGNATURE_STR        "GC"
 struct discovery_gc_info_v1_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_se;
 	uint32_t num_wgp0_per_sa;
 	uint32_t num_wgp1_per_sa;
@@ -245,7 +245,7 @@ struct discovery_gc_info_v1_0 {
 };
 
 struct discovery_gc_info_v1_1 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_se;
 	uint32_t num_wgp0_per_sa;
 	uint32_t num_wgp1_per_sa;
@@ -271,7 +271,7 @@ struct discovery_gc_info_v1_1 {
 };
 
 struct discovery_gc_info_v1_2 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_se;
 	uint32_t num_wgp0_per_sa;
 	uint32_t num_wgp1_per_sa;
@@ -305,7 +305,7 @@ struct discovery_gc_info_v1_2 {
 };
 
 struct discovery_gc_info_v1_3 {
-    struct discovery_infotable_header header;
+    struct discovery_info_header header;
     uint32_t num_se;
     uint32_t num_wgp0_per_sa;
     uint32_t num_wgp1_per_sa;
@@ -347,7 +347,7 @@ struct discovery_gc_info_v1_3 {
 };
 
 struct discovery_gc_info_v2_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_se;
 	uint32_t num_cu_per_sh;
 	uint32_t num_sh_per_se;
@@ -368,7 +368,7 @@ struct discovery_gc_info_v2_0 {
 };
 
 struct discovery_gc_info_v2_1 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_se;
 	uint32_t num_cu_per_sh;
 	uint32_t num_sh_per_se;
@@ -396,7 +396,7 @@ struct discovery_gc_info_v2_1 {
 };
 
 union discovery_gc_info {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	struct discovery_gc_info_v1_0   v1_0;
 	struct discovery_gc_info_v1_1   v1_1;
 	struct discovery_gc_info_v1_2   v1_2;
@@ -448,7 +448,7 @@ struct discovery_vcn_instance_info_v1_0 {
 };
 #define DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES 4
 struct discovery_vcn_info_v1_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t num_of_instances; // number of entries used in instance_info below
 	struct discovery_vcn_instance_info_v1_0 instance_info[
 		DISCOVERY_VCN_INFO_TABLE_MAX_NUM_INSTANCES
@@ -463,7 +463,7 @@ struct discovery_vcn_info_v1_0 {
 #define MALL_INFO_TABLE_SIGNATURE_STR "MALL"
 
 struct discovery_mall_info_v1_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t mall_size_per_m;
 	uint32_t m_s_present;
 	uint32_t m_half_use;
@@ -472,13 +472,13 @@ struct discovery_mall_info_v1_0 {
 };
 
 struct discovery_mall_info_v2_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t mall_size_per_umc;
 	uint32_t reserved[8];
 };
 
 union discovery_mall_info {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	struct discovery_mall_info_v1_0   v1_0;
 	struct discovery_mall_info_v2_0   v2_0;
 };
@@ -496,7 +496,7 @@ struct discovery_nps_instance_info_v1_0 {
 };
 
 struct discovery_nps_info_v1_0 {
-	struct discovery_infotable_header header;
+	struct discovery_info_header header;
 	uint32_t nps_type;
 	uint32_t count;
 	struct discovery_nps_instance_info_v1_0 instance_info[
