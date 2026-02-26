@@ -506,10 +506,8 @@ populate_pplib_ppt_state_array(
 		struct atomtree_commons* const com,
 		struct atomtree_powerplay_table* const ppt
 		) {
+	// 2D double-flex array
 	struct atomtree_powerplay_table_v4_1* const ppt41 = &(ppt->v4_1);
-	struct atom_pplib_powerplaytable_v1 const* const pplibv1 = &(
-		ppt41->leaves->v1
-	);
 	union atom_pplib_state_arrays* const base = ppt41->state_array_base;
 	union {
 		void* raw;
@@ -517,14 +515,17 @@ populate_pplib_ppt_state_array(
 		struct atom_pplib_state_v2* v2;
 		union atom_pplib_states*    states;
 	} walker;
-	bool oob = false; // out of bounds
 	uint8_t i = 0;
 
 
 	// driver gates with the atom ver
 	if (V(6,0) > ppt->ver.ver) {
+		struct atom_pplib_powerplaytable_v1 const* const pplibv1 = &(
+			ppt41->leaves->v1
+		);
 		ppt41->state_array_ver = SET_VER(1);
 		ppt41->num_state_array_entries = pplibv1->NumStates;
+		walker.raw = &(base->v1);
 
 		if (pplibv1->NumStates) {
 			ppt41->state_array = arena_alloc(
@@ -537,19 +538,21 @@ populate_pplib_ppt_state_array(
 				(entry_size - sizeof(base->v1))
 				/ sizeof(base->v1.ClockStateIndices[0])
 			);
-			walker.raw = &(base->v1);
-			for (i=0, oob=false; i < pplibv1->NumStates && !oob; i++) {
-				oob = offchk(com, walker.raw, entry_size);
+			do {
+				if (offchk(com, walker.raw, entry_size)) {
+					break;
+				}
 				ppt41->state_array[i].num_levels = num_levels;
 				ppt41->state_array[i].state = walker.states;
 				ppt41->state_array[i].size = entry_size;
 				walker.raw += entry_size;
-			}
-			ppt41->state_array_size = i * pplibv1->StateEntrySize;
+				i++;
+			} while (i < pplibv1->NumStates);
 		}
 	} else {
 		ppt41->state_array_ver = SET_VER(2);
 		ppt41->num_state_array_entries = base->v2.NumEntries;
+		walker.v2 = base->v2.states;
 
 		if (base->v2.NumEntries) {
 			ppt41->state_array = arena_alloc(
@@ -557,25 +560,25 @@ populate_pplib_ppt_state_array(
 				base->v2.NumEntries * sizeof(ppt41->state_array[0])
 			);
 
-			uint16_t entry_size = sizeof(*walker.v2);
-			walker.v2 = base->v2.states;
-			oob = offchk(com, walker.raw, entry_size);
-			for (i=0; i < base->v2.NumEntries && !oob; i++) {
+			uint16_t entry_size;
+			do {
+				if (offchk_flex(com, walker.v2,
+						clockInfoIndex, walker.v2->NumDPMLevels)
+						) {
+					break;
+				}
 				ppt41->state_array[i].num_levels = walker.v2->NumDPMLevels;
 				ppt41->state_array[i].state = walker.states;
 				entry_size = sizeof_flex(
 					walker.v2, clockInfoIndex, walker.v2->NumDPMLevels
 				);
 				ppt41->state_array[i].size = entry_size;
-				oob = offchk(com, walker.raw, entry_size);
 				walker.raw += entry_size;
-			}
-			ppt41->state_array_size = walker.raw - (void*)base;
+				i++;
+			} while (i < base->v2.NumEntries);
 		}
 	}
-	if (oob && ppt41->state_array_size) {
-		ppt41->num_state_array_entries = i - 1;
-	}
+	ppt41->state_array_size = walker.raw - (void*)base;
 }
 inline static void
 populate_pplib_ppt_extended_table(
@@ -1462,16 +1465,17 @@ populate_display_object_records(
 		union display_records* records;
 	} r = {.records = start};
 
-	bool err = offchk(com, r.header);
 	bool end = false;
-	uint8_t size = 1;
-	while (!(err || end || 0 == size)) {
+	uint8_t size;
+	do {
+		if (offchk(com, r.header)) {
+			break;
+		}
 		end = (ATOM_RECORD_END_TYPE == r.header->record_type);
 		set->num_records++;
 		size = r.header->record_size;
 		r.raw += r.header->record_size;
-		err = offchk(com, r.header);
-	}
+	} while (!(end || 0 == size));
 	set->num_records -= end;
 
 	if (0 == set->num_records) {
@@ -1555,11 +1559,9 @@ populate_display_object_path_table(
 		uint16_t const offset
 		) {
 	struct atom_display_object_path_table* const header = bios + offset;
-	if (offchk_flex(com, header, DispPath, header->NumOfDispPath)) {
-		// heuristic; atom_display_object_path_table is flex 2D
+	if (offchk(com, header)) { // flex 2D
 		return;
 	}
-
 	table->header = header;
 	uint8_t const num_paths = header->NumOfDispPath;
 	if (0 == num_paths) {
@@ -1571,27 +1573,31 @@ populate_display_object_path_table(
 	);
 	table->paths = paths;
 
-	void* pos = header->DispPath;
+	union {
+		void* raw;
+		struct atom_display_object_path* path;
+	} w = {.path = header->DispPath};
 
 	uint8_t i = 0;
-	bool err;
 	do {
-		paths[i].path = pos;
+		if (offchk(com, w.path)) { 
+			break;
+		}
+		paths[i].path = w.path;
 		paths[i].num_graphic_ids = (
-			(paths[i].path->Size - sizeof(*(paths[i].path)))
-			/ sizeof(paths[i].path->GraphicObjIds[0])
+			(w.path->Size - sizeof(*w.path))
+			/ sizeof(w.path->GraphicObjIds[0])
 		);
-		err = offchk(com, pos, paths[i].path->Size);
-		pos += paths[i].path->Size;
+		w.raw += w.path->Size;
 		i++;
-	} while ((i < num_paths) && (! err));
-	i -= err;
+	} while (i < num_paths);
+
+	if (i) { // if good start
+		i -= offchk(com, paths[i-1].path, paths[i-1].path->Size); // sub bad end
+	}
 
 	table->num_paths = i;
-	table->total_size = pos - (void*) header;
-	if (err) {
-		table->total_size -= paths[i+err-1].path->Size; // 0 == err-1
-	}
+	table->total_size = w.raw - (void*) header;
 }
 inline static bool
 populate_atom_object_header(
@@ -1860,14 +1866,18 @@ populate_init_reg_block(
 		(void*)leaves->RegIndexBuf + leaves->RegIndexTblSize
 	);
 	w.block = block_start;
-	err = offchk(com, w.block_id);
 	bool not_end = true;
-	while ((!err) && not_end) {
-		not_end = (0 < w.block_id->id_access);
-		at_regblock->num_data_blocks += not_end;
-		w.raw += at_regblock->data_block_element_size;
+	do {
 		err = offchk(com, w.block_id);
-	}
+		if (err) {
+			break;
+		}
+		not_end = (0 < w.block_id->id_access);
+		at_regblock->num_data_blocks++;
+		w.raw += at_regblock->data_block_element_size;
+	} while (not_end);
+	at_regblock->num_data_blocks -= (!not_end);
+	
 
 	if (at_regblock->num_data_blocks) {
 		at_regblock->data_blocks = arena_alloc(
@@ -2076,15 +2086,17 @@ populate_umc_init_reg_block(
 		union atom_mc_register_setting_id* block_id;
 		void* raw;
 	} w = {.block = block_start};
-
-	err = offchk(com, w.block_id);
 	bool not_end = true;
-	while ((!err) && not_end) {
-		not_end = (0 < w.block_id->id_access);
-		at_regblock->num_data_blocks += not_end;
-		w.raw += at_regblock->data_block_element_size;
+	do {
 		err = offchk(com, w.block_id);
-	}
+		if (err) {
+			break;
+		}
+		not_end = (0 < w.block_id->id_access);
+		at_regblock->num_data_blocks++;
+		w.raw += at_regblock->data_block_element_size;
+	} while (not_end);
+	at_regblock->num_data_blocks -= (!not_end);
 
 	if (at_regblock->num_data_blocks) {
 		at_regblock->data_blocks = arena_alloc(
@@ -2697,7 +2709,7 @@ populate_navi_timings( // TODO collapse into UMC mem_clk_patch
 
 	if (sizeof(*vi24->navi1_timings) != mem_clk_patch->data_block_element_size){
 		assert(0); // don't know what else.
-		return false;
+		return true;
 	}
 	if (mem_clk_patch->num_data_blocks) {
 		vi24->num_timing_straps = mem_clk_patch->num_data_blocks;
@@ -2805,7 +2817,12 @@ populate_vram_info_v2_5(
 	if (l.leaves->gddr6_ac_timing_offset) {
 		vi25->gddr6_ac_timings = l.raw + l.leaves->gddr6_ac_timing_offset;
 		uint8_t i = 0;
-		for (; vi25->gddr6_ac_timings[i].block_id.id_access; i++);
+		while (offchk(com, &(vi25->gddr6_ac_timings[i].block_id.id_access))) {
+			if (0 == vi25->gddr6_ac_timings[i].block_id.id_access) {
+				break;
+			}
+			i++;
+		}
 		vi25->gddr6_acstrap_count = i;
 	}
 
@@ -4212,20 +4229,24 @@ populate_pci_tables(
 		struct pcir_data_structure* pcir;
 	} pcir;
 
-	uint8_t i = 0;
 	header.header = start;
 	do {
+		if (offchk(com, header.header)) {
+			break;
+		}
 		if (PCI_HEADER_MAGIC != header.header->pci_rom_signature) {
 			break;
 		}
 		pcir.raw = header.raw + header.header->pcir_structure_offset;
+		if (offchk(com, pcir.pcir)) {
+			break;
+		}
 		if (PCIR_SIGNATURE != pcir.pcir->signature.num) {
 			break;
 		}
-		i++;
+		atree_pci->num_images++;
 		header.raw += pcir.pcir->image_length_in_512 * BIOS_IMAGE_SIZE_UNIT;
 	} while (!pcir.pcir->last.last_image);
-	atree_pci->num_images = i;
 
 	if (atree_pci->num_images) {
 		struct pci_rom_tables* const tables = arena_alloc(
@@ -4233,7 +4254,7 @@ populate_pci_tables(
 			atree_pci->num_images * sizeof(atree_pci->pci_tables[0])
 		);
 		atree_pci->pci_tables = tables;
-		i = 0;
+		uint8_t i = 0;
 		header.header = start;
 		while (i < atree_pci->num_images) {
 			pcir.raw = header.raw + header.header->pcir_structure_offset;
